@@ -1,0 +1,15 @@
+{
+  "name": "algoliasearch-helper",
+  "version": "1.0.0",
+  "description": "Helper for implementing advanced search features with algolia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexandre Stanislawski <bobylito@gmail.com>",
+  "license": "MIT",
+  "repository" : {
+    "type": "git",
+    "url" : "https://github.com/algolia/algoliasearch-helper-js.git"
+  }
+}
