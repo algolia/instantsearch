@@ -4,12 +4,22 @@
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "scripts": {
+    "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
+    "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
+    "dev": "",
+    "lint": "",
+    "examples": "",
+    "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alexandre Stanislawski <bobylito@gmail.com>",
   "license": "MIT",
-  "repository" : {
+  "repository": {
     "type": "git",
-    "url" : "https://github.com/algolia/algoliasearch-helper-js.git"
+    "url": "https://github.com/algolia/algoliasearch-helper-js.git"
+  },
+  "devDependencies": {
+    "browserify": "9.0.3",
+    "uglify": "0.1.1"
   }
 }
