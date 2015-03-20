@@ -22,6 +22,8 @@
     "browserify": "9.0.3",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
+    "lodash": "3.5.0",
+    "sinon": "1.14.1",
     "tape": "3.5.0",
     "uglify": "0.1.1",
     "zuul": "2.1.1"
