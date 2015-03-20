@@ -26,4 +26,3 @@ test( "Adding refinments should add an entry to the refinments attribute", funct
         "when removed, should be still one with the value of the key to false");
   t.end();
 } );
-
