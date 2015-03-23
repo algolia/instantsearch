@@ -2,4 +2,6 @@ CHANGELOG
 
 1.0.0
   * Extraction of the helper from the algolia-client-js v2.9.4
-  * Some basic tests
+  * FEATURE: CommonJS compatibility
+  * FEATURE: UMD builds in dist/
+  * TESTS: Some basic tests
