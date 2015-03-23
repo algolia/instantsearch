@@ -4,6 +4,7 @@
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "scripts": {
+    "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
     "dev": "DEBUG=zuul* zuul --no-coverage --local 8080 --ui tape test/run.js",
@@ -31,6 +32,7 @@
     "sinon": "1.14.1",
     "tape": "3.5.0",
     "uglify": "0.1.1",
+    "watchify": "2.6.0",
     "zuul": "2.1.1"
   }
 }
