@@ -1,0 +1,153 @@
+<html>
+  <head>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="algoliasearch.min.js"></script>
+    <script src="/dist/algoliasearch.helper.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+
+    <section class="panel">
+      <header class="panel-heading">
+        <div class="search_box">
+          <form action="#" method="get">
+            <input autocomplete="off" class="autocomplete" id="q" placeholder="Start typing" type="text" spellcheck="false"/>
+            <div class='searchbutton'>
+              <i class="icon-search icon-large"></i>
+            </div>
+          </form>
+        </div>
+      </header>
+    </section>
+
+    <div class="facets-wrapper">
+      <h1>Disjunctive Facets</h1>
+      <div id="disjunctive-facets"></div>
+    </div>
+    <div class="facets-wrapper">
+      <h1>Facets</h1>
+      <div id="facets"></div>
+    </div>
+    <div class="hits-wrapper">
+      <h1>Results</h1>
+      <div id="hits"></div>
+    </div>
+
+    <script type="text/javascript">
+      $(document).ready(function() {
+        var $inputfield = $("#q");
+        // Replace the following values by your ApplicationID and ApiKey.
+        var algolia = new AlgoliaSearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+        // Replace the following value by the name of the index you want to query.
+        var helper = new AlgoliaSearchHelper(algolia, 'bestbuy', {
+          // conjunctive facets (link)
+          facets: ['type', 'shipping'],
+          // disjunctive facets (checkbox)
+          disjunctiveFacets: ['category', 'manufacturer']
+          // (optional) default list of facet filters
+          //,defaultFacetFilters: ['type:Game']
+        });
+
+        function search() {
+          helper.search($inputfield.val(), searchCallback, { hitsPerPage: 5, maxValuesPerFacet: 5 });
+        }
+
+        window.toggleRefine = function(facet, value) {
+          helper.toggleRefine(facet, value);
+        }
+
+        window.toggleExclude = function(facet, value) {
+          helper.toggleExclude(facet, value);
+        }
+
+        $inputfield.keyup(function() {
+          search();
+        }).focus();
+
+        // IE 9 doesn't define trim()
+        if (typeof String.prototype.trim !== 'function') {
+          String.prototype.trim = function() {
+            return this.replace(/^\s+|\s+$/g, '');
+          }
+        }
+
+        function searchCallback(success, content) {
+          if (!success) {
+            // error
+            return;
+          }
+
+          if (content.query != $inputfield.val()) {
+            // do not consider out-dated queries
+            return;
+          }
+          if (content.hits.length == 0 || content.query.trim() === '') {
+            // no results
+            $('#hits').empty();
+            $('#facets').empty();
+            $('#disjunctive-facets').empty();
+            return;
+          }
+
+          // Scan all hits and display them
+          var hits = '';
+          for (var i = 0; i < content.hits.length; ++i) {
+            var hit = content.hits[i];
+            hits += '<div class="hit">';
+            for (var attribute in hit._highlightResult) {
+              hits += '<div class="attribute">' +
+                '<span>' + attribute + ': </span>' +
+                hit._highlightResult[attribute].value +
+                '</div>';
+            }
+            hits += '</div>';
+          }
+          $('#hits').html(hits);
+
+          // Scan all disjunctive facets and display them
+          var facets = '';
+          for (var facet in content.disjunctiveFacets) {
+            facets += '<h4>' + facet + '</h4>';
+            facets += '<ul>';
+            var values = content.disjunctiveFacets[facet];
+            for (var value in values) {
+              facets += '<li>' +
+                  '<input type="checkbox" ' + (helper.isRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
+                '</li>';
+            }
+            facets += '</ul>';
+          }
+          $('#disjunctive-facets').html(facets);
+
+          // Scan all facets and display them
+          facets = '';
+          for (var facet in content.facets) {
+            facets += '<h4>' + facet + '</h4>';
+            facets += '<ul>';
+            var values = content.facets[facet];
+            for (var value in values) {
+              var excluded = helper.isExcluded(facet, value);
+              var refined = helper.isRefined(facet, value);
+              facets += '<li class="' + (refined ? 'refined' : '') + ' ' + (excluded ? 'excluded' : '') + '">';
+              if (refined) {
+                facets += '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')';
+              } else if (excluded) {
+                facets += '<a href="#" onclick="toggleExclude(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a>';
+              } else {
+                facets += '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ') ' +
+                  '<small><a href="#" onclick="toggleExclude(\'' + facet + '\', \'' + value + '\'); return false">X</a></small>';
+              }
+              facets += '</li>';
+            }
+            facets += '</ul>';
+          }
+          $('#facets').html(facets);
+        }
+      });
+    </script>
+
+  </body>
+</html>
