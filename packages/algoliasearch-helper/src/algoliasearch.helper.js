@@ -40,7 +40,7 @@ AlgoliaSearchHelper.prototype = {
    * Perform a query
    * @param  {string} q the user query
    * @param  {function} searchCallback the result callback called with two arguments:
-   *  success: boolean set to true if the request was successfull
+   *  err : an error is something wrong occured or null
    *  content: the query answer with an extra 'disjunctiveFacets' attribute
    */
   search : function( q, searchCallback, searchParams ) {
@@ -311,7 +311,7 @@ AlgoliaSearchHelper.prototype = {
     var self = this;
     this.client.sendQueriesBatch( function( err, content ) {
       if ( err ) {
-        self.searchCallback( false, content );
+        self.searchCallback( new Error( content.message ), content );
         return;
       }
       var aggregatedAnswer = content.results[0];
@@ -362,7 +362,7 @@ AlgoliaSearchHelper.prototype = {
       }
       // call the actual callback
       if ( self.extraQueries.length === 0 ) {
-        self.searchCallback( true, aggregatedAnswer );
+        self.searchCallback( null, aggregatedAnswer );
       }
       else {
         // append the extra queries
@@ -370,7 +370,7 @@ AlgoliaSearchHelper.prototype = {
         for ( i = 0; i < self.extraQueries.length; ++i ) {
           c.results.push( content.results[1 + disjunctiveFacets.length + i] );
         }
-        self.searchCallback( true, c );
+        self.searchCallback( null, c );
       }
     } );
   },
