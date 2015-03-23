@@ -17,12 +17,12 @@ specifically made to work with the newest V3 versions of it.
 ## What does it look like?
 
 ```javascript
-var algoliaSearch = require( "algoliasearch" );
-var Helper = require( "algoliasearch-helper" );
+var algoliasearch = require( "algoliasearch" );
+var algoliasearchHelper = require( "algoliasearch-helper" );
 
 var client = algoliasearch( "GKDHJFHGN", "kfhjd02dsfklh" );
 
-var helper = Helper( client, "myMainIndex", { 
+var helper = algoliasearchHelper( client, "myMainIndex", { 
   facets : ["mainCharacterFirstName", "year"],
   disjunctiveFacets : ["producer"]
 });
