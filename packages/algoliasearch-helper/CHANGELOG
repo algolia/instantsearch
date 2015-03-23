@@ -1,0 +1,5 @@
+CHANGELOG
+
+1.0.0
+  * Extraction of the helper from the algolia-client-js v2.9.4
+  * Some basic tests
