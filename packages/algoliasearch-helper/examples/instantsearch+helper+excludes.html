@@ -6,23 +6,17 @@
     <script src="algoliasearch.min.js"></script>
     <script src="/dist/algoliasearch.helper.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
 
-    <section class="panel">
-      <header class="panel-heading">
-        <div class="search_box">
-          <form action="#" method="get">
-            <input autocomplete="off" class="autocomplete" id="q" placeholder="Start typing" type="text" spellcheck="false"/>
-            <div class='searchbutton'>
-              <i class="icon-search icon-large"></i>
-            </div>
-          </form>
-        </div>
-      </header>
-    </section>
+<div class="container">
+  <div class="search">
+      <input autocomplete="off" class="autocomplete" id="q" placeholder="Search for a product..." type="text" spellcheck="false"/>
+  </div>
 
+  <div class="col-md-4">
     <div class="facets-wrapper">
       <h1>Disjunctive Facets</h1>
       <div id="disjunctive-facets"></div>
@@ -31,10 +25,15 @@
       <h1>Facets</h1>
       <div id="facets"></div>
     </div>
+  </div>
+
+  <div class="hits-wrapper col-md-8">
     <div class="hits-wrapper">
       <h1>Results</h1>
       <div id="hits"></div>
     </div>
+  </div>
+</div>
 
     <script type="text/javascript">
       $(document).ready(function() {
@@ -50,6 +49,8 @@
           // (optional) default list of facet filters
           //,defaultFacetFilters: ['type:Game']
         });
+
+        search();
 
         function search() {
           helper.search($inputfield.val(), searchCallback, { hitsPerPage: 5, maxValuesPerFacet: 5 });
@@ -84,7 +85,7 @@
             // do not consider out-dated queries
             return;
           }
-          if (content.hits.length == 0 || content.query.trim() === '') {
+          if (content.hits.length == 0) {
             // no results
             $('#hits').empty();
             $('#facets').empty();
@@ -96,7 +97,7 @@
           var hits = '';
           for (var i = 0; i < content.hits.length; ++i) {
             var hit = content.hits[i];
-            hits += '<div class="hit">';
+            hits += '<div class="hit panel">';
             for (var attribute in hit._highlightResult) {
               hits += '<div class="attribute">' +
                 '<span>' + attribute + ': </span>' +
@@ -111,14 +112,12 @@
           var facets = '';
           for (var facet in content.disjunctiveFacets) {
             facets += '<h4>' + facet + '</h4>';
-            facets += '<ul>';
             var values = content.disjunctiveFacets[facet];
             for (var value in values) {
-              facets += '<li>' +
+            facets += '<div class="checkbox"><label>' +
                   '<input type="checkbox" ' + (helper.isRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
-                '</li>';
+                  '</label></div>';
             }
-            facets += '</ul>';
           }
           $('#disjunctive-facets').html(facets);
 
