@@ -38,4 +38,6 @@ helper.search( "", function( err, data ){
 } );
 ```
 
+## Examples in action
 
+http://algolia.github.io/algoliasearch-helper-js/
