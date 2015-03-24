@@ -40,7 +40,7 @@ helper.search( "", function( err, data ){
 
 ## How to use this module
 
-(See the examples in action)[http://algolia.github.io/algoliasearch-helper-js/]
+[See the examples in action](http://algolia.github.io/algoliasearch-helper-js/)
 
 ### Use with NPM
 
