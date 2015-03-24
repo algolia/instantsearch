@@ -2887,9 +2887,10 @@ AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacet
     this.emit( "error", err );
     return;
   }
+
   var aggregatedAnswer = content.results[0];
   aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
-  aggregatedAnswer.facetStats = aggregatedAnswer.facetStats || {};
+  aggregatedAnswer.facets_stats = aggregatedAnswer.facets_stats || {};
   // create disjunctive facets from facets (disjunctive facets without refinements)
   for ( var unusedFacet in unusedDisjunctiveFacets ) {
     if ( aggregatedAnswer.facets[ unusedFacet ] && !aggregatedAnswer.disjunctiveFacets[ unusedFacet ] ) {
@@ -2919,7 +2920,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacet
     }
     // aggregate the disjunctive facets stats
     for ( var stats in content.results[idx + 1].facets_stats ) {
-      aggregatedAnswer.facetStats[stats] = content.results[idx + 1].facets_stats[stats];
+      aggregatedAnswer.facets_stats[stats] = content.results[idx + 1].facets_stats[stats];
     }
   }, this );
 
@@ -2935,6 +2936,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacet
       }
     }
   }
+
   // call the actual callback
   if ( this.extraQueries.length === 0 ) {
     this.emit( "result", aggregatedAnswer );
