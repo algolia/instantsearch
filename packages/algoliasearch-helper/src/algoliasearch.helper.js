@@ -2,6 +2,8 @@
 var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
+var forEach = require( "lodash/collection/forEach" );
+var bind = require( "lodash/function/bind" );
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -142,6 +144,7 @@ AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
  * @return {boolean} true if the facet has been found
  */
 AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
+  // FIXME : replace with indexOf
   for ( var i = 0; i < this.options.facets.length; ++i ) {
     if ( this.options.facets[i] === facet ) {
       var refinement = facet + ":-" + value;
@@ -287,87 +290,92 @@ AlgoliaSearchHelper.prototype._search = function() {
   this.client.addQueryInBatch( this.index, this.q, this._getHitsSearchParams() );
   var disjunctiveFacets = [];
   var unusedDisjunctiveFacets = {};
-  var i = 0;
-  for ( i = 0; i < this.options.disjunctiveFacets.length; ++i ) {
-    var disjunctiveFacet = this.options.disjunctiveFacets[i];
+
+  forEach( this.options.disjunctiveFacets, function( disjunctiveFacet ) {
     if ( this._hasDisjunctiveRefinements( disjunctiveFacet ) ) {
       disjunctiveFacets.push( disjunctiveFacet );
     }
     else {
       unusedDisjunctiveFacets[ disjunctiveFacet ] = true;
     }
+  }, this );
+
+  forEach( disjunctiveFacets, function( disjunctiveFacet ) {
+    this.client.addQueryInBatch( this.index, this.q, this._getDisjunctiveFacetSearchParams( disjunctiveFacet ) );
+  }, this );
+
+  forEach( this.extraQueries, function( queryParams ) {
+    this.client.addQueryInBatch( queryParams.index, queryParams.query, queryParams.params );
+  }, this );
+
+  this.client.sendQueriesBatch( bind( this._handleResponse, this, unusedDisjunctiveFacets, disjunctiveFacets ) );
+};
+
+AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacets, disjunctiveFacets, err, content ) {
+  if ( err ) {
+    this.emit( "error", err );
+    return;
   }
-  for ( i = 0; i < disjunctiveFacets.length; ++i ) {
-    this.client.addQueryInBatch( this.index, this.q, this._getDisjunctiveFacetSearchParams( disjunctiveFacets[i] ) );
-  }
-  for ( i = 0; i < this.extraQueries.length; ++i ) {
-    this.client.addQueryInBatch( this.extraQueries[i].index, this.extraQueries[i].query, this.extraQueries[i].params );
-  }
-  var self = this;
-  this.client.sendQueriesBatch( function( err, content ) {
-    if ( err ) {
-      self.emit( "error", err );
-      return;
-    }
-    var aggregatedAnswer = content.results[0];
-    aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
-    aggregatedAnswer.facetStats = aggregatedAnswer.facetStats || {};
-    // create disjunctive facets from facets (disjunctive facets without refinements)
-    for ( var unusedFacet in unusedDisjunctiveFacets ) {
-      if ( aggregatedAnswer.facets[ unusedFacet ] && !aggregatedAnswer.disjunctiveFacets[ unusedFacet ] ) {
-        aggregatedAnswer.disjunctiveFacets[ unusedFacet ] = aggregatedAnswer.facets[ unusedFacet ];
-        try {
-          delete aggregatedAnswer.facets[ unusedFacet ];
-        }
-        catch ( error ) {
-          aggregatedAnswer.facets[ unusedFacet ] = undefined; // IE compat
-        }
+  var aggregatedAnswer = content.results[0];
+  aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
+  aggregatedAnswer.facetStats = aggregatedAnswer.facetStats || {};
+  // create disjunctive facets from facets (disjunctive facets without refinements)
+  for ( var unusedFacet in unusedDisjunctiveFacets ) {
+    if ( aggregatedAnswer.facets[ unusedFacet ] && !aggregatedAnswer.disjunctiveFacets[ unusedFacet ] ) {
+      aggregatedAnswer.disjunctiveFacets[ unusedFacet ] = aggregatedAnswer.facets[ unusedFacet ];
+      try {
+        delete aggregatedAnswer.facets[ unusedFacet ];
+      }
+      catch ( error ) {
+        aggregatedAnswer.facets[ unusedFacet ] = undefined; // IE compat
       }
     }
-    // aggregate the disjunctive facets
-    for ( i = 0; i < disjunctiveFacets.length; ++i ) {
-      for ( var dfacet in content.results[i + 1].facets ) {
-        aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[i + 1].facets[dfacet];
-        if ( self.disjunctiveRefinements[dfacet] ) {
-          for ( var refinementValue in self.disjunctiveRefinements[dfacet] ) {
-            // add the disjunctive reginements if it is no more retrieved
-            if ( !aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] &&
-                self.disjunctiveRefinements[dfacet][refinementValue] ) {
-              aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] = 0;
-            }
+  }
+
+  // aggregate the disjunctive facets
+  forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
+    for ( var dfacet in content.results[idx + 1].facets ) {
+      aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[idx + 1].facets[dfacet];
+      if ( this.disjunctiveRefinements[dfacet] ) {
+        for ( var refinementValue in this.disjunctiveRefinements[dfacet] ) {
+          // add the disjunctive reginements if it is no more retrieved
+          if ( !aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] &&
+              this.disjunctiveRefinements[dfacet][refinementValue] ) {
+            aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] = 0;
           }
         }
       }
-      // aggregate the disjunctive facets stats
-      for ( var stats in content.results[i + 1].facets_stats ) {
-        aggregatedAnswer.facetStats[stats] = content.results[i + 1].facets_stats[stats];
+    }
+    // aggregate the disjunctive facets stats
+    for ( var stats in content.results[idx + 1].facets_stats ) {
+      aggregatedAnswer.facetStats[stats] = content.results[idx + 1].facets_stats[stats];
+    }
+  }, this );
+
+  // add the excludes
+  for ( var exclude in this.excludes ) {
+    if ( this.excludes[exclude] ) {
+      var e = exclude.indexOf( ":-" );
+      var facet = exclude.slice( 0, e );
+      var value = exclude.slice( e + 2 );
+      aggregatedAnswer.facets[facet] = aggregatedAnswer.facets[facet] || {};
+      if ( !aggregatedAnswer.facets[facet][value] ) {
+        aggregatedAnswer.facets[facet][value] = 0;
       }
     }
-    // add the excludes
-    for ( var exclude in self.excludes ) {
-      if ( self.excludes[exclude] ) {
-        var e = exclude.indexOf( ":-" );
-        var facet = exclude.slice( 0, e );
-        var value = exclude.slice( e + 2 );
-        aggregatedAnswer.facets[facet] = aggregatedAnswer.facets[facet] || {};
-        if ( !aggregatedAnswer.facets[facet][value] ) {
-          aggregatedAnswer.facets[facet][value] = 0;
-        }
-      }
+  }
+  // call the actual callback
+  if ( this.extraQueries.length === 0 ) {
+    this.emit( "result", aggregatedAnswer );
+  }
+  else {
+    // append the extra queries
+    var c = { results : [ aggregatedAnswer ] };
+    for ( var i = 0; i < this.extraQueries.length; ++i ) {
+      c.results.push( content.results[1 + disjunctiveFacets.length + i] );
     }
-    // call the actual callback
-    if ( self.extraQueries.length === 0 ) {
-      self.emit( "result", aggregatedAnswer );
-    }
-    else {
-      // append the extra queries
-      var c = { results : [ aggregatedAnswer ] };
-      for ( i = 0; i < self.extraQueries.length; ++i ) {
-        c.results.push( content.results[1 + disjunctiveFacets.length + i] );
-      }
-      self.emit( "result", c );
-    }
-  } );
+    this.emit( "result", c );
+  }
 };
 
 /**
@@ -376,16 +384,17 @@ AlgoliaSearchHelper.prototype._search = function() {
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = [];
-  var i = 0;
-  for ( i = 0; i < this.options.facets.length; ++i ) {
-    facets.push( this.options.facets[i] );
-  }
-  for ( i = 0; i < this.options.disjunctiveFacets.length; ++i ) {
-    var facet = this.options.disjunctiveFacets[i];
+
+  forEach( this.options.facets, function( facet ) {
+    facets.push( facet );
+  } );
+
+  forEach( this.options.disjunctiveFacets, function( facet ) {
     if ( !this._hasDisjunctiveRefinements( facet ) ) {
       facets.push( facet );
     }
-  }
+  }, this );
+
   return extend( {}, {
     hitsPerPage : this.options.hitsPerPage,
     page : this.page,
