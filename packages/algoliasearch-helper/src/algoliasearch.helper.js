@@ -199,10 +199,7 @@ AlgoliaSearchHelper.prototype = {
    */
   isExcluded : function( facet, value ) {
     var refinement = facet + ":-" + value;
-    if ( this.excludes[refinement] ) {
-      return true;
-    }
-    return false;
+    return !!this.excludes[refinement];
   },
 
   /**
