@@ -38,9 +38,19 @@ helper.search( "", function( err, data ){
 } );
 ```
 
-## Examples in action
+## How to use this module
 
-http://algolia.github.io/algoliasearch-helper-js/
+(See the examples in action)[http://algolia.github.io/algoliasearch-helper-js/]
+
+### Use with NPM
+
+`npm install algoliasearch-helper`
+
+### Use the CDN
+
+Include this in your page :
+
+`<script src="//cdn.jsdelivr.net/algoliasearch.helper/1.0.0/algoliasearch.helper.min.js"></script>`
 
 ## How to contribute
 
