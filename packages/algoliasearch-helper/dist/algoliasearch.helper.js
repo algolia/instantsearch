@@ -202,13 +202,8 @@ AlgoliaSearchHelper.prototype = {
    */
   isRefined : function( facet, value ) {
     var refinement = facet + ":" + value;
-    if ( this.refinements[refinement] ) {
-      return true;
-    }
-    if ( this.disjunctiveRefinements[facet] && this.disjunctiveRefinements[facet][value] ) {
-      return true;
-    }
-    return false;
+    return this.refinements[refinement] ||
+          (this.disjunctiveRefinements[facet] && this.disjunctiveRefinements[facet][value]);
   },
 
   /**
