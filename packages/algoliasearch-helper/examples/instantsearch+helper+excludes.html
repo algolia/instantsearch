@@ -39,9 +39,9 @@
       $(document).ready(function() {
         var $inputfield = $("#q");
         // Replace the following values by your ApplicationID and ApiKey.
-        var algolia = new AlgoliaSearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+        var algolia = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
         // Replace the following value by the name of the index you want to query.
-        var helper = new AlgoliaSearchHelper(algolia, 'bestbuy', {
+        var helper = algoliasearchHelper(algolia, 'bestbuy', {
           // conjunctive facets (link)
           facets: ['type', 'shipping'],
           // disjunctive facets (checkbox)
@@ -50,11 +50,8 @@
           //,defaultFacetFilters: ['type:Game']
         });
 
-        search();
-
-        function search() {
-          helper.search($inputfield.val(), searchCallback, { hitsPerPage: 5, maxValuesPerFacet: 5 });
-        }
+        helper.on( "result", searchCallback );
+        $inputfield.keyup( search );
 
         window.toggleRefine = function(facet, value) {
           helper.toggleRefine(facet, value);
@@ -64,27 +61,18 @@
           helper.toggleExclude(facet, value);
         }
 
-        $inputfield.keyup(function() {
-          search();
-        }).focus();
+        search();
 
-        // IE 9 doesn't define trim()
-        if (typeof String.prototype.trim !== 'function') {
-          String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
-          }
+        function search() {
+          helper.search($inputfield.val(), { hitsPerPage: 5, maxValuesPerFacet: 5 });
         }
 
-        function searchCallback(success, content) {
-          if (!success) {
-            // error
-            return;
-          }
-
+        function searchCallback( content ) {
           if (content.query != $inputfield.val()) {
             // do not consider out-dated queries
             return;
           }
+
           if (content.hits.length == 0) {
             // no results
             $('#hits').empty();

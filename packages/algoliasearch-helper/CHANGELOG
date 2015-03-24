@@ -1,6 +1,7 @@
 CHANGELOG
 
 UNRELEASED
+  * FEATURE : (breaking) Move callback style to a event based API
   * REFACTORING : constructor, now expose the defaults
   * TESTS : defaults test
 
