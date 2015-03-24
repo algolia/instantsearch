@@ -1,5 +1,9 @@
 CHANGELOG
 
+UNRELEASED
+  * REFACTORING : constructor, now expose the defaults
+  * TESTS : defaults test
+
 1.0.0
   * Extraction of the helper from the algolia-client-js v2.9.4
   * FEATURE: CommonJS compatibility

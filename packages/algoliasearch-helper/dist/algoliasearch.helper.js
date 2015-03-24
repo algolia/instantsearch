@@ -16,40 +16,40 @@ module.exports = helper;
 "use strict";
 var extend = require( "./functions/extend" );
 
+/**
+ * Initialize a new AlgoliaSearchHelper
+ * @param  {AlgoliaSearch} client an AlgoliaSearch client
+ * @param  {string} index the index name to query
+ * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
+ */
 function AlgoliaSearchHelper( client, index, options ) {
-  var defaults = {
-    // list of facets to compute
-    facets : [],
-    // list of disjunctive facets to compute
-    disjunctiveFacets : [],
-    // number of hits per page
-    hitsPerPage : 20,
-    // the default list of facetFilters
-    defaultFacetFilters : []
-  };
+  var defaults = AlgoliaSearchHelper.optionsDefaults;
+  var optionsWithDefaults = extend( {}, defaults, options );
 
-  this.init( client, index, extend( {}, defaults, options ) );
+  this.client = client;
+  this.index = index;
+  this.options = optionsWithDefaults;
+
+  this.page = 0;
+  this.refinements = {};
+  this.excludes = {};
+  this.disjunctiveRefinements = {};
+  this.extraQueries = [];
 }
+
+AlgoliaSearchHelper.optionsDefaults = {
+  // list of facets to compute
+  facets : [],
+  // list of disjunctive facets to compute
+  disjunctiveFacets : [],
+  // number of hits per page
+  hitsPerPage : 20,
+  // the default list of facetFilters
+  defaultFacetFilters : []
+};
 
 AlgoliaSearchHelper.prototype = {
   constructor : AlgoliaSearchHelper,
-
-  /**
-   * Initialize a new AlgoliaSearchHelper
-   * @param  {AlgoliaSearch} client an AlgoliaSearch client
-   * @param  {string} index the index name to query
-   * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
-   */
-  init : function( client, index, options ) {
-    this.client = client;
-    this.index = index;
-    this.options = options;
-    this.page = 0;
-    this.refinements = {};
-    this.excludes = {};
-    this.disjunctiveRefinements = {};
-    this.extraQueries = [];
-  },
 
   /**
    * Perform a query
