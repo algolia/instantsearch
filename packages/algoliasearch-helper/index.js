@@ -1,4 +1,5 @@
-var AlgoliaSearchHelper = require( './src/algoliasearch.helper' );
+"use strict";
+var AlgoliaSearchHelper = require( "./src/algoliasearch.helper" );
 /**
  * Algolia Search Helper providing faceting and disjunctive faceting
  * @param {AlgoliaSearch} client - An AlgoliaSearch client

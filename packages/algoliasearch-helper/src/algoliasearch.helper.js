@@ -191,7 +191,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
 AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
   var refinement = facet + ":" + value;
   return this.refinements[refinement] ||
-    (this.disjunctiveRefinements[facet] && this.disjunctiveRefinements[facet][value]);
+       ( this.disjunctiveRefinements[facet] && this.disjunctiveRefinements[facet][value] );
 };
 
 /**
@@ -306,7 +306,7 @@ AlgoliaSearchHelper.prototype._search = function() {
   var self = this;
   this.client.sendQueriesBatch( function( err, content ) {
     if ( err ) {
-      self.emit( "error", err )
+      self.emit( "error", err );
       return;
     }
     var aggregatedAnswer = content.results[0];
