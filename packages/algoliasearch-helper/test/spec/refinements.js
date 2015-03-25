@@ -11,6 +11,23 @@ test( "algoliasearchHelper should be initialized with no refinments", function( 
   t.end();
 } );
 
+test( "isDisjunctiveRefined", function( t ){
+  var helper = algoliasearchHelper( null, null, {} );
+
+  var facet = "MyFacet";
+  var value = "MyValue";
+
+  t.notOk( helper.isDisjunctiveRefined( facet, value ),
+          "isDisjunctiveRefined should not return true for undefined refinement" );
+  helper.addDisjunctiveRefine( facet, value );
+  t.ok( helper.isDisjunctiveRefined( facet, value ),
+        "isDisjunctiveRefined should not return false for defined refinement" );
+  helper.removeDisjunctiveRefine( facet, value );
+  t.notOk( helper.isDisjunctiveRefined( facet, value ),
+         "isDisjunctiveRefined should not return true for removed refinement" );
+  t.end();
+} );
+
 test( "Adding refinments should add an entry to the refinments attribute", function( t ) {
   var helper = algoliasearchHelper( {}, "index", {} );
   t.ok( _.isEmpty( helper.refinements ), "should be empty at first");

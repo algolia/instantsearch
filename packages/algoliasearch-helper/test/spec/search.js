@@ -24,7 +24,7 @@ test( "Search should call the algolia client according to the number of refineme
 
   helper.on( "result", function( data ) {
     t.ok( _.isEqual( data, testData.responseHelper ) , "should be equal" );
-    t.ok( mock.verify(), "" );
+    t.ok( mock.verify(), "Mock constraints should be verified!" );
     t.end();
   } );
 

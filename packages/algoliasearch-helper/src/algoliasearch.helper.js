@@ -210,6 +210,21 @@ AlgoliaSearchHelper.prototype.isExcluded = function( facet, value ) {
 };
 
 /**
+ * Check the refinement state of the disjunctive facet
+ * @param  {string}  facet the facet
+ * @param  {string}  value the associated value
+ * @return {boolean} true if refined
+ */
+AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
+  if( this.options.disjunctiveFacets.indexOf( facet ) === -1 ){
+    console.log( "The facet '" + facet + "' is not listed as a disjunctive." +
+                 "You should think about adding it in the parameters" );
+  }
+  return this.disjunctiveRefinements[facet] &&
+         this.disjunctiveRefinements[facet][value];
+}
+
+/**
  * Go to next page
  */
 AlgoliaSearchHelper.prototype.nextPage = function() {
