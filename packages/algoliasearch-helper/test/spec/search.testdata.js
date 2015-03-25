@@ -340,7 +340,7 @@ var responseHelper = {
    ],
    "params" : "query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%22city%3AParis%22%2C%22city%3ANew%20York%22%5D%5D",
    "page" : 0,
-   "facetStats" : {},
+   "facets_stats" : {},
    "query" : "",
    "index" : "test_hotels-node",
    "processingTimeMS" : 1,
