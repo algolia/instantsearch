@@ -2578,6 +2578,7 @@ var bind = require( "lodash/function/bind" );
 
 /**
  * Initialize a new AlgoliaSearchHelper
+ * @class
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
  * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
