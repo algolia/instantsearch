@@ -276,6 +276,7 @@ AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
 
 /**
  * Goto a page
+ * @private
  * @param  {integer} page The page number
  */
 AlgoliaSearchHelper.prototype._gotoPage = function( page ) {
@@ -285,6 +286,7 @@ AlgoliaSearchHelper.prototype._gotoPage = function( page ) {
 
 /**
  * Perform the underlying queries
+ * @private
  */
 AlgoliaSearchHelper.prototype._search = function() {
   this.client.startQueriesBatch();
@@ -312,6 +314,15 @@ AlgoliaSearchHelper.prototype._search = function() {
   this.client.sendQueriesBatch( bind( this._handleResponse, this, unusedDisjunctiveFacets, disjunctiveFacets ) );
 };
 
+/**
+ * Transform the response as sent by the server and transform it into a user
+ * usable objet that merge the results of all the batch requests.
+ * @private
+ * @param unusedDisjunctiveFacets {Hash}
+ * @param disjunctiveFacets {Hash}
+ * @param err {Error}
+ * @param content {Hash}
+ */
 AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacets, disjunctiveFacets, err, content ) {
   if ( err ) {
     this.emit( "error", err );
@@ -383,6 +394,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( unusedDisjunctiveFacet
 
 /**
  * Build search parameters used to fetch hits
+ * @private
  * @return {hash}
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
@@ -408,6 +420,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
 
 /**
  * Build search parameters used to fetch a disjunctive facet
+ * @private
  * @param  {string} facet the associated facet name
  * @return {hash}
  */
@@ -425,6 +438,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
 
 /**
  * Test if there are some disjunctive refinements on the facet
+ * @private
  */
 AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
   for ( var value in this.disjunctiveRefinements[facet] ) {
@@ -437,6 +451,7 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
 
 /**
  * Build facetFilters parameter based on current refinements
+ * @private
  * @param  {string} facet if set, the current disjunctive facet
  * @return {hash}
  */
