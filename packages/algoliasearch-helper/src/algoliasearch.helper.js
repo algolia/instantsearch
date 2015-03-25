@@ -1,4 +1,5 @@
 "use strict";
+var SearchParameters = require( "./SearchParameters" );
 var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
@@ -19,8 +20,8 @@ function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
   this.options = optionsWithDefaults;
+  this.state = new SearchParameters( options );
 
-  this.page = 0;
   this.refinements = {};
   this.excludes = {};
   this.disjunctiveRefinements = {};
@@ -51,9 +52,9 @@ AlgoliaSearchHelper.optionsDefaults = {
  *  undefined, otherwise it gives the results through a promise.
  */
 AlgoliaSearchHelper.prototype.search = function( q, searchParams ) {
+  this.state = this.state.setPage( 0 );
   this.q = q;
   this.searchParams = searchParams || {};
-  this.page = this.page || 0;
   this.refinements = this.refinements || {};
   this.disjunctiveRefinements = this.disjunctiveRefinements || {};
   return this._search();
@@ -150,7 +151,7 @@ AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
     if ( this.options.facets[i] === facet ) {
       var refinement = facet + ":-" + value;
       this.excludes[refinement] = !this.excludes[refinement];
-      this.page = 0;
+      this.state = this.state.setPage( 0 );
       this._search();
       return true;
     }
@@ -169,7 +170,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
     if ( this.options.facets[i] === facet ) {
       var refinement = facet + ":" + value;
       this.refinements[refinement] = !this.refinements[refinement];
-      this.page = 0;
+      this.state = this.state.setPage( 0 );
       this._search();
       return true;
     }
@@ -178,7 +179,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
   for ( var j = 0; j < this.options.disjunctiveFacets.length; ++j ) {
     if ( this.options.disjunctiveFacets[j] === facet ) {
       this.disjunctiveRefinements[facet][value] = !this.disjunctiveRefinements[facet][value];
-      this.page = 0;
+      this.state = this.state.setPage( 0 );
       this._search();
       return true;
     }
@@ -228,32 +229,25 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
  * Go to next page
  */
 AlgoliaSearchHelper.prototype.nextPage = function() {
-  this._gotoPage( this.page + 1 );
+  this._gotoPage( this.state.page + 1 );
 };
 
 /**
  * Go to previous page
  */
 AlgoliaSearchHelper.prototype.previousPage = function() {
-  if ( this.page > 0 ) {
-    this._gotoPage( this.page - 1 );
-  }
+  this.setPage( this.state.page - 1 );
 };
 
 /**
- * Goto a page
- * @param  {integer} page The page number
- */
-AlgoliaSearchHelper.prototype.gotoPage = function( page ) {
-  this._gotoPage( page );
-};
-
-/**
- * Configure the page but do not trigger a reload
+ * Change the current page
  * @param  {integer} page The page number
  */
 AlgoliaSearchHelper.prototype.setPage = function( page ) {
-  this.page = page;
+  if( page < 0 ) throw new Error( "Page requested below 0." );
+
+  this.state = this.state.setPage( page );
+  this._search();
 };
 
 /**
@@ -288,16 +282,6 @@ AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
 };
 
 ///////////// PRIVATE
-
-/**
- * Goto a page
- * @private
- * @param  {integer} page The page number
- */
-AlgoliaSearchHelper.prototype._gotoPage = function( page ) {
-  this.page = page;
-  this._search();
-};
 
 /**
  * Perform the underlying queries
@@ -427,7 +411,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
 
   return extend( {}, {
     hitsPerPage : this.options.hitsPerPage,
-    page : this.page,
+    page : this.state.page,
     facets : facets,
     facetFilters : this._getFacetFilters()
   }, this.searchParams );
