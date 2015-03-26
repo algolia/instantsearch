@@ -314,17 +314,14 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   }, this );
 
   // add the excludes
-  for ( var exclude in this.excludes ) {
-    if ( this.excludes[exclude] ) {
-      var e = exclude.indexOf( ":-" );
-      var facet = exclude.slice( 0, e );
-      var value = exclude.slice( e + 2 );
-      aggregatedAnswer.facets[facet] = aggregatedAnswer.facets[facet] || {};
-      if ( !aggregatedAnswer.facets[facet][value] ) {
-        aggregatedAnswer.facets[facet][value] = 0;
+  forEach( this.state.facetsExcludes, function( excludes, facetName ){
+    aggregatedAnswer.facets[ facetName ] = aggregatedAnswer.facets[ facetName ] || {};
+    forEach( excludes, function( facetValue ) {
+      if ( !aggregatedAnswer.facets[ facetName ][ facetValue ] ) {
+        aggregatedAnswer.facets[ facetName ][ facetValue ] = 0;
       }
-    }
-  }
+    } );   
+  } );
 
   // call the actual callback
   if ( this.extraQueries.length === 0 ) {
