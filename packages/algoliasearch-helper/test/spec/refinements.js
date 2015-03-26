@@ -3,14 +3,6 @@ var _ = require( "lodash" );
 var sinon = require("sinon"); 
 var algoliasearchHelper = require( "../../index" );
 
-test( "algoliasearchHelper should be initialized with no refinments", function( t ){
-  var helper = algoliasearchHelper( {}, "index", {} );
-  t.ok( _.isEmpty( helper.refinements ), "helper.refinments should be an empty object");
-  t.ok( _.isEmpty( helper.disjunctiveRefinements ), "helper.disjunctiveRefinements should be an empty object");
-  t.ok( _.isEmpty( helper.excludes ), "helper.excludes should be an empty object");
-  t.end();
-} );
-
 test( "isDisjunctiveRefined", function( t ){
   var helper = algoliasearchHelper( null, null, {} );
 
@@ -30,17 +22,18 @@ test( "isDisjunctiveRefined", function( t ){
 
 test( "Adding refinments should add an entry to the refinments attribute", function( t ) {
   var helper = algoliasearchHelper( {}, "index", {} );
-  t.ok( _.isEmpty( helper.refinements ), "should be empty at first");
-  helper.addRefine( "facet1", "42" );
-  t.ok( _.size( helper.refinements ) === 1 &&
-          helper.refinements["facet1:42"] === true,
-        "when adding a refinment, should have one");
-  helper.addRefine( "facet1", "42" );
-  t.ok( _.size( helper.refinements ) === 1, "when adding the same, should still be one");
-  helper.removeRefine( "facet1", "42" );
-  t.ok( _.size( helper.refinements ) === 1 &&
-          helper.refinements["facet1:42"] === false,
-        "when removed, should be still one with the value of the key to false");
+  var facetName = "facet1";
+  var facetValue = "42";
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "should be empty at first");
+  helper.addRefine( facetName, "42" );
+  t.ok( _.size( helper.state.facetsRefinements ) === 1 &&
+          helper.state.facetsRefinements["facet1"] === facetValue,
+          "when adding a refinment, should have one" );
+  helper.addRefine( facetName, facetValue );
+  t.ok( _.size( helper.state.facetsRefinements ) === 1, "when adding the same, should still be one");
+  helper.removeRefine( facetName, facetValue );
+  t.ok( _.size( helper.state.facetsRefinements ) === 0, "Then empty ");
   t.end();
 } );
 
