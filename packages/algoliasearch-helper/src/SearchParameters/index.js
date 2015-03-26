@@ -52,7 +52,7 @@ SearchParameters.prototype = {
   },
   addExcludeRefinement : function addExcludedValue( facet, value ){
     return this.mutateMe( function( m ){
-      if( !m.facetsRefinements[ facet ] ) {
+      if( !m.facetsExcludes[ facet ] ) {
         m.facetsExcludes[ facet ] = [];
       }
       m.facetsExcludes[ facet ].push( value );
