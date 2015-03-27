@@ -46,6 +46,10 @@ helper.search( "", function( err, data ){
 
 `npm install algoliasearch-helper`
 
+### Use with bower
+
+`bower install algoliasearch-helper`
+
 ### Use the CDN
 
 Include this in your page :
