@@ -5,7 +5,7 @@
     "Algolia Team <support@algolia.com>"
   ],
   "description": "Helper for implementing advanced search features with algolia",
-  "main": "dist/algoliasearch-helper.js",
+  "main": "dist/algoliasearch.helper.js",
   "keywords": [
     "js",
     "algolia",
