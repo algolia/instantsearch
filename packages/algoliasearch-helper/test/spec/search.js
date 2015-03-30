@@ -23,7 +23,7 @@ test( "Search should call the algolia client according to the number of refineme
   helper.addDisjunctiveRefine( "city", "New York" );
 
   helper.on( "result", function( data ) {
-    t.ok( _.isEqual( data, testData.responseHelper ) , "should be equal" );
+    t.deepEqual( data, testData.responseHelper,  "should be equal" );
     t.ok( mock.verify(), "Mock constraints should be verified!" );
     t.end();
   } );
