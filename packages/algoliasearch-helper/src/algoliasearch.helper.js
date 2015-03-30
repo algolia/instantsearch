@@ -282,29 +282,29 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
 
   //Since we send request only for disjunctive facets that have been refined,
   //we get the facets informations from the first, general, response.
-  forEach( aggregatedAnswer.facets, function( facetValueObject, facetKey ){
-    if( this.state.disjunctiveFacets.indexOf( facetKey ) !== -1 ){
+  forEach( aggregatedAnswer.facets, function( facetValueObject, facetKey ) {
+    if( this.state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
       aggregatedAnswer.disjunctiveFacets[ facetKey ] = facetValueObject;
-      try{
+      try {
         delete aggregatedAnswer.facets[ facetKey ];
-      } catch( e ) { aggregatedAnswer.facets = undefined; }
+      }
+      catch( e ) { aggregatedAnswer.facets = undefined; }
     }
   }, this );
 
 
-  // this.state.disjunctiveFacets - this.state.disjunctiveFacets( withNoRefinements )
   // aggregate the disjunctive facets
   forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
     for ( var dfacet in content.results[idx + 1].facets ) {
       aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[idx + 1].facets[dfacet];
-      if ( this.disjunctiveRefinements[dfacet] ) {
-        for ( var refinementValue in this.disjunctiveRefinements[dfacet] ) {
-          // add the disjunctive reginements if it is no more retrieved
+      if ( this.state.disjunctiveFacetsRefinements[dfacet] ) {
+        forEach( this.state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
+          // add the disjunctive refinements if it is no more retrieved
           if ( !aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] &&
-              this.disjunctiveRefinements[dfacet][refinementValue] ) {
+               this.state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
             aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] = 0;
           }
-        }
+        }, this);
       }
     }
     // aggregate the disjunctive facets stats
