@@ -1,0 +1,28 @@
+{
+  "name": "algoliasearch-helper",
+  "homepage": "https://github.com/algolia/algoliasearch-client-js",
+  "authors": [
+    "Algolia Team <support@algolia.com>"
+  ],
+  "description": "Helper for implementing advanced search features with algolia",
+  "main": "dist/algoliasearch.helper.js",
+  "keywords": [
+    "js",
+    "algolia",
+    "search",
+    "helper",
+    "facets",
+    "api",
+    "rest"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "examples",
+    "node_modules",
+    "bower_components",
+    "test"
+  ],
+  "dependencies": {
+    "algoliasearch": "3.x"
+  }
+}
