@@ -27,11 +27,6 @@ util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 /**
  * Perform a query
  * @param  {string} q the user query
- * @param  {function} searchCallback the result callback called with two arguments:
- *  err : an error is something wrong occured or null
- *  content: the query answer with an extra 'disjunctiveFacets' attribute
- * @return {undefined | Promise} If a callback is provided then it returns
- *  undefined, otherwise it gives the results through a promise.
  */
 AlgoliaSearchHelper.prototype.search = function( q ) {
   this.state = this.state.setQuery( q )
@@ -44,6 +39,7 @@ AlgoliaSearchHelper.prototype.search = function( q ) {
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function() {
   this.state = this.state.clearRefinements();
+  this._search();
 };
 
 /**
@@ -53,6 +49,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function() {
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -62,6 +59,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -71,6 +69,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value )
  */
 AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
   this.state = this.state.addFacetRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -80,6 +79,7 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
   this.state = this.state.removeFacetRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -89,6 +89,7 @@ AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
   this.state = this.state.addExcludeRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -98,6 +99,7 @@ AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
+  this._search();
 };
 
 /**
@@ -191,6 +193,7 @@ AlgoliaSearchHelper.prototype.setPage = function( page ) {
  */
 AlgoliaSearchHelper.prototype.setIndex = function( name ) {
   this.index = name;
+  this._search();
 };
 
 /**
