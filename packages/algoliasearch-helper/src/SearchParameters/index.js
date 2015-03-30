@@ -1,6 +1,7 @@
-var defaults = require( "lodash/object/defaults" );
+"use strict";
 var keys = require( "lodash/object/keys" );
 var forEach = require( "lodash/collection/forEach" );
+var reduce = require( "lodash/collection/reduce" );
 
 /**
  * @typedef FacetList
@@ -23,8 +24,8 @@ var forEach = require( "lodash/collection/forEach" );
 var SearchParameters = function( newParameters ) {
   var params = newParameters || {};
   //Query
-  /** 
-   * Query used for the search. 
+  /**
+   * Query used for the search.
    * @member {string}
    */
   this.query = params.query || "";
@@ -32,9 +33,9 @@ var SearchParameters = function( newParameters ) {
   /**
    * All the facets that will be requested to the server
    * @member {Object.<string, string>}
-   */ 
+   */
   this.facets = params.facets || [];
-  /** 
+  /**
    * All the declared disjunctive facets
    * @member {Object.<string, string>}
    */
@@ -48,21 +49,68 @@ var SearchParameters = function( newParameters ) {
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
   //Misc. parameters
   /** @member {number} */
-  this.hitsPerpage = params.hitsPerpage || 20;
+  this.hitsPerPage = params.hitsPerPage || 20;
+  /**
+   * @member {number} 
+   **/
+  this.maxValuesPerFacet = params.maxValuesPerFacet || 10;
   /** @member {number} */
   this.page = params.page || 0;
+
+  /**
+   * Possible values : prefixAll, prefixLast, prefixNone
+   * @member {string}
+   */
+  this.queryType = params.queryType;
+  /**
+   * Possible values : true, false, min, strict
+   * @member {string}
+   */
+  this.typoTolerance = params.typoTolerance;
+
+  this.minWordSizefor1Typo = params.minWordSizefor1Typo;
+  this.minWordSizefor2Typos = params.minWordSizefor2Typos;
+  this.allowTyposOnNumericTokens = params.allowTyposOnNumericTokens;
+  this.ignorePlurals = params.ignorePlurals;
+  this.restrictSearchableAttributes = params.restrictSearchableAttributes;
+  this.advancedSyntax = params.advancedSyntax;
+  this.analytics = params.analytics;
+  this.analyticsTags = params.analyticsTags;
+  this.synonyms = params.synonyms;
+  this.replaceSynonymsInHighlight = params.replaceSynonymsInHighlight;
+  this.optionalWords = params.optionalWords;
+  this.removeWordsIfNoResults = params.removeWordsIfNoResults;
+  this.attributesToRetrieve = params.attributesToRetrieve;
+  this.attributesToHighlight = params.attributesToHighlight;
+  this.attributesToSnippet = params.attributesToSnippet;
+  this.getRankingInfo = params.getRankingInfo;
+  this.numericFilters = params.numericFilters;
+  this.tagFilters = params.tagFilters;
+  this.distinct = params.distinct;
+  this.aroundLatLng = params.aroundLatLng;
+  this.aroundLatLngViaIP = params.aroundLatLngViaIP;
+  this.aroundRadius = params.aroundRadius;
+  this.aroundPrecision = params.aroundPrecision;
+  this.insideBoundingBox = params.insideBoundingBox;
 };
 
 SearchParameters.prototype = {
   constructor : SearchParameters,
+  clearRefinements : function clearRefinements() {
+    return this.mutateMe( function( m ) {
+      m.facetsRefinements = {};
+      m.facetsExcludes = {};
+      m.disjunctiveFacetsRefinements = {};
+    } );
+  },
   /**
    * Query setter
    * @method
    * @param {string} newQuery value for the new query
    * @return {SearchParameters}
    */
-  setQuery : function setQuery( newQuery ){
-    return this.mutateMe( function( newState ){
+  setQuery : function setQuery( newQuery ) {
+    return this.mutateMe( function( newState ) {
       newState.query = newQuery;
     } );
   },
@@ -72,10 +120,10 @@ SearchParameters.prototype = {
    * @param {number} newPage new page number
    * @return {SearchParameters}
    */
-  setPage : function setPage( newPage ){
-    return this.mutateMe( function( mutable ){
+  setPage : function setPage( newPage ) {
+    return this.mutateMe( function( mutable ) {
       mutable.page = newPage;
-    });
+    } );
   },
   /**
    * Facets setter
@@ -84,8 +132,8 @@ SearchParameters.prototype = {
    * @param {string[]} facets all the attributes of the algolia records used for conjunctive facetting
    * @return {SearchParameters}
    */
-  setFacets : function setFacets( facets ){
-    return this.mutateMe( function( m ){
+  setFacets : function setFacets( facets ) {
+    return this.mutateMe( function( m ) {
       m.facets = facets;
     } );
   },
@@ -96,8 +144,8 @@ SearchParameters.prototype = {
    * @param {string[]} facets all the attributes of the algolia records used for disjunctive facetting
    * @return {SearchParameters}
    */
-  setDisjunctiveFacets : function setDisjunctiveFacets( facets ){
-    return this.mutateMe( function( m ){
+  setDisjunctiveFacets : function setDisjunctiveFacets( facets ) {
+    return this.mutateMe( function( m ) {
       m.disjunctiveFacets = facets;
     } );
   },
@@ -108,9 +156,9 @@ SearchParameters.prototype = {
    * @param {number} n number of hits retrieved per page of results
    * @return {SearchParameters}
    */
-  setHitsPerPage : function setHitsPerPage( n ){
-    return this.mutateMe( function( m ){
-      m.hitsPerpage = n;
+  setHitsPerPage : function setHitsPerPage( n ) {
+    return this.mutateMe( function( m ) {
+      m.HitsPerPage = n;
     } );
   },
   /**
@@ -120,8 +168,8 @@ SearchParameters.prototype = {
    * @param {string} value value of the attribute
    * @return {SearchParameters}
    */
-  addFacetRefinement : function addFacetRefinement( facet, value ){
-    return this.mutateMe( function( m ){
+  addFacetRefinement : function addFacetRefinement( facet, value ) {
+    return this.mutateMe( function( m ) {
       m.facetsRefinements[ facet ] = value;
     } );
   },
@@ -132,8 +180,8 @@ SearchParameters.prototype = {
    * @param {string} value value of the attribute
    * @return {SearchParameters}
    */
-  addExcludeRefinement : function addExcludedValue( facet, value ){
-    return this.mutateMe( function( m ){
+  addExcludeRefinement : function addExcludedValue( facet, value ) {
+    return this.mutateMe( function( m ) {
       if( !m.facetsExcludes[ facet ] ) {
         m.facetsExcludes[ facet ] = [];
       }
@@ -147,8 +195,8 @@ SearchParameters.prototype = {
    * @param {string} value value of the attribute
    * @return {SearchParameters}
    */
-  addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value){
-    return this.mutateMe( function( m ){
+  addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
+    return this.mutateMe( function( m ) {
       if( !m.disjunctiveFacetsRefinements[ facet ] ) {
         m.disjunctiveFacetsRefinements[ facet ] = [];
       }
@@ -158,11 +206,11 @@ SearchParameters.prototype = {
   /**
    * Remove a refinement set on facet.
    * @method
-   * @param {string} facet 
+   * @param {string} facet
    * @return {SearchParameters}
    */
-  removeFacetRefinement : function removeFacetRefinement( facet ){
-    return this.mutateMe( function( m ){
+  removeFacetRefinement : function removeFacetRefinement( facet ) {
+    return this.mutateMe( function( m ) {
       delete m.facetsRefinements[ facet ];
     } );
   },
@@ -173,9 +221,9 @@ SearchParameters.prototype = {
    * @param {string} value
    * @return {SearchParameters}
    */
-  removeExcludeRefinement : function removeExcludeRefinement( facet, value ){
-    return this.mutateMe( function( m ){
-      if( m.facetsExcludes[ facet ] ){
+  removeExcludeRefinement : function removeExcludeRefinement( facet, value ) {
+    return this.mutateMe( function( m ) {
+      if( m.facetsExcludes[ facet ] ) {
         var idx = m.facetsExcludes[ facet ].indexOf( value );
         if( idx > -1 ) m.facetsExcludes[ facet ].splice( idx, 1 );
       }
@@ -188,9 +236,9 @@ SearchParameters.prototype = {
    * @param {string} value
    * @return {SearchParameters}
    */
-  removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value){
-    return this.mutateMe( function( m ){
-      if( m.disjunctiveFacetsRefinements[ facet ] ){
+  removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value ) {
+    return this.mutateMe( function( m ) {
+      if( m.disjunctiveFacetsRefinements[ facet ] ) {
         var idx = m.disjunctiveFacetsRefinements[ facet ].indexOf( value );
         if( idx > -1 ) m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
       }
@@ -203,8 +251,8 @@ SearchParameters.prototype = {
    * @param {value} value
    * @return {SearchParameters}
    */
-  toggleFacetRefinement : function toggleFacetRefinement( facet, value ){
-    if( this.isFacetRefined( facet, value ) ){
+  toggleFacetRefinement : function toggleFacetRefinement( facet, value ) {
+    if( this.isFacetRefined( facet, value ) ) {
       return this.removeFacetRefinement( facet );
     }
     else {
@@ -218,8 +266,8 @@ SearchParameters.prototype = {
    * @param {value} value
    * @return {SearchParameters}
    */
-  toggleExcludeFacetRefinement : function toggleExcludeFacetRefinement( facet, value ){
-    if( this.isExcludeRefined( facet, value ) ){
+  toggleExcludeFacetRefinement : function toggleExcludeFacetRefinement( facet, value ) {
+    if( this.isExcludeRefined( facet, value ) ) {
       return this.removeExcludeRefinement( facet, value );
     }
     else {
@@ -233,9 +281,9 @@ SearchParameters.prototype = {
    * @param {value} value
    * @return {SearchParameters}
    */
-  toggleDisjunctiveFacetRefinement : function toggleDisjunctiveFacetRefinement( facet, value ){
-    if( this.isDisjunctiveFacetRefined( facet, value ) ){
-      return this.removeDisjunctiveFacetRefinement( facet, value ); 
+  toggleDisjunctiveFacetRefinement : function toggleDisjunctiveFacetRefinement( facet, value ) {
+    if( this.isDisjunctiveFacetRefined( facet, value ) ) {
+      return this.removeDisjunctiveFacetRefinement( facet, value );
     }
     else {
       return this.addDisjunctiveFacetRefinement( facet, value );
@@ -248,7 +296,7 @@ SearchParameters.prototype = {
    * @param {string} value
    * @return {boolean}
    */
-  isFacetRefined : function isFacetRefined( facet, value ){
+  isFacetRefined : function isFacetRefined( facet, value ) {
     return this.facetsRefinements[ facet ] === value;
   },
   /**
@@ -258,7 +306,7 @@ SearchParameters.prototype = {
    * @param {string} value
    * @return {boolean}
    */
-  isExcludeRefined : function isExcludeRefined( facet, value ){
+  isExcludeRefined : function isExcludeRefined( facet, value ) {
     return this.facetsExcludes[ facet ] &&
            this.facetsExcludes[ facet ].indexOf( value ) !== -1;
   },
@@ -269,7 +317,7 @@ SearchParameters.prototype = {
    * @param {string} value
    * @return {boolean}
    */
-  isDisjunctiveFacetRefined : function isDisjunctiveFacetRefined( facet, value){
+  isDisjunctiveFacetRefined : function isDisjunctiveFacetRefined( facet, value ) {
     return this.disjunctiveFacetsRefinements[ facet ] &&
            this.disjunctiveFacetsRefinements[ facet ].indexOf( value ) !== -1;
   },
@@ -280,7 +328,7 @@ SearchParameters.prototype = {
    * @param {value} value
    * @return {string[]}
    */
-  getRefinedDisjunctiveFacets: function getRefinedDisjunctiveFacets(){
+  getRefinedDisjunctiveFacets : function getRefinedDisjunctiveFacets() {
     return keys( this.disjunctiveFacetsRefinements );
   },
   /**
@@ -288,23 +336,35 @@ SearchParameters.prototype = {
    * @method
    * @return {string[]}
    */
-  getUnrefinedDisjunctiveFacets: function(){
+  getUnrefinedDisjunctiveFacets : function() {
     var unrefinedFacets = [];
     var refinedFacets = this.getRefinedDisjunctiveFacets();
-    forEach( this.disjunctiveFacets, function( f ){
+    forEach( this.disjunctiveFacets, function( f ) {
       if( refinedFacets.indexOf( f ) === -1 ) {
         unrefinedFacets.push( f );
       }
     } );
     return unrefinedFacets;
   },
+  managedParameters : ["facets", "disjunctiveFacets", "facetsRefinements",
+           "facetsExcludes", "disjunctiveFacetsRefinements" ],
+  getQueryParams : function getQueryParams(){
+    var managedParameters = this.managedParameters;
+    return reduce( this, function( memo, value, parameter, parameters) {
+      if( managedParameters.indexOf( parameter ) === -1 &&
+          parameters[ parameter ] !== undefined ){
+        memo[ parameter ] = value;
+      };
+      return memo;
+    }, {});
+  },
   /**
    * Helper function to make it easier to build new instances from a mutating
    * function
    * @private
    */
-  mutateMe : function mutateMe( fn ){
-    var newState = new (this.constructor)( this );
+  mutateMe : function mutateMe( fn ) {
+    var newState = new ( this.constructor )( this );
     fn( newState );
     return Object.freeze( newState );
   }

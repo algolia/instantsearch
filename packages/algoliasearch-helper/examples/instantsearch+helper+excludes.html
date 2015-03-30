@@ -45,9 +45,11 @@
           // conjunctive facets (link)
           facets: ['type', 'shipping'],
           // disjunctive facets (checkbox)
-          disjunctiveFacets: ['category', 'manufacturer']
+          disjunctiveFacets: ['category', 'manufacturer'],
           // (optional) default list of facet filters
           //,defaultFacetFilters: ['type:Game']
+          hitsPerPage: 5,
+          maxValuesPerFacet: 5
         });
 
         helper.on( "result", searchCallback );
@@ -64,7 +66,7 @@
         search();
 
         function search() {
-          helper.search($inputfield.val(), { hitsPerPage: 5, maxValuesPerFacet: 5 });
+          helper.search( $inputfield.val() );
         }
 
         function searchCallback( content ) {

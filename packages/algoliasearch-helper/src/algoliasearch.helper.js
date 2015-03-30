@@ -14,16 +14,10 @@ var bind = require( "lodash/function/bind" );
  * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
  */
 function AlgoliaSearchHelper( client, index, options ) {
-  var defaults = AlgoliaSearchHelper.optionsDefaults;
-  var optionsWithDefaults = extend( {}, defaults, options );
-
   this.client = client;
   this.index = index;
-  this.options = optionsWithDefaults;
   this.state = new SearchParameters( options );
 
-  this.refinements = {};
-  this.excludes = {};
   this.disjunctiveRefinements = {};
   this.extraQueries = [];
 }
@@ -36,25 +30,20 @@ util.inherits( AlgoliaSearchHelper, events.EventEmitter );
  * @param  {function} searchCallback the result callback called with two arguments:
  *  err : an error is something wrong occured or null
  *  content: the query answer with an extra 'disjunctiveFacets' attribute
- * @param  {object} searchParams contains options to pass to the inner algolia client
  * @return {undefined | Promise} If a callback is provided then it returns
  *  undefined, otherwise it gives the results through a promise.
  */
-AlgoliaSearchHelper.prototype.search = function( q, searchParams ) {
-  this.state = this.state.setPage( 0 );
-  this.q = q;
-  this.searchParams = searchParams || {};
-  this.refinements = this.refinements || {};
-  this.disjunctiveRefinements = this.disjunctiveRefinements || {};
-  return this._search();
+AlgoliaSearchHelper.prototype.search = function( q ) {
+  this.state = this.state.setQuery( q )
+                         .setPage( 0 );
+  this._search();
 };
 
 /**
- * Remove all refinements (disjunctive + conjunctive)
+ * Remove all refinements (disjunctive + conjunctive + excludes )
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function() {
-  this.disjunctiveRefinements = {};
-  this.refinements = {};
+  this.state = this.state.clearRefinements();
 };
 
 /**
@@ -63,7 +52,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function() {
  * @param  {string} value the associated value
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
-  this.state = this.state.addDisjunctiveFacetRefinement( facet, value);
+  this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
 };
 
 /**
@@ -136,7 +125,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
   }
   else {
     console.log( "warning : you're trying to refine the undeclared facet '" + facet +
-                "'; add it to the helper parameter 'facets' or 'disjunctiveFacets'");
+                "'; add it to the helper parameter 'facets' or 'disjunctiveFacets'" );
   }
   this._search();
 };
@@ -169,7 +158,7 @@ AlgoliaSearchHelper.prototype.isExcluded = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
   return this.state.isDisjunctiveFacetRefined( facet, value );
-}
+};
 
 /**
  * Go to next page
@@ -215,9 +204,9 @@ AlgoliaSearchHelper.prototype.getIndex = function() {
  * Get the currently selected page
  * @return Number the current page
  */
-AlgoliaSearchHelper.prototype.getCurrentPage = function(){
+AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
-}
+};
 
 /**
  * Clear the extra queries added to the underlying batch of queries
@@ -245,11 +234,11 @@ AlgoliaSearchHelper.prototype._search = function() {
   this.client.startQueriesBatch();
 
   //One query for the hits
-  this.client.addQueryInBatch( this.index, this.q, this._getHitsSearchParams() );
+  this.client.addQueryInBatch( this.index, this.state.query, this._getHitsSearchParams() );
 
   //One for each disjunctive facets
   forEach( this.state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
-    this.client.addQueryInBatch( this.index, this.q, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
+    this.client.addQueryInBatch( this.index, this.state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
   }, this );
 
   //One for each extra query
@@ -314,13 +303,13 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   }, this );
 
   // add the excludes
-  forEach( this.state.facetsExcludes, function( excludes, facetName ){
+  forEach( this.state.facetsExcludes, function( excludes, facetName ) {
     aggregatedAnswer.facets[ facetName ] = aggregatedAnswer.facets[ facetName ] || {};
     forEach( excludes, function( facetValue ) {
       if ( !aggregatedAnswer.facets[ facetName ][ facetValue ] ) {
         aggregatedAnswer.facets[ facetName ][ facetValue ] = 0;
       }
-    } );   
+    } );
   } );
 
   // call the actual callback
@@ -345,12 +334,12 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = this.state.facets.concat( this.state.getUnrefinedDisjunctiveFacets() );
 
-  return extend( {}, {
-    hitsPerPage : this.state.hitsPerPage,
-    page : this.state.page,
+  console.log( this.state.getQueryParams() );
+
+  return extend( this.state.getQueryParams(), {
     facets : facets,
     facetFilters : this._getFacetFilters()
-  }, this.searchParams );
+  });
 };
 
 /**
@@ -360,7 +349,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * @return {hash}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
-  return extend( {}, this.searchParams, {
+  return extend( this.state.getQueryParams(), {
     hitsPerPage : 1,
     page : 0,
     attributesToRetrieve : [],
@@ -389,17 +378,17 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
 AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   var facetFilters = [];
 
-  forEach( this.state.facetsRefinements, function( facetValue, facetName ){
+  forEach( this.state.facetsRefinements, function( facetValue, facetName ) {
     facetFilters.push( facetName + ":" + facetValue );
   } );
 
-  forEach( this.state.facetsExcludes, function( facetValues, facetName ){
+  forEach( this.state.facetsExcludes, function( facetValues, facetName ) {
     forEach( facetValues, function( facetValue ) {
       facetFilters.push( facetName + ":-" + facetValue );
     } );
   } );
 
-  forEach( this.state.disjunctiveFacetsRefinements, function( facetValues, facetName ){
+  forEach( this.state.disjunctiveFacetsRefinements, function( facetValues, facetName ) {
     if( facetName === facet ) return;
     var orFilters = [];
     forEach( facetValues, function( facetValue ) {
