@@ -32,6 +32,8 @@ util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 AlgoliaSearchHelper.prototype.search = function( q, holdSearch ) {
   this.state = this.state.setQuery( q )
                          .setPage( 0 );
+
+  this.emit( "change", this.state );
   if( !holdSearch ) {
     this._search();
   }
@@ -43,6 +45,7 @@ AlgoliaSearchHelper.prototype.search = function( q, holdSearch ) {
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function( holdSearch ) {
   this.state = this.state.clearRefinements();
+  this.emit( "change", this.state );
   if( !holdSearch ) {
     this._search();
   }
@@ -56,6 +59,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function( holdSearch ) {
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value, holdSearch ) {
   this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ) {
     this._search();
   }
@@ -69,6 +73,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value, hol
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, holdSearch ) {
   this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ) {
     this._search();
   }
@@ -82,6 +87,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, 
  */
 AlgoliaSearchHelper.prototype.addRefine = function( facet, value, holdSearch ) {
   this.state = this.state.addFacetRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ) {
     this._search();
   }
@@ -95,6 +101,7 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value, holdSearch ) {
  */
 AlgoliaSearchHelper.prototype.removeRefine = function( facet, value, holdSearch ) {
   this.state = this.state.removeFacetRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ){
     this._search();
   }
@@ -108,6 +115,7 @@ AlgoliaSearchHelper.prototype.removeRefine = function( facet, value, holdSearch 
  */
 AlgoliaSearchHelper.prototype.addExclude = function( facet, value, holdSearch ) {
   this.state = this.state.addExcludeRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ){
     this._search();
   }
@@ -121,6 +129,7 @@ AlgoliaSearchHelper.prototype.addExclude = function( facet, value, holdSearch ) 
  */
 AlgoliaSearchHelper.prototype.removeExclude = function( facet, value, holdSearch ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ){
     this._search();
   }
@@ -135,6 +144,7 @@ AlgoliaSearchHelper.prototype.removeExclude = function( facet, value, holdSearch
  */
 AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value, holdSearch ) {
   this.state = this.state.toggleExcludeFacetRefinement( facet, value );
+  this.emit( "change", this.state );
   if( !holdSearch ){
     this._search();
   }
@@ -149,9 +159,11 @@ AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value, holdSearch
 AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value, holdSearch ) {
   if( this.state.facets.indexOf( facet ) > -1 ) {
     this.state = this.state.toggleFacetRefinement( facet, value );
+    this.emit( "change", this.state );
   }
   else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
     this.state = this.state.toggleDisjunctiveFacetRefinement( facet, value );
+    this.emit( "change", this.state );
   }
   else {
     console.log( "warning : you're trying to refine the undeclared facet '" + facet +
@@ -214,6 +226,8 @@ AlgoliaSearchHelper.prototype.setPage = function( page, holdSearch ) {
   if( page < 0 ) throw new Error( "Page requested below 0." );
 
   this.state = this.state.setPage( page );
+  this.emit( "change", this.state );
+
   if( !holdSearch ){
     this._search();
   }
