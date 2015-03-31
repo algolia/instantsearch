@@ -1,6 +1,9 @@
 CHANGELOG
 
 UNRELEASED
+  * FEATURE : (breaking) Auto search on methods can be hold with the last parameter
+  * FEATURE : (breaking) All mututating methods triggers a search
+  * FEATURE : (breaking) Search parameters as a separate object
   * FEATURE : (breaking) Move callback style to a event based API
   * FEATURE : isDisjunctiveRefined to check if a disjunctive facet is refined
   * REFACTORING : constructor, now expose the defaults

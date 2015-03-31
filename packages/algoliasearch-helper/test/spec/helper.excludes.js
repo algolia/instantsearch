@@ -5,6 +5,7 @@ var algoliasearchHelper = require( "../../index" );
 
 test( "addExclude should add an exclusion", function( t ){
   var helper = new algoliasearchHelper( null, null, null );
+  helper._search = function(){};
   var facetName = "facet";
   var facetValueToExclude = "brand";
 
@@ -18,6 +19,7 @@ test( "addExclude should add an exclusion", function( t ){
 
 test( "removeExclude should remove an exclusion", function( t ){
   var helper = new algoliasearchHelper( null, null, null );
+  helper._search = function(){};
   var facetName = "facet";
   var facetValueToExclude = "brand";
   var refinement = facetName + ":-" + facetValueToExclude;
@@ -39,6 +41,7 @@ test( "removeExclude should remove an exclusion", function( t ){
 
 test( "isExcluded should report exclusion correctly", function( t ){
   var helper = new algoliasearchHelper( null, null, null );
+  helper._search = function(){};
   var facetName = "facet";
   var facetValueToExclude = "brand";
 

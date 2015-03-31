@@ -3720,77 +3720,103 @@ util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 /**
  * Perform a query
  * @param  {string} q the user query
- * @param  {function} searchCallback the result callback called with two arguments:
- *  err : an error is something wrong occured or null
- *  content: the query answer with an extra 'disjunctiveFacets' attribute
- * @return {undefined | Promise} If a callback is provided then it returns
- *  undefined, otherwise it gives the results through a promise.
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.search = function( q ) {
+AlgoliaSearchHelper.prototype.search = function( q, holdSearch ) {
   this.state = this.state.setQuery( q )
                          .setPage( 0 );
-  this._search();
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
  * Remove all refinements (disjunctive + conjunctive + excludes )
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.clearRefinements = function() {
+AlgoliaSearchHelper.prototype.clearRefinements = function( holdSearch ) {
   this.state = this.state.clearRefinements();
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
+AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value, holdSearch ) {
   this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet refinement does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, holdSearch ) {
   this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
+AlgoliaSearchHelper.prototype.addRefine = function( facet, value, holdSearch ) {
   this.state = this.state.addFacetRefinement( facet, value );
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet refinement does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
+AlgoliaSearchHelper.prototype.removeRefine = function( facet, value, holdSearch ) {
   this.state = this.state.removeFacetRefinement( facet, value );
+  if( !holdSearch ){
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
+AlgoliaSearchHelper.prototype.addExclude = function( facet, value, holdSearch ) {
   this.state = this.state.addExcludeRefinement( facet, value );
+  if( !holdSearch ){
+    this._search();
+  }
 };
 
 /**
  * Ensure a facet exclude does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
+AlgoliaSearchHelper.prototype.removeExclude = function( facet, value, holdSearch ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
+  if( !holdSearch ){
+    this._search();
+  }
 };
 
 /**
@@ -3798,18 +3824,22 @@ AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {boolean} true if the facet has been found
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
+AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value, holdSearch ) {
   this.state = this.state.toggleExcludeFacetRefinement( facet, value );
-  this._search();
+  if( !holdSearch ){
+    this._search();
+  }
 };
 
 /**
  * Toggle refinement state of a facet
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
+ * @param  {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
  */
-AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
+AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value, holdSearch ) {
   if( this.state.facets.indexOf( facet ) > -1 ) {
     this.state = this.state.toggleFacetRefinement( facet, value );
   }
@@ -3820,7 +3850,9 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
     console.log( "warning : you're trying to refine the undeclared facet '" + facet +
                 "'; add it to the helper parameter 'facets' or 'disjunctiveFacets'" );
   }
-  this._search();
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
@@ -3856,26 +3888,28 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
 /**
  * Go to next page
  */
-AlgoliaSearchHelper.prototype.nextPage = function() {
-  this.setPage( this.state.page + 1 );
+AlgoliaSearchHelper.prototype.nextPage = function( holdSearch ) {
+  this.setPage( this.state.page + 1, holdSearch );
 };
 
 /**
  * Go to previous page
  */
-AlgoliaSearchHelper.prototype.previousPage = function() {
-  this.setPage( this.state.page - 1 );
+AlgoliaSearchHelper.prototype.previousPage = function( holdSearch ) {
+  this.setPage( this.state.page - 1, holdSearch );
 };
 
 /**
  * Change the current page
  * @param  {integer} page The page number
  */
-AlgoliaSearchHelper.prototype.setPage = function( page ) {
+AlgoliaSearchHelper.prototype.setPage = function( page, holdSearch ) {
   if( page < 0 ) throw new Error( "Page requested below 0." );
 
   this.state = this.state.setPage( page );
-  this._search();
+  if( !holdSearch ){
+    this._search();
+  }
 };
 
 /**
@@ -3884,6 +3918,7 @@ AlgoliaSearchHelper.prototype.setPage = function( page ) {
  */
 AlgoliaSearchHelper.prototype.setIndex = function( name ) {
   this.index = name;
+  this._search();
 };
 
 /**

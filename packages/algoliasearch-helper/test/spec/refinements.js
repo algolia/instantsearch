@@ -5,6 +5,7 @@ var algoliasearchHelper = require( "../../index" );
 
 test( "isDisjunctiveRefined", function( t ){
   var helper = algoliasearchHelper( null, null, {} );
+  helper._search = function(){};
 
   var facet = "MyFacet";
   var value = "MyValue";
@@ -22,6 +23,8 @@ test( "isDisjunctiveRefined", function( t ){
 
 test( "Adding refinments should add an entry to the refinments attribute", function( t ) {
   var helper = algoliasearchHelper( {}, "index", {} );
+  helper._search = function(){};
+
   var facetName = "facet1";
   var facetValue = "42";
 
@@ -39,6 +42,8 @@ test( "Adding refinments should add an entry to the refinments attribute", funct
 
 test( "IsRefined should return true if the ( facet, value ) is refined.", function( t ){
   var helper = algoliasearchHelper( null, null, {} );
+  helper._search = function(){};
+
   helper.addRefine( "facet1", "boom" );
 
   t.ok( helper.isRefined( "facet1", "boom" ) );
