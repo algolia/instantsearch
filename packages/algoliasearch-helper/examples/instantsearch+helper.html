@@ -36,32 +36,27 @@
       $(document).ready(function() {
         var $inputfield = $("#q");
 
-        // Replace the following values by your ApplicationID and ApiKey.
         var algolia = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
-        // Replace the following value by the name of the index you want to query.
         var helper = algoliasearchHelper(algolia, 'bestbuy', {
-          // conjunctive facets (link)
           facets: ['type', 'shipping'],
-          // disjunctive facets (checkbox)
-          disjunctiveFacets: ['category', 'manufacturer']
-          // (optional) default list of facet filters
-          //,defaultFacetFilters: ['type:Game']
+          disjunctiveFacets: ['category', 'manufacturer'],
+          hitsPerPage: 5,
+          maxValuesPerFacet: 5
         });
 
         helper.on( "result", searchCallback);
-        $inputfield.keyup( search );
+
+        $inputfield.keyup( function( e ){
+          helper.search( $inputfield.val() );
+        } );
 
         window.toggleRefine = function(facet, value) {
           helper.toggleRefine(facet, value);
-          search();
         }
 
-        search();
+        helper.search( $inputfield.val() );
 
-        function search() {
-          helper.search($inputfield.val(), { hitsPerPage: 5, maxValuesPerFacet: 5 });
-        }
 
         function searchCallback( content ) {
           if (content.query != $inputfield.val()) {
@@ -99,7 +94,7 @@
             for (var value in values) {
 
               facets += '' +
-              '<div class="checkbox"><label><input type="checkbox" ' + (helper.isRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
+              '<div class="checkbox"><label><input type="checkbox" ' + (helper.isDisjunctiveRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
               '</label></div>';
             }
           }
