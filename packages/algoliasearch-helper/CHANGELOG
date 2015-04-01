@@ -1,6 +1,7 @@
 CHANGELOG
 
 UNRELEASED
+  * FIX : handle distinct parameter automatically
   * FEATURE : (breaking) Auto search on methods can be hold with the last parameter
   * FEATURE : (breaking) All mututating methods triggers a search
   * FEATURE : (breaking) Search parameters as a separate object

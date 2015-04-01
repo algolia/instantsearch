@@ -382,13 +382,21 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = this.state.facets.concat( this.state.getUnrefinedDisjunctiveFacets() );
+  var facetFilters = this._getFacetFilters();
 
-  console.log( this.state.getQueryParams() );
-
-  return extend( this.state.getQueryParams(), {
-    facets : facets,
-    facetFilters : this._getFacetFilters()
-  });
+  if( facetFilters.length === 0 ) {
+    return extend( this.state.getQueryParams(), {
+      facets : facets,
+      distinct : false
+    });
+  }
+  else {
+    return extend( this.state.getQueryParams(), {
+      facets : facets,
+      facetFilters : facetFilters,
+      distinct : this.state.distinct || false
+    });
+  }
 };
 
 /**
@@ -398,15 +406,31 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * @return {hash}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
-  return extend( this.state.getQueryParams(), {
-    hitsPerPage : 1,
-    page : 0,
-    attributesToRetrieve : [],
-    attributesToHighlight : [],
-    attributesToSnippet : [],
-    facets : facet,
-    facetFilters : this._getFacetFilters( facet )
-  } );
+  var facetFilters = this._getFacetFilters( facet )
+
+  if( facetFilters.length === 0 ){
+    return extend( this.state.getQueryParams(), {
+      hitsPerPage : 1,
+      page : 0,
+      attributesToRetrieve : [],
+      attributesToHighlight : [],
+      attributesToSnippet : [],
+      facets : facet,
+      distinct : false
+    } );
+  }
+  else {
+    return extend( this.state.getQueryParams(), {
+      hitsPerPage : 1,
+      page : 0,
+      attributesToRetrieve : [],
+      attributesToHighlight : [],
+      attributesToSnippet : [],
+      facets : facet,
+      facetFilters : facetFilters,
+      distinct : this.state.distinct || false
+    } );
+  }
 };
 
 /**
