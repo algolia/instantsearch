@@ -225,7 +225,12 @@ SearchParameters.prototype = {
     return this.mutateMe( function( m ) {
       if( m.facetsExcludes[ facet ] ) {
         var idx = m.facetsExcludes[ facet ].indexOf( value );
-        if( idx > -1 ) m.facetsExcludes[ facet ].splice( idx, 1 );
+        if( idx > -1 ){
+          m.facetsExcludes[ facet ].splice( idx, 1 );
+          if( m.facetsExcludes[ facet ].length === 0 ){
+            delete m.facetsExcludes[ facet ];
+          }
+        }
       }
     } );
   },
@@ -240,7 +245,12 @@ SearchParameters.prototype = {
     return this.mutateMe( function( m ) {
       if( m.disjunctiveFacetsRefinements[ facet ] ) {
         var idx = m.disjunctiveFacetsRefinements[ facet ].indexOf( value );
-        if( idx > -1 ) m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
+        if( idx > -1 ){
+          m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
+          if( m.disjunctiveFacetsRefinements[facet].length === 0 ){
+            delete m.disjunctiveFacetsRefinements[ facet ];
+          }
+        }
       }
     } );
   },
