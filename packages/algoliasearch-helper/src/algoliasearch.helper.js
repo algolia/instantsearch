@@ -17,8 +17,6 @@ function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
   this.state = new SearchParameters( options );
-
-  this.disjunctiveRefinements = {};
   this.extraQueries = [];
 }
 
