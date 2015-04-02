@@ -27,7 +27,7 @@ test( "removeExclude should remove an exclusion", function( t ){
   helper.addExclude( facetName, facetValueToExclude );
   t.ok( helper.state.facetsExcludes[ facetName ].length === 1, "not empty at first");
   helper.removeExclude( facetName, facetValueToExclude );
-  t.ok( helper.state.facetsExcludes[ facetName ].length === 0, "then empty" );
+  t.ok( !helper.state.facetsExcludes[ facetName ], "then empty" );
 
   try{ 
     helper.removeExclude( facetName, facetValueToExclude );
