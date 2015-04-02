@@ -358,6 +358,10 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   // aggregate the disjunctive facets
   forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
     for ( var dfacet in content.results[idx + 1].facets ) {
+      if( this.state.getRankingInfo ) {
+        aggregatedAnswer.facets_stats[dfacet] = aggregatedAnswer.facets_stats[dfacet] || {};
+        aggregatedAnswer.facets_stats[dfacet].timeout = !!( content.results[idx + 1].timeoutCounts );
+      }
       aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[idx + 1].facets[dfacet];
       if ( this.state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( this.state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
