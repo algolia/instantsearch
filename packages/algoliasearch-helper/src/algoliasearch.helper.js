@@ -80,6 +80,32 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, 
 };
 
 /**
+ * Add a numeric refinement on the given attribute
+ * @param  {string} attribute
+ * @param  {string} operator
+ * @param  {number} value
+ * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ */
+AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operator, value, holdSearch ){
+  this.state = this.state.addNumericRefinement( attribute, operator, value );
+  this.emit( "change", this.state );
+  if( !holdSearch ){
+    this._search();
+  }
+}
+
+/**
+ *
+ */
+AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value, holdSearch ){
+  this.state = this.state.removeNumericRefinement( attribute, operator, value );
+  this.emit( "change", this.state );
+  if( !holdSearch ){
+    this._search();
+  }
+}
+
+/**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
@@ -378,25 +404,27 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
 /**
  * Build search parameters used to fetch hits
  * @private
- * @return {hash}
+ * @return {object.<string, any>}
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = this.state.facets.concat( this.state.getUnrefinedDisjunctiveFacets() );
   var facetFilters = this._getFacetFilters();
+  var numericFilters = this._getNumericFilters();
+  var additionalParams = {
+    facets : facets,
+    distinct : false
+  };
 
-  if( facetFilters.length === 0 ) {
-    return extend( this.state.getQueryParams(), {
-      facets : facets,
-      distinct : false
-    });
+  if( facetFilters.length > 0 ) {
+    additionalParams.facetFilters = facetFilters;
+    additionalParams.distinct = this.state.distinct || false;
   }
-  else {
-    return extend( this.state.getQueryParams(), {
-      facets : facets,
-      facetFilters : facetFilters,
-      distinct : this.state.distinct || false
-    });
+
+  if( numericFilters.length > 0 ){
+    additionalParams.numericFilters = numericFilters;
   }
+
+  return extend( this.state.getQueryParams(), additionalParams );
 };
 
 /**
@@ -407,31 +435,43 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet )
+  var numericFilters = this._getNumericFilters();
+  var additionalParams = {
+    hitsPerPage : 1,
+    page : 0,
+    attributesToRetrieve : [],
+    attributesToHighlight : [],
+    attributesToSnippet : [],
+    facets : facet,
+    distinct : false
+  };
 
-  if( facetFilters.length === 0 ){
-    return extend( this.state.getQueryParams(), {
-      hitsPerPage : 1,
-      page : 0,
-      attributesToRetrieve : [],
-      attributesToHighlight : [],
-      attributesToSnippet : [],
-      facets : facet,
-      distinct : false
-    } );
+  if( numericFilters.length > 0 ){
+    additionalParams.numericFilters = numericFilters;
   }
-  else {
-    return extend( this.state.getQueryParams(), {
-      hitsPerPage : 1,
-      page : 0,
-      attributesToRetrieve : [],
-      attributesToHighlight : [],
-      attributesToSnippet : [],
-      facets : facet,
-      facetFilters : facetFilters,
-      distinct : this.state.distinct || false
-    } );
+
+  if( facetFilters > 0 ){
+    additionalParams.facetFilters = facetFilters;
+    additionalParams.distinct = this.state.distinct || false;
   }
+
+  return extend( this.state.getQueryParams(), additionalParams );
 };
+
+/**
+ * Return the numeric filters in an algolia request fashion
+ * @private
+ * @return {array.<string>} the numeric filters in the algolia format
+ */
+AlgoliaSearchHelper.prototype._getNumericFilters = function() {
+  var numericFilters = [];
+  forEach( this.state.numericRefinements, function( operators, attribute ){
+    forEach( operators, function( value, operator ) {
+      numericFilters.push( attribute + operator + value );
+    } );
+  } );
+  return numericFilters;
+}
 
 /**
  * Test if there are some disjunctive refinements on the facet
@@ -443,10 +483,11 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
 };
 
 /**
- * Build facetFilters parameter based on current refinements
+ * Build facetFilters parameter based on current refinements. The array returned
+ * contains strings representing the facet filters in the algolia format.
  * @private
  * @param  {string} facet if set, the current disjunctive facet
- * @return {hash}
+ * @return {array.<string>}
  */
 AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   var facetFilters = [];

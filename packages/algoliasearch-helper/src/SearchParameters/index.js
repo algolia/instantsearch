@@ -2,10 +2,14 @@
 var keys = require( "lodash/object/keys" );
 var forEach = require( "lodash/collection/forEach" );
 var reduce = require( "lodash/collection/reduce" );
+var isEmpty = require( "lodash/lang/isEmpty" );
 
 /**
  * @typedef FacetList
  * @type {Array.<string>}
+ *
+ * @typedef OperatorList
+ * @type {Object.<string, number>}
  */
 
 /**
@@ -47,6 +51,10 @@ var SearchParameters = function( newParameters ) {
   this.facetsExcludes = params.facetsExcludes || {};
   /** @member {Object.<string, FacetList>}*/
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
+  /**
+   * @member {Object.<string, OperatorList>}
+   */
+  this.numericRefinements = params.numericRefinements || {};
   //Misc. parameters
   /** @member {number} */
   this.hitsPerPage = params.hitsPerPage || 20;
@@ -84,7 +92,6 @@ var SearchParameters = function( newParameters ) {
   this.attributesToHighlight = params.attributesToHighlight;
   this.attributesToSnippet = params.attributesToSnippet;
   this.getRankingInfo = params.getRankingInfo;
-  this.numericFilters = params.numericFilters;
   this.tagFilters = params.tagFilters;
   this.distinct = params.distinct;
   this.aroundLatLng = params.aroundLatLng;
@@ -101,6 +108,7 @@ SearchParameters.prototype = {
       m.facetsRefinements = {};
       m.facetsExcludes = {};
       m.disjunctiveFacetsRefinements = {};
+      m.numericRefinements = {};
     } );
   },
   /**
@@ -159,6 +167,41 @@ SearchParameters.prototype = {
   setHitsPerPage : function setHitsPerPage( n ) {
     return this.mutateMe( function( m ) {
       m.HitsPerPage = n;
+    } );
+  },
+  /**
+   * Add or update a numeric filter for a given attribute
+   * @method
+   * @param {string} attribute attribute to set the filter on
+   * @param {string} operator operator of the filter ( possible values : =, >, >=, <, <=, != )
+   * @param {number} value value of the filter
+   */
+  addNumericRefinement : function( attribute, operator, value ) {
+    return this.mutateMe( function( m ){
+      if( !m.numericRefinements[ attribute ] ){
+        m.numericRefinements[ attribute ] = {};
+      }
+      m.numericRefinements[ attribute ][ operator ] = value;
+    } );
+  },
+  /**
+   * Remove a numeric filter
+   * @method
+   * @param {string} attribute attribute to set the filter on
+   * @param {string} operator operator of the filter ( possible values : =, >, >=, <, <=, != )
+   * @param {number} value value of the filter
+   */
+  removeNumericRefinement : function( attribute, operator, value ) {
+    return this.mutateMe( function( m ) {
+      if( m.numericRefinements[ attribute ] ) {
+        var value = m.numericRefinements[ attribute ][ operator ];
+        if( value ) {
+          delete m.numericRefinements[ attribute ][ operator ];
+          if( isEmpty( m.numericRefinements[ attribute ] ) ){
+            delete m.numericRefinements[ attribute ];
+          }
+        }
+      }
     } );
   },
   /**
@@ -356,8 +399,11 @@ SearchParameters.prototype = {
     } );
     return unrefinedFacets;
   },
-  managedParameters : ["facets", "disjunctiveFacets", "facetsRefinements",
-           "facetsExcludes", "disjunctiveFacetsRefinements" ],
+  managedParameters : [
+    "facets", "disjunctiveFacets", "facetsRefinements",
+    "facetsExcludes", "disjunctiveFacetsRefinements",
+    "numericRefinements" 
+  ],
   getQueryParams : function getQueryParams(){
     var managedParameters = this.managedParameters;
     return reduce( this, function( memo, value, parameter, parameters) {
