@@ -452,7 +452,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     additionalParams.numericFilters = numericFilters;
   }
 
-  if( facetFilters > 0 ){
+  if( facetFilters.length > 0 ){
     additionalParams.facetFilters = facetFilters;
     additionalParams.distinct = this.state.distinct || false;
   }
