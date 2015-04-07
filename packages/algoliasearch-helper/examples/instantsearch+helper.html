@@ -48,15 +48,14 @@
         helper.on( "result", searchCallback);
 
         $inputfield.keyup( function( e ){
-          helper.search( $inputfield.val() );
+          helper.setQuery( $inputfield.val() ).search();
         } );
 
         window.toggleRefine = function(facet, value) {
-          helper.toggleRefine(facet, value);
+          helper.toggleRefine(facet, value).search();
         }
 
-        helper.search( $inputfield.val() );
-
+        helper.search();
 
         function searchCallback( content ) {
           if (content.query != $inputfield.val()) {
