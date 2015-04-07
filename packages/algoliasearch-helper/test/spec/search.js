@@ -31,7 +31,7 @@ test( "Search should call the algolia client according to the number of refineme
   helper.search( "" );
 } );
 
-test( "all mutating methods should trigger a search", function( t ){
+test( "no mutating methods should trigger a search", function( t ){
   var helper = Helper( undefined, "Index", {
     disjunctiveFacets : ["city"],
     facets : ["tower"]
@@ -39,7 +39,7 @@ test( "all mutating methods should trigger a search", function( t ){
 
   var stubbedSearch = sinon.stub( helper, "_search" );
 
-  helper.search( "" );
+  helper.setQuery( "" );
   helper.clearRefinements();
   helper.addDisjunctiveRefine( "city", "Paris" );
   helper.removeDisjunctiveRefine( "city", "Paris" );
@@ -48,29 +48,11 @@ test( "all mutating methods should trigger a search", function( t ){
   helper.addRefine( "tower", "Empire State Building" );
   helper.removeRefine( "tower", "Empire State Building" );
 
-  t.equal( stubbedSearch.callCount, 8, "should have triggered calls for each mutating methods");
+  t.equal( stubbedSearch.callCount, 0, "should not have triggered calls");
 
-  t.end();
-} );
+  helper.search();
 
-test( "all mutating methods should not trigger a search if holdSearch flag is passed", function( t ){
-  var helper = Helper( undefined, "Index", {
-    disjunctiveFacets : ["city"],
-    facets : ["tower"]
-  });
-
-  var stubbedSearch = sinon.stub( helper, "_search" );
-
-  helper.search( "", true);
-  helper.clearRefinements( true );
-  helper.addDisjunctiveRefine( "city", "Paris", true );
-  helper.removeDisjunctiveRefine( "city", "Paris", true );
-  helper.addExclude( "tower", "Empire State Building", true );
-  helper.removeExclude( "tower", "Empire State Building", true );
-  helper.addRefine( "tower", "Empire State Building", true );
-  helper.removeRefine( "tower", "Empire State Building", true );
-
-  t.equal( stubbedSearch.callCount, 0, "should not trigger calls for each mutating methods");
+  t.equal( stubbedSearch.callCount, 1, "should have triggered a single search");
 
   t.end();
 } );
