@@ -22,12 +22,18 @@ function AlgoliaSearchHelper( client, index, options ) {
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 
+/**
+ * Start the search with the parameters set in the state.
+ */
+AlgoliaSearchHelper.prototype.search = function(){
+  this._search();
+};
 
 /**
- * Perform a query
+ * Sets the query. Also sets the current page to 0.
  * @param  {string} q the user query
  */
-AlgoliaSearchHelper.prototype.search = function( q ) {
+AlgoliaSearchHelper.prototype.setQuery = function( q ) {
   this.state = this.state.setQuery( q )
                          .setPage( 0 );
 
