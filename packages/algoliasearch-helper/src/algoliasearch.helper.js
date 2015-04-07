@@ -22,6 +22,7 @@ function AlgoliaSearchHelper( client, index, options ) {
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 
+
 /**
  * Perform a query
  * @param  {string} q the user query
@@ -286,6 +287,19 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
  */
 AlgoliaSearchHelper.prototype.clearExtraQueries = function() {
   this.extraQueries = [];
+};
+
+/**
+ * Set the whole state ( warning : will erase previous state )
+ * @param {SearchParameters} newState the whole new state
+ * @param {boolean} holdSearch hold the search
+ */
+AlgoliaSearchHelper.prototype.setState = function( newState, holdSearch ){
+  this.state = new SearchParameters( newState );
+  this.emit( "change", this.state );
+  if( !holdSearch ) {
+    this._search();
+  }
 };
 
 /**
