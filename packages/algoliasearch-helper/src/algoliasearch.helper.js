@@ -519,7 +519,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   } );
 
   forEach( this.state.disjunctiveFacetsRefinements, function( facetValues, facetName ) {
-    if( facetName === facet ) return;
+    if( facetName === facet || !facetValues || facetValues.length === 0 ) return;
     var orFilters = [];
     forEach( facetValues, function( facetValue ) {
       orFilters.push( facetName + ":" + facetValue );
