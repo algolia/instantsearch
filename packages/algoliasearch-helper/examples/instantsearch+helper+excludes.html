@@ -56,17 +56,19 @@
         $inputfield.keyup( search );
 
         window.toggleRefine = function(facet, value) {
-          helper.toggleRefine(facet, value);
+          helper.toggleRefine(facet, value).search();
         }
 
         window.toggleExclude = function(facet, value) {
-          helper.toggleExclude(facet, value);
+          helper.toggleExclude(facet, value).search();
         }
 
         search();
 
+        //Functions
+
         function search() {
-          helper.search( $inputfield.val() );
+          helper.setQuery( $inputfield.val() ).search();
         }
 
         function searchCallback( content ) {
