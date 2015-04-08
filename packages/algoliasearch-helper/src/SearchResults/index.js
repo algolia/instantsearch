@@ -1,4 +1,5 @@
 var forEach = require( "lodash/collection/forEach" );
+var map = require( "lodash/collection/map" );
 
 /**
  * Returns a SearchResults from an Algolia search response.
@@ -18,39 +19,56 @@ var SearchResults = function( state, algoliaResponse ) {
   this.processingTimeMS = mainSubResponse.processingTimeMS;
   this.query = mainSubResponse.query;
 
-  this.disjunctiveFacets = {};
-  this.facets = {};
-  this.facets_stats = {};
+  this.disjunctiveFacets = [];
+  this.facets = [];
+  this.facets_stats = [];
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
   //var aggregatedAnswer = content.results[0];
+  var facetsIndices = getIndices( state.facets );
+  var disjunctiveFacetsIndices = getIndices( state.disjunctiveFacets );
 
   //Since we send request only for disjunctive facets that have been refined,
   //we get the facets informations from the first, general, response.
   forEach( mainSubResponse.facets, function( facetValueObject, facetKey ) {
     if( state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
-      this.disjunctiveFacets[ facetKey ] = facetValueObject;
+      var position = disjunctiveFacetsIndices[ facetKey ];
+      this.disjunctiveFacets[ position ] = {
+        name : facetKey,
+        data : facetValueObject
+      };
     }
     else {
-      this.facets[ facetKey ] = facetValueObject;
+      var position = facetsIndices[ facetKey ];
+      this.facets[ position ] = {
+        name : facetKey,
+        data : facetValueObject
+      };
     }
   }, this );
 
-  // aggregate the disjunctive facets
+  // aggregate the refined disjunctive facets
   forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
+
     for ( var dfacet in algoliaResponse.results[idx + 1].facets ) {
       if( state.getRankingInfo ) {
         this.facets_stats[dfacet] = mainSubResponse.facets_stats[dfacet] || {};
         this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
       }
-      this.disjunctiveFacets[dfacet] = algoliaResponse.results[idx + 1].facets[dfacet];
+
+      var position = disjunctiveFacetsIndices[ dfacet ];
+
+      this.disjunctiveFacets[ position ] = {
+        name : dfacet,
+        data : algoliaResponse.results[idx + 1].facets[dfacet]
+      };
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
           // add the disjunctive refinements if it is no more retrieved
-          if ( !this.disjunctiveFacets[dfacet][refinementValue] &&
+          if ( !this.disjunctiveFacets[position].data[refinementValue] &&
                state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
-            this.disjunctiveFacets[dfacet][refinementValue] = 0;
+            this.disjunctiveFacets[position].data[refinementValue] = 0;
           }
         }, this );
       }
@@ -64,17 +82,30 @@ var SearchResults = function( state, algoliaResponse ) {
 
   // add the excludes
   forEach( state.facetsExcludes, function( excludes, facetName ) {
-    this.facets[ facetName ] = mainSubResponse.facets[ facetName ] || {};
+    var position = facetsIndices[ facetName ];
+    this.facets[ position ] = {
+      name : facetName,
+      data : mainSubResponse.facets[ facetName ]
+    };
     forEach( excludes, function( facetValue ) {
-      if ( !mainSubResponse.facets[ facetName ] ) {
-        this.facets[ facetName ] = {};
-        this.facets[ facetName ][ facetValue ] = 0;
+      if ( !this.facets[ position ] ) {
+        this.facets[ position ] = {
+          name : facetName,
+          data : {}
+        };
+        this.facets[ position ][ "data" ][ facetValue ] = 0;
       }
-      else if ( !mainSubResponse.facets[ facetName ][ facetValue ] ) {
-        this.facets[ facetName ][ facetValue ] = 0;
+      else if ( !this.facets[ position ][ "data" ][ facetValue ] ) {
+        this.facets[ position ][ "data" ][ facetValue ] = 0;
       }
     }, this );
   }, this );
 };
+
+function getIndices( obj ){
+  var indices = {};
+  forEach( obj, function( val, idx ){ indices[ val ] = idx; } );
+  return indices;
+}
 
 module.exports = SearchResults;

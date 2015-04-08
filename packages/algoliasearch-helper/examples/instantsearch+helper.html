@@ -88,13 +88,13 @@
 
           // Scan all disjunctive facets and display them
           var facets = '';
-          for (var facet in content.disjunctiveFacets) {
-            facets += '<h4>' + facet + '</h4>';
-            var values = content.disjunctiveFacets[facet];
+          for( var i = 0; i < content.disjunctiveFacets.length; i++ ){
+            var facet = content.disjunctiveFacets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
+            var values = facet.data;
             for (var value in values) {
-
               facets += '' +
-              '<div class="checkbox"><label><input type="checkbox" ' + (helper.isDisjunctiveRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
+                        '<div class="checkbox"><label><input type="checkbox" ' + (helper.isDisjunctiveRefined(facet.name, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
               '</label></div>';
             }
           }
@@ -102,13 +102,14 @@
 
           // Scan all facets and display them
           facets = '';
-          for (var facet in content.facets) {
-            facets += '<h4>' + facet + '</h4>';
+          for( var i = 0; i < content.facets.length ; i++ ){
+            var facet = content.facets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
             facets += '<ul>';
-            var values = content.facets[facet];
+            var values = facet.data;
             for (var value in values) {
-              facets += '<li class="' + (helper.isRefined(facet, value) ? 'refined' : '') + '">' +
-                  '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')' +
+              facets += '<li class="' + (helper.isRefined(facet.name, value) ? 'refined' : '') + '">' +
+                  '<a href="#" onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')' +
                 '</li>';
             }
             facets += '</ul>';

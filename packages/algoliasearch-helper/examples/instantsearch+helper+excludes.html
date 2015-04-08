@@ -101,34 +101,37 @@
 
           // Scan all disjunctive facets and display them
           var facets = '';
-          for (var facet in content.disjunctiveFacets) {
-            facets += '<h4>' + facet + '</h4>';
-            var values = content.disjunctiveFacets[facet];
+          for ( var i = 0; i < content.disjunctiveFacets.length; i++ ){
+            var facet = content.disjunctiveFacets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
+            var values = facet.data;
             for (var value in values) {
-            facets += '<div class="checkbox"><label>' +
-                  '<input type="checkbox" ' + (helper.isDisjunctiveRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
-                  '</label></div>';
+              facets += '<div class="checkbox"><label>' +
+                        '<input type="checkbox" ' + (helper.isDisjunctiveRefined(facet.name, value) ? 'checked="checked"' : '') +
+                        ' onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
+                        '</label></div>';
             }
           }
           $('#disjunctive-facets').html(facets);
 
           // Scan all facets and display them
           facets = '';
-          for (var facet in content.facets) {
-            facets += '<h4>' + facet + '</h4>';
+          for( var i = 0; i < content.facets.length; i++ ){
+            var facet = content.facets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
             facets += '<ul>';
-            var values = content.facets[facet];
+            var values = facet.data;
             for (var value in values) {
-              var excluded = helper.isExcluded(facet, value);
-              var refined = helper.isRefined(facet, value);
+              var excluded = helper.isExcluded(facet.name, value);
+              var refined = helper.isRefined(facet.name, value);
               facets += '<li class="' + (refined ? 'refined' : '') + ' ' + (excluded ? 'excluded' : '') + '">';
               if (refined) {
-                facets += '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')';
+                facets += '<a href="#" onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')';
               } else if (excluded) {
-                facets += '<a href="#" onclick="toggleExclude(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a>';
+                facets += '<a href="#" onclick="toggleExclude(\'' + facet.name + '\', \'' + value + '\'); return false">' + value + '</a>';
               } else {
-                facets += '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ') ' +
-                  '<small><a href="#" onclick="toggleExclude(\'' + facet + '\', \'' + value + '\'); return false">X</a></small>';
+                facets += '<a href="#" onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ') ' +
+                  '<small><a href="#" onclick="toggleExclude(\'' + facet.name + '\', \'' + value + '\'); return false">X</a></small>';
               }
               facets += '</li>';
             }
