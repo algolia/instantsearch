@@ -1,5 +1,5 @@
 var forEach = require( "lodash/collection/forEach" );
-var map = require( "lodash/collection/map" );
+var compact = require( "lodash/array/compact" );
 
 /**
  * Returns a SearchResults from an Algolia search response.
@@ -100,6 +100,9 @@ var SearchResults = function( state, algoliaResponse ) {
       }
     }, this );
   }, this );
+
+  this.facets = compact( this.facets );
+  this.disjunctiveFacets = compact( this.disjunctiveFacets );
 };
 
 function getIndices( obj ){
