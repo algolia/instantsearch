@@ -2,25 +2,65 @@ var forEach = require( "lodash/collection/forEach" );
 var compact = require( "lodash/array/compact" );
 
 /**
- * Returns a SearchResults from an Algolia search response.
+ * Constructor for SearchResults
+ * @class
+ * @classdesc SearchResults is an object that contains all the data from a
+ * helper query.
  * @param {SearchParameters} state state that led to the response
  * @param {object} algoliaResponse the response from algolia client
  **/
 var SearchResults = function( state, algoliaResponse ) {
   var mainSubResponse = algoliaResponse.results[ 0 ];
 
+  /**
+   * all the hits generated for the query
+   * @member {array}
+   */
   this.hits = mainSubResponse.hits;
+  /**
+   * index where the results come from
+   * @member {string}
+   */
   this.index = mainSubResponse.index;
+  /**
+   * number of hits per page requested
+   * @member {number}
+   */
   this.hitsPerPage = mainSubResponse.hitsPerPage;
+  /**
+   * total number of hits of this query on the index
+   * @member {number}
+   */
   this.nbHits = mainSubResponse.nbHits;
+  /**
+   * total number of pages with respect to the number of hits per page and the total number of hits
+   * @member {number}
+   */
   this.nbPages = mainSubResponse.nbPages;
+  /**
+   * current page
+   * @member {number}
+   */
   this.page = mainSubResponse.page;
-  this.params = mainSubResponse.params;
+  /**
+   * processing time of the main query
+   * @member {number}
+   */
   this.processingTimeMS = mainSubResponse.processingTimeMS;
-  this.query = mainSubResponse.query;
-
+  /**
+   * disjunctive facets results
+   * @member {array}
+   */
   this.disjunctiveFacets = [];
+  /**
+   * other facets results
+   * @member {array}
+   */
   this.facets = [];
+  /**
+   *
+   * @member {array}
+   */
   this.facets_stats = [];
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
@@ -74,7 +114,6 @@ var SearchResults = function( state, algoliaResponse ) {
           }
         }, this );
       }
-    
     }, this );
 
     // aggregate the disjunctive facets stats
