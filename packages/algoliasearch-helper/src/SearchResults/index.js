@@ -25,7 +25,6 @@ var SearchResults = function( state, algoliaResponse ) {
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
-  //var aggregatedAnswer = content.results[0];
   var facetsIndices = getIndices( state.facets );
   var disjunctiveFacetsIndices = getIndices( state.disjunctiveFacets );
 
@@ -50,19 +49,22 @@ var SearchResults = function( state, algoliaResponse ) {
 
   // aggregate the refined disjunctive facets
   forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
+    var result = algoliaResponse.results[ idx + 1 ];
 
-    for ( var dfacet in algoliaResponse.results[idx + 1].facets ) {
+    // There should be only item in facets.
+    forEach( result.facets, function( facetResults, dfacet ){
+      var position = disjunctiveFacetsIndices[ dfacet ];
+
       if( state.getRankingInfo ) {
         this.facets_stats[dfacet] = mainSubResponse.facets_stats[dfacet] || {};
         this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
       }
 
-      var position = disjunctiveFacetsIndices[ dfacet ];
-
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
-        data : algoliaResponse.results[idx + 1].facets[dfacet]
+        data : facetResults
       };
+
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
           // add the disjunctive refinements if it is no more retrieved
@@ -72,11 +74,12 @@ var SearchResults = function( state, algoliaResponse ) {
           }
         }, this );
       }
-    }
+    
+    }, this );
 
     // aggregate the disjunctive facets stats
-    for ( var stats in algoliaResponse.results[idx + 1].facets_stats ) {
-      this.facets_stats[stats] = algoliaResponse.results[idx + 1].facets_stats[stats];
+    for ( var stats in result.facets_stats ) {
+      this.facets_stats[stats] = result.facets_stats[stats];
     }
   }, this );
 
