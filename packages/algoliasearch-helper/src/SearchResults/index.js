@@ -13,6 +13,11 @@ var SearchResults = function( state, algoliaResponse ) {
   var mainSubResponse = algoliaResponse.results[ 0 ];
 
   /**
+   * query used to generate the results
+   * @member {string}
+   */
+  this.query = mainSubResponse.query;
+  /**
    * all the hits generated for the query
    * @member {array}
    */

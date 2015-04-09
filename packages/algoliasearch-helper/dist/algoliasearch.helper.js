@@ -13,7 +13,7 @@ function helper( client, index, opts ) {
 
 module.exports = helper;
 
-},{"./src/algoliasearch.helper":69}],2:[function(require,module,exports){
+},{"./src/algoliasearch.helper":71}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -999,6 +999,38 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":5,"_process":4,"inherits":3}],7:[function(require,module,exports){
+/**
+ * Creates an array with all falsey values removed. The values `false`, `null`,
+ * `0`, `""`, `undefined`, and `NaN` are falsey.
+ *
+ * @static
+ * @memberOf _
+ * @category Array
+ * @param {Array} array The array to compact.
+ * @returns {Array} Returns the new array of filtered values.
+ * @example
+ *
+ * _.compact([0, 1, false, 2, '', 3]);
+ * // => [1, 2, 3]
+ */
+function compact(array) {
+  var index = -1,
+      length = array ? array.length : 0,
+      resIndex = -1,
+      result = [];
+
+  while (++index < length) {
+    var value = array[index];
+    if (value) {
+      result[++resIndex] = value;
+    }
+  }
+  return result;
+}
+
+module.exports = compact;
+
+},{}],8:[function(require,module,exports){
 var arrayEach = require('../internal/arrayEach'),
     baseEach = require('../internal/baseEach'),
     bindCallback = require('../internal/bindCallback'),
@@ -1042,7 +1074,7 @@ function forEach(collection, iteratee, thisArg) {
 
 module.exports = forEach;
 
-},{"../internal/arrayEach":12,"../internal/baseEach":16,"../internal/bindCallback":30,"../lang/isArray":55}],8:[function(require,module,exports){
+},{"../internal/arrayEach":13,"../internal/baseEach":17,"../internal/bindCallback":31,"../lang/isArray":56}],9:[function(require,module,exports){
 var arrayReduce = require('../internal/arrayReduce'),
     baseCallback = require('../internal/baseCallback'),
     baseEach = require('../internal/baseEach'),
@@ -1092,7 +1124,7 @@ function reduce(collection, iteratee, accumulator, thisArg) {
 
 module.exports = reduce;
 
-},{"../internal/arrayReduce":13,"../internal/baseCallback":14,"../internal/baseEach":16,"../internal/baseReduce":26,"../lang/isArray":55}],9:[function(require,module,exports){
+},{"../internal/arrayReduce":14,"../internal/baseCallback":15,"../internal/baseEach":17,"../internal/baseReduce":27,"../lang/isArray":56}],10:[function(require,module,exports){
 var isNative = require('../lang/isNative');
 
 /* Native method references for those with the same name as other `lodash` methods. */
@@ -1118,7 +1150,7 @@ var now = nativeNow || function() {
 
 module.exports = now;
 
-},{"../lang/isNative":58}],10:[function(require,module,exports){
+},{"../lang/isNative":59}],11:[function(require,module,exports){
 var baseSlice = require('../internal/baseSlice'),
     createWrapper = require('../internal/createWrapper'),
     replaceHolders = require('../internal/replaceHolders');
@@ -1178,7 +1210,7 @@ bind.placeholder = {};
 
 module.exports = bind;
 
-},{"../internal/baseSlice":28,"../internal/createWrapper":37,"../internal/replaceHolders":50}],11:[function(require,module,exports){
+},{"../internal/baseSlice":29,"../internal/createWrapper":38,"../internal/replaceHolders":51}],12:[function(require,module,exports){
 /**
  * Copies the values of `source` to `array`.
  *
@@ -1200,7 +1232,7 @@ function arrayCopy(source, array) {
 
 module.exports = arrayCopy;
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 /**
  * A specialized version of `_.forEach` for arrays without support for callback
  * shorthands or `this` binding.
@@ -1224,7 +1256,7 @@ function arrayEach(array, iteratee) {
 
 module.exports = arrayEach;
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /**
  * A specialized version of `_.reduce` for arrays without support for callback
  * shorthands or `this` binding.
@@ -1252,7 +1284,7 @@ function arrayReduce(array, iteratee, accumulator, initFromArray) {
 
 module.exports = arrayReduce;
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var baseMatches = require('./baseMatches'),
     baseMatchesProperty = require('./baseMatchesProperty'),
     baseProperty = require('./baseProperty'),
@@ -1290,7 +1322,7 @@ function baseCallback(func, thisArg, argCount) {
 
 module.exports = baseCallback;
 
-},{"../utility/identity":66,"./baseMatches":23,"./baseMatchesProperty":24,"./baseProperty":25,"./bindCallback":30,"./isBindable":42}],15:[function(require,module,exports){
+},{"../utility/identity":67,"./baseMatches":24,"./baseMatchesProperty":25,"./baseProperty":26,"./bindCallback":31,"./isBindable":43}],16:[function(require,module,exports){
 (function (global){
 var isObject = require('../lang/isObject');
 
@@ -1317,7 +1349,7 @@ var baseCreate = (function() {
 module.exports = baseCreate;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../lang/isObject":59}],16:[function(require,module,exports){
+},{"../lang/isObject":60}],17:[function(require,module,exports){
 var baseForOwn = require('./baseForOwn'),
     isLength = require('./isLength'),
     toObject = require('./toObject');
@@ -1349,7 +1381,7 @@ function baseEach(collection, iteratee) {
 
 module.exports = baseEach;
 
-},{"./baseForOwn":18,"./isLength":44,"./toObject":53}],17:[function(require,module,exports){
+},{"./baseForOwn":19,"./isLength":45,"./toObject":54}],18:[function(require,module,exports){
 var toObject = require('./toObject');
 
 /**
@@ -1381,7 +1413,7 @@ function baseFor(object, iteratee, keysFunc) {
 
 module.exports = baseFor;
 
-},{"./toObject":53}],18:[function(require,module,exports){
+},{"./toObject":54}],19:[function(require,module,exports){
 var baseFor = require('./baseFor'),
     keys = require('../object/keys');
 
@@ -1400,7 +1432,7 @@ function baseForOwn(object, iteratee) {
 
 module.exports = baseForOwn;
 
-},{"../object/keys":62,"./baseFor":17}],19:[function(require,module,exports){
+},{"../object/keys":63,"./baseFor":18}],20:[function(require,module,exports){
 var baseIsEqualDeep = require('./baseIsEqualDeep');
 
 /**
@@ -1436,7 +1468,7 @@ function baseIsEqual(value, other, customizer, isWhere, stackA, stackB) {
 
 module.exports = baseIsEqual;
 
-},{"./baseIsEqualDeep":20}],20:[function(require,module,exports){
+},{"./baseIsEqualDeep":21}],21:[function(require,module,exports){
 var equalArrays = require('./equalArrays'),
     equalByTag = require('./equalByTag'),
     equalObjects = require('./equalObjects'),
@@ -1539,7 +1571,7 @@ function baseIsEqualDeep(object, other, equalFunc, customizer, isWhere, stackA, 
 
 module.exports = baseIsEqualDeep;
 
-},{"../lang/isArray":55,"../lang/isTypedArray":61,"./equalArrays":38,"./equalByTag":39,"./equalObjects":40}],21:[function(require,module,exports){
+},{"../lang/isArray":56,"../lang/isTypedArray":62,"./equalArrays":39,"./equalByTag":40,"./equalObjects":41}],22:[function(require,module,exports){
 /**
  * The base implementation of `_.isFunction` without support for environments
  * with incorrect `typeof` results.
@@ -1556,7 +1588,7 @@ function baseIsFunction(value) {
 
 module.exports = baseIsFunction;
 
-},{}],22:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual');
 
 /** Used for native method references. */
@@ -1616,7 +1648,7 @@ function baseIsMatch(object, props, values, strictCompareFlags, customizer) {
 
 module.exports = baseIsMatch;
 
-},{"./baseIsEqual":19}],23:[function(require,module,exports){
+},{"./baseIsEqual":20}],24:[function(require,module,exports){
 var baseIsMatch = require('./baseIsMatch'),
     isStrictComparable = require('./isStrictComparable'),
     keys = require('../object/keys');
@@ -1663,7 +1695,7 @@ function baseMatches(source) {
 
 module.exports = baseMatches;
 
-},{"../object/keys":62,"./baseIsMatch":22,"./isStrictComparable":46}],24:[function(require,module,exports){
+},{"../object/keys":63,"./baseIsMatch":23,"./isStrictComparable":47}],25:[function(require,module,exports){
 var baseIsEqual = require('./baseIsEqual'),
     isStrictComparable = require('./isStrictComparable');
 
@@ -1689,7 +1721,7 @@ function baseMatchesProperty(key, value) {
 
 module.exports = baseMatchesProperty;
 
-},{"./baseIsEqual":19,"./isStrictComparable":46}],25:[function(require,module,exports){
+},{"./baseIsEqual":20,"./isStrictComparable":47}],26:[function(require,module,exports){
 /**
  * The base implementation of `_.property` which does not coerce `key` to a string.
  *
@@ -1705,7 +1737,7 @@ function baseProperty(key) {
 
 module.exports = baseProperty;
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /**
  * The base implementation of `_.reduce` and `_.reduceRight` without support
  * for callback shorthands or `this` binding, which iterates over `collection`
@@ -1731,7 +1763,7 @@ function baseReduce(collection, iteratee, accumulator, initFromCollection, eachF
 
 module.exports = baseReduce;
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 var identity = require('../utility/identity'),
     metaMap = require('./metaMap');
 
@@ -1750,7 +1782,7 @@ var baseSetData = !metaMap ? identity : function(func, data) {
 
 module.exports = baseSetData;
 
-},{"../utility/identity":66,"./metaMap":48}],28:[function(require,module,exports){
+},{"../utility/identity":67,"./metaMap":49}],29:[function(require,module,exports){
 /**
  * The base implementation of `_.slice` without an iteratee call guard.
  *
@@ -1784,7 +1816,7 @@ function baseSlice(array, start, end) {
 
 module.exports = baseSlice;
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * Converts `value` to a string if it is not one. An empty string is returned
  * for `null` or `undefined` values.
@@ -1802,7 +1834,7 @@ function baseToString(value) {
 
 module.exports = baseToString;
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var identity = require('../utility/identity');
 
 /**
@@ -1843,7 +1875,7 @@ function bindCallback(func, thisArg, argCount) {
 
 module.exports = bindCallback;
 
-},{"../utility/identity":66}],31:[function(require,module,exports){
+},{"../utility/identity":67}],32:[function(require,module,exports){
 /* Native method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
 
@@ -1879,7 +1911,7 @@ function composeArgs(args, partials, holders) {
 
 module.exports = composeArgs;
 
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /* Native method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
 
@@ -1917,7 +1949,7 @@ function composeArgsRight(args, partials, holders) {
 
 module.exports = composeArgsRight;
 
-},{}],33:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 (function (global){
 var createCtorWrapper = require('./createCtorWrapper');
 
@@ -1943,7 +1975,7 @@ function createBindWrapper(func, thisArg) {
 module.exports = createBindWrapper;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./createCtorWrapper":34}],34:[function(require,module,exports){
+},{"./createCtorWrapper":35}],35:[function(require,module,exports){
 var baseCreate = require('./baseCreate'),
     isObject = require('../lang/isObject');
 
@@ -1968,7 +2000,7 @@ function createCtorWrapper(Ctor) {
 
 module.exports = createCtorWrapper;
 
-},{"../lang/isObject":59,"./baseCreate":15}],35:[function(require,module,exports){
+},{"../lang/isObject":60,"./baseCreate":16}],36:[function(require,module,exports){
 (function (global){
 var arrayCopy = require('./arrayCopy'),
     composeArgs = require('./composeArgs'),
@@ -2077,7 +2109,7 @@ function createHybridWrapper(func, bitmask, thisArg, partials, holders, partials
 module.exports = createHybridWrapper;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./arrayCopy":11,"./composeArgs":31,"./composeArgsRight":32,"./createCtorWrapper":34,"./reorder":49,"./replaceHolders":50}],36:[function(require,module,exports){
+},{"./arrayCopy":12,"./composeArgs":32,"./composeArgsRight":33,"./createCtorWrapper":35,"./reorder":50,"./replaceHolders":51}],37:[function(require,module,exports){
 (function (global){
 var createCtorWrapper = require('./createCtorWrapper');
 
@@ -2124,7 +2156,7 @@ function createPartialWrapper(func, bitmask, thisArg, partials) {
 module.exports = createPartialWrapper;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./createCtorWrapper":34}],37:[function(require,module,exports){
+},{"./createCtorWrapper":35}],38:[function(require,module,exports){
 var baseSetData = require('./baseSetData'),
     createBindWrapper = require('./createBindWrapper'),
     createHybridWrapper = require('./createHybridWrapper'),
@@ -2212,7 +2244,7 @@ function createWrapper(func, bitmask, thisArg, partials, holders, argPos, ary, a
 
 module.exports = createWrapper;
 
-},{"./baseSetData":27,"./createBindWrapper":33,"./createHybridWrapper":35,"./createPartialWrapper":36,"./getData":41,"./mergeData":47,"./setData":51}],38:[function(require,module,exports){
+},{"./baseSetData":28,"./createBindWrapper":34,"./createHybridWrapper":36,"./createPartialWrapper":37,"./getData":42,"./mergeData":48,"./setData":52}],39:[function(require,module,exports){
 /**
  * A specialized version of `baseIsEqualDeep` for arrays with support for
  * partial deep comparisons.
@@ -2268,7 +2300,7 @@ function equalArrays(array, other, equalFunc, customizer, isWhere, stackA, stack
 
 module.exports = equalArrays;
 
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]',
     dateTag = '[object Date]',
@@ -2319,7 +2351,7 @@ function equalByTag(object, other, tag) {
 
 module.exports = equalByTag;
 
-},{}],40:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 var keys = require('../object/keys');
 
 /** Used for native method references. */
@@ -2395,7 +2427,7 @@ function equalObjects(object, other, equalFunc, customizer, isWhere, stackA, sta
 
 module.exports = equalObjects;
 
-},{"../object/keys":62}],41:[function(require,module,exports){
+},{"../object/keys":63}],42:[function(require,module,exports){
 var metaMap = require('./metaMap'),
     noop = require('../utility/noop');
 
@@ -2412,7 +2444,7 @@ var getData = !metaMap ? noop : function(func) {
 
 module.exports = getData;
 
-},{"../utility/noop":67,"./metaMap":48}],42:[function(require,module,exports){
+},{"../utility/noop":68,"./metaMap":49}],43:[function(require,module,exports){
 var baseSetData = require('./baseSetData'),
     isNative = require('../lang/isNative'),
     support = require('../support');
@@ -2452,7 +2484,7 @@ function isBindable(func) {
 
 module.exports = isBindable;
 
-},{"../lang/isNative":58,"../support":65,"./baseSetData":27}],43:[function(require,module,exports){
+},{"../lang/isNative":59,"../support":66,"./baseSetData":28}],44:[function(require,module,exports){
 /**
  * Used as the maximum length of an array-like value.
  * See the [ES spec](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
@@ -2476,7 +2508,7 @@ function isIndex(value, length) {
 
 module.exports = isIndex;
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 /**
  * Used as the maximum length of an array-like value.
  * See the [ES spec](https://people.mozilla.org/~jorendorff/es6-draft.html#sec-number.max_safe_integer)
@@ -2501,7 +2533,7 @@ function isLength(value) {
 
 module.exports = isLength;
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * Checks if `value` is object-like.
  *
@@ -2515,7 +2547,7 @@ function isObjectLike(value) {
 
 module.exports = isObjectLike;
 
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -2532,7 +2564,7 @@ function isStrictComparable(value) {
 
 module.exports = isStrictComparable;
 
-},{"../lang/isObject":59}],47:[function(require,module,exports){
+},{"../lang/isObject":60}],48:[function(require,module,exports){
 var arrayCopy = require('./arrayCopy'),
     composeArgs = require('./composeArgs'),
     composeArgsRight = require('./composeArgsRight'),
@@ -2633,7 +2665,7 @@ function mergeData(data, source) {
 
 module.exports = mergeData;
 
-},{"./arrayCopy":11,"./composeArgs":31,"./composeArgsRight":32,"./replaceHolders":50}],48:[function(require,module,exports){
+},{"./arrayCopy":12,"./composeArgs":32,"./composeArgsRight":33,"./replaceHolders":51}],49:[function(require,module,exports){
 (function (global){
 var isNative = require('../lang/isNative');
 
@@ -2646,7 +2678,7 @@ var metaMap = WeakMap && new WeakMap;
 module.exports = metaMap;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../lang/isNative":58}],49:[function(require,module,exports){
+},{"../lang/isNative":59}],50:[function(require,module,exports){
 var arrayCopy = require('./arrayCopy'),
     isIndex = require('./isIndex');
 
@@ -2677,7 +2709,7 @@ function reorder(array, indexes) {
 
 module.exports = reorder;
 
-},{"./arrayCopy":11,"./isIndex":43}],50:[function(require,module,exports){
+},{"./arrayCopy":12,"./isIndex":44}],51:[function(require,module,exports){
 /** Used as the internal argument placeholder. */
 var PLACEHOLDER = '__lodash_placeholder__';
 
@@ -2707,7 +2739,7 @@ function replaceHolders(array, placeholder) {
 
 module.exports = replaceHolders;
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 var baseSetData = require('./baseSetData'),
     now = require('../date/now');
 
@@ -2750,7 +2782,7 @@ var setData = (function() {
 
 module.exports = setData;
 
-},{"../date/now":9,"./baseSetData":27}],52:[function(require,module,exports){
+},{"../date/now":10,"./baseSetData":28}],53:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('./isIndex'),
@@ -2794,7 +2826,7 @@ function shimKeys(object) {
 
 module.exports = shimKeys;
 
-},{"../lang/isArguments":54,"../lang/isArray":55,"../object/keysIn":63,"../support":65,"./isIndex":43,"./isLength":44}],53:[function(require,module,exports){
+},{"../lang/isArguments":55,"../lang/isArray":56,"../object/keysIn":64,"../support":66,"./isIndex":44,"./isLength":45}],54:[function(require,module,exports){
 var isObject = require('../lang/isObject');
 
 /**
@@ -2810,7 +2842,7 @@ function toObject(value) {
 
 module.exports = toObject;
 
-},{"../lang/isObject":59}],54:[function(require,module,exports){
+},{"../lang/isObject":60}],55:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -2850,7 +2882,7 @@ function isArguments(value) {
 
 module.exports = isArguments;
 
-},{"../internal/isLength":44,"../internal/isObjectLike":45}],55:[function(require,module,exports){
+},{"../internal/isLength":45,"../internal/isObjectLike":46}],56:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isNative = require('./isNative'),
     isObjectLike = require('../internal/isObjectLike');
@@ -2893,7 +2925,7 @@ var isArray = nativeIsArray || function(value) {
 
 module.exports = isArray;
 
-},{"../internal/isLength":44,"../internal/isObjectLike":45,"./isNative":58}],56:[function(require,module,exports){
+},{"../internal/isLength":45,"../internal/isObjectLike":46,"./isNative":59}],57:[function(require,module,exports){
 var isArguments = require('./isArguments'),
     isArray = require('./isArray'),
     isFunction = require('./isFunction'),
@@ -2943,7 +2975,7 @@ function isEmpty(value) {
 
 module.exports = isEmpty;
 
-},{"../internal/isLength":44,"../internal/isObjectLike":45,"../object/keys":62,"./isArguments":54,"./isArray":55,"./isFunction":57,"./isString":60}],57:[function(require,module,exports){
+},{"../internal/isLength":45,"../internal/isObjectLike":46,"../object/keys":63,"./isArguments":55,"./isArray":56,"./isFunction":58,"./isString":61}],58:[function(require,module,exports){
 (function (global){
 var baseIsFunction = require('../internal/baseIsFunction'),
     isNative = require('./isNative');
@@ -2990,7 +3022,7 @@ var isFunction = !(baseIsFunction(/x/) || (Uint8Array && !baseIsFunction(Uint8Ar
 module.exports = isFunction;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../internal/baseIsFunction":21,"./isNative":58}],58:[function(require,module,exports){
+},{"../internal/baseIsFunction":22,"./isNative":59}],59:[function(require,module,exports){
 var escapeRegExp = require('../string/escapeRegExp'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -3047,7 +3079,7 @@ function isNative(value) {
 
 module.exports = isNative;
 
-},{"../internal/isObjectLike":45,"../string/escapeRegExp":64}],59:[function(require,module,exports){
+},{"../internal/isObjectLike":46,"../string/escapeRegExp":65}],60:[function(require,module,exports){
 /**
  * Checks if `value` is the language type of `Object`.
  * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
@@ -3079,7 +3111,7 @@ function isObject(value) {
 
 module.exports = isObject;
 
-},{}],60:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 var isObjectLike = require('../internal/isObjectLike');
 
 /** `Object#toString` result references. */
@@ -3117,7 +3149,7 @@ function isString(value) {
 
 module.exports = isString;
 
-},{"../internal/isObjectLike":45}],61:[function(require,module,exports){
+},{"../internal/isObjectLike":46}],62:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isObjectLike = require('../internal/isObjectLike');
 
@@ -3194,7 +3226,7 @@ function isTypedArray(value) {
 
 module.exports = isTypedArray;
 
-},{"../internal/isLength":44,"../internal/isObjectLike":45}],62:[function(require,module,exports){
+},{"../internal/isLength":45,"../internal/isObjectLike":46}],63:[function(require,module,exports){
 var isLength = require('../internal/isLength'),
     isNative = require('../lang/isNative'),
     isObject = require('../lang/isObject'),
@@ -3244,7 +3276,7 @@ var keys = !nativeKeys ? shimKeys : function(object) {
 
 module.exports = keys;
 
-},{"../internal/isLength":44,"../internal/shimKeys":52,"../lang/isNative":58,"../lang/isObject":59}],63:[function(require,module,exports){
+},{"../internal/isLength":45,"../internal/shimKeys":53,"../lang/isNative":59,"../lang/isObject":60}],64:[function(require,module,exports){
 var isArguments = require('../lang/isArguments'),
     isArray = require('../lang/isArray'),
     isIndex = require('../internal/isIndex'),
@@ -3311,7 +3343,7 @@ function keysIn(object) {
 
 module.exports = keysIn;
 
-},{"../internal/isIndex":43,"../internal/isLength":44,"../lang/isArguments":54,"../lang/isArray":55,"../lang/isObject":59,"../support":65}],64:[function(require,module,exports){
+},{"../internal/isIndex":44,"../internal/isLength":45,"../lang/isArguments":55,"../lang/isArray":56,"../lang/isObject":60,"../support":66}],65:[function(require,module,exports){
 var baseToString = require('../internal/baseToString');
 
 /**
@@ -3345,7 +3377,7 @@ function escapeRegExp(string) {
 
 module.exports = escapeRegExp;
 
-},{"../internal/baseToString":29}],65:[function(require,module,exports){
+},{"../internal/baseToString":30}],66:[function(require,module,exports){
 (function (global){
 var isNative = require('./lang/isNative');
 
@@ -3424,7 +3456,7 @@ var support = {};
 module.exports = support;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./lang/isNative":58}],66:[function(require,module,exports){
+},{"./lang/isNative":59}],67:[function(require,module,exports){
 /**
  * This method returns the first argument provided to it.
  *
@@ -3446,7 +3478,7 @@ function identity(value) {
 
 module.exports = identity;
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /**
  * A no-operation function which returns `undefined` regardless of the
  * arguments it receives.
@@ -3467,7 +3499,7 @@ function noop() {
 
 module.exports = noop;
 
-},{}],68:[function(require,module,exports){
+},{}],69:[function(require,module,exports){
 "use strict";
 var keys = require( "lodash/object/keys" );
 var forEach = require( "lodash/collection/forEach" );
@@ -3898,9 +3930,173 @@ SearchParameters.prototype = {
 
 module.exports = SearchParameters;
 
-},{"lodash/collection/forEach":7,"lodash/collection/reduce":8,"lodash/lang/isEmpty":56,"lodash/object/keys":62}],69:[function(require,module,exports){
+},{"lodash/collection/forEach":8,"lodash/collection/reduce":9,"lodash/lang/isEmpty":57,"lodash/object/keys":63}],70:[function(require,module,exports){
+var forEach = require( "lodash/collection/forEach" );
+var compact = require( "lodash/array/compact" );
+
+/**
+ * Constructor for SearchResults
+ * @class
+ * @classdesc SearchResults is an object that contains all the data from a
+ * helper query.
+ * @param {SearchParameters} state state that led to the response
+ * @param {object} algoliaResponse the response from algolia client
+ **/
+var SearchResults = function( state, algoliaResponse ) {
+  var mainSubResponse = algoliaResponse.results[ 0 ];
+
+  /**
+   * query used to generate the results
+   * @member {string}
+   */
+  this.query = mainSubResponse.query;
+  /**
+   * all the hits generated for the query
+   * @member {array}
+   */
+  this.hits = mainSubResponse.hits;
+  /**
+   * index where the results come from
+   * @member {string}
+   */
+  this.index = mainSubResponse.index;
+  /**
+   * number of hits per page requested
+   * @member {number}
+   */
+  this.hitsPerPage = mainSubResponse.hitsPerPage;
+  /**
+   * total number of hits of this query on the index
+   * @member {number}
+   */
+  this.nbHits = mainSubResponse.nbHits;
+  /**
+   * total number of pages with respect to the number of hits per page and the total number of hits
+   * @member {number}
+   */
+  this.nbPages = mainSubResponse.nbPages;
+  /**
+   * current page
+   * @member {number}
+   */
+  this.page = mainSubResponse.page;
+  /**
+   * processing time of the main query
+   * @member {number}
+   */
+  this.processingTimeMS = mainSubResponse.processingTimeMS;
+  /**
+   * disjunctive facets results
+   * @member {array}
+   */
+  this.disjunctiveFacets = [];
+  /**
+   * other facets results
+   * @member {array}
+   */
+  this.facets = [];
+  /**
+   *
+   * @member {array}
+   */
+  this.facets_stats = [];
+
+  var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
+
+  var facetsIndices = getIndices( state.facets );
+  var disjunctiveFacetsIndices = getIndices( state.disjunctiveFacets );
+
+  //Since we send request only for disjunctive facets that have been refined,
+  //we get the facets informations from the first, general, response.
+  forEach( mainSubResponse.facets, function( facetValueObject, facetKey ) {
+    if( state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
+      var position = disjunctiveFacetsIndices[ facetKey ];
+      this.disjunctiveFacets[ position ] = {
+        name : facetKey,
+        data : facetValueObject
+      };
+    }
+    else {
+      var position = facetsIndices[ facetKey ];
+      this.facets[ position ] = {
+        name : facetKey,
+        data : facetValueObject
+      };
+    }
+  }, this );
+
+  // aggregate the refined disjunctive facets
+  forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
+    var result = algoliaResponse.results[ idx + 1 ];
+
+    // There should be only item in facets.
+    forEach( result.facets, function( facetResults, dfacet ){
+      var position = disjunctiveFacetsIndices[ dfacet ];
+
+      if( state.getRankingInfo ) {
+        this.facets_stats[dfacet] = mainSubResponse.facets_stats[dfacet] || {};
+        this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
+      }
+
+      this.disjunctiveFacets[ position ] = {
+        name : dfacet,
+        data : facetResults
+      };
+
+      if ( state.disjunctiveFacetsRefinements[dfacet] ) {
+        forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
+          // add the disjunctive refinements if it is no more retrieved
+          if ( !this.disjunctiveFacets[position].data[refinementValue] &&
+               state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
+            this.disjunctiveFacets[position].data[refinementValue] = 0;
+          }
+        }, this );
+      }
+    }, this );
+
+    // aggregate the disjunctive facets stats
+    for ( var stats in result.facets_stats ) {
+      this.facets_stats[stats] = result.facets_stats[stats];
+    }
+  }, this );
+
+  // add the excludes
+  forEach( state.facetsExcludes, function( excludes, facetName ) {
+    var position = facetsIndices[ facetName ];
+    this.facets[ position ] = {
+      name : facetName,
+      data : mainSubResponse.facets[ facetName ]
+    };
+    forEach( excludes, function( facetValue ) {
+      if ( !this.facets[ position ] ) {
+        this.facets[ position ] = {
+          name : facetName,
+          data : {}
+        };
+        this.facets[ position ][ "data" ][ facetValue ] = 0;
+      }
+      else if ( !this.facets[ position ][ "data" ][ facetValue ] ) {
+        this.facets[ position ][ "data" ][ facetValue ] = 0;
+      }
+    }, this );
+  }, this );
+
+  this.facets = compact( this.facets );
+  this.disjunctiveFacets = compact( this.disjunctiveFacets );
+};
+
+function getIndices( obj ){
+  var indices = {};
+  forEach( obj, function( val, idx ){ indices[ val ] = idx; } );
+  return indices;
+}
+
+module.exports = SearchResults;
+
+},{"lodash/array/compact":7,"lodash/collection/forEach":8}],71:[function(require,module,exports){
 "use strict";
 var SearchParameters = require( "./SearchParameters" );
+var SearchResults = require( "./SearchResults" );
 var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
@@ -3912,7 +4108,7 @@ var bind = require( "lodash/function/bind" );
  * @class
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
+ * @param  {object} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
  */
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
@@ -3923,60 +4119,60 @@ function AlgoliaSearchHelper( client, index, options ) {
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
 
+/**
+ * Start the search with the parameters set in the state.
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.search = function(){
+  this._search();
+  return this;
+};
 
 /**
- * Perform a query
+ * Sets the query. Also sets the current page to 0.
  * @param  {string} q the user query
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.search = function( q, holdSearch ) {
+AlgoliaSearchHelper.prototype.setQuery = function( q ) {
   this.state = this.state.setQuery( q )
                          .setPage( 0 );
 
   this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Remove all refinements (disjunctive + conjunctive + excludes )
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.clearRefinements = function( holdSearch ) {
+AlgoliaSearchHelper.prototype.clearRefinements = function( ) {
   this.state = this.state.clearRefinements();
   this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Ensure a facet refinement does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
+  return this;
 };
 
 /**
@@ -3984,120 +4180,157 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value, 
  * @param  {string} attribute
  * @param  {string} operator
  * @param  {number} value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operator, value, holdSearch ){
+AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operator, value ){
   this.state = this.state.addNumericRefinement( attribute, operator, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 }
 
 /**
- *
+ * Remove a numeric filter.
+ * @param  {string} attribute
+ * @param  {string} operator
+ * @param  {number} value
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value, holdSearch ){
+AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value ){
   this.state = this.state.removeNumericRefinement( attribute, operator, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 }
 
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.addRefine = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
   this.state = this.state.addFacetRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Ensure a facet refinement does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.removeRefine = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
   this.state = this.state.removeFacetRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.addExclude = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
   this.state = this.state.addExcludeRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Ensure a facet exclude does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.removeExclude = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Toggle refinement state of an exclude
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @return {boolean} true if the facet has been found
- * @param {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
   this.state = this.state.toggleExcludeFacetRefinement( facet, value );
   this.emit( "change", this.state );
-  if( !holdSearch ){
-    this._search();
-  }
+  return this;
 };
 
 /**
  * Toggle refinement state of a facet
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
- * @param  {boolean} holdSearch Optionnal parameter to specify that the search should not be triggered right away
+ * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value, holdSearch ) {
+AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
   if( this.state.facets.indexOf( facet ) > -1 ) {
     this.state = this.state.toggleFacetRefinement( facet, value );
-    this.emit( "change", this.state );
   }
   else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
     this.state = this.state.toggleDisjunctiveFacetRefinement( facet, value );
-    this.emit( "change", this.state );
   }
   else {
     console.log( "warning : you're trying to refine the undeclared facet '" + facet +
-                "'; add it to the helper parameter 'facets' or 'disjunctiveFacets'" );
+                "'; add it to the helper options 'facets' or 'disjunctiveFacets'" );
+    return this;
   }
-  if( !holdSearch ) {
-    this._search();
-  }
+  this.emit( "change", this.state );
+  return this;
+};
+
+/**
+ * Go to next page
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.nextPage = function() {
+  return this.setPage( this.state.page + 1 );
+};
+
+/**
+ * Go to previous page
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.previousPage = function() {
+  return this.setPage( this.state.page - 1 );
+};
+
+/**
+ * Change the current page
+ * @param  {integer} page The page number
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setPage = function( page ) {
+  if( page < 0 ) throw new Error( "Page requested below 0." );
+
+  this.state = this.state.setPage( page );
+  this.emit( "change", this.state );
+  return this;
+};
+
+/**
+ * Configure the underlying index name
+ * @param {string} name the index name
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setIndex = function( name ) {
+  this.index = name;
+  return this;
+};
+
+/**
+ * Set the whole state ( warning : will erase previous state )
+ * @param {SearchParameters} newState the whole new state
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setState = function( newState ){
+  this.state = new SearchParameters( newState );
+  this.emit( "change", this.state );
+  return this;
 };
 
 /**
@@ -4131,44 +4364,6 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
 };
 
 /**
- * Go to next page
- */
-AlgoliaSearchHelper.prototype.nextPage = function( holdSearch ) {
-  this.setPage( this.state.page + 1, holdSearch );
-};
-
-/**
- * Go to previous page
- */
-AlgoliaSearchHelper.prototype.previousPage = function( holdSearch ) {
-  this.setPage( this.state.page - 1, holdSearch );
-};
-
-/**
- * Change the current page
- * @param  {integer} page The page number
- */
-AlgoliaSearchHelper.prototype.setPage = function( page, holdSearch ) {
-  if( page < 0 ) throw new Error( "Page requested below 0." );
-
-  this.state = this.state.setPage( page );
-  this.emit( "change", this.state );
-
-  if( !holdSearch ){
-    this._search();
-  }
-};
-
-/**
- * Configure the underlying index name
- * @param {string} name the index name
- */
-AlgoliaSearchHelper.prototype.setIndex = function( name ) {
-  this.index = name;
-  this._search();
-};
-
-/**
  * Get the underlying configured index name
  */
 AlgoliaSearchHelper.prototype.getIndex = function() {
@@ -4188,19 +4383,6 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
  */
 AlgoliaSearchHelper.prototype.clearExtraQueries = function() {
   this.extraQueries = [];
-};
-
-/**
- * Set the whole state ( warning : will erase previous state )
- * @param {SearchParameters} newState the whole new state
- * @param {boolean} holdSearch hold the search
- */
-AlgoliaSearchHelper.prototype.setState = function( newState, holdSearch ){
-  this.state = new SearchParameters( newState );
-  this.emit( "change", this.state );
-  if( !holdSearch ) {
-    this._search();
-  }
 };
 
 /**
@@ -4241,9 +4423,9 @@ AlgoliaSearchHelper.prototype._search = function() {
  * Transform the response as sent by the server and transform it into a user
  * usable objet that merge the results of all the batch requests.
  * @private
- * @param disjunctiveFacets {Hash}
+ * @param disjunctiveFacets {object}
  * @param err {Error}
- * @param content {Hash}
+ * @param content {object}
  */
 AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   if ( err ) {
@@ -4252,65 +4434,15 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   }
 
   var disjunctiveFacets = this.state.getRefinedDisjunctiveFacets();
-
-  var aggregatedAnswer = content.results[0];
-  aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
-  aggregatedAnswer.facets_stats = aggregatedAnswer.facets_stats || {};
-
-  //Since we send request only for disjunctive facets that have been refined,
-  //we get the facets informations from the first, general, response.
-  forEach( aggregatedAnswer.facets, function( facetValueObject, facetKey ) {
-    if( this.state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
-      aggregatedAnswer.disjunctiveFacets[ facetKey ] = facetValueObject;
-      try {
-        delete aggregatedAnswer.facets[ facetKey ];
-      }
-      catch( e ) { aggregatedAnswer.facets = undefined; }
-    }
-  }, this );
-
-
-  // aggregate the disjunctive facets
-  forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
-    for ( var dfacet in content.results[idx + 1].facets ) {
-      if( this.state.getRankingInfo ) {
-        aggregatedAnswer.facets_stats[dfacet] = aggregatedAnswer.facets_stats[dfacet] || {};
-        aggregatedAnswer.facets_stats[dfacet].timeout = !!( content.results[idx + 1].timeoutCounts );
-      }
-      aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[idx + 1].facets[dfacet];
-      if ( this.state.disjunctiveFacetsRefinements[dfacet] ) {
-        forEach( this.state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
-          // add the disjunctive refinements if it is no more retrieved
-          if ( !aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] &&
-               this.state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
-            aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] = 0;
-          }
-        }, this);
-      }
-    }
-    // aggregate the disjunctive facets stats
-    for ( var stats in content.results[idx + 1].facets_stats ) {
-      aggregatedAnswer.facets_stats[stats] = content.results[idx + 1].facets_stats[stats];
-    }
-  }, this );
-
-  // add the excludes
-  forEach( this.state.facetsExcludes, function( excludes, facetName ) {
-    aggregatedAnswer.facets[ facetName ] = aggregatedAnswer.facets[ facetName ] || {};
-    forEach( excludes, function( facetValue ) {
-      if ( !aggregatedAnswer.facets[ facetName ][ facetValue ] ) {
-        aggregatedAnswer.facets[ facetName ][ facetValue ] = 0;
-      }
-    } );
-  } );
+  var formattedResponse = new SearchResults( this.state, content );
 
   // call the actual callback
   if ( this.extraQueries.length === 0 ) {
-    this.emit( "result", aggregatedAnswer );
+    this.emit( "result", formattedResponse );
   }
   else {
     // append the extra queries
-    var c = { results : [ aggregatedAnswer ] };
+    var c = { results : [ formattedResponse ] };
     for ( var i = 0; i < this.extraQueries.length; ++i ) {
       c.results.push( content.results[1 + disjunctiveFacets.length + i] );
     }
@@ -4348,7 +4480,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * Build search parameters used to fetch a disjunctive facet
  * @private
  * @param  {string} facet the associated facet name
- * @return {hash}
+ * @return {object}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet )
@@ -4420,7 +4552,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   } );
 
   forEach( this.state.disjunctiveFacetsRefinements, function( facetValues, facetName ) {
-    if( facetName === facet ) return;
+    if( facetName === facet || !facetValues || facetValues.length === 0 ) return;
     var orFilters = [];
     forEach( facetValues, function( facetValue ) {
       orFilters.push( facetName + ":" + facetValue );
@@ -4433,7 +4565,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":68,"./functions/extend":70,"events":2,"lodash/collection/forEach":7,"lodash/function/bind":10,"util":6}],70:[function(require,module,exports){
+},{"./SearchParameters":69,"./SearchResults":70,"./functions/extend":72,"events":2,"lodash/collection/forEach":8,"lodash/function/bind":11,"util":6}],72:[function(require,module,exports){
 "use strict";
 module.exports = function extend( out ) {
   out = out || {};
