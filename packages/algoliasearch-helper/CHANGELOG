@@ -1,6 +1,8 @@
 CHANGELOG
 
 UNRELEASED
+  * FEATURE : (breaking) Facets results are stored in an array with an order
+  that reflects their definition.
   * FIX : handle distinct parameter automatically
   * FEATURE : (breaking) Auto search on methods can be hold with the last parameter
   * FEATURE : (breaking) All mututating methods triggers a search
