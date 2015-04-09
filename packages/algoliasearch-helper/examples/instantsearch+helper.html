@@ -39,10 +39,11 @@
         var algolia = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
 
         var helper = algoliasearchHelper(algolia, 'bestbuy', {
-          facets: ['type', 'shipping'],
+          facets: ['type', 'shipping', 'salePrice'],
           disjunctiveFacets: ['category', 'manufacturer'],
           hitsPerPage: 5,
-          maxValuesPerFacet: 5
+          maxValuesPerFacet: 5,
+          getRankingInfo : true
         });
 
         helper.on( "result", searchCallback);
