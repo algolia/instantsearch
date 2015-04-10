@@ -66,7 +66,7 @@ var SearchResults = function( state, algoliaResponse ) {
    *
    * @member {array}
    */
-  this.facets_stats = [];
+  this.facets_stats = mainSubResponse.facets_stats || [];
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
@@ -101,7 +101,7 @@ var SearchResults = function( state, algoliaResponse ) {
       var position = disjunctiveFacetsIndices[ dfacet ];
 
       if( state.getRankingInfo ) {
-        this.facets_stats[dfacet] = mainSubResponse.facets_stats[dfacet] || {};
+        this.facets_stats[dfacet] = ( mainSubResponse.facets_stats && mainSubResponse.facets_stats[dfacet] ) || {};
         this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
       }
 
