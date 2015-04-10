@@ -62,11 +62,6 @@ var SearchResults = function( state, algoliaResponse ) {
    * @member {array}
    */
   this.facets = [];
-  /**
-   *
-   * @member {array}
-   */
-  this.facets_stats = mainSubResponse.facets_stats || [];
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
@@ -82,6 +77,7 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
+      assignFacetStats( this.disjunctiveFacets[ position ], state, mainSubResponse, facetKey );
     }
     else {
       var position = facetsIndices[ facetKey ];
@@ -89,6 +85,7 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
+      assignFacetStats( this.facets[ position ], state, mainSubResponse, facetKey );
     }
   }, this );
 
@@ -100,15 +97,11 @@ var SearchResults = function( state, algoliaResponse ) {
     forEach( result.facets, function( facetResults, dfacet ){
       var position = disjunctiveFacetsIndices[ dfacet ];
 
-      if( state.getRankingInfo ) {
-        this.facets_stats[dfacet] = ( mainSubResponse.facets_stats && mainSubResponse.facets_stats[dfacet] ) || {};
-        this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
-      }
-
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
         data : facetResults
       };
+      assignFacetStats( this.disjunctiveFacets[ position ], state, result, dfacet );
 
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
@@ -120,11 +113,6 @@ var SearchResults = function( state, algoliaResponse ) {
         }, this );
       }
     }, this );
-
-    // aggregate the disjunctive facets stats
-    for ( var stats in result.facets_stats ) {
-      this.facets_stats[stats] = result.facets_stats[stats];
-    }
   }, this );
 
   // add the excludes
@@ -149,6 +137,15 @@ function getIndices( obj ){
   var indices = {};
   forEach( obj, function( val, idx ){ indices[ val ] = idx; } );
   return indices;
+}
+
+function assignFacetStats( dest, state, response, key ) {
+  if ( response.facets_stats && response.facets_stats[key] ) {
+    dest.stats = response.facets_stats[key];
+    if ( state.getRankingInfo ) {
+      dest.stats.timeout = !!( response.timeoutCounts );
+    }
+  }
 }
 
 module.exports = SearchResults;
