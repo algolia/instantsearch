@@ -4078,16 +4078,9 @@ var SearchResults = function( state, algoliaResponse ) {
       data : mainSubResponse.facets[ facetName ]
     };
     forEach( excludes, function( facetValue ) {
-      if ( !this.facets[ position ] ) {
-        this.facets[ position ] = {
-          name : facetName,
-          data : {}
-        };
-        this.facets[ position ][ "data" ][ facetValue ] = 0;
-      }
-      else if ( !this.facets[ position ][ "data" ][ facetValue ] ) {
-        this.facets[ position ][ "data" ][ facetValue ] = 0;
-      }
+      this.facets[ position ] = this.facets[ position ] || { name : facetName };
+      this.facets[ position ].data = this.facets[ position ].data || {};
+      this.facets[ position ].data[ facetValue ] = 0;
     }, this );
   }, this );
 
