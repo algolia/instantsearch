@@ -6,7 +6,7 @@ var algoliaSearch = require( "algoliasearch" );
 var Helper = require( "../../index" );
 
 test( "Search should call the algolia client according to the number of refinements", function( t ){
-  var testData = require( "./search.testData" );
+  var testData = require( "./search.testdata" );
 
   var client = algoliaSearch( "dsf", "dsfdf" );
 
