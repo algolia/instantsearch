@@ -1,15 +1,16 @@
 CHANGELOG
 
 UNRELEASED
+  * FIX : handle distinct parameter automatically
+  * FIX : batch response handler gets the proper search state
   * FEATURE : (breaking) Facets results are stored in an array with an order
   that reflects their definition.
-  * FIX : handle distinct parameter automatically
-  * FEATURE : (breaking) Auto search on methods can be hold with the last parameter
-  * FEATURE : (breaking) All mututating methods triggers a search
+  * FEATURE : Search results explicit definition
   * FEATURE : (breaking) Search parameters as a separate object
   * FEATURE : (breaking) Move callback style to a event based API
   * FEATURE : isDisjunctiveRefined to check if a disjunctive facet is refined
-  * REFACTORING : constructor, now expose the defaults
+  * FEATURE : basic support for numeric filters
+  * FEATURE : version number on the main helper factory
   * TESTS : defaults test
 
 1.0.0
