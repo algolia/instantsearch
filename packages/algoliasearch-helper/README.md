@@ -50,6 +50,10 @@ helper.search( "" );
 
 `npm install algoliasearch-helper`
 
+### Use with bower
+
+`bower install algoliasearch-helper`
+
 ### Use the CDN
 
 Include this in your page :
