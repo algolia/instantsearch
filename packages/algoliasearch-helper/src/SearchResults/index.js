@@ -77,7 +77,8 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
-      assignFacetStats( this.disjunctiveFacets[ position ], state, mainSubResponse, facetKey );
+      assignFacetStats( this.disjunctiveFacets[ position ], mainSubResponse.facets_stats, facetKey );
+      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
     }
     else {
       var position = facetsIndices[ facetKey ];
@@ -85,7 +86,8 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
-      assignFacetStats( this.facets[ position ], state, mainSubResponse, facetKey );
+      assignFacetStats( this.facets[ position ], mainSubResponse.facets_stats, facetKey );
+      assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
     }
   }, this );
 
@@ -101,7 +103,8 @@ var SearchResults = function( state, algoliaResponse ) {
         name : dfacet,
         data : facetResults
       };
-      assignFacetStats( this.disjunctiveFacets[ position ], state, result, dfacet );
+      assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
+      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet);
 
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
@@ -139,12 +142,15 @@ function getIndices( obj ){
   return indices;
 }
 
-function assignFacetStats( dest, state, response, key ) {
-  if ( response.facets_stats && response.facets_stats[key] ) {
-    dest.stats = response.facets_stats[key];
-    if ( state.getRankingInfo ) {
-      dest.stats.timeout = !!( response.timeoutCounts );
-    }
+function assignFacetStats( dest, facets_stats, key ) {
+  if ( facets_stats && facets_stats[key] ) {
+    dest.stats = facets_stats[key];
+  }
+}
+
+function assignFacetTimeout( dest, timeoutCounts, getRankingInfo ) {
+  if ( getRankingInfo ) {
+    dest.timeout = !!( timeoutCounts );
   }
 }
 
