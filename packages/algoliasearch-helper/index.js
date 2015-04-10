@@ -10,4 +10,6 @@ function helper( client, index, opts ) {
   return new AlgoliaSearchHelper( client, index, opts );
 }
 
+helper.version = "2.0.0-beta"
+
 module.exports = helper;
