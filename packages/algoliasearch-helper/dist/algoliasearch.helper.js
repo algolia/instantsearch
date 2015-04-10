@@ -1,15 +1,25 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.algoliasearchHelper = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+/**
+ */
 "use strict";
 var AlgoliaSearchHelper = require( "./src/algoliasearch.helper" );
 /**
- * Algolia Search Helper providing faceting and disjunctive faceting
- * @param {AlgoliaSearch} client - An AlgoliaSearch client
- * @param {string} index - The index name to query
- * @param {Object} [opts] an associative array defining the hitsPerPage, list of facets, the list of disjunctive facets and the default facet filters
+ * The algoliasearch-helper module is a function that instanciate the helper.
+ * @module algoliasearch-helper
+ * @param  {AlgoliaSearch} client an AlgoliaSearch client
+ * @param  {string} index the index name to query
+ * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParamaters}, just an object containing the properties you need from it.
+ * @return {AlgoliaSearchHelper}
  */
 function helper( client, index, opts ) {
   return new AlgoliaSearchHelper( client, index, opts );
 }
+
+/**
+ * The version currently used
+ * @member module:algoliasearch-helper.version
+ */
+helper.version = "2.0.0-rc1"
 
 module.exports = helper;
 
@@ -4106,15 +4116,19 @@ var bind = require( "lodash/function/bind" );
 /**
  * Initialize a new AlgoliaSearchHelper
  * @class
+ * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
+ * search. It provides an event based interface for search callbacks :
+ *  - change : when the internal search state is changed. This event contains a {SearchParameters} object
+ *  - result : when the response is retrieved from Algolia and is processed. This event contains a {SearchResults} object
+ *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {object} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
+ * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParamaters}, just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
   this.state = new SearchParameters( options );
-  this.extraQueries = [];
 }
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
@@ -4378,22 +4392,6 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
 };
 
-/**
- * Clear the extra queries added to the underlying batch of queries
- */
-AlgoliaSearchHelper.prototype.clearExtraQueries = function() {
-  this.extraQueries = [];
-};
-
-/**
- * Add an extra query to the underlying batch of queries. Once you add queries
- * to the batch, the 2nd parameter of the searchCallback will be an object with a `results`
- * attribute listing all search results.
- */
-AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
-  this.extraQueries.push( { index : index, query : query, params : ( params || {} ) } );
-};
-
 ///////////// PRIVATE
 
 /**
@@ -4401,53 +4399,39 @@ AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
  * @private
  */
 AlgoliaSearchHelper.prototype._search = function() {
+  var state = this.state;
+
   this.client.startQueriesBatch();
 
   //One query for the hits
-  this.client.addQueryInBatch( this.index, this.state.query, this._getHitsSearchParams() );
+  this.client.addQueryInBatch( this.index, state.query, this._getHitsSearchParams() );
 
   //One for each disjunctive facets
-  forEach( this.state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
-    this.client.addQueryInBatch( this.index, this.state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
+  forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
+    this.client.addQueryInBatch( this.index, state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
   }, this );
 
-  //One for each extra query
-  forEach( this.extraQueries, function( queryParams ) {
-    this.client.addQueryInBatch( queryParams.index, queryParams.query, queryParams.params );
-  }, this );
-
-  this.client.sendQueriesBatch( bind( this._handleResponse, this ) );
+  this.client.sendQueriesBatch( bind( this._handleResponse, this, state ) );
 };
 
 /**
  * Transform the response as sent by the server and transform it into a user
  * usable objet that merge the results of all the batch requests.
  * @private
- * @param disjunctiveFacets {object}
- * @param err {Error}
- * @param content {object}
+ * @param {SearchParameters} state state used for to generate the request
+ * @param {Error} err error if any, null otherwise
+ * @param {object} content content of the response
  */
-AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
+AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) {
   if ( err ) {
     this.emit( "error", err );
     return;
   }
 
-  var disjunctiveFacets = this.state.getRefinedDisjunctiveFacets();
-  var formattedResponse = new SearchResults( this.state, content );
+  var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
+  var formattedResponse = new SearchResults( state, content );
 
-  // call the actual callback
-  if ( this.extraQueries.length === 0 ) {
-    this.emit( "result", formattedResponse );
-  }
-  else {
-    // append the extra queries
-    var c = { results : [ formattedResponse ] };
-    for ( var i = 0; i < this.extraQueries.length; ++i ) {
-      c.results.push( content.results[1 + disjunctiveFacets.length + i] );
-    }
-    this.emit( "result", c );
-  }
+  this.emit( "result", formattedResponse );
 };
 
 /**

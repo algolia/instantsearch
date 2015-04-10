@@ -16,16 +16,22 @@ specifically made to work with the newest V3 versions of it.
 
 ## What does it look like?
 
+A small example that uses Browserify to manage modules.
+
 ```javascript
 var algoliasearch = require( "algoliasearch" );
 var algoliasearchHelper = require( "algoliasearch-helper" );
 
-var client = algoliasearch( "GKDHJFHGN", "kfhjd02dsfklh" );
+var client = algoliasearch( "app_id", "secret" );
 
 var helper = algoliasearchHelper( client, "myMainIndex", { 
-  facets : ["mainCharacterFirstName", "year"],
-  disjunctiveFacets : ["producer"]
+  facets : [ "mainCharacterFirstName", "year" ],
+  disjunctiveFacets : [ "director" ]
 });
+
+helper.on( "result", function( data ){
+  console.log( data.hits );
+} );
 
 helper.addDisjunctiveRefine( "director", "Clint Eastword" );
 helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
@@ -33,14 +39,12 @@ helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
 helper.addRefine( "year", "2003" );
 
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
-helper.search( "", function( err, data ){
-  console.log( err ? "Error : " + data.message : data );
-} );
+helper.search( "" );
 ```
 
 ## How to use this module
 
-[See the examples in action](http://algolia.github.io/algoliasearch-helper-js/)
+(See the examples in action)[http://algolia.github.io/algoliasearch-helper-js/]
 
 ### Use with NPM
 
@@ -50,7 +54,7 @@ helper.search( "", function( err, data ){
 
 Include this in your page :
 
-`<script src="//cdn.jsdelivr.net/algoliasearch.helper/1.0.0/algoliasearch.helper.min.js"></script>`
+`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2.0.0-rc1/algoliasearch.helper.min.js"></script>`
 
 ## How to contribute
 
