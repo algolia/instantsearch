@@ -23,7 +23,6 @@ function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
   this.state = new SearchParameters( options );
-  this.extraQueries = [];
 }
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
@@ -287,22 +286,6 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
 };
 
-/**
- * Clear the extra queries added to the underlying batch of queries
- */
-AlgoliaSearchHelper.prototype.clearExtraQueries = function() {
-  this.extraQueries = [];
-};
-
-/**
- * Add an extra query to the underlying batch of queries. Once you add queries
- * to the batch, the 2nd parameter of the searchCallback will be an object with a `results`
- * attribute listing all search results.
- */
-AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
-  this.extraQueries.push( { index : index, query : query, params : ( params || {} ) } );
-};
-
 ///////////// PRIVATE
 
 /**
@@ -320,11 +303,6 @@ AlgoliaSearchHelper.prototype._search = function() {
   //One for each disjunctive facets
   forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
     this.client.addQueryInBatch( this.index, state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
-  }, this );
-
-  //One for each extra query
-  forEach( this.extraQueries, function( queryParams ) {
-    this.client.addQueryInBatch( queryParams.index, queryParams.query, queryParams.params );
   }, this );
 
   this.client.sendQueriesBatch( bind( this._handleResponse, this, state ) );
@@ -347,18 +325,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
   var formattedResponse = new SearchResults( state, content );
 
-  // call the actual callback
-  if ( this.extraQueries.length === 0 ) {
-    this.emit( "result", formattedResponse );
-  }
-  else {
-    // append the extra queries
-    var c = { results : [ formattedResponse ] };
-    for ( var i = 0; i < this.extraQueries.length; ++i ) {
-      c.results.push( content.results[1 + disjunctiveFacets.length + i] );
-    }
-    this.emit( "result", c );
-  }
+  this.emit( "result", formattedResponse );
 };
 
 /**
