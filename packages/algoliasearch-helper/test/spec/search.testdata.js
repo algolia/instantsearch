@@ -184,15 +184,18 @@ var response = {
 
 
 var responseHelper = {
-   "hitsPerPage" : 20,
-   "disjunctiveFacets" : {
-      "city" : {
+  "hitsPerPage" : 20,
+  "disjunctiveFacets" : [
+    {
+      "name" : "city",
+      "data" : {
          "New York" : 1,
          "San Francisco" : 1,
          "Paris" : 3
       }
-   },
-   "facets" : {},
+    }
+   ],
+   "facets" : [],
    "hits" : [
       {
          "city" : "New York",
@@ -339,7 +342,6 @@ var responseHelper = {
          "name" : "Hotel A"
       }
    ],
-   "params" : "query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%22city%3AParis%22%2C%22city%3ANew%20York%22%5D%5D",
    "page" : 0,
    "facets_stats" : {},
    "query" : "",
