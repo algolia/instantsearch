@@ -192,6 +192,7 @@ var responseHelper = {
          "Paris" : 3
       }
    },
+   "facets" : {},
    "hits" : [
       {
          "city" : "New York",

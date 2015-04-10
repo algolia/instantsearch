@@ -1,5 +1,6 @@
 "use strict";
 var SearchParameters = require( "./SearchParameters" );
+var SearchResults = require( "./SearchResults" );
 var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
@@ -11,7 +12,7 @@ var bind = require( "lodash/function/bind" );
  * @class
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {hash} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
+ * @param  {object} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
  */
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
@@ -326,9 +327,9 @@ AlgoliaSearchHelper.prototype._search = function() {
  * Transform the response as sent by the server and transform it into a user
  * usable objet that merge the results of all the batch requests.
  * @private
- * @param disjunctiveFacets {Hash}
+ * @param disjunctiveFacets {object}
  * @param err {Error}
- * @param content {Hash}
+ * @param content {object}
  */
 AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   if ( err ) {
@@ -337,65 +338,15 @@ AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
   }
 
   var disjunctiveFacets = this.state.getRefinedDisjunctiveFacets();
-
-  var aggregatedAnswer = content.results[0];
-  aggregatedAnswer.disjunctiveFacets = aggregatedAnswer.disjunctiveFacets || {};
-  aggregatedAnswer.facets_stats = aggregatedAnswer.facets_stats || {};
-
-  //Since we send request only for disjunctive facets that have been refined,
-  //we get the facets informations from the first, general, response.
-  forEach( aggregatedAnswer.facets, function( facetValueObject, facetKey ) {
-    if( this.state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
-      aggregatedAnswer.disjunctiveFacets[ facetKey ] = facetValueObject;
-      try {
-        delete aggregatedAnswer.facets[ facetKey ];
-      }
-      catch( e ) { aggregatedAnswer.facets = undefined; }
-    }
-  }, this );
-
-
-  // aggregate the disjunctive facets
-  forEach( disjunctiveFacets, function( disjunctiveFacet, idx ) {
-    for ( var dfacet in content.results[idx + 1].facets ) {
-      if( this.state.getRankingInfo ) {
-        aggregatedAnswer.facets_stats[dfacet] = aggregatedAnswer.facets_stats[dfacet] || {};
-        aggregatedAnswer.facets_stats[dfacet].timeout = !!( content.results[idx + 1].timeoutCounts );
-      }
-      aggregatedAnswer.disjunctiveFacets[dfacet] = content.results[idx + 1].facets[dfacet];
-      if ( this.state.disjunctiveFacetsRefinements[dfacet] ) {
-        forEach( this.state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
-          // add the disjunctive refinements if it is no more retrieved
-          if ( !aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] &&
-               this.state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
-            aggregatedAnswer.disjunctiveFacets[dfacet][refinementValue] = 0;
-          }
-        }, this);
-      }
-    }
-    // aggregate the disjunctive facets stats
-    for ( var stats in content.results[idx + 1].facets_stats ) {
-      aggregatedAnswer.facets_stats[stats] = content.results[idx + 1].facets_stats[stats];
-    }
-  }, this );
-
-  // add the excludes
-  forEach( this.state.facetsExcludes, function( excludes, facetName ) {
-    aggregatedAnswer.facets[ facetName ] = aggregatedAnswer.facets[ facetName ] || {};
-    forEach( excludes, function( facetValue ) {
-      if ( !aggregatedAnswer.facets[ facetName ][ facetValue ] ) {
-        aggregatedAnswer.facets[ facetName ][ facetValue ] = 0;
-      }
-    } );
-  } );
+  var formattedResponse = new SearchResults( this.state, content );
 
   // call the actual callback
   if ( this.extraQueries.length === 0 ) {
-    this.emit( "result", aggregatedAnswer );
+    this.emit( "result", formattedResponse );
   }
   else {
     // append the extra queries
-    var c = { results : [ aggregatedAnswer ] };
+    var c = { results : [ formattedResponse ] };
     for ( var i = 0; i < this.extraQueries.length; ++i ) {
       c.results.push( content.results[1 + disjunctiveFacets.length + i] );
     }
@@ -433,7 +384,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * Build search parameters used to fetch a disjunctive facet
  * @private
  * @param  {string} facet the associated facet name
- * @return {hash}
+ * @return {object}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet )
