@@ -310,14 +310,16 @@ AlgoliaSearchHelper.prototype.addExtraQuery = function( index, query, params ) {
  * @private
  */
 AlgoliaSearchHelper.prototype._search = function() {
+  var state = this.state;
+
   this.client.startQueriesBatch();
 
   //One query for the hits
-  this.client.addQueryInBatch( this.index, this.state.query, this._getHitsSearchParams() );
+  this.client.addQueryInBatch( this.index, state.query, this._getHitsSearchParams() );
 
   //One for each disjunctive facets
-  forEach( this.state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
-    this.client.addQueryInBatch( this.index, this.state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
+  forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
+    this.client.addQueryInBatch( this.index, state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
   }, this );
 
   //One for each extra query
@@ -325,25 +327,25 @@ AlgoliaSearchHelper.prototype._search = function() {
     this.client.addQueryInBatch( queryParams.index, queryParams.query, queryParams.params );
   }, this );
 
-  this.client.sendQueriesBatch( bind( this._handleResponse, this ) );
+  this.client.sendQueriesBatch( bind( this._handleResponse, this, state ) );
 };
 
 /**
  * Transform the response as sent by the server and transform it into a user
  * usable objet that merge the results of all the batch requests.
  * @private
- * @param disjunctiveFacets {object}
- * @param err {Error}
- * @param content {object}
+ * @param {SearchParameters} state state used for to generate the request
+ * @param {Error} err error if any, null otherwise
+ * @param {object} content content of the response
  */
-AlgoliaSearchHelper.prototype._handleResponse = function( err, content ) {
+AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) {
   if ( err ) {
     this.emit( "error", err );
     return;
   }
 
-  var disjunctiveFacets = this.state.getRefinedDisjunctiveFacets();
-  var formattedResponse = new SearchResults( this.state, content );
+  var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
+  var formattedResponse = new SearchResults( state, content );
 
   // call the actual callback
   if ( this.extraQueries.length === 0 ) {
