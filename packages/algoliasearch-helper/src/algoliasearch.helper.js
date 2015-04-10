@@ -10,9 +10,14 @@ var bind = require( "lodash/function/bind" );
 /**
  * Initialize a new AlgoliaSearchHelper
  * @class
+ * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
+ * search. It provides an event based interface for search callbacks :
+ *  - change : when the internal search state is changed. This event contains a {SearchParameters} object
+ *  - result : when the response is retrieved from Algolia and is processed. This event contains a {SearchResults} object
+ *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {object} options an associative array defining the hitsPerPage, list of facets and list of disjunctive facets
+ * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParamaters}, just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
