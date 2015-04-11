@@ -3,6 +3,8 @@ CHANGELOG
 UNRELEASED
   * FIX : handle distinct parameter automatically
   * FIX : batch response handler gets the proper search state
+  * FEATURE : (breaking) Facets stats and timeout infos are consistently
+  grouped in the facet object in the SearchResults
   * FEATURE : (breaking) no more extra queries
   * FEATURE : (breaking) Facets results are stored in an array with an order
   that reflects their definition.
