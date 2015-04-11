@@ -19,7 +19,7 @@ function helper( client, index, opts ) {
  * The version currently used
  * @member module:algoliasearch-helper.version
  */
-helper.version = "2.0.0-rc1"
+helper.version = "2.0.0-rc3"
 
 module.exports = helper;
 
@@ -4005,11 +4005,6 @@ var SearchResults = function( state, algoliaResponse ) {
    * @member {array}
    */
   this.facets = [];
-  /**
-   *
-   * @member {array}
-   */
-  this.facets_stats = [];
 
   var disjunctiveFacets = state.getRefinedDisjunctiveFacets();
 
@@ -4025,6 +4020,8 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
+      assignFacetStats( this.disjunctiveFacets[ position ], mainSubResponse.facets_stats, facetKey );
+      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
     }
     else {
       var position = facetsIndices[ facetKey ];
@@ -4032,6 +4029,8 @@ var SearchResults = function( state, algoliaResponse ) {
         name : facetKey,
         data : facetValueObject
       };
+      assignFacetStats( this.facets[ position ], mainSubResponse.facets_stats, facetKey );
+      assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
     }
   }, this );
 
@@ -4043,15 +4042,12 @@ var SearchResults = function( state, algoliaResponse ) {
     forEach( result.facets, function( facetResults, dfacet ){
       var position = disjunctiveFacetsIndices[ dfacet ];
 
-      if( state.getRankingInfo ) {
-        this.facets_stats[dfacet] = mainSubResponse.facets_stats[dfacet] || {};
-        this.facets_stats[dfacet].timeout = !!( algoliaResponse.results[idx + 1].timeoutCounts );
-      }
-
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
         data : facetResults
       };
+      assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
+      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet);
 
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
@@ -4063,11 +4059,6 @@ var SearchResults = function( state, algoliaResponse ) {
         }, this );
       }
     }, this );
-
-    // aggregate the disjunctive facets stats
-    for ( var stats in result.facets_stats ) {
-      this.facets_stats[stats] = result.facets_stats[stats];
-    }
   }, this );
 
   // add the excludes
@@ -4092,6 +4083,18 @@ function getIndices( obj ){
   var indices = {};
   forEach( obj, function( val, idx ){ indices[ val ] = idx; } );
   return indices;
+}
+
+function assignFacetStats( dest, facets_stats, key ) {
+  if ( facets_stats && facets_stats[key] ) {
+    dest.stats = facets_stats[key];
+  }
+}
+
+function assignFacetTimeout( dest, timeoutCounts, getRankingInfo ) {
+  if ( getRankingInfo ) {
+    dest.timeout = !!( timeoutCounts );
+  }
 }
 
 module.exports = SearchResults;
