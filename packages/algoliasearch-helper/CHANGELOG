@@ -1,6 +1,7 @@
 CHANGELOG
 
 UNRELEASED
+  * FIX : set page to 0 if it might change the number of pages returned
   * FIX : handle distinct parameter automatically
   * FIX : batch response handler gets the proper search state
   * FEATURE : (breaking) Facets stats and timeout infos are consistently
