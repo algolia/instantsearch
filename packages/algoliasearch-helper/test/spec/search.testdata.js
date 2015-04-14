@@ -184,171 +184,170 @@ var response = {
 
 
 var responseHelper = {
-  "hitsPerPage" : 20,
-  "disjunctiveFacets" : [
+  "query": "",
+  "hits": [
     {
-      "name" : "city",
-      "data" : {
-         "New York" : 1,
-         "San Francisco" : 1,
-         "Paris" : 3
+      "stars": "****",
+      "facilities": [
+        "spa"
+      ],
+      "city": "New York",
+      "objectID": "366084010",
+      "name": "Hotel E",
+      "_highlightResult": {
+        "name": {
+          "matchedWords": [],
+          "value": "Hotel E",
+          "matchLevel": "none"
+        },
+        "stars": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "****"
+        },
+        "facilities": [
+          {
+            "matchLevel": "none",
+            "value": "spa",
+            "matchedWords": []
+          }
+        ],
+        "city": {
+          "matchLevel": "none",
+          "value": "New York",
+          "matchedWords": []
+        }
+      }
+    },
+    {
+      "_highlightResult": {
+        "stars": {
+          "matchedWords": [],
+          "value": "****",
+          "matchLevel": "none"
+        },
+        "facilities": [
+          {
+            "value": "spa",
+            "matchedWords": [],
+            "matchLevel": "none"
+          }
+        ],
+        "city": {
+          "matchedWords": [],
+          "value": "Paris",
+          "matchLevel": "none"
+        },
+        "name": {
+          "value": "Hotel D",
+          "matchedWords": [],
+          "matchLevel": "none"
+        }
+      },
+      "name": "Hotel D",
+      "objectID": "366084000",
+      "facilities": [
+        "spa"
+      ],
+      "city": "Paris",
+      "stars": "****"
+    },
+    {
+      "_highlightResult": {
+        "stars": {
+          "matchLevel": "none",
+          "value": "*",
+          "matchedWords": []
+        },
+        "city": {
+          "matchLevel": "none",
+          "value": "Paris",
+          "matchedWords": []
+        },
+        "facilities": [
+          {
+            "value": "wifi",
+            "matchedWords": [],
+            "matchLevel": "none"
+          }
+        ],
+        "name": {
+          "matchedWords": [],
+          "value": "Hotel B",
+          "matchLevel": "none"
+        }
+      },
+      "name": "Hotel B",
+      "objectID": "366083980",
+      "city": "Paris",
+      "facilities": [
+        "wifi"
+      ],
+      "stars": "*"
+    },
+    {
+      "stars": "*",
+      "city": "Paris",
+      "facilities": [
+        "wifi",
+        "bath",
+        "spa"
+      ],
+      "objectID": "366083970",
+      "name": "Hotel A",
+      "_highlightResult": {
+        "name": {
+          "value": "Hotel A",
+          "matchedWords": [],
+          "matchLevel": "none"
+        },
+        "stars": {
+          "matchLevel": "none",
+          "value": "*",
+          "matchedWords": []
+        },
+        "facilities": [
+          {
+            "matchLevel": "none",
+            "value": "wifi",
+            "matchedWords": []
+          },
+          {
+            "value": "bath",
+            "matchedWords": [],
+            "matchLevel": "none"
+          },
+          {
+            "matchLevel": "none",
+            "matchedWords": [],
+            "value": "spa"
+          }
+        ],
+        "city": {
+          "matchLevel": "none",
+          "matchedWords": [],
+          "value": "Paris"
+        }
       }
     }
-   ],
-   "facets" : [],
-   "hits" : [
-      {
-         "city" : "New York",
-         "objectID" : "366084010",
-         "name" : "Hotel E",
-         "_highlightResult" : {
-            "name" : {
-               "value" : "Hotel E",
-               "matchLevel" : "none",
-               "matchedWords" : []
-            },
-            "city" : {
-               "matchLevel" : "none",
-               "value" : "New York",
-               "matchedWords" : []
-            },
-            "facilities" : [
-               {
-                  "matchedWords" : [],
-                  "value" : "spa",
-                  "matchLevel" : "none"
-               }
-            ],
-            "stars" : {
-               "value" : "****",
-               "matchLevel" : "none",
-               "matchedWords" : []
-            }
-         },
-         "stars" : "****",
-         "facilities" : [
-            "spa"
-         ]
-      },
-      {
-         "stars" : "****",
-         "_highlightResult" : {
-            "stars" : {
-               "matchedWords" : [],
-               "matchLevel" : "none",
-               "value" : "****"
-            },
-            "facilities" : [
-               {
-                  "matchedWords" : [],
-                  "value" : "spa",
-                  "matchLevel" : "none"
-               }
-            ],
-            "name" : {
-               "matchedWords" : [],
-               "matchLevel" : "none",
-               "value" : "Hotel D"
-            },
-            "city" : {
-               "matchedWords" : [],
-               "value" : "Paris",
-               "matchLevel" : "none"
-            }
-         },
-         "facilities" : [
-            "spa"
-         ],
-         "objectID" : "366084000",
-         "city" : "Paris",
-         "name" : "Hotel D"
-      },
-      {
-         "facilities" : [
-            "wifi"
-         ],
-         "_highlightResult" : {
-            "stars" : {
-               "matchedWords" : [],
-               "matchLevel" : "none",
-               "value" : "*"
-            },
-            "facilities" : [
-               {
-                  "value" : "wifi",
-                  "matchLevel" : "none",
-                  "matchedWords" : []
-               }
-            ],
-            "city" : {
-               "matchLevel" : "none",
-               "value" : "Paris",
-               "matchedWords" : []
-            },
-            "name" : {
-               "matchedWords" : [],
-               "matchLevel" : "none",
-               "value" : "Hotel B"
-            }
-         },
-         "stars" : "*",
-         "name" : "Hotel B",
-         "objectID" : "366083980",
-         "city" : "Paris"
-      },
-      {
-         "facilities" : [
-            "wifi",
-            "bath",
-            "spa"
-         ],
-         "_highlightResult" : {
-            "name" : {
-               "matchLevel" : "none",
-               "value" : "Hotel A",
-               "matchedWords" : []
-            },
-            "city" : {
-               "matchedWords" : [],
-               "matchLevel" : "none",
-               "value" : "Paris"
-            },
-            "stars" : {
-               "matchLevel" : "none",
-               "value" : "*",
-               "matchedWords" : []
-            },
-            "facilities" : [
-               {
-                  "matchLevel" : "none",
-                  "value" : "wifi",
-                  "matchedWords" : []
-               },
-               {
-                  "matchLevel" : "none",
-                  "value" : "bath",
-                  "matchedWords" : []
-               },
-               {
-                  "value" : "spa",
-                  "matchLevel" : "none",
-                  "matchedWords" : []
-               }
-            ]
-         },
-         "stars" : "*",
-         "city" : "Paris",
-         "objectID" : "366083970",
-         "name" : "Hotel A"
+  ],
+  "index": "test_hotels-node",
+  "hitsPerPage": 20,
+  "nbHits": 4,
+  "nbPages": 1,
+  "page": 0,
+  "processingTimeMS": 1,
+  "disjunctiveFacets": [
+    {
+      "name": "city",
+      "data": {
+        "New York": 1,
+        "Paris": 3,
+        "San Francisco": 1
       }
-   ],
-   "page" : 0,
-   "facets_stats" : {},
-   "query" : "",
-   "index" : "test_hotels-node",
-   "processingTimeMS" : 1,
-   "nbPages" : 1,
-   "nbHits" : 4
+    }
+  ],
+  "facets": []
 };
 
 module.exports = {
