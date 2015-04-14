@@ -3,6 +3,8 @@ var keys = require( "lodash/object/keys" );
 var forEach = require( "lodash/collection/forEach" );
 var reduce = require( "lodash/collection/reduce" );
 var isEmpty = require( "lodash/lang/isEmpty" );
+var isUndefined = require( "lodash/lang/isUndefined" );
+var isString = require( "lodash/lang/isString" );
 
 /**
  * @typedef FacetList
@@ -103,13 +105,19 @@ var SearchParameters = function( newParameters ) {
 
 SearchParameters.prototype = {
   constructor : SearchParameters,
-  clearRefinements : function clearRefinements() {
-    return this.mutateMe( function( m ) {
-      m.facetsRefinements = {};
-      m.facetsExcludes = {};
-      m.disjunctiveFacetsRefinements = {};
-      m.numericRefinements = {};
-    } );
+
+  /**
+   * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
+   * @method
+   * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
+   * @return {AlgoliaSearchHelper}
+   */
+  clearRefinements : function clearRefinements( name ) {
+    return this
+      .clearNumericRefinements( name )
+      .clearFacetRefinements( name )
+      .clearExcludeRefinements( name )
+      .clearDisjunctiveFacetRefinements( name );
   },
   /**
    * Query setter
@@ -205,6 +213,25 @@ SearchParameters.prototype = {
     } );
   },
   /**
+   * Clear numeric filters.
+   * @method
+   * @param {string} [attribute] -
+   * - If not given, means to clear all the filters.
+   * - If `string`, means to clear all refinements for the `attribute` named filter.
+   */
+  clearNumericRefinements : function( attribute ) {
+    return this.mutateMe( function( m ) {
+      if ( isUndefined( attribute ) ) {
+        m.numericRefinements = {};
+      }
+      else if ( isString( attribute ) ) {
+        if ( !isUndefined( m.numericRefinements[ attribute ] ) ) {
+          delete m.numericRefinements[ attribute ];
+        }
+      }
+    } );
+  },
+  /**
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
@@ -253,9 +280,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeFacetRefinement : function removeFacetRefinement( facet ) {
-    return this.mutateMe( function( m ) {
-      delete m.facetsRefinements[ facet ];
-    } );
+    return this.clearFacetRefinements( facet );
   },
   /**
    * Remove a negative refinement on a facet
@@ -293,6 +318,63 @@ SearchParameters.prototype = {
           if( m.disjunctiveFacetsRefinements[facet].length === 0 ){
             delete m.disjunctiveFacetsRefinements[ facet ];
           }
+        }
+      }
+    } );
+  },
+  /**
+   * Clear the facet refinements
+   * @method
+   * @param {string} [facet] -
+   * - If not given, means to clear the refinement of all facets.
+   * - If `string`, means to clear the refinement for the `facet` named facet.
+   */
+  clearFacetRefinements : function clearFacetRefinements( facet ) {
+    return this.mutateMe( function( m ) {
+      if ( isUndefined( facet ) ) {
+        m.facetsRefinements = {};
+      }
+      else if ( isString( facet ) ) {
+        if ( !isUndefined( m.facetsRefinements[ facet ] ) ) {
+          delete m.facetsRefinements[ facet ];
+        }
+      }
+    } );
+  },
+  /**
+   * Clear the exclude refinements
+   * @method
+   * @param {string} [facet] -
+   * - If not given, means to clear all the excludes of all facets.
+   * - If `string`, means to clear all the excludes for the `facet` named facet.
+   */
+  clearExcludeRefinements : function clearExcludeRefinements( facet ) {
+    return this.mutateMe( function( m ) {
+      if ( isUndefined( facet ) ) {
+        m.facetsExcludes = {};
+      }
+      else if ( isString( facet ) ) {
+        if ( !isUndefined( m.facetsExcludes[ facet ] ) ) {
+          delete m.facetsExcludes[ facet ];
+        }
+      }
+    } );
+  },
+  /**
+   * Clear the disjunctive refinements
+   * @method
+   * @param {string} [facet] -
+   * - If not given, means to clear all the refinements of all disjunctive facets.
+   * - If `string`, means to clear all the refinements for the `facet` named facet.
+   */
+  clearDisjunctiveFacetRefinements : function clearDisjunctiveFacetRefinements( facet ) {
+    return this.mutateMe( function( m ) {
+      if ( isUndefined( facet ) ) {
+        m.disjunctiveFacetsRefinements = {};
+      }
+      else if ( isString( facet ) ) {
+        if ( !isUndefined( m.disjunctiveFacetsRefinements[ facet ] ) ) {
+          delete m.disjunctiveFacetsRefinements[ facet ];
         }
       }
     } );
