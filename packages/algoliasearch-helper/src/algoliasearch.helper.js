@@ -49,11 +49,12 @@ AlgoliaSearchHelper.prototype.setQuery = function( q ) {
 };
 
 /**
- * Remove all refinements (disjunctive + conjunctive + excludes )
+ * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
+ * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
  * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.clearRefinements = function( ) {
-  this.state = this.state.clearRefinements();
+AlgoliaSearchHelper.prototype.clearRefinements = function( name ) {
+  this.state = this.state.clearRefinements( name );
   this.emit( "change", this.state );
   return this;
 };
