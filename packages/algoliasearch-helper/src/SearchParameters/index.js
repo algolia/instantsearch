@@ -61,7 +61,7 @@ var SearchParameters = function( newParameters ) {
   /** @member {number} */
   this.hitsPerPage = params.hitsPerPage || 20;
   /**
-   * @member {number} 
+   * @member {number}
    **/
   this.maxValuesPerFacet = params.maxValuesPerFacet || 10;
   /** @member {number} */
@@ -189,9 +189,9 @@ SearchParameters.prototype = {
    * @param {number} value value of the filter
    */
   addNumericRefinement : function( attribute, operator, value ) {
-    return this.mutateMe( function( m ){
+    return this.mutateMe( function( m ) {
       m.page = 0;
-      if( !m.numericRefinements[ attribute ] ){
+      if( !m.numericRefinements[ attribute ] ) {
         m.numericRefinements[ attribute ] = {};
       }
       m.numericRefinements[ attribute ][ operator ] = value;
@@ -211,7 +211,7 @@ SearchParameters.prototype = {
         var value = m.numericRefinements[ attribute ][ operator ];
         if( value ) {
           delete m.numericRefinements[ attribute ][ operator ];
-          if( isEmpty( m.numericRefinements[ attribute ] ) ){
+          if( isEmpty( m.numericRefinements[ attribute ] ) ) {
             delete m.numericRefinements[ attribute ];
           }
         }
@@ -274,7 +274,7 @@ SearchParameters.prototype = {
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
-      m.page=0;
+      m.page = 0;
       if( !m.disjunctiveFacetsRefinements[ facet ] ) {
         m.disjunctiveFacetsRefinements[ facet ] = [];
       }
@@ -305,9 +305,9 @@ SearchParameters.prototype = {
       if( m.facetsExcludes[ facet ] ) {
         m.page = 0;
         var idx = m.facetsExcludes[ facet ].indexOf( value );
-        if( idx > -1 ){
+        if( idx > -1 ) {
           m.facetsExcludes[ facet ].splice( idx, 1 );
-          if( m.facetsExcludes[ facet ].length === 0 ){
+          if( m.facetsExcludes[ facet ].length === 0 ) {
             delete m.facetsExcludes[ facet ];
           }
         }
@@ -326,9 +326,9 @@ SearchParameters.prototype = {
       if( m.disjunctiveFacetsRefinements[ facet ] ) {
         m.page = 0;
         var idx = m.disjunctiveFacetsRefinements[ facet ].indexOf( value );
-        if( idx > -1 ){
+        if( idx > -1 ) {
           m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
-          if( m.disjunctiveFacetsRefinements[facet].length === 0 ){
+          if( m.disjunctiveFacetsRefinements[facet].length === 0 ) {
             delete m.disjunctiveFacetsRefinements[ facet ];
           }
         }
@@ -494,17 +494,17 @@ SearchParameters.prototype = {
   managedParameters : [
     "facets", "disjunctiveFacets", "facetsRefinements",
     "facetsExcludes", "disjunctiveFacetsRefinements",
-    "numericRefinements" 
+    "numericRefinements"
   ],
-  getQueryParams : function getQueryParams(){
+  getQueryParams : function getQueryParams() {
     var managedParameters = this.managedParameters;
-    return reduce( this, function( memo, value, parameter, parameters) {
+    return reduce( this, function( memo, value, parameter, parameters ) {
       if( managedParameters.indexOf( parameter ) === -1 &&
-          parameters[ parameter ] !== undefined ){
+          parameters[ parameter ] !== undefined ) {
         memo[ parameter ] = value;
-      };
+      }
       return memo;
-    }, {});
+    }, {} );
   },
   /**
    * Helper function to make it easier to build new instances from a mutating

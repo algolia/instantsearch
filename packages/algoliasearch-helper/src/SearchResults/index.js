@@ -1,5 +1,24 @@
+"use strict";
 var forEach = require( "lodash/collection/forEach" );
 var compact = require( "lodash/array/compact" );
+
+function getIndices( obj ) {
+  var indices = {};
+  forEach( obj, function( val, idx ) { indices[ val ] = idx; } );
+  return indices;
+}
+
+function assignFacetStats( dest, facetStats, key ) {
+  if ( facetStats && facetStats[key] ) {
+    dest.stats = facetStats[key];
+  }
+}
+
+function assignFacetTimeout( dest, timeoutCounts, getRankingInfo ) {
+  if ( getRankingInfo ) {
+    dest.timeout = !!( timeoutCounts );
+  }
+}
 
 /**
  * Constructor for SearchResults
@@ -71,23 +90,27 @@ var SearchResults = function( state, algoliaResponse ) {
   //Since we send request only for disjunctive facets that have been refined,
   //we get the facets informations from the first, general, response.
   forEach( mainSubResponse.facets, function( facetValueObject, facetKey ) {
-    if( state.disjunctiveFacets.indexOf( facetKey ) !== -1 ) {
-      var position = disjunctiveFacetsIndices[ facetKey ];
+    var isFacetDisjunctive = state.disjunctiveFacets.indexOf( facetKey ) !== -1;
+    var position = isFacetDisjunctive ? disjunctiveFacetsIndices[ facetKey ] :
+                                        facetsIndices[ facetKey ];
+    if( isFacetDisjunctive ) {
       this.disjunctiveFacets[ position ] = {
         name : facetKey,
         data : facetValueObject
       };
       assignFacetStats( this.disjunctiveFacets[ position ], mainSubResponse.facets_stats, facetKey );
-      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
+      assignFacetTimeout( this.disjunctiveFacets[ position ],
+                          state.getRankingInfo,
+                          mainSubResponse.timeoutCounts,
+                          facetKey );
     }
     else {
-      var position = facetsIndices[ facetKey ];
       this.facets[ position ] = {
         name : facetKey,
         data : facetValueObject
       };
       assignFacetStats( this.facets[ position ], mainSubResponse.facets_stats, facetKey );
-      assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey);
+      assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey );
     }
   }, this );
 
@@ -96,7 +119,7 @@ var SearchResults = function( state, algoliaResponse ) {
     var result = algoliaResponse.results[ idx + 1 ];
 
     // There should be only item in facets.
-    forEach( result.facets, function( facetResults, dfacet ){
+    forEach( result.facets, function( facetResults, dfacet ) {
       var position = disjunctiveFacetsIndices[ dfacet ];
 
       this.disjunctiveFacets[ position ] = {
@@ -104,13 +127,13 @@ var SearchResults = function( state, algoliaResponse ) {
         data : facetResults
       };
       assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
-      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet);
+      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet );
 
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
-        forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ){
+        forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ) {
           // add the disjunctive refinements if it is no more retrieved
           if ( !this.disjunctiveFacets[position].data[refinementValue] &&
-               state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1 ) {
+               state.disjunctiveFacetsRefinements[dfacet].indexOf( refinementValue ) > -1 ) {
             this.disjunctiveFacets[position].data[refinementValue] = 0;
           }
         }, this );
@@ -135,23 +158,5 @@ var SearchResults = function( state, algoliaResponse ) {
   this.facets = compact( this.facets );
   this.disjunctiveFacets = compact( this.disjunctiveFacets );
 };
-
-function getIndices( obj ){
-  var indices = {};
-  forEach( obj, function( val, idx ){ indices[ val ] = idx; } );
-  return indices;
-}
-
-function assignFacetStats( dest, facets_stats, key ) {
-  if ( facets_stats && facets_stats[key] ) {
-    dest.stats = facets_stats[key];
-  }
-}
-
-function assignFacetTimeout( dest, timeoutCounts, getRankingInfo ) {
-  if ( getRankingInfo ) {
-    dest.timeout = !!( timeoutCounts );
-  }
-}
 
 module.exports = SearchResults;
