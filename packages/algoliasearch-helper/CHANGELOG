@@ -1,6 +1,7 @@
 CHANGELOG
 
 UNRELEASED
+  * FEATURE : clear refinements by name
   * FIX : handle distinct parameter automatically
   * FIX : batch response handler gets the proper search state
   * FEATURE : (breaking) Facets stats and timeout infos are consistently
