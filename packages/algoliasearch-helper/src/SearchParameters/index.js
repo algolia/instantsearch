@@ -229,7 +229,7 @@ SearchParameters.prototype = {
    * @param {string} value value of the attribute
    * @return {SearchParameters}
    */
-  addExcludeRefinement : function addExcludedValue( facet, value ) {
+  addExcludeRefinement : function addExcludeRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       m.page = 0;
       if( !m.facetsExcludes[ facet ] ) {
