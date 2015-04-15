@@ -105,6 +105,7 @@ SearchParameters.prototype = {
   constructor : SearchParameters,
   clearRefinements : function clearRefinements() {
     return this.mutateMe( function( m ) {
+      m.page = 0;
       m.facetsRefinements = {};
       m.facetsExcludes = {};
       m.disjunctiveFacetsRefinements = {};
@@ -120,6 +121,7 @@ SearchParameters.prototype = {
   setQuery : function setQuery( newQuery ) {
     return this.mutateMe( function( newState ) {
       newState.query = newQuery;
+      newState.page = 0;
     } );
   },
   /**
@@ -167,6 +169,7 @@ SearchParameters.prototype = {
   setHitsPerPage : function setHitsPerPage( n ) {
     return this.mutateMe( function( m ) {
       m.HitsPerPage = n;
+      m.page = 0;
     } );
   },
   /**
@@ -178,6 +181,7 @@ SearchParameters.prototype = {
    */
   addNumericRefinement : function( attribute, operator, value ) {
     return this.mutateMe( function( m ){
+      m.page = 0;
       if( !m.numericRefinements[ attribute ] ){
         m.numericRefinements[ attribute ] = {};
       }
@@ -194,6 +198,7 @@ SearchParameters.prototype = {
   removeNumericRefinement : function( attribute, operator, value ) {
     return this.mutateMe( function( m ) {
       if( m.numericRefinements[ attribute ] ) {
+        m.page = 0;
         var value = m.numericRefinements[ attribute ][ operator ];
         if( value ) {
           delete m.numericRefinements[ attribute ][ operator ];
@@ -213,6 +218,7 @@ SearchParameters.prototype = {
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
+      m.page = 0;
       m.facetsRefinements[ facet ] = value;
     } );
   },
@@ -225,6 +231,7 @@ SearchParameters.prototype = {
    */
   addExcludeRefinement : function addExcludedValue( facet, value ) {
     return this.mutateMe( function( m ) {
+      m.page = 0;
       if( !m.facetsExcludes[ facet ] ) {
         m.facetsExcludes[ facet ] = [];
       }
@@ -240,6 +247,7 @@ SearchParameters.prototype = {
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
+      m.page=0;
       if( !m.disjunctiveFacetsRefinements[ facet ] ) {
         m.disjunctiveFacetsRefinements[ facet ] = [];
       }
@@ -254,6 +262,7 @@ SearchParameters.prototype = {
    */
   removeFacetRefinement : function removeFacetRefinement( facet ) {
     return this.mutateMe( function( m ) {
+      m.page = 0;
       delete m.facetsRefinements[ facet ];
     } );
   },
@@ -267,6 +276,7 @@ SearchParameters.prototype = {
   removeExcludeRefinement : function removeExcludeRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       if( m.facetsExcludes[ facet ] ) {
+        m.page = 0;
         var idx = m.facetsExcludes[ facet ].indexOf( value );
         if( idx > -1 ){
           m.facetsExcludes[ facet ].splice( idx, 1 );
@@ -287,6 +297,7 @@ SearchParameters.prototype = {
   removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       if( m.disjunctiveFacetsRefinements[ facet ] ) {
+        m.page = 0;
         var idx = m.disjunctiveFacetsRefinements[ facet ].indexOf( value );
         if( idx > -1 ){
           m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
