@@ -183,6 +183,9 @@ SearchParameters.prototype = {
   },
   /**
    * Add or update a numeric filter for a given attribute
+   * Current limitation of the numeric filters : you can't have more than one value
+   * filtered for each (attribute, oprator). It means that you can't have a filter
+   * for ( "attribute", "=", 3 ) and ( "attribute", "=", 8 )
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter ( possible values : =, >, >=, <, <=, != )
@@ -202,14 +205,13 @@ SearchParameters.prototype = {
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter ( possible values : =, >, >=, <, <=, != )
-   * @param {number} value value of the filter
    */
-  removeNumericRefinement : function( attribute, operator, value ) {
+  removeNumericRefinement : function( attribute, operator ) {
     return this.mutateMe( function( m ) {
       if( m.numericRefinements[ attribute ] ) {
         m.page = 0;
         var value = m.numericRefinements[ attribute ][ operator ];
-        if( value ) {
+        if( !isUndefined( value ) ) {
           delete m.numericRefinements[ attribute ][ operator ];
           if( isEmpty( m.numericRefinements[ attribute ] ) ) {
             delete m.numericRefinements[ attribute ];
