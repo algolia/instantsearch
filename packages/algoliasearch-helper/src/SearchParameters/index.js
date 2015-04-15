@@ -119,9 +119,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setQuery : function setQuery( newQuery ) {
-    return this.mutateMe( function( newState ) {
-      newState.query = newQuery;
-      newState.page = 0;
+    return this.mutateMe( function( m ) {
+      m.query = newQuery;
+      m.page = 0;
     } );
   },
   /**
