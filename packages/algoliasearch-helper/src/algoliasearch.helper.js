@@ -42,8 +42,7 @@ AlgoliaSearchHelper.prototype.search = function(){
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.setQuery = function( q ) {
-  this.state = this.state.setQuery( q )
-                         .setPage( 0 );
+  this.state = this.state.setQuery( q );
 
   this.emit( "change", this.state );
   return this;
@@ -197,7 +196,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.nextPage = function() {
-  return this.setPage( this.state.page + 1 );
+  return this.setCurrentPage( this.state.page + 1 );
 };
 
 /**
@@ -205,7 +204,7 @@ AlgoliaSearchHelper.prototype.nextPage = function() {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.previousPage = function() {
-  return this.setPage( this.state.page - 1 );
+  return this.setCurrentPage( this.state.page - 1 );
 };
 
 /**
@@ -213,7 +212,7 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
  * @param  {integer} page The page number
  * @return {AlgoliaSearchHelper}
  */
-AlgoliaSearchHelper.prototype.setPage = function( page ) {
+AlgoliaSearchHelper.prototype.setCurrentPage = function( page ) {
   if( page < 0 ) throw new Error( "Page requested below 0." );
 
   this.state = this.state.setPage( page );
