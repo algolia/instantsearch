@@ -250,7 +250,13 @@ AlgoliaSearchHelper.prototype.setState = function( newState ) {
  * @return {boolean} true if refined
  */
 AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
-  return this.state.isFacetRefined( facet, value );
+  if( this.state.facets.indexOf( facet ) > -1 ) {
+    return this.state.isFacetRefined( facet, value );
+  }
+  else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
+    return this.state.isDisjunctiveFacetRefined( facet, value );
+  }
+  return false;
 };
 
 /**
