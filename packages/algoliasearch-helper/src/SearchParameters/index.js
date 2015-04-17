@@ -485,7 +485,7 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedDisjunctiveFacets : function getRefinedDisjunctiveFacets() {
-    return keys( this.disjunctiveFacetsRefinements );
+    return keys( this.disjunctiveFacetsRefinements ).concat( keys( this.numericRefinements ) );
   },
   /**
    * Returned the list of all disjunctive facets not refined
