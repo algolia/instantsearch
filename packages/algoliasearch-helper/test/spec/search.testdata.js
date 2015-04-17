@@ -1,3 +1,5 @@
+"use strict";
+var SearchParameters = require( "../../src/SearchParameters" );
 
 var response = {
    "results" : [
@@ -182,8 +184,15 @@ var response = {
    ]
 };
 
+var searchParams = new SearchParameters( {
+  disjunctiveFacets : [ "city" ],
+  disjunctiveFacetsRefinements : {
+    city : [ "Paris", "New York" ]
+  }
+} );
 
 var responseHelper = {
+  "_state" : searchParams,
   "query": "",
   "hits": [
     {
@@ -352,5 +361,6 @@ var responseHelper = {
 
 module.exports = {
   response : response,
+  searchParams : searchParams,
   responseHelper : responseHelper
 };

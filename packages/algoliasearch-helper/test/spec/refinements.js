@@ -41,16 +41,17 @@ test( "Adding refinments should add an entry to the refinments attribute", funct
 } );
 
 test( "IsRefined should return true if the ( facet, value ) is refined.", function( t ){
-  var helper = algoliasearchHelper( null, null, {} );
-  helper._search = function(){};
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ]
+  } );
 
   helper.addRefine( "facet1", "boom" );
 
-  t.ok( helper.isRefined( "facet1", "boom" ) );
+  t.ok( helper.isRefined( "facet1", "boom"), "the facet is refined >> true" );
 
-  t.notOk( helper.isRefined( "facet1", "booohh" ) );
-  t.notOk( helper.isRefined( "notAFacet", "maoooh" ) );
-  t.notOk( helper.isRefined( null, null ) );
+  t.notOk( helper.isRefined( "facet1", "booohh" ), "not refined but is a facet");
+  t.notOk( helper.isRefined( "notAFacet", "maoooh" ), "not refined because it's not a facet" );
+  t.notOk( helper.isRefined( null, null), "not even valid values" );
 
   t.end();
 } );

@@ -1,6 +1,15 @@
 "use strict";
 var forEach = require( "lodash/collection/forEach" );
 var compact = require( "lodash/array/compact" );
+var find = require( "lodash/collection/find" );
+
+/**
+ * @typedef Facet
+ * @type {object}
+ * @property {string} name name of the attribute in the record
+ * @property {object.<string, number>} data the facetting data : value, number of entries
+ * @property {object} stats undefined unless facet_stats is retrieved from algolia
+ */
 
 function getIndices( obj ) {
   var indices = {};
@@ -157,6 +166,19 @@ var SearchResults = function( state, algoliaResponse ) {
 
   this.facets = compact( this.facets );
   this.disjunctiveFacets = compact( this.disjunctiveFacets );
+
+  this._state = state;
+};
+
+/**
+ * Get a facet object with its name
+ * @param {string} name name of the attribute facetted
+ * @return {Facet} the facet object
+ */
+SearchResults.prototype.getFacetByName = function( name ) {
+  var isName = function( facet ) { return facet.name === name; };
+  var indexInFacets = find( this.facets, isName );
+  return indexInFacets || find( this.disjunctiveFacets, isName );
 };
 
 module.exports = SearchResults;
