@@ -221,6 +221,15 @@ SearchParameters.prototype = {
     } );
   },
   /**
+   * Return the current refinement for the ( attribute, operator )
+   * @param {string} attribute of the record
+   * @param {string} operator applied
+   * @return {number} value of the refinement
+   */
+  getNumericRefinement : function( attribute, operator ){
+    return this.numericRefinements[ attribute ] && this.numericRefinements[ attribute ][ operator ];
+  },
+  /**
    * Clear numeric filters.
    * @method
    * @private
