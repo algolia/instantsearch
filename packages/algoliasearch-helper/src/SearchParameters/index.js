@@ -1,5 +1,6 @@
 "use strict";
 var keys = require( "lodash/object/keys" );
+var intersection = require( "lodash/array/intersection" );
 var forEach = require( "lodash/collection/forEach" );
 var reduce = require( "lodash/collection/reduce" );
 var isEmpty = require( "lodash/lang/isEmpty" );
@@ -485,7 +486,11 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedDisjunctiveFacets : function getRefinedDisjunctiveFacets() {
-    return keys( this.disjunctiveFacetsRefinements ).concat( keys( this.numericRefinements ) );
+    var disjunctiveNumericRefinedFacets = intersection(
+      keys( this.numericRefinements ),
+      this.disjunctiveFacets
+    );
+    return keys( this.disjunctiveFacetsRefinements ).concat( disjunctiveNumericRefinedFacets );
   },
   /**
    * Returned the list of all disjunctive facets not refined
