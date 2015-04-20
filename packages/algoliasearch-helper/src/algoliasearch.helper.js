@@ -369,7 +369,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet );
-  var numericFilters = this._getNumericFilters();
+  var numericFilters = this._getNumericFilters( facet );
   var additionalParams = {
     hitsPerPage : 1,
     page : 0,
@@ -397,11 +397,13 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
  * @private
  * @return {array.<string>} the numeric filters in the algolia format
  */
-AlgoliaSearchHelper.prototype._getNumericFilters = function() {
+AlgoliaSearchHelper.prototype._getNumericFilters = function( facetName ) {
   var numericFilters = [];
   forEach( this.state.numericRefinements, function( operators, attribute ) {
     forEach( operators, function( value, operator ) {
-      numericFilters.push( attribute + operator + value );
+      if( facetName !== attribute ) {
+        numericFilters.push( attribute + operator + value );
+      }
     } );
   } );
   return numericFilters;
