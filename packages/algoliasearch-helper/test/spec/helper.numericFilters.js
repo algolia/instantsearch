@@ -5,12 +5,11 @@ var algoliasearchHelper = require( "../../index" );
 
 test( "Numeric filters : numeric filters from constructor", function( t ) {
   var client = algoliaSearch( "dsf", "dsfdf" );
-  client.sendQueriesBatch = function() { /*Do nothing*/ };
-  client.addQueryInBatch = function( i, q, args ) {
-    t.equals( args.numericFilters[ 0 ], "attribute1>3" );
-    t.equals( args.numericFilters[ 1 ], "attribute1<=100" );
-    t.equals( args.numericFilters[ 2 ], "attribute2=42" );
-
+  client.search = function( queries ) {
+    var ps = queries[0].params;
+    t.equals( ps.numericFilters[ 0 ], "attribute1>3" );
+    t.equals( ps.numericFilters[ 1 ], "attribute1<=100" );
+    t.equals( ps.numericFilters[ 2 ], "attribute2=42" );
     t.end();
   };
 
@@ -30,10 +29,10 @@ test( "Numeric filters : numeric filters from constructor", function( t ) {
 
 test( "Numeric filters : numeric filters from setters", function( t ) {
   var client = algoliaSearch( "dsf", "dsfdf" );
-  client.sendQueriesBatch = function() { /*Do nothing*/ };
-  client.addQueryInBatch = function( i, q, args ) {
-    t.equals( args.numericFilters[ 0 ], "badassAttribute>9000" );
-    t.equals( args.numericFilters[ 1 ], "attribute2!=7" );
+  client.search = function( queries ) {
+    var ps = queries[0].params;
+    t.equals( ps.numericFilters[ 0 ], "badassAttribute>9000" );
+    t.equals( ps.numericFilters[ 1 ], "attribute2!=7" );
     t.end();
   };
 

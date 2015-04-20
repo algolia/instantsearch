@@ -1,11 +1,10 @@
 "use strict";
 
 var test = require("tape");
-var _ = require( "lodash" );
 var sinon = require("sinon");
 var algoliaSearch = require( "algoliasearch" );
 
-var Helper = require( "../../index" );
+var algoliasearchHelper = require( "../../index" );
 
 test( "Search should call the algolia client according to the number of refinements", function( t ){
   var testData = require( "./search.testdata" );
@@ -13,11 +12,9 @@ test( "Search should call the algolia client according to the number of refineme
   var client = algoliaSearch( "dsf", "dsfdf" );
 
   var mock = sinon.mock( client );
-  mock.expects( "startQueriesBatch" ).once();
-  mock.expects( "addQueryInBatch" ).exactly( 2 );
-  mock.expects( "sendQueriesBatch" ).once().yields( null, testData.response );
+  mock.expects( "search" ).once().yields( null, testData.response );
 
-  var helper = Helper( client, "test_hotels-node", {
+  var helper = algoliasearchHelper( client, "test_hotels-node", {
     disjunctiveFacets : ["city"]
   });
 
@@ -34,7 +31,7 @@ test( "Search should call the algolia client according to the number of refineme
 } );
 
 test( "no mutating methods should trigger a search", function( t ){
-  var helper = Helper( undefined, "Index", {
+  var helper = algoliasearchHelper( undefined, "Index", {
     disjunctiveFacets : ["city"],
     facets : ["tower"]
   });
