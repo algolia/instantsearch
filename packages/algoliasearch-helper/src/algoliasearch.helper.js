@@ -229,6 +229,7 @@ AlgoliaSearchHelper.prototype.setCurrentPage = function( page ) {
  */
 AlgoliaSearchHelper.prototype.setIndex = function( name ) {
   this.index = name;
+  this.setCurrentPage( 0 );
   return this;
 };
 
