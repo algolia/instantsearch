@@ -304,11 +304,9 @@ AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
   var queries = [];
 
-  this.client.startQueriesBatch();
-
   //One query for the hits
-  queries.push( { 
-    index : this.index,
+  queries.push( {
+    indexName : this.index,
     query : state.query,
     params : this._getHitsSearchParams()
   } );
@@ -316,7 +314,7 @@ AlgoliaSearchHelper.prototype._search = function() {
   //One for each disjunctive facets
   forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
     queries.push( {
-      index : this.index,
+      indexName : this.index,
       query : state.query,
       params : this._getDisjunctiveFacetSearchParams( refinedFacet )
     } );
