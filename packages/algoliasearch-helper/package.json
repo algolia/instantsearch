@@ -27,7 +27,7 @@
     "url": "https://github.com/algolia/algoliasearch-helper-js.git"
   },
   "devDependencies": {
-    "algoliasearch": "git://github.com/algolia/algoliasearch-client-js.git#cb15a53b55e64c96f9a1d5a95b50478d153a187c",
+    "algoliasearch": ">= 3.1",
     "browserify": "9.0.3",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
@@ -45,5 +45,8 @@
   },
   "dependencies": {
     "lodash": "3.5.0"
+  },
+  "peerDependencies": {
+    "algoliasearch" : ">= 3.1 < 4" 
   }
 }

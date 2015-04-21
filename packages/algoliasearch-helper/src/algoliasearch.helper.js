@@ -302,18 +302,27 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
+  var queries = [];
 
   this.client.startQueriesBatch();
 
   //One query for the hits
-  this.client.addQueryInBatch( this.index, state.query, this._getHitsSearchParams() );
+  queries.push( { 
+    index : this.index,
+    query : state.query,
+    params : this._getHitsSearchParams()
+  } );
 
   //One for each disjunctive facets
   forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
-    this.client.addQueryInBatch( this.index, state.query, this._getDisjunctiveFacetSearchParams( refinedFacet ) );
+    queries.push( {
+      index : this.index,
+      query : state.query,
+      params : this._getDisjunctiveFacetSearchParams( refinedFacet )
+    } );
   }, this );
 
-  this.client.sendQueriesBatch( bind( this._handleResponse, this, state ) );
+  this.client.search( queries, bind( this._handleResponse, this, state ) );
 };
 
 /**
