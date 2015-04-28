@@ -3,7 +3,7 @@
     <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="algoliasearch.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.js"></script>
     <script src="/dist/algoliasearch.helper.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/3.2.1/css/font-awesome.min.css" />
@@ -13,7 +13,7 @@
 
 <div class="container">
   <div class="search">
-      <input autocomplete="off" class="autocomplete" id="q" placeholder="Search for a product..." type="text" spellcheck="false"/>
+      <input autocomplete="off" class="autocomplete" id="q" placeholder="Search for a product..." type="text" spellcheck="false" autofocus/>
   </div>
 
   <div class="col-md-4">
@@ -35,46 +35,30 @@
     <script type="text/javascript">
       $(document).ready(function() {
         var $inputfield = $("#q");
-        // Replace the following values by your ApplicationID and ApiKey.
-        var algolia = new AlgoliaSearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
-        // Replace the following value by the name of the index you want to query.
-        var helper = new AlgoliaSearchHelper(algolia, 'bestbuy', {
-          // conjunctive facets (link)
-          facets: ['type', 'shipping'],
-          // disjunctive facets (checkbox)
-          disjunctiveFacets: ['category', 'manufacturer']
-          // (optional) default list of facet filters
-          //,defaultFacetFilters: ['type:Game']
+
+        var algolia = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
+
+        var helper = algoliasearchHelper(algolia, 'bestbuy', {
+          facets: ['type', 'shipping', 'salePrice'],
+          disjunctiveFacets: ['category', 'manufacturer'],
+          hitsPerPage: 5,
+          maxValuesPerFacet: 5,
+          getRankingInfo : true
         });
 
-        function search() {
-          helper.search($inputfield.val(), searchCallback, { hitsPerPage: 5, maxValuesPerFacet: 5 });
-        }
+        helper.on( "result", searchCallback);
+
+        $inputfield.keyup( function( e ){
+          helper.setQuery( $inputfield.val() ).search();
+        } );
 
         window.toggleRefine = function(facet, value) {
-          helper.toggleRefine(facet, value);
-          search();
+          helper.toggleRefine(facet, value).search();
         }
 
-        $inputfield.keyup(function() {
-          search();
-        }).focus();
+        helper.search();
 
-        // IE 9 doesn't define trim()
-        if (typeof String.prototype.trim !== 'function') {
-          String.prototype.trim = function() {
-            return this.replace(/^\s+|\s+$/g, '');
-          }
-        }
-
-        search();
-
-        function searchCallback(success, content) {
-          if (!success) {
-            // error
-            return;
-          }
-
+        function searchCallback( content ) {
           if (content.query != $inputfield.val()) {
             // do not consider out-dated queries
             return;
@@ -104,13 +88,13 @@
 
           // Scan all disjunctive facets and display them
           var facets = '';
-          for (var facet in content.disjunctiveFacets) {
-            facets += '<h4>' + facet + '</h4>';
-            var values = content.disjunctiveFacets[facet];
+          for( var i = 0; i < content.disjunctiveFacets.length; i++ ){
+            var facet = content.disjunctiveFacets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
+            var values = facet.data;
             for (var value in values) {
-
               facets += '' +
-              '<div class="checkbox"><label><input type="checkbox" ' + (helper.isRefined(facet, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
+                        '<div class="checkbox"><label><input type="checkbox" ' + (helper.isDisjunctiveRefined(facet.name, value) ? 'checked="checked"' : '') + ' onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false" />' + value + ' (' + values[value] + ')' +
               '</label></div>';
             }
           }
@@ -118,13 +102,14 @@
 
           // Scan all facets and display them
           facets = '';
-          for (var facet in content.facets) {
-            facets += '<h4>' + facet + '</h4>';
+          for( var i = 0; i < content.facets.length ; i++ ){
+            var facet = content.facets[ i ];
+            facets += '<h4>' + facet.name + '</h4>';
             facets += '<ul>';
-            var values = content.facets[facet];
+            var values = facet.data;
             for (var value in values) {
-              facets += '<li class="' + (helper.isRefined(facet, value) ? 'refined' : '') + '">' +
-                  '<a href="#" onclick="toggleRefine(\'' + facet + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')' +
+              facets += '<li class="' + (helper.isRefined(facet.name, value) ? 'refined' : '') + '">' +
+                  '<a href="#" onclick="toggleRefine(\'' + facet.name + '\', \'' + value + '\'); return false">' + value + '</a> (' + values[value] + ')' +
                 '</li>';
             }
             facets += '</ul>';

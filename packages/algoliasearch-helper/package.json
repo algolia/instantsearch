@@ -1,16 +1,19 @@
 {
   "name": "algoliasearch-helper",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "scripts": {
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
-    "dev": "DEBUG=zuul* zuul --no-coverage --local 8080 --ui tape test/run.js",
-    "lint": "eslint src",
+    "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 --ui tape test/run.js",
+    "lint": "eslint src index.js; true",
+    "watch-lint": " onchange '.eslintrc' 'src/**/*.js' 'index.js' -- npm run lint ",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
+    "doc" : "jsdoc -r src index.js -d docs -c .jsdoc",
+    "publish-doc" : "git checkout gh-pages && git merge master && npm run build && npm run doc && git commit -a -m 'Update doc' && git push origin gh-pages && git checkout master",
     "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,18 +27,26 @@
     "url": "https://github.com/algolia/algoliasearch-helper-js.git"
   },
   "devDependencies": {
-    "algoliasearch": "git://github.com/algolia/algoliasearch-client-js.git#cb15a53b55e64c96f9a1d5a95b50478d153a187c",
+    "algoliasearch": ">= 3.1",
     "browserify": "9.0.3",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
     "eslint": "0.17.1",
     "http-server": "0.8.0",
+    "jsdoc": "3.3.0-beta3",
     "lodash": "3.5.0",
+    "onchange": "1.0.0",
     "opn": "1.0.1",
     "sinon": "1.14.1",
     "tape": "3.5.0",
     "uglify-js": "2.4.17",
     "watchify": "2.6.0",
     "zuul": "2.1.1"
+  },
+  "dependencies": {
+    "lodash": "3.5.0"
+  },
+  "peerDependencies": {
+    "algoliasearch" : ">= 3.1 < 4" 
   }
 }
