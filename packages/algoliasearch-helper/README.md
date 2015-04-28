@@ -12,7 +12,6 @@ specifically made to work with the newest V3 versions of it.
  - Facets exclusions
  - Pagination
  - Disjunctive facetting (search on two or more values for a single facet)
- - Query batching
 
 ## What does it look like?
 
@@ -39,7 +38,7 @@ helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
 helper.addRefine( "year", "2003" );
 
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
-helper.search( "" );
+helper.search();
 ```
 
 ## How to use this module
