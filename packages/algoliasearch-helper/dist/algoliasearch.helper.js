@@ -19,7 +19,7 @@ function helper( client, index, opts ) {
  * The version currently used
  * @member module:algoliasearch-helper.version
  */
-helper.version = "2.0.0";
+helper.version = "2.0.1";
 
 module.exports = helper;
 
@@ -4688,9 +4688,9 @@ var bind = require( "lodash/function/bind" );
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
  * search. It provides an event based interface for search callbacks :
  *  - change : when the internal search state is changed.
- *             This event contains a {SearchParameters} object and the {SearchResults} of the last result if any.
+ *    This event contains a {SearchParameters} object and the {SearchResults} of the last result if any.
  *  - result : when the response is retrieved from Algolia and is processed.
- *             This event contains a {SearchResults} object and the {SearchParameters} corresponding to this answer.
+ *    This event contains a {SearchResults} object and the {SearchParameters} corresponding to this answer.
  *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query

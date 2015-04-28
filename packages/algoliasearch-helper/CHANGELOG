@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.0.1
+  * MEH : because of jsDelivr
+
 2.0.0
   * FIX : set page to 0 if it might change the number of pages returned
   * FIX : handle distinct parameter automatically
