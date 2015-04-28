@@ -3,6 +3,8 @@ var forEach = require( "lodash/collection/forEach" );
 var compact = require( "lodash/array/compact" );
 var find = require( "lodash/collection/find" );
 
+var extend = require( "../functions/extend" );
+
 /**
  * @typedef Facet
  * @type {object}
@@ -131,9 +133,10 @@ var SearchResults = function( state, algoliaResponse ) {
     forEach( result.facets, function( facetResults, dfacet ) {
       var position = disjunctiveFacetsIndices[ dfacet ];
 
+      var dataFromMainRequest = mainSubResponse.facets[ dfacet ];
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
-        data : facetResults
+        data : extend( {}, facetResults, dataFromMainRequest )
       };
       assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
       assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet );

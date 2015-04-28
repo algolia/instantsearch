@@ -351,7 +351,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) 
  * @return {object.<string, any>}
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
-  var facets = this.state.facets.concat( this.state.getUnrefinedDisjunctiveFacets() );
+  var facets = this.state.facets.concat( this.state.disjunctiveFacets );
   var facetFilters = this._getFacetFilters();
   var numericFilters = this._getNumericFilters();
   var additionalParams = {
