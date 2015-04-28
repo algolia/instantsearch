@@ -1,11 +1,12 @@
 CHANGELOG
 
-UNRELEASED
+2.0.0
   * FIX : set page to 0 if it might change the number of pages returned
   * FIX : handle distinct parameter automatically
   * FIX : batch response handler gets the proper search state
   * FEATURE : (breaking) Now peer depend on algoliasearch v3.1
   * FEATURE : (breaking) Facets stats and timeout infos are consistently
+  grouped in the facet object in the SearchResults
   * FEATURE : (breaking) no more extra queries
   * FEATURE : (breaking) Facets results are stored in an array with an order
   that reflects their definition.
@@ -18,11 +19,16 @@ UNRELEASED
   * FEATURE : SearchParameters.getNumericRefinement : get back the value of a specific numeric
   refinement
   * FEATURE : clear refinements by name
-  grouped in the facet object in the SearchResults
   * FEATURE : isDisjunctiveRefined to check if a disjunctive facet is refined
   * FEATURE : basic support for numeric filters
   * FEATURE : version number on the main helper factory
   * TESTS : defaults test
+
+1.1.0
+  * REFACTORING : constructor, now expose the defaults
+  * TESTS : defaults test
+  * FEATURE: Allow .search(q, params, cb) "callback always last" convention
+    introduced by JavaScript client, also on the helper
 
 1.0.0
   * Extraction of the helper from the algolia-client-js v2.9.4

@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "2.0.0-rc5",
+  "version": "2.0.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "scripts": {

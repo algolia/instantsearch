@@ -23,6 +23,6 @@
     "test"
   ],
   "dependencies": {
-    "algoliasearch": "3.x"
+    "algoliasearch": "3.1.x"
   }
 }
