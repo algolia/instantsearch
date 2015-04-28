@@ -58,7 +58,7 @@ helper.search( "" );
 
 Include this in your page :
 
-`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2.0.0-rc1/algoliasearch.helper.min.js"></script>`
+`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2.0.0/algoliasearch.helper.min.js"></script>`
 
 ## How to contribute
 
