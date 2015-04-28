@@ -5,19 +5,20 @@ UNRELEASED
   * FIX : handle distinct parameter automatically
   * FIX : batch response handler gets the proper search state
   * FEATURE : (breaking) Now peer depend on algoliasearch v3.1
-  * FEATURE : SearchRefults.getFacetByName to retrieve a facet object from its
-  name
-  * FEATURE : SearchParameters.getNumericRefinement : get back the value of a specific numeric
-  refinement
-  * FEATURE : clear refinements by name
   * FEATURE : (breaking) Facets stats and timeout infos are consistently
-  grouped in the facet object in the SearchResults
   * FEATURE : (breaking) no more extra queries
   * FEATURE : (breaking) Facets results are stored in an array with an order
   that reflects their definition.
   * FEATURE : Search results explicit definition
   * FEATURE : (breaking) Search parameters as a separate object
   * FEATURE : (breaking) Move callback style to a event based API
+  * FEATURE : change and results events return the state and the results (if any)
+  * FEATURE : SearchRefults.getFacetByName to retrieve a facet object from its
+  name
+  * FEATURE : SearchParameters.getNumericRefinement : get back the value of a specific numeric
+  refinement
+  * FEATURE : clear refinements by name
+  grouped in the facet object in the SearchResults
   * FEATURE : isDisjunctiveRefined to check if a disjunctive facet is refined
   * FEATURE : basic support for numeric filters
   * FEATURE : version number on the main helper factory

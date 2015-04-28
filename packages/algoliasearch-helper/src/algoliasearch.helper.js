@@ -12,8 +12,10 @@ var bind = require( "lodash/function/bind" );
  * @class
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
  * search. It provides an event based interface for search callbacks :
- *  - change : when the internal search state is changed. This event contains a {SearchParameters} object
- *  - result : when the response is retrieved from Algolia and is processed. This event contains a {SearchResults} object
+ *  - change : when the internal search state is changed.
+ *             This event contains a {SearchParameters} object and the {SearchResults} of the last result if any.
+ *  - result : when the response is retrieved from Algolia and is processed.
+ *             This event contains a {SearchResults} object and the {SearchParameters} corresponding to this answer.
  *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
@@ -23,6 +25,7 @@ function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
   this.state = new SearchParameters( options );
+  this.lastResults = null;
 }
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
@@ -43,8 +46,7 @@ AlgoliaSearchHelper.prototype.search = function() {
  */
 AlgoliaSearchHelper.prototype.setQuery = function( q ) {
   this.state = this.state.setQuery( q );
-
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -55,7 +57,7 @@ AlgoliaSearchHelper.prototype.setQuery = function( q ) {
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function( name ) {
   this.state = this.state.clearRefinements( name );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -67,7 +69,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function( name ) {
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.addDisjunctiveFacetRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -79,7 +81,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
   this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -92,7 +94,7 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value )
  */
 AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operator, value ) {
   this.state = this.state.addNumericRefinement( attribute, operator, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -105,7 +107,7 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operat
  */
 AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value ) {
   this.state = this.state.removeNumericRefinement( attribute, operator, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -117,7 +119,7 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, ope
  */
 AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
   this.state = this.state.addFacetRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -129,7 +131,7 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
   this.state = this.state.removeFacetRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -141,7 +143,7 @@ AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
   this.state = this.state.addExcludeRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -153,7 +155,7 @@ AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -165,7 +167,7 @@ AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
   this.state = this.state.toggleExcludeFacetRefinement( facet, value );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -189,7 +191,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
     /* eslint-enable */
     return this;
   }
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -218,7 +220,7 @@ AlgoliaSearchHelper.prototype.setCurrentPage = function( page ) {
   if( page < 0 ) throw new Error( "Page requested below 0." );
 
   this.state = this.state.setPage( page );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -240,7 +242,7 @@ AlgoliaSearchHelper.prototype.setIndex = function( name ) {
  */
 AlgoliaSearchHelper.prototype.setState = function( newState ) {
   this.state = new SearchParameters( newState );
-  this.emit( "change", this.state );
+  this._change();
   return this;
 };
 
@@ -338,9 +340,9 @@ AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) 
     return;
   }
 
-  var formattedResponse = new SearchResults( state, content );
+  var formattedResponse = this.lastResults = new SearchResults( state, content );
 
-  this.emit( "result", formattedResponse );
+  this.emit( "result", formattedResponse, state );
 };
 
 /**
@@ -456,6 +458,10 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   } );
 
   return facetFilters;
+};
+
+AlgoliaSearchHelper.prototype._change = function() {
+  this.emit( "change", this.state, this.lastResults );
 };
 
 module.exports = AlgoliaSearchHelper;
