@@ -178,7 +178,7 @@ SearchParameters.prototype = {
    */
   setHitsPerPage : function setHitsPerPage( n ) {
     return this.mutateMe( function( m ) {
-      m.HitsPerPage = n;
+      m.hitsPerPage = n;
       m.page = 0;
     } );
   },
