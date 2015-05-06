@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.0.2 - 2015-05-06
+  * FIX : setHitsPerPage was creating a new property HitsPerPage instead of
+  updating the currently available hitsPerPage
+
 2.0.1
   * MEH : because of jsDelivr
 
