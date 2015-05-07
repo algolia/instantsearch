@@ -1,5 +1,3 @@
-/**
- */
 "use strict";
 var AlgoliaSearchHelper = require( "./src/algoliasearch.helper" );
 /**
