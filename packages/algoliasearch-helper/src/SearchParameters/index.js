@@ -187,7 +187,7 @@ SearchParameters.prototype = {
    * typoTolerance setter
    * Set the value of typoTolerance
    * @method
-   * @param {string} s string new value of typoTolerance
+   * @param {string} s string new value of typoTolerance ("true", "false", "min" or "strict")
    * @return {SearchParameters}
    */
   setTypoTolerance : function setTypoTolerance( s ) {
