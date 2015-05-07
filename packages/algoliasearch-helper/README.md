@@ -35,13 +35,15 @@ helper.on( "result", function( data ){
 helper.addDisjunctiveRefine( "director", "Clint Eastword" );
 helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
 
-helper.addRefine( "year", "2003" );
+helper.addNumericRefine( "year", "=", 2003 );
 
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
 helper.search();
 ```
 
 ## How to use this module
+
+[Have a look at the JSDoc](http://algolia.github.io/algoliasearch-helper-js/docs)
 
 [See the examples in action](http://algolia.github.io/algoliasearch-helper-js/)
 
