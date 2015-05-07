@@ -103,7 +103,7 @@ var SearchParameters = function( newParameters ) {
   this.ignorePlurals = params.ignorePlurals;
   /**
   * @see https://www.algolia.com/doc#restrictSearchableAttributes 
-  * @member {string} comma separated list
+  * @member {string}
   */
   this.restrictSearchableAttributes = params.restrictSearchableAttributes;
   /**
@@ -118,7 +118,7 @@ var SearchParameters = function( newParameters ) {
   this.analytics = params.analytics;
   /**
    * @see https://www.algolia.com/doc#analyticsTags 
-   * @member {string} comma separated list of tags
+   * @member {string}
    */
   this.analyticsTags = params.analyticsTags;
   /**
@@ -137,8 +137,9 @@ var SearchParameters = function( newParameters ) {
    */
   this.optionalWords = params.optionalWords;
   /**
+   * possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)
    * @see https://www.algolia.com/doc#removeWordsIfNoResults 
-   * @member {string} possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)
+   * @member {string}
    */
   this.removeWordsIfNoResults = params.removeWordsIfNoResults;
   /**
