@@ -12,7 +12,7 @@
     "watch-lint": " onchange '.eslintrc' 'src/**/*.js' 'index.js' -- npm run lint ",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
-    "doc": "jsdoc -r src index.js -d docs -c .jsdoc --readme README.MD -P package.json",
+    "doc": "jsdoc -r src index.js -d docs -c .jsdoc --readme README.MD",
     "publish-doc": "git checkout gh-pages && git merge master && npm run build && npm run doc && git commit -a -m 'Update doc' && git push origin gh-pages && git checkout master",
     "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
