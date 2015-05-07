@@ -187,12 +187,12 @@ SearchParameters.prototype = {
    * typoTolerance setter
    * Set the value of typoTolerance
    * @method
-   * @param {boolean} b boolean new value of typoTolerance
+   * @param {string} s string new value of typoTolerance
    * @return {SearchParameters}
    */
-  setTypoTolerance : function setTypoTolerance( b ) {
+  setTypoTolerance : function setTypoTolerance( s ) {
     return this.mutateMe( function( m ) {
-      m.typoTolerance = b;
+      m.typoTolerance = s;
       m.page = 0;
     } );
   },
