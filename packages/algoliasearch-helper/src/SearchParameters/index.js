@@ -182,6 +182,20 @@ SearchParameters.prototype = {
       m.page = 0;
     } );
   },
+
+  /**
+   * typoTolerance setter
+   * Set the value of typoTolerance
+   * @method
+   * @param {boolean} b boolean new value of typoTolerance
+   * @return {SearchParameters}
+   */
+  setTypoTolerance : function setTypoTolerance( b ) {
+    return this.mutateMe( function( m ) {
+      m.typoTolerance = b;
+      m.page = 0;
+    } );
+  },
   /**
    * Add or update a numeric filter for a given attribute
    * Current limitation of the numeric filters : you can't have more than one value
