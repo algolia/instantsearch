@@ -1,3 +1,5 @@
+*Coming from V1 (or js client v2)?* Read the [migration guide](https://github.com/algolia/algoliasearch-helper-js/wiki/Migration-guide-:-V1-to-V2) to the new version of the Helper.
+
 # algoliasearch-helper-js
 
 This module is the companion of the algoliasearch-client-js. It helps you keep
