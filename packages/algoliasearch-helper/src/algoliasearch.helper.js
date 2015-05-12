@@ -438,8 +438,10 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
 AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   var facetFilters = [];
 
-  forEach( this.state.facetsRefinements, function( facetValue, facetName ) {
-    facetFilters.push( facetName + ":" + facetValue );
+  forEach( this.state.facetsRefinements, function( facetValues, facetName ) {
+    forEach( facetValues, function( facetValue ) {
+      facetFilters.push( facetName + ":" + facetValue );
+    } );
   } );
 
   forEach( this.state.facetsExcludes, function( facetValues, facetName ) {

@@ -1,3 +1,4 @@
+"use strict";
 var test = require("tape");
 var _ = require( "lodash" );
 var sinon = require("sinon"); 

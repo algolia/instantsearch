@@ -365,9 +365,16 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
+    if( this.isRefined( facet, value ) ) {
+      return this;
+    }
+
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m.facetsRefinements[ facet ] = value;
+      if( !m.facetsRefinements[ facet ] ) {
+        m.facetsRefinements[ facet ] = [];
+      }
+      m.facetsRefinements[ facet ].push( value );
     } );
   },
   /**
@@ -403,15 +410,29 @@ SearchParameters.prototype = {
     } );
   },
   /**
-   * Remove a refinement set on facet.
+   * Remove a refinement set on facet. If a value is provided, it will clear the
+   * refinement for the given value, otherwise it will clear all the refinement
+   * values for the facetted attribute.
    * @method
    * @param {string} facet
+   * @param {string} value
    * @return {SearchParameters}
    */
-  removeFacetRefinement : function removeFacetRefinement( facet ) {
+  removeFacetRefinement : function removeFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m._clearFacetRefinements( facet );
+      if( value ) {
+        var idx = m.facetsRefinements[ facet ].indexOf( value );
+        if( idx > -1 ) {
+          m.facetsRefinements[ facet ].splice( idx, 1 );
+          if( m.facetsRefinements[ facet ].length === 0 ) {
+            delete m.facetsRefinements[ facet ];
+          }
+        }
+      }
+      else {
+        m._clearFacetRefinements( facet );
+      }
     } );
   },
   /**
@@ -519,7 +540,7 @@ SearchParameters.prototype = {
    */
   toggleFacetRefinement : function toggleFacetRefinement( facet, value ) {
     if( this.isFacetRefined( facet, value ) ) {
-      return this.removeFacetRefinement( facet );
+      return this.removeFacetRefinement( facet, value );
     }
     else {
       return this.addFacetRefinement( facet, value );
@@ -563,7 +584,8 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    return this.facetsRefinements[ facet ] === value;
+    return this.facetsRefinements[ facet ] &&
+           this.facetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
    * Returns true if the couple (facet, value) is excluded
