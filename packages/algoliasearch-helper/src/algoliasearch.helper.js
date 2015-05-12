@@ -258,6 +258,7 @@ AlgoliaSearchHelper.prototype.setState = function( newState ) {
  *    updateYourURL( state );
  *  } );
  *  window.onpopstate = function( event ){
+ *    // This is naive though as you should check if the state is really defined etc.
  *    helper.overrideState( event.state ).search();
  *  }
  */
