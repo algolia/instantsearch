@@ -259,10 +259,10 @@ AlgoliaSearchHelper.prototype.setState = function( newState ) {
  *  } );
  *  window.onpopstate = function( event ){
  *    // This is naive though as you should check if the state is really defined etc.
- *    helper.overrideState( event.state ).search();
+ *    helper.overrideStateWithoutTriggeringChangeEvent( event.state ).search();
  *  }
  */
-AlgoliaSearchHelper.prototype.overrideState = function( newState ) {
+AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = function( newState ) {
   this.state = new SearchParameters( newState );
   return this;
 };
