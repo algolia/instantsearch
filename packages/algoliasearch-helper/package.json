@@ -34,7 +34,6 @@
     "eslint": "0.17.1",
     "http-server": "0.8.0",
     "jsdoc": "3.3.0-beta3",
-    "lodash": "3.5.0",
     "minami": "1.1.0",
     "onchange": "1.0.0",
     "opn": "1.0.1",
