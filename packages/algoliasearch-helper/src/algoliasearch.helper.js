@@ -247,6 +247,27 @@ AlgoliaSearchHelper.prototype.setState = function( newState ) {
 };
 
 /**
+ * Override the current state without triggering a change event.
+ * Do not use this method unless you know what you are doing. (see the example
+ * for a legit use case)
+ * @param {SearchParameters} newState the whole new state
+ * @return {AlgoliaSearchHelper}
+ * @example
+ *  helper.on( "change", function( state ){
+ *    // In this function you might want to find a way to store the state in the url/history
+ *    updateYourURL( state );
+ *  } );
+ *  window.onpopstate = function( event ){
+ *    // This is naive though as you should check if the state is really defined etc.
+ *    helper.overrideStateWithoutTriggeringChangeEvent( event.state ).search();
+ *  }
+ */
+AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = function( newState ) {
+  this.state = new SearchParameters( newState );
+  return this;
+};
+
+/**
  * Check the refinement state of a facet
  * @param  {string}  facet the facet
  * @param  {string}  value the associated value
