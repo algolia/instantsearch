@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.0.3 - 2015-05-13
+  * FIX : #72 add back the ability to do multiple disjunctive facetting on a
+  single attribute
+  * FEATURE : #73 method to replace the state, without triggering a change
+  event : overrideStateWithoutTriggeringChangeEvent (use wisely)
+  * FEATURE : #66 add setTypoTolerance to SearchParameters
+
 2.0.2 - 2015-05-06
   * FIX : setHitsPerPage was creating a new property HitsPerPage instead of
   updating the currently available hitsPerPage
