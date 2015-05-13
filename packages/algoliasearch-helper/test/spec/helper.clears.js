@@ -1,5 +1,4 @@
 "use strict";
-
 var test = require( "tape" ),
     algoliasearchHelper = require( "../../index" ),
     isUndefined = require( "lodash/lang/isUndefined" );
@@ -25,7 +24,7 @@ var init = function init() {
 test( "Check that the state objects match how we test them", function( t ) {
   var helper = init();
 
-  t.deepEqual( helper.state.facetsRefinements, { "facet1" : "0", "facet2" : "0" } );
+  t.deepEqual( helper.state.facetsRefinements, { "facet1" : [ "0" ], "facet2" : [ "0" ] } );
   t.deepEqual( helper.state.disjunctiveFacetsRefinements, { "disjunctiveFacet1" : [ "0" ], "disjunctiveFacet2" : [ "0" ] } );
   t.deepEqual( helper.state.facetsExcludes, { "excluded1" : [ "0" ], "excluded2" : [ "0" ] } );
   t.deepEqual( helper.state.numericRefinements, { "numeric1" : { ">=" : "0", "<" : "10" }, "numeric2" : { ">=" : 0, "<" : 10 } } );
@@ -37,7 +36,7 @@ test( "Clear with a name should work on every type and not remove others than ta
   var helper = init();
 
   helper.clearRefinements( "facet1" );
-  t.deepEqual( helper.state.facetsRefinements, { "facet2" : "0" } );
+  t.deepEqual( helper.state.facetsRefinements, { "facet2" : [ "0" ] } );
 
   helper.clearRefinements( "disjunctiveFacet1" );
   t.deepEqual( helper.state.disjunctiveFacetsRefinements, { "disjunctiveFacet2" : [ "0" ] } );
@@ -57,7 +56,7 @@ test( "Clearing the same field from multiple elements should remove it everywher
 
   helper.addNumericRefinement( "facet1", ">=", "10" ).toggleExclude( "facet1", "value" );
 
-  t.equal( helper.state.facetsRefinements.facet1, "0" );
+  t.deepEqual( helper.state.facetsRefinements.facet1, [ "0" ] );
   t.deepEqual( helper.state.numericRefinements.facet1, { ">=" : "10" } );
   t.deepEqual( helper.state.facetsExcludes.facet1, [ "value" ] );
 
@@ -72,7 +71,7 @@ test( "Clearing the same field from multiple elements should remove it everywher
 test( "Clearing twice the same attribute should be not problem", function( t ) {
   var helper = init();
 
-  t.equal( helper.state.facetsRefinements.facet1, "0" );
+  t.deepEqual( helper.state.facetsRefinements.facet1, [ "0" ] );
   helper.clearRefinements( "facet1" );
   t.assert( isUndefined( helper.state.facetsRefinements.facet1 ) );
   t.doesNotThrow( function() {

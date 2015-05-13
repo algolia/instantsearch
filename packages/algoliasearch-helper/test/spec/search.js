@@ -1,5 +1,4 @@
 "use strict";
-
 var test = require("tape");
 var sinon = require("sinon");
 var algoliaSearch = require( "algoliasearch" );

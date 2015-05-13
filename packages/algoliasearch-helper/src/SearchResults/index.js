@@ -133,7 +133,7 @@ var SearchResults = function( state, algoliaResponse ) {
     forEach( result.facets, function( facetResults, dfacet ) {
       var position = disjunctiveFacetsIndices[ dfacet ];
 
-      var dataFromMainRequest = mainSubResponse.facets[ dfacet ];
+      var dataFromMainRequest = ( mainSubResponse.facets && mainSubResponse.facets[ dfacet ] ) || {};
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
         data : extend( {}, facetResults, dataFromMainRequest )

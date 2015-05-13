@@ -70,19 +70,19 @@ var SearchParameters = function( newParameters ) {
 
   /**
    * Possible values : prefixAll, prefixLast, prefixNone
-   * @see https://www.algolia.com/doc#queryType 
+   * @see https://www.algolia.com/doc#queryType
    * @member {string}
    */
   this.queryType = params.queryType;
   /**
    * Possible values : true, false, min, strict
-   * @see https://www.algolia.com/doc#typoTolerance 
+   * @see https://www.algolia.com/doc#typoTolerance
    * @member {string}
    */
   this.typoTolerance = params.typoTolerance;
 
   /**
-   * @see https://www.algolia.com/doc#minWordSizefor1Typo 
+   * @see https://www.algolia.com/doc#minWordSizefor1Typo
    * @member {number}
    */
   this.minWordSizefor1Typo = params.minWordSizefor1Typo;
@@ -92,108 +92,108 @@ var SearchParameters = function( newParameters ) {
    */
   this.minWordSizefor2Typos = params.minWordSizefor2Typos;
   /**
-   * @see https://www.algolia.com/doc#allowTyposOnNumericTokens 
+   * @see https://www.algolia.com/doc#allowTyposOnNumericTokens
    * @member {boolean}
    */
   this.allowTyposOnNumericTokens = params.allowTyposOnNumericTokens;
   /**
-  * @see https://www.algolia.com/doc#ignorePlurals 
+  * @see https://www.algolia.com/doc#ignorePlurals
   * @member {boolean}
   */
   this.ignorePlurals = params.ignorePlurals;
   /**
-  * @see https://www.algolia.com/doc#restrictSearchableAttributes 
+  * @see https://www.algolia.com/doc#restrictSearchableAttributes
   * @member {string}
   */
   this.restrictSearchableAttributes = params.restrictSearchableAttributes;
   /**
-  * @see https://www.algolia.com/doc#advancedSyntax 
+  * @see https://www.algolia.com/doc#advancedSyntax
   * @member {boolean}
   */
   this.advancedSyntax = params.advancedSyntax;
   /**
-   * @see https://www.algolia.com/doc#analytics 
+   * @see https://www.algolia.com/doc#analytics
    * @member {boolean}
    */
   this.analytics = params.analytics;
   /**
-   * @see https://www.algolia.com/doc#analyticsTags 
+   * @see https://www.algolia.com/doc#analyticsTags
    * @member {string}
    */
   this.analyticsTags = params.analyticsTags;
   /**
-   * @see https://www.algolia.com/doc#synonyms 
+   * @see https://www.algolia.com/doc#synonyms
    * @member {boolean}
    */
   this.synonyms = params.synonyms;
   /**
-   * @see https://www.algolia.com/doc#replaceSynonymsInHighlight 
+   * @see https://www.algolia.com/doc#replaceSynonymsInHighlight
    * @member {boolean}
    */
   this.replaceSynonymsInHighlight = params.replaceSynonymsInHighlight;
   /**
-   * @see https://www.algolia.com/doc#optionalWords 
+   * @see https://www.algolia.com/doc#optionalWords
    * @member {string}
    */
   this.optionalWords = params.optionalWords;
   /**
    * possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)
-   * @see https://www.algolia.com/doc#removeWordsIfNoResults 
+   * @see https://www.algolia.com/doc#removeWordsIfNoResults
    * @member {string}
    */
   this.removeWordsIfNoResults = params.removeWordsIfNoResults;
   /**
-   * @see https://www.algolia.com/doc#attributesToRetrieve 
+   * @see https://www.algolia.com/doc#attributesToRetrieve
    * @member {string}
    */
   this.attributesToRetrieve = params.attributesToRetrieve;
   /**
-   * @see https://www.algolia.com/doc#attributesToHighlight 
+   * @see https://www.algolia.com/doc#attributesToHighlight
    * @member {string}
    */
   this.attributesToHighlight = params.attributesToHighlight;
   /**
-   * @see https://www.algolia.com/doc#attributesToSnippet 
+   * @see https://www.algolia.com/doc#attributesToSnippet
    * @member {string}
    */
   this.attributesToSnippet = params.attributesToSnippet;
   /**
-   * @see https://www.algolia.com/doc#getRankingInfo 
+   * @see https://www.algolia.com/doc#getRankingInfo
    * @member {integer}
    */
   this.getRankingInfo = params.getRankingInfo;
   /**
-   * @see https://www.algolia.com/doc#tagFilters 
+   * @see https://www.algolia.com/doc#tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
   /**
-   * @see https://www.algolia.com/doc#distinct 
+   * @see https://www.algolia.com/doc#distinct
    * @member {boolean}
    */
   this.distinct = params.distinct;
   /**
-   * @see https://www.algolia.com/doc#aroundLatLng 
+   * @see https://www.algolia.com/doc#aroundLatLng
    * @member {string}
    */
   this.aroundLatLng = params.aroundLatLng;
   /**
-   * @see https://www.algolia.com/doc#aroundLatLngViaIP 
+   * @see https://www.algolia.com/doc#aroundLatLngViaIP
    * @member {boolean}
    */
   this.aroundLatLngViaIP = params.aroundLatLngViaIP;
   /**
-   * @see https://www.algolia.com/doc#aroundRadius 
+   * @see https://www.algolia.com/doc#aroundRadius
    * @member {number}
    */
   this.aroundRadius = params.aroundRadius;
   /**
-   * @see https://www.algolia.com/doc#aroundPrecision 
+   * @see https://www.algolia.com/doc#aroundPrecision
    * @member {number}
    */
   this.aroundPrecision = params.aroundPrecision;
   /**
-   * @see https://www.algolia.com/doc#insideBoundingBox 
+   * @see https://www.algolia.com/doc#insideBoundingBox
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
@@ -336,7 +336,7 @@ SearchParameters.prototype = {
    * @param {string} operator applied
    * @return {number} value of the refinement
    */
-  getNumericRefinement : function( attribute, operator ){
+  getNumericRefinement : function( attribute, operator ) {
     return this.numericRefinements[ attribute ] && this.numericRefinements[ attribute ][ operator ];
   },
   /**
@@ -365,9 +365,16 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
+    if( this.isRefined( facet, value ) ) {
+      return this;
+    }
+
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m.facetsRefinements[ facet ] = value;
+      if( !m.facetsRefinements[ facet ] ) {
+        m.facetsRefinements[ facet ] = [];
+      }
+      m.facetsRefinements[ facet ].push( value );
     } );
   },
   /**
@@ -403,15 +410,29 @@ SearchParameters.prototype = {
     } );
   },
   /**
-   * Remove a refinement set on facet.
+   * Remove a refinement set on facet. If a value is provided, it will clear the
+   * refinement for the given value, otherwise it will clear all the refinement
+   * values for the facetted attribute.
    * @method
    * @param {string} facet
+   * @param {string} value
    * @return {SearchParameters}
    */
-  removeFacetRefinement : function removeFacetRefinement( facet ) {
+  removeFacetRefinement : function removeFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m._clearFacetRefinements( facet );
+      if( value ) {
+        var idx = m.facetsRefinements[ facet ].indexOf( value );
+        if( idx > -1 ) {
+          m.facetsRefinements[ facet ].splice( idx, 1 );
+          if( m.facetsRefinements[ facet ].length === 0 ) {
+            delete m.facetsRefinements[ facet ];
+          }
+        }
+      }
+      else {
+        m._clearFacetRefinements( facet );
+      }
     } );
   },
   /**
@@ -519,7 +540,7 @@ SearchParameters.prototype = {
    */
   toggleFacetRefinement : function toggleFacetRefinement( facet, value ) {
     if( this.isFacetRefined( facet, value ) ) {
-      return this.removeFacetRefinement( facet );
+      return this.removeFacetRefinement( facet, value );
     }
     else {
       return this.addFacetRefinement( facet, value );
@@ -563,7 +584,8 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    return this.facetsRefinements[ facet ] === value;
+    return this.facetsRefinements[ facet ] &&
+           this.facetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
    * Returns true if the couple (facet, value) is excluded

@@ -29,10 +29,9 @@ test( "Adding refinments should add an entry to the refinments attribute", funct
   var facetValue = "42";
 
   t.ok( _.isEmpty( helper.state.facetsRefinements ), "should be empty at first" );
-  helper.addRefine( facetName, "42" );
-  t.ok( _.size( helper.state.facetsRefinements ) === 1 &&
-          helper.state.facetsRefinements.facet1 === facetValue,
-          "when adding a refinment, should have one" );
+  helper.addRefine( facetName, facetValue );
+  t.ok( _.size( helper.state.facetsRefinements ) === 1, "when adding a refinment, should have one" );
+  t.deepEqual( helper.state.facetsRefinements.facet1, [ facetValue ] );
   helper.addRefine( facetName, facetValue );
   t.ok( _.size( helper.state.facetsRefinements ) === 1, "when adding the same, should still be one" );
   helper.removeRefine( facetName, facetValue );

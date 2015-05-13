@@ -1,5 +1,4 @@
 "use strict";
-
 var test = require( "tape" );
 //var _ = require( "lodash" );
 var SearchParameters = require( "../../src/SearchParameters" );
