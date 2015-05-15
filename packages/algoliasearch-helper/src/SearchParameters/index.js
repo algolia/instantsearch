@@ -365,7 +365,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
-    if( this.isRefined( facet, value ) ) {
+    if( this.isFacetRefined( facet, value ) ) {
       return this;
     }
 
