@@ -107,7 +107,8 @@ var SearchResults = function( state, algoliaResponse ) {
     if( isFacetDisjunctive ) {
       this.disjunctiveFacets[ position ] = {
         name : facetKey,
-        data : facetValueObject
+        data : facetValueObject,
+        exhaustive : mainSubResponse.exhaustiveFacetsCount
       };
       assignFacetStats( this.disjunctiveFacets[ position ], mainSubResponse.facets_stats, facetKey );
       assignFacetTimeout( this.disjunctiveFacets[ position ],
@@ -118,7 +119,8 @@ var SearchResults = function( state, algoliaResponse ) {
     else {
       this.facets[ position ] = {
         name : facetKey,
-        data : facetValueObject
+        data : facetValueObject,
+        exhaustive : mainSubResponse.exhaustiveFacetsCount
       };
       assignFacetStats( this.facets[ position ], mainSubResponse.facets_stats, facetKey );
       assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey );
@@ -136,7 +138,8 @@ var SearchResults = function( state, algoliaResponse ) {
       var dataFromMainRequest = ( mainSubResponse.facets && mainSubResponse.facets[ dfacet ] ) || {};
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
-        data : extend( {}, facetResults, dataFromMainRequest )
+        data : extend( {}, facetResults, dataFromMainRequest ),
+        exhaustive : result.exhaustiveFacetsCount
       };
       assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
       assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet );
@@ -158,7 +161,8 @@ var SearchResults = function( state, algoliaResponse ) {
     var position = facetsIndices[ facetName ];
     this.facets[ position ] = {
       name : facetName,
-      data : mainSubResponse.facets[ facetName ]
+      data : mainSubResponse.facets[ facetName ],
+      exhaustive : mainSubResponse.exhaustiveFacetsCount
     };
     forEach( excludes, function( facetValue ) {
       this.facets[ position ] = this.facets[ position ] || { name : facetName };
