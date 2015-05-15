@@ -1,6 +1,4 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.algoliasearchHelper = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-/**
- */
 "use strict";
 var AlgoliaSearchHelper = require( "./src/algoliasearch.helper" );
 /**
@@ -19,7 +17,7 @@ function helper( client, index, opts ) {
  * The version currently used
  * @member module:algoliasearch-helper.version
  */
-helper.version = "2.0.1";
+helper.version = "2.0.3";
 
 module.exports = helper;
 
@@ -4017,37 +4015,132 @@ var SearchParameters = function( newParameters ) {
 
   /**
    * Possible values : prefixAll, prefixLast, prefixNone
+   * @see https://www.algolia.com/doc#queryType
    * @member {string}
    */
   this.queryType = params.queryType;
   /**
    * Possible values : true, false, min, strict
+   * @see https://www.algolia.com/doc#typoTolerance
    * @member {string}
    */
   this.typoTolerance = params.typoTolerance;
 
+  /**
+   * @see https://www.algolia.com/doc#minWordSizefor1Typo
+   * @member {number}
+   */
   this.minWordSizefor1Typo = params.minWordSizefor1Typo;
+  /**
+   * @see https://www.algolia.com/doc#minWordSizefor2Typos
+   * @member {number}
+   */
   this.minWordSizefor2Typos = params.minWordSizefor2Typos;
+  /**
+   * @see https://www.algolia.com/doc#allowTyposOnNumericTokens
+   * @member {boolean}
+   */
   this.allowTyposOnNumericTokens = params.allowTyposOnNumericTokens;
+  /**
+  * @see https://www.algolia.com/doc#ignorePlurals
+  * @member {boolean}
+  */
   this.ignorePlurals = params.ignorePlurals;
+  /**
+  * @see https://www.algolia.com/doc#restrictSearchableAttributes
+  * @member {string}
+  */
   this.restrictSearchableAttributes = params.restrictSearchableAttributes;
+  /**
+  * @see https://www.algolia.com/doc#advancedSyntax
+  * @member {boolean}
+  */
   this.advancedSyntax = params.advancedSyntax;
+  /**
+   * @see https://www.algolia.com/doc#analytics
+   * @member {boolean}
+   */
   this.analytics = params.analytics;
+  /**
+   * @see https://www.algolia.com/doc#analyticsTags
+   * @member {string}
+   */
   this.analyticsTags = params.analyticsTags;
+  /**
+   * @see https://www.algolia.com/doc#synonyms
+   * @member {boolean}
+   */
   this.synonyms = params.synonyms;
+  /**
+   * @see https://www.algolia.com/doc#replaceSynonymsInHighlight
+   * @member {boolean}
+   */
   this.replaceSynonymsInHighlight = params.replaceSynonymsInHighlight;
+  /**
+   * @see https://www.algolia.com/doc#optionalWords
+   * @member {string}
+   */
   this.optionalWords = params.optionalWords;
+  /**
+   * possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)
+   * @see https://www.algolia.com/doc#removeWordsIfNoResults
+   * @member {string}
+   */
   this.removeWordsIfNoResults = params.removeWordsIfNoResults;
+  /**
+   * @see https://www.algolia.com/doc#attributesToRetrieve
+   * @member {string}
+   */
   this.attributesToRetrieve = params.attributesToRetrieve;
+  /**
+   * @see https://www.algolia.com/doc#attributesToHighlight
+   * @member {string}
+   */
   this.attributesToHighlight = params.attributesToHighlight;
+  /**
+   * @see https://www.algolia.com/doc#attributesToSnippet
+   * @member {string}
+   */
   this.attributesToSnippet = params.attributesToSnippet;
+  /**
+   * @see https://www.algolia.com/doc#getRankingInfo
+   * @member {integer}
+   */
   this.getRankingInfo = params.getRankingInfo;
+  /**
+   * @see https://www.algolia.com/doc#tagFilters
+   * @member {string}
+   */
   this.tagFilters = params.tagFilters;
+  /**
+   * @see https://www.algolia.com/doc#distinct
+   * @member {boolean}
+   */
   this.distinct = params.distinct;
+  /**
+   * @see https://www.algolia.com/doc#aroundLatLng
+   * @member {string}
+   */
   this.aroundLatLng = params.aroundLatLng;
+  /**
+   * @see https://www.algolia.com/doc#aroundLatLngViaIP
+   * @member {boolean}
+   */
   this.aroundLatLngViaIP = params.aroundLatLngViaIP;
+  /**
+   * @see https://www.algolia.com/doc#aroundRadius
+   * @member {number}
+   */
   this.aroundRadius = params.aroundRadius;
+  /**
+   * @see https://www.algolia.com/doc#aroundPrecision
+   * @member {number}
+   */
   this.aroundPrecision = params.aroundPrecision;
+  /**
+   * @see https://www.algolia.com/doc#insideBoundingBox
+   * @member {string}
+   */
   this.insideBoundingBox = params.insideBoundingBox;
 };
 
@@ -4125,7 +4218,21 @@ SearchParameters.prototype = {
    */
   setHitsPerPage : function setHitsPerPage( n ) {
     return this.mutateMe( function( m ) {
-      m.HitsPerPage = n;
+      m.hitsPerPage = n;
+      m.page = 0;
+    } );
+  },
+
+  /**
+   * typoTolerance setter
+   * Set the value of typoTolerance
+   * @method
+   * @param {string} s string new value of typoTolerance ("true", "false", "min" or "strict")
+   * @return {SearchParameters}
+   */
+  setTypoTolerance : function setTypoTolerance( s ) {
+    return this.mutateMe( function( m ) {
+      m.typoTolerance = s;
       m.page = 0;
     } );
   },
@@ -4174,7 +4281,7 @@ SearchParameters.prototype = {
    * @param {string} operator applied
    * @return {number} value of the refinement
    */
-  getNumericRefinement : function( attribute, operator ){
+  getNumericRefinement : function( attribute, operator ) {
     return this.numericRefinements[ attribute ] && this.numericRefinements[ attribute ][ operator ];
   },
   /**
@@ -4203,9 +4310,16 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
+    if( this.isRefined( facet, value ) ) {
+      return this;
+    }
+
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m.facetsRefinements[ facet ] = value;
+      if( !m.facetsRefinements[ facet ] ) {
+        m.facetsRefinements[ facet ] = [];
+      }
+      m.facetsRefinements[ facet ].push( value );
     } );
   },
   /**
@@ -4241,15 +4355,29 @@ SearchParameters.prototype = {
     } );
   },
   /**
-   * Remove a refinement set on facet.
+   * Remove a refinement set on facet. If a value is provided, it will clear the
+   * refinement for the given value, otherwise it will clear all the refinement
+   * values for the facetted attribute.
    * @method
    * @param {string} facet
+   * @param {string} value
    * @return {SearchParameters}
    */
-  removeFacetRefinement : function removeFacetRefinement( facet ) {
+  removeFacetRefinement : function removeFacetRefinement( facet, value ) {
     return this.mutateMe( function( m ) {
       m.page = 0;
-      m._clearFacetRefinements( facet );
+      if( value ) {
+        var idx = m.facetsRefinements[ facet ].indexOf( value );
+        if( idx > -1 ) {
+          m.facetsRefinements[ facet ].splice( idx, 1 );
+          if( m.facetsRefinements[ facet ].length === 0 ) {
+            delete m.facetsRefinements[ facet ];
+          }
+        }
+      }
+      else {
+        m._clearFacetRefinements( facet );
+      }
     } );
   },
   /**
@@ -4357,7 +4485,7 @@ SearchParameters.prototype = {
    */
   toggleFacetRefinement : function toggleFacetRefinement( facet, value ) {
     if( this.isFacetRefined( facet, value ) ) {
-      return this.removeFacetRefinement( facet );
+      return this.removeFacetRefinement( facet, value );
     }
     else {
       return this.addFacetRefinement( facet, value );
@@ -4401,7 +4529,8 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    return this.facetsRefinements[ facet ] === value;
+    return this.facetsRefinements[ facet ] &&
+           this.facetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
    * Returns true if the couple (facet, value) is excluded
@@ -4619,7 +4748,7 @@ var SearchResults = function( state, algoliaResponse ) {
     forEach( result.facets, function( facetResults, dfacet ) {
       var position = disjunctiveFacetsIndices[ dfacet ];
 
-      var dataFromMainRequest = mainSubResponse.facets[ dfacet ];
+      var dataFromMainRequest = ( mainSubResponse.facets && mainSubResponse.facets[ dfacet ] ) || {};
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
         data : extend( {}, facetResults, dataFromMainRequest )
@@ -4922,6 +5051,27 @@ AlgoliaSearchHelper.prototype.setState = function( newState ) {
 };
 
 /**
+ * Override the current state without triggering a change event.
+ * Do not use this method unless you know what you are doing. (see the example
+ * for a legit use case)
+ * @param {SearchParameters} newState the whole new state
+ * @return {AlgoliaSearchHelper}
+ * @example
+ *  helper.on( "change", function( state ){
+ *    // In this function you might want to find a way to store the state in the url/history
+ *    updateYourURL( state );
+ *  } );
+ *  window.onpopstate = function( event ){
+ *    // This is naive though as you should check if the state is really defined etc.
+ *    helper.overrideStateWithoutTriggeringChangeEvent( event.state ).search();
+ *  }
+ */
+AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = function( newState ) {
+  this.state = new SearchParameters( newState );
+  return this;
+};
+
+/**
  * Check the refinement state of a facet
  * @param  {string}  facet the facet
  * @param  {string}  value the associated value
@@ -5113,8 +5263,10 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
 AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
   var facetFilters = [];
 
-  forEach( this.state.facetsRefinements, function( facetValue, facetName ) {
-    facetFilters.push( facetName + ":" + facetValue );
+  forEach( this.state.facetsRefinements, function( facetValues, facetName ) {
+    forEach( facetValues, function( facetValue ) {
+      facetFilters.push( facetName + ":" + facetValue );
+    } );
   } );
 
   forEach( this.state.facetsExcludes, function( facetValues, facetName ) {
