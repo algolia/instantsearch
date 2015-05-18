@@ -9,7 +9,7 @@ The helper is built on top of algoliasearch-client-js and this version is
 specifically made to work with the newest V3 versions of it.
 
 ## Features
-
+a
  - Search parameters tracking
  - Facets exclusions
  - Pagination
@@ -37,7 +37,7 @@ helper.on( "result", function( data ){
 helper.addDisjunctiveRefine( "director", "Clint Eastword" );
 helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
 
-helper.addNumericRefine( "year", "=", 2003 );
+helper.addNumericRefinement( "year", "=", 2003 );
 
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
 helper.search();
