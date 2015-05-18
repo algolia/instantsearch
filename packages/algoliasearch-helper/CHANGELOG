@@ -1,5 +1,8 @@
 CHANGELOG
 
+CURRENT
+  * FEATURE: Add exhaustive attribute to a facet and removed useless timeout
+
 2.0.3 - 2015-05-13
   * FIX : #72 add back the ability to do multiple disjunctive facetting on a
   single attribute
