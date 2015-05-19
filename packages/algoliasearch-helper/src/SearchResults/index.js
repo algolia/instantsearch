@@ -127,7 +127,7 @@ var SearchResults = function( state, algoliaResponse ) {
       var dataFromMainRequest = ( mainSubResponse.facets && mainSubResponse.facets[ dfacet ] ) || {};
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
-        data : extend( {}, facetResults, dataFromMainRequest ),
+        data : extend( {}, dataFromMainRequest, facetResults ),
         exhaustive : result.exhaustiveFacetsCount
       };
       assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
