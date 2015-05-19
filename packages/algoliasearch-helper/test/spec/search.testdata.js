@@ -153,6 +153,7 @@ var response = {
             }
          ],
          "params" : "query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%22city%3AParis%22%2C%22city%3ANew%20York%22%5D%5D",
+         "exhaustiveFacetsCount" : true,
          "nbHits" : 4,
          "query" : "",
          "processingTimeMS" : 1,
@@ -173,6 +174,7 @@ var response = {
                "San Francisco" : 1
             }
          },
+         "exhaustiveFacetsCount" : false,
          "nbHits" : 5,
          "hits" : [
             {
@@ -353,7 +355,8 @@ var responseHelper = {
         "New York": 1,
         "Paris": 3,
         "San Francisco": 1
-      }
+      },
+      "exhaustive": false
     }
   ],
   "facets": []
