@@ -25,12 +25,6 @@ function assignFacetStats( dest, facetStats, key ) {
   }
 }
 
-function assignFacetTimeout( dest, timeoutCounts, getRankingInfo ) {
-  if ( getRankingInfo ) {
-    dest.timeout = !!( timeoutCounts );
-  }
-}
-
 /**
  * Constructor for SearchResults
  * @class
@@ -107,21 +101,18 @@ var SearchResults = function( state, algoliaResponse ) {
     if( isFacetDisjunctive ) {
       this.disjunctiveFacets[ position ] = {
         name : facetKey,
-        data : facetValueObject
+        data : facetValueObject,
+        exhaustive : mainSubResponse.exhaustiveFacetsCount
       };
       assignFacetStats( this.disjunctiveFacets[ position ], mainSubResponse.facets_stats, facetKey );
-      assignFacetTimeout( this.disjunctiveFacets[ position ],
-                          state.getRankingInfo,
-                          mainSubResponse.timeoutCounts,
-                          facetKey );
     }
     else {
       this.facets[ position ] = {
         name : facetKey,
-        data : facetValueObject
+        data : facetValueObject,
+        exhaustive : mainSubResponse.exhaustiveFacetsCount
       };
       assignFacetStats( this.facets[ position ], mainSubResponse.facets_stats, facetKey );
-      assignFacetTimeout( this.facets[ position ], state.getRankingInfo, mainSubResponse.timeoutCounts, facetKey );
     }
   }, this );
 
@@ -136,10 +127,10 @@ var SearchResults = function( state, algoliaResponse ) {
       var dataFromMainRequest = ( mainSubResponse.facets && mainSubResponse.facets[ dfacet ] ) || {};
       this.disjunctiveFacets[ position ] = {
         name : dfacet,
-        data : extend( {}, dataFromMainRequest, facetResults )
+        data : extend( {}, dataFromMainRequest, facetResults ),
+        exhaustive : result.exhaustiveFacetsCount
       };
       assignFacetStats( this.disjunctiveFacets[ position ], result.facets_stats, dfacet );
-      assignFacetTimeout( this.disjunctiveFacets[ position ], state.getRankingInfo, result.timeoutCounts, dfacet );
 
       if ( state.disjunctiveFacetsRefinements[dfacet] ) {
         forEach( state.disjunctiveFacetsRefinements[ dfacet ], function( refinementValue ) {
@@ -158,7 +149,8 @@ var SearchResults = function( state, algoliaResponse ) {
     var position = facetsIndices[ facetName ];
     this.facets[ position ] = {
       name : facetName,
-      data : mainSubResponse.facets[ facetName ]
+      data : mainSubResponse.facets[ facetName ],
+      exhaustive : mainSubResponse.exhaustiveFacetsCount
     };
     forEach( excludes, function( facetValue ) {
       this.facets[ position ] = this.facets[ position ] || { name : facetName };
