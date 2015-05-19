@@ -1,6 +1,6 @@
 CHANGELOG
 
-2.0.4-UNRELEASED
+2.0.4
   * FIX : #82 Fix facet count on records with multiple values for a single
   facet
   * FEATURE: Add exhaustive attribute to a facet and removed useless timeout

@@ -17,7 +17,7 @@ function helper( client, index, opts ) {
  * The version currently used
  * @member module:algoliasearch-helper.version
  */
-helper.version = "2.0.4-SNAPSHOT";
+helper.version = "2.0.4";
 
 module.exports = helper;
 
