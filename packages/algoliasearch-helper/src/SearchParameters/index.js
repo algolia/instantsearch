@@ -577,36 +577,78 @@ SearchParameters.prototype = {
     }
   },
   /**
-   * Returns true if the couple (facet, value) is refined
+   * Test if the facet name is from one of the disjunctive facets
    * @method
-   * @param {string} facet
-   * @param {string} value
-   * @return {boolean}
+   * @param {string} facet facet name to test
+   * @return boolean
+   */
+  isDisjunctiveFacet : function( facet ) {
+    return this.disjunctiveFacets.indexOf( facet ) > -1;
+  },
+  /**
+   * Test if the facet name is from one of the conjunctive/normal facets
+   * @method
+   * @param {string} facet facet name to test
+   * @return boolean
+   */
+  isConjunctiveFacet : function( facet ) {
+    return this.facets.indexOf( facet ) > -1;
+  },
+  /**
+   * Returns true if the facet is refined, either for a specific value or in
+   * general.
+   * @method
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value, optionnal value. If passed will test that this value
+   * is filtering the given facet.
+   * @return {boolean} returns true if refined
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    return this.facetsRefinements[ facet ] &&
+    var containsRefinements = this.facetsRefinements[ facet ] &&
+                              this.facetsRefinements[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.facetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
-   * Returns true if the couple (facet, value) is excluded
+   * Returns true if the facet contains exclusions or if a specific value is
+   * excluded
    * @method
-   * @param {string} facet
-   * @param {string} value
-   * @return {boolean}
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value, optionnal value. If passed will test that this value
+   * is filtering the given facet.
+   * @return {boolean} returns true if refined
    */
   isExcludeRefined : function isExcludeRefined( facet, value ) {
-    return this.facetsExcludes[ facet ] &&
+    var containsRefinements = this.facetsExcludes[ facet ] &&
+                              this.facetsExcludes[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.facetsExcludes[ facet ].indexOf( value ) !== -1;
   },
   /**
-   * Returns true if the couple (facet, value) is refined
+   * Returns true if the facet contains a refinement, or if a value passed is a
+   * refinement for the facet.
    * @method
-   * @param {string} facet
-   * @param {string} value
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value optionnal, will test if the value is used for refinement
+   * if there is one, otherwise will test if the facet contains any refinement
    * @return {boolean}
    */
   isDisjunctiveFacetRefined : function isDisjunctiveFacetRefined( facet, value ) {
-    return this.disjunctiveFacetsRefinements[ facet ] &&
+    var containsRefinements = this.disjunctiveFacetsRefinements[ facet ] &&
+                              this.disjunctiveFacetsRefinements[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.disjunctiveFacetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
