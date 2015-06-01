@@ -56,19 +56,23 @@ test( "IsRefined should return true if the ( facet, value ) is refined.", functi
   t.end();
 } );
 
-test( "IsRefined should return true if the facet is refined.", function( t ) {
+test( "isRefined(facet)/hasRefinements should return true if the facet is refined.", function( t ) {
   var helper = algoliasearchHelper( null, null, {
     facets : [ "facet1" ]
   } );
 
   t.notOk( helper.isRefined( "facet1" ), "the facet is not refined yet >> false" );
+  t.notOk( helper.hasRefinements( "facet1" ), "the facet is not refined yet >> false" );
 
   helper.addRefine( "facet1", "boom" );
 
   t.ok( helper.isRefined( "facet1" ), "the facet is refined >> true" );
+  t.ok( helper.hasRefinements( "facet1" ), "the facet is refined >> true" );
 
   t.notOk( helper.isRefined( "notAFacet" ), "not a facet" );
+  t.notOk( helper.hasRefinements( "notAFacet" ), "not a facet" );
   t.notOk( helper.isRefined( null ), "not even valid values" );
+  t.notOk( helper.hasRefinements( null ), "not even valid values" );
 
   t.end();
 } );
