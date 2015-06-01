@@ -268,7 +268,7 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = functi
 };
 
 /**
- * Check the refinement state of a facet
+ * Check the refinement state of a given value for a facet
  * @param  {string}  facet the facet
  * @param  {string}  value the associated value
  * @return {boolean} true if refined
@@ -281,6 +281,15 @@ AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
     return this.state.isDisjunctiveFacetRefined( facet, value );
   }
   return false;
+};
+
+/**
+ * Check if the facet has any disjunctive or conjunctive refinements
+ * @param {string} facet the facet attribute name
+ * @return {boolean} true if the facet is facetted by at least one value
+ */
+AlgoliaSearchHelper.prototype.hasRefinements = function( facet ) {
+  return this.isRefined( facet );
 };
 
 /**
