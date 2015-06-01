@@ -9,7 +9,6 @@ The helper is built on top of algoliasearch-client-js and this version is
 specifically made to work with the newest V3 versions of it.
 
 ## Features
-a
  - Search parameters tracking
  - Facets exclusions
  - Pagination
