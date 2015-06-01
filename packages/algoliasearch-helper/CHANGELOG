@@ -1,5 +1,8 @@
 CHANGELOG
 
+UNRELEASED
+  * FEATURE : #69 Ability to know if a facet is refined, whatever the value
+
 2.0.4
   * FIX : #82 Fix facet count on records with multiple values for a single
   facet

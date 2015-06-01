@@ -178,10 +178,10 @@ AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
-  if( this.state.facets.indexOf( facet ) > -1 ) {
+  if( this.state.isConjunctiveFacet( facet ) ) {
     this.state = this.state.toggleFacetRefinement( facet, value );
   }
-  else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
+  else if( this.state.isDisjunctiveFacet( facet ) ) {
     this.state = this.state.toggleDisjunctiveFacetRefinement( facet, value );
   }
   else {
@@ -274,10 +274,10 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = functi
  * @return {boolean} true if refined
  */
 AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
-  if( this.state.facets.indexOf( facet ) > -1 ) {
+  if( this.state.isConjunctiveFacet( facet ) ) {
     return this.state.isFacetRefined( facet, value );
   }
-  else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
+  else if( this.state.isDisjunctiveFacet( facet ) ) {
     return this.state.isDisjunctiveFacetRefined( facet, value );
   }
   return false;
