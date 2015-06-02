@@ -402,12 +402,15 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var numericFilters = this._getNumericFilters();
   var additionalParams = {
     facets : facets,
-    distinct : false
+    distinct : this.state.distinct
   };
+
+  if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 ) {
+    additionalParams.distinct = false;
+  }
 
   if( facetFilters.length > 0 ) {
     additionalParams.facetFilters = facetFilters;
-    additionalParams.distinct = this.state.distinct || false;
   }
 
   if( numericFilters.length > 0 ) {
