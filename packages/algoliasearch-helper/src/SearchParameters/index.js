@@ -704,6 +704,24 @@ SearchParameters.prototype = {
     var newState = new ( this.constructor )( this );
     fn( newState );
     return Object.freeze( newState );
+  },
+  /**
+   * Function that let the user set any of the parameters with a plain object.
+   * It won't let the user define custom properties.
+   * @method
+   * @param {object} params all the keys and the values to be updated
+   * @return {SearchParameters} a new updated instance
+   */
+  setQueryParameters : function setQueryParams( params ) {
+    return this.mutateMe( function merge( newInstance ) {
+      var ks = keys( newInstance );
+      forEach( ks, function( k ) {
+        if( params[ k ] === undefined ) return;
+
+        newInstance[ k ] = params[ k ];
+      } );
+      return newInstance;
+    } );
   }
 };
 
