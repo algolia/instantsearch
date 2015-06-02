@@ -236,6 +236,22 @@ AlgoliaSearchHelper.prototype.setIndex = function( name ) {
 };
 
 /**
+ * Update any single parameter of the state/configuration (based on SearchParameters).
+ * @param {string} parameter name of the parameter to update
+ * @param {any} value new value of the parameter
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setQueryParameter = function( parameter, value ) {
+  var newState = this.state.setQueryParameter( parameter, value );
+
+  if( this.state === newState ) return this;
+
+  this.state = newState;
+  this._change();
+  return this;
+};
+
+/**
  * Set the whole state ( warning : will erase previous state )
  * @param {SearchParameters} newState the whole new state
  * @return {AlgoliaSearchHelper}

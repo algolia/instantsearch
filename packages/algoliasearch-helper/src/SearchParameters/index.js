@@ -704,6 +704,47 @@ SearchParameters.prototype = {
     var newState = new ( this.constructor )( this );
     fn( newState );
     return Object.freeze( newState );
+  },
+  /**
+   * Let the user set a specific value for a given parameter. Will return the
+   * same instance if the parameter is invalid or if the value is the same as the
+   * previous one.
+   * @method
+   * @param {string} parameter the parameter name
+   * @param {any} value the value to be set, must be compliant with the definition of the attribute on the object
+   * @return {SearchParameters} the updated state
+   */
+  setQueryParameter : function setParameter( parameter, value ) {
+    var k = keys( this );
+    if( k.indexOf( parameter ) === -1 ) {
+      throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+    }
+    if( this[ parameter ] === value ) return this;
+
+    return this.mutateMe( function updateParameter( newState ) {
+      newState[ parameter ] = value;
+      return newState;
+    } );
+  },
+  /**
+   * Let the user set any of the parameters with a plain object.
+   * It won't let the user define custom properties.
+   * @method
+   * @param {object} params all the keys and the values to be updated
+   * @return {SearchParameters} a new updated instance
+   */
+  setQueryParameters : function setQueryParameters( params ) {
+    return this.mutateMe( function merge( newInstance ) {
+      var ks = keys( params );
+      forEach( ks, function( k ) {
+        if( !newInstance.hasOwnProperty( k ) ) {
+          throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+        }
+
+        newInstance[ k ] = params[ k ];
+      } );
+      return newInstance;
+    } );
   }
 };
 

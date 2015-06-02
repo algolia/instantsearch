@@ -4522,36 +4522,78 @@ SearchParameters.prototype = {
     }
   },
   /**
-   * Returns true if the couple (facet, value) is refined
+   * Test if the facet name is from one of the disjunctive facets
    * @method
-   * @param {string} facet
-   * @param {string} value
-   * @return {boolean}
+   * @param {string} facet facet name to test
+   * @return boolean
+   */
+  isDisjunctiveFacet : function( facet ) {
+    return this.disjunctiveFacets.indexOf( facet ) > -1;
+  },
+  /**
+   * Test if the facet name is from one of the conjunctive/normal facets
+   * @method
+   * @param {string} facet facet name to test
+   * @return boolean
+   */
+  isConjunctiveFacet : function( facet ) {
+    return this.facets.indexOf( facet ) > -1;
+  },
+  /**
+   * Returns true if the facet is refined, either for a specific value or in
+   * general.
+   * @method
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value, optionnal value. If passed will test that this value
+   * is filtering the given facet.
+   * @return {boolean} returns true if refined
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    return this.facetsRefinements[ facet ] &&
+    var containsRefinements = this.facetsRefinements[ facet ] &&
+                              this.facetsRefinements[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.facetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
-   * Returns true if the couple (facet, value) is excluded
+   * Returns true if the facet contains exclusions or if a specific value is
+   * excluded
    * @method
-   * @param {string} facet
-   * @param {string} value
-   * @return {boolean}
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value, optionnal value. If passed will test that this value
+   * is filtering the given facet.
+   * @return {boolean} returns true if refined
    */
   isExcludeRefined : function isExcludeRefined( facet, value ) {
-    return this.facetsExcludes[ facet ] &&
+    var containsRefinements = this.facetsExcludes[ facet ] &&
+                              this.facetsExcludes[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.facetsExcludes[ facet ].indexOf( value ) !== -1;
   },
   /**
-   * Returns true if the couple (facet, value) is refined
+   * Returns true if the facet contains a refinement, or if a value passed is a
+   * refinement for the facet.
    * @method
-   * @param {string} facet
-   * @param {string} value
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value optionnal, will test if the value is used for refinement
+   * if there is one, otherwise will test if the facet contains any refinement
    * @return {boolean}
    */
   isDisjunctiveFacetRefined : function isDisjunctiveFacetRefined( facet, value ) {
-    return this.disjunctiveFacetsRefinements[ facet ] &&
+    var containsRefinements = this.disjunctiveFacetsRefinements[ facet ] &&
+                              this.disjunctiveFacetsRefinements[ facet ].length > 0;
+    if( value === undefined ) {
+      return containsRefinements;
+    }
+
+    return containsRefinements &&
            this.disjunctiveFacetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
@@ -4607,6 +4649,47 @@ SearchParameters.prototype = {
     var newState = new ( this.constructor )( this );
     fn( newState );
     return Object.freeze( newState );
+  },
+  /**
+   * Let the user set a specific value for a given parameter. Will return the
+   * same instance if the parameter is invalid or if the value is the same as the
+   * previous one.
+   * @method
+   * @param {string} parameter the parameter name
+   * @param {any} value the value to be set, must be compliant with the definition of the attribute on the object
+   * @return {SearchParameters} the updated state
+   */
+  setQueryParameter : function setParameter( parameter, value ) {
+    var k = keys( this );
+    if( k.indexOf( parameter ) === -1 ) {
+      throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+    }
+    if( this[ parameter ] === value ) return this;
+
+    return this.mutateMe( function updateParameter( newState ) {
+      newState[ parameter ] = value;
+      return newState;
+    } );
+  },
+  /**
+   * Let the user set any of the parameters with a plain object.
+   * It won't let the user define custom properties.
+   * @method
+   * @param {object} params all the keys and the values to be updated
+   * @return {SearchParameters} a new updated instance
+   */
+  setQueryParameters : function setQueryParameters( params ) {
+    return this.mutateMe( function merge( newInstance ) {
+      var ks = keys( params );
+      forEach( ks, function( k ) {
+        if( !newInstance.hasOwnProperty( k ) ) {
+          throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+        }
+
+        newInstance[ k ] = params[ k ];
+      } );
+      return newInstance;
+    } );
   }
 };
 
@@ -4974,10 +5057,10 @@ AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
-  if( this.state.facets.indexOf( facet ) > -1 ) {
+  if( this.state.isConjunctiveFacet( facet ) ) {
     this.state = this.state.toggleFacetRefinement( facet, value );
   }
-  else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
+  else if( this.state.isDisjunctiveFacet( facet ) ) {
     this.state = this.state.toggleDisjunctiveFacetRefinement( facet, value );
   }
   else {
@@ -5032,6 +5115,22 @@ AlgoliaSearchHelper.prototype.setIndex = function( name ) {
 };
 
 /**
+ * Update any single parameter of the state/configuration (based on SearchParameters).
+ * @param {string} parameter name of the parameter to update
+ * @param {any} value new value of the parameter
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setQueryParameter = function( parameter, value ) {
+  var newState = this.state.setQueryParameter( parameter, value );
+
+  if( this.state === newState ) return this;
+
+  this.state = newState;
+  this._change();
+  return this;
+};
+
+/**
  * Set the whole state ( warning : will erase previous state )
  * @param {SearchParameters} newState the whole new state
  * @return {AlgoliaSearchHelper}
@@ -5064,19 +5163,28 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = functi
 };
 
 /**
- * Check the refinement state of a facet
+ * Check the refinement state of a given value for a facet
  * @param  {string}  facet the facet
  * @param  {string}  value the associated value
  * @return {boolean} true if refined
  */
 AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
-  if( this.state.facets.indexOf( facet ) > -1 ) {
+  if( this.state.isConjunctiveFacet( facet ) ) {
     return this.state.isFacetRefined( facet, value );
   }
-  else if( this.state.disjunctiveFacets.indexOf( facet ) > -1 ) {
+  else if( this.state.isDisjunctiveFacet( facet ) ) {
     return this.state.isDisjunctiveFacetRefined( facet, value );
   }
   return false;
+};
+
+/**
+ * Check if the facet has any disjunctive or conjunctive refinements
+ * @param {string} facet the facet attribute name
+ * @return {boolean} true if the facet is facetted by at least one value
+ */
+AlgoliaSearchHelper.prototype.hasRefinements = function( facet ) {
+  return this.isRefined( facet );
 };
 
 /**
