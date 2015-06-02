@@ -716,7 +716,9 @@ SearchParameters.prototype = {
    */
   setQueryParameter : function setParameter( parameter, value ) {
     var k = keys( this );
-    if( k.indexOf( parameter ) === -1 ) return this;
+    if( k.indexOf( parameter ) === -1 ) {
+      throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+    }
     if( this[ parameter ] === value ) return this;
 
     return this.mutateMe( function updateParameter( newState ) {
@@ -733,9 +735,11 @@ SearchParameters.prototype = {
    */
   setQueryParameters : function setQueryParameters( params ) {
     return this.mutateMe( function merge( newInstance ) {
-      var ks = keys( newInstance );
+      var ks = keys( params );
       forEach( ks, function( k ) {
-        if( params[ k ] === undefined ) return;
+        if( !newInstance.hasOwnProperty( k ) ) {
+          throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+        }
 
         newInstance[ k ] = params[ k ];
       } );

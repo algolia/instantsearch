@@ -1,6 +1,5 @@
 "use strict";
 var test = require( "tape" );
-//var _ = require( "lodash" );
 var SearchParameters = require( "../../src/SearchParameters" );
 
 test( "setqueryparameter should update existing parameter", function( t ) {
@@ -43,15 +42,13 @@ test( "setQueryParameter should not create a new instance if the update is non e
   t.end();
 } );
 
-test( "setQueryParameter should not create a new instance if the parameter is unknown", function( t ) {
+test( "setQueryParameter should throw an error when trying to add an unknown parameter", function( t ) {
   var sp = new SearchParameters( {
     facets : ["facet"]
   } );
 
-  var newValue = [ "attributesToHighlight" ];
-  var newsp = sp.setQueryParameter( "unknown", newValue );
-
-  t.equal( newsp, sp, "Unknown parameter should return the same instance" );
+  t.throws( sp.setQueryParameter.bind( sp, "unknown", "" ),
+            "Unknown parameter should throw an exception" );
 
   t.end();
 } );

@@ -1,6 +1,5 @@
 "use strict";
 var test = require( "tape" );
-//var _ = require( "lodash" );
 var SearchParameters = require( "../../src/SearchParameters" );
 
 test( "setQueryParameters should be able to mix an actual state with a new set of parameters", function( t ) {
@@ -36,9 +35,9 @@ test( "setQueryParameters should not add unknown properties", function( t ) {
     unknow1 : [ "a", "c" ],
     facet : [ "city", "country" ]
   };
-  var newSP = originalSP.setQueryParameters( params );
 
-  t.deepEqual( newSP, originalSP, "The new searchParameters should be strictly equal" );
+  t.throws( originalSP.setQueryParameters.bind( originalSP, params ),
+            "The new searchParameters should be strictly equal" );
 
   t.end();
 } );
