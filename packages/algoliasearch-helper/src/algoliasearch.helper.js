@@ -19,7 +19,7 @@ var bind = require( "lodash/function/bind" );
  *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParamaters}, just an object containing the properties you need from it.
+ * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParameters}, just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
