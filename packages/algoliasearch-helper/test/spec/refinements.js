@@ -39,6 +39,44 @@ test( "Adding several refinements for a single attribute should be handled", fun
   t.end();
 } );
 
+test( "Toggling several refinements for a single attribute should be handled", function( t ) {
+  var facetName = "facet";
+
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ facetName ]
+  } );
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "empty" );
+  helper.toggleRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 1, "Adding one refinement, should have one" );
+  helper.toggleRefine( facetName, "value2" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding another refinement, should have two" );
+  helper.toggleRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 1, "Adding same refinement as the first, should have two" );
+  t.deepEqual( helper.state.facetsRefinements[ facetName ], [ "value2" ], "should contain value2" );
+
+  t.end();
+} );
+
+test( "Removing several refinements for a single attribute should be handled", function( t ) {
+  var facetName = "facet";
+
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ facetName ]
+  } );
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "empty" );
+  helper.addRefine( facetName, "value1" );
+  helper.addRefine( facetName, "value2" );
+  helper.addRefine( facetName, "value3" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 3, "Adding another refinement, should have two" );
+  helper.removeRefine( facetName, "value2" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding same refinement as the first, should have two" );
+  t.deepEqual( helper.state.facetsRefinements[ facetName ], [ "value1", "value3" ], "should contain value1 and value3" );
+
+  t.end();
+} );
+
 test( "isDisjunctiveRefined", function( t ) {
   var helper = algoliasearchHelper( null, null, {} );
 

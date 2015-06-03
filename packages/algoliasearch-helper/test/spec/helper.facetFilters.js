@@ -20,6 +20,14 @@ test( "The filters should contain the different filters for a single conjunctive
   t.deepEqual( helper._getFacetFilters(),
                [ facetName + ":value1", facetName + ":value2" ],
                "Two values : two filters" );
+  helper.toggleRefine( facetName, "value3" );
+  t.deepEqual( helper._getFacetFilters(),
+               [ facetName + ":value1", facetName + ":value2", facetName + ":value3" ],
+               "Three values : three filters" );
+  helper.removeRefine( facetName, "value3" );
+  t.deepEqual( helper._getFacetFilters(),
+               [ facetName + ":value1", facetName + ":value2" ],
+               "Three values : three filters" );
   helper.addRefine( facetName, "value1" );
   t.deepEqual( helper._getFacetFilters(),
                [ facetName + ":value1", facetName + ":value2"],

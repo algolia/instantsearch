@@ -46,20 +46,39 @@ test( "Should retrieve different values for multi facetted records", function( t
       calls++;
       if( calls === 1 ) {
         t.equal( content.hits.length, 2, "filter should result in two items" );
-        t.equal( content.facets[ 0 ].data.f1, 2 );
-        t.equal( content.facets[ 0 ].data.f2, 1 );
-        t.equal( content.facets[ 0 ].data.f3, 1 );
+        t.deepEqual( content.facets[ 0 ].data, {
+          f1 : 2,
+          f2 : 1,
+          f3 : 1
+        } );
       }
       if( calls === 2 ) {
         t.equal( content.hits.length, 1, "filter should result in one item" );
-        t.equal( content.facets[ 0 ].data.f1, 1 );
-        t.equal( content.facets[ 0 ].data.f2, 1 );
+        t.deepEqual( content.facets[ 0 ].data, {
+          f1 : 1,
+          f2 : 1
+        } );
+      }
+      if( calls === 3 ) {
+        t.equal( content.hits.length, 0, "filter should result in 0 item" );
+        t.equal( content.facets[ 0 ], undefined );
+      }
+      if( calls === 4 ) {
+        t.equal( content.hits.length, 1, "filter should result in one item again" );
+        t.deepEqual( content.facets[ 0 ].data, {
+          f1 : 1,
+          f3 : 1
+        } );
         t.end();
+
       }
     } );
 
     helper.addRefine( "facet", "f1" ).search();
     helper.addRefine( "facet", "f2" ).search();
+    helper.toggleRefine( "facet", "f3" ).search();
+    helper.removeRefine( "facet", "f2" ).search();
+
   } );
 
 } );
