@@ -1,6 +1,8 @@
 CHANGELOG
 
 UNRELEASED
+  * FIX : #92 Parameters that can be set in the dashboard shouldn't have
+  defaults
   * FEATURE : Ability to modify any parameter of the state easily (#76 #84)
   * FEATURE : #69 Ability to know if a facet is refined, whatever the value
 

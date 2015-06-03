@@ -36,6 +36,7 @@ var SearchParameters = function( newParameters ) {
    * @member {string}
    */
   this.query = params.query || "";
+
   //Facets
   /**
    * All the facets that will be requested to the server
@@ -58,16 +59,16 @@ var SearchParameters = function( newParameters ) {
    * @member {Object.<string, OperatorList>}
    */
   this.numericRefinements = params.numericRefinements || {};
+
   //Misc. parameters
   /** @member {number} */
-  this.hitsPerPage = params.hitsPerPage || 20;
+  this.hitsPerPage = params.hitsPerPage;
   /**
    * @member {number}
    **/
-  this.maxValuesPerFacet = params.maxValuesPerFacet || 10;
+  this.maxValuesPerFacet = params.maxValuesPerFacet;
   /** @member {number} */
   this.page = params.page || 0;
-
   /**
    * Possible values : prefixAll, prefixLast, prefixNone
    * @see https://www.algolia.com/doc#queryType
