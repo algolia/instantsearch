@@ -1,6 +1,7 @@
 CHANGELOG
 
 UNRELEASED
+  * FEATURE : #51 multiple filters for a single conjunctive facet (tests)
   * FEATURE : Ability to modify any parameter of the state easily (#76 #84)
   * FEATURE : #69 Ability to know if a facet is refined, whatever the value
 
