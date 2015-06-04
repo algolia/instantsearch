@@ -343,6 +343,11 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
 };
 
+/**
+ * Get the list of refinements for a give facet.
+ * @param {string} facetName
+ * @return {Refinement[]} All Refinement contains a value, and a type. Numeric also contains operators.
+ */
 AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
   var refinements = [];
 
