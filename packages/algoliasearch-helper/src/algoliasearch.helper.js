@@ -343,6 +343,53 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
 };
 
+/**
+ * Get the list of refinements for a given attribute.
+ * @param {string} facetName
+ * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
+ */
+AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
+  var refinements = [];
+
+  if( this.state.isConjunctiveFacet( facetName ) ) {
+    var conjRefinements = this.state.getConjunctiveRefinements( facetName );
+    forEach( conjRefinements, function( r ) {
+      refinements.push( {
+        value : r,
+        type : "conjunctive"
+      } );
+    } );
+  }
+  else if( this.state.isDisjunctiveFacet( facetName ) ) {
+    var disjRefinements = this.state.getDisjunctiveRefinements( facetName );
+    forEach( disjRefinements, function( r ) {
+      refinements.push( {
+        value : r,
+        type : "disjunctive"
+      } );
+    } );
+  }
+
+  var excludeRefinements = this.state.getExcludeRefinements( facetName );
+  forEach( excludeRefinements, function( r ) {
+    refinements.push( {
+      value : r,
+      type : "exclude"
+    } );
+  } );
+
+  var numericRefinements = this.state.getNumericRefinements( facetName );
+  forEach( numericRefinements, function( value, operator ) {
+    refinements.push( {
+      value : value,
+      operator : operator,
+      type : "numeric"
+    } );
+  } );
+
+  return refinements;
+};
+
 ///////////// PRIVATE
 
 /**

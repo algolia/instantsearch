@@ -9,7 +9,7 @@ var isString = require( "lodash/lang/isString" );
 
 /**
  * @typedef FacetList
- * @type {Array.<string>}
+ * @type {string[]}
  *
  * @typedef OperatorList
  * @type {Object.<string, number>}
@@ -312,6 +312,30 @@ SearchParameters.prototype = {
     } );
   },
   /**
+   * Get the list of conjunctive refinements for a single facet
+   * @param {string} facetName
+   * @return {string[]} list of refinements
+   */
+  getConjunctiveRefinements : function( facetName ) {
+    return this.facetsRefinements[ facetName ] || [];
+  },
+  /**
+   * Get the list of disjunctive refinements for a single facet
+   * @param {string} facetName
+   * @return {string[]} list of refinements
+   */
+  getDisjunctiveRefinements : function( facetName ) {
+    return this.disjunctiveFacetsRefinements[ facetName ] || [];
+  },
+  /**
+   * Get the list of exclude refinements for a single facet
+   * @param {string} facetName
+   * @return {string[]} list of refinements
+   */
+  getExcludeRefinements : function( facetName ) {
+    return this.facetsExcludes[ facetName ] || [];
+  },
+  /**
    * Remove a numeric filter
    * @method
    * @param {string} attribute attribute to set the filter on
@@ -330,6 +354,14 @@ SearchParameters.prototype = {
         }
       }
     } );
+  },
+  /**
+   * Get the list of numeric refinements for a single facet
+   * @param {string} facetName
+   * @return {OperatorList[]} list of refinements
+   */
+  getNumericRefinements : function( facetName ) {
+    return this.numericRefinements[ facetName ] || [];
   },
   /**
    * Return the current refinement for the ( attribute, operator )
