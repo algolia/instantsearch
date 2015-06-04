@@ -75,7 +75,13 @@ var SearchResults = function( state, algoliaResponse ) {
    * processing time of the main query
    * @member {number}
    */
-  this.processingTimeMS = mainSubResponse.processingTimeMS;
+  this.processingTimeMS = ( function( responses ) {
+    var totalProcessingTimeMS = 0;
+    forEach( responses, function( r ) {
+      totalProcessingTimeMS += r.processingTimeMS;
+    } );
+    return totalProcessingTimeMS;
+  } )( algoliaResponse.results );
   /**
    * disjunctive facets results
    * @member {array}
