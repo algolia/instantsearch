@@ -344,9 +344,9 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
 };
 
 /**
- * Get the list of refinements for a give facet.
+ * Get the list of refinements for a given attribute.
  * @param {string} facetName
- * @return {Refinement[]} All Refinement contains a value, and a type. Numeric also contains operators.
+ * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
  */
 AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
   var refinements = [];
