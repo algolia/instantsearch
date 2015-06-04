@@ -317,7 +317,7 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getConjunctiveRefinements : function( facetName ) {
-    return this.facetsRefinements[ facetName ];
+    return this.facetsRefinements[ facetName ] || [];
   },
   /**
    * Get the list of disjunctive refinements for a single facet
@@ -325,7 +325,7 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getDisjunctiveRefinements : function( facetName ) {
-    return this.disjunctiveFacetsRefinements[ facetName ];
+    return this.disjunctiveFacetsRefinements[ facetName ] || [];
   },
   /**
    * Get the list of exclude refinements for a single facet
@@ -333,7 +333,7 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getExcludeRefinements : function( facetName ) {
-    return this.facetsExcludes[ facetName ];
+    return this.facetsExcludes[ facetName ] || [];
   },
   /**
    * Remove a numeric filter
@@ -361,7 +361,7 @@ SearchParameters.prototype = {
    * @return {OperatorList[]} list of refinements
    */
   getNumericRefinements : function( facetName ) {
-    return this.numericRefinements[ facetName ];
+    return this.numericRefinements[ facetName ] || [];
   },
   /**
    * Return the current refinement for the ( attribute, operator )

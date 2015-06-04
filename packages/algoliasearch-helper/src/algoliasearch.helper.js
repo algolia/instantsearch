@@ -353,47 +353,39 @@ AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
 
   if( this.state.isConjunctiveFacet( facetName ) ) {
     var conjRefinements = this.state.getConjunctiveRefinements( facetName );
-    if( conjRefinements ) {
-      forEach( conjRefinements, function( r ) {
-        refinements.push( {
-          value : r,
-          type : "conjunctive"
-        } );
+    forEach( conjRefinements, function( r ) {
+      refinements.push( {
+        value : r,
+        type : "conjunctive"
       } );
-    }
+    } );
   }
   else if( this.state.isDisjunctiveFacet( facetName ) ) {
     var disjRefinements = this.state.getDisjunctiveRefinements( facetName );
-    if( disjRefinements ) {
-      forEach( disjRefinements, function( r ) {
-        refinements.push( {
-          value : r,
-          type : "disjunctive"
-        } );
+    forEach( disjRefinements, function( r ) {
+      refinements.push( {
+        value : r,
+        type : "disjunctive"
       } );
-    }
+    } );
   }
 
   var excludeRefinements = this.state.getExcludeRefinements( facetName );
-  if( excludeRefinements ) {
-    forEach( excludeRefinements, function( r ) {
-      refinements.push( {
-        value : r,
-        type : "exclude"
-      } );
+  forEach( excludeRefinements, function( r ) {
+    refinements.push( {
+      value : r,
+      type : "exclude"
     } );
-  }
+  } );
 
   var numericRefinements = this.state.getNumericRefinements( facetName );
-  if( numericRefinements ) {
-    forEach( numericRefinements, function( value, operator ) {
-      refinements.push( {
-        value : value,
-        operator : operator,
-        type : "numeric"
-      } );
+  forEach( numericRefinements, function( value, operator ) {
+    refinements.push( {
+      value : value,
+      operator : operator,
+      type : "numeric"
     } );
-  }
+  } );
 
   return refinements;
 };
