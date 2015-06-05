@@ -156,7 +156,7 @@ var response = {
          "exhaustiveFacetsCount" : true,
          "nbHits" : 4,
          "query" : "",
-         "processingTimeMS" : 1,
+         "processingTimeMS" : 2,
          "nbPages" : 1,
          "hitsPerPage" : 20
       },
@@ -164,7 +164,7 @@ var response = {
          "query" : "",
          "nbPages" : 5,
          "hitsPerPage" : 1,
-         "processingTimeMS" : 1,
+         "processingTimeMS" : 3,
          "page" : 0,
          "index" : "test_hotels-node",
          "facets" : {
@@ -347,7 +347,7 @@ var responseHelper = {
   "nbHits": 4,
   "nbPages": 1,
   "page": 0,
-  "processingTimeMS": 1,
+  "processingTimeMS": 5,
   "disjunctiveFacets": [
     {
       "name": "city",

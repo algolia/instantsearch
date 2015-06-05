@@ -1,6 +1,8 @@
 CHANGELOG
 
 UNRELEASED
+  * LIB : Update lodash version to 3.9.x
+  * FIX : #64 Sum up the processing time of all queries
   * FIX : #92 Parameters that can be set in the dashboard shouldn't have
   defaults
   * FEATURE : #70 Ability to get all refined values : helper.getRefinements(
