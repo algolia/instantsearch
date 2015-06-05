@@ -1,6 +1,7 @@
 "use strict";
 var forEach = require( "lodash/collection/forEach" );
 var compact = require( "lodash/array/compact" );
+var sum = require( "lodash/collection/sum" );
 var find = require( "lodash/collection/find" );
 
 var extend = require( "../functions/extend" );
@@ -75,13 +76,7 @@ var SearchResults = function( state, algoliaResponse ) {
    * processing time of the main query
    * @member {number}
    */
-  this.processingTimeMS = ( function( responses ) {
-    var totalProcessingTimeMS = 0;
-    forEach( responses, function( r ) {
-      totalProcessingTimeMS += r.processingTimeMS;
-    } );
-    return totalProcessingTimeMS;
-  } )( algoliaResponse.results );
+  this.processingTimeMS = sum( algoliaResponse.results, "processingTimeMS" );
   /**
    * disjunctive facets results
    * @member {array}
