@@ -26,6 +26,8 @@ function AlgoliaSearchHelper( client, index, options ) {
   this.index = index;
   this.state = new SearchParameters( options );
   this.lastResults = null;
+  this._queryId = 0;
+  this._lastQueryIdReceived = -1;
 }
 
 util.inherits( AlgoliaSearchHelper, events.EventEmitter );
@@ -416,7 +418,11 @@ AlgoliaSearchHelper.prototype._search = function() {
     } );
   }, this );
 
-  this.client.search( queries, bind( this._handleResponse, this, state ) );
+  this.client.search( queries,
+                      bind( this._handleResponse,
+                            this,
+                            state,
+                            this._queryId++ ) );
 };
 
 /**
@@ -427,14 +433,20 @@ AlgoliaSearchHelper.prototype._search = function() {
  * @param {Error} err error if any, null otherwise
  * @param {object} content content of the response
  */
-AlgoliaSearchHelper.prototype._handleResponse = function( state, err, content ) {
+AlgoliaSearchHelper.prototype._handleResponse = function( state, queryId, err, content ) {
+  if( queryId < this._lastQueryIdReceived ) {
+    // Outdated answer
+    return;
+  }
+
+  this._lastQueryIdReceived = queryId;
+
   if ( err ) {
     this.emit( "error", err );
     return;
   }
 
   var formattedResponse = this.lastResults = new SearchResults( state, content );
-
   this.emit( "result", formattedResponse, state );
 };
 
