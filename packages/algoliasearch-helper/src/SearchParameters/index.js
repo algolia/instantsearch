@@ -3,6 +3,7 @@ var keys = require( "lodash/object/keys" );
 var intersection = require( "lodash/array/intersection" );
 var forEach = require( "lodash/collection/forEach" );
 var reduce = require( "lodash/collection/reduce" );
+var filter = require( "lodash/collection/filter" );
 var isEmpty = require( "lodash/lang/isEmpty" );
 var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
@@ -59,6 +60,13 @@ var SearchParameters = function( newParameters ) {
    * @member {Object.<string, OperatorList>}
    */
   this.numericRefinements = params.numericRefinements || {};
+  /**
+   * Contains the tags used to refine the query
+   * Associated property in the query : tagFilters
+   * @see https://www.algolia.com/doc#tagFilters
+   * @member {string[]}
+   */
+  this.tagRefinements = params.tagRefinements || [];
 
   //Misc. parameters
   /** @member {number} */
@@ -163,11 +171,6 @@ var SearchParameters = function( newParameters ) {
    * @member {integer}
    */
   this.getRankingInfo = params.getRankingInfo;
-  /**
-   * @see https://www.algolia.com/doc#tagFilters
-   * @member {string}
-   */
-  this.tagFilters = params.tagFilters;
   /**
    * @see https://www.algolia.com/doc#distinct
    * @member {boolean}
@@ -443,6 +446,18 @@ SearchParameters.prototype = {
     } );
   },
   /**
+   * addTagRefinement adds a tag to the list used to filter the results
+   * @param {string} tag tag to be added
+   * @return {SearchParameters}
+   */
+  addTagRefinement : function addTagRefinement( tag ) {
+    if( this.isTagRefined( tag ) ) return this;
+
+    return this.mutateMe( function( m ) {
+      m.tagRefinements = m.tagRefinements.concat( tag );
+    } );
+  },
+  /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
    * refinement for the given value, otherwise it will clear all the refinement
    * values for the facetted attribute.
@@ -508,6 +523,21 @@ SearchParameters.prototype = {
           }
         }
       }
+    } );
+  },
+  /**
+   * Remove a tag from the list of tag refinements
+   * @method
+   * @param {string} tag the tag to remove
+   * @return {SearchParameters}
+   */
+  removeTagRefinement : function removeTagRefinement( tag ) {
+    if( !this.isTagRefined( tag ) ) return this;
+
+    return this.mutateMe( function( m, previousState ) {
+      console.log( m.tagRefinements, tag );
+      m.tagRefinements = filter( previousState.tagRefinements, function( t ) { return t !== tag; } );
+      console.log( m.tagRefinements );
     } );
   },
   /**
@@ -610,6 +640,20 @@ SearchParameters.prototype = {
     }
   },
   /**
+   * Switch the tag refinement
+   * @method
+   * @param {string} tag the tag to remove or add
+   * @return {SearchParameters}
+   */
+  toggleTagRefinement : function toggleTagRefinement( tag ) {
+    if( this.isTagRefined( tag ) ) {
+      return this.removeTagRefinement( tag );
+    }
+    else {
+      return this.addTagRefinement( tag );
+    }
+  },
+  /**
    * Test if the facet name is from one of the disjunctive facets
    * @method
    * @param {string} facet facet name to test
@@ -685,6 +729,15 @@ SearchParameters.prototype = {
            this.disjunctiveFacetsRefinements[ facet ].indexOf( value ) !== -1;
   },
   /**
+   * Returns true if the tag refined, false otherwise
+   * @method
+   * @param {string} tag the tag to check
+   * @return {boolean}
+   */
+  isTagRefined : function isTagRefined( tag ) {
+    return this.tagRefinements.indexOf( tag ) !== -1;
+  },
+  /**
    * Returns the list of all disjunctive facets refined
    * @method
    * @param {string} facet
@@ -697,6 +750,13 @@ SearchParameters.prototype = {
       this.disjunctiveFacets
     );
     return keys( this.disjunctiveFacetsRefinements ).concat( disjunctiveNumericRefinedFacets );
+  },
+  /**
+   * Return all the tags filtering the search results
+   * @return {string[]}
+   */
+  getTagRefinements : function getTagRefinements() {
+    return this.tagRefinements;
   },
   /**
    * Returned the list of all disjunctive facets not refined
@@ -716,7 +776,7 @@ SearchParameters.prototype = {
   managedParameters : [
     "facets", "disjunctiveFacets", "facetsRefinements",
     "facetsExcludes", "disjunctiveFacetsRefinements",
-    "numericRefinements"
+    "numericRefinements", "tagRefinements"
   ],
   getQueryParams : function getQueryParams() {
     var managedParameters = this.managedParameters;
@@ -735,7 +795,7 @@ SearchParameters.prototype = {
    */
   mutateMe : function mutateMe( fn ) {
     var newState = new ( this.constructor )( this );
-    fn( newState );
+    fn( newState, this );
     return Object.freeze( newState );
   },
   /**
