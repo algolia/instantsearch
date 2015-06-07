@@ -16,7 +16,7 @@ function setup( indexName, fn ) {
                } );
 }
 
-test( "Should retrieve different values for multi facetted records", function( t ) {
+test( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
   var indexName = "helper_refinements";
 
   setup( indexName, function( client, index ) {

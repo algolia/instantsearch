@@ -401,7 +401,7 @@ AlgoliaSearchHelper.prototype.getCurrentPage = function() {
  * @return {string[]}
  */
 AlgoliaSearchHelper.prototype.getTags = function() {
-  return this.state.getTagRefinements();
+  return this.state.tagRefinements;
 };
 
 /**
@@ -508,7 +508,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = this.state.facets.concat( this.state.disjunctiveFacets );
   var facetFilters = this._getFacetFilters();
   var numericFilters = this._getNumericFilters();
-  var tagFilters = this.state.getTagRefinements();
+  var tagFilters = this._getTagFilters();
   var additionalParams = {
     facets : facets,
     tagFilters : tagFilters,
@@ -536,7 +536,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet );
   var numericFilters = this._getNumericFilters( facet );
-  var tagFilters = this.state.getTagRefinements();
+  var tagFilters = this._getTagFilters();
   var additionalParams = {
     hitsPerPage : 1,
     page : 0,
@@ -575,6 +575,19 @@ AlgoliaSearchHelper.prototype._getNumericFilters = function( facetName ) {
     } );
   } );
   return numericFilters;
+};
+
+/**
+ * Return the tags filters depending
+ * @private
+ * @return {string}
+ */
+AlgoliaSearchHelper.prototype._getTagFilters = function() {
+  if( this.state.tagFilters ) {
+    return this.state.tagFilters;
+  }
+
+  return this.state.tagRefinements.join( "," );
 };
 
 /**

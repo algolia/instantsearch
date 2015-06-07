@@ -68,6 +68,14 @@ var SearchParameters = function( newParameters ) {
    */
   this.tagRefinements = params.tagRefinements || [];
 
+  /**
+   * Contains the tag filters in the raw format of the Algolia API. Setting this
+   * parameter will override any tag filters configured with the add/remove/toggle
+   * tag api.
+   * @member {string}
+   */
+  this.tagFilters = params.tagFilters;
+
   //Misc. parameters
   /** @member {number} */
   this.hitsPerPage = params.hitsPerPage;
@@ -451,6 +459,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addTagRefinement : function addTagRefinement( tag ) {
+    if( this.tagFilters ) {
+      return this.setQueryParameter( "tagFilters", undefined )
+                 .addTagRefinement( tag );
+    }
     if( this.isTagRefined( tag ) ) return this;
 
     return this.mutateMe( function( m ) {
@@ -532,6 +544,12 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeTagRefinement : function removeTagRefinement( tag ) {
+    if( this.tagFilters ) {
+      // If the tagFilters are set, we need to discard as there can't be two
+      // concurrent ways to use the tag API at the same time
+      return this.setQueryParameter( "tagFilters", undefined )
+                 .removeTagRefinement( tag );
+    }
     if( !this.isTagRefined( tag ) ) return this;
 
     return this.mutateMe( function( m, previousState ) {
@@ -748,13 +766,6 @@ SearchParameters.prototype = {
       this.disjunctiveFacets
     );
     return keys( this.disjunctiveFacetsRefinements ).concat( disjunctiveNumericRefinedFacets );
-  },
-  /**
-   * Return all the tags filtering the search results
-   * @return {string[]}
-   */
-  getTagRefinements : function getTagRefinements() {
-    return this.tagRefinements;
   },
   /**
    * Returned the list of all disjunctive facets not refined
