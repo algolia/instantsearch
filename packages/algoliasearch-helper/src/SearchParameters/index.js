@@ -535,9 +535,7 @@ SearchParameters.prototype = {
     if( !this.isTagRefined( tag ) ) return this;
 
     return this.mutateMe( function( m, previousState ) {
-      console.log( m.tagRefinements, tag );
       m.tagRefinements = filter( previousState.tagRefinements, function( t ) { return t !== tag; } );
-      console.log( m.tagRefinements );
     } );
   },
   /**
