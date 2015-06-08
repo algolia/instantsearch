@@ -230,6 +230,17 @@ SearchParameters.prototype = {
     } );
   },
   /**
+   * Remove all the refined tags from the SearchParameters
+   * @method
+   * @return {SearchParameters}
+   */
+  clearTags : function clearTags() {
+    return this.setQueryParameters( {
+      tagFilters : undefined,
+      tagRefinements : []
+    } );
+  },
+  /**
    * Query setter
    * @method
    * @param {string} newQuery value for the new query
