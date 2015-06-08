@@ -24,19 +24,30 @@ test( "Tags filters : advanced query", function( t ) {
   t.end();
 } );
 
-test( "Tags filters : switching betweend advanced and simple API", function( t ) {
+test( "Tags filters : switching between advanced and simple API should be forbidden without clearing the refinements first", function( t ) {
   var helper = algoliasearchHelper( null, null, null );
 
   helper.addTag( "tag" ).addTag( "tag2" );
   t.deepEqual( helper._getTagFilters(), "tag,tag2", "should be [ tag, tag2 ]" );
 
   var complexQuery = "( sea, city ), romantic, -mountain";
-  helper.setQueryParameter( "tagFilters", complexQuery );
+  try {
+    helper.setQueryParameter( "tagFilters", complexQuery );
+    t.fail( "Can't switch directly from the advanced API to the managed API" );
+  }
+  catch( e0 ) {
+    helper.clearTags().setQueryParameter( "tagFilters", complexQuery );
+    t.deepEqual( helper._getTagFilters(), complexQuery, "The complex should override the simple mode if cleared before" );
 
-  t.deepEqual( helper._getTagFilters(), complexQuery, "The complex should override the simple mode" );
+    try {
+      helper.addTag( "tag" ).addTag( "tag2" );
+      t.fail( "Can't switch directly from the managed API to the advanced API" );
+    }
+    catch( e1 ) {
+      helper.setQueryParameter( "tagFilters", undefined ).addTag( "tag" ).addTag( "tag2" );
+      t.deepEqual( helper._getTagFilters(), "tag,tag2", "should be [ tag, tag2 ]" );
 
-  helper.addTag( "tag" ).addTag( "tag2" );
-  t.deepEqual( helper._getTagFilters(), "tag,tag2", "should be [ tag, tag2 ]" );
-
-  t.end();
+      t.end();
+    }
+  }
 } );

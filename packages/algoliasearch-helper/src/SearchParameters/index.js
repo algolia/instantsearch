@@ -32,6 +32,7 @@ var isString = require( "lodash/lang/isString" );
  */
 var SearchParameters = function( newParameters ) {
   var params = newParameters || {};
+
   //Query
   /**
    * Query used for the search.
@@ -71,7 +72,7 @@ var SearchParameters = function( newParameters ) {
 
   /**
    * Contains the tag filters in the raw format of the Algolia API. Setting this
-   * parameter will override any tag filters configured with the add/remove/toggle
+   * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
    * @member {string}
    */
@@ -212,6 +213,33 @@ var SearchParameters = function( newParameters ) {
   this.insideBoundingBox = params.insideBoundingBox;
 };
 
+/**
+ * Validates the new parameters based on the previous state
+ * @param {SearchParameters} currentState the current state
+ * @param {object|SearchParameters} parameters the new parameters to set
+ * @return {Error|null} Error if the modification is invalid, null otherwise
+ */
+SearchParameters.validate = function( currentState, parameters ) {
+  var params = parameters || {};
+
+  var ks = keys( params );
+  var unknownKeys = filter( ks, function( k ) {
+    return !currentState.hasOwnProperty( k );
+  } );
+  if( unknownKeys.length === 1 ) return new Error( "Property " + unknownKeys[0] + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+  if( unknownKeys.length > 1 ) return new Error( "Properties " + unknownKeys.join( " " ) + " are not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
+
+  if( currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0 ) {
+    return new Error( "[Tags] Can't switch from the managed tag API to the advanced API. It is probably an error, if it's really what you want, you should first clear the tags with clearTags method." );
+  }
+
+  if( currentState.tagRefinements.length > 0 && params.tagFilters ) {
+    return new Error( "[Tags] Can't switch from the advanced tag API to the managed API. It is probably an error, if it's not, you should first clear the tags with clearTags method." );
+  }
+
+  return null;
+};
+
 SearchParameters.prototype = {
   constructor : SearchParameters,
 
@@ -237,6 +265,7 @@ SearchParameters.prototype = {
    */
   clearTags : function clearTags() {
     return this.setQueryParameters( {
+      page: 0,
       tagFilters : undefined,
       tagRefinements : []
     } );
@@ -301,7 +330,6 @@ SearchParameters.prototype = {
       m.page = 0;
     } );
   },
-
   /**
    * typoTolerance setter
    * Set the value of typoTolerance
@@ -474,15 +502,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addTagRefinement : function addTagRefinement( tag ) {
-    if( this.tagFilters ) {
-      return this.setQueryParameter( "tagFilters", undefined )
-                 .addTagRefinement( tag );
-    }
     if( this.isTagRefined( tag ) ) return this;
 
-    return this.mutateMe( function( m ) {
-      m.tagRefinements = m.tagRefinements.concat( tag );
-    } );
+    var modification = {
+      page : 0,
+      tagRefinements : this.tagRefinements.concat( tag )
+    };
+
+    return this.setQueryParameters( modification );
   },
   /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
@@ -559,17 +586,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeTagRefinement : function removeTagRefinement( tag ) {
-    if( this.tagFilters ) {
-      // If the tagFilters are set, we need to discard as there can't be two
-      // concurrent ways to use the tag API at the same time
-      return this.setQueryParameter( "tagFilters", undefined )
-                 .removeTagRefinement( tag );
-    }
     if( !this.isTagRefined( tag ) ) return this;
 
-    return this.mutateMe( function( m, previousState ) {
-      m.tagRefinements = filter( previousState.tagRefinements, function( t ) { return t !== tag; } );
-    } );
+    var modification = {
+      page : 0,
+      tagRefinements : filter( this.tagRefinements, function( t ) { return t !== tag; } )
+    };
+
+    return this.setQueryParameters( modification );
   },
   /**
    * Clear the facet refinements
@@ -838,16 +862,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters} the updated state
    */
   setQueryParameter : function setParameter( parameter, value ) {
-    var k = keys( this );
-    if( k.indexOf( parameter ) === -1 ) {
-      throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
-    }
     if( this[ parameter ] === value ) return this;
 
-    return this.mutateMe( function updateParameter( newState ) {
-      newState[ parameter ] = value;
-      return newState;
-    } );
+    var modification = {};
+    modification[ parameter ] = value;
+    return this.setQueryParameters( modification );
   },
   /**
    * Let the user set any of the parameters with a plain object.
@@ -857,13 +876,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters} a new updated instance
    */
   setQueryParameters : function setQueryParameters( params ) {
+    var error = SearchParameters.validate( this, params );
+    if( error ) {
+      throw error;
+    }
+
     return this.mutateMe( function merge( newInstance ) {
       var ks = keys( params );
       forEach( ks, function( k ) {
-        if( !newInstance.hasOwnProperty( k ) ) {
-          throw new Error( "Property " + k + " is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html )" );
-        }
-
         newInstance[ k ] = params[ k ];
       } );
       return newInstance;

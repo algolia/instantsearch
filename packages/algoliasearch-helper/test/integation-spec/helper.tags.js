@@ -7,8 +7,10 @@ var map = require( "lodash/collection/map" );
 var algoliasearchHelper = require( "../../index" );
 
 function setup( indexName, fn ) {
+  /* eslint-disable */
   var appID = process.env.INTEGRATION_TEST_APPID;
   var key = process.env.INTEGRATION_TEST_API_KEY;
+  /* eslint-enable */
 
   var client = algoliasearch( appID, key, { protocol : "https:" } );
   return client.deleteIndex( indexName )
@@ -37,7 +39,7 @@ test( "[INT][TAGS]Test tags operations on the helper and their results on the al
     var helper = algoliasearchHelper( client, indexName, {} );
 
     var calls = 0;
-    helper.on( "result", function( content, state ) {
+    helper.on( "result", function( content ) {
       calls++;
       var hitsToParsedID = function( h ) { return parseInt( h.objectID ); };
       if( calls === 1 ) {
@@ -75,7 +77,7 @@ test( "[INT][TAGS]Test tags operations on the helper and their results on the al
     helper.addTag( "t1" ).search();
     helper.addTag( "t2" ).search();
     helper.removeTag( "t2" ).toggleTag( "t3" ).toggleTag( "t1" ).search();
-    helper.setQueryParameter( "tagFilters", "t3,(t1,t2)" ).search();
+    helper.clearTags().setQueryParameter( "tagFilters", "t3,(t1,t2)" ).search();
   } );
 
 } );
