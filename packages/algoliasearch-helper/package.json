@@ -17,6 +17,11 @@
     "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "browserify": {
+    "transform": [
+      "envify"
+    ]
+  },
   "author": {
     "name": "Algolia SAS",
     "url": "https://www.algolia.com"
@@ -31,6 +36,7 @@
     "browserify": "9.0.3",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
+    "envify": "3.4.0",
     "eslint": "0.17.1",
     "http-server": "0.8.0",
     "jsdoc": "3.3.0-beta3",
@@ -44,7 +50,7 @@
     "zuul": "2.1.1"
   },
   "dependencies": {
-    "lodash": "3.5.0"
+    "lodash": "3.9.x"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

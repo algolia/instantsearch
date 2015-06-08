@@ -6,7 +6,6 @@ var algoliasearchHelper = require( "../../index" );
 
 test( "Adding refinments should add an entry to the refinments attribute", function( t ) {
   var helper = algoliasearchHelper( {}, "index", {} );
-  helper._search = function() {};
 
   var facetName = "facet1";
   var facetValue = "42";
@@ -22,9 +21,64 @@ test( "Adding refinments should add an entry to the refinments attribute", funct
   t.end();
 } );
 
+test( "Adding several refinements for a single attribute should be handled", function( t ) {
+  var facetName = "facet";
+
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ facetName ]
+  } );
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "empty" );
+  helper.addRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 1, "Adding one refinement, should have one" );
+  helper.addRefine( facetName, "value2" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding another refinement, should have two" );
+  helper.addRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding same refinement as the first, should have two" );
+
+  t.end();
+} );
+
+test( "Toggling several refinements for a single attribute should be handled", function( t ) {
+  var facetName = "facet";
+
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ facetName ]
+  } );
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "empty" );
+  helper.toggleRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 1, "Adding one refinement, should have one" );
+  helper.toggleRefine( facetName, "value2" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding another refinement, should have two" );
+  helper.toggleRefine( facetName, "value1" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 1, "Adding same refinement as the first, should have two" );
+  t.deepEqual( helper.state.facetsRefinements[ facetName ], [ "value2" ], "should contain value2" );
+
+  t.end();
+} );
+
+test( "Removing several refinements for a single attribute should be handled", function( t ) {
+  var facetName = "facet";
+
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ facetName ]
+  } );
+
+  t.ok( _.isEmpty( helper.state.facetsRefinements ), "empty" );
+  helper.addRefine( facetName, "value1" );
+  helper.addRefine( facetName, "value2" );
+  helper.addRefine( facetName, "value3" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 3, "Adding another refinement, should have two" );
+  helper.removeRefine( facetName, "value2" );
+  t.ok( _.size( helper.state.facetsRefinements[ facetName ] ) === 2, "Adding same refinement as the first, should have two" );
+  t.deepEqual( helper.state.facetsRefinements[ facetName ], [ "value1", "value3" ], "should contain value1 and value3" );
+
+  t.end();
+} );
+
 test( "isDisjunctiveRefined", function( t ) {
   var helper = algoliasearchHelper( null, null, {} );
-  helper._search = function() {};
 
   var facet = "MyFacet";
   var value = "MyValue";
@@ -73,6 +127,62 @@ test( "isRefined(facet)/hasRefinements should return true if the facet is refine
   t.notOk( helper.hasRefinements( "notAFacet" ), "not a facet" );
   t.notOk( helper.isRefined( null ), "not even valid values" );
   t.notOk( helper.hasRefinements( null ), "not even valid values" );
+
+  t.end();
+} );
+
+test( "getRefinements should return all the refinements for a given facet", function( t ) {
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ],
+    disjunctiveFacets : [ "facet2", "sales" ]
+  } );
+
+  helper.addRefine( "facet1", "val1" )
+        .addRefine( "facet1", "val2" )
+        .addExclude( "facet1", "val-1" )
+        .toggleRefine( "facet1", "val3" );
+
+  helper.addDisjunctiveRefine( "facet2", "val4" )
+        .addDisjunctiveRefine( "facet2", "val5" )
+        .toggleRefine( "facet2", "val6" );
+
+  helper.addNumericRefinement( "sales", ">", "3" )
+        .addNumericRefinement( "sales", "<", "9" );
+
+  t.deepEqual( helper.getRefinements( "facet1" ),
+               [
+                 { value : "val1", type : "conjunctive" },
+                 { value : "val2", type : "conjunctive" },
+                 { value : "val3", type : "conjunctive" },
+                 { value : "val-1", type : "exclude" }
+               ],
+               "" );
+
+  t.deepEqual( helper.getRefinements( "facet2" ),
+               [
+                 { value : "val4", type : "disjunctive" },
+                 { value : "val5", type : "disjunctive" },
+                 { value : "val6", type : "disjunctive" }
+               ],
+               "" );
+
+  t.deepEqual( helper.getRefinements( "sales" ),
+               [
+                 { value : "3", operator : ">", type : "numeric" },
+                 { value : "9", operator : "<", type : "numeric" }
+               ],
+               "" );
+
+  t.end();
+} );
+test( "getRefinements should return an empty array if the facet has no refinement", function( t ) {
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ],
+    disjunctiveFacets : [ "facet2" ]
+  } );
+
+  t.deepEqual( helper.getRefinements( "facet1" ), [], "" );
+  t.deepEqual( helper.getRefinements( "facet2" ), [], "" );
 
   t.end();
 } );

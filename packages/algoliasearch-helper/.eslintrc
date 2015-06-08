@@ -30,7 +30,10 @@
     "space-infix-ops": 1,
     "no-multi-spaces": 1,
     "space-before-blocks": 1,
-    "no-underscore-dangle": 0
+    "no-underscore-dangle": 0,
+    "valid-jsdoc": [2, {
+      "requireReturnDescription": false
+    }]
   },
   globals : {
     "module" : true,
