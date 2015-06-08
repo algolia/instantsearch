@@ -493,6 +493,7 @@ AlgoliaSearchHelper.prototype._search = function() {
  * usable objet that merge the results of all the batch requests.
  * @private
  * @param {SearchParameters} state state used for to generate the request
+ * @param {number} queryId id of the current request
  * @param {Error} err error if any, null otherwise
  * @param {object} content content of the response
  * @return {undefined}
@@ -527,12 +528,15 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var additionalParams = {
     facets : facets,
     tagFilters : tagFilters,
-    distinct : false
+    distinct : this.state.distinct
   };
+
+  if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
+    additionalParams.distinct = false;
+  }
 
   if( facetFilters.length > 0 ) {
     additionalParams.facetFilters = facetFilters;
-    additionalParams.distinct = this.state.distinct || false;
   }
 
   if( numericFilters.length > 0 ) {
@@ -560,8 +564,12 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToSnippet : [],
     facets : facet,
     tagFilters : tagFilters,
-    distinct : false
+    distinct : this.state.distinct
   };
+
+  if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
+    additionalParams.distinct = false;
+  }
 
   if( numericFilters.length > 0 ) {
     additionalParams.numericFilters = numericFilters;
@@ -569,7 +577,6 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
 
   if( facetFilters.length > 0 ) {
     additionalParams.facetFilters = facetFilters;
-    additionalParams.distinct = this.state.distinct || false;
   }
 
   return extend( this.state.getQueryParams(), additionalParams );
