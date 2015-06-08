@@ -5,8 +5,10 @@ var algoliasearch = require( "algoliasearch" );
 var algoliasearchHelper = require( "../../index" );
 
 function setup( indexName, fn ) {
+  /* eslint-disable */
   var appID = process.env.INTEGRATION_TEST_APPID;
   var key = process.env.INTEGRATION_TEST_API_KEY;
+  /* eslint-enable */
 
   var client = algoliasearch( appID, key, { protocol : "https:" } );
   return client.deleteIndex( indexName )
@@ -16,7 +18,7 @@ function setup( indexName, fn ) {
                } );
 }
 
-test( "Should retrieve different values for multi facetted records", function( t ) {
+test( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
   var indexName = "helper_refinements";
 
   setup( indexName, function( client, index ) {
@@ -78,7 +80,5 @@ test( "Should retrieve different values for multi facetted records", function( t
     helper.addRefine( "facet", "f2" ).search();
     helper.toggleRefine( "facet", "f3" ).search();
     helper.removeRefine( "facet", "f2" ).search();
-
   } );
-
 } );

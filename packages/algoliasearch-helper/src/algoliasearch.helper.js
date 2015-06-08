@@ -64,6 +64,16 @@ AlgoliaSearchHelper.prototype.clearRefinements = function( name ) {
 };
 
 /**
+ * Remove all the tag filtering
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.clearTags = function() {
+  this.state = this.state.clearTags();
+  this._change();
+  return this;
+};
+
+/**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
@@ -76,39 +86,14 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
 };
 
 /**
- * Ensure a facet refinement does not exist
- * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper}
- */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
-  this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
-  this._change();
-  return this;
-};
-
-/**
  * Add a numeric refinement on the given attribute
- * @param  {string} attribute
- * @param  {string} operator
- * @param  {number} value
+ * @param  {string} attribute the attribute on which the numeric filter applies
+ * @param  {string} operator the operator of the filter
+ * @param  {number} value the value of the filter
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operator, value ) {
   this.state = this.state.addNumericRefinement( attribute, operator, value );
-  this._change();
-  return this;
-};
-
-/**
- * Remove a numeric filter.
- * @param  {string} attribute
- * @param  {string} operator
- * @param  {number} value
- * @return {AlgoliaSearchHelper}
- */
-AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value ) {
-  this.state = this.state.removeNumericRefinement( attribute, operator, value );
   this._change();
   return this;
 };
@@ -126,18 +111,6 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
 };
 
 /**
- * Ensure a facet refinement does not exist
- * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
- * @return {AlgoliaSearchHelper}
- */
-AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
-  this.state = this.state.removeFacetRefinement( facet, value );
-  this._change();
-  return this;
-};
-
-/**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
@@ -150,6 +123,55 @@ AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
 };
 
 /**
+ * Add a tag refinement
+ * @param {string} tag the tag to add to the filter
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.addTag = function( tag ) {
+  this.state = this.state.addTagRefinement( tag );
+  this._change();
+  return this;
+};
+
+/**
+ * Remove a numeric filter.
+ * @param  {string} attribute the attribute on which the numeric filter applies
+ * @param  {string} operator the operator of the filter
+ * @param  {number} value the value of the filter
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, operator, value ) {
+  this.state = this.state.removeNumericRefinement( attribute, operator, value );
+  this._change();
+  return this;
+};
+
+
+/**
+ * Ensure a facet refinement does not exist
+ * @param  {string} facet the facet to refine
+ * @param  {string} value the associated value
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function( facet, value ) {
+  this.state = this.state.removeDisjunctiveFacetRefinement( facet, value );
+  this._change();
+  return this;
+};
+
+/**
+ * Ensure a facet refinement does not exist
+ * @param  {string} facet the facet to refine
+ * @param  {string} value the associated value
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.removeRefine = function( facet, value ) {
+  this.state = this.state.removeFacetRefinement( facet, value );
+  this._change();
+  return this;
+};
+
+/**
  * Ensure a facet exclude does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
@@ -157,6 +179,17 @@ AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
  */
 AlgoliaSearchHelper.prototype.removeExclude = function( facet, value ) {
   this.state = this.state.removeExcludeRefinement( facet, value );
+  this._change();
+  return this;
+};
+
+/**
+ * Ensure that a tag is not filtering the results
+ * @param {string} tag tag to remove from the filter
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.removeTag = function( tag ) {
+  this.state = this.state.removeTagRefinement( tag );
   this._change();
   return this;
 };
@@ -193,6 +226,17 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
     /* eslint-enable */
     return this;
   }
+  this._change();
+  return this;
+};
+
+/**
+ * Toggle tag refinement
+ * @param {string} tag tag to remove or add
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.toggleTag = function( tag ) {
+  this.state = this.state.toggleTagRefinement( tag );
   this._change();
   return this;
 };
@@ -331,7 +375,17 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function( facet, value ) {
 };
 
 /**
+ * Check if the string is a currently filtering tag
+ * @param {string} tag tag to check
+ * @return {boolean}
+ */
+AlgoliaSearchHelper.prototype.isTagRefined = function( tag ) {
+  return this.state.isTagRefined( tag );
+};
+
+/**
  * Get the underlying configured index name
+ * @return {string}
  */
 AlgoliaSearchHelper.prototype.getIndex = function() {
   return this.index;
@@ -339,15 +393,23 @@ AlgoliaSearchHelper.prototype.getIndex = function() {
 
 /**
  * Get the currently selected page
- * @return Number the current page
+ * @return {number} the current page
  */
 AlgoliaSearchHelper.prototype.getCurrentPage = function() {
   return this.state.page;
 };
 
 /**
+ * Get all the filtering tags
+ * @return {string[]}
+ */
+AlgoliaSearchHelper.prototype.getTags = function() {
+  return this.state.tagRefinements;
+};
+
+/**
  * Get the list of refinements for a given attribute.
- * @param {string} facetName
+ * @param {string} facetName attribute name used for facetting
  * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
  */
 AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
@@ -397,6 +459,7 @@ AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
 /**
  * Perform the underlying queries
  * @private
+ * @return {undefined}
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
@@ -432,6 +495,7 @@ AlgoliaSearchHelper.prototype._search = function() {
  * @param {SearchParameters} state state used for to generate the request
  * @param {Error} err error if any, null otherwise
  * @param {object} content content of the response
+ * @return {undefined}
  */
 AlgoliaSearchHelper.prototype._handleResponse = function( state, queryId, err, content ) {
   if( queryId < this._lastQueryIdReceived ) {
@@ -459,8 +523,10 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var facets = this.state.facets.concat( this.state.disjunctiveFacets );
   var facetFilters = this._getFacetFilters();
   var numericFilters = this._getNumericFilters();
+  var tagFilters = this._getTagFilters();
   var additionalParams = {
     facets : facets,
+    tagFilters : tagFilters,
     distinct : false
   };
 
@@ -485,6 +551,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
   var facetFilters = this._getFacetFilters( facet );
   var numericFilters = this._getNumericFilters( facet );
+  var tagFilters = this._getTagFilters();
   var additionalParams = {
     hitsPerPage : 1,
     page : 0,
@@ -492,6 +559,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToHighlight : [],
     attributesToSnippet : [],
     facets : facet,
+    tagFilters : tagFilters,
     distinct : false
   };
 
@@ -510,7 +578,8 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
 /**
  * Return the numeric filters in an algolia request fashion
  * @private
- * @return {array.<string>} the numeric filters in the algolia format
+ * @param {string} [facetName] the name of the attribute for which the filters should be excluded
+ * @return {string[]} the numeric filters in the algolia format
  */
 AlgoliaSearchHelper.prototype._getNumericFilters = function( facetName ) {
   var numericFilters = [];
@@ -525,8 +594,23 @@ AlgoliaSearchHelper.prototype._getNumericFilters = function( facetName ) {
 };
 
 /**
+ * Return the tags filters depending
+ * @private
+ * @return {string}
+ */
+AlgoliaSearchHelper.prototype._getTagFilters = function() {
+  if( this.state.tagFilters ) {
+    return this.state.tagFilters;
+  }
+
+  return this.state.tagRefinements.join( "," );
+};
+
+/**
  * Test if there are some disjunctive refinements on the facet
  * @private
+ * @param {string} facet the attribute to test
+ * @return {boolean}
  */
 AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
   return this.state.disjunctiveRefinements[ facet ] &&
@@ -537,7 +621,7 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function( facet ) {
  * Build facetFilters parameter based on current refinements. The array returned
  * contains strings representing the facet filters in the algolia format.
  * @private
- * @param  {string} facet if set, the current disjunctive facet
+ * @param  {string} [facet] if set, the current disjunctive facet
  * @return {array.<string>}
  */
 AlgoliaSearchHelper.prototype._getFacetFilters = function( facet ) {
