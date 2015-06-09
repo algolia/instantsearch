@@ -408,6 +408,15 @@ AlgoliaSearchHelper.prototype.getTags = function() {
 };
 
 /**
+ * Get a parameter of the search by its name
+ * @param {string} parameterName the parameter name
+ * @return {any} the parameter value
+ */
+AlgoliaSearchHelper.prototype.getQueryParameter = function( parameterName ) {
+  return this.state.getQueryParameter( parameterName );
+};
+
+/**
  * Get the list of refinements for a given attribute.
  * @param {string} facetName attribute name used for facetting
  * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
