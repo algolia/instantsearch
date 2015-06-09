@@ -528,7 +528,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var additionalParams = {
     facets : facets,
     tagFilters : tagFilters,
-    distinct : this.state.distinct
+    distinct : this.state.distinct || false
   };
 
   if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
@@ -564,7 +564,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToSnippet : [],
     facets : facet,
     tagFilters : tagFilters,
-    distinct : this.state.distinct
+    distinct : this.state.distinct || false
   };
 
   if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
