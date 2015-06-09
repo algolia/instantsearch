@@ -9,11 +9,11 @@ var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
 
 /**
- * @typedef FacetList
- * @type {string[]}
- *
- * @typedef OperatorList
- * @type {Object.<string, number>}
+ * @typedef {string[]} SearchParameters.FacetList
+ */
+
+/**
+ * @typedef {Object.<string, number>} SearchParameters.OperatorList
  */
 
 /**
@@ -31,6 +31,7 @@ var isString = require( "lodash/lang/isString" );
  * @param {object|SearchParameters} newParameters existing parameters or partial object for the properties of a new SearchParameters
  */
 var SearchParameters = function( newParameters ) {
+
   var params = newParameters || {};
 
   //Query
@@ -52,14 +53,14 @@ var SearchParameters = function( newParameters ) {
    */
   this.disjunctiveFacets = params.disjunctiveFacets || [];
   //Refinements
-  /** @member {Object.<string, FacetList>}*/
+  /** @member {Object.<string, SearchParameters.FacetList>}*/
   this.facetsRefinements = params.facetsRefinements || {};
-  /** @member {Object.<string, FacetList>}*/
+  /** @member {Object.<string, SearchParameters.FacetList>}*/
   this.facetsExcludes = params.facetsExcludes || {};
-  /** @member {Object.<string, FacetList>}*/
+  /** @member {Object.<string, SearchParameters.FacetList>}*/
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
   /**
-   * @member {Object.<string, OperatorList>}
+   * @member {Object.<string, SearchParameters.OperatorList>}
    */
   this.numericRefinements = params.numericRefinements || {};
   /**
@@ -411,7 +412,7 @@ SearchParameters.prototype = {
   /**
    * Get the list of numeric refinements for a single facet
    * @param {string} facetName name of the attribute used for facetting
-   * @return {OperatorList[]} list of refinements
+   * @return {SearchParameters.OperatorList[]} list of refinements
    */
   getNumericRefinements : function( facetName ) {
     return this.numericRefinements[ facetName ] || [];
