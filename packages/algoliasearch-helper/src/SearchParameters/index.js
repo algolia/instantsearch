@@ -8,6 +8,7 @@ var pick = require( "lodash/object/pick" );
 var isEmpty = require( "lodash/lang/isEmpty" );
 var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
+var isFunction = require( "lodash/lang/isFunction" );
 
 /**
  * @typedef FacetList
@@ -247,16 +248,19 @@ SearchParameters.prototype = {
   /**
    * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
    * @method
-   * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
+   * @param {string|SearchParameters.clearCallback} [attribute] optionnal string or function
+   * - If not given, means to clear all the filters.
+   * - If `string`, means to clear all refinements for the `attribute` named filter.
+   * - If `function`, means to clear all the refinements that return falsey values.
    * @return {SearchParameters}
    */
-  clearRefinements : function clearRefinements( name ) {
+  clearRefinements : function clearRefinements( attribute ) {
     return this.setQueryParameters( {
       page : 0,
-      numericRefinements : this._clearNumericRefinements( name ),
-      facetsRefinements : this._clearFacetRefinements( name ),
-      facetsExcludes : this._clearExcludeRefinements( name ),
-      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( name )
+      numericRefinements : this._clearNumericRefinements( attribute ),
+      facetsRefinements : this._clearFacetRefinements( attribute ),
+      facetsExcludes : this._clearExcludeRefinements( attribute ),
+      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( attribute )
     } );
   },
   /**
@@ -430,10 +434,11 @@ SearchParameters.prototype = {
    * Clear numeric filters.
    * @method
    * @private
-   * @param {string} [attribute] optionnal name of the attribute to clear the refinements on
-   * @return {undefined}
+   * @param {string|SearchParameters.clearCallback} [attribute] optionnal string or function
    * - If not given, means to clear all the filters.
    * - If `string`, means to clear all refinements for the `attribute` named filter.
+   * - If `function`, means to clear all the refinements that return falsey values.
+   * @return {Object.<string, OperatorList>}
    */
   _clearNumericRefinements : function _clearNumericRefinements( attribute ) {
     if ( isUndefined( attribute ) ) {
@@ -443,6 +448,15 @@ SearchParameters.prototype = {
       return pick( this.numericRefinements, function( value, key ) {
         return attribute !== key;
       } );
+    }
+    else if ( isFunction( attribute ) ) {
+      return reduce( this.numericRefinements, function( memo, operators, key ) {
+        var operatorList = pick( operators, function( value ) {
+          return attribute( value, key, "numeric" );
+        } );
+
+        if( !isEmpty( operatorList ) ) memo[ key ] = operatorList;
+      }, {} );
     }
   },
   /**
@@ -600,10 +614,11 @@ SearchParameters.prototype = {
    * Clear the facet refinements
    * @method
    * @private
-   * @param {string} [facet] name of the attibrute used for facetting
+   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
    * - If not given, means to clear the refinement of all facets.
    * - If `string`, means to clear the refinement for the `facet` named facet.
-   * @return {undefined}
+   * - If `function`, means to clear all the refinements that return falsey values.
+   * @return {Object.<string, FacetList>}
    */
   _clearFacetRefinements : function _clearFacetRefinements( facet ) {
     if ( isUndefined( facet ) ) {
@@ -614,15 +629,25 @@ SearchParameters.prototype = {
         return key !== facet;
       } );
     }
+    else if ( isFunction( facet ) ) {
+      return reduce( this.facetsRefinements, function( memo, values, key ) {
+        var facetList = pick( values, function( value ) {
+          return facet( value, key, "conjunctiveFacet" );
+        } );
+
+        if( !isEmpty( facetList ) ) memo[ key ] = facetList;
+      }, {} );
+    }
   },
   /**
    * Clear the exclude refinements
    * @method
    * @private
-   * @param {string} [facet] name of the attribute used for facetting
+   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
    * - If not given, means to clear all the excludes of all facets.
    * - If `string`, means to clear all the excludes for the `facet` named facet.
-   * @return {undefined}
+   * - If `function`, means to clear all the refinements that return falsey values
+   * @return {Object.<string, FacetList>}
    */
   _clearExcludeRefinements : function _clearExcludeRefinements( facet ) {
     if ( isUndefined( facet ) ) {
@@ -633,15 +658,25 @@ SearchParameters.prototype = {
         return key !== facet;
       } );
     }
+    else if( isFunction( facet ) ) {
+      return reduce( this.facetsExcludes, function( memo, excludes, key ) {
+        var excludeList = pick( excludes, function( exclude ) {
+          return facet( exclude, key, "exclude" );
+        } );
+
+        if( !isEmpty( excludeList ) ) memo[ key ] = excludeList;
+      }, {} );
+    }
   },
   /**
    * Clear the disjunctive refinements
    * @method
    * @private
-   * @param {string} [facet] name of the attribute used for facetting
+   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
    * - If not given, means to clear all the refinements of all disjunctive facets.
    * - If `string`, means to clear all the refinements for the `facet` named facet.
-   * @return {undefined}
+   * - If `function`, means to clear all the refinements that return falsey values.
+   * @return {Object.<string, FacetList>}
    */
   _clearDisjunctiveFacetRefinements : function _clearDisjunctiveFacetRefinements( facet ) {
     if ( isUndefined( facet ) ) {
@@ -651,6 +686,15 @@ SearchParameters.prototype = {
       return pick( this.disjunctiveFacetsRefinements, function( value, key ) {
         return key !== facet;
       } );
+    }
+    else if ( isFunction( facet ) ) {
+      return reduce( this.disjunctiveFacetsRefinements, function( memo, values, key ) {
+        var facetList = pick( values, function( value ) {
+          return facet( value, key, "disjunctiveFacet" );
+        } );
+
+        if( !isEmpty( facetList ) ) memo[ key ] = facetList;
+      }, {} );
     }
   },
   /**
@@ -902,4 +946,13 @@ SearchParameters.prototype = {
   }
 };
 
+/**
+ * Callback used for clearRefinement method
+ * @callback SearchParameters.clearCallback
+ * @param {OperatorList|FacetList} value
+ * @param {string} key
+ * @param {string} type numeric, disjunctiveFacet, conjunctiveFacet or exclude
+ * depending on the type of facet
+ * @return {boolean}
+ */
 module.exports = SearchParameters;
