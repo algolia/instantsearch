@@ -4,6 +4,7 @@ var intersection = require( "lodash/array/intersection" );
 var forEach = require( "lodash/collection/forEach" );
 var reduce = require( "lodash/collection/reduce" );
 var filter = require( "lodash/collection/filter" );
+var pick = require( "lodash/object/pick" );
 var isEmpty = require( "lodash/lang/isEmpty" );
 var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
@@ -250,12 +251,12 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   clearRefinements : function clearRefinements( name ) {
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      m._clearNumericRefinements( name );
-      m._clearFacetRefinements( name );
-      m._clearExcludeRefinements( name );
-      m._clearDisjunctiveFacetRefinements( name );
+    return this.setQueryParameters( {
+      page : 0,
+      numericRefinements : this._clearNumericRefinements( name ),
+      facetsRefinements : this._clearFacetRefinements( name ),
+      facetsExcludes : this._clearExcludeRefinements( name ),
+      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( name )
     } );
   },
   /**
@@ -436,12 +437,12 @@ SearchParameters.prototype = {
    */
   _clearNumericRefinements : function _clearNumericRefinements( attribute ) {
     if ( isUndefined( attribute ) ) {
-      this.numericRefinements = {};
+      return {};
     }
     else if ( isString( attribute ) ) {
-      if ( !isUndefined( this.numericRefinements[ attribute ] ) ) {
-        delete this.numericRefinements[ attribute ];
-      }
+      return pick( this.numericRefinements, function( value, key ) {
+        return attribute !== key;
+      } );
     }
   },
   /**
@@ -533,7 +534,7 @@ SearchParameters.prototype = {
         }
       }
       else {
-        m._clearFacetRefinements( facet );
+        m.facetsRefinements = m._clearFacetRefinements( facet );
       }
     } );
   },
@@ -606,12 +607,12 @@ SearchParameters.prototype = {
    */
   _clearFacetRefinements : function _clearFacetRefinements( facet ) {
     if ( isUndefined( facet ) ) {
-      this.facetsRefinements = {};
+      return {};
     }
     else if ( isString( facet ) ) {
-      if ( !isUndefined( this.facetsRefinements[ facet ] ) ) {
-        delete this.facetsRefinements[ facet ];
-      }
+      return pick( this.facetsRefinements, function( value, key ) {
+        return key !== facet;
+      } );
     }
   },
   /**
@@ -625,12 +626,12 @@ SearchParameters.prototype = {
    */
   _clearExcludeRefinements : function _clearExcludeRefinements( facet ) {
     if ( isUndefined( facet ) ) {
-      this.facetsExcludes = {};
+      return {};
     }
     else if ( isString( facet ) ) {
-      if ( !isUndefined( this.facetsExcludes[ facet ] ) ) {
-        delete this.facetsExcludes[ facet ];
-      }
+      return pick( this.facetsExcludes, function( value, key ) {
+        return key !== facet;
+      } );
     }
   },
   /**
@@ -644,12 +645,12 @@ SearchParameters.prototype = {
    */
   _clearDisjunctiveFacetRefinements : function _clearDisjunctiveFacetRefinements( facet ) {
     if ( isUndefined( facet ) ) {
-      this.disjunctiveFacetsRefinements = {};
+      return {};
     }
     else if ( isString( facet ) ) {
-      if ( !isUndefined( this.disjunctiveFacetsRefinements[ facet ] ) ) {
-        delete this.disjunctiveFacetsRefinements[ facet ];
-      }
+      return pick( this.disjunctiveFacetsRefinements, function( value, key ) {
+        return key !== facet;
+      } );
     }
   },
   /**
