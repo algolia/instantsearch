@@ -412,17 +412,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeNumericRefinement : function( attribute, operator ) {
-    return this.mutateMe( function( m ) {
-      if( m.numericRefinements[ attribute ] ) {
-        m.page = 0;
-        var value = m.numericRefinements[ attribute ][ operator ];
-        if( !isUndefined( value ) ) {
-          delete m.numericRefinements[ attribute ][ operator ];
-          if( isEmpty( m.numericRefinements[ attribute ] ) ) {
-            delete m.numericRefinements[ attribute ];
-          }
-        }
-      }
+    return this.setQueryParameters( {
+      page : 0,
+      numericRefinements : this._clearNumericRefinements( function( value, key ) {
+        return key === attribute && value.op === operator;
+      } )
     } );
   },
   /**
@@ -549,20 +543,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeFacetRefinement : function removeFacetRefinement( facet, value ) {
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      if( value ) {
-        var idx = m.facetsRefinements[ facet ].indexOf( value );
-        if( idx > -1 ) {
-          m.facetsRefinements[ facet ].splice( idx, 1 );
-          if( m.facetsRefinements[ facet ].length === 0 ) {
-            delete m.facetsRefinements[ facet ];
-          }
-        }
-      }
-      else {
-        m.facetsRefinements = m._clearFacetRefinements( facet );
-      }
+    var facetsRefinements = isUndefined( value ) ? this._clearFacetRefinements( facet ) :
+      this._clearFacetRefinements( function( v, f ) {
+        return facet === f && value === v;
+      } );
+
+    return this.setQueryParameters( {
+      page : 0,
+      facetsRefinements : facetsRefinements
     } );
   },
   /**
@@ -573,17 +561,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeExcludeRefinement : function removeExcludeRefinement( facet, value ) {
-    return this.mutateMe( function( m ) {
-      if( m.facetsExcludes[ facet ] ) {
-        m.page = 0;
-        var idx = m.facetsExcludes[ facet ].indexOf( value );
-        if( idx > -1 ) {
-          m.facetsExcludes[ facet ].splice( idx, 1 );
-          if( m.facetsExcludes[ facet ].length === 0 ) {
-            delete m.facetsExcludes[ facet ];
-          }
-        }
-      }
+    return this.setQueryParameters( {
+      page : 0,
+      facetsExcludes : this._clearFacetRefinements( function( v, f ) {
+        return value === v && facet === f;
+      } )
     } );
   },
   /**
@@ -594,17 +576,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value ) {
-    return this.mutateMe( function( m ) {
-      if( m.disjunctiveFacetsRefinements[ facet ] ) {
-        m.page = 0;
-        var idx = m.disjunctiveFacetsRefinements[ facet ].indexOf( value );
-        if( idx > -1 ) {
-          m.disjunctiveFacetsRefinements[ facet ].splice( idx, 1 );
-          if( m.disjunctiveFacetsRefinements[facet].length === 0 ) {
-            delete m.disjunctiveFacetsRefinements[ facet ];
-          }
-        }
-      }
+    return this.setQueryParameters( {
+      page : 0,
+      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( function( v, f ) {
+        return f === facet && v === value;
+      } )
     } );
   },
   /**
