@@ -451,9 +451,7 @@ SearchParameters.prototype = {
       return {};
     }
     else if ( isString( attribute ) ) {
-      return omit( this.numericRefinements, function( value, key ) {
-        return attribute === key;
-      } );
+      return omit( this.numericRefinements, attribute );
     }
     else if ( isFunction( attribute ) ) {
       return reduce( this.numericRefinements, function( memo, operators, key ) {
@@ -614,9 +612,7 @@ SearchParameters.prototype = {
       return {};
     }
     else if ( isString( facet ) ) {
-      return omit( this.facetsRefinements, function( value, key ) {
-        return key === facet;
-      } );
+      return omit( this.facetsRefinements, facet );
     }
     else if ( isFunction( facet ) ) {
       return reduce( this.facetsRefinements, function( memo, values, key ) {
@@ -644,9 +640,7 @@ SearchParameters.prototype = {
       return {};
     }
     else if ( isString( facet ) ) {
-      return omit( this.facetsExcludes, function( value, key ) {
-        return key === facet;
-      } );
+      return omit( this.facetsExcludes, facet );
     }
     else if( isFunction( facet ) ) {
       return reduce( this.facetsExcludes, function( memo, excludes, key ) {
@@ -674,9 +668,7 @@ SearchParameters.prototype = {
       return {};
     }
     else if ( isString( facet ) ) {
-      return omit( this.disjunctiveFacetsRefinements, function( value, key ) {
-        return key === facet;
-      } );
+      return omit( this.disjunctiveFacetsRefinements, facet );
     }
     else if ( isFunction( facet ) ) {
       return reduce( this.disjunctiveFacetsRefinements, function( memo, values, key ) {

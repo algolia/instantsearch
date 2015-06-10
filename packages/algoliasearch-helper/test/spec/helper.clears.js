@@ -71,11 +71,11 @@ test( "Clearing the same field from multiple elements should remove it everywher
   t.end();
 } );
 
-test( "Clear with a function : neutral and abosorbing ops", function( t ) {
+test( "Clear with a function : neutral predicate", function( t ) {
   var helper = init();
   var state0 = helper.state;
 
-  helper.clearRefinements( function( value, key, type ) {
+  helper.clearRefinements( function() {
     return false;
   } );
 
@@ -84,7 +84,13 @@ test( "Clear with a function : neutral and abosorbing ops", function( t ) {
   t.deepEqual( helper.state.facetsExcludes, state0.facetsExcludes, "Neutral op : exclude ref should be equal" );
   t.deepEqual( helper.state.disjunctiveFacetsRefinements, state0.disjunctiveFacetsRefinements, "Neutral op : disj ref should be equal" );
 
-  helper.clearRefinements( function( value, key, type ) {
+  t.end();
+} );
+
+test( "Clear with a function : remove all predicate", function( t ) {
+  var helper = init();
+
+  helper.clearRefinements( function() {
     return true;
   } );
 
