@@ -1,6 +1,9 @@
 "use strict";
 var test = require( "tape" ),
     algoliasearchHelper = require( "../../index" ),
+    forEach = require( "lodash/collection/forEach" ),
+    keys = require( "lodash/object/keys" ),
+    isEmpty = require( "lodash/lang/isEmpty" ),
     isUndefined = require( "lodash/lang/isUndefined" );
 
 var init = function init() {
@@ -64,6 +67,58 @@ test( "Clearing the same field from multiple elements should remove it everywher
   t.assert( isUndefined( helper.state.facetsRefinements.facet1 ) );
   t.assert( isUndefined( helper.state.numericRefinements.facet1 ) );
   t.assert( isUndefined( helper.state.facetsExcludes.facet1 ) );
+
+  t.end();
+} );
+
+test( "Clear with a function : neutral and abosorbing ops", function( t ) {
+  var helper = init();
+  var state0 = helper.state;
+
+  helper.clearRefinements( function( value, key, type ) {
+    return false;
+  } );
+
+  t.deepEqual( helper.state.numericRefinements, state0.numericRefinements, "Neutral op : numeric ref should be equal" );
+  t.deepEqual( helper.state.facetsRefinements, state0.facetsRefinements, "Neutral op : conj ref should be equal" );
+  t.deepEqual( helper.state.facetsExcludes, state0.facetsExcludes, "Neutral op : exclude ref should be equal" );
+  t.deepEqual( helper.state.disjunctiveFacetsRefinements, state0.disjunctiveFacetsRefinements, "Neutral op : disj ref should be equal" );
+
+  helper.clearRefinements( function( value, key, type ) {
+    return true;
+  } );
+
+  t.assert( isEmpty( helper.state.numericRefinements ), "remove all numericRefinements" );
+  t.assert( isEmpty( helper.state.facetsRefinements ), "remove all facetsRefinements" );
+  t.assert( isEmpty( helper.state.facetsExcludes ), "remove all facetsExcludes" );
+  t.assert( isEmpty( helper.state.disjunctiveFacetsRefinements ), "remove all disjunctiveFacetsRefinements" );
+
+  t.end();
+} );
+
+test( "Clear with a function : filtering", function( t ) {
+  var helper = init();
+
+  var checkType = {
+    numeric : false,
+    disjunctiveFacet : false,
+    conjunctiveFacet : false,
+    exclude : false
+  };
+
+  helper.clearRefinements( function( value, key, type ) {
+    checkType[ type ] = true;
+
+    return key.indexOf( "1" ) !== -1;
+  } );
+
+  t.equal( keys( checkType ).length, 4, "There should be only 4 refinements" );
+  forEach( checkType, function( typeTest, type ) { t.ok( typeTest, "clear should go through : " + type ); } );
+
+  t.deepEqual( helper.state.facetsRefinements, { "facet2" : [ "0" ] } );
+  t.deepEqual( helper.state.disjunctiveFacetsRefinements, { "disjunctiveFacet2" : [ "0" ] } );
+  t.deepEqual( helper.state.facetsExcludes, { "excluded2" : [ "0" ] } );
+  t.deepEqual( helper.state.numericRefinements, { "numeric2" : { ">=" : 0, "<" : 10 } } );
 
   t.end();
 } );
