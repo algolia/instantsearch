@@ -7,7 +7,7 @@ var find = require( "lodash/collection/find" );
 var extend = require( "../functions/extend" );
 
 /**
- * @typedef Facet
+ * @typedef SearchResults.Facet
  * @type {object}
  * @property {string} name name of the attribute in the record
  * @property {object.<string, number>} data the facetting data : value, number of entries
@@ -169,7 +169,7 @@ var SearchResults = function( state, algoliaResponse ) {
 /**
  * Get a facet object with its name
  * @param {string} name name of the attribute facetted
- * @return {Facet} the facet object
+ * @return {SearchResults.Facet} the facet object
  */
 SearchResults.prototype.getFacetByName = function( name ) {
   var isName = function( facet ) { return facet.name === name; };
