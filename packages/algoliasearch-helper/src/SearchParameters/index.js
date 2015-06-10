@@ -9,6 +9,7 @@ var isEmpty = require( "lodash/lang/isEmpty" );
 var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
 var isFunction = require( "lodash/lang/isFunction" );
+var extend = require( "../functions/extend" );
 
 /**
  * @typedef FacetList
@@ -372,12 +373,13 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addNumericRefinement : function( attribute, operator, value ) {
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      if( !m.numericRefinements[ attribute ] ) {
-        m.numericRefinements[ attribute ] = {};
-      }
-      m.numericRefinements[ attribute ][ operator ] = value;
+    var mod = extend( {}, this.numericRefinements );
+    mod[ attribute ] = extend( {}, mod[ attribute ] );
+    mod[ attribute ][ operator ] = value;
+
+    return this.setQueryParameters( {
+      page : 0,
+      numericRefinements : mod
     } );
   },
   /**
