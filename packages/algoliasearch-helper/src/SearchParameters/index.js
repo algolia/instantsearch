@@ -632,8 +632,8 @@ SearchParameters.prototype = {
     }
     else if ( isFunction( facet ) ) {
       return reduce( this.facetsRefinements, function( memo, values, key ) {
-        var facetList = omit( values, function( value ) {
-          return facet( value, key, "conjunctiveFacet" );
+        var facetList = filter( values, function( value ) {
+          return !facet( value, key, "conjunctiveFacet" );
         } );
 
         if( !isEmpty( facetList ) ) memo[ key ] = facetList;
@@ -662,8 +662,8 @@ SearchParameters.prototype = {
     }
     else if( isFunction( facet ) ) {
       return reduce( this.facetsExcludes, function( memo, excludes, key ) {
-        var excludeList = omit( excludes, function( exclude ) {
-          return facet( exclude, key, "exclude" );
+        var excludeList = filter( excludes, function( exclude ) {
+          return !facet( exclude, key, "exclude" );
         } );
 
         if( !isEmpty( excludeList ) ) memo[ key ] = excludeList;
@@ -692,8 +692,8 @@ SearchParameters.prototype = {
     }
     else if ( isFunction( facet ) ) {
       return reduce( this.disjunctiveFacetsRefinements, function( memo, values, key ) {
-        var facetList = omit( values, function( value ) {
-          return facet( value, key, "disjunctiveFacet" );
+        var facetList = filter( values, function( value ) {
+          return !facet( value, key, "disjunctiveFacet" );
         } );
 
         if( !isEmpty( facetList ) ) memo[ key ] = facetList;
