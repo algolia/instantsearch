@@ -1,9 +1,12 @@
 "use strict";
 var test = require( "tape" ),
     algoliasearchHelper = require( "../../index" ),
+    forEach = require( "lodash/collection/forEach" ),
+    keys = require( "lodash/object/keys" ),
+    isEmpty = require( "lodash/lang/isEmpty" ),
     isUndefined = require( "lodash/lang/isUndefined" );
 
-var init = function init() {
+var fixture = function fixture() {
   var helper = algoliasearchHelper( undefined, "Index", {
     facets : ["facet1", "facet2", "both_facet"],
     disjunctiveFacets : ["disjunctiveFacet1", "disjunctiveFacet2", "both_facet"]
@@ -22,7 +25,7 @@ var init = function init() {
 };
 
 test( "Check that the state objects match how we test them", function( t ) {
-  var helper = init();
+  var helper = fixture();
 
   t.deepEqual( helper.state.facetsRefinements, { "facet1" : [ "0" ], "facet2" : [ "0" ] } );
   t.deepEqual( helper.state.disjunctiveFacetsRefinements, { "disjunctiveFacet1" : [ "0" ], "disjunctiveFacet2" : [ "0" ] } );
@@ -33,7 +36,7 @@ test( "Check that the state objects match how we test them", function( t ) {
 } );
 
 test( "Clear with a name should work on every type and not remove others than targetted name", function( t ) {
-  var helper = init();
+  var helper = fixture();
 
   helper.clearRefinements( "facet1" );
   t.deepEqual( helper.state.facetsRefinements, { "facet2" : [ "0" ] } );
@@ -52,7 +55,7 @@ test( "Clear with a name should work on every type and not remove others than ta
 
 
 test( "Clearing the same field from multiple elements should remove it everywhere", function( t ) {
-  var helper = init();
+  var helper = fixture();
 
   helper.addNumericRefinement( "facet1", ">=", "10" ).toggleExclude( "facet1", "value" );
 
@@ -68,8 +71,66 @@ test( "Clearing the same field from multiple elements should remove it everywher
   t.end();
 } );
 
+test( "Clear with a function : neutral predicate", function( t ) {
+  var helper = fixture();
+  var state0 = helper.state;
+
+  helper.clearRefinements( function() {
+    return false;
+  } );
+
+  t.deepEqual( helper.state.numericRefinements, state0.numericRefinements, "Neutral op : numeric ref should be equal" );
+  t.deepEqual( helper.state.facetsRefinements, state0.facetsRefinements, "Neutral op : conj ref should be equal" );
+  t.deepEqual( helper.state.facetsExcludes, state0.facetsExcludes, "Neutral op : exclude ref should be equal" );
+  t.deepEqual( helper.state.disjunctiveFacetsRefinements, state0.disjunctiveFacetsRefinements, "Neutral op : disj ref should be equal" );
+
+  t.end();
+} );
+
+test( "Clear with a function : remove all predicate", function( t ) {
+  var helper = fixture();
+
+  helper.clearRefinements( function() {
+    return true;
+  } );
+
+  t.assert( isEmpty( helper.state.numericRefinements ), "remove all numericRefinements" );
+  t.assert( isEmpty( helper.state.facetsRefinements ), "remove all facetsRefinements" );
+  t.assert( isEmpty( helper.state.facetsExcludes ), "remove all facetsExcludes" );
+  t.assert( isEmpty( helper.state.disjunctiveFacetsRefinements ), "remove all disjunctiveFacetsRefinements" );
+
+  t.end();
+} );
+
+test( "Clear with a function : filtering", function( t ) {
+  var helper = fixture();
+
+  var checkType = {
+    numeric : false,
+    disjunctiveFacet : false,
+    conjunctiveFacet : false,
+    exclude : false
+  };
+
+  helper.clearRefinements( function( value, key, type ) {
+    checkType[ type ] = true;
+
+    return key.indexOf( "1" ) !== -1;
+  } );
+
+  t.equal( keys( checkType ).length, 4, "There should be only 4 refinements" );
+  forEach( checkType, function( typeTest, type ) { t.ok( typeTest, "clear should go through : " + type ); } );
+
+  t.deepEqual( helper.state.facetsRefinements, { "facet2" : [ "0" ] } );
+  t.deepEqual( helper.state.disjunctiveFacetsRefinements, { "disjunctiveFacet2" : [ "0" ] } );
+  t.deepEqual( helper.state.facetsExcludes, { "excluded2" : [ "0" ] } );
+  t.deepEqual( helper.state.numericRefinements, { "numeric2" : { ">=" : 0, "<" : 10 } } );
+
+  t.end();
+} );
+
 test( "Clearing twice the same attribute should be not problem", function( t ) {
-  var helper = init();
+  var helper = fixture();
 
   t.deepEqual( helper.state.facetsRefinements.facet1, [ "0" ] );
   helper.clearRefinements( "facet1" );
