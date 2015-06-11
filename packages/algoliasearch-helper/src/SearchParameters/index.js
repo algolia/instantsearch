@@ -740,19 +740,6 @@ SearchParameters.prototype = {
     }, {} );
   },
   /**
-   * Helper function to make it easier to build new instances from a mutating
-   * function
-   * @private
-   * @param {function} fn newMutableState -> previousState -> () function that will
-   * change the value of the newMutable to the desired state
-   * @return {SearchParameters} a new instance with the specified modifications applied
-   */
-  mutateMe : function mutateMe( fn ) {
-    var newState = new ( this.constructor )( this );
-    fn( newState, this );
-    return Object.freeze( newState );
-  },
-  /**
    * Let the user retrieve any parameter value from the SearchParameters
    * @param {string} paramName name of the parameter
    * @return {any} the value of the parameter
@@ -798,6 +785,19 @@ SearchParameters.prototype = {
       } );
       return newInstance;
     } );
+  },
+  /**
+   * Helper function to make it easier to build new instances from a mutating
+   * function
+   * @private
+   * @param {function} fn newMutableState -> previousState -> () function that will
+   * change the value of the newMutable to the desired state
+   * @return {SearchParameters} a new instance with the specified modifications applied
+   */
+  mutateMe : function mutateMe( fn ) {
+    var newState = new ( this.constructor )( this );
+    fn( newState, this );
+    return Object.freeze( newState );
   }
 };
 
