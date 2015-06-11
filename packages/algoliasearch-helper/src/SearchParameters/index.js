@@ -10,6 +10,7 @@ var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
 var isFunction = require( "lodash/lang/isFunction" );
 var extend = require( "../functions/extend" );
+var RefinementList = require( "./RefinementList" );
 
 /**
  * @typedef {string[]} SearchParameters.FacetList
@@ -272,9 +273,9 @@ SearchParameters.prototype = {
     return this.setQueryParameters( {
       page : 0,
       numericRefinements : this._clearNumericRefinements( attribute ),
-      facetsRefinements : this._clearFacetRefinements( attribute ),
-      facetsExcludes : this._clearExcludeRefinements( attribute ),
-      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( attribute )
+      facetsRefinements : RefinementList.clearRefinement( this.facetsRefinements, attribute, "conjunctiveFacet" ),
+      facetsExcludes : RefinementList.clearRefinement( this.facetsExcludes, attribute, "exclude" ),
+      disjunctiveFacetsRefinements : RefinementList.clearRefinement( this.disjunctiveFacetsRefinements, attribute, "disjunctiveFacet" )
     } );
   },
   /**
@@ -475,18 +476,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
-    if( this.isFacetRefined( facet, value ) ) {
-      return this;
-    }
-
-    var facetRefinement = !this.facetsRefinements[ facet ] ? [ value ] : this.facetsRefinements[ facet ].concat( value );
-    var mod = {};
-    mod[ facet ] = facetRefinement;
-    var facetsRefinements = extend( {}, this.facetsRefinements, mod );
-
     return this.setQueryParameters( {
       page : 0,
-      facetsRefinements : facetsRefinements
+      facetsRefinements : RefinementList.addRefinement( this.facetsRefinements, facet, value )
     } );
   },
   /**
@@ -497,18 +489,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addExcludeRefinement : function addExcludeRefinement( facet, value ) {
-    if( this.isExcludeRefined( facet, value ) ) {
-      return this;
-    }
-
-    var excludeRefine = !this.facetsExcludes[ facet ] ? [ value ] : this.facetsExcludes[ facet ].concat( value );
-    var mod = {};
-    mod[ facet ] = excludeRefine;
-    var facetsExcludes = extend( {}, this.facetsExcludes, mod );
-
     return this.setQueryParameters( {
       page : 0,
-      facetsExcludes : facetsExcludes
+      facetsExcludes : RefinementList.addRefinement( this.facetsExcludes, facet, value )
     } );
   },
   /**
@@ -519,18 +502,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
-    if( this.isDisjunctiveFacetRefined( facet, value ) ) {
-      return this;
-    }
-
-    var disjunctiveRefine = !this.disjunctiveFacetsRefinements[ facet ] ? [ value ] : this.disjunctiveFacetsRefinements[ facet ].concat( value );
-    var mod = {};
-    mod[ facet ] = disjunctiveRefine;
-    var disjunctiveFacetsRefinements = extend( {}, this.disjunctiveFacetsRefinements, mod );
-
     return this.setQueryParameters( {
       page : 0,
-      disjunctiveFacetsRefinements : disjunctiveFacetsRefinements
+      disjunctiveFacetsRefinements : RefinementList.addRefinement( this.disjunctiveFacetsRefinements, facet, value )
     } );
   },
   /**
@@ -558,14 +532,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeFacetRefinement : function removeFacetRefinement( facet, value ) {
-    var facetsRefinements = isUndefined( value ) ? this._clearFacetRefinements( facet ) :
-      this._clearFacetRefinements( function( v, f ) {
-        return facet === f && value === v;
-      } );
-
     return this.setQueryParameters( {
       page : 0,
-      facetsRefinements : facetsRefinements
+      facetsRefinements : RefinementList.removeRefinement( this.facetsRefinements, facet, value )
     } );
   },
   /**
@@ -578,9 +547,7 @@ SearchParameters.prototype = {
   removeExcludeRefinement : function removeExcludeRefinement( facet, value ) {
     return this.setQueryParameters( {
       page : 0,
-      facetsExcludes : this._clearFacetRefinements( function( v, f ) {
-        return value === v && facet === f;
-      } )
+      facetsExcludes : RefinementList.removeRefinement( this.facetsExcludes, facet, value )
     } );
   },
   /**
@@ -593,9 +560,7 @@ SearchParameters.prototype = {
   removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value ) {
     return this.setQueryParameters( {
       page : 0,
-      disjunctiveFacetsRefinements : this._clearDisjunctiveFacetRefinements( function( v, f ) {
-        return f === facet && v === value;
-      } )
+      disjunctiveFacetsRefinements : RefinementList.removeRefinement( this.disjunctiveFacetsRefinements, facet, value )
     } );
   },
   /**
@@ -615,90 +580,6 @@ SearchParameters.prototype = {
     return this.setQueryParameters( modification );
   },
   /**
-   * Clear the facet refinements
-   * @method
-   * @private
-   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
-   * - If not given, means to clear the refinement of all facets.
-   * - If `string`, means to clear the refinement for the `facet` named facet.
-   * - If `function`, means to clear all the refinements that return truthy values.
-   * @return {Object.<string, FacetList>}
-   */
-  _clearFacetRefinements : function _clearFacetRefinements( facet ) {
-    if ( isUndefined( facet ) ) {
-      return {};
-    }
-    else if ( isString( facet ) ) {
-      return omit( this.facetsRefinements, facet );
-    }
-    else if ( isFunction( facet ) ) {
-      return reduce( this.facetsRefinements, function( memo, values, key ) {
-        var facetList = filter( values, function( value ) {
-          return !facet( value, key, "conjunctiveFacet" );
-        } );
-
-        if( !isEmpty( facetList ) ) memo[ key ] = facetList;
-        return memo;
-      }, {} );
-    }
-  },
-  /**
-   * Clear the exclude refinements
-   * @method
-   * @private
-   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
-   * - If not given, means to clear all the excludes of all facets.
-   * - If `string`, means to clear all the excludes for the `facet` named facet.
-   * - If `function`, means to clear all the refinements that return truthy values
-   * @return {Object.<string, FacetList>}
-   */
-  _clearExcludeRefinements : function _clearExcludeRefinements( facet ) {
-    if ( isUndefined( facet ) ) {
-      return {};
-    }
-    else if ( isString( facet ) ) {
-      return omit( this.facetsExcludes, facet );
-    }
-    else if( isFunction( facet ) ) {
-      return reduce( this.facetsExcludes, function( memo, excludes, key ) {
-        var excludeList = filter( excludes, function( exclude ) {
-          return !facet( exclude, key, "exclude" );
-        } );
-
-        if( !isEmpty( excludeList ) ) memo[ key ] = excludeList;
-        return memo;
-      }, {} );
-    }
-  },
-  /**
-   * Clear the disjunctive refinements
-   * @method
-   * @private
-   * @param {string|SearchParameters.clearCallback} [facet] optionnal string or function
-   * - If not given, means to clear all the refinements of all disjunctive facets.
-   * - If `string`, means to clear all the refinements for the `facet` named facet.
-   * - If `function`, means to clear all the refinements that return truthy values.
-   * @return {Object.<string, FacetList>}
-   */
-  _clearDisjunctiveFacetRefinements : function _clearDisjunctiveFacetRefinements( facet ) {
-    if ( isUndefined( facet ) ) {
-      return {};
-    }
-    else if ( isString( facet ) ) {
-      return omit( this.disjunctiveFacetsRefinements, facet );
-    }
-    else if ( isFunction( facet ) ) {
-      return reduce( this.disjunctiveFacetsRefinements, function( memo, values, key ) {
-        var facetList = filter( values, function( value ) {
-          return !facet( value, key, "disjunctiveFacet" );
-        } );
-
-        if( !isEmpty( facetList ) ) memo[ key ] = facetList;
-        return memo;
-      }, {} );
-    }
-  },
-  /**
    * Switch the refinement applied over a facet/value
    * @method
    * @param {string} facet name of the attribute used for facetting
@@ -706,12 +587,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleFacetRefinement : function toggleFacetRefinement( facet, value ) {
-    if( this.isFacetRefined( facet, value ) ) {
-      return this.removeFacetRefinement( facet, value );
-    }
-    else {
-      return this.addFacetRefinement( facet, value );
-    }
+    return this.setQueryParameters( {
+      page : 0,
+      facetsRefinements : RefinementList.toggleRefinement( this.facetsRefinements, facet, value )
+    } );
   },
   /**
    * Switch the refinement applied over a facet/value
@@ -721,12 +600,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleExcludeFacetRefinement : function toggleExcludeFacetRefinement( facet, value ) {
-    if( this.isExcludeRefined( facet, value ) ) {
-      return this.removeExcludeRefinement( facet, value );
-    }
-    else {
-      return this.addExcludeRefinement( facet, value );
-    }
+    return this.setQueryParameters( {
+      page : 0,
+      facetsExcludes : RefinementList.toggleRefinement( this.facetsExcludes, facet, value )
+    } );
   },
   /**
    * Switch the refinement applied over a facet/value
@@ -736,12 +613,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleDisjunctiveFacetRefinement : function toggleDisjunctiveFacetRefinement( facet, value ) {
-    if( this.isDisjunctiveFacetRefined( facet, value ) ) {
-      return this.removeDisjunctiveFacetRefinement( facet, value );
-    }
-    else {
-      return this.addDisjunctiveFacetRefinement( facet, value );
-    }
+    return this.setQueryParameters( {
+      page : 0,
+      disjunctiveFacetsRefinements : RefinementList.toggleRefinement( this.disjunctiveFacetsRefinements, facet, value )
+    } );
   },
   /**
    * Switch the tag refinement
@@ -785,14 +660,7 @@ SearchParameters.prototype = {
    * @return {boolean} returns true if refined
    */
   isFacetRefined : function isFacetRefined( facet, value ) {
-    var containsRefinements = this.facetsRefinements[ facet ] &&
-                              this.facetsRefinements[ facet ].length > 0;
-    if( value === undefined ) {
-      return containsRefinements;
-    }
-
-    return containsRefinements &&
-           this.facetsRefinements[ facet ].indexOf( value ) !== -1;
+    return RefinementList.isRefined( this.facetsRefinements, facet, value );
   },
   /**
    * Returns true if the facet contains exclusions or if a specific value is
@@ -804,14 +672,7 @@ SearchParameters.prototype = {
    * @return {boolean} returns true if refined
    */
   isExcludeRefined : function isExcludeRefined( facet, value ) {
-    var containsRefinements = this.facetsExcludes[ facet ] &&
-                              this.facetsExcludes[ facet ].length > 0;
-    if( value === undefined ) {
-      return containsRefinements;
-    }
-
-    return containsRefinements &&
-           this.facetsExcludes[ facet ].indexOf( value ) !== -1;
+    return RefinementList.isRefined( this.facetsExcludes, facet, value );
   },
   /**
    * Returns true if the facet contains a refinement, or if a value passed is a
@@ -823,14 +684,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isDisjunctiveFacetRefined : function isDisjunctiveFacetRefined( facet, value ) {
-    var containsRefinements = this.disjunctiveFacetsRefinements[ facet ] &&
-                              this.disjunctiveFacetsRefinements[ facet ].length > 0;
-    if( value === undefined ) {
-      return containsRefinements;
-    }
-
-    return containsRefinements &&
-           this.disjunctiveFacetsRefinements[ facet ].indexOf( value ) !== -1;
+    return RefinementList.isRefined( this.disjunctiveFacetsRefinements, facet, value );
   },
   /**
    * Returns true if the tag refined, false otherwise
