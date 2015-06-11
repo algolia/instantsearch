@@ -687,6 +687,22 @@ SearchParameters.prototype = {
     return RefinementList.isRefined( this.disjunctiveFacetsRefinements, facet, value );
   },
   /**
+   * Test if the triple attribute operator value is already refined.
+   * @method
+   * @param {string} attribute attribute for which the refinement is applied
+   * @param {string} operator operator of the refinement
+   * @param {string} value value of the refinement
+   * @return {boolean} true if it is refined
+   */
+  isNumericRefined : function isNumericRefined( attribute, operator, value ) {
+    if( isUndefined( value ) ) return this.numericRefinements[ attribute ] &&
+                                      !isUndefined( this.numericRefinements[ attribute ][ operator ] );
+
+    return this.numericRefinements[ attribute ] &&
+           this.numericRefinements[ attribute ][ operator ] &&
+           this.numericRefinements[ attribute ][ operator ] === value;
+  },
+  /**
    * Returns true if the tag refined, false otherwise
    * @method
    * @param {string} tag the tag to check
