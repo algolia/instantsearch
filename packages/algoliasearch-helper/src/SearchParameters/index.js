@@ -479,12 +479,14 @@ SearchParameters.prototype = {
       return this;
     }
 
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      if( !m.facetsRefinements[ facet ] ) {
-        m.facetsRefinements[ facet ] = [];
-      }
-      m.facetsRefinements[ facet ].push( value );
+    var facetRefinement = !this.facetsRefinements[ facet ] ? [ value ] : this.facetsRefinements[ facet ].concat( value );
+    var mod = {};
+    mod[ facet ] = facetRefinement;
+    var facetsRefinements = extend( {}, this.facetsRefinements, mod );
+
+    return this.setQueryParameters( {
+      page : 0,
+      facetsRefinements : facetsRefinements
     } );
   },
   /**
@@ -495,12 +497,18 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addExcludeRefinement : function addExcludeRefinement( facet, value ) {
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      if( !m.facetsExcludes[ facet ] ) {
-        m.facetsExcludes[ facet ] = [];
-      }
-      m.facetsExcludes[ facet ].push( value );
+    if( this.isExcludeRefined( facet, value ) ) {
+      return this;
+    }
+
+    var excludeRefine = !this.facetsExcludes[ facet ] ? [ value ] : this.facetsExcludes[ facet ].concat( value );
+    var mod = {};
+    mod[ facet ] = excludeRefine;
+    var facetsExcludes = extend( {}, this.facetsExcludes, mod );
+
+    return this.setQueryParameters( {
+      page : 0,
+      facetsExcludes : facetsExcludes
     } );
   },
   /**
@@ -511,12 +519,18 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
-    return this.mutateMe( function( m ) {
-      m.page = 0;
-      if( !m.disjunctiveFacetsRefinements[ facet ] ) {
-        m.disjunctiveFacetsRefinements[ facet ] = [];
-      }
-      m.disjunctiveFacetsRefinements[ facet ].push( value );
+    if( this.isDisjunctiveFacetRefined( facet, value ) ) {
+      return this;
+    }
+
+    var disjunctiveRefine = !this.disjunctiveFacetsRefinements[ facet ] ? [ value ] : this.disjunctiveFacetsRefinements[ facet ].concat( value );
+    var mod = {};
+    mod[ facet ] = disjunctiveRefine;
+    var disjunctiveFacetsRefinements = extend( {}, this.disjunctiveFacetsRefinements, mod );
+
+    return this.setQueryParameters( {
+      page : 0,
+      disjunctiveFacetsRefinements : disjunctiveFacetsRefinements
     } );
   },
   /**
