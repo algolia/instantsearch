@@ -284,6 +284,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   clearTags : function clearTags() {
+    if( this.tagFilters === undefined && this.tagRefinements.length === 0 ) return this;
+
     return this.setQueryParameters( {
       page : 0,
       tagFilters : undefined,
@@ -297,9 +299,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setQuery : function setQuery( newQuery ) {
-    return this.mutateMe( function( m ) {
-      m.query = newQuery;
-      m.page = 0;
+    if( newQuery === this.query ) return this;
+
+    return this.setQueryParameters( {
+      query : newQuery,
+      page : 0
     } );
   },
   /**
@@ -309,8 +313,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setPage : function setPage( newPage ) {
-    return this.mutateMe( function( mutable ) {
-      mutable.page = newPage;
+    if( newPage === this.page ) return this;
+
+    return this.setQueryParameters( {
+      page : newPage
     } );
   },
   /**
@@ -321,8 +327,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setFacets : function setFacets( facets ) {
-    return this.mutateMe( function( m ) {
-      m.facets = facets;
+    return this.setQueryParameters( {
+      facets : facets
     } );
   },
   /**
@@ -333,8 +339,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setDisjunctiveFacets : function setDisjunctiveFacets( facets ) {
-    return this.mutateMe( function( m ) {
-      m.disjunctiveFacets = facets;
+    return this.setQueryParameters( {
+      disjunctiveFacets : facets
     } );
   },
   /**
@@ -345,9 +351,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setHitsPerPage : function setHitsPerPage( n ) {
-    return this.mutateMe( function( m ) {
-      m.hitsPerPage = n;
-      m.page = 0;
+    if( this.HitsPerPage === n ) return this;
+
+    return this.setQueryParameters( {
+      hitsPerPage : n,
+      page : 0
     } );
   },
   /**
@@ -358,9 +366,11 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setTypoTolerance : function setTypoTolerance( s ) {
-    return this.mutateMe( function( m ) {
-      m.typoTolerance = s;
-      m.page = 0;
+    if( this.typoTolerance === s ) return this;
+
+    return this.setQueryParameters( {
+      typoTolerance : s,
+      page : 0
     } );
   },
   /**
@@ -375,6 +385,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addNumericRefinement : function( attribute, operator, value ) {
+    if( this.isNumericRefined( attribute, operator, value ) ) return this;
+
     var mod = extend( {}, this.numericRefinements );
     mod[ attribute ] = extend( {}, mod[ attribute ] );
     mod[ attribute ][ operator ] = value;
@@ -416,6 +428,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeNumericRefinement : function( attribute, operator ) {
+    if( !this.isNumericRefined( attribute, operator ) ) return this;
+
     return this.setQueryParameters( {
       page : 0,
       numericRefinements : this._clearNumericRefinements( function( value, key ) {
@@ -476,6 +490,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
+    if( RefinementList.isRefined( this.facetsRefinements, facet, value ) ) return this;
     return this.setQueryParameters( {
       page : 0,
       facetsRefinements : RefinementList.addRefinement( this.facetsRefinements, facet, value )
@@ -489,6 +504,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addExcludeRefinement : function addExcludeRefinement( facet, value ) {
+    if( RefinementList.isRefined( this.facetsExcludes, facet, value ) ) return this;
     return this.setQueryParameters( {
       page : 0,
       facetsExcludes : RefinementList.addRefinement( this.facetsExcludes, facet, value )
@@ -502,6 +518,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {
+    if( RefinementList.isRefined( this.disjunctiveFacetsRefinements, facet, value ) ) return this;
     return this.setQueryParameters( {
       page : 0,
       disjunctiveFacetsRefinements : RefinementList.addRefinement( this.disjunctiveFacetsRefinements, facet, value )
@@ -532,6 +549,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeFacetRefinement : function removeFacetRefinement( facet, value ) {
+    if( !RefinementList.isRefined( this.facetsRefinements, facet, value ) ) return this;
+
     return this.setQueryParameters( {
       page : 0,
       facetsRefinements : RefinementList.removeRefinement( this.facetsRefinements, facet, value )
@@ -545,6 +564,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeExcludeRefinement : function removeExcludeRefinement( facet, value ) {
+    if( !RefinementList.isRefined( this.facetsExcludes, facet, value ) ) return this;
+
     return this.setQueryParameters( {
       page : 0,
       facetsExcludes : RefinementList.removeRefinement( this.facetsExcludes, facet, value )
@@ -558,6 +579,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeDisjunctiveFacetRefinement : function removeDisjunctiveFacetRefinement( facet, value ) {
+    if( !RefinementList.isRefined( this.disjunctiveFacetsRefinements, facet, value ) ) return this;
+
     return this.setQueryParameters( {
       page : 0,
       disjunctiveFacetsRefinements : RefinementList.removeRefinement( this.disjunctiveFacetsRefinements, facet, value )
@@ -719,6 +742,7 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedDisjunctiveFacets : function getRefinedDisjunctiveFacets() {
+    // attributes used for numeric filter can also be disjunctive
     var disjunctiveNumericRefinedFacets = intersection(
       keys( this.numericRefinements ),
       this.disjunctiveFacets
