@@ -9,7 +9,10 @@ var isEmpty = require( "lodash/lang/isEmpty" );
 var isUndefined = require( "lodash/lang/isUndefined" );
 var isString = require( "lodash/lang/isString" );
 var isFunction = require( "lodash/lang/isFunction" );
+
 var extend = require( "../functions/extend" );
+var deepFreeze = require( "../functions/deepFreeze" );
+
 var RefinementList = require( "./RefinementList" );
 
 /**
@@ -227,7 +230,7 @@ var SearchParameters = function( newParameters ) {
  */
 SearchParameters.make = function makeSearchParameters( newParameters ) {
   var instance = new SearchParameters( newParameters );
-  return Object.freeze( instance );
+  return deepFreeze( instance );
 };
 
 /**
@@ -837,7 +840,7 @@ SearchParameters.prototype = {
   mutateMe : function mutateMe( fn ) {
     var newState = new ( this.constructor )( this );
     fn( newState, this );
-    return Object.freeze( newState );
+    return deepFreeze( newState );
   }
 };
 
