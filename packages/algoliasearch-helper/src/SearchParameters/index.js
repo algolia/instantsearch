@@ -758,14 +758,10 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getUnrefinedDisjunctiveFacets : function() {
-    var unrefinedFacets = [];
     var refinedFacets = this.getRefinedDisjunctiveFacets();
-    forEach( this.disjunctiveFacets, function( f ) {
-      if( refinedFacets.indexOf( f ) === -1 ) {
-        unrefinedFacets.push( f );
-      }
+    return filter( this.disjunctiveFacets, function( f ) {
+      return refinedFacets.indexOf( f ) === -1;
     } );
-    return unrefinedFacets;
   },
   managedParameters : [
     "facets", "disjunctiveFacets", "facetsRefinements",
