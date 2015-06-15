@@ -7,7 +7,7 @@
  * @module SearchParameters.refinementList
  *
  * @typedef {string[]} SearchParameters.refinementList.Refinements
- * @typedef {Object.<string, Refinements>} SearchParameters.refinementList.RefinementList
+ * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
 "use strict";
