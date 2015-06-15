@@ -537,10 +537,14 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var additionalParams = {
     facets : facets,
     tagFilters : tagFilters,
-    distinct : this.state.distinct || false
+    distinct : this.state.distinct
   };
 
-  if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
+  if( this.state.distinct !== undefined &&
+      !this.state.query &&
+      facetFilters.length === 0 &&
+      numericFilters.length === 0 &&
+      tagFilters.length === 0 ) {
     additionalParams.distinct = false;
   }
 
@@ -573,10 +577,14 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToSnippet : [],
     facets : facet,
     tagFilters : tagFilters,
-    distinct : this.state.distinct || false
+    distinct : this.state.distinct
   };
 
-  if( !this.state.query && facetFilters.length === 0 && numericFilters.length === 0 && tagFilters.length === 0 ) {
+  if( this.state.distinct !== undefined &&
+      !this.state.query &&
+      facetFilters.length === 0 &&
+      numericFilters.length === 0 &&
+      tagFilters.length === 0 ) {
     additionalParams.distinct = false;
   }
 
