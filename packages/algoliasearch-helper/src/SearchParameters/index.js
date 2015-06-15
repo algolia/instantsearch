@@ -354,7 +354,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   setHitsPerPage : function setHitsPerPage( n ) {
-    if( this.HitsPerPage === n ) return this;
+    if( this.hitsPerPage === n ) return this;
 
     return this.setQueryParameters( {
       hitsPerPage : n,
@@ -721,11 +721,13 @@ SearchParameters.prototype = {
    * @return {boolean} true if it is refined
    */
   isNumericRefined : function isNumericRefined( attribute, operator, value ) {
-    if( isUndefined( value ) ) return this.numericRefinements[ attribute ] &&
-                                      !isUndefined( this.numericRefinements[ attribute ][ operator ] );
+    if( isUndefined( value ) ) {
+      return this.numericRefinements[ attribute ] &&
+             !isUndefined( this.numericRefinements[ attribute ][ operator ] );
+    }
 
     return this.numericRefinements[ attribute ] &&
-           this.numericRefinements[ attribute ][ operator ] &&
+           !( isUndefined( this.numericRefinements[ attribute ][ operator ] ) ) &&
            this.numericRefinements[ attribute ][ operator ] === value;
   },
   /**

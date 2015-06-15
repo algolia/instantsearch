@@ -79,7 +79,7 @@ var lib = {
   /**
    * Clear all or parts of a RefinementList. Depending on the arguments, three
    * behaviors can happen :
-   *  - if not attribute is provided : clears the whole list
+   *  - if no attribute is provided : clears the whole list
    *  - if an attribute is provided as a string : clears the list for the specific attribute
    *  - if an attribute is provided as a function : discards the elements for which the function returns true
    * @param {RefinementList} refinementList the initial list
