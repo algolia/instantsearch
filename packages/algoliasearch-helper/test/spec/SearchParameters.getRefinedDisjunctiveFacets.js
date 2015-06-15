@@ -9,8 +9,8 @@ test( "getRefinedDisjunctiveFacets should return the refined facets declared as 
   } );
 
   t.equal( sp.getRefinedDisjunctiveFacets().length, 0, "Should be empty at first" );
-  sp.addNumericRefinement( "myNumericFacet", ">", 3 );
-  t.equal( sp.getRefinedDisjunctiveFacets().indexOf( "myNumericFacet" ), 0, "Should contain myNumericFacet" );
+  var newState = sp.addNumericRefinement( "myNumericFacet", ">", 3 );
+  t.equal( newState.getRefinedDisjunctiveFacets().indexOf( "myNumericFacet" ), 0, "Should contain myNumericFacet" );
 
   t.end();
 } );
@@ -21,9 +21,8 @@ test( "getRefinedDisjunctiveFacets should return the refined once even if there 
   } );
 
   t.equal( sp.getRefinedDisjunctiveFacets().length, 0, "Should be empty at first" );
-  sp.addNumericRefinement( "myNumericFacet", ">", 3 );
-  sp.addNumericRefinement( "myNumericFacet", "=", 3 );
-  t.equal( sp.getRefinedDisjunctiveFacets().indexOf( "myNumericFacet" ), 0, "Should contain myNumericFacet" );
+  var newState = sp.addNumericRefinement( "myNumericFacet", ">", 3 ).addNumericRefinement( "myNumericFacet", "=", 3 );
+  t.equal( newState.getRefinedDisjunctiveFacets().indexOf( "myNumericFacet" ), 0, "Should contain myNumericFacet" );
 
   t.end();
 } );
@@ -34,8 +33,8 @@ test( "getRefinedDisjunctiveFactes should not return refined normal facets", fun
   } );
 
   t.equal( sp.getRefinedDisjunctiveFacets().length, 0, "Should be empty at first" );
-  sp.addNumericRefinement( "myNumericFacet", ">", 3 );
-  t.equal( sp.getRefinedDisjunctiveFacets().length, 0, "Should still be empty" );
+  var newState = sp.addNumericRefinement( "myNumericFacet", ">", 3 );
+  t.equal( newState.getRefinedDisjunctiveFacets().length, 0, "Should still be empty" );
 
   t.end();
 } );

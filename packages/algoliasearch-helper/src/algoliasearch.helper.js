@@ -24,7 +24,7 @@ var bind = require( "lodash/function/bind" );
 function AlgoliaSearchHelper( client, index, options ) {
   this.client = client;
   this.index = index;
-  this.state = new SearchParameters( options );
+  this.state = SearchParameters.make( options );
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
