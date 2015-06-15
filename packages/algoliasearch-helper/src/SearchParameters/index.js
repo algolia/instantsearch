@@ -365,14 +365,14 @@ SearchParameters.prototype = {
    * typoTolerance setter
    * Set the value of typoTolerance
    * @method
-   * @param {string} s string new value of typoTolerance ("true", "false", "min" or "strict")
+   * @param {string} typoTolerance new value of typoTolerance ("true", "false", "min" or "strict")
    * @return {SearchParameters}
    */
-  setTypoTolerance : function setTypoTolerance( s ) {
-    if( this.typoTolerance === s ) return this;
+  setTypoTolerance : function setTypoTolerance( typoTolerance ) {
+    if( this.typoTolerance === typoTolerance ) return this;
 
     return this.setQueryParameters( {
-      typoTolerance : s,
+      typoTolerance : typoTolerance,
       page : 0
     } );
   },
