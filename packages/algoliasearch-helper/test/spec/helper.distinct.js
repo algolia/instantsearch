@@ -3,15 +3,15 @@ var test = require( "tape" );
 
 var algoliasearchHelper = require( "../../index.js" );
 
-test( "Distinct initial value", function( t ) {
+test( "Distinct not set", function( t ) {
   var helper = algoliasearchHelper( null, null, {} );
   var state0 = helper.state;
 
   var disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
-  t.equal( disjunctiveFacetSearchParam.distinct, undefined, "[disjunctive] distinct should be undefined" );
+  t.equal( disjunctiveFacetSearchParam.distinct, false, "[disjunctive] distinct should be undefined" );
 
   var facetSearchParam = helper._getHitsSearchParams();
-  t.equal( facetSearchParam.distinct, undefined, "[hits] distinct should be undefined" );
+  t.equal( facetSearchParam.distinct, false, "[hits] distinct should be undefined" );
 
   helper.setState( state0 );
   helper.setQuery( "not empty" );
@@ -44,7 +44,7 @@ test( "Distinct initial value", function( t ) {
   t.end();
 } );
 
-test( "Distinct to true", function( t ) {
+test( "Distinct set to true", function( t ) {
   var helper = algoliasearchHelper( null, null, {} ).setQueryParameter( "distinct", true );
   var state0 = helper.state;
 

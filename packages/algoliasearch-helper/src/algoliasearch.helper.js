@@ -540,8 +540,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
     distinct : this.state.distinct
   };
 
-  if( this.state.distinct !== undefined &&
-      !this.state.query &&
+  if( !this.state.query &&
       facetFilters.length === 0 &&
       numericFilters.length === 0 &&
       tagFilters.length === 0 ) {
@@ -580,8 +579,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     distinct : this.state.distinct
   };
 
-  if( this.state.distinct !== undefined &&
-      !this.state.query &&
+  if( !this.state.query &&
       facetFilters.length === 0 &&
       numericFilters.length === 0 &&
       tagFilters.length === 0 ) {
