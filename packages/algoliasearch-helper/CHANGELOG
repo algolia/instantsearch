@@ -1,18 +1,23 @@
 CHANGELOG
 
-UNRELEASED
+2.1.0 - 2015-06-15
   * FIX : #29 Avoid callback for outdated queries
   * FIX : #64 Sum up the processing time of all queries
   * FIX : #92 Parameters that can be set in the dashboard shouldn't have
   defaults
+  * FIX : #62 Make sure disctinct is set to false when it's not possible to
+  use distinct in Algolia
   * FEATURE : #91 Support for tags (with support for the raw format #98)
   * FEATURE : #70 Ability to get all refined values : helper.getRefinements(
   facetname )
   * FEATURE : #51 multiple filters for a single conjunctive facet (tests)
-  * FEATURE : Ability to modify any parameter of the state easily (#76 #84)
+  * FEATURE : Ability to modify any parameter of the state easily (#76 #84 #12)
   * FEATURE : #69 Ability to know if a facet is refined, whatever the value
-  * REFACTORING : SearchParameters is immutable
-  * REFACTORING : Ensure SearchParameters is totally frozen
+  * FEATURE : #86 Expose SearchParameters, AlgoliaSearchHelper, SearchResults to
+  users directly in the builds 
+  * FEATURE : #25 let the user do a clearRefinement with a function as a filter
+  * REFACTORING : SearchParameters is immutable (#14)
+  * REFACTORING : Ensure SearchParameters is totally frozen (#14)
   * LIB : Update lodash version to 3.9.x
 
 2.0.4
