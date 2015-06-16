@@ -1,6 +1,5 @@
 "use strict";
 var test = require( "tape" );
-//var _ = require( "lodash" );
 var SearchParameters = require( "../../src/SearchParameters" );
 
 test( "getRefinedDisjunctiveFacets should return the refined facets declared as disjunctive", function( t ) {
