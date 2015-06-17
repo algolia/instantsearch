@@ -530,6 +530,7 @@ AlgoliaSearchHelper.prototype._handleResponse = function( state, queryId, err, c
  * @return {object.<string, any>}
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
+  var query = this.state.query;
   var facets = this.state.facets.concat( this.state.disjunctiveFacets );
   var facetFilters = this._getFacetFilters();
   var numericFilters = this._getNumericFilters();
@@ -540,10 +541,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
     distinct : this.state.distinct
   };
 
-  if( !this.state.query &&
-      facetFilters.length === 0 &&
-      numericFilters.length === 0 &&
-      tagFilters.length === 0 ) {
+  if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }
 
@@ -565,6 +563,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * @return {object}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet ) {
+  var query = this.state.query;
   var facetFilters = this._getFacetFilters( facet );
   var numericFilters = this._getNumericFilters( facet );
   var tagFilters = this._getTagFilters();
@@ -579,10 +578,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     distinct : this.state.distinct
   };
 
-  if( !this.state.query &&
-      facetFilters.length === 0 &&
-      numericFilters.length === 0 &&
-      tagFilters.length === 0 ) {
+  if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }
 
@@ -595,6 +591,13 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
   }
 
   return extend( this.state.getQueryParams(), additionalParams );
+};
+
+AlgoliaSearchHelper.prototype.containsRefinement = function( query, facetFilters, numericFilters, tagFilters ) {
+  return query ||
+         facetFilters.length !== 0 ||
+         numericFilters.length !== 0 ||
+         tagFilters.length !== 0;
 };
 
 /**
