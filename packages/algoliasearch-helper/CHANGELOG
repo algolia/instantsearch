@@ -1,5 +1,8 @@
 CHANGELOG
 
+unreleased
+  * FIX : #107 Apply rules to distinct to prevent the API to return an error
+
 2.1.0 - 2015-06-15
   * FIX : #29 Avoid callback for outdated queries
   * FIX : #64 Sum up the processing time of all queries
