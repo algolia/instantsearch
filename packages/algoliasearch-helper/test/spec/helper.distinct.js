@@ -8,10 +8,10 @@ test( "Distinct not set", function( t ) {
   var state0 = helper.state;
 
   var disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
-  t.equal( disjunctiveFacetSearchParam.distinct, false, "[disjunctive] distinct should be undefined" );
+  t.equal( disjunctiveFacetSearchParam.distinct, false, "[disjunctive] distinct should be false" );
 
   var facetSearchParam = helper._getHitsSearchParams();
-  t.equal( facetSearchParam.distinct, false, "[hits] distinct should be undefined" );
+  t.equal( facetSearchParam.distinct, false, "[hits] distinct should be false" );
 
   helper.setState( state0 );
   helper.setQuery( "not empty" );
