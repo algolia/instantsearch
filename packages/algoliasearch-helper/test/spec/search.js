@@ -1,11 +1,11 @@
 "use strict";
-var test = require("tape");
-var sinon = require("sinon");
+var test = require( "tape" );
+var sinon = require( "sinon" );
 var algoliaSearch = require( "algoliasearch" );
 
 var algoliasearchHelper = require( "../../index" );
 
-test( "Search should call the algolia client according to the number of refinements", function( t ){
+test( "Search should call the algolia client according to the number of refinements", function( t ) {
   var testData = require( "./search.testdata" );
 
   var client = algoliaSearch( "dsf", "dsfdf" );
@@ -15,13 +15,13 @@ test( "Search should call the algolia client according to the number of refineme
 
   var helper = algoliasearchHelper( client, "test_hotels-node", {
     disjunctiveFacets : ["city"]
-  });
+  } );
 
   helper.addDisjunctiveRefine( "city", "Paris", true );
-  helper.addDisjunctiveRefine( "city", "New York", true);
+  helper.addDisjunctiveRefine( "city", "New York", true );
 
   helper.on( "result", function( data ) {
-    t.deepEqual( data, testData.responseHelper,  "should be equal" );
+    t.deepEqual( data, testData.responseHelper, "should be equal" );
     t.ok( mock.verify(), "Mock constraints should be verified!" );
     t.end();
   } );
@@ -29,11 +29,11 @@ test( "Search should call the algolia client according to the number of refineme
   helper.search( "" );
 } );
 
-test( "no mutating methods should trigger a search", function( t ){
+test( "no mutating methods should trigger a search", function( t ) {
   var helper = algoliasearchHelper( undefined, "Index", {
     disjunctiveFacets : ["city"],
     facets : ["tower"]
-  });
+  } );
 
   var stubbedSearch = sinon.stub( helper, "_search" );
 
@@ -46,11 +46,11 @@ test( "no mutating methods should trigger a search", function( t ){
   helper.addRefine( "tower", "Empire State Building" );
   helper.removeRefine( "tower", "Empire State Building" );
 
-  t.equal( stubbedSearch.callCount, 0, "should not have triggered calls");
+  t.equal( stubbedSearch.callCount, 0, "should not have triggered calls" );
 
   helper.search();
 
-  t.equal( stubbedSearch.callCount, 1, "should have triggered a single search");
+  t.equal( stubbedSearch.callCount, 1, "should have triggered a single search" );
 
   t.end();
 } );
