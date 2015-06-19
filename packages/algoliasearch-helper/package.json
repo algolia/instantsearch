@@ -19,11 +19,6 @@
     "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "browserify": {
-    "transform": [
-      "envify"
-    ]
-  },
   "author": {
     "name": "Algolia SAS",
     "url": "https://www.algolia.com"
