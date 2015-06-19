@@ -2,6 +2,7 @@ CHANGELOG
 
 unreleased
   * FIX : #107 Apply rules to distinct to prevent the API to return an error
+  * FIX : make algoliasearch-helper requireable + browserifyable by remvoving the global envify transform
 
 2.1.0 - 2015-06-15
   * FIX : #29 Avoid callback for outdated queries
@@ -17,7 +18,7 @@ unreleased
   * FEATURE : Ability to modify any parameter of the state easily (#76 #84 #12)
   * FEATURE : #69 Ability to know if a facet is refined, whatever the value
   * FEATURE : #86 Expose SearchParameters, AlgoliaSearchHelper, SearchResults to
-  users directly in the builds 
+  users directly in the builds
   * FEATURE : #25 let the user do a clearRefinement with a function as a filter
   * REFACTORING : SearchParameters is immutable (#14)
   * REFACTORING : Ensure SearchParameters is totally frozen (#14)
