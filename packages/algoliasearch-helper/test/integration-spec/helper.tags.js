@@ -1,24 +1,10 @@
 "use strict";
 
 var test = require( "tape" );
-var algoliasearch = require( "algoliasearch" );
 var map = require( "lodash/collection/map" );
 
 var algoliasearchHelper = require( "../../index" );
-
-function setup( indexName, fn ) {
-  /* eslint-disable */
-  var appID = process.env.INTEGRATION_TEST_APPID;
-  var key = process.env.INTEGRATION_TEST_API_KEY;
-  /* eslint-enable */
-
-  var client = algoliasearch( appID, key, { protocol : "https:" } );
-  return client.deleteIndex( indexName )
-               .then( function( ) {
-                 var index = client.initIndex( indexName );
-                 return fn( client, index );
-               } );
-}
+var setup = require( "../integration-utils.js" ).setup;
 
 test( "[INT][TAGS]Test tags operations on the helper and their results on the algolia API", function( t ) {
   var indexName = "helper_refinements";
