@@ -30,6 +30,10 @@ test( "[INT][FILTERS] Should retrieve different values for multi facetted record
     } );
 
     var calls = 0;
+    helper.on( "error", function( err ) {
+      t.fail( err );
+      t.end();
+    } );
     helper.on( "result", function( content ) {
       calls++;
       if( calls === 1 ) {

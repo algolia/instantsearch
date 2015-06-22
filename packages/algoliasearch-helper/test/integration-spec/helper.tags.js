@@ -25,6 +25,10 @@ test( "[INT][TAGS]Test tags operations on the helper and their results on the al
     var helper = algoliasearchHelper( client, indexName, {} );
 
     var calls = 0;
+    helper.on( "error", function( err ) {
+      t.fail( err );
+      t.end();
+    } );
     helper.on( "result", function( content ) {
       calls++;
       var hitsToParsedID = function( h ) { return parseInt( h.objectID ); };
