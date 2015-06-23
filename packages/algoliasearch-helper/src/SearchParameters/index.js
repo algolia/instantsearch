@@ -182,6 +182,16 @@ var SearchParameters = function( newParameters ) {
    */
   this.attributesToHighlight = params.attributesToHighlight;
   /**
+   * @see https://www.algolia.com/doc#highlightPreTag
+   * @member {string}
+   */
+  this.highlightPreTag = params.highlightPreTag;
+  /**
+   * @see https://www.algolia.com/doc#highlightPostTag
+   * @member {string}
+   */
+  this.highlightPostTag = params.highlightPostTag;
+  /**
    * @see https://www.algolia.com/doc#attributesToSnippet
    * @member {string}
    */
