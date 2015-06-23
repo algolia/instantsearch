@@ -348,8 +348,8 @@ AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
 
 /**
  * Check if the attribute has any numeric, disjunctive or conjunctive refinements
- * @param {string} attribute the facet attribute name
- * @return {boolean} true if the facet is facetted by at least one value
+ * @param {string} attribute the name of the attribute
+ * @return {boolean} true if the attribute is filtered by at least one value
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function( attribute ) {
   return !isEmpty( this.state.getNumericRefinements( attribute ) ) || this.isRefined( attribute );
