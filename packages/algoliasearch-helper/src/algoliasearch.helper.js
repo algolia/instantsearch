@@ -537,10 +537,12 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var tagFilters = this._getTagFilters();
   var additionalParams = {
     facets : facets,
-    tagFilters : tagFilters,
-    distinct : this.state.distinct
+    tagFilters : tagFilters
   };
 
+  if( this.state.distinct === true || this.state.distinct === false ) {
+    additionalParams.distinct = this.state.distinct;
+  }
   if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }
@@ -574,10 +576,12 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToHighlight : [],
     attributesToSnippet : [],
     facets : facet,
-    tagFilters : tagFilters,
-    distinct : this.state.distinct
+    tagFilters : tagFilters
   };
 
+  if( this.state.distinct === true || this.state.distinct === false ) {
+    additionalParams.distinct = this.state.distinct;
+  }
   if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }
