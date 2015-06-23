@@ -1,5 +1,6 @@
 "use strict";
 var test = require( "tape" );
+var forEach = require( "lodash/collection/forEach" );
 
 var algoliasearchHelper = require( "../../index.js" );
 
@@ -19,6 +20,9 @@ test( "Distinct not set", function( t ) {
   t.equal( disjunctiveFacetSearchParam.distinct, undefined, "[disjunctive][query not empty] distinct should be undefined" );
   facetSearchParam = helper._getHitsSearchParams();
   t.equal( facetSearchParam.distinct, undefined, "[hits][query not empty] distinct should be undefined" );
+  forEach( helper._getQueries(), function( q ) {
+    t.notOk( q.hasOwnProperty( "distinct" ), "[hits][query not empty] no distinct should be in the queries by default" );
+  } );
 
   helper.setState( state0 );
   helper.addDisjunctiveRefine( "facet", "value" );
@@ -26,6 +30,9 @@ test( "Distinct not set", function( t ) {
   t.equal( disjunctiveFacetSearchParam.distinct, undefined, "[disjunctive][disjunctive refinement] distinct should be undefined" );
   facetSearchParam = helper._getHitsSearchParams();
   t.equal( facetSearchParam.distinct, undefined, "[hits][disjunctive refinement] distinct should be undefined" );
+  forEach( helper._getQueries(), function( q ) {
+    t.notOk( q.hasOwnProperty( "distinct" ), "[hits][disjunctive refinement] no distinct should be in the queries by default" );
+  } );
 
   helper.setState( state0 );
   helper.addRefine( "facet", "value" );
@@ -33,6 +40,9 @@ test( "Distinct not set", function( t ) {
   t.equal( disjunctiveFacetSearchParam.distinct, undefined, "[disjunctive][conjunctive refinement] distinct should be undefined" );
   facetSearchParam = helper._getHitsSearchParams();
   t.equal( facetSearchParam.distinct, undefined, "[hits][conjunctive refinement] distinct should be undefined" );
+  forEach( helper._getQueries(), function( q ) {
+    t.notOk( q.hasOwnProperty( "distinct" ), "[disjunctive][conjunctive refinement] no distinct should be in the queries by default" );
+  } );
 
   helper.setState( state0 );
   helper.addNumericRefinement( "attribute", ">", "0" );
@@ -40,6 +50,9 @@ test( "Distinct not set", function( t ) {
   t.equal( disjunctiveFacetSearchParam.distinct, undefined, "[disjunctive][numeric refinement] distinct should be undefined" );
   facetSearchParam = helper._getHitsSearchParams();
   t.equal( facetSearchParam.distinct, undefined, "[hits][numeric refinement] distinct should be undefined" );
+  forEach( helper._getQueries(), function( q ) {
+    t.notOk( q.hasOwnProperty( "distinct" ), "no distinct should be in the queries by default" );
+  } );
 
   t.end();
 } );
