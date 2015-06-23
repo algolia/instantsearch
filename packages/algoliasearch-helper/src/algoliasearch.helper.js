@@ -472,29 +472,38 @@ AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
+
+  this.client.search( this._getQueries(),
+                      bind( this._handleResponse,
+                            this,
+                            state,
+                            this._queryId++ ) );
+};
+
+/**
+ * Get all the queries to send to the client
+ * @return {object[]} The queries
+ */
+AlgoliaSearchHelper.prototype._getQueries = function getQueries() {
   var queries = [];
 
   //One query for the hits
   queries.push( {
     indexName : this.index,
-    query : state.query,
+    query : this.state.query,
     params : this._getHitsSearchParams()
   } );
 
   //One for each disjunctive facets
-  forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
+  forEach( this.state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
     queries.push( {
       indexName : this.index,
-      query : state.query,
+      query : this.state.query,
       params : this._getDisjunctiveFacetSearchParams( refinedFacet )
     } );
   }, this );
 
-  this.client.search( queries,
-                      bind( this._handleResponse,
-                            this,
-                            state,
-                            this._queryId++ ) );
+  return queries;
 };
 
 /**
