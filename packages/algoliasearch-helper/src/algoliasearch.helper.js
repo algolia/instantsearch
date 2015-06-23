@@ -5,6 +5,7 @@ var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
 var forEach = require( "lodash/collection/forEach" );
+var isEmpty = require( "lodash/lang/isEmpty" );
 var bind = require( "lodash/function/bind" );
 
 /**
@@ -346,12 +347,12 @@ AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
 };
 
 /**
- * Check if the facet has any disjunctive or conjunctive refinements
- * @param {string} facet the facet attribute name
+ * Check if the attribute has any numeric, disjunctive or conjunctive refinements
+ * @param {string} attribute the facet attribute name
  * @return {boolean} true if the facet is facetted by at least one value
  */
-AlgoliaSearchHelper.prototype.hasRefinements = function( facet ) {
-  return this.isRefined( facet );
+AlgoliaSearchHelper.prototype.hasRefinements = function( attribute ) {
+  return !isEmpty( this.state.getNumericRefinements( attribute ) ) || this.isRefined( attribute );
 };
 
 /**

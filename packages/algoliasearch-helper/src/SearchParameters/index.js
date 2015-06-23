@@ -713,11 +713,13 @@ SearchParameters.prototype = {
     return RefinementList.isRefined( this.disjunctiveFacetsRefinements, facet, value );
   },
   /**
-   * Test if the triple attribute operator value is already refined.
+   * Test if the triple (attribute, operator, value) is already refined.
+   * If only the attribute and the operator are provided, it tests if the
+   * contains any refinement value.
    * @method
    * @param {string} attribute attribute for which the refinement is applied
    * @param {string} operator operator of the refinement
-   * @param {string} value value of the refinement
+   * @param {string} [value] value of the refinement
    * @return {boolean} true if it is refined
    */
   isNumericRefined : function isNumericRefined( attribute, operator, value ) {
