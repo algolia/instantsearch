@@ -489,7 +489,7 @@ SearchParameters.prototype = {
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
@@ -503,7 +503,7 @@ SearchParameters.prototype = {
    * Exclude a value from a "normal" facet
    * @method
    * @param {string} facet attribute to apply the exclusion on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addExcludeRefinement : function addExcludeRefinement( facet, value ) {
@@ -517,7 +517,7 @@ SearchParameters.prototype = {
    * Adds a refinement on a disjunctive facet.
    * @method
    * @param {string} facet attribute to apply the facetting on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {

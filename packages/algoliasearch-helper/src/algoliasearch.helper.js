@@ -76,7 +76,7 @@ AlgoliaSearchHelper.prototype.clearTags = function() {
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
@@ -101,7 +101,7 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operat
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
@@ -113,7 +113,7 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
 /**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
@@ -145,7 +145,6 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, ope
   this._change();
   return this;
 };
-
 
 /**
  * Ensure a facet refinement does not exist
