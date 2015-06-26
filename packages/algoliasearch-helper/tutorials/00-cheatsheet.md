@@ -1,57 +1,5 @@
 # JS Helper Cheat Sheet
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
-- [Init the helper](#init-the-helper)
-- [Helper lifecycle](#helper-lifecycle)
-- [Objects](#objects)
-- [Search](#search)
-- [Events](#events)
-  - [Listen to the "result" event](#listen-to-the-result-event)
-  - [Listen to an "result" event once](#listen-to-an-result-event-once)
-  - [Remove all "result" listeners](#remove-all-result-listeners)
-- [Query](#query)
-  - [Do a search with the query "fruit"](#do-a-search-with-the-query-fruit)
-- [Filtering results](#filtering-results)
-  - ["And" facets](#and-facets)
-    - [Facet definition](#facet-definition)
-    - [Add a facet filter](#add-a-facet-filter)
-    - [Remove a facet filter](#remove-a-facet-filter)
-  - ["Or" facets](#or-facets)
-    - [Facet definition](#facet-definition-1)
-    - [Add a facet filter](#add-a-facet-filter-1)
-    - [Remove a facet filter](#remove-a-facet-filter-1)
-  - [Negative facets](#negative-facets)
-    - [Facet definition (same as "and" facet)](#facet-definition-same-as-and-facet)
-    - [Exclude a value for a facet](#exclude-a-value-for-a-facet)
-    - [Remove an exclude from the list of excluded values](#remove-an-exclude-from-the-list-of-excluded-values)
-  - [Numeric facets](#numeric-facets)
-    - [Facet definition](#facet-definition-2)
-    - [Add a numeric refinement](#add-a-numeric-refinement)
-    - [Remove a numeric refinement](#remove-a-numeric-refinement)
-  - [Clearing filters](#clearing-filters)
-    - [Clear all the refinements for all the refined attributes](#clear-all-the-refinements-for-all-the-refined-attributes)
-    - [Clear all the refinements for a specific attribute](#clear-all-the-refinements-for-a-specific-attribute)
-    - [[ADVANCED] Clear only the exclusions on the "andFacet" attribute](#advanced-clear-only-the-exclusions-on-the-andfacet-attribute)
-- [Tags](#tags)
-  - [Add a tag filter for the value "landscape"](#add-a-tag-filter-for-the-value-landscape)
-  - [Remove a tag filter for the value "landscape"](#remove-a-tag-filter-for-the-value-landscape)
-  - [Clear all the tags filters](#clear-all-the-tags-filters)
-- [Pagination](#pagination)
-  - [Get the current page](#get-the-current-page)
-  - [Change page](#change-page)
-- [Index](#index)
-  - [Change the current index](#change-the-current-index)
-  - [Get the current index](#get-the-current-index)
-- [Query parameters](#query-parameters)
-  - [Set a parameter at the initialization of the helper](#set-a-parameter-at-the-initialization-of-the-helper)
-  - [Set a parameter later](#set-a-parameter-later)
-  - [List of parameters that can be set](#list-of-parameters-that-can-be-set)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 ## Init the helper
 
 ```
