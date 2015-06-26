@@ -29,8 +29,8 @@ function assignFacetStats( dest, facetStats, key ) {
 /**
  * Constructor for SearchResults
  * @class
- * @classdesc SearchResults is an object that contains all the data from a
- * helper query.
+ * @classdesc SearchResults contains the results of a query to Algolia using the
+ * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
  * @param {object} algoliaResponse the response from algolia client
  * @example <caption>SearchResults of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
