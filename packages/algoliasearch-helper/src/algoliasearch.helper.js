@@ -352,7 +352,8 @@ AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
  * @return {boolean} true if the attribute is filtered by at least one value
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function( attribute ) {
-  return !isEmpty( this.state.getNumericRefinements( attribute ) ) || this.isRefined( attribute );
+  var attributeHasNumericRefinements = !isEmpty( this.state.getNumericRefinements( attribute ) );
+  return attributeHasNumericRefinements || this.isRefined( attribute );
 };
 
 /**
