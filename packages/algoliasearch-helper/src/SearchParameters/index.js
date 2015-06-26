@@ -236,6 +236,18 @@ var SearchParameters = function( newParameters ) {
    */
   this.attributesToHighlight = params.attributesToHighlight;
   /**
+   * Code to be embedded on the left part of the highlighted results
+   * @see https://www.algolia.com/doc#highlightPreTag
+   * @member {string}
+   */
+  this.highlightPreTag = params.highlightPreTag;
+  /**
+   * Code to be embedded on the right part of the highlighted results
+   * @see https://www.algolia.com/doc#highlightPostTag
+   * @member {string}
+   */
+  this.highlightPostTag = params.highlightPostTag;
+  /**
    * List of attributes to snippet
    * @see https://www.algolia.com/doc#attributesToSnippet
    * @member {string}
@@ -551,7 +563,7 @@ SearchParameters.prototype = {
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addFacetRefinement : function addFacetRefinement( facet, value ) {
@@ -565,7 +577,7 @@ SearchParameters.prototype = {
    * Exclude a value from a "normal" facet
    * @method
    * @param {string} facet attribute to apply the exclusion on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addExcludeRefinement : function addExcludeRefinement( facet, value ) {
@@ -579,7 +591,7 @@ SearchParameters.prototype = {
    * Adds a refinement on a disjunctive facet.
    * @method
    * @param {string} facet attribute to apply the facetting on
-   * @param {string} value value of the attribute
+   * @param {string} value value of the attribute (will be converted to string)
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement : function addDisjunctiveFacetRefinement( facet, value ) {

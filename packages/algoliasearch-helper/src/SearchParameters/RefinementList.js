@@ -27,7 +27,7 @@ var lib = {
    * Adds a refinement to a RefinementList
    * @param {RefinementList} refinementList the initial list
    * @param {string} attribute the attribute to refine
-   * @param {string} value the value of the refinement
+   * @param {string} value the value of the refinement, if the value is not a string it will be converted
    * @return {RefinementList} a new and updated prefinement list
    */
   addRefinement : function addRefinement( refinementList, attribute, value ) {
@@ -35,7 +35,9 @@ var lib = {
       return refinementList;
     }
 
-    var facetRefinement = !refinementList[ attribute ] ? [ value ] : refinementList[ attribute ].concat( value );
+    var valueAsString = "" + value;
+
+    var facetRefinement = !refinementList[ attribute ] ? [ valueAsString ] : refinementList[ attribute ].concat( valueAsString );
 
     var mod = {};
     mod[ attribute ] = facetRefinement;
@@ -56,8 +58,10 @@ var lib = {
       return lib.clearRefinement( refinementList, attribute );
     }
 
+    var valueAsString = "" + value;
+
     return lib.clearRefinement( refinementList, function( v, f ) {
-      return attribute === f && value === v;
+      return attribute === f && valueAsString === v;
     } );
   },
   /**
@@ -118,12 +122,14 @@ var lib = {
     var containsRefinements = refinementList[ attribute ] &&
                               refinementList[ attribute ].length > 0;
 
-    if( refinementValue === undefined ) {
+    if( isUndefined( refinementValue ) ) {
       return containsRefinements;
     }
 
+    var refinementValueAsString = "" + refinementValue;
+
     return containsRefinements &&
-           refinementList[ attribute ].indexOf( refinementValue ) !== -1;
+           refinementList[ attribute ].indexOf( refinementValueAsString ) !== -1;
   }
 };
 
