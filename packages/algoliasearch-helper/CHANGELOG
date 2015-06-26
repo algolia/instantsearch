@@ -1,5 +1,14 @@
 CHANGELOG
 
+2.1.2 - 2015-06-26
+  * FIX : #113 support for attributes hightlightPreTag and hightlighPostTag
+  * FIX : #112 distinct = undefined sent to the server
+  * FIX : #110 helper.hasRefinements() now checks for numerics
+  * FIX : #106 convert refinements to string
+  * DOC : Update theme + fix (github.com/algolia/minami)
+  * DOC : Fix misc links and descrition and added samples of objects
+  * DOC : Added a cheat sheet in the generated documentation
+
 2.1.1 - 2015-06-19
   * FIX : #107 Apply rules to distinct to prevent the API to return an error
   * FIX : make algoliasearch-helper requireable + browserifyable by removing the global envify transform
