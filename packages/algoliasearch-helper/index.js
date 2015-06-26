@@ -34,27 +34,28 @@ function algoliasearchHelper( client, index, opts ) {
 /**
  * The version currently used
  * @member module:algoliasearchHelper.version
+ * @type {number}
  */
 algoliasearchHelper.version = "2.1.1";
 
 /**
  * Constructor for the Helper.
  * @member module:algoliasearchHelper.AlgoliaSearchHelper
- * @see AlgoliaSearchHelper
+ * @type {AlgoliaSearchHelper}
  */
 algoliasearchHelper.AlgoliaSearchHelper = AlgoliaSearchHelper;
 
 /**
  * Constructor for the object containing all the parameters of the search.
  * @member module:algoliasearchHelper.SearchParameters
- * @see SearchParameters
+ * @type {SearchParameters}
  */
 algoliasearchHelper.SearchParameters = SearchParameters;
 
 /**
  * Constructor for the object containing the results of the search.
  * @member module:algoliasearchHelper.SearchResults
- * @see SearchResults
+ * @type {SearchResults}
  */
 algoliasearchHelper.SearchResults = SearchResults;
 

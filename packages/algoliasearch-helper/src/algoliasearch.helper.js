@@ -481,7 +481,9 @@ AlgoliaSearchHelper.prototype._search = function() {
 };
 
 /**
- * Get all the queries to send to the client
+ * Get all the queries to send to the client, those queries can used directly
+ * with the Algolia client.
+ * @private
  * @return {object[]} The queries
  */
 AlgoliaSearchHelper.prototype._getQueries = function getQueries() {
