@@ -1,5 +1,23 @@
 # JS Helper Cheat Sheet
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Init the helper](#init-the-helper)
+- [Helper lifecycle](#helper-lifecycle)
+- [Objects](#objects)
+- [Search](#search)
+- [Events](#events)
+- [Query](#query)
+- [Filtering results](#filtering-results)
+- [Tags](#tags)
+- [Pagination](#pagination)
+- [Index](#index)
+- [Query parameters](#query-parameters)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Init the helper
 
 ```

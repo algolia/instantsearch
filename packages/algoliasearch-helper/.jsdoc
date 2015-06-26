@@ -2,5 +2,8 @@
   "plugins": ["plugins/markdown"],
   "opts" : {
     "template" : "node_modules/minami"
+  },
+  "markdown" : {
+    "anchorInHeadings" : true
   }
 }
