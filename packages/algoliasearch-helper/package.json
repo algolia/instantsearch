@@ -40,7 +40,7 @@
     "eslint": "0.17.1",
     "http-server": "0.8.0",
     "jsdoc": "bobylito/jsdoc",
-    "minami": "1.1.0",
+    "minami": "algolia/minami",
     "onchange": "1.0.0",
     "opn": "1.0.1",
     "sinon": "1.14.1",
