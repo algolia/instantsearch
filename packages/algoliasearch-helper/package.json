@@ -23,7 +23,7 @@
   },
   "gh-pages-deploy": {
     "prep": [
-      "npm run doc"
+      "doc"
     ],
     "noprompt": false
   },
