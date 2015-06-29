@@ -13,13 +13,19 @@
     "watch-lint": " onchange '.eslintrc' 'src/**/*.js' 'index.js' -- npm run lint ",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
-    "doc" : "npm run doc:toc && npm run doc:jsdoc",
+    "doc": "npm run doc:toc && npm run doc:jsdoc",
     "doc:jsdoc": "jsdoc -r src index.js -d docs -c .jsdoc --tutorials tutorials --readme README.MD",
-    "doc:toc" : "doctoc --notitle tutorials/* --maxlevel 2",
+    "doc:toc": "doctoc --notitle tutorials/* --maxlevel 2",
     "doc:watch": "onchange 'src/**/*.js' 'index.js' 'tutorials/*.md' '../minami/**/*.*' -- npm run doc",
-    "publish-doc": "git checkout gh-pages && git merge master && npm run build && npm run doc && git add docs dist && git commit -a -m 'Update doc' && git push origin gh-pages && git checkout master",
+    "doc:publish": "gh-pages-deploy",
     "test-ci": "echo \"Error: no test specified\" && exit 1",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "gh-pages-deploy": {
+    "prep": [
+      "npm run doc"
+    ],
+    "noprompt": false
   },
   "author": {
     "name": "Algolia SAS",
@@ -38,6 +44,7 @@
     "doctoc": "0.14.1",
     "envify": "3.4.0",
     "eslint": "0.17.1",
+    "gh-pages-deploy": "0.3.0",
     "http-server": "0.8.0",
     "jsdoc": "bobylito/jsdoc",
     "minami": "algolia/minami",
