@@ -29,10 +29,131 @@ function assignFacetStats( dest, facetStats, key ) {
 /**
  * Constructor for SearchResults
  * @class
- * @classdesc SearchResults is an object that contains all the data from a
- * helper query.
+ * @classdesc SearchResults contains the results of a query to Algolia using the
+ * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
  * @param {object} algoliaResponse the response from algolia client
+ * @example <caption>SearchResults of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+{
+   "hitsPerPage" : 10,
+   "processingTimeMS" : 2,
+   "facets" : [
+      {
+         "name" : "type",
+         "data" : {
+            "HardGood" : 6627,
+            "BlackTie" : 550,
+            "Music" : 665,
+            "Software" : 131,
+            "Game" : 456,
+            "Movie" : 1571
+         },
+         "exhaustive" : false
+      },
+      {
+         "exhaustive" : false,
+         "data" : {
+            "Free shipping" : 5507
+         },
+         "name" : "shipping"
+      }
+   ],
+   "hits" : [
+      {
+         "thumbnailImage" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_54x108_s.gif",
+         "_highlightResult" : {
+            "shortDescription" : {
+               "matchLevel" : "none",
+               "value" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+               "matchedWords" : []
+            },
+            "category" : {
+               "matchLevel" : "none",
+               "value" : "Computer Security Software",
+               "matchedWords" : []
+            },
+            "manufacturer" : {
+               "matchedWords" : [],
+               "value" : "Webroot",
+               "matchLevel" : "none"
+            },
+            "name" : {
+               "value" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+               "matchedWords" : [],
+               "matchLevel" : "none"
+            }
+         },
+         "image" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_105x210_sc.jpg",
+         "shipping" : "Free shipping",
+         "bestSellingRank" : 4,
+         "shortDescription" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+         "url" : "http://www.bestbuy.com/site/webroot-secureanywhere-internet-security-3-devi…d=1219060687969&skuId=1688832&cmp=RMX&ky=2d3GfEmNIzjA0vkzveHdZEBgpPCyMnLTJ",
+         "name" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+         "category" : "Computer Security Software",
+         "salePrice_range" : "1 - 50",
+         "objectID" : "1688832",
+         "type" : "Software",
+         "customerReviewCount" : 5980,
+         "salePrice" : 49.99,
+         "manufacturer" : "Webroot"
+      },
+      ....
+   ],
+   "nbHits" : 10000,
+   "disjunctiveFacets" : [
+      {
+         "exhaustive" : false,
+         "data" : {
+            "5" : 183,
+            "12" : 112,
+            "7" : 149,
+            ...
+         },
+         "name" : "customerReviewCount",
+         "stats" : {
+            "max" : 7461,
+            "avg" : 157.939,
+            "min" : 1
+         }
+      },
+      {
+         "data" : {
+            "Printer Ink" : 142,
+            "Wireless Speakers" : 60,
+            "Point & Shoot Cameras" : 48,
+            ...
+         },
+         "name" : "category",
+         "exhaustive" : false
+      },
+      {
+         "exhaustive" : false,
+         "data" : {
+            "> 5000" : 2,
+            "1 - 50" : 6524,
+            "501 - 2000" : 566,
+            "201 - 500" : 1501,
+            "101 - 200" : 1360,
+            "2001 - 5000" : 47
+         },
+         "name" : "salePrice_range"
+      },
+      {
+         "data" : {
+            "Dynex™" : 202,
+            "Insignia™" : 230,
+            "PNY" : 72,
+            ...
+         },
+         "name" : "manufacturer",
+         "exhaustive" : false
+      }
+   ],
+   "query" : "",
+   "nbPages" : 100,
+   "page" : 0,
+   "index" : "bestbuy"
+}
  **/
 var SearchResults = function( state, algoliaResponse ) {
   var mainSubResponse = algoliaResponse.results[ 0 ];
@@ -43,8 +164,9 @@ var SearchResults = function( state, algoliaResponse ) {
    */
   this.query = mainSubResponse.query;
   /**
-   * all the hits generated for the query
-   * @member {array}
+   * all the records that match the search parameters. It also contains _highlightResult,
+   * which describe which and how the attributes are matched.
+   * @member {object[]}
    */
   this.hits = mainSubResponse.hits;
   /**
@@ -73,18 +195,18 @@ var SearchResults = function( state, algoliaResponse ) {
    */
   this.page = mainSubResponse.page;
   /**
-   * processing time of the main query
+   * sum of the processing time of all the queries
    * @member {number}
    */
   this.processingTimeMS = sum( algoliaResponse.results, "processingTimeMS" );
   /**
    * disjunctive facets results
-   * @member {array}
+   * @member {SearchResults.Facet[]}
    */
   this.disjunctiveFacets = [];
   /**
    * other facets results
-   * @member {array}
+   * @member {SearchResults.Facet[]}
    */
   this.facets = [];
 

@@ -4,6 +4,7 @@ var forEach = require( "lodash/collection/forEach" );
 
 /**
  * Recursively freeze the parts of an object that are not frozen.
+ * @private
  * @param {object} obj object to freeze
  * @return {object} the object frozen
  */

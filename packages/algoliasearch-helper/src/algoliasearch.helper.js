@@ -5,6 +5,7 @@ var extend = require( "./functions/extend" );
 var util = require( "util" );
 var events = require( "events" );
 var forEach = require( "lodash/collection/forEach" );
+var isEmpty = require( "lodash/lang/isEmpty" );
 var bind = require( "lodash/function/bind" );
 
 /**
@@ -13,9 +14,9 @@ var bind = require( "lodash/function/bind" );
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
  * search. It provides an event based interface for search callbacks :
  *  - change : when the internal search state is changed.
- *    This event contains a {SearchParameters} object and the {SearchResults} of the last result if any.
+ *    This event contains a {@link SearchParameters} object and the {@link SearchResults} of the last result if any.
  *  - result : when the response is retrieved from Algolia and is processed.
- *    This event contains a {SearchResults} object and the {SearchParameters} corresponding to this answer.
+ *    This event contains a {@link SearchResults} object and the {@link SearchParameters} corresponding to this answer.
  *  - error  : when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
@@ -76,7 +77,7 @@ AlgoliaSearchHelper.prototype.clearTags = function() {
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function( facet, value ) {
@@ -101,7 +102,7 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function( attribute, operat
 /**
  * Ensure a facet refinement exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
@@ -113,7 +114,7 @@ AlgoliaSearchHelper.prototype.addRefine = function( facet, value ) {
 /**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
- * @param  {string} value the associated value
+ * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.addExclude = function( facet, value ) {
@@ -145,7 +146,6 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function( attribute, ope
   this._change();
   return this;
 };
-
 
 /**
  * Ensure a facet refinement does not exist
@@ -346,12 +346,13 @@ AlgoliaSearchHelper.prototype.isRefined = function( facet, value ) {
 };
 
 /**
- * Check if the facet has any disjunctive or conjunctive refinements
- * @param {string} facet the facet attribute name
- * @return {boolean} true if the facet is facetted by at least one value
+ * Check if the attribute has any numeric, disjunctive or conjunctive refinements
+ * @param {string} attribute the name of the attribute
+ * @return {boolean} true if the attribute is filtered by at least one value
  */
-AlgoliaSearchHelper.prototype.hasRefinements = function( facet ) {
-  return this.isRefined( facet );
+AlgoliaSearchHelper.prototype.hasRefinements = function( attribute ) {
+  var attributeHasNumericRefinements = !isEmpty( this.state.getNumericRefinements( attribute ) );
+  return attributeHasNumericRefinements || this.isRefined( attribute );
 };
 
 /**
@@ -472,29 +473,40 @@ AlgoliaSearchHelper.prototype.getRefinements = function( facetName ) {
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
+
+  this.client.search( this._getQueries(),
+                      bind( this._handleResponse,
+                            this,
+                            state,
+                            this._queryId++ ) );
+};
+
+/**
+ * Get all the queries to send to the client, those queries can used directly
+ * with the Algolia client.
+ * @private
+ * @return {object[]} The queries
+ */
+AlgoliaSearchHelper.prototype._getQueries = function getQueries() {
   var queries = [];
 
   //One query for the hits
   queries.push( {
     indexName : this.index,
-    query : state.query,
+    query : this.state.query,
     params : this._getHitsSearchParams()
   } );
 
   //One for each disjunctive facets
-  forEach( state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
+  forEach( this.state.getRefinedDisjunctiveFacets(), function( refinedFacet ) {
     queries.push( {
       indexName : this.index,
-      query : state.query,
+      query : this.state.query,
       params : this._getDisjunctiveFacetSearchParams( refinedFacet )
     } );
   }, this );
 
-  this.client.search( queries,
-                      bind( this._handleResponse,
-                            this,
-                            state,
-                            this._queryId++ ) );
+  return queries;
 };
 
 /**
@@ -537,10 +549,12 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
   var tagFilters = this._getTagFilters();
   var additionalParams = {
     facets : facets,
-    tagFilters : tagFilters,
-    distinct : this.state.distinct
+    tagFilters : tagFilters
   };
 
+  if( this.state.distinct === true || this.state.distinct === false ) {
+    additionalParams.distinct = this.state.distinct;
+  }
   if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }
@@ -574,10 +588,12 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function( facet
     attributesToHighlight : [],
     attributesToSnippet : [],
     facets : facet,
-    tagFilters : tagFilters,
-    distinct : this.state.distinct
+    tagFilters : tagFilters
   };
 
+  if( this.state.distinct === true || this.state.distinct === false ) {
+    additionalParams.distinct = this.state.distinct;
+  }
   if( !this.containsRefinement( query, facetFilters, numericFilters, tagFilters ) ) {
     additionalParams.distinct = false;
   }

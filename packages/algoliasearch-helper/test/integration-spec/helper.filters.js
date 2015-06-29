@@ -1,22 +1,8 @@
 "use strict";
 
 var test = require( "tape" );
-var algoliasearch = require( "algoliasearch" );
 var algoliasearchHelper = require( "../../index" );
-
-function setup( indexName, fn ) {
-  /* eslint-disable */
-  var appID = process.env.INTEGRATION_TEST_APPID;
-  var key = process.env.INTEGRATION_TEST_API_KEY;
-  /* eslint-enable */
-
-  var client = algoliasearch( appID, key, { protocol : "https:" } );
-  return client.deleteIndex( indexName )
-               .then( function( ) {
-                 var index = client.initIndex( indexName );
-                 return fn( client, index );
-               } );
-}
+var setup = require( "../integration-utils.js" ).setup;
 
 test( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
   var indexName = "helper_refinements";
@@ -44,6 +30,10 @@ test( "[INT][FILTERS] Should retrieve different values for multi facetted record
     } );
 
     var calls = 0;
+    helper.on( "error", function( err ) {
+      t.fail( err );
+      t.end();
+    } );
     helper.on( "result", function( content ) {
       calls++;
       if( calls === 1 ) {

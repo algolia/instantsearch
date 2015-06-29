@@ -52,3 +52,13 @@ test( "Should be able to remove a value if it equals 0", function( t ) {
   t.equal( helper.state.numericRefinements.attribute, undefined, "should set to undefined" );
   t.end();
 } );
+
+test( "Should be able to get if an attribute has numeric filter with hasRefinements", function( t ) {
+  var helper = algoliasearchHelper( null, null, null );
+
+  t.notOk( helper.hasRefinements( "attribute" ), "not refined initially" );
+  helper.addNumericRefinement( "attribute", "=", 42 );
+  t.ok( helper.hasRefinements( "attribute" ), "should be refined" );
+
+  t.end();
+} );

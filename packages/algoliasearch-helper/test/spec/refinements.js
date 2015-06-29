@@ -175,6 +175,7 @@ test( "getRefinements should return all the refinements for a given facet", func
 
   t.end();
 } );
+
 test( "getRefinements should return an empty array if the facet has no refinement", function( t ) {
   var helper = algoliasearchHelper( null, null, {
     facets : [ "facet1" ],
@@ -183,6 +184,69 @@ test( "getRefinements should return an empty array if the facet has no refinemen
 
   t.deepEqual( helper.getRefinements( "facet1" ), [], "" );
   t.deepEqual( helper.getRefinements( "facet2" ), [], "" );
+
+  t.end();
+} );
+
+test( "[Conjunctive] Facets should be resilient to user attempt to use numbers", function( t ) {
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ],
+    disjunctiveFacets : [ "facet2" ]
+  } );
+
+  helper.addRefine( "facet1", 42 );
+  t.ok( helper.isRefined( "facet1", 42 ), "[facet][number] should be refined" );
+  t.ok( helper.isRefined( "facet1", "42" ), "[facet][string] should be refined" );
+
+  var stateWithFacet1and42 = helper.state;
+  helper.removeRefine( "facet1", "42" );
+  t.notOk( helper.isRefined( "facet1", "42" ), "[facet][string] should not be refined" );
+
+  helper.setState( stateWithFacet1and42 );
+  helper.removeRefine( "facet1", 42 );
+  t.notOk( helper.isRefined( "facet1", 42 ), "[facet][number] should not be refined" );
+
+  t.end();
+} );
+
+test( "[Disjunctive] Facets should be resilient to user attempt to use numbers", function( t ) {
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ],
+    disjunctiveFacets : [ "facet2" ]
+  } );
+
+  helper.addExclude( "facet1", 42 );
+  t.ok( helper.isExcluded( "facet1", 42 ), "[facet][number] should be refined" );
+  t.ok( helper.isExcluded( "facet1", "42" ), "[facet][string] should be refined" );
+
+  var stateWithFacet1Without42 = helper.state;
+  helper.removeExclude( "facet1", "42" );
+  t.notOk( helper.isExcluded( "facet1", "42" ), "[facet][string] should not be refined" );
+
+  helper.setState( stateWithFacet1Without42 );
+  helper.removeExclude( "facet1", 42 );
+  t.notOk( helper.isExcluded( "facet1", 42 ), "[facet][number] should not be refined" );
+
+  t.end();
+} );
+
+test( "[Disjunctive] Facets should be resilient to user attempt to use numbers", function( t ) {
+  var helper = algoliasearchHelper( null, null, {
+    facets : [ "facet1" ],
+    disjunctiveFacets : [ "facet2" ]
+  } );
+
+  helper.addDisjunctiveRefine( "facet2", 42 );
+  t.ok( helper.isDisjunctiveRefined( "facet2", 42 ), "[facet][number] should be refined" );
+  t.ok( helper.isDisjunctiveRefined( "facet2", "42" ), "[facet][string] should be refined" );
+
+  var stateWithFacet2and42 = helper.state;
+  helper.removeDisjunctiveRefine( "facet2", "42" );
+  t.notOk( helper.isDisjunctiveRefined( "facet2", "42" ), "[facet][string] should not be refined" );
+  helper.setState( stateWithFacet2and42 );
+
+  helper.removeDisjunctiveRefine( "facet2", 42 );
+  t.notOk( helper.isDisjunctiveRefined( "facet2", 42 ), "[facet][number] should not be refined" );
 
   t.end();
 } );
