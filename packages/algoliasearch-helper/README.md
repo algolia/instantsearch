@@ -2,11 +2,25 @@
 
 # algoliasearch-helper-js
 
-This module is the companion of the algoliasearch-client-js. It helps you keep
+This module is the companion of the [algoliasearch-client-js](https://github.com/algolia/algoliasearch-client-js). It helps you keep
 track of the search parameters and provides a higher level API.
 
-The helper is built on top of algoliasearch-client-js and this version is 
-specifically made to work with the newest V3 versions of it.
+This is the plugin you will need to easily build a good search UX.
+
+[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
+
+[![Browser tests][browser-test-matrix]][browser-test-url]
+
+[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
+[license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
+[license-url]: LICENSE
+[downloads-image]: https://img.shields.io/npm/dm/algoliasearch-helper.svg?style=flat-square
+[downloads-url]: http://npm-stat.com/charts.html?package=algoliasearch-helper
+[browser-test-matrix]: https://saucelabs.com/browser-matrix/as-helper-js.svg
+[browser-test-url]: https://saucelabs.com/u/as-helper-js
+[version-svg]: https://img.shields.io/npm/v/algoliasearch-helper.svg?style=flat-square
+[package-url]: https://npmjs.org/package/algoliasearch-helper
 
 ## Features
  - Search parameters tracking
