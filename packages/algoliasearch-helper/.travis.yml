@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+  - stable
+install: npm install
+script: npm run test-ci
+branches:
+  only:
+    - master
+    - develop
+env:
+  global:
+    - SAUCE_USERNAME=as-helper-js
+    - secure: vlxdjFyywtltr3TuTGygvlBIt2Z/7YUl64nrEiQkAOyDOqypH+ceVJF3rBH/F4S2dIgqMa8K/dgIYptiEK4tXFt2fWkkKRyThXfJYSgEp5Wz0spFYK22nQ3oMpeVIdfEeq4HnqLm5AeLP1CovLYhcaUWhvsZ4eX948Jy8u9/+xw=
+    - secure: lSERMB1BsqW/fyOBUrE6b7E5xJAsi7BsUGjC6N7QKH+08ILUkJWLyjNkQulkT5/vpUZFXHij4J5eRS5180ZYEMWiL1bDmH/+wpIh5uAM7Dw2OoCOVyymaOCH9hg+FvCiBCb9OTX9jtwi9dAtXnmVlsSyD8ZitrzBpNT4uRKe0mk=
+    - secure: Ynlz8lfe9zGJPZNWE4CZXn4AkF1b520ZAnteJ3njC/4c7emLXzxebSqP+RLVCNZDyks2r5+XrVmfFpk9qcLIfPE8rTdJuJbRB/jCqBKDqrPQr69RNkBFAq2t00RDHVMgTIYY/xV5AKt/7wO3bAiAIJu23ytDNn6Tc6+/iJXsf4E=

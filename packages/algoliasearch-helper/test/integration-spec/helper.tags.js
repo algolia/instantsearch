@@ -3,7 +3,7 @@
 var test = require( "tape" );
 var map = require( "lodash/collection/map" );
 
-var algoliasearchHelper = require( "../../index" );
+var algoliasearchHelper = window.algoliasearchHelper;
 var setup = require( "../integration-utils.js" ).setup;
 
 test( "[INT][TAGS]Test tags operations on the helper and their results on the algolia API", function( t ) {

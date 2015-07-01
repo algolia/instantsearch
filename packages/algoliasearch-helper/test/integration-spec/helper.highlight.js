@@ -1,7 +1,7 @@
 "use strict";
 
 var test = require( "tape" );
-var algoliasearchHelper = require( "../../index" );
+var algoliasearchHelper = window.algoliasearchHelper;
 var setup = require( "../integration-utils.js" ).setup;
 
 test( "[INT][HIGHLIGHT] The highlight should be consistent with the parameters", function( t ) {

@@ -62,17 +62,6 @@ Include this in your page :
 
 `<script src="//cdn.jsdelivr.net/algoliasearch.helper/2.0.0/algoliasearch.helper.min.js"></script>`
 
-## How to contribute
+## How to contribute?
 
- - fork this repo
- - clone the repository `git clone https://github.com/[your-handle-here]/algoliasearch-helper-js.git`
- - make your fix or feature
- - launch the dev mode  `npm run dev`
- - add a test for your feature (see /test folder)
- - make sure, it goes through the linter without an error `npm run lint`
- - [propose your pull request](https://help.github.com/articles/creating-a-pull-request/)
- - profit :)
-
-A quick note though, even though we'll make our best to read and integrate your PR,
-we may be a bit slow. Sorry :). We might also make some comments and discussions too,
-for the best interest of this library. *Thanks in advance for your contribution!*
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
