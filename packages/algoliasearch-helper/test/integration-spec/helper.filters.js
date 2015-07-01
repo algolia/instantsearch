@@ -1,11 +1,13 @@
 "use strict";
 
+var random = require( "lodash/number/random" );
 var test = require( "tape" );
-var algoliasearchHelper = window.algoliasearchHelper;
+var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require( "../../" );
 var setup = require( "../integration-utils.js" ).setup;
 
-test( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
-  var indexName = "helper_refinements";
+test.skip( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
+  var indexName = ( process.env.TRAVIS_BUILD_NUMBER ||
+    "helper-integration-tests-" ) + "helper_refinements" + random( 0, 5000 );
 
   setup( indexName, function( client, index ) {
     return index.addObjects( [
@@ -61,6 +63,7 @@ test( "[INT][FILTERS] Should retrieve different values for multi facetted record
           f1 : 1,
           f3 : 1
         } );
+        client.deleteIndex( indexName );
         t.end();
 
       }
