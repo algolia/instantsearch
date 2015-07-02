@@ -54,7 +54,7 @@
     "tape": "4.0.0",
     "uglify-js": "2.4.23",
     "watchify": "3.2.3",
-    "zuul": "git://github.com/defunctzombie/zuul.git#573d6e9284455db39145d514e4f375e03597eee6",
+    "zuul": "3.2.0",
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
