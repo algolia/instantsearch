@@ -33,24 +33,24 @@ This is the library you will need to easily build a good search UX like our [ins
 A small example that uses Browserify to manage modules.
 
 ```javascript
-var algoliasearch = require( "algoliasearch" );
-var algoliasearchHelper = require( "algoliasearch-helper" );
+var algoliasearch = require('algoliasearch');
+var algoliasearchHelper = require('algoliasearch-helper');
 
-var client = algoliasearch( "app_id", "secret" );
+var client = algoliasearch('app_id', 'secret');
 
-var helper = algoliasearchHelper( client, "myMainIndex", { 
-  facets : [ "mainCharacterFirstName", "year" ],
-  disjunctiveFacets : [ "director" ]
+var helper = algoliasearchHelper(client, 'myMainIndex', { 
+  facets: ['mainCharacterFirstName', 'year'],
+  disjunctiveFacets: ['director']
 });
 
-helper.on( "result", function( data ){
-  console.log( data.hits );
-} );
+helper.on('result', function(data){
+  console.log(data.hits);
+});
 
-helper.addDisjunctiveRefine( "director", "Clint Eastword" );
-helper.addDisjunctiveRefine( "director", "Sofia Coppola" );
+helper.addDisjunctiveRefine('director', 'Clint Eastword');
+helper.addDisjunctiveRefine('director', 'Sofia Coppola');
 
-helper.addNumericRefinement( "year", "=", 2003 );
+helper.addNumericRefinement('year', '=', 2003);
 
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
 helper.search();
@@ -62,19 +62,19 @@ helper.search();
 
 [See the examples in action](http://algolia.github.io/algoliasearch-helper-js/)
 
-### Use with NPM
+### With NPM
 
 `npm install algoliasearch-helper`
 
-### Use with bower
+### With bower
 
 `bower install algoliasearch-helper`
 
-### Use the CDN
+### Regular `<script>` tag
 
-Include this in your page :
+Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
-`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2.0.0/algoliasearch.helper.min.js"></script>`
+`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
 
 ## How to contribute?
 
