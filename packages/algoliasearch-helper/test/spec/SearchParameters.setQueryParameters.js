@@ -25,6 +25,8 @@ test( "setQueryParameters should be able to mix an actual state with a new set o
 } );
 
 test( "setQueryParameters should not add unknown properties", function( t ) {
+  var partial = require( "lodash/function/partial" );
+
   var originalSP = new SearchParameters( {
     facets : [ "a", "b" ],
     ignorePlurals : false,
@@ -36,7 +38,7 @@ test( "setQueryParameters should not add unknown properties", function( t ) {
     facet : [ "city", "country" ]
   };
 
-  t.throws( originalSP.setQueryParameters.bind( originalSP, params ),
+  t.throws( partial( originalSP.setQueryParameters, params ),
             "The new searchParameters should be strictly equal" );
 
   t.end();

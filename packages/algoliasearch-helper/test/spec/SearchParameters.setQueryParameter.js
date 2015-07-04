@@ -43,11 +43,13 @@ test( "setQueryParameter should not create a new instance if the update is non e
 } );
 
 test( "setQueryParameter should throw an error when trying to add an unknown parameter", function( t ) {
+  var partial = require( "lodash/function/partial" );
+
   var sp = new SearchParameters( {
     facets : ["facet"]
   } );
 
-  t.throws( sp.setQueryParameter.bind( sp, "unknown", "" ),
+  t.throws( partial( sp.setQueryParameter, "unknown", "" ),
             "Unknown parameter should throw an exception" );
 
   t.end();

@@ -1,5 +1,8 @@
 CHANGELOG
 
+UNRELEASED
+  * test: add CI testing (browsers, phantom, node, io)
+
 2.1.2 - 2015-06-26
   * FIX : #113 support for attributes hightlightPreTag and hightlighPostTag
   * FIX : #112 distinct = undefined sent to the server

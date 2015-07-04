@@ -1,13 +1,15 @@
 "use strict";
 
+var random = require( "lodash/number/random" );
 var test = require( "tape" );
 var map = require( "lodash/collection/map" );
 
-var algoliasearchHelper = require( "../../index" );
+var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require( "../../" );
 var setup = require( "../integration-utils.js" ).setup;
 
-test( "[INT][TAGS]Test tags operations on the helper and their results on the algolia API", function( t ) {
-  var indexName = "helper_refinements";
+test.skip( "[INT][TAGS]Test tags operations on the helper and their results on the algolia API", function( t ) {
+  var indexName = ( process.env.TRAVIS_BUILD_NUMBER ||
+    "helper-integration-tests-" ) + "helper_refinements" + random( 0, 5000 );
 
   setup( indexName, function( client, index ) {
     return index.addObjects( [
@@ -59,6 +61,7 @@ test( "[INT][TAGS]Test tags operations on the helper and their results on the al
       if( calls === 5 ) {
         t.equal( content.hits.length, 2, "filter should result in two item again" );
         t.deepEqual( map( content.hits, hitsToParsedID ).sort(), [ 1, 2 ] );
+        client.deleteIndex( indexName );
         t.end();
       }
     } );
