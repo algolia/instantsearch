@@ -5,7 +5,7 @@ var test = require( "tape" );
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require( "../../" );
 var setup = require( "../integration-utils.js" ).setup;
 
-test.skip( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
+test( "[INT][FILTERS] Should retrieve different values for multi facetted records", function( t ) {
   var indexName = ( process.env.TRAVIS_BUILD_NUMBER ||
     "helper-integration-tests-" ) + "helper_refinements" + random( 0, 5000 );
 
@@ -45,6 +45,7 @@ test.skip( "[INT][FILTERS] Should retrieve different values for multi facetted r
           f2 : 1,
           f3 : 1
         } );
+        helper.addRefine( "facet", "f2" ).search();
       }
       if( calls === 2 ) {
         t.equal( content.hits.length, 1, "filter should result in one item" );
@@ -52,10 +53,12 @@ test.skip( "[INT][FILTERS] Should retrieve different values for multi facetted r
           f1 : 1,
           f2 : 1
         } );
+        helper.toggleRefine( "facet", "f3" ).search();
       }
       if( calls === 3 ) {
         t.equal( content.hits.length, 0, "filter should result in 0 item" );
         t.equal( content.facets[ 0 ], undefined );
+        helper.removeRefine( "facet", "f2" ).search();
       }
       if( calls === 4 ) {
         t.equal( content.hits.length, 1, "filter should result in one item again" );
@@ -70,8 +73,5 @@ test.skip( "[INT][FILTERS] Should retrieve different values for multi facetted r
     } );
 
     helper.addRefine( "facet", "f1" ).search();
-    helper.addRefine( "facet", "f2" ).search();
-    helper.toggleRefine( "facet", "f3" ).search();
-    helper.removeRefine( "facet", "f2" ).search();
   } );
 } );

@@ -5,7 +5,7 @@ var test = require( "tape" );
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require( "../../" );
 var setup = require( "../integration-utils.js" ).setup;
 
-test.skip( "[INT][HIGHLIGHT] The highlight should be consistent with the parameters", function( t ) {
+test( "[INT][HIGHLIGHT] The highlight should be consistent with the parameters", function( t ) {
   var indexName = ( process.env.TRAVIS_BUILD_NUMBER ||
     "helper-integration-tests-" ) + "helper_highlight" + random( 0, 5000 );
 
@@ -42,6 +42,9 @@ test.skip( "[INT][HIGHLIGHT] The highlight should be consistent with the paramet
         t.equal( content.hits[1]._highlightResult.facet[0].value,
                 "<em>f1</em>",
                 "should be hightlighted with em (default)" );
+        helper.setQueryParameter( "highlightPostTag", "</strong>" )
+              .setQueryParameter( "highlightPreTag", "<strong>" )
+              .search();
       }
       else if( calls === 2 ) {
         t.equal( content.hits[0]._highlightResult.facet[0].value,
@@ -56,9 +59,6 @@ test.skip( "[INT][HIGHLIGHT] The highlight should be consistent with the paramet
     } );
 
     helper.setQuery( "f1" )
-          .search()
-          .setQueryParameter( "highlightPostTag", "</strong>" )
-          .setQueryParameter( "highlightPreTag", "<strong>" )
           .search();
   } );
 } );
