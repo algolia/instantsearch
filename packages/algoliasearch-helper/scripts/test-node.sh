@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-source ~/.nvm/nvm.sh
+if [ -f ~/.nvm/nvm.sh ]
+then
+  source ~/.nvm/nvm.sh
+elif [ -f $(brew --prefix nvm)/nvm.sh ] 
+then
+  source $(brew --prefix nvm)/nvm.sh
+fi
 
 set -e # exit when error
 set -x # debug messages
