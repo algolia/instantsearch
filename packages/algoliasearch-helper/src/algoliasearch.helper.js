@@ -211,6 +211,7 @@ AlgoliaSearchHelper.prototype.toggleExclude = function( facet, value ) {
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
+ * @throws will throw an error if the facet is not declared in the settings of the helper
  */
 AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
   if( this.state.isConjunctiveFacet( facet ) ) {
@@ -220,11 +221,8 @@ AlgoliaSearchHelper.prototype.toggleRefine = function( facet, value ) {
     this.state = this.state.toggleDisjunctiveFacetRefinement( facet, value );
   }
   else {
-    /* eslint-disable */
-    console.log( "warning : you're trying to refine the undeclared facet '" + facet +
-                "'; add it to the helper options 'facets' or 'disjunctiveFacets'" );
-    /* eslint-enable */
-    return this;
+    throw new Error( "Can't refine the undeclared facet '" + facet +
+                     "'; it should be added to the helper options 'facets' or 'disjunctiveFacets'" );
   }
   this._change();
   return this;
