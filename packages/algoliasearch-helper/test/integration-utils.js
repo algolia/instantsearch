@@ -7,11 +7,14 @@ function setup(indexName, fn) {
   var key = process.env.INTEGRATION_TEST_API_KEY;
 
   var client = algoliasearch(appID, key, {protocol: 'https:'});
+  var index = client.initIndex(indexName);
 
-  return client.deleteIndex(indexName)
+  return client
+    .deleteIndex(indexName)
+    .then(function(content) {
+      return index.waitTask(content.taskID);
+    })
     .then(function() {
-      var index = client.initIndex(indexName);
-
       return fn(client, index);
     });
 }

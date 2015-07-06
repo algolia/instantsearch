@@ -1,5 +1,6 @@
 'use strict';
 
+var bind = require('lodash/function/bind');
 var random = require('lodash/number/random');
 var test = require('tape');
 var map = require('lodash/collection/map');
@@ -73,10 +74,14 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
         t.equal(content.hits.length, 2, 'filter should result in two item again');
         t.deepEqual(map(content.hits, hitsToParsedID).sort(), [1, 2]);
         client.deleteIndex(indexName);
+        if (client.destroy) {
+          client.destroy();
+        }
         t.end();
       }
     });
 
     helper.search();
-  });
+  })
+  .then(null, bind(t.error, t));
 });
