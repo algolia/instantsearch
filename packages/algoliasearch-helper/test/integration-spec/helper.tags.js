@@ -74,7 +74,7 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
         t.equal(content.hits.length, 2, 'filter should result in two item again');
         t.deepEqual(map(content.hits, hitsToParsedID).sort(), [1, 2]);
         client.deleteIndex(indexName);
-        if (client.destroy) {
+        if (!process.browser) {
           client.destroy();
         }
         t.end();

@@ -73,7 +73,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
           f3: 1
         });
         client.deleteIndex(indexName);
-        if (client.destroy) {
+        if (!process.browser) {
           client.destroy();
         }
         t.end();
