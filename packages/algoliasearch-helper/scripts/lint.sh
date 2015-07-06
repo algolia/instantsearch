@@ -5,4 +5,4 @@ set -x # debug messages
 
 echo "Lint"
 
-eslint --quiet .
+eslint . --quiet

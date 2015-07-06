@@ -1,6 +1,7 @@
+<!doctype html>
 <html>
   <head>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.js"></script>
@@ -43,27 +44,27 @@
           disjunctiveFacets: ['category', 'manufacturer'],
           hitsPerPage: 5,
           maxValuesPerFacet: 5,
-          getRankingInfo : true
+          getRankingInfo: true
         });
 
-        helper.on( "result", searchCallback);
+        helper.on("result", searchCallback);
 
-        $inputfield.keyup( function( e ){
-          helper.setQuery( $inputfield.val() ).search();
-        } );
+        $inputfield.keyup(function(e){
+          helper.setQuery($inputfield.val()).search();
+        });
 
         window.toggleRefine = function(facet, value) {
           helper.toggleRefine(facet, value).search();
-        }
+        };
 
         helper.search();
 
-        function searchCallback( content ) {
+        function searchCallback(content) {
           if (content.query != $inputfield.val()) {
             // do not consider out-dated queries
             return;
           }
-          if (content.hits.length == 0 ) {
+          if (content.hits.length === 0 ) {
             // no results
             $('#hits').empty();
             $('#facets').empty();
@@ -88,8 +89,8 @@
 
           // Scan all disjunctive facets and display them
           var facets = '';
-          for( var i = 0; i < content.disjunctiveFacets.length; i++ ){
-            var facet = content.disjunctiveFacets[ i ];
+          for(var i = 0; i < content.disjunctiveFacets.length; i++){
+            var facet = content.disjunctiveFacets[i];
             facets += '<h4>' + facet.name + '</h4>';
             var values = facet.data;
             for (var value in values) {
@@ -102,8 +103,8 @@
 
           // Scan all facets and display them
           facets = '';
-          for( var i = 0; i < content.facets.length ; i++ ){
-            var facet = content.facets[ i ];
+          for(var i = 0; i < content.facets.length ; i++){
+            var facet = content.facets[i];
             facets += '<h4>' + facet.name + '</h4>';
             facets += '<ul>';
             var values = facet.data;
@@ -116,7 +117,6 @@
           }
           $('#facets').html(facets);
         }
-
       });
     </script>
 
