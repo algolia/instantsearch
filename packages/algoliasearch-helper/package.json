@@ -17,7 +17,7 @@
     "doc:toc": "doctoc --notitle tutorials/* --maxlevel 2",
     "doc:watch": "onchange 'src/**/*.js' 'index.js' 'tutorials/*.md' '../minami/**/*.*' -- npm run doc",
     "doc:publish": "gh-pages-deploy",
-    "readme:toc" : "doctoc --notitle README.md --maxlevel 2",
+    "readme:toc" : "doctoc --notitle README.md --maxlevel 3",
     "test-ci": "scripts/test-ci.sh",
     "test": "scripts/test.sh"
   },
