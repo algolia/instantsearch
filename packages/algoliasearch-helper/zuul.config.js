@@ -18,9 +18,9 @@ var zuulConfig = module.exports = {
   // not activated when dev or phantom
   concurrency: 5,
 
-  // if browser does not sends output in 30s since last output:
+  // if browser does not sends output in 120s since last output:
   // stop testing, something is wrong
-  browser_output_timeout: 50 * 1000,
+  browser_output_timeout: 60 * 2 * 1000,
 
   // we want to be notified something is wrong asap, so no retry
   browser_retries: 0
