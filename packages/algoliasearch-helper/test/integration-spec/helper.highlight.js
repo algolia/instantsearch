@@ -1,5 +1,6 @@
 'use strict';
 
+var bind = require('lodash/function/bind');
 var random = require('lodash/number/random');
 var test = require('tape');
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
@@ -53,11 +54,15 @@ test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', 
                 '<strong>f1</strong>',
                 'should be hightlighted with strong (setting)');
         client.deleteIndex(indexName);
+        if (client.destroy) {
+          client.destroy();
+        }
         t.end();
       }
     });
 
     helper.setQuery('f1')
           .search();
-  });
+  })
+  .then(null, bind(t.error, t));
 });

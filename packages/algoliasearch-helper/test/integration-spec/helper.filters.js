@@ -1,5 +1,6 @@
 'use strict';
 
+var bind = require('lodash/function/bind');
 var random = require('lodash/number/random');
 var test = require('tape');
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
@@ -72,10 +73,14 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
           f3: 1
         });
         client.deleteIndex(indexName);
+        if (client.destroy) {
+          client.destroy();
+        }
         t.end();
       }
     });
 
     helper.addRefine('facet', 'f1').search();
-  });
+  })
+  .then(null, bind(t.error, t));
 });
