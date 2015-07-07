@@ -1,17 +1,17 @@
 .search {
-  text-align : center;
-  background : lightblue;
+  text-align: center;
+  background: lightblue;
 }
 
 #q {
   width: 500px;
   margin: 10px auto;
-  padding : 5px;
+  padding: 5px;
 }
 
 .code{
-  font-family : 'inconsolata', monospace;
-  background : #eee;
+  font-family: 'inconsolata', monospace;
+  background: #eee;
 }
 
 em{

@@ -9,7 +9,7 @@
     "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
     "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 test/run.js",
     "dev-coverage": "DEBUG=zuul* zuul --local 8090 test/run.js",
-    "watch-lint": " onchange '.eslintrc' 'src/**/*.js' 'index.js' -- script/lint.sh",
+    "lint": "scripts/lint.sh",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
     "doc": "npm run doc:toc && npm run doc:jsdoc",
@@ -36,6 +36,11 @@
     "type": "git",
     "url": "https://github.com/algolia/algoliasearch-helper-js.git"
   },
+  "standard": {
+    "ignore": [
+      "dist/"
+    ]
+  },
   "devDependencies": {
     "algoliasearch": "latest",
     "browserify": "10.2.4",
@@ -44,8 +49,11 @@
     "doctoc": "0.14.1",
     "envify": "3.4.0",
     "eslint": "0.24.0",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-config-algolia": "2.0.4",
     "gh-pages-deploy": "0.3.0",
     "http-server": "0.8.0",
+    "jscs": "1.13.1",
     "jsdoc": "bobylito/jsdoc",
     "minami": "algolia/minami",
     "onchange": "1.0.0",

@@ -1,8 +1,8 @@
-"use strict";
-var AlgoliaSearchHelper = require( "./src/algoliasearch.helper" );
+'use strict';
+var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
 
-var SearchParameters = require( "./src/SearchParameters" );
-var SearchResults = require( "./src/SearchResults" );
+var SearchParameters = require('./src/SearchParameters');
+var SearchResults = require('./src/SearchResults');
 
 /**
  * The algoliasearchHelper module contains everything needed to use the Algoliasearch
@@ -11,15 +11,15 @@ var SearchResults = require( "./src/SearchResults" );
  * @example
  * //using the UMD build
  * var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
- * var helper = algoliasearchHelper( client, "bestbuy", {
- *   facets : [ "shipping" ],
- *   disjunctiveFacets : [ "category" ]
- * } );
- * helper.on( "result", function( result ) {
- *   console.log( result );
- * } );
- * helper.toggleRefine( "Movies & TV Shows" )
- *       .toggleRefine( "Free shipping" )
+ * var helper = algoliasearchHelper(client, 'bestbuy', {
+ *   facets: ['shipping'],
+ *   disjunctiveFacets: ['category']
+ * });
+ * helper.on('result', function(result) {
+ *   console.log(result);
+ * });
+ * helper.toggleRefine('Movies & TV Shows')
+ *       .toggleRefine('Free shipping')
  *       .search();
  * @module algoliasearchHelper
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
@@ -27,8 +27,8 @@ var SearchResults = require( "./src/SearchResults" );
  * @param  {SearchParameters|object} opts an object defining the initial config of the search. It doesn't have to be a {SearchParameters}, just an object containing the properties you need from it.
  * @return {AlgoliaSearchHelper}
  */
-function algoliasearchHelper( client, index, opts ) {
-  return new AlgoliaSearchHelper( client, index, opts );
+function algoliasearchHelper(client, index, opts) {
+  return new AlgoliaSearchHelper(client, index, opts);
 }
 
 /**
@@ -36,7 +36,7 @@ function algoliasearchHelper( client, index, opts ) {
  * @member module:algoliasearchHelper.version
  * @type {number}
  */
-algoliasearchHelper.version = "2.1.2";
+algoliasearchHelper.version = '2.1.2';
 
 /**
  * Constructor for the Helper.
