@@ -6,7 +6,12 @@ var test = require('tape');
 var map = require('lodash/collection/map');
 
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
-var setup = require('../integration-utils.js').setup;
+var utils = require('../integration-utils.js');
+var setup = utils.setup;
+
+if (!utils.shouldRun) {
+  test = test.skip;
+}
 
 test('[INT][TAGS]Test tags operations on the helper and their results on the algolia API', function(t) {
   var indexName = (process.env.TRAVIS_BUILD_NUMBER ||

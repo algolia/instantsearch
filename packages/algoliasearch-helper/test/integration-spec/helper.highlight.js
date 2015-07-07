@@ -4,7 +4,12 @@ var bind = require('lodash/function/bind');
 var random = require('lodash/number/random');
 var test = require('tape');
 var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
-var setup = require('../integration-utils.js').setup;
+var utils = require('../integration-utils.js');
+var setup = utils.setup;
+
+if (!utils.shouldRun) {
+  test = test.skip;
+}
 
 test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', function(t) {
   var indexName = (process.env.TRAVIS_BUILD_NUMBER ||

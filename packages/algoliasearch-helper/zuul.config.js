@@ -54,8 +54,7 @@ var browsers = {
   }, {
     name: 'ipad',
     version: '7.0..latest'
-  }
-  ],
+  }],
   pullRequest: [{
     name: 'chrome',
     version: 'latest', // `latest` === stable
@@ -73,8 +72,7 @@ var browsers = {
   }, {
     name: 'android',
     version: 'latest'
-  }
-  ]
+  }]
 };
 
 zuulConfig.browsers =
