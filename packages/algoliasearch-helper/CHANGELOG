@@ -1,6 +1,8 @@
 CHANGELOG
 
 UNRELEASED
+  * FIX: #130 toggleRefine should throw an exception when executed with an
+  attribute that is not a declared facet
   * test: add CI testing (browsers, phantom, node, io)
 
 2.1.2 - 2015-06-26
