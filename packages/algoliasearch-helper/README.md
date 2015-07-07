@@ -111,17 +111,17 @@ var helper = algoliasearchHelper(client, indexName, parameters);
 ### Helper lifecycle
 
 1. modify the parameters of the search (usually through user interactions)
-        ```js
+        ```javascript
         helper.setQuery('iphone').addRefine('category', 'phone')
         ```
 
 2. trigger the search (after all the modification have been applied)
-        ```js
+        ```javascript
         helper.search()
         ```
 
 3. read the results (with the event "result" handler) and update the UI with the results
-        ```js
+        ```javascript
         helper.on('result', function(results) {
              updateUI(results);
         });
