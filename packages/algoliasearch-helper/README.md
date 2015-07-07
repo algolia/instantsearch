@@ -354,7 +354,7 @@ helper.setCurrentPage( 3 ).search();
 
 ### Index
 
-Index can be changed. The common use case is when you have several slaves with different sort values (sort by relevance, sort by price…).
+Index can be changed. The common use case is when you have several slaves with different sort order (sort by relevance, sort by price…).
 
 #### Change the current index
 
