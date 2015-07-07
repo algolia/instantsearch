@@ -30,8 +30,7 @@ This is the library you will need to easily build a good search UX like our [ins
 
 
 - [Features](#features)
-- [What does it look like?](#what-does-it-look-like)
-- [How to use this module](#how-to-use-this-module)
+- [Example](#example)
 - [Helper cheatsheet](#helper-cheatsheet)
   - [Add the helper in your project](#add-the-helper-in-your-project)
   - [Init the helper](#init-the-helper)
@@ -45,6 +44,7 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Pagination](#pagination)
   - [Index](#index)
   - [Query parameters](#query-parameters)
+  - [Results format](#results-format)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -54,7 +54,7 @@ This is the library you will need to easily build a good search UX like our [ins
  - Pagination
  - Disjunctive facetting (search on two or more values for a single facet)
 
-## What does it look like?
+## Example
 
 A small example that uses Browserify to manage modules.
 
@@ -773,3 +773,129 @@ helper.setQueryParameter( "hitsPerPage", 20 ).search();
   </tbody>
 </table>
 
+### Results format
+
+Here is an example of a result object you get with the `result` event.
+
+```javascript
+{
+   "hitsPerPage" : 10,
+   "processingTimeMS" : 2,
+   "facets" : [
+      {
+         "name" : "type",
+         "data" : {
+            "HardGood" : 6627,
+            "BlackTie" : 550,
+            "Music" : 665,
+            "Software" : 131,
+            "Game" : 456,
+            "Movie" : 1571
+         },
+         "exhaustive" : false
+      },
+      {
+         "exhaustive" : false,
+         "data" : {
+            "Free shipping" : 5507
+         },
+         "name" : "shipping"
+      }
+   ],
+   "hits" : [
+      {
+         "thumbnailImage" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_54x108_s.gif",
+         "_highlightResult" : {
+            "shortDescription" : {
+               "matchLevel" : "none",
+               "value" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+               "matchedWords" : []
+            },
+            "category" : {
+               "matchLevel" : "none",
+               "value" : "Computer Security Software",
+               "matchedWords" : []
+            },
+            "manufacturer" : {
+               "matchedWords" : [],
+               "value" : "Webroot",
+               "matchLevel" : "none"
+            },
+            "name" : {
+               "value" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+               "matchedWords" : [],
+               "matchLevel" : "none"
+            }
+         },
+         "image" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_105x210_sc.jpg",
+         "shipping" : "Free shipping",
+         "bestSellingRank" : 4,
+         "shortDescription" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+         "url" : "http://www.bestbuy.com/site/webroot-secureanywhere-internet-security-3-devi…d=1219060687969&skuId=1688832&cmp=RMX&ky=2d3GfEmNIzjA0vkzveHdZEBgpPCyMnLTJ",
+         "name" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+         "category" : "Computer Security Software",
+         "salePrice_range" : "1 - 50",
+         "objectID" : "1688832",
+         "type" : "Software",
+         "customerReviewCount" : 5980,
+         "salePrice" : 49.99,
+         "manufacturer" : "Webroot"
+      },
+      ....
+   ],
+   "nbHits" : 10000,
+   "disjunctiveFacets" : [
+      {
+         "exhaustive" : false,
+         "data" : {
+            "5" : 183,
+            "12" : 112,
+            "7" : 149,
+            ...
+         },
+         "name" : "customerReviewCount",
+         "stats" : {
+            "max" : 7461,
+            "avg" : 157.939,
+            "min" : 1
+         }
+      },
+      {
+         "data" : {
+            "Printer Ink" : 142,
+            "Wireless Speakers" : 60,
+            "Point & Shoot Cameras" : 48,
+            ...
+         },
+         "name" : "category",
+         "exhaustive" : false
+      },
+      {
+         "exhaustive" : false,
+         "data" : {
+            "> 5000" : 2,
+            "1 - 50" : 6524,
+            "501 - 2000" : 566,
+            "201 - 500" : 1501,
+            "101 - 200" : 1360,
+            "2001 - 5000" : 47
+         },
+         "name" : "salePrice_range"
+      },
+      {
+         "data" : {
+            "Dynex™" : 202,
+            "Insignia™" : 230,
+            "PNY" : 72,
+            ...
+         },
+         "name" : "manufacturer",
+         "exhaustive" : false
+      }
+   ],
+   "query" : "",
+   "nbPages" : 100,
+   "page" : 0,
+   "index" : "bestbuy"
+}
+```
