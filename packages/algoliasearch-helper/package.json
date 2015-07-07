@@ -10,6 +10,7 @@
     "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 test/run.js",
     "dev-coverage": "DEBUG=zuul* zuul --local 8090 test/run.js",
     "lint": "scripts/lint.sh",
+    "lint:watch": "onchange 'src/**/*js' 'index.js' 'test/**/*js' '.eslintrc' -- npm run -s lint",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
     "doc": "npm run doc:toc && npm run doc:jsdoc",

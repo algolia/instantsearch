@@ -57,6 +57,14 @@ test('Toggling several refinements for a single attribute should be handled', fu
   t.end();
 });
 
+test('Using toggleRefine on a non specified facet should throw an exception', function(t) {
+  var helper = algoliasearchHelper(null, null, {});
+
+  t.throws(_.partial(helper.toggleRefine, 'unknown', 'value'));
+
+  t.end();
+});
+
 test('Removing several refinements for a single attribute should be handled', function(t) {
   var facetName = 'facet';
 
