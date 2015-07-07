@@ -133,15 +133,16 @@ var helper = algoliasearchHelper(client, indexName, parameters);
 
 **AlgoliasearchHelper** : the helper. Keeps the state of the search, makes the queries and calls the handlers when an event happen.
 
-**SearchParameters** : the object representing the state of the search.
+**SearchParameters** : the object representing the state of the search. The current state is stored in `helperInstance.state`.
 
 **SearchResults** : the object in which the Algolia answers are transformed into. This object is passed to the result event handler.
+An example of SearchResults in JSON is available at [the end of this readme](#results-format)
 
 ### Search
 
-The search is triggered by the search() method.
+The search is triggered by the `search()` method.
 
-It takes all the previous modifications to the search and use them to create the queries to Algolia. The search parameters are stateful.
+It takes all the previous modifications to the search and use them to create the queries to Algolia. The search parameters are immutable.
 
 Example :
 
@@ -161,10 +162,10 @@ helper.addTag('photo').search();
 
 ### Events
 
-`result` : get the new results when available. The handler function will receive
+`result` : get notified when new results are received. The handler function will receive
 two objects (`SearchResults` and `SearchParameters`).
 
-`error` : get the errors from the API
+`error` : get notified when errors are received from the API.
 
 `change` : get notified when a property has changed in the helper
 
