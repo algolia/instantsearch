@@ -104,24 +104,24 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
 ### Init the helper
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, parameters);
 ```
 
 ### Helper lifecycle
 
-1. modify the parameters of the search (usually through user interactions)
-        ```javascript
-        helper.setQuery('iphone').addRefine('category', 'phone')
+1. modify the parameters of the search (usually through user interactions)<br/>
+        ```
+        	helper.setQuery('iphone').addRefine('category', 'phone')
         ```
 
-2. trigger the search (after all the modification have been applied)
-        ```javascript
+2. trigger the search (after all the modification have been applied)<br/>
+        ```
         helper.search()
         ```
 
-3. read the results (with the event "result" handler) and update the UI with the results
-        ```javascript
+3. read the results (with the event "result" handler) and update the UI with the results<br/>
+        ```
         helper.on('result', function(results) {
              updateUI(results);
         });
@@ -171,7 +171,7 @@ two objects (`SearchResults` and `SearchParameters`).
 
 #### Listen to the `result` event
 
-```
+```javascript
 helper.on('result', function(results){
         updateTheResults(results);
 })
@@ -179,7 +179,7 @@ helper.on('result', function(results){
 
 #### Listen to a `result`" event once
 
-```
+```javascript
 helper.once('result', function(results){
         updateTheResults(results);
 })
@@ -187,7 +187,7 @@ helper.once('result', function(results){
 
 #### Remove all `result` listeners
 
-```
+```javascript
 helper.removeListener('result')
 ```
 
@@ -195,7 +195,7 @@ helper.removeListener('result')
 
 #### Do a search with the query "fruit"
 
-```
+```javscript
 helper.setQuery('fruit').search();
 ```
 
@@ -207,7 +207,7 @@ Facets are categories created upon attributes. First you need to define which at
 
 ##### Facet definition
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, {
 	facets : [ 'ANDFacet' ]
 });
@@ -215,13 +215,13 @@ var helper = algoliasearchHelper(client, indexName, {
 
 ##### Add a facet filter
 
-```
+```javascript
 helper.addRefine('ANDFacet', 'valueOfANDFacet').search();
 ```
 
 ##### Remove a facet filter
 
-```
+```javascript
 helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
 ```
 
@@ -229,7 +229,7 @@ helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
 
 ##### Facet definition
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, {
 	disjunctiveFacets : [ 'ORFacet' ]
 });
@@ -237,13 +237,13 @@ var helper = algoliasearchHelper(client, indexName, {
 
 ##### Add a facet filter
 
-```
+```javascript
 helper.addDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
 ```
 
 ##### Remove a facet filter
 
-```
+```javascript
 helper.removeDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
 ```
 
@@ -253,7 +253,7 @@ filter so that we do NOT get a given category
 
 ##### Facet definition (same as "AND" facet)
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, {
 	facets: [ 'ANDFacet' ]
 }).search();
@@ -261,13 +261,13 @@ var helper = algoliasearchHelper(client, indexName, {
 
 ##### Exclude a value for a facet
 
-```
+```javascript
 helper.addExclude('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 ##### Remove an exclude from the list of excluded values
 
-```
+```javascript
 helper.removeExclude('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
@@ -277,7 +277,7 @@ Filter over numeric attributes with math operations like `=`, `>`, `<`, `>=`, `<
 
 ##### Facet definition
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, {
 	disjunctiveFacets : [ 'numericFacet' ]
 });
@@ -285,13 +285,13 @@ var helper = algoliasearchHelper(client, indexName, {
 
 ##### Add a numeric refinement
 
-```
+```javascript
 helper.addNumericRefinement('numericFacet', '=', '3').search();
 ```
 
 ##### Remove a numeric refinement
 
-```
+```javascript
 helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
 ```
 
@@ -299,19 +299,19 @@ helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
 
 ##### Clear all the refinements for all the refined attributes
 
-```
+```javascript
 helper.clearRefinements().search();
 ```
 
 ##### Clear all the refinements for a specific attribute
 
-```
+```javascript
 helper.clearRefinements('ANDFacet').search();
 ```
 
 ##### [ADVANCED] Clear only the exclusions on the "ANDFacet" attribute
 
-```
+```javascript
 helper.clearRefinements(function(value, attribute, type) {
   return type==='exclude' && attribute==='ANDFacet';
 }).search();
@@ -323,19 +323,19 @@ Tags are an easy way to do filtering. They are based on a special attribute in t
 
 #### Add a tag filter for the value "landscape"
 
-```
+```javascript
 helper.addTag('landscape').search();
 ```
 
 #### Remove a tag filter for the value "landscape"
 
-```
+```javascript
 helper.removeTag('landscape').search();
 ```
 
 #### Clear all the tags filters
 
-```
+```javascript
 helper.clearTags().search();
 ```
 
@@ -343,13 +343,13 @@ helper.clearTags().search();
 
 #### Get the current page
 
-```
+```javascript
 helper.getCurrentPage();
 ```
 
 #### Change page
 
-```
+```javascript
 helper.setCurrentPage(3).search();
 ```
 
@@ -359,13 +359,13 @@ Index can be changed. The common use case is when you have several slaves with d
 
 #### Change the current index
 
-```
+```javascript
 helper.setIndex('index_orderByPrice').search();
 ```
 
 #### Get the current index
 
-```
+```javascript
 var currentIndex = helper.state.index;
 ```
 
@@ -375,7 +375,7 @@ There are lots of other parameters you can set.
 
 #### Set a parameter at the initialization of the helper
 
-```
+```javascript
 var helper = algoliasearchHelper(client, indexName, {
 	hitsPerPage : 50
 });
@@ -383,7 +383,7 @@ var helper = algoliasearchHelper(client, indexName, {
 
 #### Set a parameter later
 
-```
+```javascript
 helper.setQueryParameter('hitsPerPage', 20).search();
 ```
 
