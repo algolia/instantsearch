@@ -52,7 +52,7 @@ This is the library you will need to easily build a good search UX like our [ins
  - Search parameters management
  - Facets exclusions
  - Pagination
- - Disjunctive facetting (search on two or more values for a single facet)
+ - Disjunctive faceting (search on two or more values of the same facet)
 
 ## Example
 
@@ -62,7 +62,7 @@ A small example that uses Browserify to manage modules.
 var algoliasearch = require('algoliasearch');
 var algoliasearchHelper = require('algoliasearch-helper');
 
-var client = algoliasearch('app_id', 'secret');
+var client = algoliasearch('app_id', 'api_key');
 
 var helper = algoliasearchHelper(client, 'myMainIndex', {
   facets: ['mainCharacterFirstName', 'year'],
@@ -88,6 +88,12 @@ helper.search();
 
 ### Add the helper in your project
 
+### Regular `<script>` tag
+
+Use our [jsDelivr](http://www.jsdelivr.com/) build:
+
+`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
+
 ### With NPM
 
 `npm install algoliasearch-helper`
@@ -95,12 +101,6 @@ helper.search();
 ### With bower
 
 `bower install algoliasearch-helper`
-
-### Regular `<script>` tag
-
-Use our [jsDelivr](http://www.jsdelivr.com/) build:
-
-`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
 
 ### Init the helper
 
@@ -142,7 +142,7 @@ An example of SearchResults in JSON is available at [the end of this readme](#re
 
 The search is triggered by the `search()` method.
 
-It takes all the previous modifications to the search and use them to create the queries to Algolia. The search parameters are immutable.
+It takes all the previous modifications to the search and uses them to create the queries to Algolia. The search parameters are immutable.
 
 Example :
 
@@ -177,7 +177,7 @@ helper.on('result', function(results){
 })
 ```
 
-#### Listen to a `result`" event once
+#### Listen to a `result` event once
 
 ```javascript
 helper.once('result', function(results){
@@ -201,7 +201,7 @@ helper.setQuery('fruit').search();
 
 ### Filtering results
 
-Facets are categories created upon attributes. First you need to define which attribute will be used as facet in the dashboard : [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
+Facets are filters to retrieve a subset of an index having a specific value for a given attribute. First you need to define which attribute will be used as a facet in the dashboard : [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
 
 #### "AND" facets
 
