@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Functions to manipulate refinement lists
  *
@@ -10,7 +12,6 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-'use strict';
 
 var extend = require('../functions/extend');
 

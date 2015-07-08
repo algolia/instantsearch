@@ -34,7 +34,7 @@ var browsers = {
   all: [{
     name: 'chrome',
     version: '42..beta',
-    platform: 'Windows 2012 R2'  // Force Win 8.1, more stable than linux etc
+    platform: 'Windows 2012 R2' // Force Win 8.1, more stable than linux etc
   }, {
     name: 'firefox',
     version: '37..beta',
@@ -75,7 +75,6 @@ var browsers = {
   }]
 };
 
-zuulConfig.browsers =
-  process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST !== 'false' ?
-    browsers.pullRequest :
-    browsers.all;
+zuulConfig.browsers = process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST !== 'false' ?
+  browsers.pullRequest :
+  browsers.all;

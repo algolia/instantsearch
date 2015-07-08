@@ -19,7 +19,8 @@
     "doc:watch": "onchange 'src/**/*.js' 'index.js' 'tutorials/*.md' '../minami/**/*.*' -- npm run doc",
     "doc:publish": "gh-pages-deploy",
     "test-ci": "scripts/test-ci.sh",
-    "test": "scripts/test.sh"
+    "test": "scripts/test.sh",
+    "jsfmt": "jsfmt"
   },
   "gh-pages-deploy": {
     "prep": [
@@ -42,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "@algolia/jsfmt": "1.3.0",
     "algoliasearch": "latest",
     "browserify": "10.2.4",
     "bulk-require": "0.2.1",
@@ -50,7 +52,7 @@
     "envify": "3.4.0",
     "eslint": "0.24.0",
     "eslint-config-airbnb": "0.0.6",
-    "eslint-config-algolia": "2.0.4",
+    "eslint-config-algolia": "2.1.1",
     "gh-pages-deploy": "0.3.0",
     "http-server": "0.8.0",
     "jscs": "1.13.1",

@@ -43,21 +43,21 @@ test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', 
       calls++;
       if (calls === 1) {
         t.equal(content.hits[0]._highlightResult.facet[0].value,
-                '<em>f1</em>',
-                'should be hightlighted with em (default)');
+          '<em>f1</em>',
+          'should be hightlighted with em (default)');
         t.equal(content.hits[1]._highlightResult.facet[0].value,
-                '<em>f1</em>',
-                'should be hightlighted with em (default)');
+          '<em>f1</em>',
+          'should be hightlighted with em (default)');
         helper.setQueryParameter('highlightPostTag', '</strong>')
-              .setQueryParameter('highlightPreTag', '<strong>')
-              .search();
+          .setQueryParameter('highlightPreTag', '<strong>')
+          .search();
       } else if (calls === 2) {
         t.equal(content.hits[0]._highlightResult.facet[0].value,
-                '<strong>f1</strong>',
-                'should be hightlighted with strong (setting)');
+          '<strong>f1</strong>',
+          'should be hightlighted with strong (setting)');
         t.equal(content.hits[1]._highlightResult.facet[0].value,
-                '<strong>f1</strong>',
-                'should be hightlighted with strong (setting)');
+          '<strong>f1</strong>',
+          'should be hightlighted with strong (setting)');
         client.deleteIndex(indexName);
         if (!process.browser) {
           client.destroy();
@@ -67,7 +67,7 @@ test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', 
     });
 
     helper.setQuery('f1')
-          .search();
+      .search();
   })
-  .then(null, bind(t.error, t));
+    .then(null, bind(t.error, t));
 });

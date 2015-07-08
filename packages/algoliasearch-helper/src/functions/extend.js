@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = function extend(out) {
   out = out || {};
 

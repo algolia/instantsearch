@@ -20,7 +20,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       {facet: ['f1', 'f2']},
       {facet: ['f1', 'f3']},
       {facet: ['f2', 'f3']}
-   ])
+    ])
       .then(function() {
         return index.setSettings({
           attributesToIndex: ['facet'],
@@ -47,7 +47,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
 
       if (calls === 1) {
         t.equal(content.hits.length, 2, 'filter should result in two items');
-        t.deepEqual(content.facets[ 0 ].data, {
+        t.deepEqual(content.facets[0].data, {
           f1: 2,
           f2: 1,
           f3: 1
@@ -58,7 +58,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
 
       if (calls === 2) {
         t.equal(content.hits.length, 1, 'filter should result in one item');
-        t.deepEqual(content.facets[ 0 ].data, {
+        t.deepEqual(content.facets[0].data, {
           f1: 1,
           f2: 1
         });
@@ -67,7 +67,7 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
 
       if (calls === 3) {
         t.equal(content.hits.length, 0, 'filter should result in 0 item');
-        t.equal(content.facets[ 0 ], undefined);
+        t.equal(content.facets[0], undefined);
         helper.removeRefine('facet', 'f2').search();
       }
 
@@ -87,5 +87,5 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
 
     helper.addRefine('facet', 'f1').search();
   })
-  .then(null, bind(t.error, t));
+    .then(null, bind(t.error, t));
 });

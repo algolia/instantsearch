@@ -6,3 +6,4 @@ set -x # debug messages
 echo "Lint"
 
 eslint . --quiet
+jsfmt --diff

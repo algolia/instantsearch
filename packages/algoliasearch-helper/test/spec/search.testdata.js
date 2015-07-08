@@ -1,4 +1,5 @@
 'use strict';
+
 var SearchParameters = require('../../src/SearchParameters');
 
 var response = {

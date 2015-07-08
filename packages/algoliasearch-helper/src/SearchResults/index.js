@@ -1,4 +1,5 @@
 'use strict';
+
 var forEach = require('lodash/collection/forEach');
 var compact = require('lodash/array/compact');
 var sum = require('lodash/collection/sum');

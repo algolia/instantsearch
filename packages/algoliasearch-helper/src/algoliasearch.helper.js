@@ -1,4 +1,5 @@
 'use strict';
+
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
 var extend = require('./functions/extend');
@@ -220,7 +221,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function(facet, value) {
     this.state = this.state.toggleDisjunctiveFacetRefinement(facet, value);
   } else {
     throw new Error("Can't refine the undeclared facet '" + facet +
-                    "'; it should be added to the helper options 'facets' or 'disjunctiveFacets'");
+      "'; it should be added to the helper options 'facets' or 'disjunctiveFacets'");
   }
 
   this._change();

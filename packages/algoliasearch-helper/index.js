@@ -1,4 +1,5 @@
 'use strict';
+
 var AlgoliaSearchHelper = require('./src/algoliasearch.helper');
 
 var SearchParameters = require('./src/SearchParameters');
