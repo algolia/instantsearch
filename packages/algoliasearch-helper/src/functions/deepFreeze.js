@@ -1,7 +1,8 @@
 'use strict';
 
-var isObject = require('lodash/lang/isObject');
 var forEach = require('lodash/collection/forEach');
+var identity = require('lodash/utility/identity');
+var isObject = require('lodash/lang/isObject');
 
 /**
  * Recursively freeze the parts of an object that are not frozen.
@@ -20,4 +21,4 @@ var deepFreeze = function(obj) {
   return obj;
 };
 
-module.exports = deepFreeze;
+module.exports = Object.freeze ? deepFreeze : identity;

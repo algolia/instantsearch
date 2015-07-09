@@ -6,6 +6,7 @@ var forEach = require('lodash/collection/forEach');
 var reduce = require('lodash/collection/reduce');
 var filter = require('lodash/collection/filter');
 var omit = require('lodash/object/omit');
+var indexOf = require('lodash/array/indexOf');
 var isEmpty = require('lodash/lang/isEmpty');
 var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
@@ -744,7 +745,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isDisjunctiveFacet: function(facet) {
-    return this.disjunctiveFacets.indexOf(facet) > -1;
+    return indexOf(this.disjunctiveFacets, facet) > -1;
   },
   /**
    * Test if the facet name is from one of the conjunctive/normal facets
@@ -753,7 +754,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isConjunctiveFacet: function(facet) {
-    return this.facets.indexOf(facet) > -1;
+    return indexOf(this.facets, facet) > -1;
   },
   /**
    * Returns true if the facet is refined, either for a specific value or in
@@ -818,7 +819,7 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isTagRefined: function isTagRefined(tag) {
-    return this.tagRefinements.indexOf(tag) !== -1;
+    return indexOf(this.tagRefinements, tag) !== -1;
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -845,7 +846,7 @@ SearchParameters.prototype = {
     var refinedFacets = this.getRefinedDisjunctiveFacets();
 
     return filter(this.disjunctiveFacets, function(f) {
-      return refinedFacets.indexOf(f) === -1;
+      return indexOf(refinedFacets, f) === -1;
     });
   },
 
@@ -858,7 +859,7 @@ SearchParameters.prototype = {
     var managedParameters = this.managedParameters;
 
     return reduce(this, function(memo, value, parameter, parameters) {
-      if (managedParameters.indexOf(parameter) === -1 &&
+      if (indexOf(managedParameters, parameter) === -1 &&
         parameters[parameter] !== undefined) {
         memo[parameter] = value;
       }
