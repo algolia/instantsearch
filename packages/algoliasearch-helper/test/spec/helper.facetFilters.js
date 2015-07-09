@@ -1,6 +1,7 @@
+'use strict';
+
 // Make sure we do facet filters correctly before sending them to algolia
 
-'use strict';
 
 var test = require('tape');
 var algoliasearchHelper = require('../../index');

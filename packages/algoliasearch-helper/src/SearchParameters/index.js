@@ -1,4 +1,5 @@
 'use strict';
+
 var keys = require('lodash/object/keys');
 var intersection = require('lodash/array/intersection');
 var forEach = require('lodash/collection/forEach');
@@ -852,7 +853,7 @@ SearchParameters.prototype = {
     'facets', 'disjunctiveFacets', 'facetsRefinements',
     'facetsExcludes', 'disjunctiveFacetsRefinements',
     'numericRefinements', 'tagRefinements'
- ],
+  ],
   getQueryParams: function getQueryParams() {
     var managedParameters = this.managedParameters;
 

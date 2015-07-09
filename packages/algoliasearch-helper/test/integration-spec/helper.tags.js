@@ -88,5 +88,5 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
 
     helper.search();
   })
-  .then(null, bind(t.error, t));
+    .then(null, bind(t.error, t));
 });

@@ -1,4 +1,5 @@
 'use strict';
+
 var isObject = require('lodash/lang/isObject');
 var forEach = require('lodash/collection/forEach');
 

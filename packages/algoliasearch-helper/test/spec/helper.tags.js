@@ -1,4 +1,5 @@
 'use strict';
+
 var test = require('tape');
 var algoliasearchHelper = require('../../index');
 
