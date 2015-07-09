@@ -2,6 +2,7 @@
 
 var forEach = require('lodash/collection/forEach');
 var compact = require('lodash/array/compact');
+var indexOf = require('lodash/array/indexOf');
 var sum = require('lodash/collection/sum');
 var find = require('lodash/collection/find');
 
@@ -221,7 +222,7 @@ function SearchResults(state, algoliaResponse) {
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
-    var isFacetDisjunctive = state.disjunctiveFacets.indexOf(facetKey) !== -1;
+    var isFacetDisjunctive = indexOf(state.disjunctiveFacets, facetKey) !== -1;
     var position = isFacetDisjunctive ? disjunctiveFacetsIndices[facetKey] :
       facetsIndices[facetKey];
 
@@ -263,7 +264,7 @@ function SearchResults(state, algoliaResponse) {
         forEach(state.disjunctiveFacetsRefinements[dfacet], function(refinementValue) {
           // add the disjunctive refinements if it is no more retrieved
           if (!this.disjunctiveFacets[position].data[refinementValue] &&
-            state.disjunctiveFacetsRefinements[dfacet].indexOf(refinementValue) > -1) {
+            indexOf(state.disjunctiveFacetsRefinements[dfacet], refinementValue) > -1) {
             this.disjunctiveFacets[position].data[refinementValue] = 0;
           }
         }, this);

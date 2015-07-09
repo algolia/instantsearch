@@ -22,7 +22,8 @@ test('Search should call the algolia client according to the number of refinemen
   helper.addDisjunctiveRefine('city', 'New York', true);
 
   helper.on('result', function(data) {
-    t.deepEqual(data, testData.responseHelper, 'should be equal');
+    // shame deepclone, to remove any associated methods coming from the results
+    t.deepEqual(JSON.parse(JSON.stringify(data)), JSON.parse(JSON.stringify(testData.responseHelper)), 'should be equal');
     t.ok(mock.verify(), 'Mock constraints should be verified!');
     t.end();
   });

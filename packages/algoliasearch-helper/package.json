@@ -18,7 +18,7 @@
     "doc:toc": "doctoc --notitle tutorials/* --maxlevel 2",
     "doc:watch": "onchange 'src/**/*.js' 'index.js' 'tutorials/*.md' '../minami/**/*.*' -- npm run doc",
     "doc:publish": "gh-pages-deploy",
-    "readme:toc" : "doctoc --notitle README.md --maxlevel 3",
+    "readme:toc": "doctoc --notitle README.md --maxlevel 3",
     "test-ci": "scripts/test-ci.sh",
     "test": "scripts/test.sh",
     "jsfmt": "jsfmt"
@@ -42,6 +42,9 @@
     "ignore": [
       "dist/"
     ]
+  },
+  "browser": {
+    "lodash": "lodash-compat"
   },
   "devDependencies": {
     "@algolia/jsfmt": "1.3.0",
@@ -70,7 +73,8 @@
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
-    "lodash": "3.10.x"
+    "lodash": "3.10.0",
+    "lodash-compat": "3.10.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

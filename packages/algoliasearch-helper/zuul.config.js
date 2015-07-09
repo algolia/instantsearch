@@ -41,7 +41,7 @@ var browsers = {
     platform: 'Windows 2012 R2'
   }, {
     name: 'ie',
-    version: '9..latest'
+    version: '8..latest'
   }, {
     name: 'safari',
     version: '6..latest'
