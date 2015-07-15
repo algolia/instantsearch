@@ -23,7 +23,11 @@ test('Search should call the algolia client according to the number of refinemen
 
   helper.on('result', function(data) {
     // shame deepclone, to remove any associated methods coming from the results
-    t.deepEqual(JSON.parse(JSON.stringify(data)), JSON.parse(JSON.stringify(testData.responseHelper)), 'should be equal');
+    t.deepEqual(
+      JSON.parse(JSON.stringify(data)),
+      JSON.parse(JSON.stringify(testData.responseHelper)),
+      'should be equal'
+    );
     t.ok(mock.verify(), 'Mock constraints should be verified!');
     t.end();
   });

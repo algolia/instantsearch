@@ -11,6 +11,8 @@ var isEmpty = require('lodash/lang/isEmpty');
 var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
 var isFunction = require('lodash/lang/isFunction');
+var find = require('lodash/collection/find');
+var trimRight = require('lodash/string/trimRight');
 
 var extend = require('../functions/extend');
 var deepFreeze = require('../functions/deepFreeze');
@@ -80,6 +82,12 @@ function SearchParameters(newParameters) {
    * @member {string[]}
    */
   this.disjunctiveFacets = params.disjunctiveFacets || [];
+  /**
+   * All the declared hierarchical facets,
+   * a hierarchical facet is a disjunctive facet with some specific behavior
+   * @member {string[]|object[]}
+   */
+  this.hierarchicalFacets = params.hierarchicalFacets || [];
 
   // Refinements
   /**
@@ -109,6 +117,11 @@ function SearchParameters(newParameters) {
    * @member {string[]}
    */
   this.tagRefinements = params.tagRefinements || [];
+  /**
+   * @private
+   * @member {Object.<string, SearchParameters.FacetList>}
+   */
+  this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
   /**
    * Contains the tag filters in the raw format of the Algolia API. Setting this
@@ -495,6 +508,14 @@ SearchParameters.prototype = {
     return this.disjunctiveFacetsRefinements[facetName] || [];
   },
   /**
+   * Get the list of hierarchical refinements for a single facet
+   * @param {string} facetName name of the attribute used for facetting
+   * @return {string[]} list of refinements
+   */
+  getHierarchicalRefinement: function(facetName) {
+    return this.hierarchicalFacetsRefinements[facetName] || '';
+  },
+  /**
    * Get the list of exclude refinements for a single facet
    * @param {string} facetName name of the attribute used for facetting
    * @return {string[]} list of refinements
@@ -726,6 +747,38 @@ SearchParameters.prototype = {
     });
   },
   /**
+   * Switch the refinement applied over a facet/value
+   * @method
+   * @param {string} facet name of the attribute used for facetting
+   * @param {value} value value used for filtering
+   * @return {SearchParameters}
+   */
+  toggleHierarchicalFacetRefinement: function toggleHierarchicalFacetRefinement(facet, value) {
+    var separator = this.getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
+
+    return this.mutateMe(function merge(newInstance) {
+      var mod = {};
+
+      // up one level:
+      // - `beer > IPA` => `beer` or
+      // - `beer` => ``
+      if (newInstance.hierarchicalFacetsRefinements[facet] === value) {
+        if (value.indexOf(separator) === -1) {
+          // root level
+          mod[facet] = '';
+        } else {
+          mod[facet] = trimRight(value.slice(0, value.lastIndexOf(separator)));
+        }
+      } else {
+        mod[facet] = value;
+      }
+
+      newInstance.hierarchicalFacetsRefinements = extend({}, newInstance.hierarchicalFacetsRefinements, mod);
+
+      return newInstance;
+    });
+  },
+  /**
    * Switch the tag refinement
    * @method
    * @param {string} tag the tag to remove or add
@@ -746,6 +799,15 @@ SearchParameters.prototype = {
    */
   isDisjunctiveFacet: function(facet) {
     return indexOf(this.disjunctiveFacets, facet) > -1;
+  },
+  /**
+   * Test if the facet name is from one of the hierarchical facets
+   * @method
+   * @param {string} facetName facet name to test
+   * @return {boolean}
+   */
+  isHierarchicalFacet: function(facetName) {
+    return this.getHierarchicalFacetByName(facetName) !== undefined;
   },
   /**
    * Test if the facet name is from one of the conjunctive/normal facets
@@ -835,7 +897,19 @@ SearchParameters.prototype = {
       this.disjunctiveFacets
     );
 
-    return keys(this.disjunctiveFacetsRefinements).concat(disjunctiveNumericRefinedFacets);
+    return keys(this.disjunctiveFacetsRefinements)
+      .concat(disjunctiveNumericRefinedFacets)
+      .concat(keys(this.hierarchicalFacetsRefinements));
+  },
+  /**
+   * Returns the list of all disjunctive facets refined
+   * @method
+   * @param {string} facet name of the attribute used for facetting
+   * @param {value} value value used for filtering
+   * @return {string[]}
+   */
+  getRefinedHierarchicalFacets: function getRefinedHierarchicalFacets() {
+    return this.hierarchicalFacetsRefinements;
   },
   /**
    * Returned the list of all disjunctive facets not refined
@@ -853,7 +927,7 @@ SearchParameters.prototype = {
   managedParameters: [
     'facets', 'disjunctiveFacets', 'facetsRefinements',
     'facetsExcludes', 'disjunctiveFacetsRefinements',
-    'numericRefinements', 'tagRefinements'
+    'numericRefinements', 'tagRefinements', 'hierarchicalFacets', 'hierarchicalFacetsRefinements'
   ],
   getQueryParams: function getQueryParams() {
     var managedParameters = this.managedParameters;
@@ -932,6 +1006,27 @@ SearchParameters.prototype = {
 
     fn(newState, this);
     return deepFreeze(newState);
+  },
+
+  /**
+   * Helper function to get the hierarchicalFacet separator or the default one (`>`)
+   * @param  {object} hierarchicalFacet
+   * @return {string} returns the hierarchicalFacet.separator or `>` as default
+   */
+  getHierarchicalFacetSeparator: function(hierarchicalFacet) {
+    return hierarchicalFacet.separator || '>';
+  },
+
+  /**
+   * Helper function to get the hierarchicalFacet by it's name
+   * @param  {string} hierarchicalFacetName
+   * @return {object} a hierarchicalFacet
+   */
+  getHierarchicalFacetByName: function(hierarchicalFacetName) {
+    return find(
+      this.hierarchicalFacets,
+      {name: hierarchicalFacetName}
+    );
   }
 };
 

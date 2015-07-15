@@ -360,6 +360,7 @@ var responseHelper = {
       'exhaustive': false
     }
   ],
+  'hierarchicalFacets': [],
   'facets': []
 };
 
