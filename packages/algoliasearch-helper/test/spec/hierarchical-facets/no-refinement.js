@@ -62,17 +62,17 @@ test('hierarchical facets: no refinement', function(t) {
   helper.once('result', function(content) {
     var call = search.getCall(0);
     var queries = call.args[0];
-    var firstQuery = queries[0];
+    var hitsQuery = queries[0];
 
     t.equal(queries.length, 1, 'we made one query');
     t.ok(search.calledOnce, 'client.search was called once');
     t.deepEqual(
-      firstQuery.params.facets,
+      hitsQuery.params.facets,
       ['categories.lvl0'],
       'first query (hits) has `categories.lvl0` as facets'
     );
     t.equal(
-      firstQuery.params.facetFilters,
+      hitsQuery.params.facetFilters,
       undefined,
       'first query (hits) has no facet refinement refinement'
     );

@@ -92,7 +92,7 @@ test('hierarchical facets: simple usage', function(t) {
     var call = search.getCall(0);
     var queries = call.args[0];
     var hitsQuery = queries[0];
-    var disjunctiveQuery = queries[1];
+    var parentFacetValuesQuery = queries[1];
 
     t.equal(queries.length, 2, 'we made two queries');
     t.ok(search.calledOnce, 'client.search was called once');
@@ -107,12 +107,12 @@ test('hierarchical facets: simple usage', function(t) {
       'first query (hits) has our `categories.lvl2` refinement facet filter'
     );
     t.deepEqual(
-      disjunctiveQuery.params.facets,
+      parentFacetValuesQuery.params.facets,
       ['categories.lvl2'],
       'second query (unrefined parent facet values) has `categories.lvl2` as facets'
     );
     t.deepEqual(
-      disjunctiveQuery.params.facetFilters,
+      parentFacetValuesQuery.params.facetFilters,
       [['categories.lvl1:beers > IPA']],
       'second query (unrefined parent facet values) has `categories.lvl1` (parent level) refined'
     );
