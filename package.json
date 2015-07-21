@@ -1,0 +1,54 @@
+{
+  "name": "instantsearch.js",
+  "version": "0.0.1",
+  "description": "Instant search kit for Algolia search",
+  "main": "index.js",
+  "author": "Algolia unicorn factory <hey@algolia.com>",
+  "scripts": {
+    "postinstall": "mkdir -p ./dist",
+    "lint": "scripts/lint.sh",
+    "lint:watch": "onchange 'lib/**/*js' 'index.js' 'test/**/*js' '.eslintrc' -- npm run -s lint",
+    "js:build": "NODE_ENV=production browserify -s instantsearch -d index.js | uglifyjs -c warnings=false -m > dist/instantsearch.min.js && gzip -k -f -9 dist/instantsearch.min.js",
+    "js:watch": "watchify -v -d index.js -s instantsearch -o dist/instantsearch.js",
+    "serve": "static -z -a 0.0.0.0 .",
+    "jsfmt": "jsfmt"
+  },
+  "browserify": {
+    "transform": [
+      "babelify",
+      "envify"
+    ]
+  },
+  "standard": {
+    "ignore": [
+      "dist/"
+    ]
+  },
+  "browser": {
+    "lodash": "lodash-compat"
+  },
+  "devDependencies": {
+    "@algolia/jsfmt": "1.3.0",
+    "babelify": "5.0.4",
+    "browserify": "9.0.3",
+    "envify": "3.4.0",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-config-algolia": "2.1.1",
+    "eslint-plugin-react": "2.2.0",
+    "minifyify": "6.4.0",
+    "node-static": "0.7.6",
+    "onchange": "1.1.0",
+    "uglifyjs": "2.4.10",
+    "watchify": "2.4.0"
+  },
+  "dependencies": {
+    "algoliasearch": "3.x.x",
+    "algoliasearch-helper": "2.1.x",
+    "classnames": "2.1.x",
+    "hogan.js": "3.0.2",
+    "lodash": "3.9.x",
+    "qs": "2.4.2",
+    "react": "0.13.1"
+  },
+  "license": "MIT"
+}
