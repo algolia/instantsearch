@@ -369,7 +369,8 @@ SearchParameters.prototype = {
       numericRefinements: this._clearNumericRefinements(attribute),
       facetsRefinements: RefinementList.clearRefinement(this.facetsRefinements, attribute, 'conjunctiveFacet'),
       facetsExcludes: RefinementList.clearRefinement(this.facetsExcludes, attribute, 'exclude'),
-      disjunctiveFacetsRefinements: RefinementList.clearRefinement(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet')
+      disjunctiveFacetsRefinements: RefinementList.clearRefinement(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
+      hierarchicalFacetsRefinements: RefinementList.clearRefinement(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
     });
   },
   /**
