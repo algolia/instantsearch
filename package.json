@@ -5,19 +5,16 @@
   "main": "index.js",
   "author": "Algolia <support@algolia.com>",
   "scripts": {
-    "postinstall": "mkdir -p ./dist",
-    "lint": "/scripts/lint.sh",
-    "lint:watch": "onchange 'lib/**/*js' 'index.js' 'test/**/*js' '.eslintrc' -- npm run -s lint",
-    "js:build": "./scripts/build.sh",
-    "js:watch": "watchify -v -d index.js -s instantsearch -o dist/instantsearch.js",
+    "lint": "./scripts/lint.sh",
+    "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
     "checkstyle": "jsfmt --diff",
-    "jsfmt": "jsfmt"
+    "jsfmt": "jsfmt",
+    "test": "npm run lint"
   },
   "browserify": {
     "transform": [
-      "babelify",
-      "envify"
+      "babelify"
     ]
   },
   "browser": {
@@ -25,15 +22,20 @@
   },
   "devDependencies": {
     "@algolia/jsfmt": "1.3.0",
-    "babelify": "6.1.3",
-    "browserify": "11.0.0",
-    "envify": "3.4.0",
+    "babel-core": "5.8.3",
+    "babel-eslint": "3.1.26",
+    "babel-loader": "5.3.2",
+    "eslint": "0.24.1",
     "eslint-config-airbnb": "0.0.6",
     "eslint-config-algolia": "2.1.1",
+    "eslint-plugin-react": "3.0.0",
     "http-server": "0.8.0",
     "onchange": "1.1.0",
+    "pretty-bytes": "2.0.1",
+    "raw-loader": "0.5.1",
     "uglifyjs": "2.4.10",
-    "watchify": "3.3.0"
+    "webpack": "1.10.1",
+    "webpack-dev-server": "1.10.1"
   },
   "dependencies": {
     "algoliasearch": "3.7.4",

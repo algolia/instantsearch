@@ -1,6 +1,6 @@
 'use strict';
 
-var BemHelper = function BemHelper(block) {
+function BemHelper(block) {
   return function(element, modifier) {
     if (!element) {
       return block;
@@ -10,6 +10,6 @@ var BemHelper = function BemHelper(block) {
     }
     return block + '--' + element + '__' + modifier;
   };
-};
+}
 
 module.exports = BemHelper;

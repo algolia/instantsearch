@@ -2,5 +2,29 @@
   "extends": [
     "eslint-config-airbnb",
     "eslint-config-algolia"
-  ]
+  ],
+  "parser": "babel-eslint",
+  "plugins": ["react"],
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "classes": true,
+    "defaultParams": true,
+    "destructuring": true,
+    "forOf": true,
+    "generators": false,
+    "modules": true,
+    "objectLiteralComputedProperties": true,
+    "objectLiteralDuplicateProperties": false,
+    "objectLiteralShorthandMethods": true,
+    "objectLiteralShorthandProperties": true,
+    "spread": true,
+    "superInFunctions": true,
+    "templateStrings": true,
+    "jsx": true
+  },
+  "rules": {
+    "strict": 0,
+    "react/jsx-curly-spacing": [2, never]
+  }
 }

@@ -4,16 +4,15 @@ var React = require('react');
 
 var utils = require('../../lib/widgetUtils');
 
-var searchbox = function(parameters) {
+function searchbox(parameters) {
   var SearchBox = require('../../components/SearchBox');
   var container = utils.getContainerNode(parameters.container);
   return {
     init: function(initialState, helper) {
-      var searchboxComponent = <SearchBox helper={ helper }
-                                placeholder={ parameters.placeholder } />
-      React.render(searchboxComponent, container);
+      React.render(<SearchBox helper={helper}
+      placeholder={parameters.placeholder} />, container);
     }
   };
-};
+}
 
 module.exports = searchbox;

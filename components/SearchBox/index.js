@@ -19,14 +19,14 @@ var SearchBox = React.createClass({
     var classNames = cx(bem('input'), this.props.inputClass);
 
     return <input type="text"
-      placeholder={ this.props.placeholder }
+      placeholder={this.props.placeholder}
       name="algolia-query"
       className={classNames}
       data-role="autocomplete"
       autoComplete="off"
       autofocus="autofocus"
-      onChange={ this.change }
-      onFocus={ onFocus }
+      onChange={this.change}
+      onFocus={onFocus}
       role="textbox" />;
   },
   change: function(e) {

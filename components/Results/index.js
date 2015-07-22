@@ -7,11 +7,6 @@ var isString = require('lodash/lang/isString');
 var Hogan = require('../templates/Hogan');
 var TemplateFn = require('../templates/Function');
 
-var paginationLabels = {
-  next: 'next',
-  previous: 'previous'
-};
-
 class Results extends React.Component {
   render() {
     var results = this.props.results;
@@ -23,14 +18,14 @@ class Results extends React.Component {
   renderWithResults(hits, hitTemplate) {
     var TemplateComponent = isString(hitTemplate) ? Hogan : TemplateFn;
     var renderedHits = map(hits, function(hit) {
-      return <TemplateComponent data={ hit } key={ hit.objectID } template={ hitTemplate } />;
+      return <TemplateComponent data={hit} key={hit.objectID} template={hitTemplate} />;
     });
-    return <div className="search_list search_results_container row">{ renderedHits }</div>;
+    return <div className="search_list search_results_container row">{renderedHits}</div>;
   }
   renderNoResults(results, noResultsTemplate) {
     var TemplateComponent = isString(noResultsTemplate) ? Hogan : TemplateFn;
     return <div className="search_list search_results_container row">
-             <TemplateComponent data={ results } template={ noResultsTemplate } />
+             <TemplateComponent data={results} template={noResultsTemplate} />
            </div>;
   }
 }
