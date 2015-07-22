@@ -1,12 +1,9 @@
-var InstantSearch = require('./lib/InstantSearch');
-var SearchBox = require('./components/SearchBox');
-var Results = require('./components/Results');
-var React = require( "react" );
+'use strict';
 
 module.exports = {
-  InstantSearch : InstantSearch,
+  InstantSearch: require('./lib/InstantSearch'),
   widgets: {
-    searchbox: require('widgets/searchbox'),
-    results: require('widgets/hits')
+    searchbox: require('./widgets/searchbox'),
+    results: require('./widgets/hits')
   }
-}
+};
