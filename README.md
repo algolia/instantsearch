@@ -1,12 +1,25 @@
 # instantsearch.js
 
-Instant search for everyone, even your cat 😸.
+Instant search for everyone, even for your cat 😸.
+
+API is unstable. We welcome any idea.
 
 ## Usage
 
 ```js
 var instantSearch = require('instantsearch.js');
-var instant = new instantSearch.InstantSearch();
+var instant = new instantSearch.InstantSearch(appId, apiKey, indexName);
+
+// add a widget
+instant.addWidget(
+  instantSearch.widgets.searchBox({
+    container: '#search-box',
+    placeholder: 'Search for libraries in France...'
+  })
+);
+
+// start
+instant.start();
 ```
 
 ## Widget API
