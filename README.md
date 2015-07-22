@@ -28,3 +28,9 @@ function searchBox(opts) {
   }
 }
 ```
+
+## Dev
+
+```sh
+npm run dev
+```
