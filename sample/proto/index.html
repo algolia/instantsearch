@@ -20,13 +20,15 @@ Sorry no results
 <script type="text/javascript">
   var instantSearch = new instantsearch.InstantSearch('JTH1JDTDFT', '34a4c1b994546fbec45a670a06ba0c33', 'Bibliotheques');
   instantSearch.addWidget(instantsearch.widgets.searchbox({
-    selector: "#search-box",
+    container : "#search-box",
     placeholder: "Search for libraries in France..."
   }));
   instantSearch.addWidget(instantsearch.widgets.results({
-    selector: "#hits",
-    noResultsTemplate:"#no-results-template",
-    hitTemplate:"#hit-template"
+    container : "#hits",
+    templates: {
+      'no-results' : document.querySelector('#no-results-template').innerHTML,
+      'hit': document.querySelector('#hit-template').innerHTML
+    }
   }));
   instantSearch.start();
 </script>
