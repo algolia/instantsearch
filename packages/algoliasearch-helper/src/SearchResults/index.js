@@ -246,7 +246,7 @@ function SearchResults(state, algoliaResponse) {
     var hierarchicalFacet;
 
     if (hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey)) {
-      this.hierarchicalFacets[hierarchicalFacetsIndices[hierarchicalFacet]].push({
+      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
         attribute: facetKey,
         data: facetValueObject,
         exhaustive: mainSubResponse.exhaustiveFacetsCount
@@ -284,7 +284,7 @@ function SearchResults(state, algoliaResponse) {
       var position;
 
       if (hierarchicalFacet) {
-        position = hierarchicalFacetsIndices[hierarchicalFacet];
+        position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
         var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
         this.hierarchicalFacets[position][attributeIndex].data = extend({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
       } else {
