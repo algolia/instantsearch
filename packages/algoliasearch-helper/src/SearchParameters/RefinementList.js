@@ -128,14 +128,19 @@ var lib = {
     var containsRefinements = refinementList[attribute] &&
       refinementList[attribute].length > 0;
 
+    if (!containsRefinements) {
+      return false;
+    }
+
+    // .isRefined('facet')
     if (isUndefined(refinementValue)) {
-      return containsRefinements;
+      return !!containsRefinements;
     }
 
     var refinementValueAsString = '' + refinementValue;
 
-    return containsRefinements &&
-      indexOf(refinementList[attribute], refinementValueAsString) !== -1;
+    // .isRefined('facet', 'value')
+    return indexOf(refinementList[attribute], refinementValueAsString) !== -1;
   }
 };
 
