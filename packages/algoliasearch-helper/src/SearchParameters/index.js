@@ -757,26 +757,24 @@ SearchParameters.prototype = {
   toggleHierarchicalFacetRefinement: function toggleHierarchicalFacetRefinement(facet, value) {
     var separator = this.getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
 
-    return this.mutateMe(function merge(newInstance) {
-      var mod = {};
+    var mod = {};
 
-      // up one level:
-      // - `beer > IPA` => `beer` or
-      // - `beer` => ``
-      if (newInstance.hierarchicalFacetsRefinements[facet] === value) {
-        if (value.indexOf(separator) === -1) {
-          // root level
-          mod[facet] = '';
-        } else {
-          mod[facet] = trimRight(value.slice(0, value.lastIndexOf(separator)));
-        }
+    // up one level:
+    // - `beer > IPA` => `beer` or
+    // - `beer` => ``
+    if (this.hierarchicalFacetsRefinements[facet] === value) {
+      if (value.indexOf(separator) === -1) {
+        // root level
+        mod[facet] = '';
       } else {
-        mod[facet] = value;
+        mod[facet] = trimRight(value.slice(0, value.lastIndexOf(separator)));
       }
+    } else {
+      mod[facet] = value;
+    }
 
-      newInstance.hierarchicalFacetsRefinements = extend({}, newInstance.hierarchicalFacetsRefinements, mod);
-
-      return newInstance;
+    return this.setQueryParameters({
+      hierarchicalFacetsRefinements: extend({}, this.hierarchicalFacetsRefinements, mod)
     });
   },
   /**
