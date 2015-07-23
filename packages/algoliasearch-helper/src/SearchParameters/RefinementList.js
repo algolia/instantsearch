@@ -129,13 +129,16 @@ var lib = {
       refinementList[attribute].length > 0;
 
     if (isUndefined(refinementValue)) {
-      return containsRefinements;
+      return containsRefinements ? true : false;
+    }
+
+    if (!containsRefinements) {
+      return false;
     }
 
     var refinementValueAsString = '' + refinementValue;
 
-    return containsRefinements &&
-      indexOf(refinementList[attribute], refinementValueAsString) !== -1;
+    return indexOf(refinementList[attribute], refinementValueAsString) !== -1;
   }
 };
 

@@ -91,14 +91,16 @@ test('isDisjunctiveRefined', function(t) {
   var facet = 'MyFacet';
   var value = 'MyValue';
 
-  t.notOk(helper.isDisjunctiveRefined(facet, value),
-    'isDisjunctiveRefined should not return true for undefined refinement');
+  t.equal(helper.isDisjunctiveRefined(facet, value), false,
+    'isDisjunctiveRefined should return false for when no refinement for facet');
+
   helper.addDisjunctiveRefine(facet, value);
-  t.ok(helper.isDisjunctiveRefined(facet, value),
-    'isDisjunctiveRefined should not return false for defined refinement');
+  t.equal(helper.isDisjunctiveRefined(facet, value), true,
+    'isDisjunctiveRefined should be true when facet is refined');
+
   helper.removeDisjunctiveRefine(facet, value);
-  t.notOk(helper.isDisjunctiveRefined(facet, value),
-    'isDisjunctiveRefined should not return true for removed refinement');
+  t.equal(helper.isDisjunctiveRefined(facet, value), false,
+    'isDisjunctiveRefined should return false when refinement was removed');
   t.end();
 });
 
@@ -109,11 +111,11 @@ test('IsRefined should return true if the (facet, value ) is refined.', function
 
   helper.addRefine('facet1', 'boom');
 
-  t.ok(helper.isRefined('facet1', 'boom'), 'the facet + value is refined >> true');
+  t.equal(helper.isRefined('facet1', 'boom'), true, 'the facet + value is refined >> true');
 
-  t.notOk(helper.isRefined('facet1', 'booohh'), 'value not refined but is a facet');
-  t.notOk(helper.isRefined('notAFacet', 'maoooh'), "not refined because it's not a facet");
-  t.notOk(helper.isRefined(null, null), 'not even valid values');
+  t.equal(helper.isRefined('facet1', 'booohh'), false, 'value not refined but is a facet');
+  t.equal(helper.isRefined('notAFacet', 'maoooh'), false, "not refined because it's not a facet");
+  t.equal(helper.isRefined(null, null), false, 'not even valid values');
 
   t.end();
 });
@@ -123,18 +125,18 @@ test('isRefined(facet)/hasRefinements should return true if the facet is refined
     facets: ['facet1']
   });
 
-  t.notOk(helper.isRefined('facet1'), 'the facet is not refined yet >> false');
-  t.notOk(helper.hasRefinements('facet1'), 'the facet is not refined yet >> false');
+  t.equal(helper.isRefined('facet1'), false, 'the facet is not refined yet >> false');
+  t.equal(helper.hasRefinements('facet1'), false, 'the facet is not refined yet >> false');
 
   helper.addRefine('facet1', 'boom');
 
-  t.ok(helper.isRefined('facet1'), 'the facet is refined >> true');
-  t.ok(helper.hasRefinements('facet1'), 'the facet is refined >> true');
+  t.equal(helper.isRefined('facet1'), true, 'the facet is refined >> true');
+  t.equal(helper.hasRefinements('facet1'), true, 'the facet is refined >> true');
 
-  t.notOk(helper.isRefined('notAFacet'), 'not a facet');
-  t.notOk(helper.hasRefinements('notAFacet'), 'not a facet');
-  t.notOk(helper.isRefined(null), 'not even valid values');
-  t.notOk(helper.hasRefinements(null), 'not even valid values');
+  t.equal(helper.isRefined('notAFacet'), false, 'not a facet');
+  t.equal(helper.hasRefinements('notAFacet'), false, 'not a facet');
+  t.equal(helper.isRefined(null), false, 'not even valid values');
+  t.equal(helper.hasRefinements(null), false, 'not even valid values');
 
   t.end();
 });
@@ -203,17 +205,17 @@ test('[Conjunctive] Facets should be resilient to user attempt to use numbers', 
   });
 
   helper.addRefine('facet1', 42);
-  t.ok(helper.isRefined('facet1', 42), '[facet][number] should be refined');
-  t.ok(helper.isRefined('facet1', '42'), '[facet][string] should be refined');
+  t.equal(helper.isRefined('facet1', 42), true, '[facet][number] should be refined');
+  t.equal(helper.isRefined('facet1', '42'), true, '[facet][string] should be refined');
 
   var stateWithFacet1and42 = helper.state;
 
   helper.removeRefine('facet1', '42');
-  t.notOk(helper.isRefined('facet1', '42'), '[facet][string] should not be refined');
+  t.equal(helper.isRefined('facet1', '42'), false, '[facet][string] should not be refined');
 
   helper.setState(stateWithFacet1and42);
   helper.removeRefine('facet1', 42);
-  t.notOk(helper.isRefined('facet1', 42), '[facet][number] should not be refined');
+  t.equal(helper.isRefined('facet1', 42), false, '[facet][number] should not be refined');
 
   t.end();
 });
@@ -225,17 +227,17 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
   });
 
   helper.addExclude('facet1', 42);
-  t.ok(helper.isExcluded('facet1', 42), '[facet][number] should be refined');
-  t.ok(helper.isExcluded('facet1', '42'), '[facet][string] should be refined');
+  t.equal(helper.isExcluded('facet1', 42), true, '[facet][number] should be refined');
+  t.equal(helper.isExcluded('facet1', '42'), true, '[facet][string] should be refined');
 
   var stateWithFacet1Without42 = helper.state;
 
   helper.removeExclude('facet1', '42');
-  t.notOk(helper.isExcluded('facet1', '42'), '[facet][string] should not be refined');
+  t.equal(helper.isExcluded('facet1', '42'), false, '[facet][string] should not be refined');
 
   helper.setState(stateWithFacet1Without42);
   helper.removeExclude('facet1', 42);
-  t.notOk(helper.isExcluded('facet1', 42), '[facet][number] should not be refined');
+  t.equal(helper.isExcluded('facet1', 42), false, '[facet][number] should not be refined');
 
   t.end();
 });
@@ -247,17 +249,17 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
   });
 
   helper.addDisjunctiveRefine('facet2', 42);
-  t.ok(helper.isDisjunctiveRefined('facet2', 42), '[facet][number] should be refined');
-  t.ok(helper.isDisjunctiveRefined('facet2', '42'), '[facet][string] should be refined');
+  t.equal(helper.isDisjunctiveRefined('facet2', 42), true, '[facet][number] should be refined');
+  t.equal(helper.isDisjunctiveRefined('facet2', '42'), true, '[facet][string] should be refined');
 
   var stateWithFacet2and42 = helper.state;
 
   helper.removeDisjunctiveRefine('facet2', '42');
-  t.notOk(helper.isDisjunctiveRefined('facet2', '42'), '[facet][string] should not be refined');
+  t.equal(helper.isDisjunctiveRefined('facet2', '42'), false, '[facet][string] should not be refined');
   helper.setState(stateWithFacet2and42);
 
   helper.removeDisjunctiveRefine('facet2', 42);
-  t.notOk(helper.isDisjunctiveRefined('facet2', 42), '[facet][number] should not be refined');
+  t.equal(helper.isDisjunctiveRefined('facet2', 42), false, '[facet][number] should not be refined');
 
   t.end();
 });
