@@ -5,10 +5,12 @@ var _ = require('lodash');
 var algoliasearchHelper = require('../../index');
 
 test('Adding refinments should add an entry to the refinments attribute', function(t) {
-  var helper = algoliasearchHelper({}, 'index', {});
-
   var facetName = 'facet1';
   var facetValue = '42';
+
+  var helper = algoliasearchHelper({}, 'index', {
+    facets: [facetName]
+  });
 
   t.ok(_.isEmpty(helper.state.facetsRefinements), 'should be empty at first');
   helper.addRefine(facetName, facetValue);
@@ -86,9 +88,12 @@ test('Removing several refinements for a single attribute should be handled', fu
 });
 
 test('isDisjunctiveRefined', function(t) {
-  var helper = algoliasearchHelper(null, null, {});
-
   var facet = 'MyFacet';
+
+  var helper = algoliasearchHelper(null, null, {
+    disjunctiveFacets: [facet]
+  });
+
   var value = 'MyValue';
 
   t.equal(helper.isDisjunctiveRefined(facet, value), false,

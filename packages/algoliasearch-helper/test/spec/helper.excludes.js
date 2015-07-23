@@ -4,7 +4,9 @@ var test = require('tape');
 var algoliasearchHelper = require('../../index');
 
 test('addExclude should add an exclusion', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facet']
+  });
 
   helper._search = function() {};
 
@@ -20,7 +22,9 @@ test('addExclude should add an exclusion', function(t) {
 });
 
 test('removeExclude should remove an exclusion', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facet']
+  });
 
   helper._search = function() {};
 
@@ -42,7 +46,9 @@ test('removeExclude should remove an exclusion', function(t) {
 });
 
 test('isExcluded should report exclusion correctly', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facet']
+  });
 
   helper._search = function() {};
 

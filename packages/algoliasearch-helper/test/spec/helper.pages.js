@@ -60,11 +60,11 @@ test('pages should be reset if the mutation might change the number of pages', f
   testMutation(t, ' addExclude', partial(helper.addExclude, 'facet1', 'val2'));
   testMutation(t, ' removeExclude', partial(helper.removeExclude, 'facet1', 'val2'));
 
-  testMutation(t, ' addRefine', partial(helper.addRefine, 'f1', 'val'));
-  testMutation(t, ' removeRefine', partial(helper.removeRefine, 'f1', 'val'));
+  testMutation(t, ' addRefine', partial(helper.addRefine, 'f2', 'val'));
+  testMutation(t, ' removeRefine', partial(helper.removeRefine, 'f2', 'val'));
 
-  testMutation(t, ' addDisjunctiveRefine', partial(helper.addDisjunctiveRefine, 'f2', 'val'));
-  testMutation(t, ' removeDisjunctiveRefine', partial(helper.removeDisjunctiveRefine, 'f2', 'val'));
+  testMutation(t, ' addDisjunctiveRefine', partial(helper.addDisjunctiveRefine, 'f1', 'val'));
+  testMutation(t, ' removeDisjunctiveRefine', partial(helper.removeDisjunctiveRefine, 'f1', 'val'));
 
   testMutation(t, ' toggleRefine', partial(helper.toggleRefine, 'f1', 'v1'));
   testMutation(t, ' toggleExclude', partial(helper.toggleExclude, 'facet1', '55'));

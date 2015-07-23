@@ -6,7 +6,10 @@ var forEach = require('lodash/collection/forEach');
 var algoliasearchHelper = require('../../index.js');
 
 test('Distinct not set', function(t) {
-  var helper = algoliasearchHelper(null, null, {});
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facetConj'],
+    disjunctiveFacets: ['facet']
+  });
   var state0 = helper.state;
 
   var disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
@@ -38,7 +41,7 @@ test('Distinct not set', function(t) {
   });
 
   helper.setState(state0);
-  helper.addRefine('facet', 'value');
+  helper.addRefine('facetConj', 'value');
   disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
   t.equal(disjunctiveFacetSearchParam.distinct, undefined, '[disjunctive][conjunctive refinement] distinct should be undefined');
   facetSearchParam = helper._getHitsSearchParams();
@@ -61,7 +64,10 @@ test('Distinct not set', function(t) {
 });
 
 test('Distinct set to true', function(t) {
-  var helper = algoliasearchHelper(null, null, {}).setQueryParameter('distinct', true);
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facetConj'],
+    disjunctiveFacets: ['facet']
+  }).setQueryParameter('distinct', true);
   var state0 = helper.state;
 
   var disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
@@ -87,7 +93,7 @@ test('Distinct set to true', function(t) {
   t.equal(facetSearchParam.distinct, true, '[hits][disjunctive refinement] distinct should be true');
 
   helper.setState(state0);
-  helper.addRefine('facet', 'value');
+  helper.addRefine('facetConj', 'value');
   disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
   t.equal(disjunctiveFacetSearchParam.distinct, true, '[disjunctive][conjunctive refinement] distinct should be true');
   facetSearchParam = helper._getHitsSearchParams();
@@ -104,7 +110,10 @@ test('Distinct set to true', function(t) {
 });
 
 test('Distinct to false', function(t) {
-  var helper = algoliasearchHelper(null, null, {}).setQueryParameter('distinct', false);
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facetConj'],
+    disjunctiveFacets: ['facet']
+  }).setQueryParameter('distinct', false);
   var state0 = helper.state;
 
   var disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
@@ -130,7 +139,7 @@ test('Distinct to false', function(t) {
   t.equal(facetSearchParam.distinct, false, '[hits][disjunctive refinement] distinct should be false');
 
   helper.setState(state0);
-  helper.addRefine('facet', 'value');
+  helper.addRefine('facetConj', 'value');
   disjunctiveFacetSearchParam = helper._getDisjunctiveFacetSearchParams();
   t.equal(disjunctiveFacetSearchParam.distinct, false, '[disjunctive][conjunctive refinement] distinct should be false');
   facetSearchParam = helper._getHitsSearchParams();
