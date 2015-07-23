@@ -3,13 +3,17 @@
 if [ -f ~/.nvm/nvm.sh ]
 then
   source ~/.nvm/nvm.sh
-elif [ -f $(brew --prefix nvm)/nvm.sh ] 
+elif [ -f $(brew --prefix nvm)/nvm.sh ]
 then
   source $(brew --prefix nvm)/nvm.sh
 fi
 
+[ -z $TRAVIS_BUILD_NUMBER ] && CI='false' || CI='true'
+
 set -e # exit when error
-set -x # debug messages
+if [ $CI == 'true' ]; then
+  set -x # debug messages
+fi
 
 [ -z $TRAVIS_PULL_REQUEST ] && TRAVIS_PULL_REQUEST='false'
 [ -z $TRAVIS_BUILD_NUMBER ] && TRAVIS_BUILD_NUMBER='false'
