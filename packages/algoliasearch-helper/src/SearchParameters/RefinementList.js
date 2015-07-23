@@ -125,15 +125,11 @@ var lib = {
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
     var indexOf = require('lodash/array/indexOf');
 
-    var containsRefinements = refinementList[attribute] &&
+    var containsRefinements = !!refinementList[attribute] &&
       refinementList[attribute].length > 0;
 
-    if (isUndefined(refinementValue)) {
-      return containsRefinements ? true : false;
-    }
-
-    if (!containsRefinements) {
-      return false;
+    if (isUndefined(refinementValue) || !containsRefinements) {
+      return containsRefinements;
     }
 
     var refinementValueAsString = '' + refinementValue;
