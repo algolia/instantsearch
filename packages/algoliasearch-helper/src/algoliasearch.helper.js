@@ -574,7 +574,6 @@ AlgoliaSearchHelper.prototype._handleResponse = function(state, queryId, err, co
  * @return {object.<string, any>}
  */
 AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
-  var query = this.state.query;
   var facets = this.state.facets
     .concat(this.state.disjunctiveFacets)
     .concat(this._getHitsHierarchicalFacetsAttributes());
@@ -589,10 +588,6 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
 
   if (this.state.distinct === true || this.state.distinct === false) {
     additionalParams.distinct = this.state.distinct;
-  }
-
-  if (!this.containsRefinement(query, facetFilters, numericFilters, tagFilters)) {
-    additionalParams.distinct = false;
   }
 
   if (facetFilters.length > 0) {
@@ -613,7 +608,6 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * @return {object}
  */
 AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet) {
-  var query = this.state.query;
   var facetFilters = this._getFacetFilters(facet);
   var numericFilters = this._getNumericFilters(facet);
   var tagFilters = this._getTagFilters();
@@ -636,10 +630,6 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet)
 
   if (this.state.distinct === true || this.state.distinct === false) {
     additionalParams.distinct = this.state.distinct;
-  }
-
-  if (!this.containsRefinement(query, facetFilters, numericFilters, tagFilters)) {
-    additionalParams.distinct = false;
   }
 
   if (numericFilters.length > 0) {
