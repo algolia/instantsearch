@@ -743,7 +743,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
     // let's get the parent level facet values
     if (facet) {
       attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 2];
-      facetValue = trim(facetValue.slice(0, facetValue.lastIndexOf(separator)));
+      facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
     } else {
       attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 1];
     }

@@ -2,7 +2,7 @@
 
 var test = require('tape');
 
-test('hierarchical facets: custom separator', function(t) {
+test('hierarchical facets: simple usage', function(t) {
   var algoliasearch = require('algoliasearch');
   var sinon = require('sinon');
 
@@ -16,12 +16,11 @@ test('hierarchical facets: custom separator', function(t) {
   var helper = algoliasearchHelper(client, indexName, {
     hierarchicalFacets: [{
       name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1'],
-      separator: ' | '
+      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
     }]
   });
 
-  helper.toggleRefine('categories', 'beers | IPA');
+  helper.toggleRefine('categories', 'beers > IPA > Flying dog');
 
   var search = sinon.stub(client, 'search');
 
@@ -29,14 +28,15 @@ test('hierarchical facets: custom separator', function(t) {
     'results': [{
       'query': 'a',
       'index': indexName,
-      'hits': [{'objectID': 'one'}, {'objectID': 'two'}],
-      'nbHits': 2,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
       'facets': {
-        'categories.lvl0': {'beers': 2},
-        'categories.lvl1': {'beers | IPA': 2}
+        'categories.lvl0': {'beers': 1},
+        'categories.lvl1': {'beers > IPA': 1},
+        'categories.lvl2': {'beers > IPA > Flying dog': 1}
       }
     }, {
       'query': 'a',
@@ -47,8 +47,9 @@ test('hierarchical facets: custom separator', function(t) {
       'nbPages': 1,
       'hitsPerPage': 1,
       'facets': {
-        'categories.lvl0': {'beers': 3},
-        'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1}
+        'categories.lvl0': {'beers': 2},
+        'categories.lvl1': {'beers > IPA': 2},
+        'categories.lvl2': {'beers > IPA > Flying dog': 1, 'beers > IPA > Anchor steam': 1}
       }
     }]
   };
@@ -61,20 +62,26 @@ test('hierarchical facets: custom separator', function(t) {
     'data': [{
       'name': 'beers',
       'path': 'beers',
-      'count': 3,
+      'count': 2,
       'isRefined': true,
       'data': [{
         'name': 'IPA',
-        'path': 'beers | IPA',
+        'path': 'beers > IPA',
         'count': 2,
         'isRefined': true,
-        'data': null
-      }, {
-        'name': 'Belgian',
-        'path': 'beers | Belgian',
-        'count': 1,
-        'isRefined': false,
-        'data': null
+        'data': [{
+          'name': 'Flying dog',
+          'path': 'beers > IPA > Flying dog',
+          'count': 1,
+          'isRefined': true,
+          'data': null
+        }, {
+          'name': 'Anchor steam',
+          'path': 'beers > IPA > Anchor steam',
+          'count': 1,
+          'isRefined': false,
+          'data': null
+        }]
       }]
     }]
   }];
@@ -91,23 +98,23 @@ test('hierarchical facets: custom separator', function(t) {
     t.ok(search.calledOnce, 'client.search was called once');
     t.deepEqual(
       hitsQuery.params.facets,
-      ['categories.lvl0', 'categories.lvl1'],
-      'first query (hits) has `categories.lvl0, categories.lvl1` as facets'
+      ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3'],
+      'first query (hits) has `categories.lvl0, categories.lvl1, categories.lvl2, categories.lvl3` as facets'
     );
     t.deepEqual(
       hitsQuery.params.facetFilters,
-      [['categories.lvl1:beers | IPA']],
-      'first query (hits) has our `categories.lvl1` refinement facet filter'
+      [['categories.lvl2:beers > IPA > Flying dog']],
+      'first query (hits) has our `categories.lvl2` refinement facet filter'
     );
     t.deepEqual(
       parentFacetValuesQuery.params.facets,
-      ['categories.lvl1'],
-      'second query (unrefined parent facet values) has `categories.lvl1` as facets'
+      ['categories.lvl2'],
+      'second query (unrefined parent facet values) has `categories.lvl2` as facets'
     );
     t.deepEqual(
       parentFacetValuesQuery.params.facetFilters,
-      [['categories.lvl0:beers']],
-      'second query (unrefined parent facet values) has `categories.lvl0` (parent level) refined'
+      [['categories.lvl1:beers > IPA']],
+      'second query (unrefined parent facet values) has `categories.lvl1` (parent level) refined'
     );
     t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
     t.end();

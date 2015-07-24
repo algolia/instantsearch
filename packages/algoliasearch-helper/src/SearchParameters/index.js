@@ -767,7 +767,7 @@ SearchParameters.prototype = {
         // root level
         mod[facet] = '';
       } else {
-        mod[facet] = trimRight(value.slice(0, value.lastIndexOf(separator)));
+        mod[facet] = value.slice(0, value.lastIndexOf(separator));
       }
     } else {
       mod[facet] = value;
@@ -1013,7 +1013,7 @@ SearchParameters.prototype = {
    * @return {string} returns the hierarchicalFacet.separator or `>` as default
    */
   getHierarchicalFacetSeparator: function(hierarchicalFacet) {
-    return hierarchicalFacet.separator || '>';
+    return hierarchicalFacet.separator || ' > ';
   },
 
   /**
