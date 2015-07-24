@@ -14,8 +14,9 @@ if (!utils.shouldRun) {
 }
 
 test('[INT][TAGS]Test tags operations on the helper and their results on the algolia API', function(t) {
-  var indexName = (process.env.TRAVIS_BUILD_NUMBER ||
-    'helper-integration-tests-') + 'helper_refinements' + random(0, 5000);
+  var indexName = '_travis-algoliasearch-helper-js-' +
+    (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+    'helper_refinements' + random(0, 5000);
 
   setup(indexName, function(client, index) {
     return index.addObjects([
