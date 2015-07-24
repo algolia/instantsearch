@@ -105,7 +105,7 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 ### Init the helper
 
 ```js
-var helper = algoliasearchHelper(client, indexName, parameters);
+var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 ```
 
 ### Helper lifecycle
