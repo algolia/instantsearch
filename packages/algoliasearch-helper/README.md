@@ -58,13 +58,13 @@ This is the library you will need to easily build a good search UX like our [ins
 
 A small example that uses Browserify to manage modules.
 
-```javascript
+```js
 var algoliasearch = require('algoliasearch');
 var algoliasearchHelper = require('algoliasearch-helper');
 
-var client = algoliasearch('app_id', 'api_key');
+var client = algoliasearch('appId', 'apiKey');
 
-var helper = algoliasearchHelper(client, 'myMainIndex', {
+var helper = algoliasearchHelper(client, 'indexName', {
   facets: ['mainCharacterFirstName', 'year'],
   disjunctiveFacets: ['director']
 });
@@ -104,8 +104,8 @@ Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
 ### Init the helper
 
-```javascript
-var helper = algoliasearchHelper(client, indexName, parameters);
+```js
+var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 ```
 
 ### Helper lifecycle
@@ -123,7 +123,7 @@ var helper = algoliasearchHelper(client, indexName, parameters);
 3. read the results (with the event "result" handler) and update the UI with the results<br/>
         ```
         helper.on('result', function(results) {
-             updateUI(results);
+          updateUI(results);
         });
         ```
 
@@ -131,11 +131,11 @@ var helper = algoliasearchHelper(client, indexName, parameters);
 
 ### Objects
 
-**AlgoliasearchHelper** : the helper. Keeps the state of the search, makes the queries and calls the handlers when an event happen.
+**AlgoliasearchHelper**: the helper. Keeps the state of the search, makes the queries and calls the handlers when an event happen.
 
-**SearchParameters** : the object representing the state of the search. The current state is stored in `helperInstance.state`.
+**SearchParameters**: the object representing the state of the search. The current state is stored in `helperInstance.state`.
 
-**SearchResults** : the object in which the Algolia answers are transformed into. This object is passed to the result event handler.
+**SearchResults**: the object in which the Algolia answers are transformed into. This object is passed to the result event handler.
 An example of SearchResults in JSON is available at [the end of this readme](#results-format)
 
 ### Search
@@ -144,17 +144,23 @@ The search is triggered by the `search()` method.
 
 It takes all the previous modifications to the search and uses them to create the queries to Algolia. The search parameters are immutable.
 
-Example :
+Example:
 
-```javascript
-var helper = algoliasearchHelper(client, 'index', {});
+```js
+var helper = algoliasearchHelper(client, indexName);
+
 // Let's monitor the results with the console
-helper.on('result', function(content) { console.log(content); });
+helper.on('result', function(content) {
+  console.log(content);
+});
+
 // Let's make an empty search
 // The results are all sorted using the dashboard configuration
 helper.search();
+
 // Let's search for "landscape"
 helper.setQuery('landscape').search();
+
 // Let's add a category "photo"
 // Will make a search with "photo" tag and "landscape" as the query
 helper.addTag('photo').search();
@@ -162,33 +168,31 @@ helper.addTag('photo').search();
 
 ### Events
 
-`result` : get notified when new results are received. The handler function will receive
+The helper is an [Event Emitter](https://nodejs.org/api/events.html#events_class_events_eventemitter).
+
+`result`: get notified when new results are received. The handler function will receive
 two objects (`SearchResults` and `SearchParameters`).
 
-`error` : get notified when errors are received from the API.
+`error`: get notified when errors are received from the API.
 
-`change` : get notified when a property has changed in the helper
+`change`: get notified when a property has changed in the helper
 
 #### Listen to the `result` event
 
-```javascript
-helper.on('result', function(results){
-        updateTheResults(results);
-})
+```js
+helper.on('result', updateTheResults);
 ```
 
 #### Listen to a `result` event once
 
-```javascript
-helper.once('result', function(results){
-        updateTheResults(results);
-})
+```js
+helper.once('result', updateTheResults);
 ```
 
 #### Remove all `result` listeners
 
-```javascript
-helper.removeListener('result')
+```js
+helper.removeListener('result');
 ```
 
 ### Query
@@ -201,27 +205,27 @@ helper.setQuery('fruit').search();
 
 ### Filtering results
 
-Facets are filters to retrieve a subset of an index having a specific value for a given attribute. First you need to define which attribute will be used as a facet in the dashboard : [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
+Facets are filters to retrieve a subset of an index having a specific value for a given attribute. First you need to define which attribute will be used as a facet in the dashboard: [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
 
 #### "AND" facets
 
 ##### Facet definition
 
-```javascript
+```js
 var helper = algoliasearchHelper(client, indexName, {
-	facets : [ 'ANDFacet' ]
+	facets: ['ANDFacet']
 });
 ```
 
 ##### Add a facet filter
 
-```javascript
+```js
 helper.addRefine('ANDFacet', 'valueOfANDFacet').search();
 ```
 
 ##### Remove a facet filter
 
-```javascript
+```js
 helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
 ```
 
@@ -229,21 +233,21 @@ helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
 
 ##### Facet definition
 
-```javascript
+```js
 var helper = algoliasearchHelper(client, indexName, {
-	disjunctiveFacets : [ 'ORFacet' ]
+	disjunctiveFacets: ['ORFacet']
 });
 ```
 
 ##### Add a facet filter
 
-```javascript
+```js
 helper.addDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
 ```
 
 ##### Remove a facet filter
 
-```javascript
+```js
 helper.removeDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
 ```
 
@@ -253,21 +257,21 @@ filter so that we do NOT get a given category
 
 ##### Facet definition (same as "AND" facet)
 
-```javascript
+```js
 var helper = algoliasearchHelper(client, indexName, {
-	facets: [ 'ANDFacet' ]
+	facets: ['ANDFacet']
 }).search();
 ```
 
 ##### Exclude a value for a facet
 
-```javascript
+```js
 helper.addExclude('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 ##### Remove an exclude from the list of excluded values
 
-```javascript
+```js
 helper.removeExclude('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
@@ -277,21 +281,21 @@ Filter over numeric attributes with math operations like `=`, `>`, `<`, `>=`, `<
 
 ##### Facet definition
 
-```javascript
+```js
 var helper = algoliasearchHelper(client, indexName, {
-	disjunctiveFacets : [ 'numericFacet' ]
+	disjunctiveFacets: ['numericFacet']
 });
 ```
 
 ##### Add a numeric refinement
 
-```javascript
+```js
 helper.addNumericRefinement('numericFacet', '=', '3').search();
 ```
 
 ##### Remove a numeric refinement
 
-```javascript
+```js
 helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
 ```
 
@@ -299,21 +303,21 @@ helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
 
 ##### Clear all the refinements for all the refined attributes
 
-```javascript
+```js
 helper.clearRefinements().search();
 ```
 
 ##### Clear all the refinements for a specific attribute
 
-```javascript
+```js
 helper.clearRefinements('ANDFacet').search();
 ```
 
 ##### [ADVANCED] Clear only the exclusions on the "ANDFacet" attribute
 
-```javascript
+```js
 helper.clearRefinements(function(value, attribute, type) {
-  return type==='exclude' && attribute==='ANDFacet';
+  return type === 'exclude' && attribute === 'ANDFacet';
 }).search();
 ```
 
@@ -323,19 +327,19 @@ Tags are an easy way to do filtering. They are based on a special attribute in t
 
 #### Add a tag filter for the value "landscape"
 
-```javascript
+```js
 helper.addTag('landscape').search();
 ```
 
 #### Remove a tag filter for the value "landscape"
 
-```javascript
+```js
 helper.removeTag('landscape').search();
 ```
 
 #### Clear all the tags filters
 
-```javascript
+```js
 helper.clearTags().search();
 ```
 
@@ -343,29 +347,29 @@ helper.clearTags().search();
 
 #### Get the current page
 
-```javascript
+```js
 helper.getCurrentPage();
 ```
 
 #### Change page
 
-```javascript
+```js
 helper.setCurrentPage(3).search();
 ```
 
 ### Index
 
-Index can be changed. The common use case is when you have several slaves with different sort order (sort by relevance, sort by price…).
+Index can be changed. The common use case is when you have several slaves with different sort order (sort by relevance, price or any other attribute).
 
 #### Change the current index
 
-```javascript
+```js
 helper.setIndex('index_orderByPrice').search();
 ```
 
 #### Get the current index
 
-```javascript
+```js
 var currentIndex = helper.state.index;
 ```
 
@@ -375,15 +379,15 @@ There are lots of other parameters you can set.
 
 #### Set a parameter at the initialization of the helper
 
-```javascript
+```js
 var helper = algoliasearchHelper(client, indexName, {
-	hitsPerPage : 50
+	hitsPerPage: 50
 });
 ```
 
 #### Set a parameter later
 
-```javascript
+```js
 helper.setQueryParameter('hitsPerPage', 20).search();
 ```
 
@@ -695,7 +699,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
         <p class="p3"><span class="s1">string</span></p>
       </td>
       <td valign="top" class="td6">
-        <p class="p4"><span class="s1">How the query should be treated by the search engine. Possible values : prefixAll, prefixLast, prefixNone</span></p>
+        <p class="p4"><span class="s1">How the query should be treated by the search engine. Possible values: prefixAll, prefixLast, prefixNone</span></p>
         <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc#queryType">queryType on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
@@ -767,7 +771,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
         <p class="p3"><span class="s1">string</span></p>
       </td>
       <td valign="top" class="td6">
-        <p class="p4"><span class="s1">How the typo tolerance behave in the search engine. Possible values : true, false, min, strict</span></p>
+        <p class="p4"><span class="s1">How the typo tolerance behave in the search engine. Possible values: true, false, min, strict</span></p>
         <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc#typoTolerance">typoTolerance on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
@@ -778,125 +782,125 @@ helper.setQueryParameter('hitsPerPage', 20).search();
 
 Here is an example of a result object you get with the `result` event.
 
-```javascript
+```js
 {
-   "hitsPerPage" : 10,
-   "processingTimeMS" : 2,
-   "facets" : [
+   "hitsPerPage": 10,
+   "processingTimeMS": 2,
+   "facets": [
       {
-         "name" : "type",
-         "data" : {
-            "HardGood" : 6627,
-            "BlackTie" : 550,
-            "Music" : 665,
-            "Software" : 131,
-            "Game" : 456,
-            "Movie" : 1571
+         "name": "type",
+         "data": {
+            "HardGood": 6627,
+            "BlackTie": 550,
+            "Music": 665,
+            "Software": 131,
+            "Game": 456,
+            "Movie": 1571
          },
-         "exhaustive" : false
+         "exhaustive": false
       },
       {
-         "exhaustive" : false,
-         "data" : {
-            "Free shipping" : 5507
+         "exhaustive": false,
+         "data": {
+            "Free shipping": 5507
          },
-         "name" : "shipping"
+         "name": "shipping"
       }
    ],
-   "hits" : [
+   "hits": [
       {
-         "thumbnailImage" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_54x108_s.gif",
-         "_highlightResult" : {
-            "shortDescription" : {
-               "matchLevel" : "none",
-               "value" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
-               "matchedWords" : []
+         "thumbnailImage": "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_54x108_s.gif",
+         "_highlightResult": {
+            "shortDescription": {
+               "matchLevel": "none",
+               "value": "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+               "matchedWords": []
             },
-            "category" : {
-               "matchLevel" : "none",
-               "value" : "Computer Security Software",
-               "matchedWords" : []
+            "category": {
+               "matchLevel": "none",
+               "value": "Computer Security Software",
+               "matchedWords": []
             },
-            "manufacturer" : {
-               "matchedWords" : [],
-               "value" : "Webroot",
-               "matchLevel" : "none"
+            "manufacturer": {
+               "matchedWords": [],
+               "value": "Webroot",
+               "matchLevel": "none"
             },
-            "name" : {
-               "value" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
-               "matchedWords" : [],
-               "matchLevel" : "none"
+            "name": {
+               "value": "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+               "matchedWords": [],
+               "matchLevel": "none"
             }
          },
-         "image" : "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_105x210_sc.jpg",
-         "shipping" : "Free shipping",
-         "bestSellingRank" : 4,
-         "shortDescription" : "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
-         "url" : "http://www.bestbuy.com/site/webroot-secureanywhere-internet-security-3-devi…d=1219060687969&skuId=1688832&cmp=RMX&ky=2d3GfEmNIzjA0vkzveHdZEBgpPCyMnLTJ",
-         "name" : "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
-         "category" : "Computer Security Software",
-         "salePrice_range" : "1 - 50",
-         "objectID" : "1688832",
-         "type" : "Software",
-         "customerReviewCount" : 5980,
-         "salePrice" : 49.99,
-         "manufacturer" : "Webroot"
+         "image": "http://img.bbystatic.com/BestBuy_US/images/products/1688/1688832_105x210_sc.jpg",
+         "shipping": "Free shipping",
+         "bestSellingRank": 4,
+         "shortDescription": "Safeguard your PC, Mac, Android and iOS devices with comprehensive Internet protection",
+         "url": "http://www.bestbuy.com/site/webroot-secureanywhere-internet-security-3-devi…d=1219060687969&skuId=1688832&cmp=RMX&ky=2d3GfEmNIzjA0vkzveHdZEBgpPCyMnLTJ",
+         "name": "Webroot SecureAnywhere Internet Security (3-Device) (1-Year Subscription) - Mac/Windows",
+         "category": "Computer Security Software",
+         "salePrice_range": "1 - 50",
+         "objectID": "1688832",
+         "type": "Software",
+         "customerReviewCount": 5980,
+         "salePrice": 49.99,
+         "manufacturer": "Webroot"
       },
       ....
    ],
-   "nbHits" : 10000,
-   "disjunctiveFacets" : [
+   "nbHits": 10000,
+   "disjunctiveFacets": [
       {
-         "exhaustive" : false,
-         "data" : {
-            "5" : 183,
-            "12" : 112,
-            "7" : 149,
+         "exhaustive": false,
+         "data": {
+            "5": 183,
+            "12": 112,
+            "7": 149,
             ...
          },
-         "name" : "customerReviewCount",
-         "stats" : {
-            "max" : 7461,
-            "avg" : 157.939,
-            "min" : 1
+         "name": "customerReviewCount",
+         "stats": {
+            "max": 7461,
+            "avg": 157.939,
+            "min": 1
          }
       },
       {
-         "data" : {
-            "Printer Ink" : 142,
-            "Wireless Speakers" : 60,
-            "Point & Shoot Cameras" : 48,
+         "data": {
+            "Printer Ink": 142,
+            "Wireless Speakers": 60,
+            "Point & Shoot Cameras": 48,
             ...
          },
-         "name" : "category",
-         "exhaustive" : false
+         "name": "category",
+         "exhaustive": false
       },
       {
-         "exhaustive" : false,
-         "data" : {
-            "> 5000" : 2,
-            "1 - 50" : 6524,
-            "501 - 2000" : 566,
-            "201 - 500" : 1501,
-            "101 - 200" : 1360,
-            "2001 - 5000" : 47
+         "exhaustive": false,
+         "data": {
+            "> 5000": 2,
+            "1 - 50": 6524,
+            "501 - 2000": 566,
+            "201 - 500": 1501,
+            "101 - 200": 1360,
+            "2001 - 5000": 47
          },
-         "name" : "salePrice_range"
+         "name": "salePrice_range"
       },
       {
-         "data" : {
-            "Dynex™" : 202,
-            "Insignia™" : 230,
-            "PNY" : 72,
+         "data": {
+            "Dynex™": 202,
+            "Insignia™": 230,
+            "PNY": 72,
             ...
          },
-         "name" : "manufacturer",
-         "exhaustive" : false
+         "name": "manufacturer",
+         "exhaustive": false
       }
    ],
-   "query" : "",
-   "nbPages" : 100,
-   "page" : 0,
-   "index" : "bestbuy"
+   "query": "",
+   "nbPages": 100,
+   "page": 0,
+   "index": "bestbuy"
 }
 ```
