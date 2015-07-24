@@ -755,6 +755,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleHierarchicalFacetRefinement: function toggleHierarchicalFacetRefinement(facet, value) {
+    if (!this.isHierarchicalFacet(facet)) {
+      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+    }
+
     var separator = this.getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
 
     var mod = {};
