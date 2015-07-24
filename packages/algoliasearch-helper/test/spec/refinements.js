@@ -119,8 +119,8 @@ test('IsRefined should return true if the (facet, value ) is refined.', function
   t.equal(helper.isRefined('facet1', 'boom'), true, 'the facet + value is refined >> true');
 
   t.equal(helper.isRefined('facet1', 'booohh'), false, 'value not refined but is a facet');
-  t.equal(helper.isRefined('notAFacet', 'maoooh'), false, "not refined because it's not a facet");
-  t.equal(helper.isRefined(null, null), false, 'not even valid values');
+  t.throws(_.bind(helper.isRefined, helper, 'notAFacet', 'maoooh'), 'should throw as it is not a facet');
+  t.throws(_.bind(helper.isRefined, helper, null, null), 'not valid values');
 
   t.end();
 });
@@ -138,10 +138,11 @@ test('isRefined(facet)/hasRefinements should return true if the facet is refined
   t.equal(helper.isRefined('facet1'), true, 'the facet is refined >> true');
   t.equal(helper.hasRefinements('facet1'), true, 'the facet is refined >> true');
 
-  t.equal(helper.isRefined('notAFacet'), false, 'not a facet');
-  t.equal(helper.hasRefinements('notAFacet'), false, 'not a facet');
-  t.equal(helper.isRefined(null), false, 'not even valid values');
-  t.equal(helper.hasRefinements(null), false, 'not even valid values');
+  t.throws(_.bind(helper.isRefined, helper, 'notAFacet'), 'not a facet');
+  // in complete honesty we should be able to detect numeric facets but we can't
+  // t.throws(helper.hasRefinements.bind(helper, 'notAFacet'), 'not a facet');
+  t.throws(_.bind(helper.isRefined, null), 'not even valid values');
+  t.throws(_.bind(helper.hasRefinements, null), 'not even valid values');
 
   t.end();
 });
