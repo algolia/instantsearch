@@ -380,6 +380,8 @@ var helper = algoliasearchHelper(client, indexName, {
     separator: '|'
   }]
 });
+
+helper.toggleRefine('products', 'fruits|citrus');
 ```
 
 Would mean that your objects look like so:
@@ -394,6 +396,29 @@ Would mean that your objects look like so:
   }
 }
 ```
+
+##### Asking for the current breadcrumb
+
+```js
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    separator: '|'
+  }]
+});
+
+helper.toggleRefine('products', 'fruits|citrus');
+var breadcrumb = helper.getHierarchicalFacetBreadcrumb('products');
+
+console.log(breadcrumb);
+// ['fruits', 'citrus']
+
+console.log(breadcrumb.join(' | '));
+// 'fruits | citrus'
+```
+
+
 
 #### Clearing filters
 
