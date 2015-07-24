@@ -117,6 +117,7 @@ test('hierarchical facets: simple usage', function(t) {
       'second query (unrefined parent facet values) has `categories.lvl1` (parent level) refined'
     );
     t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
+    t.deepEqual(content.getFacetByName('categories'), expectedHelperResponse[0]);
     t.end();
   });
 });

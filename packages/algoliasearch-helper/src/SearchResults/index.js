@@ -341,11 +341,11 @@ function SearchResults(state, algoliaResponse) {
  * @return {SearchResults.Facet} the facet object
  */
 SearchResults.prototype.getFacetByName = function(name) {
-  var isName = function(facet) { return facet.name === name; };
+  var predicate = {name: name};
 
-  var indexInFacets = find(this.facets, isName);
-
-  return indexInFacets || find(this.disjunctiveFacets, isName);
+  return find(this.facets, predicate) ||
+    find(this.disjunctiveFacets, predicate) ||
+    find(this.hierarchicalFacets, predicate);
 };
 
 module.exports = SearchResults;
