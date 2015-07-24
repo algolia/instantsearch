@@ -12,7 +12,6 @@ var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
 var isFunction = require('lodash/lang/isFunction');
 var find = require('lodash/collection/find');
-var trimRight = require('lodash/string/trimRight');
 
 var extend = require('../functions/extend');
 var deepFreeze = require('../functions/deepFreeze');

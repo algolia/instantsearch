@@ -238,7 +238,6 @@ function SearchResults(state, algoliaResponse) {
 
   var facetsIndices = getIndices(state.facets);
   var disjunctiveFacetsIndices = getIndices(state.disjunctiveFacets);
-  var hierarchicalFacetsIndices = getIndices(state.hierarchicalFacets);
 
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
