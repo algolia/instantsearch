@@ -225,8 +225,8 @@ AlgoliaSearchHelper.prototype.toggleRefine = function(facet, value) {
   } else if (this.state.isDisjunctiveFacet(facet)) {
     this.state = this.state.toggleDisjunctiveFacetRefinement(facet, value);
   } else {
-    throw new Error("Can't refine the undeclared facet '" + facet +
-      "'; it should be added to the helper options 'facets' or 'disjunctiveFacets'");
+    throw new Error('Cannot refine the undeclared facet ' + facet +
+      '; it should be added to the helper options facets or disjunctiveFacets');
   }
 
   this._change();
@@ -353,7 +353,9 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
     return this.state.isDisjunctiveFacetRefined(facet, value);
   }
 
-  return false;
+  throw new Error(facet +
+    ' is not properly defined in this helper configuration' +
+    '(use the facets or disjunctiveFacets keys to configure it)');
 };
 
 /**
@@ -363,8 +365,13 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function(attribute) {
   var attributeHasNumericRefinements = !isEmpty(this.state.getNumericRefinements(attribute));
+  var isFacetDeclared = this.state.isConjunctiveFacet(attribute) || this.state.isDisjunctiveFacet(attribute);
 
-  return attributeHasNumericRefinements || this.isRefined(attribute);
+  if (!attributeHasNumericRefinements && isFacetDeclared) {
+    return this.state.isFacetRefined(attribute);
+  }
+
+  return attributeHasNumericRefinements;
 };
 
 /**
@@ -446,6 +453,15 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
         type: 'conjunctive'
       });
     });
+
+    var excludeRefinements = this.state.getExcludeRefinements(facetName);
+
+    forEach(excludeRefinements, function(r) {
+      refinements.push({
+        value: r,
+        type: 'exclude'
+      });
+    });
   } else if (this.state.isDisjunctiveFacet(facetName)) {
     var disjRefinements = this.state.getDisjunctiveRefinements(facetName);
 
@@ -456,15 +472,6 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
       });
     });
   }
-
-  var excludeRefinements = this.state.getExcludeRefinements(facetName);
-
-  forEach(excludeRefinements, function(r) {
-    refinements.push({
-      value: r,
-      type: 'exclude'
-    });
-  });
 
   var numericRefinements = this.state.getNumericRefinements(facetName);
 

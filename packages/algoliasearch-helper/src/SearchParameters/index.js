@@ -497,6 +497,9 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getConjunctiveRefinements: function(facetName) {
+    if (!this.isConjunctiveFacet(facetName)) {
+      throw new Error(facetName + ' is not defined in the facets attribute of the helper configuration');
+    }
     return this.facetsRefinements[facetName] || [];
   },
   /**
@@ -505,6 +508,9 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getDisjunctiveRefinements: function(facetName) {
+    if (!this.isDisjunctiveFacet(facetName)) {
+      throw new Error(facetName + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+    }
     return this.disjunctiveFacetsRefinements[facetName] || [];
   },
   /**
@@ -521,6 +527,9 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getExcludeRefinements: function(facetName) {
+    if (!this.isConjunctiveFacet(facetName)) {
+      throw new Error(facetName + ' is not defined in the facets attribute of the helper configuration');
+    }
     return this.facetsExcludes[facetName] || [];
   },
   /**
@@ -592,6 +601,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addFacetRefinement: function addFacetRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     if (RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -607,6 +619,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addExcludeRefinement: function addExcludeRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     if (RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -622,6 +637,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   addDisjunctiveFacetRefinement: function addDisjunctiveFacetRefinement(facet, value) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+    }
+
     if (RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -654,6 +673,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeFacetRefinement: function removeFacetRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     if (!RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -669,6 +691,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeExcludeRefinement: function removeExcludeRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     if (!RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -684,6 +709,9 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeDisjunctiveFacetRefinement: function removeDisjunctiveFacetRefinement(facet, value) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+    }
     if (!RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
@@ -715,6 +743,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
+
     return this.setQueryParameters({
       page: 0,
       facetsRefinements: RefinementList.toggleRefinement(this.facetsRefinements, facet, value)
@@ -728,6 +760,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleExcludeFacetRefinement: function toggleExcludeFacetRefinement(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
+
     return this.setQueryParameters({
       page: 0,
       facetsExcludes: RefinementList.toggleRefinement(this.facetsExcludes, facet, value)
@@ -741,6 +777,10 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   toggleDisjunctiveFacetRefinement: function toggleDisjunctiveFacetRefinement(facet, value) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+    }
+
     return this.setQueryParameters({
       page: 0,
       disjunctiveFacetsRefinements: RefinementList.toggleRefinement(this.disjunctiveFacetsRefinements, facet, value)
@@ -830,6 +870,9 @@ SearchParameters.prototype = {
    * @return {boolean} returns true if refined
    */
   isFacetRefined: function isFacetRefined(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     return RefinementList.isRefined(this.facetsRefinements, facet, value);
   },
   /**
@@ -842,6 +885,9 @@ SearchParameters.prototype = {
    * @return {boolean} returns true if refined
    */
   isExcludeRefined: function isExcludeRefined(facet, value) {
+    if (!this.isConjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
+    }
     return RefinementList.isRefined(this.facetsExcludes, facet, value);
   },
   /**
@@ -854,6 +900,9 @@ SearchParameters.prototype = {
    * @return {boolean}
    */
   isDisjunctiveFacetRefined: function isDisjunctiveFacetRefined(facet, value) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+    }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
   },
   /**

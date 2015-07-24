@@ -94,7 +94,7 @@ test('[No changes] addFacetRefinement', function(t) {
 
 test('[No changes] removeDisjunctiveFacetRefinement', function(t) {
   var state = SearchParameters.make({
-    facets: ['facet']
+    disjunctiveFacets: ['facet']
   });
 
   t.equal(state.removeDisjunctiveFacetRefinement('facet', 'value'), state, 'removeDisjunctiveFacetRefinement should return the same instance');

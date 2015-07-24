@@ -9,7 +9,7 @@ var isUndefined = require('lodash/lang/isUndefined');
 
 var fixture = function fixture() {
   var helper = algoliasearchHelper(undefined, 'Index', {
-    facets: ['facet1', 'facet2', 'both_facet'],
+    facets: ['facet1', 'facet2', 'both_facet', 'excluded1', 'excluded2'],
     disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet']
   });
 
