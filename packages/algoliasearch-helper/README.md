@@ -299,6 +299,131 @@ helper.addNumericRefinement('numericFacet', '=', '3').search();
 helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
 ```
 
+#### Hierarchical facets
+
+Hierarchical facets are useful to build such navigation menus:
+
+```txt
+| products
+  > fruits
+    > citrus
+    | strawberries
+    | peaches
+    | apples
+```
+
+Here, we refined the search this way:
+- click on fruits
+- click on citrus
+
+To build such menu, you need to use hierarchical faceting:
+
+```javascript
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1']
+  }]
+});
+```
+
+Given your objects looks like this:
+
+```json
+{
+  "objectID": "123",
+  "name": "orange",
+  "categories": {
+    "lvl0": "fruits",
+    "lvl1": "fruits > citrus"
+  }
+}
+```
+
+And you refine `products`:
+
+```js
+helper.toggleRefine('products', 'fruits > citrus');
+```
+
+You will get a hierarchical presentation of your facet values: a navigation menu
+of your facet values.
+
+```js
+helper.on('result', function(data){
+  console.log(data.hierarchicalFacets[0]);
+  // {
+  //   'name': 'products',
+  //   'count': null,
+  //   'isRefined': true,
+  //   'path': null,
+  //   'data': [{
+  //     'name': 'fruits',
+  //     'path': 'fruits',
+  //     'count': 1,
+  //     'isRefined': true,
+  //     'data': [{
+  //       'name': 'citrus',
+  //       'path': 'fruits > citrus',
+  //       'count': 1,
+  //       'isRefined': true,
+  //       'data': null
+  //     }]
+  //   }]
+  // }
+});
+```
+
+##### Specifying another separator
+
+```js
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    separator: '|'
+  }]
+});
+
+helper.toggleRefine('products', 'fruits|citrus');
+```
+
+Would mean that your objects look like so:
+
+```json
+{
+  "objectID": "123",
+  "name": "orange",
+  "categories": {
+    "lvl0": "fruits",
+    "lvl1": "fruits|citrus"
+  }
+}
+```
+
+##### Asking for the current breadcrumb
+
+```js
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    separator: '|'
+  }]
+});
+
+helper.toggleRefine('products', 'fruits|citrus');
+var breadcrumb = helper.getHierarchicalFacetBreadcrumb('products');
+
+console.log(breadcrumb);
+// ['fruits', 'citrus']
+
+console.log(breadcrumb.join(' | '));
+// 'fruits | citrus'
+```
+
+
+
 #### Clearing filters
 
 ##### Clear all the refinements for all the refined attributes
