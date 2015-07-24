@@ -12,8 +12,9 @@ if (!utils.shouldRun) {
 }
 
 test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', function(t) {
-  var indexName = (process.env.TRAVIS_BUILD_NUMBER ||
-    'helper-integration-tests-') + 'helper_highlight' + random(0, 5000);
+  var indexName = '_travis-algoliasearch-helper-js-' +
+    (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
+    'helper_highlight' + random(0, 5000);
 
   setup(indexName, function(client, index) {
     return index.addObjects([
