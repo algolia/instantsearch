@@ -1,6 +1,6 @@
 var instantsearch = require('../');
 
-var instant = new instantsearch.instantsearch(
+var instant = new instantsearch.InstantSearch(
   'JTH1JDTDFT',
   '34a4c1b994546fbec45a670a06ba0c33',
   'Bibliotheques'

@@ -3,7 +3,7 @@ module.exports = {
   output: {
     path: './dist/',
     filename: 'instantsearch.js',
-    library: 'instantSearch',
+    library: 'instantsearch',
     libraryTarget: 'umd'
   },
   module: {

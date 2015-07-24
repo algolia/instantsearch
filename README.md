@@ -7,12 +7,12 @@ API is unstable. We welcome any idea.
 ## Usage
 
 ```js
-var instantSearch = require('instantsearch.js');
-var instant = new instantSearch.InstantSearch(appId, apiKey, indexName);
+var instantsearch = require('instantsearch.js');
+var instant = new instantsearch.InstantSearch(appId, apiKey, indexName);
 
 // add a widget
 instant.addWidget(
-  instantSearch.widgets.searchBox({
+  instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for libraries in France...'
   })
