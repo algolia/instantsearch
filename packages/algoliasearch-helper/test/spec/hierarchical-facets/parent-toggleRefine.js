@@ -2,7 +2,7 @@
 
 var test = require('tape');
 
-test('hierarchical facets: toggleRefine behavior on parent', function(t) {
+test('hierarchical facets: toggleRefine behavior', function(t) {
   var algoliasearch = require('algoliasearch');
   var sinon = require('sinon');
 
@@ -23,8 +23,14 @@ test('hierarchical facets: toggleRefine behavior on parent', function(t) {
 
   var search = sinon.stub(client, 'search');
 
+  // select `Flying dog`
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
-  helper.toggleRefine('categories', 'beers > IPA');
+
+  // unselect `beers`
+  helper.toggleRefine('categories', 'beers');
+
+  // select `beers`
+  helper.toggleRefine('categories', 'beers');
   // we should be on `beers`
 
   helper.setQuery('a').search();
@@ -88,4 +94,3 @@ test('hierarchical facets: toggleRefine behavior when root level', function(t) {
   );
   t.end();
 });
-

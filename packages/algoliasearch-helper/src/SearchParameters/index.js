@@ -803,7 +803,8 @@ SearchParameters.prototype = {
 
     var mod = {};
 
-    var upOneOrMultipleLevel = this.hierarchicalFacetsRefinements[facet] !== undefined && (
+    var upOneOrMultipleLevel = this.hierarchicalFacetsRefinements[facet] !== undefined &&
+      this.hierarchicalFacetsRefinements[facet].length > 0 && (
       // remove current refinement:
       // refinement was 'beer > IPA', call is toggleRefine('beer > IPA'), refinement should be `beer`
       this.hierarchicalFacetsRefinements[facet][0] === value ||
