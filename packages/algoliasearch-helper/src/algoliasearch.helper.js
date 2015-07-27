@@ -737,6 +737,10 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
   forEach(this.state.hierarchicalFacetsRefinements, function(facetValues, facetName) {
     var facetValue = facetValues[0];
 
+    if (facetValue === undefined) {
+      return;
+    }
+
     var hierarchicalFacet = this.state.getHierarchicalFacetByName(facetName);
     var separator = this.state.getHierarchicalFacetSeparator(hierarchicalFacet);
     var attributeToRefine;
@@ -788,7 +792,7 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
 };
 
 AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet) {
-  var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
+  var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
   // if refinement is 'beers > IPA > Flying dog',
   // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
