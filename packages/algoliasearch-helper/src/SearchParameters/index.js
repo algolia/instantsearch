@@ -519,7 +519,8 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getHierarchicalRefinement: function(facetName) {
-    return this.hierarchicalFacetsRefinements[facetName] || '';
+    // we send an array but we currently do not support multiple hierarchicalRefinements for a hierarchicalFacet
+    return this.hierarchicalFacetsRefinements[facetName] || [];
   },
   /**
    * Get the list of exclude refinements for a single facet
@@ -805,23 +806,23 @@ SearchParameters.prototype = {
     var upOneOrMultipleLevel = this.hierarchicalFacetsRefinements[facet] !== undefined && (
       // remove current refinement:
       // refinement was 'beer > IPA', call is toggleRefine('beer > IPA'), refinement should be `beer`
-      this.hierarchicalFacetsRefinements[facet] === value ||
+      this.hierarchicalFacetsRefinements[facet][0] === value ||
       // remove a parent refinement:
       //  - refinement was 'beer > IPA > Flying dog'
       //  - call is toggleRefine('beer > IPA')
       //  - refinement should be `beer`
-      value.length > 0 && value.length < this.hierarchicalFacetsRefinements[facet].length
+      value.length > 0 && value.length < this.hierarchicalFacetsRefinements[facet][0].length
     );
 
     if (upOneOrMultipleLevel) {
       if (value.indexOf(separator) === -1) {
         // go back to root level
-        mod[facet] = '';
+        mod[facet] = [];
       } else {
-        mod[facet] = value.slice(0, value.lastIndexOf(separator));
+        mod[facet] = [value.slice(0, value.lastIndexOf(separator))];
       }
     } else {
-      mod[facet] = value;
+      mod[facet] = [value];
     }
 
     return this.setQueryParameters({

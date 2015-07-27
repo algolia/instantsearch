@@ -20,7 +20,6 @@ test('hierarchical facets: toggleRefine behavior on parent', function(t) {
     }]
   });
 
-
   var search = sinon.stub(client, 'search');
 
   helper.toggleRefine('categories', 'beers > IPA > Flying dog');
