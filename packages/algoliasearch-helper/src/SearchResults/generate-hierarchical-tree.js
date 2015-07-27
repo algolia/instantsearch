@@ -2,12 +2,13 @@
 
 module.exports = generateTrees;
 
-var find = require('lodash/collection/find');
 var last = require('lodash/array/last');
 var map = require('lodash/collection/map');
 var reduce = require('lodash/collection/reduce');
 var sortByOrder = require('lodash/collection/sortByOrder');
 var trim = require('lodash/string/trim');
+var find = require('lodash/collection/find');
+var pick = require('lodash/object/pick');
 
 function generateTrees(state) {
   return function generate(hierarchicalFacetResult, hierarchicalFacetIndex) {
@@ -45,7 +46,17 @@ function generateHierarchicalTree(hierarchicalSeparator, currentRefinement) {
     if (parent) {
       parent.data = sortByOrder(
         map(
-          hierarchicalFacetResult.data,
+          // filter values in case an object has:
+          //   {
+          //     categories: {
+          //       level0: ['beers', 'bières'],
+          //       level1: ['beers > IPA', 'bières > Belges']
+          //     }
+          //   }
+          //
+          // If parent refinement is `beers`, then we do not want to have `bières > Belges`
+          // showing up
+          pick(hierarchicalFacetResult.data, parentMatches(parent.path, currentRefinement, hierarchicalSeparator)),
           formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement)
         ),
         ['isRefined', 'name', 'count'], ['desc', 'asc', 'desc']
@@ -53,6 +64,19 @@ function generateHierarchicalTree(hierarchicalSeparator, currentRefinement) {
     }
 
     return hierarchicalTree;
+  };
+}
+
+function parentMatches(parentPath, currentRefinement, hierarchicalSeparator) {
+  return function(facetCount, facetValue) {
+    // if current refinement is a root level and current facetValue is a root level,
+    // keep the facetValue
+    return facetValue.indexOf(hierarchicalSeparator) === -1 &&
+      currentRefinement.indexOf(hierarchicalSeparator) === -1 ||
+      // currentRefinement is a child of the facet value
+      currentRefinement.indexOf(facetValue + hierarchicalSeparator) === 0 ||
+      // facetValue is a child of the current parent, add it
+      facetValue.indexOf(parentPath + hierarchicalSeparator) === 0;
   };
 }
 
