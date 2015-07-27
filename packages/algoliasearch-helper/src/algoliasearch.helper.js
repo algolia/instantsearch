@@ -495,7 +495,7 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
   return map(
     this
       .state
-      .getHierarchicalRefinement(facetName)
+      .getHierarchicalRefinement(facetName)[0]
       .split(this.state.getHierarchicalFacetSeparator(
         this.state.getHierarchicalFacetByName(facetName)
       )), function trimName(facetValue) { return trim(facetValue); }
@@ -735,6 +735,8 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
   });
 
   forEach(this.state.hierarchicalFacetsRefinements, function(facetValue, facetName) {
+    facetValue = facetValue[0];
+
     var hierarchicalFacet = this.state.getHierarchicalFacetByName(facetName);
     var separator = this.state.getHierarchicalFacetSeparator(hierarchicalFacet);
 
@@ -770,7 +772,7 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
     this.state.hierarchicalFacets,
     // ask for as much levels as there's hierarchical refinements
     function getHitsAttributesForHierarchicalFacet(allAttributes, hierarchicalFacet) {
-      var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name);
+      var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
 
       // if no refinement, ask for root level
       if (!hierarchicalRefinement) {
@@ -786,7 +788,7 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
 };
 
 AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet) {
-  var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name);
+  var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
   // if refinement is 'beers > IPA > Flying dog',
   // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 

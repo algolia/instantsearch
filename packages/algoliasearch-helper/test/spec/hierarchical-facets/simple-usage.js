@@ -4,6 +4,8 @@ var test = require('tape');
 
 test('hierarchical facets: simple usage', function(t) {
   var algoliasearch = require('algoliasearch');
+  var isArray = require('lodash/lang/isArray');
+
   var sinon = require('sinon');
 
   var algoliasearchHelper = require('../../../');
@@ -118,6 +120,14 @@ test('hierarchical facets: simple usage', function(t) {
     );
     t.deepEqual(content.hierarchicalFacets, expectedHelperResponse);
     t.deepEqual(content.getFacetByName('categories'), expectedHelperResponse[0]);
+
+    // we do not yet support multiple values for hierarchicalFacetsRefinements
+    // but at some point we may want to open multiple leafs of a hierarchical menu
+    // So we set this as an array so that we do not have to bump major to handle it
+    t.ok(
+      isArray(helper.state.hierarchicalFacetsRefinements.categories),
+      'state.hierarchicalFacetsRefinements is an array'
+    );
     t.end();
   });
 });

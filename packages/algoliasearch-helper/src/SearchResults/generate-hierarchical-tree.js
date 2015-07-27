@@ -12,7 +12,8 @@ var trim = require('lodash/string/trim');
 function generateTrees(state) {
   return function generate(hierarchicalFacetResult, hierarchicalFacetIndex) {
     var hierarchicalFacet = state.hierarchicalFacets[hierarchicalFacetIndex];
-    var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] || '';
+    var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
+      state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
     var hierarchicalSeparator = state.getHierarchicalFacetSeparator(hierarchicalFacet);
 
     return reduce(hierarchicalFacetResult, generateHierarchicalTree(hierarchicalSeparator, hierarchicalFacetRefinement), {
