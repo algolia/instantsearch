@@ -734,21 +734,21 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
     facetFilters.push(orFilters);
   });
 
-  forEach(this.state.hierarchicalFacetsRefinements, function(facetValue, facetName) {
-    facetValue = facetValue[0];
+  forEach(this.state.hierarchicalFacetsRefinements, function(facetValues, facetName) {
+    var facetValue = facetValues[0];
 
     var hierarchicalFacet = this.state.getHierarchicalFacetByName(facetName);
     var separator = this.state.getHierarchicalFacetSeparator(hierarchicalFacet);
-
-    if (facet && facetValue.indexOf(separator) === -1) {
-      // if root level and disjunctive params compute, no refinement
-      return;
-    }
-
     var attributeToRefine;
 
-    // let's get the parent level facet values
-    if (facet) {
+    // we ask for parent facet values only when the `facet` is the current hierarchical facet
+    if (facet === facetName) {
+      // if we are at the root level already, no need to ask for facet values, we get them from
+      // the hits query
+      if (facetValue.indexOf(separator) === -1) {
+        return;
+      }
+
       attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 2];
       facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
     } else {
