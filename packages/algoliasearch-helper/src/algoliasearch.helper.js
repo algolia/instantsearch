@@ -749,7 +749,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
     if (facet === facetName) {
       // if we are at the root level already, no need to ask for facet values, we get them from
       // the hits query
-      if (facetValue.indexOf(separator) === -1) {
+      if (facetValue.indexOf(separator) === -1 || hierarchicalFacet.alwaysGetRootLevel === true) {
         return;
       }
 
@@ -792,6 +792,10 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
 };
 
 AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet) {
+  if (hierarchicalFacet.alwaysGetRootLevel) {
+    return hierarchicalFacet.attributes[0];
+  }
+
   var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
   // if refinement is 'beers > IPA > Flying dog',
   // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
