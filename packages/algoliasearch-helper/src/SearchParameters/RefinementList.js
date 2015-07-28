@@ -12,13 +12,11 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-
-var extend = require('../functions/extend');
-
 var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
 var isFunction = require('lodash/lang/isFunction');
 var isEmpty = require('lodash/lang/isEmpty');
+var defaults = require('lodash/object/defaults');
 
 var reduce = require('lodash/collection/reduce');
 var filter = require('lodash/collection/filter');
@@ -47,7 +45,7 @@ var lib = {
 
     mod[attribute] = facetRefinement;
 
-    return extend({}, refinementList, mod);
+    return defaults({}, mod, refinementList);
   },
   /**
    * Removes refinement(s) for an attribute:

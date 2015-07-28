@@ -2,7 +2,6 @@
 
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
-var extend = require('./functions/extend');
 var util = require('util');
 var events = require('events');
 var forEach = require('lodash/collection/forEach');
@@ -11,6 +10,7 @@ var bind = require('lodash/function/bind');
 var reduce = require('lodash/collection/reduce');
 var map = require('lodash/collection/map');
 var trim = require('lodash/string/trim');
+var merge = require('lodash/object/merge');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -605,7 +605,7 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
     additionalParams.numericFilters = numericFilters;
   }
 
-  return extend(this.state.getQueryParams(), additionalParams);
+  return merge(this.state.getQueryParams(), additionalParams);
 };
 
 /**
@@ -647,7 +647,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet)
     additionalParams.facetFilters = facetFilters;
   }
 
-  return extend(this.state.getQueryParams(), additionalParams);
+  return merge(this.state.getQueryParams(), additionalParams);
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
