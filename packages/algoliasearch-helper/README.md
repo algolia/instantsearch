@@ -423,6 +423,31 @@ The available sort tokens are:
 - name
 - path
 
+##### Display root parent values 
+
+The default behavior of the hierarchical facet feature is to always
+return the parent (n - 1) values of the current refinement.
+
+Thus, when you click on `products > fruits > citrus`, you will get:
+- all the citruses sub categories if any
+- all the fruits sub categories (including the citrus category)
+
+The goal is to always give the user a way to easily go back to a previous
+category, without bloating the interface with too many data.
+
+If you are not happy with this behavior and only want to always have
+the root categories shown (along with the currently refined sub categories), you can do:
+
+```js
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    alwaysGetRootLevel: true
+  }]
+});
+```
+
 ##### Asking for the current breadcrumb
 
 ```js
