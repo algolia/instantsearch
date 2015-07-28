@@ -496,7 +496,7 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
     this
       .state
       .getHierarchicalRefinement(facetName)[0]
-      .split(this.state.getHierarchicalFacetSeparator(
+      .split(this.state._getHierarchicalFacetSeparator(
         this.state.getHierarchicalFacetByName(facetName)
       )), function trimName(facetValue) { return trim(facetValue); }
   );
@@ -742,7 +742,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
     }
 
     var hierarchicalFacet = this.state.getHierarchicalFacetByName(facetName);
-    var separator = this.state.getHierarchicalFacetSeparator(hierarchicalFacet);
+    var separator = this.state._getHierarchicalFacetSeparator(hierarchicalFacet);
     var attributeToRefine;
 
     // we ask for parent facet values only when the `facet` is the current hierarchical facet
@@ -784,7 +784,7 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
         return allAttributes;
       }
 
-      var level = hierarchicalRefinement.split(this.state.getHierarchicalFacetSeparator(hierarchicalFacet)).length;
+      var level = hierarchicalRefinement.split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length;
       var newAttributes = hierarchicalFacet.attributes.slice(0, level + 1);
 
       return allAttributes.concat(newAttributes);
@@ -796,7 +796,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = functi
   // if refinement is 'beers > IPA > Flying dog',
   // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
-  var parentLevel = hierarchicalRefinement.split(this.state.getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
+  var parentLevel = hierarchicalRefinement.split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
   return hierarchicalFacet.attributes[parentLevel];
 };
 

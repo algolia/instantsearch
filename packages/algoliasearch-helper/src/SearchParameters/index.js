@@ -799,7 +799,7 @@ SearchParameters.prototype = {
       throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
     }
 
-    var separator = this.getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
+    var separator = this._getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
 
     var mod = {};
 
@@ -1074,7 +1074,16 @@ SearchParameters.prototype = {
    * @param  {object} hierarchicalFacet
    * @return {string} returns the hierarchicalFacet.separator or `>` as default
    */
-  getHierarchicalFacetSeparator: function(hierarchicalFacet) {
+  _getHierarchicalFacetSortBy: function(hierarchicalFacet) {
+    return hierarchicalFacet.sortBy || ['isRefined:desc', 'name:asc'];
+  },
+
+  /**
+   * Helper function to get the hierarchicalFacet separator or the default one (`>`)
+   * @param  {object} hierarchicalFacet
+   * @return {string} returns the hierarchicalFacet.separator or `>` as default
+   */
+  _getHierarchicalFacetSeparator: function(hierarchicalFacet) {
     return hierarchicalFacet.separator || ' > ';
   },
 
