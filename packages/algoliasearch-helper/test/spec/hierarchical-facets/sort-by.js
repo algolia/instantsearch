@@ -57,6 +57,17 @@ test('hierarchical facets: using sortBy', function(t) {
           'beers > IPA > Brewdog punk IPA': 3
         }
       }
+    }, {
+      'query': 'a',
+      'index': indexName,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
+      'page': 0,
+      'nbPages': 1,
+      'hitsPerPage': 1,
+      'facets': {
+        'categories.lvl0': {'beers': 5}
+      }
     }]
   };
 

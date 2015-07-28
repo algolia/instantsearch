@@ -239,6 +239,7 @@ function SearchResults(state, algoliaResponse) {
 
   var facetsIndices = getIndices(state.facets);
   var disjunctiveFacetsIndices = getIndices(state.disjunctiveFacets);
+  var nextDisjunctiveResult = 1;
 
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
@@ -275,8 +276,8 @@ function SearchResults(state, algoliaResponse) {
   }, this);
 
   // aggregate the refined disjunctive facets
-  forEach(disjunctiveFacets, function(disjunctiveFacet, idx) {
-    var result = algoliaResponse.results[idx + 1];
+  forEach(disjunctiveFacets, function(disjunctiveFacet) {
+    var result = algoliaResponse.results[nextDisjunctiveResult];
     var hierarchicalFacet = state.getHierarchicalFacetByName(disjunctiveFacet);
 
     // There should be only item in facets.
@@ -286,20 +287,7 @@ function SearchResults(state, algoliaResponse) {
       if (hierarchicalFacet) {
         position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
         var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
-        if (hierarchicalFacet.alwaysGetRootLevel) {
-          // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
-          // then the disjunctive values will be `beers` (count: 100),
-          // but we do not want to display
-          //   | beers (100)
-          //     > IPA (5)
-          // We want
-          //   | beers (5)
-          //     > IPA (5)
-          // So we use `defaults` instead of `merge` (do not overwrite hits count for root parent refinement)
-          this.hierarchicalFacets[position][attributeIndex].data = defaults({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
-        } else {
-          this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
-        }
+        this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
@@ -323,6 +311,45 @@ function SearchResults(state, algoliaResponse) {
         }
       }
     }, this);
+    nextDisjunctiveResult++;
+  }, this);
+
+  // if we have some root level values for hierarchical facets, merge them
+  forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
+    var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
+
+    var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
+    // if we are already at a root refinement (or no refinement at all), there is no
+    // root level values request
+    if (currentRefinement.length === 0 || currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length < 2) {
+      return;
+    }
+
+    var result = algoliaResponse.results[nextDisjunctiveResult];
+
+    forEach(result.facets, function(facetResults, dfacet) {
+      var position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
+      var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
+
+      // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
+      // then the disjunctive values will be `beers` (count: 100),
+      // but we do not want to display
+      //   | beers (100)
+      //     > IPA (5)
+      // We want
+      //   | beers (5)
+      //     > IPA (5)
+      var defaultData = {};
+
+      if (currentRefinement.length > 0) {
+        var root = currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet))[0];
+        defaultData[root] = this.hierarchicalFacets[position][attributeIndex].data[root];
+      }
+
+      this.hierarchicalFacets[position][attributeIndex].data = defaults(defaultData, facetResults, this.hierarchicalFacets[position][attributeIndex].data);
+    }, this);
+
+    nextDisjunctiveResult++;
   }, this);
 
   // add the excludes

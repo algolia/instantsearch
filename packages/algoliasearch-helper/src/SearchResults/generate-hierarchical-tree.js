@@ -17,9 +17,10 @@ function generateTrees(state) {
       state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
     var hierarchicalSeparator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
     var sortBy = prepareHierarchicalFacetSortBy(state._getHierarchicalFacetSortBy(hierarchicalFacet));
-    var alwaysGetRootLevel = hierarchicalFacet.alwaysGetRootLevel;
 
-    return reduce(hierarchicalFacetResult, generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalFacetRefinement, alwaysGetRootLevel), {
+    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalFacetRefinement);
+
+    return reduce(hierarchicalFacetResult, generateTreeFn, {
       name: state.hierarchicalFacets[hierarchicalFacetIndex].name,
       count: null, // root level, no count
       isRefined: true, // root level, always refined
@@ -29,7 +30,7 @@ function generateTrees(state) {
   };
 }
 
-function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefinement, alwaysGetRootLevel) {
+function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefinement) {
   return function generateTree(hierarchicalTree, hierarchicalFacetResult, currentHierarchicalLevel) {
     var parent = hierarchicalTree;
 
@@ -46,19 +47,20 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefineme
 
     // we found a refined parent, let's add current level data under it
     if (parent) {
+      // filter values in case an object has multiple categories:
+      //   {
+      //     categories: {
+      //       level0: ['beers', 'bières'],
+      //       level1: ['beers > IPA', 'bières > Belges']
+      //     }
+      //   }
+      //
+      // If parent refinement is `beers`, then we do not want to have `bières > Belges`
+      // showing up
+      var onlyMatchingValuesFn = filterFacetValues(parent.path, currentRefinement, hierarchicalSeparator);
       parent.data = sortByOrder(
         map(
-          // filter values in case an object has:
-          //   {
-          //     categories: {
-          //       level0: ['beers', 'bières'],
-          //       level1: ['beers > IPA', 'bières > Belges']
-          //     }
-          //   }
-          //
-          // If parent refinement is `beers`, then we do not want to have `bières > Belges`
-          // showing up
-          pick(hierarchicalFacetResult.data, filterFacetValues(parent.path, currentRefinement, hierarchicalSeparator, alwaysGetRootLevel)),
+          pick(hierarchicalFacetResult.data, onlyMatchingValuesFn),
           formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement)
         ),
         sortBy[0], sortBy[1]
@@ -69,10 +71,10 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefineme
   };
 }
 
-function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator, alwaysGetRootLevel) {
+function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator) {
   return function(facetCount, facetValue) {
-    // we always want root levels and facetValue is a root level
-    return alwaysGetRootLevel === true && facetValue.indexOf(hierarchicalSeparator === -1) ||
+    // we always want root levels
+    return facetValue.indexOf(hierarchicalSeparator) === -1 ||
       // if current refinement is a root level and current facetValue is a root level,
       // keep the facetValue
       facetValue.indexOf(hierarchicalSeparator) === -1 &&

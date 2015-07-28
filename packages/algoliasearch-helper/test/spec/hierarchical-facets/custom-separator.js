@@ -50,6 +50,17 @@ test('hierarchical facets: custom separator', function(t) {
         'categories.lvl0': {'beers': 3},
         'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1}
       }
+    }, {
+      'query': 'a',
+      'index': indexName,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
+      'page': 0,
+      'nbPages': 1,
+      'hitsPerPage': 1,
+      'facets': {
+        'categories.lvl0': {'beers': 3}
+      }
     }]
   };
 
@@ -85,9 +96,8 @@ test('hierarchical facets: custom separator', function(t) {
     var call = search.getCall(0);
     var queries = call.args[0];
     var hitsQuery = queries[0];
-    var parentFacetValuesQuery = queries[1];
+    var parentValuesQuery = queries[1];
 
-    t.equal(queries.length, 2, 'we made two queries');
     t.ok(search.calledOnce, 'client.search was called once');
     t.deepEqual(
       hitsQuery.params.facets,
@@ -100,12 +110,12 @@ test('hierarchical facets: custom separator', function(t) {
       'first query (hits) has our `categories.lvl1` refinement facet filter'
     );
     t.deepEqual(
-      parentFacetValuesQuery.params.facets,
-      ['categories.lvl1'],
+      parentValuesQuery.params.facets,
+      ['categories.lvl0', 'categories.lvl1'],
       'second query (unrefined parent facet values) has `categories.lvl1` as facets'
     );
     t.deepEqual(
-      parentFacetValuesQuery.params.facetFilters,
+      parentValuesQuery.params.facetFilters,
       [['categories.lvl0:beers']],
       'second query (unrefined parent facet values) has `categories.lvl0` (parent level) refined'
     );

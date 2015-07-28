@@ -50,6 +50,17 @@ test('hierarchical facets: objects with multiple categories', function(t) {
         'categories.lvl0': {'beers': 5, 'bières': 3},
         'categories.lvl1': {'beers > IPA': 3, 'beers > Guiness': 2, 'bières > Rousses': 3}
       }
+    }, {
+      'query': 'a',
+      'index': indexName,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
+      'page': 0,
+      'nbPages': 1,
+      'hitsPerPage': 20,
+      'facets': {
+        'categories.lvl0': {'beers': 5, 'bières': 3}
+      }
     }]
   };
 
@@ -76,6 +87,12 @@ test('hierarchical facets: objects with multiple categories', function(t) {
         'isRefined': false,
         'data': null
       }]
+    }, {
+      'name': 'bières',
+      'path': 'bières',
+      'count': 3,
+      'isRefined': false,
+      'data': null
     }]
   }];
 
