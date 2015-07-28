@@ -9,8 +9,8 @@ var includes = require('lodash/collection/includes');
 var map = require('lodash/collection/map');
 var findIndex = require('lodash/array/findIndex');
 var defaults = require('lodash/object/defaults');
+var merge = require('lodash/object/merge');
 
-var extend = require('../functions/extend');
 var generateHierarchicalTree = require('./generate-hierarchical-tree');
 
 /**
@@ -298,7 +298,7 @@ function SearchResults(state, algoliaResponse) {
           // So we use `defaults` instead of `merge` (do not overwrite hits count for root parent refinement)
           this.hierarchicalFacets[position][attributeIndex].data = defaults({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
         } else {
-          this.hierarchicalFacets[position][attributeIndex].data = extend({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+          this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
         }
       } else {
         position = disjunctiveFacetsIndices[dfacet];
@@ -307,7 +307,7 @@ function SearchResults(state, algoliaResponse) {
 
         this.disjunctiveFacets[position] = {
           name: dfacet,
-          data: extend({}, dataFromMainRequest, facetResults),
+          data: defaults({}, facetResults, dataFromMainRequest),
           exhaustive: result.exhaustiveFacetsCount
         };
         assignFacetStats(this.disjunctiveFacets[position], result.facets_stats, dfacet);

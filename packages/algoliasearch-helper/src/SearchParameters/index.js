@@ -12,8 +12,10 @@ var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
 var isFunction = require('lodash/lang/isFunction');
 var find = require('lodash/collection/find');
+var pluck = require('lodash/collection/pluck');
 
-var extend = require('../functions/extend');
+var defaults = require('lodash/object/defaults');
+var merge = require('lodash/object/merge');
 var deepFreeze = require('../functions/deepFreeze');
 
 var RefinementList = require('./RefinementList');
@@ -481,9 +483,9 @@ SearchParameters.prototype = {
   addNumericRefinement: function(attribute, operator, value) {
     if (this.isNumericRefined(attribute, operator, value)) return this;
 
-    var mod = extend({}, this.numericRefinements);
+    var mod = merge({}, this.numericRefinements);
 
-    mod[attribute] = extend({}, mod[attribute]);
+    mod[attribute] = merge({}, mod[attribute]);
     mod[attribute][operator] = value;
 
     return this.setQueryParameters({
@@ -827,7 +829,7 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      hierarchicalFacetsRefinements: extend({}, this.hierarchicalFacetsRefinements, mod)
+      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
   /**
@@ -960,7 +962,12 @@ SearchParameters.prototype = {
 
     return keys(this.disjunctiveFacetsRefinements)
       .concat(disjunctiveNumericRefinedFacets)
-      .concat(keys(this.hierarchicalFacetsRefinements));
+      .concat(intersection(
+        // enforce the order between the two arrays,
+        // so that refinement name index === hierarchical facet index
+        pluck(this.hierarchicalFacets, 'name'),
+        keys(this.hierarchicalFacetsRefinements)
+      ));
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -993,6 +1000,7 @@ SearchParameters.prototype = {
   getQueryParams: function getQueryParams() {
     var managedParameters = this.managedParameters;
 
+    // FIXME with lodash
     return reduce(this, function(memo, value, parameter, parameters) {
       if (indexOf(managedParameters, parameter) === -1 &&
         parameters[parameter] !== undefined) {
@@ -1044,7 +1052,7 @@ SearchParameters.prototype = {
       throw error;
     }
 
-    return this.mutateMe(function merge(newInstance) {
+    return this.mutateMe(function mergeWith(newInstance) {
       var ks = keys(params);
 
       forEach(ks, function(k) {
