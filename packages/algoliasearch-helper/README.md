@@ -401,6 +401,28 @@ Would mean that your objects look like so:
 }
 ```
 
+##### Specifying a different sort order for values
+
+The default sort for the hierarchical facet view is: `isRefined:desc (first show refined), name:asc (then sort by name)`.
+
+You can specify a different sort order by using:
+
+```js
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    sortBy: ['count:desc', 'name:asc'] // first show the most common values, then sort by name
+  }]
+});
+```
+
+The available sort tokens are:
+- count
+- isRefined
+- name
+- path
+
 ##### Asking for the current breadcrumb
 
 ```js
@@ -421,8 +443,6 @@ console.log(breadcrumb);
 console.log(breadcrumb.join(' | '));
 // 'fruits | citrus'
 ```
-
-
 
 #### Clearing filters
 

@@ -15,9 +15,10 @@ function generateTrees(state) {
     var hierarchicalFacet = state.hierarchicalFacets[hierarchicalFacetIndex];
     var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
       state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
-    var hierarchicalSeparator = state.getHierarchicalFacetSeparator(hierarchicalFacet);
+    var hierarchicalSeparator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    var sortBy = prepareHierarchicalFacetSortBy(state._getHierarchicalFacetSortBy(hierarchicalFacet));
 
-    return reduce(hierarchicalFacetResult, generateHierarchicalTree(hierarchicalSeparator, hierarchicalFacetRefinement), {
+    return reduce(hierarchicalFacetResult, generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalFacetRefinement), {
       name: state.hierarchicalFacets[hierarchicalFacetIndex].name,
       count: null, // root level, no count
       isRefined: true, // root level, always refined
@@ -27,7 +28,7 @@ function generateTrees(state) {
   };
 }
 
-function generateHierarchicalTree(hierarchicalSeparator, currentRefinement) {
+function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefinement) {
   return function generateTree(hierarchicalTree, hierarchicalFacetResult, currentHierarchicalLevel) {
     var parent = hierarchicalTree;
 
@@ -59,7 +60,7 @@ function generateHierarchicalTree(hierarchicalSeparator, currentRefinement) {
           pick(hierarchicalFacetResult.data, parentMatches(parent.path, currentRefinement, hierarchicalSeparator)),
           formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement)
         ),
-        ['isRefined', 'name', 'count'], ['desc', 'asc', 'desc']
+        sortBy[0], sortBy[1]
       );
     }
 
@@ -90,4 +91,14 @@ function formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement) 
       data: null
     };
   };
+}
+
+// ['isRefined:desc', 'count:asc'] => [['isRefined', 'count'], ['desc', 'asc']] (lodash sortByOrder format)
+function prepareHierarchicalFacetSortBy(sortBy) {
+  return reduce(sortBy, function prepare(out, sortInstruction) {
+    var sortInstructions = sortInstruction.split(':');
+    out[0].push(sortInstructions[0]);
+    out[1].push(sortInstructions[1]);
+    return out;
+  }, [[], []]);
 }
