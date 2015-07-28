@@ -808,11 +808,11 @@ SearchParameters.prototype = {
       // remove current refinement:
       // refinement was 'beer > IPA', call is toggleRefine('beer > IPA'), refinement should be `beer`
       this.hierarchicalFacetsRefinements[facet][0] === value ||
-      // remove a parent refinement:
+      // remove a parent refinement of the current refinement:
       //  - refinement was 'beer > IPA > Flying dog'
       //  - call is toggleRefine('beer > IPA')
       //  - refinement should be `beer`
-      value.length > 0 && value.length < this.hierarchicalFacetsRefinements[facet][0].length
+      this.hierarchicalFacetsRefinements[facet][0].indexOf(value + separator) === 0
     );
 
     if (upOneOrMultipleLevel) {
