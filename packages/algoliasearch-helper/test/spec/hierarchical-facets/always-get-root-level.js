@@ -29,14 +29,14 @@ test('hierarchical facets: alwaysGetRootLevel option', function(t) {
       'query': 'a',
       'index': indexName,
       'hits': [{'objectID': 'one'}],
-      'nbHits': 1,
+      'nbHits': 3,
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
       'facets': {
-        'categories.lvl0': {'beers': 1},
-        'categories.lvl1': {'beers > IPA': 1},
-        'categories.lvl2': {'beers > IPA > Flying dog': 1}
+        'categories.lvl0': {'beers': 3},
+        'categories.lvl1': {'beers > IPA': 3},
+        'categories.lvl2': {'beers > IPA > Flying dog': 3}
       }
     }, {
       'query': 'a',
@@ -47,7 +47,7 @@ test('hierarchical facets: alwaysGetRootLevel option', function(t) {
       'nbPages': 1,
       'hitsPerPage': 1,
       'facets': {
-        'categories.lvl0': {'beers': 2, 'fruits': 5, 'electronics': 10}
+        'categories.lvl0': {'beers': 6, 'fruits': 5, 'electronics': 10}
       }
     }]
   };
@@ -60,17 +60,17 @@ test('hierarchical facets: alwaysGetRootLevel option', function(t) {
     'data': [{
       'name': 'beers',
       'path': 'beers',
-      'count': 2,
+      'count': 3,
       'isRefined': true,
       'data': [{
         'name': 'IPA',
         'path': 'beers > IPA',
-        'count': 1,
+        'count': 3,
         'isRefined': true,
         'data': [{
           'name': 'Flying dog',
           'path': 'beers > IPA > Flying dog',
-          'count': 1,
+          'count': 3,
           'isRefined': true,
           'data': null
         }]

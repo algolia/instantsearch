@@ -8,6 +8,7 @@ var find = require('lodash/collection/find');
 var includes = require('lodash/collection/includes');
 var map = require('lodash/collection/map');
 var findIndex = require('lodash/array/findIndex');
+var defaults = require('lodash/object/defaults');
 
 var extend = require('../functions/extend');
 var generateHierarchicalTree = require('./generate-hierarchical-tree');
@@ -285,7 +286,20 @@ function SearchResults(state, algoliaResponse) {
       if (hierarchicalFacet) {
         position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
         var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
-        this.hierarchicalFacets[position][attributeIndex].data = extend({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+        if (hierarchicalFacet.alwaysGetRootLevel) {
+          // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
+          // then the disjunctive values will be `beers` (count: 100),
+          // but we do not want to display
+          //   | beers (100)
+          //     > IPA (5)
+          // We want
+          //   | beers (5)
+          //     > IPA (5)
+          // So we use `defaults` instead of `merge` (do not overwrite hits count for root parent refinement)
+          this.hierarchicalFacets[position][attributeIndex].data = defaults({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+        } else {
+          this.hierarchicalFacets[position][attributeIndex].data = extend({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+        }
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
