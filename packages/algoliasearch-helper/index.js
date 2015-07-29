@@ -37,7 +37,7 @@ function algoliasearchHelper(client, index, opts) {
  * @member module:algoliasearchHelper.version
  * @type {number}
  */
-algoliasearchHelper.version = '2.1.2';
+algoliasearchHelper.version = require('./src/version.json');
 
 /**
  * Constructor for the Helper.

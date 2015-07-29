@@ -8,8 +8,6 @@ if [ $CI == 'true' ]; then
   set -x # debug messages
 fi
 
-set -x # debug messages
-
 echo "Lint"
 
 eslint . --quiet
