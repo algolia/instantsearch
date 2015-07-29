@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
-    "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
-    "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
+    "build": "./scripts/build.sh",
     "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 test/run.js",
     "dev-coverage": "DEBUG=zuul* zuul --local 8090 test/run.js",
     "lint": "scripts/lint.sh",
@@ -23,7 +22,8 @@
     "test": "scripts/test.sh",
     "test-node": "clear && node test/run",
     "test:watch": "onchange '{src,test}/**/*.js' 'index.js' -- npm run test-node",
-    "jsfmt": "jsfmt"
+    "jsfmt": "jsfmt",
+    "release": "git clean dist/ -f && git checkout dist/ && npm install && ./scripts/release.js && npm run build"
   },
   "gh-pages-deploy": {
     "prep": [
@@ -64,9 +64,12 @@
     "jscs": "1.13.1",
     "jsdoc": "bobylito/jsdoc",
     "minami": "algolia/minami",
+    "mversion": "1.10.0",
     "onchange": "1.0.0",
     "opn": "1.0.1",
     "phantomjs": "1.9.17",
+    "pretty-bytes": "2.0.1",
+    "semver": "5.0.1",
     "sinon": "1.15.4",
     "tape": "4.0.0",
     "uglify-js": "2.4.23",
