@@ -1,67 +1,73 @@
-"use strict";
-var test = require( "tape" );
-var algoliasearchHelper = require( "../../index" );
+'use strict';
 
-test( "setChange should change the current page", function( t ) {
-  var helper = algoliasearchHelper( null, null, null );
+var test = require('tape');
+var algoliasearchHelper = require('../../index');
 
-  t.ok( helper.getCurrentPage() === 0, "First page should be 0" );
-  helper.setCurrentPage( 3 );
-  t.ok( helper.getCurrentPage() === 3, "If page was changed to 3, getCurrentPage should return 3" );
+test('setChange should change the current page', function(t) {
+  var helper = algoliasearchHelper(null, null, null);
+
+  t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
+  helper.setCurrentPage(3);
+  t.ok(helper.getCurrentPage() === 3, 'If page was changed to 3, getCurrentPage should return 3');
   t.end();
-} );
+});
 
-test( "nextPage should increment the page by one", function( t ) {
-  var helper = algoliasearchHelper( null, null, null );
+test('nextPage should increment the page by one', function(t) {
+  var helper = algoliasearchHelper(null, null, null);
 
-  t.ok( helper.getCurrentPage() === 0, "First page should be 0" );
+  t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
   helper.nextPage();
   helper.nextPage();
   helper.nextPage();
-  t.ok( helper.getCurrentPage() === 3, "If page was increment 3 times, getCurrentPage should return 3" );
+  t.ok(helper.getCurrentPage() === 3, 'If page was increment 3 times, getCurrentPage should return 3');
   t.end();
-} );
+});
 
-test( "previousPage should decrement the current page by one", function( t ) {
-  var helper = algoliasearchHelper( null, null, null );
+test('previousPage should decrement the current page by one', function(t) {
+  var helper = algoliasearchHelper(null, null, null);
 
-  t.ok( helper.getCurrentPage() === 0, "First page should be 0" );
-  helper.setCurrentPage( 3 );
-  t.ok( helper.getCurrentPage() === 3, "If page was changed to 3, getCurrentPage should return 3" );
+  t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
+  helper.setCurrentPage(3);
+  t.ok(helper.getCurrentPage() === 3, 'If page was changed to 3, getCurrentPage should return 3');
   helper.previousPage();
-  t.ok( helper.getCurrentPage() === 2, "must be 2 now" );
+  t.ok(helper.getCurrentPage() === 2, 'must be 2 now');
   t.end();
-} );
+});
 
-test( "pages should be reset if the mutation might change the number of pages", function( t ) {
-  var helper = algoliasearchHelper( "", "", {
-    facets : [ "facet1", "f2" ],
-    disjunctiveFacets : [ "f1" ]
-  } );
+test('pages should be reset if the mutation might change the number of pages', function(t) {
+  var bindAll = require('lodash/function/bindAll');
+  var partial = require('lodash/function/partial');
 
-  var testMutation = function( tester, text, testFn ) {
-    helper.setCurrentPage( 10 );
-    t.equal( helper.getCurrentPage(), 10, "set the current page to 10" + text );
+  var helper = algoliasearchHelper('', '', {
+    facets: ['facet1', 'f2'],
+    disjunctiveFacets: ['f1']
+  });
+
+  bindAll(helper);
+
+  var testMutation = function(tester, text, testFn) {
+    helper.setCurrentPage(10);
+    t.equal(helper.getCurrentPage(), 10, 'set the current page to 10' + text);
     testFn();
-    t.equal( helper.getCurrentPage(), 0, "page resetted" + text );
+    t.equal(helper.getCurrentPage(), 0, 'page resetted' + text);
   };
 
-  testMutation( t, " clearRefinements", helper.clearRefinements.bind( helper ) );
-  testMutation( t, " setQuery", helper.setQuery.bind( helper, "query" ) );
-  testMutation( t, " addNumericRefinement", helper.addNumericRefinement.bind( helper, "facet", ">", "2" ) );
-  testMutation( t, " removeNumericRefinement", helper.removeNumericRefinement.bind( helper, "facet", ">" ) );
+  testMutation(t, ' clearRefinements', helper.clearRefinements);
+  testMutation(t, ' setQuery', partial(helper.setQuery, 'query'));
+  testMutation(t, ' addNumericRefinement', partial(helper.addNumericRefinement, 'facet', '>', '2'));
+  testMutation(t, ' removeNumericRefinement', partial(helper.removeNumericRefinement, 'facet', '>'));
 
-  testMutation( t, " addExclude", helper.addExclude.bind( helper, "facet1", "val2" ) );
-  testMutation( t, " removeExclude", helper.removeExclude.bind( helper, "facet1", "val2" ) );
+  testMutation(t, ' addExclude', partial(helper.addExclude, 'facet1', 'val2'));
+  testMutation(t, ' removeExclude', partial(helper.removeExclude, 'facet1', 'val2'));
 
-  testMutation( t, " addRefine", helper.addRefine.bind( helper, "f1", "val" ) );
-  testMutation( t, " removeRefine", helper.removeRefine.bind( helper, "f1", "val" ) );
+  testMutation(t, ' addRefine', partial(helper.addRefine, 'f2', 'val'));
+  testMutation(t, ' removeRefine', partial(helper.removeRefine, 'f2', 'val'));
 
-  testMutation( t, " addDisjunctiveRefine", helper.addDisjunctiveRefine.bind( helper, "f2", "val" ) );
-  testMutation( t, " removeDisjunctiveRefine", helper.removeDisjunctiveRefine.bind( helper, "f2", "val" ) );
+  testMutation(t, ' addDisjunctiveRefine', partial(helper.addDisjunctiveRefine, 'f1', 'val'));
+  testMutation(t, ' removeDisjunctiveRefine', partial(helper.removeDisjunctiveRefine, 'f1', 'val'));
 
-  testMutation( t, " toggleRefine", helper.toggleRefine.bind( helper, "f1", "v1" ) );
-  testMutation( t, " toggleExclude", helper.toggleExclude.bind( helper, "facet1", "55" ) );
+  testMutation(t, ' toggleRefine', partial(helper.toggleRefine, 'f1', 'v1'));
+  testMutation(t, ' toggleExclude', partial(helper.toggleExclude, 'facet1', '55'));
 
   t.end();
-} );
+});

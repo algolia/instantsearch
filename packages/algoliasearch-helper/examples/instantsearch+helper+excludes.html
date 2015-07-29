@@ -1,6 +1,7 @@
+<!doctype html>
 <html>
   <head>
-    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
@@ -52,27 +53,26 @@
           maxValuesPerFacet: 5
         });
 
-        helper.on( "result", searchCallback );
-        $inputfield.keyup( search );
+        helper.on("result", searchCallback);
+        $inputfield.keyup(search);
 
         window.toggleRefine = function(facet, value) {
           helper.toggleRefine(facet, value).search();
-        }
+        };
 
         window.toggleExclude = function(facet, value) {
           helper.toggleExclude(facet, value).search();
-        }
+        };
 
         search();
 
         //Functions
 
         function search() {
-          helper.setQuery( $inputfield.val() ).search();
+          helper.setQuery($inputfield.val()).search();
         }
 
-        function searchCallback( content ) {
-          console.log( content );
+        function searchCallback(content) {
           if (content.query != $inputfield.val()) {
             // do not consider out-dated queries
             return;
@@ -103,8 +103,8 @@
 
           // Scan all disjunctive facets and display them
           var facets = '';
-          for ( var i = 0; i < content.disjunctiveFacets.length; i++ ){
-            var facet = content.disjunctiveFacets[ i ];
+          for (var i = 0; i < content.disjunctiveFacets.length; i++){
+            var facet = content.disjunctiveFacets[i];
             facets += '<h4>' + facet.name + '</h4>';
             var values = facet.data;
             for (var value in values) {
@@ -118,8 +118,8 @@
 
           // Scan all facets and display them
           facets = '';
-          for( var i = 0; i < content.facets.length; i++ ){
-            var facet = content.facets[ i ];
+          for(var i = 0; i < content.facets.length; i++){
+            var facet = content.facets[i];
             facets += '<h4>' + facet.name + '</h4>';
             facets += '<ul>';
             var values = facet.data;

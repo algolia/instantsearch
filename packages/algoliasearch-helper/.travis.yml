@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+  - stable
+before_install: npm prune
+install: npm install
+script: npm run test-ci
+branches:
+  only:
+    - master
+    - develop
+# force container based infra
+# http://docs.travis-ci.com/user/workers/container-based-infrastructure/#Routing-your-build-to-container-based-infrastructure
+sudo: false
+cache:
+  directories:
+    - node_modules
+env:
+  global:
+    - SAUCE_USERNAME=as-helper-js
+    - secure: zHtXU8LLLHwoXiOeHsUSXJVLMVUEelCfsZI5bUTyp/vy4ZZ5zPr8r9oPKZAHhQXii6PYFwW4rgP0/5BJ8Ono/axDIDPHg9YNoAbajnco31mYJEsxN+4hi/6rkmJWxqXprRvqEfiEIPY0FSaJEv9rOpJRZX2rycP3MH2vHwZKNXo=
+    - secure: kxNWq4D6Tv7c/h2kutn3tPVU6m02IYlHFQgNLlzxHmnAh0OFbHFeXFu1d6ng0m0BQqK4JIuCLJudN3U9HAGFeYwxizM3ozkbMsOfuhZ2aoisLC40ber1x7eAh3vuVvHV3cDRwYvhvspLV6h8I9ggHiEye5Q2FEqBjg8Zm822/EM=
+    - secure: Jj2WzeDLvGJlDT+OxIvgWqTOwORiziXs2uv/pjKwjKHgF8DA9pUBaz6q+s+2L2IAlcjkU3OliyVUQp8ajbhQKXwMM1a+bCQiiYgGWJ7hnn9bdzc4MPC1MljjAJ5yRn5iwX2GjqRS9v6VM3YTVp6QLSNR556g4Frg37TbGbzU01A=

@@ -1,85 +1,91 @@
 CHANGELOG
 
+UNRELEASED
+  * FIX: #130 toggleRefine should throw an exception when executed with an
+  attribute that is not a declared facet
+  * TEST: add CI testing (browsers, phantom, node, io)
+  * FEATURE: add hierarchicalFacets
+
 2.1.2 - 2015-06-26
-  * FIX : #113 support for attributes hightlightPreTag and hightlighPostTag
-  * FIX : #112 distinct = undefined sent to the server
-  * FIX : #110 helper.hasRefinements() now checks for numerics
-  * FIX : #106 convert refinements to string
-  * DOC : Update theme + fix (github.com/algolia/minami)
-  * DOC : Fix misc links and descrition and added samples of objects
-  * DOC : Added a cheat sheet in the generated documentation
+  * FIX: #113 support for attributes hightlightPreTag and hightlighPostTag
+  * FIX: #112 distinct = undefined sent to the server
+  * FIX: #110 helper.hasRefinements() now checks for numerics
+  * FIX: #106 convert refinements to string
+  * DOC: Update theme + fix (github.com/algolia/minami)
+  * DOC: Fix misc links and descrition and added samples of objects
+  * DOC: Added a cheat sheet in the generated documentation
 
 2.1.1 - 2015-06-19
-  * FIX : #107 Apply rules to distinct to prevent the API to return an error
-  * FIX : make algoliasearch-helper requireable + browserifyable by removing the global envify transform
+  * FIX: #107 Apply rules to distinct to prevent the API to return an error
+  * FIX: make algoliasearch-helper requireable + browserifyable by removing the global envify transform
 
 2.1.0 - 2015-06-15
-  * FIX : #29 Avoid callback for outdated queries
-  * FIX : #64 Sum up the processing time of all queries
-  * FIX : #92 Parameters that can be set in the dashboard shouldn't have
+  * FIX: #29 Avoid callback for outdated queries
+  * FIX: #64 Sum up the processing time of all queries
+  * FIX: #92 Parameters that can be set in the dashboard shouldn't have
   defaults
-  * FIX : #62 Make sure disctinct is set to false when it's not possible to
+  * FIX: #62 Make sure disctinct is set to false when it's not possible to
   use distinct in Algolia
-  * FEATURE : #91 Support for tags (with support for the raw format #98)
-  * FEATURE : #70 Ability to get all refined values : helper.getRefinements(
+  * FEATURE: #91 Support for tags (with support for the raw format #98)
+  * FEATURE: #70 Ability to get all refined values: helper.getRefinements(
   facetname )
-  * FEATURE : #51 multiple filters for a single conjunctive facet (tests)
-  * FEATURE : Ability to modify any parameter of the state easily (#76 #84 #12)
-  * FEATURE : #69 Ability to know if a facet is refined, whatever the value
-  * FEATURE : #86 Expose SearchParameters, AlgoliaSearchHelper, SearchResults to
+  * FEATURE: #51 multiple filters for a single conjunctive facet (tests)
+  * FEATURE: Ability to modify any parameter of the state easily (#76 #84 #12)
+  * FEATURE: #69 Ability to know if a facet is refined, whatever the value
+  * FEATURE: #86 Expose SearchParameters, AlgoliaSearchHelper, SearchResults to
   users directly in the builds
-  * FEATURE : #25 let the user do a clearRefinement with a function as a filter
-  * REFACTORING : SearchParameters is immutable (#14)
-  * REFACTORING : Ensure SearchParameters is totally frozen (#14)
-  * LIB : Update lodash version to 3.9.x
+  * FEATURE: #25 let the user do a clearRefinement with a function as a filter
+  * REFACTORING: SearchParameters is immutable (#14)
+  * REFACTORING: Ensure SearchParameters is totally frozen (#14)
+  * LIB: Update lodash version to 3.9.x
 
 2.0.4
-  * FIX : #82 Fix facet count on records with multiple values for a single
+  * FIX: #82 Fix facet count on records with multiple values for a single
   facet
   * FEATURE: Add exhaustive attribute to a facet and removed useless timeout
   (#80)
 
 2.0.3 - 2015-05-13
-  * FIX : #72 add back the ability to do multiple disjunctive facetting on a
+  * FIX: #72 add back the ability to do multiple disjunctive facetting on a
   single attribute
-  * FEATURE : #73 method to replace the state, without triggering a change
-  event : overrideStateWithoutTriggeringChangeEvent (use wisely)
-  * FEATURE : #66 add setTypoTolerance to SearchParameters
+  * FEATURE: #73 method to replace the state, without triggering a change
+  event: overrideStateWithoutTriggeringChangeEvent (use wisely)
+  * FEATURE: #66 add setTypoTolerance to SearchParameters
 
 2.0.2 - 2015-05-06
-  * FIX : setHitsPerPage was creating a new property HitsPerPage instead of
+  * FIX: setHitsPerPage was creating a new property HitsPerPage instead of
   updating the currently available hitsPerPage
 
 2.0.1
-  * MEH : because of jsDelivr
+  * MEH: because of jsDelivr
 
 2.0.0
-  * FIX : set page to 0 if it might change the number of pages returned
-  * FIX : handle distinct parameter automatically
-  * FIX : batch response handler gets the proper search state
-  * FEATURE : (breaking) Now peer depend on algoliasearch v3.1
-  * FEATURE : (breaking) Facets stats and timeout infos are consistently
+  * FIX: set page to 0 if it might change the number of pages returned
+  * FIX: handle distinct parameter automatically
+  * FIX: batch response handler gets the proper search state
+  * FEATURE: (breaking) Now peer depend on algoliasearch v3.1
+  * FEATURE: (breaking) Facets stats and timeout infos are consistently
   grouped in the facet object in the SearchResults
-  * FEATURE : (breaking) no more extra queries
-  * FEATURE : (breaking) Facets results are stored in an array with an order
+  * FEATURE: (breaking) no more extra queries
+  * FEATURE: (breaking) Facets results are stored in an array with an order
   that reflects their definition.
-  * FEATURE : Search results explicit definition
-  * FEATURE : (breaking) Search parameters as a separate object
-  * FEATURE : (breaking) Move callback style to a event based API
-  * FEATURE : change and results events return the state and the results (if any)
-  * FEATURE : SearchRefults.getFacetByName to retrieve a facet object from its
+  * FEATURE: Search results explicit definition
+  * FEATURE: (breaking) Search parameters as a separate object
+  * FEATURE: (breaking) Move callback style to a event based API
+  * FEATURE: change and results events return the state and the results (if any)
+  * FEATURE: SearchRefults.getFacetByName to retrieve a facet object from its
   name
-  * FEATURE : SearchParameters.getNumericRefinement : get back the value of a specific numeric
+  * FEATURE: SearchParameters.getNumericRefinement: get back the value of a specific numeric
   refinement
-  * FEATURE : clear refinements by name
-  * FEATURE : isDisjunctiveRefined to check if a disjunctive facet is refined
-  * FEATURE : basic support for numeric filters
-  * FEATURE : version number on the main helper factory
-  * TESTS : defaults test
+  * FEATURE: clear refinements by name
+  * FEATURE: isDisjunctiveRefined to check if a disjunctive facet is refined
+  * FEATURE: basic support for numeric filters
+  * FEATURE: version number on the main helper factory
+  * TESTS: defaults test
 
 1.1.0
-  * REFACTORING : constructor, now expose the defaults
-  * TESTS : defaults test
+  * REFACTORING: constructor, now expose the defaults
+  * TESTS: defaults test
   * FEATURE: Allow .search(q, params, cb) "callback always last" convention
     introduced by JavaScript client, also on the helper
 

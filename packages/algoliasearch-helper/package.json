@@ -7,10 +7,10 @@
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
     "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
-    "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 --ui tape test/run.js",
-    "dev-coverage": "DEBUG=zuul* zuul --local 8090 --ui tape test/run.js",
-    "lint": "eslint src index.js; true",
-    "watch-lint": " onchange '.eslintrc' 'src/**/*.js' 'index.js' -- npm run lint ",
+    "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 test/run.js",
+    "dev-coverage": "DEBUG=zuul* zuul --local 8090 test/run.js",
+    "lint": "scripts/lint.sh",
+    "lint:watch": "onchange 'src/**/*js' 'index.js' 'test/**/*js' '.eslintrc' -- npm run -s lint",
     "open": "sleep 1 && opn http://localhost:8080/examples",
     "examples": "npm run build & npm run open & http-server .",
     "doc": "npm run doc:toc && npm run doc:jsdoc",
@@ -18,8 +18,12 @@
     "doc:toc": "doctoc --notitle tutorials/* --maxlevel 2",
     "doc:watch": "onchange 'src/**/*.js' 'index.js' 'tutorials/*.md' '../minami/**/*.*' -- npm run doc",
     "doc:publish": "gh-pages-deploy",
-    "test-ci": "echo \"Error: no test specified\" && exit 1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "readme:toc": "doctoc --notitle README.md --maxlevel 3",
+    "test-ci": "scripts/test-ci.sh",
+    "test": "scripts/test.sh",
+    "test-node": "clear && node test/run",
+    "test:watch": "onchange '{src,test}/**/*.js' 'index.js' -- npm run test-node",
+    "jsfmt": "jsfmt"
   },
   "gh-pages-deploy": {
     "prep": [
@@ -36,28 +40,43 @@
     "type": "git",
     "url": "https://github.com/algolia/algoliasearch-helper-js.git"
   },
+  "standard": {
+    "ignore": [
+      "dist/"
+    ]
+  },
+  "browser": {
+    "lodash": "lodash-compat"
+  },
   "devDependencies": {
-    "algoliasearch": ">= 3.1",
-    "browserify": "9.0.3",
+    "@algolia/jsfmt": "1.3.0",
+    "algoliasearch": "latest",
+    "browserify": "10.2.4",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
     "doctoc": "0.14.1",
     "envify": "3.4.0",
-    "eslint": "0.17.1",
+    "eslint": "0.24.0",
+    "eslint-config-airbnb": "0.0.6",
+    "eslint-config-algolia": "2.1.1",
     "gh-pages-deploy": "0.3.0",
     "http-server": "0.8.0",
+    "jscs": "1.13.1",
     "jsdoc": "bobylito/jsdoc",
     "minami": "algolia/minami",
     "onchange": "1.0.0",
     "opn": "1.0.1",
-    "sinon": "1.14.1",
-    "tape": "3.5.0",
-    "uglify-js": "2.4.17",
-    "watchify": "2.6.0",
-    "zuul": "2.1.1"
+    "phantomjs": "1.9.17",
+    "sinon": "1.15.4",
+    "tape": "4.0.0",
+    "uglify-js": "2.4.23",
+    "watchify": "3.2.3",
+    "zuul": "3.2.0",
+    "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
-    "lodash": "3.9.x"
+    "lodash": "3.10.0",
+    "lodash-compat": "3.10.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"
