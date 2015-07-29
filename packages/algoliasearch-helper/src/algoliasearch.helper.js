@@ -544,6 +544,22 @@ AlgoliaSearchHelper.prototype._getQueries = function getQueries() {
     });
   }, this);
 
+  // maybe more to get the root level of hierarchical facets when activated
+  forEach(this.state.getRefinedHierarchicalFacets(), function(refinedFacet) {
+    var hierarchicalFacet = this.state.getHierarchicalFacetByName(refinedFacet);
+
+    var currentRefinement = this.state.getHierarchicalRefinement(refinedFacet);
+    // if we are deeper than level 0 (starting from `beer > IPA`)
+    // we want to get the root values
+    if (currentRefinement.length > 0 && currentRefinement[0].split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length > 1) {
+      queries.push({
+        indexName: this.index,
+        query: this.state.query,
+        params: this._getDisjunctiveFacetSearchParams(refinedFacet, true)
+      });
+    }
+  }, this);
+
   return queries;
 };
 
@@ -614,8 +630,8 @@ AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
  * @param  {string} facet the associated facet name
  * @return {object}
  */
-AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet) {
-  var facetFilters = this._getFacetFilters(facet);
+AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet, hierarchicalRootLevel) {
+  var facetFilters = this._getFacetFilters(facet, hierarchicalRootLevel);
   var numericFilters = this._getNumericFilters(facet);
   var tagFilters = this._getTagFilters();
   var additionalParams = {
@@ -630,7 +646,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet)
   var hierarchicalFacet = this.state.getHierarchicalFacetByName(facet);
 
   if (hierarchicalFacet) {
-    additionalParams.facets = [this._getDisjunctiveHierarchicalFacetAttribute(hierarchicalFacet)];
+    additionalParams.facets = this._getDisjunctiveHierarchicalFacetAttribute(hierarchicalFacet, hierarchicalRootLevel);
   } else {
     additionalParams.facets = facet;
   }
@@ -708,7 +724,7 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function(facet) {
  * @param  {string} [facet] if set, the current disjunctive facet
  * @return {array.<string>}
  */
-AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
+AlgoliaSearchHelper.prototype._getFacetFilters = function(facet, hierarchicalRootLevel) {
   var facetFilters = [];
 
   forEach(this.state.facetsRefinements, function(facetValues, facetName) {
@@ -749,7 +765,7 @@ AlgoliaSearchHelper.prototype._getFacetFilters = function(facet) {
     if (facet === facetName) {
       // if we are at the root level already, no need to ask for facet values, we get them from
       // the hits query
-      if (facetValue.indexOf(separator) === -1 || hierarchicalFacet.alwaysGetRootLevel === true) {
+      if (facetValue.indexOf(separator) === -1 || hierarchicalRootLevel === true) {
         return;
       }
 
@@ -791,9 +807,9 @@ AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() 
     }, out, this);
 };
 
-AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet) {
-  if (hierarchicalFacet.alwaysGetRootLevel) {
-    return hierarchicalFacet.attributes[0];
+AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet, rootLevel) {
+  if (rootLevel === true) {
+    return [hierarchicalFacet.attributes[0]];
   }
 
   var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
@@ -801,7 +817,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = functi
   // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
   var parentLevel = hierarchicalRefinement.split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
-  return hierarchicalFacet.attributes[parentLevel];
+  return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
 };
 
 module.exports = AlgoliaSearchHelper;

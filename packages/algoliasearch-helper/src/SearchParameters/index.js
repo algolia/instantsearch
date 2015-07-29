@@ -962,12 +962,7 @@ SearchParameters.prototype = {
 
     return keys(this.disjunctiveFacetsRefinements)
       .concat(disjunctiveNumericRefinedFacets)
-      .concat(intersection(
-        // enforce the order between the two arrays,
-        // so that refinement name index === hierarchical facet index
-        pluck(this.hierarchicalFacets, 'name'),
-        keys(this.hierarchicalFacetsRefinements)
-      ));
+      .concat(this.getRefinedHierarchicalFacets());
   },
   /**
    * Returns the list of all disjunctive facets refined
@@ -977,7 +972,12 @@ SearchParameters.prototype = {
    * @return {string[]}
    */
   getRefinedHierarchicalFacets: function getRefinedHierarchicalFacets() {
-    return this.hierarchicalFacetsRefinements;
+    return intersection(
+      // enforce the order between the two arrays,
+      // so that refinement name index === hierarchical facet index
+      pluck(this.hierarchicalFacets, 'name'),
+      keys(this.hierarchicalFacetsRefinements)
+    );
   },
   /**
    * Returned the list of all disjunctive facets not refined

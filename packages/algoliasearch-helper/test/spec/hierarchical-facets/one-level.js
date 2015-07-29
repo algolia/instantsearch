@@ -76,7 +76,7 @@ test('hierarchical facets: only one level deep', function(t) {
     var call = search.getCall(0);
     var queries = call.args[0];
     var hitsQuery = queries[0];
-    var parentFacetValuesQuery = queries[1];
+    var parentValuesQuery = queries[1];
 
     t.equal(queries.length, 2, 'we made two queries');
     t.ok(search.calledOnce, 'client.search was called once');
@@ -91,12 +91,12 @@ test('hierarchical facets: only one level deep', function(t) {
       'first query (hits) has our `categories.lvl0` refinement facet filter'
     );
     t.deepEqual(
-      parentFacetValuesQuery.params.facets,
+      parentValuesQuery.params.facets,
       ['categories.lvl0'],
       'second query (unrefined parent facet values) has `categories.lvl0` as facets'
     );
     t.equal(
-      parentFacetValuesQuery.params.facetFilters,
+      parentValuesQuery.params.facetFilters,
       undefined,
       'second query (unrefined parent facet values) has no facet refinement since we are at the root level'
     );
