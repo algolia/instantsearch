@@ -262,7 +262,7 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
 
 /**
  * Change the current page
- * @param  {integer} page The page number
+ * @param  {number} page The page number
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {

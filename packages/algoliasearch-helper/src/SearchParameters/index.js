@@ -272,7 +272,7 @@ function SearchParameters(newParameters) {
   /**
    * Enable the ranking informations in the response
    * @see https://www.algolia.com/doc#getRankingInfo
-   * @member {integer}
+   * @member {number}
    */
   this.getRankingInfo = params.getRankingInfo;
   /**
