@@ -21,6 +21,17 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @property {object} stats undefined unless facet_stats is retrieved from algolia
  */
 
+/**
+ * @typedef SearchResults.HierarchicalFacet
+ * @type {object}
+ * @property {string} name name of the current value given the hierarchical level, trimmed.
+ *                         If root node, you get the facet name
+ * @property {number} count number (integer) of objets matching this hierarchical value
+ * @property {string} path the current hierarchical value full path
+ * @property {boolean} isRefined true if the current value was refined, false otherwise
+ * @property {SearchResults.HierarchicalFacet[]} data sub values for the current level
+ */
+
 function getIndices(obj) {
   var indices = {};
 
@@ -224,7 +235,7 @@ function SearchResults(state, algoliaResponse) {
   this.disjunctiveFacets = [];
   /**
    * disjunctive facets results
-   * @member {SearchResults.Facet[]}
+   * @member {SearchResults.HierarchicalFacet[]}
    */
   this.hierarchicalFacets = map(state.hierarchicalFacets, function initFutureTree() {
     return [];
