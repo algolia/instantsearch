@@ -1,0 +1,14 @@
+body {
+  padding: 2em 0;
+}
+
+.hit + .hit {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #bbb;
+}
+
+.hit em {
+  font-style: normal;
+  background-color: lightcyan;
+}

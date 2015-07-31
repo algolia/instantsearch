@@ -1,14 +1,16 @@
+require('./style.css');
+
 var instantsearch = require('../');
 
 var instant = new instantsearch.InstantSearch(
-  'JTH1JDTDFT',
-  '34a4c1b994546fbec45a670a06ba0c33',
-  'Bibliotheques'
+  'latency',
+  '6be0576ff61c053d5f9a3225e2a90f76',
+  'bestbuy'
 );
 
 instant.addWidget(instantsearch.widgets.searchbox({
   container: '#search-box',
-  placeholder: 'Search for libraries in France...'
+  placeholder: 'Search for products in France...'
 }));
 
 instant.addWidget(instantsearch.widgets.results({

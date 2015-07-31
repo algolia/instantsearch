@@ -2,11 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Instant search example</title>
+  <title>Instant search demo built with instantsearch.js</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 </head>
 <body>
-  <div id="search-box"></div>
-  <div id="hits"></div>
+  <div class="container">
+    <div class="page-header">
+      <h1>Instant search demo <small>using instantsearch.js</small></h1>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+
+        <div id="search-box"></div>
+      </div>
+      <div class="col-md-9">
+        <div id="hits"></div>
+      </div>
+    </div>
+  </div>
 
   <script src="bundle.js"></script>
 </body>
