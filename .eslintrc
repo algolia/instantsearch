@@ -1,7 +1,7 @@
 {
   "extends": [
-    "eslint-config-airbnb",
-    "eslint-config-algolia"
+    "airbnb",
+    "algolia"
   ],
   "parser": "babel-eslint",
   "plugins": ["react"],
