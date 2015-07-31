@@ -24,9 +24,11 @@ class Results extends React.Component {
   }
   renderNoResults(results, noResultsTemplate) {
     var TemplateComponent = isString(noResultsTemplate) ? Hogan : TemplateFn;
-    return <div className="search_list search_results_container row">
-             <TemplateComponent data={results} template={noResultsTemplate} />
-           </div>;
+    return (
+      <div className="search_list search_results_container row">
+        <TemplateComponent data={results} template={noResultsTemplate} />
+      </div>
+    );
   }
 }
 
