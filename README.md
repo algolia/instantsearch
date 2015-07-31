@@ -57,3 +57,11 @@ npm run dev
 # open http://localhost:8080
 # make changes in your widgets, or in example/app.js
 ```
+
+## Test
+
+```sh
+npm test # test and lint
+npm run test:watch # developer mode, test only
+npm run test:coverage
+```
