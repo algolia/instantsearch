@@ -4,7 +4,7 @@ var keys = require('lodash/object/keys');
 var intersection = require('lodash/array/intersection');
 var forEach = require('lodash/collection/forEach');
 var reduce = require('lodash/collection/reduce');
-var filter = require('lodash/collection/filter');
+var filter = require('lodash/collection/filter');e
 var omit = require('lodash/object/omit');
 var indexOf = require('lodash/array/indexOf');
 var isEmpty = require('lodash/lang/isEmpty');
@@ -270,7 +270,7 @@ function SearchParameters(newParameters) {
    */
   this.attributesToSnippet = params.attributesToSnippet;
   /**
-   * Enable the ranking informations in the response
+   * Enable the ranking informations in the response, set to 1 to activate
    * @see https://www.algolia.com/doc#getRankingInfo
    * @member {number}
    */
