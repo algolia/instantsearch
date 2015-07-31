@@ -8,6 +8,10 @@ var memoize = require('lodash/function/memoize');
 var memoHogan = memoize(hogan.compile.bind(hogan));
 
 var HoganResult = React.createClass({
+  propTypes: {
+    template: React.PropTypes.string,
+    data: React.PropTypes.object
+  },
   componentWillMount: function() {
     this.setState({
       template: memoHogan(this.props.template)
