@@ -12,7 +12,8 @@ var SearchBox = React.createClass({
     helper: React.PropTypes.instanceOf(AlgoliasearchHelper),
     results: React.PropTypes.instanceOf(SearchResults),
     onFocus: React.PropTypes.func,
-    placeholder: React.PropTypes.string
+    placeholder: React.PropTypes.string,
+    inputClass: React.PropTypes.string
   },
   render: function() {
     var onFocus = this.props.onFocus;
