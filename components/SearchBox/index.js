@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var bem = require('../BemHelper')('algolia-magic-search-box');
+var bem = require('../BemHelper')('as-search-box');
 var cx = require('classnames');
 
 var AlgoliasearchHelper = require('algoliasearch-helper/src/algoliasearch.helper');
