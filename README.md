@@ -78,8 +78,8 @@ npm run test:coverage
   instant.addWidget(
     instantsearch.widgets.searchBox({
       container: '#search-box',
-      cssClass: 'form-control',
-      placeholder: 'Search for products'
+      placeholder: 'Search for products',
+      // cssClass: 'form-control'
     })
   );
 ```
