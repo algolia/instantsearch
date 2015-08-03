@@ -319,6 +319,8 @@ Here, we refined the search this way:
 - click on fruits
 - click on citrus
 
+##### Usage
+
 To build such menu, you need to use hierarchical faceting:
 
 ```javascript
@@ -382,6 +384,29 @@ To ease navigation, we always:
 - provide the current refinement sub categories (`fruits > citrus > *`: n + 1)
 - provide the parent refinement (`fruits > citrus` => `fruits`: n -1) categories
 - refine the search using the current hierarchical refinement
+
+##### Multiple values per level
+
+Your records can also share multiple categories between one another by using arrays inside your object:
+
+```json
+{
+  "objectID": "123",
+  "name": "orange",
+  "categories": {
+    "lvl0": ["fruits", "color"],
+    "lvl1": ["fruits > citrus", "color > orange"]
+  }
+},
+{
+  "objectID": "456",
+  "name": "grapefruit",
+  "categories": {
+    "lvl0": ["fruits", "color", "new"],
+    "lvl1": ["fruits > citrus", "color > yellow", "new > citrus"]
+  }
+}
+```
 
 ##### Specifying another separator
 
