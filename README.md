@@ -65,3 +65,21 @@ npm test # test and lint
 npm run test:watch # developer mode, test only
 npm run test:coverage
 ```
+
+## Available widgets
+
+### searchBox
+
+```html
+  <input id="search-box" />
+```
+
+```js
+  instant.addWidget(
+    instantsearch.widgets.searchBox({
+      container: '#search-box',
+      cssClass: 'form-control',
+      placeholder: 'Search for products'
+    })
+  );
+```
