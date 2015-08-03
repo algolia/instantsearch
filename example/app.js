@@ -9,7 +9,7 @@ var instant = new instantsearch.InstantSearch(
 );
 
 instant.addWidget(
-  instantsearch.widgets.searchbox({
+  instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
     addClass: 'form-control'
