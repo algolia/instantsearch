@@ -83,3 +83,27 @@ npm run test:coverage
     })
   );
 ```
+
+## pagination
+
+```html
+  <div id="pagination"></div>
+```
+
+```js
+  instant.addWidget(
+    instantsearch.widgets.pagination({
+      container: '#pagination',
+      // cssClass: 'pagination', // no default
+      // padding: 3, // number of page numbers to show before/after current
+      // showFirstLast: true, // show or hide first and last links
+      // labels: {
+      //   previous: '‹', // &lsaquo;
+      //   next: '›', // &rsaquo;
+      //   first: '«', // &laquo;
+      //   last: '»' // &raquo;
+      // }
+    })
+  );
+```
+

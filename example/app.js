@@ -26,4 +26,11 @@ instant.addWidget(
   })
 );
 
+instant.addWidget(
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+    cssClass: 'pagination'
+  })
+);
+
 instant.start();
