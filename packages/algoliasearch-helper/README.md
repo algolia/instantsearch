@@ -383,6 +383,27 @@ To ease navigation, we always:
 - provide the parent refinement (`fruits > citrus` => `fruits`: n -1) categories
 - refine the search using the current hierarchical refinement
 
+Your records can share multiple categories between one another by using arrays inside your object:
+
+```json
+{
+  "objectID": "123",
+  "name": "orange",
+  "categories": {
+    "lvl0": ["fruits", "color"],
+    "lvl1": ["fruits > citrus", "color > orange"]
+  }
+},
+{
+  "objectID": "456",
+  "name": "grapefruit",
+  "categories": {
+    "lvl0": ["fruits", "color", "new"],
+    "lvl1": ["fruits > citrus", "color > yellow"]
+  }
+}
+```
+
 ##### Specifying another separator
 
 ```js
