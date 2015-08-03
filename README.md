@@ -71,7 +71,7 @@ npm run test:coverage
 ### searchBox
 
 ```html
-  <input id="search-box" />
+  <div id="search-box"></div>
 ```
 
 ```js
