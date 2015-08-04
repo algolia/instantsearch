@@ -10,12 +10,13 @@ function hits(parameters) {
 
   return {
     render: function(results, state, helper) {
-      React.render(<Results results={results}
-      searchState={state}
-      helper={helper}
-      noResultsTemplate={parameters.templates.noResults}
-      hitTemplate={parameters.templates.hit} />,
-        containerNode);
+      React.render(
+        <Results results={results}
+          helper={helper}
+          noResultsTemplate={params.templates.noResults}
+          hitTemplate={params.templates.hit} />,
+        containerNode
+      );
     }
   };
 }

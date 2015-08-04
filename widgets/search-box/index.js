@@ -16,7 +16,8 @@ function searchbox(params) {
           setQuery={bind(helper.setQuery, helper)}
           search={bind(helper.search, helper)}
           placeholder={params.placeholder}
-          inputClass={params.cssClass} />, container
+          inputClass={params.cssClass} />,
+        container
       );
     }
   };
