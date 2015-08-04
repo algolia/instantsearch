@@ -7,27 +7,46 @@ var TemplateFn = require('../templates/Function');
 
 class Hits extends React.Component {
   render() {
-    var results = this.props.results;
-    if (!results || !results.hits || results.hits.length === 0) {
-      return this.renderNoResults(results, this.props.noResultsTemplate);
+    if (this.props.hits.length === 0) {
+      return this.renderNoResults();
     }
-    return this.renderWithResults(results.hits, this.props.hitTemplate);
+
+    return this.renderWithResults();
   }
-  renderWithResults(hits, hitTemplate) {
-    var TemplateComponent = isString(hitTemplate) ? Hogan : TemplateFn;
-    var renderedHits = map(hits, function(hit) {
-      return <TemplateComponent data={hit} key={hit.objectID} template={hitTemplate} />;
-    });
-    return <div className="search_list search_results_container row">{renderedHits}</div>;
+
+  renderWithResults() {
+    var TemplateComponent = isString(this.props.hitTemplate) ? Hogan : TemplateFn;
+
+    var renderedHits = map(this.props.hits, function(hit) {
+      return <TemplateComponent data={hit} key={hit.objectID} template={this.props.hitTemplate} />;
+    }, this);
+
+    return <div>{renderedHits}</div>;
   }
-  renderNoResults(results, noResultsTemplate) {
-    var TemplateComponent = isString(noResultsTemplate) ? Hogan : TemplateFn;
+
+  renderNoResults() {
+    var TemplateComponent = isString(this.props.noResultsTemplate) ? Hogan : TemplateFn;
+
     return (
-      <div className="search_list search_results_container row">
-        <TemplateComponent data={results} template={noResultsTemplate} />
-      </div>
+      <div><TemplateComponent template={this.props.noResultsTemplate} /></div>
     );
   }
 }
+
+Hits.propTypes = {
+  hits: React.PropTypes.array,
+  hitTemplate: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.func
+  ]).isRequired,
+  noResultsTemplate: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.func
+  ]).isRequired
+};
+
+Hits.defaultProps = {
+  hits: []
+};
 
 module.exports = Hits;
