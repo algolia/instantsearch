@@ -6,22 +6,8 @@
   ],
   "plugins": ["react"],
   "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": false,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": false,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "spread": true,
-    "superInFunctions": true,
-    "templateStrings": true,
-    "jsx": true
+    // eslint-config-algolia disables modules because all projects are not ES6
+    "modules": true
   },
   "rules": {
     "strict": [2, "never"], // babel inserts "use strict"; for us
