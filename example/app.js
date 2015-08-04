@@ -8,17 +8,22 @@ var instant = new instantsearch.InstantSearch(
   'bestbuy'
 );
 
-instant.addWidget(instantsearch.widgets.searchbox({
-  container: '#search-box',
-  placeholder: 'Search for products in France...'
-}));
+instant.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-box',
+    placeholder: 'Search for products',
+    cssClass: 'form-control'
+  })
+);
 
-instant.addWidget(instantsearch.widgets.results({
+instant.addWidget(
+  instantsearch.widgets.results({
   container: '#hits',
-  templates: {
-    noResults: require('./templates/no-results.html'),
-    hit: require('./templates/hit.html')
-  }
-}));
+    templates: {
+      noResults: require('./templates/no-results.html'),
+      hit: require('./templates/hit.html')
+    }
+  })
+);
 
 instant.start();

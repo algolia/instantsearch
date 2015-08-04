@@ -3,7 +3,7 @@
 module.exports = {
   InstantSearch: require('./lib/InstantSearch'),
   widgets: {
-    searchbox: require('./widgets/searchbox'),
-    results: require('./widgets/hits')
+    searchBox: require('./widgets/search-box/'),
+    results: require('./widgets/hits/')
   }
 };
