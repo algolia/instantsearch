@@ -86,42 +86,44 @@ npm run test:coverage
 ### searchBox
 
 ```html
-  <div id="search-box"></div>
+<div id="search-box"></div>
 ```
 
 ```js
-  instant.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#search-box',
-      placeholder: 'Search for products',
-      // cssClass: 'form-control'
-    })
-  );
+instant.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-box',
+    placeholder: 'Search for products',
+    // cssClass: 'form-control'
+  })
+);
 ```
 
-## pagination
+### pagination
 
 ```html
-  <div id="pagination"></div>
+<div id="pagination"></div>
 ```
 
 ```js
-  instant.addWidget(
-    instantsearch.widgets.pagination({
-      container: '#pagination',
-      // cssClass, // no default
-      // padding: 3, // number of page numbers to show before/after current
-      // showFirstLast: true, // show or hide first and last links
-      // hitsPerPage: 20,
-      // maxPages, // automatically computed based on the result set
-      // labels: {
-      //   previous: '‹', // &lsaquo;
-      //   next: '›', // &rsaquo;
-      //   first: '«', // &laquo;
-      //   last: '»' // &raquo;
-      // }
-    })
-  );
+instant.addWidget(
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+    // cssClass, // no default
+    // padding: 3, // number of page numbers to show before/after current
+    // showFirstLast: true, // show or hide first and last links
+    // hitsPerPage: 20,
+    // maxPages, // automatically computed based on the result set
+    // labels: {
+    //   previous: '‹', // &lsaquo;
+    //   next: '›', // &rsaquo;
+    //   first: '«', // &laquo;
+    //   last: '»' // &raquo;
+    // }
+  })
+);
+```
+
 ### hits
 
 ```html
