@@ -1,5 +1,3 @@
-'use strict';
-
 require('./style.css');
 
 var instantsearch = require('../');

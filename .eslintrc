@@ -24,7 +24,7 @@
     "jsx": true
   },
   "rules": {
-    "strict": 0,
+    "strict": [2, "never"], // babel inserts "use strict"; for us
     "react/jsx-curly-spacing": [2, "never"]
   }
 }

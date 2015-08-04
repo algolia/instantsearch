@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var map = require('lodash/collection/map');
 var isString = require('lodash/lang/isString');
