@@ -25,6 +25,6 @@
   },
   "rules": {
     "strict": 0,
-    "react/jsx-curly-spacing": [2, never]
+    "react/jsx-curly-spacing": [2, "never"]
   }
 }
