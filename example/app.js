@@ -19,8 +19,9 @@ instant.addWidget(
 );
 
 instant.addWidget(
-  instantsearch.widgets.results({
-  container: '#hits',
+  instantsearch.widgets.hits({
+    container: '#hits',
+
     templates: {
       noResults: require('./templates/no-results.html'),
       hit: require('./templates/hit.html')
