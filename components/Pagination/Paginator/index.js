@@ -1,5 +1,3 @@
-'use strict';
-
 var range = require('lodash/utility/range');
 
 class Paginator {

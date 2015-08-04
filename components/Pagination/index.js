@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var forEach = require('lodash/collection/forEach');
 var defaultsDeep = require('lodash/object/defaultsDeep');

@@ -1,5 +1,3 @@
-'use strict';
-
 var hogan = require('hogan.js');
 var React = require('react');
 

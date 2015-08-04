@@ -1,8 +1,6 @@
-'use strict';
-
 var React = require('react');
 
-class PaginationLink extends React . Component {
+class PaginationLink extends React.Component {
   render() {
     var label = this.props.label;
     var ariaLabel = this.props.ariaLabel;

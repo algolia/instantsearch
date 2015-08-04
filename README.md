@@ -4,6 +4,21 @@ Instant search for everyone, even for your cat 😸.
 
 API is unstable. We welcome any idea.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Usage](#usage)
+- [Widget API](#widget-api)
+- [Dev](#dev)
+- [Test](#test)
+- [Available widgets](#available-widgets)
+  - [searchBox](#searchbox)
+  - [pagination](#pagination)
+  - [hits](#hits)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Usage
 
 ```js
@@ -71,41 +86,70 @@ npm run test:coverage
 ### searchBox
 
 ```html
-  <div id="search-box"></div>
+<div id="search-box"></div>
 ```
 
 ```js
-  instant.addWidget(
-    instantsearch.widgets.searchBox({
-      container: '#search-box',
-      placeholder: 'Search for products',
-      // cssClass: 'form-control'
-    })
-  );
+instant.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-box',
+    placeholder: 'Search for products',
+    // cssClass: 'form-control'
+  })
+);
 ```
 
-## pagination
+### pagination
 
 ```html
-  <div id="pagination"></div>
+<div id="pagination"></div>
 ```
 
 ```js
-  instant.addWidget(
-    instantsearch.widgets.pagination({
-      container: '#pagination',
-      // cssClass, // no default
-      // padding: 3, // number of page numbers to show before/after current
-      // showFirstLast: true, // show or hide first and last links
-      // hitsPerPage: 20,
-      // maxPages, // automatically computed based on the result set
-      // labels: {
-      //   previous: '‹', // &lsaquo;
-      //   next: '›', // &rsaquo;
-      //   first: '«', // &laquo;
-      //   last: '»' // &raquo;
-      // }
-    })
-  );
+instant.addWidget(
+  instantsearch.widgets.pagination({
+    container: '#pagination',
+    // cssClass, // no default
+    // padding: 3, // number of page numbers to show before/after current
+    // showFirstLast: true, // show or hide first and last links
+    // hitsPerPage: 20,
+    // maxPages, // automatically computed based on the result set
+    // labels: {
+    //   previous: '‹', // &lsaquo;
+    //   next: '›', // &rsaquo;
+    //   first: '«', // &laquo;
+    //   last: '»' // &raquo;
+    // }
+  })
+);
+```
+
+### hits
+
+```html
+<div id="hits"></div>
+```
+
+```js
+instant.addWidget(
+  instantsearch.widgets.hits({
+    container: '#hits',
+    templates: {
+      noResults, // string (mustache format) or function(hit) return string 
+      hit // string (mustache format) or function(hit) return string
+    }
+    // cssClass, // no default
+    // padding: 3, // number of page numbers to show before/after current
+    // showFirstLast: true, // show or hide first and last links
+    // hitsPerPage: 20,
+    // maxPages, // automatically computed based on the result set
+    // labels: {
+    //   previous: '‹', // &lsaquo;
+    //   next: '›', // &rsaquo;
+    //   first: '«', // &laquo;
+    //   last: '»' // &raquo;
+    // }
+  })
+);
 ```
 

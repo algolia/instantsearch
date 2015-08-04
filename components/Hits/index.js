@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var map = require('lodash/collection/map');
 var isString = require('lodash/lang/isString');
@@ -7,7 +5,7 @@ var isString = require('lodash/lang/isString');
 var Hogan = require('../templates/Hogan');
 var TemplateFn = require('../templates/Function');
 
-class Results extends React.Component {
+class Hits extends React.Component {
   render() {
     var results = this.props.results;
     if (!results || !results.hits || results.hits.length === 0) {
@@ -32,4 +30,4 @@ class Results extends React.Component {
   }
 }
 
-module.exports = Results;
+module.exports = Hits;

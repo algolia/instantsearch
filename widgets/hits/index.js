@@ -1,21 +1,20 @@
-'use strict';
-
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils');
+var utils = require('../../lib/widgetUtils.js');
 
-function hits(parameters) {
-  var Results = require('../../components/Results');
-  var containerNode = utils.getContainerNode(parameters.container);
+function hits(params) {
+  var Hits = require('../../components/Hits');
+  var containerNode = utils.getContainerNode(params.container);
 
   return {
     render: function(results, state, helper) {
-      React.render(<Results results={results}
-      searchState={state}
-      helper={helper}
-      noResultsTemplate={parameters.templates.noResults}
-      hitTemplate={parameters.templates.hit} />,
-        containerNode);
+      React.render(
+        <Hits results={results}
+          helper={helper}
+          noResultsTemplate={params.templates.noResults}
+          hitTemplate={params.templates.hit} />,
+        containerNode
+      );
     }
   };
 }
