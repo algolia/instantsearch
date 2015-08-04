@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var map = require('lodash/collection/map');
 var isString = require('lodash/lang/isString');
@@ -7,7 +5,7 @@ var isString = require('lodash/lang/isString');
 var Hogan = require('../templates/Hogan');
 var TemplateFn = require('../templates/Function');
 
-class Results extends React.Component {
+class Hits extends React.Component {
   render() {
     var results = this.props.results;
     if (!results || !results.hits || results.hits.length === 0) {
@@ -24,10 +22,12 @@ class Results extends React.Component {
   }
   renderNoResults(results, noResultsTemplate) {
     var TemplateComponent = isString(noResultsTemplate) ? Hogan : TemplateFn;
-    return <div className="search_list search_results_container row">
-             <TemplateComponent data={results} template={noResultsTemplate} />
-           </div>;
+    return (
+      <div className="search_list search_results_container row">
+        <TemplateComponent data={results} template={noResultsTemplate} />
+      </div>
+    );
   }
 }
 
-module.exports = Results;
+module.exports = Hits;

@@ -1,3 +1,4 @@
 node_modules/
 dist/
 example/bundle.js*
+coverage/

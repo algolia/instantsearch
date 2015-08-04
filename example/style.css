@@ -1,0 +1,37 @@
+html {
+  /* force vertical scrollbar no matter the content,
+  avoid container center position changes */
+  overflow-y: scroll;
+}
+
+body {
+  padding: 2em 0;
+}
+
+/* Hits widget */
+.hit + .hit {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid #bbb;
+}
+
+.hit em {
+  font-style: normal;
+  background-color: lightcyan;
+}
+
+/* Force widths and heights to avoid vertical size changes.
+  So that pagination clicks will not jump */
+.hit img {
+  max-height: 100px;
+  max-width: 100px;
+}
+
+.hit p {
+  max-height: 50px;
+  text-overflow: ellipsis;
+}
+
+.hit {
+  height: 125px;
+}

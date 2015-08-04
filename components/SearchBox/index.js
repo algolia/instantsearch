@@ -1,39 +1,35 @@
-'use strict';
-
 var React = require('react');
-var bem = require('../BemHelper')('algolia-magic-search-box');
+var bem = require('../BemHelper')('as-search-box');
 var cx = require('classnames');
-
-var AlgoliasearchHelper = require('algoliasearch-helper/src/algoliasearch.helper');
-var SearchResults = require('algoliasearch-helper/src/SearchResults');
 
 var SearchBox = React.createClass({
   propTypes: {
-    helper: React.PropTypes.instanceOf(AlgoliasearchHelper),
-    results: React.PropTypes.instanceOf(SearchResults),
-    onFocus: React.PropTypes.func,
-    placeholder: React.PropTypes.string
+    placeholder: React.PropTypes.string,
+    inputClass: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.array
+    ]),
+    setQuery: React.PropTypes.func,
+    search: React.PropTypes.func
   },
   render: function() {
-    var onFocus = this.props.onFocus;
     var classNames = cx(bem('input'), this.props.inputClass);
 
-    return <input type="text"
-      placeholder={this.props.placeholder}
-      name="algolia-query"
-      className={classNames}
-      data-role="autocomplete"
-      autoComplete="off"
-      autofocus="autofocus"
-      onChange={this.change}
-      onFocus={onFocus}
-      role="textbox" />;
+    return (
+      <input type="text"
+        placeholder={this.props.placeholder}
+        name="algolia-query"
+        className={classNames}
+        data-role="autocomplete"
+        autoComplete="off"
+        autoFocus="autofocus"
+        onChange={this.change}
+        role="textbox" />
+    );
   },
   change: function(e) {
-    var value = e.target.value;
-    var helper = this.props.helper;
-
-    helper.setQuery(value).search();
+    this.props.setQuery(e.target.value);
+    this.props.search();
   }
 });
 
