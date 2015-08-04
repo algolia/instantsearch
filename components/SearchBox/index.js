@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require('react');
 var bem = require('../BemHelper')('as-search-box');
 var cx = require('classnames');
@@ -19,14 +17,14 @@ var SearchBox = React.createClass({
 
     return (
       <input type="text"
-      placeholder={this.props.placeholder}
-      name="algolia-query"
-      className={classNames}
-      data-role="autocomplete"
-      autoComplete="off"
-      autoFocus="autofocus"
-      onChange={this.change}
-      role="textbox" />
+        placeholder={this.props.placeholder}
+        name="algolia-query"
+        className={classNames}
+        data-role="autocomplete"
+        autoComplete="off"
+        autoFocus="autofocus"
+        onChange={this.change}
+        role="textbox" />
     );
   },
   change: function(e) {

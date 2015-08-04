@@ -1,8 +1,6 @@
-'use strict';
-
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils');
+var utils = require('../../lib/widgetUtils.js');
 var bind = require('lodash/function/bind');
 
 function searchbox(params) {
@@ -16,7 +14,8 @@ function searchbox(params) {
           setQuery={bind(helper.setQuery, helper)}
           search={bind(helper.search, helper)}
           placeholder={params.placeholder}
-          inputClass={params.cssClass} />, container
+          inputClass={params.cssClass} />,
+        container
       );
     }
   };
