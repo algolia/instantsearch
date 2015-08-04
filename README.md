@@ -94,7 +94,7 @@ npm run test:coverage
   instant.addWidget(
     instantsearch.widgets.pagination({
       container: '#pagination',
-      // cssClass: 'pagination', // no default
+      // cssClass, // no default
       // padding: 3, // number of page numbers to show before/after current
       // showFirstLast: true, // show or hide first and last links
       // hitsPerPage: 20,
