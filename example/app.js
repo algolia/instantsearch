@@ -29,7 +29,9 @@ instant.addWidget(
 instant.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
-    cssClass: 'pagination'
+    cssClass: 'pagination',
+    hitsPerPage: 5,
+    maxPages: 20
   })
 );
 

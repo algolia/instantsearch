@@ -97,6 +97,8 @@ npm run test:coverage
       // cssClass: 'pagination', // no default
       // padding: 3, // number of page numbers to show before/after current
       // showFirstLast: true, // show or hide first and last links
+      // hitsPerPage: 20,
+      // maxPages, // automatically computed based on the result set
       // labels: {
       //   previous: '‹', // &lsaquo;
       //   next: '›', // &rsaquo;
