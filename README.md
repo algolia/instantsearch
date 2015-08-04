@@ -4,6 +4,21 @@ Instant search for everyone, even for your cat 😸.
 
 API is unstable. We welcome any idea.
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Usage](#usage)
+- [Widget API](#widget-api)
+- [Dev](#dev)
+- [Test](#test)
+- [Available widgets](#available-widgets)
+  - [searchBox](#searchbox)
+  - [pagination](#pagination)
+  - [hits](#hits)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Usage
 
 ```js
