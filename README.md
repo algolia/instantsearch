@@ -94,7 +94,7 @@ instant.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    // cssClass: 'form-control'
+    // cssClass
   })
 );
 ```
@@ -109,13 +109,12 @@ instant.addWidget(
 instant.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
-    // cssClass, // no default
+    // cssClass, // add cssClasses to the main wrapper
     // padding: 3, // number of page numbers to show before/after current
     // showFirstLast: true, // show or hide first and last links
-    // hitsPerPage: 20,
     // maxPages, // automatically computed based on the result set
     // labels: {
-    //   previous: '‹', // &lsaquo;
+    //   prev: '‹', // &lsaquo;
     //   next: '›', // &rsaquo;
     //   first: '«', // &laquo;
     //   last: '»' // &raquo;
@@ -135,20 +134,11 @@ instant.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
-      noResults, // string (mustache format) or function(hit) return string 
+      empty, // string (mustache format) or function(hit) return string 
       hit // string (mustache format) or function(hit) return string
-    }
-    // cssClass, // no default
-    // padding: 3, // number of page numbers to show before/after current
-    // showFirstLast: true, // show or hide first and last links
-    // hitsPerPage: 20,
-    // maxPages, // automatically computed based on the result set
-    // labels: {
-    //   previous: '‹', // &lsaquo;
-    //   next: '›', // &rsaquo;
-    //   first: '«', // &laquo;
-    //   last: '»' // &raquo;
-    // }
+    },
+    hitsPerPage: 20,
+    // cssClass
   })
 );
 ```
