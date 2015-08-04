@@ -1,5 +1,3 @@
-'use strict';
-
 function BemHelper(block) {
   return function(element, modifier) {
     if (!element) {
