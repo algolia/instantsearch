@@ -4,9 +4,9 @@ var React = require('react');
 
 var utils = require('../../lib/widgetUtils.js');
 
-function hits(parameters) {
+function hits(params) {
   var Results = require('../../components/Results');
-  var containerNode = utils.getContainerNode(parameters.container);
+  var containerNode = utils.getContainerNode(params.container);
 
   return {
     render: function(results, state, helper) {
