@@ -2,7 +2,7 @@
 
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils');
+var utils = require('../../lib/widgetUtils.js');
 
 function hits(parameters) {
   var Results = require('../../components/Results');
