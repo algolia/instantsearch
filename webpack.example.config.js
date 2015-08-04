@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
   entry: './example/app.js',
   devtool: 'source-map',
