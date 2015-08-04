@@ -107,5 +107,32 @@ npm run test:coverage
       // }
     })
   );
+### hits
+
+```html
+<div id="hits"></div>
+```
+
+```js
+instant.addWidget(
+  instantsearch.widgets.hits({
+    container: '#hits',
+    templates: {
+      noResults, // string (mustache format) or function(hit) return string 
+      hit // string (mustache format) or function(hit) return string
+    }
+    // cssClass, // no default
+    // padding: 3, // number of page numbers to show before/after current
+    // showFirstLast: true, // show or hide first and last links
+    // hitsPerPage: 20,
+    // maxPages, // automatically computed based on the result set
+    // labels: {
+    //   previous: '‹', // &lsaquo;
+    //   next: '›', // &rsaquo;
+    //   first: '«', // &laquo;
+    //   last: '»' // &raquo;
+    // }
+  })
+);
 ```
 
