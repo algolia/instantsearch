@@ -2,16 +2,11 @@ var React = require('react');
 
 var utils = require('../../lib/widgetUtils.js');
 
-function hits({container, cssClass, labels, hitsPerPage=20, maxPages}={}) {
+function hits({container, cssClass, labels, maxPages}={}) {
   var Pagination = require('../../components/Pagination/');
   var containerNode = utils.getContainerNode(container);
 
   return {
-    getConfiguration: function() {
-      return {
-        hitsPerPage
-      };
-    },
     render: function(results, state, helper) {
       var nbPages = maxPages !== undefined ? maxPages : results.nbPages;
 

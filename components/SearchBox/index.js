@@ -20,7 +20,6 @@ var SearchBox = React.createClass({
         placeholder={this.props.placeholder}
         name="algolia-query"
         className={classNames}
-        data-role="autocomplete"
         autoComplete="off"
         autoFocus="autofocus"
         onChange={this.change}
