@@ -76,8 +76,8 @@ helper.on('result', function(data){
   console.log(data.hits);
 });
 
-helper.addDisjunctiveRefine('director', 'Clint Eastword');
-helper.addDisjunctiveRefine('director', 'Sofia Coppola');
+helper.addDisjunctiveFacetRefinement('director', 'Clint Eastword');
+helper.addDisjunctiveFacetRefinement('director', 'Sofia Coppola');
 
 helper.addNumericRefinement('year', '=', 2003);
 
@@ -115,7 +115,7 @@ var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 
 1. modify the parameters of the search (usually through user interactions)<br/>
         ```
-        	helper.setQuery('iphone').addRefine('category', 'phone')
+        	helper.setQuery('iphone').addFacetRefinement('category', 'phone')
         ```
 
 2. trigger the search (after all the modification have been applied)<br/>
@@ -210,7 +210,9 @@ helper.setQuery('fruit').search();
 
 Facets are filters to retrieve a subset of an index having a specific value for a given attribute. First you need to define which attribute will be used as a facet in the dashboard: [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
 
-#### "AND" facets
+#### Regular (conjunctive) facets
+
+Refinements are ANDed by default (Conjunctive selection).
 
 ##### Facet definition
 
@@ -223,16 +225,18 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Add a facet filter
 
 ```js
-helper.addRefine('ANDFacet', 'valueOfANDFacet').search();
+helper.addFacetRefinement('ANDFacet', 'valueOfANDFacet').search();
 ```
 
 ##### Remove a facet filter
 
 ```js
-helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
+helper.removeFacetRefinement('ANDFacet', 'valueOfANDFacet').search();
 ```
 
-#### "OR" facets
+#### Disjunctive facets
+
+Refinements are ORed by default (Disjunctive selection).
 
 ##### Facet definition
 
@@ -245,18 +249,18 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Add a facet filter
 
 ```js
-helper.addDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
+helper.addDisjunctiveFacetRefinement('ORFacet', 'valueOfORFacet').search();
 ```
 
 ##### Remove a facet filter
 
 ```js
-helper.removeDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
+helper.removeDisjunctiveFacetRefinement('ORFacet', 'valueOfORFacet').search();
 ```
 
 #### Negative facets
 
-filter so that we do NOT get a given category
+Filter so that we do NOT get a given facet
 
 ##### Facet definition (same as "AND" facet)
 
@@ -269,13 +273,13 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Exclude a value for a facet
 
 ```js
-helper.addExclude('ANDFacet', 'valueOfANDFacetToExclude');
+helper.addFacetExclusion('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 ##### Remove an exclude from the list of excluded values
 
 ```js
-helper.removeExclude('ANDFacet', 'valueOfANDFacetToExclude');
+helper.removeFacetExclusion('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 #### Numeric facets
@@ -299,7 +303,7 @@ helper.addNumericRefinement('numericFacet', '=', '3').search();
 ##### Remove a numeric refinement
 
 ```js
-helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
+helper.removeNumericRefinement('numericFacet', '=', '3').search();
 ```
 
 #### Hierarchical facets
@@ -346,7 +350,7 @@ Given your objects looks like this:
 And you refine `products`:
 
 ```js
-helper.toggleRefine('products', 'fruits > citrus');
+helper.toggleRefinement('products', 'fruits > citrus');
 ```
 
 You will get a hierarchical presentation of your facet values: a navigation menu
@@ -394,7 +398,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefine('products', 'fruits|citrus');
+helper.toggleRefinement('products', 'fruits|citrus');
 ```
 
 Would mean that your objects look like so:
@@ -443,7 +447,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefine('products', 'fruits|citrus');
+helper.toggleRefinement('products', 'fruits|citrus');
 var breadcrumb = helper.getHierarchicalFacetBreadcrumb('products');
 
 console.log(breadcrumb);
