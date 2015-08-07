@@ -33,7 +33,7 @@ test('InstantSearch', function(t) {
     'algoliasearch-helper': algoliasearchHelper
   });
 
-  var instant = new InstantSearch(appId, apiKey, indexName, searchParameters);
+  var search = new InstantSearch(appId, apiKey, indexName, searchParameters);
 
   // instantiates a client
   t.ok(algoliasearch.calledOnce, 'algoliasearch called');
@@ -45,7 +45,7 @@ test('InstantSearch', function(t) {
   t.ok(algoliasearchHelper.notCalled, 'algoliasearchHelper not yet called');
 
   // adding a widget, should call widget.getConfiguration(searchParameters)
-  instant.addWidget(widget);
+  search.addWidget(widget);
   t.ok(widget.getConfiguration.calledOnce, 'widget.getConfiguration called');
   t.deepEqual(
     widget.getConfiguration.args[0],
@@ -53,7 +53,7 @@ test('InstantSearch', function(t) {
     'widget.getConfiguration(current searchParameters)'
   );
 
-  instant.start();
+  search.start();
   t.ok(algoliasearchHelper.calledOnce, 'algoliasearchHelper called');
   t.deepEqual(
     algoliasearchHelper.args[0], [
