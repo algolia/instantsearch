@@ -10,8 +10,11 @@ class PaginationLink extends React.Component {
 
     return (
       <li className={className}>
-        <a href={href} aria-label={ariaLabel} onClick={this.click.bind(this, page)}>
-          {label}
+        <a
+          href={href}
+          aria-label={ariaLabel}
+          onClick={this.click.bind(this, page)}
+          dangerouslySetInnerHTML={{__html: label}}>
         </a>
       </li>
     );
