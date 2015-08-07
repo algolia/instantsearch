@@ -2,8 +2,9 @@ var React = require('react');
 var forEach = require('lodash/collection/forEach');
 var defaultsDeep = require('lodash/object/defaultsDeep');
 
-var Paginator = require('./Paginator');
-var PaginationLink = require('./PaginationLink');
+var Paginator = require('./Paginator/');
+var PaginationHiddenLink = require('./PaginationHiddenLink/');
+var PaginationLink = require('./PaginationLink/');
 
 var bem = require('../BemHelper')('as-pagination');
 var cx = require('classnames');
@@ -38,7 +39,9 @@ class Pagination extends React.Component {
   }
 
   previousPageLink(pager) {
-    if (pager.isFirstPage()) return null;
+    if (pager.isFirstPage()) {
+      return <PaginationHiddenLink label={this.props.labels.prev} />;
+    }
 
     return (
       <PaginationLink
@@ -50,7 +53,9 @@ class Pagination extends React.Component {
   }
 
   nextPageLink(pager) {
-    if (pager.isLastPage()) return null;
+    if (pager.isLastPage()) {
+      return <PaginationHiddenLink label={this.props.labels.next} />;
+    }
 
     return (
       <PaginationLink
@@ -62,7 +67,9 @@ class Pagination extends React.Component {
   }
 
   firstPageLink(pager) {
-    if (pager.isFirstPage()) return null;
+    if (pager.isFirstPage()) {
+      return <PaginationHiddenLink label={this.props.labels.first} />;
+    }
 
     return (
       <PaginationLink
@@ -75,7 +82,9 @@ class Pagination extends React.Component {
   }
 
   lastPageLink(pager) {
-    if (pager.isLastPage()) return null;
+    if (pager.isLastPage()) {
+      return <PaginationHiddenLink label={this.props.labels.last} />;
+    }
 
     return (
       <PaginationLink
@@ -91,7 +100,7 @@ class Pagination extends React.Component {
     var elements = [];
 
     forEach(pager.pages(), function(pageNumber) {
-      var className = pageNumber === pager.currentPage ? 'active' : '';
+      var className = pageNumber === pager.currentPage ? 'active' : null;
 
       elements.push(
         <PaginationLink
