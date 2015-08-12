@@ -389,6 +389,7 @@ function SearchResults(state, algoliaResponse) {
 
 /**
  * Get a facet object with its name
+ * @deprecated
  * @param {string} name name of the attribute facetted
  * @return {SearchResults.Facet} the facet object
  */
