@@ -3,13 +3,24 @@
 var forEach = require('lodash/collection/forEach');
 var compact = require('lodash/array/compact');
 var indexOf = require('lodash/array/indexOf');
+var findIndex = require('lodash/array/findIndex');
+
 var sum = require('lodash/collection/sum');
 var find = require('lodash/collection/find');
 var includes = require('lodash/collection/includes');
 var map = require('lodash/collection/map');
-var findIndex = require('lodash/array/findIndex');
+var sortByOrder = require('lodash/collection/sortByOrder');
+
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
+
+var isArray = require('lodash/lang/isArray');
+var isFunction = require('lodash/lang/isFunction');
+
+var partial = require('lodash/function/partial');
+var partialRight = require('lodash/function/partialRight');
+
+var formatSort = require('../functions/formatSort');
 
 var generateHierarchicalTree = require('./generate-hierarchical-tree');
 
@@ -407,6 +418,113 @@ SearchResults.prototype.getFacetByName = function(name) {
   return find(this.facets, predicate) ||
     find(this.disjunctiveFacets, predicate) ||
     find(this.hierarchicalFacets, predicate);
+};
+
+/**
+ * Get the facet values of a specified attribute from a SearchParameters object.
+ * @param {SearchParameters} parameters the search parameters to search in
+ * @param {string} attribute name of the facetted attribute to search for
+ * @return {array|object} facet values enhanced with the attribute facetType to
+ * distinguish the type of facet.
+ */
+function getFacetValues(parameters, attribute) {
+  var predicate = {name: attribute};
+  if (parameters._state.isConjunctiveFacet(attribute)) {
+    var facet = find(parameters.facets, predicate);
+    var facetValues = map(facet.data, function(v, k) {
+      return {
+        name: k,
+        count: v,
+        isRefined: parameters._state.isFacetRefined(attribute, k)
+      };
+    });
+    facetValues.facetType = 'conjunctive';
+    return facetValues;
+  } else if (parameters._state.isDisjunctiveFacet(attribute)) {
+    var disjunctiveFacet = find(parameters.disjunctiveFacets, predicate);
+    var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
+      return {
+        name: k,
+        count: v,
+        isRefined: parameters._state.isDisjunctiveFacetRefined(attribute, k)
+      };
+    });
+    disjunctiveFacetValues.facetType = 'disjunctive';
+    return disjunctiveFacetValues;
+  } else if (parameters._state.isHierarchicalFacet(attribute)) {
+    var hFacetValues = find(parameters.hierarchicalFacets, predicate);
+    hFacetValues.facetType = 'hierarchical';
+    return hFacetValues;
+  }
+}
+
+/**
+ * Sort nodes of a hierarchical facet results
+ * @param {HierarchicalFacet} node node to upon which we want to apply the sort
+ */
+function recSort(sortFn, node) {
+  if (!node.data || node.data.length === 0) {
+    return node;
+  }
+  var children = map(node.data, partial(recSort, sortFn));
+  var sortedChildren = sortFn(children);
+  var newNode = merge({}, node, {data: sortedChildren});
+  return newNode;
+}
+
+SearchResults.DEFAULT_SORT = ['isRefined:desc', 'count:desc', 'name:asc'];
+
+function vanillaSortFn(order, data) {
+  return data.sort(order);
+}
+
+/**
+ * Get a the list of values for a given facet attribute. Those values are sorted
+ * refinement first, descending count (bigger value on top), and name asending
+ * (alphabetical order). The sort formula can overriden using either string based
+ * predicates or a function.
+ * @param {string} attribute attribute name
+ * @param {object} options configuration options
+ *                          - sortBy : function or array of string
+ * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
+ * the attribute requested (hierarchical, disjunctive or conjunctive)
+ * @example
+ * helper.on('results', function(content){
+ *   //get values ordered only by name ascending using the string predicate
+ *   content.getFacetValues('city', {sortBy: ['name:asc']);
+ *   //get values  ordered only by count ascending using a function
+ *   content.getFacetValues('city', {
+ *     sortBy: function(a, b) {
+ *       return a.count - b.count;
+ *     }
+ *   });
+ * });
+ */
+SearchResults.prototype.getFacetValues = function(attribute, opts) {
+  var facetValues = getFacetValues(this, attribute);
+  if (!facetValues) throw new Error(attribute + ' is not a retrieved facet.');
+
+  var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
+
+  if (isArray(options.sortBy)) {
+    var order = formatSort(options.sortBy);
+    if (facetValues.facetType === 'hierarchical') {
+      delete facetValues.facetType;
+      return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
+    }
+    return sortByOrder(facetValues, order[0], order[1]);
+  } else if (isFunction(options.sortBy)) {
+    if (facetValues.facetType === 'hierarchical') {
+      delete facetValues.facetType;
+      return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
+    }
+    delete facetValues.facetType;
+    return facetValues.sort(options.sortBy);
+  }
+  throw new Error(
+    'options.sortBy is optional but if defined it must be ' +
+    'either an array of string (predicates) or a sorting function'
+  );
 };
 
 module.exports = SearchResults;

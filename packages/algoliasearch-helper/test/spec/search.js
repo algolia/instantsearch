@@ -28,7 +28,45 @@ test('Search should call the algolia client according to the number of refinemen
       JSON.parse(JSON.stringify(testData.responseHelper)),
       'should be equal'
     );
+
+    var cityValues = data.getFacetValues('city');
+    var expectedCityValues = [
+      {name: 'Paris', count: 3, isRefined: true},
+      {name: 'New York', count: 1, isRefined: true},
+      {name: 'San Francisco', count: 1, isRefined: false}
+    ];
+
+    t.deepEqual(
+      cityValues,
+      expectedCityValues,
+      'Facet values for "city" should be correctly ordered using the default sort');
+
+    var cityValuesCustom = data.getFacetValues('city', {sortBy: ['name:desc']});
+    var expectedCityValuesCustom = [
+      {name: 'San Francisco', count: 1, isRefined: false},
+      {name: 'Paris', count: 3, isRefined: true},
+      {name: 'New York', count: 1, isRefined: true}
+    ];
+
+    t.deepEqual(
+      cityValuesCustom,
+      expectedCityValuesCustom,
+      'Facet values for "city" should be correctly ordered using a custom sort');
+
+    var cityValuesFn = data.getFacetValues('city', {sortBy: function(a, b) { return a.count - b.count; }});
+    var expectedCityValuesFn = [
+      {name: 'New York', count: 1, isRefined: true},
+      {name: 'San Francisco', count: 1, isRefined: false},
+      {name: 'Paris', count: 3, isRefined: true}
+    ];
+
+    t.deepEqual(
+      cityValuesFn,
+      expectedCityValuesFn,
+      'Facet values for "city" should be correctly ordered using a sort function');
+
     t.ok(mock.verify(), 'Mock constraints should be verified!');
+
     t.end();
   });
 
