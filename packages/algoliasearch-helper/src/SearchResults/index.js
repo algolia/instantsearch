@@ -32,6 +32,14 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @property {SearchResults.HierarchicalFacet[]} data sub values for the current level
  */
 
+/**
+ * @typedef SearchResults.FacetValue
+ * @type {object}
+ * @property {value} string the facet value itself
+ * @property {count} number times this facet appears in the results
+ * @property {isRefined} boolean is the facet currently selected
+ */
+
 function getIndices(obj) {
   var indices = {};
 
