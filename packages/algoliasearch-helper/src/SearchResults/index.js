@@ -528,7 +528,10 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
 };
 
 /**
- *
+ * Returns the facet stats if attribute is defined and the facet contains some.
+ * Otherwise returns undefined.
+ * @param {string} attribute name of the facetted attribute
+ * @return {object} The stats of the facet
  */
 SearchResults.prototype.getFacetStats = function(attribute) {
   var facet = find(this.facets, {name: attribute});

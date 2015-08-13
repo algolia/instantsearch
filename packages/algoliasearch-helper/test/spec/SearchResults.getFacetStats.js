@@ -13,9 +13,9 @@ var response = {
     },
     'facets_stats': {
       'age': {
-        'min': 21,   // minimum value
-        'max': 42,   // maximum value
-        'avg': 31.5  // average value
+        'min': 21,
+        'max': 42,
+        'avg': 31.5
       }
     },
     'params': 'query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%2' +
