@@ -527,4 +527,12 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
   );
 };
 
+/**
+ *
+ */
+SearchResults.prototype.getFacetStats = function(attribute) {
+  var facet = find(this.facets, {name: attribute});
+  return facet && facet.stats;
+};
+
 module.exports = SearchResults;
