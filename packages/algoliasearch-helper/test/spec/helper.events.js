@@ -56,3 +56,54 @@ test('Change events should be emitted as soon as the state change, but search sh
 
   t.end();
 });
+
+test('requestsent event should be emitted once when the search is triggered and before the request is sent', function(t) {
+  var clientMock = {};
+  var helper = algoliaSearchHelper(clientMock, 'Index', {
+    disjunctiveFacets: ['city'],
+    facets: ['tower']
+  });
+
+  var count = 0;
+
+  helper.on('requestsent', function() {
+    count++;
+  });
+
+  clientMock.search = function() {
+    t.equal(
+      count,
+      1,
+      'When the client search function is called the requestsent' +
+      ' event should have been sent exactly once.');
+  };
+
+  helper.setQuery('');
+  t.equal(count, 0, 'search');
+
+  helper.clearRefinements();
+  t.equal(count, 0, 'clearRefinements');
+
+  helper.addDisjunctiveRefine('city', 'Paris');
+  t.equal(count, 0, 'addDisjunctiveRefine');
+
+  helper.removeDisjunctiveRefine('city', 'Paris');
+  t.equal(count, 0, 'removeDisjunctiveRefine');
+
+  helper.addExclude('tower', 'Empire State Building');
+  t.equal(count, 0, 'addExclude');
+
+  helper.removeExclude('tower', 'Empire State Building');
+  t.equal(count, 0, 'removeExclude');
+
+  helper.addRefine('tower', 'Empire State Building');
+  t.equal(count, 0, 'addRefine');
+
+  helper.removeRefine('tower', 'Empire State Building');
+  t.equal(count, 0, 'removeRefine');
+
+  helper.search();
+  t.equal(count, 1, 'final search does trigger the requestsent');
+
+  t.end();
+});

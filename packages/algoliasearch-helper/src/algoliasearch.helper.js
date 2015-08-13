@@ -552,8 +552,10 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
+  var queries = this._getQueries();
 
-  this.client.search(this._getQueries(),
+  this.emit('requestsent', state, this.lastResults);
+  this.client.search(queries,
     bind(this._handleResponse,
       this,
       state,

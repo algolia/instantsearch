@@ -180,6 +180,8 @@ two objects (`SearchResults` and `SearchParameters`).
 
 `change`: get notified when a property has changed in the helper
 
+`requestsent` : get notified just before the request is sent to Algolia
+
 #### Listen to the `result` event
 
 ```js
