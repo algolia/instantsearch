@@ -421,38 +421,38 @@ SearchResults.prototype.getFacetByName = function(name) {
 };
 
 /**
- * Get the facet values of a specified attribute from a SearchParameters object.
- * @param {SearchParameters} parameters the search parameters to search in
+ * Get the facet values of a specified attribute from a SearchResults object.
+ * @param {SearchResults} results the search results to search in
  * @param {string} attribute name of the facetted attribute to search for
  * @return {array|object} facet values enhanced with the attribute facetType to
  * distinguish the type of facet.
  */
-function getFacetValues(parameters, attribute) {
+function getFacetValues(results, attribute) {
   var predicate = {name: attribute};
-  if (parameters._state.isConjunctiveFacet(attribute)) {
-    var facet = find(parameters.facets, predicate);
+  if (results._state.isConjunctiveFacet(attribute)) {
+    var facet = find(results.facets, predicate);
     var facetValues = map(facet.data, function(v, k) {
       return {
         name: k,
         count: v,
-        isRefined: parameters._state.isFacetRefined(attribute, k)
+        isRefined: results._state.isFacetRefined(attribute, k)
       };
     });
     facetValues.facetType = 'conjunctive';
     return facetValues;
-  } else if (parameters._state.isDisjunctiveFacet(attribute)) {
-    var disjunctiveFacet = find(parameters.disjunctiveFacets, predicate);
+  } else if (results._state.isDisjunctiveFacet(attribute)) {
+    var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
     var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
       return {
         name: k,
         count: v,
-        isRefined: parameters._state.isDisjunctiveFacetRefined(attribute, k)
+        isRefined: results._state.isDisjunctiveFacetRefined(attribute, k)
       };
     });
     disjunctiveFacetValues.facetType = 'disjunctive';
     return disjunctiveFacetValues;
-  } else if (parameters._state.isHierarchicalFacet(attribute)) {
-    var hFacetValues = find(parameters.hierarchicalFacets, predicate);
+  } else if (results._state.isHierarchicalFacet(attribute)) {
+    var hFacetValues = find(results.hierarchicalFacets, predicate);
     hFacetValues.facetType = 'hierarchical';
     return hFacetValues;
   }
