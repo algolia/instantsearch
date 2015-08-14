@@ -2,6 +2,7 @@ CHANGELOG
 
 UNRELEASED
   * FEATURE : #136, fire a 'search' event once a search is sent to Algolia
+  * CHORE : #125, events documentation
 
 2.2.0 - 2015-07-29
   * FIX: #130 toggleRefine should throw an exception when executed with an
