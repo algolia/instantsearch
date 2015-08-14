@@ -57,7 +57,7 @@ test('Change events should be emitted as soon as the state change, but search sh
   t.end();
 });
 
-test('requestsent event should be emitted once when the search is triggered and before the request is sent', function(t) {
+test('search event should be emitted once when the search is triggered and before the request is sent', function(t) {
   var clientMock = {};
   var helper = algoliaSearchHelper(clientMock, 'Index', {
     disjunctiveFacets: ['city'],
@@ -66,7 +66,7 @@ test('requestsent event should be emitted once when the search is triggered and 
 
   var count = 0;
 
-  helper.on('requestsent', function() {
+  helper.on('search', function() {
     count++;
   });
 
@@ -74,7 +74,7 @@ test('requestsent event should be emitted once when the search is triggered and 
     t.equal(
       count,
       1,
-      'When the client search function is called the requestsent' +
+      'When the client search function is called the search' +
       ' event should have been sent exactly once.');
   };
 
@@ -103,7 +103,7 @@ test('requestsent event should be emitted once when the search is triggered and 
   t.equal(count, 0, 'removeRefine');
 
   helper.search();
-  t.equal(count, 1, 'final search does trigger the requestsent');
+  t.equal(count, 1, 'final search does trigger the search event');
 
   t.end();
 });

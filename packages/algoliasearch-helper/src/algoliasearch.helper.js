@@ -554,7 +554,7 @@ AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
   var queries = this._getQueries();
 
-  this.emit('requestsent', state, this.lastResults);
+  this.emit('search', state, this.lastResults);
   this.client.search(queries,
     bind(this._handleResponse,
       this,
