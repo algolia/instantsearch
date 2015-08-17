@@ -749,6 +749,10 @@ AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters,
  * @return {string[]} the numeric filters in the algolia format
  */
 AlgoliaSearchHelper.prototype._getNumericFilters = function(facetName) {
+  if (this.state.numericFilters) {
+    return this.state.numericFilters;
+  }
+
   var numericFilters = [];
 
   forEach(this.state.numericRefinements, function(operators, attribute) {

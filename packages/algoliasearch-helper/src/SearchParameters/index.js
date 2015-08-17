@@ -128,10 +128,20 @@ function SearchParameters(newParameters) {
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
+   * @private
    * @see https://www.algolia.com/doc#tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
+
+  /**
+   * Contains the numeric filters in the raw format of the Algolia API. Setting
+   * this parameter is not compatible with the usage of numeric filters methods.
+   * @private
+   * @see https://www.algolia.com/doc/javascript#numericFilters
+   * @member {string}
+   */
+  this.numericFilters = params.numericFilters;
 
   // Misc. parameters
   /**
@@ -347,6 +357,20 @@ SearchParameters.validate = function(currentState, parameters) {
 
   if (currentState.tagRefinements.length > 0 && params.tagFilters) {
     return new Error("[Tags] Can't switch from the advanced tag API to the managed API. It is probably an error, if it's not, you should first clear the tags with clearTags method.");
+  }
+
+  if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
+    return new Error(
+      '[Numeric filters] Can\'t switch from the advanced to the managed API. It' +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
+  }
+
+  if (!isEmpty(currentState.numericRefinements) && params.numericFilters) {
+    return new Error(
+      '[Numeric filters] Can\'t switch from the managed API to the advanced. It' +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
   }
 
   return null;
