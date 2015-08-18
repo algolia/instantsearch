@@ -427,7 +427,7 @@ SearchResults.prototype.getFacetByName = function(name) {
  * @return {array|object} facet values enhanced with the attribute facetType to
  * distinguish the type of facet.
  */
-function getFacetValues(results, attribute) {
+function extractNormalizedFacetValues(results, attribute) {
   var predicate = {name: attribute};
   if (results._state.isConjunctiveFacet(attribute)) {
     var facet = find(results.facets, predicate);
@@ -501,7 +501,7 @@ function vanillaSortFn(order, data) {
  * });
  */
 SearchResults.prototype.getFacetValues = function(attribute, opts) {
-  var facetValues = getFacetValues(this, attribute);
+  var facetValues = extractNormalizedFacetValues(this, attribute);
   if (!facetValues) throw new Error(attribute + ' is not a retrieved facet.');
 
   var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
