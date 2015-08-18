@@ -43,6 +43,7 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Events](#events)
   - [Query](#query)
   - [Filtering results](#filtering-results)
+  - [Facet utilities](#facet-utilities)
   - [Tags](#tags)
   - [Pagination](#pagination)
   - [Index](#index)
@@ -479,6 +480,44 @@ helper.clearRefinements('ANDFacet').search();
 helper.clearRefinements(function(value, attribute, type) {
   return type === 'exclude' && attribute === 'ANDFacet';
 }).search();
+```
+
+### Facet utilities
+
+#### Get the values of a facet with the default sort
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetValues('age');
+  // It will be ordered : 
+  //  - refined facets first
+  //  - then ordered by number of occurence (bigger count -> higher in the list)
+  //  - then ordered by name (alphabetically)
+});
+```
+
+#### Get the values of a facet with a custom sort
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetValues('age', {sortBy: ['count:asc']});
+  // It will be ordered by number of occurence (lower number => higher position)
+  // Elements that can be sorted : count, name, isRefined
+  // Type of sort : 'asc' for ascending order, 'desc' for descending order
+});
+```
+
+#### Get the facet stats
+
+*This only apply on numeric based facets/attributes.*
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetStats('age');
+});
 ```
 
 ### Tags

@@ -3,13 +3,24 @@
 var forEach = require('lodash/collection/forEach');
 var compact = require('lodash/array/compact');
 var indexOf = require('lodash/array/indexOf');
+var findIndex = require('lodash/array/findIndex');
+
 var sum = require('lodash/collection/sum');
 var find = require('lodash/collection/find');
 var includes = require('lodash/collection/includes');
 var map = require('lodash/collection/map');
-var findIndex = require('lodash/array/findIndex');
+var sortByOrder = require('lodash/collection/sortByOrder');
+
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
+
+var isArray = require('lodash/lang/isArray');
+var isFunction = require('lodash/lang/isFunction');
+
+var partial = require('lodash/function/partial');
+var partialRight = require('lodash/function/partialRight');
+
+var formatSort = require('../functions/formatSort');
 
 var generateHierarchicalTree = require('./generate-hierarchical-tree');
 
@@ -30,6 +41,14 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @property {string} path the current hierarchical value full path
  * @property {boolean} isRefined true if the current value was refined, false otherwise
  * @property {SearchResults.HierarchicalFacet[]} data sub values for the current level
+ */
+
+/**
+ * @typedef SearchResults.FacetValue
+ * @type {object}
+ * @property {value} string the facet value itself
+ * @property {count} number times this facet appears in the results
+ * @property {isRefined} boolean is the facet currently selected
  */
 
 function getIndices(obj) {
@@ -389,6 +408,7 @@ function SearchResults(state, algoliaResponse) {
 
 /**
  * Get a facet object with its name
+ * @deprecated
  * @param {string} name name of the attribute facetted
  * @return {SearchResults.Facet} the facet object
  */
@@ -398,6 +418,124 @@ SearchResults.prototype.getFacetByName = function(name) {
   return find(this.facets, predicate) ||
     find(this.disjunctiveFacets, predicate) ||
     find(this.hierarchicalFacets, predicate);
+};
+
+/**
+ * Get the facet values of a specified attribute from a SearchResults object.
+ * @param {SearchResults} results the search results to search in
+ * @param {string} attribute name of the facetted attribute to search for
+ * @return {array|object} facet values enhanced with the attribute facetType to
+ * distinguish the type of facet.
+ */
+function extractNormalizedFacetValues(results, attribute) {
+  var predicate = {name: attribute};
+  if (results._state.isConjunctiveFacet(attribute)) {
+    var facet = find(results.facets, predicate);
+    var facetValues = map(facet.data, function(v, k) {
+      return {
+        name: k,
+        count: v,
+        isRefined: results._state.isFacetRefined(attribute, k)
+      };
+    });
+    facetValues.facetType = 'conjunctive';
+    return facetValues;
+  } else if (results._state.isDisjunctiveFacet(attribute)) {
+    var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
+    var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
+      return {
+        name: k,
+        count: v,
+        isRefined: results._state.isDisjunctiveFacetRefined(attribute, k)
+      };
+    });
+    disjunctiveFacetValues.facetType = 'disjunctive';
+    return disjunctiveFacetValues;
+  } else if (results._state.isHierarchicalFacet(attribute)) {
+    var hFacetValues = find(results.hierarchicalFacets, predicate);
+    hFacetValues.facetType = 'hierarchical';
+    return hFacetValues;
+  }
+}
+
+/**
+ * Sort nodes of a hierarchical facet results
+ * @param {HierarchicalFacet} node node to upon which we want to apply the sort
+ */
+function recSort(sortFn, node) {
+  if (!node.data || node.data.length === 0) {
+    return node;
+  }
+  var children = map(node.data, partial(recSort, sortFn));
+  var sortedChildren = sortFn(children);
+  var newNode = merge({}, node, {data: sortedChildren});
+  return newNode;
+}
+
+SearchResults.DEFAULT_SORT = ['isRefined:desc', 'count:desc', 'name:asc'];
+
+function vanillaSortFn(order, data) {
+  return data.sort(order);
+}
+
+/**
+ * Get a the list of values for a given facet attribute. Those values are sorted
+ * refinement first, descending count (bigger value on top), and name asending
+ * (alphabetical order). The sort formula can overriden using either string based
+ * predicates or a function.
+ * @param {string} attribute attribute name
+ * @param {object} options configuration options
+ *                          - sortBy : function or array of string
+ * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
+ * the attribute requested (hierarchical, disjunctive or conjunctive)
+ * @example
+ * helper.on('results', function(content){
+ *   //get values ordered only by name ascending using the string predicate
+ *   content.getFacetValues('city', {sortBy: ['name:asc']);
+ *   //get values  ordered only by count ascending using a function
+ *   content.getFacetValues('city', {
+ *     sortBy: function(a, b) {
+ *       return a.count - b.count;
+ *     }
+ *   });
+ * });
+ */
+SearchResults.prototype.getFacetValues = function(attribute, opts) {
+  var facetValues = extractNormalizedFacetValues(this, attribute);
+  if (!facetValues) throw new Error(attribute + ' is not a retrieved facet.');
+
+  var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
+
+  if (isArray(options.sortBy)) {
+    var order = formatSort(options.sortBy);
+    if (facetValues.facetType === 'hierarchical') {
+      delete facetValues.facetType;
+      return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
+    }
+    return sortByOrder(facetValues, order[0], order[1]);
+  } else if (isFunction(options.sortBy)) {
+    if (facetValues.facetType === 'hierarchical') {
+      delete facetValues.facetType;
+      return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
+    }
+    delete facetValues.facetType;
+    return facetValues.sort(options.sortBy);
+  }
+  throw new Error(
+    'options.sortBy is optional but if defined it must be ' +
+    'either an array of string (predicates) or a sorting function'
+  );
+};
+
+/**
+ * Returns the facet stats if attribute is defined and the facet contains some.
+ * Otherwise returns undefined.
+ * @param {string} attribute name of the facetted attribute
+ * @return {object} The stats of the facet
+ */
+SearchResults.prototype.getFacetStats = function(attribute) {
+  var facet = find(this.facets, {name: attribute});
+  return facet && facet.stats;
 };
 
 module.exports = SearchResults;
