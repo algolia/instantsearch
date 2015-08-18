@@ -41,11 +41,11 @@ test('Search should call the algolia client according to the number of refinemen
       expectedCityValues,
       'Facet values for "city" should be correctly ordered using the default sort');
 
-    var cityValuesCustom = data.getFacetValues('city', {sortBy: ['name:desc']});
+    var cityValuesCustom = data.getFacetValues('city', {sortBy: ['count:asc', 'name:asc']});
     var expectedCityValuesCustom = [
+      {name: 'New York', count: 1, isRefined: true},
       {name: 'San Francisco', count: 1, isRefined: false},
-      {name: 'Paris', count: 3, isRefined: true},
-      {name: 'New York', count: 1, isRefined: true}
+      {name: 'Paris', count: 3, isRefined: true}
     ];
 
     t.deepEqual(
