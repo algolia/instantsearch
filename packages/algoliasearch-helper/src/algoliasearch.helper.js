@@ -761,7 +761,7 @@ AlgoliaSearchHelper.prototype._getNumericFilters = function(facetName) {
       if (facetName !== attribute) {
         forEach(values, function(value) {
           if (isArray(value)) {
-            var vs = map(value, function(v){
+            var vs = map(value, function(v) {
               return attribute + operator + v;
             });
             numericFilters.push(vs);

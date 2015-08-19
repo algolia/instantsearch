@@ -590,7 +590,7 @@ SearchParameters.prototype = {
   removeNumericRefinement: function(attribute, operator, paramValue) {
     if (!this.isNumericRefined(attribute, operator)) return this;
 
-    if (paramValue!==undefined) {
+    if (paramValue !== undefined) {
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
