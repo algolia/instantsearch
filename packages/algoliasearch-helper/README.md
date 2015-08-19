@@ -296,7 +296,7 @@ var helper = algoliasearchHelper(client, indexName, {
 });
 ```
 
-##### Add a numeric refinements
+##### Add numeric refinements
 
 ```js
 helper.addNumericRefinement('numericFacet', '=', '3').search();
