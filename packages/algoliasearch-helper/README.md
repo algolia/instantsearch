@@ -292,36 +292,36 @@ Filter over numeric attributes with math operations like `=`, `>`, `<`, `>=`, `<
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	disjunctiveFacets: ['numericFacet']
+  disjunctiveFacets: ['numericAttribute']
 });
 ```
 
 ##### Add a numeric refinements
 
 ```js
-helper.addNumericRefinement('numericFacet', '=', '3').search();
-// filter to only the results that match numericFacet=3
-helper.addNumericRefinement('numericFacet', '=', '4').search();
-// filter to only the results that match numericFacet=3 AND numericFacet=4
+helper.addNumericRefinement('numericAttribute', '=', '3').search();
+// filter to only the results that match numericAttribute=3
+helper.addNumericRefinement('numericAttribute', '=', '4').search();
+// filter to only the results that match numericAttribute=3 AND numericAttribute=4
 
 // On another numeric with no previous filter
-helper.addNumericRefinement('numericFacet2', '=', ['42', '56', '37'] ).search();
-// filter to only the results that match numericFacet=42 OR numericFacet2=56 OR numericFacet2=37
+helper.addNumericRefinement('numericAttribute2', '=', ['42', '56', '37'] ).search();
+// filter to only the results that match numericAttribute=42 OR numericAttribute2=56 OR numericAttribute2=37
 ```
 
 ##### Remove a numeric refinement
 
 ```js
-helper.removeNumericRefinement('numericFacet', '=', '3').search();
+helper.removeNumericRefinement('numericAttribute', '=', '3').search();
 ```
 
 ##### Batch numeric filter removal
 
 ```js
-// for the single operator = on numericFacet
-helper.removeNumericRefinement('numericFacet', '=').search();
-// for all the refinements on numericFacet
-helper.removeNumericRefinement('numericFacet').search();
+// for the single operator = on numericAttribute
+helper.removeNumericRefinement('numericAttribute', '=').search();
+// for all the refinements on numericAttribute
+helper.removeNumericRefinement('numericAttribute').search();
 ```
 
 #### Hierarchical facets
