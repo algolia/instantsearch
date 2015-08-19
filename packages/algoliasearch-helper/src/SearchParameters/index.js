@@ -128,6 +128,15 @@ function SearchParameters(newParameters) {
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
   /**
+   * Contains the numeric filters in the raw format of the Algolia API. Setting
+   * this parameter is not compatible with the usage of numeric filters methods.
+   * @private
+   * @see https://www.algolia.com/doc/javascript#numericFilters
+   * @member {string}
+   */
+  this.numericFilters = params.numericFilters;
+
+  /**
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
@@ -137,14 +146,6 @@ function SearchParameters(newParameters) {
    */
   this.tagFilters = params.tagFilters;
 
-  /**
-   * Contains the numeric filters in the raw format of the Algolia API. Setting
-   * this parameter is not compatible with the usage of numeric filters methods.
-   * @private
-   * @see https://www.algolia.com/doc/javascript#numericFilters
-   * @member {string}
-   */
-  this.numericFilters = params.numericFilters;
 
   // Misc. parameters
   /**

@@ -296,16 +296,32 @@ var helper = algoliasearchHelper(client, indexName, {
 });
 ```
 
-##### Add a numeric refinement
+##### Add a numeric refinements
 
 ```js
 helper.addNumericRefinement('numericFacet', '=', '3').search();
+// filter to only the results that match numericFacet=3
+helper.addNumericRefinement('numericFacet', '=', '4').search();
+// filter to only the results that match numericFacet=3 AND numericFacet=4
+
+// On another numeric with no previous filter
+helper.addNumericRefinement('numericFacet2', '=', ['42', '56', '37'] ).search();
+// filter to only the results that match numericFacet=42 OR numericFacet2=56 OR numericFacet2=37
 ```
 
 ##### Remove a numeric refinement
 
 ```js
 helper.removeNumericRefinement('numericFacet', '=', '3').search();
+```
+
+##### Batch numeric filter removal
+
+```js
+// for the single operator = on numericFacet
+helper.removeNumericRefinement('numericFacet', '=').search();
+// for all the refinements on numericFacet
+helper.removeNumericRefinement('numericFacet').search();
 ```
 
 #### Hierarchical facets

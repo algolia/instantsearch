@@ -6529,7 +6529,8 @@ var RefinementList = require('./RefinementList');
  */
 
 /**
- * @typedef {Object.<string, number>} SearchParameters.OperatorList
+ * Structure to store numeric filters with the operator as the key
+ * @typedef {Object.<string, array.<number|number[]>>} SearchParameters.OperatorList
  */
 
 /**
@@ -6545,9 +6546,11 @@ var RefinementList = require('./RefinementList');
  * If need be, instanciate the Helper from the factory function {@link SearchParameters.make}
  * @constructor
  * @classdesc contains all the parameters of a search
- * @param {object|SearchParameters} newParameters existing parameters or partial object for the properties of a new SearchParameters
+ * @param {object|SearchParameters} newParameters existing parameters or partial object
+ * for the properties of a new SearchParameters
  * @see SearchParameters.make
- * @example <caption>SearchParameters of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ * @example <caption>SearchParameters of the first query in
+ *   <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
    "query": "",
    "disjunctiveFacets": [
@@ -6629,13 +6632,24 @@ function SearchParameters(newParameters) {
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
   /**
+   * Contains the numeric filters in the raw format of the Algolia API. Setting
+   * this parameter is not compatible with the usage of numeric filters methods.
+   * @private
+   * @see https://www.algolia.com/doc/javascript#numericFilters
+   * @member {string}
+   */
+  this.numericFilters = params.numericFilters;
+
+  /**
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
+   * @private
    * @see https://www.algolia.com/doc#tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
+
 
   // Misc. parameters
   /**
@@ -6774,9 +6788,9 @@ function SearchParameters(newParameters) {
    */
   this.attributesToSnippet = params.attributesToSnippet;
   /**
-   * Enable the ranking informations in the response
+   * Enable the ranking informations in the response, set to 1 to activate
    * @see https://www.algolia.com/doc#getRankingInfo
-   * @member {integer}
+   * @member {number}
    */
   this.getRankingInfo = params.getRankingInfo;
   /**
@@ -6819,7 +6833,8 @@ function SearchParameters(newParameters) {
 
 /**
  * Factory for SearchParameters
- * @param {object|SearchParameters} newParameters existing parameters or partial object for the properties of a new SearchParameters
+ * @param {object|SearchParameters} newParameters existing parameters or partial
+ * object for the properties of a new SearchParameters
  * @return {SearchParameters} frozen instance of SearchParameters
  */
 SearchParameters.make = function makeSearchParameters(newParameters) {
@@ -6853,6 +6868,20 @@ SearchParameters.validate = function(currentState, parameters) {
     return new Error("[Tags] Can't switch from the advanced tag API to the managed API. It is probably an error, if it's not, you should first clear the tags with clearTags method.");
   }
 
+  if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
+    return new Error(
+      '[Numeric filters] Can\'t switch from the advanced to the managed API. It' +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
+  }
+
+  if (!isEmpty(currentState.numericRefinements) && params.numericFilters) {
+    return new Error(
+      '[Numeric filters] Can\'t switch from the managed API to the advanced. It' +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
+  }
+
   return null;
 };
 
@@ -6869,13 +6898,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   clearRefinements: function clearRefinements(attribute) {
+    var clear = RefinementList.clearRefinement;
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(attribute),
-      facetsRefinements: RefinementList.clearRefinement(this.facetsRefinements, attribute, 'conjunctiveFacet'),
-      facetsExcludes: RefinementList.clearRefinement(this.facetsExcludes, attribute, 'exclude'),
-      disjunctiveFacetsRefinements: RefinementList.clearRefinement(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
-      hierarchicalFacetsRefinements: RefinementList.clearRefinement(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
+      facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
+      facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
+      disjunctiveFacetsRefinements: clear(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
+      hierarchicalFacetsRefinements: clear(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
     });
   },
   /**
@@ -6974,15 +7004,21 @@ SearchParameters.prototype = {
     });
   },
   /**
-   * Add or update a numeric filter for a given attribute
-   * Current limitation of the numeric filters: you can't have more than one value
-   * filtered for each (attribute, oprator). It means that you can't have a filter
-   * for ("attribute", "=", 3 ) and ("attribute", "=", 8)
+   * Add a numeric filter for a given attribute
+   * When value is an array, they are combined with OR
+   * When value is a single value, it will combined with AND
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter (possible values: =, >, >=, <, <=, !=)
-   * @param {number} value value of the filter
+   * @param {number | number[]} value value of the filter
    * @return {SearchParameters}
+   * @example
+   * // for price = 50 or 40
+   * searchparameter.addNumericRefinement('price', '=', [50, 40]);
+   * @example
+   * // for size = 38 and 40
+   * searchparameter.addNumericRefinement('size', '=', 38);
+   * searchparameter.addNumericRefinement('size', '=', 40);
    */
   addNumericRefinement: function(attribute, operator, value) {
     if (this.isNumericRefined(attribute, operator, value)) return this;
@@ -6990,7 +7026,15 @@ SearchParameters.prototype = {
     var mod = merge({}, this.numericRefinements);
 
     mod[attribute] = merge({}, mod[attribute]);
-    mod[attribute][operator] = value;
+
+    if (mod[attribute][operator]) {
+      // Array copy
+      mod[attribute][operator] = mod[attribute][operator].slice();
+      // Add the element. Concat can't be used here because value can be an array.
+      mod[attribute][operator].push(value);
+    } else {
+      mod[attribute][operator] = [value];
+    }
 
     return this.setQueryParameters({
       page: 0,
@@ -7025,7 +7069,8 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getHierarchicalRefinement: function(facetName) {
-    // we send an array but we currently do not support multiple hierarchicalRefinements for a hierarchicalFacet
+    // we send an array but we currently do not support multiple
+    // hierarchicalRefinements for a hierarchicalFacet
     return this.hierarchicalFacetsRefinements[facetName] || [];
   },
   /**
@@ -7040,19 +7085,35 @@ SearchParameters.prototype = {
     return this.facetsExcludes[facetName] || [];
   },
   /**
-   * Remove a numeric filter
+   * Remove all the numeric filter for a given (attribute, operator)
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter (possible values: =, >, >=, <, <=, !=)
    * @return {SearchParameters}
    */
-  removeNumericRefinement: function(attribute, operator) {
+  removeNumericRefinement: function(attribute, operator, paramValue) {
     if (!this.isNumericRefined(attribute, operator)) return this;
+
+    if (paramValue!==undefined) {
+      return this.setQueryParameters({
+        page: 0,
+        numericRefinements: this._clearNumericRefinements(function(value, key) {
+          return key === attribute && value.op === operator && value.val === paramValue;
+        })
+      });
+    } else if (operator) {
+      return this.setQueryParameters({
+        page: 0,
+        numericRefinements: this._clearNumericRefinements(function(value, key) {
+          return key === attribute && value.op === operator;
+        })
+      });
+    }
 
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
-        return key === attribute && value.op === operator;
+        return key === attribute;
       })
     });
   },
@@ -7090,8 +7151,15 @@ SearchParameters.prototype = {
       return omit(this.numericRefinements, attribute);
     } else if (isFunction(attribute)) {
       return reduce(this.numericRefinements, function(memo, operators, key) {
-        var operatorList = omit(operators, function(value, operator) {
-          return attribute({val: value, op: operator}, key, 'numeric');
+        var operatorList = {};
+
+        forEach(operators, function(values, operator) {
+          var outValues = [];
+          forEach(values, function(value) {
+            var predicateResult = attribute({val: value, op: operator}, key, 'numeric');
+            if (!predicateResult) outValues.push(value);
+          });
+          if (!isEmpty(outValues)) operatorList[operator] = outValues;
         });
 
         if (!isEmpty(operatorList)) memo[key] = operatorList;
@@ -7439,7 +7507,7 @@ SearchParameters.prototype = {
 
     return this.numericRefinements[attribute] &&
       !isUndefined(this.numericRefinements[attribute][operator]) &&
-      this.numericRefinements[attribute][operator] === value;
+      this.numericRefinements[attribute][operator].indexOf(value) !== -1;
   },
   /**
    * Returns true if the tag refined, false otherwise
@@ -7758,6 +7826,17 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @property {object} stats undefined unless facet_stats is retrieved from algolia
  */
 
+/**
+ * @typedef SearchResults.HierarchicalFacet
+ * @type {object}
+ * @property {string} name name of the current value given the hierarchical level, trimmed.
+ *                         If root node, you get the facet name
+ * @property {number} count number (integer) of objets matching this hierarchical value
+ * @property {string} path the current hierarchical value full path
+ * @property {boolean} isRefined true if the current value was refined, false otherwise
+ * @property {SearchResults.HierarchicalFacet[]} data sub values for the current level
+ */
+
 function getIndices(obj) {
   var indices = {};
 
@@ -7961,7 +8040,7 @@ function SearchResults(state, algoliaResponse) {
   this.disjunctiveFacets = [];
   /**
    * disjunctive facets results
-   * @member {SearchResults.Facet[]}
+   * @member {SearchResults.HierarchicalFacet[]}
    */
   this.hierarchicalFacets = map(state.hierarchicalFacets, function initFutureTree() {
     return [];
@@ -8142,6 +8221,7 @@ var reduce = require('lodash/collection/reduce');
 var map = require('lodash/collection/map');
 var trim = require('lodash/string/trim');
 var merge = require('lodash/object/merge');
+var isArray = require('lodash/lang/isArray');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -8171,6 +8251,9 @@ util.inherits(AlgoliaSearchHelper, events.EventEmitter);
 /**
  * Start the search with the parameters set in the state.
  * @return {AlgoliaSearchHelper}
+ * @fires search
+ * @fires result
+ * @fires error
  */
 AlgoliaSearchHelper.prototype.search = function() {
   this._search();
@@ -8181,6 +8264,7 @@ AlgoliaSearchHelper.prototype.search = function() {
  * Sets the query. Also sets the current page to 0.
  * @param  {string} q the user query
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.setQuery = function(q) {
   this.state = this.state.setQuery(q);
@@ -8189,9 +8273,10 @@ AlgoliaSearchHelper.prototype.setQuery = function(q) {
 };
 
 /**
- * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
+ * Remove all refinements (disjunctive + conjunctive + hierarchical + excludes + numeric filters)
  * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.clearRefinements = function(name) {
   this.state = this.state.clearRefinements(name);
@@ -8202,6 +8287,7 @@ AlgoliaSearchHelper.prototype.clearRefinements = function(name) {
 /**
  * Remove all the tag filtering
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.clearTags = function() {
   this.state = this.state.clearTags();
@@ -8214,12 +8300,18 @@ AlgoliaSearchHelper.prototype.clearTags = function() {
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function(facet, value) {
+AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function(facet, value) {
   this.state = this.state.addDisjunctiveFacetRefinement(facet, value);
   this._change();
   return this;
 };
+
+/**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
+ */
+AlgoliaSearchHelper.prototype.addDisjunctiveRefine = AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement;
 
 /**
  * Add a numeric refinement on the given attribute
@@ -8227,6 +8319,7 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function(facet, value) {
  * @param  {string} operator the operator of the filter
  * @param  {number} value the value of the filter
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.addNumericRefinement = function(attribute, operator, value) {
   this.state = this.state.addNumericRefinement(attribute, operator, value);
@@ -8239,29 +8332,43 @@ AlgoliaSearchHelper.prototype.addNumericRefinement = function(attribute, operato
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.addRefine = function(facet, value) {
+AlgoliaSearchHelper.prototype.addFacetRefinement = function(facet, value) {
   this.state = this.state.addFacetRefinement(facet, value);
   this._change();
   return this;
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
+ */
+AlgoliaSearchHelper.prototype.addRefine = AlgoliaSearchHelper.prototype.addFacetRefinement;
+
+
+/**
  * Ensure a facet exclude exists
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value (will be converted to string)
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.addExclude = function(facet, value) {
+AlgoliaSearchHelper.prototype.addFacetExclusion = function(facet, value) {
   this.state = this.state.addExcludeRefinement(facet, value);
   this._change();
   return this;
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
+ */
+AlgoliaSearchHelper.prototype.addExclude = AlgoliaSearchHelper.prototype.addFacetExclusion;
+
+/**
  * Add a tag refinement
  * @param {string} tag the tag to add to the filter
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.addTag = function(tag) {
   this.state = this.state.addTagRefinement(tag);
@@ -8275,6 +8382,7 @@ AlgoliaSearchHelper.prototype.addTag = function(tag) {
  * @param  {string} operator the operator of the filter
  * @param  {number} value the value of the filter
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.removeNumericRefinement = function(attribute, operator, value) {
   this.state = this.state.removeNumericRefinement(attribute, operator, value);
@@ -8287,41 +8395,60 @@ AlgoliaSearchHelper.prototype.removeNumericRefinement = function(attribute, oper
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function(facet, value) {
+AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet, value) {
   this.state = this.state.removeDisjunctiveFacetRefinement(facet, value);
   this._change();
   return this;
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
+ */
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement;
+
+/**
  * Ensure a facet refinement does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.removeRefine = function(facet, value) {
+AlgoliaSearchHelper.prototype.removeFacetRefinement = function(facet, value) {
   this.state = this.state.removeFacetRefinement(facet, value);
   this._change();
   return this;
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
+ */
+AlgoliaSearchHelper.prototype.removeRefine = AlgoliaSearchHelper.prototype.removeFacetRefinement;
+
+/**
  * Ensure a facet exclude does not exist
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.removeExclude = function(facet, value) {
+AlgoliaSearchHelper.prototype.removeFacetExclusion = function(facet, value) {
   this.state = this.state.removeExcludeRefinement(facet, value);
   this._change();
   return this;
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
+ */
+AlgoliaSearchHelper.prototype.removeExclude = AlgoliaSearchHelper.prototype.removeFacetExclusion;
+
+/**
  * Ensure that a tag is not filtering the results
  * @param {string} tag tag to remove from the filter
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.removeTag = function(tag) {
   this.state = this.state.removeTagRefinement(tag);
@@ -8334,12 +8461,18 @@ AlgoliaSearchHelper.prototype.removeTag = function(tag) {
  * @param  {string} facet the facet to refine
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.toggleExclude = function(facet, value) {
+AlgoliaSearchHelper.prototype.toggleFacetExclusion = function(facet, value) {
   this.state = this.state.toggleExcludeFacetRefinement(facet, value);
   this._change();
   return this;
 };
+
+/**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
+ */
+AlgoliaSearchHelper.prototype.toggleExclude = AlgoliaSearchHelper.prototype.toggleFacetExclusion;
 
 /**
  * Toggle refinement state of a facet
@@ -8347,8 +8480,9 @@ AlgoliaSearchHelper.prototype.toggleExclude = function(facet, value) {
  * @param  {string} value the associated value
  * @return {AlgoliaSearchHelper}
  * @throws will throw an error if the facet is not declared in the settings of the helper
+ * @fires change
  */
-AlgoliaSearchHelper.prototype.toggleRefine = function(facet, value) {
+AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
   if (this.state.isHierarchicalFacet(facet)) {
     this.state = this.state.toggleHierarchicalFacetRefinement(facet, value);
   } else if (this.state.isConjunctiveFacet(facet)) {
@@ -8357,7 +8491,7 @@ AlgoliaSearchHelper.prototype.toggleRefine = function(facet, value) {
     this.state = this.state.toggleDisjunctiveFacetRefinement(facet, value);
   } else {
     throw new Error('Cannot refine the undeclared facet ' + facet +
-      '; it should be added to the helper options facets or disjunctiveFacets');
+      '; it should be added to the helper options facets, disjunctiveFacets or hierarchicalFacets');
   }
 
   this._change();
@@ -8365,9 +8499,15 @@ AlgoliaSearchHelper.prototype.toggleRefine = function(facet, value) {
 };
 
 /**
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
+ */
+AlgoliaSearchHelper.prototype.toggleRefine = AlgoliaSearchHelper.prototype.toggleRefinement;
+
+/**
  * Toggle tag refinement
  * @param {string} tag tag to remove or add
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.toggleTag = function(tag) {
   this.state = this.state.toggleTagRefinement(tag);
@@ -8393,8 +8533,9 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
 
 /**
  * Change the current page
- * @param  {integer} page The page number
+ * @param  {number} page The page number
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {
   if (page < 0) throw new Error('Page requested below 0.');
@@ -8408,6 +8549,7 @@ AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {
  * Configure the underlying index name
  * @param {string} name the index name
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.setIndex = function(name) {
   this.index = name;
@@ -8420,6 +8562,7 @@ AlgoliaSearchHelper.prototype.setIndex = function(name) {
  * @param {string} parameter name of the parameter to update
  * @param {any} value new value of the parameter
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
   var newState = this.state.setQueryParameter(parameter, value);
@@ -8435,6 +8578,7 @@ AlgoliaSearchHelper.prototype.setQueryParameter = function(parameter, value) {
  * Set the whole state (warning: will erase previous state)
  * @param {SearchParameters} newState the whole new state
  * @return {AlgoliaSearchHelper}
+ * @fires change
  */
 AlgoliaSearchHelper.prototype.setState = function(newState) {
   this.state = new SearchParameters(newState);
@@ -8472,10 +8616,7 @@ AlgoliaSearchHelper.prototype.overrideStateWithoutTriggeringChangeEvent = functi
 };
 
 /**
- * Check the refinement state of a given value for a facet
- * @param  {string}  facet the facet
- * @param  {string}  value the associated value
- * @return {boolean} true if refined
+ * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
  */
 AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
   if (this.state.isConjunctiveFacet(facet)) {
@@ -8516,10 +8657,7 @@ AlgoliaSearchHelper.prototype.isExcluded = function(facet, value) {
 };
 
 /**
- * Check the refinement state of the disjunctive facet
- * @param  {string}  facet the facet
- * @param  {string}  value the associated value
- * @return {boolean} true if refined
+ * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasRefinements}
  */
 AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function(facet, value) {
   return this.state.isDisjunctiveFacetRefined(facet, value);
@@ -8530,9 +8668,15 @@ AlgoliaSearchHelper.prototype.isDisjunctiveRefined = function(facet, value) {
  * @param {string} tag tag to check
  * @return {boolean}
  */
-AlgoliaSearchHelper.prototype.isTagRefined = function(tag) {
+AlgoliaSearchHelper.prototype.hasTag = function(tag) {
   return this.state.isTagRefined(tag);
 };
+
+/**
+ * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
+ */
+AlgoliaSearchHelper.prototype.isTagRefined = AlgoliaSearchHelper.prototype.hasTagRefinements;
+
 
 /**
  * Get the underlying configured index name
@@ -8639,11 +8783,16 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  * Perform the underlying queries
  * @private
  * @return {undefined}
+ * @fires search
+ * @fires result
+ * @fires error
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
+  var queries = this._getQueries();
 
-  this.client.search(this._getQueries(),
+  this.emit('search', state, this.lastResults);
+  this.client.search(queries,
     bind(this._handleResponse,
       this,
       state,
@@ -8811,12 +8960,25 @@ AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters,
  * @return {string[]} the numeric filters in the algolia format
  */
 AlgoliaSearchHelper.prototype._getNumericFilters = function(facetName) {
+  if (this.state.numericFilters) {
+    return this.state.numericFilters;
+  }
+
   var numericFilters = [];
 
   forEach(this.state.numericRefinements, function(operators, attribute) {
-    forEach(operators, function(value, operator) {
+    forEach(operators, function(values, operator) {
       if (facetName !== attribute) {
-        numericFilters.push(attribute + operator + value);
+        forEach(values, function(value) {
+          if (isArray(value)) {
+            var vs = map(value, function(v){
+              return attribute + operator + v;
+            });
+            numericFilters.push(vs);
+          } else {
+            numericFilters.push(attribute + operator + value);
+          }
+        });
       }
     });
   });
@@ -8953,7 +9115,7 @@ AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = functi
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":156,"./SearchResults":158,"events":2,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/function/bind":23,"lodash/lang/isEmpty":132,"lodash/object/merge":146,"lodash/string/trim":151,"util":6}],160:[function(require,module,exports){
+},{"./SearchParameters":156,"./SearchResults":158,"events":2,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/function/bind":23,"lodash/lang/isArray":131,"lodash/lang/isEmpty":132,"lodash/object/merge":146,"lodash/string/trim":151,"util":6}],160:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
