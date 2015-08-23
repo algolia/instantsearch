@@ -58,7 +58,9 @@ AlgoliaSearchHelper.prototype.search = function() {
  * @param {function} [callback] optional callback executed when the response from the
  * server is back.
  * @return promise|undefined if a callback is passed the method returns undefined
- * otherwise it returns a promise of SearchResults
+ * otherwise it returns a promise containing an object with two keys :
+ *  - content with a SearchResults
+ *  - state with the state used for the query as a SearchParameters
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var index = options.index || this.index;
@@ -70,13 +72,16 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
     return this.client.search(
       queries,
       function(err, content) {
-        cb(err, content, tempState);
+        cb(err, new SearchResults(tempState, content), tempState);
       });
   }
 
   return this.client.search(queries).then(
     function(content) {
-      return [content, tempState];
+      return {
+        content: new SearchResults(tempState, content),
+        state: tempState
+      };
     });
 };
 
