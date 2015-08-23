@@ -8446,10 +8446,24 @@ AlgoliaSearchHelper.prototype.search = function() {
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var index = options.index || this.index;
   if (options.index) delete options.index;
+
   var tempState = this.state.setQueryParameters(options);
+  var queries = requestBuilder._getQueries(index, tempState);
   if (cb) {
-_  
+    return this.client.search(
+      queries,
+      function(err, content) {
+        cb(err, new SearchResults(tempState, content), tempState);
+      });
   }
+
+  return this.client.search(queries).then(
+    function(content) {
+      return {
+        content: new SearchResults(tempState, content),
+        state: tempState
+      };
+    });
 };
 
 /**
