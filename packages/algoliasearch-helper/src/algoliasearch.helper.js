@@ -64,7 +64,9 @@ AlgoliaSearchHelper.prototype.search = function() {
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var index = options.index || this.index;
-  if (options.index) delete options.index;
+  if (options.index) {
+    delete options.index;
+  }
 
   var tempState = this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(index, tempState);

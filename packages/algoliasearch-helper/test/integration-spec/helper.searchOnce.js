@@ -11,8 +11,7 @@ var setup = utils.setup;
 if (!utils.shouldRun) {
   test = test.skip;
 }
-var indexName =
-  '_travis-algoliasearch-helper-js-' +
+var indexName = '_travis-algoliasearch-helper-js-' +
   (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
   'helper_searchonce' + random(0, 5000);
 
