@@ -11,6 +11,7 @@ var reduce = require('lodash/collection/reduce');
 var map = require('lodash/collection/map');
 var trim = require('lodash/string/trim');
 var merge = require('lodash/object/merge');
+var isArray = require('lodash/lang/isArray');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -749,12 +750,25 @@ AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters,
  * @return {string[]} the numeric filters in the algolia format
  */
 AlgoliaSearchHelper.prototype._getNumericFilters = function(facetName) {
+  if (this.state.numericFilters) {
+    return this.state.numericFilters;
+  }
+
   var numericFilters = [];
 
   forEach(this.state.numericRefinements, function(operators, attribute) {
-    forEach(operators, function(value, operator) {
+    forEach(operators, function(values, operator) {
       if (facetName !== attribute) {
-        numericFilters.push(attribute + operator + value);
+        forEach(values, function(value) {
+          if (isArray(value)) {
+            var vs = map(value, function(v) {
+              return attribute + operator + v;
+            });
+            numericFilters.push(vs);
+          } else {
+            numericFilters.push(attribute + operator + value);
+          }
+        });
       }
     });
   });
