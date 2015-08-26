@@ -366,14 +366,14 @@ SearchParameters.validate = function(currentState, parameters) {
 
   if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
     return new Error(
-      '[Numeric filters] Can\'t switch from the advanced to the managed API. It' +
+      "[Numeric filters] Can't switch from the advanced to the managed API. It" +
       ' is probably an error, if this is really what you want, you have to first' +
       ' clear the numeric filters.');
   }
 
   if (!isEmpty(currentState.numericRefinements) && params.numericFilters) {
     return new Error(
-      '[Numeric filters] Can\'t switch from the managed API to the advanced. It' +
+      "[Numeric filters] Can't switch from the managed API to the advanced. It" +
       ' is probably an error, if this is really what you want, you have to first' +
       ' clear the numeric filters.');
   }

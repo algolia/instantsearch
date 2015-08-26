@@ -13,11 +13,11 @@ test('Numeric filters: numeric filters from constructor', function(t) {
     t.deepEqual(
       ps.numericFilters,
       ['attribute1>3',
-       'attribute1<=100',
-       'attribute2=42',
-       'attribute2=25',
-       'attribute2=58',
-       ['attribute2=27', 'attribute2=70']],
+        'attribute1<=100',
+        'attribute2=42',
+        'attribute2=25',
+        'attribute2=58',
+        ['attribute2=27', 'attribute2=70']],
       'Serialization of numerical filters');
     t.end();
   };
@@ -46,11 +46,11 @@ test('Numeric filters: numeric filters from setters', function(t) {
     t.deepEqual(
       ps.numericFilters,
       ['attribute1>3',
-       'attribute1<=100',
-       'attribute2=42',
-       'attribute2=25',
-       'attribute2=58',
-       ['attribute2=27', 'attribute2=70']],
+        'attribute1<=100',
+        'attribute2=42',
+        'attribute2=25',
+        'attribute2=58',
+        ['attribute2=27', 'attribute2=70']],
       'Serialization of numerical filters');
     t.end();
   };
