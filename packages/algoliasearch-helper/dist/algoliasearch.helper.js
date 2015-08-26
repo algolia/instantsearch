@@ -6640,7 +6640,8 @@ var RefinementList = require('./RefinementList');
  */
 
 /**
- * @typedef {Object.<string, number>} SearchParameters.OperatorList
+ * Structure to store numeric filters with the operator as the key
+ * @typedef {Object.<string, array.<number|number[]>>} SearchParameters.OperatorList
  */
 
 /**
@@ -6656,9 +6657,11 @@ var RefinementList = require('./RefinementList');
  * If need be, instanciate the Helper from the factory function {@link SearchParameters.make}
  * @constructor
  * @classdesc contains all the parameters of a search
- * @param {object|SearchParameters} newParameters existing parameters or partial object for the properties of a new SearchParameters
+ * @param {object|SearchParameters} newParameters existing parameters or partial object
+ * for the properties of a new SearchParameters
  * @see SearchParameters.make
- * @example <caption>SearchParameters of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ * @example <caption>SearchParameters of the first query in
+ *   <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
    "query": "",
    "disjunctiveFacets": [
@@ -6740,13 +6743,24 @@ function SearchParameters(newParameters) {
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
 
   /**
+   * Contains the numeric filters in the raw format of the Algolia API. Setting
+   * this parameter is not compatible with the usage of numeric filters methods.
+   * @private
+   * @see https://www.algolia.com/doc/javascript#numericFilters
+   * @member {string}
+   */
+  this.numericFilters = params.numericFilters;
+
+  /**
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
+   * @private
    * @see https://www.algolia.com/doc#tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
+
 
   // Misc. parameters
   /**
@@ -6930,7 +6944,8 @@ function SearchParameters(newParameters) {
 
 /**
  * Factory for SearchParameters
- * @param {object|SearchParameters} newParameters existing parameters or partial object for the properties of a new SearchParameters
+ * @param {object|SearchParameters} newParameters existing parameters or partial
+ * object for the properties of a new SearchParameters
  * @return {SearchParameters} frozen instance of SearchParameters
  */
 SearchParameters.make = function makeSearchParameters(newParameters) {
@@ -6964,6 +6979,20 @@ SearchParameters.validate = function(currentState, parameters) {
     return new Error("[Tags] Can't switch from the advanced tag API to the managed API. It is probably an error, if it's not, you should first clear the tags with clearTags method.");
   }
 
+  if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
+    return new Error(
+      "[Numeric filters] Can't switch from the advanced to the managed API. It" +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
+  }
+
+  if (!isEmpty(currentState.numericRefinements) && params.numericFilters) {
+    return new Error(
+      "[Numeric filters] Can't switch from the managed API to the advanced. It" +
+      ' is probably an error, if this is really what you want, you have to first' +
+      ' clear the numeric filters.');
+  }
+
   return null;
 };
 
@@ -6980,13 +7009,14 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   clearRefinements: function clearRefinements(attribute) {
+    var clear = RefinementList.clearRefinement;
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(attribute),
-      facetsRefinements: RefinementList.clearRefinement(this.facetsRefinements, attribute, 'conjunctiveFacet'),
-      facetsExcludes: RefinementList.clearRefinement(this.facetsExcludes, attribute, 'exclude'),
-      disjunctiveFacetsRefinements: RefinementList.clearRefinement(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
-      hierarchicalFacetsRefinements: RefinementList.clearRefinement(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
+      facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
+      facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
+      disjunctiveFacetsRefinements: clear(this.disjunctiveFacetsRefinements, attribute, 'disjunctiveFacet'),
+      hierarchicalFacetsRefinements: clear(this.hierarchicalFacetsRefinements, attribute, 'hierarchicalFacet')
     });
   },
   /**
@@ -7085,15 +7115,21 @@ SearchParameters.prototype = {
     });
   },
   /**
-   * Add or update a numeric filter for a given attribute
-   * Current limitation of the numeric filters: you can't have more than one value
-   * filtered for each (attribute, oprator). It means that you can't have a filter
-   * for ("attribute", "=", 3 ) and ("attribute", "=", 8)
+   * Add a numeric filter for a given attribute
+   * When value is an array, they are combined with OR
+   * When value is a single value, it will combined with AND
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter (possible values: =, >, >=, <, <=, !=)
-   * @param {number} value value of the filter
+   * @param {number | number[]} value value of the filter
    * @return {SearchParameters}
+   * @example
+   * // for price = 50 or 40
+   * searchparameter.addNumericRefinement('price', '=', [50, 40]);
+   * @example
+   * // for size = 38 and 40
+   * searchparameter.addNumericRefinement('size', '=', 38);
+   * searchparameter.addNumericRefinement('size', '=', 40);
    */
   addNumericRefinement: function(attribute, operator, value) {
     if (this.isNumericRefined(attribute, operator, value)) return this;
@@ -7101,7 +7137,15 @@ SearchParameters.prototype = {
     var mod = merge({}, this.numericRefinements);
 
     mod[attribute] = merge({}, mod[attribute]);
-    mod[attribute][operator] = value;
+
+    if (mod[attribute][operator]) {
+      // Array copy
+      mod[attribute][operator] = mod[attribute][operator].slice();
+      // Add the element. Concat can't be used here because value can be an array.
+      mod[attribute][operator].push(value);
+    } else {
+      mod[attribute][operator] = [value];
+    }
 
     return this.setQueryParameters({
       page: 0,
@@ -7136,7 +7180,8 @@ SearchParameters.prototype = {
    * @return {string[]} list of refinements
    */
   getHierarchicalRefinement: function(facetName) {
-    // we send an array but we currently do not support multiple hierarchicalRefinements for a hierarchicalFacet
+    // we send an array but we currently do not support multiple
+    // hierarchicalRefinements for a hierarchicalFacet
     return this.hierarchicalFacetsRefinements[facetName] || [];
   },
   /**
@@ -7151,19 +7196,35 @@ SearchParameters.prototype = {
     return this.facetsExcludes[facetName] || [];
   },
   /**
-   * Remove a numeric filter
+   * Remove all the numeric filter for a given (attribute, operator)
    * @method
    * @param {string} attribute attribute to set the filter on
    * @param {string} operator operator of the filter (possible values: =, >, >=, <, <=, !=)
    * @return {SearchParameters}
    */
-  removeNumericRefinement: function(attribute, operator) {
+  removeNumericRefinement: function(attribute, operator, paramValue) {
     if (!this.isNumericRefined(attribute, operator)) return this;
+
+    if (paramValue !== undefined) {
+      return this.setQueryParameters({
+        page: 0,
+        numericRefinements: this._clearNumericRefinements(function(value, key) {
+          return key === attribute && value.op === operator && value.val === paramValue;
+        })
+      });
+    } else if (operator) {
+      return this.setQueryParameters({
+        page: 0,
+        numericRefinements: this._clearNumericRefinements(function(value, key) {
+          return key === attribute && value.op === operator;
+        })
+      });
+    }
 
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
-        return key === attribute && value.op === operator;
+        return key === attribute;
       })
     });
   },
@@ -7201,8 +7262,15 @@ SearchParameters.prototype = {
       return omit(this.numericRefinements, attribute);
     } else if (isFunction(attribute)) {
       return reduce(this.numericRefinements, function(memo, operators, key) {
-        var operatorList = omit(operators, function(value, operator) {
-          return attribute({val: value, op: operator}, key, 'numeric');
+        var operatorList = {};
+
+        forEach(operators, function(values, operator) {
+          var outValues = [];
+          forEach(values, function(value) {
+            var predicateResult = attribute({val: value, op: operator}, key, 'numeric');
+            if (!predicateResult) outValues.push(value);
+          });
+          if (!isEmpty(outValues)) operatorList[operator] = outValues;
         });
 
         if (!isEmpty(operatorList)) memo[key] = operatorList;
@@ -7550,7 +7618,7 @@ SearchParameters.prototype = {
 
     return this.numericRefinements[attribute] &&
       !isUndefined(this.numericRefinements[attribute][operator]) &&
-      this.numericRefinements[attribute][operator] === value;
+      this.numericRefinements[attribute][operator].indexOf(value) !== -1;
   },
   /**
    * Returns true if the tag refined, false otherwise
@@ -8441,11 +8509,15 @@ AlgoliaSearchHelper.prototype.search = function() {
  * @param {function} [callback] optional callback executed when the response from the
  * server is back.
  * @return promise|undefined if a callback is passed the method returns undefined
- * otherwise it returns a promise of SearchResults
+ * otherwise it returns a promise containing an object with two keys :
+ *  - content with a SearchResults
+ *  - state with the state used for the query as a SearchParameters
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var index = options.index || this.index;
-  if (options.index) delete options.index;
+  if (options.index) {
+    delete options.index;
+  }
 
   var tempState = this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(index, tempState);
@@ -9107,8 +9179,10 @@ module.exports = function formatSort(sortBy) {
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
+var map = require('lodash/collection/map');
 var reduce = require('lodash/collection/reduce');
 var merge = require('lodash/object/merge');
+var isArray = require('lodash/lang/isArray');
 
 var requestBuilder = {
   /**
@@ -9238,12 +9312,25 @@ var requestBuilder = {
    * @return {string[]} the numeric filters in the algolia format
    */
   _getNumericFilters: function(state, facetName) {
+    if (state.numericFilters) {
+      return state.numericFilters;
+    }
+
     var numericFilters = [];
 
     forEach(state.numericRefinements, function(operators, attribute) {
-      forEach(operators, function(value, operator) {
+      forEach(operators, function(values, operator) {
         if (facetName !== attribute) {
-          numericFilters.push(attribute + operator + value);
+          forEach(values, function(value) {
+            if (isArray(value)) {
+              var vs = map(value, function(v) {
+                return attribute + operator + v;
+              });
+              numericFilters.push(vs);
+            } else {
+              numericFilters.push(attribute + operator + value);
+            }
+          });
         }
       });
     });
@@ -9368,7 +9455,7 @@ var requestBuilder = {
 
 module.exports = requestBuilder;
 
-},{"lodash/collection/forEach":15,"lodash/collection/reduce":19,"lodash/object/merge":149}],166:[function(require,module,exports){
+},{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":134,"lodash/object/merge":149}],166:[function(require,module,exports){
 module.exports="2.2.0"
 },{}]},{},[1])(1)
 });

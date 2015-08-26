@@ -1,8 +1,10 @@
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
+var map = require('lodash/collection/map');
 var reduce = require('lodash/collection/reduce');
 var merge = require('lodash/object/merge');
+var isArray = require('lodash/lang/isArray');
 
 var requestBuilder = {
   /**
@@ -132,12 +134,25 @@ var requestBuilder = {
    * @return {string[]} the numeric filters in the algolia format
    */
   _getNumericFilters: function(state, facetName) {
+    if (state.numericFilters) {
+      return state.numericFilters;
+    }
+
     var numericFilters = [];
 
     forEach(state.numericRefinements, function(operators, attribute) {
-      forEach(operators, function(value, operator) {
+      forEach(operators, function(values, operator) {
         if (facetName !== attribute) {
-          numericFilters.push(attribute + operator + value);
+          forEach(values, function(value) {
+            if (isArray(value)) {
+              var vs = map(value, function(v) {
+                return attribute + operator + v;
+              });
+              numericFilters.push(vs);
+            } else {
+              numericFilters.push(attribute + operator + value);
+            }
+          });
         }
       });
     });
