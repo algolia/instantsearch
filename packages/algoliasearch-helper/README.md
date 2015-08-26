@@ -578,12 +578,14 @@ Sometime it's convenient to reuse the current search parameters with small chang
 without changing the state stored in the helper. That's why there is a function
 called `searchOnce`. This method does not trigger `change` or `error` events.
 
+In the following, we are using `searchOnce` to fetch only a single element using
+all the other parameters already set in the search parameters.
+
 #### Using searchOnce with a callback
 
 ```js
-var state = 
-helper.searchOnce(
-  helper.state.addFacetRefinement('facet', 'f2');,
+var state = helper.searchOnce(
+  {hitsPerPage: 1},
   function(error, content, state) {
     // if an error occured it will be passed in error, otherwise its value is null
     // content contains the results formatted as a SearchResults
@@ -594,8 +596,8 @@ helper.searchOnce(
 #### Using searchOnce with a promise
 
 ```js
-var state1 = 
-helper.searchOnce(helper.state.addFacetRefinement('facet', 'f1')).then(function(res) {
+var state1 = helper.searchOnce({hitsPerPage: 1})
+                   .then(function(res) {
   // res contains 
   // {
   //   content : SearchResults
