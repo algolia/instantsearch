@@ -172,7 +172,7 @@ helper.addTag('photo').search();
 
 ### Events
 
-The helper is an [Event Emitter](https://nodejs.org/api/events.html#events_class_events_eventemitter).
+The helper is a Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_events_eventemitter) instance.
 
 `result`: get notified when new results are received. The handler function will receive
 two objects (`SearchResults` and `SearchParameters`).
@@ -195,11 +195,19 @@ helper.on('result', updateTheResults);
 helper.once('result', updateTheResults);
 ```
 
+#### Remove a `result` listener
+
+```js
+helper.removeListener('result', updateTheResults);
+```
+
 #### Remove all `result` listeners
 
 ```js
-helper.removeListener('result');
+helper.removeAllListeners('result');
 ```
+
+All the methods from Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_events_eventemitter) class are available.
 
 ### Query
 
@@ -342,6 +350,8 @@ Here, we refined the search this way:
 - click on fruits
 - click on citrus
 
+##### Usage
+
 To build such menu, you need to use hierarchical faceting:
 
 ```javascript
@@ -405,6 +415,29 @@ To ease navigation, we always:
 - provide the current refinement sub categories (`fruits > citrus > *`: n + 1)
 - provide the parent refinement (`fruits > citrus` => `fruits`: n -1) categories
 - refine the search using the current hierarchical refinement
+
+##### Multiple values per level
+
+Your records can also share multiple categories between one another by using arrays inside your object:
+
+```json
+{
+  "objectID": "123",
+  "name": "orange",
+  "categories": {
+    "lvl0": ["fruits", "color"],
+    "lvl1": ["fruits > citrus", "color > orange"]
+  }
+},
+{
+  "objectID": "456",
+  "name": "grapefruit",
+  "categories": {
+    "lvl0": ["fruits", "color", "new"],
+    "lvl1": ["fruits > citrus", "color > yellow", "new > citrus"]
+  }
+}
+```
 
 ##### Specifying another separator
 
