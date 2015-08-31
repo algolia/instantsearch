@@ -171,7 +171,7 @@ helper.addTag('photo').search();
 
 ### Events
 
-The helper is an [Event Emitter](https://nodejs.org/api/events.html#events_class_events_eventemitter).
+The helper is a Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_events_eventemitter) instance.
 
 `result`: get notified when new results are received. The handler function will receive
 two objects (`SearchResults` and `SearchParameters`).
@@ -192,11 +192,19 @@ helper.on('result', updateTheResults);
 helper.once('result', updateTheResults);
 ```
 
+#### Remove a `result` listener
+
+```js
+helper.removeListener('result', updateTheResults);
+```
+
 #### Remove all `result` listeners
 
 ```js
-helper.removeListener('result');
+helper.removeAllListeners('result');
 ```
+
+All the methods from Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_events_eventemitter) class are available.
 
 ### Query
 
