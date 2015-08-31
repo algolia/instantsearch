@@ -23,10 +23,10 @@ API is unstable. We welcome any idea.
 
 ```js
 var instantsearch = require('instantsearch.js');
-var instant = new instantsearch.InstantSearch(appId, apiKey, indexName);
+var search = new instantsearch.InstantSearch(appId, apiKey, indexName);
 
 // add a widget
-instant.addWidget(
+search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for libraries in France...'
@@ -34,7 +34,7 @@ instant.addWidget(
 );
 
 // start
-instant.start();
+search.start();
 ```
 
 ## Widget API
@@ -60,7 +60,7 @@ function mySuperWidget(opts) {
   }
 }
 
-instant.addWidget(mySuperWidget());
+search.addWidget(mySuperWidget());
 ```
 
 ## Dev
@@ -90,7 +90,7 @@ npm run test:coverage
 ```
 
 ```js
-instant.addWidget(
+search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
@@ -106,7 +106,7 @@ instant.addWidget(
 ```
 
 ```js
-instant.addWidget(
+search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
     // cssClass, // add cssClasses to the main wrapper
@@ -130,7 +130,7 @@ instant.addWidget(
 ```
 
 ```js
-instant.addWidget(
+search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
