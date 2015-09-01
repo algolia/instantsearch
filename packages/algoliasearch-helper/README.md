@@ -557,7 +557,7 @@ helper.setIndex('index_orderByPrice').search();
 #### Get the current index
 
 ```js
-var currentIndex = helper.state.index;
+var currentIndex = helper.index;
 ```
 
 ### Query parameters
