@@ -4,7 +4,7 @@ var test = require('tape');
 var algoliaSearchHelper = require('../../index.js');
 
 test('getQueryParameter', function(t) {
-  var partial = require('lodash/function/partial');
+  var bind = require('lodash/function/bind');
 
   var helper = algoliaSearchHelper(null, null, {
     facets: ['facet1'],
@@ -16,7 +16,7 @@ test('getQueryParameter', function(t) {
   t.equal(helper.getQueryParameter('minWordSizefor1Typo'), 8);
   t.equal(helper.getQueryParameter('ignorePlurals'), true);
 
-  t.throws(partial(helper.getQueryParameter, 'unknown'));
+  t.throws(bind(helper.getQueryParameter, helper, 'unknown'));
 
   t.end();
 });

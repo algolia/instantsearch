@@ -7,11 +7,9 @@ var events = require('events');
 var forEach = require('lodash/collection/forEach');
 var isEmpty = require('lodash/lang/isEmpty');
 var bind = require('lodash/function/bind');
-var reduce = require('lodash/collection/reduce');
 var map = require('lodash/collection/map');
 var trim = require('lodash/string/trim');
-var merge = require('lodash/object/merge');
-var isArray = require('lodash/lang/isArray');
+var requestBuilder = require('./requestBuilder');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -48,6 +46,45 @@ util.inherits(AlgoliaSearchHelper, events.EventEmitter);
 AlgoliaSearchHelper.prototype.search = function() {
   this._search();
   return this;
+};
+
+/**
+ * Start a search using a modified version of the current state. This method does
+ * not trigger the helper lifecycle and does not modify the state kept internally
+ * by the helper. This second aspect means that the next search call will be the
+ * same as a search call before calling searchOnce.
+ * @param {object} options can contain all the parameters that can be set to SearchParameters
+ * plus the index
+ * @param {function} [callback] optional callback executed when the response from the
+ * server is back.
+ * @return promise|undefined if a callback is passed the method returns undefined
+ * otherwise it returns a promise containing an object with two keys :
+ *  - content with a SearchResults
+ *  - state with the state used for the query as a SearchParameters
+ */
+AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
+  var index = options.index || this.index;
+  if (options.index) {
+    delete options.index;
+  }
+
+  var tempState = this.state.setQueryParameters(options);
+  var queries = requestBuilder._getQueries(index, tempState);
+  if (cb) {
+    return this.client.search(
+      queries,
+      function(err, content) {
+        cb(err, new SearchResults(tempState, content), tempState);
+      });
+  }
+
+  return this.client.search(queries).then(
+    function(content) {
+      return {
+        content: new SearchResults(tempState, content),
+        state: tempState
+      };
+    });
 };
 
 /**
@@ -579,7 +616,7 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
-  var queries = this._getQueries();
+  var queries = requestBuilder._getQueries(this.index, this.state);
 
   this.emit('search', state, this.lastResults);
   this.client.search(queries,
@@ -587,50 +624,6 @@ AlgoliaSearchHelper.prototype._search = function() {
       this,
       state,
       this._queryId++));
-};
-
-/**
- * Get all the queries to send to the client, those queries can used directly
- * with the Algolia client.
- * @private
- * @return {object[]} The queries
- */
-AlgoliaSearchHelper.prototype._getQueries = function getQueries() {
-  var queries = [];
-
-  // One query for the hits
-  queries.push({
-    indexName: this.index,
-    query: this.state.query,
-    params: this._getHitsSearchParams()
-  });
-
-  // One for each disjunctive facets
-  forEach(this.state.getRefinedDisjunctiveFacets(), function(refinedFacet) {
-    queries.push({
-      indexName: this.index,
-      query: this.state.query,
-      params: this._getDisjunctiveFacetSearchParams(refinedFacet)
-    });
-  }, this);
-
-  // maybe more to get the root level of hierarchical facets when activated
-  forEach(this.state.getRefinedHierarchicalFacets(), function(refinedFacet) {
-    var hierarchicalFacet = this.state.getHierarchicalFacetByName(refinedFacet);
-
-    var currentRefinement = this.state.getHierarchicalRefinement(refinedFacet);
-    // if we are deeper than level 0 (starting from `beer > IPA`)
-    // we want to get the root values
-    if (currentRefinement.length > 0 && currentRefinement[0].split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length > 1) {
-      queries.push({
-        indexName: this.index,
-        query: this.state.query,
-        params: this._getDisjunctiveFacetSearchParams(refinedFacet, true)
-      });
-    }
-  }, this);
-
-  return queries;
 };
 
 /**
@@ -661,132 +654,11 @@ AlgoliaSearchHelper.prototype._handleResponse = function(state, queryId, err, co
   this.emit('result', formattedResponse, state);
 };
 
-/**
- * Build search parameters used to fetch hits
- * @private
- * @return {object.<string, any>}
- */
-AlgoliaSearchHelper.prototype._getHitsSearchParams = function() {
-  var facets = this.state.facets
-    .concat(this.state.disjunctiveFacets)
-    .concat(this._getHitsHierarchicalFacetsAttributes());
-
-  var facetFilters = this._getFacetFilters();
-  var numericFilters = this._getNumericFilters();
-  var tagFilters = this._getTagFilters();
-  var additionalParams = {
-    facets: facets,
-    tagFilters: tagFilters
-  };
-
-  if (this.state.distinct === true || this.state.distinct === false) {
-    additionalParams.distinct = this.state.distinct;
-  }
-
-  if (facetFilters.length > 0) {
-    additionalParams.facetFilters = facetFilters;
-  }
-
-  if (numericFilters.length > 0) {
-    additionalParams.numericFilters = numericFilters;
-  }
-
-  return merge(this.state.getQueryParams(), additionalParams);
-};
-
-/**
- * Build search parameters used to fetch a disjunctive facet
- * @private
- * @param  {string} facet the associated facet name
- * @return {object}
- */
-AlgoliaSearchHelper.prototype._getDisjunctiveFacetSearchParams = function(facet, hierarchicalRootLevel) {
-  var facetFilters = this._getFacetFilters(facet, hierarchicalRootLevel);
-  var numericFilters = this._getNumericFilters(facet);
-  var tagFilters = this._getTagFilters();
-  var additionalParams = {
-    hitsPerPage: 1,
-    page: 0,
-    attributesToRetrieve: [],
-    attributesToHighlight: [],
-    attributesToSnippet: [],
-    tagFilters: tagFilters
-  };
-
-  var hierarchicalFacet = this.state.getHierarchicalFacetByName(facet);
-
-  if (hierarchicalFacet) {
-    additionalParams.facets = this._getDisjunctiveHierarchicalFacetAttribute(hierarchicalFacet, hierarchicalRootLevel);
-  } else {
-    additionalParams.facets = facet;
-  }
-
-  if (this.state.distinct === true || this.state.distinct === false) {
-    additionalParams.distinct = this.state.distinct;
-  }
-
-  if (numericFilters.length > 0) {
-    additionalParams.numericFilters = numericFilters;
-  }
-
-  if (facetFilters.length > 0) {
-    additionalParams.facetFilters = facetFilters;
-  }
-
-  return merge(this.state.getQueryParams(), additionalParams);
-};
-
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
   return query ||
     facetFilters.length !== 0 ||
     numericFilters.length !== 0 ||
     tagFilters.length !== 0;
-};
-
-/**
- * Return the numeric filters in an algolia request fashion
- * @private
- * @param {string} [facetName] the name of the attribute for which the filters should be excluded
- * @return {string[]} the numeric filters in the algolia format
- */
-AlgoliaSearchHelper.prototype._getNumericFilters = function(facetName) {
-  if (this.state.numericFilters) {
-    return this.state.numericFilters;
-  }
-
-  var numericFilters = [];
-
-  forEach(this.state.numericRefinements, function(operators, attribute) {
-    forEach(operators, function(values, operator) {
-      if (facetName !== attribute) {
-        forEach(values, function(value) {
-          if (isArray(value)) {
-            var vs = map(value, function(v) {
-              return attribute + operator + v;
-            });
-            numericFilters.push(vs);
-          } else {
-            numericFilters.push(attribute + operator + value);
-          }
-        });
-      }
-    });
-  });
-
-  return numericFilters;
-};
-
-/**
- * Return the tags filters depending
- * @private
- * @return {string}
- */
-AlgoliaSearchHelper.prototype._getTagFilters = function() {
-  if (this.state.tagFilters) {
-    return this.state.tagFilters;
-  }
-
-  return this.state.tagRefinements.join(',');
 };
 
 /**
@@ -800,107 +672,9 @@ AlgoliaSearchHelper.prototype._hasDisjunctiveRefinements = function(facet) {
     this.state.disjunctiveRefinements[facet].length > 0;
 };
 
-/**
- * Build facetFilters parameter based on current refinements. The array returned
- * contains strings representing the facet filters in the algolia format.
- * @private
- * @param  {string} [facet] if set, the current disjunctive facet
- * @return {array.<string>}
- */
-AlgoliaSearchHelper.prototype._getFacetFilters = function(facet, hierarchicalRootLevel) {
-  var facetFilters = [];
-
-  forEach(this.state.facetsRefinements, function(facetValues, facetName) {
-    forEach(facetValues, function(facetValue) {
-      facetFilters.push(facetName + ':' + facetValue);
-    });
-  });
-
-  forEach(this.state.facetsExcludes, function(facetValues, facetName) {
-    forEach(facetValues, function(facetValue) {
-      facetFilters.push(facetName + ':-' + facetValue);
-    });
-  });
-
-  forEach(this.state.disjunctiveFacetsRefinements, function(facetValues, facetName) {
-    if (facetName === facet || !facetValues || facetValues.length === 0) return;
-    var orFilters = [];
-
-    forEach(facetValues, function(facetValue) {
-      orFilters.push(facetName + ':' + facetValue);
-    });
-
-    facetFilters.push(orFilters);
-  });
-
-  forEach(this.state.hierarchicalFacetsRefinements, function(facetValues, facetName) {
-    var facetValue = facetValues[0];
-
-    if (facetValue === undefined) {
-      return;
-    }
-
-    var hierarchicalFacet = this.state.getHierarchicalFacetByName(facetName);
-    var separator = this.state._getHierarchicalFacetSeparator(hierarchicalFacet);
-    var attributeToRefine;
-
-    // we ask for parent facet values only when the `facet` is the current hierarchical facet
-    if (facet === facetName) {
-      // if we are at the root level already, no need to ask for facet values, we get them from
-      // the hits query
-      if (facetValue.indexOf(separator) === -1 || hierarchicalRootLevel === true) {
-        return;
-      }
-
-      attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 2];
-      facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
-    } else {
-      attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 1];
-    }
-
-    facetFilters.push([attributeToRefine + ':' + facetValue]);
-  }, this);
-
-  return facetFilters;
-};
-
 AlgoliaSearchHelper.prototype._change = function() {
   this.emit('change', this.state, this.lastResults);
 };
 
-AlgoliaSearchHelper.prototype._getHitsHierarchicalFacetsAttributes = function() {
-  var out = [];
-
-  return reduce(
-    this.state.hierarchicalFacets,
-    // ask for as much levels as there's hierarchical refinements
-    function getHitsAttributesForHierarchicalFacet(allAttributes, hierarchicalFacet) {
-      var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0];
-
-      // if no refinement, ask for root level
-      if (!hierarchicalRefinement) {
-        allAttributes.push(hierarchicalFacet.attributes[0]);
-        return allAttributes;
-      }
-
-      var level = hierarchicalRefinement.split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length;
-      var newAttributes = hierarchicalFacet.attributes.slice(0, level + 1);
-
-      return allAttributes.concat(newAttributes);
-    }, out, this);
-};
-
-AlgoliaSearchHelper.prototype._getDisjunctiveHierarchicalFacetAttribute = function(hierarchicalFacet, rootLevel) {
-  if (rootLevel === true) {
-    return [hierarchicalFacet.attributes[0]];
-  }
-
-  var hierarchicalRefinement = this.state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
-  // if refinement is 'beers > IPA > Flying dog',
-  // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
-
-  var parentLevel = hierarchicalRefinement.split(this.state._getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
-  return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
-};
 
 module.exports = AlgoliaSearchHelper;

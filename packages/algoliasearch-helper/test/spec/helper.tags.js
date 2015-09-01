@@ -2,6 +2,7 @@
 
 var test = require('tape');
 var algoliasearchHelper = require('../../index');
+var requestBuilder = require('../../src/requestBuilder');
 
 test('Tag filters: operations on tags list', function(t) {
   var helper = algoliasearchHelper(null, null, null);
@@ -22,7 +23,7 @@ test('Tags filters: advanced query', function(t) {
 
   helper.setQueryParameter('tagFilters', complexQuery);
 
-  t.deepEqual(helper._getTagFilters(), complexQuery, 'The complex query should be equal to the user input');
+  t.deepEqual(requestBuilder._getTagFilters(helper.state), complexQuery, 'The complex query should be equal to the user input');
 
   t.end();
 });
@@ -31,7 +32,7 @@ test('Tags filters: switching between advanced and simple API should be forbidde
   var helper = algoliasearchHelper(null, null, null);
 
   helper.addTag('tag').addTag('tag2');
-  t.deepEqual(helper._getTagFilters(), 'tag,tag2', 'should be [ tag, tag2 ]');
+  t.deepEqual(requestBuilder._getTagFilters(helper.state), 'tag,tag2', 'should be [ tag, tag2 ]');
 
   var complexQuery = '(sea, city), romantic, -mountain';
 
@@ -40,14 +41,14 @@ test('Tags filters: switching between advanced and simple API should be forbidde
     t.fail("Can't switch directly from the advanced API to the managed API");
   } catch (e0) {
     helper.clearTags().setQueryParameter('tagFilters', complexQuery);
-    t.deepEqual(helper._getTagFilters(), complexQuery, 'The complex should override the simple mode if cleared before');
+    t.deepEqual(requestBuilder._getTagFilters(helper.state), complexQuery, 'The complex should override the simple mode if cleared before');
 
     try {
       helper.addTag('tag').addTag('tag2');
       t.fail("Can't switch directly from the managed API to the advanced API");
     } catch (e1) {
       helper.setQueryParameter('tagFilters', undefined).addTag('tag').addTag('tag2');
-      t.deepEqual(helper._getTagFilters(), 'tag,tag2', 'should be [ tag, tag2 ]');
+      t.deepEqual(requestBuilder._getTagFilters(helper.state), 'tag,tag2', 'should be [ tag, tag2 ]');
 
       t.end();
     }

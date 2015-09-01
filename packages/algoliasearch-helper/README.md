@@ -618,7 +618,41 @@ helper.setIndex('index_orderByPrice').search();
 #### Get the current index
 
 ```js
-var currentIndex = helper.state.index;
+var currentIndex = helper.getIndex();
+```
+
+### One time query
+
+Sometime it's convenient to reuse the current search parameters with small changes
+without changing the state stored in the helper. That's why there is a function
+called `searchOnce`. This method does not trigger `change` or `error` events.
+
+In the following, we are using `searchOnce` to fetch only a single element using
+all the other parameters already set in the search parameters.
+
+#### Using searchOnce with a callback
+
+```js
+var state = helper.searchOnce(
+  {hitsPerPage: 1},
+  function(error, content, state) {
+    // if an error occured it will be passed in error, otherwise its value is null
+    // content contains the results formatted as a SearchResults
+    // state is the instance of SearchParameters used for this search
+  });
+```
+
+#### Using searchOnce with a promise
+
+```js
+var state1 = helper.searchOnce({hitsPerPage: 1})
+                   .then(function(res) {
+  // res contains 
+  // {
+  //   content : SearchResults
+  //   state : SearchParameters (the one used for this specific search)
+  // }
+});
 ```
 
 ### Query parameters
