@@ -274,9 +274,9 @@ function SearchResults(state, algoliaResponse) {
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
-    var hierarchicalFacet;
+    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey);
 
-    if (hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey)) {
+    if (hierarchicalFacet) {
       this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
         attribute: facetKey,
         data: facetValueObject,

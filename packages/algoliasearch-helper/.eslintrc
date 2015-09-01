@@ -1,6 +1,7 @@
 {
   "extends": [
-    "eslint-config-airbnb",
-    "eslint-config-algolia"
+    "eslint:recommended",
+    "airbnb/base/",
+    "algolia"
   ]
 }
