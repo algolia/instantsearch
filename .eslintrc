@@ -11,6 +11,7 @@
   },
   "rules": {
     "strict": [2, "never"], // babel inserts "use strict"; for us
-    "react/jsx-curly-spacing": [2, "never"]
+    "react/jsx-curly-spacing": [2, "never"],
+    "react/jsx-closing-bracket-location": 2
   }
 }

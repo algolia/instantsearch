@@ -14,6 +14,90 @@ class Pagination extends React.Component {
     super(defaultsDeep(props, Pagination.defaultProps));
   }
 
+  previousPageLink(pager) {
+    if (pager.isFirstPage()) {
+      return <PaginationHiddenLink label={this.props.labels.prev} />;
+    }
+
+    return (
+      <PaginationLink
+        href="#"
+        label={this.props.labels.prev} ariaLabel="Previous"
+        setCurrentPage={this.props.setCurrentPage}
+        page={pager.currentPage - 1}
+      />
+    );
+  }
+
+  nextPageLink(pager) {
+    if (pager.isLastPage()) {
+      return <PaginationHiddenLink label={this.props.labels.next} />;
+    }
+
+    return (
+      <PaginationLink
+        href="#"
+        label={this.props.labels.next} ariaLabel="Next"
+        setCurrentPage={this.props.setCurrentPage}
+        page={pager.currentPage + 1}
+      />
+    );
+  }
+
+  firstPageLink(pager) {
+    if (pager.isFirstPage()) {
+      return <PaginationHiddenLink label={this.props.labels.first} />;
+    }
+
+    return (
+      <PaginationLink
+        href="#"
+        label={this.props.labels.first}
+        ariaLabel="First"
+        setCurrentPage={this.props.setCurrentPage}
+        page={0}
+      />
+    );
+  }
+
+  lastPageLink(pager) {
+    if (pager.isLastPage()) {
+      return <PaginationHiddenLink label={this.props.labels.last} />;
+    }
+
+    return (
+      <PaginationLink
+        href="#"
+        label={this.props.labels.last}
+        ariaLabel="Last"
+        setCurrentPage={this.props.setCurrentPage}
+        page={pager.total - 1}
+      />
+    );
+  }
+
+  pages(pager) {
+    var elements = [];
+
+    forEach(pager.pages(), function(pageNumber) {
+      var className = pageNumber === pager.currentPage ? 'active' : null;
+
+      elements.push(
+        <PaginationLink
+          href="#"
+          label={pageNumber + 1}
+          ariaLabel={pageNumber + 1}
+          setCurrentPage={this.props.setCurrentPage}
+          page={pageNumber}
+          key={pageNumber}
+          className={className}
+        />
+      );
+    }, this);
+
+    return elements;
+  }
+
   render() {
     if (this.props.nbHits === 0) {
       return null;
@@ -36,85 +120,6 @@ class Pagination extends React.Component {
         {this.props.showFirstLast ? this.lastPageLink(pager) : null}
       </ul>
     );
-  }
-
-  previousPageLink(pager) {
-    if (pager.isFirstPage()) {
-      return <PaginationHiddenLink label={this.props.labels.prev} />;
-    }
-
-    return (
-      <PaginationLink
-        href="#"
-        label={this.props.labels.prev} ariaLabel="Previous"
-        setCurrentPage={this.props.setCurrentPage}
-        page={pager.currentPage - 1} />
-    );
-  }
-
-  nextPageLink(pager) {
-    if (pager.isLastPage()) {
-      return <PaginationHiddenLink label={this.props.labels.next} />;
-    }
-
-    return (
-      <PaginationLink
-        href="#"
-        label={this.props.labels.next} ariaLabel="Next"
-        setCurrentPage={this.props.setCurrentPage}
-        page={pager.currentPage + 1} />
-    );
-  }
-
-  firstPageLink(pager) {
-    if (pager.isFirstPage()) {
-      return <PaginationHiddenLink label={this.props.labels.first} />;
-    }
-
-    return (
-      <PaginationLink
-        href="#"
-        label={this.props.labels.first}
-        ariaLabel="First"
-        setCurrentPage={this.props.setCurrentPage}
-        page={0} />
-    );
-  }
-
-  lastPageLink(pager) {
-    if (pager.isLastPage()) {
-      return <PaginationHiddenLink label={this.props.labels.last} />;
-    }
-
-    return (
-      <PaginationLink
-        href="#"
-        label={this.props.labels.last}
-        ariaLabel="Last"
-        setCurrentPage={this.props.setCurrentPage}
-        page={pager.total - 1} />
-    );
-  }
-
-  pages(pager) {
-    var elements = [];
-
-    forEach(pager.pages(), function(pageNumber) {
-      var className = pageNumber === pager.currentPage ? 'active' : null;
-
-      elements.push(
-        <PaginationLink
-          href="#"
-          label={pageNumber + 1}
-          ariaLabel={pageNumber + 1}
-          setCurrentPage={this.props.setCurrentPage}
-          page={pageNumber}
-          key={pageNumber}
-          className={className} />
-      );
-    }, this);
-
-    return elements;
   }
 }
 

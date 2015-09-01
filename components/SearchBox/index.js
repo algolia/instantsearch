@@ -2,17 +2,13 @@ var React = require('react');
 var bem = require('../BemHelper')('as-search-box');
 var cx = require('classnames');
 
-var SearchBox = React.createClass({
-  propTypes: {
-    placeholder: React.PropTypes.string,
-    inputClass: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.array
-    ]),
-    setQuery: React.PropTypes.func,
-    search: React.PropTypes.func
-  },
-  render: function() {
+class SearchBox {
+  handleChange(e) {
+    this.props.setQuery(e.target.value);
+    this.props.search();
+  }
+
+  render() {
     var classNames = cx(bem('input'), this.props.inputClass);
 
     return (
@@ -22,14 +18,21 @@ var SearchBox = React.createClass({
         className={classNames}
         autoComplete="off"
         autoFocus="autofocus"
-        onChange={this.change}
-        role="textbox" />
+        onChange={this.handleChange.bind(this)}
+        role="textbox"
+      />
     );
-  },
-  change: function(e) {
-    this.props.setQuery(e.target.value);
-    this.props.search();
   }
-});
+}
+
+SearchBox.propTypes = {
+  placeholder: React.PropTypes.string,
+  inputClass: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.array
+  ]),
+  setQuery: React.PropTypes.func,
+  search: React.PropTypes.func
+};
 
 module.exports = SearchBox;

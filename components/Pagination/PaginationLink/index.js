@@ -1,6 +1,15 @@
 var React = require('react');
 
 class PaginationLink extends React.Component {
+  clickDisabled(e) {
+    e.preventDefault();
+  }
+
+  handleClick(page, e) {
+    e.preventDefault();
+    this.props.setCurrentPage(page).search();
+  }
+
   render() {
     var label = this.props.label;
     var ariaLabel = this.props.ariaLabel;
@@ -13,20 +22,11 @@ class PaginationLink extends React.Component {
         <a
           href={href}
           aria-label={ariaLabel}
-          onClick={this.click.bind(this, page)}
-          dangerouslySetInnerHTML={{__html: label}}>
-        </a>
+          onClick={this.handleClick.bind(this, page)}
+          dangerouslySetInnerHTML={{__html: label}}
+        ></a>
       </li>
     );
-  }
-
-  clickDisabled(e) {
-    e.preventDefault();
-  }
-
-  click(page, e) {
-    e.preventDefault();
-    this.props.setCurrentPage(page).search();
   }
 }
 

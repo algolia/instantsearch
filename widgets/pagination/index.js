@@ -2,7 +2,7 @@ var React = require('react');
 
 var utils = require('../../lib/widgetUtils.js');
 
-function hits({container, cssClass, labels, maxPages}={}) {
+function hits({container, cssClass, labels, maxPages} = {}) {
   var Pagination = require('../../components/Pagination/');
   var containerNode = utils.getContainerNode(container);
 
@@ -17,7 +17,8 @@ function hits({container, cssClass, labels, maxPages}={}) {
           nbPages={nbPages}
           setCurrentPage={helper.setCurrentPage.bind(helper)}
           cssClass={cssClass}
-          labels={labels} />,
+          labels={labels}
+        />,
         containerNode
       );
     }

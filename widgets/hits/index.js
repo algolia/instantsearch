@@ -2,7 +2,7 @@ var React = require('react');
 
 var utils = require('../../lib/widgetUtils.js');
 
-function hits({container=null, templates={}, hitsPerPage=20}) {
+function hits({container = null, templates = {}, hitsPerPage = 20}) {
   var Hits = require('../../components/Hits');
   var containerNode = utils.getContainerNode(container);
 
@@ -10,10 +10,12 @@ function hits({container=null, templates={}, hitsPerPage=20}) {
     getConfiguration: () => ({hitsPerPage}),
     render: function(results, state, helper) {
       React.render(
-        <Hits hits={results.hits}
+        <Hits
+          hits={results.hits}
           helper={helper}
           noResultsTemplate={templates.empty}
-          hitTemplate={templates.hit} />,
+          hitTemplate={templates.hit}
+        />,
         containerNode
       );
     }
