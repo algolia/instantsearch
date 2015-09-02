@@ -248,7 +248,7 @@ function SearchParameters(newParameters) {
    */
   this.optionalWords = params.optionalWords;
   /**
-   * Possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)
+   * Possible values are "lastWords" "firstWords" "allOptional" "none" (default)
    * @see https://www.algolia.com/doc#removeWordsIfNoResults
    * @member {string}
    */
