@@ -1,5 +1,9 @@
 CHANGELOG
 
+UNRELEASED
+  * CHORE: add a console.error() when passing unknown parameters
+  * FIX: add offset/length undocumented search parameters
+
 2.3.0 - 2015-09-02
   * FEATURE: #136, fire a 'search' event once a search is sent to Algolia
   * FEATURE: ability to set multiple OR and AND filters with the numeric
