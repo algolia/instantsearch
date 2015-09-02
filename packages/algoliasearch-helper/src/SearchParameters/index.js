@@ -326,6 +326,10 @@ function SearchParameters(newParameters) {
    */
   this.insideBoundingBox = params.insideBoundingBox;
 
+  // Undocumented parameters, still needed otherwise we fail
+  this.offset = params.offset;
+  this.length = params.length;
+
   forEach(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
       console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
