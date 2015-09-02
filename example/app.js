@@ -5,7 +5,7 @@ var instantsearch = require('../');
 var search = new instantsearch.InstantSearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76',
-  'bestbuy'
+  'instant_search'
 );
 
 search.addWidget(
@@ -23,7 +23,7 @@ search.addWidget(
       empty: require('./templates/no-results.html'),
       hit: require('./templates/hit.html')
     },
-    hitsPerPage: 5
+    hitsPerPage: 6
   })
 );
 
@@ -32,6 +32,13 @@ search.addWidget(
     container: '#pagination',
     cssClass: 'pagination',
     maxPages: 20
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.multipleChoiceList({
+    container: '#brands',
+    facetName: 'brand'
   })
 );
 

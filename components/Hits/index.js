@@ -1,35 +1,29 @@
 var React = require('react');
 var map = require('lodash/collection/map');
-var isString = require('lodash/lang/isString');
 
-var Hogan = require('../templates/Hogan');
-var TemplateFn = require('../templates/Function');
+var Template = require('../Template/');
 
 class Hits extends React.Component {
-  render() {
-    if (this.props.hits.length === 0) {
-      return this.renderNoResults();
-    }
-
-    return this.renderWithResults();
-  }
-
   renderWithResults() {
-    var TemplateComponent = isString(this.props.hitTemplate) ? Hogan : TemplateFn;
-
     var renderedHits = map(this.props.hits, function(hit) {
-      return <TemplateComponent data={hit} key={hit.objectID} template={this.props.hitTemplate} />;
+      return <Template data={hit} key={hit.objectID} template={this.props.hitTemplate} />;
     }, this);
 
     return <div>{renderedHits}</div>;
   }
 
   renderNoResults() {
-    var TemplateComponent = isString(this.props.noResultsTemplate) ? Hogan : TemplateFn;
-
     return (
-      <div><TemplateComponent template={this.props.noResultsTemplate} /></div>
+      <div><Template template={this.props.noResultsTemplate} /></div>
     );
+  }
+
+  render() {
+    var renderedHits = map(this.props.hits, function(hit) {
+      return <Template data={hit} key={hit.objectID} template={this.props.hitTemplate} />;
+    }, this);
+
+    return <div>{renderedHits}</div>;
   }
 }
 
