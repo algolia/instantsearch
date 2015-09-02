@@ -1,13 +1,16 @@
 CHANGELOG
 
-UNRELEASED
-  * FEATURE : #136, fire a 'search' event once a search is sent to Algolia
-  * FEATURE : ability to set multiple OR and AND filters with the numeric
+2.3.0 - 2015-09-02
+  * FEATURE: #136, fire a 'search' event once a search is sent to Algolia
+  * FEATURE: ability to set multiple OR and AND filters with the numeric
   filter API
-  * FEATURE : Ability to set the raw numeric filter string
-  * CHORE : #125, events documentation
-  * FIX : semantic of addNumericRefinement indeed add an numeric, does not
-  update anymore
+  * FEATURE: Ability to set the raw numeric filter string
+  * CHORE: #125, events documentation
+  * FIX(CANBREAK): semantic of addNumericRefinement indeed add an numeric, does not
+  update anymore. This can possibly BREAK your code if you were relying on this. Email support@algolia.com if it does
+  * FEATURE: add `requestsent` event on the helper when any request is sent
+  * FEATURE: add results.getFacetStats
+  * FEATURE: add `results.getFacetValues` and add sortBy option to it
 
 2.2.0 - 2015-07-29
   * FIX: #130 toggleRefine should throw an exception when executed with an

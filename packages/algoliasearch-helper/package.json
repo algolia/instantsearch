@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
   "scripts": {
@@ -64,7 +64,7 @@
     "minami": "algolia/minami",
     "mversion": "1.10.1",
     "onchange": "2.0.0",
-    "opn": "3.0.2",
+    "opn-cli": "1.0.0",
     "phantomjs": "1.9.18",
     "pretty-bytes": "2.0.1",
     "semver": "5.0.1",

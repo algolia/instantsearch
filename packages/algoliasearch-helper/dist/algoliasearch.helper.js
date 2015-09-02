@@ -1177,7 +1177,7 @@ var nativeMax = Math.max;
 /**
  * Gets the index at which the first occurrence of `value` is found in `array`
  * using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
- * for equality comparisons. If `fromIndex` is negative, it is used as the offset
+ * for equality comparisons. If `fromIndex` is negative, it's used as the offset
  * from the end of `array`. If `array` is sorted providing `true` for `fromIndex`
  * performs a faster binary search.
  *
@@ -1603,9 +1603,9 @@ var baseIndexOf = require('../internal/baseIndexOf'),
 var nativeMax = Math.max;
 
 /**
- * Checks if `value` is in `collection` using
+ * Checks if `target` is in `collection` using
  * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)
- * for equality comparisons. If `fromIndex` is negative, it is used as the offset
+ * for equality comparisons. If `fromIndex` is negative, it's used as the offset
  * from the end of `collection`.
  *
  * @static
@@ -2042,7 +2042,7 @@ var nativeMax = Math.max;
  * Creates a function that invokes `func` with the `this` binding of the
  * created function and arguments from `start` and beyond provided as an array.
  *
- * **Note:** This method is based on the [rest parameter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/rest_parameters).
+ * **Note:** This method is based on the [rest parameter](https://developer.mozilla.org/Web/JavaScript/Reference/Functions/rest_parameters).
  *
  * @static
  * @memberOf _
@@ -4665,7 +4665,7 @@ var realNames = require('./realNames');
  * @returns {string} Returns the function name.
  */
 function getFuncName(func) {
-  var result = func.name,
+  var result = (func.name + ''),
       array = realNames[result],
       length = array ? array.length : 0;
 
@@ -4881,11 +4881,12 @@ var LazyWrapper = require('./LazyWrapper'),
  * @returns {boolean} Returns `true` if `func` has a lazy counterpart, else `false`.
  */
 function isLaziable(func) {
-  var funcName = getFuncName(func);
-  if (!(funcName in LazyWrapper.prototype)) {
+  var funcName = getFuncName(func),
+      other = lodash[funcName];
+
+  if (typeof other != 'function' || !(funcName in LazyWrapper.prototype)) {
     return false;
   }
-  var other = lodash[funcName];
   if (func === other) {
     return true;
   }
@@ -5494,7 +5495,7 @@ var isArguments = require('./isArguments'),
     keys = require('../object/keys');
 
 /**
- * Checks if `value` is empty. A value is considered empty unless it is an
+ * Checks if `value` is empty. A value is considered empty unless it's an
  * `arguments` object, array, string, or jQuery-like collection with a length
  * greater than `0` or an object with own enumerable properties.
  *
@@ -5567,7 +5568,7 @@ var objToString = objectProto.toString;
 function isFunction(value) {
   // The use of `Object#toString` avoids issues with the `typeof` operator
   // in older versions of Chrome and Safari which return 'function' for regexes
-  // and Safari 8 equivalents which return 'object' for typed array constructors.
+  // and Safari 8 which returns 'object' for typed array constructors.
   return isObject(value) && objToString.call(value) == funcTag;
 }
 
@@ -5955,7 +5956,7 @@ var assignWith = require('../internal/assignWith'),
 /**
  * Assigns own enumerable properties of source object(s) to the destination
  * object. Subsequent sources overwrite property assignments of previous sources.
- * If `customizer` is provided it is invoked to produce the assigned values.
+ * If `customizer` is provided it's invoked to produce the assigned values.
  * The `customizer` is bound to `thisArg` and invoked with five arguments:
  * (objectValue, sourceValue, key, object, source).
  *
@@ -6140,7 +6141,7 @@ var baseMerge = require('../internal/baseMerge'),
  * Recursively merges own enumerable properties of the source object(s), that
  * don't resolve to `undefined` into the destination object. Subsequent sources
  * overwrite property assignments of previous sources. If `customizer` is
- * provided it is invoked to produce the merged values of the destination and
+ * provided it's invoked to produce the merged values of the destination and
  * source properties. If `customizer` returns `undefined` merging is handled
  * by the method instead. The `customizer` is bound to `thisArg` and invoked
  * with five arguments: (objectValue, sourceValue, key, object, source).
@@ -6282,7 +6283,7 @@ var baseFlatten = require('../internal/baseFlatten'),
 /**
  * Creates an object composed of the picked `object` properties. Property
  * names may be specified as individual arguments or as arrays of property
- * names. If `predicate` is provided it is invoked for each property of `object`
+ * names. If `predicate` is provided it's invoked for each property of `object`
  * picking the properties `predicate` returns truthy for. The predicate is
  * bound to `thisArg` and invoked with three arguments: (value, key, object).
  *
@@ -8182,9 +8183,9 @@ function SearchResults(state, algoliaResponse) {
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
-    var hierarchicalFacet;
+    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey);
 
-    if (hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey)) {
+    if (hierarchicalFacet) {
       this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
         attribute: facetKey,
         data: facetValueObject,
@@ -9456,6 +9457,6 @@ var requestBuilder = {
 module.exports = requestBuilder;
 
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":134,"lodash/object/merge":149}],166:[function(require,module,exports){
-module.exports="2.2.0"
+module.exports="2.3.0"
 },{}]},{},[1])(1)
 });

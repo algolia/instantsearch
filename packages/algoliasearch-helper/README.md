@@ -47,6 +47,7 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Tags](#tags)
   - [Pagination](#pagination)
   - [Index](#index)
+  - [One time query](#one-time-query)
   - [Query parameters](#query-parameters)
   - [Results format](#results-format)
 
