@@ -994,7 +994,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
         <p class="p3"><span class="s1">string</span></p>
       </td>
       <td valign="top" class="td6">
-        <p class="p4"><span class="s1">Possible values are "lastWords" "firstWords" "allOptionnal" "none" (default)</span></p>
+        <p class="p4"><span class="s1">Possible values are "lastWords" "firstWords" "allOptional" "none" (default)</span></p>
         <p class="p5"><span class="s1"><a href="https://www.algolia.com/doc#removeWordsIfNoResults">removeWordsIfNoResults on Algolia.com<span class="s3"></span></a></span></p>
       </td>
     </tr>
