@@ -325,6 +325,12 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
+
+  forEach(params, function checkForUnknownParameter(paramValue, paramName) {
+    if (!this.hasOwnProperty(paramName)) {
+      console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
+    }
+  }, this);
 }
 
 /**
