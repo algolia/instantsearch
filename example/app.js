@@ -35,4 +35,11 @@ search.addWidget(
   })
 );
 
+search.addWidget(
+  instantsearch.widgets.multipleChoiceList({
+    container: '#brands',
+    facetName: 'brand'
+  })
+);
+
 search.start();

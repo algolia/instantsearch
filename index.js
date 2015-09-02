@@ -3,6 +3,7 @@ module.exports = {
   widgets: {
     searchBox: require('./widgets/search-box/'),
     hits: require('./widgets/hits/'),
-    pagination: require('./widgets/pagination/')
+    pagination: require('./widgets/pagination/'),
+    multipleChoiceList: require('./widgets/multiple-choice-list/')
   }
 };
