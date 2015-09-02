@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
-    "build": "browserify index.js -s algoliasearchHelper -o dist/algoliasearch.helper.js",
-    "minify-build": "uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/algoliasearch.helper.min.js",
+    "build": "./scripts/build.sh",
     "dev": "DEBUG=zuul* zuul --no-coverage --local 8090 test/run.js",
     "dev-coverage": "DEBUG=zuul* zuul --local 8090 test/run.js",
     "lint": "scripts/lint.sh",
@@ -22,7 +21,8 @@
     "test": "scripts/test.sh",
     "test-node": "clear && node test/run",
     "test:watch": "onchange '{src,test}/**/*.js' 'index.js' -- npm run test-node",
-    "jsfmt": "jsfmt"
+    "jsfmt": "jsfmt",
+    "release": "git clean dist/ -f && git checkout dist/ && npm install && ./scripts/release.js && npm run build"
   },
   "gh-pages-deploy": {
     "prep": [
@@ -50,32 +50,34 @@
   "devDependencies": {
     "@algolia/jsfmt": "1.3.0",
     "algoliasearch": "latest",
-    "browserify": "10.2.4",
+    "browserify": "11.0.1",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
-    "doctoc": "0.14.1",
+    "doctoc": "0.15.0",
     "envify": "3.4.0",
-    "eslint": "0.24.0",
-    "eslint-config-airbnb": "0.0.6",
-    "eslint-config-algolia": "2.1.1",
+    "eslint": "1.3.1",
+    "eslint-config-airbnb": "0.0.8",
+    "eslint-config-algolia": "2.1.2",
     "gh-pages-deploy": "0.3.0",
     "http-server": "0.8.0",
-    "jscs": "1.13.1",
     "jsdoc": "bobylito/jsdoc",
     "minami": "algolia/minami",
-    "onchange": "1.0.0",
-    "opn": "1.0.1",
-    "phantomjs": "1.9.17",
-    "sinon": "1.15.4",
-    "tape": "4.0.0",
-    "uglify-js": "2.4.23",
-    "watchify": "3.2.3",
-    "zuul": "3.2.0",
+    "mversion": "1.10.1",
+    "onchange": "2.0.0",
+    "opn": "3.0.2",
+    "phantomjs": "1.9.18",
+    "pretty-bytes": "2.0.1",
+    "semver": "5.0.1",
+    "sinon": "1.16.1",
+    "tape": "4.2.0",
+    "uglify-js": "2.4.24",
+    "watchify": "3.3.1",
+    "zuul": "3.4.0",
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
-    "lodash": "3.10.0",
-    "lodash-compat": "3.10.0"
+    "lodash": "3.10.1",
+    "lodash-compat": "3.10.1"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

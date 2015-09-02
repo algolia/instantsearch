@@ -10,6 +10,8 @@ var trim = require('lodash/string/trim');
 var find = require('lodash/collection/find');
 var pick = require('lodash/object/pick');
 
+var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
+
 function generateTrees(state) {
   return function generate(hierarchicalFacetResult, hierarchicalFacetIndex) {
     var hierarchicalFacet = state.hierarchicalFacets[hierarchicalFacetIndex];
@@ -96,14 +98,4 @@ function formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement) 
       data: null
     };
   };
-}
-
-// ['isRefined:desc', 'count:asc'] => [['isRefined', 'count'], ['desc', 'asc']] (lodash sortByOrder format)
-function prepareHierarchicalFacetSortBy(sortBy) {
-  return reduce(sortBy, function prepare(out, sortInstruction) {
-    var sortInstructions = sortInstruction.split(':');
-    out[0].push(sortInstructions[0]);
-    out[1].push(sortInstructions[1]);
-    return out;
-  }, [[], []]);
 }

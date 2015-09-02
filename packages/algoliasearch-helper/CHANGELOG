@@ -1,5 +1,14 @@
 CHANGELOG
 
+UNRELEASED
+  * FEATURE : #136, fire a 'search' event once a search is sent to Algolia
+  * FEATURE : ability to set multiple OR and AND filters with the numeric
+  filter API
+  * FEATURE : Ability to set the raw numeric filter string
+  * CHORE : #125, events documentation
+  * FIX : semantic of addNumericRefinement indeed add an numeric, does not
+  update anymore
+
 2.2.0 - 2015-07-29
   * FIX: #130 toggleRefine should throw an exception when executed with an
   attribute that is not a declared facet

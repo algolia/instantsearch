@@ -8,7 +8,7 @@ set -x # debug messages
 echo "Browser test"
 
 echo "Browser test: build and minify"
-npm run build && npm run minify-build
+npm run build
 
 echo "Browser test"
 DEBUG=zuul* zuul --no-coverage -- test/run.js

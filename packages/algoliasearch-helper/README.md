@@ -43,6 +43,7 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Events](#events)
   - [Query](#query)
   - [Filtering results](#filtering-results)
+  - [Facet utilities](#facet-utilities)
   - [Tags](#tags)
   - [Pagination](#pagination)
   - [Index](#index)
@@ -76,8 +77,8 @@ helper.on('result', function(data){
   console.log(data.hits);
 });
 
-helper.addDisjunctiveRefine('director', 'Clint Eastword');
-helper.addDisjunctiveRefine('director', 'Sofia Coppola');
+helper.addDisjunctiveFacetRefinement('director', 'Clint Eastword');
+helper.addDisjunctiveFacetRefinement('director', 'Sofia Coppola');
 
 helper.addNumericRefinement('year', '=', 2003);
 
@@ -115,7 +116,7 @@ var helper = algoliasearchHelper(client, 'indexName'/*, parameters*/);
 
 1. modify the parameters of the search (usually through user interactions)<br/>
         ```
-        	helper.setQuery('iphone').addRefine('category', 'phone')
+        	helper.setQuery('iphone').addFacetRefinement('category', 'phone')
         ```
 
 2. trigger the search (after all the modification have been applied)<br/>
@@ -180,6 +181,8 @@ two objects (`SearchResults` and `SearchParameters`).
 
 `change`: get notified when a property has changed in the helper
 
+`search` : get notified when a request is sent to Algolia
+
 #### Listen to the `result` event
 
 ```js
@@ -218,7 +221,9 @@ helper.setQuery('fruit').search();
 
 Facets are filters to retrieve a subset of an index having a specific value for a given attribute. First you need to define which attribute will be used as a facet in the dashboard: [https://www.algolia.com/explorer#?tab=display](https://www.algolia.com/explorer#?tab=display)
 
-#### "AND" facets
+#### Regular (conjunctive) facets
+
+Refinements are ANDed by default (Conjunctive selection).
 
 ##### Facet definition
 
@@ -231,16 +236,18 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Add a facet filter
 
 ```js
-helper.addRefine('ANDFacet', 'valueOfANDFacet').search();
+helper.addFacetRefinement('ANDFacet', 'valueOfANDFacet').search();
 ```
 
 ##### Remove a facet filter
 
 ```js
-helper.removeRefine('ANDFacet', 'valueOfANDFacet').search();
+helper.removeFacetRefinement('ANDFacet', 'valueOfANDFacet').search();
 ```
 
-#### "OR" facets
+#### Disjunctive facets
+
+Refinements are ORed by default (Disjunctive selection).
 
 ##### Facet definition
 
@@ -253,18 +260,18 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Add a facet filter
 
 ```js
-helper.addDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
+helper.addDisjunctiveFacetRefinement('ORFacet', 'valueOfORFacet').search();
 ```
 
 ##### Remove a facet filter
 
 ```js
-helper.removeDisjunctiveRefine('ORFacet', 'valueOfORFacet').search();
+helper.removeDisjunctiveFacetRefinement('ORFacet', 'valueOfORFacet').search();
 ```
 
 #### Negative facets
 
-filter so that we do NOT get a given category
+Filter so that we do NOT get a given facet
 
 ##### Facet definition (same as "AND" facet)
 
@@ -277,13 +284,13 @@ var helper = algoliasearchHelper(client, indexName, {
 ##### Exclude a value for a facet
 
 ```js
-helper.addExclude('ANDFacet', 'valueOfANDFacetToExclude');
+helper.addFacetExclusion('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 ##### Remove an exclude from the list of excluded values
 
 ```js
-helper.removeExclude('ANDFacet', 'valueOfANDFacetToExclude');
+helper.removeFacetExclusion('ANDFacet', 'valueOfANDFacetToExclude');
 ```
 
 #### Numeric facets
@@ -294,20 +301,36 @@ Filter over numeric attributes with math operations like `=`, `>`, `<`, `>=`, `<
 
 ```js
 var helper = algoliasearchHelper(client, indexName, {
-	disjunctiveFacets: ['numericFacet']
+  disjunctiveFacets: ['numericAttribute']
 });
 ```
 
-##### Add a numeric refinement
+##### Add numeric refinements
 
 ```js
-helper.addNumericRefinement('numericFacet', '=', '3').search();
+helper.addNumericRefinement('numericAttribute', '=', '3').search();
+// filter to only the results that match numericAttribute=3
+helper.addNumericRefinement('numericAttribute', '=', '4').search();
+// filter to only the results that match numericAttribute=3 AND numericAttribute=4
+
+// On another numeric with no previous filter
+helper.addNumericRefinement('numericAttribute2', '=', ['42', '56', '37'] ).search();
+// filter to only the results that match numericAttribute=42 OR numericAttribute2=56 OR numericAttribute2=37
 ```
 
 ##### Remove a numeric refinement
 
 ```js
-helper.removeNumericRefinemetn('numericFacet', '=', '3').search();
+helper.removeNumericRefinement('numericAttribute', '=', '3').search();
+```
+
+##### Batch numeric filter removal
+
+```js
+// for the single operator = on numericAttribute
+helper.removeNumericRefinement('numericAttribute', '=').search();
+// for all the refinements on numericAttribute
+helper.removeNumericRefinement('numericAttribute').search();
 ```
 
 #### Hierarchical facets
@@ -356,7 +379,7 @@ Given your objects looks like this:
 And you refine `products`:
 
 ```js
-helper.toggleRefine('products', 'fruits > citrus');
+helper.toggleRefinement('products', 'fruits > citrus');
 ```
 
 You will get a hierarchical presentation of your facet values: a navigation menu
@@ -427,7 +450,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefine('products', 'fruits|citrus');
+helper.toggleRefinement('products', 'fruits|citrus');
 ```
 
 Would mean that your objects look like so:
@@ -476,7 +499,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefine('products', 'fruits|citrus');
+helper.toggleRefinement('products', 'fruits|citrus');
 var breadcrumb = helper.getHierarchicalFacetBreadcrumb('products');
 
 console.log(breadcrumb);
@@ -506,6 +529,44 @@ helper.clearRefinements('ANDFacet').search();
 helper.clearRefinements(function(value, attribute, type) {
   return type === 'exclude' && attribute === 'ANDFacet';
 }).search();
+```
+
+### Facet utilities
+
+#### Get the values of a facet with the default sort
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetValues('age');
+  // It will be ordered : 
+  //  - refined facets first
+  //  - then ordered by number of occurence (bigger count -> higher in the list)
+  //  - then ordered by name (alphabetically)
+});
+```
+
+#### Get the values of a facet with a custom sort
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetValues('age', {sortBy: ['count:asc']});
+  // It will be ordered by number of occurence (lower number => higher position)
+  // Elements that can be sorted : count, name, isRefined
+  // Type of sort : 'asc' for ascending order, 'desc' for descending order
+});
+```
+
+#### Get the facet stats
+
+*This only apply on numeric based facets/attributes.*
+
+```js
+helper.on('result', function(result) {
+  // Get the facet values for the attribute age
+  result.getFacetStats('age');
+});
 ```
 
 ### Tags
@@ -557,7 +618,41 @@ helper.setIndex('index_orderByPrice').search();
 #### Get the current index
 
 ```js
-var currentIndex = helper.state.index;
+var currentIndex = helper.getIndex();
+```
+
+### One time query
+
+Sometime it's convenient to reuse the current search parameters with small changes
+without changing the state stored in the helper. That's why there is a function
+called `searchOnce`. This method does not trigger `change` or `error` events.
+
+In the following, we are using `searchOnce` to fetch only a single element using
+all the other parameters already set in the search parameters.
+
+#### Using searchOnce with a callback
+
+```js
+var state = helper.searchOnce(
+  {hitsPerPage: 1},
+  function(error, content, state) {
+    // if an error occured it will be passed in error, otherwise its value is null
+    // content contains the results formatted as a SearchResults
+    // state is the instance of SearchParameters used for this search
+  });
+```
+
+#### Using searchOnce with a promise
+
+```js
+var state1 = helper.searchOnce({hitsPerPage: 1})
+                   .then(function(res) {
+  // res contains 
+  // {
+  //   content : SearchResults
+  //   state : SearchParameters (the one used for this specific search)
+  // }
+});
 ```
 
 ### Query parameters
