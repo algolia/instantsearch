@@ -1,7 +1,6 @@
 var React = require('react');
 
 var utils = require('../../lib/widgetUtils.js');
-var bind = require('lodash/function/bind');
 
 function searchbox(params) {
   var SearchBox = require('../../components/SearchBox');
@@ -11,8 +10,8 @@ function searchbox(params) {
     init: function(initialState, helper) {
       React.render(
         <SearchBox
-          setQuery={bind(helper.setQuery, helper)}
-          search={bind(helper.search, helper)}
+          setQuery={helper.setQuery.bind(helper)}
+          search={helper.search.bind(helper)}
           placeholder={params.placeholder}
           inputClass={params.cssClass}
         />,
