@@ -10,7 +10,7 @@ class MultipleChoiceList extends React.Component {
     return (
       <ul>
         {facetValues.map(function(facetValue) {
-          return <Template key={facetValue.name} data={facetValue} template={template} />;
+          return <li key={facetValue.name}><Template data={facetValue} template={template} /></li>;
         })}
       </ul>
     );
@@ -23,7 +23,7 @@ MultipleChoiceList.propTypes = {
     React.PropTypes.string,
     React.PropTypes.func
   ]).isRequired,
-  toggleRefine: React.PropTypes.fn
+  toggleRefine: React.PropTypes.func
 };
 
 module.exports = MultipleChoiceList;
