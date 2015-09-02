@@ -1,6 +1,6 @@
 CHANGELOG
 
-UNRELEASED
+2.3.1 - 2015-09-02
   * CHORE: add a console.error() when passing unknown parameters
   * FIX: add offset/length undocumented search parameters
 
