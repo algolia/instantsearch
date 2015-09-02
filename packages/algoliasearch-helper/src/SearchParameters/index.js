@@ -325,6 +325,10 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
+
+  // Undocumented parameters, still needed otherwise we fail
+  this.offset = params.offset;
+  this.length = params.length;
 }
 
 /**
