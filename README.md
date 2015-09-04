@@ -99,6 +99,26 @@ search.addWidget(
 );
 ```
 
+### stats
+
+```html
+<div id="stats"></div>
+```
+
+```javascript
+search.addWidget(
+  instantsearch.widgets.stats({
+    container: '#stats',
+    template: // mustache string or function(stats) with the following keys
+              // nbHits: number,
+              // hasNoResults: boolean
+              // hasOneResult: boolean
+              // hasManyResults: boolean
+              // processingTimeMS: number
+  })
+);
+```
+
 ### pagination
 
 ```html
