@@ -13,9 +13,11 @@ API is unstable. We welcome any idea.
 - [Dev](#dev)
 - [Test](#test)
 - [Available widgets](#available-widgets)
-  - [searchBox](#searchbox)
-  - [pagination](#pagination)
   - [hits](#hits)
+  - [multipleChoiceList](#multiple-choice-list)
+  - [pagination](#pagination)
+  - [searchBox](#searchbox)
+  - [stats](#stats)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
