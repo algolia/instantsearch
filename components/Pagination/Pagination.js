@@ -2,9 +2,9 @@ var React = require('react');
 var forEach = require('lodash/collection/forEach');
 var defaultsDeep = require('lodash/object/defaultsDeep');
 
-var Paginator = require('./Paginator/');
-var PaginationHiddenLink = require('./PaginationHiddenLink/');
-var PaginationLink = require('./PaginationLink/');
+var Paginator = require('./Paginator');
+var PaginationHiddenLink = require('./PaginationHiddenLink');
+var PaginationLink = require('./PaginationLink');
 
 var bem = require('../BemHelper')('as-pagination');
 var cx = require('classnames');

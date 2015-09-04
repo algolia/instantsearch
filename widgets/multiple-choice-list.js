@@ -1,7 +1,7 @@
 var React = require('react');
 var cx = require('classnames');
 
-var utils = require('../../lib/widgetUtils.js');
+var utils = require('../lib/widget-utils.js');
 
 var defaultTemplate = `<label>
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
@@ -27,10 +27,10 @@ function multipleChoiceList({
     cssClass = null,
     template = defaultTemplate
   }) {
-  var usage = 'Usage: multipleChoiceList({container, facetName, operator[sortBy, limit, cssClass, template]})';
+  var MultipleChoiceList = require('../components/MultipleChoiceList');
 
-  var MultipleChoiceList = require('../../components/MultipleChoiceList');
   var containerNode = utils.getContainerNode(container);
+  var usage = 'Usage: multipleChoiceList({container, facetName, operator[sortBy, limit, cssClass, template]})';
 
   if (container === null ||
     facetName === null ||

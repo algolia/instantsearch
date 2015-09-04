@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Template = require('../Template/');
+var Template = require('./Template');
 
 class MultipleChoiceList extends React.Component {
   refine(value) {

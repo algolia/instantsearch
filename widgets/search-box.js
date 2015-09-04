@@ -1,9 +1,10 @@
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils.js');
+var utils = require('../lib/widget-utils.js');
 
 function searchbox(params) {
-  var SearchBox = require('../../components/SearchBox');
+  var SearchBox = require('../components/SearchBox');
+
   var container = utils.getContainerNode(params.container);
 
   return {

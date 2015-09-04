@@ -1,9 +1,10 @@
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils.js');
+var utils = require('../lib/widget-utils.js');
 
 function hits({container = null, templates = {}, hitsPerPage = 20}) {
-  var Hits = require('../../components/Hits');
+  var Hits = require('../components/Hits');
+
   var containerNode = utils.getContainerNode(container);
 
   return {

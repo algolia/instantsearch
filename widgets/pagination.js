@@ -1,9 +1,10 @@
 var React = require('react');
 
-var utils = require('../../lib/widgetUtils.js');
+var utils = require('../lib/widget-utils.js');
 
 function pagination({container, cssClass, labels, maxPages} = {}) {
-  var Pagination = require('../../components/Pagination/');
+  var Pagination = require('../components/Pagination/Pagination.js');
+
   var containerNode = utils.getContainerNode(container);
 
   return {
