@@ -1,5 +1,6 @@
 var React = require('react');
 
+var findIndex = require('lodash/array/findIndex');
 var utils = require('../../lib/widgetUtils.js');
 
 function indexSelector({container = null, indices = null}) {
@@ -12,6 +13,13 @@ function indexSelector({container = null, indices = null}) {
   }
 
   return {
+    init: function(state, helper) {
+      var currentIndex = helper.getIndex();
+      var isIndexInList = findIndex(indices, {'name': currentIndex}) !== -1;
+      if (!isIndexInList) {
+        throw new Error('[stats]: Index ' + currentIndex + ' not present in `indices`');
+      }
+    },
     render: function(results, state, helper) {
       React.render(
         <IndexSelector
