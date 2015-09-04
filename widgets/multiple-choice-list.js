@@ -8,14 +8,17 @@ var defaultTemplate = `<label>
 </label>`;
 
 /**
- * Instantiate a list of refinement based on a facet
+ * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get.
- * @param  {String|String[]} [options.cssClass=null] CSS class(es) for the main `<ul>` wrapper.
+ * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
+ * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
  * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
+ *                                                       to build radio based refinement lists for example.
  * @return {Object}
  */
 function multipleChoiceList({
@@ -24,17 +27,22 @@ function multipleChoiceList({
     operator = null,
     sortBy = ['count:desc'],
     limit = 100,
-    cssClass = null,
-    template = defaultTemplate
+    rootClass = null,
+    itemClass = null,
+    template = defaultTemplate,
+    singleRefine = false
   }) {
   var MultipleChoiceList = require('../components/MultipleChoiceList');
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: multipleChoiceList({container, facetName, operator[sortBy, limit, cssClass, template]})';
+  var usage = 'Usage: multipleChoiceList({container, facetName, operator[sortBy, limit, rootClass, itemClass, template]})';
 
   if (container === null ||
     facetName === null ||
-    operator === null) {
+    // operator is mandatory when multiple refines allowed
+    (operator === null && singleRefine === false) ||
+    // operator is not allowed when single refine enabled
+    (operator !== null && singleRefine === true)) {
     throw new Error(usage);
   }
 
@@ -50,16 +58,26 @@ function multipleChoiceList({
     render: function(results, state, helper) {
       React.render(
         <MultipleChoiceList
-          cssClass={cx(cssClass)}
+          rootClass={cx(rootClass)}
+          itemClass={cx(itemClass)}
           facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
-          search={helper.search.bind(helper)}
           template={template}
-          toggleRefine={helper.toggleRefine.bind(helper, facetName)}
+          toggleRefine={toggleRefine.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode
       );
     }
   };
+}
+
+function toggleRefine(helper, singleRefine, facetName, facetValue) {
+  if (singleRefine) {
+    helper.clearRefinement(facetName);
+  }
+
+  helper
+    .toggleRefine(facetName, facetValue)
+    .search();
 }
 
 module.exports = multipleChoiceList;
