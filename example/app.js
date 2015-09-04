@@ -17,6 +17,12 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.stats({
+    container: '#stats'
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {

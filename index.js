@@ -1,9 +1,10 @@
 module.exports = {
   InstantSearch: require('./lib/InstantSearch'),
   widgets: {
-    searchBox: require('./widgets/search-box/'),
     hits: require('./widgets/hits/'),
+    multipleChoiceList: require('./widgets/multiple-choice-list/'),
     pagination: require('./widgets/pagination/'),
-    multipleChoiceList: require('./widgets/multiple-choice-list/')
+    searchBox: require('./widgets/search-box/'),
+    stats: require('./widgets/stats/')
   }
 };
