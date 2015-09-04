@@ -45,14 +45,13 @@ function multipleChoiceList({
 
   return {
     getConfiguration: () => ({
-      maxValuesPerFacet: limit,
       [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
     }),
     render: function(results, state, helper) {
       React.render(
         <MultipleChoiceList
           cssClass={cx(cssClass)}
-          facetValues={results.getFacetValues(facetName, {sortBy: sortBy})}
+          facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
           search={helper.search.bind(helper)}
           template={template}
           toggleRefine={helper.toggleRefine.bind(helper, facetName)}
