@@ -143,3 +143,37 @@ search.addWidget(
 );
 ```
 
+### multipleChoiceList
+
+#### API
+
+```js
+/**
+ * Instantiate a list of refinement based on a facet
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
+ * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {String} [options.limit=100] How much facet values to get.
+ * @param  {String|String[]} [options.cssClass=null] CSS class(es) for the main `<ul>` wrapper.
+ * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @return {Object}
+ */
+```
+
+
+#### Usage
+
+```html
+<div id="brands"></div>
+```
+
+```js
+search.addWidget(
+  instantsearch.widgets.multipleChoiceList({
+    container: '#brands', 
+    facetName: 'brands',
+    operator: 'or'
+  })
+);
+```
