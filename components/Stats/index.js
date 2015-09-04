@@ -7,6 +7,7 @@ class Stats extends React.Component {
     var template = this.props.template;
     var data = {
       nbHits: this.props.nbHits,
+      isPlural: this.props.nbHits > 1,
       processingTimeMS: this.props.processingTimeMS
     };
 

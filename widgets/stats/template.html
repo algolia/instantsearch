@@ -1,4 +1,4 @@
 <div>
-  {{nbHits}} results
+  {{nbHits}} {{#isPlural}}results{{/isPlural}}{{^isPlural}}result{{/isPlural}}
   <small>found in {{processingTimeMS}}ms</small>
 </div>
