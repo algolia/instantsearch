@@ -3,6 +3,7 @@
 var keys = require('lodash/object/keys');
 var intersection = require('lodash/array/intersection');
 var forEach = require('lodash/collection/forEach');
+var forOwn = require('lodash/object/forOwn');
 var reduce = require('lodash/collection/reduce');
 var filter = require('lodash/collection/filter');
 var omit = require('lodash/object/omit');
@@ -330,7 +331,7 @@ function SearchParameters(newParameters) {
   this.offset = params.offset;
   this.length = params.length;
 
-  forEach(params, function checkForUnknownParameter(paramValue, paramName) {
+  forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
       console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
     }
@@ -1078,15 +1079,15 @@ SearchParameters.prototype = {
   getQueryParams: function getQueryParams() {
     var managedParameters = this.managedParameters;
 
-    // FIXME with lodash
-    return reduce(this, function(memo, value, parameter, parameters) {
-      if (indexOf(managedParameters, parameter) === -1 &&
-        parameters[parameter] !== undefined) {
-        memo[parameter] = value;
-      }
+    var queryParams = {};
 
-      return memo;
-    }, {});
+    forOwn(this, function(paramValue, paramName) {
+      if (indexOf(managedParameters, paramName) === -1 && paramValue !== undefined) {
+        queryParams[paramName] = paramValue;
+      }
+    });
+
+    return queryParams;
   },
   /**
    * Let the user retrieve any parameter value from the SearchParameters
