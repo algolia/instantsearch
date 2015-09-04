@@ -44,7 +44,11 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.multipleChoiceList({
     container: '#brands',
-    facetName: 'brand'
+    facetName: 'brand',
+    operator: 'or',
+    limit: 10,
+    cssClass: 'nav nav-stacked',
+    template: require('./templates/or.html')
   })
 );
 
