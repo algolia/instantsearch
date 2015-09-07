@@ -2,14 +2,14 @@ var React = require('react');
 var cx = require('classnames');
 
 var findIndex = require('lodash/array/findIndex');
-var utils = require('../../lib/widgetUtils.js');
+var utils = require('../lib/widget-utils.js');
 
 function indexSelector({
     container = null,
     cssClass = null,
     indices = null
   }) {
-  var IndexSelector = require('../../components/IndexSelector');
+  var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
 
   var usage = 'Usage: indexSelector({container, indices[, cssClass]})';
