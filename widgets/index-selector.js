@@ -1,18 +1,17 @@
 var React = require('react');
-var cx = require('classnames');
 
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../lib/widget-utils.js');
 
 function indexSelector({
     container = null,
-    cssClass = null,
+    htmlAttributes = {},
     indices = null
   }) {
   var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
 
-  var usage = 'Usage: indexSelector({container, indices[, cssClass]})';
+  var usage = 'Usage: indexSelector({container, indices[, htmlAttributes]})';
   if (container === null || indices === null) {
     throw new Error(usage);
   }
@@ -29,7 +28,7 @@ function indexSelector({
     render: function(results, state, helper) {
       React.render(
         <IndexSelector
-          cssClass={cx(cssClass)}
+          htmlAttributes={htmlAttributes}
           currentIndex={helper.getIndex()}
           indices={indices}
           setIndex={helper.setIndex.bind(helper)}
