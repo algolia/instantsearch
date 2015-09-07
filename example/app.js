@@ -47,8 +47,18 @@ search.addWidget(
     facetName: 'brand',
     operator: 'or',
     limit: 10,
-    cssClass: 'nav nav-stacked',
+    rootClass: 'nav nav-stacked',
     template: require('./templates/or.html')
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.menu({
+    container: '#categories',
+    facetName: 'categories',
+    limit: 10,
+    rootClass: 'list-unstyled',
+    template: require('./templates/category.html')
   })
 );
 

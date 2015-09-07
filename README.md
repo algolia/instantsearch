@@ -171,14 +171,17 @@ search.addWidget(
 
 ```js
 /**
- * Instantiate a list of refinement based on a facet
+ * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get.
- * @param  {String|String[]} [options.cssClass=null] CSS class(es) for the main `<ul>` wrapper.
+ * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
+ * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
  * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
+ *                                                       to build radio based refinement lists for example.
  * @return {Object}
  */
 ```
@@ -196,6 +199,40 @@ search.addWidget(
     container: '#brands', 
     facetName: 'brands',
     operator: 'or'
+  })
+);
+```
+
+### menu
+
+#### API
+
+```js
+/**
+ * Create a menu out of a facet
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {String} [options.limit=100] How much facet values to get.
+ * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
+ * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
+ * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @return {Object}
+ */
+```
+
+
+#### Usage
+
+```html
+<div id="categories"></div>
+```
+
+```js
+search.addWidget(
+  instantsearch.widgets.menu({
+    container: '#categories', 
+    facetName: 'categories'
   })
 );
 ```

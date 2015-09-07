@@ -5,7 +5,6 @@ var Template = require('./Template');
 class MultipleChoiceList extends React.Component {
   refine(value) {
     this.props.toggleRefine(value);
-    this.props.search();
   }
 
   // Click events on DOM tree like LABEL > INPUT will result in two click events
@@ -46,10 +45,10 @@ class MultipleChoiceList extends React.Component {
     var template = this.props.template;
 
     return (
-      <ul className={this.props.cssClass}>
+      <ul className={this.props.rootClass}>
         {facetValues.map(facetValue => {
           return (
-            <li key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
+            <li className={this.props.itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
               <Template data={facetValue} template={template} />
             </li>
           );
@@ -60,12 +59,15 @@ class MultipleChoiceList extends React.Component {
 }
 
 MultipleChoiceList.propTypes = {
-  cssClass: React.PropTypes.oneOfType([
+  rootClass: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.array
+    React.PropTypes.arrayOf(React.PropTypes.string)
+  ]),
+  itemClass: React.PropTypes.oneOfType([
+    React.PropTypes.string,
+    React.PropTypes.arrayOf(React.PropTypes.string)
   ]),
   facetValues: React.PropTypes.array,
-  search: React.PropTypes.func.isRequired,
   template: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.func
