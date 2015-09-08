@@ -145,10 +145,7 @@ search.addWidget(
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
     ],
-    htmlAttributes: {
-      id: 'indexSelectorDropdown',
-      class: 'form-control'
-    }
+    cssClass: 'form-control'
   })
 );
 ```
@@ -158,7 +155,7 @@ search.addWidget(
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
- * @param  {String} [options.htmlAttributes] Object of html attributes to be passed to the generated `select` element
+ * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
  * @return {Object}
  */
 ```

@@ -7,7 +7,7 @@ var utils = require('../lib/widget-utils.js');
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
- * @param  {String} options.cssClass Class name(s) to be added to the generated select element
+ * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
  * @return {Object}
  */
 function indexSelector({
@@ -18,7 +18,7 @@ function indexSelector({
   var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
 
-  var usage = 'Usage: indexSelector({container, indices[, htmlAttributes]})';
+  var usage = 'Usage: indexSelector({container, indices[, cssClass]})';
   if (container === null || indices === null) {
     throw new Error(usage);
   }
