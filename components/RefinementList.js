@@ -4,7 +4,7 @@ var Template = require('./Template');
 
 class RefinementList extends React.Component {
   refine(value) {
-    this.props.toggleRefine(value);
+    this.props.toggleRefinement(value);
   }
 
   // Click events on DOM tree like LABEL > INPUT will result in two click events
@@ -68,7 +68,7 @@ RefinementList.propTypes = {
     React.PropTypes.string,
     React.PropTypes.func
   ]).isRequired,
-  toggleRefine: React.PropTypes.func.isRequired
+  toggleRefinement: React.PropTypes.func.isRequired
 };
 
 module.exports = RefinementList;

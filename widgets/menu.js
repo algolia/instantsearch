@@ -54,7 +54,7 @@ function menu({
           itemClass={cx(itemClass)}
           facetValues={getFacetValues(results, hierarchicalFacetName, sortBy, limit)}
           template={template}
-          toggleRefine={toggleRefine.bind(null, helper, hierarchicalFacetName)}
+          toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode
       );
@@ -62,9 +62,9 @@ function menu({
   };
 }
 
-function toggleRefine(helper, facetName, facetValue) {
+function toggleRefinement(helper, facetName, facetValue) {
   helper
-    .toggleRefine(facetName, facetValue)
+    .toggleRefinement(facetName, facetValue)
     .search();
 }
 

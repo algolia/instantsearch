@@ -76,7 +76,7 @@ function toggleRefine(helper, singleRefine, facetName, facetValue) {
   }
 
   helper
-    .toggleRefine(facetName, facetValue)
+    .toggleRefinement(facetName, facetValue)
     .search();
 }
 
