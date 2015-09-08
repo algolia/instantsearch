@@ -138,7 +138,9 @@ AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function(facet, va
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement;
+AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
+  return this.addDisjunctiveFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Add a numeric refinement on the given attribute
@@ -170,7 +172,9 @@ AlgoliaSearchHelper.prototype.addFacetRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.addRefine = AlgoliaSearchHelper.prototype.addFacetRefinement;
+AlgoliaSearchHelper.prototype.addRefine = function() {
+  return this.addFacetRefinement.apply(this, arguments);
+};
 
 
 /**
@@ -189,7 +193,9 @@ AlgoliaSearchHelper.prototype.addFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.addExclude = AlgoliaSearchHelper.prototype.addFacetExclusion;
+AlgoliaSearchHelper.prototype.addExclude = function() {
+  return this.addFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Add a tag refinement
@@ -233,7 +239,9 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet,
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement;
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
+  return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Ensure a facet refinement does not exist
@@ -251,7 +259,9 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.removeRefine = AlgoliaSearchHelper.prototype.removeFacetRefinement;
+AlgoliaSearchHelper.prototype.removeRefine = function() {
+  return this.removeFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Ensure a facet exclude does not exist
@@ -269,7 +279,9 @@ AlgoliaSearchHelper.prototype.removeFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.removeExclude = AlgoliaSearchHelper.prototype.removeFacetExclusion;
+AlgoliaSearchHelper.prototype.removeExclude = function() {
+  return this.removeFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Ensure that a tag is not filtering the results
@@ -299,7 +311,9 @@ AlgoliaSearchHelper.prototype.toggleFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.toggleExclude = AlgoliaSearchHelper.prototype.toggleFacetExclusion;
+AlgoliaSearchHelper.prototype.toggleExclude = function() {
+  return this.toggleFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Toggle refinement state of a facet
@@ -328,7 +342,9 @@ AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
  */
-AlgoliaSearchHelper.prototype.toggleRefine = AlgoliaSearchHelper.prototype.toggleRefinement;
+AlgoliaSearchHelper.prototype.toggleRefine = function() {
+  return this.toggleRefinement.apply(this, arguments);
+};
 
 /**
  * Toggle tag refinement
@@ -502,7 +518,9 @@ AlgoliaSearchHelper.prototype.hasTag = function(tag) {
 /**
  * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
  */
-AlgoliaSearchHelper.prototype.isTagRefined = AlgoliaSearchHelper.prototype.hasTagRefinements;
+AlgoliaSearchHelper.prototype.isTagRefined = function() {
+  return this.hasTagRefinements.apply(this, arguments);
+};
 
 
 /**
