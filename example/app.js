@@ -53,6 +53,15 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.toggle({
+    container: '#free_shipping',
+    facetName: 'free_shipping',
+    label: 'Free Shipping',
+    template: require('./templates/free_shipping.html')
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.menu({
     container: '#categories',
     facetName: 'categories',
