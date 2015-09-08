@@ -3,6 +3,13 @@ var React = require('react');
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../lib/widget-utils.js');
 
+/**
+ * Instantiate a dropdown element to choose the current targeted index
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
+ * @param  {String} [options.htmlAttributes] Object of html attributes to be passed to the generated `select` element
+ * @return {Object}
+ */
 function indexSelector({
     container = null,
     htmlAttributes = {},
