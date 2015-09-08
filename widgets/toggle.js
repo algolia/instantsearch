@@ -1,11 +1,13 @@
 var React = require('react');
 
 var utils = require('../lib/widget-utils.js');
+var defaultTemplate = '<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>';
 
 function toggle({
     container = null,
     facetName = null,
-    label = null
+    label = null,
+    template = defaultTemplate
   }) {
   var Toggle = require('../components/Toggle');
 
@@ -31,8 +33,9 @@ function toggle({
       React.render(
         <Toggle
           isRefined={isRefined}
-          toggleFilter={toggleFilter}
           label={label}
+          template={template}
+          toggleFilter={toggleFilter}
         />,
         containerNode
       );
