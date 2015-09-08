@@ -23,6 +23,18 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.indexSelector({
+    container: '#index-selector',
+    indices: [
+      {name: 'instant_search', label: 'Most relevant'},
+      {name: 'instant_search_price_asc', label: 'Lowest price'},
+      {name: 'instant_search_price_desc', label: 'Highest price'}
+    ],
+    cssClass: 'form-control'
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {

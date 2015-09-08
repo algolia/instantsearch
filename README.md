@@ -123,6 +123,43 @@ search.addWidget(
 );
 ```
 
+### indexSelector
+
+This widget will let you change the current index being targeted. This is
+especially useful for changing the current sort order. If you need your results
+ordered following a special rule (like price ascending or price descending),
+you'll need several indices. This widget lets you easily change it.
+
+![Example of the indexSelector widget](./docs/index-selector.jpg)
+
+```html
+<div id="index-selector"></div>
+```
+
+```javascript
+search.addWidget(
+  instantsearch.widgets.indexSelector({
+    container: '#index-selector',
+    indices: [
+      {name: 'instant_search', label: 'Most relevant'},
+      {name: 'instant_search_price_asc', label: 'Lowest price'},
+      {name: 'instant_search_price_desc', label: 'Highest price'}
+    ],
+    cssClass: 'form-control'
+  })
+);
+```
+
+```javascript
+/**
+ * Instantiate a dropdown element to choose the current targeted index
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
+ * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
+ * @return {Object}
+ */
+```
+
 ### pagination
 
 ```html
