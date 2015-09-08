@@ -13,11 +13,13 @@ API is unstable. We welcome any idea.
 - [Dev](#dev)
 - [Test](#test)
 - [Available widgets](#available-widgets)
-  - [hits](#hits)
-  - [multipleChoiceList](#multiple-choice-list)
-  - [pagination](#pagination)
   - [searchBox](#searchbox)
   - [stats](#stats)
+  - [pagination](#pagination)
+  - [hits](#hits)
+  - [toggle](#toggle)
+  - [multipleChoiceList](#multiplechoicelist)
+  - [menu](#menu)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -164,6 +166,50 @@ search.addWidget(
   })
 );
 ```
+
+### toggle
+
+This widget is used to add filtering of results on a boolean value. Let's say
+you want to only display elements that are eligible to free shipping. You'll
+just have to instantiate this widget with a `facetName` of `free_shipping` (with
+`free_shipping` being a boolean attribute in your records.
+
+When toggling on this widget, only hits with Free Shipping will be displayed.
+When switching it off, all items will be displayed.
+
+Note that we are not toggling from `true` to `false` here, but from `true` to
+`undefined`.
+
+![Example of the toggle widget in action](./docs/toggle.jpg)
+
+```html
+<div id="free_shipping"></div>
+```
+
+```javascript
+search.addWidget(
+  instantsearch.widgets.toggle({
+    container: '#free_shipping',
+    facetName: 'free_shipping',
+    label: 'Free Shipping',
+    template: '<label><input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}}</label>'
+  })
+);
+```
+
+```javascript
+/**
+ * Instantiate the toggling of a boolean facet filter on and off.
+ * Note that it will not toggle between `true` and `false, but between `true`
+ * and `undefined`.
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
+ * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
+ * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
+ * @return {Object}
+ */
+```
+
 
 ### multipleChoiceList
 
