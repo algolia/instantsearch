@@ -24,20 +24,16 @@ class RefinementList extends React.Component {
     }
 
     var parent = e.target;
-    var checkboxInLabel = false;
 
     while (parent !== e.currentTarget) {
       if (parent.tagName === 'LABEL' && parent.querySelector('input[type="checkbox"]')) {
-        checkboxInLabel = true;
         return;
       }
 
       parent = parent.parentNode;
     }
 
-    if (checkboxInLabel === false) {
-      this.refine(value);
-    }
+    this.refine(value);
   }
 
   render() {
