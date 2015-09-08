@@ -41,15 +41,15 @@ class RefinementList extends React.Component {
     var template = this.props.template;
 
     return (
-      <ul className={this.props.rootClass}>
+      <div className={this.props.rootClass}>
         {facetValues.map(facetValue => {
           return (
-            <li className={this.props.itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
+            <div className={this.props.itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
               <Template data={facetValue} template={template} />
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     );
   }
 }
