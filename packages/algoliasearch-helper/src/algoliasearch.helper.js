@@ -5,6 +5,7 @@ var SearchResults = require('./SearchResults');
 var util = require('util');
 var events = require('events');
 var forEach = require('lodash/collection/forEach');
+var filter = require('lodash/collection/filter');
 var isEmpty = require('lodash/lang/isEmpty');
 var bind = require('lodash/function/bind');
 var map = require('lodash/collection/map');
@@ -415,10 +416,58 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
 
 /**
  * Get the current search state stored in the helper. This object is immutable.
- * @return {SearchParameters}
+ * @param {string[]} [filters] optionnal filters to retrieve only a subset of the state
+ * @return {SearchParameters|object} if filters is specified a plain object is
+ * returned containing only the requested fields
+ * @example
+ * helper.getState(['query', 'attribute:category']);
  */
-AlgoliaSearchHelper.prototype.getState = function() {
-  return this.state;
+AlgoliaSearchHelper.prototype.getState = function(filters) {
+  if(filters===undefined) return this.state;
+
+  var partialState = {};
+  var usedFilters = [];
+  var attributeFilters = filter(filters, function(f){ return f.indexOf('attribute:') !== -1; })
+  var attributes = map(attributeFilters, function(aF){ return aF.split(':')[1]; });
+  if(attributes.indexOf('*') === -1) {
+    forEach(attributes, function(attr) {
+      if(this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)){
+        if(!partialState.facetsRefinements) partialState.facetsRefinements = {} 
+        partialState.facetsRefinements[attr] = this.state.facetsRefinements[attr];
+      }
+
+      if(this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
+        if(!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {} 
+        partialState.disjunctiveFacetsRefinements[attr] = this.state.disjunctiveFacetsRefinements[attr];
+      }
+
+      var numericRefinements = this.state.getNumericRefinements(attr);
+      if(!isEmpty(numericRefinements)) {
+        if(!partialState.numericRefinements) partialState.numericRefinements = {};
+        partialState.numericRefinements[attr] = this.state.numericRefinements[attr];
+      }
+    }, this);
+  } else {
+    if(!isEmpty(this.state.numericRefinements))
+      partialState.numericRefinements = this.state.numericRefinements;
+    if(!isEmpty(this.state.facetsRefinements))
+      partialState.facetsRefinements = this.state.facetsRefinements;
+    if(!isEmpty(this.state.disjunctiveFacetsRefinements))
+      partialState.disjunctiveFacetsRefinements = this.state.disjunctiveFacetsRefinements;
+    if(!isEmpty(this.state.hierarchicalFacetsRefinements))
+      partialState.hierarchicalFacetsRefinements = this.state.hierarchicalFacetsRefinements;
+  }
+
+  if(filters.indexOf('index') !== -1) {
+    partialState.index = this.index; 
+  }
+
+  var searchParameters = filter(filters, function(f){ return f !== 'index' && f.indexOf('attribute:')===-1; });
+  forEach(searchParameters, function(parameterKey) {
+    partialState[parameterKey] = this.state[parameterKey];
+  }, this);
+
+  return partialState;
 };
 
 /**
