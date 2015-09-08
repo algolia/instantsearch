@@ -474,19 +474,27 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
 };
 
 /**
- * Check if the attribute has any numeric, disjunctive or conjunctive refinements
+ * Check if the attribute has any numeric, conjunctive, disjunctive or hierarchical refinements
  * @param {string} attribute the name of the attribute
  * @return {boolean} true if the attribute is filtered by at least one value
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function(attribute) {
-  var attributeHasNumericRefinements = !isEmpty(this.state.getNumericRefinements(attribute));
-  var isFacetDeclared = this.state.isConjunctiveFacet(attribute) || this.state.isDisjunctiveFacet(attribute);
-
-  if (!attributeHasNumericRefinements && isFacetDeclared) {
+  if (!isEmpty(this.state.getNumericRefinements(attribute))) {
+    return true;
+  } else if (this.state.isConjunctiveFacet(attribute)) {
     return this.state.isFacetRefined(attribute);
+  } else if (this.state.isDisjunctiveFacet(attribute)) {
+    return this.state.isDisjunctiveFacetRefined(attribute);
+  } else if (this.state.isHierarchicalFacet(attribute)) {
+    return this.state.isHierarchicalFacetRefined(attribute);
   }
 
-  return attributeHasNumericRefinements;
+  // there's currently no way to know that the user did call `addNumericRefinement` at some point
+  // thus we cannot distinguish if there once was a numeric refinement that was cleared
+  // so we will return false in every other situations to be consistent
+  // while what we should do here is throw because we did not find the attribute in any type
+  // of refinement
+  return false;
 };
 
 /**
