@@ -21,7 +21,7 @@ var defaultTemplate = `<label>
  *                                                       to build radio based refinement lists for example.
  * @return {Object}
  */
-function multipleChoiceList({
+function refinementList({
     container = null,
     facetName = null,
     operator = null,
@@ -32,10 +32,10 @@ function multipleChoiceList({
     template = defaultTemplate,
     singleRefine = false
   }) {
-  var MultipleChoiceList = require('../components/MultipleChoiceList');
+  var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: multipleChoiceList({container, facetName, operator[sortBy, limit, rootClass, itemClass, template]})';
+  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, template]})';
 
   if (container === null ||
     facetName === null ||
@@ -57,7 +57,7 @@ function multipleChoiceList({
     }),
     render: function(results, state, helper) {
       React.render(
-        <MultipleChoiceList
+        <RefinementList
           rootClass={cx(rootClass)}
           itemClass={cx(itemClass)}
           facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
@@ -80,4 +80,4 @@ function toggleRefine(helper, singleRefine, facetName, facetValue) {
     .search();
 }
 
-module.exports = multipleChoiceList;
+module.exports = refinementList;

@@ -29,7 +29,7 @@ function menu({
   }) {
   hierarchicalCounter++;
 
-  var MultipleChoiceList = require('../components/MultipleChoiceList');
+  var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, template]})';
@@ -49,7 +49,7 @@ function menu({
     }),
     render: function(results, state, helper) {
       React.render(
-        <MultipleChoiceList
+        <RefinementList
           rootClass={cx(rootClass)}
           itemClass={cx(itemClass)}
           facetValues={getFacetValues(results, hierarchicalFacetName, sortBy, limit)}

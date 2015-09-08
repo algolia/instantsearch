@@ -4,7 +4,7 @@ module.exports = {
     hits: require('./widgets/hits'),
     indexSelector: require('./widgets/index-selector'),
     menu: require('./widgets/menu'),
-    multipleChoiceList: require('./widgets/multiple-choice-list'),
+    refinementList: require('./widgets/refinement-list'),
     pagination: require('./widgets/pagination'),
     searchBox: require('./widgets/search-box'),
     stats: require('./widgets/stats'),

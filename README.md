@@ -18,7 +18,7 @@ API is unstable. We welcome any idea.
   - [pagination](#pagination)
   - [hits](#hits)
   - [toggle](#toggle)
-  - [multipleChoiceList](#multiplechoicelist)
+  - [refinementList](#refinementlist)
   - [menu](#menu)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -248,7 +248,7 @@ search.addWidget(
 ```
 
 
-### multipleChoiceList
+### refinementList
 
 #### API
 
@@ -278,7 +278,7 @@ search.addWidget(
 
 ```js
 search.addWidget(
-  instantsearch.widgets.multipleChoiceList({
+  instantsearch.widgets.refinementList({
     container: '#brands', 
     facetName: 'brands',
     operator: 'or'
