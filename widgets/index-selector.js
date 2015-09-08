@@ -7,12 +7,12 @@ var utils = require('../lib/widget-utils.js');
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
- * @param  {String} [options.htmlAttributes] Object of html attributes to be passed to the generated `select` element
+ * @param  {String} options.cssClass Class name(s) to be added to the generated select element
  * @return {Object}
  */
 function indexSelector({
     container = null,
-    htmlAttributes = {},
+    cssClass = {},
     indices = null
   }) {
   var IndexSelector = require('../components/IndexSelector');
@@ -33,9 +33,11 @@ function indexSelector({
     },
 
     render: function(results, state, helper) {
+      var containerId = containerNode.id;
       React.render(
         <IndexSelector
-          htmlAttributes={htmlAttributes}
+          containerId={containerId}
+          cssClass={cssClass}
           currentIndex={helper.getIndex()}
           indices={indices}
           setIndex={helper.setIndex.bind(helper)}

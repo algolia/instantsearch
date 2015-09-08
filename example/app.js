@@ -30,10 +30,7 @@ search.addWidget(
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
     ],
-    htmlAttributes: {
-      id: 'indexSelectorDropdown',
-      class: 'form-control'
-    }
+    cssClass: 'form-control'
   })
 );
 

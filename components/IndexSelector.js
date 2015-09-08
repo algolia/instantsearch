@@ -8,16 +8,13 @@ class IndexSelector extends React.Component {
   render() {
     var currentIndex = this.props.currentIndex;
     var indices = this.props.indices;
-    var htmlAttributes = this.props.htmlAttributes;
-    // React needs `className` in place of `class`
-    if (htmlAttributes.class) {
-      htmlAttributes.className = htmlAttributes.class;
-      htmlAttributes.class = null;
-    }
+    var cssClass = this.props.cssClass;
+    var selectId = this.props.containerId + '-select';
 
     return (
       <select
-        {...htmlAttributes}
+        id={selectId}
+        className={cssClass}
         onChange={this.handleChange.bind(this)}
         value={currentIndex}
       >
@@ -30,8 +27,9 @@ class IndexSelector extends React.Component {
 }
 
 IndexSelector.propTypes = {
+  containerId: React.PropTypes.string,
+  cssClass: React.PropTypes.string,
   currentIndex: React.PropTypes.string,
-  htmlAttributes: React.PropTypes.object,
   indices: React.PropTypes.array,
   setIndex: React.PropTypes.func
 };
