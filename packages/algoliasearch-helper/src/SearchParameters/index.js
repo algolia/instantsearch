@@ -630,7 +630,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters.OperatorList[]} list of refinements
    */
   getNumericRefinements: function(facetName) {
-    return this.numericRefinements[facetName] || [];
+    return this.numericRefinements[facetName] || {};
   },
   /**
    * Return the current refinement for the (attribute, operator)
