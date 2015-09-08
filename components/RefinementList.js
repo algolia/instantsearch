@@ -2,7 +2,7 @@ var React = require('react');
 
 var Template = require('./Template');
 
-class MultipleChoiceList extends React.Component {
+class RefinementList extends React.Component {
   refine(value) {
     this.props.toggleRefine(value);
   }
@@ -58,7 +58,7 @@ class MultipleChoiceList extends React.Component {
   }
 }
 
-MultipleChoiceList.propTypes = {
+RefinementList.propTypes = {
   rootClass: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.arrayOf(React.PropTypes.string)
@@ -75,4 +75,4 @@ MultipleChoiceList.propTypes = {
   toggleRefine: React.PropTypes.func.isRequired
 };
 
-module.exports = MultipleChoiceList;
+module.exports = RefinementList;

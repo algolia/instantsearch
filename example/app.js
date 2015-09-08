@@ -54,7 +54,7 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.multipleChoiceList({
+  instantsearch.widgets.refinementList({
     container: '#brands',
     facetName: 'brand',
     operator: 'or',
