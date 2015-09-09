@@ -29,7 +29,7 @@ test('InstantSearch', function(t) {
   };
 
   var InstantSearch = proxyquire('../lib/InstantSearch', {
-    'algoliasearch': algoliasearch,
+    algoliasearch: algoliasearch,
     'algoliasearch-helper': algoliasearchHelper
   });
 

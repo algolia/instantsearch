@@ -26,7 +26,7 @@ function indexSelector({
   return {
     init: function(state, helper) {
       var currentIndex = helper.getIndex();
-      var isIndexInList = findIndex(indices, {'name': currentIndex}) !== -1;
+      var isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {
         throw new Error('[stats]: Index ' + currentIndex + ' not present in `indices`');
       }
