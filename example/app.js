@@ -78,7 +78,6 @@ search.addWidget(
     container: '#categories',
     facetName: 'categories',
     limit: 10,
-    rootClass: 'list-unstyled',
     template: require('./templates/category.html')
   })
 );
