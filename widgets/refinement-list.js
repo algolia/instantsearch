@@ -62,7 +62,7 @@ function refinementList({
           itemClass={cx(itemClass)}
           facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
           template={template}
-          toggleRefine={toggleRefine.bind(null, helper, singleRefine, facetName)}
+          toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode
       );
@@ -70,7 +70,7 @@ function refinementList({
   };
 }
 
-function toggleRefine(helper, singleRefine, facetName, facetValue) {
+function toggleRefinement(helper, singleRefine, facetName, facetValue) {
   if (singleRefine) {
     helper.clearRefinement(facetName);
   }
