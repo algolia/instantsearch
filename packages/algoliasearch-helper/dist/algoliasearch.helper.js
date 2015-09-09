@@ -7302,7 +7302,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters.OperatorList[]} list of refinements
    */
   getNumericRefinements: function(facetName) {
-    return this.numericRefinements[facetName] || [];
+    return this.numericRefinements[facetName] || {};
   },
   /**
    * Return the current refinement for the (attribute, operator)
@@ -7667,6 +7667,28 @@ SearchParameters.prototype = {
       throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
+  },
+  /**
+   * Returns true if the facet contains a refinement, or if a value passed is a
+   * refinement for the facet.
+   * @method
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value optionnal, will test if the value is used for refinement
+   * if there is one, otherwise will test if the facet contains any refinement
+   * @return {boolean}
+   */
+  isHierarchicalFacetRefined: function isHierarchicalFacetRefined(facet, value) {
+    if (!this.isHierarchicalFacet(facet)) {
+      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+    }
+
+    var refinements = this.getHierarchicalRefinement(facet);
+
+    if (!value) {
+      return refinements.length > 0;
+    }
+
+    return indexOf(refinements, value) !== -1;
   },
   /**
    * Test if the triple (attribute, operator, value) is already refined.
@@ -8657,7 +8679,9 @@ AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement = function(facet, va
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addDisjunctiveFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.addDisjunctiveRefine = AlgoliaSearchHelper.prototype.addDisjunctiveFacetRefinement;
+AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
+  return this.addDisjunctiveFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Add a numeric refinement on the given attribute
@@ -8689,7 +8713,9 @@ AlgoliaSearchHelper.prototype.addFacetRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.addRefine = AlgoliaSearchHelper.prototype.addFacetRefinement;
+AlgoliaSearchHelper.prototype.addRefine = function() {
+  return this.addFacetRefinement.apply(this, arguments);
+};
 
 
 /**
@@ -8708,7 +8734,9 @@ AlgoliaSearchHelper.prototype.addFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#addFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.addExclude = AlgoliaSearchHelper.prototype.addFacetExclusion;
+AlgoliaSearchHelper.prototype.addExclude = function() {
+  return this.addFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Add a tag refinement
@@ -8752,7 +8780,9 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet,
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeDisjunctiveFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement;
+AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
+  return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Ensure a facet refinement does not exist
@@ -8770,7 +8800,9 @@ AlgoliaSearchHelper.prototype.removeFacetRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetRefinement}
  */
-AlgoliaSearchHelper.prototype.removeRefine = AlgoliaSearchHelper.prototype.removeFacetRefinement;
+AlgoliaSearchHelper.prototype.removeRefine = function() {
+  return this.removeFacetRefinement.apply(this, arguments);
+};
 
 /**
  * Ensure a facet exclude does not exist
@@ -8788,7 +8820,9 @@ AlgoliaSearchHelper.prototype.removeFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#removeFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.removeExclude = AlgoliaSearchHelper.prototype.removeFacetExclusion;
+AlgoliaSearchHelper.prototype.removeExclude = function() {
+  return this.removeFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Ensure that a tag is not filtering the results
@@ -8818,7 +8852,9 @@ AlgoliaSearchHelper.prototype.toggleFacetExclusion = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetExclusion}
  */
-AlgoliaSearchHelper.prototype.toggleExclude = AlgoliaSearchHelper.prototype.toggleFacetExclusion;
+AlgoliaSearchHelper.prototype.toggleExclude = function() {
+  return this.toggleFacetExclusion.apply(this, arguments);
+};
 
 /**
  * Toggle refinement state of a facet
@@ -8847,7 +8883,9 @@ AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
 /**
  * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
  */
-AlgoliaSearchHelper.prototype.toggleRefine = AlgoliaSearchHelper.prototype.toggleRefinement;
+AlgoliaSearchHelper.prototype.toggleRefine = function() {
+  return this.toggleRefinement.apply(this, arguments);
+};
 
 /**
  * Toggle tag refinement
@@ -8977,19 +9015,27 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
 };
 
 /**
- * Check if the attribute has any numeric, disjunctive or conjunctive refinements
+ * Check if the attribute has any numeric, conjunctive, disjunctive or hierarchical refinements
  * @param {string} attribute the name of the attribute
  * @return {boolean} true if the attribute is filtered by at least one value
  */
 AlgoliaSearchHelper.prototype.hasRefinements = function(attribute) {
-  var attributeHasNumericRefinements = !isEmpty(this.state.getNumericRefinements(attribute));
-  var isFacetDeclared = this.state.isConjunctiveFacet(attribute) || this.state.isDisjunctiveFacet(attribute);
-
-  if (!attributeHasNumericRefinements && isFacetDeclared) {
+  if (!isEmpty(this.state.getNumericRefinements(attribute))) {
+    return true;
+  } else if (this.state.isConjunctiveFacet(attribute)) {
     return this.state.isFacetRefined(attribute);
+  } else if (this.state.isDisjunctiveFacet(attribute)) {
+    return this.state.isDisjunctiveFacetRefined(attribute);
+  } else if (this.state.isHierarchicalFacet(attribute)) {
+    return this.state.isHierarchicalFacetRefined(attribute);
   }
 
-  return attributeHasNumericRefinements;
+  // there's currently no way to know that the user did call `addNumericRefinement` at some point
+  // thus we cannot distinguish if there once was a numeric refinement that was cleared
+  // so we will return false in every other situations to be consistent
+  // while what we should do here is throw because we did not find the attribute in any type
+  // of refinement
+  return false;
 };
 
 /**
@@ -9021,7 +9067,9 @@ AlgoliaSearchHelper.prototype.hasTag = function(tag) {
 /**
  * @deprecated since 2.4.0, see {@link AlgoliaSearchHelper#hasTag}
  */
-AlgoliaSearchHelper.prototype.isTagRefined = AlgoliaSearchHelper.prototype.hasTagRefinements;
+AlgoliaSearchHelper.prototype.isTagRefined = function() {
+  return this.hasTagRefinements.apply(this, arguments);
+};
 
 
 /**
@@ -9524,6 +9572,6 @@ var requestBuilder = {
 module.exports = requestBuilder;
 
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":135,"lodash/object/merge":151}],168:[function(require,module,exports){
-module.exports="2.3.2"
+module.exports="2.3.3"
 },{}]},{},[1])(1)
 });
