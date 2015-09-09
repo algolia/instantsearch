@@ -87,7 +87,18 @@ npm run test:coverage
 
 ## Available widgets
 
+[searchBox]: ./widgets-screenshots/search-box.png
+[stats]: ./widgets-screenshots/stats.png
+[indexSelector]: ./widgets-screenshots/index-selector.png
+[pagination]: ./widgets-screenshots/pagination.png
+[hits]: ./widgets-screenshots/hits.png
+[toggle]: ./widgets-screenshots/toggle.png
+[refinementList]: ./widgets-screenshots/refinement-list.png
+[menu]: ./widgets-screenshots/menu.png
+
 ### searchBox
+
+![Example of the searchBox widget][searchBox]
 
 ```html
 <div id="search-box"></div>
@@ -104,6 +115,8 @@ search.addWidget(
 ```
 
 ### stats
+
+![Example of the stats widget][stats]
 
 ```html
 <div id="stats"></div>
@@ -125,12 +138,12 @@ search.addWidget(
 
 ### indexSelector
 
+![Example of the indexSelector widget][indexSelector]
+
 This widget will let you change the current index being targeted. This is
 especially useful for changing the current sort order. If you need your results
 ordered following a special rule (like price ascending or price descending),
 you'll need several indices. This widget lets you easily change it.
-
-![Example of the indexSelector widget](./docs/index-selector.jpg)
 
 ```html
 <div id="index-selector"></div>
@@ -162,6 +175,8 @@ search.addWidget(
 
 ### pagination
 
+![Example of the pagination widget][pagination]
+
 ```html
 <div id="pagination"></div>
 ```
@@ -186,6 +201,8 @@ search.addWidget(
 
 ### hits
 
+![Example of the hits widget][hits]
+
 ```html
 <div id="hits"></div>
 ```
@@ -206,6 +223,8 @@ search.addWidget(
 
 ### toggle
 
+![Example of the toggle widget][toggle]
+
 This widget is used to add filtering of results on a boolean value. Let's say
 you want to only display elements that are eligible to free shipping. You'll
 just have to instantiate this widget with a `facetName` of `free_shipping` (with
@@ -216,8 +235,6 @@ When switching it off, all items will be displayed.
 
 Note that we are not toggling from `true` to `false` here, but from `true` to
 `undefined`.
-
-![Example of the toggle widget in action](./docs/toggle.jpg)
 
 ```html
 <div id="free_shipping"></div>
@@ -249,6 +266,8 @@ search.addWidget(
 
 
 ### refinementList
+
+![Example of the refinementList widget][refinementList]
 
 #### API
 
@@ -287,6 +306,8 @@ search.addWidget(
 ```
 
 ### menu
+
+![Example of the menu widget][menu]
 
 #### API
 
