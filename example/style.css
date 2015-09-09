@@ -80,3 +80,7 @@ body {
 .ais-toggle--label {
   display: block;
 }
+
+.fixed-input-sm {
+  width: 65px !important;
+}

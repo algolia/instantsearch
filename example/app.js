@@ -167,8 +167,24 @@ search.addWidget(
   })
 );
 
+
 search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
+
+search.addWidget(
+  instantsearch.widgets.priceRanges({
+    container: '#price_ranges',
+    facetName: 'price',
+    cssClasses: {
+      root: 'nav nav-stacked',
+      range: 'list-group-item',
+      inputGroup: 'list-group-item form-inline',
+      input: 'form-control input-sm fixed-input-sm',
+      button: 'btn btn-default btn-sm'
+    },
+    template: require('./templates/price_range.html')
+  })
+);
 
 search.start();
