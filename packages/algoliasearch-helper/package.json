@@ -77,7 +77,8 @@
   },
   "dependencies": {
     "lodash": "3.10.1",
-    "lodash-compat": "3.10.1"
+    "lodash-compat": "3.10.1",
+    "qs": "5.0.0"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

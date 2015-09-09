@@ -2,15 +2,21 @@
 
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
+var requestBuilder = require('./requestBuilder');
+
 var util = require('util');
 var events = require('events');
+
 var forEach = require('lodash/collection/forEach');
 var filter = require('lodash/collection/filter');
-var isEmpty = require('lodash/lang/isEmpty');
-var bind = require('lodash/function/bind');
 var map = require('lodash/collection/map');
+var bind = require('lodash/function/bind');
+var isEmpty = require('lodash/lang/isEmpty');
+var merge = require('lodash/object/merge');
+var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
-var requestBuilder = require('./requestBuilder');
+
+var qs = require('qs');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -18,13 +24,17 @@ var requestBuilder = require('./requestBuilder');
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
  * search. It provides an event based interface for search callbacks:
  *  - change: when the internal search state is changed.
- *    This event contains a {@link SearchParameters} object and the {@link SearchResults} of the last result if any.
+ *    This event contains a {@link SearchParameters} object and the
+ *    {@link SearchResults} of the last result if any.
  *  - result: when the response is retrieved from Algolia and is processed.
- *    This event contains a {@link SearchResults} object and the {@link SearchParameters} corresponding to this answer.
+ *    This event contains a {@link SearchResults} object and the
+ *    {@link SearchParameters} corresponding to this answer.
  *  - error: when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParameters}, just an object containing the properties you need from it.
+ * @param  {SearchParameters | object} options an object defining the initial
+ * config of the search. It doesn't have to be a {SearchParameters},
+ * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
   this.client = client;
@@ -102,7 +112,7 @@ AlgoliaSearchHelper.prototype.setQuery = function(q) {
 
 /**
  * Remove all refinements (disjunctive + conjunctive + hierarchical + excludes + numeric filters)
- * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
+ * @param {string} [name] optional name of the facet / attribute on which we want to remove all refinements
  * @return {AlgoliaSearchHelper}
  * @fires change
  */
@@ -423,51 +433,98 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
  * helper.getState(['query', 'attribute:category']);
  */
 AlgoliaSearchHelper.prototype.getState = function(filters) {
-  if(filters===undefined) return this.state;
+  if (filters === undefined) return this.state;
 
   var partialState = {};
-  var usedFilters = [];
-  var attributeFilters = filter(filters, function(f){ return f.indexOf('attribute:') !== -1; })
-  var attributes = map(attributeFilters, function(aF){ return aF.split(':')[1]; });
-  if(attributes.indexOf('*') === -1) {
+  var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
+  var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
+  if (attributes.indexOf('*') === -1) {
     forEach(attributes, function(attr) {
-      if(this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)){
-        if(!partialState.facetsRefinements) partialState.facetsRefinements = {} 
+      if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
+        if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
         partialState.facetsRefinements[attr] = this.state.facetsRefinements[attr];
       }
 
-      if(this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
-        if(!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {} 
+      if (this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
+        if (!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {};
         partialState.disjunctiveFacetsRefinements[attr] = this.state.disjunctiveFacetsRefinements[attr];
       }
 
       var numericRefinements = this.state.getNumericRefinements(attr);
-      if(!isEmpty(numericRefinements)) {
-        if(!partialState.numericRefinements) partialState.numericRefinements = {};
+      if (!isEmpty(numericRefinements)) {
+        if (!partialState.numericRefinements) partialState.numericRefinements = {};
         partialState.numericRefinements[attr] = this.state.numericRefinements[attr];
       }
     }, this);
   } else {
-    if(!isEmpty(this.state.numericRefinements))
+    if (!isEmpty(this.state.numericRefinements)) {
       partialState.numericRefinements = this.state.numericRefinements;
-    if(!isEmpty(this.state.facetsRefinements))
-      partialState.facetsRefinements = this.state.facetsRefinements;
-    if(!isEmpty(this.state.disjunctiveFacetsRefinements))
+    }
+    if (!isEmpty(this.state.facetsRefinements)) partialState.facetsRefinements = this.state.facetsRefinements;
+    if (!isEmpty(this.state.disjunctiveFacetsRefinements)) {
       partialState.disjunctiveFacetsRefinements = this.state.disjunctiveFacetsRefinements;
-    if(!isEmpty(this.state.hierarchicalFacetsRefinements))
+    }
+    if (!isEmpty(this.state.hierarchicalFacetsRefinements)) {
       partialState.hierarchicalFacetsRefinements = this.state.hierarchicalFacetsRefinements;
+    }
   }
 
-  if(filters.indexOf('index') !== -1) {
-    partialState.index = this.index; 
+  if (filters.indexOf('index') !== -1) {
+    partialState.index = this.index;
   }
 
-  var searchParameters = filter(filters, function(f){ return f !== 'index' && f.indexOf('attribute:')===-1; });
+  var searchParameters = filter(
+    filters,
+    function(f) { return f !== 'index' && f.indexOf('attribute:') === -1; });
   forEach(searchParameters, function(parameterKey) {
     partialState[parameterKey] = this.state[parameterKey];
   }, this);
 
   return partialState;
+};
+
+/**
+ * Get part of the
+ */
+AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(filters, options) {
+  var moreAttributes = options && options.moreAttributes;
+  // var prefixForParameters = options && options.prefix || '';
+
+  var filtersOrDefault = filters ? filters : ['query', 'attribute:*'];
+  var partialState = this.getState(filtersOrDefault);
+  if (moreAttributes) merge(partialState, moreAttributes);
+
+  return qs.stringify(partialState);
+};
+
+AlgoliaSearchHelper.prototype.setStateAsQueryString = function setStateAsQueryString(queryString, options) {
+  // var prefixForParameters = options && options.prefix || '';
+  var triggerChange = options && options.triggerChange || false;
+
+  var partialState = qs.parse(queryString);
+  var index = partialState.index;
+  if (index) {
+    this.setIndex(index);
+  }
+
+  if (partialState.numericRefinements) {
+    var numericRefinements = {};
+    forEach(partialState.numericRefinements, function(operators, attribute) {
+      numericRefinements[attribute] = {};
+      forEach(operators, function(values, operator) {
+        var parsedValues = map(values, function(v) {
+          return parseFloat(v);
+        });
+        numericRefinements[attribute][operator] = parsedValues;
+      });
+    });
+    partialState.numericRefinements = numericRefinements;
+  }
+
+  var state = this.state.setQueryParameters(pick(partialState, SearchParameters.PARAMETERS));
+
+  if (triggerChange) this.setState(state);
+  else this.overrideStateWithoutTriggeringChangeEvent(state);
 };
 
 /**

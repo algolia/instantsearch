@@ -338,6 +338,8 @@ function SearchParameters(newParameters) {
   }, this);
 }
 
+SearchParameters.PARAMETERS = keys(new SearchParameters());
+
 /**
  * Factory for SearchParameters
  * @param {object|SearchParameters} newParameters existing parameters or partial
