@@ -13,6 +13,7 @@ var map = require('lodash/collection/map');
 var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
 var merge = require('lodash/object/merge');
+var mapKeys = require('lodash/object/mapKeys');
 var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
 
@@ -488,20 +489,33 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
  */
 AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(filters, options) {
   var moreAttributes = options && options.moreAttributes;
-  // var prefixForParameters = options && options.prefix || '';
+  var prefixForParameters = options && options.prefix;
 
   var filtersOrDefault = filters ? filters : ['query', 'attribute:*'];
   var partialState = this.getState(filtersOrDefault);
-  if (moreAttributes) merge(partialState, moreAttributes);
+  var partialStateWithPrefix = prefixForParameters ?
+    mapKeys(
+      partialState,
+      function(v, k) { return prefixForParameters + k; }) :
+    partialState;
 
-  return qs.stringify(partialState);
+  if (moreAttributes) merge(partialStateWithPrefix, moreAttributes);
+
+  return qs.stringify(partialStateWithPrefix);
 };
 
 AlgoliaSearchHelper.prototype.setStateAsQueryString = function setStateAsQueryString(queryString, options) {
-  // var prefixForParameters = options && options.prefix || '';
+  var prefixForParameters = options && options.prefix || '';
   var triggerChange = options && options.triggerChange || false;
 
-  var partialState = qs.parse(queryString);
+  var partialStateWithPrefix = qs.parse(queryString);
+  var partialState = mapKeys(
+    partialStateWithPrefix,
+    function(v, k) {
+      if (k.indexOf(prefixForParameters) === 0) return k.replace(prefixForParameters, '');
+      return k;
+    }
+  );
   var index = partialState.index;
   if (index) {
     this.setIndex(index);

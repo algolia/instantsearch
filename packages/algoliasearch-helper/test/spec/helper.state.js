@@ -208,3 +208,118 @@ test('Set the state with a query parameter with unknown querystring attributes',
     'Index should be equal');
   t.end();
 });
+
+test('Serialize with prefix', function(t) {
+  var initialState = {
+    facets: ['facetA', 'facetWeDontCareAbout'],
+    disjunctiveFacets: ['facetB']
+  };
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, initialState);
+
+  helper.setQuery('a query');
+  helper.toggleRefine('facetA', 'a');
+  helper.toggleRefine('facetWeDontCareAbout', 'v');
+  helper.toggleRefine('facetB', 'd');
+  // Here we add the number as strings (which is correct but not orthodox)
+  // because the parser will return string values...
+  helper.addNumericRefinement('numerical', '=', '3');
+  helper.addNumericRefinement('numerical2', '<=', '3');
+
+  var filters = ['query', 'attribute:*', 'index'];
+  var prefix = 'toto_';
+
+  var qString = helper.getStateAsQueryString(filters, {prefix: prefix});
+  var parsedQs = qs.parse(qString);
+
+  t.deepEquals(
+    parsedQs,
+    {
+      toto_facetsRefinements: helper.state.facetsRefinements,
+      toto_disjunctiveFacetsRefinements: helper.state.disjunctiveFacetsRefinements,
+      toto_numericRefinements: helper.state.numericRefinements,
+      toto_query: helper.state.query,
+      toto_index: index
+    },
+    'deserialized qs with prefix should be equal to the state with prefix');
+
+  t.end();
+});
+
+test('Serialize with prefix, this should have no impact on user provided paramaters', function(t) {
+  var initialState = {
+    facets: ['facetA', 'facetWeDontCareAbout'],
+    disjunctiveFacets: ['facetB']
+  };
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, initialState);
+
+  helper.setQuery('a query');
+  helper.toggleRefine('facetA', 'a');
+  helper.toggleRefine('facetWeDontCareAbout', 'v');
+  helper.toggleRefine('facetB', 'd');
+  // Here we add the number as strings (which is correct but not orthodox)
+  // because the parser will return string values...
+  helper.addNumericRefinement('numerical', '=', '3');
+  helper.addNumericRefinement('numerical2', '<=', '3');
+
+  var filters = ['query', 'attribute:*'];
+  var prefix = 'toto_';
+
+  var qString = helper.getStateAsQueryString(
+    filters,
+    {
+      prefix: prefix,
+      moreAttributes: {
+        toto: 'tata',
+        foo: 'bar'
+      }
+    }
+  );
+  var parsedQs = qs.parse(qString);
+
+  t.deepEquals(
+    parsedQs,
+    {
+      toto_facetsRefinements: helper.state.facetsRefinements,
+      toto_disjunctiveFacetsRefinements: helper.state.disjunctiveFacetsRefinements,
+      toto_numericRefinements: helper.state.numericRefinements,
+      toto_query: helper.state.query,
+      toto: 'tata',
+      foo: 'bar'
+    },
+    'deserialized qs with prefix should be equal to the state with prefix and keep the custom attributes');
+
+  t.end();
+});
+test('Should be able to deserialize qs with namespaced attributes', function(t) {
+  var initialState = {
+    facets: ['facetA', 'facetWeDontCareAbout'],
+    disjunctiveFacets: ['facetB']
+  };
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, initialState);
+
+  helper.setQuery('a query');
+  helper.toggleRefine('facetA', 'a');
+  helper.toggleRefine('facetWeDontCareAbout', 'v');
+  helper.toggleRefine('facetB', 'd');
+  helper.addNumericRefinement('numerical', '=', 3);
+  helper.addNumericRefinement('numerical2', '<=', 3);
+
+  var filters = ['index', 'query', 'attribute:*'];
+
+  var newHelper = algoliasearchHelper(null, null, initialState);
+  var queryString = helper.getStateAsQueryString(filters, {prefix: 'calimerou_'});
+  newHelper.setStateAsQueryString(queryString, {prefix: 'calimerou_'});
+
+  t.deepEquals(
+    newHelper.state,
+    helper.state,
+    'Should be able to recreate a helper from a query string (with prefix)');
+  t.equal(
+    newHelper.getIndex(),
+    helper.getIndex(),
+    'Index should be equal even with the prefix');
+  t.end();
+});
