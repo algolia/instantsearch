@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.4.0 - 2015-09-10
+  * FEATURE : add AlgoliaSearchHelper.setState(filters) to get a filtered state
+  * FEATURE : add AlgoliaSearchHelper.getStateAsQueryString to get a part of
+  the state as a queryString
+  * FEATURE : add AlgoliaSearchHelper.setStateAsQueryString to set the state
+  of the helper with a query string
+
 2.3.3 - 2015-09-09
   * FIX: hasRefinements fix, should check facet, disjunctive, hierarchical, numeric
 
