@@ -114,7 +114,7 @@ test('Get the state as a query string', function(t) {
   var stateWithoutConfig = helper.getState(filters);
 
   var decodedState = mapKeys(
-    qs.parse(helper.getStateAsQueryString(filters)),
+    qs.parse(helper.getStateAsQueryString({filters: filters})),
     function(v, k) {
       var decodedKey = shortener.decode(k);
       return decodedKey || k;
@@ -147,7 +147,7 @@ test('Set the state with a query parameter with index', function(t) {
   var filters = ['index', 'query', 'attribute:*'];
 
   var newHelper = algoliasearchHelper(null, null, initialState);
-  newHelper.setStateAsQueryString(helper.getStateAsQueryString(filters));
+  newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
   t.deepEquals(
     newHelper.state,
@@ -177,7 +177,7 @@ test('Set the state with a query parameter without index', function(t) {
   var filters = ['query', 'attribute:*'];
 
   var newHelper = algoliasearchHelper(null, null, initialState);
-  newHelper.setStateAsQueryString(helper.getStateAsQueryString(filters));
+  newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
   t.deepEquals(
     newHelper.state,
@@ -207,8 +207,8 @@ test('Set the state with a query parameter with unknown querystring attributes',
   var filters = ['query', 'attribute:*'];
 
   var newHelper = algoliasearchHelper(null, null, initialState);
-  var queryString = helper.getStateAsQueryString(filters) + '&foo=bar&toto=tata';
-  newHelper.setStateAsQueryString(queryString);
+  var queryString = helper.getStateAsQueryString({filters: filters}) + '&foo=bar&toto=tata';
+  newHelper.setStateFromQueryString(queryString);
 
   t.deepEquals(
     newHelper.state,
@@ -241,7 +241,7 @@ test('Serialize with prefix', function(t) {
   var filters = ['query', 'attribute:*', 'index'];
   var prefix = 'toto_';
 
-  var qString = helper.getStateAsQueryString(filters, {prefix: prefix});
+  var qString = helper.getStateAsQueryString({filters: filters, prefix: prefix});
   var parsedQs = qs.parse(qString);
 
   t.deepEquals(
@@ -279,8 +279,8 @@ test('Serialize with prefix, this should have no impact on user provided paramat
   var prefix = 'toto_';
 
   var qString = helper.getStateAsQueryString(
-    filters,
     {
+      filters: filters,
       prefix: prefix,
       moreAttributes: {
         toto: 'tata',
@@ -322,8 +322,8 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
   var filters = ['index', 'query', 'attribute:*'];
 
   var newHelper = algoliasearchHelper(null, null, initialState);
-  var queryString = helper.getStateAsQueryString(filters, {prefix: 'calimerou_'});
-  newHelper.setStateAsQueryString(queryString, {prefix: 'calimerou_'});
+  var queryString = helper.getStateAsQueryString({filters: filters, prefix: 'calimerou_'});
+  newHelper.setStateFromQueryString(queryString, {prefix: 'calimerou_'});
 
   t.deepEquals(
     newHelper.state,

@@ -503,14 +503,22 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
 var shortener = require('./SearchParameters/shortener');
 
 /**
- * Get part of the
+ * Get part of the state as a query string. By default, the output keys will not
+ * be prefixed and will only take the applied refinements and the query.
+ * @param {object} [options] May contain the following parameters : 
+ *  - filters : possible values are all the keys of the {SearchParameters}, 'index' for the index,
+ *    all the refinements with 'attribute:*' or for some specific attributes with 'attribute:theAttribute'
+ *  - prefix : prefix in front of the keys
+ *  - moreAttributes : more values to be added in the query string. Those values
+ *    won't be prefixed.
+ * @return {string} the query string
  */
-AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(filters, options) {
+AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(options) {
+  var filters = options && options.filters || ['query', 'attribute:*'];
   var moreAttributes = options && options.moreAttributes;
   var prefixForParameters = options && options.prefix || '';
 
-  var filtersOrDefault = filters ? filters : ['query', 'attribute:*'];
-  var partialState = this.getState(filtersOrDefault);
+  var partialState = this.getState(filters);
 
   var encodedState = mapKeys(
     partialState,
@@ -525,8 +533,15 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
   return qs.stringify(encodedState);
 };
 
-
-AlgoliaSearchHelper.prototype.setStateAsQueryString = function setStateAsQueryString(queryString, options) {
+/**
+ * Overrides part of the state with the properties stored in the provided query
+ * string.
+ * @param {string} queryString the query string containing the informations to url the state
+ * @param {object} options optionnal parameters :
+ *  - prefix : prefix used for the algolia parameters
+ *  - triggerChange : if set to true the state update will trigger a change event
+ */
+AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQueryString(queryString, options) {
   var prefixForParameters = options && options.prefix || '';
   var triggerChange = options && options.triggerChange || false;
 
@@ -547,7 +562,6 @@ AlgoliaSearchHelper.prototype.setStateAsQueryString = function setStateAsQuerySt
   if (index) {
     this.setIndex(index);
   }
-
 
   if (partialState.numericRefinements) {
     var numericRefinements = {};

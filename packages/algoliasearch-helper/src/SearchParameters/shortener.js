@@ -51,9 +51,19 @@ var keys2Short = {
 var short2Keys = invert(keys2Short);
 
 module.exports = {
+  /**
+   * Decode a shorten attribute
+   * @param {string} shortKey the shorten attribute
+   * @return {string} the decoded attribute, undefined otherwise
+   */
   decode: function(shortKey) {
     return short2Keys[shortKey];
   },
+  /**
+   * Encode an attribute into a short version
+   * @param {string} key the attribute
+   * @return {string} the shorten attribute
+   */
   encode: function(key) {
     return keys2Short[key];
   }
