@@ -656,6 +656,29 @@ var state1 = helper.searchOnce({hitsPerPage: 1})
 });
 ```
 
+### URL Helpers
+
+#### Get a query string of a part of the parameters
+
+```js
+// see the jsdoc for the parameters
+var qs = helper.getStateAsQueryString();
+// by defaults it serialize the current index, the query and all the refinements
+```
+
+#### Set the state from a query string
+
+```js
+helper.setStateFromQueryString(qs);
+```
+
+#### Get a plain object with a subset of the state
+
+```js
+// to an object with the query and all the refinements
+helper.getState(['query', 'attribute:*']);
+```
+
 ### Query parameters
 
 There are lots of other parameters you can set.
