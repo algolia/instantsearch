@@ -632,7 +632,7 @@ SearchParameters.prototype = {
    * @return {SearchParameters.OperatorList[]} list of refinements
    */
   getNumericRefinements: function(facetName) {
-    return this.numericRefinements[facetName] || [];
+    return this.numericRefinements[facetName] || {};
   },
   /**
    * Return the current refinement for the (attribute, operator)
@@ -997,6 +997,28 @@ SearchParameters.prototype = {
       throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
+  },
+  /**
+   * Returns true if the facet contains a refinement, or if a value passed is a
+   * refinement for the facet.
+   * @method
+   * @param {string} facet name of the attribute for used for facetting
+   * @param {string} value optionnal, will test if the value is used for refinement
+   * if there is one, otherwise will test if the facet contains any refinement
+   * @return {boolean}
+   */
+  isHierarchicalFacetRefined: function isHierarchicalFacetRefined(facet, value) {
+    if (!this.isHierarchicalFacet(facet)) {
+      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+    }
+
+    var refinements = this.getHierarchicalRefinement(facet);
+
+    if (!value) {
+      return refinements.length > 0;
+    }
+
+    return indexOf(refinements, value) !== -1;
   },
   /**
    * Test if the triple (attribute, operator, value) is already refined.
