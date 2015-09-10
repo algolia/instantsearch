@@ -534,8 +534,17 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
  * @return {object} The stats of the facet
  */
 SearchResults.prototype.getFacetStats = function(attribute) {
-  var facet = find(this.facets, {name: attribute});
-  return facet && facet.stats;
+  var facet;
+
+  if (this._state.isConjunctiveFacet(attribute)) {
+    facet = find(this.facets, {name: attribute});
+    return facet && facet.stats;
+  } else if (this._state.isDisjunctiveFacet(attribute)) {
+    facet = find(this.disjunctiveFacets, {name: attribute});
+    return facet && facet.stats;
+  }
+
+  throw new Error(attribute + ' is not present in `facets` or `disjunctiveFacets`');
 };
 
 module.exports = SearchResults;

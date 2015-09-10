@@ -4,18 +4,26 @@ var test = require('tape');
 var SearchResults = require('../../src/SearchResults');
 var SearchParameters = require('../../src/SearchParameters');
 
+var bind = require('lodash/function/bind');
+
 var response = {
   'results': [{
     'page': 0,
     'index': 'test_hotels-node',
     'facets': {
-      'age': {}
+      'age': {},
+      'price': {}
     },
     'facets_stats': {
       'age': {
         'min': 21,
         'max': 42,
         'avg': 31.5
+      },
+      'price': {
+        'min': 30,
+        'max': 60,
+        'avg': 33.5
       }
     },
     'params': 'query=&hitsPerPage=20&page=0&facets=%5B%5D&facetFilters=%5B%5B%2' +
@@ -30,19 +38,28 @@ var response = {
 };
 
 var searchParams = new SearchParameters({
-  facets: ['age']
+  facets: ['age', 'country'],
+  disjunctiveFacets: ['price']
 });
 
-test('getFacetByName should return a given facet be it disjunctive or conjunctive', function(t) {
+test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet', function(t) {
   var result = new SearchResults(searchParams, response);
 
+  t.throws(
+    bind(result.getFacetStats, result, 'city'),
+    Error,
+    'non defined facet should throw');
   t.equal(
-    result.getFacetStats('city'),
+    result.getFacetStats('country'),
     undefined,
-    'should be undefined as "city" does not permit stats');
+    'should be undefined as "country" has no stats');
   t.deepEqual(
     result.getFacetStats('age'),
     response.results[0].facets_stats.age,
+    'should return the same stats data as in the response');
+  t.deepEqual(
+    result.getFacetStats('price'),
+    response.results[0].facets_stats.price,
     'should return the same stats data as in the response');
 
   t.end();
