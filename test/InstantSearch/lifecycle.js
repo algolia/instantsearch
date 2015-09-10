@@ -1,6 +1,6 @@
 var test = require('tape');
 
-test('InstantSearch', function(t) {
+test('InstantSearch: lifecycle', function(t) {
   var EventEmitter = require('events').EventEmitter;
 
   var proxyquire = require('proxyquire');
@@ -18,7 +18,7 @@ test('InstantSearch', function(t) {
 
   var appId = 'appId';
   var apiKey = 'apiKey';
-  var indexName = 'test';
+  var indexName = 'lifeycle';
 
   var searchParameters = {some: 'configuration', another: {config: 'parameter'}};
 
@@ -28,7 +28,7 @@ test('InstantSearch', function(t) {
     render: sinon.spy()
   };
 
-  var InstantSearch = proxyquire('../lib/InstantSearch', {
+  var InstantSearch = proxyquire('../../lib/InstantSearch', {
     algoliasearch: algoliasearch,
     'algoliasearch-helper': algoliasearchHelper
   });
