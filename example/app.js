@@ -66,11 +66,12 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: '#salePrice_range',
-    facetName: 'salePrice_range',
+    container: '#price_range',
+    facetName: 'price_range',
     operator: 'and',
     limit: 10,
-    rootClass: 'nav nav-stacked'
+    rootClass: 'nav nav-stacked',
+    template: require('./templates/and.html')
   })
 );
 
