@@ -20,22 +20,22 @@ fi
 
 currentVersion=$(nvm current)
 
-# always test on node 0.12
-echo "Node test 0.12"
-nvm use 0.12
+# always test on node 4
+echo "Node test 4"
+nvm use 4
 node test/run.js
 
 # in a PR or in local environement, test only on node 0.12
 if [ $TRAVIS_PULL_REQUEST != 'false' ] || [ $TRAVIS_BUILD_NUMBER == 'false' ]; then
-  echo 'Skipping 0.10 and iojs tests (PR or local)'
+  echo 'Skipping 0.10 and 0.12 tests (PR or local)'
   exit 0
 else
   echo "Node test 0.10"
   nvm use 0.10
   node test/run.js
 
-  echo "Node test iojs"
-  nvm use iojs
+  echo "Node test 0.12"
+  nvm use 0.12
   node test/run.js
 fi
 
