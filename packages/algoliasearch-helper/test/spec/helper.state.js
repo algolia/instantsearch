@@ -2,7 +2,11 @@
 
 var test = require('tape');
 var algoliasearchHelper = require('../../index');
+
 var SearchParameters = algoliasearchHelper.SearchParameters;
+var shortener = require('../../src/SearchParameters/shortener');
+
+var mapKeys = require('lodash/object/mapKeys');
 
 var qs = require('qs');
 
@@ -109,8 +113,16 @@ test('Get the state as a query string', function(t) {
   var filters = ['query', 'attribute:*'];
   var stateWithoutConfig = helper.getState(filters);
 
-  t.deepEquals(
+  var decodedState = mapKeys(
     qs.parse(helper.getStateAsQueryString(filters)),
+    function(v, k) {
+      var decodedKey = shortener.decode(k);
+      return decodedKey || k;
+    }
+  );
+
+  t.deepEquals(
+    decodedState,
     stateWithoutConfig,
     'deserialized qs should be equal to the state');
 
@@ -235,11 +247,11 @@ test('Serialize with prefix', function(t) {
   t.deepEquals(
     parsedQs,
     {
-      toto_facetsRefinements: helper.state.facetsRefinements,
-      toto_disjunctiveFacetsRefinements: helper.state.disjunctiveFacetsRefinements,
-      toto_numericRefinements: helper.state.numericRefinements,
-      toto_query: helper.state.query,
-      toto_index: index
+      toto_fR: helper.state.facetsRefinements,
+      toto_dFR: helper.state.disjunctiveFacetsRefinements,
+      toto_nR: helper.state.numericRefinements,
+      toto_q: helper.state.query,
+      toto_idx: index
     },
     'deserialized qs with prefix should be equal to the state with prefix');
 
@@ -281,10 +293,10 @@ test('Serialize with prefix, this should have no impact on user provided paramat
   t.deepEquals(
     parsedQs,
     {
-      toto_facetsRefinements: helper.state.facetsRefinements,
-      toto_disjunctiveFacetsRefinements: helper.state.disjunctiveFacetsRefinements,
-      toto_numericRefinements: helper.state.numericRefinements,
-      toto_query: helper.state.query,
+      toto_fR: helper.state.facetsRefinements,
+      toto_dFR: helper.state.disjunctiveFacetsRefinements,
+      toto_nR: helper.state.numericRefinements,
+      toto_q: helper.state.query,
       toto: 'tata',
       foo: 'bar'
     },

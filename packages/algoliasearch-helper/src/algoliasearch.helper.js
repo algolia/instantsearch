@@ -500,42 +500,54 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   return partialState;
 };
 
+var shortener = require('./SearchParameters/shortener');
+
 /**
  * Get part of the
  */
 AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(filters, options) {
   var moreAttributes = options && options.moreAttributes;
-  var prefixForParameters = options && options.prefix;
+  var prefixForParameters = options && options.prefix || '';
 
   var filtersOrDefault = filters ? filters : ['query', 'attribute:*'];
   var partialState = this.getState(filtersOrDefault);
-  var partialStateWithPrefix = prefixForParameters ?
-    mapKeys(
-      partialState,
-      function(v, k) { return prefixForParameters + k; }) :
-    partialState;
 
-  if (moreAttributes) merge(partialStateWithPrefix, moreAttributes);
+  var encodedState = mapKeys(
+    partialState,
+    function(v, k) {
+      var shortK = shortener.encode(k);
+      return prefixForParameters + shortK;
+    }
+  );
 
-  return qs.stringify(partialStateWithPrefix);
+  if (moreAttributes) merge(encodedState, moreAttributes);
+
+  return qs.stringify(encodedState);
 };
+
 
 AlgoliaSearchHelper.prototype.setStateAsQueryString = function setStateAsQueryString(queryString, options) {
   var prefixForParameters = options && options.prefix || '';
   var triggerChange = options && options.triggerChange || false;
 
   var partialStateWithPrefix = qs.parse(queryString);
+  var prefixRegexp = new RegExp('^' + prefixForParameters);
   var partialState = mapKeys(
     partialStateWithPrefix,
     function(v, k) {
-      if (k.indexOf(prefixForParameters) === 0) return k.replace(prefixForParameters, '');
-      return k;
+      if (prefixForParameters && prefixRegexp.test(k)) {
+        var encodedKey = k.replace(prefixRegexp, '');
+        return shortener.decode(encodedKey);
+      }
+      var decodedKey = shortener.decode(k);
+      return decodedKey || k;
     }
   );
   var index = partialState.index;
   if (index) {
     this.setIndex(index);
   }
+
 
   if (partialState.numericRefinements) {
     var numericRefinements = {};
