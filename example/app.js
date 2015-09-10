@@ -65,6 +65,16 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#salePrice_range',
+    facetName: 'salePrice_range',
+    operator: 'and',
+    limit: 10,
+    rootClass: 'nav nav-stacked'
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free_shipping',
     facetName: 'free_shipping',
