@@ -93,4 +93,11 @@ search.addWidget(
   })
 );
 
+search.addWidget(
+  instantsearch.widgets.rangeSlider({
+    container: '#price',
+    facetName: 'price'
+  })
+);
+
 search.start();

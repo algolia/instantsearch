@@ -53,6 +53,7 @@
     "lodash": "3.10.1",
     "raw-loader": "0.5.1",
     "react": "0.13.3",
+    "react-nouislider": "1.0.0",
     "to-factory": "1.0.0"
   },
   "license": "MIT"

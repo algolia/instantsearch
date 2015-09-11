@@ -99,6 +99,7 @@ npm run test:coverage
 [toggle]: ./widgets-screenshots/toggle.png
 [refinementList]: ./widgets-screenshots/refinement-list.png
 [menu]: ./widgets-screenshots/menu.png
+[rangeSlider]: ./widgets-screenshots/rangeSlider.png
 
 ### searchBox
 
@@ -341,6 +342,32 @@ search.addWidget(
   instantsearch.widgets.menu({
     container: '#categories', 
     facetName: 'categories'
+  })
+);
+```
+
+### rangeSlider
+
+![Example of the rangeSlider widget][rangeSlider]
+
+#### API
+
+```js
+
+```
+
+
+#### Usage
+
+```html
+<div id="price"></div>
+```
+
+```js
+search.addWidget(
+  instantsearch.widgets.rangeSlider({
+    container: '#price',
+    facetName: 'price'
   })
 );
 ```
