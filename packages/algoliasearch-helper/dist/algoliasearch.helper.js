@@ -424,7 +424,9 @@ function drainQueue() {
         currentQueue = queue;
         queue = [];
         while (++queueIndex < len) {
-            currentQueue[queueIndex].run();
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
         }
         queueIndex = -1;
         len = queue.length;
@@ -476,7 +478,6 @@ process.binding = function (name) {
     throw new Error('process.binding is not supported');
 };
 
-// TODO(shtylman)
 process.cwd = function () { return '/' };
 process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
@@ -8420,39 +8421,37 @@ SearchResults.prototype.getFacetByName = function(name) {
 
 /**
  * Get the facet values of a specified attribute from a SearchResults object.
+ * @private
  * @param {SearchResults} results the search results to search in
  * @param {string} attribute name of the facetted attribute to search for
- * @return {array|object} facet values enhanced with the attribute facetType to
- * distinguish the type of facet.
+ * @return {array|object} facet values. For the hierarchical facets it is an object.
  */
 function extractNormalizedFacetValues(results, attribute) {
   var predicate = {name: attribute};
   if (results._state.isConjunctiveFacet(attribute)) {
     var facet = find(results.facets, predicate);
-    var facetValues = map(facet.data, function(v, k) {
+    if (!facet) return [];
+
+    return map(facet.data, function(v, k) {
       return {
         name: k,
         count: v,
         isRefined: results._state.isFacetRefined(attribute, k)
       };
     });
-    facetValues.facetType = 'conjunctive';
-    return facetValues;
   } else if (results._state.isDisjunctiveFacet(attribute)) {
     var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
-    var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
+    if (!disjunctiveFacet) return [];
+
+    return map(disjunctiveFacet.data, function(v, k) {
       return {
         name: k,
         count: v,
         isRefined: results._state.isDisjunctiveFacetRefined(attribute, k)
       };
     });
-    disjunctiveFacetValues.facetType = 'disjunctive';
-    return disjunctiveFacetValues;
   } else if (results._state.isHierarchicalFacet(attribute)) {
-    var hFacetValues = find(results.hierarchicalFacets, predicate);
-    hFacetValues.facetType = 'hierarchical';
-    return hFacetValues;
+    return find(results.hierarchicalFacets, predicate);
   }
 }
 
@@ -8506,18 +8505,17 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
 
   if (isArray(options.sortBy)) {
     var order = formatSort(options.sortBy);
-    if (facetValues.facetType === 'hierarchical') {
-      delete facetValues.facetType;
-      return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
+    if (isArray(facetValues)) {
+      return sortByOrder(facetValues, order[0], order[1]);
     }
-    return sortByOrder(facetValues, order[0], order[1]);
+    // If facetValues is not an array, it's an object thus a hierarchical facet object
+    return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
   } else if (isFunction(options.sortBy)) {
-    if (facetValues.facetType === 'hierarchical') {
-      delete facetValues.facetType;
-      return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
+    if (isArray(facetValues)) {
+      return facetValues.sort(options.sortBy);
     }
-    delete facetValues.facetType;
-    return facetValues.sort(options.sortBy);
+    // If facetValues is not an array, it's an object thus a hierarchical facet object
+    return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
   }
   throw new Error(
     'options.sortBy is optional but if defined it must be ' +
@@ -9572,6 +9570,6 @@ var requestBuilder = {
 module.exports = requestBuilder;
 
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":135,"lodash/object/merge":151}],168:[function(require,module,exports){
-module.exports="2.3.3"
+module.exports="2.3.4"
 },{}]},{},[1])(1)
 });
