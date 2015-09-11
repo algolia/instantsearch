@@ -1,14 +1,14 @@
 'use strict';
 
-var bind = require('lodash/function/bind');
-var random = require('lodash/number/random');
-var test = require('tape');
-var map = require('lodash/collection/map');
-
-var algoliasearchHelper = process.browser &&
-  process.env.TRAVIS_BUILD_NUMBER ? window.algoliasearchHelper : require('../../');
 var utils = require('../integration-utils.js');
 var setup = utils.setup;
+
+var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
+
+var test = require('tape');
+var map = require('lodash/collection/map');
+var bind = require('lodash/function/bind');
+var random = require('lodash/number/random');
 
 if (!utils.shouldRun) {
   test = test.skip;
