@@ -3,6 +3,12 @@ CHANGELOG
 UNRELEASED
   * FIX: getFacetStats should look into facets and disjunctiveFacets
 
+2.3.4 - 2015-09-11
+  * FIX: #208, getFacetValues should return an empty array if the facet is
+  defined but there are no returned values for it (and not throw an exception)
+  * CHORE : drop tests on iojs
+  * CHORE : travis now requires us to install if missing node env
+
 2.3.3 - 2015-09-09
   * FIX: hasRefinements fix, should check facet, disjunctive, hierarchical, numeric
 

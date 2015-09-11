@@ -35,6 +35,7 @@ if (!process.browser) {
 }
 
 module.exports = {
+  isCIBrowser: process.browser && process.env.TRAVIS_BUILD_NUMBER,
   setup: setup,
   shouldRun: shouldRun
 };
