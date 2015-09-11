@@ -2,6 +2,6 @@
   "extends": [
     "eslint:recommended",
     "airbnb/base/",
-    "algolia"
+    "algolia/es5"
   ]
 }
