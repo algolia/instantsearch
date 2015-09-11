@@ -1,4 +1,5 @@
 'use strict';
+
 var invert = require('lodash/object/invert');
 
 var keys2Short = {

@@ -505,7 +505,7 @@ var shortener = require('./SearchParameters/shortener');
 /**
  * Get part of the state as a query string. By default, the output keys will not
  * be prefixed and will only take the applied refinements and the query.
- * @param {object} [options] May contain the following parameters : 
+ * @param {object} [options] May contain the following parameters :
  *  - filters : possible values are all the keys of the {SearchParameters}, 'index' for the index,
  *    all the refinements with 'attribute:*' or for some specific attributes with 'attribute:theAttribute'
  *  - prefix : prefix in front of the keys
