@@ -420,47 +420,39 @@ SearchResults.prototype.getFacetByName = function(name) {
     find(this.hierarchicalFacets, predicate);
 };
 
-var EMPTY_NORMALIZED_FACET_VALUES = (function() { var a = []; a.facetType = 'conjunctive'; return a; })();
-var EMPTY_NORMALIZED_DISJUNCTIVE_VALUES = (function() { var a = []; a.facetType = 'disjunctive'; return a; })();
 /**
  * Get the facet values of a specified attribute from a SearchResults object.
+ * @private
  * @param {SearchResults} results the search results to search in
  * @param {string} attribute name of the facetted attribute to search for
- * @return {array|object} facet values enhanced with the attribute facetType to
- * distinguish the type of facet.
+ * @return {array|object} facet values. For the hierarchical facets it is an object.
  */
 function extractNormalizedFacetValues(results, attribute) {
   var predicate = {name: attribute};
   if (results._state.isConjunctiveFacet(attribute)) {
     var facet = find(results.facets, predicate);
-    if (!facet) return EMPTY_NORMALIZED_FACET_VALUES;
+    if (!facet) return [];
 
-    var facetValues = map(facet.data, function(v, k) {
+    return map(facet.data, function(v, k) {
       return {
         name: k,
         count: v,
         isRefined: results._state.isFacetRefined(attribute, k)
       };
     });
-    facetValues.facetType = 'conjunctive';
-    return facetValues;
   } else if (results._state.isDisjunctiveFacet(attribute)) {
     var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
-    if (!disjunctiveFacet) return EMPTY_NORMALIZED_DISJUNCTIVE_VALUES;
+    if (!disjunctiveFacet) return [];
 
-    var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
+    return map(disjunctiveFacet.data, function(v, k) {
       return {
         name: k,
         count: v,
         isRefined: results._state.isDisjunctiveFacetRefined(attribute, k)
       };
     });
-    disjunctiveFacetValues.facetType = 'disjunctive';
-    return disjunctiveFacetValues;
   } else if (results._state.isHierarchicalFacet(attribute)) {
-    var hFacetValues = find(results.hierarchicalFacets, predicate);
-    hFacetValues.facetType = 'hierarchical';
-    return hFacetValues;
+    return find(results.hierarchicalFacets, predicate);
   }
 }
 
@@ -514,18 +506,17 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
 
   if (isArray(options.sortBy)) {
     var order = formatSort(options.sortBy);
-    if (facetValues.facetType === 'hierarchical') {
-      delete facetValues.facetType;
-      return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
+    if (isArray(facetValues)) {
+      return sortByOrder(facetValues, order[0], order[1]);
     }
-    return sortByOrder(facetValues, order[0], order[1]);
+    // If facetValues is not an array, it's an object thus a hierarchical facet object
+    return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
   } else if (isFunction(options.sortBy)) {
-    if (facetValues.facetType === 'hierarchical') {
-      delete facetValues.facetType;
-      return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
+    if (isArray(facetValues)) {
+      return facetValues.sort(options.sortBy);
     }
-    delete facetValues.facetType;
-    return facetValues.sort(options.sortBy);
+    // If facetValues is not an array, it's an object thus a hierarchical facet object
+    return recSort(partial(vanillaSortFn, options.sortBy), facetValues);
   }
   throw new Error(
     'options.sortBy is optional but if defined it must be ' +
