@@ -1,6 +1,6 @@
 CHANGELOG
 
-UNRELEASED
+2.3.5 - 2015-09-12
   * FIX: getFacetStats should look into facets and disjunctiveFacets
 
 2.3.4 - 2015-09-11
