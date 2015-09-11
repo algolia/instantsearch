@@ -4,7 +4,8 @@ var bind = require('lodash/function/bind');
 var random = require('lodash/number/random');
 var find = require('lodash/collection/find');
 var test = require('tape');
-var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
+var algoliasearchHelper = process.browser &&
+  process.env.TRAVIS_BUILD_NUMBER ? window.algoliasearchHelper : require('../../');
 var utils = require('../integration-utils.js');
 var setup = utils.setup;
 

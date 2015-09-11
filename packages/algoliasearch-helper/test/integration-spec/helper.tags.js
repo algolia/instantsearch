@@ -5,12 +5,17 @@ var random = require('lodash/number/random');
 var test = require('tape');
 var map = require('lodash/collection/map');
 
-var algoliasearchHelper = process.browser ? window.algoliasearchHelper : require('../../');
+var algoliasearchHelper = process.browser &&
+  process.env.TRAVIS_BUILD_NUMBER ? window.algoliasearchHelper : require('../../');
 var utils = require('../integration-utils.js');
 var setup = utils.setup;
 
 if (!utils.shouldRun) {
   test = test.skip;
+}
+
+function hitsToParsedID(h) {
+  return parseInt(h.objectID, 10);
 }
 
 test('[INT][TAGS]Test tags operations on the helper and their results on the algolia API', function(t) {
@@ -42,7 +47,6 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
 
     helper.on('result', function(content) {
       calls++;
-      var hitsToParsedID = function(h) { return parseInt(h.objectID, 10); };
 
       if (calls === 1) {
         t.equal(content.hits.length, 4, 'No tags: 3 results');
