@@ -1,6 +1,6 @@
 var React = require('react');
 
-var Nouislider = require('react-nouislider');
+var Nouislider = require('./react-nouislider/');
 
 class Slider extends React.Component {
 

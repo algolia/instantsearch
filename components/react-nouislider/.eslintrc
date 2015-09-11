@@ -1,0 +1,7 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "airbnb",
+    "algolia/es6"
+  ]
+}
