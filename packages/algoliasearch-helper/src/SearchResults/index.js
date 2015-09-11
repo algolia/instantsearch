@@ -420,6 +420,8 @@ SearchResults.prototype.getFacetByName = function(name) {
     find(this.hierarchicalFacets, predicate);
 };
 
+var EMPTY_NORMALIZED_FACET_VALUES = (function() { var a = []; a.facetType = 'conjunctive'; return a; })();
+var EMPTY_NORMALIZED_DISJUNCTIVE_VALUES = (function() { var a = []; a.facetType = 'disjunctive'; return a; })();
 /**
  * Get the facet values of a specified attribute from a SearchResults object.
  * @param {SearchResults} results the search results to search in
@@ -431,6 +433,8 @@ function extractNormalizedFacetValues(results, attribute) {
   var predicate = {name: attribute};
   if (results._state.isConjunctiveFacet(attribute)) {
     var facet = find(results.facets, predicate);
+    if (!facet) return EMPTY_NORMALIZED_FACET_VALUES;
+
     var facetValues = map(facet.data, function(v, k) {
       return {
         name: k,
@@ -442,6 +446,8 @@ function extractNormalizedFacetValues(results, attribute) {
     return facetValues;
   } else if (results._state.isDisjunctiveFacet(attribute)) {
     var disjunctiveFacet = find(results.disjunctiveFacets, predicate);
+    if (!disjunctiveFacet) return EMPTY_NORMALIZED_DISJUNCTIVE_VALUES;
+
     var disjunctiveFacetValues = map(disjunctiveFacet.data, function(v, k) {
       return {
         name: k,
