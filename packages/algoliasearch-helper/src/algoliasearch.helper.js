@@ -542,8 +542,30 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
  *  - triggerChange : if set to true the state update will trigger a change event
  */
 AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQueryString(queryString, options) {
-  var prefixForParameters = options && options.prefix || '';
   var triggerChange = options && options.triggerChange || false;
+
+  var configuration = this.getConfigurationFromQueryString(queryString, options);
+  var index = configuration.index;
+  if (index) {
+    this.setIndex(index);
+  }
+
+  if (triggerChange) this.setState(configuration.state);
+  else this.overrideStateWithoutTriggeringChangeEvent(configuration.state);
+};
+
+/**
+ * Read a query string and return an object containing the state and the index.
+ * @param {string} queryString the query string that will be decoded
+ * @param {object} options accepted options : 
+ *   - prefix : the prefix used for the saved attributes, you have to provide the
+ *     same that was used for serialization
+ * @return {object} contains 2 properties : index (if set), state
+ */
+AlgoliaSearchHelper.prototype.getConfigurationFromQueryString = function(queryString, options) {
+  var configuration = {};
+
+  var prefixForParameters = options && options.prefix || '';
 
   var partialStateWithPrefix = qs.parse(queryString);
   var prefixRegexp = new RegExp('^' + prefixForParameters);
@@ -558,10 +580,9 @@ AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQue
       return decodedKey || k;
     }
   );
+
   var index = partialState.index;
-  if (index) {
-    this.setIndex(index);
-  }
+  if (index) configuration.index = index;
 
   if (partialState.numericRefinements) {
     var numericRefinements = {};
@@ -577,11 +598,10 @@ AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQue
     partialState.numericRefinements = numericRefinements;
   }
 
-  var state = this.state.setQueryParameters(pick(partialState, SearchParameters.PARAMETERS));
+  configuration.state = this.state.setQueryParameters(pick(partialState, SearchParameters.PARAMETERS));
 
-  if (triggerChange) this.setState(state);
-  else this.overrideStateWithoutTriggeringChangeEvent(state);
-};
+  return configuration;
+}
 
 /**
  * Override the current state without triggering a change event.
