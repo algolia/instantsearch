@@ -544,25 +544,28 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
 AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQueryString(queryString, options) {
   var triggerChange = options && options.triggerChange || false;
 
-  var configuration = this.getConfigurationFromQueryString(queryString, options);
+  var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
   var index = configuration.index;
   if (index) {
     this.setIndex(index);
   }
 
-  if (triggerChange) this.setState(configuration.state);
-  else this.overrideStateWithoutTriggeringChangeEvent(configuration.state);
+  var updatedState = this.state.setQueryParameters(configuration.state);
+
+  if (triggerChange) this.setState(updatedState);
+  else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
 };
 
 /**
  * Read a query string and return an object containing the state and the index.
+ * @static
  * @param {string} queryString the query string that will be decoded
  * @param {object} options accepted options : 
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
  * @return {object} contains 2 properties : index (if set), state
  */
-AlgoliaSearchHelper.prototype.getConfigurationFromQueryString = function(queryString, options) {
+AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
   var configuration = {};
 
   var prefixForParameters = options && options.prefix || '';
@@ -598,7 +601,7 @@ AlgoliaSearchHelper.prototype.getConfigurationFromQueryString = function(querySt
     partialState.numericRefinements = numericRefinements;
   }
 
-  configuration.state = this.state.setQueryParameters(pick(partialState, SearchParameters.PARAMETERS));
+  configuration.state = pick(partialState, SearchParameters.PARAMETERS);
 
   return configuration;
 }
