@@ -53,7 +53,6 @@
     "classnames": "2.1.3",
     "hogan.js": "3.0.2",
     "lodash": "3.10.1",
-    "nouislider": "git://github.com/algolia/noUiSlider.git#744f9166cf109de91de516e4af6fe3a6e4e95a7f",
     "react": "0.13.3",
     "react-nouislider": "1.2.0",
     "to-factory": "1.0.0"
