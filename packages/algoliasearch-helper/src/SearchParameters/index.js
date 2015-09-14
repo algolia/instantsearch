@@ -68,6 +68,12 @@ var RefinementList = require('./RefinementList');
 function SearchParameters(newParameters) {
   var params = newParameters || {};
 
+  /**
+   * Targeted index. This parameter is mandatory.
+   * @member {string}
+   */
+  this.index = params.index || '';
+
   // Query
   /**
    * Query string of the instant search. The empty string is a valid query.
@@ -429,6 +435,14 @@ SearchParameters.prototype = {
       page: 0,
       tagFilters: undefined,
       tagRefinements: []
+    });
+  },
+  setIndex: function setIndex(index) {
+    if (index === this.index) return this;
+
+    return this.setQueryParameters({
+      index: index,
+      page: 0
     });
   },
   /**
@@ -1096,6 +1110,7 @@ SearchParameters.prototype = {
   },
 
   managedParameters: [
+    'index',
     'facets', 'disjunctiveFacets', 'facetsRefinements',
     'facetsExcludes', 'disjunctiveFacetsRefinements',
     'numericRefinements', 'tagRefinements', 'hierarchicalFacets', 'hierarchicalFacetsRefinements'

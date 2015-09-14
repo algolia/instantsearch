@@ -39,8 +39,9 @@ var qs = require('qs');
  */
 function AlgoliaSearchHelper(client, index, options) {
   this.client = client;
-  this.index = index;
-  this.state = SearchParameters.make(options);
+  var opts = options || {};
+  opts.index = index;
+  this.state = SearchParameters.make(opts);
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
@@ -75,13 +76,8 @@ AlgoliaSearchHelper.prototype.search = function() {
  *  - state with the state used for the query as a SearchParameters
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
-  var index = options.index || this.index;
-  if (options.index) {
-    delete options.index;
-  }
-
   var tempState = this.state.setQueryParameters(options);
-  var queries = requestBuilder._getQueries(index, tempState);
+  var queries = requestBuilder._getQueries(tempState.index, tempState);
   if (cb) {
     return this.client.search(
       queries,
@@ -407,8 +403,8 @@ AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {
  * @fires change
  */
 AlgoliaSearchHelper.prototype.setIndex = function(name) {
-  this.index = name;
-  this.setCurrentPage(0);
+  this.state = this.state.setIndex(name);
+  this._change();
   return this;
 };
 
@@ -486,16 +482,17 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
     }
   }
 
-  if (filters.indexOf('index') !== -1) {
-    partialState.index = this.index;
-  }
-
   var searchParameters = filter(
     filters,
-    function(f) { return f !== 'index' && f.indexOf('attribute:') === -1; });
-  forEach(searchParameters, function(parameterKey) {
-    partialState[parameterKey] = this.state[parameterKey];
-  }, this);
+    function(f) { return f.indexOf('attribute:') === -1; });
+
+  forEach(
+    searchParameters,
+    function(parameterKey) {
+      partialState[parameterKey] = this.state[parameterKey];
+    },
+    this
+  );
 
   return partialState;
 };
@@ -545,29 +542,24 @@ AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQue
   var triggerChange = options && options.triggerChange || false;
 
   var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
-  var index = configuration.index;
-  if (index) {
-    this.setIndex(index);
-  }
 
-  var updatedState = this.state.setQueryParameters(configuration.state);
+  var updatedState = this.state.setQueryParameters(configuration);
 
   if (triggerChange) this.setState(updatedState);
   else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
 };
 
 /**
- * Read a query string and return an object containing the state and the index.
+ * Read a query string and return an object containing the state
  * @static
  * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options : 
+ * @param {object} options accepted options :
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
- * @return {object} contains 2 properties : index (if set), state
+ * @return {object} partial search parameters object (same properties than in the
+ * SearchParameters but not exhaustive
  */
 AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
-  var configuration = {};
-
   var prefixForParameters = options && options.prefix || '';
 
   var partialStateWithPrefix = qs.parse(queryString);
@@ -584,9 +576,6 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
     }
   );
 
-  var index = partialState.index;
-  if (index) configuration.index = index;
-
   if (partialState.numericRefinements) {
     var numericRefinements = {};
     forEach(partialState.numericRefinements, function(operators, attribute) {
@@ -601,10 +590,8 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
     partialState.numericRefinements = numericRefinements;
   }
 
-  configuration.state = pick(partialState, SearchParameters.PARAMETERS);
-
-  return configuration;
-}
+  return pick(partialState, SearchParameters.PARAMETERS);
+};
 
 /**
  * Override the current state without triggering a change event.
@@ -705,7 +692,7 @@ AlgoliaSearchHelper.prototype.isTagRefined = function() {
  * @return {string}
  */
 AlgoliaSearchHelper.prototype.getIndex = function() {
-  return this.index;
+  return this.state.index;
 };
 
 /**
@@ -811,7 +798,7 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
-  var queries = requestBuilder._getQueries(this.index, this.state);
+  var queries = requestBuilder._getQueries(state.index, state);
 
   this.emit('search', state, this.lastResults);
   this.client.search(queries,

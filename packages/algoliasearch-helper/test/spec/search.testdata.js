@@ -188,6 +188,7 @@ var response = {
 };
 
 var searchParams = new SearchParameters({
+  index: 'test_hotels-node',
   disjunctiveFacets: ['city'],
   disjunctiveFacetsRefinements: {
     city: ['Paris', 'New York']
