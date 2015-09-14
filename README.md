@@ -27,7 +27,11 @@ API is unstable. We welcome any idea.
 
 ```js
 var instantsearch = require('instantsearch.js');
-var search = instantsearch(appId, apiKey, indexName);
+var search = instantsearch({
+  appId: appId,
+  apiKey: apiKey,
+  indexName: indexName
+});
 
 // add a widget
 search.addWidget(

@@ -33,7 +33,12 @@ test('InstantSearch: lifecycle', function(t) {
     'algoliasearch-helper': algoliasearchHelper
   });
 
-  var search = new InstantSearch(appId, apiKey, indexName, searchParameters);
+  var search = new InstantSearch({
+    appId: appId,
+    apiKey: apiKey,
+    indexName: indexName,
+    searchParameters: searchParameters
+  });
 
   // instantiates a client
   t.ok(algoliasearch.calledOnce, 'algoliasearch called');
