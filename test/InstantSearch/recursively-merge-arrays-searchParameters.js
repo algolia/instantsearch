@@ -42,7 +42,12 @@ test('InstantSearch: recursively merge arrays in searchParameters', function(t) 
     'algoliasearch-helper': algoliasearchHelper
   });
 
-  var search = new InstantSearch('appId', 'apiKey', 'recursively', searchParameters);
+  var search = new InstantSearch({
+    applicationID: 'appId',
+    searchAPIKey: 'apiKey',
+    indexName: 'recursively',
+    defaultSearchParameters: searchParameters
+  });
 
   search.addWidget(firstWidget);
   search.addWidget(secondWidget);

@@ -2,11 +2,11 @@ require('./style.css');
 
 var instantsearch = require('../');
 
-var search = instantsearch(
-  'latency',
-  '6be0576ff61c053d5f9a3225e2a90f76',
-  'instant_search'
-);
+var search = instantsearch({
+  applicationID: 'latency',
+  searchAPIKey: '6be0576ff61c053d5f9a3225e2a90f76',
+  indexName: 'instant_search'
+});
 
 search.addWidget(
   instantsearch.widgets.searchBox({
