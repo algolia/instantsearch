@@ -34,10 +34,10 @@ test('InstantSearch: lifecycle', function(t) {
   });
 
   var search = new InstantSearch({
-    applicationID: appId,
-    searchAPIKey: apiKey,
+    appId: appId,
+    apiKey: apiKey,
     indexName: indexName,
-    defaultSearchParameters: searchParameters
+    searchParameters: searchParameters
   });
 
   // instantiates a client
