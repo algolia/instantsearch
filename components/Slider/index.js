@@ -1,6 +1,10 @@
 var React = require('react');
 
-var Nouislider = require('./react-nouislider/');
+var Nouislider = require('react-nouislider');
+
+require('./index.css');
+
+var cssPrefix = 'as-range-slider--';
 
 class Slider extends React.Component {
 
@@ -14,6 +18,10 @@ class Slider extends React.Component {
       <Nouislider
         {...this.props}
         onChange={this.handleChange.bind(this)}
+        animate={false}
+        behaviour={'snap'}
+        connect
+        cssPrefix={cssPrefix}
       />
     );
   }
@@ -23,7 +31,11 @@ Slider.propTypes = {
   onSlide: React.PropTypes.func,
   onChange: React.PropTypes.func,
   range: React.PropTypes.object.isRequired,
-  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired
+  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+  tooltips: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.object
+  ])
 };
 
 module.exports = Slider;

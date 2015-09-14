@@ -1,6 +1,6 @@
 var React = require('react');
 
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 function pagination({container, cssClass, labels, maxPages} = {}) {
   var Pagination = require('../components/Pagination/Pagination.js');

@@ -1,0 +1,102 @@
+.as-range-slider--target,
+.as-range-slider--target * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -ms-touch-action: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.as-range-slider--target {
+  position: relative;
+  direction: ltr;
+  padding: 0 15px;
+  border-radius: 5px;
+  background: #f3f4f7;
+  height: 18px;
+}
+.as-range-slider--base {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 1; /* Fix 401 */
+}
+.as-range-slider--origin {
+  position: absolute;
+  right: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+}
+.as-range-slider--state-tap .as-range-slider--origin {
+  -webkit-transition: left 0.3s, top 0.3s;
+  transition: left 0.3s, top 0.3s;
+}
+.as-range-slider--state-drag * {
+  cursor: inherit !important;
+}
+
+/* Painting and performance;
+ * Browsers can paint handles in their own layer.
+ */
+.as-range-slider--base {
+  -webkit-transform: translate3d(0,0,0);
+  transform: translate3d(0,0,0);
+}
+
+.as-range-slider--connect {
+  background: #46aeda;
+  -webkit-transition: background 450ms;
+  transition: background 450ms;
+}
+
+.as-range-slider--background {
+  background: #f3f4f7;
+}
+
+.as-range-slider--handle {
+  width: 1px;
+  height: 28px;
+  position: relative;
+  z-index: 1;
+  background: #8191b1;
+  cursor: pointer;
+}
+
+.as-range-slider--handle-lower {
+  bottom: 10px;
+}
+
+.as-range-slider--active {
+  background: #1f3b5d;
+}
+
+.as-range-slider--tooltip {
+  position: absolute;
+  color: #1f3b5d;
+  border: 1px solid #8191b1;
+  background: #ffffff;
+  padding: 2px 3px;
+}
+
+.as-range-slider--handle:hover {
+  background: #1f3b5d;
+}
+
+.as-range-slider--active .as-range-slider--tooltip, .as-range-slider--handle:hover .as-range-slider--tooltip {
+  background: #46aeda;
+  color: #ffffff;
+  border-color: #1f3b5d;
+}
+
+.as-range-slider--handle-lower .as-range-slider--tooltip {
+  border-radius: 5px 5px 5px 0;
+  top: -24px;
+}
+
+.as-range-slider--handle-upper .as-range-slider--tooltip {
+  bottom: -24px;
+  border-radius: 5px 0 5px 5px;
+  right: 0;
+}

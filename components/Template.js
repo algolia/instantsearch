@@ -1,15 +1,10 @@
-var hogan = require('hogan.js');
 var React = require('react');
+
+var renderTemplate = require('../lib/utils').renderTemplate;
 
 class Template {
   render() {
-    var content;
-
-    if (typeof this.props.template === 'string') {
-      content = hogan.compile(this.props.template).render(this.props.data);
-    } else {
-      content = this.props.template(this.props.data);
-    }
+    var content = renderTemplate(this.props.template, this.props.data);
 
     return <div dangerouslySetInnerHTML={{__html: content}} />;
   }

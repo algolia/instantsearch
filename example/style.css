@@ -35,3 +35,7 @@ body {
 .hit {
   height: 125px;
 }
+
+#price {
+  padding: 30px 0;
+}

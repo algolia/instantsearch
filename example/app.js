@@ -96,7 +96,12 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price'
+    facetName: 'price',
+    tooltips: {
+      format: function(formattedValue) {
+        return '$' + formattedValue;
+      }
+    }
   })
 );
 

@@ -20,6 +20,7 @@ API is unstable. We welcome any idea.
   - [toggle](#toggle)
   - [refinementList](#refinementlist)
   - [menu](#menu)
+  - [rangeSlider](#rangeslider)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -99,7 +100,7 @@ npm run test:coverage
 [toggle]: ./widgets-screenshots/toggle.png
 [refinementList]: ./widgets-screenshots/refinement-list.png
 [menu]: ./widgets-screenshots/menu.png
-[rangeSlider]: ./widgets-screenshots/rangeSlider.png
+[rangeSlider]: ./widgets-screenshots/range-slider.png
 
 ### searchBox
 
@@ -353,7 +354,14 @@ search.addWidget(
 #### API
 
 ```js
-
+/**
+ * Instantiate a slider based on a numeric attribute
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
+ * You can also provide tooltips: {format: function(formattedValue, rawValue) {return string}} option object
+ * @return {Object}
+ */
 ```
 
 
@@ -367,7 +375,12 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price'
+    facetName: 'price',
+    tooltips: {
+      format: function(formattedValue) {
+        return '$' + formattedValue;
+      }
+    }
   })
 );
 ```

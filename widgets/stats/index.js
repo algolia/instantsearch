@@ -1,6 +1,6 @@
 var React = require('react');
 
-var utils = require('../../lib/widget-utils.js');
+var utils = require('../../lib/utils.js');
 var defaultTemplate = require('./template.html');
 
 function stats({container = null, template = defaultTemplate}) {

@@ -1,16 +1,19 @@
 var React = require('react');
 
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 /**
  * Instantiate a slider based on a numeric attribute
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
+ * You can also provide tooltips: {format: function(formattedValue, rawValue) {return string}} option object
  * @return {Object}
  */
 function rangeSlider({
     container = null,
-    facetName = null
+    facetName = null,
+    tooltips = true
   }) {
   var Slider = require('../components/Slider');
 
@@ -53,6 +56,7 @@ function rangeSlider({
           start={[this._currentValues.min, this._currentValues.max]}
           range={{min: stats.min, max: stats.max}}
           onChange={this._refine.bind(this, helper, stats)}
+          tooltips={tooltips}
         />,
         containerNode
       );
