@@ -47,7 +47,7 @@ function menu({
         attributes: [facetName]
       }]
     }),
-    render: function(results, state, helper) {
+    render: function({results, helper}) {
       React.render(
         <RefinementList
           rootClass={cx(rootClass)}

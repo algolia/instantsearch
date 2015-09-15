@@ -32,7 +32,7 @@ function indexSelector({
       }
     },
 
-    render: function(results, state, helper) {
+    render: function({helper}) {
       var containerId = containerNode.id;
       React.render(
         <IndexSelector

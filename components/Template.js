@@ -4,7 +4,11 @@ var renderTemplate = require('../lib/utils').renderTemplate;
 
 class Template {
   render() {
-    var content = renderTemplate(this.props.template, this.props.data);
+    var content = renderTemplate({
+      template: this.props.template,
+      templateHelpers: this.props.templateHelpers,
+      data: this.props.data
+    });
 
     return <div dangerouslySetInnerHTML={{__html: content}} />;
   }
@@ -15,6 +19,7 @@ Template.propTypes = {
     React.PropTypes.string,
     React.PropTypes.func
   ]).isRequired,
+  templateHelpers: React.PropTypes.object,
   data: React.PropTypes.object
 };
 
