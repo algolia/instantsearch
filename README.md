@@ -10,11 +10,15 @@ API is unstable. We welcome any idea.
 
 - [Usage](#usage)
 - [Widget API](#widget-api)
+- [Templates](#templates)
+  - [Examples](#examples)
+  - [Template helpers](#template-helpers)
 - [Dev](#dev)
 - [Test](#test)
 - [Available widgets](#available-widgets)
   - [searchBox](#searchbox)
   - [stats](#stats)
+  - [indexSelector](#indexselector)
   - [pagination](#pagination)
   - [hits](#hits)
   - [toggle](#toggle)
@@ -89,7 +93,7 @@ template.
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-    template: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>
+    template: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>'
   })
 );
 // Function template example
