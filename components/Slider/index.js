@@ -2,7 +2,7 @@ var React = require('react');
 
 var Nouislider = require('react-nouislider');
 
-require('./index.css');
+require('style?prepend!raw!./index.css');
 
 var cssPrefix = 'as-range-slider--';
 

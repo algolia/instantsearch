@@ -10,8 +10,6 @@ module.exports = {
       test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw'
-    }, {
-      test: /\.css$/, loader: 'style-loader!css-loader'
     }]
   },
   devServer: {

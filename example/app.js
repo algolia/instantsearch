@@ -1,5 +1,3 @@
-require('./style.css');
-
 var instantsearch = require('../');
 
 var search = instantsearch({
