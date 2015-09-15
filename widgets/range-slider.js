@@ -53,7 +53,7 @@ function rangeSlider({
       helper.addNumericRefinement(facetName, '<=', newValues[1]);
       helper.search();
     },
-    render(results, state, helper) {
+    render({results, helper}) {
       var stats = results.getFacetStats(facetName);
       var currentRefinement = this._getCurrentRefinement(helper);
 
