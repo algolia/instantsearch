@@ -21,46 +21,47 @@ function rangeSlider({
   var Slider = require('../components/Slider');
 
   var containerNode = utils.getContainerNode(container);
-  var currentValues = {
-    min: -Infinity,
-    max: Infinity
-  };
 
   return {
     getConfiguration: () => ({
       disjunctiveFacets: [facetName]
     }),
-    _refine(helper, stats, newValues) {
+    _getCurrentRefinement(helper) {
       var min = helper.state.getNumericRefinement(facetName, '>=');
       var max = helper.state.getNumericRefinement(facetName, '<=');
 
-      currentValues = {
-        // min: Math.max(min && min.length && min[0] || -Infinity, stats.min),
-        min: min && min.length ? Math.max.apply(Math, min.concat(stats.min)) : stats.min,
-        // max: Math.min(max && max.length && max[0] || Infinity, stats.max)
-        max: max && max.length ? Math.max.apply(Math, max.concat(stats.max)) : stats.max
-      };
-
-      if (currentValues.min !== newValues[0] || currentValues.max !== newValues[1]) {
-        currentValues = {
-          min: newValues[0],
-          max: newValues[1]
-        };
-
-        helper.clearRefinements(facetName);
-        helper.addNumericRefinement(facetName, '>=', currentValues.min);
-        helper.addNumericRefinement(facetName, '<=', currentValues.max);
-        helper.search();
+      if (min && min.length) {
+        min = min[0];
+      } else {
+        min = -Infinity;
       }
+
+      if (max && max.length) {
+        max = max[0];
+      } else {
+        max = Infinity;
+      }
+
+      return {
+        min,
+        max
+      };
+    },
+    _refine(helper, newValues) {
+      helper.clearRefinements(facetName);
+      helper.addNumericRefinement(facetName, '>=', newValues[0]);
+      helper.addNumericRefinement(facetName, '<=', newValues[1]);
+      helper.search();
     },
     render(results, state, helper) {
       var stats = results.getFacetStats(facetName);
+      var currentRefinement = this._getCurrentRefinement(helper);
 
       React.render(
         <Slider
-          start={[currentValues.min, currentValues.max]}
+          start={[currentRefinement.min, currentRefinement.max]}
           range={{min: stats.min, max: stats.max}}
-          onChange={this._refine.bind(this, helper, stats)}
+          onChange={this._refine.bind(this, helper)}
           tooltips={tooltips}
         />,
         containerNode
