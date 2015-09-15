@@ -1,7 +1,7 @@
 var React = require('react');
 
 var findIndex = require('lodash/array/findIndex');
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index

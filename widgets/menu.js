@@ -1,7 +1,7 @@
 var React = require('react');
 var cx = require('classnames');
 
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 var defaultTemplate = `<a href="{{href}}">{{name}}</a> {{count}}`;
 

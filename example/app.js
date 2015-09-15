@@ -1,5 +1,3 @@
-require('./style.css');
-
 var instantsearch = require('../');
 
 var search = instantsearch({
@@ -90,6 +88,18 @@ search.addWidget(
     facetName: 'categories',
     limit: 10,
     template: require('./templates/category.html')
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.rangeSlider({
+    container: '#price',
+    facetName: 'price',
+    tooltips: {
+      format: function(formattedValue) {
+        return '$' + formattedValue;
+      }
+    }
   })
 );
 

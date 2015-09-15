@@ -1,6 +1,6 @@
 var React = require('react');
 
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 function hits({container = null, templates = {}, hitsPerPage = 20}) {
   var Hits = require('../components/Hits');

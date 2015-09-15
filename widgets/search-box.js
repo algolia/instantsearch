@@ -1,6 +1,6 @@
 var React = require('react');
 
-var utils = require('../lib/widget-utils.js');
+var utils = require('../lib/utils.js');
 
 function searchbox(params) {
   var SearchBox = require('../components/SearchBox');
