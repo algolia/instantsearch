@@ -7,7 +7,10 @@ var utils = require('../lib/utils.js');
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
- * You can also provide tooltips: {format: function(formattedValue, rawValue) {return string}} option object
+ * The default tooltip will show the formatted corresponding value without any other token.
+ * You can also provide
+ * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
+ * So that you can format the tooltip display value as you want
  * @return {Object}
  */
 function rangeSlider({
