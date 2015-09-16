@@ -11,7 +11,7 @@ if (!process.env.VERSION) {
 }
 
 var semver = require('semver');
-var currentVersion = require('../src/version.json');
+var currentVersion = require('../src/version.js');
 var newVersion = process.env.VERSION;
 
 if (!semver.valid(newVersion)) {
@@ -24,9 +24,11 @@ if (semver.gte(currentVersion, newVersion)) {
 
 console.log('Releasing ' + newVersion);
 
-console.log('..Updating src/version.json');
+console.log('..Updating src/version.js');
 
-fs.writeFileSync(path.join(__dirname, '../src/version.json'), '"' + newVersion + '"');
+var versionFile = path.join(__dirname, '../src/version.js');
+var newContent = "'use strict';\n\nmodule.exports = '" + newVersion + "';\n";
+fs.writeFileSync(versionFile, newContent);
 
 console.log('..Updating bower.json and package.json');
 
