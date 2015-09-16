@@ -33,12 +33,12 @@ if (process.env.TRAVIS_BUILD_NUMBER !== undefined) {
 var browsers = {
   all: [{
     name: 'chrome',
-    version: '42..beta',
-    platform: 'Windows 2012 R2' // Force Win 8.1, more stable than linux etc
+    version: '-2..latest',
+    platform: 'Windows 10'
   }, {
     name: 'firefox',
-    version: '37..beta',
-    platform: 'Windows 2012 R2'
+    version: '-2..latest',
+    platform: 'Windows 10'
   }, {
     name: 'ie',
     version: '8..latest'
@@ -58,11 +58,11 @@ var browsers = {
   pullRequest: [{
     name: 'chrome',
     version: 'latest', // `latest` === stable
-    platform: 'Windows 2012 R2'
+    platform: 'Windows 10'
   }, {
     name: 'firefox',
     version: 'latest',
-    platform: 'Windows 2012 R2'
+    platform: 'Windows 10'
   }, {
     name: 'ie',
     version: 'latest'

@@ -72,7 +72,7 @@
     "tape": "4.2.0",
     "uglify-js": "2.4.24",
     "watchify": "3.3.1",
-    "zuul": "3.4.0",
+    "zuul": "3.5.0",
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
