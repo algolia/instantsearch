@@ -76,8 +76,8 @@
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
-    "lodash": "3.10.1",
-    "lodash-compat": "3.10.1"
+    "lodash": "^3.10.1",
+    "lodash-compat": "^3.10.1"
   },
   "peerDependencies": {
     "algoliasearch": ">= 3.1 < 4"

@@ -1,4 +1,6 @@
-dist
-examples
-node_modules
-test
+dist/
+examples/
+test/
+# we do not want to lock down dependencies when used as an npm dependency
+# only when we build
+npm-shrinkwrap.json
