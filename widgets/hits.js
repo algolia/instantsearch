@@ -9,7 +9,7 @@ function hits({container = null, templates = {}, hitsPerPage = 20}) {
 
   return {
     getConfiguration: () => ({hitsPerPage}),
-    render: function(results, state, helper) {
+    render: function({results, helper}) {
       React.render(
         <Hits
           hits={results.hits}

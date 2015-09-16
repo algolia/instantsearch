@@ -12,12 +12,13 @@ function stats({container = null, template = defaultTemplate}) {
   }
 
   return {
-    render: function(results) {
+    render: function({results, templateHelpers}) {
       React.render(
         <Stats
           nbHits={results.nbHits}
           processingTimeMS={results.processingTimeMS}
           template={template}
+          templateHelpers={templateHelpers}
         />,
         containerNode
       );

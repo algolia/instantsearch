@@ -10,11 +10,15 @@ API is unstable. We welcome any idea.
 
 - [Usage](#usage)
 - [Widget API](#widget-api)
+- [Templates](#templates)
+  - [Examples](#examples)
+  - [Template helpers](#template-helpers)
 - [Dev](#dev)
 - [Test](#test)
 - [Available widgets](#available-widgets)
   - [searchBox](#searchbox)
   - [stats](#stats)
+  - [indexSelector](#indexselector)
   - [pagination](#pagination)
   - [hits](#hits)
   - [toggle](#toggle)
@@ -29,9 +33,10 @@ API is unstable. We welcome any idea.
 ```js
 var instantsearch = require('instantsearch.js');
 var search = instantsearch({
-  appId: appId,
-  apiKey: apiKey,
-  indexName: indexName
+  appId: appId, // Mandatory
+  apiKey: apiKey, // Mandatory
+  indexName: indexName, // Mandatory
+  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN'
 });
 
 // add a widget
@@ -71,6 +76,52 @@ function mySuperWidget(opts) {
 
 search.addWidget(mySuperWidget());
 ```
+
+## Templates
+
+Most of the widgets accept a `template` or `templates` option that let you
+change the default rendering.
+
+`template` can be defined either as a Mustache (Hogan) string or as a function.
+See the documentation of each widget to see which data is passed to the
+template.
+
+### Examples
+
+```javascript
+// Mustache template example
+search.addWidget(
+  instantsearch.widgets.stats({
+    container: '#stats',
+    template: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>'
+  })
+);
+// Function template example
+search.addWidget(
+  instantsearch.widgets.stats({
+    container: '#stats',
+    template: function(data) {
+      return '<div>You have ' + data.nbHits + 'results, fetched in ' + data.processingTimMS +'ms.</div>'
+    }
+  })
+);
+```
+
+### Template helpers
+
+In order to help you when defining your templates, `instantsearch.js` exposes
+a few helpers. All helpers are accessible in the Mustache templating through
+`{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}`. To
+use them in the function templates, you'll have to call
+`search.templateHelpers.nameOfTheHelper` where `search` is your current
+`instantsearch` instance.
+
+Here is the list of the currently available helpers.
+
+- `formatNumber`: Will accept a number as input and returned the formatted
+  version of the number in the locale defined with the `numberLocale` config
+  option (defaults to `en-EN`).
+  eg. `100000` will be formatted as `100 000` with `en-EN`
 
 ## Dev
 

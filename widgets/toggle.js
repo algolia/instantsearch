@@ -32,7 +32,7 @@ function toggle({
     getConfiguration: () => ({
       facets: [facetName]
     }),
-    render: function(results, state, helper) {
+    render: function({helper}) {
       var isRefined = helper.hasRefinements(facetName);
 
       function toggleFilter() {

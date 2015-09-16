@@ -8,7 +8,7 @@ function pagination({container, cssClass, labels, maxPages} = {}) {
   var containerNode = utils.getContainerNode(container);
 
   return {
-    render: function(results, state, helper) {
+    render: function({results, helper}) {
       var nbPages = results.nbPages;
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);

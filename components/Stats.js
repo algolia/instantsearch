@@ -5,6 +5,7 @@ var Template = require('./Template');
 class Stats extends React.Component {
   render() {
     var template = this.props.template;
+    var templateHelpers = this.props.templateHelpers;
     var data = {
       nbHits: this.props.nbHits,
       hasNoResults: this.props.nbHits === 0,
@@ -17,6 +18,7 @@ class Stats extends React.Component {
       <Template
         data={data}
         template={template}
+        templateHelpers={templateHelpers}
       />
     );
   }
@@ -28,7 +30,8 @@ Stats.propTypes = {
   template: React.PropTypes.oneOfType([
     React.PropTypes.func,
     React.PropTypes.string
-  ]).isRequired
+  ]).isRequired,
+  templateHelpers: React.PropTypes.object
 };
 
 module.exports = Stats;
