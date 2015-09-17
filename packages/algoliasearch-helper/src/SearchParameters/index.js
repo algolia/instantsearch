@@ -1036,7 +1036,7 @@ SearchParameters.prototype = {
 
     return this.numericRefinements[attribute] &&
       !isUndefined(this.numericRefinements[attribute][operator]) &&
-      this.numericRefinements[attribute][operator].indexOf(value) !== -1;
+      indexOf(this.numericRefinements[attribute][operator], value) !== -1;
   },
   /**
    * Returns true if the tag refined, false otherwise
