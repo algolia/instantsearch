@@ -13,7 +13,7 @@ test('getFacetByName should return a given facet be it disjunctive or conjunctiv
   t.equal(cityFacet.name, 'city', 'name');
   t.deepEqual(cityFacet.data, {
     'New York': 1,
-    Paris: 3,
+    'Paris': 3,
     'San Francisco': 1
   }, 'values');
 
