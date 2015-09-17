@@ -1,4 +1,4 @@
 node_modules/
 dist/
 example/bundle.js*
-coverage/
+npm-debug.log

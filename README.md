@@ -28,6 +28,23 @@ API is unstable. We welcome any idea.
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+## Setup
+
+### npm
+
+```sh
+npm install instantsearch.js --save-dev
+```
+
+### `<script>`
+
+instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
+
+```html
+<script src="//cdn.jsdelivr.net/instantsearch/0/instantsearch.min.js"></script>
+```
+
+
 ## Usage
 
 ```js
