@@ -38,7 +38,7 @@ function algoliasearchHelper(client, index, opts) {
  * @member module:algoliasearchHelper.version
  * @type {number}
  */
-algoliasearchHelper.version = require('./src/version.json');
+algoliasearchHelper.version = require('./src/version.js');
 
 /**
  * Constructor for the Helper.
@@ -63,7 +63,7 @@ algoliasearchHelper.SearchResults = SearchResults;
 
 module.exports = algoliasearchHelper;
 
-},{"./src/SearchParameters":161,"./src/SearchResults":163,"./src/algoliasearch.helper":164,"./src/version.json":168}],2:[function(require,module,exports){
+},{"./src/SearchParameters":161,"./src/SearchResults":163,"./src/algoliasearch.helper":164,"./src/version.js":168}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -7709,7 +7709,7 @@ SearchParameters.prototype = {
 
     return this.numericRefinements[attribute] &&
       !isUndefined(this.numericRefinements[attribute][operator]) &&
-      this.numericRefinements[attribute][operator].indexOf(value) !== -1;
+      indexOf(this.numericRefinements[attribute][operator], value) !== -1;
   },
   /**
    * Returns true if the tag refined, false otherwise
@@ -9580,6 +9580,9 @@ var requestBuilder = {
 module.exports = requestBuilder;
 
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":135,"lodash/object/merge":151}],168:[function(require,module,exports){
-module.exports="2.3.5"
+'use strict';
+
+module.exports = '2.3.6';
+
 },{}]},{},[1])(1)
 });

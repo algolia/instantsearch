@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.3.6 - 2015-09-17
+  * CHORE: technical release, move all deps to ^version and add a shrinkwrap to allow reproducible builds
+
 2.3.5 - 2015-09-12
   * FIX: getFacetStats should look into facets and disjunctiveFacets
 
