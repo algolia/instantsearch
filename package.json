@@ -10,7 +10,7 @@
     "watch": "webpack --watch",
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh && npm run lint",
-    "test:watch": "nodemon -i node_modules/ -i coverage/ -i .git/ -i dist/ -q --exec './scripts/test.sh | tap-spec'",
+    "test:watch": "nodemon -q --exec './scripts/test.sh | tap-spec'",
     "release": "./scripts/release.sh",
     "doctoc": "doctoc --maxlevel 3 README.md"
   },
