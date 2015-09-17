@@ -8,13 +8,16 @@ if [ $currentBranch != 'master' ]; then
   exit 1
 fi
 
-[[ -z $(git status -s) ]] && printf "Release: Working tree is not clean (git status)" && exit 1
+if [[ -z $(git status -s) ]]; then
+printf "Release: Working tree is not clean (git status)"
+exit 1
+fi
 
 printf "\n\nRelease: update working tree"
 git pull origin master
 
 printf "\n\nRelease: merge develop branch"
-git fetch origin/develop
+git fetch origin develop
 git merge origin/develop
 
 printf "Release: npm install"
@@ -38,7 +41,7 @@ conventional-changelog -p angular | nd 2>/dev/null
 # choose and bump new version
 # printf "\n\nRelease: Please enter the new chosen version > "
 printf "\n=> Release: Please enter the new chosen version > "
-read newVersion
+read -e newVersion
 VERSION=$newVersion node ./scripts/bump-package-version.js
 
 # build new version
