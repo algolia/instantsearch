@@ -30,7 +30,7 @@ API is unstable. We welcome any idea.
 
 ## Setup
 
-### npm
+### npm, browserify, webpack
 
 ```sh
 npm install instantsearch.js --save-dev
@@ -41,9 +41,8 @@ npm install instantsearch.js --save-dev
 instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
 
 ```html
-<script src="//cdn.jsdelivr.net/instantsearch/0/instantsearch.min.js"></script>
+<script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
 ```
-
 
 ## Usage
 
@@ -454,3 +453,20 @@ search.addWidget(
   })
 );
 ```
+
+## Browser support
+
+We support IE9+ and all other modern browsers.
+
+To get IE8 support, please insert this in the `<head>`:
+
+```html
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<!--[if lte IE 8]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+<![endif]-->
+```
+
+We use the [shawnbot/aight](https://github.com/shawnbot/aight) polyfill.
+
+**Always put the `<script>` after any `jQuery` library**, see https://github.com/shawnbot/aight/issues/42.
