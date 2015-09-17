@@ -10,7 +10,6 @@
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh && npm run lint",
     "test:watch": "nodemon -i node_modules/ -i coverage/ -i .git/ -i dist/ -q --exec './scripts/test.sh | tap-spec'",
-    "test:coverage": "babel-node node_modules/.bin/isparta cover ./scripts/test.sh",
     "doctoc": "doctoc --maxlevel 3 README.md"
   },
   "browserify": {
@@ -32,7 +31,6 @@
     "eslint-config-airbnb": "0.0.8",
     "eslint-config-algolia": "3.0.0",
     "eslint-plugin-react": "3.3.2",
-    "isparta": "3.0.4",
     "nodemon": "1.4.1",
     "onchange": "2.0.0",
     "pretty-bytes": "2.0.1",
