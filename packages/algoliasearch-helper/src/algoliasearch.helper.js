@@ -590,6 +590,10 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
     partialState.numericRefinements = numericRefinements;
   }
 
+  if (partialState.page) {
+    partialState.page = parseInt(partialState.page, 10);
+  }
+
   return pick(partialState, SearchParameters.PARAMETERS);
 };
 

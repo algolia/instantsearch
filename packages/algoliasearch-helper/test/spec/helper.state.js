@@ -335,3 +335,24 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
     'Index should be equal even with the prefix');
   t.end();
 });
+
+test('getConfigurationFromQueryString should parse page as number and be consistent with the state', function(t) {
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, {});
+
+  helper.setCurrentPage(10);
+
+  var filters = ['page'];
+
+  var queryString = helper.getStateAsQueryString({filters: filters});
+
+  var partialStateFromQueryString = algoliasearchHelper.AlgoliaSearchHelper.getConfigurationFromQueryString(
+    queryString
+  );
+
+  t.deepEquals(
+    partialStateFromQueryString.page,
+    helper.state.page,
+    'Page should be consistent throught query string serialization/deserialization');
+  t.end();
+});
