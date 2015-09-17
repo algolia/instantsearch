@@ -8,10 +8,6 @@ if [ $currentBranch != 'master' ]; then
   exit 1
 fi
 
-printf "Release: git clean dist/"
-git clean dist/ -f
-git checkout dist/
-
 [[ -z $(git status -s) ]] && printf "Release: Working tree is not clean (git status)" && exit 1
 
 printf "\n\nRelease: update working tree"
@@ -59,7 +55,7 @@ npm run doctoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add package.json CHANGELOG.md README.md
+git add npm-shrinkwrap.json package.json CHANGELOG.md README.md
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
