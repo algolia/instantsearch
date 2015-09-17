@@ -51,6 +51,7 @@
     "@algolia/jsfmt": "1.3.0",
     "algoliasearch": "latest",
     "browserify": "11.1.0",
+    "browzers": "^1.0.0",
     "bulk-require": "0.2.1",
     "bulkify": "1.1.1",
     "doctoc": "0.15.0",
@@ -72,7 +73,7 @@
     "tape": "4.2.0",
     "uglify-js": "2.4.24",
     "watchify": "3.4.0",
-    "zuul": "3.5.0",
+    "zuul": "vvo/zuul#247d685a780d4d062e0ce696a4ec3ffeb12aa40d",
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {

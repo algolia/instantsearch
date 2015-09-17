@@ -30,50 +30,7 @@ if (process.env.TRAVIS_BUILD_NUMBER !== undefined) {
   zuulConfig.tunnel = 'ngrok';
 }
 
-var browsers = {
-  all: [{
-    name: 'chrome',
-    version: '-2..latest',
-    platform: 'Windows 10'
-  }, {
-    name: 'firefox',
-    version: '-2..latest',
-    platform: 'Windows 10'
-  }, {
-    name: 'ie',
-    version: '8..latest'
-  }, {
-    name: 'safari',
-    version: '6..latest'
-  }, {
-    name: 'iphone',
-    version: '7.0..latest'
-  }, {
-    name: 'android',
-    version: '4.1..latest'
-  }, {
-    name: 'ipad',
-    version: '7.0..latest'
-  }],
-  pullRequest: [{
-    name: 'chrome',
-    version: 'latest', // `latest` === stable
-    platform: 'Windows 10'
-  }, {
-    name: 'firefox',
-    version: 'latest',
-    platform: 'Windows 10'
-  }, {
-    name: 'ie',
-    version: 'latest'
-  }, {
-    name: 'iphone',
-    version: 'latest'
-  }, {
-    name: 'android',
-    version: 'latest'
-  }]
-};
+var browsers = require('browzers');
 
 zuulConfig.browsers = process.env.TRAVIS_PULL_REQUEST && process.env.TRAVIS_PULL_REQUEST !== 'false' ?
   browsers.pullRequest :
