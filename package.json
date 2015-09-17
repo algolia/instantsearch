@@ -7,6 +7,7 @@
   "scripts": {
     "lint": "./scripts/lint.sh",
     "build": "./scripts/build.sh",
+    "gh-pages": "./scripts/gh-pages.sh",
     "watch": "webpack --watch",
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh && npm run lint",
@@ -27,6 +28,7 @@
     "eslint-config-airbnb": "0.0.8",
     "eslint-config-algolia": "3.0.0",
     "eslint-plugin-react": "3.4.1",
+    "gh-pages": "^0.4.0",
     "json": "^9.0.3",
     "mversion": "^1.10.1",
     "nd": "^1.2.0",

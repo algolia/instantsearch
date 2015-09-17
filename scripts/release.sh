@@ -26,13 +26,13 @@ npm install
 currentVersion=`cat package.json | json version`
 
 # header
-printf "\n\nRelease: Current version is $currentVersion"
-printf "\nRelease: A changelog will be generated only if a fix/feat/performance/breaking token is found in git log"
-printf "\nRelease: You must choose a new ve.rs.ion (semver)"
-printf "\nPress q to exit the next screen\n\n"
+printf "\n\nRelease: current version is $currentVersion"
+printf "\nRelease: a changelog will be generated only if a fix/feat/performance/breaking token is found in git log"
+printf "\nRelease: you must choose a new ve.rs.ion (semver)"
+printf "\nRelease: press q to exit the next screen\n\n"
 
 # preview changelog
-read -p "=> Release: Press [ENTER] to view changes since latest version.."
+read -p "=> Release: press [ENTER] to view changes since latest version.."
 
 # nd (markdown renderer in terminal)
 # has some output going on to stderr because of node v4, no big deal
@@ -40,7 +40,7 @@ conventional-changelog -p angular | nd 2>/dev/null
 
 # choose and bump new version
 # printf "\n\nRelease: Please enter the new chosen version > "
-printf "\n=> Release: Please enter the new chosen version > "
+printf "\n=> Release: please type the new chosen version > "
 read -e newVersion
 VERSION=$newVersion node ./scripts/bump-package-version.js
 
@@ -48,12 +48,12 @@ VERSION=$newVersion node ./scripts/bump-package-version.js
 VERSION=$newVersion npm run build
 
 # update changelog
-printf "\n\nRelease: Update changelog"
+printf "\n\nRelease: update changelog"
 changelog=`conventional-changelog -p angular`
 conventional-changelog -p angular -i CHANGELOG.md -w
 
 # regenerate readme TOC
-printf "\n\nRelease: Generate README.mc TOC"
+printf "\n\nRelease: generate README.mc TOC"
 npm run doctoc
 
 # git add and tag
@@ -62,10 +62,10 @@ git add lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
-printf "\n\nRelease: Almost done, check everything in another terminal tab.\n"
-read -p "=> Release: When ready, press [ENTER] to push to github and publish the package"
+printf "\n\nRelease: almost done, check everything in another terminal tab.\n"
+read -p "=> Release: when ready, press [ENTER] to push to github and publish the package"
 
-printf "\n\nRelease: Push to github, publish on npm"
+printf "\n\nRelease: push to github, publish on npm"
 git push
 git push --tags
 npm publish
@@ -73,5 +73,8 @@ git checkout develop
 git pull
 git merge master
 git push
+
+printf "\n\nRelease: update http://algolia.github.io/instantsearch.js with example/"
+npm run gh-pages
 
 printf "\n\nRelease: done! Flush the jsDelivr cache when the PR is merged: http://www.jsdelivr.com/"
