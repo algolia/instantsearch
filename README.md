@@ -4,8 +4,6 @@
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
-[![Browser tests][browser-test-matrix]][browser-test-url]
-
 [travis-svg]: https://img.shields.io/travis/algolia/instantsearch.js/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/instantsearch.js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
