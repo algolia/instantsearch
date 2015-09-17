@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Instant search kit for Algolia search",
   "main": "dist/instantsearch.js",
   "author": "Algolia <support@algolia.com>",
