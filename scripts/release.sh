@@ -8,9 +8,9 @@ if [ $currentBranch != 'master' ]; then
   exit 1
 fi
 
-if [[ -z $(git status -s) ]]; then
-printf "Release: Working tree is not clean (git status)"
-exit 1
+if [[ -n $(git status --porcelain) ]]; then
+  printf "Release: Working tree is not clean (git status)"
+  exit 1
 fi
 
 printf "\n\nRelease: update working tree"
