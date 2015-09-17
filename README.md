@@ -8,6 +8,9 @@ API is unstable. We welcome any idea.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [Setup](#setup)
+  - [npm, browserify, webpack](#npm-browserify-webpack)
+  - [`<script>`](#script)
 - [Usage](#usage)
 - [Widget API](#widget-api)
 - [Templates](#templates)
@@ -25,6 +28,7 @@ API is unstable. We welcome any idea.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
+- [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
