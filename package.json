@@ -2,24 +2,17 @@
   "name": "instantsearch.js",
   "version": "0.0.0",
   "description": "Instant search kit for Algolia search",
-  "main": "index.js",
+  "main": "dist/instantsearch.js",
   "author": "Algolia <support@algolia.com>",
   "scripts": {
     "lint": "./scripts/lint.sh",
     "build": "./scripts/build.sh",
+    "watch": "webpack --watch",
     "dev": "./scripts/dev.sh",
     "test": "./scripts/test.sh && npm run lint",
     "test:watch": "nodemon -i node_modules/ -i coverage/ -i .git/ -i dist/ -q --exec './scripts/test.sh | tap-spec'",
     "release": "./scripts/release.sh",
     "doctoc": "doctoc --maxlevel 3 README.md"
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
-  },
-  "browser": {
-    "lodash": "lodash-compat"
   },
   "repository": "algolia/intantsearch.js",
   "devDependencies": {

@@ -1,4 +1,5 @@
-var instantsearch = require('../');
+// force using index because package 'main' is dist/
+var instantsearch = require('../index');
 
 var search = instantsearch({
   appId: 'latency',
