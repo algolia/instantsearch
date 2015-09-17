@@ -1,8 +1,21 @@
 # instantsearch.js
 
-Instant search for everyone, even for your cat 😸.
+*instantsearch.js* is a library of widgets to build high performance instant search experiences using Algolia
 
-API is unstable. We welcome any idea.
+[![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
+
+[![Browser tests][browser-test-matrix]][browser-test-url]
+
+[travis-svg]: https://img.shields.io/travis/algolia/instantsearch.js/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/algolia/instantsearch.js
+[license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
+[license-url]: LICENSE
+[downloads-image]: https://img.shields.io/npm/dm/instantsearch.js.svg?style=flat-square
+[downloads-url]: http://npm-stat.com/charts.html?package=instantsearch.js
+[version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
+[package-url]: https://npmjs.org/package/instantsearch.js
+
+API is unstable. We welcome any idea and pull request.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
