@@ -15,4 +15,6 @@ instantsearch.widgets = {
   toggle: require('./widgets/toggle')
 };
 
+instantsearch.version = require('./lib/version.js');
+
 module.exports = instantsearch;
