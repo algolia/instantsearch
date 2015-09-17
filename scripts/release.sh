@@ -70,7 +70,7 @@ git push
 git push --tags
 npm publish
 git checkout develop
-git pull develop
+git pull
 git merge master
 git push
 
