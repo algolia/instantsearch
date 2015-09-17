@@ -115,7 +115,9 @@ search.addWidget(mySuperWidget());
 Most of the widgets accept a `template` or `templates` option that let you
 change the default rendering.
 
-`template` can be defined either as a Mustache (Hogan) string or as a function.
+`template` can be defined either as a Mustache (Hogan) string or as a function receiving
+the widget data.
+
 See the documentation of each widget to see which data is passed to the
 template.
 
@@ -149,16 +151,14 @@ use them in the function templates, you'll have to call
 `search.templateHelpers.nameOfTheHelper` where `search` is your current
 `instantsearch` instance.
 
-Here is the list of the currently available helpers.
+Here is the list of the currently available helpers:
 
 - `formatNumber`: Will accept a number as input and returned the formatted
   version of the number in the locale defined with the `numberLocale` config
   option (defaults to `en-EN`).
   eg. `100000` will be formatted as `100 000` with `en-EN`
 
-## Dev
-
-Here is the development workflow:
+## Development workflow
 
 ```sh
 npm run dev
@@ -171,7 +171,6 @@ npm run dev
 ```sh
 npm test # test and lint
 npm run test:watch # developer mode, test only
-npm run test:coverage
 ```
 
 ## Available widgets
