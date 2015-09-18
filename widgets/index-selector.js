@@ -12,8 +12,8 @@ var utils = require('../lib/utils.js');
  */
 function indexSelector({
     container = null,
-    cssClass = {},
-    indices = null
+    indices = null,
+    cssClass
   }) {
   var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
