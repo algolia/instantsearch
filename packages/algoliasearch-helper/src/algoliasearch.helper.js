@@ -527,7 +527,7 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
 
   if (moreAttributes) merge(encodedState, moreAttributes);
 
-  return qs.stringify(encodedState);
+  return qs.stringify(encodedState, {encode: false});
 };
 
 /**
