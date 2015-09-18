@@ -598,6 +598,28 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
 };
 
 /**
+ * Retrieve an object of all the properties that are not understandable as helper
+ * parameters.
+ */
+AlgoliaSearchHelper.getForeignConfigurationInQueryString = function(queryString, options) {
+  var prefixForParameters = options && options.prefix;
+
+  var foreignConfig = {};
+  var config = qs.parse(queryString);
+  if (prefixForParameters) {
+    var prefixRegexp = new RegExp('^' + prefixForParameters);
+    forEach(config, function(v, key) {
+      if (!prefixRegexp.test(key)) foreignConfig[key] = v;
+    });
+  } else {
+    forEach(config, function(v, key) {
+      if (!shortener.decode(key)) foreignConfig[key] = v;
+    });
+  }
+  return foreignConfig;
+};
+
+/**
  * Override the current state without triggering a change event.
  * Do not use this method unless you know what you are doing. (see the example
  * for a legit use case)

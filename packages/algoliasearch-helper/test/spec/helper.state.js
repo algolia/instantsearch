@@ -356,3 +356,43 @@ test('getConfigurationFromQueryString should parse page as number and be consist
     'Page should be consistent throught query string serialization/deserialization');
   t.end();
 });
+
+test('should be able to get configuration that is not from algolia', function(t) {
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, {});
+
+  helper.setCurrentPage(10);
+
+  var filters = ['page', 'index'];
+
+  var moar = {
+    foo: 'bar',
+    baz: 'toto',
+    mi: '0'
+  };
+
+  var qsWithoutPrefix = helper.getStateAsQueryString(
+    {
+      filters: filters,
+      moreAttributes: moar
+    }
+  );
+  var qsWithPrefix = helper.getStateAsQueryString(
+    {
+      filters: filters,
+      moreAttributes: moar,
+      prefix: 'wtf_'
+    }
+  );
+
+  var config1 = algoliasearchHelper.AlgoliaSearchHelper.getForeignConfigurationInQueryString(qsWithoutPrefix);
+  var config2 = algoliasearchHelper.AlgoliaSearchHelper.getForeignConfigurationInQueryString(qsWithPrefix, {prefix: 'wtf_'});
+
+  t.deepEquals(
+    config1,
+    moar);
+  t.deepEquals(
+    config2,
+    moar);
+  t.end();
+});
