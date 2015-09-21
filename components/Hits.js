@@ -14,16 +14,15 @@ class Hits extends React.Component {
 
   renderNoResults() {
     return (
-      <div><Template template={this.props.noResultsTemplate} /></div>
+      <div><Template data={this.props.results} template={this.props.noResultsTemplate} /></div>
     );
   }
 
   render() {
-    var renderedHits = map(this.props.hits, function(hit) {
-      return <Template data={hit} key={hit.objectID} template={this.props.hitTemplate} />;
-    }, this);
-
-    return <div>{renderedHits}</div>;
+    if (this.props.hits.length > 0) {
+      return this.renderWithResults();
+    }
+    return this.renderNoResults();
   }
 }
 
