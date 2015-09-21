@@ -14,10 +14,15 @@ var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
 var merge = require('lodash/object/merge');
 var mapKeys = require('lodash/object/mapKeys');
+var mapValues= require('lodash/object/mapValues');
 var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
+var isString = require('lodash/lang/isString');
+var isObject = require('lodash/lang/isObject');
+var isArray = require('lodash/lang/isArray');
 
 var qs = require('qs');
+var encode = require('qs/lib/utils').encode;
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -499,6 +504,19 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
 
 var shortener = require('./SearchParameters/shortener');
 
+var recursiveEncode = function(input) {
+  if(isObject(input)){
+    return mapValues(input, recursiveEncode);
+  }
+  if(isArray(input)){
+    return map(input, recursiveEncode);
+  }
+  if(isString(input)){
+    return encode(input);
+  }
+  return input;
+}
+
 /**
  * Get part of the state as a query string. By default, the output keys will not
  * be prefixed and will only take the applied refinements and the query.
@@ -517,8 +535,10 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
 
   var partialState = this.getState(filters);
 
+  var partialStateWithEncodedValues = recursiveEncode(partialState);
+
   var encodedState = mapKeys(
-    partialState,
+    partialStateWithEncodedValues,
     function(v, k) {
       var shortK = shortener.encode(k);
       return prefixForParameters + shortK;

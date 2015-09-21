@@ -313,7 +313,7 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
   var helper = algoliasearchHelper(null, index, initialState);
 
   helper.setQuery('a query');
-  helper.toggleRefine('facetA', 'a');
+  helper.toggleRefine('facetA', 'a&b=13');
   helper.toggleRefine('facetWeDontCareAbout', 'v');
   helper.toggleRefine('facetB', 'd');
   helper.addNumericRefinement('numerical', '=', 3);
