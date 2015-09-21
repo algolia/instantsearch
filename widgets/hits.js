@@ -13,6 +13,7 @@ function hits({container = null, templates = {}, hitsPerPage = 20}) {
       React.render(
         <Hits
           hits={results.hits}
+          results={results}
           helper={helper}
           noResultsTemplate={templates.empty}
           hitTemplate={templates.hit}
