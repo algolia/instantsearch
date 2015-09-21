@@ -29,7 +29,7 @@ API is unstable. We welcome any idea and pull request.
 - [Templates](#templates)
   - [Examples](#examples)
   - [Template helpers](#template-helpers)
-- [Dev](#dev)
+- [Development workflow](#development-workflow)
 - [Test](#test)
 - [Available widgets](#available-widgets)
   - [searchBox](#searchbox)
