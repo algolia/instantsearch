@@ -11,7 +11,8 @@ class Stats extends React.Component {
       hasNoResults: this.props.nbHits === 0,
       hasOneResult: this.props.nbHits === 1,
       hasManyResults: this.props.nbHits > 1,
-      processingTimeMS: this.props.processingTimeMS
+      processingTimeMS: this.props.processingTimeMS,
+      query: this.props.query
     };
 
     return (
@@ -31,7 +32,8 @@ Stats.propTypes = {
     React.PropTypes.func,
     React.PropTypes.string
   ]).isRequired,
-  templateHelpers: React.PropTypes.object
+  templateHelpers: React.PropTypes.object,
+  query: React.PropTypes.string
 };
 
 module.exports = Stats;

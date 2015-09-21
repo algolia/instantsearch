@@ -17,6 +17,7 @@ function stats({container = null, template = defaultTemplate}) {
         <Stats
           nbHits={results.nbHits}
           processingTimeMS={results.processingTimeMS}
+          query={results.query}
           template={template}
           templateHelpers={templateHelpers}
         />,
