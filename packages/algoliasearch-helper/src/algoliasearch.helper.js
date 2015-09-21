@@ -18,7 +18,7 @@ var mapValues= require('lodash/object/mapValues');
 var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
 var isString = require('lodash/lang/isString');
-var isObject = require('lodash/lang/isObject');
+var isPlainObject = require('lodash/lang/isPlainObject');
 var isArray = require('lodash/lang/isArray');
 
 var qs = require('qs');
@@ -505,7 +505,7 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
 var shortener = require('./SearchParameters/shortener');
 
 var recursiveEncode = function(input) {
-  if(isObject(input)){
+  if(isPlainObject(input)){
     return mapValues(input, recursiveEncode);
   }
   if(isArray(input)){
