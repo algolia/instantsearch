@@ -216,11 +216,15 @@ search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
     template: // mustache string or function(stats) with the following keys
-              // nbHits: number,
+              // hasManyResults: boolean
               // hasNoResults: boolean
               // hasOneResult: boolean
-              // hasManyResults: boolean
+              // hitsPerPage: number
+              // nbHits: number
+              // nbPages: number
+              // page: number
               // processingTimeMS: number
+              // query: string
   })
 );
 ```

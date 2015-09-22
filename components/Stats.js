@@ -7,10 +7,13 @@ class Stats extends React.Component {
     var template = this.props.template;
     var templateHelpers = this.props.templateHelpers;
     var data = {
-      nbHits: this.props.nbHits,
+      hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
       hasOneResult: this.props.nbHits === 1,
-      hasManyResults: this.props.nbHits > 1,
+      hitsPerPage: this.props.hitsPerPage,
+      nbHits: this.props.nbHits,
+      nbPages: this.props.nbPages,
+      page: this.props.page,
       processingTimeMS: this.props.processingTimeMS,
       query: this.props.query
     };
@@ -26,7 +29,10 @@ class Stats extends React.Component {
 }
 
 Stats.propTypes = {
+  hitsPerPage: React.PropTypes.number,
   nbHits: React.PropTypes.number,
+  nbPages: React.PropTypes.number,
+  page: React.PropTypes.number,
   processingTimeMS: React.PropTypes.number,
   template: React.PropTypes.oneOfType([
     React.PropTypes.func,
