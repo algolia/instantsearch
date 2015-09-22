@@ -59,28 +59,38 @@ search.addWidget(
     facetName: 'brand',
     operator: 'or',
     limit: 10,
-    rootClass: 'nav nav-stacked',
-    template: require('./templates/or.html')
+    cssClasses: {
+      list: 'nav nav-stacked panel-body'
+    },
+    templates: {
+      header: '<div class="panel-heading">Brands</div>',
+      item: require('./templates/or.html')
+    }
   })
 );
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: '#price_range',
+    container: '#price-range',
     facetName: 'price_range',
     operator: 'and',
     limit: 10,
-    rootClass: 'nav nav-stacked',
-    template: require('./templates/and.html')
+    cssClasses: {
+      root: 'list-group'
+    },
+    templates: {
+      header: '<div class="panel-heading">Price ranges</div>',
+      item: require('./templates/and.html')
+    }
   })
 );
 
 search.addWidget(
   instantsearch.widgets.toggle({
-    container: '#free_shipping',
+    container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
-    template: require('./templates/free_shipping.html')
+    template: require('./templates/free-shipping.html')
   })
 );
 
@@ -89,7 +99,13 @@ search.addWidget(
     container: '#categories',
     facetName: 'categories',
     limit: 10,
-    template: require('./templates/category.html')
+    cssClasses: {
+      root: 'list-group'
+    },
+    templates: {
+      header: '<div class="panel-heading">Categories</div>',
+      item: require('./templates/category.html')
+    }
   })
 );
 

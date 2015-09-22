@@ -23,4 +23,8 @@ Template.propTypes = {
   data: React.PropTypes.object
 };
 
+Template.defaultProps = {
+  data: {}
+};
+
 module.exports = Template;

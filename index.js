@@ -3,6 +3,8 @@ var toFactory = require('to-factory');
 var InstantSearch = require('./lib/InstantSearch');
 var instantsearch = toFactory(InstantSearch);
 
+require('style?prepend!raw!./lib/style.css');
+
 instantsearch.widgets = {
   hits: require('./widgets/hits'),
   indexSelector: require('./widgets/index-selector'),
