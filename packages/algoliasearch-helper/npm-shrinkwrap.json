@@ -1,0 +1,16 @@
+{
+  "name": "algoliasearch-helper",
+  "version": "2.3.6",
+  "dependencies": {
+    "lodash": {
+      "version": "3.10.1",
+      "from": "lodash@>=3.10.1 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
+    },
+    "lodash-compat": {
+      "version": "3.10.1",
+      "from": "lodash-compat@>=3.10.1 <4.0.0",
+      "resolved": "https://registry.npmjs.org/lodash-compat/-/lodash-compat-3.10.1.tgz"
+    }
+  }
+}
