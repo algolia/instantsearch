@@ -1,7 +1,7 @@
 CHANGELOG
 
 UNRELEASED
-  * FEATURE : add AlgoliaSearchHelper.setState(filters) to get a filtered state
+  * FEATURE : add AlgoliaSearchHelper.getState(filters) to get a filtered state
   * FEATURE : add AlgoliaSearchHelper.getStateAsQueryString to get a part of
   the state as a queryString
   * FEATURE : add AlgoliaSearchHelper.setStateFromQueryString to set the state
