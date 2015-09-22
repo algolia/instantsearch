@@ -25,6 +25,7 @@ var hierarchicalCounter = 0;
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -39,14 +40,15 @@ function menu({
       item: null
     },
     hideWhenNoResults = true,
-    templates = defaultTemplates
+    templates = defaultTemplates,
+    transformData = null
   }) {
   hierarchicalCounter++;
 
   var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, template]})';
+  var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
 
   if (container === null || facetName === null) {
     throw new Error(usage);
@@ -85,6 +87,7 @@ function menu({
           cssClasses={cssClasses}
           facetValues={getFacetValues(results, hierarchicalFacetName, sortBy, limit)}
           templates={templates}
+          transformData={transformData}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode

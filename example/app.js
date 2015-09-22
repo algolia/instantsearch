@@ -81,6 +81,10 @@ search.addWidget(
     templates: {
       header: '<div class="panel-heading">Price ranges</div>',
       item: require('./templates/and.html')
+    },
+    transformData: function(data) {
+      data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+      return data;
     }
   })
 );
