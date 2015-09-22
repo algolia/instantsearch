@@ -4,7 +4,7 @@ UNRELEASED
   * FEATURE : add AlgoliaSearchHelper.setState(filters) to get a filtered state
   * FEATURE : add AlgoliaSearchHelper.getStateAsQueryString to get a part of
   the state as a queryString
-  * FEATURE : add AlgoliaSearchHelper.setStateAsQueryString to set the state
+  * FEATURE : add AlgoliaSearchHelper.setStateFromQueryString to set the state
   of the helper with a query string
   * FEATURE : add AlgoliaSearchHelper.getConfigurationFromQueryString. Reads
   a query string and returns the associated partial helper configuration
