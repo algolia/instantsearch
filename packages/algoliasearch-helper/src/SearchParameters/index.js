@@ -343,8 +343,7 @@ function SearchParameters(newParameters) {
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
       /*eslint-disable*/
-      console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
-      /*eslint-enable*/
+      console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'); /*eslint-enable*/
     }
   }, this);
 }
@@ -442,7 +441,7 @@ SearchParameters.validate = function(currentState, parameters) {
 
   if (currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0) {
     return new Error(
-      '[Tags] Can\'t switch from the managed tag API to the advanced API. It is probably ' +
+      '[Tags] Cannot switch from the managed tag API to the advanced API. It is probably ' +
       'an error, if it is really what you want, you should first clear the tags with clearTags method.');
   }
 
