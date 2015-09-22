@@ -326,13 +326,13 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
 `undefined`.
 
 ```html
-<div id="free_shipping"></div>
+<div id="free-shipping"></div>
 ```
 
 ```javascript
 search.addWidget(
   instantsearch.widgets.toggle({
-    container: '#free_shipping',
+    container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
     template: '<label><input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}}</label>'

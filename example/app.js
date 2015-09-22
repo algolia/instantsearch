@@ -65,7 +65,7 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.refinementList({
-    container: '#price_range',
+    container: '#price-range',
     facetName: 'price_range',
     operator: 'and',
     limit: 10,
@@ -76,10 +76,10 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.toggle({
-    container: '#free_shipping',
+    container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
-    template: require('./templates/free_shipping.html')
+    template: require('./templates/free-shipping.html')
   })
 );
 
