@@ -199,6 +199,7 @@ search.addWidget(
     container: '#search-box',
     placeholder: 'Search for products',
     // cssClass
+    // poweredBy: boolean
   })
 );
 ```

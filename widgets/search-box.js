@@ -15,6 +15,7 @@ function searchbox(params) {
           search={helper.search.bind(helper)}
           placeholder={params.placeholder}
           inputClass={params.cssClass}
+          poweredBy={params.poweredBy}
         />,
         container
       );
