@@ -55,7 +55,13 @@ function rangeSlider({
     },
     render({results, helper}) {
       var stats = results.getFacetStats(facetName);
+
       var currentRefinement = this._getCurrentRefinement(helper);
+
+      if (!stats) {
+        React.render(<div/>, containerNode);
+        return;
+      }
 
       React.render(
         <Slider
