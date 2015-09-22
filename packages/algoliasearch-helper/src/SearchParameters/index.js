@@ -430,15 +430,26 @@ SearchParameters.validate = function(currentState, parameters) {
     return !currentState.hasOwnProperty(k);
   });
 
-  if (unknownKeys.length === 1) return new Error('Property ' + unknownKeys[0] + ' is not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
-  if (unknownKeys.length > 1) return new Error('Properties ' + unknownKeys.join(' ') + ' are not defined on SearchParameters (see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+  if (unknownKeys.length === 1) {
+    return new Error(
+      'Property ' + unknownKeys[0] + ' is not defined on SearchParameters ' +
+      '(see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+  } else if (unknownKeys.length > 1) {
+    return new Error(
+      'Properties ' + unknownKeys.join(' ') + ' are not defined on SearchParameters ' +
+      '(see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+  }
 
   if (currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0) {
-    return new Error("[Tags] Can't switch from the managed tag API to the advanced API. It is probably an error, if it's really what you want, you should first clear the tags with clearTags method.");
+    return new Error(
+      '[Tags] Can\'t switch from the managed tag API to the advanced API. It is probably ' +
+      'an error, if it is really what you want, you should first clear the tags with clearTags method.');
   }
 
   if (currentState.tagRefinements.length > 0 && params.tagFilters) {
-    return new Error("[Tags] Can't switch from the advanced tag API to the managed API. It is probably an error, if it's not, you should first clear the tags with clearTags method.");
+    return new Error(
+      '[Tags] Cannot switch from the advanced tag API to the managed API. It is probably ' +
+      'an error, if it is not, you should first clear the tags with clearTags method.');
   }
 
   if (currentState.numericFilters && params.numericRefinements && !isEmpty(params.numericRefinements)) {
@@ -603,14 +614,14 @@ SearchParameters.prototype = {
    */
   addNumericRefinement: function(attribute, operator, v) {
     var value;
-    if(isNumber(v)) {
+    if (isNumber(v)) {
       value = v;
-    } else if(isString(v)){
+    } else if (isString(v)) {
       value = parseFloat(v);
-    } else if(isArray(v)){
+    } else if (isArray(v)) {
       value = map(
         v,
-        function(number){
+        function(number) {
           return isString(number) ? parseFloat(number) : number;
         }
       );
@@ -656,7 +667,9 @@ SearchParameters.prototype = {
    */
   getDisjunctiveRefinements: function(facetName) {
     if (!this.isDisjunctiveFacet(facetName)) {
-      throw new Error(facetName + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      throw new Error(
+        facetName + ' is not defined in the disjunctiveFacets attribute of the helper configuration'
+      );
     }
     return this.disjunctiveFacetsRefinements[facetName] || [];
   },
@@ -810,14 +823,16 @@ SearchParameters.prototype = {
    */
   addDisjunctiveFacetRefinement: function addDisjunctiveFacetRefinement(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
 
     if (RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
       page: 0,
-      disjunctiveFacetsRefinements: RefinementList.addRefinement(this.disjunctiveFacetsRefinements, facet, value)
+      disjunctiveFacetsRefinements: RefinementList.addRefinement(
+        this.disjunctiveFacetsRefinements, facet, value)
     });
   },
   /**
@@ -882,13 +897,15 @@ SearchParameters.prototype = {
    */
   removeDisjunctiveFacetRefinement: function removeDisjunctiveFacetRefinement(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
     if (!RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
       page: 0,
-      disjunctiveFacetsRefinements: RefinementList.removeRefinement(this.disjunctiveFacetsRefinements, facet, value)
+      disjunctiveFacetsRefinements: RefinementList.removeRefinement(
+        this.disjunctiveFacetsRefinements, facet, value)
     });
   },
   /**
@@ -950,12 +967,14 @@ SearchParameters.prototype = {
    */
   toggleDisjunctiveFacetRefinement: function toggleDisjunctiveFacetRefinement(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
 
     return this.setQueryParameters({
       page: 0,
-      disjunctiveFacetsRefinements: RefinementList.toggleRefinement(this.disjunctiveFacetsRefinements, facet, value)
+      disjunctiveFacetsRefinements: RefinementList.toggleRefinement(
+        this.disjunctiveFacetsRefinements, facet, value)
     });
   },
   /**
@@ -967,7 +986,8 @@ SearchParameters.prototype = {
    */
   toggleHierarchicalFacetRefinement: function toggleHierarchicalFacetRefinement(facet, value) {
     if (!this.isHierarchicalFacet(facet)) {
-      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
     }
 
     var separator = this._getHierarchicalFacetSeparator(this.getHierarchicalFacetByName(facet));
@@ -1082,7 +1102,8 @@ SearchParameters.prototype = {
    */
   isDisjunctiveFacetRefined: function isDisjunctiveFacetRefined(facet, value) {
     if (!this.isDisjunctiveFacet(facet)) {
-      throw new Error(facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the disjunctiveFacets attribute of the helper configuration');
     }
     return RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value);
   },
@@ -1097,7 +1118,8 @@ SearchParameters.prototype = {
    */
   isHierarchicalFacetRefined: function isHierarchicalFacetRefined(facet, value) {
     if (!this.isHierarchicalFacet(facet)) {
-      throw new Error(facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
+      throw new Error(
+        facet + ' is not defined in the hierarchicalFacets attribute of the helper configuration');
     }
 
     var refinements = this.getHierarchicalRefinement(facet);
@@ -1208,7 +1230,11 @@ SearchParameters.prototype = {
    * @return {any} the value of the parameter
    */
   getQueryParameter: function getQueryParameter(paramName) {
-    if (!this.hasOwnProperty(paramName)) throw new Error("Parameter '" + paramName + "' is not an attribute of SearchParameters (http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)");
+    if (!this.hasOwnProperty(paramName)) {
+      throw new Error(
+        "Parameter '" + paramName + "' is not an attribute of SearchParameters " +
+        '(http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+    }
 
     return this[paramName];
   },
@@ -1218,7 +1244,8 @@ SearchParameters.prototype = {
    * previous one.
    * @method
    * @param {string} parameter the parameter name
-   * @param {any} value the value to be set, must be compliant with the definition of the attribute on the object
+   * @param {any} value the value to be set, must be compliant with the definition
+   * of the attribute on the object
    * @return {SearchParameters} the updated state
    */
   setQueryParameter: function setParameter(parameter, value) {
