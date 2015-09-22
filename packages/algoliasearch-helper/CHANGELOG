@@ -6,6 +6,12 @@ UNRELEASED
   the state as a queryString
   * FEATURE : add AlgoliaSearchHelper.setStateAsQueryString to set the state
   of the helper with a query string
+  * FEATURE : add AlgoliaSearchHelper.getConfigurationFromQueryString. Reads
+  a query string and returns the associated partial helper configuration
+  * FEATURE : add AlgoliaSearchHelper.getForeignConfigurationInQueryString to
+  get the configuration contained in a qs that is not from the helper
+  * FIX : all the properties that are supposed to be numbers are now parsed in
+  the SearchParameters
 
 2.3.5 - 2015-09-12
   * FIX: getFacetStats should look into facets and disjunctiveFacets

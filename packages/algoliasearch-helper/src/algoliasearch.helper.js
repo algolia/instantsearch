@@ -579,7 +579,7 @@ AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, op
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
  * @return {object} partial search parameters object (same properties than in the
- * SearchParameters but not exhaustive
+ * SearchParameters but not exhaustive)
  */
 AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
   var prefixForParameters = options && options.prefix || '';
@@ -606,6 +606,11 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
 /**
  * Retrieve an object of all the properties that are not understandable as helper
  * parameters.
+ * @param {string} queryString the query string to read
+ * @param {object} options the options
+ *   - prefixForParameters : prefix used for the helper configuration keys
+ * @return {object} the object containing the parsed configuration that doesn't
+ * to the helper
  */
 AlgoliaSearchHelper.getForeignConfigurationInQueryString = function(queryString, options) {
   var prefixForParameters = options && options.prefix;
