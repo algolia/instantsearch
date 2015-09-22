@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Template = require('./Template');
+var cx = require('classnames');
 
 class RefinementList extends React.Component {
   refine(value) {
@@ -38,37 +39,68 @@ class RefinementList extends React.Component {
 
   render() {
     var facetValues = this.props.facetValues;
-    var template = this.props.template;
+    var templates = this.props.templates;
+    var rootClass = cx(this.props.cssClasses.root);
+    var listClass = cx(this.props.cssClasses.list);
+    var itemClass = cx(this.props.cssClasses.item);
 
     return (
-      <div className={this.props.rootClass}>
+      <div className={rootClass}>
+        <Template template={templates.header} />
+        <div className={listClass}>
         {facetValues.map(facetValue => {
           return (
-            <div className={this.props.itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
-              <Template data={facetValue} template={template} />
+            <div className={itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
+              <Template data={facetValue} template={templates.item} />
             </div>
           );
         })}
+        </div>
+        <Template template={templates.footer} />
       </div>
     );
   }
 }
 
 RefinementList.propTypes = {
-  rootClass: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.arrayOf(React.PropTypes.string)
-  ]),
-  itemClass: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.arrayOf(React.PropTypes.string)
-  ]),
+  cssClasses: React.PropTypes.shape({
+    root: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
+    item: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
+    list: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
+  }),
   facetValues: React.PropTypes.array,
-  template: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.func
-  ]).isRequired,
+  templates: React.PropTypes.shape({
+    header: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func
+    ]),
+    item: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func
+    ]).isRequired,
+    footer: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func
+    ])
+  }),
   toggleRefinement: React.PropTypes.func.isRequired
+};
+
+RefinementList.defaultProps = {
+  cssClasses: {
+    root: null,
+    item: null,
+    list: null
+  }
 };
 
 module.exports = RefinementList;

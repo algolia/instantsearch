@@ -58,8 +58,13 @@ search.addWidget(
     facetName: 'brand',
     operator: 'or',
     limit: 10,
-    rootClass: 'nav nav-stacked',
-    template: require('./templates/or.html')
+    cssClasses: {
+      list: 'nav nav-stacked panel-body'
+    },
+    templates: {
+      header: '<div class="panel-heading">Brands</div>',
+      item: require('./templates/or.html')
+    }
   })
 );
 
@@ -69,8 +74,13 @@ search.addWidget(
     facetName: 'price_range',
     operator: 'and',
     limit: 10,
-    rootClass: 'nav nav-stacked',
-    template: require('./templates/and.html')
+    cssClasses: {
+      root: 'list-group'
+    },
+    templates: {
+      header: '<div class="panel-heading">Price ranges</div>',
+      item: require('./templates/and.html')
+    }
   })
 );
 
@@ -88,7 +98,13 @@ search.addWidget(
     container: '#categories',
     facetName: 'categories',
     limit: 10,
-    template: require('./templates/category.html')
+    cssClasses: {
+      root: 'list-group'
+    },
+    templates: {
+      header: '<div class="panel-heading">Categories</div>',
+      item: require('./templates/category.html')
+    }
   })
 );
 
