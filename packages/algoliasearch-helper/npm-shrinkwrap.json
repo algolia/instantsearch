@@ -4,13 +4,18 @@
   "dependencies": {
     "lodash": {
       "version": "3.10.1",
-      "from": "lodash@>=3.10.1 <4.0.0",
+      "from": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz",
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
     },
     "lodash-compat": {
       "version": "3.10.1",
-      "from": "lodash-compat@>=3.10.1 <4.0.0",
+      "from": "https://registry.npmjs.org/lodash-compat/-/lodash-compat-3.10.1.tgz",
       "resolved": "https://registry.npmjs.org/lodash-compat/-/lodash-compat-3.10.1.tgz"
+    },
+    "qs": {
+      "version": "5.1.0",
+      "from": "qs@*",
+      "resolved": "https://registry.npmjs.org/qs/-/qs-5.1.0.tgz"
     }
   }
 }
