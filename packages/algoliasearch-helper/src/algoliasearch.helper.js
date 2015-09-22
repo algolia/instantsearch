@@ -3,6 +3,7 @@
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
 var requestBuilder = require('./requestBuilder');
+var shortener = require('./SearchParameters/shortener');
 
 var util = require('util');
 var events = require('events');
@@ -14,7 +15,7 @@ var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
 var merge = require('lodash/object/merge');
 var mapKeys = require('lodash/object/mapKeys');
-var mapValues= require('lodash/object/mapValues');
+var mapValues = require('lodash/object/mapValues');
 var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
 var isString = require('lodash/lang/isString');
@@ -446,8 +447,10 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
  * Get the current search state stored in the helper. This object is immutable.
  * @param {string[]} [filters] optionnal filters to retrieve only a subset of the state
  * @return {SearchParameters|object} if filters is specified a plain object is
- * returned containing only the requested fields
+ * returned containing only the requested fields, otherwise return the unfiltered
+ * state
  * @example
+ * // Get a part of the state with all the refinements on attributes and the query
  * helper.getState(['query', 'attribute:category']);
  */
 AlgoliaSearchHelper.prototype.getState = function(filters) {
@@ -502,16 +505,15 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   return partialState;
 };
 
-var shortener = require('./SearchParameters/shortener');
 
-var recursiveEncode = function(input) {
-  if(isPlainObject(input)){
+function recursiveEncode(input) {
+  if (isPlainObject(input)) {
     return mapValues(input, recursiveEncode);
   }
-  if(isArray(input)){
+  if (isArray(input)) {
     return map(input, recursiveEncode);
   }
-  if(isString(input)){
+  if (isString(input)) {
     return encode(input);
   }
   return input;
@@ -558,7 +560,7 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
  *  - prefix : prefix used for the algolia parameters
  *  - triggerChange : if set to true the state update will trigger a change event
  */
-AlgoliaSearchHelper.prototype.setStateFromQueryString = function setStateFromQueryString(queryString, options) {
+AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, options) {
   var triggerChange = options && options.triggerChange || false;
 
   var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
@@ -753,7 +755,8 @@ AlgoliaSearchHelper.prototype.getQueryParameter = function(parameterName) {
 /**
  * Get the list of refinements for a given attribute.
  * @param {string} facetName attribute name used for facetting
- * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
+ * @return {Refinement[]} All Refinement are objects that contain a value, and
+ * a type. Numeric also contains an operator.
  */
 AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
   var refinements = [];
