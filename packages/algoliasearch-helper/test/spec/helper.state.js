@@ -122,7 +122,7 @@ test('Get the state as a query string', function(t) {
   );
 
   t.deepEquals(
-    decodedState,
+    algoliasearchHelper.SearchParameters._parseNumbers(decodedState),
     stateWithoutConfig,
     'deserialized qs should be equal to the state');
 
@@ -242,18 +242,11 @@ test('Serialize with prefix', function(t) {
   var prefix = 'toto_';
 
   var qString = helper.getStateAsQueryString({filters: filters, prefix: prefix});
-  var parsedQs = qs.parse(qString);
 
   t.deepEquals(
-    parsedQs,
-    {
-      toto_fR: helper.state.facetsRefinements,
-      toto_dFR: helper.state.disjunctiveFacetsRefinements,
-      toto_nR: helper.state.numericRefinements,
-      toto_q: helper.state.query,
-      toto_idx: index
-    },
-    'deserialized qs with prefix should be equal to the state with prefix');
+    qString,
+    'toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto_fR[facetWeDontCareAbout][0]=v&toto_fR[facetA][0]=a&toto_dFR[facetB][0]=d&toto_q=a%20query&toto_idx=indexNameInTheHelper',
+    'serialized qs with prefix should be correct');
 
   t.end();
 });
@@ -288,19 +281,11 @@ test('Serialize with prefix, this should have no impact on user provided paramat
       }
     }
   );
-  var parsedQs = qs.parse(qString);
 
   t.deepEquals(
-    parsedQs,
-    {
-      toto_fR: helper.state.facetsRefinements,
-      toto_dFR: helper.state.disjunctiveFacetsRefinements,
-      toto_nR: helper.state.numericRefinements,
-      toto_q: helper.state.query,
-      toto: 'tata',
-      foo: 'bar'
-    },
-    'deserialized qs with prefix should be equal to the state with prefix and keep the custom attributes');
+    qString,
+    'toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto_fR[facetWeDontCareAbout][0]=v&toto_fR[facetA][0]=a&toto_dFR[facetB][0]=d&toto_q=a%20query&toto=tata&foo=bar',
+    'serialized qs with prefix and more attributes should be equal');
 
   t.end();
 });

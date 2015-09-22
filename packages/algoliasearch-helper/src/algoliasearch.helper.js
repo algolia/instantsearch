@@ -596,25 +596,9 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, opti
     }
   );
 
-  if (partialState.numericRefinements) {
-    var numericRefinements = {};
-    forEach(partialState.numericRefinements, function(operators, attribute) {
-      numericRefinements[attribute] = {};
-      forEach(operators, function(values, operator) {
-        var parsedValues = map(values, function(v) {
-          return parseFloat(v);
-        });
-        numericRefinements[attribute][operator] = parsedValues;
-      });
-    });
-    partialState.numericRefinements = numericRefinements;
-  }
+  var partialStateWithParsedNumbers = SearchParameters._parseNumbers(partialState);
 
-  if (partialState.page) {
-    partialState.page = parseInt(partialState.page, 10);
-  }
-
-  return pick(partialState, SearchParameters.PARAMETERS);
+  return pick(partialStateWithParsedNumbers, SearchParameters.PARAMETERS);
 };
 
 /**

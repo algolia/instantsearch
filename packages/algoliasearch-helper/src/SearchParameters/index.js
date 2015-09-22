@@ -2,15 +2,18 @@
 
 var keys = require('lodash/object/keys');
 var intersection = require('lodash/array/intersection');
-var forEach = require('lodash/collection/forEach');
 var forOwn = require('lodash/object/forOwn');
-var reduce = require('lodash/collection/reduce');
+var forEach = require('lodash/collection/forEach');
 var filter = require('lodash/collection/filter');
+var map = require('lodash/collection/map');
+var reduce = require('lodash/collection/reduce');
 var omit = require('lodash/object/omit');
 var indexOf = require('lodash/array/indexOf');
+var isArray = require('lodash/lang/isArray');
 var isEmpty = require('lodash/lang/isEmpty');
 var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
+var isNumber = require('lodash/lang/isNumber');
 var isFunction = require('lodash/lang/isFunction');
 var find = require('lodash/collection/find');
 var pluck = require('lodash/collection/pluck');
@@ -66,7 +69,7 @@ var RefinementList = require('./RefinementList');
 }
  */
 function SearchParameters(newParameters) {
-  var params = newParameters || {};
+  var params = newParameters ? SearchParameters._parseNumbers(newParameters) : {};
 
   /**
    * Targeted index. This parameter is mandatory.
@@ -339,12 +342,67 @@ function SearchParameters(newParameters) {
 
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
+      /*eslint-disable*/
       console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
+      /*eslint-enable*/
     }
   }, this);
 }
 
+/**
+ * List all the properties in SearchParameters
+ */
 SearchParameters.PARAMETERS = keys(new SearchParameters());
+
+/**
+ * @private
+ * @param {object} partialState full or part of a state
+ * @return {object} a new object with the number keys as number
+ */
+SearchParameters._parseNumbers = function(partialState) {
+  var numbers = {};
+
+  var numberKeys = [
+    'aroundPrecision',
+    'aroundRadius',
+    'getRankingInfo',
+    'minWordSizefor2Typos',
+    'minWordSizefor1Typo',
+    'page',
+    'maxValuesPerFacet'
+  ];
+
+  forEach(numberKeys, function(k) {
+    var value = partialState[k];
+    if (isString(value)) numbers[k] = parseFloat(partialState[k]);
+  });
+
+  if (partialState.numericRefinements) {
+    var numericRefinements = {};
+    forEach(partialState.numericRefinements, function(operators, attribute) {
+      numericRefinements[attribute] = {};
+      forEach(operators, function(values, operator) {
+        var parsedValues = map(values, function(v) {
+          if (isArray(v)) {
+            return map(v, function(vPrime) {
+              if (isString(vPrime)) {
+                return parseFloat(vPrime);
+              }
+              return vPrime;
+            });
+          } else if (isString(v)) {
+            return parseFloat(v);
+          }
+          return v;
+        });
+        numericRefinements[attribute][operator] = parsedValues;
+      });
+    });
+    numbers.numericRefinements = numericRefinements;
+  }
+
+  return merge({}, partialState, numbers);
+};
 
 /**
  * Factory for SearchParameters
@@ -543,7 +601,23 @@ SearchParameters.prototype = {
    * searchparameter.addNumericRefinement('size', '=', 38);
    * searchparameter.addNumericRefinement('size', '=', 40);
    */
-  addNumericRefinement: function(attribute, operator, value) {
+  addNumericRefinement: function(attribute, operator, v) {
+    var value;
+    if(isNumber(v)) {
+      value = v;
+    } else if(isString(v)){
+      value = parseFloat(v);
+    } else if(isArray(v)){
+      value = map(
+        v,
+        function(number){
+          return isString(number) ? parseFloat(number) : number;
+        }
+      );
+    } else {
+      throw new Error('The value should be a number, a parseable string or an array of those.');
+    }
+
     if (this.isNumericRefined(attribute, operator, value)) return this;
 
     var mod = merge({}, this.numericRefinements);
