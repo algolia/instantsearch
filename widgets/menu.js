@@ -69,9 +69,10 @@ function toggleRefinement(helper, facetName, facetValue) {
 }
 
 function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
-  return results
-    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy})
-    .data.slice(0, limit);
+  var values = results
+    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
+
+  return values.data && values.data.slice(0, limit) || [];
 }
 
 module.exports = menu;

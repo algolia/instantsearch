@@ -15,11 +15,14 @@ function stats({container = null, template = defaultTemplate}) {
     render: function({results, templateHelpers}) {
       React.render(
         <Stats
+          hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}
+          nbPages={results.nbPages}
+          page={results.page}
           processingTimeMS={results.processingTimeMS}
           query={results.query}
-          template={template}
           templateHelpers={templateHelpers}
+          template={template}
         />,
         containerNode
       );
