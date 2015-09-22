@@ -662,6 +662,7 @@ var state1 = helper.searchOnce({hitsPerPage: 1})
 
 ```js
 // see the jsdoc for the parameters
+// http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html#getStateAsQueryString
 var qs = helper.getStateAsQueryString();
 // by defaults it serialize the current index, the query and all the refinements
 ```
