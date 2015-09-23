@@ -3,8 +3,6 @@ var React = require('react');
 var Template = require('./Template');
 var cx = require('classnames');
 
-var identity = require('lodash/utility/identity');
-
 class RefinementList extends React.Component {
   refine(value) {
     this.props.toggleRefinement(value);
@@ -45,7 +43,6 @@ class RefinementList extends React.Component {
     var rootClass = cx(this.props.cssClasses.root);
     var listClass = cx(this.props.cssClasses.list);
     var itemClass = cx(this.props.cssClasses.item);
-    var transformData = this.props.transformData || identity;
 
     return (
       <div className={rootClass}>
@@ -54,7 +51,7 @@ class RefinementList extends React.Component {
         {facetValues.map(facetValue => {
           return (
             <div className={itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
-              <Template data={transformData(facetValue)} template={templates.item} />
+              <Template data={(this.props.transformData) ? this.props.transformData(facetValue) : facetValue} template={templates.item} />
             </div>
           );
         })}
