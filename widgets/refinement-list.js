@@ -27,6 +27,7 @@ var defaultTemplates = {
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
@@ -45,12 +46,13 @@ function refinementList({
     },
     hideWhenNoResults = true,
     templates = defaultTemplates,
+    transformData = null,
     singleRefine = false
   }) {
   var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, template]})';
+  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
 
   if (container === null ||
     facetName === null ||
@@ -94,6 +96,7 @@ function refinementList({
           cssClasses={cssClasses}
           facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
           templates={templates}
+          transformData={transformData}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode

@@ -51,7 +51,7 @@ class RefinementList extends React.Component {
         {facetValues.map(facetValue => {
           return (
             <div className={itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
-              <Template data={facetValue} template={templates.item} />
+              <Template data={(this.props.transformData) ? this.props.transformData(facetValue) : facetValue} template={templates.item} />
             </div>
           );
         })}
@@ -92,6 +92,7 @@ RefinementList.propTypes = {
       React.PropTypes.func
     ])
   }),
+  transformData: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired
 };
 
