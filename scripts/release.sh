@@ -77,4 +77,4 @@ git push
 printf "\n\nRelease: update http://algolia.github.io/instantsearch.js with example/"
 npm run gh-pages
 
-printf "\n\nRelease: done! Flush the jsDelivr cache when the PR is merged: http://www.jsdelivr.com/"
+printf "\n\nRelease: done! Flush the jsDelivr cache when the PR is merged: http://www.jsdelivr.com/\n"
