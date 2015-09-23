@@ -6,7 +6,7 @@ var Paginator = require('./Paginator');
 var PaginationHiddenLink = require('./PaginationHiddenLink');
 var PaginationLink = require('./PaginationLink');
 
-var bem = require('../BemHelper')('as-pagination');
+var bem = require('../../lib/utils').bemHelper;
 var cx = require('classnames');
 
 class Pagination extends React.Component {

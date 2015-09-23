@@ -1,5 +1,5 @@
 var React = require('react');
-var bem = require('../BemHelper')('as-powered-by');
+var bem = require('../../lib/utils').bemHelper('as-powered-by');
 var logo = require('url?limit=10000!./algolia_logo.png');
 
 require('style?prepend!raw!./index.css');
