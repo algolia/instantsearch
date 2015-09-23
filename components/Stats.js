@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Template = require('./Template');
+var autoHide = require('../decorators/autoHide');
 
 class Stats extends React.Component {
   render() {
@@ -42,4 +43,4 @@ Stats.propTypes = {
   query: React.PropTypes.string
 };
 
-module.exports = Stats;
+module.exports = autoHide(Stats);

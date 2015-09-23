@@ -2,7 +2,14 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 
-function pagination({container, cssClass, labels, maxPages, showFirstLast} = {}) {
+function pagination({
+    container = null,
+    cssClass,
+    labels,
+    maxPages,
+    showFirstLast,
+    hideIfEmpty = true
+  }) {
   var Pagination = require('../components/Pagination/Pagination.js');
 
   var containerNode = utils.getContainerNode(container);
@@ -21,6 +28,8 @@ function pagination({container, cssClass, labels, maxPages, showFirstLast} = {})
           nbPages={nbPages}
           setCurrentPage={helper.setCurrentPage.bind(helper)}
           cssClass={cssClass}
+          hideIfEmpty={hideIfEmpty}
+          hasResults={results.hits.length > 0}
           labels={labels}
           showFirstLast={showFirstLast}
         />,

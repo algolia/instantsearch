@@ -3,7 +3,11 @@ var React = require('react');
 var utils = require('../../lib/utils.js');
 var defaultTemplate = require('./template.html');
 
-function stats({container = null, template = defaultTemplate}) {
+function stats({
+    container = null,
+    template = defaultTemplate,
+    hideIfEmpty = true
+  }) {
   var Stats = require('../../components/Stats');
   var containerNode = utils.getContainerNode(container);
 
@@ -15,6 +19,8 @@ function stats({container = null, template = defaultTemplate}) {
     render: function({results, templateHelpers}) {
       React.render(
         <Stats
+          hasResults={results.hits.length > 0}
+          hideIfEmpty={hideIfEmpty}
           hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}
           nbPages={results.nbPages}

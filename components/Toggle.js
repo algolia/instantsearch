@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Template = require('./Template');
+var autoHide = require('../decorators/autoHide');
 var debounce = require('lodash/function/debounce');
 
 class Toggle extends React.Component {
@@ -35,4 +36,4 @@ Toggle.propTypes = {
   isRefined: React.PropTypes.bool
 };
 
-module.exports = Toggle;
+module.exports = autoHide(Toggle);

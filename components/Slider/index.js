@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Nouislider = require('react-nouislider');
+var autoHide = require('../../decorators/autoHide');
 
 require('style?prepend!raw!./index.css');
 
@@ -38,4 +39,4 @@ Slider.propTypes = {
   ])
 };
 
-module.exports = Slider;
+module.exports = autoHide(Slider);

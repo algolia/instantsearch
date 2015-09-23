@@ -6,6 +6,8 @@ var Paginator = require('./Paginator');
 var PaginationHiddenLink = require('./PaginationHiddenLink');
 var PaginationLink = require('./PaginationLink');
 
+var autoHide = require('../../decorators/autoHide');
+
 var bem = require('../../lib/utils').bemHelper;
 var cx = require('classnames');
 
@@ -99,10 +101,6 @@ class Pagination extends React.Component {
   }
 
   render() {
-    if (this.props.nbHits === 0) {
-      return null;
-    }
-
     var pager = new Paginator({
       currentPage: this.props.currentPage,
       total: this.props.nbPages,
@@ -156,4 +154,4 @@ Pagination.defaultProps = {
   padding: 3
 };
 
-module.exports = Pagination;
+module.exports = autoHide(Pagination);
