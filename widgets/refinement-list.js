@@ -10,6 +10,8 @@ var defaultTemplates = {
 </label>`
 };
 
+var defaults = require('lodash/object/defaults');
+
 /**
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
@@ -69,7 +71,7 @@ function refinementList({
   }
 
   if (templates !== defaultTemplates) {
-    templates = Object.assign({}, defaultTemplates, templates);
+    templates = defaults({}, templates, defaultTemplates);
   }
 
   return {
