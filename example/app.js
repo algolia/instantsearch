@@ -8,6 +8,12 @@ var search = instantsearch({
 });
 
 search.addWidget(
+  instantsearch.widgets.urlSync({
+    useHash: true
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
