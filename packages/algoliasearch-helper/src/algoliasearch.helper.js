@@ -2,14 +2,28 @@
 
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
+var requestBuilder = require('./requestBuilder');
+var shortener = require('./SearchParameters/shortener');
+
 var util = require('util');
 var events = require('events');
+
 var forEach = require('lodash/collection/forEach');
-var isEmpty = require('lodash/lang/isEmpty');
-var bind = require('lodash/function/bind');
+var filter = require('lodash/collection/filter');
 var map = require('lodash/collection/map');
+var bind = require('lodash/function/bind');
+var isEmpty = require('lodash/lang/isEmpty');
+var merge = require('lodash/object/merge');
+var mapKeys = require('lodash/object/mapKeys');
+var mapValues = require('lodash/object/mapValues');
+var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
-var requestBuilder = require('./requestBuilder');
+var isString = require('lodash/lang/isString');
+var isPlainObject = require('lodash/lang/isPlainObject');
+var isArray = require('lodash/lang/isArray');
+
+var qs = require('qs');
+var encode = require('qs/lib/utils').encode;
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -17,18 +31,23 @@ var requestBuilder = require('./requestBuilder');
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
  * search. It provides an event based interface for search callbacks:
  *  - change: when the internal search state is changed.
- *    This event contains a {@link SearchParameters} object and the {@link SearchResults} of the last result if any.
+ *    This event contains a {@link SearchParameters} object and the
+ *    {@link SearchResults} of the last result if any.
  *  - result: when the response is retrieved from Algolia and is processed.
- *    This event contains a {@link SearchResults} object and the {@link SearchParameters} corresponding to this answer.
+ *    This event contains a {@link SearchResults} object and the
+ *    {@link SearchParameters} corresponding to this answer.
  *  - error: when the response is an error. This event contains the error returned by the server.
  * @param  {AlgoliaSearch} client an AlgoliaSearch client
  * @param  {string} index the index name to query
- * @param  {SearchParameters | object} options an object defining the initial config of the search. It doesn't have to be a {SearchParameters}, just an object containing the properties you need from it.
+ * @param  {SearchParameters | object} options an object defining the initial
+ * config of the search. It doesn't have to be a {SearchParameters},
+ * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
   this.client = client;
-  this.index = index;
-  this.state = SearchParameters.make(options);
+  var opts = options || {};
+  opts.index = index;
+  this.state = SearchParameters.make(opts);
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
@@ -63,13 +82,8 @@ AlgoliaSearchHelper.prototype.search = function() {
  *  - state with the state used for the query as a SearchParameters
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
-  var index = options.index || this.index;
-  if (options.index) {
-    delete options.index;
-  }
-
   var tempState = this.state.setQueryParameters(options);
-  var queries = requestBuilder._getQueries(index, tempState);
+  var queries = requestBuilder._getQueries(tempState.index, tempState);
   if (cb) {
     return this.client.search(
       queries,
@@ -101,7 +115,7 @@ AlgoliaSearchHelper.prototype.setQuery = function(q) {
 
 /**
  * Remove all refinements (disjunctive + conjunctive + hierarchical + excludes + numeric filters)
- * @param {string} [name] - If given, name of the facet / attribute on which  we want to remove all refinements
+ * @param {string} [name] optional name of the facet / attribute on which we want to remove all refinements
  * @return {AlgoliaSearchHelper}
  * @fires change
  */
@@ -395,8 +409,8 @@ AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {
  * @fires change
  */
 AlgoliaSearchHelper.prototype.setIndex = function(name) {
-  this.index = name;
-  this.setCurrentPage(0);
+  this.state = this.state.setIndex(name);
+  this._change();
   return this;
 };
 
@@ -431,10 +445,189 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
 
 /**
  * Get the current search state stored in the helper. This object is immutable.
- * @return {SearchParameters}
+ * @param {string[]} [filters] optionnal filters to retrieve only a subset of the state
+ * @return {SearchParameters|object} if filters is specified a plain object is
+ * returned containing only the requested fields, otherwise return the unfiltered
+ * state
+ * @example
+ * // Get a part of the state with all the refinements on attributes and the query
+ * helper.getState(['query', 'attribute:category']);
  */
-AlgoliaSearchHelper.prototype.getState = function() {
-  return this.state;
+AlgoliaSearchHelper.prototype.getState = function(filters) {
+  if (filters === undefined) return this.state;
+
+  var partialState = {};
+  var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
+  var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
+  if (attributes.indexOf('*') === -1) {
+    forEach(attributes, function(attr) {
+      if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
+        if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
+        partialState.facetsRefinements[attr] = this.state.facetsRefinements[attr];
+      }
+
+      if (this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
+        if (!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {};
+        partialState.disjunctiveFacetsRefinements[attr] = this.state.disjunctiveFacetsRefinements[attr];
+      }
+
+      var numericRefinements = this.state.getNumericRefinements(attr);
+      if (!isEmpty(numericRefinements)) {
+        if (!partialState.numericRefinements) partialState.numericRefinements = {};
+        partialState.numericRefinements[attr] = this.state.numericRefinements[attr];
+      }
+    }, this);
+  } else {
+    if (!isEmpty(this.state.numericRefinements)) {
+      partialState.numericRefinements = this.state.numericRefinements;
+    }
+    if (!isEmpty(this.state.facetsRefinements)) partialState.facetsRefinements = this.state.facetsRefinements;
+    if (!isEmpty(this.state.disjunctiveFacetsRefinements)) {
+      partialState.disjunctiveFacetsRefinements = this.state.disjunctiveFacetsRefinements;
+    }
+    if (!isEmpty(this.state.hierarchicalFacetsRefinements)) {
+      partialState.hierarchicalFacetsRefinements = this.state.hierarchicalFacetsRefinements;
+    }
+  }
+
+  var searchParameters = filter(
+    filters,
+    function(f) { return f.indexOf('attribute:') === -1; });
+
+  forEach(
+    searchParameters,
+    function(parameterKey) {
+      partialState[parameterKey] = this.state[parameterKey];
+    },
+    this
+  );
+
+  return partialState;
+};
+
+
+function recursiveEncode(input) {
+  if (isPlainObject(input)) {
+    return mapValues(input, recursiveEncode);
+  }
+  if (isArray(input)) {
+    return map(input, recursiveEncode);
+  }
+  if (isString(input)) {
+    return encode(input);
+  }
+  return input;
+}
+
+/**
+ * Get part of the state as a query string. By default, the output keys will not
+ * be prefixed and will only take the applied refinements and the query.
+ * @param {object} [options] May contain the following parameters :
+ *  - filters : possible values are all the keys of the {SearchParameters}, 'index' for the index,
+ *    all the refinements with 'attribute:*' or for some specific attributes with 'attribute:theAttribute'
+ *  - prefix : prefix in front of the keys
+ *  - moreAttributes : more values to be added in the query string. Those values
+ *    won't be prefixed.
+ * @return {string} the query string
+ */
+AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(options) {
+  var filters = options && options.filters || ['query', 'attribute:*'];
+  var moreAttributes = options && options.moreAttributes;
+  var prefixForParameters = options && options.prefix || '';
+
+  var partialState = this.getState(filters);
+
+  var partialStateWithEncodedValues = recursiveEncode(partialState);
+
+  var encodedState = mapKeys(
+    partialStateWithEncodedValues,
+    function(v, k) {
+      var shortK = shortener.encode(k);
+      return prefixForParameters + shortK;
+    }
+  );
+
+  if (moreAttributes) merge(encodedState, moreAttributes);
+
+  return qs.stringify(encodedState, {encode: false});
+};
+
+/**
+ * Overrides part of the state with the properties stored in the provided query
+ * string.
+ * @param {string} queryString the query string containing the informations to url the state
+ * @param {object} options optionnal parameters :
+ *  - prefix : prefix used for the algolia parameters
+ *  - triggerChange : if set to true the state update will trigger a change event
+ */
+AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, options) {
+  var triggerChange = options && options.triggerChange || false;
+
+  var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
+
+  var updatedState = this.state.setQueryParameters(configuration);
+
+  if (triggerChange) this.setState(updatedState);
+  else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
+};
+
+/**
+ * Read a query string and return an object containing the state
+ * @static
+ * @param {string} queryString the query string that will be decoded
+ * @param {object} options accepted options :
+ *   - prefix : the prefix used for the saved attributes, you have to provide the
+ *     same that was used for serialization
+ * @return {object} partial search parameters object (same properties than in the
+ * SearchParameters but not exhaustive)
+ */
+AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
+  var prefixForParameters = options && options.prefix || '';
+
+  var partialStateWithPrefix = qs.parse(queryString);
+  var prefixRegexp = new RegExp('^' + prefixForParameters);
+  var partialState = mapKeys(
+    partialStateWithPrefix,
+    function(v, k) {
+      if (prefixForParameters && prefixRegexp.test(k)) {
+        var encodedKey = k.replace(prefixRegexp, '');
+        return shortener.decode(encodedKey);
+      }
+      var decodedKey = shortener.decode(k);
+      return decodedKey || k;
+    }
+  );
+
+  var partialStateWithParsedNumbers = SearchParameters._parseNumbers(partialState);
+
+  return pick(partialStateWithParsedNumbers, SearchParameters.PARAMETERS);
+};
+
+/**
+ * Retrieve an object of all the properties that are not understandable as helper
+ * parameters.
+ * @param {string} queryString the query string to read
+ * @param {object} options the options
+ *   - prefixForParameters : prefix used for the helper configuration keys
+ * @return {object} the object containing the parsed configuration that doesn't
+ * to the helper
+ */
+AlgoliaSearchHelper.getForeignConfigurationInQueryString = function(queryString, options) {
+  var prefixForParameters = options && options.prefix;
+
+  var foreignConfig = {};
+  var config = qs.parse(queryString);
+  if (prefixForParameters) {
+    var prefixRegexp = new RegExp('^' + prefixForParameters);
+    forEach(config, function(v, key) {
+      if (!prefixRegexp.test(key)) foreignConfig[key] = v;
+    });
+  } else {
+    forEach(config, function(v, key) {
+      if (!shortener.decode(key)) foreignConfig[key] = v;
+    });
+  }
+  return foreignConfig;
 };
 
 /**
@@ -536,7 +729,7 @@ AlgoliaSearchHelper.prototype.isTagRefined = function() {
  * @return {string}
  */
 AlgoliaSearchHelper.prototype.getIndex = function() {
-  return this.index;
+  return this.state.index;
 };
 
 /**
@@ -567,7 +760,8 @@ AlgoliaSearchHelper.prototype.getQueryParameter = function(parameterName) {
 /**
  * Get the list of refinements for a given attribute.
  * @param {string} facetName attribute name used for facetting
- * @return {Refinement[]} All Refinement are objects that contain a value, and a type. Numeric also contains an operator.
+ * @return {Refinement[]} All Refinement are objects that contain a value, and
+ * a type. Numeric also contains an operator.
  */
 AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
   var refinements = [];
@@ -642,7 +836,7 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
-  var queries = requestBuilder._getQueries(this.index, this.state);
+  var queries = requestBuilder._getQueries(state.index, state);
 
   this.emit('search', state, this.lastResults);
   this.client.search(queries,
