@@ -1,5 +1,18 @@
 CHANGELOG
 
+UNRELEASED
+  * FEATURE : add AlgoliaSearchHelper.getState(filters) to get a filtered state
+  * FEATURE : add AlgoliaSearchHelper.getStateAsQueryString to get a part of
+  the state as a queryString
+  * FEATURE : add AlgoliaSearchHelper.setStateFromQueryString to set the state
+  of the helper with a query string
+  * FEATURE : add AlgoliaSearchHelper.getConfigurationFromQueryString. Reads
+  a query string and returns the associated partial helper configuration
+  * FEATURE : add AlgoliaSearchHelper.getForeignConfigurationInQueryString to
+  get the configuration contained in a qs that is not from the helper
+  * FIX : all the properties that are supposed to be numbers are now parsed in
+  the SearchParameters
+
 2.3.6 - 2015-09-17
   * CHORE: technical release, move all deps to ^version and add a shrinkwrap to allow reproducible builds
 

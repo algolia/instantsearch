@@ -184,8 +184,8 @@ test('getRefinements should return all the refinements for a given facet', funct
 
   t.deepEqual(helper.getRefinements('sales'),
     [
-      {value: ['3'], operator: '>', type: 'numeric'},
-      {value: ['9'], operator: '<', type: 'numeric'}
+      {value: [3], operator: '>', type: 'numeric'},
+      {value: [9], operator: '<', type: 'numeric'}
     ],
     '');
 
