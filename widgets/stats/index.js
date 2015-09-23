@@ -6,13 +6,14 @@ var defaultTemplate = require('./template.html');
 function stats({
     container = null,
     template = defaultTemplate,
+    transformData = null,
     hideIfEmpty = true
   }) {
   var Stats = require('../../components/Stats');
   var containerNode = utils.getContainerNode(container);
 
   if (container === null) {
-    throw new Error('Usage: stats({container})');
+    throw new Error('Usage: stats({container[, template, transformData]})');
   }
 
   return {
@@ -29,6 +30,7 @@ function stats({
           query={results.query}
           templateHelpers={templateHelpers}
           template={template}
+          transformData={transformData}
         />,
         containerNode
       );

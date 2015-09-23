@@ -45,6 +45,7 @@ class RefinementList extends React.Component {
   render() {
     var facetValues = this.props.facetValues;
     var templates = this.props.templates;
+    var transformData = this.props.transformData;
     var rootClass = cx(this.props.cssClasses.root);
     var listClass = cx(this.props.cssClasses.list);
     var itemClass = cx(this.props.cssClasses.item);
@@ -56,7 +57,11 @@ class RefinementList extends React.Component {
         {facetValues.map(facetValue => {
           return (
             <div className={itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
-              <Template data={(this.props.transformData) ? this.props.transformData(facetValue) : facetValue} template={templates.item} />
+              <Template
+                data={facetValue}
+                transformData={transformData}
+                template={templates.item}
+              />
             </div>
           );
         })}

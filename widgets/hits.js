@@ -5,8 +5,9 @@ var utils = require('../lib/utils.js');
 function hits({
     container = null,
     templates = {},
-    hitsPerPage = 20,
-    hideIfEmpty = false
+    transformData = {},
+    hideIfEmpty = false,
+    hitsPerPage = 20
   }) {
   var Hits = require('../components/Hits');
 
@@ -21,9 +22,11 @@ function hits({
           results={results}
           helper={helper}
           noResultsTemplate={templates.empty}
+          noResultsTransformData={transformData.empty}
           hideIfEmpty={hideIfEmpty}
           hasResults={results.hits.length > 0}
           hitTemplate={templates.hit}
+          hitTransformData={transformData.hit}
         />,
         containerNode
       );
