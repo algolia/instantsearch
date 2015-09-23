@@ -123,7 +123,7 @@ template.
 
 ### Examples
 
-```javascript
+```js
 // Mustache template example
 search.addWidget(
   instantsearch.widgets.stats({
@@ -213,7 +213,7 @@ search.addWidget(
 <div id="stats"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
@@ -244,7 +244,7 @@ you'll need several indices. This widget lets you easily change it.
 <div id="index-selector"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.indexSelector({
     container: '#index-selector',
@@ -258,7 +258,7 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
@@ -335,7 +335,7 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
 <div id="free-shipping"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free-shipping',
@@ -346,7 +346,7 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
