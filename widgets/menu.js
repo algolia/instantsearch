@@ -11,6 +11,8 @@ var defaultTemplates = {
 
 var hierarchicalCounter = 0;
 
+var defaults = require('lodash/object/defaults');
+
 /**
  * Create a menu out of a facet
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
@@ -55,7 +57,7 @@ function menu({
   }
 
   if (templates !== defaultTemplates) {
-    templates = Object.assign({}, defaultTemplates, templates);
+    templates = defaults({}, templates, defaultTemplates);
   }
 
   var hierarchicalFacetName = 'instantsearch.js' + hierarchicalCounter;

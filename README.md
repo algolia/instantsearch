@@ -491,17 +491,16 @@ search.addWidget(
 
 ## Browser support
 
-We support IE10+ and all other modern browsers.
+We natively support IE10+ and all other modern browsers without any dependency need
+on your side.
 
-To get < IE10 support, please insert this in the `<head>`:
+To get < IE10 support, please insert this code in the `<head>`:
 
 ```html
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <!--[if lte IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
 <![endif]-->
 ```
 
-We use the [shawnbot/aight](https://github.com/shawnbot/aight) polyfill.
-
-**Always put the `<script>` after any `jQuery` library**, see https://github.com/shawnbot/aight/issues/42.
+We use the [polyfill.io](https://cdn.polyfill.io/v1/docs/).
