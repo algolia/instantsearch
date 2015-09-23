@@ -19,6 +19,7 @@ Once **you are ready** to start working:
 - wait for **review**
 - do the necessary changes
 - **rebase** your pull request to avoid commits like "fix dangling comma in bro.js", "fix after review"
+- when updating your feature branch on develop, always use rebase instead of merge
 
 # Development workflow
 
@@ -44,6 +45,4 @@ Examples:
 
 - feat(slider): add new range option
 - fix(refinementList): send the full algolia result to the noResults template
-
-
 
