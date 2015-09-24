@@ -2,6 +2,7 @@ var React = require('react');
 
 var Template = require('./Template');
 var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
 var cx = require('classnames');
 
 class RefinementList extends React.Component {
@@ -43,30 +44,23 @@ class RefinementList extends React.Component {
   }
 
   render() {
-    var facetValues = this.props.facetValues;
-    var templates = this.props.templates;
-    var transformData = this.props.transformData;
-    var rootClass = cx(this.props.cssClasses.root);
-    var listClass = cx(this.props.cssClasses.list);
-    var itemClass = cx(this.props.cssClasses.item);
-
     return (
-      <div className={rootClass}>
-        <Template template={templates.header} />
-        <div className={listClass}>
-        {facetValues.map(facetValue => {
-          return (
-            <div className={itemClass} key={facetValue.name} onClick={this.handleClick.bind(this, facetValue.name)}>
-              <Template
-                data={facetValue}
-                transformData={transformData}
-                template={templates.item}
-              />
-            </div>
-          );
-        })}
-        </div>
-        <Template template={templates.footer} />
+      <div className={cx(this.props.cssClasses.list)}>
+      {this.props.facetValues.map(facetValue => {
+        return (
+          <div
+            className={cx(this.props.cssClasses.item)}
+            key={facetValue.name}
+            onClick={this.handleClick.bind(this, facetValue.name)}
+          >
+            <Template
+              data={facetValue}
+              transformData={this.props.transformData}
+              template={this.props.templates.item}
+            />
+          </div>
+        );
+      })}
       </div>
     );
   }
@@ -74,10 +68,6 @@ class RefinementList extends React.Component {
 
 RefinementList.propTypes = {
   cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.arrayOf(React.PropTypes.string)
@@ -89,18 +79,10 @@ RefinementList.propTypes = {
   }),
   facetValues: React.PropTypes.array,
   templates: React.PropTypes.shape({
-    header: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]),
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.func
-    ]).isRequired,
-    footer: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ])
+    ]).isRequired
   }),
   transformData: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired
@@ -108,10 +90,9 @@ RefinementList.propTypes = {
 
 RefinementList.defaultProps = {
   cssClasses: {
-    root: null,
     item: null,
     list: null
   }
 };
 
-module.exports = autoHide(RefinementList);
+module.exports = autoHide(headerFooter(RefinementList));
