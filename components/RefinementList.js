@@ -19,6 +19,10 @@ class RefinementList extends React.Component {
   // So the code here checks if the click was done on or in a LABEL. If this LABEL
   // has a checkbox inside, we ignore the first click event because we will get another one.
   handleClick(value, e) {
+    if (e.target.tagName === 'A' && e.target.href) {
+      e.preventDefault();
+    }
+
     if (e.target.tagName === 'INPUT') {
       this.refine(value);
       return;

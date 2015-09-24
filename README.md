@@ -184,6 +184,7 @@ npm run test:watch # developer mode, test only
 [refinementList]: ./widgets-screenshots/refinement-list.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
+[urlSync]: ./widgets-screenshots/url-sync.gif
 
 ### searchBox
 
@@ -485,6 +486,41 @@ search.addWidget(
         return '$' + formattedValue;
       }
     }
+  })
+);
+```
+
+### URL Synchronisation
+
+![Example of url sync][urlSync]
+
+#### API
+
+```js
+/**
+ * Instanciate a url sync widget. This widget let you synchronize the search
+ * parameters with the URL. It can operate with legacy API and hash or it can use
+ * the modern history API. By default, it will use the modern API, but if you are
+ * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
+ * true.
+ * @param {number} threshold time in ms after which a new state is created in the browser
+ * history. The default value is 700.
+ * @param {string[]} trackedParameters parameters that will be synchronized in the
+ * URL. By default, it will track the query, all the refinable attribute (facets and numeric
+ * filters), the index and the page.
+ * @param {boolean} useHash if set to true, the url will be hash based. Otherwise,
+ * it'll use the query parameters using the modern history API.
+ */
+```
+
+#### Usage
+
+```js
+search.addWidget(
+  instantsearch.widgets.urlSync({
+/*  useHash: true,
+    threshold: 600,
+    trackedParameters: ['query', 'page', 'attribute:*'] */
   })
 );
 ```

@@ -3,10 +3,23 @@ var PoweredBy = require('./PoweredBy');
 var bem = require('./BemHelper')('as-search-box');
 var cx = require('classnames');
 
-class SearchBox {
+class SearchBox extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({value: newProps.value});
+  }
+
   handleChange(e) {
-    this.props.setQuery(e.target.value);
+    var newValue = e.target.value;
+    this.props.setQuery(newValue);
     this.props.search();
+    this.setState({value: newValue});
   }
 
   render() {
@@ -22,12 +35,20 @@ class SearchBox {
           autoFocus="autofocus"
           onChange={this.handleChange.bind(this)}
           role="textbox"
+          onBlur={this.props.onBlur}
+          onFocus={this.props.onFocus}
+          value={this.state.value}
         />
         <PoweredBy display={this.props.poweredBy} />
       </div>
     );
   }
 }
+
+SearchBox.defaultProps = {
+  onBlur: function() {},
+  onFocus: function() {}
+};
 
 SearchBox.propTypes = {
   placeholder: React.PropTypes.string,
@@ -37,7 +58,10 @@ SearchBox.propTypes = {
   ]),
   poweredBy: React.PropTypes.bool,
   setQuery: React.PropTypes.func,
-  search: React.PropTypes.func
+  search: React.PropTypes.func,
+  onFocus: React.PropTypes.func,
+  onBlur: React.PropTypes.func,
+  value: React.PropTypes.string
 };
 
 module.exports = SearchBox;
