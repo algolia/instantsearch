@@ -263,7 +263,7 @@ search.addWidget(
 ```js
 /**
  * Instantiate a dropdown element to choose the current targeted index
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
@@ -358,7 +358,7 @@ search.addWidget(
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
  * and `undefined`.
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
@@ -378,7 +378,7 @@ search.addWidget(
 ```js
 /**
  * Instantiate a list of refinements based on a facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
@@ -427,7 +427,7 @@ search.addWidget(
 ```js
 /**
  * Create a menu out of a facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get
@@ -470,7 +470,7 @@ search.addWidget(
 ```js
 /**
  * Instantiate a slider based on a numeric attribute
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.

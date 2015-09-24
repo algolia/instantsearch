@@ -4,7 +4,7 @@ var utils = require('../lib/utils.js');
 
 /**
  * Instantiate a slider based on a numeric attribute
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
