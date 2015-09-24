@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
   <title>Instant search demo built with instantsearch.js</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <![endif]-->
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -19,26 +23,17 @@
           <div class="panel-body" id="search-box"></div>
         </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">Categories</div>
-          <div id="categories" class="list-group"></div>
-        </div>
+        <div class="panel panel-default" id="categories"></div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">Brands</div>
-          <div class="panel-body" id="brands"></div>
-        </div>
+        <div class="panel panel-default" id="brands"></div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">Price Ranges</div>
-          <div class="list-group" id="price_range"></div>
-        </div>
+        <div class="panel panel-default" id="price-range"></div>
 
         <div class="panel panel-default">
           <div class="panel-heading">Shipping</div>
           <div class="panel-body">
             <ul class="nav nav-stacked">
-              <li><div id="free_shipping"></div></li>
+              <li><div id="free-shipping"></div></li>
             </ul>
           </div>
         </div>

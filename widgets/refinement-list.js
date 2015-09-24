@@ -1,11 +1,16 @@
 var React = require('react');
-var cx = require('classnames');
 
 var utils = require('../lib/utils.js');
 
-var defaultTemplate = `<label>
+var defaultTemplates = {
+  header: '',
+  footer: '',
+  item: `<label>
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>`;
+</label>`
+};
+
+var defaults = require('lodash/object/defaults');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -13,12 +18,21 @@ var defaultTemplate = `<label>
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get.
- * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
- * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
- * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String} [options.limit=100] How much facet values to get
+ * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header] Header template
+ * @param  {String|Function} [options.templates.item=`<label>
+  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>`] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
- *                                                       to build radio based refinement lists for example.
+ *                                                       to build radio based refinement lists for example
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 function refinementList({
@@ -27,15 +41,20 @@ function refinementList({
     operator = null,
     sortBy = ['count:desc'],
     limit = 100,
-    rootClass = null,
-    itemClass = null,
-    template = defaultTemplate,
+    cssClasses = {
+      root: null,
+      list: null,
+      item: null
+    },
+    hideIfEmpty = true,
+    templates = defaultTemplates,
+    transformData = null,
     singleRefine = false
   }) {
   var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, template]})';
+  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
 
   if (container === null ||
     facetName === null ||
@@ -51,17 +70,25 @@ function refinementList({
     throw new Error(usage);
   }
 
+  if (templates !== defaultTemplates) {
+    templates = defaults({}, templates, defaultTemplates);
+  }
+
   return {
     getConfiguration: () => ({
       [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
     }),
     render: function({results, helper}) {
+      var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
+
       React.render(
         <RefinementList
-          rootClass={cx(rootClass)}
-          itemClass={cx(itemClass)}
-          facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
-          template={template}
+          cssClasses={cssClasses}
+          facetValues={facetValues}
+          templates={templates}
+          transformData={transformData}
+          hideIfEmpty={hideIfEmpty}
+          hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode

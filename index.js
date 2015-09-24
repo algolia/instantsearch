@@ -12,7 +12,8 @@ instantsearch.widgets = {
   searchBox: require('./widgets/search-box'),
   rangeSlider: require('./widgets/range-slider'),
   stats: require('./widgets/stats'),
-  toggle: require('./widgets/toggle')
+  toggle: require('./widgets/toggle'),
+  urlSync: require('./widgets/url-sync')
 };
 
 instantsearch.version = require('./lib/version.js');

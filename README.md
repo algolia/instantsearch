@@ -123,7 +123,7 @@ template.
 
 ### Examples
 
-```javascript
+```js
 // Mustache template example
 search.addWidget(
   instantsearch.widgets.stats({
@@ -184,6 +184,7 @@ npm run test:watch # developer mode, test only
 [refinementList]: ./widgets-screenshots/refinement-list.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
+[urlSync]: ./widgets-screenshots/url-sync.gif
 
 ### searchBox
 
@@ -199,6 +200,7 @@ search.addWidget(
     container: '#search-box',
     placeholder: 'Search for products',
     // cssClass
+    // poweredBy: boolean
   })
 );
 ```
@@ -211,16 +213,20 @@ search.addWidget(
 <div id="stats"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
     template: // mustache string or function(stats) with the following keys
-              // nbHits: number,
+              // hasManyResults: boolean
               // hasNoResults: boolean
               // hasOneResult: boolean
-              // hasManyResults: boolean
+              // hitsPerPage: number
+              // nbHits: number
+              // nbPages: number
+              // page: number
               // processingTimeMS: number
+              // query: string
   })
 );
 ```
@@ -238,7 +244,7 @@ you'll need several indices. This widget lets you easily change it.
 <div id="index-selector"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.indexSelector({
     container: '#index-selector',
@@ -252,12 +258,13 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {boolean} [hideIfEmpty=false] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -326,13 +333,13 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
 `undefined`.
 
 ```html
-<div id="free_shipping"></div>
+<div id="free-shipping"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.toggle({
-    container: '#free_shipping',
+    container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
     template: '<label><input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}}</label>'
@@ -340,7 +347,7 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
@@ -349,6 +356,7 @@ search.addWidget(
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -367,12 +375,20 @@ search.addWidget(
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get.
- * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
- * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
- * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String} [options.limit=100] How much facet values to get
+ * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header] Header template
+ * @param  {String|Function} [options.templates.item=`<label>
+  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>`] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.footer] Footer template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
- *                                                       to build radio based refinement lists for example.
+ *                                                       to build radio based refinement lists for example
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -406,10 +422,16 @@ search.addWidget(
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get.
- * @param  {String|String[]} [options.rootClass=null] CSS class(es) for the root `<ul>` element
- * @param  {String|String[]} [options.itemClass=null] CSS class(es) for the item `<li>` element
- * @param  {String|Function} [options.template] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String} [options.limit=100] How much facet values to get
+ * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -446,6 +468,7 @@ search.addWidget(
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -470,19 +493,53 @@ search.addWidget(
 );
 ```
 
+### URL Synchronisation
+
+![Example of url sync][urlSync]
+
+#### API
+
+```js
+/**
+ * Instanciate a url sync widget. This widget let you synchronize the search
+ * parameters with the URL. It can operate with legacy API and hash or it can use
+ * the modern history API. By default, it will use the modern API, but if you are
+ * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
+ * true.
+ * @param {number} threshold time in ms after which a new state is created in the browser
+ * history. The default value is 700.
+ * @param {string[]} trackedParameters parameters that will be synchronized in the
+ * URL. By default, it will track the query, all the refinable attribute (facets and numeric
+ * filters), the index and the page.
+ * @param {boolean} useHash if set to true, the url will be hash based. Otherwise,
+ * it'll use the query parameters using the modern history API.
+ */
+```
+
+#### Usage
+
+```js
+search.addWidget(
+  instantsearch.widgets.urlSync({
+/*  useHash: true,
+    threshold: 600,
+    trackedParameters: ['query', 'page', 'attribute:*'] */
+  })
+);
+```
+
 ## Browser support
 
-We support IE9+ and all other modern browsers.
+We natively support IE10+ and all other modern browsers without any dependency need
+on your side.
 
-To get IE8 support, please insert this in the `<head>`:
+To get < IE10 support, please insert this code in the `<head>`:
 
 ```html
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<!--[if lte IE 8]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/aight/1.2.2/aight.min.js"></script>
+<!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
 <![endif]-->
 ```
 
-We use the [shawnbot/aight](https://github.com/shawnbot/aight) polyfill.
-
-**Always put the `<script>` after any `jQuery` library**, see https://github.com/shawnbot/aight/issues/42.
+We use the [polyfill.io](https://cdn.polyfill.io/v1/docs/).
