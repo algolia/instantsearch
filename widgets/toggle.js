@@ -11,13 +11,15 @@ var defaultTemplate = '<label>{{label}}<input type="checkbox" {{#isRefined}}chec
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 function toggle({
     container = null,
     facetName = null,
     label = null,
-    template = defaultTemplate
+    template = defaultTemplate,
+    hideIfEmpty = true
   }) {
   var Toggle = require('../components/Toggle');
 
@@ -32,7 +34,7 @@ function toggle({
     getConfiguration: () => ({
       facets: [facetName]
     }),
-    render: function({helper}) {
+    render: function({helper, results}) {
       var isRefined = helper.hasRefinements(facetName);
 
       function toggleFilter() {
@@ -45,6 +47,8 @@ function toggle({
           isRefined={isRefined}
           label={label}
           template={template}
+          hideIfEmpty={hideIfEmpty}
+          hasResults={results.hits.length > 0}
           toggleFilter={toggleFilter}
         />,
         containerNode

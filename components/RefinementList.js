@@ -1,6 +1,7 @@
 var React = require('react');
 
 var Template = require('./Template');
+var autoHide = require('../decorators/autoHide');
 var cx = require('classnames');
 
 class RefinementList extends React.Component {
@@ -108,4 +109,4 @@ RefinementList.defaultProps = {
   }
 };
 
-module.exports = RefinementList;
+module.exports = autoHide(RefinementList);

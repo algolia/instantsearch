@@ -32,7 +32,7 @@ var defaults = require('lodash/object/defaults');
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 function refinementList({
@@ -46,7 +46,7 @@ function refinementList({
       list: null,
       item: null
     },
-    hideWhenNoResults = true,
+    hideIfEmpty = true,
     templates = defaultTemplates,
     transformData = null,
     singleRefine = false
@@ -79,26 +79,16 @@ function refinementList({
       [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
     }),
     render: function({results, helper}) {
-      var values = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
-
-      if (values.length === 0) {
-        React.render(<div/>, containerNode);
-        if (hideWhenNoResults === true) {
-          containerNode.classList.add('as-display-none');
-        }
-        return;
-      }
-
-      if (hideWhenNoResults === true) {
-        containerNode.classList.remove('as-display-none');
-      }
+      var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
       React.render(
         <RefinementList
           cssClasses={cssClasses}
-          facetValues={results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit)}
+          facetValues={facetValues}
           templates={templates}
           transformData={transformData}
+          hideIfEmpty={hideIfEmpty}
+          hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode

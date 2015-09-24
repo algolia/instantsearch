@@ -123,7 +123,7 @@ template.
 
 ### Examples
 
-```javascript
+```js
 // Mustache template example
 search.addWidget(
   instantsearch.widgets.stats({
@@ -213,7 +213,7 @@ search.addWidget(
 <div id="stats"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
@@ -244,7 +244,7 @@ you'll need several indices. This widget lets you easily change it.
 <div id="index-selector"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.indexSelector({
     container: '#index-selector',
@@ -258,12 +258,13 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {boolean} [hideIfEmpty=false] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -335,7 +336,7 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
 <div id="free-shipping"></div>
 ```
 
-```javascript
+```js
 search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free-shipping',
@@ -346,7 +347,7 @@ search.addWidget(
 );
 ```
 
-```javascript
+```js
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
@@ -355,6 +356,7 @@ search.addWidget(
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -386,7 +388,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.footer] Footer template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -429,7 +431,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -466,6 +468,7 @@ search.addWidget(
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
+ * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
  * @return {Object}
  */
 ```

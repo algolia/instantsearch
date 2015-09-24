@@ -1,5 +1,7 @@
 var React = require('react');
 
+var autoHide = require('../decorators/autoHide');
+
 class IndexSelector extends React.Component {
   handleChange(event) {
     this.props.setIndex(event.target.value).search();
@@ -34,4 +36,4 @@ IndexSelector.propTypes = {
   setIndex: React.PropTypes.func
 };
 
-module.exports = IndexSelector;
+module.exports = autoHide(IndexSelector);

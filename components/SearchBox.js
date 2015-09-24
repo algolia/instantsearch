@@ -1,6 +1,7 @@
 var React = require('react');
+
 var PoweredBy = require('./PoweredBy');
-var bem = require('./BemHelper')('as-search-box');
+var bem = require('../lib/utils').bemHelper('as-search-box');
 var cx = require('classnames');
 
 class SearchBox extends React.Component {
