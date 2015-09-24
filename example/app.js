@@ -17,7 +17,9 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    cssClass: 'form-control',
+    cssClasses: {
+      input: 'form-control'
+    },
     poweredBy: true
   })
 );
@@ -100,7 +102,10 @@ search.addWidget(
     container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
-    template: require('./templates/free-shipping.html')
+    templates: {
+      header: '<div class="panel-heading">Shipping</div>',
+      body: require('./templates/free-shipping.html')
+    }
   })
 );
 

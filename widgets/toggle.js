@@ -38,6 +38,13 @@ function toggle({
     }),
     render: function({helper, results}) {
       var isRefined = helper.hasRefinements(facetName);
+      var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
+
+      var facetValue = {
+        name: label,
+        isRefined: isRefined,
+        count: values && values.count || null
+      };
 
       function toggleFilter() {
         var methodToCall = isRefined ? 'removeFacetRefinement' : 'addFacetRefinement';

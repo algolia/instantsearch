@@ -191,6 +191,27 @@ npm run test:watch # developer mode, test only
 
 ![Example of the searchBox widget][searchBox]
 
+
+#### API
+
+```js
+/**
+ * Instantiate a searchbox
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {String} [options.placeholder='Search here'] Input's placeholder
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, input
+ * @param  {String|String[]} [options.cssClasses.root=null]
+ * @param  {String|String[]} [options.cssClasses.input=null]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
+ * @return {Object}
+ */
+```
+
+#### Usage
+
 ```html
 <div id="search-box"></div>
 ```
