@@ -227,6 +227,7 @@ search.addWidget(
               // page: number
               // processingTimeMS: number
               // query: string
+    transformData: // function to modify the data passed to the template
   })
 );
 ```
@@ -264,7 +265,7 @@ search.addWidget(
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideIfEmpty=false] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -312,7 +313,11 @@ search.addWidget(
       hit // string (mustache format) or function(hit) return string
     },
     hitsPerPage: 20,
-    // cssClass
+    // cssClass,
+    // transformData: {
+    //   empty, // function to modify the data passed to the empty template
+    //   hit // function to modify the data passed to the hit template
+    // }
   })
 );
 ```
@@ -356,7 +361,8 @@ search.addWidget(
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -386,9 +392,10 @@ search.addWidget(
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -431,7 +438,8 @@ search.addWidget(
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -468,7 +476,7 @@ search.addWidget(
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```

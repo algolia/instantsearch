@@ -8,14 +8,14 @@ var utils = require('../lib/utils.js');
  * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideIfEmpty=false] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 function indexSelector({
     container = null,
     indices = null,
     cssClass,
-    hideIfEmpty = false
+    hideWhenNoResults = false
   }) {
   var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
@@ -42,7 +42,7 @@ function indexSelector({
           cssClass={cssClass}
           currentIndex={helper.getIndex()}
           indices={indices}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           setIndex={helper.setIndex.bind(helper)}
         />,

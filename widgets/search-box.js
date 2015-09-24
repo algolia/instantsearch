@@ -36,6 +36,7 @@ function searchbox(params) {
             placeholder={params.placeholder}
             inputClass={params.cssClass}
             value={state.query}
+            poweredBy={params.poweredBy}
           />,
           container
         );

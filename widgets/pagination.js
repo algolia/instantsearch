@@ -8,7 +8,7 @@ function pagination({
     labels,
     maxPages,
     showFirstLast,
-    hideIfEmpty = true
+    hideWhenNoResults = true
   }) {
   var Pagination = require('../components/Pagination/Pagination.js');
 
@@ -28,7 +28,7 @@ function pagination({
           nbPages={nbPages}
           setCurrentPage={helper.setCurrentPage.bind(helper)}
           cssClass={cssClass}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           labels={labels}
           showFirstLast={showFirstLast}

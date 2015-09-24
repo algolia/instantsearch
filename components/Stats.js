@@ -7,6 +7,7 @@ class Stats extends React.Component {
   render() {
     var template = this.props.template;
     var templateHelpers = this.props.templateHelpers;
+    var transformData = this.props.transformData;
     var data = {
       hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
@@ -22,6 +23,7 @@ class Stats extends React.Component {
     return (
       <Template
         data={data}
+        transformData={transformData}
         template={template}
         templateHelpers={templateHelpers}
       />
@@ -39,6 +41,7 @@ Stats.propTypes = {
     React.PropTypes.func,
     React.PropTypes.string
   ]).isRequired,
+  transformData: React.PropTypes.func,
   templateHelpers: React.PropTypes.object,
   query: React.PropTypes.string
 };
