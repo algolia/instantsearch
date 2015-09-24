@@ -25,7 +25,8 @@ Template.propTypes = {
 };
 
 Template.defaultProps = {
-  data: {}
+  data: {},
+  template: ''
 };
 
 module.exports = Template;
