@@ -12,7 +12,7 @@ var defaultTemplate = '<label>{{label}}<input type="checkbox" {{#isRefined}}chec
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function toggle({
@@ -21,7 +21,7 @@ function toggle({
     label = null,
     template = defaultTemplate,
     transformData = null,
-    hideIfEmpty = true
+    hideWhenNoResults = true
   }) {
   var Toggle = require('../components/Toggle');
 
@@ -50,7 +50,7 @@ function toggle({
           label={label}
           template={template}
           transformData={transformData}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           toggleFilter={toggleFilter}
         />,

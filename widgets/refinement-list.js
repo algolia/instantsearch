@@ -32,7 +32,7 @@ var defaults = require('lodash/object/defaults');
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function refinementList({
@@ -46,7 +46,7 @@ function refinementList({
       list: null,
       item: null
     },
-    hideIfEmpty = true,
+    hideWhenNoResults = true,
     templates = defaultTemplates,
     transformData = null,
     singleRefine = false
@@ -87,7 +87,7 @@ function refinementList({
           facetValues={facetValues}
           templates={templates}
           transformData={transformData}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,

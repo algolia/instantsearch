@@ -11,14 +11,14 @@ var utils = require('../lib/utils.js');
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function rangeSlider({
     container = null,
     facetName = null,
     tooltips = true,
-    hideIfEmpty = true
+    hideWhenNoResults = true
   }) {
   var Slider = require('../components/Slider');
 
@@ -71,7 +71,7 @@ function rangeSlider({
         <Slider
           start={[currentRefinement.min, currentRefinement.max]}
           range={{min: stats.min, max: stats.max}}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={stats.min !== null && stats.max !== null}
           onChange={this._refine.bind(this, helper)}
           tooltips={tooltips}

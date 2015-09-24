@@ -28,7 +28,7 @@ var defaults = require('lodash/object/defaults');
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function menu({
@@ -41,7 +41,7 @@ function menu({
       list: null,
       item: null
     },
-    hideIfEmpty = true,
+    hideWhenNoResults = true,
     templates = defaultTemplates,
     transformData = null
   }) {
@@ -78,7 +78,7 @@ function menu({
           facetValues={facetValues}
           templates={templates}
           transformData={transformData}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

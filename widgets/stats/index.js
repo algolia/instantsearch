@@ -7,7 +7,7 @@ function stats({
     container = null,
     template = defaultTemplate,
     transformData = null,
-    hideIfEmpty = true
+    hideWhenNoResults = true
   }) {
   var Stats = require('../../components/Stats');
   var containerNode = utils.getContainerNode(container);
@@ -21,7 +21,7 @@ function stats({
       React.render(
         <Stats
           hasResults={results.hits.length > 0}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}
           nbPages={results.nbPages}

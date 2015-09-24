@@ -6,7 +6,7 @@ function hits({
     container = null,
     templates = {},
     transformData = {},
-    hideIfEmpty = false,
+    hideWhenNoResults = false,
     hitsPerPage = 20
   }) {
   var Hits = require('../components/Hits');
@@ -23,7 +23,7 @@ function hits({
           helper={helper}
           noResultsTemplate={templates.empty}
           noResultsTransformData={transformData.empty}
-          hideIfEmpty={hideIfEmpty}
+          hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           hitTemplate={templates.hit}
           hitTransformData={transformData.hit}
