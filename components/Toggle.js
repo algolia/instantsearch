@@ -7,6 +7,7 @@ var debounce = require('lodash/function/debounce');
 class Toggle extends React.Component {
   render() {
     var template = this.props.template;
+    var transformData = this.props.transformData;
     // When a checkbox is wrapped inside a label, click events fire twice, so we
     // debounce it to only keep the first one
     var toggleFilter = debounce(this.props.toggleFilter, 0, {
@@ -20,7 +21,11 @@ class Toggle extends React.Component {
 
     return (
       <span onClick={toggleFilter}>
-        <Template data={data} template={template} />
+        <Template
+          data={data}
+          transformData={transformData}
+          template={template}
+        />
       </span>
     );
   }
@@ -31,6 +36,7 @@ Toggle.propTypes = {
     React.PropTypes.string,
     React.PropTypes.func
   ]).isRequired,
+  transformData: React.PropTypes.func,
   toggleFilter: React.PropTypes.func.isRequired,
   label: React.PropTypes.string,
   isRefined: React.PropTypes.bool

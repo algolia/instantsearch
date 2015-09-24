@@ -29,7 +29,7 @@ var defaults = require('lodash/object/defaults');
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData] Method to change the object passed to the item template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideIfEmpty=true] Hide the container when no results match
