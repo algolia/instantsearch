@@ -1,7 +1,9 @@
+var cx = require('classnames');
 var React = require('react');
 
 var Nouislider = require('react-nouislider');
 var autoHide = require('../../decorators/autoHide');
+var headerFooter = require('../../decorators/headerFooter');
 
 require('style?prepend!raw!./index.css');
 
@@ -16,14 +18,16 @@ class Slider extends React.Component {
 
   render() {
     return (
-      <Nouislider
-        {...this.props}
-        onChange={this.handleChange.bind(this)}
-        animate={false}
-        behaviour={'snap'}
-        connect
-        cssPrefix={cssPrefix}
-      />
+      <div className={cx(this.props.cssClasses.body)}>
+        <Nouislider
+          {...this.props}
+          onChange={this.handleChange.bind(this)}
+          animate={false}
+          behaviour={'snap'}
+          connect
+          cssPrefix={cssPrefix}
+        />
+      </div>
     );
   }
 }
@@ -36,7 +40,13 @@ Slider.propTypes = {
   tooltips: React.PropTypes.oneOfType([
     React.PropTypes.bool,
     React.PropTypes.object
-  ])
+  ]),
+  cssClasses: React.PropTypes.shape({
+    body: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
+  })
 };
 
-module.exports = autoHide(Slider);
+module.exports = autoHide(headerFooter(Slider));

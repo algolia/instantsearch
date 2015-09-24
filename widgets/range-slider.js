@@ -2,6 +2,11 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 
+var defaultTemplates = {
+  header: '',
+  footer: ''
+};
+
 /**
  * Instantiate a slider based on a numeric attribute
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
@@ -11,6 +16,12 @@ var utils = require('../lib/utils.js');
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
+ * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, body
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.body]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -18,6 +29,11 @@ function rangeSlider({
     container = null,
     facetName = null,
     tooltips = true,
+    templates = defaultTemplates,
+    cssClasses = {
+      root: null,
+      body: null
+    },
     hideWhenNoResults = true
   }) {
   var Slider = require('../components/Slider');
@@ -71,6 +87,8 @@ function rangeSlider({
         <Slider
           start={[currentRefinement.min, currentRefinement.max]}
           range={{min: stats.min, max: stats.max}}
+          cssClasses={cssClasses}
+          templates={templates}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={stats.min !== null && stats.max !== null}
           onChange={this._refine.bind(this, helper)}

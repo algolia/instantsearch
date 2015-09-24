@@ -498,6 +498,12 @@ search.addWidget(
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
+ * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, body
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.body]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */

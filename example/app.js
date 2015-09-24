@@ -128,6 +128,12 @@ search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
     facetName: 'price',
+    cssClasses: {
+      body: 'panel-body'
+    },
+    templates: {
+      header: '<div class="panel-heading">Price</div>'
+    },
     tooltips: {
       format: function(formattedValue) {
         return '$' + formattedValue;
