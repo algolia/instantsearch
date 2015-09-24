@@ -41,6 +41,7 @@ API is unstable. We welcome any idea and pull request.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
+  - [URL Synchronisation](#url-synchronisation)
 - [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
