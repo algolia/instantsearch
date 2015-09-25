@@ -1,6 +1,9 @@
 var React = require('react');
 
 var utils = require('../lib/utils.js');
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var Slider = autoHide(headerFooter(require('../components/Slider')));
 
 var defaultTemplates = {
   header: '',
@@ -36,8 +39,6 @@ function rangeSlider({
     },
     hideWhenNoResults = true
   }) {
-  var Slider = require('../components/Slider');
-
   var containerNode = utils.getContainerNode(container);
 
   return {

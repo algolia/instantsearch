@@ -1,7 +1,9 @@
 var React = require('react');
 
 var utils = require('../lib/utils.js');
-
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 
 var defaultTemplates = {
   header: '',
@@ -46,8 +48,6 @@ function menu({
     transformData = null
   }) {
   hierarchicalCounter++;
-
-  var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';

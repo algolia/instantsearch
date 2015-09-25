@@ -2,6 +2,8 @@ var React = require('react');
 
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../lib/utils.js');
+var autoHide = require('../decorators/autoHide');
+var IndexSelector = autoHide(require('../components/IndexSelector'));
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
@@ -17,7 +19,6 @@ function indexSelector({
     cssClass,
     hideWhenNoResults = false
   }) {
-  var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
 
   var usage = 'Usage: indexSelector({container, indices[, cssClass]})';

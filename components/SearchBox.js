@@ -1,7 +1,6 @@
 var React = require('react');
 
 var PoweredBy = require('./PoweredBy');
-var headerFooter = require('../decorators/headerFooter');
 var bem = require('../lib/utils').bemHelper('as-search-box');
 var cx = require('classnames');
 
@@ -66,4 +65,4 @@ SearchBox.propTypes = {
   value: React.PropTypes.string
 };
 
-module.exports = headerFooter(SearchBox);
+module.exports = SearchBox;

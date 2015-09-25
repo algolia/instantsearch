@@ -6,8 +6,6 @@ var Paginator = require('./Paginator');
 var PaginationHiddenLink = require('./PaginationHiddenLink');
 var PaginationLink = require('./PaginationLink');
 
-var autoHide = require('../../decorators/autoHide');
-
 var bem = require('../../lib/utils').bemHelper;
 var cx = require('classnames');
 
@@ -154,4 +152,4 @@ Pagination.defaultProps = {
   padding: 3
 };
 
-module.exports = autoHide(Pagination);
+module.exports = Pagination;

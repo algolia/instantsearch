@@ -2,8 +2,6 @@ var cx = require('classnames');
 var React = require('react');
 
 var Nouislider = require('react-nouislider');
-var autoHide = require('../../decorators/autoHide');
-var headerFooter = require('../../decorators/headerFooter');
 
 require('style?prepend!raw!./index.css');
 
@@ -49,4 +47,4 @@ Slider.propTypes = {
   })
 };
 
-module.exports = autoHide(headerFooter(Slider));
+module.exports = Slider;

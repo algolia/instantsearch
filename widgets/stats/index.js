@@ -2,6 +2,8 @@ var React = require('react');
 
 var utils = require('../../lib/utils.js');
 var defaultTemplate = require('./template.html');
+var autoHide = require('../../decorators/autoHide');
+var Stats = autoHide(require('../../components/Stats'));
 
 function stats({
     container = null,
@@ -9,7 +11,6 @@ function stats({
     transformData = null,
     hideWhenNoResults = true
   }) {
-  var Stats = require('../../components/Stats');
   var containerNode = utils.getContainerNode(container);
 
   if (container === null) {

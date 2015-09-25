@@ -11,6 +11,10 @@ var defaultTemplates = {
   footer: ''
 };
 
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
@@ -39,8 +43,6 @@ function toggle({
     transformData = null,
     hideWhenNoResults = true
   }) {
-  var RefinementList = require('../components/RefinementList');
-
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
 

@@ -1,6 +1,8 @@
 var React = require('react');
 
 var utils = require('../lib/utils.js');
+var headerFooter = require('../decorators/headerFooter');
+var SearchBox = headerFooter(require('../components/SearchBox'));
 
 /**
  * Instantiate a searchbox
@@ -28,8 +30,6 @@ function searchbox({
     },
     poweredBy = false
   }) {
-  var SearchBox = require('../components/SearchBox');
-
   var containerNode = utils.getContainerNode(container);
   var isFocused = false;
 

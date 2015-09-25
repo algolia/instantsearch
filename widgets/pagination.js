@@ -1,6 +1,8 @@
 var React = require('react');
 
 var utils = require('../lib/utils.js');
+var autoHide = require('../decorators/autoHide');
+var Pagination = autoHide(require('../components/Pagination/Pagination.js'));
 
 function pagination({
     container = null,
@@ -10,8 +12,6 @@ function pagination({
     showFirstLast,
     hideWhenNoResults = true
   }) {
-  var Pagination = require('../components/Pagination/Pagination.js');
-
   var containerNode = utils.getContainerNode(container);
 
   return {

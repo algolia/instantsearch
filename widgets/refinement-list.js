@@ -11,6 +11,9 @@ var defaultTemplates = {
 };
 
 var defaults = require('lodash/object/defaults');
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -51,8 +54,6 @@ function refinementList({
     transformData = null,
     singleRefine = false
   }) {
-  var RefinementList = require('../components/RefinementList');
-
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
 
