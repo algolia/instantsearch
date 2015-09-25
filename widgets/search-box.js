@@ -33,7 +33,7 @@ function searchbox(params) {
 
       // Overrides attributes if not already set
       forEach(defaultAttributes, (value, key) => {
-        if (input.getAttribute(key)) {
+        if (input.hasAttribute(key)) {
           return;
         }
         input.setAttribute(key, value);
