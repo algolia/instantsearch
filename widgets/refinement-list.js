@@ -11,10 +11,13 @@ var defaultTemplates = {
 };
 
 var defaults = require('lodash/object/defaults');
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 
 /**
  * Instantiate a list of refinements based on a facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
@@ -24,11 +27,11 @@ var defaults = require('lodash/object/defaults');
  * @param  {String|String[]} [options.cssClasses.list]
  * @param  {String|String[]} [options.cssClasses.item]
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header] Header template
+ * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item=`<label>
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
 </label>`] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
@@ -51,8 +54,6 @@ function refinementList({
     transformData = null,
     singleRefine = false
   }) {
-  var RefinementList = require('../components/RefinementList');
-
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
 

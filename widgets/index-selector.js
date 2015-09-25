@@ -2,10 +2,12 @@ var React = require('react');
 
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../lib/utils.js');
+var autoHide = require('../decorators/autoHide');
+var IndexSelector = autoHide(require('../components/IndexSelector'));
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
@@ -17,7 +19,6 @@ function indexSelector({
     cssClass,
     hideWhenNoResults = false
   }) {
-  var IndexSelector = require('../components/IndexSelector');
   var containerNode = utils.getContainerNode(container);
 
   var usage = 'Usage: indexSelector({container, indices[, cssClass]})';

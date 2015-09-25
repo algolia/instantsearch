@@ -1,7 +1,9 @@
 var React = require('react');
 
 var utils = require('../lib/utils.js');
-
+var autoHide = require('../decorators/autoHide');
+var headerFooter = require('../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 
 var defaultTemplates = {
   header: '',
@@ -15,7 +17,7 @@ var defaults = require('lodash/object/defaults');
 
 /**
  * Create a menu out of a facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get
@@ -46,8 +48,6 @@ function menu({
     transformData = null
   }) {
   hierarchicalCounter++;
-
-  var RefinementList = require('../components/RefinementList');
 
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';

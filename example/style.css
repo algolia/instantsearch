@@ -36,8 +36,8 @@ body {
   height: 125px;
 }
 
-#price {
-  padding: 30px 0;
+#price .panel-body {
+  padding: 45px 15px;
 }
 
 .panel-heading {

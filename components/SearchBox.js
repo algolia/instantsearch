@@ -24,14 +24,12 @@ class SearchBox extends React.Component {
   }
 
   render() {
-    var classNames = cx(bem('input'), this.props.inputClass);
-
     return (
       <div>
         <input type="text"
           placeholder={this.props.placeholder}
           name="algolia-query"
-          className={classNames}
+          className={cx(bem('input'), this.props.cssClasses.input)}
           autoComplete="off"
           autoFocus="autofocus"
           onChange={this.handleChange.bind(this)}
@@ -47,16 +45,18 @@ class SearchBox extends React.Component {
 }
 
 SearchBox.defaultProps = {
-  onBlur: function() {},
-  onFocus: function() {}
+  onBlur() {},
+  onFocus() {}
 };
 
 SearchBox.propTypes = {
   placeholder: React.PropTypes.string,
-  inputClass: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.array
-  ]),
+  cssClasses: React.PropTypes.shape({
+    input: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
+  }),
   poweredBy: React.PropTypes.bool,
   setQuery: React.PropTypes.func,
   search: React.PropTypes.func,
