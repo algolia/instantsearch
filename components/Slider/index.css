@@ -11,8 +11,6 @@
 .as-range-slider--target {
   position: relative;
   direction: ltr;
-  padding: 0 15px;
-  border-radius: 5px;
   background: #f3f4f7;
   height: 18px;
 }
