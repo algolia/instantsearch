@@ -21,6 +21,7 @@ var trim = require('lodash/string/trim');
 var isString = require('lodash/lang/isString');
 var isPlainObject = require('lodash/lang/isPlainObject');
 var isArray = require('lodash/lang/isArray');
+var indexOf = require('lodash/array/indexOf');
 
 var qs = require('qs');
 var encode = require('qs/lib/utils').encode;
@@ -459,7 +460,7 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   var partialState = {};
   var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
   var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
-  if (attributes.indexOf('*') === -1) {
+  if (indexOf(attributes, '*') === -1) {
     forEach(attributes, function(attr) {
       if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
         if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
