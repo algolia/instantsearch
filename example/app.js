@@ -17,9 +17,6 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    cssClasses: {
-      input: 'form-control'
-    },
     poweredBy: true
   })
 );
