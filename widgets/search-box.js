@@ -54,9 +54,12 @@ function searchbox(params) {
         input.parentNode.appendChild(poweredByContainer);
         React.render(<PoweredBy display />, poweredByContainer);
       }
-    },
-    render: function({helper}) {
-      input.value = helper.state.query;
+
+      helper.on('change', function(state) {
+        if (input.value !== state.query) {
+          input.value = state.query;
+        }
+      });
     }
   };
 }
