@@ -143,13 +143,13 @@ search.addWidget(
 );
 ```
 
-### Template helpers
+### Template configuration
 
 In order to help you when defining your templates, `instantsearch.js` exposes
 a few helpers. All helpers are accessible in the Mustache templating through
 `{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}`. To
 use them in the function templates, you'll have to call
-`search.templateHelpers.nameOfTheHelper` where `search` is your current
+`search.templatesConfig.helpers.nameOfTheHelper` where `search` is your current
 `instantsearch` instance.
 
 Here is the list of the currently available helpers:
@@ -158,6 +158,16 @@ Here is the list of the currently available helpers:
   version of the number in the locale defined with the `numberLocale` config
   option (defaults to `en-EN`).
   eg. `100000` will be formatted as `100 000` with `en-EN`
+
+`instantsearch.js` also provides the ability to set options to use with your
+templating engine. These options are accessible through
+`search.templatesConfig.options`.
+With the embedded widgets using our `Template` component (widgets with
+`template(s)` parameter), we're passing these options to `Hogan.compile`
+if you're not using the default `template`.
+```js
+search.templatesConfig.options.delimiters = '[[ ]]';
+```
 
 ## Development workflow
 

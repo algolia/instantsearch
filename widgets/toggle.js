@@ -3,14 +3,6 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 
-var defaultTemplates = {
-  header: '',
-  body: `<label>
-  <input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}} <span>{{count}}</span>
-</label>`,
-  footer: ''
-};
-
 var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
@@ -26,7 +18,7 @@ var RefinementList = autoHide(headerFooter(require('../components/RefinementList
  * @param  {String|String[]} [options.cssClasses.root=null]
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
+ * @param  {String|Function} [options.templates.item='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
@@ -36,7 +28,7 @@ function toggle({
     container = null,
     facetName = null,
     label = null,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses = {
       root: null
     },
@@ -45,6 +37,19 @@ function toggle({
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
+  var defaultTemplates = {
+    header: '',
+    item: `<label>
+  <input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}} <span>{{count}}</span>
+</label>`,
+    footer: ''
+  };
+
+  var _templates = {
+    header: templates.header,
+    item: templates.body,
+    footer: templates.footer
+  };
 
   if (container === null || facetName === null || label === null) {
     throw new Error(usage);
@@ -54,7 +59,7 @@ function toggle({
     getConfiguration: () => ({
       facets: [facetName]
     }),
-    render: function({helper, results}) {
+    render: function({helper, results, templatesConfig}) {
       var isRefined = helper.hasRefinements(facetName);
       var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
 
@@ -64,16 +69,12 @@ function toggle({
         count: values && values.count || null
       };
 
-      var _templates = {
-        header: templates.header,
-        item: templates.body,
-        footer: templates.footer
-      };
-
       React.render(
         <RefinementList
           facetValues={[facetValue]}
           templates={_templates}
+          defaultTemplates={defaultTemplates}
+          templatesConfig={templatesConfig}
           cssClasses={cssClasses}
           transformData={prepareData(transformData)}
           hideWhenNoResults={hideWhenNoResults}

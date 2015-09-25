@@ -15,7 +15,7 @@ function hits({
 
   return {
     getConfiguration: () => ({hitsPerPage}),
-    render: function({results, helper}) {
+    render: function({results, helper, templatesConfig}) {
       React.render(
         <Hits
           hits={results.hits}
@@ -26,6 +26,7 @@ function hits({
           hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           hitTemplate={templates.hit}
+          templatesConfig={templatesConfig}
           hitTransformData={transformData.hit}
         />,
         containerNode

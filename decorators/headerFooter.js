@@ -9,9 +9,9 @@ function headerFooter(ComposedComponent) {
     render() {
       return (
         <div className={cx(this.props.cssClasses.root)}>
-          <Template template={this.props.templates.header} />
+          <Template template={this.props.templates.header} defaultTemplate={this.props.defaultTemplates.header} config={this.props.templatesConfig} />
           <ComposedComponent {...this.props} />
-          <Template template={this.props.templates.footer} />
+          <Template template={this.props.templates.footer} defaultTemplate={this.props.defaultTemplates.footer} config={this.props.templatesConfig} />
         </div>
       );
     }
@@ -28,6 +28,17 @@ function headerFooter(ComposedComponent) {
         React.PropTypes.func
       ])
     }),
+    defaultTemplates: React.PropTypes.shape({
+      header: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func
+      ]),
+      footer: React.PropTypes.oneOfType([
+        React.PropTypes.string,
+        React.PropTypes.func
+      ])
+    }),
+    templatesConfig: React.PropTypes.object.isRequired,
     cssClasses: React.PropTypes.shape({
       root: React.PropTypes.oneOfType([
         React.PropTypes.string,
@@ -37,7 +48,7 @@ function headerFooter(ComposedComponent) {
   };
 
   HeaderFooter.defaultProps = {
-    templates: {
+    defaultTemplates: {
       header: '',
       footer: ''
     },

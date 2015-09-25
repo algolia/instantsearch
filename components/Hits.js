@@ -6,6 +6,7 @@ var Template = require('./Template');
 class Hits extends React.Component {
   renderWithResults() {
     var template = this.props.hitTemplate;
+    var templatesConfig = this.props.templatesConfig;
     var transformData = this.props.hitTransformData;
 
     var renderedHits = map(this.props.hits, function(hit) {
@@ -15,6 +16,7 @@ class Hits extends React.Component {
           transformData={transformData}
           key={hit.objectID}
           template={template}
+          config={templatesConfig}
         />
       );
     }, this);
@@ -25,6 +27,7 @@ class Hits extends React.Component {
   renderNoResults() {
     var data = this.props.results;
     var template = this.props.noResultsTemplate;
+    var templatesConfig = this.props.templatesConfig;
     var transformData = this.props.noResultsTransformData;
 
     return (
@@ -33,6 +36,7 @@ class Hits extends React.Component {
           data={data}
           transformData={transformData}
           template={template}
+          config={templatesConfig}
         />
       </div>
     );
@@ -57,6 +61,7 @@ Hits.propTypes = {
     React.PropTypes.string,
     React.PropTypes.func
   ]).isRequired,
+  templatesConfig: React.PropTypes.object.isRequired,
   noResultsTransformData: React.PropTypes.func
 };
 

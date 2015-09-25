@@ -6,6 +6,7 @@ var search = instantsearch({
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search'
 });
+search.templatesConfig.options.sectionTags = [{o: '_refined', c: 'refined'}];
 
 search.addWidget(
   instantsearch.widgets.urlSync({
@@ -102,6 +103,10 @@ search.addWidget(
     templates: {
       header: '<div class="panel-heading">Shipping</div>',
       body: require('./templates/free-shipping.html')
+    },
+    transformData: function(data) {
+      data._refined = data.isRefined;
+      return data;
     }
   })
 );

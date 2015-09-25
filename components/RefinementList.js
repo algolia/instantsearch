@@ -55,6 +55,8 @@ class RefinementList extends React.Component {
               data={facetValue}
               transformData={this.props.transformData}
               template={this.props.templates.item}
+              defaultTemplate={this.props.defaultTemplates.item}
+              config={this.props.templatesConfig}
             />
           </div>
         );
@@ -80,8 +82,15 @@ RefinementList.propTypes = {
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.func
-    ]).isRequired
+    ])
   }),
+  defaultTemplates: React.PropTypes.shape({
+    item: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func
+    ])
+  }),
+  templatesConfig: React.PropTypes.object.isRequired,
   transformData: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired
 };

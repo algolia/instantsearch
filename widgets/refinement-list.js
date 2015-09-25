@@ -2,15 +2,6 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 
-var defaultTemplates = {
-  header: '',
-  footer: '',
-  item: `<label>
-  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>`
-};
-
-var defaults = require('lodash/object/defaults');
 var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
@@ -50,12 +41,19 @@ function refinementList({
       item: null
     },
     hideWhenNoResults = true,
-    templates = defaultTemplates,
+    templates = {},
     transformData = null,
     singleRefine = false
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
+  var defaultTemplates = {
+    header: '',
+    item: `<label>
+  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>`,
+    footer: ''
+  };
 
   if (container === null ||
     facetName === null ||
@@ -71,15 +69,11 @@ function refinementList({
     throw new Error(usage);
   }
 
-  if (templates !== defaultTemplates) {
-    templates = defaults({}, templates, defaultTemplates);
-  }
-
   return {
     getConfiguration: () => ({
       [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
     }),
-    render: function({results, helper}) {
+    render: function({results, helper, templatesConfig}) {
       var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
       React.render(
@@ -87,6 +81,8 @@ function refinementList({
           cssClasses={cssClasses}
           facetValues={facetValues}
           templates={templates}
+          defaultTemplates={defaultTemplates}
+          templatesConfig={templatesConfig}
           transformData={transformData}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}

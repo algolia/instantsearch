@@ -5,15 +5,7 @@ var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 
-var defaultTemplates = {
-  header: '',
-  footer: '',
-  item: '<a href="{{href}}">{{name}}</a> {{count}}'
-};
-
 var hierarchicalCounter = 0;
-
-var defaults = require('lodash/object/defaults');
 
 /**
  * Create a menu out of a facet
@@ -44,20 +36,21 @@ function menu({
       item: null
     },
     hideWhenNoResults = true,
-    templates = defaultTemplates,
+    templates = {},
     transformData = null
   }) {
   hierarchicalCounter++;
 
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
+  var defaultTemplates = {
+    header: '',
+    item: '<a href="{{href}}">{{name}}</a> {{count}}',
+    footer: ''
+  };
 
   if (container === null || facetName === null) {
     throw new Error(usage);
-  }
-
-  if (templates !== defaultTemplates) {
-    templates = defaults({}, templates, defaultTemplates);
   }
 
   var hierarchicalFacetName = 'instantsearch.js' + hierarchicalCounter;
@@ -69,7 +62,7 @@ function menu({
         attributes: [facetName]
       }]
     }),
-    render: function({results, helper}) {
+    render: function({results, helper, templatesConfig}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
 
       React.render(
@@ -77,6 +70,8 @@ function menu({
           cssClasses={cssClasses}
           facetValues={facetValues}
           templates={templates}
+          defaultTemplates={defaultTemplates}
+          templatesConfig={templatesConfig}
           transformData={transformData}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}

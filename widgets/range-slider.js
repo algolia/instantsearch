@@ -5,11 +5,6 @@ var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
 var Slider = autoHide(headerFooter(require('../components/Slider')));
 
-var defaultTemplates = {
-  header: '',
-  footer: ''
-};
-
 /**
  * Instantiate a slider based on a numeric attribute
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
@@ -32,7 +27,7 @@ function rangeSlider({
     container = null,
     facetName = null,
     tooltips = true,
-    templates = defaultTemplates,
+    templates = {},
     cssClasses = {
       root: null,
       body: null
@@ -40,6 +35,11 @@ function rangeSlider({
     hideWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
+  var defaultTemplates = {
+    header: '',
+    footer: ''
+  };
+
 
   return {
     getConfiguration: () => ({
@@ -72,7 +72,7 @@ function rangeSlider({
       helper.addNumericRefinement(facetName, '<=', newValues[1]);
       helper.search();
     },
-    render({results, helper}) {
+    render({results, helper, templatesConfig}) {
       var stats = results.getFacetStats(facetName);
 
       var currentRefinement = this._getCurrentRefinement(helper);
@@ -90,6 +90,8 @@ function rangeSlider({
           range={{min: stats.min, max: stats.max}}
           cssClasses={cssClasses}
           templates={templates}
+          defaultTemplates={defaultTemplates}
+          templatesConfig={templatesConfig}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={stats.min !== null && stats.max !== null}
           onChange={this._refine.bind(this, helper)}
