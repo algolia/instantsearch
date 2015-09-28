@@ -10,9 +10,9 @@ class Paginator {
   pages() {
     var current = this.currentPage;
     var padding = this.padding;
-    var paddingLeft = this.calculatePaddingLeft(current, padding, this.total);
-    var paddingRight = Math.min(2 * padding + 1, this.total) - paddingLeft;
-    var first = current - paddingLeft;
+    var paddingLeft = Math.min(this.calculatePaddingLeft(current, padding, this.total), this.total);
+    var paddingRight = Math.max(Math.min(2 * padding + 1, this.total) - paddingLeft, 1);
+    var first = Math.max(current - paddingLeft, 0);
     var last = current + paddingRight;
     return range(first, last);
   }
