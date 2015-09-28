@@ -199,12 +199,7 @@ npm run test:watch # developer mode, test only
  * Instantiate a searchbox
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} [options.placeholder='Search here'] Input's placeholder
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, input
- * @param  {String|String[]} [options.cssClasses.root=null]
- * @param  {String|String[]} [options.cssClasses.input=null]
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {Object} [options.cssClass] CSS classes to add to the input
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @return {Object}
  */
@@ -213,6 +208,8 @@ npm run test:watch # developer mode, test only
 #### Usage
 
 ```html
+<input id="search-box" />
+Or
 <div id="search-box"></div>
 ```
 

@@ -114,8 +114,7 @@ class URLSync {
         i.blur();
       });
 
-      helper.overrideStateWithoutTriggeringChangeEvent(fullState);
-      helper.search();
+      helper.setState(fullState).search();
     });
   }
 
