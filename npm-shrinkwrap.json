@@ -203,14 +203,14 @@
       }
     },
     "react-nouislider": {
-      "version": "1.2.0",
-      "from": "react-nouislider@>=1.2.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.2.0.tgz",
+      "version": "1.2.1",
+      "from": "react-nouislider@1.2.1",
+      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.2.1.tgz",
       "dependencies": {
         "nouislider": {
           "version": "8.0.2",
-          "from": "algolia/noUiSlider#30d08e19070ccc17394cd9aa450dacb2eced3b6a",
-          "resolved": "git://github.com/algolia/noUiSlider.git#30d08e19070ccc17394cd9aa450dacb2eced3b6a"
+          "from": "algolia/noUiSlider#fad95f6340990748c2b4d2abbc6ec84bc00eea2f",
+          "resolved": "git://github.com/algolia/noUiSlider.git#fad95f6340990748c2b4d2abbc6ec84bc00eea2f"
         }
       }
     },
