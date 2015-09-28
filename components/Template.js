@@ -2,13 +2,15 @@ var React = require('react');
 
 var renderTemplate = require('../lib/utils').renderTemplate;
 
+var identity = require('lodash/utility/identity');
+
 class Template {
   render() {
     var content = renderTemplate({
-      template: this.props.template,
-      defaultTemplate: this.props.defaultTemplate,
-      config: this.props.config,
-      data: this.props.transformData ? this.props.transformData(this.props.data) : this.props.data
+      template: this.props.templates[this.props.templateKey],
+      defaultTemplate: this.props.defaultTemplates[this.props.templateKey],
+      config: this.props.templatesConfig,
+      data: this.props.transformData(this.props.data)
     });
 
     if (content === null) {
@@ -37,7 +39,8 @@ Template.propTypes = {
 
 Template.defaultProps = {
   data: {},
-  template: ''
+  template: '',
+  transformData: identity
 };
 
 module.exports = Template;

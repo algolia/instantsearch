@@ -3,8 +3,18 @@ var React = require('react');
 var utils = require('../lib/utils.js');
 
 var autoHide = require('../decorators/autoHide');
+var prepareProps = require('../decorators/prepareProps');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+var Template = require('../components/Template');
+
+var defaultTemplates = {
+  header: '',
+  item: `<label>
+<input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>`,
+  footer: ''
+};
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -41,19 +51,12 @@ function refinementList({
       item: null
     },
     hideWhenNoResults = true,
-    templates = {},
-    transformData = null,
+    templates = defaultTemplates,
+    transformData,
     singleRefine = false
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
-  var defaultTemplates = {
-    header: '',
-    item: `<label>
-  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>`,
-    footer: ''
-  };
 
   if (container === null ||
     facetName === null ||
@@ -74,18 +77,22 @@ function refinementList({
       [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
     }),
     render: function({results, helper, templatesConfig}) {
+      var templateProps = {
+        transformData,
+        defaultTemplates,
+        templatesConfig,
+        templates
+      };
+
       var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
       React.render(
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}
-          templates={templates}
-          defaultTemplates={defaultTemplates}
-          templatesConfig={templatesConfig}
-          transformData={transformData}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
+          Template={prepareProps(Template, templateProps)}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode
