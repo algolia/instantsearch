@@ -33,7 +33,7 @@ Template.propTypes = {
     React.PropTypes.func
   ]),
   config: React.PropTypes.object.isRequired,
-  transformData: React.PropTypes.object,
+  transformData: React.PropTypes.func,
   data: React.PropTypes.object
 };
 
