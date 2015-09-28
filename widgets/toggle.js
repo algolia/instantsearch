@@ -5,7 +5,18 @@ var utils = require('../lib/utils.js');
 
 var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
+var bindProps = require('../decorators/bindProps');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+
+var Template = require('../components/Template');
+
+var defaultTemplates = {
+  header: '',
+  item: `<label>
+<input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}} <span>{{count}}</span>
+</label>`,
+  footer: ''
+};
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -21,35 +32,22 @@ var RefinementList = autoHide(headerFooter(require('../components/RefinementList
  * @param  {String|Function} [options.templates.item='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function toggle({
     container = null,
     facetName = null,
     label = null,
-    templates = {},
+    templates = defaultTemplates,
     cssClasses = {
       root: null
     },
-    transformData = null,
+    transformData,
     hideWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
-  var defaultTemplates = {
-    header: '',
-    item: `<label>
-  <input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}} <span>{{count}}</span>
-</label>`,
-    footer: ''
-  };
-
-  var _templates = {
-    header: templates.header,
-    item: templates.body,
-    footer: templates.footer
-  };
 
   if (container === null || facetName === null || label === null) {
     throw new Error(usage);
@@ -63,6 +61,17 @@ function toggle({
       var isRefined = helper.hasRefinements(facetName);
       var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
 
+      var templateProps = utils.prepareTemplateProps({
+        transformData: prepareToggleData(transformData),
+        defaultTemplates,
+        templatesConfig,
+        templates: {
+          header: templates.header,
+          item: templates.body,
+          footer: templates.footer
+        }
+      });
+
       var facetValue = {
         name: label,
         isRefined: isRefined,
@@ -72,11 +81,8 @@ function toggle({
       React.render(
         <RefinementList
           facetValues={[facetValue]}
-          templates={_templates}
-          defaultTemplates={defaultTemplates}
-          templatesConfig={templatesConfig}
+          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
-          transformData={prepareData(transformData)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={results.hits.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
@@ -87,7 +93,7 @@ function toggle({
   };
 }
 
-function prepareData(transformData) {
+function prepareToggleData(transformData) {
   return function(data) {
     var newData = {
       label: data.name, // Toggle API exposes `label`

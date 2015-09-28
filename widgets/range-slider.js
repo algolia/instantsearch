@@ -2,8 +2,16 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
+var bindProps = require('../decorators/bindProps');
 var headerFooter = require('../decorators/headerFooter');
 var Slider = autoHide(headerFooter(require('../components/Slider')));
+
+var Template = require('../components/Template');
+
+var defaultTemplates = {
+  header: '',
+  footer: ''
+};
 
 /**
  * Instantiate a slider based on a numeric attribute
@@ -20,14 +28,14 @@ var Slider = autoHide(headerFooter(require('../components/Slider')));
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function rangeSlider({
     container = null,
     facetName = null,
     tooltips = true,
-    templates = {},
+    templates = defaultTemplates,
     cssClasses = {
       root: null,
       body: null
@@ -35,11 +43,6 @@ function rangeSlider({
     hideWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
-  var defaultTemplates = {
-    header: '',
-    footer: ''
-  };
-
 
   return {
     getConfiguration: () => ({
@@ -84,14 +87,18 @@ function rangeSlider({
         };
       }
 
+      var templateProps = utils.prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
+
       React.render(
         <Slider
           start={[currentRefinement.min, currentRefinement.max]}
           range={{min: stats.min, max: stats.max}}
           cssClasses={cssClasses}
-          templates={templates}
-          defaultTemplates={defaultTemplates}
-          templatesConfig={templatesConfig}
+          Template={bindProps(Template, templateProps)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={stats.min !== null && stats.max !== null}
           onChange={this._refine.bind(this, helper)}

@@ -129,15 +129,19 @@ template.
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-    template: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>'
+    templates: {
+      body: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>'
+    }
   })
 );
 // Function template example
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-    template: function(data) {
-      return '<div>You have ' + data.nbHits + 'results, fetched in ' + data.processingTimMS +'ms.</div>'
+    templates: {
+      body: function(data) {
+        return '<div>You have ' + data.nbHits + 'results, fetched in ' + data.processingTimMS +'ms.</div>'
+      }
     }
   })
 );
@@ -159,15 +163,9 @@ Here is the list of the currently available helpers:
   option (defaults to `en-EN`).
   eg. `100000` will be formatted as `100 000` with `en-EN`
 
-`instantsearch.js` also provides the ability to set options to use with your
-templating engine. These options are accessible through
-`search.templatesConfig.options`.
-With the embedded widgets using our `Template` component (widgets with
-`template(s)` parameter), we're passing these options to `Hogan.compile`
-if you're not using the default `template`.
-```js
-search.templatesConfig.options.delimiters = '[[ ]]';
-```
+You can configure the options passed to `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
+
+Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
 
 ## Development workflow
 
@@ -236,6 +234,32 @@ search.addWidget(
 
 ### stats
 
+#### API
+
+```js
+/**
+ * Display various stats about the current search state
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
+ * @param  {String|String[]} [options.cssClasses.root=null]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.body='<div>
+  {{#hasNoResults}}No results{{/hasNoResults}}
+  {{#hasOneResult}}1 result{{/hasOneResult}}
+  {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
+  <small>found in {{processingTimeMS}}ms</small>
+</div>'] Body template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @return {Object}
+ */
+```
+
+
+#### Usage
+
 ![Example of the stats widget][stats]
 
 ```html
@@ -294,7 +318,7 @@ search.addWidget(
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -391,7 +415,7 @@ search.addWidget(
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -424,7 +448,7 @@ search.addWidget(
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -468,7 +492,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -511,7 +535,7 @@ search.addWidget(
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```

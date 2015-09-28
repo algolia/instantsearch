@@ -4,10 +4,6 @@ var Template = require('./Template');
 
 class Stats extends React.Component {
   render() {
-    var template = this.props.template;
-    var defaultTemplate = this.props.defaultTemplate;
-    var templatesConfig = this.props.templatesConfig;
-    var transformData = this.props.transformData;
     var data = {
       hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
@@ -21,13 +17,7 @@ class Stats extends React.Component {
     };
 
     return (
-      <Template
-        data={data}
-        transformData={transformData}
-        template={template}
-        defaultTemplate={defaultTemplate}
-        config={templatesConfig}
-      />
+      <this.props.Template data={data} templateKey="body" />
     );
   }
 }
@@ -38,16 +28,6 @@ Stats.propTypes = {
   nbPages: React.PropTypes.number,
   page: React.PropTypes.number,
   processingTimeMS: React.PropTypes.number,
-  template: React.PropTypes.oneOfType([
-    React.PropTypes.func,
-    React.PropTypes.string
-  ]),
-  defaultTemplate: React.PropTypes.oneOfType([
-    React.PropTypes.func,
-    React.PropTypes.string
-  ]).isRequired,
-  transformData: React.PropTypes.func,
-  templatesConfig: React.PropTypes.object.isRequired,
   query: React.PropTypes.string
 };
 

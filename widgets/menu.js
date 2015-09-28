@@ -2,10 +2,17 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
+var bindProps = require('../decorators/bindProps');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+var Template = require('../components/Template');
 
 var hierarchicalCounter = 0;
+var defaultTemplates = {
+  header: '',
+  item: '<a href="{{href}}">{{name}}</a> {{count}}',
+  footer: ''
+};
 
 /**
  * Create a menu out of a facet
@@ -22,7 +29,7 @@ var hierarchicalCounter = 0;
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function menu({
@@ -36,18 +43,13 @@ function menu({
       item: null
     },
     hideWhenNoResults = true,
-    templates = {},
-    transformData = null
+    templates = defaultTemplates,
+    transformData
   }) {
   hierarchicalCounter++;
 
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
-  var defaultTemplates = {
-    header: '',
-    item: '<a href="{{href}}">{{name}}</a> {{count}}',
-    footer: ''
-  };
 
   if (container === null || facetName === null) {
     throw new Error(usage);
@@ -65,14 +67,18 @@ function menu({
     render: function({results, helper, templatesConfig}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
 
+      var templateProps = utils.prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
+
       React.render(
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}
-          templates={templates}
-          defaultTemplates={defaultTemplates}
-          templatesConfig={templatesConfig}
-          transformData={transformData}
+          Template={bindProps(Template, templateProps)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
