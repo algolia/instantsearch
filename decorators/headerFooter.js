@@ -1,17 +1,17 @@
 var React = require('react');
 
-var Template = require('../components/Template');
-
 var cx = require('classnames');
+
+var identity = require('lodash/utility/identity');
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
     render() {
       return (
         <div className={cx(this.props.cssClasses.root)}>
-          <Template template={this.props.templates.header} defaultTemplate={this.props.defaultTemplates.header} config={this.props.templatesConfig} />
+          <this.props.Template templateKey="header" transformData={identity} />
           <ComposedComponent {...this.props} />
-          <Template template={this.props.templates.footer} defaultTemplate={this.props.defaultTemplates.footer} config={this.props.templatesConfig} />
+          <this.props.Template templateKey="footer" transformData={identity} />
         </div>
       );
     }
