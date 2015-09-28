@@ -2,7 +2,6 @@ var AlgoliaSearchHelper = require('algoliasearch-helper').AlgoliaSearchHelper;
 
 var isEqual = require('lodash/lang/isEqual');
 var merge = require('lodash/object/merge');
-var forEach = require('lodash/collection/forEach');
 
 function timerMaker(t0) {
   var t = t0;
@@ -109,10 +108,6 @@ class URLSync {
       var fullHelperState = merge({}, self.originalConfig, partialHelperState);
 
       if (isEqual(fullHelperState, fullState)) return;
-
-      forEach(window.document.querySelectorAll('input'), function(i) {
-        i.blur();
-      });
 
       helper.setState(fullState).search();
     });
