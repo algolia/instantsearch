@@ -31,11 +31,9 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
-  hits: React.PropTypes.array,
-  transformData: React.PropTypes.shape({
-    hit: React.PropTypes.func,
-    empty: React.PropTypes.func
-  })
+  hits: React.PropTypes.arrayOf(React.PropTypes.object),
+  results: React.PropTypes.object,
+  Template: React.PropTypes.func
 };
 
 Hits.defaultProps = {
