@@ -46,7 +46,7 @@ search.addWidget(
       empty: require('./templates/no-results.html'),
       hit: require('./templates/hit.html')
     },
-    hitsPerPage: 6
+    hitsPerPage: 10
   })
 );
 
