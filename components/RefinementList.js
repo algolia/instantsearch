@@ -70,7 +70,6 @@ RefinementList.propTypes = {
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
-  transformData: React.PropTypes.func,
   facetValues: React.PropTypes.array,
   Template: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired
