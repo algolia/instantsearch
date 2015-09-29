@@ -4,4 +4,4 @@ set -e # exit when error
 
 printf "\nLint\n"
 
-eslint . --quiet
+eslint . --quiet --no-color

@@ -1,33 +1,25 @@
 var React = require('react');
 
-var Template = require('../components/Template');
-
 var cx = require('classnames');
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
     render() {
+      // override potential widget's defined transformData,
+      // header and footer currently do not have it
+      var transformData = null;
+
       return (
         <div className={cx(this.props.cssClasses.root)}>
-          <Template template={this.props.templates.header} />
+          <this.props.Template templateKey="header" transformData={transformData} />
           <ComposedComponent {...this.props} />
-          <Template template={this.props.templates.footer} />
+          <this.props.Template templateKey="footer" transformData={transformData} />
         </div>
       );
     }
   }
 
   HeaderFooter.propTypes = {
-    templates: React.PropTypes.shape({
-      header: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func
-      ]),
-      footer: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.func
-      ])
-    }),
     cssClasses: React.PropTypes.shape({
       root: React.PropTypes.oneOfType([
         React.PropTypes.string,
@@ -37,10 +29,6 @@ function headerFooter(ComposedComponent) {
   };
 
   HeaderFooter.defaultProps = {
-    templates: {
-      header: '',
-      footer: ''
-    },
     cssClasses: {
       root: null
     }

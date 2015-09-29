@@ -1,6 +1,5 @@
 var React = require('react');
 
-var Template = require('./Template');
 var cx = require('classnames');
 
 class RefinementList extends React.Component {
@@ -51,11 +50,7 @@ class RefinementList extends React.Component {
             key={facetValue.name}
             onClick={this.handleClick.bind(this, facetValue.name)}
           >
-            <Template
-              data={facetValue}
-              transformData={this.props.transformData}
-              template={this.props.templates.item}
-            />
+            <this.props.Template data={facetValue} templateKey="item" />
           </div>
         );
       })}
@@ -75,14 +70,9 @@ RefinementList.propTypes = {
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
-  facetValues: React.PropTypes.array,
-  templates: React.PropTypes.shape({
-    item: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.func
-    ]).isRequired
-  }),
   transformData: React.PropTypes.func,
+  facetValues: React.PropTypes.array,
+  Template: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired
 };
 

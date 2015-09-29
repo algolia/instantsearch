@@ -83,8 +83,8 @@ test('InstantSearch: lifecycle', function(t) {
   );
   t.deepEqual(
     widget.init.args[0],
-    [helper.state, helper],
-    'widget.init(helper.state, helper)'
+    [helper.state, helper, search.templatesConfig],
+    'widget.init(helper.state, helper, templatesConfig)'
   );
   t.ok(widget.render.notCalled, 'widget.render not yet called');
 
@@ -98,7 +98,7 @@ test('InstantSearch: lifecycle', function(t) {
       results: results,
       state: helper.state,
       helper: helper,
-      templateHelpers: search.templateHelpers
+      templatesConfig: search.templatesConfig
     }],
     'widget.render(results, state, helper)'
   );

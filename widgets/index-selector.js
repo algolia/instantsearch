@@ -10,7 +10,7 @@ var IndexSelector = autoHide(require('../components/IndexSelector'));
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
  * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when there's no results
  * @return {Object}
  */
 function indexSelector({

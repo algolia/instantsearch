@@ -2,18 +2,17 @@ var React = require('react');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
+var bindProps = require('../decorators/bindProps');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
-
-var defaultTemplates = {
-  header: '',
-  footer: '',
-  item: '<a href="{{href}}">{{name}}</a> {{count}}'
-};
+var Template = require('../components/Template');
 
 var hierarchicalCounter = 0;
-
-var defaults = require('lodash/object/defaults');
+var defaultTemplates = {
+  header: '',
+  item: '<a href="{{href}}">{{name}}</a> {{count}}',
+  footer: ''
+};
 
 /**
  * Create a menu out of a facet
@@ -30,7 +29,7 @@ var defaults = require('lodash/object/defaults');
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function menu({
@@ -45,7 +44,7 @@ function menu({
     },
     hideWhenNoResults = true,
     templates = defaultTemplates,
-    transformData = null
+    transformData
   }) {
   hierarchicalCounter++;
 
@@ -54,10 +53,6 @@ function menu({
 
   if (container === null || facetName === null) {
     throw new Error(usage);
-  }
-
-  if (templates !== defaultTemplates) {
-    templates = defaults({}, templates, defaultTemplates);
   }
 
   var hierarchicalFacetName = 'instantsearch.js' + hierarchicalCounter;
@@ -69,15 +64,21 @@ function menu({
         attributes: [facetName]
       }]
     }),
-    render: function({results, helper}) {
+    render: function({results, helper, templatesConfig}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+
+      var templateProps = utils.prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
 
       React.render(
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}
-          templates={templates}
-          transformData={transformData}
+          Template={bindProps(Template, templateProps)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
