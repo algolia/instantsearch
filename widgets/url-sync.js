@@ -1,4 +1,5 @@
 var AlgoliaSearchHelper = require('algoliasearch-helper').AlgoliaSearchHelper;
+var majorVersionNumber = require('../lib/version.js').split('.')[0];
 
 var isEqual = require('lodash/lang/isEqual');
 var merge = require('lodash/object/merge');
@@ -97,29 +98,33 @@ class URLSync {
     return config;
   }
 
+  onPopState(helper) {
+    var qs = this.urlUtils.readUrl();
+    var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
+    var fullState = merge({}, this.originalConfig, partialState);
+    // compare with helper.state
+    var partialHelperState = helper.getState(this.trackedParameters);
+    var fullHelperState = merge({}, this.originalConfig, partialHelperState);
+
+    if (isEqual(fullHelperState, fullState)) return;
+
+    helper.setState(fullState).search();
+  }
+
   init(state, helper) {
-    var self = this;
-    this.urlUtils.onpopstate(function() {
-      var qs = self.urlUtils.readUrl();
-      var partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
-      var fullState = merge({}, self.originalConfig, partialState);
-      // compare with helper.state
-      var partialHelperState = helper.getState(self.trackedParameters);
-      var fullHelperState = merge({}, self.originalConfig, partialHelperState);
-
-      if (isEqual(fullHelperState, fullState)) return;
-
-      helper.setState(fullState).search();
-    });
+    this.urlUtils.onpopstate(this.onPopState.bind(this, helper));
   }
 
   render({helper}) {
     var helperState = helper.getState(this.trackedParameters);
     var currentQueryString = this.urlUtils.readUrl();
-    var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString);
     var urlState = AlgoliaSearchHelper.getConfigurationFromQueryString(currentQueryString);
 
     if (isEqual(helperState, urlState)) return;
+
+    // Add instantsearch version to reconciliate old url with newer versions
+    var foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString);
+    foreignConfig.is_v = majorVersionNumber;
 
     var qs = helper.getStateAsQueryString({filters: this.trackedParameters, moreAttributes: foreignConfig});
     if (this.timer() < this.threshold) {
