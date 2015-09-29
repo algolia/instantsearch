@@ -19,11 +19,11 @@ var defaultTemplates = {
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get
- * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String} [options.limit=100] How many facets values to retrieve
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
@@ -42,14 +42,14 @@ function menu({
       list: null,
       item: null
     },
-    hideWhenNoResults = true,
     templates = defaultTemplates,
-    transformData
+    transformData = null,
+    hideWhenNoResults = true
   }) {
   hierarchicalCounter++;
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
+  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
 
   if (container === null || facetName === null) {
     throw new Error(usage);

@@ -23,7 +23,7 @@ var defaultTemplates = {
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get
- * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {String|String[]} [options.cssClasses.root]
  * @param  {String|String[]} [options.cssClasses.list]
  * @param  {String|String[]} [options.cssClasses.item]

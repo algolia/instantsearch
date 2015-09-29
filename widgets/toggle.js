@@ -25,8 +25,10 @@ var defaultTemplates = {
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root=null]
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template

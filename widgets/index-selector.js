@@ -8,9 +8,11 @@ var IndexSelector = autoHide(require('../components/IndexSelector'));
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
- * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when there's no results
+ * @param  {Array} options.indices Array of objects defining the different indices to choose from.
+ * @param  {String} options.indices[0].name Name of the index to target
+ * @param  {String} options.indices[0].label Label displayed in the dropdown
+ * @param  {String|String[]} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 function indexSelector({
