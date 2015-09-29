@@ -226,8 +226,8 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    // cssClass
-    // poweredBy: boolean
+    cssClass: 'form-control',
+    poweredBy: true
   })
 );
 ```
@@ -262,6 +262,10 @@ search.addWidget(
 
 ![Example of the stats widget][stats]
 
+#### API
+
+#### Usage
+
 ```html
 <div id="stats"></div>
 ```
@@ -294,6 +298,23 @@ especially useful for changing the current sort order. If you need your results
 ordered following a special rule (like price ascending or price descending),
 you'll need several indices. This widget lets you easily change it.
 
+#### API
+
+```js
+/**
+ * Instantiate a dropdown element to choose the current targeted index
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Array} options.indices Array of objects defining the different indices to choose from.
+ * @param  {String} options.indices[0].name Name of the index to target
+ * @param  {String} options.indices[0].label Label displayed in the dropdown
+ * @param  {String|String[]} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
+ * @return {Object}
+ */
+```
+
+#### Usage
+
 ```html
 <div id="index-selector"></div>
 ```
@@ -312,20 +333,30 @@ search.addWidget(
 );
 ```
 
+### pagination
+
+![Example of the pagination widget][pagination]
+
+#### API
+
 ```js
 /**
- * Instantiate a dropdown element to choose the current targeted index
+ * Add a pagination menu to navigate through the results
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.indices Array of objects defining the different indices to choose from. Each object must contain a `name` and `label` key.
- * @param  {String} [options.cssClass] Class name(s) to be added to the generated select element
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when there's no results
+ * @param  {String|String[]} [options.cssClass] CSS class to be added to the wrapper element
+ * @param  {Object} [options.labels] Text to display in the various links (prev, next, first, last)
+ * @param  {String} [options.labels.prev] Label for the Previous link
+ * @param  {String} [options.labels.next] Label for the Next link
+ * @param  {String} [options.labels.first] Label for the First link
+ * @param  {String} [options.labels.last] Label for the Last link
+ * @param  {Number} [maxPages=20] The max number of pages to browse
+ * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
 
-### pagination
-
-![Example of the pagination widget][pagination]
+#### Usage
 
 ```html
 <div id="pagination"></div>
@@ -335,16 +366,15 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
-    // cssClass, // add cssClasses to the main wrapper
-    // padding: 3, // number of page numbers to show before/after current
-    // showFirstLast: true, // show or hide first and last links
-    // maxPages, // automatically computed based on the result set
-    // labels: {
-    //   prev: '‹', // &lsaquo;
-    //   next: '›', // &rsaquo;
-    //   first: '«', // &laquo;
-    //   last: '»' // &raquo;
-    // }
+    cssClass: 'pagination',
+    labels: {
+      prev: '< Previous',
+      next: 'Next >',
+      first: '<< First',
+      last: 'Last >>'
+    },
+    maxPages: 10,
+    showFirstLast: true
   })
 );
 ```
@@ -352,6 +382,26 @@ search.addWidget(
 ### hits
 
 ![Example of the hits widget][hits]
+
+#### API
+
+```js
+/**
+ * Display the list of results (hits) from the current search
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.empty=''] Template to use when there are no result
+ * @param  {String|Function} [options.templates.hit=''] Template to use for each result
+ * @param  {Object} [options.transformData] Method to change the object passed to the templates
+ * @param  {Function} [options.transformData.empty=''] Method used to change the object passed to the empty template
+ * @param  {Function} [options.transformData.hit=''] Method used to change the object passed to the hit template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {Number} [hitsPerPage=20] The number of hits to display per page
+ * @return {Object}
+ */
+```
+
+#### Usage
 
 ```html
 <div id="hits"></div>
@@ -362,15 +412,16 @@ search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
-      empty, // string (mustache format) or function(hit) return string 
-      hit // string (mustache format) or function(hit) return string
+      empty: 'No results'
+      hit: '<div><strong>{{name}}</strong> {{price}}</div>'
     },
-    hitsPerPage: 20,
-    // cssClass,
-    // transformData: {
-    //   empty, // function to modify the data passed to the empty template
-    //   hit // function to modify the data passed to the hit template
-    // }
+    transformData: {
+      hit: function(data) {
+        data.price = data.price + '$';
+        return data;
+      }
+    },
+    hitsPerPage: 20
   })
 );
 ```
@@ -390,6 +441,32 @@ When switching it off, all items will be displayed.
 Note that we are not toggling from `true` to `false` here, but from `true` to
 `undefined`.
 
+#### API
+
+```js
+/**
+ * Instantiate the toggling of a boolean facet filter on and off.
+ * Note that it will not toggle between `true` and `false, but between `true`
+ * and `undefined`.
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
+ * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.header=''] Header template
+ * @param  {String|Function} [options.templates.body='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @return {Object}
+ */
+```
+
+#### Usage
+
 ```html
 <div id="free-shipping"></div>
 ```
@@ -400,26 +477,12 @@ search.addWidget(
     container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
-    template: '<label><input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}}</label>'
+    templates: {
+      body: '<label><input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}}</label>'
+    }
   })
 );
 ```
-
-```js
-/**
- * Instantiate the toggling of a boolean facet filter on and off.
- * Note that it will not toggle between `true` and `false, but between `true`
- * and `undefined`.
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
- * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {String|Function} [options.template] Item template, provided with `label` and `isRefined`
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
- * @return {Object}
- */
-```
-
 
 ### refinementList
 
@@ -435,16 +498,16 @@ search.addWidget(
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get
- * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {String|String[]} [options.cssClasses.root]
  * @param  {String|String[]} [options.cssClasses.list]
  * @param  {String|String[]} [options.cssClasses.item]
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header] Header template
+ * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item=`<label>
   <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
 </label>`] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
@@ -452,7 +515,6 @@ search.addWidget(
  * @return {Object}
  */
 ```
-
 
 #### Usage
 
@@ -482,17 +544,17 @@ search.addWidget(
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get
- * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String} [options.limit=100] How many facets values to retrieve
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {Function} [options.transformData] Method to change the object passed to the item template
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -529,13 +591,13 @@ search.addWidget(
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
- * @param  {Object} [options.cssClasses] Css classes to add to the wrapping elements: root, body
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.body]
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.body]
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -573,12 +635,16 @@ search.addWidget(
  * the modern history API. By default, it will use the modern API, but if you are
  * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
  * true.
- * @param {number} threshold time in ms after which a new state is created in the browser
+ * @class
+ * @param {UrlUtil} urlUtils an object containing the function to read, watch the changes
+ * and update the URL.
+ * @param {object} options may contain the following keys :
+ *  - threshold:number time in ms after which a new state is created in the browser
  * history. The default value is 700.
- * @param {string[]} trackedParameters parameters that will be synchronized in the
+ *  - trackedParameters:string[] parameters that will be synchronized in the
  * URL. By default, it will track the query, all the refinable attribute (facets and numeric
  * filters), the index and the page.
- * @param {boolean} useHash if set to true, the url will be hash based. Otherwise,
+ *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
  * it'll use the query parameters using the modern history API.
  */
 ```
