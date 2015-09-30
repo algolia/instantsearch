@@ -5,11 +5,11 @@ var Template = require('./Template');
 
 class Hits extends React.Component {
   renderWithResults() {
-    var renderedHits = map(this.props.hits, function(hit) {
+    var renderedHits = map(this.props.hits, (hit) => {
       return (
         <this.props.Template templateKey="hit" data={hit} key={hit.objectID} />
       );
-    }, this);
+    });
 
     return <div>{renderedHits}</div>;
   }
@@ -17,7 +17,7 @@ class Hits extends React.Component {
   renderNoResults() {
     return (
       <div>
-        <this.props.Template data={this.props.results} templateKey="empty" />
+        <this.props.Template templateKey="empty" data={this.props.results}  />
       </div>
     );
   }
@@ -31,9 +31,9 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
+  Template: React.PropTypes.func,
   hits: React.PropTypes.arrayOf(React.PropTypes.object),
-  results: React.PropTypes.object,
-  Template: React.PropTypes.func
+  results: React.PropTypes.object
 };
 
 Hits.defaultProps = {
