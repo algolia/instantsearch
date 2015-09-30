@@ -15,57 +15,60 @@ var defaultTemplates = {
 };
 
 /**
- * Create a menu out of a facet
+ * Create a hierarchical menu using multiple attributes
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {String[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
+ * You need to follow some conventions:
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How many facets values to retrieve
+ * @param  {Number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
+ * @param  {String|String[]} [options.cssClasses.root]
+ * @param  {String|String[]} [options.cssClasses.list]
+ * @param  {String|String[]} [options.cssClasses.item]
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {String|Function} [options.templates.header=''] Header template (root level only)
+ * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`, `path`
+ * @param  {String|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
-function menu({
+function hierarchicalMenu({
     container = null,
-    facetName = null,
-    sortBy = ['count:desc'],
+    attributes = [],
+    separator,
     limit = 100,
+    sortBy = ['name:asc'],
     cssClasses = {
       root: null,
       list: null,
       item: null
     },
+    hideWhenNoResults = true,
     templates = defaultTemplates,
-    transformData = null,
-    hideWhenNoResults = true
+    transformData
   }) {
   hierarchicalCounter++;
 
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
+  var usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData]})';
 
-  if (container === null || facetName === null) {
+  if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
   }
 
-  var hierarchicalFacetName = 'instantsearch.js-menu' + hierarchicalCounter;
+  var hierarchicalFacetName = 'instantsearch.js-hierarchicalMenu' + hierarchicalCounter;
 
   return {
     getConfiguration: () => ({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
-        attributes: [facetName]
+        attributes,
+        separator
       }]
     }),
     render: function({results, helper, templatesConfig}) {
-      var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
 
       var templateProps = utils.prepareTemplateProps({
         transformData,
@@ -78,9 +81,11 @@ function menu({
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}
+          limit={limit}
           Template={bindProps(Template, templateProps)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
+          facetNameKey="path"
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode
@@ -95,11 +100,11 @@ function toggleRefinement(helper, facetName, facetValue) {
     .search();
 }
 
-function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
+function getFacetValues(results, hierarchicalFacetName, sortBy) {
   var values = results
     .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
 
-  return values.data && values.data.slice(0, limit) || [];
+  return values.data || [];
 }
 
-module.exports = menu;
+module.exports = hierarchicalMenu;

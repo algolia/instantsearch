@@ -139,4 +139,19 @@ search.addWidget(
   })
 );
 
+search.addWidget(
+  instantsearch.widgets.hierarchicalMenu({
+    container: '#hierarchical-categories',
+    attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+    cssClasses: {
+      root: 'list-group',
+      list: 'hierarchical-categories-list'
+    },
+    templates: {
+      header: '<div class="panel-heading">Hierarchical categories</div>',
+      item: require('./templates/category.html')
+    }
+  })
+);
+
 search.start();
