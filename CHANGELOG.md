@@ -1,3 +1,35 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/algolia/intantsearch.js/compare/v0.3.0...v0.4.0) (2015-09-30)
+
+
+### Bug Fixes
+
+* **pagination:** handle cases where maxPages is low ([d3c9959](https://github.com/algolia/intantsearch.js/commit/d3c9959)), closes [#100](https://github.com/algolia/intantsearch.js/issues/100)
+* **searchBox:** allow searchBox to reuse an `<input>` ([e820cc3](https://github.com/algolia/intantsearch.js/commit/e820cc3))
+* **searchBox:** Use `hasAttribute` instead of `getAttribute` ([a122af9](https://github.com/algolia/intantsearch.js/commit/a122af9))
+* **slider:** allow handles to reach the real start and end of the slider ([03ed3f5](https://github.com/algolia/intantsearch.js/commit/03ed3f5))
+* **slider:** fix tap event throwing ([d906d3e](https://github.com/algolia/intantsearch.js/commit/d906d3e)), closes [#120](https://github.com/algolia/intantsearch.js/issues/120)
+* **Template:** add default value for template ([4291014](https://github.com/algolia/intantsearch.js/commit/4291014))
+* **url-sync:** make input not to lose focus ([63488d3](https://github.com/algolia/intantsearch.js/commit/63488d3))
+
+### Features
+
+* **rangeSlider:** add headerFooter decorator ([19090c3](https://github.com/algolia/intantsearch.js/commit/19090c3))
+* **searchBox:** add headerFooter decorator to the Component ([5974a88](https://github.com/algolia/intantsearch.js/commit/5974a88))
+* **templatesConfig:** helpers and options transferred to Template ([456d781](https://github.com/algolia/intantsearch.js/commit/456d781)), closes [#99](https://github.com/algolia/intantsearch.js/issues/99)
+* **toggle:** add headerFooter decorator ([8a70c7d](https://github.com/algolia/intantsearch.js/commit/8a70c7d))
+* **url-sync:** Add `is_v` version to url ([9f597a0](https://github.com/algolia/intantsearch.js/commit/9f597a0)), closes [#70](https://github.com/algolia/intantsearch.js/issues/70)
+* hierarchicalWidget ([1facd9d](https://github.com/algolia/intantsearch.js/commit/1facd9d))
+
+
+### BREAKING CHANGES
+
+* S:
+- toggle: removed template
+* - removed: inputClass
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/algolia/intantsearch.js/compare/v0.2.2...v0.3.0) (2015-09-24)
 

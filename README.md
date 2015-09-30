@@ -28,7 +28,7 @@ API is unstable. We welcome any idea and pull request.
 - [Widget API](#widget-api)
 - [Templates](#templates)
   - [Examples](#examples)
-  - [Template helpers](#template-helpers)
+  - [Template configuration](#template-configuration)
 - [Development workflow](#development-workflow)
 - [Test](#test)
 - [Available widgets](#available-widgets)
@@ -42,6 +42,7 @@ API is unstable. We welcome any idea and pull request.
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
   - [URL Synchronisation](#url-synchronisation)
+  - [hierarchicalMenu](#hierarchicalmenu)
 - [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
