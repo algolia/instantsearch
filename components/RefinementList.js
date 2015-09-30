@@ -19,7 +19,10 @@ class RefinementList extends React.Component {
   // has a checkbox inside, we ignore the first click event because we will get another one.
   handleClick(value, e) {
     if (e.target.tagName === 'A' && e.target.href) {
+      // do not trigger any url change by the href
       e.preventDefault();
+      // do not bubble (so that hierarchical lists are not triggering refine twice)
+      e.stopPropagation();
     }
 
     if (e.target.tagName === 'INPUT') {
@@ -43,14 +46,21 @@ class RefinementList extends React.Component {
   render() {
     return (
       <div className={cx(this.props.cssClasses.list)}>
-      {this.props.facetValues.map(facetValue => {
+      {this.props.facetValues.slice(0, this.props.limit).map(facetValue => {
+        var hasChildren = facetValue.data && facetValue.data.length > 0;
+
+        var subList = hasChildren ?
+          <RefinementList {...this.props} facetValues={facetValue.data} /> :
+          null;
+
         return (
           <div
             className={cx(this.props.cssClasses.item)}
-            key={facetValue.name}
-            onClick={this.handleClick.bind(this, facetValue.name)}
+            key={facetValue[this.props.facetNameKey]}
+            onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
           >
             <this.props.Template data={facetValue} templateKey="item" />
+            {subList}
           </div>
         );
       })}
@@ -70,16 +80,20 @@ RefinementList.propTypes = {
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
+  limit: React.PropTypes.number,
   facetValues: React.PropTypes.array,
   Template: React.PropTypes.func,
-  toggleRefinement: React.PropTypes.func.isRequired
+  toggleRefinement: React.PropTypes.func.isRequired,
+  facetNameKey: React.PropTypes.string
 };
 
 RefinementList.defaultProps = {
   cssClasses: {
     item: null,
     list: null
-  }
+  },
+  limit: 1000,
+  facetNameKey: 'name'
 };
 
 module.exports = RefinementList;

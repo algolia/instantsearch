@@ -44,3 +44,7 @@ body {
   background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
   border-color: #ddd;
 }
+
+.hierarchical-categories-list .hierarchical-categories-list {
+  padding-left: 20px;
+}

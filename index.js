@@ -4,6 +4,7 @@ var InstantSearch = require('./lib/InstantSearch');
 var instantsearch = toFactory(InstantSearch);
 
 instantsearch.widgets = {
+  hierarchicalMenu: require('./widgets/hierarchicalMenu'),
   hits: require('./widgets/hits'),
   indexSelector: require('./widgets/index-selector'),
   menu: require('./widgets/menu'),
