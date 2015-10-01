@@ -43,7 +43,7 @@ function menu({
       item: null
     },
     templates = defaultTemplates,
-    transformData = null,
+    transformData,
     hideWhenNoResults = true
   }) {
   hierarchicalCounter++;

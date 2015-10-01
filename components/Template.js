@@ -10,9 +10,7 @@ class Template {
         this.props.templatesConfig.compileOptions :
         {},
       helpers: this.props.templatesConfig.helpers,
-      data: this.props.transformData ?
-        getTransformData(this.props.transformData, this.props.templateKey)(this.props.data) :
-        this.props.data
+      data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
     });
 
     if (content === null) {
@@ -56,14 +54,19 @@ Template.defaultProps = {
   data: {}
 };
 
-function getTransformData(transformData, templateKey) {
-  if (typeof transformData === 'function') {
-    return transformData;
-  } else if (typeof transformData[templateKey] === 'function') {
-    return transformData[templateKey];
+function transformData(fn, templateKey, originalData) {
+  if (!fn) {
+    return originalData;
   }
 
-  throw new Error('transformData should be a function or an object');
+  if (typeof fn === 'function') {
+    return fn(originalData);
+  } else if (typeof fn === 'object') {
+    // ex: transformData: {hit, empty}
+    return fn[templateKey] && fn[templateKey](originalData) || originalData;
+  }
+
+  throw new Error('`transformData` must be a function or an object');
 }
 
 module.exports = Template;
