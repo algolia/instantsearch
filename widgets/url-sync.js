@@ -33,10 +33,10 @@ var hashUrlUtils = {
     window.addEventListener('hashchange', cb);
   },
   pushState: function(qs) {
-    window.location.assign(this.character + qs);
+    window.location.assign(document.location.search + this.character + qs);
   },
   replaceState: function(qs) {
-    window.location.replace(this.character + qs);
+    window.location.replace(document.location.search + this.character + qs);
   },
   readUrl: function() {
     return window.location.hash.slice(1);
@@ -53,10 +53,10 @@ var modernUrlUtils = {
     window.addEventListener('popstate', cb);
   },
   pushState: function(qs) {
-    window.history.pushState(null, '', this.character + qs);
+    window.history.pushState(null, '', this.character + qs + document.location.hash);
   },
   replaceState: function(qs) {
-    window.history.replaceState(null, '', this.character + qs);
+    window.history.replaceState(null, '', this.character + qs + document.location.hash);
   },
   readUrl: function() {
     return window.location.search.slice(1);
