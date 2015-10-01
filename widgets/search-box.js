@@ -1,12 +1,6 @@
 var utils = require('../lib/utils.js');
 var forEach = require('lodash/collection/forEach');
 
-var VALID_AUTOFOCUS_VALUES = {
-  true: true,
-  false: true,
-  auto: true
-};
-
 /**
  * Instantiate a searchbox
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
@@ -23,7 +17,7 @@ function searchbox(params) {
     input = input.appendChild(document.createElement('input'));
   }
 
-  var autofocus = (typeof params.autofocus === 'boolean' || VALID_AUTOFOCUS_VALUES[params.autofocus]) ?
+  var autofocus = (typeof params.autofocus === 'boolean' || params.autofocus === 'auto') ?
     params.autofocus :
     'auto';
 
@@ -71,8 +65,7 @@ function searchbox(params) {
         }
       });
 
-      if (autofocus === 'true' ||
-          autofocus === true ||
+      if (autofocus === true ||
           autofocus === 'auto' && helper.state.query === '') {
         input.focus();
       }
