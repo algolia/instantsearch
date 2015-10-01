@@ -7,6 +7,7 @@ var forEach = require('lodash/collection/forEach');
  * @param  {String} [options.placeholder='Search here'] Input's placeholder
  * @param  {Object} [options.cssClass] CSS classes to add to the input
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
+ * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}
  */
 function searchbox(params) {
@@ -16,13 +17,16 @@ function searchbox(params) {
     input = input.appendChild(document.createElement('input'));
   }
 
+  var autofocus = (typeof params.autofocus === 'boolean' || params.autofocus === 'auto') ?
+    params.autofocus :
+    'auto';
+
   return {
     init: function(initialState, helper) {
       var defaultAttributes = {
         autocapitalize: 'off',
         autocomplete: 'off',
         autocorrect: 'off',
-        autofocus: 'autofocus',
         className: params.cssClass,
         placeholder: params.placeholder,
         role: 'textbox',
@@ -60,6 +64,11 @@ function searchbox(params) {
           input.value = state.query;
         }
       });
+
+      if (autofocus === true ||
+          autofocus === 'auto' && helper.state.query === '') {
+        input.focus();
+      }
     }
   };
 }
