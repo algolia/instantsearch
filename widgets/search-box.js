@@ -56,7 +56,7 @@ function searchbox(params) {
       }
 
       helper.on('change', function(state) {
-        if (input.value !== state.query) {
+        if (input !== document.activeElement && input.value !== state.query) {
           input.value = state.query;
         }
       });
