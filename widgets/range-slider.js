@@ -26,8 +26,8 @@ var defaultTemplates = {
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.body]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */

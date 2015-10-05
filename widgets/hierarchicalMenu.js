@@ -22,9 +22,9 @@ var defaultTemplates = {
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class added to the root element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class added to each list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class added to each item element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template (root level only)
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`, `path`

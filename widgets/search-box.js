@@ -10,16 +10,23 @@ var forEach = require('lodash/collection/forEach');
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}
  */
-function searchbox(params) {
+function searchbox({
+  container,
+  placeholder,
+  cssClass,
+  poweredBy = false,
+  autofocus = 'auto'
+}) {
   // Hook on an existing input, or add one if none targeted
-  var input = utils.getContainerNode(params.container);
+  var input = utils.getContainerNode(container);
   if (input.tagName !== 'INPUT') {
     input = input.appendChild(document.createElement('input'));
   }
 
-  var autofocus = (typeof params.autofocus === 'boolean' || params.autofocus === 'auto') ?
-    params.autofocus :
-    'auto';
+  // Only possible values are 'auto', true and false
+  if (typeof autofocus !== 'boolean') {
+    autofocus = 'auto';
+  }
 
   return {
     init: function(initialState, helper) {
@@ -27,8 +34,8 @@ function searchbox(params) {
         autocapitalize: 'off',
         autocomplete: 'off',
         autocorrect: 'off',
-        className: params.cssClass,
-        placeholder: params.placeholder,
+        className: cssClass,
+        placeholder: placeholder,
         role: 'textbox',
         spellcheck: 'false',
         type: 'text',
@@ -51,7 +58,7 @@ function searchbox(params) {
       });
 
       // Optional "powered by Algolia" widget
-      if (params.poweredBy) {
+      if (poweredBy) {
         var React = require('react');
         var PoweredBy = require('../components/PoweredBy');
         var poweredByContainer = document.createElement('div');

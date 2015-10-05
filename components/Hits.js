@@ -17,7 +17,7 @@ class Hits extends React.Component {
   renderNoResults() {
     return (
       <div>
-        <this.props.Template templateKey="empty" data={this.props.results}  />
+        <this.props.Template templateKey="empty" data={this.props.results} />
       </div>
     );
   }
