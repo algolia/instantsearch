@@ -369,6 +369,7 @@ search.addWidget(
  * @param  {String} [options.labels.first] Label for the First link
  * @param  {String} [options.labels.last] Label for the Last link
  * @param  {Number} [maxPages=20] The max number of pages to browse
+ * @param  {String|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
