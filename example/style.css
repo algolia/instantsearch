@@ -22,9 +22,16 @@ body {
 
 /* Force widths and heights to avoid vertical size changes.
   So that pagination clicks will not jump */
-.hit img {
+.hit a {
   height: 100px;
   width: 100px;
+  margin-right: 20px
+}
+
+.hit img {
+  max-height: 100px;
+  max-width: 100px;
+  margin: 0 auto;
 }
 
 .hit p {
@@ -36,8 +43,16 @@ body {
   height: 150px;
 }
 
+#hits {
+  margin-top: 20px;
+}
+
 #price .panel-body {
   padding: 45px 15px;
+}
+
+.hit h3, .hit h4 {
+  margin-top: 0;
 }
 
 .panel-heading {
