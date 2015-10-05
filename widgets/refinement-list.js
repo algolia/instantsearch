@@ -67,9 +67,11 @@ function refinementList({
     throw new Error(usage);
   }
 
-  operator = operator.toLowerCase();
-  if (operator !== 'and' && operator !== 'or') {
-    throw new Error(usage);
+  if (operator) {
+    operator = operator.toLowerCase();
+    if (operator !== 'and' && operator !== 'or') {
+      throw new Error(usage);
+    }
   }
 
   return {
@@ -103,7 +105,12 @@ function refinementList({
 
 function toggleRefinement(helper, singleRefine, facetName, facetValue) {
   if (singleRefine) {
-    helper.clearRefinement(facetName);
+    var previousRefinement = helper.getRefinements(facetName);
+    helper.clearRefinements(facetName);
+    if (previousRefinement && previousRefinement[0] && previousRefinement[0].value === facetValue) {
+      helper.search();
+      return;
+    }
   }
 
   helper
