@@ -23,17 +23,17 @@ body {
 /* Force widths and heights to avoid vertical size changes.
   So that pagination clicks will not jump */
 .hit img {
-  max-height: 100px;
-  max-width: 100px;
+  height: 100px;
+  width: 100px;
 }
 
 .hit p {
-  max-height: 50px;
-  text-overflow: ellipsis;
+  max-height: 70px;
+  max-width: 80%;
 }
 
 .hit {
-  height: 125px;
+  height: 150px;
 }
 
 #price .panel-body {
