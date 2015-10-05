@@ -1,3 +1,17 @@
+<a name="0.4.1"></a>
+## [0.4.1](https://github.com/algolia/intantsearch.js/compare/v0.4.0...v0.4.1) (2015-10-05)
+
+
+### Bug Fixes
+
+* allow passing only one key of transformData as an object ([e0ce89f](https://github.com/algolia/intantsearch.js/commit/e0ce89f))
+* **search-box:** Fix #137 autofocus must be configurable ([51f01be](https://github.com/algolia/intantsearch.js/commit/51f01be)), closes [#137](https://github.com/algolia/intantsearch.js/issues/137)
+* **searchBox:** do not update input's value if focused ([0e85f0d](https://github.com/algolia/intantsearch.js/commit/0e85f0d)), closes [#163](https://github.com/algolia/intantsearch.js/issues/163)
+* **templatesConfig:** helpers are now following Mustache spec ([8f3502f](https://github.com/algolia/intantsearch.js/commit/8f3502f))
+* **url-sync:** handle both hash and query parameter fix #165 ([8d84de6](https://github.com/algolia/intantsearch.js/commit/8d84de6)), closes [#165](https://github.com/algolia/intantsearch.js/issues/165)
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/algolia/intantsearch.js/compare/v0.3.0...v0.4.0) (2015-09-30)
 

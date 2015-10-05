@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "dependencies": {
     "algoliasearch": {
       "version": "3.8.1",
