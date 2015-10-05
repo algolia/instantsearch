@@ -164,6 +164,21 @@ Here is the list of the currently available helpers:
   option (defaults to `en-EN`).
   eg. `100000` will be formatted as `100 000` with `en-EN`
 
+Here is the syntax of a helper (`render` is using `search.templatesConfig.compileOptions`):
+```js
+search.templatesConfig.helpers.makeTitle = function (text, render) {
+  return '<h1>' + render(text) + '</h1>';
+};
+```
+
+If you know the structure of the object you'll be calling a helper with,
+you can access it with `this`:
+```js
+search.templatesConfig.helpers.discount = function () {
+  return '-' + ((1 - this.promotion_price / this.price) * 100) + '%'; // -10%
+};
+```
+
 You can configure the options passed to `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
 
 Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
