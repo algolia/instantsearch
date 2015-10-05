@@ -3,5 +3,13 @@
     "eslint:recommended",
     "airbnb",
     "algolia/es6"
-  ]
+  ],
+  "rules": {
+    "valid-jsdoc": [
+      2,
+      {
+        "requireReturnDescription": false
+      }
+    ]
+  }
 }

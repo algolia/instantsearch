@@ -226,6 +226,7 @@ npm run test:watch # developer mode, test only
  * @param  {String} [options.placeholder='Search here'] Input's placeholder
  * @param  {Object} [options.cssClass] CSS classes to add to the input
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
+ * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}
  */
 ```
@@ -258,7 +259,7 @@ search.addWidget(
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root=null]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.body='<div>
@@ -517,9 +518,9 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.item=`<label>
@@ -613,8 +614,8 @@ search.addWidget(
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.body]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -694,9 +695,9 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class added to the root element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class added to each list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class added to each item element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template (root level only)
  * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`, `path`

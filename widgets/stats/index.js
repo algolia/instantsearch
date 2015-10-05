@@ -18,7 +18,7 @@ var defaultTemplates = {
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root=null]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
  * @param  {String|Function} [options.templates.body='<div>
