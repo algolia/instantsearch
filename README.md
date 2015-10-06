@@ -258,15 +258,16 @@ search.addWidget(
 /**
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {Object} [options.cssClasses] CSS classes to add to the default template
+ * @param  {String} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<div>
+ * @param  {String|Function} [options.templates.body='<div class="{{cssClasses.root}}">
   {{#hasNoResults}}No results{{/hasNoResults}}
   {{#hasOneResult}}1 result{{/hasOneResult}}
   {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <small>found in {{processingTimeMS}}ms</small>
+  <span class="{{cssClasses.time}}">found in {{processingTimeMS}}ms</span>
 </div>'] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
@@ -275,12 +276,9 @@ search.addWidget(
  */
 ```
 
-
 #### Usage
 
 ![Example of the stats widget][stats]
-
-#### API
 
 #### Usage
 
@@ -292,17 +290,9 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-    template: // mustache string or function(stats) with the following keys
-              // hasManyResults: boolean
-              // hasNoResults: boolean
-              // hasOneResult: boolean
-              // hitsPerPage: number
-              // nbHits: number
-              // nbPages: number
-              // page: number
-              // processingTimeMS: number
-              // query: string
-    transformData: // function to modify the data passed to the template
+    cssClasses: {
+      time: 'label label-info'
+    }
   })
 );
 ```
