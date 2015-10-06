@@ -7,6 +7,25 @@ class RefinementList extends React.Component {
     this.props.toggleRefinement(value);
   }
 
+  _generateFacetItem(facetValue) {
+    var hasChildren = facetValue.data && facetValue.data.length > 0;
+
+    var subList = hasChildren ?
+      <RefinementList {...this.props} facetValues={facetValue.data} /> :
+      null;
+
+    return (
+      <div
+        className={cx(this.props.cssClasses.item)}
+        key={facetValue[this.props.facetNameKey]}
+        onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
+      >
+        <this.props.Template data={facetValue} templateKey="item" />
+        {subList}
+      </div>
+    );
+  }
+
   // Click events on DOM tree like LABEL > INPUT will result in two click events
   // instead of one. No matter the framework: see
   // a label, you will get two click events instead of one.
@@ -46,24 +65,9 @@ class RefinementList extends React.Component {
   render() {
     return (
       <div className={cx(this.props.cssClasses.list)}>
-      {this.props.facetValues.slice(0, this.props.limit).map(facetValue => {
-        var hasChildren = facetValue.data && facetValue.data.length > 0;
-
-        var subList = hasChildren ?
-          <RefinementList {...this.props} facetValues={facetValue.data} /> :
-          null;
-
-        return (
-          <div
-            className={cx(this.props.cssClasses.item)}
-            key={facetValue[this.props.facetNameKey]}
-            onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
-          >
-            <this.props.Template data={facetValue} templateKey="item" />
-            {subList}
-          </div>
-        );
-      })}
+      {this.props.facetValues
+        .slice(0, this.props.limit)
+        .map(this._generateFacetItem, this)}
       </div>
     );
   }
