@@ -4,7 +4,7 @@ var utils = require('../../lib/utils.js');
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
 var bindProps = require('../../decorators/bindProps');
-var Stats = autoHide(headerFooter(require('../../components/Stats')));
+var Stats = autoHide(headerFooter(require('../../components/Stats/Stats.js')));
 
 var Template = require('../../components/Template');
 
@@ -17,15 +17,16 @@ var defaultTemplates = {
 /**
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {Object} [options.cssClasses] CSS classes to add to the default template
+ * @param  {String} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<div>
+ * @param  {String|Function} [options.templates.body='<div class="{{cssClasses.root}}">
   {{#hasNoResults}}No results{{/hasNoResults}}
   {{#hasOneResult}}1 result{{/hasOneResult}}
   {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <small>found in {{processingTimeMS}}ms</small>
+  <span class="{{cssClasses.time}}">found in {{processingTimeMS}}ms</span>
 </div>'] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
@@ -33,17 +34,15 @@ var defaultTemplates = {
  * @return {Object}
  */
 function stats({
-    container = null,
-    templates = defaultTemplates,
-    transformData,
+    container,
+    cssClasses = {},
     hideWhenNoResults = true,
-    cssClasses = {
-      root: null
-    }
+    templates = defaultTemplates,
+    transformData
   }) {
   var containerNode = utils.getContainerNode(container);
 
-  if (container === null) {
+  if (!containerNode) {
     throw new Error('Usage: stats({container[, template, transformData]})');
   }
 
