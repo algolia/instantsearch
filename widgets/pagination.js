@@ -29,10 +29,11 @@ var defaultLabels = {
  * @param  {String} [options.labels.next] Label for the Next link
  * @param  {String} [options.labels.first] Label for the First link
  * @param  {String} [options.labels.last] Label for the Last link
- * @param  {Number} [maxPages=20] The max number of pages to browse
- * @param  {Number} [padding=3] The number of pages to display on each side of the current page
- * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {Number} [options.maxPages=20] The max number of pages to browse
+ * @param  {Number} [options.padding=3] The number of pages to display on each side of the current page
+ * @param  {String|DOMElement|boolean} [options.scrollTo='body'] Where to scroll after a click, set to `false` to disable
+ * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
+ * @param  {boolean} [options.hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function pagination({
@@ -42,9 +43,15 @@ function pagination({
     maxPages = 20,
     padding = 3,
     showFirstLast = true,
-    hideWhenNoResults = true
+    hideWhenNoResults = true,
+    scrollTo = 'body'
   }) {
+  if (scrollTo === true) {
+    scrollTo = 'body';
+  }
+
   var containerNode = utils.getContainerNode(container);
+  var scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
 
   if (!container) {
     throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideWhenNoResults]})');
@@ -62,8 +69,6 @@ function pagination({
       var nbPages = results.nbPages;
       var nbHits = results.nbHits;
       var hasResults = nbHits > 0;
-      var setCurrentPage = this.setCurrentPage.bind(this, helper);
-
 
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);
@@ -79,11 +84,20 @@ function pagination({
           nbHits={nbHits}
           nbPages={nbPages}
           padding={padding}
-          setCurrentPage={setCurrentPage}
+          setCurrentPage={setCurrentPage(helper, scrollToNode)}
           showFirstLast={showFirstLast}
         />,
         containerNode
       );
+    }
+  };
+}
+
+function setCurrentPage(helper, scrollToNode) {
+  return askedPage => {
+    helper.setCurrentPage(askedPage).search();
+    if (scrollToNode !== false) {
+      scrollToNode.scrollIntoView();
     }
   };
 }
