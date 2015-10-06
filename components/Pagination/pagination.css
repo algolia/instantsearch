@@ -1,0 +1,19 @@
+.ais-pagination {
+}
+.ais-pagination--item {
+}
+.ais-pagination--item__disabled {
+  visibility: hidden;
+}
+.ais-pagination--item-first {
+}
+.ais-pagination--item-previous {
+}
+.ais-pagination--item-page {
+}
+.ais-pagination--item-page__active {
+}
+.ais-pagination--item-next {
+}
+.ais-pagination--item-last {
+}

@@ -53,7 +53,10 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
-    cssClass: 'pagination',
+    cssClasses: {
+      root: 'pagination', // This uses Bootstrap classes
+      active: 'active'
+    },
     maxPages: 20
   })
 );

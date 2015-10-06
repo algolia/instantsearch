@@ -1,50 +1,85 @@
 var React = require('react');
+var defaults = require('lodash/object/defaults');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
 var Pagination = autoHide(require('../components/Pagination/Pagination.js'));
+var defaultLabels = {
+  previous: '‹',
+  next: '›',
+  first: '«',
+  last: '»'
+};
 
 /**
  * Add a pagination menu to navigate through the results
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String|String[]} [options.cssClass] CSS class to be added to the wrapper element
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {String} [options.cssClasses.root] CSS classes added to the parent <ul>
+ * @param  {String} [options.cssClasses.item] CSS classes added to each <li>
+ * @param  {String} [options.cssClasses.page] CSS classes added to page <li>
+ * @param  {String} [options.cssClasses.previous] CSS classes added to the previous <li>
+ * @param  {String} [options.cssClasses.next] CSS classes added to the next <li>
+ * @param  {String} [options.cssClasses.first] CSS classes added to the first <li>
+ * @param  {String} [options.cssClasses.last] CSS classes added to the last <li>
+ * @param  {String} [options.cssClasses.active] CSS classes added to the active <li>
+ * @param  {String} [options.cssClasses.disabled] CSS classes added to the disabled <li>
  * @param  {Object} [options.labels] Text to display in the various links (prev, next, first, last)
- * @param  {String} [options.labels.prev] Label for the Previous link
+ * @param  {String} [options.labels.previous] Label for the Previous link
  * @param  {String} [options.labels.next] Label for the Next link
  * @param  {String} [options.labels.first] Label for the First link
  * @param  {String} [options.labels.last] Label for the Last link
  * @param  {Number} [maxPages=20] The max number of pages to browse
+ * @param  {Number} [padding=3] The number of pages to display on each side of the current page
  * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function pagination({
-    container = null,
-    cssClass,
-    labels,
-    maxPages,
-    showFirstLast,
+    container,
+    cssClasses = {},
+    labels = {},
+    maxPages = 20,
+    padding = 3,
+    showFirstLast = true,
     hideWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
 
+  if (!container) {
+    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideWhenNoResults]})');
+  }
+
+  labels = defaults(labels, defaultLabels);
+
   return {
+    setCurrentPage: function(helper, pageNumber) {
+      helper.setCurrentPage(pageNumber).search();
+    },
+
     render: function({results, helper}) {
+      var currentPage = results.page;
       var nbPages = results.nbPages;
+      var nbHits = results.nbHits;
+      var hasResults = nbHits > 0;
+      var setCurrentPage = this.setCurrentPage.bind(this, helper);
+
+
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
       React.render(
         <Pagination
-          nbHits={results.nbHits}
-          currentPage={results.page}
-          nbPages={nbPages}
-          setCurrentPage={helper.setCurrentPage.bind(helper)}
-          cssClass={cssClass}
+          cssClasses={cssClasses}
+          currentPage={currentPage}
+          hasResults={hasResults}
           hideWhenNoResults={hideWhenNoResults}
-          hasResults={results.hits.length > 0}
           labels={labels}
+          nbHits={nbHits}
+          nbPages={nbPages}
+          padding={padding}
+          setCurrentPage={setCurrentPage}
           showFirstLast={showFirstLast}
         />,
         containerNode
