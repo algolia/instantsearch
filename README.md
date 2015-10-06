@@ -41,7 +41,7 @@ API is unstable. We welcome any idea and pull request.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
-  - [URL Synchronisation](#url-synchronisation)
+  - [urlSync](#urlsync)
   - [hierarchicalMenu](#hierarchicalmenu)
 - [Browser support](#browser-support)
 
@@ -642,9 +642,9 @@ search.addWidget(
 );
 ```
 
-### URL Synchronisation
+### urlSync
 
-![Example of url sync][urlSync]
+![Example of urlSync][urlSync]
 
 #### API
 
