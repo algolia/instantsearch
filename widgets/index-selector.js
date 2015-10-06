@@ -11,20 +11,22 @@ var IndexSelector = autoHide(require('../components/IndexSelector'));
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {String} options.indices[0].name Name of the index to target
  * @param  {String} options.indices[0].label Label displayed in the dropdown
- * @param  {String|String[]} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {String} [options.cssClasses.select] CSS classes added to the parent <select>
+ * @param  {String} [options.cssClasses.option] CSS classes added to each <option>
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 function indexSelector({
-    container = null,
-    indices = null,
-    cssClass,
+    container,
+    indices,
+    cssClasses = {},
     hideWhenNoResults = false
   }) {
   var containerNode = utils.getContainerNode(container);
 
-  var usage = 'Usage: indexSelector({container, indices[, cssClass]})';
-  if (container === null || indices === null) {
+  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{select,option}, hideWhenNoResults]})';
+  if (!container || !indices) {
     throw new Error(usage);
   }
 
@@ -37,17 +39,22 @@ function indexSelector({
       }
     },
 
+    setIndex: function(helper, indexName) {
+      helper.setIndex(indexName).search();
+    },
+
     render: function({helper, results}) {
-      var containerId = containerNode.id;
+      let currentIndex = helper.getIndex();
+      let hasResults = results.hits.length > 0;
+      let setIndex = this.setIndex.bind(this, helper);
       React.render(
         <IndexSelector
-          containerId={containerId}
-          cssClass={cssClass}
-          currentIndex={helper.getIndex()}
-          indices={indices}
+          cssClasses={cssClasses}
+          currentIndex={currentIndex}
+          hasResults={hasResults}
           hideWhenNoResults={hideWhenNoResults}
-          hasResults={results.hits.length > 0}
-          setIndex={helper.setIndex.bind(helper)}
+          indices={indices}
+          setIndex={setIndex}
         />,
         containerNode
       );
