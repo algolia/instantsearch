@@ -1,3 +1,5 @@
+require('./shams/Object.freeze.js');
+
 var toFactory = require('to-factory');
 
 var InstantSearch = require('./lib/InstantSearch');
