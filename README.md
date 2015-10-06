@@ -21,30 +21,29 @@ API is unstable. We welcome any idea and pull request.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [' + render(text) + '](#--rendertext--)
-  - [Setup](#setup)
-    - [npm, browserify, webpack](#npm-browserify-webpack)
-    - [`<script>`](#script)
-  - [Usage](#usage)
-  - [Widget API](#widget-api)
-  - [Templates](#templates)
-    - [Examples](#examples)
-    - [Template configuration](#template-configuration)
-  - [Development workflow](#development-workflow)
-  - [Test](#test)
-  - [Available widgets](#available-widgets)
-    - [searchBox](#searchbox)
-    - [stats](#stats)
-    - [indexSelector](#indexselector)
-    - [pagination](#pagination)
-    - [hits](#hits)
-    - [toggle](#toggle)
-    - [refinementList](#refinementlist)
-    - [menu](#menu)
-    - [rangeSlider](#rangeslider)
-    - [URL Synchronisation](#url-synchronisation)
-    - [hierarchicalMenu](#hierarchicalmenu)
-  - [Browser support](#browser-support)
+- [Setup](#setup)
+  - [npm, browserify, webpack](#npm-browserify-webpack)
+  - [`<script>`](#script)
+- [Usage](#usage)
+- [Widget API](#widget-api)
+- [Templates](#templates)
+  - [Examples](#examples)
+  - [Template configuration](#template-configuration)
+- [Development workflow](#development-workflow)
+- [Test](#test)
+- [Available widgets](#available-widgets)
+  - [searchBox](#searchbox)
+  - [stats](#stats)
+  - [indexSelector](#indexselector)
+  - [pagination](#pagination)
+  - [hits](#hits)
+  - [toggle](#toggle)
+  - [refinementList](#refinementlist)
+  - [menu](#menu)
+  - [rangeSlider](#rangeslider)
+  - [URL Synchronisation](#url-synchronisation)
+  - [hierarchicalMenu](#hierarchicalmenu)
+- [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -167,16 +166,16 @@ Here is the list of the currently available helpers:
 
 Here is the syntax of a helper (`render` is using `search.templatesConfig.compileOptions`):
 ```js
-search.templatesConfig.helpers.makeTitle = function (text, render) {
-  return '<h1>' + render(text) + '</h1>';
+search.templatesConfig.helpers.emphasis = function(text, render) {
+  return '<em>' + render(text) + '</em>';
 };
 ```
 
-If you know the structure of the object you'll be calling a helper with,
-you can access it with `this`:
+In your helper, `this` always refers to the data:
 ```js
-search.templatesConfig.helpers.discount = function () {
-  return '-' + ((1 - this.promotion_price / this.price) * 100) + '%'; // -10%
+search.templatesConfig.helpers.discount = function(/*text, render*/) {
+  var discount = this.price * 0.3;
+  return '$ -' + discount;
 };
 ```
 
@@ -748,8 +747,8 @@ To get < IE10 support, please insert this code in the `<head>`:
 ```html
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <!--[if lte IE 9]>
-  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 <![endif]-->
 ```
 
-We use the [polyfill.io](https://cdn.polyfill.io/v1/docs/).
+We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
