@@ -34,7 +34,7 @@ var defaultTemplates = {
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
+ * @param  {String|Function} [options.singleRefine=false] Are multiple refinements allowed or only one at the same time. You can use this
  *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
@@ -67,9 +67,11 @@ function refinementList({
     throw new Error(usage);
   }
 
-  operator = operator.toLowerCase();
-  if (operator !== 'and' && operator !== 'or') {
-    throw new Error(usage);
+  if (operator) {
+    operator = operator.toLowerCase();
+    if (operator !== 'and' && operator !== 'or') {
+      throw new Error(usage);
+    }
   }
 
   return {
@@ -103,7 +105,12 @@ function refinementList({
 
 function toggleRefinement(helper, singleRefine, facetName, facetValue) {
   if (singleRefine) {
-    helper.clearRefinement(facetName);
+    var previousRefinement = helper.getRefinements(facetName);
+    helper.clearRefinements(facetName);
+    if (previousRefinement && previousRefinement[0] && previousRefinement[0].value === facetValue) {
+      helper.search();
+      return;
+    }
   }
 
   helper
