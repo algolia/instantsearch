@@ -7,7 +7,6 @@ var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
 var Template = require('../components/Template');
 
-var hierarchicalCounter = 0;
 var defaultTemplates = {
   header: '',
   item: '<a href="{{href}}">{{name}}</a> {{count}}',
@@ -48,8 +47,6 @@ function hierarchicalMenu({
     templates = defaultTemplates,
     transformData
   }) {
-  hierarchicalCounter++;
-
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData]})';
 
@@ -57,7 +54,10 @@ function hierarchicalMenu({
     throw new Error(usage);
   }
 
-  var hierarchicalFacetName = 'instantsearch.js-hierarchicalMenu' + hierarchicalCounter;
+  // we need to provide a hierarchicalFacet name for the search state
+  // so that we can always map $hierarchicalFacetName => real attributes
+  // we use the first attribute name
+  var hierarchicalFacetName = attributes[0];
 
   return {
     getConfiguration: () => ({
