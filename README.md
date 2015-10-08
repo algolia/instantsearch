@@ -356,6 +356,20 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<select class="ais-index-selector--select">
+  <option class="ais-index-selector--option">Most relevant</option>
+  <option class="ais-index-selector--option">Lowest price</option>
+  <option class="ais-index-selector--option">Highest price</option>
+</select>
+```
+
+```css
+/* No default styling applied */
+```
+
 ### pagination
 
 ![Example of the pagination widget][pagination]
