@@ -315,7 +315,9 @@ you'll need several indices. This widget lets you easily change it.
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {String} options.indices[0].name Name of the index to target
  * @param  {String} options.indices[0].label Label displayed in the dropdown
- * @param  {String|String[]} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {String} [options.cssClasses.select] CSS classes added to the parent <select>
+ * @param  {String} [options.cssClasses.option] CSS classes added to each <option>
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
@@ -336,9 +338,25 @@ search.addWidget(
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
     ],
-    cssClass: 'form-control'
+    cssClasses: {
+      select: 'form-control'
+    }
   })
 );
+```
+
+#### Styling
+
+```html
+<select class="ais-index-selector--select">
+  <option class="ais-index-selector--option">Most relevant</option>
+  <option class="ais-index-selector--option">Lowest price</option>
+  <option class="ais-index-selector--option">Highest price</option>
+</select>
+```
+
+```css
+/* No default styling applied */
 ```
 
 ### pagination
