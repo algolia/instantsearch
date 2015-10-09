@@ -1,3 +1,4 @@
+var React = require('react');
 var ReactDOM = require('react-dom');
 
 var findIndex = require('lodash/array/findIndex');

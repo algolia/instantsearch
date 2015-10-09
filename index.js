@@ -1,3 +1,5 @@
+var React = require('react');
+
 require('./shams/Object.freeze.js');
 
 var toFactory = require('to-factory');
