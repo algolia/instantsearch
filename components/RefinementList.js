@@ -65,9 +65,7 @@ class RefinementList extends React.Component {
   render() {
     return (
       <div className={cx(this.props.cssClasses.list)}>
-      {this.props.facetValues
-        .slice(0, this.props.limit)
-        .map(this._generateFacetItem, this)}
+      {this.props.facetValues.map(this._generateFacetItem, this)}
       </div>
     );
   }
@@ -84,7 +82,6 @@ RefinementList.propTypes = {
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
-  limit: React.PropTypes.number,
   facetValues: React.PropTypes.array,
   Template: React.PropTypes.func,
   toggleRefinement: React.PropTypes.func.isRequired,
@@ -96,7 +93,6 @@ RefinementList.defaultProps = {
     item: null,
     list: null
   },
-  limit: 1000,
   facetNameKey: 'name'
 };
 
