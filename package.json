@@ -53,7 +53,7 @@
     "classnames": "^2.1.5",
     "hogan.js": "^3.0.2",
     "lodash": "^3.10.1",
-    "react": "^0.13.3",
+    "react": "^0.14.0",
     "react-nouislider": "^1.2.1",
     "to-factory": "^1.0.0"
   },
