@@ -69,10 +69,14 @@ function rangeSlider({
         max
       };
     },
-    _refine(helper, newValues) {
+    _refine(helper, stats, newValues) {
       helper.clearRefinements(facetName);
-      helper.addNumericRefinement(facetName, '>=', newValues[0]);
-      helper.addNumericRefinement(facetName, '<=', newValues[1]);
+      if (newValues[0] > stats.min) {
+        helper.addNumericRefinement(facetName, '>=', newValues[0]);
+      }
+      if (newValues[1] < stats.max) {
+        helper.addNumericRefinement(facetName, '<=', newValues[1]);
+      }
       helper.search();
     },
     render({results, helper, templatesConfig}) {
@@ -101,7 +105,7 @@ function rangeSlider({
           Template={bindProps(Template, templateProps)}
           hideWhenNoResults={hideWhenNoResults}
           hasResults={stats.min !== null && stats.max !== null}
-          onChange={this._refine.bind(this, helper)}
+          onChange={this._refine.bind(this, helper, stats)}
           tooltips={tooltips}
         />,
         containerNode
