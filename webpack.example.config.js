@@ -1,4 +1,4 @@
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+var CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 
 module.exports = {
   entry: {
@@ -13,7 +13,7 @@ module.exports = {
     libraryTarget: 'umd'
   },
   plugins: [
-    new CommonsChunkPlugin("commons-chunk.js")
+    new CommonsChunkPlugin('commons-chunk.js')
   ],
   module: {
     loaders: [{
