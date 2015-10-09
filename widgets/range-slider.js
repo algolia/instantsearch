@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
@@ -97,7 +98,7 @@ function rangeSlider({
         templates
       });
 
-      React.render(
+      ReactDOM.render(
         <Slider
           start={[currentRefinement.min, currentRefinement.max]}
           range={{min: stats.min, max: stats.max}}

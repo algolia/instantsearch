@@ -68,11 +68,12 @@ function searchBox({
       // Optional "powered by Algolia" widget
       if (poweredBy) {
         var React = require('react');
+        var ReactDOM = require('react-dom');
         var PoweredBy = require('../components/PoweredBy/PoweredBy.js');
         var poweredByContainer = document.createElement('div');
         input.parentNode.appendChild(poweredByContainer);
         var poweredByClassName = cx(bem('powered-by'), cssClasses.poweredBy);
-        React.render(
+        ReactDOM.render(
           <PoweredBy
             className={poweredByClassName}
           />,

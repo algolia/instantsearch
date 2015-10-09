@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 
@@ -51,7 +52,7 @@ function hits({
         templates
       });
 
-      React.render(
+      ReactDOM.render(
         <Hits
           Template={bindProps(Template, templateProps)}
           hits={results.hits}

@@ -1,5 +1,6 @@
 var find = require('lodash/collection/find');
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 
@@ -80,7 +81,7 @@ function toggle({
         count: values && values.count || null
       };
 
-      React.render(
+      ReactDOM.render(
         <RefinementList
           facetValues={[facetValue]}
           Template={bindProps(Template, templateProps)}

@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../../lib/utils.js');
 var autoHide = require('../../decorators/autoHide');
@@ -55,7 +56,7 @@ function stats({
         templates
       });
 
-      React.render(
+      ReactDOM.render(
         <Stats
           hasResults={results.hits.length > 0}
           hideWhenNoResults={hideWhenNoResults}
