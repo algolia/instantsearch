@@ -13,7 +13,6 @@ var filter = require('lodash/collection/filter');
 var map = require('lodash/collection/map');
 var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
-var merge = require('lodash/object/merge');
 var mapKeys = require('lodash/object/mapKeys');
 var mapValues = require('lodash/object/mapValues');
 var pick = require('lodash/object/pick');
@@ -506,7 +505,6 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   return partialState;
 };
 
-
 function recursiveEncode(input) {
   if (isPlainObject(input)) {
     return mapValues(input, recursiveEncode);
@@ -518,6 +516,30 @@ function recursiveEncode(input) {
     return encode(input);
   }
   return input;
+}
+
+var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
+var stateKeys = shortener.ENCODED_PARAMETERS;
+function sortQueryStringValues(prefixRegexp, a, b) {
+  if (prefixRegexp !== null) {
+    a = a.replace(prefixRegexp, '');
+    b = b.replace(prefixRegexp, '');
+  }
+
+  if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
+    if (a === 'q') return -1;
+    if (b === 'q') return 1;
+
+    var isARefinements = refinementsParameters.indexOf(a) !== -1;
+    var isBRefinements = refinementsParameters.indexOf(b) !== -1;
+    if (isARefinements && !isBRefinements) {
+      return 1;
+    } else if (isBRefinements && !isARefinements) {
+      return -1;
+    }
+  }
+
+  return a.localeCompare(b);
 }
 
 /**
@@ -548,9 +570,16 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
     }
   );
 
-  if (moreAttributes) merge(encodedState, moreAttributes);
+  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
+  var sort = bind(sortQueryStringValues, null, prefixRegexp);
+  if (moreAttributes) {
+    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
+    var moreQs = qs.stringify(moreAttributes, {encode: false});
+    if (!stateQs) return moreQs;
+    return stateQs + '&' + moreQs;
+  }
 
-  return qs.stringify(encodedState, {encode: false});
+  return qs.stringify(encodedState, {encode: false, sort: sort});
 };
 
 /**

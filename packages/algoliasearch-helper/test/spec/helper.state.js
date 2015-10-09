@@ -245,8 +245,37 @@ test('Serialize with prefix', function(t) {
 
   t.deepEquals(
     qString,
-    'toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto_fR[facetWeDontCareAbout][0]=v&toto_fR[facetA][0]=a&toto_dFR[facetB][0]=d&toto_q=a%20query&toto_idx=indexNameInTheHelper',
+    'toto_q=a%20query&toto_idx=indexNameInTheHelper&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3',
     'serialized qs with prefix should be correct');
+
+  t.end();
+});
+
+test('Serialize without any state to serialize, only more attributes', function(t) {
+  var initialState = {
+    facets: ['facetA', 'facetWeDontCareAbout'],
+    disjunctiveFacets: ['facetB']
+  };
+
+  var index = 'indexNameInTheHelper';
+  var helper = algoliasearchHelper(null, index, initialState);
+
+  var filters = ['attribute:*'];
+
+  var qString = helper.getStateAsQueryString(
+    {
+      filters: filters,
+      moreAttributes: {
+        toto: 'tata',
+        foo: 'bar'
+      }
+    }
+  );
+
+  t.deepEquals(
+    qString,
+    'toto=tata&foo=bar',
+    'serialized qs without helper parameters and more attributes should be equal');
 
   t.end();
 });
@@ -284,11 +313,12 @@ test('Serialize with prefix, this should have no impact on user provided paramat
 
   t.deepEquals(
     qString,
-    'toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto_fR[facetWeDontCareAbout][0]=v&toto_fR[facetA][0]=a&toto_dFR[facetB][0]=d&toto_q=a%20query&toto=tata&foo=bar',
+    'toto_q=a%20query&toto_dFR[facetB][0]=d&toto_fR[facetA][0]=a&toto_fR[facetWeDontCareAbout][0]=v&toto_nR[numerical][=][0]=3&toto_nR[numerical2][<=][0]=3&toto=tata&foo=bar',
     'serialized qs with prefix and more attributes should be equal');
 
   t.end();
 });
+
 test('Should be able to deserialize qs with namespaced attributes', function(t) {
   var initialState = {
     facets: ['facetA', 'facetWeDontCareAbout'],
