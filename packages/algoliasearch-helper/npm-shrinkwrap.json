@@ -13,9 +13,9 @@
       "resolved": "https://registry.npmjs.org/lodash-compat/-/lodash-compat-3.10.1.tgz"
     },
     "qs": {
-      "version": "5.1.0",
-      "from": "qs@*",
-      "resolved": "https://registry.npmjs.org/qs/-/qs-5.1.0.tgz"
+      "version": "5.2.0",
+      "from": "qs@5.2.0",
+      "resolved": "https://registry.npmjs.org/qs/-/qs-5.2.0.tgz"
     }
   }
 }

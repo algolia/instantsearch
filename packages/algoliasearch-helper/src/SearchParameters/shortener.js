@@ -1,6 +1,7 @@
 'use strict';
 
 var invert = require('lodash/object/invert');
+var keys = require('lodash/object/keys');
 
 var keys2Short = {
   advancedSyntax: 'aS',
@@ -52,6 +53,11 @@ var keys2Short = {
 var short2Keys = invert(keys2Short);
 
 module.exports = {
+  /**
+   * All the keys of the state, encoded.
+   * @const
+   */
+  ENCODED_PARAMETERS: keys(short2Keys),
   /**
    * Decode a shorten attribute
    * @param {string} shortKey the shorten attribute
