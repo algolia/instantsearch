@@ -243,14 +243,14 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.0.tgz"
     },
     "react-nouislider": {
-      "version": "1.3.0",
-      "from": "react-nouislider@>=1.3.0 <2.0.0",
-      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.3.0.tgz",
+      "version": "1.4.3",
+      "from": "react-nouislider@>=1.4.3 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.4.3.tgz",
       "dependencies": {
         "nouislider": {
           "version": "8.0.2",
-          "from": "algolia/noUiSlider#fad95f6340990748c2b4d2abbc6ec84bc00eea2f",
-          "resolved": "git://github.com/algolia/noUiSlider.git#fad95f6340990748c2b4d2abbc6ec84bc00eea2f"
+          "from": "algolia/noUiSlider#fdfb2e6b575aa4b31563631bdc44ea40fcfd4f38",
+          "resolved": "git://github.com/algolia/noUiSlider.git#fdfb2e6b575aa4b31563631bdc44ea40fcfd4f38"
         }
       }
     },
