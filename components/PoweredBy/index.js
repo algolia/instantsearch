@@ -6,12 +6,9 @@ require('style?prepend!raw!./index.css');
 
 class PoweredBy extends React.Component {
   render() {
-    var poweredByDisplay = (this.props.display === true) ? 'block' : 'none';
-
     return (
       <div
         className={bem()}
-        style={{display: poweredByDisplay}}
       >
         Powered by
         <a href="https://www.algolia.com/">
@@ -26,7 +23,6 @@ class PoweredBy extends React.Component {
 }
 
 PoweredBy.propTypes = {
-  display: React.PropTypes.bool
 };
 
 module.exports = PoweredBy;

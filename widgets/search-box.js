@@ -63,7 +63,7 @@ function searchbox({
         var PoweredBy = require('../components/PoweredBy');
         var poweredByContainer = document.createElement('div');
         input.parentNode.appendChild(poweredByContainer);
-        React.render(<PoweredBy display />, poweredByContainer);
+        React.render(<PoweredBy />, poweredByContainer);
       }
 
       helper.on('change', function(state) {
