@@ -6973,7 +6973,7 @@ var internals = {
 };
 
 
-internals.stringify = function (obj, prefix, generateArrayPrefix, strictNullHandling, skipNulls, encode, filter) {
+internals.stringify = function (obj, prefix, generateArrayPrefix, strictNullHandling, skipNulls, encode, filter, sort) {
 
     if (typeof filter === 'function') {
         obj = filter(prefix, obj);
@@ -7008,7 +7008,14 @@ internals.stringify = function (obj, prefix, generateArrayPrefix, strictNullHand
         return values;
     }
 
-    var objKeys = Array.isArray(filter) ? filter : Object.keys(obj);
+    var objKeys;
+    if (Array.isArray(filter)) {
+        objKeys = filter;
+    } else {
+        var keys = Object.keys(obj);
+        objKeys = sort ? keys.sort(sort) : keys;
+    }
+
     for (var i = 0, il = objKeys.length; i < il; ++i) {
         var key = objKeys[i];
 
@@ -7037,6 +7044,7 @@ module.exports = function (obj, options) {
     var strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : internals.strictNullHandling;
     var skipNulls = typeof options.skipNulls === 'boolean' ? options.skipNulls : internals.skipNulls;
     var encode = typeof options.encode === 'boolean' ? options.encode : internals.encode;
+    var sort = typeof options.sort === 'function' ? options.sort : null;
     var objKeys;
     var filter;
     if (typeof options.filter === 'function') {
@@ -7072,6 +7080,10 @@ module.exports = function (obj, options) {
         objKeys = Object.keys(obj);
     }
 
+    if (sort) {
+        objKeys.sort(sort);
+    }
+
     for (var i = 0, il = objKeys.length; i < il; ++i) {
         var key = objKeys[i];
 
@@ -7081,7 +7093,7 @@ module.exports = function (obj, options) {
             continue;
         }
 
-        keys = keys.concat(internals.stringify(obj[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode, filter));
+        keys = keys.concat(internals.stringify(obj[key], key, generateArrayPrefix, strictNullHandling, skipNulls, encode, filter, sort));
     }
 
     return keys.join(delimiter);
@@ -7767,9 +7779,10 @@ function SearchParameters(newParameters) {
     if (!this.hasOwnProperty(paramName)) {
       // IE8/9 has no console (BUT if devtools opened), nevermind there's no
       // developer working ONLY in IE8/9
-      /*eslint-disable*/
-      window.console && window.console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
-      /*eslint-enable*/
+      window.console &&
+      window.console.error(
+        'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'
+      );
     }
   }, this);
 }
@@ -8767,57 +8780,63 @@ module.exports = SearchParameters;
 'use strict';
 
 var invert = require('lodash/object/invert');
+var keys = require('lodash/object/keys');
 
 var keys2Short = {
-  index: 'idx',
-  query: 'q',
-  facets: 'f',
-  disjunctiveFacets: 'dF',
-  hierarchicalFacets: 'hF',
-  facetsRefinements: 'fR',
-  facetsExcludes: 'fE',
+  advancedSyntax: 'aS',
+  allowTyposOnNumericTokens: 'aTONT',
+  analyticsTags: 'aT',
+  analytics: 'a',
+  aroundLatLngViaIP: 'aLLVIP',
+  aroundLatLng: 'aLL',
+  aroundPrecision: 'aP',
+  aroundRadius: 'aR',
+  attributesToHighlight: 'aTH',
+  attributesToRetrieve: 'aTR',
+  attributesToSnippet: 'aTS',
   disjunctiveFacetsRefinements: 'dFR',
-  numericRefinements: 'nR',
-  tagRefinements: 'tR',
+  disjunctiveFacets: 'dF',
+  distinct: 'd',
+  facetsExcludes: 'fE',
+  facetsRefinements: 'fR',
+  facets: 'f',
+  getRankingInfo: 'gRI',
   hierarchicalFacetsRefinements: 'hFR',
-  numericFilters: 'nF',
-  tagFilters: 'tF',
+  hierarchicalFacets: 'hF',
+  highlightPostTag: 'hPoT',
+  highlightPreTag: 'hPrT',
   hitsPerPage: 'hPP',
+  ignorePlurals: 'iP',
+  index: 'idx',
+  insideBoundingBox: 'iBB',
+  length: 'l',
   maxValuesPerFacet: 'mVPF',
-  page: 'p',
-  queryType: 'qT',
-  typoTolerance: 'tT',
   minWordSizefor1Typo: 'mWS1T',
   minWordSizefor2Typos: 'mWS2T',
-  allowTyposOnNumericTokens: 'aTONT',
-  ignorePlurals: 'iP',
-  restrictSearchableAttributes: 'rSA',
-  advancedSyntax: 'aS',
-  analytics: 'a',
-  analyticsTags: 'aT',
-  synonyms: 's',
-  replaceSynonymsInHighlight: 'rSIH',
-  optionalWords: 'oW',
-  removeWordsIfNoResults: 'rWINR',
-  attributesToRetrieve: 'aTR',
-  attributesToHighlight: 'aTH',
-  highlightPreTag: 'hPrT',
-  highlightPostTag: 'hPoT',
-  attributesToSnippet: 'aTS',
-  getRankingInfo: 'gRI',
-  distinct: 'd',
-  aroundLatLng: 'aLL',
-  aroundLatLngViaIP: 'aLLVIP',
-  aroundRadius: 'aR',
-  aroundPrecision: 'aP',
-  insideBoundingBox: 'iBB',
+  numericFilters: 'nF',
+  numericRefinements: 'nR',
   offset: 'o',
-  length: 'l'
+  optionalWords: 'oW',
+  page: 'p',
+  queryType: 'qT',
+  query: 'q',
+  removeWordsIfNoResults: 'rWINR',
+  replaceSynonymsInHighlight: 'rSIH',
+  restrictSearchableAttributes: 'rSA',
+  synonyms: 's',
+  tagFilters: 'tF',
+  tagRefinements: 'tR',
+  typoTolerance: 'tT'
 };
 
 var short2Keys = invert(keys2Short);
 
 module.exports = {
+  /**
+   * All the keys of the state, encoded.
+   * @const
+   */
+  ENCODED_PARAMETERS: keys(short2Keys),
   /**
    * Decode a shorten attribute
    * @param {string} shortKey the shorten attribute
@@ -8836,7 +8855,7 @@ module.exports = {
   }
 };
 
-},{"lodash/object/invert":151}],172:[function(require,module,exports){
+},{"lodash/object/invert":151,"lodash/object/keys":152}],172:[function(require,module,exports){
 'use strict';
 
 module.exports = generateTrees;
@@ -9505,7 +9524,6 @@ var filter = require('lodash/collection/filter');
 var map = require('lodash/collection/map');
 var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
-var merge = require('lodash/object/merge');
 var mapKeys = require('lodash/object/mapKeys');
 var mapValues = require('lodash/object/mapValues');
 var pick = require('lodash/object/pick');
@@ -9513,6 +9531,7 @@ var trim = require('lodash/string/trim');
 var isString = require('lodash/lang/isString');
 var isPlainObject = require('lodash/lang/isPlainObject');
 var isArray = require('lodash/lang/isArray');
+var indexOf = require('lodash/array/indexOf');
 
 var qs = require('qs');
 var encode = require('qs/lib/utils').encode;
@@ -9951,7 +9970,7 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   var partialState = {};
   var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
   var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
-  if (attributes.indexOf('*') === -1) {
+  if (indexOf(attributes, '*') === -1) {
     forEach(attributes, function(attr) {
       if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
         if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
@@ -9997,7 +10016,6 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
   return partialState;
 };
 
-
 function recursiveEncode(input) {
   if (isPlainObject(input)) {
     return mapValues(input, recursiveEncode);
@@ -10009,6 +10027,30 @@ function recursiveEncode(input) {
     return encode(input);
   }
   return input;
+}
+
+var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
+var stateKeys = shortener.ENCODED_PARAMETERS;
+function sortQueryStringValues(prefixRegexp, a, b) {
+  if (prefixRegexp !== null) {
+    a = a.replace(prefixRegexp, '');
+    b = b.replace(prefixRegexp, '');
+  }
+
+  if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
+    if (a === 'q') return -1;
+    if (b === 'q') return 1;
+
+    var isARefinements = refinementsParameters.indexOf(a) !== -1;
+    var isBRefinements = refinementsParameters.indexOf(b) !== -1;
+    if (isARefinements && !isBRefinements) {
+      return 1;
+    } else if (isBRefinements && !isARefinements) {
+      return -1;
+    }
+  }
+
+  return a.localeCompare(b);
 }
 
 /**
@@ -10039,9 +10081,16 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
     }
   );
 
-  if (moreAttributes) merge(encodedState, moreAttributes);
+  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
+  var sort = bind(sortQueryStringValues, null, prefixRegexp);
+  if (moreAttributes) {
+    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
+    var moreQs = qs.stringify(moreAttributes, {encode: false});
+    if (!stateQs) return moreQs;
+    return stateQs + '&' + moreQs;
+  }
 
-  return qs.stringify(encodedState, {encode: false});
+  return qs.stringify(encodedState, {encode: false, sort: sort});
 };
 
 /**
@@ -10391,7 +10440,7 @@ AlgoliaSearchHelper.prototype._change = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":170,"./SearchParameters/shortener":171,"./SearchResults":173,"./requestBuilder":177,"events":2,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/merge":156,"lodash/object/pick":159,"lodash/string/trim":161,"qs":165,"qs/lib/utils":168,"util":6}],175:[function(require,module,exports){
+},{"./SearchParameters":170,"./SearchParameters/shortener":171,"./SearchResults":173,"./requestBuilder":177,"events":2,"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"lodash/string/trim":161,"qs":165,"qs/lib/utils":168,"util":6}],175:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -10719,7 +10768,7 @@ module.exports = requestBuilder;
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/object/merge":156}],178:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.4.0';
+module.exports = '2.5.0';
 
 },{}]},{},[1])(1)
 });

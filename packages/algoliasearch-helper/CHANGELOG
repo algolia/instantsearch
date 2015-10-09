@@ -1,8 +1,10 @@
 CHANGELOG
 
-UNRELEASED
+2.5.0 - 2015-10-09
   * CHORE : Update qs to 5.2.0
   * FEATURE : getStateAsQueryString now orders the serialized parameters
+  * FIX : IE8 has no array indexof
+
 
 2.4.0 - 2015-09-23
   * FEATURE : add AlgoliaSearchHelper.getState(filters) to get a filtered state
