@@ -75,16 +75,19 @@ function refinementList({
   }
 
   return {
-    init: (state, helper) => {
+    getConfiguration: (configuration) => {
+      var widgetConfiguration = {
+        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
+      };
+
       // set the maxValuesPerFacet to max(limit, currentValue)
-      var maxValuesPerFacet = helper.getQueryParameter('maxValuesPerFacet');
-      if (!maxValuesPerFacet || limit > maxValuesPerFacet) {
-        helper.setQueryParameter('maxValuesPerFacet', limit);
+      if (!configuration.maxValuesPerFacet || limit > configuration.maxValuesPerFacet) {
+        widgetConfiguration.maxValuesPerFacet = limit;
       }
+
+      return widgetConfiguration;
     },
-    getConfiguration: () => ({
-      [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
-    }),
+
     render: function({results, helper, templatesConfig}) {
       var templateProps = utils.prepareTemplateProps({
         transformData,
