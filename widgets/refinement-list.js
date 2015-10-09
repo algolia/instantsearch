@@ -22,7 +22,7 @@ var defaultTemplates = {
  * @param  {String} options.facetName Name of the attribute for faceting
  * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get
+ * @param  {String} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
@@ -44,7 +44,7 @@ function refinementList({
     facetName = null,
     operator = null,
     sortBy = ['count:desc'],
-    limit = 100,
+    limit = 1000,
     cssClasses = {
       root: null,
       list: null,
@@ -75,9 +75,19 @@ function refinementList({
   }
 
   return {
-    getConfiguration: () => ({
-      [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
-    }),
+    getConfiguration: (configuration) => {
+      var widgetConfiguration = {
+        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
+      };
+
+      // set the maxValuesPerFacet to max(limit, currentValue)
+      if (!configuration.maxValuesPerFacet || limit > configuration.maxValuesPerFacet) {
+        widgetConfiguration.maxValuesPerFacet = limit;
+      }
+
+      return widgetConfiguration;
+    },
+
     render: function({results, helper, templatesConfig}) {
       var templateProps = utils.prepareTemplateProps({
         transformData,
