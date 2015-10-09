@@ -1,10 +1,20 @@
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
+
 module.exports = {
-  entry: './example/app.js',
+  entry: {
+    instantsearch: './index.js',
+    app: './example/app.js'
+  },
   devtool: 'source-map',
   output: {
     path: './example/',
-    filename: 'bundle.js'
+    filename: '[name].js',
+    library: '[name]',
+    libraryTarget: 'umd'
   },
+  plugins: [
+    new CommonsChunkPlugin("commons-chunk.js")
+  ],
   module: {
     loaders: [{
       test: /\.js$/, exclude: /node_modules/, loader: 'babel'
