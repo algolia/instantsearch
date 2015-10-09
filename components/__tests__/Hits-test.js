@@ -1,0 +1,47 @@
+/* eslint-env mocha */
+
+import React from 'react';
+import expect from 'expect';
+import TestUtils from 'react-addons-test-utils';
+import Hits from '../Hits';
+import Template from '../Template';
+
+describe('Hits', () => {
+  var renderer;
+  var results;
+
+  beforeEach(() => {
+    let {createRenderer} = TestUtils;
+    renderer = createRenderer();
+    results = {hits: []};
+  });
+
+  it('render hits when present', () => {
+    results = {hits: [{
+      objectID: 'hello'
+    }, {
+      objectID: 'mom'
+    }]};
+
+    let props = {results, Template};
+    renderer.render(<Hits {...props} />);
+    let out = renderer.getRenderOutput();
+
+    expect(out).toEqual(
+      <div>
+        <Template templateKey="hit" data={results.hits[0]} key={results.hits[0].objectID} />
+        <Template templateKey="hit" data={results.hits[1]} key={results.hits[1].objectID} />
+      </div>
+    );
+  });
+
+  it('renders a specific template when no results', () => {
+    results = {hits: []};
+
+    let props = {results, Template};
+    renderer.render(<Hits {...props} />);
+    let out = renderer.getRenderOutput();
+
+    expect(out).toEqual(<div><Template templateKey="empty" data={results} /></div>);
+  });
+});
