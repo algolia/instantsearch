@@ -250,7 +250,35 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<input class="ais-search-box--input">
+<!-- With poweredBy: true -->
+<div class="ais-search-box--powered-by ais-powered-by">
+  Powered by
+  <a class="ais-powered-by--link">
+    <img src="ais-powered-by--image" />
+  </a>
+</div>
+```
+
+```css
+/* With poweredBy; true */
+.ais-powered-by {
+  display: block;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: right;
+}
+.ais-powered-by--image {
+  height: 16px;
+  margin-bottom: 2px;
+}
+```
 ### stats
+
+![Example of the stats widget][stats]
 
 #### API
 
@@ -276,9 +304,7 @@ search.addWidget(
  */
 ```
 
-#### Usage
 
-![Example of the stats widget][stats]
 
 #### Usage
 
