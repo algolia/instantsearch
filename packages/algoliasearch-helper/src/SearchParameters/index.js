@@ -344,9 +344,10 @@ function SearchParameters(newParameters) {
     if (!this.hasOwnProperty(paramName)) {
       // IE8/9 has no console (BUT if devtools opened), nevermind there's no
       // developer working ONLY in IE8/9
-      /*eslint-disable*/
-      window.console && window.console.error('Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)');
-      /*eslint-enable*/
+      window.console &&
+      window.console.error(
+        'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'
+      );
     }
   }, this);
 }

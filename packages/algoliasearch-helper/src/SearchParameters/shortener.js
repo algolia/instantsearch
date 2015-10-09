@@ -1,57 +1,63 @@
 'use strict';
 
 var invert = require('lodash/object/invert');
+var keys = require('lodash/object/keys');
 
 var keys2Short = {
-  index: 'idx',
-  query: 'q',
-  facets: 'f',
-  disjunctiveFacets: 'dF',
-  hierarchicalFacets: 'hF',
-  facetsRefinements: 'fR',
-  facetsExcludes: 'fE',
+  advancedSyntax: 'aS',
+  allowTyposOnNumericTokens: 'aTONT',
+  analyticsTags: 'aT',
+  analytics: 'a',
+  aroundLatLngViaIP: 'aLLVIP',
+  aroundLatLng: 'aLL',
+  aroundPrecision: 'aP',
+  aroundRadius: 'aR',
+  attributesToHighlight: 'aTH',
+  attributesToRetrieve: 'aTR',
+  attributesToSnippet: 'aTS',
   disjunctiveFacetsRefinements: 'dFR',
-  numericRefinements: 'nR',
-  tagRefinements: 'tR',
+  disjunctiveFacets: 'dF',
+  distinct: 'd',
+  facetsExcludes: 'fE',
+  facetsRefinements: 'fR',
+  facets: 'f',
+  getRankingInfo: 'gRI',
   hierarchicalFacetsRefinements: 'hFR',
-  numericFilters: 'nF',
-  tagFilters: 'tF',
+  hierarchicalFacets: 'hF',
+  highlightPostTag: 'hPoT',
+  highlightPreTag: 'hPrT',
   hitsPerPage: 'hPP',
+  ignorePlurals: 'iP',
+  index: 'idx',
+  insideBoundingBox: 'iBB',
+  length: 'l',
   maxValuesPerFacet: 'mVPF',
-  page: 'p',
-  queryType: 'qT',
-  typoTolerance: 'tT',
   minWordSizefor1Typo: 'mWS1T',
   minWordSizefor2Typos: 'mWS2T',
-  allowTyposOnNumericTokens: 'aTONT',
-  ignorePlurals: 'iP',
-  restrictSearchableAttributes: 'rSA',
-  advancedSyntax: 'aS',
-  analytics: 'a',
-  analyticsTags: 'aT',
-  synonyms: 's',
-  replaceSynonymsInHighlight: 'rSIH',
-  optionalWords: 'oW',
-  removeWordsIfNoResults: 'rWINR',
-  attributesToRetrieve: 'aTR',
-  attributesToHighlight: 'aTH',
-  highlightPreTag: 'hPrT',
-  highlightPostTag: 'hPoT',
-  attributesToSnippet: 'aTS',
-  getRankingInfo: 'gRI',
-  distinct: 'd',
-  aroundLatLng: 'aLL',
-  aroundLatLngViaIP: 'aLLVIP',
-  aroundRadius: 'aR',
-  aroundPrecision: 'aP',
-  insideBoundingBox: 'iBB',
+  numericFilters: 'nF',
+  numericRefinements: 'nR',
   offset: 'o',
-  length: 'l'
+  optionalWords: 'oW',
+  page: 'p',
+  queryType: 'qT',
+  query: 'q',
+  removeWordsIfNoResults: 'rWINR',
+  replaceSynonymsInHighlight: 'rSIH',
+  restrictSearchableAttributes: 'rSA',
+  synonyms: 's',
+  tagFilters: 'tF',
+  tagRefinements: 'tR',
+  typoTolerance: 'tT'
 };
 
 var short2Keys = invert(keys2Short);
 
 module.exports = {
+  /**
+   * All the keys of the state, encoded.
+   * @const
+   */
+  ENCODED_PARAMETERS: keys(short2Keys),
   /**
    * Decode a shorten attribute
    * @param {string} shortKey the shorten attribute
