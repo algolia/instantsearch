@@ -1,4 +1,4 @@
-var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 
@@ -98,7 +98,7 @@ function refinementList({
 
       var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
-      React.render(
+      ReactDOM.render(
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}

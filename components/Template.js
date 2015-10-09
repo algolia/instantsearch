@@ -2,7 +2,7 @@ var React = require('react');
 
 var renderTemplate = require('../lib/utils').renderTemplate;
 
-class Template {
+class Template extends React.Component {
   render() {
     var content = renderTemplate({
       template: this.props.templates[this.props.templateKey],

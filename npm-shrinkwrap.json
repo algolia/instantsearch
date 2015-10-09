@@ -107,6 +107,7 @@
     "algoliasearch-helper": {
       "version": "2.4.0",
       "from": "algoliasearch-helper@>=2.4.0 <3.0.0",
+      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.4.0.tgz",
       "dependencies": {
         "lodash-compat": {
           "version": "3.10.1",
@@ -121,9 +122,9 @@
       }
     },
     "classnames": {
-      "version": "2.1.3",
-      "from": "classnames@>=2.1.3 <3.0.0",
-      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.1.3.tgz"
+      "version": "2.1.5",
+      "from": "classnames@>=2.1.5 <3.0.0",
+      "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.1.5.tgz"
     },
     "hogan.js": {
       "version": "3.0.2",
@@ -155,9 +156,9 @@
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
     },
     "react": {
-      "version": "0.13.3",
-      "from": "react@>=0.13.3 <0.14.0",
-      "resolved": "https://registry.npmjs.org/react/-/react-0.13.3.tgz",
+      "version": "0.14.0",
+      "from": "react@>=0.14.0 <0.15.0",
+      "resolved": "https://registry.npmjs.org/react/-/react-0.14.0.tgz",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
@@ -199,13 +200,52 @@
               }
             }
           }
+        },
+        "fbjs": {
+          "version": "0.3.1",
+          "from": "fbjs@>=0.3.1 <0.4.0",
+          "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.3.1.tgz",
+          "dependencies": {
+            "core-js": {
+              "version": "1.2.1",
+              "from": "core-js@>=1.0.0 <2.0.0",
+              "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.1.tgz"
+            },
+            "promise": {
+              "version": "7.0.4",
+              "from": "promise@>=7.0.3 <8.0.0",
+              "resolved": "https://registry.npmjs.org/promise/-/promise-7.0.4.tgz",
+              "dependencies": {
+                "asap": {
+                  "version": "2.0.3",
+                  "from": "asap@>=2.0.3 <2.1.0",
+                  "resolved": "https://registry.npmjs.org/asap/-/asap-2.0.3.tgz"
+                }
+              }
+            },
+            "ua-parser-js": {
+              "version": "0.7.9",
+              "from": "ua-parser-js@>=0.7.9 <0.8.0",
+              "resolved": "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.9.tgz"
+            },
+            "whatwg-fetch": {
+              "version": "0.9.0",
+              "from": "whatwg-fetch@>=0.9.0 <0.10.0",
+              "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz"
+            }
+          }
         }
       }
     },
+    "react-dom": {
+      "version": "0.14.0",
+      "from": "react-dom@>=0.14.0 <0.15.0",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.0.tgz"
+    },
     "react-nouislider": {
-      "version": "1.2.1",
-      "from": "react-nouislider@1.2.1",
-      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.2.1.tgz",
+      "version": "1.3.0",
+      "from": "react-nouislider@>=1.3.0 <2.0.0",
+      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.3.0.tgz",
       "dependencies": {
         "nouislider": {
           "version": "8.0.2",

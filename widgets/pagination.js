@@ -1,4 +1,4 @@
-var React = require('react');
+var ReactDOM = require('react-dom');
 var defaults = require('lodash/object/defaults');
 
 var utils = require('../lib/utils.js');
@@ -74,7 +74,7 @@ function pagination({
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
-      React.render(
+      ReactDOM.render(
         <Pagination
           cssClasses={cssClasses}
           currentPage={currentPage}

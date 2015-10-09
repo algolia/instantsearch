@@ -1,4 +1,4 @@
-var React = require('react');
+var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
@@ -77,7 +77,7 @@ function hierarchicalMenu({
         templates
       });
 
-      React.render(
+      ReactDOM.render(
         <RefinementList
           cssClasses={cssClasses}
           facetValues={facetValues}

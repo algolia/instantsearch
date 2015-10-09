@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 
 function autoHide(ComposedComponent) {
   class AutoHide extends React.Component {
@@ -11,7 +12,7 @@ function autoHide(ComposedComponent) {
     }
 
     _hideOrShowContainer(props) {
-      var container = React.findDOMNode(this).parentNode;
+      var container = ReactDOM.findDOMNode(this).parentNode;
       if (props.hideWhenNoResults === true && props.hasResults === false) {
         container.style.display = 'none';
       } else if (props.hideWhenNoResults === true) {
@@ -22,7 +23,7 @@ function autoHide(ComposedComponent) {
     render() {
       if (this.props.hasResults === false &&
         this.props.hideWhenNoResults === true) {
-        return <div/>;
+        return <div />;
       }
 
       return <ComposedComponent {...this.props} />;

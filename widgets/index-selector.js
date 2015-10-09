@@ -1,4 +1,4 @@
-var React = require('react');
+var ReactDOM = require('react-dom');
 
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../lib/utils.js');
@@ -47,7 +47,7 @@ function indexSelector({
       let currentIndex = helper.getIndex();
       let hasResults = results.hits.length > 0;
       let setIndex = this.setIndex.bind(this, helper);
-      React.render(
+      ReactDOM.render(
         <IndexSelector
           cssClasses={cssClasses}
           currentIndex={currentIndex}
