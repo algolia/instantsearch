@@ -194,8 +194,8 @@ npm run dev
 ## Test
 
 ```sh
-npm test # test and lint
-npm run test:watch # developer mode, test only
+npm test # test and lint single run using phantomjs
+npm run test:watch # test with auto reload using real browser
 ```
 
 ## Available widgets

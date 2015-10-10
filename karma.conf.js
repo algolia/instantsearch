@@ -7,18 +7,18 @@ module.exports = function(config) {
     basePath: '',
 
     preprocessors: {
-      'components/**/*-test.js': ['webpack', 'sourcemap']
+      '@(components|lib)/**/*-test.js': ['webpack', 'sourcemap']
     },
 
     files: [
-      'components/**/*-test.js'
+      '@(components|lib)/**/*-test.js'
     ],
 
     webpack: {
       devtool: 'inline-source-map',
       module: {
         loaders: [{
-          test: /\.js$/, exclude: /node_modules/, loader: 'babel'
+          test: /\.js$/, exclude: /node_modules/, loader: 'babel?plugins=rewire'
         }]
       }
     },
