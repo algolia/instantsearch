@@ -1,0 +1,309 @@
+// Layout
+
+// Navigation
+
+.widget-nav
+  background-color: $gray-light
+
+.documentation-menu
+  height: calc( 100% - 86px )
+  overflow-y: scroll
+  padding: 0
+  font-size: 1.3em
+  > ul
+    line-height: 2em
+    list-style: none
+    margin: 0
+    padding: 15px 0
+    ul ul li:before
+      content: ""
+      width: 8px
+      height: 8px
+      background-color: $brand-primary
+      border-radius: 1px
+      margin-right: 4px
+      display: inline-block
+    a
+      color: #242424
+      &:hover
+        color: $brand-primary
+        text-decoration: none
+    ul
+      font-size: .80em
+      padding: 0 0 5px 10px
+      line-height: 1.7em
+      list-style: none
+
+.documentation-menu-footer
+  position: absolute
+  bottom: 0
+  left: 0
+  background: $dark-blue
+  width: 100%
+  height: 86px
+  text-align: center
+  .version
+    padding: 4px
+    background: #fff
+  .list-doc-links
+    display: table
+    font-size: 2em
+    color: #eee
+    padding: 0
+    width: 100%
+    li
+      display: table-cell
+      margin: auto
+      span
+        display: none
+    .doc-footer-github a
+      color: white
+    .doc-footer-stackoverflow a
+      color: #F89A00
+
+
+// Main Content
+
+.main-documentation
+  height: 100%
+  padding-top: 52px
+  .description
+    min-height: 84px
+
+.shameless-marketing
+  float: right
+  width: 43%
+  color: rgba(white,.75)
+  .sticker
+    width: 60px
+    height: 60px
+    line-height: 58px
+    margin: 0 auto
+    border-radius: 50%
+    opacity: 0
+    animation: arrow 1s ease-in-out
+    animation-fill-mode: forwards
+    border: solid 2px rgba(white,.5)
+    img
+      position: relative
+      top: -2px
+  .sticker-algolia
+    animation-delay: .5s
+    img
+      top: -4px
+  .sticker-open-source
+    animation-delay: 1s
+  .sticker-ux
+    animation-delay: 1.5s
+
+
+.documentation-content
+  position: absolute
+  top: 0
+  left: 15px
+  right: 15px
+  bottom: 0
+  padding: 30px
+  overflow-y: scroll
+  font-size: 13px
+  line-height: 1.8em
+  color: rgba(0,0,0,0.75)
+  h1[id], h2[id], h3[id]
+    clear: both
+  h1[id], h2[id], h3[id], h4[id], h5[id] // anchorable titles
+    &:before
+      content: ""
+      display: block
+      height: $anchor-offset
+      margin: -$anchor-offset 0 0
+    a.anchor
+      display: inline-block
+      font-size: 0.7em
+      visibility: hidden
+      padding-right: 0.2em
+      margin-top: -0.5em
+      color: inherit
+      &:hover, &:active, &:focus
+        color: inherit
+        text-decoration: none
+    &:hover
+      a.anchor
+        visibility: visible
+
+  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > .h1, > .h2, > .h3, > .h4, > .h5, > pre, > .highlight, > ul, > .row
+    margin-right: 50%
+    max-width: 50%
+  > p
+    font-size: 1.15em
+  > ul
+    font-size: 1.1em
+    li
+      padding-bottom: 6px
+  > .highlight, > .row .highlight
+    pre
+      background: none
+      border: 1px solid #A3B6CB
+      .o
+        color: inherit
+  h2, .h2
+    margin-top: 3em
+    font-size: 2em
+    font-weight: normal
+    text-transform: uppercase
+    &:first-child
+      margin-top: 0
+  h3, .h3
+    margin: 2em 0 .8em
+    font-size: 1.7em
+    font-weight: bold
+  h4, .h4
+    border-bottom: dashed 1px #ccc
+    padding: 0 0 8px
+    margin: 2em 0 1em 0
+    font-size: 1.3em
+    font-weight: bold
+  > p, > ul
+    code
+      background-color: #F3F3F3
+      border: 1px solid darken(#F3F3F3,7%)
+      color: $text-color
+      font-weight: bold
+
+.toggle-html-button
+  margin-top: 1em
+  margin-right: 50%
+  max-width: 50%
+  margin-bottom: 0.5em
+  text-align: right
+  button
+    border-color: #ccc
+    &:focus
+      box-shadow: none
+      outline: 0
+
+.widget-icon
+  margin: 4px 20px 20px 0
+
+.html-container
+  padding: 40px 24px 24px
+  border: solid 1px #E4E4E4
+  border-radius: 5px
+  position: relative
+  overflow-x: hidden
+  max-height: 500px
+  &:after
+    font-size: 11px
+    font-family: $font-family-sans-serif
+    content: "Generated html"
+    top: 0
+    left: 0
+    color: #999
+    padding: 4px 6px
+    line-height: 1em
+    position: absolute
+    background-color: $gray-light
+    border: solid 1px #E4E4E4
+    border-width: 0 1px 1px 0
+    border-radius: 5px 0 3px 0
+
+.widget-container
+  padding: 50px 40px 40px
+  border: solid 1px #E4E4E4
+  border-radius: 5px
+  position: relative
+  overflow-x: hidden
+  max-height: 500px
+  &:after
+    font-size: 11px
+    content: "Widget display"
+    top: 0
+    left: 0
+    color: #999
+    padding: 4px 6px
+    line-height: 1em
+    position: absolute
+    background-color: $gray-light
+    border: solid 1px #E4E4E4
+    border-width: 0 1px 1px 0
+    border-radius: 5px 0 3px 0
+
+// Code box
+
+.code-samples
+  background-color: #172C4F
+  background: linear-gradient(to bottom, #0a1724 0%,#172c4f 100%)
+  position: absolute
+  width: 46%
+  top: 0
+  right: 0
+  bottom: 0
+
+.code-box
+  position: relative
+  width: 43%
+  float: right
+  clear: right
+  .btn-group
+    position: absolute
+    right: 0
+    top: -3em
+    .toggle-doc-button
+      text-align: right
+      color: $brand-primary
+      background-color: #0A1724
+      border: none
+      &:hover
+        color: #fff
+      &:active, &:focus
+        outline: 0px
+      &.active
+        font-weight: bolder
+        background: #163350
+  .jsdoc
+    border: none
+    color: #A3B6CB
+    padding: 9.5px
+    margin: 0 0 10px
+    background-color: #0A1724
+    code
+      background-color: #0A1724
+    .attr-optional code
+      color: #46AEDA
+    .attr-required code
+      color: $success-color
+    h5
+      text-decoration: underline
+      color: #ddd
+    pre
+      background: transparent
+      border: none
+      padding: 0
+      margin-bottom: 1.5em
+    table
+      table-layout: fixed
+      margin-top: 1em
+      width: 100%
+      th
+        font-size: 11px
+        font-weight: bold
+        text-transform: uppercase
+        border-bottom: solid 1px #758393
+      td
+        padding: 0.5em
+        border-bottom: solid 1px #162B50
+        code
+          color: white
+    .attr-legend
+      padding: 10px
+      margin: 0
+      text-align: right
+      span
+        font-size: 10px
+        color: #58D158
+
+
+// Widgets
+#q input
+  width: 100%
+  padding: 2px 3px
+

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-index</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-20.000000, -197.000000)">
+            <g id="icon-widget-index" sketch:type="MSLayerGroup" transform="translate(20.000000, 197.000000)">
+                <g id="Group" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+                </g>
+                <path d="M24.4430862,28.5847596 L24.4430862,28.5847596 L30.756971,36.3017299 C31.4484559,37.1468782 32.5547553,37.1399686 33.2405869,36.3017299 L39.5544718,28.5847596 C40.2459567,27.7396114 39.9231455,27.0669943 38.8460798,27.0669943 L25.1514781,27.0669943 C24.073817,27.0669943 23.7572545,27.746521 24.4430862,28.5847596 L24.4430862,28.5847596 Z M22.099593,29.6233991 C20.2157176,27.3208847 21.5402505,24.4813579 24.5244607,24.4813579 L39.4728815,24.4813579 C42.4554528,24.4813579 43.7883784,27.3126301 41.8977492,29.6233991 L35.0057921,38.0469022 C33.4024656,40.0065234 30.5992909,40.0119188 28.9915501,38.0469022 L22.099593,29.6233991 Z" id="Shape" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

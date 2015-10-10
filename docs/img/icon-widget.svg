@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-35.000000, -59.000000)">
+            <g id="icon-widget" sketch:type="MSLayerGroup" transform="translate(20.000000, 44.000000)">
+                <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="0" y="0" width="64" height="64"></rect>
+                <path d="M17,17.9948028 L17,17.9948028 L17,47.0051972 C17,47.5567369 17.4435658,48 17.9948028,48 L47.0051972,48 C47.5567369,48 48,47.5564342 48,47.0051972 L48,17.9948028 C48,17.4432631 47.5564342,17 47.0051972,17 L17.9948028,17 C17.4432631,17 17,17.4435658 17,17.9948028 L17,17.9948028 Z M15,18.7788675 C15,16.6918566 16.6881227,15 18.7788675,15 L46.2211325,15 C48.3081434,15 50,16.6881227 50,18.7788675 L50,46.2211325 C50,48.3081434 48.3118773,50 46.2211325,50 L18.7788675,50 C16.6918566,50 15,48.3118773 15,46.2211325 L15,18.7788675 L15,18.7788675 Z" id="Shape" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+                <circle id="Oval-46" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="21" cy="21" r="2"></circle>
+                <circle id="Oval-46-Copy" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="44" cy="21" r="2"></circle>
+                <circle id="Oval-46-Copy-3" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="21" cy="44" r="2"></circle>
+                <circle id="Oval-46-Copy-2" fill="#FFFFFF" sketch:type="MSShapeGroup" cx="44" cy="44" r="2"></circle>
+            </g>
+        </g>
+    </g>
+</svg>
