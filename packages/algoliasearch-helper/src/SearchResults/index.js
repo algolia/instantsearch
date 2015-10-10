@@ -284,17 +284,20 @@ function SearchResults(state, algoliaResponse) {
       });
     } else {
       var isFacetDisjunctive = indexOf(state.disjunctiveFacets, facetKey) !== -1;
-      var position = isFacetDisjunctive ? disjunctiveFacetsIndices[facetKey] :
-        facetsIndices[facetKey];
+      var isFacetConjunctive = indexOf(state.facets, facetKey) !== -1;
+      var position;
 
       if (isFacetDisjunctive) {
+        position = disjunctiveFacetsIndices[facetKey];
         this.disjunctiveFacets[position] = {
           name: facetKey,
           data: facetValueObject,
           exhaustive: mainSubResponse.exhaustiveFacetsCount
         };
         assignFacetStats(this.disjunctiveFacets[position], mainSubResponse.facets_stats, facetKey);
-      } else {
+      }
+      if (isFacetConjunctive) {
+        position = facetsIndices[facetKey];
         this.facets[position] = {
           name: facetKey,
           data: facetValueObject,

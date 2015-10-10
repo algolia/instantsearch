@@ -37,12 +37,11 @@ var response = {
   }]
 };
 
-var searchParams = new SearchParameters({
-  facets: ['age', 'country'],
-  disjunctiveFacets: ['price']
-});
-
 test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet', function(t) {
+  var searchParams = new SearchParameters({
+    facets: ['age', 'country'],
+    disjunctiveFacets: ['price']
+  });
   var result = new SearchResults(searchParams, response);
 
   t.throws(
@@ -62,5 +61,19 @@ test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet',
     response.results[0].facets_stats.price,
     'should return the same stats data as in the response');
 
+  t.end();
+});
+
+test('getFacetStats(facetName) returns stats if the facet is both a regular and disjunctive facet', function(t) {
+  var searchParams = new SearchParameters({
+    facets: ['price'],
+    disjunctiveFacets: ['price']
+  });
+  var result = new SearchResults(searchParams, response);
+
+  t.deepEqual(
+    result.getFacetStats('price'),
+    response.results[0].facets_stats.price,
+    'should return the same stats data as in the response');
   t.end();
 });
