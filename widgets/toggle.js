@@ -83,11 +83,11 @@ function toggle({
 
       ReactDOM.render(
         <RefinementList
-          facetValues={[facetValue]}
           Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
-          hideWhenNoResults={hideWhenNoResults}
+          facetValues={[facetValue]}
           hasResults={results.hits.length > 0}
+          hideWhenNoResults={hideWhenNoResults}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
         />,
         containerNode

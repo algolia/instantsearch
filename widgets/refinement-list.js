@@ -101,11 +101,11 @@ function refinementList({
 
       ReactDOM.render(
         <RefinementList
+          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
-          Template={bindProps(Template, templateProps)}
+          hideWhenNoResults={hideWhenNoResults}
           toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
         />,
         containerNode

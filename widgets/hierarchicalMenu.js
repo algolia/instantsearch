@@ -80,13 +80,13 @@ function hierarchicalMenu({
 
       ReactDOM.render(
         <RefinementList
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          limit={limit}
           Template={bindProps(Template, templateProps)}
-          hideWhenNoResults={hideWhenNoResults}
-          hasResults={facetValues.length > 0}
+          cssClasses={cssClasses}
           facetNameKey="path"
+          facetValues={facetValues}
+          hasResults={facetValues.length > 0}
+          hideWhenNoResults={hideWhenNoResults}
+          limit={limit}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode

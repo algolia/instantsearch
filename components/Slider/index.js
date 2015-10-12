@@ -19,11 +19,11 @@ class Slider extends React.Component {
       <div className={cx(this.props.cssClasses.body)}>
         <Nouislider
           {...this.props}
-          onChange={this.handleChange.bind(this)}
           animate={false}
           behaviour={'snap'}
           connect
           cssPrefix={cssPrefix}
+          onChange={this.handleChange.bind(this)}
         />
       </div>
     );
@@ -31,20 +31,20 @@ class Slider extends React.Component {
 }
 
 Slider.propTypes = {
-  onSlide: React.PropTypes.func,
-  onChange: React.PropTypes.func,
-  range: React.PropTypes.object.isRequired,
-  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
-  tooltips: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.object
-  ]),
   cssClasses: React.PropTypes.shape({
     body: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
-  })
+  }),
+  onChange: React.PropTypes.func,
+  onSlide: React.PropTypes.func,
+  range: React.PropTypes.object.isRequired,
+  start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
+  tooltips: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.object
+  ])
 };
 
 module.exports = Slider;

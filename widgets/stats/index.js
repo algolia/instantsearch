@@ -58,16 +58,16 @@ function stats({
 
       ReactDOM.render(
         <Stats
+          Template={bindProps(Template, templateProps)}
+          cssClasses={cssClasses}
           hasResults={results.hits.length > 0}
           hideWhenNoResults={hideWhenNoResults}
           hitsPerPage={results.hitsPerPage}
-          cssClasses={cssClasses}
           nbHits={results.nbHits}
           nbPages={results.nbPages}
           page={results.page}
           processingTimeMS={results.processingTimeMS}
           query={results.query}
-          Template={bindProps(Template, templateProps)}
         />,
         containerNode
       );

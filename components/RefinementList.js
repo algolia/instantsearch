@@ -72,6 +72,7 @@ class RefinementList extends React.Component {
 }
 
 RefinementList.propTypes = {
+  Template: React.PropTypes.func,
   cssClasses: React.PropTypes.shape({
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
@@ -82,10 +83,9 @@ RefinementList.propTypes = {
       React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
+  facetNameKey: React.PropTypes.string,
   facetValues: React.PropTypes.array,
-  Template: React.PropTypes.func,
-  toggleRefinement: React.PropTypes.func.isRequired,
-  facetNameKey: React.PropTypes.string
+  toggleRefinement: React.PropTypes.func.isRequired
 };
 
 RefinementList.defaultProps = {

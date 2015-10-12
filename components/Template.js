@@ -22,12 +22,12 @@ class Template extends React.Component {
 }
 
 Template.propTypes = {
+  data: React.PropTypes.object,
+  templateKey: React.PropTypes.string,
   templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.func
   ])),
-  templateKey: React.PropTypes.string,
-  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool),
   templatesConfig: React.PropTypes.shape({
     helpers: React.PropTypes.objectOf(React.PropTypes.func),
     // https://github.com/twitter/hogan.js/#compilation-options
@@ -45,7 +45,7 @@ Template.propTypes = {
     React.PropTypes.func,
     React.PropTypes.objectOf(React.PropTypes.func)
   ]),
-  data: React.PropTypes.object
+  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool)
 };
 
 Template.defaultProps = {
