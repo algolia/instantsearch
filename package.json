@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.8.0",
-    "algoliasearch-helper": "^2.4.0",
+    "algoliasearch-helper": "^2.5.0",
     "classnames": "^2.1.5",
     "hogan.js": "^3.0.2",
     "lodash": "^3.10.1",
