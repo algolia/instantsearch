@@ -104,7 +104,14 @@ function prepareToggleData(transformData) {
       count: data.count
     };
 
-    return transformData && transformData(newData) || newData;
+    if (transformData) {
+      newData = transformData(newData);
+      if (typeof newData !== 'object') {
+        throw new Error('`transformData` must return an object.');
+      }
+    }
+
+    return newData;
   };
 }
 
