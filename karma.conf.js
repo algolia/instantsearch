@@ -1,6 +1,6 @@
 module.exports = function(config) {
   config.set({
-    browsers: ['ChromeCanary'],
+    browsers: ['Chrome'],
     frameworks: ['phantomjs-shim', 'mocha'],
     reporters: ['mocha'],
 

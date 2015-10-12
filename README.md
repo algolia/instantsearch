@@ -195,7 +195,8 @@ npm run dev
 
 ```sh
 npm test # test and lint single run using phantomjs
-npm run test:watch # test with auto reload using real browser
+npm run test:watch # test with auto reload using real browser, default to Google Chrome
+npm run test:watch -- --browsers ChromeCanary # force Chrome Canary
 ```
 
 ## Available widgets
