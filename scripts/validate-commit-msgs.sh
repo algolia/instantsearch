@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 # Checks the commits msgs in the range of commits travis is testing.
 # Based heavily on
