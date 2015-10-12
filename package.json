@@ -26,7 +26,7 @@
     "doctoc": "^0.15.0",
     "eslint": "^1.6.0",
     "eslint-config-airbnb": "^0.1.0",
-    "eslint-config-algolia": "^4.0.0",
+    "eslint-config-algolia": "^4.1.0",
     "eslint-plugin-react": "^3.5.1",
     "expect": "^1.12.0",
     "file-loader": "^0.8.4",

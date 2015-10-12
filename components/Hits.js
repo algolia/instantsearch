@@ -5,7 +5,11 @@ class Hits extends React.Component {
   renderWithResults() {
     var renderedHits = map(this.props.results.hits, (hit) => {
       return (
-        <this.props.Template templateKey="hit" data={hit} key={hit.objectID} />
+        <this.props.Template
+          data={hit}
+          key={hit.objectID}
+          templateKey="hit"
+        />
       );
     });
 
@@ -15,7 +19,10 @@ class Hits extends React.Component {
   renderNoResults() {
     return (
       <div>
-        <this.props.Template templateKey="empty" data={this.props.results} />
+        <this.props.Template
+          data={this.props.results}
+          templateKey="empty"
+        />
       </div>
     );
   }

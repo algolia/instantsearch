@@ -100,13 +100,13 @@ function rangeSlider({
 
       ReactDOM.render(
         <Slider
-          start={[currentRefinement.min, currentRefinement.max]}
-          range={{min: stats.min, max: stats.max}}
-          cssClasses={cssClasses}
           Template={bindProps(Template, templateProps)}
-          hideWhenNoResults={hideWhenNoResults}
+          cssClasses={cssClasses}
           hasResults={stats.min !== null && stats.max !== null}
+          hideWhenNoResults={hideWhenNoResults}
           onChange={this._refine.bind(this, helper, stats)}
+          range={{min: stats.min, max: stats.max}}
+          start={[currentRefinement.min, currentRefinement.max]}
           tooltips={tooltips}
         />,
         containerNode

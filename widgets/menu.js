@@ -76,11 +76,11 @@ function menu({
 
       ReactDOM.render(
         <RefinementList
+          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          Template={bindProps(Template, templateProps)}
-          hideWhenNoResults={hideWhenNoResults}
           hasResults={facetValues.length > 0}
+          hideWhenNoResults={hideWhenNoResults}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode

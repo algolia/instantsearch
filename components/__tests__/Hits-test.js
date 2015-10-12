@@ -29,8 +29,16 @@ describe('Hits', () => {
 
     expect(out).toEqual(
       <div>
-        <Template templateKey="hit" data={results.hits[0]} key={results.hits[0].objectID} />
-        <Template templateKey="hit" data={results.hits[1]} key={results.hits[1].objectID} />
+        <Template
+          data={results.hits[0]}
+          key={results.hits[0].objectID}
+          templateKey="hit"
+        />
+        <Template
+          data={results.hits[1]}
+          key={results.hits[1].objectID}
+          templateKey="hit"
+        />
       </div>
     );
   });
@@ -42,6 +50,13 @@ describe('Hits', () => {
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(<div><Template templateKey="empty" data={results} /></div>);
+    expect(out).toEqual(
+      <div>
+        <Template
+          data={results}
+          templateKey="empty"
+        />
+      </div>
+    );
   });
 });
