@@ -106,11 +106,7 @@ function prepareToggleData(transformData) {
 
     if (transformData) {
       newData = transformData(newData);
-      if (typeof newData !== 'object') {
-        throw new Error('`transformData` must return an object.');
-      }
     }
-
     return newData;
   };
 }

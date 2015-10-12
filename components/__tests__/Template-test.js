@@ -110,7 +110,7 @@ describe('Template', () => {
     expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
   });
 
-  it('throws an error if the transformData is not anything', () => {
+  it('throws an error if the transformData is not returning anything', () => {
     templates = {test: 'it supports {{feature}}'};
     data = {feature: 'replace me'};
     templateKey = 'test';
