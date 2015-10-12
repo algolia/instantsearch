@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.5.1 - 2015-10-12
+  * FIX: the AlgoliaSearchHelper.getFacetsStats was not returning the stats
+  if the attribute was both a regular & disjunctive facet.
+
 2.5.0 - 2015-10-09
   * CHORE : Update qs to 5.2.0
   * FEATURE : getStateAsQueryString now orders the serialized parameters

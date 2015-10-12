@@ -367,31 +367,6 @@ function isUndefined(arg) {
 }
 
 },{}],3:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -484,14 +459,14 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1081,7 +1056,32 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":5,"_process":4,"inherits":3}],7:[function(require,module,exports){
+},{"./support/isBuffer":4,"_process":3,"inherits":6}],6:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],7:[function(require,module,exports){
 /**
  * Creates an array with all falsey values removed. The values `false`, `null`,
  * `0`, `""`, `undefined`, and `NaN` are falsey.
@@ -9245,17 +9245,20 @@ function SearchResults(state, algoliaResponse) {
       });
     } else {
       var isFacetDisjunctive = indexOf(state.disjunctiveFacets, facetKey) !== -1;
-      var position = isFacetDisjunctive ? disjunctiveFacetsIndices[facetKey] :
-        facetsIndices[facetKey];
+      var isFacetConjunctive = indexOf(state.facets, facetKey) !== -1;
+      var position;
 
       if (isFacetDisjunctive) {
+        position = disjunctiveFacetsIndices[facetKey];
         this.disjunctiveFacets[position] = {
           name: facetKey,
           data: facetValueObject,
           exhaustive: mainSubResponse.exhaustiveFacetsCount
         };
         assignFacetStats(this.disjunctiveFacets[position], mainSubResponse.facets_stats, facetKey);
-      } else {
+      }
+      if (isFacetConjunctive) {
+        position = facetsIndices[facetKey];
         this.facets[position] = {
           name: facetKey,
           data: facetValueObject,
@@ -10440,7 +10443,7 @@ AlgoliaSearchHelper.prototype._change = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":170,"./SearchParameters/shortener":171,"./SearchResults":173,"./requestBuilder":177,"events":2,"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"lodash/string/trim":161,"qs":165,"qs/lib/utils":168,"util":6}],175:[function(require,module,exports){
+},{"./SearchParameters":170,"./SearchParameters/shortener":171,"./SearchResults":173,"./requestBuilder":177,"events":2,"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"lodash/string/trim":161,"qs":165,"qs/lib/utils":168,"util":5}],175:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -10768,7 +10771,7 @@ module.exports = requestBuilder;
 },{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/object/merge":156}],178:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.5.0';
+module.exports = '2.5.1';
 
 },{}]},{},[1])(1)
 });
