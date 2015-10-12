@@ -159,4 +159,8 @@ search.addWidget(
   })
 );
 
+search.once('render', function() {
+  document.querySelector('.search').className = 'row search search--visible';
+});
+
 search.start();
