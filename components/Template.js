@@ -57,14 +57,22 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
+  var data;
   if (typeof fn === 'function') {
-    return fn(originalData);
+    data = fn(originalData);
   } else if (typeof fn === 'object') {
     // ex: transformData: {hit, empty}
-    return fn[templateKey] && fn[templateKey](originalData) || originalData;
+    data = fn[templateKey] && fn[templateKey](originalData);
+  } else {
+    throw new Error('`transformData` must be a function or an object');
   }
 
-  throw new Error('`transformData` must be a function or an object');
+  var dataType = typeof data;
+  var expectedType = typeof originalData;
+  if (dataType !== expectedType) {
+    throw new Error(`\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`);
+  }
+  return data;
 }
 
 function renderTemplate({template, compileOptions, helpers, data}) {
