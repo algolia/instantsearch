@@ -36,14 +36,13 @@ class RefinementList extends React.Component {
   //
   // So the code here checks if the click was done on or in a LABEL. If this LABEL
   // has a checkbox inside, we ignore the first click event because we will get another one.
+  //
+  // We also check if the click was done inside a link and then e.preventDefault() because we already
+  // handle the url
+  //
+  // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
+  // on child would click on parent also
   handleClick(value, e) {
-    if (e.target.tagName === 'A' && e.target.href) {
-      // do not trigger any url change by the href
-      e.preventDefault();
-      // do not bubble (so that hierarchical lists are not triggering refine twice)
-      e.stopPropagation();
-    }
-
     if (e.target.tagName === 'INPUT') {
       this.refine(value);
       return;
@@ -56,8 +55,14 @@ class RefinementList extends React.Component {
         return;
       }
 
+      if (parent.tagName === 'A' && parent.href) {
+        e.preventDefault();
+      }
+
       parent = parent.parentNode;
     }
+
+    e.stopPropagation();
 
     this.refine(value);
   }

@@ -110,6 +110,34 @@ describe('Template', () => {
     expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
   });
 
+  it('throws an error if the transformData is not returning anything', () => {
+    templates = {test: 'it supports {{feature}}'};
+    data = {feature: 'replace me'};
+    templateKey = 'test';
+    transformData = () => {
+      // return case if missing
+    };
+
+    let props = getProps();
+    expect(() => {
+      renderer.render(<Template {...props} />);
+    }).toThrow('`transformData` must return a `object`, got `undefined`.');
+  });
+
+  it('throws an error if the transformData returns an unexpected type', () => {
+    templates = {test: 'it supports {{feature}}'};
+    data = {feature: 'replace me'};
+    templateKey = 'test';
+    transformData = () => {
+      return true;
+    };
+
+    let props = getProps();
+    expect(() => {
+      renderer.render(<Template {...props} />);
+    }).toThrow('`transformData` must return a `object`, got `boolean`.');
+  });
+
   function getProps() {
     return {templates, data, templateKey, useCustomCompileOptions, templatesConfig, transformData};
   }
