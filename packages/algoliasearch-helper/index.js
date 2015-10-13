@@ -60,4 +60,13 @@ algoliasearchHelper.SearchParameters = SearchParameters;
  */
 algoliasearchHelper.SearchResults = SearchResults;
 
+/**
+ * URL tools to generate query string and parse them from/into
+ * SearchParameters
+ * @member module:algoliasearchHelper.url
+ * @type {object} {@link url}
+ *
+ */
+algoliasearchHelper.url = require('./src/url');
+
 module.exports = algoliasearchHelper;

@@ -1,5 +1,11 @@
 CHANGELOG
 
+unreleased 
+  * FEATURE : new function to get a query string from any state
+  * FEATURE : filter on a state to get only part of the search parameters
+  * CHORE : expose url related functions in a dedicated module
+  algoliasearchHelper.urlTools
+
 2.5.1 - 2015-10-12
   * FIX: the AlgoliaSearchHelper.getFacetsStats was not returning the stats
   if the attribute was both a regular & disjunctive facet.
