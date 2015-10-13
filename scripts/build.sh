@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e # exit when error
+set -ev # exit when error
 
 license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia SAS | github.com/algolia/instantsearch.js */"
 
