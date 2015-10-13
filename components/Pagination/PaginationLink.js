@@ -7,7 +7,7 @@ class PaginationLink extends React.Component {
   }
 
   render() {
-    var {className, label, ariaLabel, handleClick} = this.props;
+    var {className, label, ariaLabel, handleClick, url} = this.props;
 
     return (
       <li className={className}>
@@ -15,7 +15,7 @@ class PaginationLink extends React.Component {
           ariaLabel={ariaLabel}
           className={className}
           dangerouslySetInnerHTML={{__html: label}}
-          href="#"
+          href={url}
           onClick={handleClick}
         ></a>
       </li>
@@ -33,7 +33,8 @@ PaginationLink.propTypes = {
   label: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
-  ]).isRequired
+  ]).isRequired,
+  url: React.PropTypes.string
 };
 
 module.exports = PaginationLink;

@@ -69,7 +69,10 @@ var search = instantsearch({
   appId: appId, // Mandatory
   apiKey: apiKey, // Mandatory
   indexName: indexName, // Mandatory
-  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN'
+  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN',
+  urlSync: { // optionnal, activate url sync if defined
+    useHash: false
+  }
 });
 
 // add a widget
@@ -198,6 +201,77 @@ npm run test:watch:browser # chrome
 npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
 ```
 
+## Instant search configuration
+
+The main configuration of instantsearch.js is done through a configuration object.
+The minimal configuration is made a of three attributes :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name'
+});
+```
+
+It can also contain other optionnal attributes to enable other features.
+
+### Number locale
+
+For the display of numbers, the locale will be determined by
+the browsers or forced in the configuration :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  numberLocale: 'en-US'
+});
+```
+
+### Initial search parameters
+
+At the start of instantsearch, the search configuration is based on the input
+of each widget and the URL. It is also possible to change the defaults of 
+the configuration through an object that can contain any parameters understood
+by the Algolia API.
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  searchParameters: {
+    typoTolerance: 'strict'
+  }
+});
+```
+
+### URL synchronisation
+
+Instantsearch let you synchronize the url with the current search parameters.
+In order to activate this feature, you need to add the urlSync object. It accepts
+3 parameters : 
+   - trackedParameters:string[] parameters that will be synchronized in the
+      URL. By default, it will track the query, all the refinable attribute (facets and numeric
+      filters), the index and the page.
+   - useHash:boolean if set to true, the url will be hash based. Otherwise,
+      it'll use the query parameters using the modern history API.
+   - threshold:number time in ms after which a new state is created in the browser
+      history. The default value is 700.
+
+All those parameters are optional and a minimal configuration looks like :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  urlSync: {}
+});
+```
+
 ## Available widgets
 
 [searchBox]: ./widgets-screenshots/search-box.png
@@ -210,7 +284,6 @@ npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
 [hierarchicalMenu]: ./widgets-screenshots/hierarchicalMenu.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
-[urlSync]: ./widgets-screenshots/url-sync.gif
 
 ### searchBox
 
@@ -716,45 +789,6 @@ search.addWidget(
         return '$' + formattedValue;
       }
     }
-  })
-);
-```
-
-### urlSync
-
-![Example of urlSync][urlSync]
-
-#### API
-
-```js
-/**
- * Instanciate a url sync widget. This widget let you synchronize the search
- * parameters with the URL. It can operate with legacy API and hash or it can use
- * the modern history API. By default, it will use the modern API, but if you are
- * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
- * true.
- * @class
- * @param {UrlUtil} urlUtils an object containing the function to read, watch the changes
- * and update the URL.
- * @param {object} options may contain the following keys :
- *  - threshold:number time in ms after which a new state is created in the browser
- * history. The default value is 700.
- *  - trackedParameters:string[] parameters that will be synchronized in the
- * URL. By default, it will track the query, all the refinable attribute (facets and numeric
- * filters), the index and the page.
- *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
- * it'll use the query parameters using the modern history API.
- */
-```
-
-#### Usage
-
-```js
-search.addWidget(
-  instantsearch.widgets.urlSync({
-/*  useHash: true,
-    threshold: 600,
-    trackedParameters: ['query', 'page', 'attribute:*'] */
   })
 );
 ```

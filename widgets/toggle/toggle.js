@@ -51,7 +51,7 @@ function toggle({
     getConfiguration: () => ({
       facets: [facetName]
     }),
-    render: function({helper, results, templatesConfig}) {
+    render: function({helper, results, templatesConfig, state, createURL}) {
       var isRefined = helper.hasRefinements(facetName);
       var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
 
@@ -70,6 +70,7 @@ function toggle({
 
       ReactDOM.render(
         <RefinementList
+          createURL={() => createURL(state.toggleRefinement(facetName, facetValue.isRefined))}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
           hasResults={results.hits.length > 0}

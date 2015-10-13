@@ -1,12 +1,17 @@
 var React = require('react');
+var mapValues = require('lodash/object/mapValues');
+var curry = require('lodash/function/curry');
+var hogan = require('hogan.js');
 
 class Template extends React.Component {
   render() {
+    var compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
+      this.props.templatesConfig.compileOptions :
+      {};
+
     var content = renderTemplate({
       template: this.props.templates[this.props.templateKey],
-      compileOptions: this.props.useCustomCompileOptions[this.props.templateKey] ?
-        this.props.templatesConfig.compileOptions :
-        {},
+      compileOptions: compileOptions,
       helpers: this.props.templatesConfig.helpers,
       data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
     });
@@ -76,43 +81,32 @@ function transformData(fn, templateKey, originalData) {
 }
 
 function renderTemplate({template, compileOptions, helpers, data}) {
-  var hogan = require('hogan.js');
-  var forOwn = require('lodash/object/forOwn');
-  var content;
+  let isTemplateString = typeof template === 'string';
+  let isTemplateFunction = typeof template === 'function';
 
-  if (typeof template !== 'string' && typeof template !== 'function') {
+  if (!isTemplateString && !isTemplateFunction) {
     throw new Error('Template must be `string` or `function`');
+  } else if (isTemplateFunction) {
+    return template(data);
+  } else {
+    let transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
+    let preparedData = {...data, helpers: transformedHelpers};
+    return hogan.compile(template, compileOptions).render(preparedData);
   }
+}
 
-  if (typeof template === 'function') {
-    content = template(data);
-  }
-
-  if (typeof template === 'string') {
-    data = addTemplateHelpersToData(data);
-
-    content = hogan.compile(template, compileOptions).render(data);
-  }
-
-  // We add all our template helper methods to the template as lambdas. Note
-  // that lambdas in Mustache are supposed to accept a second argument of
-  // `render` to get the rendered value, not the literal `{{value}}`. But
-  // this is currently broken (see
-  // https://github.com/twitter/hogan.js/issues/222).
-  function addTemplateHelpersToData(templateData) {
-    templateData.helpers = {};
-    forOwn(helpers, (method, name) => {
-      templateData.helpers[name] = function() {
-        return (text) => {
-          var render = (value) => hogan.compile(value, compileOptions).render(this);
-          return method.call(this, text, render);
-        };
-      };
+// We add all our template helper methods to the template as lambdas. Note
+// that lambdas in Mustache are supposed to accept a second argument of
+// `render` to get the rendered value, not the literal `{{value}}`. But
+// this is currently broken (see
+// https://github.com/twitter/hogan.js/issues/222).
+function transformHelpersToHogan(helpers, compileOptions, data) {
+  return mapValues(helpers, (method) => {
+    return curry(function(text) {
+      var render = (value) => hogan.compile(value, compileOptions).render(this);
+      return method.call(data, text, render);
     });
-    return data;
-  }
-
-  return content;
+  });
 }
 
 module.exports = Template;

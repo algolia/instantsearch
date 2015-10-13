@@ -63,7 +63,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.8.0",
-    "algoliasearch-helper": "^2.5.0",
+    "algoliasearch-helper": "^2.6.2",
     "classnames": "^2.1.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",

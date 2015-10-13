@@ -91,7 +91,8 @@ describe('toggle()', () => {
           cssClasses: {},
           hideWhenNoResults: true,
           templateProps,
-          toggleRefinement: function() {}
+          toggleRefinement: function() {},
+          createURL: () => '#'
         };
       });
 
