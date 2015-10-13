@@ -8,6 +8,18 @@ body {
   padding: 2em 0;
 }
 
+.search {
+  transition: opacity 200ms;
+}
+
+.search--hidden {
+  opacity: 0;
+}
+
+.search--visible {
+
+}
+
 /* Hits widget */
 .hit + .hit {
   margin-top: 1em;
