@@ -126,6 +126,11 @@
       "from": "https://registry.npmjs.org/classnames/-/classnames-2.1.5.tgz",
       "resolved": "https://registry.npmjs.org/classnames/-/classnames-2.1.5.tgz"
     },
+    "events": {
+      "version": "1.1.0",
+      "from": "events@*",
+      "resolved": "https://registry.npmjs.org/events/-/events-1.1.0.tgz"
+    },
     "hogan.js": {
       "version": "3.0.2",
       "from": "https://registry.npmjs.org/hogan.js/-/hogan.js-3.0.2.tgz",

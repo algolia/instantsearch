@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e # exit when error
+set -ev # exit when error
 
 printf "\nPublish example/ to gh-pages\n"
 
