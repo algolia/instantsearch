@@ -1,17 +1,10 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var utils = require('../lib/utils.js');
+var utils = require('../../lib/utils.js');
 
-var bindProps = require('../decorators/bindProps');
-var Template = require('../components/Template');
-
-var defaultTemplates = {
-  empty: 'No results',
-  hit: function(data) {
-    return JSON.stringify(data, null, 2);
-  }
-};
+var Hits = require('../../components/Hits');
+var defaultTemplates = require('./defaultTemplates');
 
 /**
  * Display the list of results (hits) from the current search
@@ -33,8 +26,6 @@ function hits({
     transformData,
     hitsPerPage = 20
   }) {
-  var Hits = require('../components/Hits');
-
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: hits({container, [templates.{empty,hit}, transformData.{empty,hit}, hitsPerPage])';
 
@@ -54,9 +45,9 @@ function hits({
 
       ReactDOM.render(
         <Hits
-          Template={bindProps(Template, templateProps)}
           hits={results.hits}
           results={results}
+          templateProps={templateProps}
         />,
         containerNode
       );
