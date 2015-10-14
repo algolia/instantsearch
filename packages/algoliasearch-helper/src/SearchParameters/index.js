@@ -705,16 +705,16 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeNumericRefinement: function(attribute, operator, paramValue) {
+    if (!this.isNumericRefined(attribute, operator)) return this;
+
     if (paramValue !== undefined) {
-      if (!this.isNumericRefined(attribute, operator, paramValue)) return this;
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator && value.val === paramValue;
         })
       });
-    } else if (operator !== undefined) {
-      if (!this.isNumericRefined(attribute, operator)) return this;
+    } else if (operator) {
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
@@ -723,7 +723,6 @@ SearchParameters.prototype = {
       });
     }
 
-    if (!this.isNumericRefined(attribute)) return this;
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
@@ -1140,14 +1139,11 @@ SearchParameters.prototype = {
    * contains any refinement value.
    * @method
    * @param {string} attribute attribute for which the refinement is applied
-   * @param {string} [operator] operator of the refinement
+   * @param {string} operator operator of the refinement
    * @param {string} [value] value of the refinement
    * @return {boolean} true if it is refined
    */
   isNumericRefined: function isNumericRefined(attribute, operator, value) {
-    if (isUndefined(value)) {
-      return !!this.numericRefinements[attribute];
-    }
     if (isUndefined(value)) {
       return this.numericRefinements[attribute] &&
         !isUndefined(this.numericRefinements[attribute][operator]);
