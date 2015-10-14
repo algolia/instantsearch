@@ -80,6 +80,52 @@ test('Should be able to remove values one by one even 0s', function(t) {
   t.end();
 });
 
+test('Should remove all the numeric values for a single operator if remove is called with two arguments', function(t) {
+  var helper = algoliasearchHelper(null, null, null);
+
+  helper.addNumericRefinement('attribute', '>', 0);
+  helper.addNumericRefinement('attribute', '>', 4);
+  helper.addNumericRefinement('attribute', '<', 4);
+  t.deepEqual(
+    helper.state.numericRefinements.attribute,
+    {'>': [0, 4], '<': [4]},
+    'should be set to {">": [0, 4], "<":[4]} initially');
+  helper.removeNumericRefinement('attribute', '>');
+  t.equal(helper.state.numericRefinements.attribute['>'], undefined, 'should set to undefined');
+  t.deepEqual(
+    helper.state.numericRefinements.attribute['<'],
+    [4],
+    'the value of the other should be the same');
+
+  t.deepEqual(
+    helper.getRefinements('attribute'),
+    [{type: 'numeric', operator: '<', value: [4]}],
+    'should have the same result with getRefinements');
+
+  t.end();
+});
+
+test('Should remove all the numeric values for a single operator if remove is called with two arguments', function(t) {
+  var helper = algoliasearchHelper(null, null, null);
+
+  helper.addNumericRefinement('attribute', '>', 0);
+  helper.addNumericRefinement('attribute', '>', 4);
+  helper.addNumericRefinement('attribute', '<', 4);
+  t.deepEqual(
+    helper.state.numericRefinements.attribute,
+    {'>': [0, 4], '<': [4]},
+    'should be set to {">": [0, 4], "<":[4]} initially');
+  helper.removeNumericRefinement('attribute');
+  t.equal(helper.state.numericRefinements.attribute, undefined, 'should set to undefined');
+
+  t.deepEqual(
+    helper.getRefinements('attribute'),
+    [],
+    'should have the same result with getRefinements');
+
+  t.end();
+});
+
 test('should be able to retrieve numeric filters', function(t) {
   t.end();
 });
