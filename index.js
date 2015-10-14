@@ -9,7 +9,7 @@ var instantsearch = toFactory(InstantSearch);
 
 instantsearch.widgets = {
   hierarchicalMenu: require('./widgets/hierarchicalMenu'),
-  hits: require('./widgets/hits'),
+  hits: require('./widgets/hits/hits'),
   indexSelector: require('./widgets/index-selector'),
   menu: require('./widgets/menu'),
   refinementList: require('./widgets/refinement-list'),

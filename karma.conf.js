@@ -2,16 +2,16 @@ module.exports = function(config) {
   config.set({
     browsers: ['Chrome'],
     frameworks: ['phantomjs-shim', 'mocha'],
-    reporters: ['mocha'],
+    reporters: ['progress'],
 
     basePath: '',
 
     preprocessors: {
-      '@(components|lib)/**/*-test.js': ['webpack', 'sourcemap']
+      '@(components|lib|widgets)/**/*-test.js': ['webpack', 'sourcemap']
     },
 
     files: [
-      '@(components|lib)/**/*-test.js'
+      '@(components|lib|widgets)/**/*-test.js'
     ],
 
     webpack: {

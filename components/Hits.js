@@ -1,14 +1,17 @@
 var React = require('react');
 var map = require('lodash/collection/map');
 
+var Template = require('./Template');
+
 class Hits extends React.Component {
   renderWithResults() {
     var renderedHits = map(this.props.results.hits, (hit) => {
       return (
-        <this.props.Template
+        <Template
           data={hit}
           key={hit.objectID}
           templateKey="hit"
+          {...this.props.templateProps}
         />
       );
     });
@@ -19,9 +22,10 @@ class Hits extends React.Component {
   renderNoResults() {
     return (
       <div>
-        <this.props.Template
+        <Template
           data={this.props.results}
           templateKey="empty"
+          {...this.props.templateProps}
         />
       </div>
     );
