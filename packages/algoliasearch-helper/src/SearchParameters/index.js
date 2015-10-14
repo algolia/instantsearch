@@ -22,6 +22,8 @@ var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
 var deepFreeze = require('../functions/deepFreeze');
 
+var filterState = require('./filterState');
+
 var RefinementList = require('./RefinementList');
 
 /**
@@ -1283,6 +1285,9 @@ SearchParameters.prototype = {
 
       return newInstance;
     });
+  },
+  filter: function(filters) {
+    return filterState(this, filters);
   },
   /**
    * Helper function to make it easier to build new instances from a mutating

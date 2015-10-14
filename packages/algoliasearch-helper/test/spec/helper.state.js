@@ -361,7 +361,7 @@ test('getConfigurationFromQueryString should parse page as number and be consist
 
   var queryString = helper.getStateAsQueryString({filters: filters});
 
-  var partialStateFromQueryString = algoliasearchHelper.AlgoliaSearchHelper.getConfigurationFromQueryString(
+  var partialStateFromQueryString = algoliasearchHelper.url.getStateFromQueryString(
     queryString
   );
 
@@ -400,8 +400,8 @@ test('should be able to get configuration that is not from algolia', function(t)
     }
   );
 
-  var config1 = algoliasearchHelper.AlgoliaSearchHelper.getForeignConfigurationInQueryString(qsWithoutPrefix);
-  var config2 = algoliasearchHelper.AlgoliaSearchHelper.getForeignConfigurationInQueryString(qsWithPrefix, {prefix: 'wtf_'});
+  var config1 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithoutPrefix);
+  var config2 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithPrefix, {prefix: 'wtf_'});
 
   t.deepEquals(
     config1,

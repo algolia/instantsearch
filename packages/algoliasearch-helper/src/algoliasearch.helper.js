@@ -3,27 +3,17 @@
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
 var requestBuilder = require('./requestBuilder');
-var shortener = require('./SearchParameters/shortener');
 
 var util = require('util');
 var events = require('events');
 
 var forEach = require('lodash/collection/forEach');
-var filter = require('lodash/collection/filter');
 var map = require('lodash/collection/map');
 var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
-var mapKeys = require('lodash/object/mapKeys');
-var mapValues = require('lodash/object/mapValues');
-var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
-var isString = require('lodash/lang/isString');
-var isPlainObject = require('lodash/lang/isPlainObject');
-var isArray = require('lodash/lang/isArray');
-var indexOf = require('lodash/array/indexOf');
 
-var qs = require('qs');
-var encode = require('qs/lib/utils').encode;
+var url = require('./url');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -455,92 +445,8 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
  */
 AlgoliaSearchHelper.prototype.getState = function(filters) {
   if (filters === undefined) return this.state;
-
-  var partialState = {};
-  var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
-  var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
-  if (indexOf(attributes, '*') === -1) {
-    forEach(attributes, function(attr) {
-      if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
-        if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
-        partialState.facetsRefinements[attr] = this.state.facetsRefinements[attr];
-      }
-
-      if (this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
-        if (!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {};
-        partialState.disjunctiveFacetsRefinements[attr] = this.state.disjunctiveFacetsRefinements[attr];
-      }
-
-      var numericRefinements = this.state.getNumericRefinements(attr);
-      if (!isEmpty(numericRefinements)) {
-        if (!partialState.numericRefinements) partialState.numericRefinements = {};
-        partialState.numericRefinements[attr] = this.state.numericRefinements[attr];
-      }
-    }, this);
-  } else {
-    if (!isEmpty(this.state.numericRefinements)) {
-      partialState.numericRefinements = this.state.numericRefinements;
-    }
-    if (!isEmpty(this.state.facetsRefinements)) partialState.facetsRefinements = this.state.facetsRefinements;
-    if (!isEmpty(this.state.disjunctiveFacetsRefinements)) {
-      partialState.disjunctiveFacetsRefinements = this.state.disjunctiveFacetsRefinements;
-    }
-    if (!isEmpty(this.state.hierarchicalFacetsRefinements)) {
-      partialState.hierarchicalFacetsRefinements = this.state.hierarchicalFacetsRefinements;
-    }
-  }
-
-  var searchParameters = filter(
-    filters,
-    function(f) { return f.indexOf('attribute:') === -1; });
-
-  forEach(
-    searchParameters,
-    function(parameterKey) {
-      partialState[parameterKey] = this.state[parameterKey];
-    },
-    this
-  );
-
-  return partialState;
+  return this.state.filter(filters);
 };
-
-function recursiveEncode(input) {
-  if (isPlainObject(input)) {
-    return mapValues(input, recursiveEncode);
-  }
-  if (isArray(input)) {
-    return map(input, recursiveEncode);
-  }
-  if (isString(input)) {
-    return encode(input);
-  }
-  return input;
-}
-
-var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
-var stateKeys = shortener.ENCODED_PARAMETERS;
-function sortQueryStringValues(prefixRegexp, a, b) {
-  if (prefixRegexp !== null) {
-    a = a.replace(prefixRegexp, '');
-    b = b.replace(prefixRegexp, '');
-  }
-
-  if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
-    if (a === 'q') return -1;
-    if (b === 'q') return 1;
-
-    var isARefinements = refinementsParameters.indexOf(a) !== -1;
-    var isBRefinements = refinementsParameters.indexOf(b) !== -1;
-    if (isARefinements && !isBRefinements) {
-      return 1;
-    } else if (isBRefinements && !isARefinements) {
-      return -1;
-    }
-  }
-
-  return a.localeCompare(b);
-}
 
 /**
  * Get part of the state as a query string. By default, the output keys will not
@@ -555,32 +461,38 @@ function sortQueryStringValues(prefixRegexp, a, b) {
  */
 AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(options) {
   var filters = options && options.filters || ['query', 'attribute:*'];
-  var moreAttributes = options && options.moreAttributes;
-  var prefixForParameters = options && options.prefix || '';
-
   var partialState = this.getState(filters);
 
-  var partialStateWithEncodedValues = recursiveEncode(partialState);
-
-  var encodedState = mapKeys(
-    partialStateWithEncodedValues,
-    function(v, k) {
-      var shortK = shortener.encode(k);
-      return prefixForParameters + shortK;
-    }
-  );
-
-  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
-  var sort = bind(sortQueryStringValues, null, prefixRegexp);
-  if (moreAttributes) {
-    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
-    var moreQs = qs.stringify(moreAttributes, {encode: false});
-    if (!stateQs) return moreQs;
-    return stateQs + '&' + moreQs;
-  }
-
-  return qs.stringify(encodedState, {encode: false, sort: sort});
+  return url.getQueryStringFromState(partialState, options);
 };
+
+/**
+ * DEPRECATED Read a query string and return an object containing the state. Use
+ * url module.
+ * @deprecated
+ * @static
+ * @param {string} queryString the query string that will be decoded
+ * @param {object} options accepted options :
+ *   - prefix : the prefix used for the saved attributes, you have to provide the
+ *     same that was used for serialization
+ * @return {object} partial search parameters object (same properties than in the
+ * SearchParameters but not exhaustive)
+ * @see {@link url#getStateFromQueryString}
+ */
+AlgoliaSearchHelper.getConfigurationFromQueryString = url.getStateFromQueryString;
+
+/**
+ * DEPRECATED Retrieve an object of all the properties that are not understandable as helper
+ * parameters. Use url module.
+ * @deprecated
+ * @static
+ * @param {string} queryString the query string to read
+ * @param {object} options the options
+ *   - prefixForParameters : prefix used for the helper configuration keys
+ * @return {object} the object containing the parsed configuration that doesn't
+ * to the helper
+ */
+AlgoliaSearchHelper.getForeignConfigurationInQueryString = url.getUnrecognizedParametersInQueryString;
 
 /**
  * Overrides part of the state with the properties stored in the provided query
@@ -592,72 +504,11 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
  */
 AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, options) {
   var triggerChange = options && options.triggerChange || false;
-
-  var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
-
+  var configuration = url.getStateFromQueryString(queryString, options);
   var updatedState = this.state.setQueryParameters(configuration);
 
   if (triggerChange) this.setState(updatedState);
   else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
-};
-
-/**
- * Read a query string and return an object containing the state
- * @static
- * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options :
- *   - prefix : the prefix used for the saved attributes, you have to provide the
- *     same that was used for serialization
- * @return {object} partial search parameters object (same properties than in the
- * SearchParameters but not exhaustive)
- */
-AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
-  var prefixForParameters = options && options.prefix || '';
-
-  var partialStateWithPrefix = qs.parse(queryString);
-  var prefixRegexp = new RegExp('^' + prefixForParameters);
-  var partialState = mapKeys(
-    partialStateWithPrefix,
-    function(v, k) {
-      if (prefixForParameters && prefixRegexp.test(k)) {
-        var encodedKey = k.replace(prefixRegexp, '');
-        return shortener.decode(encodedKey);
-      }
-      var decodedKey = shortener.decode(k);
-      return decodedKey || k;
-    }
-  );
-
-  var partialStateWithParsedNumbers = SearchParameters._parseNumbers(partialState);
-
-  return pick(partialStateWithParsedNumbers, SearchParameters.PARAMETERS);
-};
-
-/**
- * Retrieve an object of all the properties that are not understandable as helper
- * parameters.
- * @param {string} queryString the query string to read
- * @param {object} options the options
- *   - prefixForParameters : prefix used for the helper configuration keys
- * @return {object} the object containing the parsed configuration that doesn't
- * to the helper
- */
-AlgoliaSearchHelper.getForeignConfigurationInQueryString = function(queryString, options) {
-  var prefixForParameters = options && options.prefix;
-
-  var foreignConfig = {};
-  var config = qs.parse(queryString);
-  if (prefixForParameters) {
-    var prefixRegexp = new RegExp('^' + prefixForParameters);
-    forEach(config, function(v, key) {
-      if (!prefixRegexp.test(key)) foreignConfig[key] = v;
-    });
-  } else {
-    forEach(config, function(v, key) {
-      if (!shortener.decode(key)) foreignConfig[key] = v;
-    });
-  }
-  return foreignConfig;
 };
 
 /**

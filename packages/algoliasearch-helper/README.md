@@ -684,15 +684,21 @@ helper.getState(['query', 'attribute:*']);
 #### Get an object for the helper configuration in the query string
 
 ```js
-var state = algoliasearchHelper.AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
+var state = algoliasearchHelper.url.getStateFromQueryString(qs);
 ```
 
 #### Get the configuration contained in the query string that is not for the helper
 
 ```js
-var otherConf = algoliasearchHelper.AlgoliaSearchHelper.getForeignConfigurationInQueryString(qs);
+var otherConf = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qs);
 ```
 
+#### Get the query string of any state
+
+```js
+var state = helper.state;
+var qs = algoliasearchHelper.url.getQueryStringFromState(state);
+```
 
 ### Query parameters
 
