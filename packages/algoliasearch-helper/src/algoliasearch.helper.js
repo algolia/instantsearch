@@ -328,16 +328,7 @@ AlgoliaSearchHelper.prototype.toggleExclude = function() {
  * @fires change
  */
 AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
-  if (this.state.isHierarchicalFacet(facet)) {
-    this.state = this.state.toggleHierarchicalFacetRefinement(facet, value);
-  } else if (this.state.isConjunctiveFacet(facet)) {
-    this.state = this.state.toggleFacetRefinement(facet, value);
-  } else if (this.state.isDisjunctiveFacet(facet)) {
-    this.state = this.state.toggleDisjunctiveFacetRefinement(facet, value);
-  } else {
-    throw new Error('Cannot refine the undeclared facet ' + facet +
-      '; it should be added to the helper options facets, disjunctiveFacets or hierarchicalFacets');
-  }
+  this.state = this.state.toggleRefinement(facet, value);
 
   this._change();
   return this;
