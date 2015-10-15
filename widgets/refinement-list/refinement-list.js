@@ -1,21 +1,15 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var utils = require('../lib/utils.js');
+var utils = require('../../lib/utils.js');
 
-var autoHide = require('../decorators/autoHide');
-var bindProps = require('../decorators/bindProps');
-var headerFooter = require('../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
-var Template = require('../components/Template');
+var autoHide = require('../../decorators/autoHide');
+var bindProps = require('../../decorators/bindProps');
+var headerFooter = require('../../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
+var Template = require('../../components/Template');
 
-var defaultTemplates = {
-  header: '',
-  item: `<label>
-<input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>`,
-  footer: ''
-};
+var defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of refinements based on a facet
