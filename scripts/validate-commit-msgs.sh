@@ -35,7 +35,7 @@ for sha in `git log --format=oneline "$RANGE" | cut '-d ' -f1`; do
     EXIT=2
   elif echo $FIRST_LINE | grep -qE '^Merge (?:pull request|branch)'; then
     echo "OK (merge)"
-  elif echo $FIRST_LINE | grep -qE '^(?:feat|fix|docs|style|refactor|perf|test|chore|revert)\(.+\).*'; then
+  elif echo $FIRST_LINE | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|revert)\(.+\): .*'; then
     echo "OK"
   else
     echo "KO (format): $FIRST_LINE"
