@@ -21,7 +21,7 @@ var defaultTemplates = {
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} [options.operator] How to apply refinements. Possible values: `or`, `and`
+ * @param  {String} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
@@ -35,31 +35,24 @@ var defaultTemplates = {
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {String|Function} [options.singleRefine=false] Are multiple refinements allowed or only one at the same time. You can use this
- *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function refinementList({
     container,
     facetName,
-    operator = null,
+    operator = 'or',
     sortBy = ['count:desc'],
     limit = 1000,
     cssClasses = {},
     hideWhenNoResults = true,
     templates = defaultTemplates,
-    transformData,
-    singleRefine = false
+    transformData
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, singleRefine, hideIfNoResults]})';
+  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideIfNoResults]})';
 
-  if (!container || !facetName ||
-    // operator is mandatory when multiple refines allowed
-    (operator === null && singleRefine === false) ||
-    // operator is not allowed when single refine enabled
-    (operator !== null && singleRefine === true)) {
+  if (!container || !facetName) {
     throw new Error(usage);
   }
 
@@ -101,7 +94,7 @@ function refinementList({
           facetValues={facetValues}
           hasResults={facetValues.length > 0}
           hideWhenNoResults={hideWhenNoResults}
-          toggleRefinement={toggleRefinement.bind(null, helper, singleRefine, facetName)}
+          toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
         />,
         containerNode
       );
@@ -109,16 +102,7 @@ function refinementList({
   };
 }
 
-function toggleRefinement(helper, singleRefine, facetName, facetValue) {
-  if (singleRefine) {
-    var previousRefinement = helper.getRefinements(facetName);
-    helper.clearRefinements(facetName);
-    if (previousRefinement && previousRefinement[0] && previousRefinement[0].value === facetValue) {
-      helper.search();
-      return;
-    }
-  }
-
+function toggleRefinement(helper, facetName, facetValue) {
   helper
     .toggleRefinement(facetName, facetValue)
     .search();

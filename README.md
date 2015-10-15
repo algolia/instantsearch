@@ -550,7 +550,7 @@ search.addWidget(
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} [options.operator] How to apply refinements. Possible values: `or`, `and`
+ * @param  {String} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
@@ -564,8 +564,6 @@ search.addWidget(
 </label>`] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {String|Function} [options.singleRefine=false] Are multiple refinements allowed or only one at the same time. You can use this
- *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
@@ -581,8 +579,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands', 
-    facetName: 'brands',
-    operator: 'or'
+    facetName: 'brands'
   })
 );
 ```
