@@ -9,11 +9,13 @@ import Template from '../Template';
 describe('Hits', () => {
   var renderer;
   var results;
+  var templateProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
     renderer = createRenderer();
     results = {hits: []};
+    templateProps = {};
   });
 
   it('render hits when present', () => {
@@ -23,7 +25,7 @@ describe('Hits', () => {
       objectID: 'mom'
     }]};
 
-    let props = {results, Template};
+    let props = {results, templateProps};
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
@@ -46,7 +48,7 @@ describe('Hits', () => {
   it('renders a specific template when no results', () => {
     results = {hits: []};
 
-    let props = {results, Template};
+    let props = {results, templateProps};
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 

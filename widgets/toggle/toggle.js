@@ -2,22 +2,13 @@ var find = require('lodash/collection/find');
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var utils = require('../lib/utils.js');
+var utils = require('../../lib/utils.js');
 
-var autoHide = require('../decorators/autoHide');
-var headerFooter = require('../decorators/headerFooter');
-var bindProps = require('../decorators/bindProps');
-var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+var autoHide = require('../../decorators/autoHide');
+var headerFooter = require('../../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
 
-var Template = require('../components/Template');
-
-var defaultTemplates = {
-  header: '',
-  item: `<label>
-<input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{label}} <span>{{count}}</span>
-</label>`,
-  footer: ''
-};
+var defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -68,11 +59,7 @@ function toggle({
         transformData: prepareToggleData(transformData),
         defaultTemplates,
         templatesConfig,
-        templates: {
-          header: templates.header,
-          item: templates.body,
-          footer: templates.footer
-        }
+        templates
       });
 
       var facetValue = {
@@ -83,11 +70,11 @@ function toggle({
 
       ReactDOM.render(
         <RefinementList
-          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
           hasResults={results.hits.length > 0}
           hideWhenNoResults={hideWhenNoResults}
+          templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
         />,
         containerNode

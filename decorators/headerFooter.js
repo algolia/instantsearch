@@ -2,6 +2,8 @@ var React = require('react');
 
 var cx = require('classnames');
 
+var Template = require('../components/Template');
+
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
     render() {
@@ -11,9 +13,9 @@ function headerFooter(ComposedComponent) {
 
       return (
         <div className={cx(this.props.cssClasses.root)}>
-          <this.props.Template templateKey="header" transformData={transformData} />
+          <Template templateKey="header" {...this.props.templateProps} transformData={transformData} />
           <ComposedComponent {...this.props} />
-          <this.props.Template templateKey="footer" transformData={transformData} />
+          <Template templateKey="footer" {...this.props.templateProps} transformData={transformData} />
         </div>
       );
     }

@@ -4,10 +4,7 @@ var ReactDOM = require('react-dom');
 var utils = require('../../lib/utils.js');
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
-var bindProps = require('../../decorators/bindProps');
 var Stats = autoHide(headerFooter(require('../../components/Stats/Stats.js')));
-
-var Template = require('../../components/Template');
 
 var defaultTemplates = {
   header: '',
@@ -58,7 +55,6 @@ function stats({
 
       ReactDOM.render(
         <Stats
-          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           hasResults={results.hits.length > 0}
           hideWhenNoResults={hideWhenNoResults}
@@ -68,6 +64,7 @@ function stats({
           page={results.page}
           processingTimeMS={results.processingTimeMS}
           query={results.query}
+          templateProps={templateProps}
         />,
         containerNode
       );

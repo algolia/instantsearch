@@ -3,10 +3,8 @@ var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
-var bindProps = require('../decorators/bindProps');
 var headerFooter = require('../decorators/headerFooter');
 var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
-var Template = require('../components/Template');
 
 var defaultTemplates = {
   header: '',
@@ -76,11 +74,11 @@ function menu({
 
       ReactDOM.render(
         <RefinementList
-          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={facetValues.length > 0}
           hideWhenNoResults={hideWhenNoResults}
+          templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
         containerNode
