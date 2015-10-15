@@ -6,6 +6,9 @@ import TestUtils from 'react-addons-test-utils';
 import Hits from '../Hits';
 import Template from '../Template';
 
+import toEqualJSX from 'expect-to-equal-jsx';
+expect.extend({toEqualJSX});
+
 describe('Hits', () => {
   var renderer;
   var results;
@@ -29,7 +32,7 @@ describe('Hits', () => {
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(
+    expect(out).toEqualJSX(
       <div>
         <Template
           data={results.hits[0]}
@@ -52,7 +55,7 @@ describe('Hits', () => {
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(
+    expect(out).toEqualJSX(
       <div>
         <Template
           data={results}

@@ -3,11 +3,14 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
+import jsdom from 'mocha-jsdom';
 
 import toggle from '../toggle';
 import RefinementList from '../../../components/RefinementList';
 
 describe('toggle()', () => {
+  jsdom();
+
   var ReactDOM;
   var container;
   var widget;
