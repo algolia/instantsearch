@@ -8440,6 +8440,26 @@ SearchParameters.prototype = {
     return this.setQueryParameters(modification);
   },
   /**
+   * Generic toggle refinement method to use with facet, disjunctive facets
+   * and hierarchical facets
+   * @param  {string} facet the facet to refine
+   * @param  {string} value the associated value
+   * @return {SearchParameters}
+   * @throws will throw an error if the facet is not declared in the settings of the helper
+   */
+  toggleRefinement: function toggleRefinement(facet, value) {
+    if (this.isHierarchicalFacet(facet)) {
+      return this.toggleHierarchicalFacetRefinement(facet, value);
+    } else if (this.isConjunctiveFacet(facet)) {
+      return this.toggleFacetRefinement(facet, value);
+    } else if (this.isDisjunctiveFacet(facet)) {
+      return this.toggleDisjunctiveFacetRefinement(facet, value);
+    }
+
+    throw new Error('Cannot refine the undeclared facet ' + facet +
+      '; it should be added to the helper options facets, disjunctiveFacets or hierarchicalFacets');
+  },
+  /**
    * Switch the refinement applied over a facet/value
    * @method
    * @param {string} facet name of the attribute used for facetting
@@ -9925,16 +9945,7 @@ AlgoliaSearchHelper.prototype.toggleExclude = function() {
  * @fires change
  */
 AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
-  if (this.state.isHierarchicalFacet(facet)) {
-    this.state = this.state.toggleHierarchicalFacetRefinement(facet, value);
-  } else if (this.state.isConjunctiveFacet(facet)) {
-    this.state = this.state.toggleFacetRefinement(facet, value);
-  } else if (this.state.isDisjunctiveFacet(facet)) {
-    this.state = this.state.toggleDisjunctiveFacetRefinement(facet, value);
-  } else {
-    throw new Error('Cannot refine the undeclared facet ' + facet +
-      '; it should be added to the helper options facets, disjunctiveFacets or hierarchicalFacets');
-  }
+  this.state = this.state.toggleRefinement(facet, value);
 
   this._change();
   return this;
@@ -10860,7 +10871,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.0';
+module.exports = '2.6.1';
 
 },{}]},{},[1])(1)
 });
