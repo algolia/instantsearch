@@ -21,7 +21,7 @@ var defaultTemplates = {
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
+ * @param  {String} [options.operator] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
@@ -41,26 +41,21 @@ var defaultTemplates = {
  * @return {Object}
  */
 function refinementList({
-    container = null,
-    facetName = null,
+    container,
+    facetName,
     operator = null,
     sortBy = ['count:desc'],
     limit = 1000,
-    cssClasses = {
-      root: null,
-      list: null,
-      item: null
-    },
+    cssClasses = {},
     hideWhenNoResults = true,
     templates = defaultTemplates,
     transformData,
     singleRefine = false
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, operator[sortBy, limit, rootClass, itemClass, templates.{header,item,footer}, transformData]})';
+  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, singleRefine, hideIfNoResults]})';
 
-  if (container === null ||
-    facetName === null ||
+  if (!container || !facetName ||
     // operator is mandatory when multiple refines allowed
     (operator === null && singleRefine === false) ||
     // operator is not allowed when single refine enabled

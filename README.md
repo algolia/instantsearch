@@ -550,9 +550,9 @@ search.addWidget(
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
+ * @param  {String} [options.operator] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get
+ * @param  {String} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
