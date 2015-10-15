@@ -61,9 +61,18 @@ algoliasearchHelper.SearchParameters = SearchParameters;
  */
 algoliasearchHelper.SearchResults = SearchResults;
 
+/**
+ * URL tools to generate query string and parse them from/into
+ * SearchParameters
+ * @member module:algoliasearchHelper.url
+ * @type {object} {@link url}
+ *
+ */
+algoliasearchHelper.url = require('./src/url');
+
 module.exports = algoliasearchHelper;
 
-},{"./src/SearchParameters":170,"./src/SearchResults":173,"./src/algoliasearch.helper":174,"./src/version.js":178}],2:[function(require,module,exports){
+},{"./src/SearchParameters":171,"./src/SearchResults":174,"./src/algoliasearch.helper":175,"./src/url":179,"./src/version.js":180}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -367,6 +376,31 @@ function isUndefined(arg) {
 }
 
 },{}],3:[function(require,module,exports){
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor
+    var TempCtor = function () {}
+    TempCtor.prototype = superCtor.prototype
+    ctor.prototype = new TempCtor()
+    ctor.prototype.constructor = ctor
+  }
+}
+
+},{}],4:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -459,14 +493,14 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -1056,32 +1090,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":4,"_process":3,"inherits":6}],6:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
-  }
-}
-
-},{}],7:[function(require,module,exports){
+},{"./support/isBuffer":5,"_process":4,"inherits":3}],7:[function(require,module,exports){
 /**
  * Creates an array with all falsey values removed. The values `false`, `null`,
  * `0`, `""`, `undefined`, and `NaN` are falsey.
@@ -7435,6 +7444,71 @@ module.exports = lib;
 },{"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/reduce":19,"lodash/lang/isEmpty":137,"lodash/lang/isFunction":138,"lodash/lang/isString":143,"lodash/lang/isUndefined":145,"lodash/object/defaults":149,"lodash/object/omit":157}],170:[function(require,module,exports){
 'use strict';
 
+var forEach = require('lodash/collection/forEach');
+var filter = require('lodash/collection/filter');
+var map = require('lodash/collection/map');
+var isEmpty = require('lodash/lang/isEmpty');
+var indexOf = require('lodash/array/indexOf');
+
+function filterState(state, filters) {
+  var partialState = {};
+  var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
+  var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
+
+  if (indexOf(attributes, '*') === -1) {
+    forEach(attributes, function(attr) {
+      if (state.isConjunctiveFacet(attr) && state.isFacetRefined(attr)) {
+        if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
+        partialState.facetsRefinements[attr] = state.facetsRefinements[attr];
+      }
+
+      if (state.isDisjunctiveFacet(attr) && state.isDisjunctiveFacetRefined(attr)) {
+        if (!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {};
+        partialState.disjunctiveFacetsRefinements[attr] = state.disjunctiveFacetsRefinements[attr];
+      }
+
+      var numericRefinements = state.getNumericRefinements(attr);
+      if (!isEmpty(numericRefinements)) {
+        if (!partialState.numericRefinements) partialState.numericRefinements = {};
+        partialState.numericRefinements[attr] = state.numericRefinements[attr];
+      }
+    });
+  } else {
+    if (!isEmpty(state.numericRefinements)) {
+      partialState.numericRefinements = state.numericRefinements;
+    }
+    if (!isEmpty(state.facetsRefinements)) partialState.facetsRefinements = state.facetsRefinements;
+    if (!isEmpty(state.disjunctiveFacetsRefinements)) {
+      partialState.disjunctiveFacetsRefinements = state.disjunctiveFacetsRefinements;
+    }
+    if (!isEmpty(state.hierarchicalFacetsRefinements)) {
+      partialState.hierarchicalFacetsRefinements = state.hierarchicalFacetsRefinements;
+    }
+  }
+
+  var searchParameters = filter(
+    filters,
+    function(f) {
+      return f.indexOf('attribute:') === -1;
+    }
+  );
+
+  forEach(
+    searchParameters,
+    function(parameterKey) {
+      partialState[parameterKey] = state[parameterKey];
+    }
+  );
+
+  console.dir(partialState);
+  return partialState;
+}
+
+module.exports = filterState;
+
+},{"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/lang/isEmpty":137}],171:[function(require,module,exports){
+'use strict';
+
 var keys = require('lodash/object/keys');
 var intersection = require('lodash/array/intersection');
 var forOwn = require('lodash/object/forOwn');
@@ -7456,6 +7530,8 @@ var pluck = require('lodash/collection/pluck');
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
 var deepFreeze = require('../functions/deepFreeze');
+
+var filterState = require('./filterState');
 
 var RefinementList = require('./RefinementList');
 
@@ -8140,16 +8216,16 @@ SearchParameters.prototype = {
    * @return {SearchParameters}
    */
   removeNumericRefinement: function(attribute, operator, paramValue) {
-    if (!this.isNumericRefined(attribute, operator)) return this;
-
     if (paramValue !== undefined) {
+      if (!this.isNumericRefined(attribute, operator, paramValue)) return this;
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator && value.val === paramValue;
         })
       });
-    } else if (operator) {
+    } else if (operator !== undefined) {
+      if (!this.isNumericRefined(attribute, operator)) return this;
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
@@ -8158,6 +8234,7 @@ SearchParameters.prototype = {
       });
     }
 
+    if (!this.isNumericRefined(attribute)) return this;
     return this.setQueryParameters({
       page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
@@ -8574,19 +8651,22 @@ SearchParameters.prototype = {
    * contains any refinement value.
    * @method
    * @param {string} attribute attribute for which the refinement is applied
-   * @param {string} operator operator of the refinement
+   * @param {string} [operator] operator of the refinement
    * @param {string} [value] value of the refinement
    * @return {boolean} true if it is refined
    */
   isNumericRefined: function isNumericRefined(attribute, operator, value) {
-    if (isUndefined(value)) {
+    if (isUndefined(value) && isUndefined(operator)) {
+      return !!this.numericRefinements[attribute];
+    } else if (isUndefined(value)) {
       return this.numericRefinements[attribute] &&
         !isUndefined(this.numericRefinements[attribute][operator]);
     }
 
+    var parsedValue = parseFloat(value);
     return this.numericRefinements[attribute] &&
       !isUndefined(this.numericRefinements[attribute][operator]) &&
-      indexOf(this.numericRefinements[attribute][operator], value) !== -1;
+      indexOf(this.numericRefinements[attribute][operator], parsedValue) !== -1;
   },
   /**
    * Returns true if the tag refined, false otherwise
@@ -8719,6 +8799,9 @@ SearchParameters.prototype = {
       return newInstance;
     });
   },
+  filter: function(filters) {
+    return filterState(this, filters);
+  },
   /**
    * Helper function to make it easier to build new instances from a mutating
    * function
@@ -8776,7 +8859,7 @@ SearchParameters.prototype = {
  */
 module.exports = SearchParameters;
 
-},{"../functions/deepFreeze":175,"./RefinementList":169,"lodash/array/indexOf":9,"lodash/array/intersection":10,"lodash/collection/filter":13,"lodash/collection/find":14,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/pluck":18,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isFunction":138,"lodash/lang/isNumber":140,"lodash/lang/isString":143,"lodash/lang/isUndefined":145,"lodash/object/defaults":149,"lodash/object/forOwn":150,"lodash/object/keys":152,"lodash/object/merge":156,"lodash/object/omit":157}],171:[function(require,module,exports){
+},{"../functions/deepFreeze":176,"./RefinementList":169,"./filterState":170,"lodash/array/indexOf":9,"lodash/array/intersection":10,"lodash/collection/filter":13,"lodash/collection/find":14,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/pluck":18,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isFunction":138,"lodash/lang/isNumber":140,"lodash/lang/isString":143,"lodash/lang/isUndefined":145,"lodash/object/defaults":149,"lodash/object/forOwn":150,"lodash/object/keys":152,"lodash/object/merge":156,"lodash/object/omit":157}],172:[function(require,module,exports){
 'use strict';
 
 var invert = require('lodash/object/invert');
@@ -8855,7 +8938,7 @@ module.exports = {
   }
 };
 
-},{"lodash/object/invert":151,"lodash/object/keys":152}],172:[function(require,module,exports){
+},{"lodash/object/invert":151,"lodash/object/keys":152}],173:[function(require,module,exports){
 'use strict';
 
 module.exports = generateTrees;
@@ -8958,7 +9041,7 @@ function formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement) 
   };
 }
 
-},{"../functions/formatSort":176,"lodash/array/last":11,"lodash/collection/find":14,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/collection/sortByOrder":20,"lodash/object/pick":159,"lodash/string/trim":161}],173:[function(require,module,exports){
+},{"../functions/formatSort":177,"lodash/array/last":11,"lodash/collection/find":14,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/collection/sortByOrder":20,"lodash/object/pick":159,"lodash/string/trim":161}],174:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -9511,33 +9594,23 @@ function getFacetStatsIfAvailable(facetList, facetName) {
 
 module.exports = SearchResults;
 
-},{"../functions/formatSort":176,"./generate-hierarchical-tree":172,"lodash/array/compact":7,"lodash/array/findIndex":8,"lodash/array/indexOf":9,"lodash/collection/find":14,"lodash/collection/forEach":15,"lodash/collection/includes":16,"lodash/collection/map":17,"lodash/collection/sortByOrder":20,"lodash/collection/sum":21,"lodash/function/partial":24,"lodash/function/partialRight":25,"lodash/lang/isArray":136,"lodash/lang/isFunction":138,"lodash/object/defaults":149,"lodash/object/merge":156}],174:[function(require,module,exports){
+},{"../functions/formatSort":177,"./generate-hierarchical-tree":173,"lodash/array/compact":7,"lodash/array/findIndex":8,"lodash/array/indexOf":9,"lodash/collection/find":14,"lodash/collection/forEach":15,"lodash/collection/includes":16,"lodash/collection/map":17,"lodash/collection/sortByOrder":20,"lodash/collection/sum":21,"lodash/function/partial":24,"lodash/function/partialRight":25,"lodash/lang/isArray":136,"lodash/lang/isFunction":138,"lodash/object/defaults":149,"lodash/object/merge":156}],175:[function(require,module,exports){
 'use strict';
 
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
 var requestBuilder = require('./requestBuilder');
-var shortener = require('./SearchParameters/shortener');
 
 var util = require('util');
 var events = require('events');
 
 var forEach = require('lodash/collection/forEach');
-var filter = require('lodash/collection/filter');
 var map = require('lodash/collection/map');
 var bind = require('lodash/function/bind');
 var isEmpty = require('lodash/lang/isEmpty');
-var mapKeys = require('lodash/object/mapKeys');
-var mapValues = require('lodash/object/mapValues');
-var pick = require('lodash/object/pick');
 var trim = require('lodash/string/trim');
-var isString = require('lodash/lang/isString');
-var isPlainObject = require('lodash/lang/isPlainObject');
-var isArray = require('lodash/lang/isArray');
-var indexOf = require('lodash/array/indexOf');
 
-var qs = require('qs');
-var encode = require('qs/lib/utils').encode;
+var url = require('./url');
 
 /**
  * Initialize a new AlgoliaSearchHelper
@@ -9969,92 +10042,8 @@ AlgoliaSearchHelper.prototype.setState = function(newState) {
  */
 AlgoliaSearchHelper.prototype.getState = function(filters) {
   if (filters === undefined) return this.state;
-
-  var partialState = {};
-  var attributeFilters = filter(filters, function(f) { return f.indexOf('attribute:') !== -1; });
-  var attributes = map(attributeFilters, function(aF) { return aF.split(':')[1]; });
-  if (indexOf(attributes, '*') === -1) {
-    forEach(attributes, function(attr) {
-      if (this.state.isConjunctiveFacet(attr) && this.state.isFacetRefined(attr)) {
-        if (!partialState.facetsRefinements) partialState.facetsRefinements = {};
-        partialState.facetsRefinements[attr] = this.state.facetsRefinements[attr];
-      }
-
-      if (this.state.isDisjunctiveFacet(attr) && this.state.isDisjunctiveFacetRefined(attr)) {
-        if (!partialState.disjunctiveFacetsRefinements) partialState.disjunctiveFacetsRefinements = {};
-        partialState.disjunctiveFacetsRefinements[attr] = this.state.disjunctiveFacetsRefinements[attr];
-      }
-
-      var numericRefinements = this.state.getNumericRefinements(attr);
-      if (!isEmpty(numericRefinements)) {
-        if (!partialState.numericRefinements) partialState.numericRefinements = {};
-        partialState.numericRefinements[attr] = this.state.numericRefinements[attr];
-      }
-    }, this);
-  } else {
-    if (!isEmpty(this.state.numericRefinements)) {
-      partialState.numericRefinements = this.state.numericRefinements;
-    }
-    if (!isEmpty(this.state.facetsRefinements)) partialState.facetsRefinements = this.state.facetsRefinements;
-    if (!isEmpty(this.state.disjunctiveFacetsRefinements)) {
-      partialState.disjunctiveFacetsRefinements = this.state.disjunctiveFacetsRefinements;
-    }
-    if (!isEmpty(this.state.hierarchicalFacetsRefinements)) {
-      partialState.hierarchicalFacetsRefinements = this.state.hierarchicalFacetsRefinements;
-    }
-  }
-
-  var searchParameters = filter(
-    filters,
-    function(f) { return f.indexOf('attribute:') === -1; });
-
-  forEach(
-    searchParameters,
-    function(parameterKey) {
-      partialState[parameterKey] = this.state[parameterKey];
-    },
-    this
-  );
-
-  return partialState;
+  return this.state.filter(filters);
 };
-
-function recursiveEncode(input) {
-  if (isPlainObject(input)) {
-    return mapValues(input, recursiveEncode);
-  }
-  if (isArray(input)) {
-    return map(input, recursiveEncode);
-  }
-  if (isString(input)) {
-    return encode(input);
-  }
-  return input;
-}
-
-var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
-var stateKeys = shortener.ENCODED_PARAMETERS;
-function sortQueryStringValues(prefixRegexp, a, b) {
-  if (prefixRegexp !== null) {
-    a = a.replace(prefixRegexp, '');
-    b = b.replace(prefixRegexp, '');
-  }
-
-  if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
-    if (a === 'q') return -1;
-    if (b === 'q') return 1;
-
-    var isARefinements = refinementsParameters.indexOf(a) !== -1;
-    var isBRefinements = refinementsParameters.indexOf(b) !== -1;
-    if (isARefinements && !isBRefinements) {
-      return 1;
-    } else if (isBRefinements && !isARefinements) {
-      return -1;
-    }
-  }
-
-  return a.localeCompare(b);
-}
 
 /**
  * Get part of the state as a query string. By default, the output keys will not
@@ -10069,32 +10058,38 @@ function sortQueryStringValues(prefixRegexp, a, b) {
  */
 AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQueryString(options) {
   var filters = options && options.filters || ['query', 'attribute:*'];
-  var moreAttributes = options && options.moreAttributes;
-  var prefixForParameters = options && options.prefix || '';
-
   var partialState = this.getState(filters);
 
-  var partialStateWithEncodedValues = recursiveEncode(partialState);
-
-  var encodedState = mapKeys(
-    partialStateWithEncodedValues,
-    function(v, k) {
-      var shortK = shortener.encode(k);
-      return prefixForParameters + shortK;
-    }
-  );
-
-  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
-  var sort = bind(sortQueryStringValues, null, prefixRegexp);
-  if (moreAttributes) {
-    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
-    var moreQs = qs.stringify(moreAttributes, {encode: false});
-    if (!stateQs) return moreQs;
-    return stateQs + '&' + moreQs;
-  }
-
-  return qs.stringify(encodedState, {encode: false, sort: sort});
+  return url.getQueryStringFromState(partialState, options);
 };
+
+/**
+ * DEPRECATED Read a query string and return an object containing the state. Use
+ * url module.
+ * @deprecated
+ * @static
+ * @param {string} queryString the query string that will be decoded
+ * @param {object} options accepted options :
+ *   - prefix : the prefix used for the saved attributes, you have to provide the
+ *     same that was used for serialization
+ * @return {object} partial search parameters object (same properties than in the
+ * SearchParameters but not exhaustive)
+ * @see {@link url#getStateFromQueryString}
+ */
+AlgoliaSearchHelper.getConfigurationFromQueryString = url.getStateFromQueryString;
+
+/**
+ * DEPRECATED Retrieve an object of all the properties that are not understandable as helper
+ * parameters. Use url module.
+ * @deprecated
+ * @static
+ * @param {string} queryString the query string to read
+ * @param {object} options the options
+ *   - prefixForParameters : prefix used for the helper configuration keys
+ * @return {object} the object containing the parsed configuration that doesn't
+ * to the helper
+ */
+AlgoliaSearchHelper.getForeignConfigurationInQueryString = url.getUnrecognizedParametersInQueryString;
 
 /**
  * Overrides part of the state with the properties stored in the provided query
@@ -10106,72 +10101,11 @@ AlgoliaSearchHelper.prototype.getStateAsQueryString = function getStateAsQuerySt
  */
 AlgoliaSearchHelper.prototype.setStateFromQueryString = function(queryString, options) {
   var triggerChange = options && options.triggerChange || false;
-
-  var configuration = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, options);
-
+  var configuration = url.getStateFromQueryString(queryString, options);
   var updatedState = this.state.setQueryParameters(configuration);
 
   if (triggerChange) this.setState(updatedState);
   else this.overrideStateWithoutTriggeringChangeEvent(updatedState);
-};
-
-/**
- * Read a query string and return an object containing the state
- * @static
- * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options :
- *   - prefix : the prefix used for the saved attributes, you have to provide the
- *     same that was used for serialization
- * @return {object} partial search parameters object (same properties than in the
- * SearchParameters but not exhaustive)
- */
-AlgoliaSearchHelper.getConfigurationFromQueryString = function(queryString, options) {
-  var prefixForParameters = options && options.prefix || '';
-
-  var partialStateWithPrefix = qs.parse(queryString);
-  var prefixRegexp = new RegExp('^' + prefixForParameters);
-  var partialState = mapKeys(
-    partialStateWithPrefix,
-    function(v, k) {
-      if (prefixForParameters && prefixRegexp.test(k)) {
-        var encodedKey = k.replace(prefixRegexp, '');
-        return shortener.decode(encodedKey);
-      }
-      var decodedKey = shortener.decode(k);
-      return decodedKey || k;
-    }
-  );
-
-  var partialStateWithParsedNumbers = SearchParameters._parseNumbers(partialState);
-
-  return pick(partialStateWithParsedNumbers, SearchParameters.PARAMETERS);
-};
-
-/**
- * Retrieve an object of all the properties that are not understandable as helper
- * parameters.
- * @param {string} queryString the query string to read
- * @param {object} options the options
- *   - prefixForParameters : prefix used for the helper configuration keys
- * @return {object} the object containing the parsed configuration that doesn't
- * to the helper
- */
-AlgoliaSearchHelper.getForeignConfigurationInQueryString = function(queryString, options) {
-  var prefixForParameters = options && options.prefix;
-
-  var foreignConfig = {};
-  var config = qs.parse(queryString);
-  if (prefixForParameters) {
-    var prefixRegexp = new RegExp('^' + prefixForParameters);
-    forEach(config, function(v, key) {
-      if (!prefixRegexp.test(key)) foreignConfig[key] = v;
-    });
-  } else {
-    forEach(config, function(v, key) {
-      if (!shortener.decode(key)) foreignConfig[key] = v;
-    });
-  }
-  return foreignConfig;
 };
 
 /**
@@ -10443,7 +10377,7 @@ AlgoliaSearchHelper.prototype._change = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":170,"./SearchParameters/shortener":171,"./SearchResults":173,"./requestBuilder":177,"events":2,"lodash/array/indexOf":9,"lodash/collection/filter":13,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isEmpty":137,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"lodash/string/trim":161,"qs":165,"qs/lib/utils":168,"util":5}],175:[function(require,module,exports){
+},{"./SearchParameters":171,"./SearchResults":174,"./requestBuilder":178,"./url":179,"events":2,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isEmpty":137,"lodash/string/trim":161,"util":6}],176:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -10469,7 +10403,7 @@ var deepFreeze = function(obj) {
 
 module.exports = Object.freeze ? deepFreeze : identity;
 
-},{"lodash/collection/forEach":15,"lodash/lang/isObject":141,"lodash/utility/identity":162}],176:[function(require,module,exports){
+},{"lodash/collection/forEach":15,"lodash/lang/isObject":141,"lodash/utility/identity":162}],177:[function(require,module,exports){
 'use strict';
 
 var reduce = require('lodash/collection/reduce');
@@ -10488,7 +10422,7 @@ module.exports = function formatSort(sortBy) {
   }, [[], []]);
 };
 
-},{"lodash/collection/reduce":19}],177:[function(require,module,exports){
+},{"lodash/collection/reduce":19}],178:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -10768,10 +10702,165 @@ var requestBuilder = {
 
 module.exports = requestBuilder;
 
-},{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/object/merge":156}],178:[function(require,module,exports){
+},{"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/collection/reduce":19,"lodash/lang/isArray":136,"lodash/object/merge":156}],179:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.5.1';
+/**
+ * Module containing the functions to serialize and deserialize
+ * {SearchParameters} in the query string format
+ * @module algoliasearchHelper.url
+ */
+
+var shortener = require('./SearchParameters/shortener');
+var SearchParameters = require('./SearchParameters');
+
+var qs = require('qs');
+
+var bind = require('lodash/function/bind');
+var forEach = require('lodash/collection/forEach');
+var pick = require('lodash/object/pick');
+var map = require('lodash/collection/map');
+var mapKeys = require('lodash/object/mapKeys');
+var mapValues = require('lodash/object/mapValues');
+var isString = require('lodash/lang/isString');
+var isPlainObject = require('lodash/lang/isPlainObject');
+var isArray = require('lodash/lang/isArray');
+var encode = require('qs/lib/utils').encode;
+
+function recursiveEncode(input) {
+  if (isPlainObject(input)) {
+    return mapValues(input, recursiveEncode);
+  }
+  if (isArray(input)) {
+    return map(input, recursiveEncode);
+  }
+  if (isString(input)) {
+    return encode(input);
+  }
+  return input;
+}
+
+var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
+var stateKeys = shortener.ENCODED_PARAMETERS;
+function sortQueryStringValues(prefixRegexp, a, b) {
+  if (prefixRegexp !== null) {
+    a = a.replace(prefixRegexp, '');
+    b = b.replace(prefixRegexp, '');
+  }
+
+  if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
+    if (a === 'q') return -1;
+    if (b === 'q') return 1;
+
+    var isARefinements = refinementsParameters.indexOf(a) !== -1;
+    var isBRefinements = refinementsParameters.indexOf(b) !== -1;
+    if (isARefinements && !isBRefinements) {
+      return 1;
+    } else if (isBRefinements && !isARefinements) {
+      return -1;
+    }
+  }
+
+  return a.localeCompare(b);
+}
+
+/**
+ * Read a query string and return an object containing the state
+ * @param {string} queryString the query string that will be decoded
+ * @param {object} options accepted options :
+ *   - prefix : the prefix used for the saved attributes, you have to provide the
+ *     same that was used for serialization
+ * @return {object} partial search parameters object (same properties than in the
+ * SearchParameters but not exhaustive)
+ */
+exports.getStateFromQueryString = function(queryString, options) {
+  var prefixForParameters = options && options.prefix || '';
+
+  var partialStateWithPrefix = qs.parse(queryString);
+  var prefixRegexp = new RegExp('^' + prefixForParameters);
+  var partialState = mapKeys(
+    partialStateWithPrefix,
+    function(v, k) {
+      if (prefixForParameters && prefixRegexp.test(k)) {
+        var encodedKey = k.replace(prefixRegexp, '');
+        return shortener.decode(encodedKey);
+      }
+      var decodedKey = shortener.decode(k);
+      return decodedKey || k;
+    }
+  );
+
+  var partialStateWithParsedNumbers = SearchParameters._parseNumbers(partialState);
+
+  return pick(partialStateWithParsedNumbers, SearchParameters.PARAMETERS);
+};
+
+/**
+ * Retrieve an object of all the properties that are not understandable as helper
+ * parameters.
+ * @param {string} queryString the query string to read
+ * @param {object} options the options
+ *   - prefixForParameters : prefix used for the helper configuration keys
+ * @return {object} the object containing the parsed configuration that doesn't
+ * to the helper
+ */
+exports.getUnrecognizedParametersInQueryString = function(queryString, options) {
+  var prefixForParameters = options && options.prefix;
+
+  var foreignConfig = {};
+  var config = qs.parse(queryString);
+  if (prefixForParameters) {
+    var prefixRegexp = new RegExp('^' + prefixForParameters);
+    forEach(config, function(v, key) {
+      if (!prefixRegexp.test(key)) foreignConfig[key] = v;
+    });
+  } else {
+    forEach(config, function(v, key) {
+      if (!shortener.decode(key)) foreignConfig[key] = v;
+    });
+  }
+
+  return foreignConfig;
+};
+
+/**
+ * Generate a query string for the state passed according to the options
+ * @param {SearchParameters} state state to serialize
+ * @param {object} [options] May contain the following parameters :
+ *  - prefix : prefix in front of the keys
+ *  - moreAttributes : more values to be added in the query string. Those values
+ *    won't be prefixed.
+ * @return {string} the query string
+ */
+exports.getQueryStringFromState = function(state, options) {
+  var moreAttributes = options && options.moreAttributes;
+  var prefixForParameters = options && options.prefix || '';
+  var partialStateWithEncodedValues = recursiveEncode(state);
+
+  var encodedState = mapKeys(
+    partialStateWithEncodedValues,
+    function(v, k) {
+      var shortK = shortener.encode(k);
+      return prefixForParameters + shortK;
+    }
+  );
+
+  var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
+  var sort = bind(sortQueryStringValues, null, prefixRegexp);
+  if (moreAttributes) {
+    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
+    var moreQs = qs.stringify(moreAttributes, {encode: false});
+    if (!stateQs) return moreQs;
+    return stateQs + '&' + moreQs;
+  }
+
+  return qs.stringify(encodedState, {encode: false, sort: sort});
+};
+
+},{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
+'use strict';
+
+module.exports = '2.6.0';
 
 },{}]},{},[1])(1)
 });

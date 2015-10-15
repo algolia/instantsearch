@@ -1,6 +1,6 @@
 {
   "name": "algoliasearch-helper",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "dependencies": {
     "lodash": {
       "version": "3.10.1",
