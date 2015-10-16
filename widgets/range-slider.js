@@ -3,11 +3,8 @@ var ReactDOM = require('react-dom');
 
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
-var bindProps = require('../decorators/bindProps');
 var headerFooter = require('../decorators/headerFooter');
 var Slider = autoHide(headerFooter(require('../components/Slider')));
-
-var Template = require('../components/Template');
 
 var defaultTemplates = {
   header: '',
@@ -100,13 +97,13 @@ function rangeSlider({
 
       ReactDOM.render(
         <Slider
-          Template={bindProps(Template, templateProps)}
           cssClasses={cssClasses}
           hasResults={stats.min !== null && stats.max !== null}
           hideWhenNoResults={hideWhenNoResults}
           onChange={this._refine.bind(this, helper, stats)}
           range={{min: stats.min, max: stats.max}}
           start={[currentRefinement.min, currentRefinement.max]}
+          templateProps={templateProps}
           tooltips={tooltips}
         />,
         containerNode

@@ -40,8 +40,8 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
-  Template: React.PropTypes.func,
-  results: React.PropTypes.object
+  results: React.PropTypes.object,
+  templateProps: React.PropTypes.object.isRequired
 };
 
 Hits.defaultProps = {

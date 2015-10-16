@@ -2,6 +2,8 @@ var React = require('react');
 
 var cx = require('classnames');
 
+var Template = require('./Template');
+
 class RefinementList extends React.Component {
   refine(value) {
     this.props.toggleRefinement(value);
@@ -20,7 +22,7 @@ class RefinementList extends React.Component {
         key={facetValue[this.props.facetNameKey]}
         onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
       >
-        <this.props.Template data={facetValue} templateKey="item" />
+        <Template data={facetValue} templateKey="item" {...this.props.templateProps} />
         {subList}
       </div>
     );
@@ -77,7 +79,6 @@ class RefinementList extends React.Component {
 }
 
 RefinementList.propTypes = {
-  Template: React.PropTypes.func,
   cssClasses: React.PropTypes.shape({
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
@@ -90,6 +91,7 @@ RefinementList.propTypes = {
   }),
   facetNameKey: React.PropTypes.string,
   facetValues: React.PropTypes.array,
+  templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired
 };
 

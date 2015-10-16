@@ -25,7 +25,7 @@ class Stats extends React.Component {
     };
 
     return (
-      <this.props.Template data={data} templateKey="body" />
+      <Template data={data} templateKey="body" {...this.props.templateProps} />
     );
   }
 }
@@ -36,7 +36,8 @@ Stats.propTypes = {
   nbPages: React.PropTypes.number,
   page: React.PropTypes.number,
   processingTimeMS: React.PropTypes.number,
-  query: React.PropTypes.string
+  query: React.PropTypes.string,
+  templateProps: React.PropTypes.object.isRequired
 };
 
 module.exports = Stats;
