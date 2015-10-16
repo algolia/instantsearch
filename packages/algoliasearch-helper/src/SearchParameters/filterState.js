@@ -56,7 +56,6 @@ function filterState(state, filters) {
     }
   );
 
-  console.dir(partialState);
   return partialState;
 }
 
