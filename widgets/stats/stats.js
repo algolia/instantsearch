@@ -4,13 +4,8 @@ var ReactDOM = require('react-dom');
 var utils = require('../../lib/utils.js');
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
-var Stats = autoHide(headerFooter(require('../../components/Stats/Stats.js')));
 
-var defaultTemplates = {
-  header: '',
-  body: require('./template.html'),
-  footer: ''
-};
+var defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Display various stats about the current search state
@@ -53,6 +48,7 @@ function stats({
         templates
       });
 
+      var Stats = autoHide(headerFooter(require('../../components/Stats/Stats.js')));
       ReactDOM.render(
         <Stats
           cssClasses={cssClasses}

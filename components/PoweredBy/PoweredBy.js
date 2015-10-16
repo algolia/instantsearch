@@ -1,9 +1,7 @@
 var React = require('react');
 var bem = require('../../lib/utils').bemHelper('ais-powered-by');
 var cx = require('classnames');
-var logo = require('url?limit=10000!./algolia_logo.png');
-
-require('style?prepend!raw!./powered-by.css');
+var logo = require('./algolia-logo');
 
 class PoweredBy extends React.Component {
   render() {
@@ -17,7 +15,7 @@ class PoweredBy extends React.Component {
       <div className={cssClasses.root}>
         Powered by
         <a className={cssClasses.link} href="https://www.algolia.com/">
-          <img className={cssClasses.image} src={logo} />
+          <img className={cssClasses.image} src={'data:image/png;base64,' + logo.base64} />
         </a>
       </div>
     );
