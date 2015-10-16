@@ -2,9 +2,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 var defaults = require('lodash/object/defaults');
 
-var utils = require('../lib/utils.js');
-var autoHide = require('../decorators/autoHide');
-var Pagination = autoHide(require('../components/Pagination/Pagination.js'));
+var utils = require('../../lib/utils.js');
+var autoHide = require('../../decorators/autoHide');
 var defaultLabels = {
   previous: '‹',
   next: '›',
@@ -62,7 +61,11 @@ function pagination({
 
   return {
     setCurrentPage: function(helper, pageNumber) {
-      helper.setCurrentPage(pageNumber).search();
+      helper.setCurrentPage(pageNumber);
+      if (scrollToNode !== false) {
+        scrollToNode.scrollIntoView();
+      }
+      helper.search();
     },
 
     render: function({results, helper}) {
@@ -75,6 +78,7 @@ function pagination({
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
+      var Pagination = autoHide(require('../../components/Pagination/Pagination.js'));
       ReactDOM.render(
         <Pagination
           cssClasses={cssClasses}
@@ -85,20 +89,11 @@ function pagination({
           nbHits={nbHits}
           nbPages={nbPages}
           padding={padding}
-          setCurrentPage={setCurrentPage(helper, scrollToNode)}
+          setCurrentPage={this.setCurrentPage.bind(this, helper)}
           showFirstLast={showFirstLast}
         />,
         containerNode
       );
-    }
-  };
-}
-
-function setCurrentPage(helper, scrollToNode) {
-  return askedPage => {
-    helper.setCurrentPage(askedPage).search();
-    if (scrollToNode !== false) {
-      scrollToNode.scrollIntoView();
     }
   };
 }
