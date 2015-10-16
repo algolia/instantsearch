@@ -3,8 +3,6 @@ var React = require('react');
 
 var Nouislider = require('react-nouislider');
 
-require('style?prepend!raw!./index.css');
-
 var cssPrefix = 'as-range-slider--';
 
 class Slider extends React.Component {
