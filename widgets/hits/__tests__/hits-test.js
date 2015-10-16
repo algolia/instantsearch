@@ -3,11 +3,17 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
+import jsdom from 'mocha-jsdom';
+
+import toEqualJSX from 'expect-to-equal-jsx';
+expect.extend({toEqualJSX});
 
 import hits from '../hits';
 import Hits from '../../../components/Hits';
 
 describe('hits()', () => {
+  jsdom();
+
   var ReactDOM;
   var container;
   var templateProps;
@@ -29,7 +35,7 @@ describe('hits()', () => {
       transformData: undefined,
       templatesConfig: undefined,
       templates: defaultTemplates,
-      useCustomCompileOptions: {empty: false, hit: false}
+      useCustomCompileOptions: {hit: false, empty: false}
     };
     widget = hits({container});
     results = {hits: [{first: 'hit', second: 'hit'}]};
@@ -44,10 +50,8 @@ describe('hits()', () => {
     widget.render({results});
 
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(ReactDOM.render.firstCall.args).toEqual([
-      <Hits {...props} />,
-      container
-    ]);
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Hits {...props} />);
+    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
   });
 
   afterEach(() => {

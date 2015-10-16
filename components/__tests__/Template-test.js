@@ -5,6 +5,9 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import Template from '../Template';
 
+import toEqualJSX from 'expect-to-equal-jsx';
+expect.extend({toEqualJSX});
+
 describe('Template', () => {
   var renderer;
   var templates;
@@ -34,7 +37,7 @@ describe('Template', () => {
     renderer.render(<Template {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it works with strings'}}></div>);
+    expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: 'it works with strings'}}></div>);
   });
 
   it('supports templates as functions', () => {
@@ -46,7 +49,7 @@ describe('Template', () => {
     renderer.render(<Template {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it also works with functions'}}></div>);
+    expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: 'it also works with functions'}}></div>);
   });
 
   it('can configure compilation options', () => {
@@ -60,7 +63,7 @@ describe('Template', () => {
     renderer.render(<Template {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it configures compilation delimiters'}}></div>);
+    expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: 'it configures compilation delimiters'}}></div>);
   });
 
   describe('using helpers', () => {
@@ -79,7 +82,7 @@ describe('Template', () => {
       renderer.render(<Template {...props} />);
       let out = renderer.getRenderOutput();
 
-      expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it supports <em>helpers</em>'}}></div>);
+      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: 'it supports <em>helpers</em>'}}></div>);
     });
 
     it('sets the function context (`this`) to the template `data`', done => {
@@ -107,7 +110,7 @@ describe('Template', () => {
     renderer.render(<Template {...props} />);
     let out = renderer.getRenderOutput();
 
-    expect(out).toEqual(<div dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
+    expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
   });
 
   it('throws an error if the transformData is not returning anything', () => {
