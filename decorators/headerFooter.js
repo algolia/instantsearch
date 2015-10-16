@@ -1,6 +1,6 @@
 var React = require('react');
 
-var cx = require('classnames');
+var cx = require('classnames/dedupe');
 
 var Template = require('../components/Template');
 
@@ -10,12 +10,25 @@ function headerFooter(ComposedComponent) {
       // override potential widget's defined transformData,
       // header and footer currently do not have it
       var transformData = null;
+      var templateProps = this.props.templateProps;
+      var classNames = {
+        root: this.props.cssClasses.root,
+        header: cx(this.props.cssClasses.header, 'ais-header'),
+        body: this.props.cssClasses.body,
+        footer: cx(this.props.cssClasses.footer, 'ais-footer')
+      };
 
       return (
-        <div className={cx(this.props.cssClasses.root)}>
-          <Template templateKey="header" {...this.props.templateProps} transformData={transformData} />
-          <ComposedComponent {...this.props} />
-          <Template templateKey="footer" {...this.props.templateProps} transformData={transformData} />
+        <div className={classNames.root}>
+          <div className={classNames.header}>
+            <Template templateKey="header" {...templateProps} transformData={transformData} />
+          </div>
+          <div className={classNames.body}>
+            <ComposedComponent {...this.props} />
+          </div>
+          <div className={classNames.footer}>
+            <Template templateKey="footer" {...templateProps} transformData={transformData} />
+          </div>
         </div>
       );
     }
@@ -23,17 +36,15 @@ function headerFooter(ComposedComponent) {
 
   HeaderFooter.propTypes = {
     cssClasses: React.PropTypes.shape({
-      root: React.PropTypes.oneOfType([
-        React.PropTypes.string,
-        React.PropTypes.arrayOf(React.PropTypes.string)
-      ])
+      root: React.PropTypes.string,
+      header: React.PropTypes.string,
+      body: React.PropTypes.string,
+      footer: React.PropTypes.string
     })
   };
 
   HeaderFooter.defaultProps = {
-    cssClasses: {
-      root: null
-    }
+    cssClasses: {}
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)

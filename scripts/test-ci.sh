@@ -3,5 +3,5 @@
 set -ev # exit when error
 
 npm test
-npm shrinkwrap
+npm shrinkwrap --dev
 ./scripts/validate-commit-msgs.sh
