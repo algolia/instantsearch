@@ -3,10 +3,10 @@
 import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import Stats from '../Stats/Stats';
-import Template from '../Template';
+import Stats from '../Stats';
+import Template from '../../Template';
 
-var bem = require('../../lib/utils').bemHelper('ais-stats');
+var bem = require('../../../lib/utils').bemHelper('ais-stats');
 var cx = require('classnames');
 
 describe('Stats', () => {
