@@ -2,8 +2,6 @@
 
 *instantsearch.js* is a library of widgets to build high performance instant search experiences using Algolia
 
-See the [online demo](http://algolia.github.io/instantsearch.js/).
-
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
 [travis-svg]: https://img.shields.io/travis/algolia/instantsearch.js/master.svg?style=flat-square
