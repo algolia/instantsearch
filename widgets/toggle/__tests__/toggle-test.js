@@ -24,7 +24,6 @@ describe('toggle()', () => {
 
     container = document.createElement('div');
     templateProps = {
-      transformData: undefined,
       templatesConfig: undefined,
       templates: require('../defaultTemplates'),
       useCustomCompileOptions: {header: false, input: false, footer: false}
@@ -54,10 +53,12 @@ describe('toggle()', () => {
       templateProps,
       toggleRefinement: sinon.spy()
     };
+    props.transformData = ReactDOM.render.firstCall.args[0].props.transformData;
+    props.toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
 
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    var a = <RefinementList {...props} />;
-    a = a; // WIP
+    expect(ReactDOM.render.firstCall.args[0]).toEqual(<RefinementList {...props} />);
+    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
   });
 
   afterEach(() => {
