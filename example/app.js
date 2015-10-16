@@ -70,12 +70,13 @@ search.addWidget(
     operator: 'or',
     limit: 10,
     cssClasses: {
+      header: 'panel-heading',
       list: 'nav nav-stacked panel-body',
       item: 'checkbox',
       count: 'badge pull-right'
     },
     templates: {
-      header: '<div class="panel-heading">Brands</div>'
+      header: 'Brands'
     }
   })
 );
@@ -87,10 +88,11 @@ search.addWidget(
     operator: 'and',
     limit: 10,
     cssClasses: {
+      header: 'panel-heading',
       root: 'list-group'
     },
     templates: {
-      header: '<div class="panel-heading">Price ranges</div>',
+      header: 'Price ranges',
       item: require('./templates/and.html')
     },
     transformData: function(data) {
@@ -105,8 +107,11 @@ search.addWidget(
     container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
+    cssClasses: {
+      header: 'panel-heading'
+    },
     templates: {
-      header: '<div class="panel-heading">Shipping</div>',
+      header: 'Shipping',
       body: require('./templates/free-shipping.html')
     }
   })
@@ -118,10 +123,11 @@ search.addWidget(
     facetName: 'categories',
     limit: 10,
     cssClasses: {
+      header: 'panel-heading',
       root: 'list-group'
     },
     templates: {
-      header: '<div class="panel-heading">Categories</div>',
+      header: 'Categories',
       item: require('./templates/category.html')
     }
   })
@@ -132,10 +138,11 @@ search.addWidget(
     container: '#price',
     facetName: 'price',
     cssClasses: {
+      header: 'panel-heading',
       body: 'panel-body'
     },
     templates: {
-      header: '<div class="panel-heading">Price</div>'
+      header: 'Price'
     },
     tooltips: {
       format: function(formattedValue) {
@@ -151,10 +158,11 @@ search.addWidget(
     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
     cssClasses: {
       root: 'list-group',
+      header: 'panel-heading',
       list: 'hierarchical-categories-list'
     },
     templates: {
-      header: '<div class="panel-heading">Hierarchical categories</div>',
+      header: 'Hierarchical categories',
       item: require('./templates/category.html')
     }
   })

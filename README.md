@@ -593,19 +593,25 @@ search.addWidget(
 #### Styling
 
 ```html
-<div class="ais-refinement-list--list">
-  <div class="ais-refinement-list--item">
-    <label class="ais-refinement-list--label">
-      <input type="checkbox" class="ais-refinement-list--checkbox" value="your_value"> Your value
-      <span class="ais-refinement-list--count">42</span>
-    </label>
+<div class="ais-refinement-list">
+  <div class="ais-refinement-list--header ais-header">[custom header template]</div>
+  <div class="ais-refinement-list--body">
+    <div class="ais-refinement-list--list">
+      <div class="ais-refinement-list--item">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_value"> Your value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+      <div class="ais-refinement-list--item ais-refinement-list--item__active">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_selected_value" checked="checked"> Your selected value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+    </div>
   </div>
-  <div class="ais-refinement-list--item ais-refinement-list--item__active">
-    <label class="ais-refinement-list--label">
-      <input type="checkbox" class="ais-refinement-list--checkbox" value="your_selected_value" checked="checked"> Your selected value
-      <span class="ais-refinement-list--count">42</span>
-    </label>
-  </div>
+  <div class="ais-refinement-list--footer ais-footer">[custom footer template]</div>
 </div>
 ```
 
