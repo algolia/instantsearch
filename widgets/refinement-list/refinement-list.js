@@ -87,6 +87,10 @@ function refinementList({
       var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
       cssClasses = {
+        root: cx(bem(null), cssClasses.root),
+        header: cx(bem('header'), cssClasses.header),
+        body: cx(bem('body'), cssClasses.body),
+        footer: cx(bem('footer'), cssClasses.footer),
         list: cx(bem('list'), cssClasses.list),
         item: cx(bem('item'), cssClasses.item),
         active: cx(bem('item', 'active'), cssClasses.active),
