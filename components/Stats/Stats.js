@@ -4,8 +4,6 @@ var Template = require('../Template');
 var bem = require('../../lib/utils').bemHelper('ais-stats');
 var cx = require('classnames');
 
-require('style?prepend!raw!./stats.css');
-
 class Stats extends React.Component {
   render() {
     var data = {

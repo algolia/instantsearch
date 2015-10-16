@@ -2,9 +2,8 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var findIndex = require('lodash/array/findIndex');
-var utils = require('../lib/utils.js');
-var autoHide = require('../decorators/autoHide');
-var IndexSelector = autoHide(require('../components/IndexSelector'));
+var utils = require('../../lib/utils.js');
+var autoHide = require('../../decorators/autoHide');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
@@ -41,13 +40,15 @@ function indexSelector({
     },
 
     setIndex: function(helper, indexName) {
-      helper.setIndex(indexName).search();
+      helper.setIndex(indexName);
+      helper.search();
     },
 
     render: function({helper, results}) {
       let currentIndex = helper.getIndex();
       let hasResults = results.hits.length > 0;
       let setIndex = this.setIndex.bind(this, helper);
+      var IndexSelector = autoHide(require('../../components/IndexSelector'));
       ReactDOM.render(
         <IndexSelector
           cssClasses={cssClasses}

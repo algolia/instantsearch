@@ -5,8 +5,6 @@ var defaultsDeep = require('lodash/object/defaultsDeep');
 var Paginator = require('./Paginator');
 var PaginationLink = require('./PaginationLink');
 
-require('style?prepend!raw!./pagination.css');
-
 var bem = require('../../lib/utils').bemHelper('ais-pagination');
 var cx = require('classnames');
 

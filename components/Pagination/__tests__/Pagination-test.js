@@ -1,0 +1,86 @@
+/* eslint-env mocha */
+
+import React from 'react';
+import expect from 'expect';
+import TestUtils from 'react-addons-test-utils';
+import Pagination from '../Pagination';
+
+var bem = require('../../../lib/utils').bemHelper('ais-pagination');
+var cx = require('classnames');
+
+describe('Pagination', () => {
+  var renderer;
+
+  beforeEach(() => {
+    let {createRenderer} = TestUtils;
+    renderer = createRenderer();
+  });
+
+  context('with stats', () => {
+    it('should not display the first/last link by default', () => {
+      var out = render();
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[0]).toEqual(null);
+      expect(out.props.children[4]).toEqual(null);
+    });
+
+    it('should display the first/last link', () => {
+      var out = render({showFirstLast: true});
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[0]).toNotEqual(null);
+      expect(out.props.children[4]).toNotEqual(null);
+    });
+
+    it('should display the right number of pages', () => {
+      var padding = 4;
+      var out = render({padding});
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[2].length).toEqual(padding + 1 + padding);
+    });
+
+    it('should flag the current page as active', () => {
+      var out = render({currentPage: 0});
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[2][0].props.className)
+        .toEqual(cx(bem('item-page', 'active'), bem('item'), bem('item-page')));
+      expect(out.props.children[2][1].props.className)
+        .toEqual(cx(bem('item'), bem('item-page')));
+    });
+
+    it('should disable the first page if already on it', () => {
+      var out = render({currentPage: 0, showFirstLast: true});
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[0].props.className)
+        .toEqual(cx(bem('item', 'disabled'), bem('item'), bem('item-first')));
+    });
+
+    it('should disable last first page if already on it', () => {
+      var out = render({currentPage: 19, showFirstLast: true});
+
+      expect(out.props.children.length).toEqual(5);
+      expect(out.props.children[4].props.className)
+        .toEqual(cx(bem('item', 'disabled'), bem('item'), bem('item-last')));
+    });
+  });
+
+  function render(extraProps = {}) {
+    var props = {
+      cssClasses: {},
+      labels: {first: '', last: '', next: '', previous: ''},
+      currentPage: 0,
+      nbHits: 200,
+      nbPages: 20,
+      padding: 3,
+      setCurrentPage: () => {},
+      ...extraProps
+    };
+
+    renderer.render(<Pagination {...props} />);
+    return renderer.getRenderOutput();
+  }
+});
