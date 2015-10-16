@@ -6,7 +6,6 @@ var utils = require('../../lib/utils.js');
 
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
 
 var defaultTemplates = require('./defaultTemplates');
 
@@ -20,30 +19,31 @@ var defaultTemplates = require('./defaultTemplates');
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to the item element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
+ * @param  {String|Function} [options.templates.item='<label>
+<input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>'] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function toggle({
-    container = null,
-    facetName = null,
-    label = null,
+    container,
+    facetName,
+    label,
     templates = defaultTemplates,
-    cssClasses = {
-      root: null
-    },
+    cssClasses = {},
     transformData,
     hideWhenNoResults = true
-  }) {
+  } = {}) {
+  var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
 
-  if (container === null || facetName === null || label === null) {
+  if (container === undefined || facetName === undefined || label === undefined) {
     throw new Error(usage);
   }
 
@@ -56,7 +56,7 @@ function toggle({
       var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
 
       var templateProps = utils.prepareTemplateProps({
-        transformData: prepareToggleData(transformData),
+        transformData,
         defaultTemplates,
         templatesConfig,
         templates
@@ -83,25 +83,11 @@ function toggle({
   };
 }
 
-function prepareToggleData(transformData) {
-  return function(data) {
-    var newData = {
-      label: data.name, // Toggle API exposes `label`
-      isRefined: data.isRefined,
-      count: data.count
-    };
-
-    if (transformData) {
-      newData = transformData(newData);
-    }
-    return newData;
-  };
-}
-
 function toggleRefinement(helper, facetName, isRefined) {
   var action = isRefined ? 'remove' : 'add';
 
-  helper[action + 'FacetRefinement'](facetName, true).search();
+  helper[action + 'FacetRefinement'](facetName, true);
+  helper.search();
 }
 
 module.exports = toggle;

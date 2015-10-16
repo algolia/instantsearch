@@ -508,12 +508,14 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to the item element
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
+ * @param  {String|Function} [options.templates.item='<label>
+<input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
+</label>'] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
@@ -593,19 +595,25 @@ search.addWidget(
 #### Styling
 
 ```html
-<div class="ais-refinement-list--list">
-  <div class="ais-refinement-list--item">
-    <label class="ais-refinement-list--label">
-      <input type="checkbox" class="ais-refinement-list--checkbox" value="your_value"> Your value
-      <span class="ais-refinement-list--count">42</span>
-    </label>
+<div class="ais-refinement-list">
+  <div class="ais-refinement-list--header ais-header">[custom header template]</div>
+  <div class="ais-refinement-list--body">
+    <div class="ais-refinement-list--list">
+      <div class="ais-refinement-list--item">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_value"> Your value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+      <div class="ais-refinement-list--item ais-refinement-list--item__active">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_selected_value" checked="checked"> Your selected value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+    </div>
   </div>
-  <div class="ais-refinement-list--item ais-refinement-list--item__active">
-    <label class="ais-refinement-list--label">
-      <input type="checkbox" class="ais-refinement-list--checkbox" value="your_selected_value" checked="checked"> Your selected value
-      <span class="ais-refinement-list--count">42</span>
-    </label>
-  </div>
+  <div class="ais-refinement-list--footer ais-footer">[custom footer template]</div>
 </div>
 ```
 

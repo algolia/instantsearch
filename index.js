@@ -13,7 +13,7 @@ instantsearch.widgets = {
   indexSelector: require('./widgets/index-selector'),
   menu: require('./widgets/menu'),
   refinementList: require('./widgets/refinement-list/refinement-list.js'),
-  pagination: require('./widgets/pagination'),
+  pagination: require('./widgets/pagination/pagination'),
   searchBox: require('./widgets/search-box'),
   rangeSlider: require('./widgets/range-slider'),
   stats: require('./widgets/stats/stats'),
