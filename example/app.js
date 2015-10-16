@@ -70,11 +70,12 @@ search.addWidget(
     operator: 'or',
     limit: 10,
     cssClasses: {
-      list: 'nav nav-stacked panel-body'
+      list: 'nav nav-stacked panel-body',
+      item: 'checkbox',
+      count: 'badge pull-right'
     },
     templates: {
-      header: '<div class="panel-heading">Brands</div>',
-      item: require('./templates/or.html')
+      header: '<div class="panel-heading">Brands</div>'
     }
   })
 );

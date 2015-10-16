@@ -1,8 +1,8 @@
 module.exports = {
   header: '',
-  item: `<label>
-  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}}
-  <span>{{count}}</span>
+  item: `<label class="{{cssClasses.label}}">
+  <input type="checkbox" class="{{cssClasses.checkbox}}" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}}
+  <span class="{{cssClasses.count}}">{{count}}</span>
 </label>`,
   footer: ''
 };

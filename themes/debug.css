@@ -8,8 +8,7 @@
   position:relative;
 }
 [class^=ais-]:hover:after {
-  background:red;
-  background: grey;
+  background: red;
   color: black;
   content:attr(class);
   font-size:1rem;
@@ -20,6 +19,7 @@
   top:0;
   white-space: nowrap;
   z-index:10;
+  font-weight: normal;
 }
 [class^=ais-] [class^=ais-] {
   outline: 1px solid orange !important;
@@ -38,4 +38,13 @@
   background: yellow;
   top:40px;
   z-index:1000;
+}
+[class^=ais-] [class^=ais-] [class^=ais-] [class^=ais-] {
+  outline: 1px solid cyan !important;
+  position:relative;
+}
+[class^=ais-] [class^=ais-] [class^=ais-] [class^=ais-]:hover:after {
+  background: cyan;
+  top:40px;
+  z-index:1100;
 }
