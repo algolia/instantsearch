@@ -16,13 +16,19 @@ class RefinementList extends React.Component {
       <RefinementList {...this.props} facetValues={facetValue.data} /> :
       null;
 
+    var templateData = {...facetValue, cssClasses: this.props.cssClasses};
+
+    var cssClassItem = cx(this.props.cssClasses.item, {
+      [this.props.cssClasses.active]: facetValue.isRefined
+    });
+
     return (
       <div
-        className={cx(this.props.cssClasses.item)}
+        className={cssClassItem}
         key={facetValue[this.props.facetNameKey]}
         onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
       >
-        <Template data={facetValue} templateKey="item" {...this.props.templateProps} />
+        <Template data={templateData} templateKey="item" {...this.props.templateProps} />
         {subList}
       </div>
     );
@@ -96,10 +102,7 @@ RefinementList.propTypes = {
 };
 
 RefinementList.defaultProps = {
-  cssClasses: {
-    item: null,
-    list: null
-  },
+  cssClasses: {},
   facetNameKey: 'name'
 };
 
