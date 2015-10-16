@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.6.2 - 2015-10-16
+  * CHORE : removes console.dir in code
+
 2.6.1 - 2015-10-15 
   * FEATURE : auto magic toggleRefinement on SearchParameters
 
