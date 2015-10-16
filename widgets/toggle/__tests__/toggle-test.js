@@ -11,57 +11,181 @@ import RefinementList from '../../../components/RefinementList';
 describe('toggle()', () => {
   jsdom();
 
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var templateProps;
-  var helper;
+  context('bad usage', () => {
+    var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
 
-  beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
-    toggle.__Rewire__('ReactDOM', ReactDOM);
+    it('throws when no container', () => {
+      expect(() => {
+        toggle();
+      }).toThrow(/Container must be `string` or `HTMLElement`/);
+    });
 
-    container = document.createElement('div');
-    templateProps = {
-      templatesConfig: undefined,
-      templates: require('../defaultTemplates'),
-      useCustomCompileOptions: {header: false, input: false, footer: false}
-    };
-    widget = toggle({container, facetName: 'aFacetName', label: 'A label'});
-    results = {
-      hits: [],
-      getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
-    };
-    helper = {
-      hasRefinements: sinon.stub().returns(false),
-      addFacetRefinement: sinon.spy(),
-      removeFacetRefinement: sinon.spy()
-    };
+    it('throws when no facetName', () => {
+      expect(() => {
+        toggle({container: document.createElement('div')});
+      }).toThrow(usage);
+    });
+
+    it('throws when no label', () => {
+      expect(() => {
+        toggle({container: document.createElement('div'), facetName: 'Hello'});
+      }).toThrow(usage);
+    });
   });
 
-  it('configures hitsPerPage', () => {
-    expect(widget.getConfiguration()).toEqual({facets: ['aFacetName']});
-  });
+  context('good usage', () => {
+    var ReactDOM;
+    var autoHide;
+    var headerFooter;
+    var container;
+    var widget;
+    var facetName;
+    var label;
 
-  it('calls ReactDOM.render(<Toggle props />, container)', () => {
-    widget.render({results, helper});
+    beforeEach(() => {
+      ReactDOM = {render: sinon.spy()};
+      autoHide = sinon.stub().returns(RefinementList);
+      headerFooter = sinon.stub().returns(RefinementList);
 
-    var props = {
-      cssClasses: {item: null, list: null},
-      label: 'A label',
-      templateProps,
-      toggleRefinement: sinon.spy()
-    };
-    props.transformData = ReactDOM.render.firstCall.args[0].props.transformData;
-    props.toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+      toggle.__Rewire__('ReactDOM', ReactDOM);
+      toggle.__Rewire__('autoHide', autoHide);
+      toggle.__Rewire__('headerFooter', headerFooter);
 
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(ReactDOM.render.firstCall.args[0]).toEqual(<RefinementList {...props} />);
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-  });
+      container = document.createElement('div');
+      label = 'Hello, ';
+      facetName = 'world!';
+    });
 
-  afterEach(() => {
-    toggle.__ResetDependency__('ReactDOM');
+    it('configures hitsPerPage', () => {
+      widget = toggle({container, facetName, label});
+      expect(widget.getConfiguration()).toEqual({facets: ['world!']});
+    });
+
+    it('uses autoHide() and headerFooter()', () => {
+      widget = toggle({container, facetName, label});
+      expect(autoHide.calledOnce).toBe(true);
+      expect(headerFooter.calledOnce).toBe(true);
+      expect(headerFooter.calledBefore(autoHide)).toBe(true);
+    });
+
+    context('render', () => {
+      var templateProps;
+      var results;
+      var helper;
+      var props;
+
+      beforeEach(() => {
+        templateProps = {
+          templatesConfig: undefined,
+          templates: require('../defaultTemplates'),
+          useCustomCompileOptions: {header: false, item: false, footer: false},
+          transformData: undefined
+        };
+        helper = {
+          hasRefinements: sinon.stub().returns(false),
+          removeFacetRefinement: sinon.spy(),
+          addFacetRefinement: sinon.spy(),
+          search: sinon.spy()
+        };
+        props = {
+          cssClasses: {},
+          hideWhenNoResults: true,
+          templateProps,
+          toggleRefinement: function() {}
+        };
+      });
+
+      it('calls ReactDOM.render', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        widget = toggle({container, facetName, label});
+        widget.render({results, helper});
+        expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+        expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+      });
+
+      it('with facet values', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        widget = toggle({container, facetName, label});
+        widget.render({results, helper});
+
+        props = {
+          facetValues: [{count: 1, isRefined: false, name: label}],
+          hasResults: true,
+          ...props
+        };
+
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+      });
+
+      it('without facet values', () => {
+        results = {
+          hits: [],
+          getFacetValues: sinon.stub().returns([])
+        };
+        widget = toggle({container, facetName, label});
+        widget.render({results, helper});
+
+        props = {
+          facetValues: [{name: label, isRefined: false, count: null}],
+          hasResults: false,
+          ...props
+        };
+
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+      });
+
+      it('when refined', () => {
+        helper = {
+          hasRefinements: sinon.stub().returns(true)
+        };
+        results = {
+          hits: [{Hello: ', world!'}],
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        widget = toggle({container, facetName, label});
+        widget.render({results, helper});
+
+        props = {
+          facetValues: [{count: 2, isRefined: true, name: label}],
+          hasResults: true,
+          ...props
+        };
+
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+      });
+
+      it('using props.toggleRefinement', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        widget = toggle({container, facetName, label});
+        widget.render({results, helper});
+        var toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        expect(toggleRefinement).toBeA('function');
+        toggleRefinement();
+        expect(helper.addFacetRefinement.calledOnce).toBe(true);
+        expect(helper.addFacetRefinement.calledWithExactly(facetName, true));
+        helper.hasRefinements = sinon.stub().returns(true);
+        ReactDOM.render.reset();
+        widget.render({results, helper});
+        toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        toggleRefinement();
+        expect(helper.removeFacetRefinement.calledOnce).toBe(true);
+        expect(helper.removeFacetRefinement.calledWithExactly(facetName, true));
+      });
+    });
+
+    afterEach(() => {
+      toggle.__ResetDependency__('ReactDOM');
+      toggle.__ResetDependency__('autoHide');
+      toggle.__ResetDependency__('headerFooter');
+    });
   });
 });
