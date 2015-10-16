@@ -112,7 +112,7 @@ search.addWidget(
     },
     templates: {
       header: 'Shipping',
-      body: require('./templates/free-shipping.html')
+      item: require('./templates/free-shipping.html')
     }
   })
 );
