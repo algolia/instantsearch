@@ -105,6 +105,24 @@ describe('Pagination', () => {
       .toEqual(cx(bem('item', 'disabled'), bem('item'), bem('item-last')));
   });
 
+  it('should handle special clicks', () => {
+    var props = {
+      setCurrentPage: sinon.spy()
+    };
+    var preventDefault = sinon.spy();
+    var component = new Pagination(props);
+    ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach((e) => {
+      var event = {preventDefault};
+      event[e] = true;
+      component.handleClick(42, event);
+      expect(props.setCurrentPage.called).toBe(false, 'setCurrentPage never called');
+      expect(preventDefault.called).toBe(false, 'preventDefault never called');
+    });
+    component.handleClick(42, {preventDefault});
+    expect(props.setCurrentPage.calledOnce).toBe(true, 'setCurrentPage called once');
+    expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
+  });
+
   function render(extraProps = {}) {
     var props = {
       cssClasses: {},
