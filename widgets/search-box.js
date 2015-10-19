@@ -72,10 +72,13 @@ function searchBox({
         var PoweredBy = require('../components/PoweredBy/PoweredBy.js');
         var poweredByContainer = document.createElement('div');
         input.parentNode.appendChild(poweredByContainer);
-        var poweredByClassName = cx(bem('powered-by'), cssClasses.poweredBy);
+        var poweredByCssClasses = {
+          root: cx(bem('powered-by'), cssClasses.poweredBy),
+          link: bem('powered-by-link')
+        };
         ReactDOM.render(
           <PoweredBy
-            className={poweredByClassName}
+            cssClasses={poweredByCssClasses}
           />,
           poweredByContainer
         );

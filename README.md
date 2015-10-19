@@ -328,25 +328,18 @@ search.addWidget(
 ```html
 <input class="ais-search-box--input">
 <!-- With poweredBy: true -->
-<div class="ais-search-box--powered-by ais-powered-by">
+<div class="ais-search-box--powered-by">
   Powered by
-  <a class="ais-powered-by--link">
-    <img src="ais-powered-by--image" />
-  </a>
+  <a class="ais-search-box--powered-by-link">Algolia</a>
 </div>
 ```
 
 ```css
-/* With poweredBy; true */
-.ais-powered-by {
-  display: block;
-  font-size: 12px;
-  line-height: 18px;
-  text-align: right;
+.ais-search-box--input {
 }
-.ais-powered-by--image {
-  height: 16px;
-  margin-bottom: 2px;
+.ais-search-box--powered-by {
+}
+.ais-search-box--powered-by-link {
 }
 ```
 ### stats
