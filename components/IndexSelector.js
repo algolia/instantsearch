@@ -1,7 +1,5 @@
 var React = require('react');
 
-var bem = require('../lib/utils').bemHelper('ais-index-selector');
-var cx = require('classnames');
 
 class IndexSelector extends React.Component {
   handleChange(event) {
@@ -11,20 +9,17 @@ class IndexSelector extends React.Component {
   render() {
     var {currentIndex, indices} = this.props;
 
-    var selectClass = cx(bem('select'), this.props.cssClasses.select);
-    var optionClass = cx(bem('option'), this.props.cssClasses.option);
-
     var handleChange = this.handleChange.bind(this);
 
     return (
       <select
-        className={selectClass}
+        className={this.props.cssClasses.root}
         onChange={handleChange}
         value={currentIndex}
       >
-          {indices.map(function(index) {
-            return <option className={optionClass} key={index.name} value={index.name}>{index.label}</option>;
-          })}
+        {indices.map((index) => {
+          return <option className={this.props.cssClasses.item} key={index.name} value={index.name}>{index.label}</option>;
+        })}
       </select>
     );
   }
@@ -32,8 +27,14 @@ class IndexSelector extends React.Component {
 
 IndexSelector.propTypes = {
   cssClasses: React.PropTypes.shape({
-    select: React.PropTypes.string,
-    option: React.PropTypes.string
+    root: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
+    item: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
   }),
   currentIndex: React.PropTypes.string,
   indices: React.PropTypes.array,

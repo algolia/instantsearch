@@ -5,9 +5,6 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import IndexSelector from '../IndexSelector';
 
-var bem = require('../../lib/utils').bemHelper('ais-index-selector');
-var cx = require('classnames');
-
 describe('IndexSelector', () => {
   var renderer;
 
@@ -18,15 +15,21 @@ describe('IndexSelector', () => {
 
 
   it('should render <IndexSelector/>', () => {
-    var out = render({currentIndex: 'index-a'});
+    var out = render({
+      currentIndex: 'index-a',
+      cssClasses: {
+        root: 'custom-root',
+        item: 'custom-item'
+      }
+    });
     expect(out).toEqualJSX(
       <select
-        className={cx(bem('select'))}
+        className="custom-root"
         onChange={() => {}}
         value="index-a"
       >
-        <option className={cx(bem('option'))} value="index-a">Index A</option>
-        <option className={cx(bem('option'))} value="index-b">Index B</option>
+        <option className="custom-item" value="index-a">Index A</option>
+        <option className="custom-item" value="index-b">Index B</option>
       </select>
     );
   });
