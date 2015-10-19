@@ -11,10 +11,12 @@ class RefinementList extends React.Component {
 
   _generateFacetItem(facetValue) {
     var hasChildren = facetValue.data && facetValue.data.length > 0;
+    var subList = hasChildren && <RefinementList {...this.props} facetValues={facetValue.data} />;
+    var data = facetValue;
 
-    var subList = hasChildren ?
-      <RefinementList {...this.props} facetValues={facetValue.data} /> :
-      null;
+    if (this.props.createURL) {
+      data.url = this.props.createURL(facetValue[this.props.facetNameKey]);
+    }
 
     var templateData = {...facetValue, cssClasses: this.props.cssClasses};
 
@@ -78,13 +80,15 @@ class RefinementList extends React.Component {
   render() {
     return (
       <div className={cx(this.props.cssClasses.list)}>
-      {this.props.facetValues.map(this._generateFacetItem, this)}
+        {this.props.facetValues.map(this._generateFacetItem, this)}
       </div>
     );
   }
 }
 
 RefinementList.propTypes = {
+  Template: React.PropTypes.func,
+  createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,

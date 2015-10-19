@@ -68,7 +68,7 @@ function pagination({
       helper.search();
     },
 
-    render: function({results, helper}) {
+    render: function({results, helper, createURL, state}) {
       var currentPage = results.page;
       var nbPages = results.nbPages;
       var nbHits = results.nbHits;
@@ -81,6 +81,7 @@ function pagination({
       var Pagination = autoHide(require('../../components/Pagination/Pagination.js'));
       ReactDOM.render(
         <Pagination
+          createURL={(page) => createURL(state.setPage(page))}
           cssClasses={cssClasses}
           currentPage={currentPage}
           hasResults={hasResults}

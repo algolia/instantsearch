@@ -8,7 +8,7 @@ var RefinementList = autoHide(headerFooter(require('../components/RefinementList
 
 var defaultTemplates = {
   header: '',
-  item: '<a href="{{href}}">{{name}}</a> {{count}}',
+  item: '<a href="{{url}}">{{name}}</a> {{count}}',
   footer: ''
 };
 
@@ -66,7 +66,7 @@ function hierarchicalMenu({
         separator
       }]
     }),
-    render: function({results, helper, templatesConfig}) {
+    render: function({results, helper, templatesConfig, createURL, state}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
 
       var templateProps = utils.prepareTemplateProps({
@@ -78,6 +78,7 @@ function hierarchicalMenu({
 
       ReactDOM.render(
         <RefinementList
+          createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetNameKey="path"
           facetValues={facetValues}

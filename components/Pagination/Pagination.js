@@ -18,7 +18,7 @@ class Pagination extends React.Component {
     this.props.setCurrentPage(pageNumber);
   }
 
-  pageLink({label, ariaLabel, pageNumber, className = null, isDisabled = false, isActive = false}) {
+  pageLink({label, ariaLabel, pageNumber, className = null, isDisabled = false, isActive = false, createURL}) {
     var handleClick = this.handleClick.bind(this, pageNumber);
 
     className = cx(bem('item'), className);
@@ -29,6 +29,7 @@ class Pagination extends React.Component {
       className = cx(bem('item-page', 'active'), this.props.cssClasses.active, className);
     }
 
+    var url = createURL ? createURL(pageNumber) : '#';
 
     return (
       <PaginationLink
@@ -37,55 +38,60 @@ class Pagination extends React.Component {
         handleClick={handleClick}
         key={label}
         label={label}
+        url={url}
       />
     );
   }
 
-  previousPageLink(pager) {
+  previousPageLink(pager, createURL) {
     var className = cx(bem('item-previous'), this.props.cssClasses.previous);
     return this.pageLink({
       ariaLabel: 'Previous',
       className: className,
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.previous,
-      pageNumber: pager.currentPage - 1
+      pageNumber: pager.currentPage - 1,
+      createURL
     });
   }
 
-  nextPageLink(pager) {
+  nextPageLink(pager, createURL) {
     var className = cx(bem('item-next'), this.props.cssClasses.next);
     return this.pageLink({
       ariaLabel: 'Next',
       className: className,
       isDisabled: pager.isLastPage(),
       label: this.props.labels.next,
-      pageNumber: pager.currentPage + 1
+      pageNumber: pager.currentPage + 1,
+      createURL
     });
   }
 
-  firstPageLink(pager) {
+  firstPageLink(pager, createURL) {
     var className = cx(bem('item-first'), this.props.cssClasses.first);
     return this.pageLink({
       ariaLabel: 'First',
       className: className,
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.first,
-      pageNumber: 0
+      pageNumber: 0,
+      createURL
     });
   }
 
-  lastPageLink(pager) {
+  lastPageLink(pager, createURL) {
     var className = cx(bem('item-last'), this.props.cssClasses.last);
     return this.pageLink({
       ariaLabel: 'Last',
       className: className,
       isDisabled: pager.isLastPage(),
       label: this.props.labels.last,
-      pageNumber: pager.total - 1
+      pageNumber: pager.total - 1,
+      createURL
     });
   }
 
-  pages(pager) {
+  pages(pager, createURL) {
     var pages = [];
     var className = cx(bem('item-page'), this.props.cssClasses.item);
 
@@ -97,7 +103,8 @@ class Pagination extends React.Component {
         className: className,
         isActive: isActive,
         label: pageNumber + 1,
-        pageNumber: pageNumber
+        pageNumber: pageNumber,
+        createURL
       }));
     });
 
@@ -112,14 +119,15 @@ class Pagination extends React.Component {
     });
 
     var cssClassesList = cx(bem(null), this.props.cssClasses.root);
+    var createURL = this.props.createURL;
 
     return (
       <ul className={cssClassesList}>
-        {this.props.showFirstLast ? this.firstPageLink(pager) : null}
-        {this.previousPageLink(pager)}
-        {this.pages(pager)}
-        {this.nextPageLink(pager)}
-        {this.props.showFirstLast ? this.lastPageLink(pager) : null}
+        {this.props.showFirstLast ? this.firstPageLink(pager, createURL) : null}
+        {this.previousPageLink(pager, createURL)}
+        {this.pages(pager, createURL)}
+        {this.nextPageLink(pager, createURL)}
+        {this.props.showFirstLast ? this.lastPageLink(pager, createURL) : null}
       </ul>
     );
   }

@@ -99,6 +99,7 @@ describe('pagination()', () => {
       padding: 3,
       setCurrentPage: () => {},
       showFirstLast: true,
+      createURL: () => '#',
       ...extraProps
     };
   }

@@ -76,7 +76,7 @@ function refinementList({
       return widgetConfiguration;
     },
 
-    render: function({results, helper, templatesConfig}) {
+    render: function({results, helper, templatesConfig, state, createURL}) {
       var templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
@@ -101,6 +101,7 @@ function refinementList({
 
       ReactDOM.render(
         <RefinementList
+          createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={facetValues.length > 0}
