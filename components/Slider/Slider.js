@@ -3,7 +3,7 @@ var React = require('react');
 
 var Nouislider = require('react-nouislider');
 
-var cssPrefix = 'as-range-slider--';
+var cssPrefix = 'ais-range-slider--';
 
 class Slider extends React.Component {
 

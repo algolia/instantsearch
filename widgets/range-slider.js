@@ -4,7 +4,7 @@ var ReactDOM = require('react-dom');
 var utils = require('../lib/utils.js');
 var autoHide = require('../decorators/autoHide');
 var headerFooter = require('../decorators/headerFooter');
-var Slider = autoHide(headerFooter(require('../components/Slider')));
+var Slider = autoHide(headerFooter(require('../components/Slider/Slider')));
 
 var defaultTemplates = {
   header: '',
