@@ -9,7 +9,7 @@
     "dev": "npm install && webpack-dev-server --config webpack.example.config.js --hot --inline --no-info",
     "doctoc": "doctoc --maxlevel 3 README.md",
     "gh-pages": "./scripts/gh-pages.sh",
-    "lint": "eslint . --quiet --no-color",
+    "lint": "eslint . --quiet --no-color && stylelint './themes/*/*.css'",
     "release": "./scripts/release.sh",
     "test": "mocha --opts mocha.opts --reporter dot && npm run lint",
     "test:watch": "mocha --opts mocha.opts --reporter min --watch",
@@ -55,6 +55,7 @@
     "semver": "^5.0.3",
     "sinon": "sinonjs/sinon#a97374641599ed2f451e9a22f784060cf7a38b3e",
     "style-loader": "^0.12.4",
+    "stylelint": "^2.0.0",
     "tap-spec": "^4.1.0",
     "uglifyjs": "^2.4.10",
     "url-loader": "^0.5.6",
@@ -71,6 +72,7 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-nouislider": "^1.4.3",
+    "stylelint": "https://registry.npmjs.org/stylelint/-/stylelint-2.0.0.tgz",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"
