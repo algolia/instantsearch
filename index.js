@@ -15,7 +15,7 @@ instantsearch.widgets = {
   refinementList: require('./widgets/refinement-list/refinement-list.js'),
   pagination: require('./widgets/pagination/pagination'),
   searchBox: require('./widgets/search-box'),
-  rangeSlider: require('./widgets/range-slider'),
+  rangeSlider: require('./widgets/range-slider/range-slider'),
   stats: require('./widgets/stats/stats'),
   toggle: require('./widgets/toggle/toggle')
 };

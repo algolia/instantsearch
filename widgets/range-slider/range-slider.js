@@ -1,10 +1,9 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var utils = require('../lib/utils.js');
-var autoHide = require('../decorators/autoHide');
-var headerFooter = require('../decorators/headerFooter');
-var Slider = autoHide(headerFooter(require('../components/Slider/Slider')));
+var utils = require('../../lib/utils.js');
+var autoHide = require('../../decorators/autoHide');
+var headerFooter = require('../../decorators/headerFooter');
 
 var defaultTemplates = {
   header: '',
@@ -47,8 +46,8 @@ function rangeSlider({
       disjunctiveFacets: [facetName]
     }),
     _getCurrentRefinement(helper) {
-      var min = helper.state.getNumericRefinement(facetName, '>=');
-      var max = helper.state.getNumericRefinement(facetName, '<=');
+      var min = helper.getNumericRefinement(facetName, '>=');
+      var max = helper.getNumericRefinement(facetName, '<=');
 
       if (min && min.length) {
         min = min[0];
@@ -95,6 +94,7 @@ function rangeSlider({
         templates
       });
 
+      var Slider = autoHide(headerFooter(require('../../components/Slider/Slider')));
       ReactDOM.render(
         <Slider
           cssClasses={cssClasses}
