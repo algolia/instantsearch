@@ -8,9 +8,6 @@ import PoweredBy from '../PoweredBy';
 import toEqualJSX from 'expect-to-equal-jsx';
 expect.extend({toEqualJSX});
 
-var bem = require('../../../lib/utils').bemHelper('ais-powered-by');
-var cx = require('classnames');
-
 describe('PoweredBy', () => {
   var renderer;
 
@@ -20,13 +17,16 @@ describe('PoweredBy', () => {
   });
 
   it('should render <PoweredBy className="pb" />', () => {
-    var out = render({className: 'pb'});
+    var out = render({
+      cssClasses: {
+        root: 'pb-root',
+        link: 'pb-link'
+      }
+    });
     expect(out).toEqualJSX(
-    <div className={cx('pb', bem(null))}>
+    <div className="pb-root">
       Powered by
-      <a className={cx(bem('link'))} href="https://www.algolia.com/">
-        <img className={cx(bem('image'))} src={'data:image/png;base64,' + require('../algolia-logo').base64} />
-      </a>
+      <a className="pb-link" href="https://www.algolia.com/" target="_blank">Algolia</a>
     </div>);
   });
 
