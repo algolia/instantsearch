@@ -29,7 +29,7 @@ class Pagination extends React.Component {
       className = cx(bem('item-page', 'active'), this.props.cssClasses.active, className);
     }
 
-    var url = createURL ? createURL(pageNumber) : '#';
+    var url = createURL && !isDisabled ? createURL(pageNumber) : '#';
 
     return (
       <PaginationLink
