@@ -7838,6 +7838,12 @@ function SearchParameters(newParameters) {
    * @see https://www.algolia.com/doc#aroundPrecision
    * @member {number}
    */
+  this.minimumAroundRadius = params.minimumAroundRadius;
+  /**
+   * Precision of the geo search.
+   * @see https://www.algolia.com/doc#minimumAroundRadius
+   * @member {number}
+   */
   this.aroundPrecision = params.aroundPrecision;
   /**
    * Geo search inside a box.
@@ -7845,6 +7851,12 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
+  /**
+   * Geo search inside a polygon.
+   * @see https://www.algolia.com/doc#insidePolygon
+   * @member {string}
+   */
+  this.insidePolygon = params.insidePolygon;
 
   // Undocumented parameters, still needed otherwise we fail
   this.offset = params.offset;
@@ -8911,8 +8923,10 @@ var keys2Short = {
   ignorePlurals: 'iP',
   index: 'idx',
   insideBoundingBox: 'iBB',
+  insidePolygon: 'iPg',
   length: 'l',
   maxValuesPerFacet: 'mVPF',
+  minimumAroundRadius: 'mAR',
   minWordSizefor1Typo: 'mWS1T',
   minWordSizefor2Typos: 'mWS2T',
   numericFilters: 'nF',
@@ -10870,7 +10884,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.2';
+module.exports = '2.6.3';
 
 },{}]},{},[1])(1)
 });
