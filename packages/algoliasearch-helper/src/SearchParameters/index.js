@@ -330,6 +330,12 @@ function SearchParameters(newParameters) {
    * @see https://www.algolia.com/doc#aroundPrecision
    * @member {number}
    */
+  this.minimumAroundRadius = params.minimumAroundRadius;
+  /**
+   * Precision of the geo search.
+   * @see https://www.algolia.com/doc#minimumAroundRadius
+   * @member {number}
+   */
   this.aroundPrecision = params.aroundPrecision;
   /**
    * Geo search inside a box.
@@ -337,6 +343,12 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
+  /**
+   * Geo search inside a polygon.
+   * @see https://www.algolia.com/doc#insidePolygon
+   * @member {string}
+   */
+  this.insidePolygon = params.insidePolygon;
 
   // Undocumented parameters, still needed otherwise we fail
   this.offset = params.offset;
