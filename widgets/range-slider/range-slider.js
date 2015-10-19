@@ -46,8 +46,8 @@ function rangeSlider({
       disjunctiveFacets: [facetName]
     }),
     _getCurrentRefinement(helper) {
-      var min = helper.getNumericRefinement(facetName, '>=');
-      var max = helper.getNumericRefinement(facetName, '<=');
+      var min = helper.state.getNumericRefinement(facetName, '>=');
+      var max = helper.state.getNumericRefinement(facetName, '<=');
 
       if (min && min.length) {
         min = min[0];

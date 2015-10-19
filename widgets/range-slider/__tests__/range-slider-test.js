@@ -40,7 +40,9 @@ describe('rangeSlider()', () => {
       })
     };
     helper = {
-      getNumericRefinement: sinon.stub().returns([]),
+      state: {
+        getNumericRefinement: sinon.stub().returns([])
+      },
       addNumericRefinement: sinon.spy(),
       clearRefinements: sinon.spy(),
       search: sinon.spy()
@@ -77,7 +79,7 @@ describe('rangeSlider()', () => {
 
   it('doesn\'t call the refinement functions if not refined', () => {
     widget.render({results, helper});
-    expect(helper.getNumericRefinement.calledTwice).toBe(true, 'getNumericRefinement called once');
+    expect(helper.state.getNumericRefinement.calledTwice).toBe(true, 'getNumericRefinement called once');
     expect(helper.clearRefinements.called).toBe(false, 'clearRefinements never called');
     expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
     expect(helper.search.called).toBe(false, 'search never called');
