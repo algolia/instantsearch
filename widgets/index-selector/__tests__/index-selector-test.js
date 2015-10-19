@@ -17,6 +17,7 @@ describe('indexSelector()', () => {
   var ReactDOM;
   var container;
   var indices;
+  var cssClasses;
   var widget;
   var props;
   var helper;
@@ -32,7 +33,11 @@ describe('indexSelector()', () => {
 
     container = document.createElement('div');
     indices = ['index-a', 'index-b'];
-    widget = indexSelector({container, indices});
+    cssClasses = {
+      root: 'custom-root',
+      item: 'custom-item'
+    };
+    widget = indexSelector({container, indices, cssClasses});
     helper = {
       getIndex: sinon.stub().returns('index-a'),
       setIndex: sinon.spy(),
@@ -50,7 +55,10 @@ describe('indexSelector()', () => {
   it('calls ReactDOM.render(<IndexSelector props />, container)', () => {
     widget.render({helper, results});
     props = {
-      cssClasses: {},
+      cssClasses: {
+        root: 'ais-index-selector custom-root',
+        item: 'ais-index-selector--item custom-item'
+      },
       currentIndex: 'index-a',
       hasResults: false,
       hideWhenNoResults: false,

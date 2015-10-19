@@ -3,6 +3,8 @@ var ReactDOM = require('react-dom');
 
 var findIndex = require('lodash/array/findIndex');
 var utils = require('../../lib/utils.js');
+var bem = utils.bemHelper('ais-index-selector');
+var cx = require('classnames');
 var autoHide = require('../../decorators/autoHide');
 
 /**
@@ -12,8 +14,8 @@ var autoHide = require('../../decorators/autoHide');
  * @param  {String} options.indices[0].name Name of the index to target
  * @param  {String} options.indices[0].label Label displayed in the dropdown
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {String} [options.cssClasses.select] CSS classes added to the parent <select>
- * @param  {String} [options.cssClasses.option] CSS classes added to each <option>
+ * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
@@ -49,6 +51,11 @@ function indexSelector({
       let hasResults = results.hits.length > 0;
       let setIndex = this.setIndex.bind(this, helper);
       var IndexSelector = autoHide(require('../../components/IndexSelector'));
+
+      cssClasses = {
+        root: cx(bem(null), cssClasses.root),
+        item: cx(bem('item'), cssClasses.item)
+      };
       ReactDOM.render(
         <IndexSelector
           cssClasses={cssClasses}
