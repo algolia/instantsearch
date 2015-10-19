@@ -1,11 +1,6 @@
 var React = require('react');
 
 class PaginationLink extends React.Component {
-  handleClick(page, e) {
-    e.preventDefault();
-    this.props.setCurrentPage(page);
-  }
-
   render() {
     var {className, label, ariaLabel, handleClick, url} = this.props;
 

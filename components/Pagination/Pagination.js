@@ -1,6 +1,7 @@
 var React = require('react');
 var forEach = require('lodash/collection/forEach');
 var defaultsDeep = require('lodash/object/defaultsDeep');
+var {isSpecialClick} = require('../../lib/utils.js');
 
 var Paginator = require('./Paginator');
 var PaginationLink = require('./PaginationLink');
@@ -14,6 +15,11 @@ class Pagination extends React.Component {
   }
 
   handleClick(pageNumber, event) {
+    if (isSpecialClick(event)) {
+      // do not alter the default browser behavior
+      // if one special key is down
+      return;
+    }
     event.preventDefault();
     this.props.setCurrentPage(pageNumber);
   }

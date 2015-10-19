@@ -4,6 +4,9 @@ var cx = require('classnames');
 
 var Template = require('./Template');
 
+var {isSpecialClick} = require('../lib/utils.js');
+
+
 class RefinementList extends React.Component {
   refine(value) {
     this.props.toggleRefinement(value);
@@ -53,6 +56,12 @@ class RefinementList extends React.Component {
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
   handleClick(value, e) {
+    if (isSpecialClick(e)) {
+      // do not alter the default browser behavior
+      // if one special key is down
+      return;
+    }
+
     if (e.target.tagName === 'INPUT') {
       this.refine(value);
       return;
