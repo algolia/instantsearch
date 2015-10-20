@@ -1,8 +1,6 @@
 var React = require('react');
 
 var Template = require('../Template');
-var bem = require('../../lib/utils').bemHelper('ais-stats');
-var cx = require('classnames');
 
 class Stats extends React.Component {
   render() {
@@ -16,10 +14,7 @@ class Stats extends React.Component {
       page: this.props.page,
       processingTimeMS: this.props.processingTimeMS,
       query: this.props.query,
-      cssClasses: {
-        root: cx(bem(null), this.props.cssClasses.root),
-        time: cx(bem('time'), this.props.cssClasses.time)
-      }
+      cssClasses: this.props.cssClasses
     };
 
     return (
@@ -29,6 +24,12 @@ class Stats extends React.Component {
 }
 
 Stats.propTypes = {
+  cssClasses: React.PropTypes.shape({
+    time: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
+  }),
   hitsPerPage: React.PropTypes.number,
   nbHits: React.PropTypes.number,
   nbPages: React.PropTypes.number,
