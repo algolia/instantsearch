@@ -43,7 +43,7 @@ search.addWidget(
     container: '#hits',
     templates: {
       empty: require('./templates/no-results.html'),
-      hit: require('./templates/hit.html')
+      item: require('./templates/item.html')
     },
     hitsPerPage: 6
   })

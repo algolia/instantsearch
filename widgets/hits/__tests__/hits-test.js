@@ -60,6 +60,15 @@ describe('hits()', () => {
   });
 
   function getProps() {
-    return {hits: results.hits, results, templateProps};
+    return {
+      hits: results.hits,
+      results,
+      templateProps,
+      cssClasses: {
+        root: 'ais-hits',
+        item: 'ais-hits--item',
+        empty: 'ais-hits__empty'
+      }
+    };
   }
 });

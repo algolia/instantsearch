@@ -9,8 +9,8 @@ describe('hits defaultTemplates', () => {
     expect(defaultTemplates.empty).toBe('No results');
   });
 
-  it('has a `hit` default template', () => {
-    let hit = {
+  it('has a `item` default template', () => {
+    let item = {
       hello: 'there,',
       how: {
         are: 'you?'
@@ -25,6 +25,6 @@ describe('hits defaultTemplates', () => {
   }
 }`;
 
-    expect(defaultTemplates.hit(hit)).toBe(expected);
+    expect(defaultTemplates.item(item)).toBe(expected);
   });
 });
