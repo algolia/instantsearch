@@ -10,8 +10,8 @@ var bemHeader = require('../../lib/utils').bemHelper('ais-header');
 var bemFooter = require('../../lib/utils').bemHelper('ais-footer');
 var cx = require('classnames');
 
-import toEqualJSX from 'expect-to-equal-jsx';
-expect.extend({toEqualJSX});
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
 
 describe('headerFooter', () => {
   var renderer;

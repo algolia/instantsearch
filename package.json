@@ -30,10 +30,10 @@
     "eslint-config-algolia": "^4.1.0",
     "eslint-plugin-react": "^3.5.1",
     "expect": "^1.12.2",
-    "expect-to-equal-jsx": "^1.1.4",
+    "expect-jsx": "^2.0.0",
     "file-loader": "^0.8.4",
     "gh-pages": "^0.4.0",
-    "jsdom": "^6.5.1",
+    "jsdom": "^7.0.1",
     "json": "^9.0.3",
     "karma": "^0.13.10",
     "karma-chrome-launcher": "^0.2.1",
@@ -63,8 +63,8 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
-    "algoliasearch": "^3.8.0",
-    "algoliasearch-helper": "^2.6.2",
+    "algoliasearch": "^3.8.1",
+    "algoliasearch-helper": "^2.6.3",
     "classnames": "^2.1.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
@@ -72,7 +72,6 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
     "react-nouislider": "^1.4.3",
-    "stylelint": "https://registry.npmjs.org/stylelint/-/stylelint-2.0.0.tgz",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"

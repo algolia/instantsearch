@@ -6,8 +6,8 @@ import TestUtils from 'react-addons-test-utils';
 import Hits from '../Hits';
 import Template from '../Template';
 
-import toEqualJSX from 'expect-to-equal-jsx';
-expect.extend({toEqualJSX});
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
 
 describe('Hits', () => {
   var renderer;
