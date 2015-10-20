@@ -27,8 +27,14 @@
 /* STATS */
 .ais-stats {
 }
+.ais-stats--header {
+}
+.ais-stats--body {
+}
 .ais-stats--time {
   font-size: small;
+}
+.ais-stats--footer {
 }
 
 /* INDEX SELECTOR */
@@ -51,7 +57,7 @@
 }
 .ais-pagination--item-previous {
 }
-.ais-pagination--item-page {
+.ais-pagination--item-page { 
 }
 .ais-pagination--item-page__active {
 }

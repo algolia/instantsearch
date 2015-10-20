@@ -51,7 +51,13 @@ describe('stats()', () => {
     expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
     <Stats
-      cssClasses={{}}
+      cssClasses={{
+        body: 'ais-stats--body',
+        header: 'ais-stats--header',
+        footer: 'ais-stats--footer',
+        root: 'ais-stats',
+        time: 'ais-stats--time'
+      }}
       hasResults={true}
       hideWhenNoResults={true}
       hitsPerPage={2}
