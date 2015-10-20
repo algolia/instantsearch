@@ -5,8 +5,8 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import PoweredBy from '../PoweredBy';
 
-import toEqualJSX from 'expect-to-equal-jsx';
-expect.extend({toEqualJSX});
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
 
 describe('PoweredBy', () => {
   var renderer;

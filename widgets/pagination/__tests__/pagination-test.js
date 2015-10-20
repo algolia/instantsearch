@@ -5,8 +5,8 @@ import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 
-import toEqualJSX from 'expect-to-equal-jsx';
-expect.extend({toEqualJSX});
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
 
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';

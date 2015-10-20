@@ -5,8 +5,8 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import autoHide from '../autoHide';
 
-import toEqualJSX from 'expect-to-equal-jsx';
-expect.extend({toEqualJSX});
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
 
 describe('autoHide', () => {
   var renderer;
