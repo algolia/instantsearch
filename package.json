@@ -16,7 +16,7 @@
     "test:watch:browser": "karma start",
     "watch": "webpack --watch"
   },
-  "repository": "algolia/intantsearch.js",
+  "repository": "algolia/instantsearch.js",
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-core": "^5.8.24",
