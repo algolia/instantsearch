@@ -1,16 +1,14 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-var utils = require('../lib/utils.js');
-var autoHide = require('../decorators/autoHide');
-var headerFooter = require('../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../components/RefinementList')));
+var utils = require('../../lib/utils.js');
+var bem = utils.bemHelper('ais-menu');
+var cx = require('classnames/dedupe');
+var autoHide = require('../../decorators/autoHide');
+var headerFooter = require('../../decorators/headerFooter');
+var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
 
-var defaultTemplates = {
-  header: '',
-  item: '<a href="{{url}}">{{name}}</a> {{count}}',
-  footer: ''
-};
+var defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Create a menu out of a facet
@@ -19,27 +17,29 @@ var defaultTemplates = {
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function menu({
-    container = null,
-    facetName = null,
+    container,
+    facetName,
     sortBy = ['count:desc'],
     limit = 100,
-    cssClasses = {
-      root: null,
-      list: null,
-      item: null
-    },
+    cssClasses = {},
     templates = defaultTemplates,
     transformData,
     hideWhenNoResults = true
@@ -47,7 +47,7 @@ function menu({
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
 
-  if (container === null || facetName === null) {
+  if (!container || !facetName) {
     throw new Error(usage);
   }
 
@@ -71,6 +71,18 @@ function menu({
         templatesConfig,
         templates
       });
+
+      cssClasses = {
+        root: cx(bem(null), cssClasses.root),
+        header: cx(bem('header'), cssClasses.header),
+        body: cx(bem('body'), cssClasses.body),
+        footer: cx(bem('footer'), cssClasses.footer),
+        list: cx(bem('list'), cssClasses.list),
+        item: cx(bem('item'), cssClasses.item),
+        active: cx(bem('item', 'active'), cssClasses.active),
+        link: cx(bem('link'), cssClasses.link),
+        count: cx(bem('count'), cssClasses.count)
+      };
 
       ReactDOM.render(
         <RefinementList

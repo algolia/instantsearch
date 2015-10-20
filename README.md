@@ -707,6 +707,12 @@ search.addWidget(
 ```
 
 ```css
+.ais-refinement-list {
+}
+.ais-refinement-list--header {
+}
+.ais-refinement-list--body {
+}
 .ais-refinement-list--list {
 }
 .ais-refinement-list--item {
@@ -718,6 +724,8 @@ search.addWidget(
 .ais-refinement-list--checkbox {
 }
 .ais-refinement-list--count {
+}
+.ais-refinement-list--footer {
 }
 ```
 
@@ -735,15 +743,21 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -762,6 +776,52 @@ search.addWidget(
     facetName: 'categories'
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-menu">
+  <div class="ais-menu--header ais-header">[custom header template]</div>
+  <div class="ais-menu--body">
+    <div class="ais-menu--list">
+      <div class="ais-menu--item">
+        <a class="ais-menu--link" href="/url">
+          Your value
+          <span class="ais-menu--count">42</span>
+        </a>
+      </div>
+      <div class="ais-menu--item ais-menu--item__active">
+        <a class="ais-menu--link" href="/url">
+          Your active value
+          <span class="ais-menu--count">42</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="ais-menu--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-menu {
+}
+.ais-menu--header {
+}
+.ais-menu--body {
+}
+.ais-menu--list {
+}
+.ais-menu--item {
+}
+.ais-menu--item__active {
+}
+.ais-menu--link {
+}
+.ais-menu--count {
+}
+.ais-menu--footer {
+}
 ```
 
 ### rangeSlider

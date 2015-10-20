@@ -121,7 +121,8 @@ search.addWidget(
     limit: 10,
     cssClasses: {
       header: 'panel-heading',
-      root: 'list-group'
+      root: 'list-group',
+      link: 'list-group-item'
     },
     templates: {
       header: 'Categories',
