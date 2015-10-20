@@ -76,6 +76,7 @@ body {
   padding-left: 20px;
 }
 
-.ais-refinement-list--label {
+.ais-refinement-list--label,
+.ais-toggle--label {
   display: block;
 }

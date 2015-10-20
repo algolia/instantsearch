@@ -12,8 +12,6 @@ describe('toggle()', () => {
   jsdom();
 
   context('bad usage', () => {
-    var usage = 'Usage: toggle({container, facetName, label[, template, transformData]})';
-
     it('throws when no container', () => {
       expect(() => {
         toggle();
@@ -23,13 +21,13 @@ describe('toggle()', () => {
     it('throws when no facetName', () => {
       expect(() => {
         toggle({container: document.createElement('div')});
-      }).toThrow(usage);
+      }).toThrow(/Usage: /);
     });
 
     it('throws when no label', () => {
       expect(() => {
         toggle({container: document.createElement('div'), facetName: 'Hello'});
-      }).toThrow(usage);
+      }).toThrow(/Usage: /);
     });
   });
 
@@ -88,7 +86,18 @@ describe('toggle()', () => {
           search: sinon.spy()
         };
         props = {
-          cssClasses: {},
+          cssClasses: {
+            root: 'ais-toggle',
+            header: 'ais-toggle--header',
+            body: 'ais-toggle--body',
+            footer: 'ais-toggle--footer',
+            list: 'ais-toggle--list',
+            item: 'ais-toggle--item',
+            active: 'ais-toggle--item__active',
+            label: 'ais-toggle--label',
+            checkbox: 'ais-toggle--checkbox',
+            count: 'ais-toggle--count'
+          },
           hideWhenNoResults: true,
           templateProps,
           toggleRefinement: function() {},
