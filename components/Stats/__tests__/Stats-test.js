@@ -6,9 +6,6 @@ import TestUtils from 'react-addons-test-utils';
 import Stats from '../Stats';
 import Template from '../../Template';
 
-var bem = require('../../../lib/utils').bemHelper('ais-stats');
-var cx = require('classnames');
-
 describe('Stats', () => {
   var renderer;
 
@@ -21,10 +18,7 @@ describe('Stats', () => {
   it('should render <Template data= />', () => {
     var out = render();
     var defaultProps = {
-      cssClasses: {
-        root: cx(bem(null)),
-        time: cx(bem('time'))
-      },
+      cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
       hasOneResult: false

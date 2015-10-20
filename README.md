@@ -352,25 +352,21 @@ search.addWidget(
 /**
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [options.cssClasses] CSS classes to add to the default template
+ * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {String} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<div class="{{cssClasses.root}}">
-  {{#hasNoResults}}No results{{/hasNoResults}}
-  {{#hasOneResult}}1 result{{/hasOneResult}}
-  {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <span class="{{cssClasses.time}}">found in {{processingTimeMS}}ms</span>
-</div>'] Body template
+ * @param  {String|Function} [options.templates.body] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
-
-
 
 #### Usage
 
@@ -387,6 +383,32 @@ search.addWidget(
     }
   })
 );
+```
+
+### Styling
+
+```html
+<div class="ais-stats">
+  <div class="ais-stats--header ais-header">[custom header template]</div>
+  <div class="ais-stats--body">
+    42 results found in <span class="ais-stats--time">42ms</span>
+  </div>
+  <div class="ais-stats--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-stats {
+}
+.ais-stats--header {
+}
+.ais-stats--body {
+}
+.ais-stats--time {
+  font-size: small;
+}
+.ais-stats--footer {
+}
 ```
 
 ### indexSelector
@@ -623,7 +645,7 @@ search.addWidget(
  * @param  {String} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=1000] How much facet values to get
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
