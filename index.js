@@ -11,7 +11,7 @@ instantsearch.widgets = {
   hierarchicalMenu: require('./widgets/hierarchicalMenu'),
   hits: require('./widgets/hits/hits'),
   indexSelector: require('./widgets/index-selector/index-selector'),
-  menu: require('./widgets/menu'),
+  menu: require('./widgets/menu/menu.js'),
   refinementList: require('./widgets/refinement-list/refinement-list.js'),
   pagination: require('./widgets/pagination/pagination'),
   searchBox: require('./widgets/search-box'),
