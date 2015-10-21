@@ -82,6 +82,7 @@ function hierarchicalMenu({
         body: cx(bem('body'), cssClasses.body),
         footer: cx(bem('footer'), cssClasses.footer),
         list: cx(bem('list'), cssClasses.list),
+        depth: bem('list', 'lvl'),
         item: cx(bem('item'), cssClasses.item),
         active: cx(bem('item', 'active'), cssClasses.active),
         link: cx(bem('link'), cssClasses.link),

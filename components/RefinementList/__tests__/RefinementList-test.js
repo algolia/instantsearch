@@ -54,6 +54,66 @@ describe('RefinementList', () => {
     );
   });
 
+  context('sublist', () => {
+    it('uses autoHide() and headerFooter()', () => {
+      var customProps = {
+        cssClasses: {
+          depth: 'depth',
+          item: 'item',
+          list: 'list'
+        },
+        facetValues: [
+          {
+            name: 'facet1',
+            data: [
+              {name: 'subfacet1'},
+              {name: 'subfacet2'}
+            ]
+          }
+        ]
+      };
+      parentListProps = {
+        className: 'list depth0'
+      };
+      itemProps = {
+        className: 'item',
+        onClick: () => {}
+      };
+      templateProps = {
+        templateKey: 'item',
+        data: {
+          cssClasses: {
+            depth: 'depth',
+            list: 'list',
+            item: 'item'
+          }
+        }
+      };
+      var out = render(customProps);
+      expect(out).toEqualJSX(
+        <div {...parentListProps}>
+          <div {...itemProps}>
+            <Template
+              {...templateProps}
+              data={{
+                ...templateProps.data,
+                name: 'facet1',
+                data: customProps.facetValues[0].data
+              }}
+            />
+            <RefinementList
+              {...templateProps.data}
+              depth={1}
+              facetNameKey="name"
+              facetValues={customProps.facetValues[0].data}
+              templateProps={{}}
+            />
+          </div>
+        </div>
+      );
+    });
+  });
+
   function render(extraProps = {}) {
     var props = getProps(extraProps);
     renderer.render(<RefinementList {...props} templateProps={{}} />);
