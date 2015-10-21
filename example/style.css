@@ -85,7 +85,7 @@ body {
   color: #000;
 }
 
-.facet-value.facet-active label, .facet-value:hover, .ais-hierarchical-menu--item__active > div > .facet-value {
+.facet-value.facet-active label, .facet-active .facet-value, .facet-value:hover, .facet-value:hover label, .ais-hierarchical-menu--item__active > div > .facet-value {
   font-weight: bold;
   color: black;
   text-decoration: none;
@@ -93,6 +93,7 @@ body {
 
 .facet-count {
   color: #999;
+  font-weight: normal;
 }
 
 .hierarchical-categories-list .hierarchical-categories-list {
