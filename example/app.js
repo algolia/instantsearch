@@ -105,11 +105,12 @@ search.addWidget(
     facetName: 'free_shipping',
     label: 'Free Shipping',
     cssClasses: {
-      header: 'panel-heading'
+      header: 'panel-heading',
+      item: 'panel-body',
+      count: 'badge pull-right'
     },
     templates: {
-      header: 'Shipping',
-      item: require('./templates/free-shipping.html')
+      header: 'Shipping'
     }
   })
 );

@@ -621,15 +621,20 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to the item element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<label>
-<input type="checkbox" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>'] Item template
+ * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
@@ -656,6 +661,47 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<div class="ais-toggle">
+  <div class="ais-toggle--header ais-header">[custom header template]</div>
+  <div class="ais-toggle--body">
+    <div class="ais-toggle--list">
+      <div class="ais-toggle--item">
+        <label class="ais-toggle--label">
+          <input type="checkbox" class="ais-toggle--checkbox" value="your_value"> Your value
+          <span class="ais-toggle--count">42</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="ais-toggle--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-toggle {
+}
+.ais-toggle--header {
+}
+.ais-toggle--body {
+}
+.ais-toggle--list {
+}
+.ais-toggle--item {
+}
+.ais-toggle--item__active {
+}
+.ais-toggle--label {
+}
+.ais-toggle--checkbox {
+}
+.ais-toggle--count {
+}
+.ais-toggle--footer {
+}
+```
 ### refinementList
 
 ![Example of the refinementList widget][refinementList]
