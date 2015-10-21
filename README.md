@@ -1031,7 +1031,7 @@ search.addWidget(
 <div class="ais-hierarchical-menu">
   <div class="ais-hierarchical-menu--header ais-header">[custom header template]</div>
   <div class="ais-hierarchical-menu--body">
-    <div class="ais-hierarchical-menu--list">
+    <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl0">
       <div class="ais-hierarchical-menu--item">
         <a class="ais-hierarchical-menu--link" href="/url">
           Your value
@@ -1043,7 +1043,7 @@ search.addWidget(
           Your active value
           <span class="ais-hierarchical-menu--count">42</span>
         </a>
-        <div class="ais-hierarchical-menu--list">
+        <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl1">
           <div class="ais-hierarchical-menu--item">
             <a class="ais-hierarchical-menu--link" href="/url">
               Your subvalue 1
@@ -1072,6 +1072,10 @@ search.addWidget(
 .ais-hierarchical-menu--body {
 }
 .ais-hierarchical-menu--list {
+}
+.ais-hierarchical-menu--list__lvl0 {
+}
+.ais-hierarchical-menu--list__lvl1 {
 }
 .ais-hierarchical-menu--item {
 }
