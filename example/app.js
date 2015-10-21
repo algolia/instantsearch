@@ -79,27 +79,6 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.refinementList({
-    container: '#price-range',
-    facetName: 'price_range',
-    operator: 'and',
-    limit: 10,
-    cssClasses: {
-      header: 'panel-heading',
-      root: 'list-group'
-    },
-    templates: {
-      header: 'Price ranges',
-      item: require('./templates/and.html')
-    },
-    transformData: function(data) {
-      data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
-      return data;
-    }
-  })
-);
-
-search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free-shipping',
     facetName: 'free_shipping',
@@ -167,23 +146,26 @@ search.addWidget(
   })
 );
 
-
 search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
 
 search.addWidget(
   instantsearch.widgets.priceRanges({
-    container: '#price_ranges',
+    container: '#price-ranges',
     facetName: 'price',
+    templates: {
+      header: 'Price ranges'
+    },
     cssClasses: {
-      root: 'nav nav-stacked',
+      header: 'panel-heading',
+      body: 'nav nav-stacked',
       range: 'list-group-item',
-      inputGroup: 'list-group-item form-inline',
+      form: 'list-group-item form-inline',
       input: 'form-control input-sm fixed-input-sm',
       button: 'btn btn-default btn-sm'
     },
-    template: require('./templates/price_range.html')
+    template: require('./templates/price-ranges.html')
   })
 );
 

@@ -1,4 +1,5 @@
 module.exports = {
+  header: ``,
   range: `
     {{#from}}
       {{^to}}
@@ -15,5 +16,6 @@ module.exports = {
       {{/from}}
       \${{to}}
     {{/to}}
-    <span>{{count}}</span>`
+    <span>{{count}}</span>`,
+  footer: ``
 };

@@ -10,9 +10,13 @@ class PriceRange extends React.Component {
     this.props.refine(from, to);
   }
 
+  _handleSubmit(e) {
+    this.refine(+this.refs.from.value || undefined, +this.refs.to.value || undefined, e);
+  }
+
   render() {
     return (
-      <div className={this.props.cssClasses.root}>
+      <div>
         {this.props.facetValues.map(facetValue => {
           var key = facetValue.from + '_' + facetValue.to;
           return (
@@ -26,7 +30,11 @@ class PriceRange extends React.Component {
             </a>
           );
         })}
-        <div className={this.props.cssClasses.inputGroup}>
+        <form
+          className={this.props.cssClasses.form}
+          onSubmit={this._handleSubmit.bind(this)}
+          ref="form"
+        >
           <label>
             {this.props.labels.currency}{' '}
             <input className={this.props.cssClasses.input} ref="from" type="number" />
@@ -39,11 +47,9 @@ class PriceRange extends React.Component {
           {' '}
           <button
             className={this.props.cssClasses.button}
-            onClick={(e) => {
-              this.refine(+this.refs.from.value || undefined, +this.refs.to.value || undefined, e);
-            }}
+            type="submit"
           >{this.props.labels.button}</button>
-        </div>
+        </form>
       </div>
     );
   }
@@ -51,10 +57,6 @@ class PriceRange extends React.Component {
 
 PriceRange.propTypes = {
   cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
     range: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.arrayOf(React.PropTypes.string)
