@@ -28,22 +28,34 @@ describe('Hits', () => {
       objectID: 'mom'
     }]};
 
-    let props = {results, templateProps};
+    let props = {
+      results,
+      templateProps,
+      cssClasses: {
+        root: 'custom-root',
+        item: 'custom-item',
+        empty: 'custom-empty'
+      }
+    };
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
     expect(out).toEqualJSX(
-      <div>
-        <Template
-          data={results.hits[0]}
-          key={results.hits[0].objectID}
-          templateKey="hit"
-        />
-        <Template
-          data={results.hits[1]}
-          key={results.hits[1].objectID}
-          templateKey="hit"
-        />
+      <div className="custom-root">
+        <div className="custom-item">
+          <Template
+            data={results.hits[0]}
+            key={results.hits[0].objectID}
+            templateKey="item"
+          />
+        </div>
+        <div className="custom-item">
+          <Template
+            data={results.hits[1]}
+            key={results.hits[1].objectID}
+            templateKey="item"
+          />
+        </div>
       </div>
     );
   });
@@ -51,12 +63,20 @@ describe('Hits', () => {
   it('renders a specific template when no results', () => {
     results = {hits: []};
 
-    let props = {results, templateProps};
+    let props = {
+      results,
+      templateProps,
+      cssClasses: {
+        root: 'custom-root',
+        item: 'custom-item',
+        empty: 'custom-empty'
+      }
+    };
     renderer.render(<Hits {...props} />);
     let out = renderer.getRenderOutput();
 
     expect(out).toEqualJSX(
-      <div>
+      <div className="custom-root custom-empty">
         <Template
           data={results}
           templateKey="empty"

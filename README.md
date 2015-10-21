@@ -533,14 +533,16 @@ search.addWidget(
 /**
  * Display the list of results (hits) from the current search
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {String} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {String} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {String} [options.cssClasses.item] CSS class to add to each result
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.empty=''] Template to use when there are no results.
- * Gets passed the `result` from the API call.
- * @param  {String|Function} [options.templates.hit=''] Template to use for each result.
- * Gets passed the `hit` of the result.
+ * @param  {String|Function} [options.templates.item=''] Template to use for each result.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
  * @param  {Function} [options.transformData.empty=''] Method used to change the object passed to the empty template
- * @param  {Function} [options.transformData.hit=''] Method used to change the object passed to the hit template
+ * @param  {Function} [options.transformData.item=''] Method used to change the object passed to the item template
  * @param  {Number} [hitsPerPage=20] The number of hits to display per page
  * @return {Object}
  */
@@ -558,10 +560,10 @@ search.addWidget(
     container: '#hits',
     templates: {
       empty: 'No results'
-      hit: '<div><strong>{{name}}</strong> {{price}}</div>'
+      item: '<div><strong>{{name}}</strong> {{price}}</div>'
     },
     transformData: {
-      hit: function(data) {
+      item: function(data) {
         data.price = data.price + '$';
         return data;
       }
@@ -569,6 +571,29 @@ search.addWidget(
     hitsPerPage: 20
   })
 );
+```
+
+### Styling
+
+```html
+<div class="ais-hits">
+  <div class="ais-hits--item">Hit content</div>
+  ...
+  <div class="ais-hits--item">Hit content</div>
+</div>
+<!-- If no results -->
+<div class="ais-hits ais-hits__empty">
+  No results
+</div>
+```
+
+```css
+.ais-hits {
+}
+.ais-hits--item {
+}
+.ais-hits__empty {
+}
 ```
 
 ### toggle

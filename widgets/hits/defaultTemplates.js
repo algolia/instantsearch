@@ -1,6 +1,6 @@
 module.exports = {
   empty: 'No results',
-  hit: function(data) {
+  item: function(data) {
     return JSON.stringify(data, null, 2);
   }
 };

@@ -5,23 +5,26 @@ var Template = require('./Template');
 
 class Hits extends React.Component {
   renderWithResults() {
-    var renderedHits = map(this.props.results.hits, (hit) => {
+    var renderedHits = map(this.props.results.hits, hit => {
       return (
-        <Template
-          data={hit}
-          key={hit.objectID}
-          templateKey="hit"
-          {...this.props.templateProps}
-        />
+        <div className={this.props.cssClasses.item}>
+          <Template
+            data={hit}
+            key={hit.objectID}
+            templateKey="item"
+            {...this.props.templateProps}
+          />
+        </div>
       );
     });
 
-    return <div>{renderedHits}</div>;
+    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
   }
 
   renderNoResults() {
+    var className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
     return (
-      <div>
+      <div className={className}>
         <Template
           data={this.props.results}
           templateKey="empty"
