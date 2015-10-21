@@ -1,0 +1,11 @@
+@mixin component($component)
+  .ais-#{$component}
+    @content
+
+@mixin modifier($modifier)
+  &--#{$modifier}
+    @content
+
+@mixin element($element)
+  &__#{$element}
+    @content

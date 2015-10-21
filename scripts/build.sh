@@ -2,6 +2,8 @@
 
 set -ev # exit when error
 
+ROOT=`dirname "$0"`/..
+
 mkdir -p dist/themes
 
 license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia SAS | github.com/algolia/instantsearch.js */"
@@ -17,8 +19,11 @@ printf "\n\nBuild: minify"
 cat dist/$bundle.js | uglifyjs -c warnings=false -m > dist/$bundle.min.js
 
 printf "\n\nBuild: CSS"
-cp themes/default.css dist/themes/default.css
-cleancss dist/themes/default.css > dist/themes/default.min.css
+for source in "$ROOT"/themes/[^_]*.sass; do
+  base=`basename "$source" .sass`
+  node-sass "$source" > dist/themes/$base.css
+  cleancss dist/themes/$base.css > dist/themes/$base.min.css
+done
 
 printf "\n\nBuild: prepend license"
 printf "$license" | cat - dist/"$bundle".js > /tmp/out && mv /tmp/out dist/"$bundle".js

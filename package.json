@@ -49,6 +49,7 @@
     "mocha-jsdom": "^1.0.0",
     "mversion": "^1.10.1",
     "nd": "^1.2.0",
+    "node-sass": "^3.3.3",
     "nodemon": "^1.7.1",
     "phantomjs": "^1.9.18",
     "pretty-bytes": "^2.0.1",
