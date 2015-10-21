@@ -27,8 +27,13 @@ API is unstable. We welcome any idea and pull request.
 - [Templates](#templates)
   - [Examples](#examples)
   - [Template configuration](#template-configuration)
+- [Themes](#themes)
 - [Development workflow](#development-workflow)
 - [Test](#test)
+- [Instant search configuration](#instant-search-configuration)
+  - [Number locale](#number-locale)
+  - [Initial search parameters](#initial-search-parameters)
+  - [URL synchronisation](#url-synchronisation)
 - [Available widgets](#available-widgets)
   - [searchBox](#searchbox)
   - [stats](#stats)
@@ -39,7 +44,6 @@ API is unstable. We welcome any idea and pull request.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
-  - [urlSync](#urlsync)
   - [hierarchicalMenu](#hierarchicalmenu)
 - [Browser support](#browser-support)
 
@@ -183,6 +187,23 @@ search.templatesConfig.helpers.discount = function(/*text, render*/) {
 You can configure the options passed to `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
 
 Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
+
+## Themes
+
+To help get you started, we provide a default theme for the widgets. This is
+just a `css` file that you have to add to your page to add basic styling.
+
+It is available from [jsDelivr](http://www.jsdelivr.com/):
+
+```html
+<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.min.css">
+<!-- or the unminified version -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.css">
+```
+
+It contains (empty) selectors for all the possible markup added by the widgets,
+so you can use it as a base for creating your own custom theme. We will provide
+more themes in the future.
 
 ## Development workflow
 
@@ -385,7 +406,7 @@ search.addWidget(
 );
 ```
 
-### Styling
+#### Styling
 
 ```html
 <div class="ais-stats">
@@ -573,7 +594,7 @@ search.addWidget(
 );
 ```
 
-### Styling
+#### Styling
 
 ```html
 <div class="ais-hits">
