@@ -22,7 +22,7 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
-    var className = [this.props.cssClasses.root, this.props.cssClasses.empty].join(' ');
+    var className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
     return (
       <div className={className}>
         <Template
