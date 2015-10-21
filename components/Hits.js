@@ -7,10 +7,9 @@ class Hits extends React.Component {
   renderWithResults() {
     var renderedHits = map(this.props.results.hits, hit => {
       return (
-        <div className={this.props.cssClasses.item}>
+        <div className={this.props.cssClasses.item} key={hit.objectID}>
           <Template
             data={hit}
-            key={hit.objectID}
             templateKey="item"
             {...this.props.templateProps}
           />
