@@ -14,6 +14,11 @@ webpack
 printf "\n\nBuild: minify"
 cat dist/$bundle.js | uglifyjs -c warnings=false -m > dist/$bundle.min.js
 
+printf "\n\nBuild: CSS"
+mkdir -p dist/themes
+cp themes/default/default.css dist/themes
+cleancss -o dist/themes/default.min.css dist/themes/default.css
+
 printf "\n\nBuild: prepend license"
 printf "$license" | cat - dist/"$bundle".js > /tmp/out && mv /tmp/out dist/"$bundle".js
 printf "$license" | cat - dist/"$bundle".min.js > /tmp/out && mv /tmp/out dist/"$bundle".min.js
