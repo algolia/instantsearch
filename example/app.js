@@ -106,7 +106,7 @@ search.addWidget(
     label: 'Free Shipping',
     cssClasses: {
       header: 'panel-heading',
-      item: 'panel-body',
+      item: 'panel-body checkbox',
       count: 'badge pull-right'
     },
     templates: {
