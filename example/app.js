@@ -69,7 +69,8 @@ search.addWidget(
     cssClasses: {
       header: 'facet-title',
       item: 'facet-value checkbox',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Brands'
@@ -86,7 +87,8 @@ search.addWidget(
     cssClasses: {
       header: 'facet-title',
       item: 'facet-value checkbox',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Price ranges'
@@ -106,7 +108,8 @@ search.addWidget(
     cssClasses: {
       header: 'facet-title',
       item: 'facet-value checkbox',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Shipping'
@@ -122,7 +125,8 @@ search.addWidget(
     cssClasses: {
       header: 'facet-title',
       link: 'facet-value',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Categories'
