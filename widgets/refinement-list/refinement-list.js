@@ -7,7 +7,7 @@ var cx = require('classnames/dedupe');
 
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
+var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates');
 

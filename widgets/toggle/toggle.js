@@ -46,7 +46,7 @@ function toggle({
     transformData,
     hideWhenNoResults = true
   } = {}) {
-  var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
+  var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideWhenNoResults]})';
 
