@@ -28,7 +28,7 @@ describe('Slider', () => {
   it('should render <NouiSlider {...props} />', () => {
     var out = render();
     expect(out).toEqualJSX(
-      <div className="">
+      <div>
         <Nouislider
           animate={false}
           behaviour="snap"
