@@ -957,12 +957,18 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class added to the root element
- * @param  {String|String[]} [options.cssClasses.list] CSS class added to each list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class added to each item element
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template (root level only)
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`, `path`
+ * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
@@ -996,6 +1002,66 @@ search.addWidget(
     attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2']
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-hierarchical-menu">
+  <div class="ais-hierarchical-menu--header ais-header">[custom header template]</div>
+  <div class="ais-hierarchical-menu--body">
+    <div class="ais-hierarchical-menu--list">
+      <div class="ais-hierarchical-menu--item">
+        <a class="ais-hierarchical-menu--link" href="/url">
+          Your value
+          <span class="ais-hierarchical-menu--count">42</span>
+        </a>
+      </div>
+      <div class="ais-hierarchical-menu--item ais-hierarchical-menu--item__active">
+        <a class="ais-hierarchical-menu--link" href="/url">
+          Your active value
+          <span class="ais-hierarchical-menu--count">42</span>
+        </a>
+        <div class="ais-hierarchical-menu--list">
+          <div class="ais-hierarchical-menu--item">
+            <a class="ais-hierarchical-menu--link" href="/url">
+              Your subvalue 1
+              <span class="ais-hierarchical-menu--count">10</span>
+            </a>
+          </div>
+          <div class="ais-hierarchical-menu--item">
+            <a class="ais-hierarchical-menu--link" href="/url">
+              Your subvalue 2
+              <span class="ais-hierarchical-menu--count">32</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ais-hierarchical-menu--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-hierarchical-menu {
+}
+.ais-hierarchical-menu--header {
+}
+.ais-hierarchical-menu--body {
+}
+.ais-hierarchical-menu--list {
+}
+.ais-hierarchical-menu--item {
+}
+.ais-hierarchical-menu--item__active {
+}
+.ais-hierarchical-menu--link {
+}
+.ais-hierarchical-menu--count {
+}
+.ais-hierarchical-menu--footer {
+}
 ```
 
 ## Browser support
