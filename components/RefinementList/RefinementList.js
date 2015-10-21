@@ -2,9 +2,9 @@ var React = require('react');
 
 var cx = require('classnames');
 
-var Template = require('./Template');
+var Template = require('../Template');
 
-var {isSpecialClick} = require('../lib/utils.js');
+var {isSpecialClick} = require('../../lib/utils.js');
 
 
 class RefinementList extends React.Component {
