@@ -5,6 +5,9 @@ import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('rangeSlider()', () => {
   jsdom({useEach: true});
 

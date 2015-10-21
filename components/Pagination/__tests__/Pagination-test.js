@@ -7,6 +7,9 @@ import TestUtils from 'react-addons-test-utils';
 import Pagination from '../Pagination';
 import PaginationLink from '../PaginationLink';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 var bem = require('../../../lib/utils').bemHelper('ais-pagination');
 var cx = require('classnames');
 

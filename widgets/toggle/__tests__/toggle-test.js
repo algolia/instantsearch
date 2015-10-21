@@ -8,6 +8,9 @@ import jsdom from 'mocha-jsdom';
 import toggle from '../toggle';
 import RefinementList from '../../../components/RefinementList';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('toggle()', () => {
   jsdom();
 

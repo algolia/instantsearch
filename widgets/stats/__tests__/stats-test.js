@@ -8,6 +8,9 @@ import jsdom from 'mocha-jsdom';
 import stats from '../stats';
 import Stats from '../../../components/Stats/Stats';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('stats()', () => {
   jsdom();
 
