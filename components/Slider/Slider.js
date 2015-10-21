@@ -1,4 +1,3 @@
-var cx = require('classnames');
 var React = require('react');
 
 var Nouislider = require('react-nouislider');
@@ -14,7 +13,7 @@ class Slider extends React.Component {
 
   render() {
     return (
-      <div className={cx(this.props.cssClasses.body)}>
+      <div>
         <Nouislider
           {...this.props}
           animate={false}
