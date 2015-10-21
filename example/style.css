@@ -29,7 +29,7 @@ body {
 
 .hit em {
   font-style: normal;
-  background-color: lightcyan;
+  background-color: #ffffe5;
 }
 
 /* Force widths and heights to avoid vertical size changes.
@@ -59,21 +59,46 @@ body {
   margin-top: 20px;
 }
 
-#price .panel-body {
-  padding: 45px 15px;
+#price .ais-header, #price .ais-footer {
+  margin-bottom: 45px;
 }
 
 .hit h3, .hit h4 {
   margin-top: 0;
 }
 
-.panel-heading {
-  background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
-  border-color: #ddd;
+.facet {
+  margin-bottom: 20px;
+}
+
+.facet-title {
+  text-transform: uppercase;
+  border-bottom: 2px solid #eee;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.facet-value {
+  font-size: 13px;
+  line-height: 1.2;
+  text-decoration: none;
+  color: #000;
+}
+
+.ais-menu--item__active .facet-value, .facet-value:hover, .ais-refinement-list--item__active .ais-refinement-list--label, .ais-hierarchical-menu--item__active > div > .facet-value {
+  font-weight: bold;
+  color: black;
+  text-decoration: none;
+}
+
+.facet-count {
+  color: #999;
 }
 
 .hierarchical-categories-list .hierarchical-categories-list {
-  padding-left: 20px;
+  border-left: 2px solid #eee;
+  margin-left: 10px;
+  padding-left: 10px;
 }
 
 .ais-refinement-list--label,
