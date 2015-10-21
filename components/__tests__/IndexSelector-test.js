@@ -5,6 +5,9 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import IndexSelector from '../IndexSelector';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('IndexSelector', () => {
   var renderer;
 

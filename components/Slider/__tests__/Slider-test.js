@@ -5,6 +5,9 @@ import expect from 'expect';
 import jsdom from 'mocha-jsdom';
 import TestUtils from 'react-addons-test-utils';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('Slider', () => {
   jsdom({useEach: true}); // to ensure the global.window is set
 
