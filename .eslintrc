@@ -1,15 +1,6 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "airbnb",
-    "algolia/es6"
-  ],
+  "extends": "algolia",
   "rules": {
-    "valid-jsdoc": [
-      2,
-      {
-        "requireReturnDescription": false
-      }
-    ]
+    "no-unused-vars": [2, {"vars": "local", "args": "after-used", "varsIgnorePattern": "^React$"}],
   }
 }

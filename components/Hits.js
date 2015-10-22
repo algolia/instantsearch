@@ -5,25 +5,36 @@ var Template = require('./Template');
 
 class Hits extends React.Component {
   renderWithResults() {
-    var renderedHits = map(this.props.hits, (hit) => {
+    var renderedHits = map(this.props.results.hits, hit => {
       return (
-        <this.props.Template templateKey="hit" data={hit} key={hit.objectID} />
+        <div className={this.props.cssClasses.item} key={hit.objectID}>
+          <Template
+            data={hit}
+            templateKey="item"
+            {...this.props.templateProps}
+          />
+        </div>
       );
     });
 
-    return <div>{renderedHits}</div>;
+    return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
   }
 
   renderNoResults() {
+    var className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
     return (
-      <div>
-        <this.props.Template templateKey="empty" data={this.props.results} />
+      <div className={className}>
+        <Template
+          data={this.props.results}
+          templateKey="empty"
+          {...this.props.templateProps}
+        />
       </div>
     );
   }
 
   render() {
-    if (this.props.hits.length > 0) {
+    if (this.props.results.hits.length > 0) {
       return this.renderWithResults();
     }
     return this.renderNoResults();
@@ -31,13 +42,12 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
-  Template: React.PropTypes.func,
-  hits: React.PropTypes.arrayOf(React.PropTypes.object),
-  results: React.PropTypes.object
+  results: React.PropTypes.object,
+  templateProps: React.PropTypes.object.isRequired
 };
 
 Hits.defaultProps = {
-  hits: []
+  results: {hits: []}
 };
 
 module.exports = Hits;

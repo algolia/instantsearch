@@ -2,8 +2,6 @@
 
 *instantsearch.js* is a library of widgets to build high performance instant search experiences using Algolia
 
-See the [online demo](http://algolia.github.io/instantsearch.js/).
-
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
 [travis-svg]: https://img.shields.io/travis/algolia/instantsearch.js/master.svg?style=flat-square
@@ -21,30 +19,33 @@ API is unstable. We welcome any idea and pull request.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [' + render(text) + '](#--rendertext--)
-  - [Setup](#setup)
-    - [npm, browserify, webpack](#npm-browserify-webpack)
-    - [`<script>`](#script)
-  - [Usage](#usage)
-  - [Widget API](#widget-api)
-  - [Templates](#templates)
-    - [Examples](#examples)
-    - [Template configuration](#template-configuration)
-  - [Development workflow](#development-workflow)
-  - [Test](#test)
-  - [Available widgets](#available-widgets)
-    - [searchBox](#searchbox)
-    - [stats](#stats)
-    - [indexSelector](#indexselector)
-    - [pagination](#pagination)
-    - [hits](#hits)
-    - [toggle](#toggle)
-    - [refinementList](#refinementlist)
-    - [menu](#menu)
-    - [rangeSlider](#rangeslider)
-    - [URL Synchronisation](#url-synchronisation)
-    - [hierarchicalMenu](#hierarchicalmenu)
-  - [Browser support](#browser-support)
+- [Setup](#setup)
+  - [npm, browserify, webpack](#npm-browserify-webpack)
+  - [`<script>`](#script)
+- [Usage](#usage)
+- [Widget API](#widget-api)
+- [Templates](#templates)
+  - [Examples](#examples)
+  - [Template configuration](#template-configuration)
+- [Themes](#themes)
+- [Development workflow](#development-workflow)
+- [Test](#test)
+- [Instant search configuration](#instant-search-configuration)
+  - [Number locale](#number-locale)
+  - [Initial search parameters](#initial-search-parameters)
+  - [URL synchronisation](#url-synchronisation)
+- [Available widgets](#available-widgets)
+  - [searchBox](#searchbox)
+  - [stats](#stats)
+  - [indexSelector](#indexselector)
+  - [pagination](#pagination)
+  - [hits](#hits)
+  - [toggle](#toggle)
+  - [refinementList](#refinementlist)
+  - [menu](#menu)
+  - [rangeSlider](#rangeslider)
+  - [hierarchicalMenu](#hierarchicalmenu)
+- [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -72,7 +73,10 @@ var search = instantsearch({
   appId: appId, // Mandatory
   apiKey: apiKey, // Mandatory
   indexName: indexName, // Mandatory
-  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN'
+  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN',
+  urlSync: { // optionnal, activate url sync if defined
+    useHash: false
+  }
 });
 
 // add a widget
@@ -167,22 +171,39 @@ Here is the list of the currently available helpers:
 
 Here is the syntax of a helper (`render` is using `search.templatesConfig.compileOptions`):
 ```js
-search.templatesConfig.helpers.makeTitle = function (text, render) {
-  return '<h1>' + render(text) + '</h1>';
+search.templatesConfig.helpers.emphasis = function(text, render) {
+  return '<em>' + render(text) + '</em>';
 };
 ```
 
-If you know the structure of the object you'll be calling a helper with,
-you can access it with `this`:
+In your helper, `this` always refers to the data:
 ```js
-search.templatesConfig.helpers.discount = function () {
-  return '-' + ((1 - this.promotion_price / this.price) * 100) + '%'; // -10%
+search.templatesConfig.helpers.discount = function(/*text, render*/) {
+  var discount = this.price * 0.3;
+  return '$ -' + discount;
 };
 ```
 
 You can configure the options passed to `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
 
 Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
+
+## Themes
+
+To help get you started, we provide a default theme for the widgets. This is
+just a `css` file that you have to add to your page to add basic styling.
+
+It is available from [jsDelivr](http://www.jsdelivr.com/):
+
+```html
+<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.min.css">
+<!-- or the unminified version -->
+<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.css">
+```
+
+It contains (empty) selectors for all the possible markup added by the widgets,
+so you can use it as a base for creating your own custom theme. We will provide
+more themes in the future.
 
 ## Development workflow
 
@@ -195,8 +216,81 @@ npm run dev
 ## Test
 
 ```sh
-npm test # test and lint
-npm run test:watch # developer mode, test only
+npm test # jsdom + lint
+npm run test:watch # jsdom
+npm run test:watch:browser # chrome
+npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
+```
+
+## Instant search configuration
+
+The main configuration of instantsearch.js is done through a configuration object.
+The minimal configuration is made a of three attributes :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name'
+});
+```
+
+It can also contain other optionnal attributes to enable other features.
+
+### Number locale
+
+For the display of numbers, the locale will be determined by
+the browsers or forced in the configuration :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  numberLocale: 'en-US'
+});
+```
+
+### Initial search parameters
+
+At the start of instantsearch, the search configuration is based on the input
+of each widget and the URL. It is also possible to change the defaults of 
+the configuration through an object that can contain any parameters understood
+by the Algolia API.
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  searchParameters: {
+    typoTolerance: 'strict'
+  }
+});
+```
+
+### URL synchronisation
+
+Instantsearch let you synchronize the url with the current search parameters.
+In order to activate this feature, you need to add the urlSync object. It accepts
+3 parameters : 
+   - trackedParameters:string[] parameters that will be synchronized in the
+      URL. By default, it will track the query, all the refinable attribute (facets and numeric
+      filters), the index and the page.
+   - useHash:boolean if set to true, the url will be hash based. Otherwise,
+      it'll use the query parameters using the modern history API.
+   - threshold:number time in ms after which a new state is created in the browser
+      history. The default value is 700.
+
+All those parameters are optional and a minimal configuration looks like :
+
+```js
+instantsearch({
+  appId: 'my_application_id',
+  apiKey: 'my_search_api_key',
+  indexName: 'my_index_name',
+  urlSync: {}
+});
 ```
 
 ## Available widgets
@@ -211,7 +305,7 @@ npm run test:watch # developer mode, test only
 [hierarchicalMenu]: ./widgets-screenshots/hierarchicalMenu.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
-[urlSync]: ./widgets-screenshots/url-sync.gif
+[priceRanges]: ./widgets-screenshots/price-ranges.png
 
 ### searchBox
 
@@ -251,7 +345,28 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<input class="ais-search-box--input">
+<!-- With poweredBy: true -->
+<div class="ais-search-box--powered-by">
+  Powered by
+  <a class="ais-search-box--powered-by-link">Algolia</a>
+</div>
+```
+
+```css
+.ais-search-box--input {
+}
+.ais-search-box--powered-by {
+}
+.ais-search-box--powered-by-link {
+}
+```
 ### stats
+
+![Example of the stats widget][stats]
 
 #### API
 
@@ -259,29 +374,21 @@ search.addWidget(
 /**
  * Display various stats about the current search state
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {String} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<div>
-  {{#hasNoResults}}No results{{/hasNoResults}}
-  {{#hasOneResult}}1 result{{/hasOneResult}}
-  {{#hasManyResults}}{{#helpers.formatNumber}}{{nbHits}}{{/helpers.formatNumber}} results{{/hasManyResults}}
-  <small>found in {{processingTimeMS}}ms</small>
-</div>'] Body template
+ * @param  {String|Function} [options.templates.body] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
-
-
-#### Usage
-
-![Example of the stats widget][stats]
-
-#### API
 
 #### Usage
 
@@ -293,19 +400,37 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
-    template: // mustache string or function(stats) with the following keys
-              // hasManyResults: boolean
-              // hasNoResults: boolean
-              // hasOneResult: boolean
-              // hitsPerPage: number
-              // nbHits: number
-              // nbPages: number
-              // page: number
-              // processingTimeMS: number
-              // query: string
-    transformData: // function to modify the data passed to the template
+    cssClasses: {
+      time: 'label label-info'
+    }
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-stats">
+  <div class="ais-stats--header ais-header">[custom header template]</div>
+  <div class="ais-stats--body">
+    42 results found in <span class="ais-stats--time">42ms</span>
+  </div>
+  <div class="ais-stats--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-stats {
+}
+.ais-stats--header {
+}
+.ais-stats--body {
+}
+.ais-stats--time {
+  font-size: small;
+}
+.ais-stats--footer {
+}
 ```
 
 ### indexSelector
@@ -326,7 +451,9 @@ you'll need several indices. This widget lets you easily change it.
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {String} options.indices[0].name Name of the index to target
  * @param  {String} options.indices[0].label Label displayed in the dropdown
- * @param  {String|String[]} [options.cssClass] Class name(s) to be added to the generated select element
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
  * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
@@ -347,9 +474,28 @@ search.addWidget(
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
     ],
-    cssClass: 'form-control'
+    cssClasses: {
+      root: 'form-control'
+    }
   })
 );
+```
+
+#### Styling
+
+```html
+<select class="ais-index-selector">
+  <option class="ais-index-selector--item">Most relevant</option>
+  <option class="ais-index-selector--item">Lowest price</option>
+  <option class="ais-index-selector--item">Highest price</option>
+</select>
+```
+
+```css
+.ais-index-selector {
+}
+.ais-index-selector--item {
+}
 ```
 
 ### pagination
@@ -369,6 +515,7 @@ search.addWidget(
  * @param  {String} [options.labels.first] Label for the First link
  * @param  {String} [options.labels.last] Label for the Last link
  * @param  {Number} [maxPages=20] The max number of pages to browse
+ * @param  {String|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
  * @return {Object}
@@ -408,14 +555,16 @@ search.addWidget(
 /**
  * Display the list of results (hits) from the current search
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {String} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {String} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {String} [options.cssClasses.item] CSS class to add to each result
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.empty=''] Template to use when there are no results.
- * Gets passed the `result` from the API call.
- * @param  {String|Function} [options.templates.hit=''] Template to use for each result.
- * Gets passed the `hit` of the result.
+ * @param  {String|Function} [options.templates.item=''] Template to use for each result.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
  * @param  {Function} [options.transformData.empty=''] Method used to change the object passed to the empty template
- * @param  {Function} [options.transformData.hit=''] Method used to change the object passed to the hit template
+ * @param  {Function} [options.transformData.item=''] Method used to change the object passed to the item template
  * @param  {Number} [hitsPerPage=20] The number of hits to display per page
  * @return {Object}
  */
@@ -433,10 +582,10 @@ search.addWidget(
     container: '#hits',
     templates: {
       empty: 'No results'
-      hit: '<div><strong>{{name}}</strong> {{price}}</div>'
+      item: '<div><strong>{{name}}</strong> {{price}}</div>'
     },
     transformData: {
-      hit: function(data) {
+      item: function(data) {
         data.price = data.price + '$';
         return data;
       }
@@ -444,6 +593,29 @@ search.addWidget(
     hitsPerPage: 20
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-hits">
+  <div class="ais-hits--item">Hit content</div>
+  ...
+  <div class="ais-hits--item">Hit content</div>
+</div>
+<!-- If no results -->
+<div class="ais-hits ais-hits__empty">
+  No results
+</div>
+```
+
+```css
+.ais-hits {
+}
+.ais-hits--item {
+}
+.ais-hits__empty {
+}
 ```
 
 ### toggle
@@ -471,13 +643,20 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root]
- * @param  {String|String[]} [options.cssClasses.list]
- * @param  {String|String[]} [options.cssClasses.item]
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body='<label>{{label}}<input type="checkbox" {{#isRefined}}checked{{/isRefined}} /></label>'] Body template
+ * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
@@ -504,6 +683,47 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<div class="ais-toggle">
+  <div class="ais-toggle--header ais-header">[custom header template]</div>
+  <div class="ais-toggle--body">
+    <div class="ais-toggle--list">
+      <div class="ais-toggle--item">
+        <label class="ais-toggle--label">
+          <input type="checkbox" class="ais-toggle--checkbox" value="your_value"> Your value
+          <span class="ais-toggle--count">42</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="ais-toggle--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-toggle {
+}
+.ais-toggle--header {
+}
+.ais-toggle--body {
+}
+.ais-toggle--list {
+}
+.ais-toggle--item {
+}
+.ais-toggle--item__active {
+}
+.ais-toggle--label {
+}
+.ais-toggle--checkbox {
+}
+.ais-toggle--count {
+}
+.ais-toggle--footer {
+}
+```
 ### refinementList
 
 ![Example of the refinementList widget][refinementList]
@@ -515,22 +735,25 @@ search.addWidget(
  * Instantiate a list of refinements based on a facet
  * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} options.operator How to apply refinements. Possible values: `or`, `and`
+ * @param  {String} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How much facet values to get
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {String} [options.limit=1000] How much facet values to get
+ * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
  * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item=`<label>
-  <input type="checkbox" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}} <span>{{count}}</span>
-</label>`] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {String|Function} [options.templates.header] Header template
+ * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {String|Function} [options.singleRefine=true] Are multiple refinements allowed or only one at the same time. You can use this
- *                                                       to build radio based refinement lists for example
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
@@ -546,10 +769,57 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands', 
-    facetName: 'brands',
-    operator: 'or'
+    facetName: 'brands'
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-refinement-list">
+  <div class="ais-refinement-list--header ais-header">[custom header template]</div>
+  <div class="ais-refinement-list--body">
+    <div class="ais-refinement-list--list">
+      <div class="ais-refinement-list--item">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_value"> Your value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+      <div class="ais-refinement-list--item ais-refinement-list--item__active">
+        <label class="ais-refinement-list--label">
+          <input type="checkbox" class="ais-refinement-list--checkbox" value="your_selected_value" checked="checked"> Your selected value
+          <span class="ais-refinement-list--count">42</span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="ais-refinement-list--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-refinement-list {
+}
+.ais-refinement-list--header {
+}
+.ais-refinement-list--body {
+}
+.ais-refinement-list--list {
+}
+.ais-refinement-list--item {
+}
+.ais-refinement-list--item__active {
+}
+.ais-refinement-list--label {
+}
+.ais-refinement-list--checkbox {
+}
+.ais-refinement-list--count {
+}
+.ais-refinement-list--footer {
+}
 ```
 
 ### menu
@@ -566,15 +836,21 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {String} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to be added to the wrapper element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to be added to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to be added to each item of the list
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -593,6 +869,52 @@ search.addWidget(
     facetName: 'categories'
   })
 );
+```
+
+#### Styling
+
+```html
+<div class="ais-menu">
+  <div class="ais-menu--header ais-header">[custom header template]</div>
+  <div class="ais-menu--body">
+    <div class="ais-menu--list">
+      <div class="ais-menu--item">
+        <a class="ais-menu--link" href="/url">
+          Your value
+          <span class="ais-menu--count">42</span>
+        </a>
+      </div>
+      <div class="ais-menu--item ais-menu--item__active">
+        <a class="ais-menu--link" href="/url">
+          Your active value
+          <span class="ais-menu--count">42</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="ais-menu--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-menu {
+}
+.ais-menu--header {
+}
+.ais-menu--body {
+}
+.ais-menu--list {
+}
+.ais-menu--item {
+}
+.ais-menu--item__active {
+}
+.ais-menu--link {
+}
+.ais-menu--count {
+}
+.ais-menu--footer {
+}
 ```
 
 ### rangeSlider
@@ -642,30 +964,33 @@ search.addWidget(
 );
 ```
 
-### URL Synchronisation
+### priceRanges
 
-![Example of url sync][urlSync]
+![Example of the pricesRanges widget][priceRanges]
 
 #### API
 
 ```js
 /**
- * Instanciate a url sync widget. This widget let you synchronize the search
- * parameters with the URL. It can operate with legacy API and hash or it can use
- * the modern history API. By default, it will use the modern API, but if you are
- * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
- * true.
- * @class
- * @param {UrlUtil} urlUtils an object containing the function to read, watch the changes
- * and update the URL.
- * @param {object} options may contain the following keys :
- *  - threshold:number time in ms after which a new state is created in the browser
- * history. The default value is 700.
- *  - trackedParameters:string[] parameters that will be synchronized in the
- * URL. By default, it will track the query, all the refinable attribute (facets and numeric
- * filters), the index and the page.
- *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
- * it'll use the query parameters using the modern history API.
+ * Instantiate a price ranges on a numerical facet
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
+ * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.range] Range template
+ * @param  {Object} [options.labels] Labels to use for the widget
+ * @param  {String|Function} [options.labels.button] Button label
+ * @param  {String|Function} [options.labels.currency] Currency label
+ * @param  {String|Function} [options.labels.to] To label
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @return {Object}
  */
 ```
 
@@ -673,12 +998,21 @@ search.addWidget(
 
 ```js
 search.addWidget(
-  instantsearch.widgets.urlSync({
-/*  useHash: true,
-    threshold: 600,
-    trackedParameters: ['query', 'page', 'attribute:*'] */
+  instantsearch.widgets.priceRanges({
+    container: '#price-ranges',
+    facetName: 'price'
   })
 );
+```
+
+#### Styling
+
+```html
+
+```
+
+```css
+
 ```
 
 ### hierarchicalMenu
@@ -696,12 +1030,18 @@ search.addWidget(
  * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class added to the root element
- * @param  {String|String[]} [options.cssClasses.list] CSS class added to each list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class added to each item element
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {String|Function} [options.templates.header=''] Header template (root level only)
- * @param  {String|Function} [options.templates.item='<a href="{{href}}">{{name}}</a> {{count}}'] Item template, provided with `name`, `count`, `isRefined`, `path`
+ * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
@@ -737,6 +1077,70 @@ search.addWidget(
 );
 ```
 
+#### Styling
+
+```html
+<div class="ais-hierarchical-menu">
+  <div class="ais-hierarchical-menu--header ais-header">[custom header template]</div>
+  <div class="ais-hierarchical-menu--body">
+    <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl0">
+      <div class="ais-hierarchical-menu--item">
+        <a class="ais-hierarchical-menu--link" href="/url">
+          Your value
+          <span class="ais-hierarchical-menu--count">42</span>
+        </a>
+      </div>
+      <div class="ais-hierarchical-menu--item ais-hierarchical-menu--item__active">
+        <a class="ais-hierarchical-menu--link" href="/url">
+          Your active value
+          <span class="ais-hierarchical-menu--count">42</span>
+        </a>
+        <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl1">
+          <div class="ais-hierarchical-menu--item">
+            <a class="ais-hierarchical-menu--link" href="/url">
+              Your subvalue 1
+              <span class="ais-hierarchical-menu--count">10</span>
+            </a>
+          </div>
+          <div class="ais-hierarchical-menu--item">
+            <a class="ais-hierarchical-menu--link" href="/url">
+              Your subvalue 2
+              <span class="ais-hierarchical-menu--count">32</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ais-hierarchical-menu--footer ais-footer">[custom footer template]</div>
+</div>
+```
+
+```css
+.ais-hierarchical-menu {
+}
+.ais-hierarchical-menu--header {
+}
+.ais-hierarchical-menu--body {
+}
+.ais-hierarchical-menu--list {
+}
+.ais-hierarchical-menu--list__lvl0 {
+}
+.ais-hierarchical-menu--list__lvl1 {
+}
+.ais-hierarchical-menu--item {
+}
+.ais-hierarchical-menu--item__active {
+}
+.ais-hierarchical-menu--link {
+}
+.ais-hierarchical-menu--count {
+}
+.ais-hierarchical-menu--footer {
+}
+```
+
 ## Browser support
 
 We natively support IE10+ and all other modern browsers without any dependency need
@@ -747,8 +1151,8 @@ To get < IE10 support, please insert this code in the `<head>`:
 ```html
 <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 <!--[if lte IE 9]>
-  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 <![endif]-->
 ```
 
-We use the [polyfill.io](https://cdn.polyfill.io/v1/docs/).
+We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).

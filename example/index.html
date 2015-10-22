@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap-theme.min.css">
   <!--[if lte IE 9]>
-  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
   <![endif]-->
+  <!-- <link rel="stylesheet" href="./debug.css"> -->
+  <link rel="stylesheet" href="./default.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -17,28 +19,20 @@
       <h1>Instant search demo <small>using instantsearch.js</small></h1>
     </div>
 
-    <div class="row">
+    <div class="row search search--hidden">
       <div class="col-md-3">
-        <div class="panel">
-          <div class="panel-body">
-            <input id="search-box" class="form-control" />
-          </div>
-        </div>
-
-        <div class="panel panel-default" id="categories"></div>
-
-        <div class="panel panel-default" id="brands"></div>
-
-        <div class="panel panel-default" id="price-range"></div>
-
-        <div class="panel panel-default" id="free-shipping"></div>
-
-        <div class="panel panel-default" id="price"></div>
-
-        <div class="panel panel-default" id="hierarchical-categories"></div>
-
+        <div class="facet" id="hierarchical-categories"></div>
+        <div class="facet" id="brands"></div>
+        <div class="facet" id="price-range"></div>
+        <div class="facet" id="free-shipping"></div>
+        <div class="facet" id="price"></div>
+        <div class="facet" id="categories"></div>
+        <div class="facet" id="price-ranges"></div>
       </div>
       <div class="col-md-9">
+        <div class="form-group">
+          <input id="search-box" class="form-control" />
+        </div>
         <div class="row">
           <div class="col-md-8">
             <div id="stats"></div>

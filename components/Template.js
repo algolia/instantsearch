@@ -1,14 +1,17 @@
 var React = require('react');
+var mapValues = require('lodash/object/mapValues');
+var curry = require('lodash/function/curry');
+var hogan = require('hogan.js');
 
-var renderTemplate = require('../lib/utils').renderTemplate;
-
-class Template {
+class Template extends React.Component {
   render() {
+    var compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
+      this.props.templatesConfig.compileOptions :
+      {};
+
     var content = renderTemplate({
       template: this.props.templates[this.props.templateKey],
-      compileOptions: this.props.useCustomCompileOptions[this.props.templateKey] ?
-        this.props.templatesConfig.compileOptions :
-        {},
+      compileOptions: compileOptions,
       helpers: this.props.templatesConfig.helpers,
       data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
     });
@@ -24,12 +27,12 @@ class Template {
 }
 
 Template.propTypes = {
+  data: React.PropTypes.object,
+  templateKey: React.PropTypes.string,
   templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.func
   ])),
-  templateKey: React.PropTypes.string,
-  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool),
   templatesConfig: React.PropTypes.shape({
     helpers: React.PropTypes.objectOf(React.PropTypes.func),
     // https://github.com/twitter/hogan.js/#compilation-options
@@ -47,7 +50,7 @@ Template.propTypes = {
     React.PropTypes.func,
     React.PropTypes.objectOf(React.PropTypes.func)
   ]),
-  data: React.PropTypes.object
+  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool)
 };
 
 Template.defaultProps = {
@@ -59,14 +62,51 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
+  var data;
   if (typeof fn === 'function') {
-    return fn(originalData);
+    data = fn(originalData);
   } else if (typeof fn === 'object') {
     // ex: transformData: {hit, empty}
-    return fn[templateKey] && fn[templateKey](originalData) || originalData;
+    data = fn[templateKey] && fn[templateKey](originalData);
+  } else {
+    throw new Error('`transformData` must be a function or an object');
   }
 
-  throw new Error('`transformData` must be a function or an object');
+  var dataType = typeof data;
+  var expectedType = typeof originalData;
+  if (dataType !== expectedType) {
+    throw new Error(`\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`);
+  }
+  return data;
+}
+
+function renderTemplate({template, compileOptions, helpers, data}) {
+  let isTemplateString = typeof template === 'string';
+  let isTemplateFunction = typeof template === 'function';
+
+  if (!isTemplateString && !isTemplateFunction) {
+    throw new Error('Template must be `string` or `function`');
+  } else if (isTemplateFunction) {
+    return template(data);
+  } else {
+    let transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
+    let preparedData = {...data, helpers: transformedHelpers};
+    return hogan.compile(template, compileOptions).render(preparedData);
+  }
+}
+
+// We add all our template helper methods to the template as lambdas. Note
+// that lambdas in Mustache are supposed to accept a second argument of
+// `render` to get the rendered value, not the literal `{{value}}`. But
+// this is currently broken (see
+// https://github.com/twitter/hogan.js/issues/222).
+function transformHelpersToHogan(helpers, compileOptions, data) {
+  return mapValues(helpers, (method) => {
+    return curry(function(text) {
+      var render = (value) => hogan.compile(value, compileOptions).render(this);
+      return method.call(data, text, render);
+    });
+  });
 }
 
 module.exports = Template;

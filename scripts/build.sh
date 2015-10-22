@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-set -e # exit when error
+set -ev # exit when error
+
+mkdir -p dist/themes
 
 license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia SAS | github.com/algolia/instantsearch.js */"
 
@@ -13,6 +15,10 @@ webpack
 
 printf "\n\nBuild: minify"
 cat dist/$bundle.js | uglifyjs -c warnings=false -m > dist/$bundle.min.js
+
+printf "\n\nBuild: CSS"
+cp themes/default.css dist/themes/default.css
+cleancss dist/themes/default.css > dist/themes/default.min.css
 
 printf "\n\nBuild: prepend license"
 printf "$license" | cat - dist/"$bundle".js > /tmp/out && mv /tmp/out dist/"$bundle".js

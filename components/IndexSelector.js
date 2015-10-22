@@ -1,37 +1,44 @@
 var React = require('react');
 
+
 class IndexSelector extends React.Component {
   handleChange(event) {
-    this.props.setIndex(event.target.value).search();
+    this.props.setIndex(event.target.value);
   }
 
   render() {
-    var currentIndex = this.props.currentIndex;
-    var indices = this.props.indices;
-    var cssClass = this.props.cssClass;
-    var selectId = this.props.containerId + '-select';
+    var {currentIndex, indices} = this.props;
+
+    var handleChange = this.handleChange.bind(this);
 
     return (
       <select
-        id={selectId}
-        className={cssClass}
-        onChange={this.handleChange.bind(this)}
+        className={this.props.cssClasses.root}
+        onChange={handleChange}
         value={currentIndex}
       >
-          {indices.map(function(index) {
-            return <option key={index.name} value={index.name}>{index.label}</option>;
-          })}
+        {indices.map((index) => {
+          return <option className={this.props.cssClasses.item} key={index.name} value={index.name}>{index.label}</option>;
+        })}
       </select>
     );
   }
 }
 
 IndexSelector.propTypes = {
-  containerId: React.PropTypes.string,
-  cssClass: React.PropTypes.string,
+  cssClasses: React.PropTypes.shape({
+    root: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
+    item: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ])
+  }),
   currentIndex: React.PropTypes.string,
   indices: React.PropTypes.array,
-  setIndex: React.PropTypes.func
+  setIndex: React.PropTypes.func.isRequired
 };
 
 module.exports = IndexSelector;

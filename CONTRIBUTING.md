@@ -40,6 +40,10 @@ Run the tests and lint:
 npm test
 ```
 
+# Updating a package (and shrinkwrap)
+
+See https://gist.github.com/vvo/d3c1c3d4358309ed2619.
+
 # Commit message guidelines
 
 We use [conventional changelog](https://github.com/ajoslin/conventional-changelog),
