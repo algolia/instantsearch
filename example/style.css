@@ -106,3 +106,7 @@ body {
 .ais-toggle--label {
   display: block;
 }
+
+.ais-price-ranges .ais-price-ranges--input{
+  width: 65px;
+}

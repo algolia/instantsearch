@@ -6,7 +6,7 @@ var bem = utils.bemHelper('ais-hierarchical-menu');
 var cx = require('classnames/dedupe');
 var autoHide = require('../../decorators/autoHide');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../../components/RefinementList')));
+var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates.js');
 
@@ -82,6 +82,7 @@ function hierarchicalMenu({
         body: cx(bem('body'), cssClasses.body),
         footer: cx(bem('footer'), cssClasses.footer),
         list: cx(bem('list'), cssClasses.list),
+        depth: bem('list', 'lvl'),
         item: cx(bem('item'), cssClasses.item),
         active: cx(bem('item', 'active'), cssClasses.active),
         link: cx(bem('link'), cssClasses.link),

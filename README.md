@@ -305,6 +305,7 @@ instantsearch({
 [hierarchicalMenu]: ./widgets-screenshots/hierarchicalMenu.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
+[priceRanges]: ./widgets-screenshots/price-ranges.png
 
 ### searchBox
 
@@ -963,6 +964,57 @@ search.addWidget(
 );
 ```
 
+### priceRanges
+
+![Example of the pricesRanges widget][priceRanges]
+
+#### API
+
+```js
+/**
+ * Instantiate a price ranges on a numerical facet
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
+ * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.range] Range template
+ * @param  {Object} [options.labels] Labels to use for the widget
+ * @param  {String|Function} [options.labels.button] Button label
+ * @param  {String|Function} [options.labels.currency] Currency label
+ * @param  {String|Function} [options.labels.to] To label
+ * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @return {Object}
+ */
+```
+
+#### Usage
+
+```js
+search.addWidget(
+  instantsearch.widgets.priceRanges({
+    container: '#price-ranges',
+    facetName: 'price'
+  })
+);
+```
+
+#### Styling
+
+```html
+
+```
+
+```css
+
+```
+
 ### hierarchicalMenu
 
 ![Example of the hierarchicalMenu widget][hierarchicalMenu]
@@ -1031,7 +1083,7 @@ search.addWidget(
 <div class="ais-hierarchical-menu">
   <div class="ais-hierarchical-menu--header ais-header">[custom header template]</div>
   <div class="ais-hierarchical-menu--body">
-    <div class="ais-hierarchical-menu--list">
+    <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl0">
       <div class="ais-hierarchical-menu--item">
         <a class="ais-hierarchical-menu--link" href="/url">
           Your value
@@ -1043,7 +1095,7 @@ search.addWidget(
           Your active value
           <span class="ais-hierarchical-menu--count">42</span>
         </a>
-        <div class="ais-hierarchical-menu--list">
+        <div class="ais-hierarchical-menu--list ais-hierarchical-menu--list__lvl1">
           <div class="ais-hierarchical-menu--item">
             <a class="ais-hierarchical-menu--link" href="/url">
               Your subvalue 1
@@ -1072,6 +1124,10 @@ search.addWidget(
 .ais-hierarchical-menu--body {
 }
 .ais-hierarchical-menu--list {
+}
+.ais-hierarchical-menu--list__lvl0 {
+}
+.ais-hierarchical-menu--list__lvl1 {
 }
 .ais-hierarchical-menu--item {
 }

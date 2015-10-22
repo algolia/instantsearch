@@ -2,9 +2,9 @@ var React = require('react');
 
 var cx = require('classnames');
 
-var Template = require('./Template');
+var Template = require('../Template');
 
-var {isSpecialClick} = require('../lib/utils.js');
+var {isSpecialClick} = require('../../lib/utils.js');
 
 
 class RefinementList extends React.Component {
@@ -13,8 +13,15 @@ class RefinementList extends React.Component {
   }
 
   _generateFacetItem(facetValue) {
+    var subList;
     var hasChildren = facetValue.data && facetValue.data.length > 0;
-    var subList = hasChildren && <RefinementList {...this.props} facetValues={facetValue.data} />;
+    if (hasChildren) {
+      subList = <RefinementList
+                  {...this.props}
+                  depth={this.props.depth + 1}
+                  facetValues={facetValue.data}
+                />;
+    }
     var data = facetValue;
 
     if (this.props.createURL) {
@@ -87,8 +94,14 @@ class RefinementList extends React.Component {
   }
 
   render() {
+    // Adding `-lvl0` classes
+    var cssClassList = [this.props.cssClasses.list];
+    if (this.props.cssClasses.depth) {
+      cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
+    }
+
     return (
-      <div className={cx(this.props.cssClasses.list)}>
+      <div className={cx(cssClassList)}>
         {this.props.facetValues.map(this._generateFacetItem, this)}
       </div>
     );
@@ -116,6 +129,7 @@ RefinementList.propTypes = {
 
 RefinementList.defaultProps = {
   cssClasses: {},
+  depth: 0,
   facetNameKey: 'name'
 };
 

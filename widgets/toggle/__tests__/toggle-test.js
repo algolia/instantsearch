@@ -6,7 +6,7 @@ import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 
 import toggle from '../toggle';
-import RefinementList from '../../../components/RefinementList';
+import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);

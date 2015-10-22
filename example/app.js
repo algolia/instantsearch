@@ -172,4 +172,22 @@ search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
 
+search.addWidget(
+  instantsearch.widgets.priceRanges({
+    container: '#price-ranges',
+    facetName: 'price',
+    templates: {
+      header: 'Price ranges'
+    },
+    cssClasses: {
+      header: 'facet-title',
+      body: 'nav nav-stacked',
+      range: 'facet-value',
+      form: '',
+      input: 'fixed-input-sm',
+      button: 'btn btn-default btn-sm'
+    }
+  })
+);
+
 search.start();
