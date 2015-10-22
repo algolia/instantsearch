@@ -9,3 +9,12 @@
 @mixin element($element)
   &__#{$element}
     @content
+
+@mixin bem($component, $modifier, $element: '')
+  +component($component)
+    +modifier($modifier)
+      @if $element != ''
+        +element($element)
+          @content
+      @else
+        @content
