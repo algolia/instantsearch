@@ -12,7 +12,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('toggle()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   context('bad usage', () => {
     it('throws when no container', () => {

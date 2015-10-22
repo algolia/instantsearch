@@ -21,7 +21,7 @@ describe('priceRanges()', () => {
   var autoHideContainer;
   var headerFooter;
 
-  jsdom();
+  jsdom({useEach: true});
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};

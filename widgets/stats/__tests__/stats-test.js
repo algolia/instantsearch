@@ -12,7 +12,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('stats()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   var ReactDOM;
   var container;

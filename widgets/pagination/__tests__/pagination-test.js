@@ -12,7 +12,7 @@ import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
 
 describe('pagination()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   var ReactDOM;
   var container;

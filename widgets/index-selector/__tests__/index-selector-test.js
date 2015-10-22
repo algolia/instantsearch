@@ -12,7 +12,7 @@ import indexSelector from '../index-selector';
 import IndexSelector from '../../../components/IndexSelector';
 
 describe('indexSelector()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   var ReactDOM;
   var container;
