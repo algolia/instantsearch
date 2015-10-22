@@ -17,7 +17,7 @@ describe('rangeSlider()', () => {
   var results;
   var helper;
 
-  var autoHide;
+  var autoHideContainer;
   var headerFooter;
   var Slider;
   var rangeSlider;
@@ -27,8 +27,8 @@ describe('rangeSlider()', () => {
     Slider = require('../../../components/Slider/Slider');
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
-    autoHide = sinon.stub().returns(Slider);
-    rangeSlider.__Rewire__('autoHide', autoHide);
+    autoHideContainer = sinon.stub().returns(Slider);
+    rangeSlider.__Rewire__('autoHideContainer', autoHideContainer);
     headerFooter = sinon.stub().returns(Slider);
     rangeSlider.__Rewire__('headerFooter', headerFooter);
 
@@ -59,13 +59,13 @@ describe('rangeSlider()', () => {
   it('calls ReactDOM.render(<Slider props />, container)', () => {
     widget.render({results, helper});
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(autoHide.calledOnce).toBe(true, 'autoHide called once');
+    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
     expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
     <Slider
       cssClasses={{body: null, root: null}}
       hasResults={true}
-      hideWhenNoResults={true}
+      hideContainerWhenNoResults={true}
       onChange={() => {}}
       range={{max: 4999.98, min: 1.99}}
       start={[-Infinity, Infinity]}
@@ -118,7 +118,7 @@ describe('rangeSlider()', () => {
 
   afterEach(() => {
     rangeSlider.__ResetDependency__('ReactDOM');
-    rangeSlider.__ResetDependency__('autoHide');
+    rangeSlider.__ResetDependency__('autoHideContainer');
     rangeSlider.__ResetDependency__('headerFooter');
   });
 });

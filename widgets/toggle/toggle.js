@@ -6,7 +6,7 @@ var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-toggle');
 var cx = require('classnames/dedupe');
 
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 
 var defaultTemplates = require('./defaultTemplates');
@@ -34,7 +34,7 @@ var defaultTemplates = require('./defaultTemplates');
  * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function toggle({
@@ -44,11 +44,11 @@ function toggle({
     templates = defaultTemplates,
     cssClasses = {},
     transformData,
-    hideWhenNoResults = true
+    hideContainerWhenNoResults = true
   } = {}) {
-  var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
+  var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideWhenNoResults]})';
+  var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
 
   if (!container || !facetName || !label) {
     throw new Error(usage);
@@ -94,7 +94,7 @@ function toggle({
           cssClasses={cssClasses}
           facetValues={[facetValue]}
           hasResults={results.hits.length > 0}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
         />,

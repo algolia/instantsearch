@@ -5,9 +5,9 @@ var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-refinement-list');
 var cx = require('classnames/dedupe');
 
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
+var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates');
 
@@ -34,7 +34,7 @@ var defaultTemplates = require('./defaultTemplates');
  * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function refinementList({
@@ -46,7 +46,7 @@ function refinementList({
     cssClasses = {},
     templates = defaultTemplates,
     transformData,
-    hideWhenNoResults = true
+    hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideIfNoResults]})';
@@ -105,7 +105,7 @@ function refinementList({
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={facetValues.length > 0}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
         />,

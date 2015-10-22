@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var utils = require('../../lib/utils.js');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 
 var defaultTemplates = {
@@ -25,7 +25,7 @@ var defaultTemplates = {
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function rangeSlider({
@@ -37,7 +37,7 @@ function rangeSlider({
       root: null,
       body: null
     },
-    hideWhenNoResults = true
+    hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
 
@@ -94,12 +94,12 @@ function rangeSlider({
         templates
       });
 
-      var Slider = autoHide(headerFooter(require('../../components/Slider/Slider')));
+      var Slider = autoHideContainer(headerFooter(require('../../components/Slider/Slider')));
       ReactDOM.render(
         <Slider
           cssClasses={cssClasses}
           hasResults={stats.min !== null && stats.max !== null}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           onChange={this._refine.bind(this, helper, stats)}
           range={{min: stats.min, max: stats.max}}
           start={[currentRefinement.min, currentRefinement.max]}

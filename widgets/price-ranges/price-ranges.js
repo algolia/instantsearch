@@ -6,7 +6,7 @@ var utils = require('../../lib/utils.js');
 var generateRanges = require('./generate-ranges.js');
 
 var defaultTemplates = require('./defaultTemplates');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 
 var bem = utils.bemHelper('ais-price-ranges');
@@ -30,7 +30,7 @@ var cx = require('classnames/dedupe');
  * @param  {String|Function} [options.labels.button] Button label
  * @param  {String|Function} [options.labels.currency] Currency label
  * @param  {String|Function} [options.labels.to] To label
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function priceRanges({
@@ -43,7 +43,7 @@ function priceRanges({
       button: 'Go',
       to: 'to'
     },
-    hideWhenNoResults = true
+    hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: priceRanges({container, facetName, [cssClasses, templates, labels]})';
@@ -98,7 +98,7 @@ function priceRanges({
     },
 
     render: function({results, helper, templatesConfig}) {
-      var PriceRanges = autoHide(headerFooter(require('../../components/PriceRanges')));
+      var PriceRanges = autoHideContainer(headerFooter(require('../../components/PriceRanges')));
       var facetValues;
 
       if (results.hits.length > 0) {
@@ -133,7 +133,7 @@ function priceRanges({
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={results.hits.length > 0}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           labels={labels}
           refine={this._refine.bind(this, helper)}
           templateProps={templateProps}

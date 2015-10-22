@@ -18,18 +18,18 @@ describe('priceRanges()', () => {
   var widget;
   var results;
   var helper;
-  var autoHide;
+  var autoHideContainer;
   var headerFooter;
 
   jsdom();
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
-    autoHide = sinon.stub().returns(PriceRanges);
+    autoHideContainer = sinon.stub().returns(PriceRanges);
     headerFooter = sinon.stub().returns(PriceRanges);
 
     priceRanges.__Rewire__('ReactDOM', ReactDOM);
-    priceRanges.__Rewire__('autoHide', autoHide);
+    priceRanges.__Rewire__('autoHideContainer', autoHideContainer);
     priceRanges.__Rewire__('headerFooter', headerFooter);
 
     container = document.createElement('div');
@@ -72,7 +72,7 @@ describe('priceRanges()', () => {
           root: 'ais-price-ranges'
         },
         hasResults: true,
-        hideWhenNoResults: true,
+        hideContainerWhenNoResults: true,
         facetValues: generateRanges(results.getFacetStats()),
         labels: {
           currency: '$',
@@ -100,7 +100,7 @@ describe('priceRanges()', () => {
     it('calls the decorators', () => {
       widget.render({results, helper});
       expect(headerFooter.calledOnce).toBe(true);
-      expect(autoHide.calledOnce).toBe(true);
+      expect(autoHideContainer.calledOnce).toBe(true);
     });
 
     it('calls getRefinements to check if there are some refinements', () => {
@@ -131,7 +131,7 @@ describe('priceRanges()', () => {
 
   afterEach(() => {
     priceRanges.__ResetDependency__('ReactDOM');
-    priceRanges.__ResetDependency__('autoHide');
+    priceRanges.__ResetDependency__('autoHideContainer');
     priceRanges.__ResetDependency__('headerFooter');
   });
 });

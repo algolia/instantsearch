@@ -36,7 +36,7 @@ describe('toggle()', () => {
 
   context('good usage', () => {
     var ReactDOM;
-    var autoHide;
+    var autoHideContainer;
     var headerFooter;
     var container;
     var widget;
@@ -45,11 +45,11 @@ describe('toggle()', () => {
 
     beforeEach(() => {
       ReactDOM = {render: sinon.spy()};
-      autoHide = sinon.stub().returns(RefinementList);
+      autoHideContainer = sinon.stub().returns(RefinementList);
       headerFooter = sinon.stub().returns(RefinementList);
 
       toggle.__Rewire__('ReactDOM', ReactDOM);
-      toggle.__Rewire__('autoHide', autoHide);
+      toggle.__Rewire__('autoHideContainer', autoHideContainer);
       toggle.__Rewire__('headerFooter', headerFooter);
 
       container = document.createElement('div');
@@ -62,11 +62,11 @@ describe('toggle()', () => {
       expect(widget.getConfiguration()).toEqual({facets: ['world!']});
     });
 
-    it('uses autoHide() and headerFooter()', () => {
+    it('uses autoHideContainer() and headerFooter()', () => {
       widget = toggle({container, facetName, label});
-      expect(autoHide.calledOnce).toBe(true);
+      expect(autoHideContainer.calledOnce).toBe(true);
       expect(headerFooter.calledOnce).toBe(true);
-      expect(headerFooter.calledBefore(autoHide)).toBe(true);
+      expect(headerFooter.calledBefore(autoHideContainer)).toBe(true);
     });
 
     context('render', () => {
@@ -101,7 +101,7 @@ describe('toggle()', () => {
             checkbox: 'ais-toggle--checkbox',
             count: 'ais-toggle--count'
           },
-          hideWhenNoResults: true,
+          hideContainerWhenNoResults: true,
           templateProps,
           toggleRefinement: function() {},
           createURL: () => '#'
@@ -197,7 +197,7 @@ describe('toggle()', () => {
 
     afterEach(() => {
       toggle.__ResetDependency__('ReactDOM');
-      toggle.__ResetDependency__('autoHide');
+      toggle.__ResetDependency__('autoHideContainer');
       toggle.__ResetDependency__('headerFooter');
     });
   });

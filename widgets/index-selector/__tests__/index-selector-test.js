@@ -22,14 +22,14 @@ describe('indexSelector()', () => {
   var props;
   var helper;
   var results;
-  var autoHide;
+  var autoHideContainer;
 
   beforeEach(() => {
-    autoHide = sinon.stub().returns(IndexSelector);
+    autoHideContainer = sinon.stub().returns(IndexSelector);
 
     ReactDOM = {render: sinon.spy()};
     indexSelector.__Rewire__('ReactDOM', ReactDOM);
-    indexSelector.__Rewire__('autoHide', autoHide);
+    indexSelector.__Rewire__('autoHideContainer', autoHideContainer);
 
     container = document.createElement('div');
     indices = ['index-a', 'index-b'];
@@ -61,7 +61,7 @@ describe('indexSelector()', () => {
       },
       currentIndex: 'index-a',
       hasResults: false,
-      hideWhenNoResults: false,
+      hideContainerWhenNoResults: false,
       indices: ['index-a', 'index-b'],
       setIndex: () => {}
     };
@@ -85,6 +85,6 @@ describe('indexSelector()', () => {
 
   afterEach(() => {
     indexSelector.__ResetDependency__('ReactDOM');
-    indexSelector.__ResetDependency__('autoHide');
+    indexSelector.__ResetDependency__('autoHideContainer');
   });
 });

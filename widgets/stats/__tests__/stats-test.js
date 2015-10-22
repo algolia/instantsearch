@@ -19,14 +19,14 @@ describe('stats()', () => {
   var widget;
   var results;
 
-  var autoHide;
+  var autoHideContainer;
   var headerFooter;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     stats.__Rewire__('ReactDOM', ReactDOM);
-    autoHide = sinon.stub().returns(Stats);
-    stats.__Rewire__('autoHide', autoHide);
+    autoHideContainer = sinon.stub().returns(Stats);
+    stats.__Rewire__('autoHideContainer', autoHideContainer);
     headerFooter = sinon.stub().returns(Stats);
     stats.__Rewire__('headerFooter', headerFooter);
 
@@ -50,7 +50,7 @@ describe('stats()', () => {
   it('calls ReactDOM.render(<Stats props />, container)', () => {
     widget.render({results});
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(autoHide.calledOnce).toBe(true, 'autoHide called once');
+    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
     expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
     <Stats
@@ -62,7 +62,7 @@ describe('stats()', () => {
         time: 'ais-stats--time'
       }}
       hasResults={true}
-      hideWhenNoResults={true}
+      hideContainerWhenNoResults={true}
       hitsPerPage={2}
       nbHits={20}
       nbPages={10}
@@ -76,7 +76,7 @@ describe('stats()', () => {
 
   afterEach(() => {
     stats.__ResetDependency__('ReactDOM');
-    stats.__ResetDependency__('autoHide');
+    stats.__ResetDependency__('autoHideContainer');
     stats.__ResetDependency__('headerFooter');
   });
 });

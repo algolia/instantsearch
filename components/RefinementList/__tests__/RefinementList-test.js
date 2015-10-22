@@ -55,7 +55,7 @@ describe('RefinementList', () => {
   });
 
   context('sublist', () => {
-    it('uses autoHide() and headerFooter()', () => {
+    it('uses autoHideContainer() and headerFooter()', () => {
       var customProps = {
         cssClasses: {
           depth: 'depth',
