@@ -2,8 +2,6 @@
 
 set -ev # exit when error
 
-printf "\nPublish example/ to gh-pages\n"
-
 webpack --config webpack.example.config.js
 cp -r example example-dist
 cat example-dist/bundle.js | uglifyjs -c warnings=false -m > example-dist/bundle.min.js

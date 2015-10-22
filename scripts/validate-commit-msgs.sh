@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e # exit when error
+
 # Checks the commits msgs in the range of commits travis is testing.
 # Based heavily on
 # https://raw.githubusercontent.com/angular/angular.js/291d7c467fba51a9cb89cbeee62202d51fe64b09/validate-commit-msg.js
