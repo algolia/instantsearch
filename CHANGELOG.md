@@ -1,3 +1,23 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/algolia/instantsearch.js/compare/v0.5.0...v0.5.1) (2015-10-22)
+
+
+### Bug Fixes
+
+* **autohide:** Rename attribute to `hideContainerWhenNoResults` ([ecb6756](https://github.com/algolia/instantsearch.js/commit/ecb6756)), closes [#325](https://github.com/algolia/instantsearch.js/issues/325)
+
+
+### BREAKING CHANGES
+
+* autohide: Widget attribute is now named
+`hideContainerWhenNoResults` instead of `hideWhenNoResults` to be more
+explicit on what it is really doing.
+
+Also internally renamed the `autoHide` decorator to
+`autoHideContainer`
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/algolia/instantsearch.js/compare/v0.4.1...v0.5.0) (2015-10-22)
 
