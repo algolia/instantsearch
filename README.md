@@ -44,6 +44,7 @@ API is unstable. We welcome any idea and pull request.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
+  - [priceRanges](#priceranges)
   - [hierarchicalMenu](#hierarchicalmenu)
 - [Browser support](#browser-support)
 
