@@ -45,7 +45,7 @@ read -e newVersion
 VERSION=$newVersion node ./scripts/bump-package-version.js
 
 # build new version
-VERSION=$newVersion npm run build
+NODE_ENV=production VERSION=$newVersion npm run build
 
 # update changelog
 printf "\n\nRelease: update changelog"
