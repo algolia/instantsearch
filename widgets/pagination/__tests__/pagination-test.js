@@ -23,7 +23,7 @@ describe('pagination()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHide', sinon.stub().returns(Pagination));
+    pagination.__Rewire__('autoHideContainer', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     widget = pagination({container, scrollTo: false});
@@ -84,7 +84,7 @@ describe('pagination()', () => {
 
   afterEach(() => {
     pagination.__ResetDependency__('ReactDOM');
-    pagination.__ResetDependency__('autoHide');
+    pagination.__ResetDependency__('autoHideContainer');
   });
 
   function getProps(extraProps = {}) {
@@ -92,7 +92,7 @@ describe('pagination()', () => {
       cssClasses: {},
       currentPage: 0,
       hasResults: true,
-      hideWhenNoResults: true,
+      hideContainerWhenNoResults: true,
       labels: {first: '«', last: '»', next: '›', previous: '‹'},
       nbHits: results.nbHits,
       nbPages: results.nbPages,

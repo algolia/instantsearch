@@ -3,12 +3,12 @@
 import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import autoHide from '../autoHide';
+import autoHideContainer from '../autoHideContainer';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-describe('autoHide', () => {
+describe('autoHideContainer', () => {
   var renderer;
 
   beforeEach(() => {
@@ -16,18 +16,18 @@ describe('autoHide', () => {
     renderer = createRenderer();
   });
 
-  it('should render autoHide(<span />)', () => {
+  it('should render autoHideContainer(<span />)', () => {
     var out = render();
     expect(out).toEqualJSX(<span />);
   });
 
-  it('should not render autoHide(<span />)', () => {
-    var out = render({hasResults: false, hideWhenNoResults: true});
+  it('should not render autoHideContainer(<span />)', () => {
+    var out = render({hasResults: false, hideContainerWhenNoResults: true});
     expect(out).toEqualJSX(<div />);
   });
 
   function render(props = {}) {
-    var AutoHide = autoHide(<span />);
+    var AutoHide = autoHideContainer(<span />);
     renderer.render(<AutoHide {...props} />);
     return renderer.getRenderOutput();
   }

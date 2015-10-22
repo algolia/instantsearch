@@ -5,7 +5,7 @@ var findIndex = require('lodash/array/findIndex');
 var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-index-selector');
 var cx = require('classnames');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
@@ -16,18 +16,18 @@ var autoHide = require('../../decorators/autoHide');
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
  * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 function indexSelector({
     container,
     indices,
     cssClasses = {},
-    hideWhenNoResults = false
+    hideContainerWhenNoResults = false
   }) {
   var containerNode = utils.getContainerNode(container);
 
-  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{select,option}, hideWhenNoResults]})';
+  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{select,option}, hideContainerWhenNoResults]})';
   if (!container || !indices) {
     throw new Error(usage);
   }
@@ -50,7 +50,7 @@ function indexSelector({
       let currentIndex = helper.getIndex();
       let hasResults = results.hits.length > 0;
       let setIndex = this.setIndex.bind(this, helper);
-      var IndexSelector = autoHide(require('../../components/IndexSelector'));
+      var IndexSelector = autoHideContainer(require('../../components/IndexSelector'));
 
       cssClasses = {
         root: cx(bem(null), cssClasses.root),
@@ -61,7 +61,7 @@ function indexSelector({
           cssClasses={cssClasses}
           currentIndex={currentIndex}
           hasResults={hasResults}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           indices={indices}
           setIndex={setIndex}
         />,
