@@ -62,12 +62,13 @@ describe('priceRanges()', () => {
 
       props = {
         cssClasses: {
+          active: 'ais-price-ranges--range__active',
           body: 'ais-price-ranges--body',
           button: 'ais-price-ranges--button',
           footer: 'ais-price-ranges--footer',
           header: 'ais-price-ranges--header',
           input: 'ais-price-ranges--input',
-          form: 'ais-price-ranges--input-group',
+          form: 'ais-price-ranges--form',
           range: 'ais-price-ranges--range',
           root: 'ais-price-ranges'
         },

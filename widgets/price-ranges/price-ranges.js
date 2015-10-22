@@ -21,7 +21,9 @@ var cx = require('classnames/dedupe');
  * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.form] CSS class to add to the form element
  * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {String|String[]} [options.cssClasses.active] CSS class to add to the active range element
  * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
  * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
  * @param  {Object} [options.templates] Templates to use for the widget
@@ -123,8 +125,9 @@ function priceRanges({
         body: cx(bem('body'), cssClasses.body),
         footer: cx(bem('footer'), cssClasses.footer),
         range: cx(bem('range'), cssClasses.range),
+        active: cx(bem('range', 'active'), cssClasses.active),
         input: cx(bem('input'), cssClasses.input),
-        form: cx(bem('input-group'), cssClasses.form),
+        form: cx(bem('form'), cssClasses.form),
         button: cx(bem('button'), cssClasses.button)
       };
 

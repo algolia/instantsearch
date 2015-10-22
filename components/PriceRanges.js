@@ -21,7 +21,7 @@ class PriceRange extends React.Component {
           var key = facetValue.from + '_' + facetValue.to;
           return (
             <a
-              className={cx(this.props.cssClasses.range, {active: facetValue.isRefined})}
+              className={cx(this.props.cssClasses.range, {[this.props.cssClasses.active]: facetValue.isRefined})}
               href="#"
               key={key}
               onClick={this.refine.bind(this, facetValue.from, facetValue.to)}
@@ -57,6 +57,11 @@ class PriceRange extends React.Component {
 
 PriceRange.propTypes = {
   cssClasses: React.PropTypes.shape({
+    active: React.PropTypes.string,
+    form: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
     range: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.arrayOf(React.PropTypes.string)
