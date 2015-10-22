@@ -6,6 +6,9 @@ import TestUtils from 'react-addons-test-utils';
 import RefinementList from '../RefinementList';
 import Template from '../../Template';
 
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
 describe('RefinementList', () => {
   var renderer;
   var parentListProps;
