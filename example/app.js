@@ -67,13 +67,35 @@ search.addWidget(
     operator: 'or',
     limit: 10,
     cssClasses: {
-      header: 'panel-heading',
-      list: 'nav nav-stacked panel-body',
-      item: 'checkbox',
-      count: 'badge pull-right'
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Brands'
+    }
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#price-range',
+    facetName: 'price_range',
+    operator: 'and',
+    limit: 10,
+    cssClasses: {
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
+    },
+    templates: {
+      header: 'Price ranges'
+    },
+    transformData: function(data) {
+      data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
+      return data;
     }
   })
 );
@@ -84,9 +106,10 @@ search.addWidget(
     facetName: 'free_shipping',
     label: 'Free Shipping',
     cssClasses: {
-      header: 'panel-heading',
-      item: 'panel-body checkbox',
-      count: 'badge pull-right'
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
       header: 'Shipping'
@@ -100,13 +123,13 @@ search.addWidget(
     facetName: 'categories',
     limit: 10,
     cssClasses: {
-      header: 'panel-heading',
-      root: 'list-group',
-      link: 'list-group-item'
+      header: 'facet-title',
+      link: 'facet-value',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
     },
     templates: {
-      header: 'Categories',
-      item: require('./templates/category.html')
+      header: 'Categories'
     }
   })
 );
@@ -116,8 +139,7 @@ search.addWidget(
     container: '#price',
     facetName: 'price',
     cssClasses: {
-      header: 'panel-heading',
-      body: 'panel-body'
+      header: 'facet-title'
     },
     templates: {
       header: 'Price'
@@ -135,13 +157,13 @@ search.addWidget(
     container: '#hierarchical-categories',
     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
     cssClasses: {
-      root: 'list-group',
-      header: 'panel-heading',
-      list: 'hierarchical-categories-list'
+      header: 'facet-title',
+      list: 'hierarchical-categories-list',
+      link: 'facet-value',
+      count: 'facet-count pull-right'
     },
     templates: {
-      header: 'Hierarchical categories',
-      item: require('./templates/category.html')
+      header: 'Hierarchical categories'
     }
   })
 );
@@ -158,14 +180,13 @@ search.addWidget(
       header: 'Price ranges'
     },
     cssClasses: {
-      header: 'panel-heading',
+      header: 'facet-title',
       body: 'nav nav-stacked',
-      range: 'list-group-item',
-      form: 'list-group-item form-inline',
-      input: 'form-control input-sm fixed-input-sm',
+      range: 'facet-value',
+      form: '',
+      input: 'fixed-input-sm',
       button: 'btn btn-default btn-sm'
-    },
-    template: require('./templates/price-ranges.html')
+    }
   })
 );
 
