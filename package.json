@@ -11,9 +11,9 @@
     "gh-pages": "./scripts/gh-pages.sh",
     "lint": "eslint . --quiet --no-color && stylelint './themes/**/*.css'",
     "release": "./scripts/release.sh",
-    "test": "mocha --opts mocha.opts --reporter dot && npm run lint",
-    "test:watch": "mocha --opts mocha.opts --reporter min --watch",
-    "test:watch:browser": "karma start",
+    "test": "BABEL_ENV=test mocha --opts mocha.opts --reporter dot && npm run lint",
+    "test:watch": "BABEL_ENV=test mocha --opts mocha.opts --reporter min --watch",
+    "test:watch:browser": "BABEL_ENV=test karma start",
     "watch": "webpack --watch"
   },
   "repository": "algolia/instantsearch.js",

@@ -1,4 +1,8 @@
 {
-  "plugins": ["babel-plugin-rewire"],
+  "env": {
+    "test": {
+      "plugins": ["babel-plugin-rewire"]
+    }
+  },
   "stage": 2
 }
