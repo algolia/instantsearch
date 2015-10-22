@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 var defaults = require('lodash/object/defaults');
 
 var utils = require('../../lib/utils.js');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var defaultLabels = {
   previous: '‹',
   next: '›',
@@ -33,7 +33,7 @@ var defaultLabels = {
  * @param  {Number} [options.padding=3] The number of pages to display on each side of the current page
  * @param  {String|DOMElement|boolean} [options.scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
- * @param  {boolean} [options.hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [options.hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function pagination({
@@ -43,7 +43,7 @@ function pagination({
     maxPages = 20,
     padding = 3,
     showFirstLast = true,
-    hideWhenNoResults = true,
+    hideContainerWhenNoResults = true,
     scrollTo = 'body'
   }) {
   if (scrollTo === true) {
@@ -54,7 +54,7 @@ function pagination({
   var scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
 
   if (!container) {
-    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideWhenNoResults]})');
+    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideContainerWhenNoResults]})');
   }
 
   labels = defaults(labels, defaultLabels);
@@ -78,14 +78,14 @@ function pagination({
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
-      var Pagination = autoHide(require('../../components/Pagination/Pagination.js'));
+      var Pagination = autoHideContainer(require('../../components/Pagination/Pagination.js'));
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
           cssClasses={cssClasses}
           currentPage={currentPage}
           hasResults={hasResults}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           labels={labels}
           nbHits={nbHits}
           nbPages={nbPages}

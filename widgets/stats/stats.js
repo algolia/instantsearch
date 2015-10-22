@@ -2,7 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var utils = require('../../lib/utils.js');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 var bem = require('../../lib/utils').bemHelper('ais-stats');
 var cx = require('classnames/dedupe');
@@ -23,13 +23,13 @@ var defaultTemplates = require('./defaultTemplates.js');
  * @param  {String|Function} [options.templates.body] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function stats({
     container,
     cssClasses = {},
-    hideWhenNoResults = true,
+    hideContainerWhenNoResults = true,
     templates = defaultTemplates,
     transformData
   }) {
@@ -48,7 +48,7 @@ function stats({
         templates
       });
 
-      var Stats = autoHide(headerFooter(require('../../components/Stats/Stats.js')));
+      var Stats = autoHideContainer(headerFooter(require('../../components/Stats/Stats.js')));
 
       cssClasses = {
         body: cx(bem('body'), cssClasses.body),
@@ -62,7 +62,7 @@ function stats({
         <Stats
           cssClasses={cssClasses}
           hasResults={results.hits.length > 0}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}
           nbPages={results.nbPages}

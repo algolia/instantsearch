@@ -44,6 +44,7 @@ API is unstable. We welcome any idea and pull request.
   - [refinementList](#refinementlist)
   - [menu](#menu)
   - [rangeSlider](#rangeslider)
+  - [priceRanges](#priceranges)
   - [hierarchicalMenu](#hierarchicalmenu)
 - [Browser support](#browser-support)
 
@@ -305,6 +306,7 @@ instantsearch({
 [hierarchicalMenu]: ./widgets-screenshots/hierarchicalMenu.png
 [menu]: ./widgets-screenshots/menu.png
 [rangeSlider]: ./widgets-screenshots/range-slider.png
+[priceRanges]: ./widgets-screenshots/price-ranges.png
 
 ### searchBox
 
@@ -384,7 +386,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.body] Body template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -453,7 +455,7 @@ you'll need several indices. This widget lets you easily change it.
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
  * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
- * @param  {boolean} [hideWhenNoResults=false] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -516,7 +518,7 @@ search.addWidget(
  * @param  {Number} [maxPages=20] The max number of pages to browse
  * @param  {String|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -658,7 +660,7 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
  * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -753,7 +755,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -849,7 +851,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```
@@ -938,7 +940,7 @@ search.addWidget(
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
  * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 ```
@@ -961,6 +963,57 @@ search.addWidget(
     }
   })
 );
+```
+
+### priceRanges
+
+![Example of the pricesRanges widget][priceRanges]
+
+#### API
+
+```js
+/**
+ * Instantiate a price ranges on a numerical facet
+ * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
+ * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
+ * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {String|Function} [options.templates.range] Range template
+ * @param  {Object} [options.labels] Labels to use for the widget
+ * @param  {String|Function} [options.labels.button] Button label
+ * @param  {String|Function} [options.labels.currency] Currency label
+ * @param  {String|Function} [options.labels.to] To label
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
+ * @return {Object}
+ */
+```
+
+#### Usage
+
+```js
+search.addWidget(
+  instantsearch.widgets.priceRanges({
+    container: '#price-ranges',
+    facetName: 'price'
+  })
+);
+```
+
+#### Styling
+
+```html
+
+```
+
+```css
+
 ```
 
 ### hierarchicalMenu
@@ -992,7 +1045,7 @@ search.addWidget(
  * @param  {String|Function} [options.templates.item] Item template
  * @param  {String|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 ```

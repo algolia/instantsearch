@@ -4,9 +4,9 @@ var ReactDOM = require('react-dom');
 var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-menu');
 var cx = require('classnames/dedupe');
-var autoHide = require('../../decorators/autoHide');
+var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHide(headerFooter(require('../../components/RefinementList/RefinementList.js')));
+var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates.js');
 
@@ -31,7 +31,7 @@ var defaultTemplates = require('./defaultTemplates.js');
  * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {String|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
  */
 function menu({
@@ -42,7 +42,7 @@ function menu({
     cssClasses = {},
     templates = defaultTemplates,
     transformData,
-    hideWhenNoResults = true
+    hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
@@ -90,7 +90,7 @@ function menu({
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={facetValues.length > 0}
-          hideWhenNoResults={hideWhenNoResults}
+          hideContainerWhenNoResults={hideContainerWhenNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

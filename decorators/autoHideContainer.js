@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
-function autoHide(ComposedComponent) {
+function autoHideContainer(ComposedComponent) {
   class AutoHide extends React.Component {
     componentDidMount() {
       this._hideOrShowContainer(this.props);
@@ -13,16 +13,16 @@ function autoHide(ComposedComponent) {
 
     _hideOrShowContainer(props) {
       var container = ReactDOM.findDOMNode(this).parentNode;
-      if (props.hideWhenNoResults === true && props.hasResults === false) {
+      if (props.hideContainerWhenNoResults === true && props.hasResults === false) {
         container.style.display = 'none';
-      } else if (props.hideWhenNoResults === true) {
+      } else if (props.hideContainerWhenNoResults === true) {
         container.style.display = '';
       }
     }
 
     render() {
       if (this.props.hasResults === false &&
-        this.props.hideWhenNoResults === true) {
+        this.props.hideContainerWhenNoResults === true) {
         return <div />;
       }
 
@@ -32,7 +32,7 @@ function autoHide(ComposedComponent) {
 
   AutoHide.propTypes = {
     hasResults: React.PropTypes.bool.isRequired,
-    hideWhenNoResults: React.PropTypes.bool.isRequired
+    hideContainerWhenNoResults: React.PropTypes.bool.isRequired
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)
@@ -41,4 +41,4 @@ function autoHide(ComposedComponent) {
   return AutoHide;
 }
 
-module.exports = autoHide;
+module.exports = autoHideContainer;
