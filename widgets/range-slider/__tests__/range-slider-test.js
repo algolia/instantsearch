@@ -64,8 +64,8 @@ describe('rangeSlider()', () => {
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
     <Slider
       cssClasses={{body: null, root: null}}
-      hasResults={true}
-      hideContainerWhenNoResults={true}
+      hasResults
+      hideContainerWhenNoResults
       onChange={() => {}}
       range={{max: 4999.98, min: 1.99}}
       start={[-Infinity, Infinity]}
@@ -75,7 +75,7 @@ describe('rangeSlider()', () => {
         transformData: undefined,
         useCustomCompileOptions: {footer: false, header: false}
       }}
-      tooltips={true}
+      tooltips
     />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
   });

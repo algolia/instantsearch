@@ -1,3 +1,6 @@
+// Issue with eslint + high-order components like decorators
+/* eslint react/prop-types: 0 */
+
 var React = require('react');
 
 var cx = require('classnames/dedupe');
@@ -40,7 +43,8 @@ function headerFooter(ComposedComponent) {
       header: React.PropTypes.string,
       body: React.PropTypes.string,
       footer: React.PropTypes.string
-    })
+    }),
+    templateProps: React.PropTypes.object
   };
 
   HeaderFooter.defaultProps = {

@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 
-import React from 'react';
 import expect from 'expect';
 
 import generateRanges from '../generate-ranges';

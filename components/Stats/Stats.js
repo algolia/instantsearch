@@ -25,10 +25,7 @@ class Stats extends React.Component {
 
 Stats.propTypes = {
   cssClasses: React.PropTypes.shape({
-    time: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+    time: React.PropTypes.string
   }),
   hitsPerPage: React.PropTypes.number,
   nbHits: React.PropTypes.number,
