@@ -67,7 +67,13 @@ function transformData(fn, templateKey, originalData) {
     data = fn(originalData);
   } else if (typeof fn === 'object') {
     // ex: transformData: {hit, empty}
-    data = fn[templateKey] && fn[templateKey](originalData);
+    if (fn[templateKey]) {
+      data = fn[templateKey](originalData);
+    } else {
+      // if the templateKey doesn't exist, just use the
+      // original data
+      data = originalData;
+    }
   } else {
     throw new Error('`transformData` must be a function or an object');
   }
