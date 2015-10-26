@@ -32,7 +32,10 @@ describe('indexSelector()', () => {
     indexSelector.__Rewire__('autoHideContainer', autoHideContainer);
 
     container = document.createElement('div');
-    indices = ['index-a', 'index-b'];
+    indices = [
+      {name: 'index-a', label: 'Index A'},
+      {name: 'index-b', label: 'Index B'}
+    ];
     cssClasses = {
       root: 'custom-root',
       item: 'custom-item'
@@ -62,7 +65,10 @@ describe('indexSelector()', () => {
       currentIndex: 'index-a',
       hasResults: false,
       hideContainerWhenNoResults: false,
-      indices: ['index-a', 'index-b'],
+      indices: [
+        {name: 'index-a', label: 'Index A'},
+        {name: 'index-b', label: 'Index B'}
+      ],
       setIndex: () => {}
     };
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
