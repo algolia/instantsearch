@@ -27,7 +27,7 @@ function indexSelector({
   }) {
   var containerNode = utils.getContainerNode(container);
 
-  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{select,option}, hideContainerWhenNoResults]})';
+  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
   if (!container || !indices) {
     throw new Error(usage);
   }
@@ -37,7 +37,7 @@ function indexSelector({
       var currentIndex = helper.getIndex();
       var isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {
-        throw new Error('[stats]: Index ' + currentIndex + ' not present in `indices`');
+        throw new Error('[indexSelector]: Index ' + currentIndex + ' not present in `indices`');
       }
     },
 
