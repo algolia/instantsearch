@@ -19,10 +19,16 @@ class PriceRange extends React.Component {
       <div>
         {this.props.facetValues.map(facetValue => {
           var key = facetValue.from + '_' + facetValue.to;
+          var url;
+          if (this.props.createURL) {
+            url = this.props.createURL(facetValue.from, facetValue.to, facetValue.isRefined);
+          } else {
+            url = '#';
+          }
           return (
             <a
               className={cx(this.props.cssClasses.range, {[this.props.cssClasses.active]: facetValue.isRefined})}
-              href="#"
+              href={url}
               key={key}
               onClick={this.refine.bind(this, facetValue.from, facetValue.to)}
             >
