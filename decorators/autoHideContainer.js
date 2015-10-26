@@ -1,3 +1,6 @@
+// Issue with eslint + high-order components like decorators
+/* eslint react/prop-types: 0 */
+
 var React = require('react');
 var ReactDOM = require('react-dom');
 

@@ -32,7 +32,7 @@ describe('Slider', () => {
         <Nouislider
           animate={false}
           behaviour="snap"
-          connect={true}
+          connect
           cssClasses={{}}
           cssPrefix="ais-range-slider--"
           onChange={() => {}}

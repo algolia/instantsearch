@@ -40,9 +40,19 @@ Run the tests and lint:
 npm test
 ```
 
-# Updating a package (and shrinkwrap)
+# Adding/Updating a package
 
-See https://gist.github.com/vvo/d3c1c3d4358309ed2619.
+```sh
+npm install package --save[-dev]
+npm run shrinkwrap
+```
+
+# Removing a package
+
+```sh
+npm remove package --save[-dev]
+npm run shrinkwrap
+```
 
 # Commit message guidelines
 

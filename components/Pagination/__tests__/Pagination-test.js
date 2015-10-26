@@ -75,6 +75,7 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         className="ais-pagination--item"
         handleClick={() => {}}
+        key="test"
         label="test"
         url="/page"
       />);
@@ -94,6 +95,7 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         className="ais-pagination--item__disabled ais-pagination--item"
         handleClick={() => {}}
+        key="test"
         label="test"
         url="#"
       />);

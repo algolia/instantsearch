@@ -61,8 +61,8 @@ describe('stats()', () => {
         root: 'ais-stats',
         time: 'ais-stats--time'
       }}
-      hasResults={true}
-      hideContainerWhenNoResults={true}
+      hasResults
+      hideContainerWhenNoResults
       hitsPerPage={2}
       nbHits={20}
       nbPages={10}

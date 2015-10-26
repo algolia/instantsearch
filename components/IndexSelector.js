@@ -27,14 +27,8 @@ class IndexSelector extends React.Component {
 
 IndexSelector.propTypes = {
   cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
-    item: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+    root: React.PropTypes.string,
+    item: React.PropTypes.string
   }),
   currentIndex: React.PropTypes.string,
   indices: React.PropTypes.array,

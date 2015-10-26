@@ -140,6 +140,7 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = {
+  createURL: React.PropTypes.func,
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.string,
     item: React.PropTypes.string,
