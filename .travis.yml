@@ -1,8 +1,9 @@
 language: node_js
 node_js: 4
+before_install: npm prune
+before_cache: npm prune
 install: npm install
 script: ./scripts/test-ci.sh
-before_cache: npm prune
 branches:
   only:
     - master
