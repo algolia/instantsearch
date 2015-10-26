@@ -1775,8 +1775,8 @@
                   }
                 },
                 "pify": {
-                  "version": "2.2.0",
-                  "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                  "version": "2.3.0",
+                  "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                 },
                 "pinkie-promise": {
                   "version": "1.0.0",
@@ -1859,8 +1859,8 @@
                   "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.2.tgz"
                 },
                 "pify": {
-                  "version": "2.2.0",
-                  "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                  "version": "2.3.0",
+                  "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                 },
                 "pinkie-promise": {
                   "version": "1.0.0",
@@ -2285,8 +2285,8 @@
                       }
                     },
                     "pify": {
-                      "version": "2.2.0",
-                      "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                      "version": "2.3.0",
+                      "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                     },
                     "pinkie-promise": {
                       "version": "1.0.0",
@@ -3443,8 +3443,8 @@
               "resolved": "https://registry.npmjs.org/hawk/-/hawk-3.1.0.tgz",
               "dependencies": {
                 "boom": {
-                  "version": "2.9.0",
-                  "resolved": "https://registry.npmjs.org/boom/-/boom-2.9.0.tgz"
+                  "version": "2.10.0",
+                  "resolved": "https://registry.npmjs.org/boom/-/boom-2.10.0.tgz"
                 },
                 "cryptiles": {
                   "version": "2.0.5",
@@ -7637,8 +7637,8 @@
                           }
                         },
                         "pify": {
-                          "version": "2.2.0",
-                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                          "version": "2.3.0",
+                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                         },
                         "pinkie-promise": {
                           "version": "1.0.0",
@@ -7671,8 +7671,8 @@
                           "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.2.tgz"
                         },
                         "pify": {
-                          "version": "2.2.0",
-                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                          "version": "2.3.0",
+                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                         },
                         "pinkie-promise": {
                           "version": "1.0.0",
@@ -7983,8 +7983,8 @@
               "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-4.0.1.tgz"
             },
             "pify": {
-              "version": "2.2.0",
-              "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+              "version": "2.3.0",
+              "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
             },
             "pinkie-promise": {
               "version": "1.0.0",
@@ -8125,8 +8125,8 @@
                           }
                         },
                         "pify": {
-                          "version": "2.2.0",
-                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                          "version": "2.3.0",
+                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                         },
                         "pinkie-promise": {
                           "version": "1.0.0",
@@ -8159,8 +8159,8 @@
                           "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-4.1.2.tgz"
                         },
                         "pify": {
-                          "version": "2.2.0",
-                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.2.0.tgz"
+                          "version": "2.3.0",
+                          "resolved": "https://registry.npmjs.org/pify/-/pify-2.3.0.tgz"
                         },
                         "pinkie-promise": {
                           "version": "1.0.0",
