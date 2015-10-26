@@ -62,6 +62,7 @@ class PriceRange extends React.Component {
 }
 
 PriceRange.propTypes = {
+  createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
     form: React.PropTypes.string,
