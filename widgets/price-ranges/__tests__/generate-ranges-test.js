@@ -39,7 +39,7 @@ describe('generateRanges()', () => {
     expect(generateRanges(stats)).toEqual(expected);
   });
 
-  it.only('should not do an infinite loop', () => {
+  it('should not do an infinite loop', () => {
     var stats = {min: 99.99, max: 149.99, avg: 124.99, sum: 249.98};
     generateRanges(stats);
   });
