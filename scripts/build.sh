@@ -6,7 +6,7 @@ ROOT=`dirname "$0"`/..
 
 mkdir -p dist/themes
 
-license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia SAS | github.com/algolia/instantsearch.js */"
+license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */"
 
 bundle='instantsearch'
 
@@ -21,7 +21,9 @@ cat dist/$bundle.js | uglifyjs -c warnings=false -m > dist/$bundle.min.js
 printf "\n\nBuild: CSS\n"
 for source in "$ROOT"/themes/[^_]*.sass; do
   base=`basename "$source" .sass`
-  node-sass "$source" > dist/themes/$base.css
+  echo "$license" > dist/themes/$base.css
+  echo >> dist/themes/$base.css
+  node-sass "$source" >> dist/themes/$base.css
   cleancss dist/themes/$base.css > dist/themes/$base.min.css
 done
 
