@@ -61,6 +61,7 @@ describe('priceRanges()', () => {
       };
 
       props = {
+        createURL: sinon.spy(),
         cssClasses: {
           active: 'ais-price-ranges--range__active',
           body: 'ais-price-ranges--body',
