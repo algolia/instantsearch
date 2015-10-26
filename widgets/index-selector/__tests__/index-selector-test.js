@@ -82,6 +82,14 @@ describe('indexSelector()', () => {
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
+  it('should throw if there is no name attribute in a passed object', () => {
+    indices.length = 0;
+    indices.push({label: 'Label without a name'});
+    expect(() => {
+      widget.init(null, helper);
+    }).toThrow(/Index index-a not present/);
+  });
+
   it('must include the current index at initialization time', () => {
     helper.getIndex = sinon.stub().returns('non-existing-index');
     expect(() => {
