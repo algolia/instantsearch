@@ -33,8 +33,8 @@ test('[INT][FILTERS] Should retrieve different values for multi facetted records
       .then(function(content) {
         return index.waitTask(content.taskID);
       }).then(function() {
-      return client;
-    });
+        return client;
+      });
   }).then(function(client) {
     var helper = algoliasearchHelper(client, indexName, {
       facets: ['facet']

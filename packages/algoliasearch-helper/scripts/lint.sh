@@ -11,4 +11,3 @@ fi
 echo "Lint"
 
 eslint . --quiet
-jsfmt --diff
