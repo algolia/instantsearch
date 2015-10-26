@@ -39,6 +39,7 @@ function generateRanges(stats) {
       });
     }
     while (next < max) {
+      console.log('YOLO LOOP')
       from = facetValues[facetValues.length - 1].to;
       next = round(from + (max - avg) / 3, precision);
       facetValues.push({
