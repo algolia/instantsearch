@@ -41,7 +41,16 @@ describe('generateRanges()', () => {
 
   it('should not do an infinite loop', () => {
     var stats = {min: 99.99, max: 149.99, avg: 124.99, sum: 249.98};
-    generateRanges(stats);
+    var expected = [
+      {to: 100},
+      {from: 100, to: 110},
+      {from: 110, to: 120},
+      {from: 120, to: 130},
+      {from: 130, to: 131},
+      {from: 131, to: 132},
+      {from: 132}
+    ];
+    expect(generateRanges(stats)).toEqual(expected);
   });
 
   it('should not generate ranges', () => {
