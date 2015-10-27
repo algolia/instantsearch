@@ -38,6 +38,7 @@ API is unstable. We welcome any idea and pull request.
   - [searchBox](#searchbox)
   - [stats](#stats)
   - [indexSelector](#indexselector)
+  - [hitsPerPageSelector](#hitsperpageselector)
   - [pagination](#pagination)
   - [hits](#hits)
   - [toggle](#toggle)
@@ -299,6 +300,7 @@ instantsearch({
 [searchBox]: ./widgets-screenshots/search-box.png
 [stats]: ./widgets-screenshots/stats.png
 [indexSelector]: ./widgets-screenshots/index-selector.png
+[hitsPerPageSelector]: ./widgets-screenshots/hits-per-page-selector.png
 [pagination]: ./widgets-screenshots/pagination.png
 [hits]: ./widgets-screenshots/hits.png
 [toggle]: ./widgets-screenshots/toggle.png
@@ -496,6 +498,69 @@ search.addWidget(
 .ais-index-selector {
 }
 .ais-index-selector--item {
+}
+```
+
+### hitsPerPageSelector
+
+![Example of the hitsPerPageSelector widget][hitsPerPageSelector]
+
+This widget will let you change the current number of results being
+displayed per page.
+
+#### API
+
+```js
+/**
+ * Instantiate a dropdown element to choose the number of hits to display per page
+ * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Array} options.options Array of objects defining the different values and labels
+ * @param  {Number} options.options[0].value Number of hits to display per page
+ * @param  {String} options.options[0].label Label to display in the option
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
+ * @return {Object}
+ */
+```
+
+#### Usage
+
+```html
+<div id="hits-per-page-selector"></div>
+```
+
+```js
+search.addWidget(
+  instantsearch.widgets.hitsPerPageSelector({
+    container: '#hits-per-page-selector',
+    options: [
+      {value: 6, label: '6 per page'},
+      {value: 12, label: '12 per page'},
+      {value: 24, label: '24 per page'}
+    ],
+    cssClasses: {
+      select: 'form-control'
+    }
+  })
+);
+```
+
+#### Styling
+
+```html
+<select class="ais-hits-per-page-selector">
+  <option class="ais-hits-per-page-selector--item">6 per page</option>
+  <option class="ais-hits-per-page-selector--item">12 per page</option>
+  <option class="ais-hits-per-page-selector--item">24 per page</option>
+</select>
+```
+
+```css
+.ais-hits-per-page-selector {
+}
+.ais-hits-per-page-selector--item {
 }
 ```
 
