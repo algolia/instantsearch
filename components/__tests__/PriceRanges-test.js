@@ -38,6 +38,7 @@ describe('PriceRanges', () => {
       props = {
         templateProps: {},
         facetValues,
+        createURL: sinon.spy(),
         cssClasses: {
           range: 'range-class',
           form: 'form-class',
@@ -65,6 +66,15 @@ describe('PriceRanges', () => {
       out.props.children[0].forEach((c) => {
         expect(c.props.className).toEqual('range-class');
       });
+    });
+
+    it('creates the URL', () => {
+      expect(props.createURL.called).toBe(true);
+      expect(props.createURL.callCount).toEqual(8);
+      expect(props.createURL.firstCall.args).toEqual([undefined, 1, undefined]);
+      expect(props.createURL.secondCall.args).toEqual([1, 80, undefined]);
+      expect(props.createURL.thirdCall.args).toEqual([80, 160, undefined]);
+      expect(props.createURL.lastCall.args).toEqual([4980, undefined, undefined]);
     });
 
     it('should have the form class', () => {

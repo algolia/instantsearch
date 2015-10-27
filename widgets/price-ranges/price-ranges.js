@@ -99,7 +99,7 @@ function priceRanges({
       helper.search();
     },
 
-    render: function({results, helper, templatesConfig}) {
+    render: function({results, helper, templatesConfig, state, createURL}) {
       var PriceRanges = autoHideContainer(headerFooter(require('../../components/PriceRanges')));
       var facetValues;
 
@@ -133,6 +133,18 @@ function priceRanges({
 
       ReactDOM.render(
         <PriceRanges
+          createURL={(from, to, isRefined) => {
+            var newState = state.clearRefinements(facetName);
+            if (!isRefined) {
+              if (typeof from !== 'undefined') {
+                newState = newState.addNumericRefinement(facetName, '>', from - 1);
+              }
+              if (typeof to !== 'undefined') {
+                newState = newState.addNumericRefinement(facetName, '<', to + 1);
+              }
+            }
+            return createURL(newState);
+          }}
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={results.hits.length > 0}
