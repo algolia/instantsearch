@@ -8,15 +8,15 @@ import jsdom from 'mocha-jsdom';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-import indexSelector from '../index-selector';
+import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
 
-describe('indexSelector()', () => {
+describe('hitsPerPageSelector()', () => {
   jsdom({useEach: true});
 
   var ReactDOM;
   var container;
-  var indices;
+  var options;
   var cssClasses;
   var widget;
   var props;
@@ -28,22 +28,24 @@ describe('indexSelector()', () => {
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = {render: sinon.spy()};
 
-    indexSelector.__Rewire__('ReactDOM', ReactDOM);
-    indexSelector.__Rewire__('autoHideContainer', autoHideContainer);
+    hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
+    hitsPerPageSelector.__Rewire__('autoHideContainer', autoHideContainer);
 
     container = document.createElement('div');
-    indices = [
-      {name: 'index-a', label: 'Index A'},
-      {name: 'index-b', label: 'Index B'}
+    options = [
+      {value: 10, label: '10 results'},
+      {value: 20, label: '20 results'}
     ];
     cssClasses = {
       root: 'custom-root',
       item: 'custom-item'
     };
-    widget = indexSelector({container, indices, cssClasses});
+    widget = hitsPerPageSelector({container, options, cssClasses});
     helper = {
-      getIndex: sinon.stub().returns('index-a'),
-      setIndex: sinon.spy(),
+      state: {
+        hitsPerPage: 20
+      },
+      setQueryParameter: sinon.spy(),
       search: sinon.spy()
     };
     results = {
@@ -56,18 +58,18 @@ describe('indexSelector()', () => {
   });
 
   it('calls ReactDOM.render(<Selector props />, container)', () => {
-    widget.render({helper, results});
+    widget.render({helper, results, state: helper.state});
     props = {
       cssClasses: {
-        root: 'ais-index-selector custom-root',
-        item: 'ais-index-selector--item custom-item'
+        root: 'ais-hits-per-page-selector custom-root',
+        item: 'ais-hits-per-page-selector--item custom-item'
       },
-      currentValue: 'index-a',
+      currentValue: 20,
       hasResults: false,
       hideContainerWhenNoResults: false,
       options: [
-        {value: 'index-a', label: 'Index A'},
-        {value: 'index-b', label: 'Index B'}
+        {value: 10, label: '10 results'},
+        {value: 20, label: '20 results'}
       ],
       setValue: () => {}
     };
@@ -76,29 +78,29 @@ describe('indexSelector()', () => {
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
   });
 
-  it('sets the underlying index', () => {
-    widget.setIndex(helper, 'index-b');
-    expect(helper.setIndex.calledOnce).toBe(true, 'setIndex called once');
+  it('sets the underlying hitsPerPage', () => {
+    widget.setHitsPerPage(helper, helper.state, 10);
+    expect(helper.setQueryParameter.calledOnce).toBe(true, 'setQueryParameter called once');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
   it('should throw if there is no name attribute in a passed object', () => {
-    indices.length = 0;
-    indices.push({label: 'Label without a name'});
+    options.length = 0;
+    options.push({label: 'Label without a value'});
     expect(() => {
-      widget.init(null, helper);
-    }).toThrow(/Index index-a not present/);
+      widget.init(helper.state, helper);
+    }).toThrow(/No option in `options` with `value: 20`/);
   });
 
-  it('must include the current index at initialization time', () => {
-    helper.getIndex = sinon.stub().returns('non-existing-index');
+  it('must include the current hitsPerPage at initialization time', () => {
+    helper.state.hitsPerPage = -1;
     expect(() => {
-      widget.init(null, helper);
-    }).toThrow(/Index non-existing-index not present/);
+      widget.init(helper.state, helper);
+    }).toThrow(/No option in `options` with `value: -1`/);
   });
 
   afterEach(() => {
-    indexSelector.__ResetDependency__('ReactDOM');
-    indexSelector.__ResetDependency__('autoHideContainer');
+    hitsPerPageSelector.__ResetDependency__('ReactDOM');
+    hitsPerPageSelector.__ResetDependency__('autoHideContainer');
   });
 });

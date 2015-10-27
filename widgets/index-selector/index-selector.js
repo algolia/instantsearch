@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var findIndex = require('lodash/array/findIndex');
+var map = require('lodash/collection/map');
 var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-index-selector');
 var cx = require('classnames');
@@ -32,6 +33,10 @@ function indexSelector({
     throw new Error(usage);
   }
 
+  var selectorOptions = map(indices, function(index) {
+    return {label: index.label, value: index.name};
+  });
+
   return {
     init: function(state, helper) {
       var currentIndex = helper.getIndex();
@@ -50,20 +55,20 @@ function indexSelector({
       let currentIndex = helper.getIndex();
       let hasResults = results.hits.length > 0;
       let setIndex = this.setIndex.bind(this, helper);
-      var IndexSelector = autoHideContainer(require('../../components/IndexSelector'));
+      var Selector = autoHideContainer(require('../../components/Selector'));
 
       cssClasses = {
         root: cx(bem(null), cssClasses.root),
         item: cx(bem('item'), cssClasses.item)
       };
       ReactDOM.render(
-        <IndexSelector
+        <Selector
           cssClasses={cssClasses}
-          currentIndex={currentIndex}
+          currentValue={currentIndex}
           hasResults={hasResults}
           hideContainerWhenNoResults={hideContainerWhenNoResults}
-          indices={indices}
-          setIndex={setIndex}
+          options={selectorOptions}
+          setValue={setIndex}
         />,
         containerNode
       );
