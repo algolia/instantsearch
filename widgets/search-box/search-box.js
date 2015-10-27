@@ -7,11 +7,11 @@ var cx = require('classnames');
 
 /**
  * Instantiate a searchbox
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} [options.placeholder] Input's placeholder
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} [options.placeholder] Input's placeholder
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.input] CSS class to add to the input
- * @param  {String} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
+ * @param  {string} [options.cssClasses.input] CSS class to add to the input
+ * @param  {string} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}

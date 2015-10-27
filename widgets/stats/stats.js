@@ -11,17 +11,17 @@ var defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Display various stats about the current search state
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
+ * @param  {string} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body] Body template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.body] Body template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
