@@ -56,7 +56,7 @@ API is unstable. We welcome any idea and pull request.
 ### npm, browserify, webpack
 
 ```sh
-npm install instantsearch.js --save-dev
+npm install instantsearch.js --save
 ```
 
 ### `<script>`
