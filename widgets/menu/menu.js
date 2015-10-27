@@ -12,24 +12,24 @@ var defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Create a menu out of a facet
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How many facets values to retrieve
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}

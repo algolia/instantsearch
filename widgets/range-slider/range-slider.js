@@ -12,19 +12,19 @@ var defaultTemplates = {
 
 /**
  * Instantiate a slider based on a numeric attribute
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */

@@ -9,13 +9,13 @@ var autoHideContainer = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.options Array of objects defining the different values and labels
- * @param  {Number} options.options[0].value Number of hits to display per page
- * @param  {String} options.options[0].label Label to display in the option
+ * @param  {number} options.options[0].value number of hits to display per page
+ * @param  {string} options.options[0].label Label to display in the option
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
  * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */

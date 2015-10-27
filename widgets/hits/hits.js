@@ -10,18 +10,18 @@ var defaultTemplates = require('./defaultTemplates');
 
 /**
  * Display the list of results (hits) from the current search
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {String} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {String} [options.cssClasses.item] CSS class to add to each result
+ * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {string} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {string} [options.cssClasses.item] CSS class to add to each result
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.empty=''] Template to use when there are no results.
- * @param  {String|Function} [options.templates.item=''] Template to use for each result.
+ * @param  {string|Function} [options.templates.empty=''] Template to use when there are no results.
+ * @param  {string|Function} [options.templates.item=''] Template to use for each result.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
  * @param  {Function} [options.transformData.empty=''] Method used to change the object passed to the empty template
  * @param  {Function} [options.transformData.item=''] Method used to change the object passed to the item template
- * @param  {Number} [hitsPerPage=20] The number of hits to display per page
+ * @param  {number} [hitsPerPage=20] The number of hits to display per page
  * @return {Object}
  */
 function hits({
