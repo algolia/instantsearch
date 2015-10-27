@@ -33,6 +33,9 @@ function generateRanges(stats) {
     while (next < avg) {
       from = facetValues[facetValues.length - 1].to;
       next = round(from + (avg - min) / 3, precision);
+      if (next <= from) {
+        next = from + 1;
+      }
       facetValues.push({
         from: from,
         to: next
@@ -41,6 +44,9 @@ function generateRanges(stats) {
     while (next < max) {
       from = facetValues[facetValues.length - 1].to;
       next = round(from + (max - avg) / 3, precision);
+      if (next <= from) {
+        next = from + 1;
+      }
       facetValues.push({
         from: from,
         to: next
