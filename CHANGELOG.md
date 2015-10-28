@@ -1,3 +1,35 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/algolia/instantsearch.js/compare/v0.6.5...v0.7.0) (2015-10-28)
+
+
+### Features
+
+* **searchBox:** Add `wrapInput` option ([b327dbc](https://github.com/algolia/instantsearch.js/commit/b327dbc))
+* **urls:** ability to create an URL from a set of params ([9ca8369](https://github.com/algolia/instantsearch.js/commit/9ca8369)), closes [#372](https://github.com/algolia/instantsearch.js/issues/372)
+
+
+### BREAKING CHANGES
+
+* urls: the instantsearch.createURL method is now taking a
+simple JS object and not a SearchParameter instance anymore.
+* searchBox: The `input` used by the search-box widget is now
+wrapped in a `<div class="ais-search-box">` by default. This can be
+turned off with `wrapInput: false`.
+
+This PR is a bit long, I had to do some minor refactoring to keep the
+new code understandable. I simply split the large `init` method into
+calls to smaller methods.
+
+There is some vanilla JS DOM manipulation involved to handle all the
+possible cases: targeting an `input` or a `div`, adding or not the
+`poweredBy`, adding or not the wrapping div.
+
+Note that there is no `targetNode.insertAfter(newNode)` method, so
+I had to resort to the old trick of `parentNode.insertBefore(newNode,
+targetNode.nextSibling)`.
+
+
+
 <a name="0.6.5"></a>
 ## [0.6.5](https://github.com/algolia/instantsearch.js/compare/v0.6.4...v0.6.5) (2015-10-27)
 
