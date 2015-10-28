@@ -102,6 +102,52 @@ describe('search-box()', () => {
     });
   });
 
+  context('wraps the input in a div', () => {
+    it('when targeting a div', () => {
+      // Given
+      container = document.createElement('div');
+      widget = searchBox({container});
+
+      // When
+      widget.init(initialState, helper);
+
+      // Then
+      var wrapper = container.querySelectorAll('div.ais-search-box')[0];
+      var input = container.querySelectorAll('input')[0];
+
+      expect(wrapper.contains(input)).toEqual(true);
+      expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
+    });
+
+    it('when targeting an input', () => {
+      // Given
+      container = createHTMLNodeFromString('<input />');
+      widget = searchBox({container});
+
+      // When
+      widget.init(initialState, helper);
+
+      // Then
+      var wrapper = container.parentNode;
+      expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
+    });
+
+    it('can be disabled with wrapInput:false', () => {
+      // Given
+      container = document.createElement('div');
+      widget = searchBox({container, wrapInput: false});
+
+      // When
+      widget.init(initialState, helper);
+
+      // Then
+      var wrapper = container.querySelectorAll('div.ais-search-box');
+      var input = container.querySelectorAll('input')[0];
+      expect(wrapper.length).toEqual(0);
+      expect(container.firstChild).toEqual(input);
+    });
+  });
+
   context('adds a PoweredBy', () => {
     beforeEach(() => {
       container = document.createElement('div');
@@ -124,7 +170,7 @@ describe('search-box()', () => {
     var input;
     beforeEach(() => {
       container = document.createElement('div');
-      input = document.createElement('input');
+      input = createHTMLNodeFromString('<input />');
       input.focus = sinon.spy();
     });
 
