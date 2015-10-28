@@ -27,7 +27,7 @@ describe('autoHideContainer', () => {
   });
 
   function render(props = {}) {
-    var AutoHide = autoHideContainer(<span />);
+    var AutoHide = autoHideContainer('span');
     renderer.render(<AutoHide {...props} />);
     return renderer.getRenderOutput();
   }
