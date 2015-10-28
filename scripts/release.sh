@@ -36,7 +36,7 @@ read -p "=> Release: press [ENTER] to view changes since latest version.."
 
 # nd (markdown renderer in terminal)
 # has some output going on to stderr because of node v4, no big deal
-conventional-changelog -p angular | nd 2>/dev/null
+conventional-changelog -p angular | nd | less -r 2>/dev/null
 
 # choose and bump new version
 # printf "\n\nRelease: Please enter the new chosen version > "
