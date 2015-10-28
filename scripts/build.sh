@@ -16,7 +16,7 @@ for source in "$ROOT"/themes/[^_]*.sass; do
   base=`basename "$source" .sass`
   echo "$license" > dist/themes/$base.css
   echo >> dist/themes/$base.css
-  node-sass "$source" >> dist/themes/$base.css
+  node-sass "$source" | postcss --use autoprefixer >> dist/themes/$base.css
   cleancss dist/themes/$base.css > dist/themes/$base.min.css
 done
 
