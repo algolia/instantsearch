@@ -39,7 +39,7 @@ describe('headerFooter', () => {
   });
 
   function render(props = {}) {
-    var HeaderFooter = headerFooter(<div />);
+    var HeaderFooter = headerFooter('div');
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }
