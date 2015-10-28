@@ -39,6 +39,20 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.hitsPerPageSelector({
+    container: '#hits-per-page-selector',
+    options: [
+      {value: 6, label: '6 per page'},
+      {value: 12, label: '12 per page'},
+      {value: 24, label: '24 per page'}
+    ],
+    cssClasses: {
+      select: 'form-control'
+    }
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {

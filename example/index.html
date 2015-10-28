@@ -16,7 +16,7 @@
 <body>
   <div class="container">
     <div class="page-header">
-      <h1>Instant search demo <small>using instantsearch.js</small></h1>
+      <h1><a href="./">Instant search demo</a> <small>using instantsearch.js</small></h1>
     </div>
 
     <div class="row search search--hidden">
@@ -34,8 +34,16 @@
           <input id="search-box" class="form-control" />
         </div>
         <div class="row">
-          <div class="col-md-8">
+          <div class="col-md-4">
             <div id="stats"></div>
+          </div>
+          <div class="col-md-4 text-right">
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="hits-per-page-select">Show:</label>
+                <span id="hits-per-page-selector"></span>
+              </div>
+            </div>
           </div>
           <div class="col-md-4 text-right">
             <div class="form-inline">

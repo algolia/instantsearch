@@ -1,2 +1,2 @@
 --compilers js:babel/register
-@(components|widgets|lib|decorators)/**/*-test.js index-test.js
+@(components|widgets|lib|decorators)/**/*-test.js

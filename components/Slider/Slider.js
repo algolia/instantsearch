@@ -28,12 +28,6 @@ class Slider extends React.Component {
 }
 
 Slider.propTypes = {
-  cssClasses: React.PropTypes.shape({
-    body: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
-  }),
   onChange: React.PropTypes.func,
   onSlide: React.PropTypes.func,
   range: React.PropTypes.object.isRequired,

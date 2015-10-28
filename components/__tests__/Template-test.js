@@ -127,6 +127,19 @@ describe('Template', () => {
     }).toThrow('`transformData` must return a `object`, got `undefined`.');
   });
 
+  it('doesn\'t throw an error if the transformData is an object without the templateKey', () => {
+    templates = {test: 'it supports {{feature}}'};
+    data = {feature: 'replace me'};
+    templateKey = 'test';
+    transformData = {
+      anotherKey: (d) => { return d; }
+    };
+    let props = getProps();
+    expect(() => {
+      renderer.render(<Template {...props} />);
+    }).toNotThrow();
+  });
+
   it('throws an error if the transformData returns an unexpected type', () => {
     templates = {test: 'it supports {{feature}}'};
     data = {feature: 'replace me'};

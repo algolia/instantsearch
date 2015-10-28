@@ -1,36 +1,33 @@
-var utils = require('../lib/utils.js');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var utils = require('../../lib/utils.js');
 var forEach = require('lodash/collection/forEach');
-var bem = require('../lib/utils').bemHelper('ais-search-box');
+var bem = require('../../lib/utils').bemHelper('ais-search-box');
 var cx = require('classnames');
 
 /**
  * Instantiate a searchbox
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} [options.placeholder] Input's placeholder
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} [options.placeholder] Input's placeholder
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.input] CSS class to add to the input
- * @param  {String} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
+ * @param  {string} [options.cssClasses.input] CSS class to add to the input
+ * @param  {string} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}
  */
 function searchBox({
   container,
-  placeholder,
+  placeholder = '',
   cssClasses = {},
   poweredBy = false,
   autofocus = 'auto'
 }) {
-  var input = utils.getContainerNode(container);
-
-  if (!input) {
+  if (!container) {
     throw new Error('Usage: searchBox({container[, placeholder, cssClasses.{input,poweredBy}, poweredBy, autofocus]})');
   }
 
-  // Hook on an existing input, or add one if none targeted
-  if (input.tagName !== 'INPUT') {
-    input = input.appendChild(document.createElement('input'));
-  }
+  container = utils.getContainerNode(container);
 
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
@@ -38,6 +35,13 @@ function searchBox({
   }
 
   return {
+    // Hook on an existing input, or add one if none targeted
+    getInput: function() {
+      if (container.tagName === 'INPUT') {
+        return container;
+      }
+      return container.appendChild(document.createElement('input'));
+    },
     init: function(initialState, helper) {
       var defaultAttributes = {
         autocapitalize: 'off',
@@ -49,6 +53,7 @@ function searchBox({
         type: 'text',
         value: initialState.query
       };
+      var input = this.getInput();
 
       // Overrides attributes if not already set
       forEach(defaultAttributes, (value, key) => {
@@ -59,7 +64,7 @@ function searchBox({
       });
 
       // Add classes
-      input.classList.add(bem('input'), cssClasses.input);
+      input.classList.add(cx(bem('input'), cssClasses.input));
 
       input.addEventListener('keyup', () => {
         helper.setQuery(input.value).search();
@@ -67,9 +72,7 @@ function searchBox({
 
       // Optional "powered by Algolia" widget
       if (poweredBy) {
-        var React = require('react');
-        var ReactDOM = require('react-dom');
-        var PoweredBy = require('../components/PoweredBy/PoweredBy.js');
+        var PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
         var poweredByContainer = document.createElement('div');
         input.parentNode.appendChild(poweredByContainer);
         var poweredByCssClasses = {

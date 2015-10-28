@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 
-import React from 'react';
 import expect from 'expect';
 
 import generateRanges from '../generate-ranges';
@@ -36,6 +35,20 @@ describe('generateRanges()', () => {
       {from: 35, to: 40},
       {from: 40, to: 45},
       {from: 45}
+    ];
+    expect(generateRanges(stats)).toEqual(expected);
+  });
+
+  it('should not do an infinite loop', () => {
+    var stats = {min: 99.99, max: 149.99, avg: 124.99, sum: 249.98};
+    var expected = [
+      {to: 100},
+      {from: 100, to: 110},
+      {from: 110, to: 120},
+      {from: 120, to: 130},
+      {from: 130, to: 131},
+      {from: 131, to: 132},
+      {from: 132}
     ];
     expect(generateRanges(stats)).toEqual(expected);
   });

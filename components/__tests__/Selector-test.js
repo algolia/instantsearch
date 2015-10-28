@@ -1,0 +1,66 @@
+/* eslint-env mocha */
+
+import React from 'react';
+import expect from 'expect';
+import TestUtils from 'react-addons-test-utils';
+import Selector from '../Selector';
+
+import expectJSX from 'expect-jsx';
+expect.extend(expectJSX);
+
+describe('Selector', () => {
+  var renderer;
+
+  beforeEach(() => {
+    let {createRenderer} = TestUtils;
+    renderer = createRenderer();
+  });
+
+
+  it('should render <Selector/> with strings', () => {
+    var out = render({
+      currentValue: 'index-a',
+      cssClasses: {
+        root: 'custom-root',
+        item: 'custom-item'
+      },
+      options: [{value: 'index-a', label: 'Index A'}, {value: 'index-b', label: 'Index B'}]
+    });
+    expect(out).toEqualJSX(
+      <select
+        className="custom-root"
+        onChange={() => {}}
+        value="index-a"
+      >
+        <option className="custom-item" value="index-a">Index A</option>
+        <option className="custom-item" value="index-b">Index B</option>
+      </select>
+    );
+  });
+
+  it('should render <Selector/> with numbers', () => {
+    var out = render({
+      currentValue: 10,
+      cssClasses: {
+        root: 'custom-root',
+        item: 'custom-item'
+      },
+      options: [{value: 10, label: '10 results per page'}, {value: 20, label: '20 results per page'}]
+    });
+    expect(out).toEqualJSX(
+      <select
+        className="custom-root"
+        onChange={() => {}}
+        value={10}
+      >
+        <option className="custom-item" value={10}>10 results per page</option>
+        <option className="custom-item" value={20}>20 results per page</option>
+      </select>
+    );
+  });
+
+  function render(props = {}) {
+    renderer.render(<Selector {...props} />);
+    return renderer.getRenderOutput();
+  }
+});

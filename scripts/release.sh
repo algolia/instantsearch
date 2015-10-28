@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ev # exit when error
+set -e # exit when error
 
 currentBranch=`git rev-parse --abbrev-ref HEAD`
 if [ $currentBranch != 'master' ]; then

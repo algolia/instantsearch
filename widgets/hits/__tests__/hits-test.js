@@ -12,7 +12,7 @@ import hits from '../hits';
 import Hits from '../../../components/Hits';
 
 describe('hits()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   var ReactDOM;
   var container;

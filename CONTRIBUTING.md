@@ -40,9 +40,19 @@ Run the tests and lint:
 npm test
 ```
 
-# Updating a package (and shrinkwrap)
+# Adding/Updating a package
 
-See https://gist.github.com/vvo/d3c1c3d4358309ed2619.
+```sh
+npm install package --save[-dev]
+npm run shrinkwrap
+```
+
+# Removing a package
+
+```sh
+npm remove package --save[-dev]
+npm run shrinkwrap
+```
 
 # Commit message guidelines
 
@@ -53,3 +63,17 @@ Examples:
 
 - feat(slider): add new range option
 - fix(refinementList): send the full algolia result to the noResults template
+
+# Milestones
+
+- `next` => Ideas, questions, refactors, bugs that were discuseed, turned into clear actions by the maintainers
+- `x.x.x` => selected `next` actions to be done in a release
+- no milestone => Still need investigation / discussion
+
+# Labels
+
+Most labels are obvious, some of them not
+
+- `needs api proposal` => good idea, now in need of a clear API proposal (example: https://github.com/algolia/instantsearch.js/issues/331)
+- `new widget` => proposal accepted
+- `question` => anything that's not a confirmed bug/new feature

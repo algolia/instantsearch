@@ -38,6 +38,7 @@ API is unstable. We welcome any idea and pull request.
   - [searchBox](#searchbox)
   - [stats](#stats)
   - [indexSelector](#indexselector)
+  - [hitsPerPageSelector](#hitsperpageselector)
   - [pagination](#pagination)
   - [hits](#hits)
   - [toggle](#toggle)
@@ -55,7 +56,7 @@ API is unstable. We welcome any idea and pull request.
 ### npm, browserify, webpack
 
 ```sh
-npm install instantsearch.js --save-dev
+npm install instantsearch.js --save
 ```
 
 ### `<script>`
@@ -299,6 +300,7 @@ instantsearch({
 [searchBox]: ./widgets-screenshots/search-box.png
 [stats]: ./widgets-screenshots/stats.png
 [indexSelector]: ./widgets-screenshots/index-selector.png
+[hitsPerPageSelector]: ./widgets-screenshots/hits-per-page-selector.png
 [pagination]: ./widgets-screenshots/pagination.png
 [hits]: ./widgets-screenshots/hits.png
 [toggle]: ./widgets-screenshots/toggle.png
@@ -318,8 +320,8 @@ instantsearch({
 ```js
 /**
  * Instantiate a searchbox
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} [options.placeholder='Search here'] Input's placeholder
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} [options.placeholder='Search here'] Input's placeholder
  * @param  {Object} [options.cssClass] CSS classes to add to the input
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
@@ -374,17 +376,17 @@ search.addWidget(
 ```js
 /**
  * Display various stats about the current search state
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
+ * @param  {string} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.body] Body template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.body] Body template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
@@ -448,13 +450,13 @@ you'll need several indices. This widget lets you easily change it.
 ```js
 /**
  * Instantiate a dropdown element to choose the current targeted index
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
- * @param  {String} options.indices[0].name Name of the index to target
- * @param  {String} options.indices[0].label Label displayed in the dropdown
+ * @param  {string} options.indices[0].name Name of the index to target
+ * @param  {string} options.indices[0].label Label displayed in the dropdown
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {String} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {String} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
  * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
  * @return {Object}
  */
@@ -499,6 +501,69 @@ search.addWidget(
 }
 ```
 
+### hitsPerPageSelector
+
+![Example of the hitsPerPageSelector widget][hitsPerPageSelector]
+
+This widget will let you change the current number of results being
+displayed per page.
+
+#### API
+
+```js
+/**
+ * Instantiate a dropdown element to choose the number of hits to display per page
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Array} options.options Array of objects defining the different values and labels
+ * @param  {number} options.options[0].value number of hits to display per page
+ * @param  {string} options.options[0].label Label to display in the option
+ * @param  {Object} [options.cssClasses] CSS classes to be added
+ * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
+ * @return {Object}
+ */
+```
+
+#### Usage
+
+```html
+<div id="hits-per-page-selector"></div>
+```
+
+```js
+search.addWidget(
+  instantsearch.widgets.hitsPerPageSelector({
+    container: '#hits-per-page-selector',
+    options: [
+      {value: 6, label: '6 per page'},
+      {value: 12, label: '12 per page'},
+      {value: 24, label: '24 per page'}
+    ],
+    cssClasses: {
+      select: 'form-control'
+    }
+  })
+);
+```
+
+#### Styling
+
+```html
+<select class="ais-hits-per-page-selector">
+  <option class="ais-hits-per-page-selector--item">6 per page</option>
+  <option class="ais-hits-per-page-selector--item">12 per page</option>
+  <option class="ais-hits-per-page-selector--item">24 per page</option>
+</select>
+```
+
+```css
+.ais-hits-per-page-selector {
+}
+.ais-hits-per-page-selector--item {
+}
+```
+
 ### pagination
 
 ![Example of the pagination widget][pagination]
@@ -508,15 +573,15 @@ search.addWidget(
 ```js
 /**
  * Add a pagination menu to navigate through the results
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String|String[]} [options.cssClass] CSS class to be added to the wrapper element
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|string[]} [options.cssClass] CSS class to be added to the wrapper element
  * @param  {Object} [options.labels] Text to display in the various links (prev, next, first, last)
- * @param  {String} [options.labels.prev] Label for the Previous link
- * @param  {String} [options.labels.next] Label for the Next link
- * @param  {String} [options.labels.first] Label for the First link
- * @param  {String} [options.labels.last] Label for the Last link
- * @param  {Number} [maxPages=20] The max number of pages to browse
- * @param  {String|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
+ * @param  {string} [options.labels.prev] Label for the Previous link
+ * @param  {string} [options.labels.next] Label for the Next link
+ * @param  {string} [options.labels.first] Label for the First link
+ * @param  {string} [options.labels.last] Label for the Last link
+ * @param  {number} [maxPages=20] The max number of pages to browse
+ * @param  {string|DOMElement|boolean} [scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
@@ -555,18 +620,18 @@ search.addWidget(
 ```js
 /**
  * Display the list of results (hits) from the current search
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {String} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {String} [options.cssClasses.item] CSS class to add to each result
+ * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {string} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {string} [options.cssClasses.item] CSS class to add to each result
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.empty=''] Template to use when there are no results.
- * @param  {String|Function} [options.templates.item=''] Template to use for each result.
+ * @param  {string|Function} [options.templates.empty=''] Template to use when there are no results.
+ * @param  {string|Function} [options.templates.item=''] Template to use for each result.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
  * @param  {Function} [options.transformData.empty=''] Method used to change the object passed to the empty template
  * @param  {Function} [options.transformData.item=''] Method used to change the object passed to the item template
- * @param  {Number} [hitsPerPage=20] The number of hits to display per page
+ * @param  {number} [hitsPerPage=20] The number of hits to display per page
  * @return {Object}
  */
 ```
@@ -641,24 +706,24 @@ Note that we are not toggling from `true` to `false` here, but from `true` to
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
  * and `undefined`.
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting (eg. "free_shipping")
- * @param  {String} options.label Human-readable name of the filter (eg. "Free Shipping")
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting (eg. "free_shipping")
+ * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {String|String[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
- * @param  {String|String[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
- * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item] Item template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
@@ -734,26 +799,26 @@ search.addWidget(
 ```js
 /**
  * Instantiate a list of refinements based on a facet
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
- * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=1000] How much facet values to get
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
+ * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {String|String[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
- * @param  {String|String[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
- * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header] Header template
- * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer] Footer template
+ * @param  {string|Function} [options.templates.header] Header template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
@@ -832,24 +897,24 @@ search.addWidget(
 ```js
 /**
  * Create a menu out of a facet
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {String} [options.limit=100] How many facets values to retrieve
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}
@@ -927,19 +992,19 @@ search.addWidget(
 ```js
 /**
  * Instantiate a slider based on a numeric attribute
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String} options.facetName Name of the attribute for faceting
- * @param  {Boolean|Object} [options.tooltips=true] Should we show tooltips or not.
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
  * You can also provide
  * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
  * So that you can format the tooltip display value as you want
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template
- * @param  {String|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -974,22 +1039,22 @@ search.addWidget(
 ```js
 /**
  * Instantiate a price ranges on a numerical facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
- * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {string} options.facetName Name of the attribute for faceting
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
- * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
- * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the min/max input elements
+ * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the button element
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.range] Range template
+ * @param  {string|Function} [options.templates.range] Range template
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {String|Function} [options.labels.button] Button label
- * @param  {String|Function} [options.labels.currency] Currency label
- * @param  {String|Function} [options.labels.to] To label
+ * @param  {string|Function} [options.labels.button] Button label
+ * @param  {string|Function} [options.labels.currency] Currency label
+ * @param  {string|Function} [options.labels.to] To label
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -1025,25 +1090,25 @@ search.addWidget(
 ```js
 /**
  * Create a hierarchical menu using multiple attributes
- * @param  {String|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {String[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
+ * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
  * You need to follow some conventions:
- * @param  {String[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {Number} [options.limit=100] How much facet values to get
+ * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {String|String[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {String|String[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {String|String[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
- * @param  {String|String[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.header=''] Header template (root level only)
- * @param  {String|Function} [options.templates.item] Item template
- * @param  {String|Function} [options.templates.footer=''] Footer template (root level only)
+ * @param  {string|Function} [options.templates.header=''] Header template (root level only)
+ * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
  * @return {Object}

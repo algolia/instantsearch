@@ -12,7 +12,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('stats()', () => {
-  jsdom();
+  jsdom({useEach: true});
 
   var ReactDOM;
   var container;
@@ -61,8 +61,8 @@ describe('stats()', () => {
         root: 'ais-stats',
         time: 'ais-stats--time'
       }}
-      hasResults={true}
-      hideContainerWhenNoResults={true}
+      hasResults
+      hideContainerWhenNoResults
       hitsPerPage={2}
       nbHits={20}
       nbPages={10}

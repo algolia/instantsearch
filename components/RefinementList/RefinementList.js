@@ -6,7 +6,6 @@ var Template = require('../Template');
 
 var {isSpecialClick} = require('../../lib/utils.js');
 
-
 class RefinementList extends React.Component {
   refine(value) {
     this.props.toggleRefinement(value);
@@ -16,11 +15,13 @@ class RefinementList extends React.Component {
     var subList;
     var hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subList = <RefinementList
-                  {...this.props}
-                  depth={this.props.depth + 1}
-                  facetValues={facetValue.data}
-                />;
+      subList = (
+        <RefinementList
+          {...this.props}
+          depth={this.props.depth + 1}
+          facetValues={facetValue.data}
+        />
+      );
     }
     var data = facetValue;
 
@@ -112,15 +113,12 @@ RefinementList.propTypes = {
   Template: React.PropTypes.func,
   createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
-    item: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
-    list: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+    active: React.PropTypes.string,
+    depth: React.PropTypes.string,
+    item: React.PropTypes.string,
+    list: React.PropTypes.string
   }),
+  depth: React.PropTypes.number,
   facetNameKey: React.PropTypes.string,
   facetValues: React.PropTypes.array,
   templateProps: React.PropTypes.object.isRequired,

@@ -2,7 +2,8 @@
 
 set -ev # exit when error
 
+./scripts/validate-pr-done-on-develop.sh
 npm test
 npm prune
-npm shrinkwrap --dev
+npm run shrinkwrap --dev
 ./scripts/validate-commit-msgs.sh

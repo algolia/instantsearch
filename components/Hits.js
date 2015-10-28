@@ -42,6 +42,11 @@ class Hits extends React.Component {
 }
 
 Hits.propTypes = {
+  cssClasses: React.PropTypes.shape({
+    root: React.PropTypes.string,
+    item: React.PropTypes.string,
+    empty: React.PropTypes.string
+  }),
   results: React.PropTypes.object,
   templateProps: React.PropTypes.object.isRequired
 };

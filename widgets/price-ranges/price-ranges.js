@@ -14,22 +14,24 @@ var cx = require('classnames/dedupe');
 
 /**
  * Instantiate a price ranges on a numerical facet
- * @param  {String|DOMElement} options.container Valid CSS Selector as a string or DOMElement
- * @param  {String} options.facetName Name of the attribute for faceting
+ * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
+ * @param  {string} options.facetName Name of the attribute for faceting
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
- * @param  {String|String[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {String|String[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {String|String[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {String|String[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {String|String[]} [options.cssClasses.range] CSS class to add to the range element
- * @param  {String|String[]} [options.cssClasses.input] CSS class to add to the min/max input elements
- * @param  {String|String[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.form] CSS class to add to the form element
+ * @param  {string|string[]} [options.cssClasses.range] CSS class to add to the range element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to the active range element
+ * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the min/max input elements
+ * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the button element
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {String|Function} [options.templates.range] Range template
+ * @param  {string|Function} [options.templates.range] Range template
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {String|Function} [options.labels.button] Button label
- * @param  {String|Function} [options.labels.currency] Currency label
- * @param  {String|Function} [options.labels.to] To label
+ * @param  {string|Function} [options.labels.button] Button label
+ * @param  {string|Function} [options.labels.currency] Currency label
+ * @param  {string|Function} [options.labels.to] To label
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -97,7 +99,7 @@ function priceRanges({
       helper.search();
     },
 
-    render: function({results, helper, templatesConfig}) {
+    render: function({results, helper, templatesConfig, state, createURL}) {
       var PriceRanges = autoHideContainer(headerFooter(require('../../components/PriceRanges')));
       var facetValues;
 
@@ -123,13 +125,26 @@ function priceRanges({
         body: cx(bem('body'), cssClasses.body),
         footer: cx(bem('footer'), cssClasses.footer),
         range: cx(bem('range'), cssClasses.range),
+        active: cx(bem('range', 'active'), cssClasses.active),
         input: cx(bem('input'), cssClasses.input),
-        form: cx(bem('input-group'), cssClasses.form),
+        form: cx(bem('form'), cssClasses.form),
         button: cx(bem('button'), cssClasses.button)
       };
 
       ReactDOM.render(
         <PriceRanges
+          createURL={(from, to, isRefined) => {
+            var newState = state.clearRefinements(facetName);
+            if (!isRefined) {
+              if (typeof from !== 'undefined') {
+                newState = newState.addNumericRefinement(facetName, '>', from - 1);
+              }
+              if (typeof to !== 'undefined') {
+                newState = newState.addNumericRefinement(facetName, '<', to + 1);
+              }
+            }
+            return createURL(newState);
+          }}
           cssClasses={cssClasses}
           facetValues={facetValues}
           hasResults={results.hits.length > 0}

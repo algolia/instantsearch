@@ -19,10 +19,16 @@ class PriceRange extends React.Component {
       <div>
         {this.props.facetValues.map(facetValue => {
           var key = facetValue.from + '_' + facetValue.to;
+          var url;
+          if (this.props.createURL) {
+            url = this.props.createURL(facetValue.from, facetValue.to, facetValue.isRefined);
+          } else {
+            url = '#';
+          }
           return (
             <a
-              className={cx(this.props.cssClasses.range, {active: facetValue.isRefined})}
-              href="#"
+              className={cx(this.props.cssClasses.range, {[this.props.cssClasses.active]: facetValue.isRefined})}
+              href={url}
               key={key}
               onClick={this.refine.bind(this, facetValue.from, facetValue.to)}
             >
@@ -56,19 +62,13 @@ class PriceRange extends React.Component {
 }
 
 PriceRange.propTypes = {
+  createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
-    range: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
-    input: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
-    button: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+    active: React.PropTypes.string,
+    form: React.PropTypes.string,
+    range: React.PropTypes.string,
+    input: React.PropTypes.string,
+    button: React.PropTypes.string
   }),
   facetValues: React.PropTypes.array,
   labels: React.PropTypes.shape({

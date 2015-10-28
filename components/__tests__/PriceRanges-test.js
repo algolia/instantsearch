@@ -38,6 +38,7 @@ describe('PriceRanges', () => {
       props = {
         templateProps: {},
         facetValues,
+        createURL: sinon.spy(),
         cssClasses: {
           range: 'range-class',
           form: 'form-class',
@@ -67,6 +68,15 @@ describe('PriceRanges', () => {
       });
     });
 
+    it('creates the URL', () => {
+      expect(props.createURL.called).toBe(true);
+      expect(props.createURL.callCount).toEqual(8);
+      expect(props.createURL.firstCall.args).toEqual([undefined, 1, undefined]);
+      expect(props.createURL.secondCall.args).toEqual([1, 80, undefined]);
+      expect(props.createURL.thirdCall.args).toEqual([80, 160, undefined]);
+      expect(props.createURL.lastCall.args).toEqual([4980, undefined, undefined]);
+    });
+
     it('should have the form class', () => {
       expect(out.props.children.length).toEqual(2);
       expect(out.props.children[1].props.className).toEqual('form-class');
@@ -75,7 +85,7 @@ describe('PriceRanges', () => {
     it('should display the inputs with the associated class & labels', () => {
       expect(out.props.children.length).toEqual(2);
       expect(out.props.children[1]).toEqualJSX(
-        <form className="form-class" onSubmit={() => {}}>
+        <form className="form-class" onSubmit={() => {}} ref="form">
           <label>
             USD{' '}<input className="input-class" ref="from" type="number" />
           </label>

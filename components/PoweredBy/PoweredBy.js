@@ -13,14 +13,8 @@ class PoweredBy extends React.Component {
 
 PoweredBy.propTypes = {
   cssClasses: React.PropTypes.shape({
-    root: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ]),
-    link: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+    root: React.PropTypes.string,
+    link: React.PropTypes.string
   })
 };
 
