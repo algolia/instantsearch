@@ -321,9 +321,13 @@ instantsearch({
 /**
  * Instantiate a searchbox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} [options.placeholder='Search here'] Input's placeholder
- * @param  {Object} [options.cssClass] CSS classes to add to the input
+ * @param  {string} [options.placeholder] Input's placeholder
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping div (if wrapInput set to `true`)
+ * @param  {string} [options.cssClasses.input] CSS class to add to the input
+ * @param  {string} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
+ * @param  {boolean} [wrapInput=true] Wrap the input in a div.ais-search-box
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @return {Object}
  */
@@ -342,7 +346,6 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    cssClass: 'form-control',
     poweredBy: true
   })
 );
@@ -351,15 +354,18 @@ search.addWidget(
 #### Styling
 
 ```html
-<input class="ais-search-box--input">
-<!-- With poweredBy: true -->
-<div class="ais-search-box--powered-by">
-  Powered by
-  <a class="ais-search-box--powered-by-link">Algolia</a>
+<div class="ais-search-box">
+  <input class="ais-search-box--input">
+  <div class="ais-search-box--powered-by">
+    Powered by
+    <a class="ais-search-box--powered-by-link">Algolia</a>
+  </div>
 </div>
 ```
 
 ```css
+.ais-search-box {
+}
 .ais-search-box--input {
 }
 .ais-search-box--powered-by {
