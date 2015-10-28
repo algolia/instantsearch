@@ -6,7 +6,7 @@
   "author": "Algolia <support@algolia.com>",
   "scripts": {
     "build": "./scripts/build.sh",
-    "dev": "npm install && webpack-dev-server --config webpack.example.config.js --hot --inline --no-info",
+    "dev": "./scripts/dev.sh",
     "doctoc": "doctoc --maxlevel 3 README.md",
     "gh-pages": "./scripts/gh-pages.sh",
     "lint": "eslint . --quiet --no-color && stylelint './themes/**/*.css'",
@@ -47,6 +47,7 @@
     "mocha-jsdom": "^1.0.0",
     "mversion": "^1.10.1",
     "nd": "^1.2.0",
+    "node-sass": "^3.3.3",
     "npm-shrinkwrap": "^5.4.1",
     "pretty-bytes": "^2.0.1",
     "raw-loader": "^0.5.1",

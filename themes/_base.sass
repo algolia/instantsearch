@@ -1,0 +1,20 @@
+@mixin component($component)
+  .ais-#{$component}
+    @content
+
+@mixin modifier($modifier)
+  &--#{$modifier}
+    @content
+
+@mixin element($element)
+  &__#{$element}
+    @content
+
+@mixin bem($component, $modifier, $element: '')
+  +component($component)
+    +modifier($modifier)
+      @if $element != ''
+        +element($element)
+          @content
+      @else
+        @content

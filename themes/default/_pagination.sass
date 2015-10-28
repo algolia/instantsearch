@@ -1,0 +1,13 @@
+@import '../base'
+@import 'variables'
+
++component(pagination)
+  +modifier(item)
+    +element(disabled)
+      visibility: hidden
+  +modifier(item-first)
+  +modifier(item-previous)
+  +modifier(item-page)
+    +element(active)
+  +modifier(item-next)
+  +modifier(item-last)

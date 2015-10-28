@@ -1,0 +1,93 @@
+@import '../base'
+@import 'variables'
+
++component(range-slider)
+  +modifier(target)
+    position: relative
+    direction: ltr
+    background: $gray-light
+    height: 18px
+    &, *
+      box-sizing: border-box
+  +modifier(base)
+    width: 100%
+    height: 100%
+    position: relative
+    z-index: 1 // Fix 401
+  +modifier(origin)
+    position: absolute
+    right: 0
+    top: 0
+    left: 0
+    bottom: 0
+  +modifier(state-tap)
+    +component(range-slider)
+      +modifier(origin)
+        transition: left .3s, top .3s
+  +modifier(state-drag)
+    *
+      cursor: inherit !important
+
+  // Painting and performance;
+  // Browsers can paint handles in their own layer.
+  //
+  +modifier(base)
+    transform: translate3d(0, 0, 0)
+
+  +modifier(connect)
+    background: $blue-light
+    transition: background 450ms
+  +modifier(background)
+    background: $gray-light
+
+  +modifier(handle)
+    width: 1px
+    height: 28px
+    position: relative
+    z-index: 1
+    background: $blue-light
+    cursor: pointer
+
+  +modifier(handle-lower)
+    bottom: 10px
+
+  +modifier(active)
+    background: $blue-dark
+
+  +modifier(tooltip)
+    position: absolute
+    color: $blue-dark
+    border: 1px solid $blue-light
+    background: $white
+    padding: 2px 3px
+
+  +modifier(handle)
+    &:hover
+      background: $blue-dark
+
+  +modifier(active)
+    +component(range-slider)
+      +modifier(tooltip)
+        background: $blue-light
+        color: $white
+        border-color: $blue-dark
+  +modifier(handle)
+    &:hover
+      +component(range-slider)
+        +modifier(tooltip)
+          background: $blue-light
+          color: $white
+          border-color: $blue-dark
+
+  +modifier(handle-lower)
+    +component(range-slider)
+      +modifier(tooltip)
+        border-radius: 5px 5px 5px 0
+        top: -24px
+
+  +modifier(handle-upper)
+    +component(range-slider)
+      +modifier(tooltip)
+        bottom: -24px
+        border-radius: 5px 0 5px 5px
+        right: 0
