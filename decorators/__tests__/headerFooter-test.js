@@ -3,6 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
+import TestComponent from './TestComponent';
 import headerFooter from '../headerFooter';
 import Template from '../../components/Template';
 
@@ -29,7 +30,7 @@ describe('headerFooter', () => {
           <Template data={{}} templateKey="header" transformData={null} />
         </div>
         <div className={undefined}>
-          <div cssClasses={{root: 'wrapper'}} />
+          <TestComponent cssClasses={{root: 'wrapper'}} />
         </div>
         <div className={cx(bemFooter(null))}>
           <Template data={{}} templateKey="footer" transformData={null} />
@@ -39,7 +40,7 @@ describe('headerFooter', () => {
   });
 
   function render(props = {}) {
-    var HeaderFooter = headerFooter('div');
+    var HeaderFooter = headerFooter(TestComponent);
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }
