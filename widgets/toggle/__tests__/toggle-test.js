@@ -107,7 +107,7 @@ describe('toggle()', () => {
         };
       });
 
-      it('calls ReactDOM.render', () => {
+      it('calls twice ReactDOM.render', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
@@ -115,8 +115,10 @@ describe('toggle()', () => {
         };
         widget = toggle({container, facetName, label});
         widget.render({results, helper});
-        expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+        widget.render({results, helper});
+        expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
         expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+        expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
       });
 
       it('with facet values', () => {
@@ -127,6 +129,7 @@ describe('toggle()', () => {
         };
         widget = toggle({container, facetName, label});
         widget.render({results, helper});
+        widget.render({results, helper});
 
         props = {
           facetValues: [{count: 1, isRefined: false, name: label}],
@@ -135,6 +138,7 @@ describe('toggle()', () => {
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('without facet values', () => {
@@ -145,6 +149,7 @@ describe('toggle()', () => {
         };
         widget = toggle({container, facetName, label});
         widget.render({results, helper});
+        widget.render({results, helper});
 
         props = {
           facetValues: [{name: label, isRefined: false, count: null}],
@@ -153,6 +158,7 @@ describe('toggle()', () => {
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('when refined', () => {
@@ -166,6 +172,7 @@ describe('toggle()', () => {
         };
         widget = toggle({container, facetName, label});
         widget.render({results, helper});
+        widget.render({results, helper});
 
         props = {
           facetValues: [{count: 2, isRefined: true, name: label}],
@@ -174,6 +181,7 @@ describe('toggle()', () => {
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('using props.toggleRefinement', () => {

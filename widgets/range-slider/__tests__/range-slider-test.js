@@ -56,27 +56,32 @@ describe('rangeSlider()', () => {
     expect(widget.getConfiguration()).toEqual({disjunctiveFacets: ['aFacetName']});
   });
 
-  it('calls ReactDOM.render(<Slider props />, container)', () => {
+  it('calls twice ReactDOM.render(<Slider props />, container)', () => {
     widget.render({results, helper});
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-    <Slider
-      cssClasses={{body: null, root: null}}
-      onChange={() => {}}
-      range={{max: 4999.98, min: 1.99}}
-      shouldAutoHideContainer={false}
-      start={[-Infinity, Infinity]}
-      templateProps={{
+    widget.render({results, helper});
+
+    var props = {
+      cssClasses: {body: null, root: null},
+      onChange: () => {},
+      range: {max: 4999.98, min: 1.99},
+      shouldAutoHideContainer: false,
+      start: [-Infinity, Infinity],
+      templateProps: {
         templates: {footer: '', header: ''},
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {footer: false, header: false}
-      }}
-      tooltips
-    />);
+      },
+      tooltips: true
+    };
+
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Slider {...props} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   it('doesn\'t call the refinement functions if not refined', () => {
