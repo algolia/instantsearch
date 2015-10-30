@@ -54,7 +54,10 @@ Template.propTypes = {
 };
 
 Template.defaultProps = {
-  data: {}
+  data: {},
+  useCustomCompileOptions: {},
+  templates: {},
+  templatesConfig: {}
 };
 
 function transformData(fn, templateKey, originalData) {
