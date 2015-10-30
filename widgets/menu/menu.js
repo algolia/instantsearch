@@ -6,7 +6,6 @@ var bem = utils.bemHelper('ais-menu');
 var cx = require('classnames/dedupe');
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates.js');
 
@@ -45,7 +44,12 @@ function menu({
     hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
+  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName) {
     throw new Error(usage);
@@ -64,6 +68,7 @@ function menu({
     }),
     render: function({results, helper, templatesConfig, state, createURL}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      var hasNoRefinements = facetValues.length === 0;
 
       var templateProps = utils.prepareTemplateProps({
         transformData,
@@ -89,8 +94,7 @@ function menu({
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hasResults={facetValues.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoRefinements}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

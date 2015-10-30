@@ -35,20 +35,24 @@ function stats({
   }) {
   var containerNode = utils.getContainerNode(container);
 
+  var Stats = headerFooter(require('../../components/Stats/Stats.js'));
+  if (hideContainerWhenNoResults === true) {
+    Stats = autoHideContainer(Stats);
+  }
+
   if (!containerNode) {
-    throw new Error('Usage: stats({container[, template, transformData]})');
+    throw new Error('Usage: stats({container[, template, transformData, hideContainerWhenNoResults]})');
   }
 
   return {
     render: function({results, templatesConfig}) {
+      var hasNoResults = results.nbHits === 0;
       var templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
-
-      var Stats = autoHideContainer(headerFooter(require('../../components/Stats/Stats.js')));
 
       cssClasses = {
         body: cx(bem('body'), cssClasses.body),
@@ -61,14 +65,13 @@ function stats({
       ReactDOM.render(
         <Stats
           cssClasses={cssClasses}
-          hasResults={results.hits.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}
           nbPages={results.nbPages}
           page={results.page}
           processingTimeMS={results.processingTimeMS}
           query={results.query}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
         />,
         containerNode

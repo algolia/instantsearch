@@ -91,8 +91,7 @@ describe('pagination()', () => {
     return {
       cssClasses: {},
       currentPage: 0,
-      hasResults: true,
-      hideContainerWhenNoResults: true,
+      shouldAutoHideContainer: false,
       labels: {first: '«', last: '»', next: '›', previous: '‹'},
       nbHits: results.nbHits,
       nbPages: results.nbPages,

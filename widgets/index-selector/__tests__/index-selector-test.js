@@ -47,7 +47,8 @@ describe('indexSelector()', () => {
       search: sinon.spy()
     };
     results = {
-      hits: []
+      hits: [],
+      nbHits: 0
     };
   });
 
@@ -63,8 +64,7 @@ describe('indexSelector()', () => {
         item: 'ais-index-selector--item custom-item'
       },
       currentValue: 'index-a',
-      hasResults: false,
-      hideContainerWhenNoResults: false,
+      shouldAutoHideContainer: true,
       options: [
         {value: 'index-a', label: 'Index A'},
         {value: 'index-b', label: 'Index B'}

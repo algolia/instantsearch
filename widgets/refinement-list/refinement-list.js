@@ -7,7 +7,6 @@ var cx = require('classnames/dedupe');
 
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates');
 
@@ -49,7 +48,12 @@ function refinementList({
     hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideIfNoResults]})';
+  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName) {
     throw new Error(usage);
@@ -86,6 +90,8 @@ function refinementList({
 
       var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
+      var hasNoResults = facetValues.length === 0;
+
       cssClasses = {
         root: cx(bem(null), cssClasses.root),
         header: cx(bem('header'), cssClasses.header),
@@ -104,8 +110,7 @@ function refinementList({
           createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hasResults={facetValues.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
         />,

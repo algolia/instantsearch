@@ -36,6 +36,7 @@ describe('priceRanges()', () => {
     widget = priceRanges({container, facetName: 'aFacetname'});
     results = {
       hits: [1],
+      nbHits: 1,
       getFacetStats: sinon.stub().returns({
         min: 1.99,
         max: 4999.98,
@@ -73,8 +74,7 @@ describe('priceRanges()', () => {
           range: 'ais-price-ranges--range',
           root: 'ais-price-ranges'
         },
-        hasResults: true,
-        hideContainerWhenNoResults: true,
+        shouldAutoHideContainer: false,
         facetValues: generateRanges(results.getFacetStats()),
         labels: {
           currency: '$',

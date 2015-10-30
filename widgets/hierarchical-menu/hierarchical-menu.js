@@ -6,7 +6,6 @@ var bem = utils.bemHelper('ais-hierarchical-menu');
 var cx = require('classnames/dedupe');
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
 
 var defaultTemplates = require('./defaultTemplates.js');
 
@@ -47,7 +46,12 @@ function hierarchicalMenu({
     transformData
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData]})';
+  var usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, hideContainerWhenNoResults]})';
+
+  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
@@ -68,6 +72,7 @@ function hierarchicalMenu({
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {
       var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
+      var hasNoRefinements = facetValues.length === 0;
 
       var templateProps = utils.prepareTemplateProps({
         transformData,
@@ -95,9 +100,8 @@ function hierarchicalMenu({
           cssClasses={cssClasses}
           facetNameKey="path"
           facetValues={facetValues}
-          hasResults={facetValues.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           limit={limit}
+          shouldAutoHideContainer={hasNoRefinements}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

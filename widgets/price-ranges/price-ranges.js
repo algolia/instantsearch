@@ -48,7 +48,12 @@ function priceRanges({
     hideContainerWhenNoResults = true
   }) {
   var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: priceRanges({container, facetName, [cssClasses, templates, labels]})';
+  var usage = 'Usage: priceRanges({container, facetName, [cssClasses, templates, labels, hideContainerWhenNoResults]})';
+
+  var PriceRanges = headerFooter(require('../../components/PriceRanges'));
+  if (hideContainerWhenNoResults === true) {
+    PriceRanges = autoHideContainer(PriceRanges);
+  }
 
   if (container === null || facetName === null) {
     throw new Error(usage);
@@ -100,7 +105,7 @@ function priceRanges({
     },
 
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var PriceRanges = autoHideContainer(headerFooter(require('../../components/PriceRanges')));
+      var hasNoResults = results.nbHits === 0;
       var facetValues;
 
       if (results.hits.length > 0) {
@@ -147,10 +152,9 @@ function priceRanges({
           }}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hasResults={results.hits.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           labels={labels}
           refine={this._refine.bind(this, helper)}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
         />,
         containerNode
