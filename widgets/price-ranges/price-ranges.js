@@ -10,7 +10,7 @@ let autoHideContainer = require('../../decorators/autoHideContainer');
 let headerFooter = require('../../decorators/headerFooter');
 
 let bem = utils.bemHelper('ais-price-ranges');
-let cx = require('classnames/dedupe');
+let cx = require('classnames');
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -43,7 +43,7 @@ let cx = require('classnames/dedupe');
 function priceRanges({
     container,
     facetName,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     labels = {
       currency: '$',
@@ -129,21 +129,21 @@ function priceRanges({
         templates
       });
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        list: cx(bem('list'), cssClasses.list),
-        link: cx(bem('link'), cssClasses.link),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        form: cx(bem('form'), cssClasses.form),
-        label: cx(bem('label'), cssClasses.label),
-        input: cx(bem('input'), cssClasses.input),
-        currency: cx(bem('currency'), cssClasses.currency),
-        button: cx(bem('button'), cssClasses.button),
-        separator: cx(bem('separator'), cssClasses.separator),
-        footer: cx(bem('footer'), cssClasses.footer)
+      var cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        list: cx(bem('list'), userCssClasses.list),
+        link: cx(bem('link'), userCssClasses.link),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        form: cx(bem('form'), userCssClasses.form),
+        label: cx(bem('label'), userCssClasses.label),
+        input: cx(bem('input'), userCssClasses.input),
+        currency: cx(bem('currency'), userCssClasses.currency),
+        button: cx(bem('button'), userCssClasses.button),
+        separator: cx(bem('separator'), userCssClasses.separator),
+        footer: cx(bem('footer'), userCssClasses.footer)
       };
 
       ReactDOM.render(

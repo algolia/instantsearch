@@ -5,7 +5,7 @@ var utils = require('../../lib/utils.js');
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 var bem = require('../../lib/utils').bemHelper('ais-stats');
-var cx = require('classnames/dedupe');
+var cx = require('classnames');
 
 var defaultTemplates = require('./defaultTemplates.js');
 
@@ -28,7 +28,7 @@ var defaultTemplates = require('./defaultTemplates.js');
  */
 function stats({
     container,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     hideContainerWhenNoResults = true,
     templates = defaultTemplates,
     transformData
@@ -54,12 +54,12 @@ function stats({
         templates
       });
 
-      cssClasses = {
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        header: cx(bem('header'), cssClasses.header),
-        root: cx(bem(null), cssClasses.root),
-        time: cx(bem('time'), cssClasses.time)
+      var cssClasses = {
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        header: cx(bem('header'), userCssClasses.header),
+        root: cx(bem(null), userCssClasses.root),
+        time: cx(bem('time'), userCssClasses.time)
       };
 
       ReactDOM.render(
