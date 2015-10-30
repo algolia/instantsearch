@@ -1,0 +1,15 @@
+@import "base";
+@import "variables";
+
+@include component(toggle) {
+  @include modifier(header);
+  @include modifier(body);
+  @include modifier(list);
+  @include modifier(item) {
+    @include element(active);
+  }
+  @include modifier(label);
+  @include modifier(checkbox);
+  @include modifier(count);
+  @include modifier(footer);
+}

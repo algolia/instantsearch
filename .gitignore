@@ -1,4 +1,5 @@
 node_modules/
 dist/
-example/bundle.js*
+dev/bundle.js*
+examples/*/*.css
 npm-debug.log

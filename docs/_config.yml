@@ -7,10 +7,12 @@ github_username: algolia
 
 # Navigation
 navigation:
- - text: Widgets
-   url: /widgets/
- - text: Themes
-   url: /themes/
+ - text: Documentation
+   url: /documentation/
+ - text: Examples
+   url: /examples/
+ # - text: Themes
+ #   url: /themes/
  - text: About
    url: /about/
 # Build settings
