@@ -1,2 +1,3 @@
 dist/
-example/bundle.js
+docs/
+dev/bundle.js

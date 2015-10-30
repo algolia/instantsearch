@@ -1,0 +1,33 @@
+---
+layout: default
+title: Examples
+permalink: /examples/
+---
+
+.hero
+  %h1.text-center Examples
+
+.spacer40
+.container
+  .row
+    .col-sm-8.col-sm-push-2
+      %p.lead <strong>Instantsearch.js</strong> allows you to customize the appearance of your widgets very easily.
+      %p.lead Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem, illum praesentium quae, ipsa sint similique quas mollitia voluptatum cumque excepturi amet dolorem dicta minus voluptate vel impedit.
+
+  .spacer40
+  %h2.text-center Check out our examples!
+  .row.text-center
+    .col-sm-4
+      %h3 Youtube
+      %img.m-b.img-responsive.img-thumbnail{src: "{{ "/examples/youtube/capture.png" | prepend: site.baseurl }}"}
+      %a.btn.btn-default.primary-btn{href: '{{ "/examples/youtube/" | prepend: site.baseurl }}', target: '_blank'} Live Preview
+
+    .col-sm-4
+      %h3 Amazon
+      %img.m-b.img-responsive.img-thumbnail{src:"http://placehold.it/600x400"}
+      %a.btn.btn-default.primary-btn{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}', target: '_blank'} Live Preview
+
+    .col-sm-4
+      %h3 Airbnb
+      %img.m-b.img-responsive.img-thumbnail{src: "{{ "/examples/airbnb/capture.png" | prepend: site.baseurl }}"}
+      %a.btn.btn-default.primary-btn{href: '{{ "/examples/airbnb/" | prepend: site.baseurl }}', target: '_blank'} Live Preview

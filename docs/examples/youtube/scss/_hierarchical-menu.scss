@@ -1,0 +1,19 @@
+@import "base";
+@import "variables";
+
+@include component(hierarchical-menu) {
+  @include modifier(header);
+  @include modifier(body);
+  @include modifier(list) {
+    @include element(lvl0);
+    @include element(lvl1);
+  }
+
+  @include modifier(item) {
+    @include element(active);
+  }
+
+  @include modifier(link);
+  @include modifier(count);
+  @include modifier(footer);
+}

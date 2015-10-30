@@ -1,0 +1,31 @@
+@mixin component($component) {
+  .ais-#{$component} {
+    @content
+  }
+}
+
+@mixin modifier($modifier) {
+  &--#{$modifier} {
+    @content
+  }
+}
+
+@mixin element($element) {
+  &__#{$element} {
+    @content
+  }
+}
+
+@mixin bem($component, $modifier, $element: "") {
+  @include component($component) {
+    @include modifier($modifier) {
+      @if $element != "" {
+        @include element($element) {
+          @content;
+        }
+      } @else {
+        @content;
+      }
+    }
+  }
+}
