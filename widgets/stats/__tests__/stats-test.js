@@ -47,30 +47,33 @@ describe('stats()', () => {
     expect(widget.getConfiguration).toEqual(undefined);
   });
 
-  it('calls ReactDOM.render(<Stats props />, container)', () => {
+  it('calls twice ReactDOM.render(<Stats props />, container)', () => {
     widget.render({results});
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-    <Stats
-      cssClasses={{
+    widget.render({results});
+    var props = {
+      cssClasses: {
         body: 'ais-stats--body',
         header: 'ais-stats--header',
         footer: 'ais-stats--footer',
         root: 'ais-stats',
         time: 'ais-stats--time'
-      }}
-      hitsPerPage={2}
-      nbHits={20}
-      nbPages={10}
-      page={0}
-      processingTimeMS={42}
-      query="a query"
-      shouldAutoHideContainer={false}
-      templateProps={ReactDOM.render.firstCall.args[0].props.templateProps}
-    />);
+      },
+      hitsPerPage: 2,
+      nbHits: 20,
+      nbPages: 10,
+      page: 0,
+      processingTimeMS: 42,
+      query: 'a query',
+      shouldAutoHideContainer: false,
+      templateProps: ReactDOM.render.firstCall.args[0].props.templateProps
+    };
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Stats {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Stats {...props} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   afterEach(() => {

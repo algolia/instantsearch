@@ -96,12 +96,15 @@ describe('priceRanges()', () => {
       };
     });
 
-    it('calls ReactDOM.render(<PriceRanges props />, container)', () => {
+    it('calls twice ReactDOM.render(<PriceRanges props />, container)', () => {
+      widget.render({results, helper});
       widget.render({results, helper});
 
-      expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+      expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
+      expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
 
     it('calls the decorators', () => {
