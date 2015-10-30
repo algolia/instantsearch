@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 
 var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-refinement-list');
-var cx = require('classnames/dedupe');
+var cx = require('classnames');
 
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
@@ -42,7 +42,7 @@ function refinementList({
     operator = 'or',
     sortBy = ['count:desc'],
     limit = 1000,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
     hideContainerWhenNoResults = true
@@ -92,17 +92,17 @@ function refinementList({
 
       var hasNoResults = facetValues.length === 0;
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        list: cx(bem('list'), cssClasses.list),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        label: cx(bem('label'), cssClasses.label),
-        checkbox: cx(bem('checkbox'), cssClasses.checkbox),
-        count: cx(bem('count'), cssClasses.count)
+      var cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        list: cx(bem('list'), userCssClasses.list),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        label: cx(bem('label'), userCssClasses.label),
+        checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+        count: cx(bem('count'), userCssClasses.count)
       };
 
       ReactDOM.render(

@@ -3,7 +3,7 @@
 
 var React = require('react');
 
-var cx = require('classnames/dedupe');
+var cx = require('classnames');
 
 var Template = require('../components/Template');
 

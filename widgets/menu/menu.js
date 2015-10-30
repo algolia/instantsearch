@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom');
 
 var utils = require('../../lib/utils.js');
 var bem = utils.bemHelper('ais-menu');
-var cx = require('classnames/dedupe');
+var cx = require('classnames');
 var autoHideContainer = require('../../decorators/autoHideContainer');
 var headerFooter = require('../../decorators/headerFooter');
 
@@ -38,7 +38,7 @@ function menu({
     facetName,
     sortBy = ['count:desc'],
     limit = 100,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
     hideContainerWhenNoResults = true
@@ -77,16 +77,16 @@ function menu({
         templates
       });
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        list: cx(bem('list'), cssClasses.list),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        link: cx(bem('link'), cssClasses.link),
-        count: cx(bem('count'), cssClasses.count)
+      var cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        list: cx(bem('list'), userCssClasses.list),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        link: cx(bem('link'), userCssClasses.link),
+        count: cx(bem('count'), userCssClasses.count)
       };
 
       ReactDOM.render(

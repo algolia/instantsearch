@@ -23,7 +23,7 @@ var autoHideContainer = require('../../decorators/autoHideContainer');
 function hitsPerPageSelector({
     container,
     options,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     hideContainerWhenNoResults = false
   }) {
   var containerNode = utils.getContainerNode(container);
@@ -58,9 +58,9 @@ function hitsPerPageSelector({
       let hasNoResults = results.nbHits === 0;
       let setHitsPerPage = this.setHitsPerPage.bind(this, helper);
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        item: cx(bem('item'), cssClasses.item)
+      var cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        item: cx(bem('item'), userCssClasses.item)
       };
       ReactDOM.render(
         <Selector
