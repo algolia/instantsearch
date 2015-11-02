@@ -1047,20 +1047,27 @@ search.addWidget(
  * Instantiate a price ranges on a numerical facet
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.facetName Name of the attribute for faceting
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.range] CSS class to add to the range element
- * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the min/max input elements
- * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {string} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string} [options.cssClasses.list] CSS class to add to the wrapping list element
+ * @param  {string} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string} [options.cssClasses.active] CSS class to add to the active item element
+ * @param  {string} [options.cssClasses.link] CSS class to add to each link element
+ * @param  {string} [options.cssClasses.form] CSS class to add to the form element
+ * @param  {string} [options.cssClasses.label] CSS class to add to each wrapping label of the form
+ * @param  {string} [options.cssClasses.input] CSS class to add to each input of the form
+ * @param  {string} [options.cssClasses.currency] CSS class to add to each currency element of the form
+ * @param  {string} [options.cssClasses.separator] CSS class to add to the separator of the form
+ * @param  {string} [options.cssClasses.button] CSS class to add to the submit button of the form
+ * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.range] Range template
+ * @param  {string|Function} [options.templates.item] Item template
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.button] Button label
  * @param  {string|Function} [options.labels.currency] Currency label
- * @param  {string|Function} [options.labels.to] To label
+ * @param  {string|Function} [options.labels.separator] Separator labe, between min and max
+ * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
@@ -1080,10 +1087,61 @@ search.addWidget(
 #### Styling
 
 ```html
-
+<div class="ais-price-ranges">
+  <div class="ais-price-ranges--header ais-header">Header</div>
+  <div class="ais-price-ranges--body">
+    <div class="ais-price-ranges--item">
+      <a class="ais-price-ranges--range" href="...">$3 - $13</a>
+    </div>
+    <div class="ais-price-ranges--item ais-price-ranges--item__active">
+      <a class="ais-price-ranges--range" href="...">$13 - $40</a>
+    </div>
+    <form class="ais-price-ranges--form">
+      <label class="ais-price-ranges--label">
+        <span class="ais-price-ranges--currency>$ </span>
+        <input class="ais-price-ranges--input" />
+      </label>
+      <span class="ais-price-ranges--separator"> to </span>
+      <label class="ais-price-ranges--label">
+        <span class="ais-price-ranges--currency>$ </span>
+        <input class="ais-price-ranges--input" />
+      </label>
+      <button class="ais-price-ranges--button">Go</button>
+    </form>
+  </div>
+  <div class="ais-price-ranges--footer ais-footer">Footer</div>
+</div>
 ```
 
 ```css
+.ais-price-ranges {
+}
+.ais-price-ranges--header {
+}
+.ais-price-ranges--body {
+}
+.ais-price-ranges--list {
+}
+.ais-price-ranges--item {
+}
+.ais-price-ranges--item__active {
+}
+.ais-price-ranges--link {
+}
+.ais-price-ranges--form {
+}
+.ais-price-ranges--label {
+}
+.ais-price-ranges--currency {
+}
+.ais-price-ranges--input {
+}
+.ais-price-ranges--separator {
+}
+.ais-price-ranges--button {
+}
+.ais-price-ranges--footer {
+}
 
 ```
 

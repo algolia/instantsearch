@@ -5,10 +5,18 @@
   @include modifier(header);
   @include modifier(body);
   @include modifier(footer);
-  @include modifier(form);
-  @include modifier(range) {
+  @include modifier(list);
+  @include modifier(item) {
     @include element(active);
   }
-  @include modifier(input-group);
+
+  @include modifier(link);
+  @include modifier(form);
+  @include modifier(label);
+  @include modifier(currency);
+  @include modifier(input);
+  @include modifier(separator);
   @include modifier(button);
 }
+
+
