@@ -39,41 +39,44 @@
       }
     });
     $(document).on('click', '.toggle-doc-button.jsdoc-btn', function(e) {
-      var $btn = $(this).addClass('active');
-      var $box = $btn.closest('.code-box'); 
-      $box.find('.code-sample-snippet').hide();
+      var $btn = $(this);
+      var $box = $btn.closest('.code-box');
+      $box.find('.toggle-doc-button').removeClass('active');
+      $btn.addClass('active');
+      $box.find('.code-sample-snippet, .html-container').hide();
       $box.find('.jsdoc').show();
-      $box.find('.snippet-btn').removeClass('active');
     });
     $(document).on('click', '.toggle-doc-button.snippet-btn', function(e) {
-      var $btn = $(this).addClass('active');
-      var $box = $btn.closest('.code-box'); 
-      $box.find('.jsdoc').hide();
+      var $btn = $(this);
+      var $box = $btn.closest('.code-box');
+      $box.find('.toggle-doc-button').removeClass('active');
+      $btn.addClass('active');
+      $box.find('.jsdoc, .html-container').hide();
       $box.find('.code-sample-snippet').show();
-      $box.find('.jsdoc-btn').removeClass('active');
     });
   }
 
-  function indentString(source) {
+  function cleanupAndHighlightMarkup(source) {
     var lines = source
       .replace(/ data-reactid="[^"]+"/g, '') // cleanup react-id
       .replace(/ class=""/g, '') // cleanup empty classes
       .replace(/(<|>|\n)/g, '\n$1').replace(/\n>/g, '>') // 1 tag per line
       .replace(/\s*\n+\s*\n+\s*/g, '\n').replace(/^\n+/g, '') // normalize number of spaces
       .replace(/<div>\n<\/div>\n/g, '') // remove empty divs
-      .replace(/\n(<\/(?:a|span|small)>)/g, '$1') // restore inline tags
+      .replace(/>([^<>]+)\n/g, '>\n$1\n').replace(/\n([^<>]+)</g, '\n$1\n<') // restore non-nested content
+      .replace(/\n+/g, '\n') // normalize extra newlines
       .split('\n');
     var indent = 0;
     source = '';
     lines.forEach(function(line) {
-      if (line.indexOf('</div') === 0 || line.indexOf('</label') === 0) {
+      if (line.indexOf('</') === 0) {
         --indent;
       }
       for (var i = 0; i < indent; ++i) {
         source += '  ';
       }
       source += line + '\n';
-      if (line.indexOf('<div') === 0 || line.indexOf('<label') === 0) {
+      if (line.indexOf('<') === 0 && line.indexOf('</') !== 0) {
         ++indent;
       }
     });
@@ -82,21 +85,27 @@
 
   function htmlTabs() {
     $('.widget-container').each(function() {
-      $(this).before(
-        '<div class="toggle-html-button"><button type="button" class="btn btn-default btn-xs">View source <i class="fa fa-caret-down"></i></button></div>'
-      );
-      $(this).after('<pre class="html-container" style="display: none"></pre>');
+      var id = $(this).attr('id');
+      var buttons = $('.code-box pre:contains("#' + id + '")').closest('.code-box').find('.btn-group');
+      buttons.append('<button type="button" class="toggle-doc-button html-btn btn btn-default btn-sm" data-widget-container="' + id + '">View HTML</button>');
+      buttons.after('<pre class="html-container highlight" id="html-' + id + '" style="display: none"></pre>');
     });
-    $(document).on('click', '.toggle-html-button button', function(e) {
-      e.preventDefault();
-      var button = $(e.target);
-      var widget = button.parent().next();
-      var code = widget.next();
-      code.toggle();
-      widget.toggle();
-      var source = indentString(widget.html());
-      code.text(source);
-      button.html(code.is(':visible') ? 'Hide source <i class="fa fa-caret-up"></i>' : 'View source <i class="fa fa-caret-down"></i>');
+    $(document).on('click', '.toggle-doc-button.html-btn', function(e) {
+      var $btn = $(this);
+      var $box = $btn.closest('.code-box');
+      var id = $(this).data('widget-container');
+      var $widget = $('#' + id);
+      var source = cleanupAndHighlightMarkup($widget.html());
+      var htmlSource = $('<div />').text(source).html();
+      $('#html-' + id).html(htmlSource
+        .replace(/ ([a-z]+=)"([^"]+)"/g, ' <span class="na">$1</span><span class="s">"$2"</span>') // highlight classes
+        .replace(/(&lt;\/?[a-z]+(&gt;)?)/g, '<span class="nt">$1</span>') // highlight tags
+        .replace(/(&gt;)\n/g, '<span class="nt">&gt;</span>\n') // highlight closing chevron
+      );
+      $box.find('.toggle-doc-button').removeClass('active');
+      $btn.addClass('active');
+      $box.find('.code-sample-snippet, .jsdoc').hide();
+      $box.find('.html-container').show();
     });
   }
 
@@ -109,6 +118,6 @@
 
   search();
   codeTabs();
-  // htmlTabs();
+  htmlTabs();
   anchorableTitles();
 })(window.jQuery);
