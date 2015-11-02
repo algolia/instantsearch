@@ -364,6 +364,11 @@ function SearchResults(state, algoliaResponse) {
       var position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
       var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
 
+      // previous refinements and no results so not able to find it
+      if (attributeIndex === -1) {
+        return;
+      }
+
       // when we always get root levels, if the hits refinement is `beers > IPA` (count: 5),
       // then the disjunctive values will be `beers` (count: 100),
       // but we do not want to display
