@@ -33,8 +33,8 @@ test('[INT][TAGS]Test tags operations on the helper and their results on the alg
       .then(function(content) {
         return index.waitTask(content.taskID);
       }).then(function() {
-      return client;
-    });
+        return client;
+      });
   }).then(function(client) {
     var helper = algoliasearchHelper(client, indexName, {});
 

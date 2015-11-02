@@ -33,8 +33,8 @@ test('[INT][HIGHLIGHT] The highlight should be consistent with the parameters', 
       .then(function(content) {
         return index.waitTask(content.taskID);
       }).then(function() {
-      return client;
-    });
+        return client;
+      });
   }).then(function(client) {
     var helper = algoliasearchHelper(client, indexName, {
       attributesToHighlight: ['facet'],

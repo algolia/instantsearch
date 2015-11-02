@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - stable
 before_install: npm prune
+before_cache: npm prune
 install: npm install
 script: npm run test-ci
 branches:
