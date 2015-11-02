@@ -46,9 +46,13 @@ function toggle({
     transformData,
     hideContainerWhenNoResults = true
   } = {}) {
-  var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
   var containerNode = utils.getContainerNode(container);
   var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName || !label) {
     throw new Error(usage);
@@ -61,6 +65,7 @@ function toggle({
     render: function({helper, results, templatesConfig, state, createURL}) {
       var isRefined = helper.hasRefinements(facetName);
       var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
+      var hasNoResults = results.nbHits === 0;
 
       var templateProps = utils.prepareTemplateProps({
         transformData,
@@ -93,8 +98,7 @@ function toggle({
           createURL={() => createURL(state.toggleRefinement(facetName, facetValue.isRefined))}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
-          hasResults={results.hits.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
         />,

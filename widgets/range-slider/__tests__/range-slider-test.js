@@ -64,10 +64,9 @@ describe('rangeSlider()', () => {
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
     <Slider
       cssClasses={{body: null, root: null}}
-      hasResults
-      hideContainerWhenNoResults
       onChange={() => {}}
       range={{max: 4999.98, min: 1.99}}
+      shouldAutoHideContainer={false}
       start={[-Infinity, Infinity]}
       templateProps={{
         templates: {footer: '', header: ''},

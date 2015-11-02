@@ -41,6 +41,11 @@ function rangeSlider({
   }) {
   var containerNode = utils.getContainerNode(container);
 
+  var Slider = headerFooter(require('../../components/Slider/Slider'));
+  if (hideContainerWhenNoResults === true) {
+    Slider = autoHideContainer(Slider);
+  }
+
   return {
     getConfiguration: () => ({
       disjunctiveFacets: [facetName]
@@ -88,20 +93,20 @@ function rangeSlider({
         };
       }
 
+      var hasNoRefinements = stats.min === null && stats.max === null;
+
       var templateProps = utils.prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var Slider = autoHideContainer(headerFooter(require('../../components/Slider/Slider')));
       ReactDOM.render(
         <Slider
           cssClasses={cssClasses}
-          hasResults={stats.min !== null && stats.max !== null}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           onChange={this._refine.bind(this, helper, stats)}
           range={{min: stats.min, max: stats.max}}
+          shouldAutoHideContainer={hasNoRefinements}
           start={[currentRefinement.min, currentRefinement.max]}
           templateProps={templateProps}
           tooltips={tooltips}

@@ -27,8 +27,13 @@ function indexSelector({
     hideContainerWhenNoResults = false
   }) {
   var containerNode = utils.getContainerNode(container);
-
   var usage = 'Usage: indexSelector({container, indices[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
+
+  var Selector = require('../../components/Selector');
+  if (hideContainerWhenNoResults === true) {
+    Selector = autoHideContainer(Selector);
+  }
+
   if (!container || !indices) {
     throw new Error(usage);
   }
@@ -53,9 +58,8 @@ function indexSelector({
 
     render: function({helper, results}) {
       let currentIndex = helper.getIndex();
-      let hasResults = results.hits.length > 0;
+      let hasNoResults = results.nbHits === 0;
       let setIndex = this.setIndex.bind(this, helper);
-      var Selector = autoHideContainer(require('../../components/Selector'));
 
       cssClasses = {
         root: cx(bem(null), cssClasses.root),
@@ -65,10 +69,9 @@ function indexSelector({
         <Selector
           cssClasses={cssClasses}
           currentValue={currentIndex}
-          hasResults={hasResults}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           options={selectorOptions}
           setValue={setIndex}
+          shouldAutoHideContainer={hasNoResults}
         />,
         containerNode
       );

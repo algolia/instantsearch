@@ -61,14 +61,13 @@ describe('stats()', () => {
         root: 'ais-stats',
         time: 'ais-stats--time'
       }}
-      hasResults
-      hideContainerWhenNoResults
       hitsPerPage={2}
       nbHits={20}
       nbPages={10}
       page={0}
       processingTimeMS={42}
       query="a query"
+      shouldAutoHideContainer={false}
       templateProps={ReactDOM.render.firstCall.args[0].props.templateProps}
     />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);

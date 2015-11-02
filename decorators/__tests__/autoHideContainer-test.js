@@ -23,7 +23,7 @@ describe('autoHideContainer', () => {
   });
 
   it('should not render autoHideContainer(<TestComponent />)', () => {
-    var out = render({hasResults: false, hideContainerWhenNoResults: true});
+    var out = render({shouldAutoHideContainer: true});
     expect(out).toEqualJSX(<div />);
   });
 

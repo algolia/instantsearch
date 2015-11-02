@@ -53,6 +53,11 @@ function pagination({
   var containerNode = utils.getContainerNode(container);
   var scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
 
+  var Pagination = require('../../components/Pagination/Pagination.js');
+  if (hideContainerWhenNoResults === true) {
+    Pagination = autoHideContainer(Pagination);
+  }
+
   if (!container) {
     throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideContainerWhenNoResults]})');
   }
@@ -72,25 +77,23 @@ function pagination({
       var currentPage = results.page;
       var nbPages = results.nbPages;
       var nbHits = results.nbHits;
-      var hasResults = nbHits > 0;
+      var hasNoResults = nbHits === 0;
 
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
-      var Pagination = autoHideContainer(require('../../components/Pagination/Pagination.js'));
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
           cssClasses={cssClasses}
           currentPage={currentPage}
-          hasResults={hasResults}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           labels={labels}
           nbHits={nbHits}
           nbPages={nbPages}
           padding={padding}
           setCurrentPage={this.setCurrentPage.bind(this, helper)}
+          shouldAutoHideContainer={hasNoResults}
           showFirstLast={showFirstLast}
         />,
         containerNode

@@ -49,7 +49,8 @@ describe('hitsPerPageSelector()', () => {
       search: sinon.spy()
     };
     results = {
-      hits: []
+      hits: [],
+      nbHits: 0
     };
   });
 
@@ -65,8 +66,7 @@ describe('hitsPerPageSelector()', () => {
         item: 'ais-hits-per-page-selector--item custom-item'
       },
       currentValue: 20,
-      hasResults: false,
-      hideContainerWhenNoResults: false,
+      shouldAutoHideContainer: true,
       options: [
         {value: 10, label: '10 results'},
         {value: 20, label: '20 results'}

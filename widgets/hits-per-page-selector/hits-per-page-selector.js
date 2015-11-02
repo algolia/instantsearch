@@ -27,8 +27,13 @@ function hitsPerPageSelector({
     hideContainerWhenNoResults = false
   }) {
   var containerNode = utils.getContainerNode(container);
-
   var usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
+
+  var Selector = require('../../components/Selector');
+  if (hideContainerWhenNoResults === true) {
+    Selector = autoHideContainer(Selector);
+  }
+
   if (!container || !options) {
     throw new Error(usage);
   }
@@ -50,9 +55,8 @@ function hitsPerPageSelector({
 
     render: function({helper, state, results}) {
       let currentValue = state.hitsPerPage;
-      let hasResults = results.hits.length > 0;
+      let hasNoResults = results.nbHits === 0;
       let setHitsPerPage = this.setHitsPerPage.bind(this, helper);
-      var Selector = autoHideContainer(require('../../components/Selector'));
 
       cssClasses = {
         root: cx(bem(null), cssClasses.root),
@@ -62,10 +66,9 @@ function hitsPerPageSelector({
         <Selector
           cssClasses={cssClasses}
           currentValue={currentValue}
-          hasResults={hasResults}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           options={options}
           setValue={setHitsPerPage}
+          shouldAutoHideContainer={hasNoResults}
         />,
         containerNode
       );
