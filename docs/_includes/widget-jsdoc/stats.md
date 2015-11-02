@@ -12,6 +12,6 @@
 |  <span class='attr-optional'>`options.templates.body`</span> | Body template |
 |  <span class='attr-optional'>`options.templates.footer`</span> | Footer template |
 |  <span class='attr-optional'>`options.transformData`</span> | Function to change the object passed to the `body` template |
-|  <span class='attr-optional'>`options.hideWhenNoResults`</span> | Hide the container when there's no results |
+|  <span class='attr-optional'>`hideContainerWhenNoResults`</span> | Hide the container when there's no results |
 
 <p class="attr-legend">* <span>Required</span></p>

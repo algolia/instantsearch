@@ -106,7 +106,7 @@ var search = instantsearch({
 instantsearch(options);
 {% endhighlight %}
 
-| Option| Description |
+| Option | Description |
 | <span class="attr-required">`options.appId`</span>* | The application ID |
 | <span class="attr-required">`options.apiKey`</span>* | The search key to access algolia |
 | <span class="attr-required">`options.index`</span>* | The name of the main index |
@@ -252,7 +252,13 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#q',
     placeholder: 'Search for products',
-    autofocus: false
+    autofocus: false,
+    poweredBy: true,
+    cssClasses: {
+      root: '',
+      input: '',
+      poweredBy: ''
+    }
   })
 );
 {% endhighlight %}
@@ -310,6 +316,46 @@ The hits widget is the main component for displaying results from Algolia. It ac
 <div id="hits-container" class="widget-container"></div>
 
 
+#### hitsPerPageSelector
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+{% raw %}
+search.addWidget(
+  instantsearch.widgets.hitsPerPageSelector({
+    container: '#hits-per-page-selector',
+    options: [
+      {value: 6, label: '6 per page'},
+      {value: 12, label: '12 per page'},
+      {value: 24, label: '24 per page'}
+    ],
+    cssClasses: {
+      select: ''
+    }
+  })
+);
+{% endraw %}
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+{% raw %}
+instantsearch.widgets.hitsPerPageSelector(options);
+{% endraw %}
+{% endhighlight %}
+
+{% include widget-jsdoc/hitsPerPageSelector.md %}
+
+  </div>
+</div>
+
+<img class="widget-icon pull-left" src="../img/icon-widget-results.svg">
+The hits widget is the main component for displaying results from Algolia. It accepts a [Mustache]() template string or a function returning a string. See the [templates](#templates) section.
+{:.description}
+
+<div id="hits-per-page-selector" class="widget-container"></div>
+
+
 ### Navigation
 
 #### pagination
@@ -319,7 +365,8 @@ The hits widget is the main component for displaying results from Algolia. It ac
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination-container',
-    maxPages: 20
+    maxPages: 20,
+    cssClass: ''
   })
 );
     {% endhighlight %}
@@ -352,6 +399,18 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Categories'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      link: '',
+      checkbox: '',
+      count: ''
     }
   })
 );
@@ -386,6 +445,18 @@ search.addWidget(
     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
     templates: {
       header: 'Hierarchical categories'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      label: '',
+      checkbox: '',
+      count: ''
     }
   })
 );
@@ -424,6 +495,18 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Brands'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      label: '',
+      checkbox: '',
+      count: ''
     }
   })
 );
@@ -457,6 +540,18 @@ search.addWidget(
     label: 'Free Shipping',
     templates: {
       header: 'Shipping'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      label: '',
+      checkbox: '',
+      count: ''
     }
   })
 );
@@ -519,7 +614,28 @@ The range slider filters values of a single numeric attribute using 2 cursors: t
 search.addWidget(
   instantsearch.widgets.priceRanges({
     container: '#priceranges.widget-container',
-    facetName: 'price'
+    facetName: 'price',
+    labels: {
+      currency: '$',
+      separator: 'to',
+      button: 'Go'
+    },
+    templates: {
+      header: 'Price'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      link: '',
+      currency: '',
+      separator: '',
+      button: ''
+    }
   })
 );
 {% endhighlight %}
@@ -552,7 +668,11 @@ search.addWidget(
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
-    ]
+    ],
+    cssClasses: {
+      root: '',
+      item: ''
+    }
   })
 );
 {% endhighlight %}
@@ -580,7 +700,13 @@ This widget lets you select which index you want to use for the search. Since Al
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.stats({
-    container: '#stats-container'
+    container: '#stats-container',
+    cssClasses: {
+      header: '',
+      body: '',
+      footer: '',
+      time: ''
+    }
   })
 );
 {% endhighlight %}

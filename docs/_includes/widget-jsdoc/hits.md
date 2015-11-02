@@ -11,6 +11,6 @@
 |  <span class='attr-optional'>`options.transformData`</span> | Method to change the object passed to the templates |
 |  <span class='attr-optional'>`options.transformData.empty`</span> | Method used to change the object passed to the empty template |
 |  <span class='attr-optional'>`options.transformData.item`</span> | Method used to change the object passed to the item template |
-|  <span class='attr-optional'>`options.hitsPerPage`</span> | The number of hits to display per page |
+|  <span class='attr-optional'>`hitsPerPage`</span> | The number of hits to display per page |
 
 <p class="attr-legend">* <span>Required</span></p>
