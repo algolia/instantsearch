@@ -14,8 +14,8 @@ import PriceRanges from '../PriceRanges';
 import PriceRangesForm from '../PriceRangesForm';
 
 describe('PriceRanges', () => {
-  var renderer;
-  var stubbedMethods;
+  let renderer;
+  let stubbedMethods;
 
   jsdom({useEach: true});
 
@@ -33,7 +33,7 @@ describe('PriceRanges', () => {
   });
 
   function render(extraProps = {}) {
-    var props = {
+    let props = {
       ...extraProps
     };
     renderer.render(<PriceRanges {...props} />);
@@ -92,8 +92,8 @@ describe('PriceRanges', () => {
     });
 
     context('getItemFromFacetValue', () => {
-      var props;
-      var facetValue;
+      let props;
+      let facetValue;
 
       beforeEach(() => {
         stubMethod('getURLFromFacetValue', 'url');

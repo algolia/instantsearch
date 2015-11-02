@@ -1,14 +1,14 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-refinement-list');
-var cx = require('classnames');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-refinement-list');
+let cx = require('classnames');
 
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -47,10 +47,10 @@ function refinementList({
     transformData,
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
 
-  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
   if (hideContainerWhenNoResults === true) {
     RefinementList = autoHideContainer(RefinementList);
   }
@@ -68,7 +68,7 @@ function refinementList({
 
   return {
     getConfiguration: (configuration) => {
-      var widgetConfiguration = {
+      let widgetConfiguration = {
         [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
       };
 
@@ -81,18 +81,18 @@ function refinementList({
     },
 
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
+      let facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
-      var hasNoResults = facetValues.length === 0;
+      let hasNoResults = facetValues.length === 0;
 
-      var cssClasses = {
+      let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
         body: cx(bem('body'), userCssClasses.body),

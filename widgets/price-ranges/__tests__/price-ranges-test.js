@@ -13,13 +13,13 @@ import generateRanges from '../generate-ranges';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges';
 
 describe('priceRanges()', () => {
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var helper;
-  var autoHideContainer;
-  var headerFooter;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let helper;
+  let autoHideContainer;
+  let headerFooter;
 
   jsdom({useEach: true});
 
@@ -51,7 +51,7 @@ describe('priceRanges()', () => {
   });
 
   context('without refinements', function() {
-    var props;
+    let props;
 
     beforeEach(() => {
       helper = {

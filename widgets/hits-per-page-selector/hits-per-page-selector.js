@@ -1,11 +1,11 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var reduce = require('lodash/collection/reduce');
-var bem = utils.bemHelper('ais-hits-per-page-selector');
-var cx = require('classnames');
-var autoHideContainer = require('../../decorators/autoHideContainer');
+let utils = require('../../lib/utils.js');
+let reduce = require('lodash/collection/reduce');
+let bem = utils.bemHelper('ais-hits-per-page-selector');
+let cx = require('classnames');
+let autoHideContainer = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -26,10 +26,10 @@ function hitsPerPageSelector({
     cssClasses: userCssClasses = {},
     hideContainerWhenNoResults = false
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
 
-  var Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector');
   if (hideContainerWhenNoResults === true) {
     Selector = autoHideContainer(Selector);
   }
@@ -40,7 +40,7 @@ function hitsPerPageSelector({
 
   return {
     init: function(state) {
-      var isCurrentInOptions = reduce(options, function(res, option) {
+      let isCurrentInOptions = reduce(options, function(res, option) {
         return res || +state.hitsPerPage === +option.value;
       }, false);
       if (!isCurrentInOptions) {
@@ -58,7 +58,7 @@ function hitsPerPageSelector({
       let hasNoResults = results.nbHits === 0;
       let setHitsPerPage = this.setHitsPerPage.bind(this, helper);
 
-      var cssClasses = {
+      let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         item: cx(bem('item'), userCssClasses.item)
       };

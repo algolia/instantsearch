@@ -14,13 +14,13 @@ expect.extend(expectJSX);
 describe('stats()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
 
-  var autoHideContainer;
-  var headerFooter;
+  let autoHideContainer;
+  let headerFooter;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -50,7 +50,7 @@ describe('stats()', () => {
   it('calls twice ReactDOM.render(<Stats props />, container)', () => {
     widget.render({results});
     widget.render({results});
-    var props = {
+    let props = {
       cssClasses: {
         body: 'ais-stats--body',
         header: 'ais-stats--header',

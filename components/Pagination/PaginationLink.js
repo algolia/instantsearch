@@ -1,8 +1,8 @@
-var React = require('react');
+let React = require('react');
 
 class PaginationLink extends React.Component {
   render() {
-    var {className, label, ariaLabel, handleClick, url} = this.props;
+    let {className, label, ariaLabel, handleClick, url} = this.props;
 
     return (
       <li className={className}>

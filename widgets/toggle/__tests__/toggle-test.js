@@ -35,13 +35,13 @@ describe('toggle()', () => {
   });
 
   context('good usage', () => {
-    var ReactDOM;
-    var autoHideContainer;
-    var headerFooter;
-    var container;
-    var widget;
-    var facetName;
-    var label;
+    let ReactDOM;
+    let autoHideContainer;
+    let headerFooter;
+    let container;
+    let widget;
+    let facetName;
+    let label;
 
     beforeEach(() => {
       ReactDOM = {render: sinon.spy()};
@@ -70,10 +70,10 @@ describe('toggle()', () => {
     });
 
     context('render', () => {
-      var templateProps;
-      var results;
-      var helper;
-      var props;
+      let templateProps;
+      let results;
+      let helper;
+      let props;
 
       beforeEach(() => {
         templateProps = {
@@ -192,7 +192,7 @@ describe('toggle()', () => {
         };
         widget = toggle({container, facetName, label});
         widget.render({results, helper});
-        var toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        let toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();
         expect(helper.addFacetRefinement.calledOnce).toBe(true);

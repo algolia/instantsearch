@@ -1,12 +1,12 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-hits');
-var cx = require('classnames');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-hits');
+let cx = require('classnames');
 
-var Hits = require('../../components/Hits');
-var defaultTemplates = require('./defaultTemplates');
+let Hits = require('../../components/Hits');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Display the list of results (hits) from the current search
@@ -31,14 +31,14 @@ function hits({
     transformData,
     hitsPerPage = 20
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: hits({container, [cssClasses.{root,empty,item}, templates.{empty,item}, transformData.{empty,item}, hitsPerPage])';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: hits({container, [cssClasses.{root,empty,item}, templates.{empty,item}, transformData.{empty,item}, hitsPerPage])';
 
   if (container === null) {
     throw new Error(usage);
   }
 
-  var cssClasses = {
+  let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty)
@@ -47,7 +47,7 @@ function hits({
   return {
     getConfiguration: () => ({hitsPerPage}),
     render: function({results, templatesConfig}) {
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

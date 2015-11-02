@@ -1,5 +1,5 @@
 function round(v, precision) {
-  var res = Math.round(v / precision) * precision;
+  let res = Math.round(v / precision) * precision;
   if (res < 1) {
     res = 1;
   }
@@ -7,7 +7,7 @@ function round(v, precision) {
 }
 
 function generateRanges(stats) {
-  var precision;
+  let precision;
   if (stats.avg < 100) {
     precision = 1;
   } else if (stats.avg < 1000) {
@@ -15,16 +15,16 @@ function generateRanges(stats) {
   } else {
     precision = 100;
   }
-  var avg = round(Math.round(stats.avg), precision);
-  var min = Math.ceil(stats.min);
-  var max = round(Math.floor(stats.max), precision);
+  let avg = round(Math.round(stats.avg), precision);
+  let min = Math.ceil(stats.min);
+  let max = round(Math.floor(stats.max), precision);
   while (max > stats.max) {
     max -= precision;
   }
 
-  var next;
-  var from;
-  var facetValues = [];
+  let next;
+  let from;
+  let facetValues = [];
   if (min !== max) {
     next = round(min, precision);
     facetValues.push({

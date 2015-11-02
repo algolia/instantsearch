@@ -1,8 +1,8 @@
-var React = require('react');
+let React = require('react');
 
-var Template = require('../Template');
-var PriceRangesForm = require('./PriceRangesForm');
-var cx = require('classnames');
+let Template = require('../Template');
+let PriceRangesForm = require('./PriceRangesForm');
+let cx = require('classnames');
 
 class PriceRanges extends React.Component {
   getForm() {

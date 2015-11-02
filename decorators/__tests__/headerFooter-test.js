@@ -11,8 +11,8 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('headerFooter', () => {
-  var renderer;
-  var defaultProps;
+  let renderer;
+  let defaultProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -28,7 +28,7 @@ describe('headerFooter', () => {
   });
 
   it('should render the component in a root and body', () => {
-    var out = render(defaultProps);
+    let out = render(defaultProps);
     expect(out).toEqualJSX(
       <div className="root">
         <div className="body">
@@ -44,9 +44,9 @@ describe('headerFooter', () => {
       header: 'HEADER'
     };
     // When
-    var out = render(defaultProps);
+    let out = render(defaultProps);
     // Then
-    var templateProps = {
+    let templateProps = {
       data: {},
       templateKey: 'header',
       transformData: null,
@@ -72,9 +72,9 @@ describe('headerFooter', () => {
       footer: 'FOOTER'
     };
     // When
-    var out = render(defaultProps);
+    let out = render(defaultProps);
     // Then
-    var templateProps = {
+    let templateProps = {
       data: {},
       templateKey: 'footer',
       transformData: null,
@@ -95,7 +95,7 @@ describe('headerFooter', () => {
   });
 
   function render(props = {}) {
-    var HeaderFooter = headerFooter(TestComponent);
+    let HeaderFooter = headerFooter(TestComponent);
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }

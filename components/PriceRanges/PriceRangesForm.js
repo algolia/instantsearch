@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 
 class PriceRangesForm extends React.Component {
   getInput(type) {

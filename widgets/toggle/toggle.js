@@ -1,15 +1,15 @@
-var find = require('lodash/collection/find');
-var React = require('react');
-var ReactDOM = require('react-dom');
+let find = require('lodash/collection/find');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-toggle');
-var cx = require('classnames');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-toggle');
+let cx = require('classnames');
 
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -46,10 +46,10 @@ function toggle({
     transformData,
     hideContainerWhenNoResults = true
   } = {}) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
 
-  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
   if (hideContainerWhenNoResults === true) {
     RefinementList = autoHideContainer(RefinementList);
   }
@@ -63,24 +63,24 @@ function toggle({
       facets: [facetName]
     }),
     render: function({helper, results, templatesConfig, state, createURL}) {
-      var isRefined = helper.hasRefinements(facetName);
-      var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
-      var hasNoResults = results.nbHits === 0;
+      let isRefined = helper.hasRefinements(facetName);
+      let values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
+      let hasNoResults = results.nbHits === 0;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var facetValue = {
+      let facetValue = {
         name: label,
         isRefined: isRefined,
         count: values && values.count || null
       };
 
-      var cssClasses = {
+      let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
         body: cx(bem('body'), userCssClasses.body),
@@ -109,7 +109,7 @@ function toggle({
 }
 
 function toggleRefinement(helper, facetName, isRefined) {
-  var action = isRefined ? 'remove' : 'add';
+  let action = isRefined ? 'remove' : 'add';
 
   helper[action + 'FacetRefinement'](facetName, true);
   helper.search();

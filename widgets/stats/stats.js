@@ -1,13 +1,13 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
-var bem = require('../../lib/utils').bemHelper('ais-stats');
-var cx = require('classnames');
+let utils = require('../../lib/utils.js');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
+let bem = require('../../lib/utils').bemHelper('ais-stats');
+let cx = require('classnames');
 
-var defaultTemplates = require('./defaultTemplates.js');
+let defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Display various stats about the current search state
@@ -33,9 +33,9 @@ function stats({
     templates = defaultTemplates,
     transformData
   }) {
-  var containerNode = utils.getContainerNode(container);
+  let containerNode = utils.getContainerNode(container);
 
-  var Stats = headerFooter(require('../../components/Stats/Stats.js'));
+  let Stats = headerFooter(require('../../components/Stats/Stats.js'));
   if (hideContainerWhenNoResults === true) {
     Stats = autoHideContainer(Stats);
   }
@@ -46,15 +46,15 @@ function stats({
 
   return {
     render: function({results, templatesConfig}) {
-      var hasNoResults = results.nbHits === 0;
-      var templateProps = utils.prepareTemplateProps({
+      let hasNoResults = results.nbHits === 0;
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var cssClasses = {
+      let cssClasses = {
         body: cx(bem('body'), userCssClasses.body),
         footer: cx(bem('footer'), userCssClasses.footer),
         header: cx(bem('header'), userCssClasses.header),
