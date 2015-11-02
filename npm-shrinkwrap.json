@@ -89,8 +89,8 @@
       }
     },
     "algoliasearch-helper": {
-      "version": "2.6.3",
-      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.3.tgz",
+      "version": "2.6.4",
+      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.4.tgz",
       "dependencies": {
         "lodash-compat": {
           "version": "3.10.1",
