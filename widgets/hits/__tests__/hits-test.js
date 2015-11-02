@@ -45,13 +45,16 @@ describe('hits()', () => {
     expect(widget.getConfiguration()).toEqual({hitsPerPage: 20});
   });
 
-  it('calls ReactDOM.render(<Hits props />, container)', () => {
+  it('calls twice ReactDOM.render(<Hits props />, container)', () => {
     props = getProps();
     widget.render({results});
+    widget.render({results});
 
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Hits {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Hits {...props} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   afterEach(() => {
