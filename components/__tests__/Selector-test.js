@@ -9,7 +9,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('Selector', () => {
-  var renderer;
+  let renderer;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -18,7 +18,7 @@ describe('Selector', () => {
 
 
   it('should render <Selector/> with strings', () => {
-    var out = render({
+    let out = render({
       currentValue: 'index-a',
       cssClasses: {
         root: 'custom-root',
@@ -39,7 +39,7 @@ describe('Selector', () => {
   });
 
   it('should render <Selector/> with numbers', () => {
-    var out = render({
+    let out = render({
       currentValue: 10,
       cssClasses: {
         root: 'custom-root',

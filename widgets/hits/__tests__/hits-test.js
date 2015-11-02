@@ -14,13 +14,13 @@ import Hits from '../../../components/Hits';
 describe('hits()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var templateProps;
-  var widget;
-  var results;
-  var props;
-  var defaultTemplates = {
+  let ReactDOM;
+  let container;
+  let templateProps;
+  let widget;
+  let results;
+  let props;
+  let defaultTemplates = {
     hit: 'hit',
     empty: 'empty'
   };

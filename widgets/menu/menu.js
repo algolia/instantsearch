@@ -1,13 +1,13 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-menu');
-var cx = require('classnames');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-menu');
+let cx = require('classnames');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates.js');
+let defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Create a menu out of a facet
@@ -43,10 +43,10 @@ function menu({
     transformData,
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
 
-  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
   if (hideContainerWhenNoResults === true) {
     RefinementList = autoHideContainer(RefinementList);
   }
@@ -57,7 +57,7 @@ function menu({
 
   // we use a hierarchicalFacet for the menu because that's one of the use cases
   // of hierarchicalFacet: a flat menu
-  var hierarchicalFacetName = facetName;
+  let hierarchicalFacetName = facetName;
 
   return {
     getConfiguration: () => ({
@@ -67,17 +67,17 @@ function menu({
       }]
     }),
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
-      var hasNoRefinements = facetValues.length === 0;
+      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      let hasNoRefinements = facetValues.length === 0;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var cssClasses = {
+      let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
         body: cx(bem('body'), userCssClasses.body),
@@ -111,7 +111,7 @@ function toggleRefinement(helper, facetName, facetValue) {
 }
 
 function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
-  var values = results
+  let values = results
     .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
 
   return values.data && values.data.slice(0, limit) || [];

@@ -11,16 +11,16 @@ expect.extend(expectJSX);
 describe('rangeSlider()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var helper;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let helper;
 
-  var autoHideContainer;
-  var headerFooter;
-  var Slider;
-  var rangeSlider;
+  let autoHideContainer;
+  let headerFooter;
+  let Slider;
+  let rangeSlider;
 
   beforeEach(() => {
     rangeSlider = require('../range-slider');
@@ -60,7 +60,7 @@ describe('rangeSlider()', () => {
     widget.render({results, helper});
     widget.render({results, helper});
 
-    var props = {
+    let props = {
       cssClasses: {body: null, root: null},
       onChange: () => {},
       range: {max: 4999.98, min: 1.99},
@@ -93,7 +93,7 @@ describe('rangeSlider()', () => {
   });
 
   it('calls the refinement functions if refined with min+1', () => {
-    var stats = results.getFacetStats();
+    let stats = results.getFacetStats();
     widget._refine(helper, stats, [stats.min + 1, stats.max]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledOnce).toBe(true, 'clearRefinements called once');
@@ -102,7 +102,7 @@ describe('rangeSlider()', () => {
   });
 
   it('calls the refinement functions if refined with max-1', () => {
-    var stats = results.getFacetStats();
+    let stats = results.getFacetStats();
     widget._refine(helper, stats, [stats.min, stats.max - 1]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
@@ -111,7 +111,7 @@ describe('rangeSlider()', () => {
   });
 
   it('calls the refinement functions if refined with min+1 and max-1', () => {
-    var stats = results.getFacetStats();
+    let stats = results.getFacetStats();
     widget._refine(helper, stats, [stats.min + 1, stats.max - 1]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');

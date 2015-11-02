@@ -1,8 +1,8 @@
-var React = require('react');
+let React = require('react');
 
-var Nouislider = require('react-nouislider');
+let Nouislider = require('react-nouislider');
 
-var cssPrefix = 'ais-range-slider--';
+let cssPrefix = 'ais-range-slider--';
 
 class Slider extends React.Component {
 

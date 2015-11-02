@@ -10,10 +10,10 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('RefinementList', () => {
-  var renderer;
-  var parentListProps;
-  var itemProps;
-  var templateProps;
+  let renderer;
+  let parentListProps;
+  let itemProps;
+  let templateProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -38,7 +38,7 @@ describe('RefinementList', () => {
 
 
   it('should render default list', () => {
-    var out = render();
+    let out = render();
     expect(out).toEqualJSX(
       <div {...parentListProps}>
         <div {...itemProps}>
@@ -59,7 +59,7 @@ describe('RefinementList', () => {
 
   context('sublist', () => {
     it('uses autoHideContainer() and headerFooter()', () => {
-      var customProps = {
+      let customProps = {
         cssClasses: {
           depth: 'depth',
           item: 'item',
@@ -92,7 +92,7 @@ describe('RefinementList', () => {
           }
         }
       };
-      var out = render(customProps);
+      let out = render(customProps);
       expect(out).toEqualJSX(
         <div {...parentListProps}>
           <div {...itemProps}>
@@ -118,7 +118,7 @@ describe('RefinementList', () => {
   });
 
   function render(extraProps = {}) {
-    var props = getProps(extraProps);
+    let props = getProps(extraProps);
     renderer.render(<RefinementList {...props} templateProps={{}} />);
     return renderer.getRenderOutput();
   }

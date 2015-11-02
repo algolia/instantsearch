@@ -1,4 +1,4 @@
-var React = require('react');
+let React = require('react');
 
 class Selector extends React.Component {
   handleChange(event) {
@@ -6,9 +6,9 @@ class Selector extends React.Component {
   }
 
   render() {
-    var {currentValue, options} = this.props;
+    let {currentValue, options} = this.props;
 
-    var handleChange = this.handleChange.bind(this);
+    let handleChange = this.handleChange.bind(this);
 
     return (
       <select

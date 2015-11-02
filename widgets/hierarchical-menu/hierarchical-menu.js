@@ -1,13 +1,13 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-hierarchical-menu');
-var cx = require('classnames');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-hierarchical-menu');
+let cx = require('classnames');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates.js');
+let defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Create a hierarchical menu using multiple attributes
@@ -45,10 +45,10 @@ function hierarchicalMenu({
     templates = defaultTemplates,
     transformData
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, hideContainerWhenNoResults]})';
 
-  var RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
   if (hideContainerWhenNoResults === true) {
     RefinementList = autoHideContainer(RefinementList);
   }
@@ -60,7 +60,7 @@ function hierarchicalMenu({
   // we need to provide a hierarchicalFacet name for the search state
   // so that we can always map $hierarchicalFacetName => real attributes
   // we use the first attribute name
-  var hierarchicalFacetName = attributes[0];
+  let hierarchicalFacetName = attributes[0];
 
   return {
     getConfiguration: () => ({
@@ -71,17 +71,17 @@ function hierarchicalMenu({
       }]
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {
-      var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
-      var hasNoRefinements = facetValues.length === 0;
+      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
+      let hasNoRefinements = facetValues.length === 0;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var cssClasses = {
+      let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
         body: cx(bem('body'), userCssClasses.body),
@@ -118,7 +118,7 @@ function toggleRefinement(helper, facetName, facetValue) {
 }
 
 function getFacetValues(results, hierarchicalFacetName, sortBy) {
-  var values = results
+  let values = results
     .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
 
   return values.data || [];

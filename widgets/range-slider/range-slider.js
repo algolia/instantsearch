@@ -1,11 +1,11 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let utils = require('../../lib/utils.js');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = {
+let defaultTemplates = {
   header: '',
   footer: ''
 };
@@ -39,9 +39,9 @@ function rangeSlider({
     },
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
+  let containerNode = utils.getContainerNode(container);
 
-  var Slider = headerFooter(require('../../components/Slider/Slider'));
+  let Slider = headerFooter(require('../../components/Slider/Slider'));
   if (hideContainerWhenNoResults === true) {
     Slider = autoHideContainer(Slider);
   }
@@ -51,8 +51,8 @@ function rangeSlider({
       disjunctiveFacets: [facetName]
     }),
     _getCurrentRefinement(helper) {
-      var min = helper.state.getNumericRefinement(facetName, '>=');
-      var max = helper.state.getNumericRefinement(facetName, '<=');
+      let min = helper.state.getNumericRefinement(facetName, '>=');
+      let max = helper.state.getNumericRefinement(facetName, '<=');
 
       if (min && min.length) {
         min = min[0];
@@ -82,9 +82,9 @@ function rangeSlider({
       helper.search();
     },
     render({results, helper, templatesConfig}) {
-      var stats = results.getFacetStats(facetName);
+      let stats = results.getFacetStats(facetName);
 
-      var currentRefinement = this._getCurrentRefinement(helper);
+      let currentRefinement = this._getCurrentRefinement(helper);
 
       if (stats === undefined) {
         stats = {
@@ -93,9 +93,9 @@ function rangeSlider({
         };
       }
 
-      var hasNoRefinements = stats.min === null && stats.max === null;
+      let hasNoRefinements = stats.min === null && stats.max === null;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates

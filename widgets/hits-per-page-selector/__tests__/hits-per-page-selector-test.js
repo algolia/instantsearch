@@ -14,15 +14,15 @@ import Selector from '../../../components/Selector';
 describe('hitsPerPageSelector()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var options;
-  var cssClasses;
-  var widget;
-  var props;
-  var helper;
-  var results;
-  var autoHideContainer;
+  let ReactDOM;
+  let container;
+  let options;
+  let cssClasses;
+  let widget;
+  let props;
+  let helper;
+  let results;
+  let autoHideContainer;
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);

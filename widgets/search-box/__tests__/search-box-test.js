@@ -10,7 +10,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 function createHTMLNodeFromString(string) {
-  var parent = document.createElement('div');
+  let parent = document.createElement('div');
   parent.innerHTML = string;
   return parent.firstChild;
 }
@@ -18,11 +18,11 @@ function createHTMLNodeFromString(string) {
 describe('search-box()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var initialState;
-  var helper;
-  var widget;
+  let ReactDOM;
+  let container;
+  let initialState;
+  let helper;
+  let widget;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -58,13 +58,13 @@ describe('search-box()', () => {
 
     it('adds an input inside the div', () => {
       widget.init(initialState, helper);
-      var inputs = container.getElementsByTagName('input');
+      let inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
       widget.init(initialState, helper);
-      var input = container.getElementsByTagName('input')[0];
+      let input = container.getElementsByTagName('input')[0];
       expect(input.getAttribute('autocapitalize')).toEqual('off');
       expect(input.getAttribute('autocomplete')).toEqual('off');
       expect(input.getAttribute('autocorrect')).toEqual('off');
@@ -112,8 +112,8 @@ describe('search-box()', () => {
       widget.init(initialState, helper);
 
       // Then
-      var wrapper = container.querySelectorAll('div.ais-search-box')[0];
-      var input = container.querySelectorAll('input')[0];
+      let wrapper = container.querySelectorAll('div.ais-search-box')[0];
+      let input = container.querySelectorAll('input')[0];
 
       expect(wrapper.contains(input)).toEqual(true);
       expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
@@ -128,7 +128,7 @@ describe('search-box()', () => {
       widget.init(initialState, helper);
 
       // Then
-      var wrapper = container.parentNode;
+      let wrapper = container.parentNode;
       expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
     });
 
@@ -141,8 +141,8 @@ describe('search-box()', () => {
       widget.init(initialState, helper);
 
       // Then
-      var wrapper = container.querySelectorAll('div.ais-search-box');
-      var input = container.querySelectorAll('input')[0];
+      let wrapper = container.querySelectorAll('div.ais-search-box');
+      let input = container.querySelectorAll('input')[0];
       expect(wrapper.length).toEqual(0);
       expect(container.firstChild).toEqual(input);
     });
@@ -167,7 +167,7 @@ describe('search-box()', () => {
   });
 
   context('focus', () => {
-    var input;
+    let input;
     beforeEach(() => {
       container = document.createElement('div');
       input = createHTMLNodeFromString('<input />');

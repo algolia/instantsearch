@@ -1,10 +1,10 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var defaults = require('lodash/object/defaults');
+let React = require('react');
+let ReactDOM = require('react-dom');
+let defaults = require('lodash/object/defaults');
 
-var utils = require('../../lib/utils.js');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var defaultLabels = {
+let utils = require('../../lib/utils.js');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
@@ -50,10 +50,10 @@ function pagination({
     scrollTo = 'body';
   }
 
-  var containerNode = utils.getContainerNode(container);
-  var scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
+  let containerNode = utils.getContainerNode(container);
+  let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
 
-  var Pagination = require('../../components/Pagination/Pagination.js');
+  let Pagination = require('../../components/Pagination/Pagination.js');
   if (hideContainerWhenNoResults === true) {
     Pagination = autoHideContainer(Pagination);
   }
@@ -74,10 +74,10 @@ function pagination({
     },
 
     render: function({results, helper, createURL, state}) {
-      var currentPage = results.page;
-      var nbPages = results.nbPages;
-      var nbHits = results.nbHits;
-      var hasNoResults = nbHits === 0;
+      let currentPage = results.page;
+      let nbPages = results.nbPages;
+      let nbHits = results.nbHits;
+      let hasNoResults = nbHits === 0;
 
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);

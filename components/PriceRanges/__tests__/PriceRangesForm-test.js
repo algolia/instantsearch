@@ -12,7 +12,7 @@ expect.extend(expectJSX);
 import PriceRangesForm from '../PriceRangesForm';
 
 describe('PriceRangesForm', () => {
-  var renderer;
+  let renderer;
 
   jsdom({useEach: true});
 
@@ -22,7 +22,7 @@ describe('PriceRangesForm', () => {
   });
 
   function render(extraProps = {}) {
-    var props = {
+    let props = {
       ...extraProps
     };
     renderer.render(<PriceRangesForm {...props} />);

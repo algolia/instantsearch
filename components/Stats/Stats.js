@@ -1,10 +1,10 @@
-var React = require('react');
+let React = require('react');
 
-var Template = require('../Template');
+let Template = require('../Template');
 
 class Stats extends React.Component {
   render() {
-    var data = {
+    let data = {
       hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
       hasOneResult: this.props.nbHits === 1,

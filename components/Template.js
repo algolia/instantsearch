@@ -1,15 +1,15 @@
-var React = require('react');
-var mapValues = require('lodash/object/mapValues');
-var curry = require('lodash/function/curry');
-var hogan = require('hogan.js');
+let React = require('react');
+let mapValues = require('lodash/object/mapValues');
+let curry = require('lodash/function/curry');
+let hogan = require('hogan.js');
 
 class Template extends React.Component {
   render() {
-    var compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
+    let compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
       this.props.templatesConfig.compileOptions :
       {};
 
-    var content = renderTemplate({
+    let content = renderTemplate({
       template: this.props.templates[this.props.templateKey],
       compileOptions: compileOptions,
       helpers: this.props.templatesConfig.helpers,
@@ -65,7 +65,7 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
-  var data;
+  let data;
   if (typeof fn === 'function') {
     data = fn(originalData);
   } else if (typeof fn === 'object') {
@@ -81,8 +81,8 @@ function transformData(fn, templateKey, originalData) {
     throw new Error('`transformData` must be a function or an object');
   }
 
-  var dataType = typeof data;
-  var expectedType = typeof originalData;
+  let dataType = typeof data;
+  let expectedType = typeof originalData;
   if (dataType !== expectedType) {
     throw new Error(`\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`);
   }
@@ -112,7 +112,7 @@ function renderTemplate({template, compileOptions, helpers, data}) {
 function transformHelpersToHogan(helpers, compileOptions, data) {
   return mapValues(helpers, (method) => {
     return curry(function(text) {
-      var render = (value) => hogan.compile(value, compileOptions).render(this);
+      let render = (value) => hogan.compile(value, compileOptions).render(this);
       return method.call(data, text, render);
     });
   });

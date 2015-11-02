@@ -10,11 +10,11 @@ import PaginationLink from '../PaginationLink';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-var bem = require('../../../lib/utils').bemHelper('ais-pagination');
-var cx = require('classnames');
+let bem = require('../../../lib/utils').bemHelper('ais-pagination');
+let cx = require('classnames');
 
 describe('Pagination', () => {
-  var renderer;
+  let renderer;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -22,7 +22,7 @@ describe('Pagination', () => {
   });
 
   it('should not display the first/last link by default', () => {
-    var out = render();
+    let out = render();
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[0]).toEqual(null);
@@ -30,7 +30,7 @@ describe('Pagination', () => {
   });
 
   it('should display the first/last link', () => {
-    var out = render({showFirstLast: true});
+    let out = render({showFirstLast: true});
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[0]).toNotEqual(null);
@@ -38,15 +38,15 @@ describe('Pagination', () => {
   });
 
   it('should display the right number of pages', () => {
-    var padding = 4;
-    var out = render({padding});
+    let padding = 4;
+    let out = render({padding});
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[2].length).toEqual(padding + 1 + padding);
   });
 
   it('should flag the current page as active', () => {
-    var out = render({currentPage: 0});
+    let out = render({currentPage: 0});
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[2][0].props.className)
@@ -56,7 +56,7 @@ describe('Pagination', () => {
   });
 
   it('should disable the first page if already on it', () => {
-    var out = render({currentPage: 0, showFirstLast: true});
+    let out = render({currentPage: 0, showFirstLast: true});
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[0].props.className)
@@ -64,8 +64,8 @@ describe('Pagination', () => {
   });
 
   it('should build the associated URL', () => {
-    var createURL = sinon.stub().returns('/page');
-    var out = new Pagination({cssClasses: {}}).pageLink({
+    let createURL = sinon.stub().returns('/page');
+    let out = new Pagination({cssClasses: {}}).pageLink({
       label: 'test',
       createURL
     });
@@ -83,8 +83,8 @@ describe('Pagination', () => {
   });
 
   it('should not build the URL of disabled page', () => {
-    var createURL = sinon.spy();
-    var out = new Pagination({cssClasses: {}}).pageLink({
+    let createURL = sinon.spy();
+    let out = new Pagination({cssClasses: {}}).pageLink({
       label: 'test',
       isDisabled: true,
       createURL
@@ -103,7 +103,7 @@ describe('Pagination', () => {
   });
 
   it('should disable last first page if already on it', () => {
-    var out = render({currentPage: 19, showFirstLast: true});
+    let out = render({currentPage: 19, showFirstLast: true});
 
     expect(out.props.children.length).toEqual(5);
     expect(out.props.children[4].props.className)
@@ -111,13 +111,13 @@ describe('Pagination', () => {
   });
 
   it('should handle special clicks', () => {
-    var props = {
+    let props = {
       setCurrentPage: sinon.spy()
     };
-    var preventDefault = sinon.spy();
-    var component = new Pagination(props);
+    let preventDefault = sinon.spy();
+    let component = new Pagination(props);
     ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach((e) => {
-      var event = {preventDefault};
+      let event = {preventDefault};
       event[e] = true;
       component.handleClick(42, event);
       expect(props.setCurrentPage.called).toBe(false, 'setCurrentPage never called');
@@ -129,7 +129,7 @@ describe('Pagination', () => {
   });
 
   function render(extraProps = {}) {
-    var props = {
+    let props = {
       cssClasses: {},
       labels: {first: '', last: '', next: '', previous: ''},
       currentPage: 0,

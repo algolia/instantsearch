@@ -14,15 +14,15 @@ import Selector from '../../../components/Selector';
 describe('indexSelector()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var indices;
-  var cssClasses;
-  var widget;
-  var props;
-  var helper;
-  var results;
-  var autoHideContainer;
+  let ReactDOM;
+  let container;
+  let indices;
+  let cssClasses;
+  let widget;
+  let props;
+  let helper;
+  let results;
+  let autoHideContainer;
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);

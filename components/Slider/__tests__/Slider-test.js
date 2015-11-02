@@ -11,9 +11,9 @@ expect.extend(expectJSX);
 describe('Slider', () => {
   jsdom({useEach: true}); // to ensure the global.window is set
 
-  var renderer;
-  var Slider;
-  var Nouislider;
+  let renderer;
+  let Slider;
+  let Nouislider;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -26,7 +26,7 @@ describe('Slider', () => {
 
 
   it('should render <NouiSlider {...props} />', () => {
-    var out = render();
+    let out = render();
     expect(out).toEqualJSX(
       <div>
         <Nouislider
