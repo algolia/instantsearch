@@ -38,18 +38,19 @@ To get started, check out [algolia.github.com/instantsearch.js](https://algolia.
 
 ## Setup
 
-### npm, browserify, webpack
-
-```sh
-npm install instantsearch.js --save-dev
-```
-
-### `<script>`
+### From a CDN
 
 instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
 
 ```html
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
 <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+```
+
+### With npm, browserify, webpack
+
+```sh
+npm install instantsearch.js --save-dev
 ```
 
 ## Quick Start
@@ -100,23 +101,6 @@ To get < IE10 support, please insert this code in the `<head>`:
 ```
 
 We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
-
-## Themes
-
-To help get you started, we provide a default theme for the widgets. This is
-just a `css` file that you have to add to your page to add basic styling.
-
-It is available from [jsDelivr](http://www.jsdelivr.com/):
-
-```html
-<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.min.css">
-<!-- or the unminified version -->
-<link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.css">
-```
-
-It contains (empty) selectors for all the possible markup added by the widgets,
-so you can use it as a base for creating your own custom theme. We will provide
-more themes in the future.
 
 ## Development workflow
 

@@ -1,0 +1,47 @@
+@import "../base";
+@import "variables";
+
+@include component(price-ranges) {
+  @include modifier(header) {
+    /* widget header */
+  }
+  @include modifier(body) {
+    /* widget body */
+  }
+  @include modifier(footer) {
+    /* widget footer */
+  }
+  @include modifier(list) {
+    /* item list */
+  }
+  @include modifier(item) {
+    /* list item */
+    @include element(active) {
+      /* active list item */
+    }
+  }
+
+  @include modifier(link) {
+    /* item link */
+  }
+  @include modifier(form) {
+    /* custom form */
+  }
+  @include modifier(label) {
+    /* custom form label */
+  }
+  @include modifier(currency) {
+    /* currency */
+  }
+  @include modifier(input) {
+    /* custom form input */
+  }
+  @include modifier(separator) {
+    /* custom form separator */
+  }
+  @include modifier(button) {
+    /* custom form button */
+  }
+}
+
+
