@@ -1,9 +1,9 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var utils = require('../../lib/utils.js');
-var forEach = require('lodash/collection/forEach');
-var bem = require('../../lib/utils').bemHelper('ais-search-box');
-var cx = require('classnames');
+let React = require('react');
+let ReactDOM = require('react-dom');
+let utils = require('../../lib/utils.js');
+let forEach = require('lodash/collection/forEach');
+let bem = require('../../lib/utils').bemHelper('ais-search-box');
+let cx = require('classnames');
 
 /**
  * Instantiate a searchbox
@@ -47,13 +47,13 @@ function searchBox({
     },
     wrapInput: function(input) {
       // Wrap input in a .ais-search-box div
-      var wrapper = document.createElement('div');
+      let wrapper = document.createElement('div');
       wrapper.classList.add(cx(bem(null), cssClasses.root));
       wrapper.appendChild(input);
       return wrapper;
     },
     addDefaultAttributesToInput: function(input, query) {
-      var defaultAttributes = {
+      let defaultAttributes = {
         autocapitalize: 'off',
         autocomplete: 'off',
         autocorrect: 'off',
@@ -76,10 +76,10 @@ function searchBox({
       input.classList.add(cx(bem('input'), cssClasses.input));
     },
     addPoweredBy: function(input) {
-      var PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
-      var poweredByContainer = document.createElement('div');
+      let PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
+      let poweredByContainer = document.createElement('div');
       input.parentNode.insertBefore(poweredByContainer, input.nextSibling);
-      var poweredByCssClasses = {
+      let poweredByCssClasses = {
         root: cx(bem('powered-by'), cssClasses.poweredBy),
         link: bem('powered-by-link')
       };
@@ -91,8 +91,8 @@ function searchBox({
       );
     },
     init: function(initialState, helper) {
-      var isInputTargeted = container.tagName === 'INPUT';
-      var input = this.getInput();
+      let isInputTargeted = container.tagName === 'INPUT';
+      let input = this.getInput();
 
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, initialState.query);
@@ -102,7 +102,7 @@ function searchBox({
 
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node
-        var placeholderNode = document.createElement('div');
+        let placeholderNode = document.createElement('div');
         input.parentNode.insertBefore(placeholderNode, input);
         let parentNode = input.parentNode;
         let wrappedInput = wrapInput ? this.wrapInput(input) : input;

@@ -14,15 +14,15 @@ import Selector from '../../../components/Selector';
 describe('hitsPerPageSelector()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var options;
-  var cssClasses;
-  var widget;
-  var props;
-  var helper;
-  var results;
-  var autoHideContainer;
+  let ReactDOM;
+  let container;
+  let options;
+  let cssClasses;
+  let widget;
+  let props;
+  let helper;
+  let results;
+  let autoHideContainer;
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);
@@ -58,7 +58,8 @@ describe('hitsPerPageSelector()', () => {
     expect(widget.getConfiguration).toEqual(undefined);
   });
 
-  it('calls ReactDOM.render(<Selector props />, container)', () => {
+  it('calls twice ReactDOM.render(<Selector props />, container)', () => {
+    widget.render({helper, results, state: helper.state});
     widget.render({helper, results, state: helper.state});
     props = {
       cssClasses: {
@@ -73,9 +74,11 @@ describe('hitsPerPageSelector()', () => {
       ],
       setValue: () => {}
     };
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   it('sets the underlying hitsPerPage', () => {

@@ -1,61 +1,66 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils.js');
 
-var generateRanges = require('./generate-ranges.js');
+let generateRanges = require('./generate-ranges.js');
 
-var defaultTemplates = require('./defaultTemplates');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let defaultTemplates = require('./defaultTemplates');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var bem = utils.bemHelper('ais-price-ranges');
-var cx = require('classnames/dedupe');
+let bem = utils.bemHelper('ais-price-ranges');
+let cx = require('classnames');
 
 /**
  * Instantiate a price ranges on a numerical facet
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.facetName Name of the attribute for faceting
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, range
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.form] CSS class to add to the form element
- * @param  {string|string[]} [options.cssClasses.range] CSS class to add to the range element
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to the active range element
- * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the min/max input elements
- * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the button element
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {string} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string} [options.cssClasses.list] CSS class to add to the wrapping list element
+ * @param  {string} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string} [options.cssClasses.active] CSS class to add to the active item element
+ * @param  {string} [options.cssClasses.link] CSS class to add to each link element
+ * @param  {string} [options.cssClasses.form] CSS class to add to the form element
+ * @param  {string} [options.cssClasses.label] CSS class to add to each wrapping label of the form
+ * @param  {string} [options.cssClasses.input] CSS class to add to each input of the form
+ * @param  {string} [options.cssClasses.currency] CSS class to add to each currency element of the form
+ * @param  {string} [options.cssClasses.separator] CSS class to add to the separator of the form
+ * @param  {string} [options.cssClasses.button] CSS class to add to the submit button of the form
+ * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.range] Range template
+ * @param  {string|Function} [options.templates.item] Item template
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.button] Button label
  * @param  {string|Function} [options.labels.currency] Currency label
- * @param  {string|Function} [options.labels.to] To label
+ * @param  {string|Function} [options.labels.separator] Separator labe, between min and max
+ * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
  * @return {Object}
  */
 function priceRanges({
-    container = null,
-    facetName = null,
-    cssClasses = {},
+    container,
+    facetName,
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     labels = {
       currency: '$',
       button: 'Go',
-      to: 'to'
+      separator: 'to'
     },
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: priceRanges({container, facetName, [cssClasses, templates, labels, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: priceRanges({container, facetName, [cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}, templates.{header,item,footer}, labels.{currency,separator,button}, hideContainerWhenNoResults]})';
 
-  var PriceRanges = headerFooter(require('../../components/PriceRanges'));
+  let PriceRanges = headerFooter(require('../../components/PriceRanges/PriceRanges'));
   if (hideContainerWhenNoResults === true) {
     PriceRanges = autoHideContainer(PriceRanges);
   }
 
-  if (container === null || facetName === null) {
+  if (!container || !facetName) {
     throw new Error(usage);
   }
 
@@ -65,14 +70,14 @@ function priceRanges({
     }),
 
     _generateRanges: function(results) {
-      var stats = results.getFacetStats(facetName);
+      let stats = results.getFacetStats(facetName);
       return generateRanges(stats);
     },
 
     _extractRefinedRange: function(helper) {
-      var refinements = helper.getRefinements(facetName);
-      var from;
-      var to;
+      let refinements = helper.getRefinements(facetName);
+      let from;
+      let to;
 
       if (refinements.length === 0) {
         return [];
@@ -89,7 +94,7 @@ function priceRanges({
     },
 
     _refine: function(helper, from, to) {
-      var facetValues = this._extractRefinedRange(helper);
+      let facetValues = this._extractRefinedRange(helper);
 
       helper.clearRefinements(facetName);
       if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
@@ -105,8 +110,8 @@ function priceRanges({
     },
 
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var hasNoResults = results.nbHits === 0;
-      var facetValues;
+      let hasNoResults = results.nbHits === 0;
+      let facetValues;
 
       if (results.hits.length > 0) {
         facetValues = this._extractRefinedRange(helper);
@@ -118,28 +123,33 @@ function priceRanges({
         facetValues = [];
       }
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        range: cx(bem('range'), cssClasses.range),
-        active: cx(bem('range', 'active'), cssClasses.active),
-        input: cx(bem('input'), cssClasses.input),
-        form: cx(bem('form'), cssClasses.form),
-        button: cx(bem('button'), cssClasses.button)
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        list: cx(bem('list'), userCssClasses.list),
+        link: cx(bem('link'), userCssClasses.link),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        form: cx(bem('form'), userCssClasses.form),
+        label: cx(bem('label'), userCssClasses.label),
+        input: cx(bem('input'), userCssClasses.input),
+        currency: cx(bem('currency'), userCssClasses.currency),
+        button: cx(bem('button'), userCssClasses.button),
+        separator: cx(bem('separator'), userCssClasses.separator),
+        footer: cx(bem('footer'), userCssClasses.footer)
       };
 
       ReactDOM.render(
         <PriceRanges
           createURL={(from, to, isRefined) => {
-            var newState = state.clearRefinements(facetName);
+            let newState = state.clearRefinements(facetName);
             if (!isRefined) {
               if (typeof from !== 'undefined') {
                 newState = newState.addNumericRefinement(facetName, '>', from - 1);

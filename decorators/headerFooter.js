@@ -1,11 +1,11 @@
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-var React = require('react');
+let React = require('react');
 
-var cx = require('classnames/dedupe');
+let cx = require('classnames');
 
-var Template = require('../components/Template');
+let Template = require('../components/Template');
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
@@ -22,14 +22,14 @@ function headerFooter(ComposedComponent) {
       );
     }
     render() {
-      var classNames = {
+      let classNames = {
         root: cx(this.props.cssClasses.root),
         body: cx(this.props.cssClasses.body)
       };
 
       // Only add header/footer if a template is defined
-      var header = this.getTemplate('header');
-      var footer = this.getTemplate('footer');
+      let header = this.getTemplate('header');
+      let footer = this.getTemplate('footer');
 
       return (
         <div className={classNames.root}>

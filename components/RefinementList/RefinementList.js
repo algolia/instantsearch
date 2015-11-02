@@ -1,10 +1,10 @@
-var React = require('react');
+let React = require('react');
 
-var cx = require('classnames');
+let cx = require('classnames');
 
-var Template = require('../Template');
+let Template = require('../Template');
 
-var {isSpecialClick} = require('../../lib/utils.js');
+let {isSpecialClick} = require('../../lib/utils.js');
 
 class RefinementList extends React.Component {
   refine(value) {
@@ -12,8 +12,8 @@ class RefinementList extends React.Component {
   }
 
   _generateFacetItem(facetValue) {
-    var subList;
-    var hasChildren = facetValue.data && facetValue.data.length > 0;
+    let subList;
+    let hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
       subList = (
         <RefinementList
@@ -23,15 +23,15 @@ class RefinementList extends React.Component {
         />
       );
     }
-    var data = facetValue;
+    let data = facetValue;
 
     if (this.props.createURL) {
       data.url = this.props.createURL(facetValue[this.props.facetNameKey]);
     }
 
-    var templateData = {...facetValue, cssClasses: this.props.cssClasses};
+    let templateData = {...facetValue, cssClasses: this.props.cssClasses};
 
-    var cssClassItem = cx(this.props.cssClasses.item, {
+    let cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined
     });
 
@@ -75,7 +75,7 @@ class RefinementList extends React.Component {
       return;
     }
 
-    var parent = e.target;
+    let parent = e.target;
 
     while (parent !== e.currentTarget) {
       if (parent.tagName === 'LABEL' && parent.querySelector('input[type="checkbox"]')) {
@@ -96,7 +96,7 @@ class RefinementList extends React.Component {
 
   render() {
     // Adding `-lvl0` classes
-    var cssClassList = [this.props.cssClasses.list];
+    let cssClassList = [this.props.cssClasses.list];
     if (this.props.cssClasses.depth) {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }

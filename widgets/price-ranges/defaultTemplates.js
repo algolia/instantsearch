@@ -1,6 +1,6 @@
 module.exports = {
   header: ``,
-  range: `
+  item: `
     {{#from}}
       {{^to}}
         &ge;
@@ -16,6 +16,6 @@ module.exports = {
       {{/from}}
       \${{to}}
     {{/to}}
-    <span>{{count}}</span>`,
+  `,
   footer: ``
 };

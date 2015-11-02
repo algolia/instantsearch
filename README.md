@@ -206,7 +206,6 @@ instantsearch({
 });
 ```
 
-
 ## License
 
 instantsearch.js is [MIT licensed](./LICENSE).
