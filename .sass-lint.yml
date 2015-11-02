@@ -1,7 +1,7 @@
 options:
   formatter: stylish
 files:
-  include: '+(examples|themes)/**/*.s+(a|c)ss'
+  include: '+(examples|css)/**/*.s+(a|c)ss'
 rules:
   # Extends
   extends-before-mixins: 1
@@ -19,7 +19,7 @@ rules:
   # Disallows
   no-color-keywords: 1
   no-color-literals: 1
-  no-css-comments: 1
+  no-css-comments: 0
   no-debug: 1
   no-duplicate-properties: 1
   no-empty-rulesets: 1

@@ -1,0 +1,11 @@
+@import "../base";
+@import "variables";
+
+@include component(hits) {
+  @include element(empty) {
+    /* empty container */
+  }
+  @include modifier(item) {
+    /* hit item */
+  }
+}

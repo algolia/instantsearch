@@ -1,9 +1,0 @@
-@import "../base";
-@import "variables";
-
-@include component(stats) {
-  @include modifier(header);
-  @include modifier(body);
-  @include modifier(time);
-  @include modifier(footer);
-}

@@ -2,6 +2,10 @@
 @import "variables";
 
 @include component(search-box) {
+  @include modifier(input) {
+    /* search input */
+  }
+
   @include modifier(powered-by) {
     font-size: .8em;
     text-align: right;
