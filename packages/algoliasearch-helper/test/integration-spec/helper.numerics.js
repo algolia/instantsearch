@@ -18,8 +18,8 @@ function hitsToParsedID(h) {
   return parseInt(h.objectID, 10);
 }
 
-test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their results on' +
-  'the algolia API', function(t) {
+test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their results on the algolia API',
+  function(t) {
     var indexName = '_travis-algoliasearch-helper-js-' +
       (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
       'helper_numerics' + random(0, 5000);
@@ -34,8 +34,8 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
         .then(function(content) {
           return index.waitTask(content.taskID);
         }).then(function() {
-        return client;
-      });
+          return client;
+        });
     }).then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
 
@@ -101,8 +101,8 @@ test('[INT][NUMERICS][RAW-API]Test numeric operations on the helper and their re
       .then(null, bind(t.error, t));
   });
 
-test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and their results on' +
-  'the algolia API', function(t) {
+test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and their results on the algolia API',
+  function(t) {
     var indexName = '_travis-algoliasearch-helper-js-' +
       (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
       'helper_numerics_managed' + random(0, 5000);
@@ -117,8 +117,8 @@ test('[INT][NUMERICS][MANAGED-API]Test numeric operations on the helper and thei
         .then(function(content) {
           return index.waitTask(content.taskID);
         }).then(function() {
-        return client;
-      });
+          return client;
+        });
     }).then(function(client) {
       var helper = algoliasearchHelper(client, indexName, {});
 
