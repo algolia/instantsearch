@@ -10,7 +10,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('autoHideContainer', () => {
-  var renderer;
+  let renderer;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -18,17 +18,17 @@ describe('autoHideContainer', () => {
   });
 
   it('should render autoHideContainer(<TestComponent />)', () => {
-    var out = render();
+    let out = render();
     expect(out).toEqualJSX(<TestComponent />);
   });
 
   it('should not render autoHideContainer(<TestComponent />)', () => {
-    var out = render({shouldAutoHideContainer: true});
+    let out = render({shouldAutoHideContainer: true});
     expect(out).toEqualJSX(<div />);
   });
 
   function render(props = {}) {
-    var AutoHide = autoHideContainer(TestComponent);
+    let AutoHide = autoHideContainer(TestComponent);
     renderer.render(<AutoHide {...props} />);
     return renderer.getRenderOutput();
   }

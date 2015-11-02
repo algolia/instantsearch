@@ -1,11 +1,11 @@
-var React = require('react');
-var map = require('lodash/collection/map');
+let React = require('react');
+let map = require('lodash/collection/map');
 
-var Template = require('./Template');
+let Template = require('./Template');
 
 class Hits extends React.Component {
   renderWithResults() {
-    var renderedHits = map(this.props.results.hits, hit => {
+    let renderedHits = map(this.props.results.hits, hit => {
       return (
         <div className={this.props.cssClasses.item} key={hit.objectID}>
           <Template
@@ -21,7 +21,7 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
-    var className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
+    let className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
     return (
       <div className={className}>
         <Template

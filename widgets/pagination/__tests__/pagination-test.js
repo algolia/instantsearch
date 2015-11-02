@@ -14,11 +14,11 @@ import Pagination from '../../../components/Pagination/Pagination';
 describe('pagination()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var helper;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let helper;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -56,11 +56,11 @@ describe('pagination()', () => {
   });
 
   context('mocking getContainerNode', function() {
-    var scrollIntoView;
+    let scrollIntoView;
 
     beforeEach(() => {
       scrollIntoView = sinon.spy();
-      var utils = {
+      let utils = {
         getContainerNode: sinon.stub().returns({
           scrollIntoView: scrollIntoView
         })

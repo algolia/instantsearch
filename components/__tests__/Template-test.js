@@ -9,13 +9,13 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('Template', () => {
-  var renderer;
-  var templates;
-  var data;
-  var templateKey;
-  var useCustomCompileOptions;
-  var templatesConfig;
-  var transformData;
+  let renderer;
+  let templates;
+  let data;
+  let templateKey;
+  let useCustomCompileOptions;
+  let templatesConfig;
+  let transformData;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
