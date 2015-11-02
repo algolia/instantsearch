@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.6.4 - 2015-11-02
+  * FIX: setPage 0 when toggling hierarchical refinements (consistency)
+
 2.6.3 - 2015-10-19
   * FIX: add new geo search parameters
 
