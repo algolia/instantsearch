@@ -1,15 +1,15 @@
-var find = require('lodash/collection/find');
-var React = require('react');
-var ReactDOM = require('react-dom');
+let find = require('lodash/collection/find');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-toggle');
-var cx = require('classnames/dedupe');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-toggle');
+let cx = require('classnames');
 
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -42,13 +42,17 @@ function toggle({
     facetName,
     label,
     templates = defaultTemplates,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     transformData,
     hideContainerWhenNoResults = true
   } = {}) {
-  var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName || !label) {
     throw new Error(usage);
@@ -59,33 +63,34 @@ function toggle({
       facets: [facetName]
     }),
     render: function({helper, results, templatesConfig, state, createURL}) {
-      var isRefined = helper.hasRefinements(facetName);
-      var values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
+      let isRefined = helper.hasRefinements(facetName);
+      let values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
+      let hasNoResults = results.nbHits === 0;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var facetValue = {
+      let facetValue = {
         name: label,
         isRefined: isRefined,
         count: values && values.count || null
       };
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        list: cx(bem('list'), cssClasses.list),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        label: cx(bem('label'), cssClasses.label),
-        checkbox: cx(bem('checkbox'), cssClasses.checkbox),
-        count: cx(bem('count'), cssClasses.count)
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        list: cx(bem('list'), userCssClasses.list),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        label: cx(bem('label'), userCssClasses.label),
+        checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+        count: cx(bem('count'), userCssClasses.count)
       };
 
       ReactDOM.render(
@@ -93,8 +98,7 @@ function toggle({
           createURL={() => createURL(state.toggleRefinement(facetName, facetValue.isRefined))}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
-          hasResults={results.hits.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
         />,
@@ -105,7 +109,7 @@ function toggle({
 }
 
 function toggleRefinement(helper, facetName, isRefined) {
-  var action = isRefined ? 'remove' : 'add';
+  let action = isRefined ? 'remove' : 'add';
 
   helper[action + 'FacetRefinement'](facetName, true);
   helper.search();

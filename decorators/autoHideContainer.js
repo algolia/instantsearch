@@ -1,8 +1,8 @@
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
 function autoHideContainer(ComposedComponent) {
   class AutoHide extends React.Component {
@@ -15,17 +15,12 @@ function autoHideContainer(ComposedComponent) {
     }
 
     _hideOrShowContainer(props) {
-      var container = ReactDOM.findDOMNode(this).parentNode;
-      if (props.hideContainerWhenNoResults === true && props.hasResults === false) {
-        container.style.display = 'none';
-      } else if (props.hideContainerWhenNoResults === true) {
-        container.style.display = '';
-      }
+      let container = ReactDOM.findDOMNode(this).parentNode;
+      container.style.display = (props.shouldAutoHideContainer === true) ? 'none' : '';
     }
 
     render() {
-      if (this.props.hasResults === false &&
-        this.props.hideContainerWhenNoResults === true) {
+      if (this.props.shouldAutoHideContainer === true) {
         return <div />;
       }
 
@@ -34,8 +29,7 @@ function autoHideContainer(ComposedComponent) {
   }
 
   AutoHide.propTypes = {
-    hasResults: React.PropTypes.bool.isRequired,
-    hideContainerWhenNoResults: React.PropTypes.bool.isRequired
+    shouldAutoHideContainer: React.PropTypes.bool.isRequired
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)

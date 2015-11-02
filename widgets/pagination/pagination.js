@@ -1,10 +1,10 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var defaults = require('lodash/object/defaults');
+let React = require('react');
+let ReactDOM = require('react-dom');
+let defaults = require('lodash/object/defaults');
 
-var utils = require('../../lib/utils.js');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var defaultLabels = {
+let utils = require('../../lib/utils.js');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
@@ -50,8 +50,13 @@ function pagination({
     scrollTo = 'body';
   }
 
-  var containerNode = utils.getContainerNode(container);
-  var scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
+  let containerNode = utils.getContainerNode(container);
+  let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
+
+  let Pagination = require('../../components/Pagination/Pagination.js');
+  if (hideContainerWhenNoResults === true) {
+    Pagination = autoHideContainer(Pagination);
+  }
 
   if (!container) {
     throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideContainerWhenNoResults]})');
@@ -69,28 +74,26 @@ function pagination({
     },
 
     render: function({results, helper, createURL, state}) {
-      var currentPage = results.page;
-      var nbPages = results.nbPages;
-      var nbHits = results.nbHits;
-      var hasResults = nbHits > 0;
+      let currentPage = results.page;
+      let nbPages = results.nbPages;
+      let nbHits = results.nbHits;
+      let hasNoResults = nbHits === 0;
 
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);
       }
 
-      var Pagination = autoHideContainer(require('../../components/Pagination/Pagination.js'));
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
           cssClasses={cssClasses}
           currentPage={currentPage}
-          hasResults={hasResults}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           labels={labels}
           nbHits={nbHits}
           nbPages={nbPages}
           padding={padding}
           setCurrentPage={this.setCurrentPage.bind(this, helper)}
+          shouldAutoHideContainer={hasNoResults}
           showFirstLast={showFirstLast}
         />,
         containerNode

@@ -12,8 +12,8 @@ bundle='instantsearch'
 
 webpack
 
-for source in "$ROOT"/themes/[^_]*.sass; do
-  base=`basename "$source" .sass`
+for source in "$ROOT"/themes/[^_]*.scss; do
+  base=`basename "$source" .scss`
   echo "$license" > dist/themes/$base.css
   echo >> dist/themes/$base.css
   node-sass "$source" | postcss --use autoprefixer >> dist/themes/$base.css

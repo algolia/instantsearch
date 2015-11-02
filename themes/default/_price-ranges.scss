@@ -1,0 +1,22 @@
+@import "../base";
+@import "variables";
+
+@include component(price-ranges) {
+  @include modifier(header);
+  @include modifier(body);
+  @include modifier(footer);
+  @include modifier(list);
+  @include modifier(item) {
+    @include element(active);
+  }
+
+  @include modifier(link);
+  @include modifier(form);
+  @include modifier(label);
+  @include modifier(currency);
+  @include modifier(input);
+  @include modifier(separator);
+  @include modifier(button);
+}
+
+

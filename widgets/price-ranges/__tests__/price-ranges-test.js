@@ -10,16 +10,16 @@ expect.extend(expectJSX);
 
 import priceRanges from '../price-ranges';
 import generateRanges from '../generate-ranges';
-import PriceRanges from '../../../components/PriceRanges';
+import PriceRanges from '../../../components/PriceRanges/PriceRanges';
 
 describe('priceRanges()', () => {
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var helper;
-  var autoHideContainer;
-  var headerFooter;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let helper;
+  let autoHideContainer;
+  let headerFooter;
 
   jsdom({useEach: true});
 
@@ -36,6 +36,7 @@ describe('priceRanges()', () => {
     widget = priceRanges({container, facetName: 'aFacetname'});
     results = {
       hits: [1],
+      nbHits: 1,
       getFacetStats: sinon.stub().returns({
         min: 1.99,
         max: 4999.98,
@@ -50,7 +51,7 @@ describe('priceRanges()', () => {
   });
 
   context('without refinements', function() {
-    var props;
+    let props;
 
     beforeEach(() => {
       helper = {
@@ -63,22 +64,26 @@ describe('priceRanges()', () => {
       props = {
         createURL: sinon.spy(),
         cssClasses: {
-          active: 'ais-price-ranges--range__active',
+          active: 'ais-price-ranges--item__active',
           body: 'ais-price-ranges--body',
           button: 'ais-price-ranges--button',
+          currency: 'ais-price-ranges--currency',
           footer: 'ais-price-ranges--footer',
+          form: 'ais-price-ranges--form',
           header: 'ais-price-ranges--header',
           input: 'ais-price-ranges--input',
-          form: 'ais-price-ranges--form',
-          range: 'ais-price-ranges--range',
-          root: 'ais-price-ranges'
+          item: 'ais-price-ranges--item',
+          label: 'ais-price-ranges--label',
+          list: 'ais-price-ranges--list',
+          link: 'ais-price-ranges--link',
+          root: 'ais-price-ranges',
+          separator: 'ais-price-ranges--separator'
         },
-        hasResults: true,
-        hideContainerWhenNoResults: true,
+        shouldAutoHideContainer: false,
         facetValues: generateRanges(results.getFacetStats()),
         labels: {
           currency: '$',
-          to: 'to',
+          separator: 'to',
           button: 'Go'
         },
         refine() {},
@@ -86,17 +91,20 @@ describe('priceRanges()', () => {
           templates: require('../defaultTemplates'),
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {header: false, footer: false, range: false}
+          useCustomCompileOptions: {header: false, footer: false, item: false}
         }
       };
     });
 
-    it('calls ReactDOM.render(<PriceRanges props />, container)', () => {
+    it('calls twice ReactDOM.render(<PriceRanges props />, container)', () => {
+      widget.render({results, helper});
       widget.render({results, helper});
 
-      expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+      expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
+      expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
     });
 
     it('calls the decorators', () => {

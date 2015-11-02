@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-searchbox</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-20.000000, -122.000000)">
+            <g id="icon-widget-searchbox" sketch:type="MSLayerGroup" transform="translate(20.000000, 122.000000)">
+                <g id="Group" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+                </g>
+                <path d="M42.1860684,40.6275695 C42.1860684,40.2108971 42.0146682,39.8064798 41.7330822,39.5246131 L37.5337775,35.321124 C38.5254501,33.8872808 39.0518935,32.171571 39.0518935,30.431351 C39.0518935,25.6641287 35.1953892,21.8037815 30.4329126,21.8037815 C25.6704359,21.8037815 21.8139316,25.6641287 21.8139316,30.431351 C21.8139316,35.1985733 25.6704359,39.0589205 30.4329126,39.0589205 C32.1714002,39.0589205 33.8854021,38.5319524 35.3178179,37.5392918 L39.5171226,41.7305258 C39.7987086,42.0246475 40.2027233,42.1962185 40.6189809,42.1962185 C41.4759819,42.1962185 42.1860684,41.4854244 42.1860684,40.6275695 Z M35.9177186,30.431351 C35.9177186,33.4583534 33.4569016,35.9216225 30.4329126,35.9216225 C27.4089235,35.9216225 24.9481065,33.4583534 24.9481065,30.431351 C24.9481065,27.4043487 27.4089235,24.9410795 30.4329126,24.9410795 C33.4569016,24.9410795 35.9177186,27.4043487 35.9177186,30.431351 Z" id="Icons/Search" fill="#FFFFFF" sketch:type="MSShapeGroup" transform="translate(32.000000, 32.000000) rotate(10.000000) translate(-32.000000, -32.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

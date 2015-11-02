@@ -1,0 +1,107 @@
+@import "base";
+@import "variables";
+
+@include component(range-slider) {
+  @include modifier(target) {
+    position: relative;
+    direction: ltr;
+    background: $gray-light;
+    height: 4px;
+    &, * {
+      box-sizing: border-box;
+    }
+  }
+
+  @include modifier(base) {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+  }
+
+  @include modifier(origin) {
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+  }
+
+  @include modifier(state-tap) {
+    @include component(range-slider) {
+      @include modifier(origin) {
+        transition: left .3s, top .3s;
+      }
+    }
+  }
+
+  @include modifier(state-drag) {
+    * {
+      cursor: inherit;
+    }
+  }
+
+  // Painting and performance;
+  // Browsers can paint handles in their own layer.
+  //
+  @include modifier(base) {
+    transform: translate3d(0, 0, 0);
+  }
+
+  @include modifier(connect) {
+    background: $blue-light;
+    transition: background 450ms;
+  }
+
+  @include modifier(background) {
+    background: $gray-light;
+  }
+
+  @include modifier(handle) {
+    width: 1px;
+    height: 10px;
+    position: relative;
+    z-index: 1;
+    background: $blue-light;
+    cursor: pointer;
+  }
+
+  @include modifier(handle-lower) {
+    bottom: 10px;
+  }
+
+  @include modifier(active) {
+    background: $blue-dark;
+  }
+
+  @include modifier(tooltip) {
+    position: absolute;
+  }
+
+  @include modifier(active) {
+    @include component(range-slider) {
+      @include modifier(tooltip) {
+        background: $blue-light;
+        color: $white;
+        border-color: $blue-dark;
+      }
+    }
+  }
+
+  @include modifier(handle-lower) {
+    @include component(range-slider) {
+      @include modifier(tooltip) {
+        top: -24px;
+      }
+    }
+  }
+
+  @include modifier(handle-upper) {
+    @include component(range-slider) {
+      @include modifier(tooltip) {
+        bottom: -24px;
+        right: 0;
+      }
+    }
+  }
+}

@@ -1,11 +1,11 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
+let utils = require('../../lib/utils.js');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = {
+let defaultTemplates = {
   header: '',
   footer: ''
 };
@@ -39,15 +39,20 @@ function rangeSlider({
     },
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
+  let containerNode = utils.getContainerNode(container);
+
+  let Slider = headerFooter(require('../../components/Slider/Slider'));
+  if (hideContainerWhenNoResults === true) {
+    Slider = autoHideContainer(Slider);
+  }
 
   return {
     getConfiguration: () => ({
       disjunctiveFacets: [facetName]
     }),
     _getCurrentRefinement(helper) {
-      var min = helper.state.getNumericRefinement(facetName, '>=');
-      var max = helper.state.getNumericRefinement(facetName, '<=');
+      let min = helper.state.getNumericRefinement(facetName, '>=');
+      let max = helper.state.getNumericRefinement(facetName, '<=');
 
       if (min && min.length) {
         min = min[0];
@@ -77,9 +82,9 @@ function rangeSlider({
       helper.search();
     },
     render({results, helper, templatesConfig}) {
-      var stats = results.getFacetStats(facetName);
+      let stats = results.getFacetStats(facetName);
 
-      var currentRefinement = this._getCurrentRefinement(helper);
+      let currentRefinement = this._getCurrentRefinement(helper);
 
       if (stats === undefined) {
         stats = {
@@ -88,20 +93,20 @@ function rangeSlider({
         };
       }
 
-      var templateProps = utils.prepareTemplateProps({
+      let hasNoRefinements = stats.min === null && stats.max === null;
+
+      let templateProps = utils.prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var Slider = autoHideContainer(headerFooter(require('../../components/Slider/Slider')));
       ReactDOM.render(
         <Slider
           cssClasses={cssClasses}
-          hasResults={stats.min !== null && stats.max !== null}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           onChange={this._refine.bind(this, helper, stats)}
           range={{min: stats.min, max: stats.max}}
+          shouldAutoHideContainer={hasNoRefinements}
           start={[currentRefinement.min, currentRefinement.max]}
           templateProps={templateProps}
           tooltips={tooltips}

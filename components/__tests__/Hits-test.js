@@ -10,9 +10,9 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('Hits', () => {
-  var renderer;
-  var results;
-  var templateProps;
+  let renderer;
+  let results;
+  let templateProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;

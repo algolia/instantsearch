@@ -3,43 +3,99 @@
 import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
+import TestComponent from './TestComponent';
 import headerFooter from '../headerFooter';
 import Template from '../../components/Template';
-
-var bemHeader = require('../../lib/utils').bemHelper('ais-header');
-var bemFooter = require('../../lib/utils').bemHelper('ais-footer');
-var cx = require('classnames');
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('headerFooter', () => {
-  var renderer;
+  let renderer;
+  let defaultProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
+    defaultProps = {
+      cssClasses: {
+        root: 'root',
+        body: 'body'
+      },
+      templateProps: {
+      }
+    };
     renderer = createRenderer();
   });
 
-  it('should render headerFooter(<div />)', () => {
-    var out = render({cssClasses: {root: 'wrapper'}});
+  it('should render the component in a root and body', () => {
+    let out = render(defaultProps);
     expect(out).toEqualJSX(
-      <div className="wrapper">
-        <div className={cx(bemHeader(null))}>
-          <Template data={{}} templateKey="header" transformData={null} />
+      <div className="root">
+        <div className="body">
+          <TestComponent {...defaultProps} />
         </div>
-        <div className={undefined}>
-          <div cssClasses={{root: 'wrapper'}} />
+      </div>
+    );
+  });
+
+  it('should add a header if such a template is passed', () => {
+    // Given
+    defaultProps.templateProps.templates = {
+      header: 'HEADER'
+    };
+    // When
+    let out = render(defaultProps);
+    // Then
+    let templateProps = {
+      data: {},
+      templateKey: 'header',
+      transformData: null,
+      templates: {
+        header: 'HEADER'
+      }
+    };
+    expect(out).toEqualJSX(
+      <div className="root">
+        <div className="ais-header">
+          <Template {...templateProps} />
         </div>
-        <div className={cx(bemFooter(null))}>
-          <Template data={{}} templateKey="footer" transformData={null} />
+        <div className="body">
+          <TestComponent {...defaultProps} />
+        </div>
+      </div>
+    );
+  });
+
+  it('should add a footer if such a template is passed', () => {
+    // Given
+    defaultProps.templateProps.templates = {
+      footer: 'FOOTER'
+    };
+    // When
+    let out = render(defaultProps);
+    // Then
+    let templateProps = {
+      data: {},
+      templateKey: 'footer',
+      transformData: null,
+      templates: {
+        footer: 'FOOTER'
+      }
+    };
+    expect(out).toEqualJSX(
+      <div className="root">
+        <div className="body">
+          <TestComponent {...defaultProps} />
+        </div>
+        <div className="ais-footer">
+          <Template {...templateProps} />
         </div>
       </div>
     );
   });
 
   function render(props = {}) {
-    var HeaderFooter = headerFooter('div');
+    let HeaderFooter = headerFooter(TestComponent);
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }

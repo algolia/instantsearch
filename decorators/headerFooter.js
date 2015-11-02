@@ -1,37 +1,43 @@
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-var React = require('react');
+let React = require('react');
 
-var cx = require('classnames/dedupe');
+let cx = require('classnames');
 
-var Template = require('../components/Template');
+let Template = require('../components/Template');
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
+    getTemplate(type) {
+      let templates = this.props.templateProps.templates;
+      if (!templates || !templates[type]) {
+        return null;
+      }
+      let className = cx(this.props.cssClasses[type], `ais-${type}`);
+      return (
+        <div className={className}>
+          <Template templateKey={type} {...this.props.templateProps} transformData={null} />
+        </div>
+      );
+    }
     render() {
-      // override potential widget's defined transformData,
-      // header and footer currently do not have it
-      var transformData = null;
-      var templateProps = this.props.templateProps;
-      var classNames = {
-        root: this.props.cssClasses.root,
-        header: cx(this.props.cssClasses.header, 'ais-header'),
-        body: this.props.cssClasses.body,
-        footer: cx(this.props.cssClasses.footer, 'ais-footer')
+      let classNames = {
+        root: cx(this.props.cssClasses.root),
+        body: cx(this.props.cssClasses.body)
       };
+
+      // Only add header/footer if a template is defined
+      let header = this.getTemplate('header');
+      let footer = this.getTemplate('footer');
 
       return (
         <div className={classNames.root}>
-          <div className={classNames.header}>
-            <Template templateKey="header" {...templateProps} transformData={transformData} />
-          </div>
+          {header}
           <div className={classNames.body}>
             <ComposedComponent {...this.props} />
           </div>
-          <div className={classNames.footer}>
-            <Template templateKey="footer" {...templateProps} transformData={transformData} />
-          </div>
+          {footer}
         </div>
       );
     }

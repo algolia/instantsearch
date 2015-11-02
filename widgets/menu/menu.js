@@ -1,14 +1,13 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-menu');
-var cx = require('classnames/dedupe');
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-menu');
+let cx = require('classnames');
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates.js');
+let defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Create a menu out of a facet
@@ -39,13 +38,18 @@ function menu({
     facetName,
     sortBy = ['count:desc'],
     limit = 100,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideWhenResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName) {
     throw new Error(usage);
@@ -53,7 +57,7 @@ function menu({
 
   // we use a hierarchicalFacet for the menu because that's one of the use cases
   // of hierarchicalFacet: a flat menu
-  var hierarchicalFacetName = facetName;
+  let hierarchicalFacetName = facetName;
 
   return {
     getConfiguration: () => ({
@@ -63,25 +67,26 @@ function menu({
       }]
     }),
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      let hasNoRefinements = facetValues.length === 0;
 
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        list: cx(bem('list'), cssClasses.list),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        link: cx(bem('link'), cssClasses.link),
-        count: cx(bem('count'), cssClasses.count)
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        list: cx(bem('list'), userCssClasses.list),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        link: cx(bem('link'), userCssClasses.link),
+        count: cx(bem('count'), userCssClasses.count)
       };
 
       ReactDOM.render(
@@ -89,8 +94,7 @@ function menu({
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hasResults={facetValues.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoRefinements}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
@@ -107,7 +111,7 @@ function toggleRefinement(helper, facetName, facetValue) {
 }
 
 function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
-  var values = results
+  let values = results
     .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
 
   return values.data && values.data.slice(0, limit) || [];

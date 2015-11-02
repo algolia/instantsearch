@@ -14,11 +14,11 @@ import Pagination from '../../../components/Pagination/Pagination';
 describe('pagination()', () => {
   jsdom({useEach: true});
 
-  var ReactDOM;
-  var container;
-  var widget;
-  var results;
-  var helper;
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let helper;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -44,20 +44,23 @@ describe('pagination()', () => {
     expect(helper.search.calledOnce).toBe(true);
   });
 
-  it('calls ReactDOM.render(<Pagination props />, container)', () => {
+  it('calls twice ReactDOM.render(<Pagination props />, container)', () => {
+    widget.render({results, helper});
     widget.render({results, helper});
 
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Pagination {...getProps()} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Pagination {...getProps()} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
   context('mocking getContainerNode', function() {
-    var scrollIntoView;
+    let scrollIntoView;
 
     beforeEach(() => {
       scrollIntoView = sinon.spy();
-      var utils = {
+      let utils = {
         getContainerNode: sinon.stub().returns({
           scrollIntoView: scrollIntoView
         })
@@ -91,8 +94,7 @@ describe('pagination()', () => {
     return {
       cssClasses: {},
       currentPage: 0,
-      hasResults: true,
-      hideContainerWhenNoResults: true,
+      shouldAutoHideContainer: false,
       labels: {first: '«', last: '»', next: '›', previous: '‹'},
       nbHits: results.nbHits,
       nbPages: results.nbPages,

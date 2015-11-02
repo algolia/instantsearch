@@ -1,4 +1,4 @@
-var range = require('lodash/utility/range');
+let range = require('lodash/utility/range');
 
 class Paginator {
   constructor(params) {
@@ -8,12 +8,12 @@ class Paginator {
   }
 
   pages() {
-    var current = this.currentPage;
-    var padding = this.padding;
-    var paddingLeft = Math.min(this.calculatePaddingLeft(current, padding, this.total), this.total);
-    var paddingRight = Math.max(Math.min(2 * padding + 1, this.total) - paddingLeft, 1);
-    var first = Math.max(current - paddingLeft, 0);
-    var last = current + paddingRight;
+    let current = this.currentPage;
+    let padding = this.padding;
+    let paddingLeft = Math.min(this.calculatePaddingLeft(current, padding, this.total), this.total);
+    let paddingRight = Math.max(Math.min(2 * padding + 1, this.total) - paddingLeft, 1);
+    let first = Math.max(current - paddingLeft, 0);
+    let last = current + paddingRight;
     return range(first, last);
   }
 

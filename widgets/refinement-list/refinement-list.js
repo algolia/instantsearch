@@ -1,15 +1,14 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-refinement-list');
-var cx = require('classnames/dedupe');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-refinement-list');
+let cx = require('classnames');
 
-var autoHideContainer = require('../../decorators/autoHideContainer');
-var headerFooter = require('../../decorators/headerFooter');
-var RefinementList = autoHideContainer(headerFooter(require('../../components/RefinementList/RefinementList.js')));
+let autoHideContainer = require('../../decorators/autoHideContainer');
+let headerFooter = require('../../decorators/headerFooter');
 
-var defaultTemplates = require('./defaultTemplates');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -43,13 +42,18 @@ function refinementList({
     operator = 'or',
     sortBy = ['count:desc'],
     limit = 1000,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
     hideContainerWhenNoResults = true
   }) {
-  var containerNode = utils.getContainerNode(container);
-  var usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideIfNoResults]})';
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+
+  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
+  if (hideContainerWhenNoResults === true) {
+    RefinementList = autoHideContainer(RefinementList);
+  }
 
   if (!container || !facetName) {
     throw new Error(usage);
@@ -64,7 +68,7 @@ function refinementList({
 
   return {
     getConfiguration: (configuration) => {
-      var widgetConfiguration = {
+      let widgetConfiguration = {
         [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
       };
 
@@ -77,26 +81,28 @@ function refinementList({
     },
 
     render: function({results, helper, templatesConfig, state, createURL}) {
-      var templateProps = utils.prepareTemplateProps({
+      let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      var facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
+      let facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        header: cx(bem('header'), cssClasses.header),
-        body: cx(bem('body'), cssClasses.body),
-        footer: cx(bem('footer'), cssClasses.footer),
-        list: cx(bem('list'), cssClasses.list),
-        item: cx(bem('item'), cssClasses.item),
-        active: cx(bem('item', 'active'), cssClasses.active),
-        label: cx(bem('label'), cssClasses.label),
-        checkbox: cx(bem('checkbox'), cssClasses.checkbox),
-        count: cx(bem('count'), cssClasses.count)
+      let hasNoResults = facetValues.length === 0;
+
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer),
+        list: cx(bem('list'), userCssClasses.list),
+        item: cx(bem('item'), userCssClasses.item),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        label: cx(bem('label'), userCssClasses.label),
+        checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+        count: cx(bem('count'), userCssClasses.count)
       };
 
       ReactDOM.render(
@@ -104,8 +110,7 @@ function refinementList({
           createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          hasResults={facetValues.length > 0}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
+          shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
         />,

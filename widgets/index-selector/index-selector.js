@@ -1,12 +1,12 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
+let React = require('react');
+let ReactDOM = require('react-dom');
 
-var findIndex = require('lodash/array/findIndex');
-var map = require('lodash/collection/map');
-var utils = require('../../lib/utils.js');
-var bem = utils.bemHelper('ais-index-selector');
-var cx = require('classnames');
-var autoHideContainer = require('../../decorators/autoHideContainer');
+let findIndex = require('lodash/array/findIndex');
+let map = require('lodash/collection/map');
+let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-index-selector');
+let cx = require('classnames');
+let autoHideContainer = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
@@ -23,24 +23,29 @@ var autoHideContainer = require('../../decorators/autoHideContainer');
 function indexSelector({
     container,
     indices,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     hideContainerWhenNoResults = false
   }) {
-  var containerNode = utils.getContainerNode(container);
+  let containerNode = utils.getContainerNode(container);
+  let usage = 'Usage: indexSelector({container, indices[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
 
-  var usage = 'Usage: indexSelector({container, indices[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
+  let Selector = require('../../components/Selector');
+  if (hideContainerWhenNoResults === true) {
+    Selector = autoHideContainer(Selector);
+  }
+
   if (!container || !indices) {
     throw new Error(usage);
   }
 
-  var selectorOptions = map(indices, function(index) {
+  let selectorOptions = map(indices, function(index) {
     return {label: index.label, value: index.name};
   });
 
   return {
     init: function(state, helper) {
-      var currentIndex = helper.getIndex();
-      var isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
+      let currentIndex = helper.getIndex();
+      let isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {
         throw new Error('[indexSelector]: Index ' + currentIndex + ' not present in `indices`');
       }
@@ -53,22 +58,20 @@ function indexSelector({
 
     render: function({helper, results}) {
       let currentIndex = helper.getIndex();
-      let hasResults = results.hits.length > 0;
+      let hasNoResults = results.nbHits === 0;
       let setIndex = this.setIndex.bind(this, helper);
-      var Selector = autoHideContainer(require('../../components/Selector'));
 
-      cssClasses = {
-        root: cx(bem(null), cssClasses.root),
-        item: cx(bem('item'), cssClasses.item)
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        item: cx(bem('item'), userCssClasses.item)
       };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
           currentValue={currentIndex}
-          hasResults={hasResults}
-          hideContainerWhenNoResults={hideContainerWhenNoResults}
           options={selectorOptions}
           setValue={setIndex}
+          shouldAutoHideContainer={hasNoResults}
         />,
         containerNode
       );

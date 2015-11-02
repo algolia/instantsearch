@@ -9,7 +9,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('PoweredBy', () => {
-  var renderer;
+  let renderer;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -17,7 +17,7 @@ describe('PoweredBy', () => {
   });
 
   it('should render <PoweredBy className="pb" />', () => {
-    var out = render({
+    let out = render({
       cssClasses: {
         root: 'pb-root',
         link: 'pb-link'

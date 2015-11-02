@@ -10,7 +10,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('Stats', () => {
-  var renderer;
+  let renderer;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -19,8 +19,8 @@ describe('Stats', () => {
 
 
   it('should render <Template data= />', () => {
-    var out = render();
-    var defaultProps = {
+    let out = render();
+    let defaultProps = {
       cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
@@ -35,7 +35,7 @@ describe('Stats', () => {
   });
 
   function render(extraProps = {}) {
-    var props = getProps(extraProps);
+    let props = getProps(extraProps);
     renderer.render(<Stats {...props} templateProps={{}} />);
     return renderer.getRenderOutput();
   }
