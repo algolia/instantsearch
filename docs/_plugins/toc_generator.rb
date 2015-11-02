@@ -24,6 +24,8 @@ module Jekyll
         current_level = level
       end
 
+      html << '</ul>'
+
       html.join
     end
   end
