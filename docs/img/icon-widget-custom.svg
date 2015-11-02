@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-custom</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-334.000000, -197.000000)">
+            <g id="icon-widget-custom" sketch:type="MSLayerGroup" transform="translate(334.000000, 197.000000)">
+                <g id="Group" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" fill="#674790" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#53327F" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#53327F" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#53327F" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#53327F" cx="8" cy="56" r="4"></circle>
+                </g>
+                <path d="M21.0007455,40.7166252 L10.4520787,33.0619917 L10.4520787,31.0162099 L21.0007455,23.4297692 L21.0007455,25.8847073 L12.5392481,32.1243417 L21.0007455,38.2105425 L21.0007455,40.7166252 Z M36.7854676,19.8666992 L28.1406377,44.8422852 L26.0675708,44.8422852 L34.6700932,19.8666992 L36.7854676,19.8666992 Z M53.1201869,33.0619917 L42.5715201,40.7166252 L42.5715201,38.2105425 L51.0330175,32.1243417 L42.5715201,25.8847073 L42.5715201,23.4297692 L53.1201869,31.0162099 L53.1201869,33.0619917 Z" id="&lt;/&gt;" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

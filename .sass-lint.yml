@@ -1,7 +1,7 @@
 options:
   formatter: stylish
 files:
-  include: 'themes/**/*.s+(a|c)ss'
+  include: '+(examples|themes)/**/*.s+(a|c)ss'
 rules:
   # Extends
   extends-before-mixins: 1
@@ -24,7 +24,7 @@ rules:
   no-duplicate-properties: 1
   no-empty-rulesets: 1
   no-extends: 0
-  no-ids: 1
+  no-ids: 0
   no-important: 1
   no-invalid-hex: 1
   no-mergeable-selectors: 1
@@ -38,7 +38,7 @@ rules:
 
   # Nesting
   force-attribute-nesting: 1
-  force-element-nesting: 1
+  force-element-nesting: 0
   force-pseudo-nesting: 1
 
   # Name Formats
@@ -59,7 +59,7 @@ rules:
       style: uppercase
   indentation: 1
   leading-zero: 1
-  nesting-depth: 1
+  nesting-depth: 0
   property-sort-order: 0
   quotes: 0
   shorthand-values: 1

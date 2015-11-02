@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-toggle</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-331.000000, -122.000000)">
+            <g id="icon-widget-toggle" sketch:type="MSLayerGroup" transform="translate(331.000000, 122.000000)">
+                <g id="Group-Copy-2" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+                </g>
+                <path d="M16.7777778,32.5 L16.7777778,32.5 C16.7777778,36.2065245 19.7641763,39.2105263 23.4494814,39.2105263 L38.5505186,39.2105263 C42.2368549,39.2105263 45.2222222,36.2067497 45.2222222,32.5 C45.2222222,28.7934755 42.2358237,25.7894737 38.5505186,25.7894737 L23.4494814,25.7894737 C19.7631451,25.7894737 16.7777778,28.7932503 16.7777778,32.5 L16.7777778,32.5 Z M15,32.5 C15,27.8055796 18.7806808,24 23.4494814,24 L38.5505186,24 C43.2170383,24 47,27.8045475 47,32.5 C47,37.1944204 43.2193192,41 38.5505186,41 L23.4494814,41 C18.7829617,41 15,37.1954525 15,32.5 L15,32.5 Z" id="Shape" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+                <path d="M23.5,37 L23.5,37 C21.0147186,37 19,34.9852814 19,32.5 C19,30.0147186 21.0147186,28 23.5,28 C25.9852814,28 28,30.0147186 28,32.5 C28,34.9852814 25.9852814,37 23.5,37 L23.5,37 Z" id="Shape-Copy" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>

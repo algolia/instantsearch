@@ -1,0 +1,9 @@
+{{#function name="%s"}}
+{{tableHead params "name|Param" "description|Description" ~}}
+{{#tableRow params "name" "type" "defaultvalue" "description" ~}}
+| {{#if @col1}} {{#if optional}}<span class='attr-optional'>{{else}}<span class='attr-required'>{{/if}}`{{name}}`</span> | {{/if~}}
+{{#if @col3}}{{{stripNewlines (inlineLinks description)}}} |{{/if}}
+{{/tableRow}}
+{{/function}}
+
+<p class="attr-legend">* <span>Required</span></p>

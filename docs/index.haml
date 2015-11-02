@@ -1,0 +1,132 @@
+---
+layout: default
+---
+#space-overlay
+%canvas#space
+%section.hero.window
+  .container
+    .row
+      .col-xs-6
+        .spacer40
+        .presented-by
+          %a{href: 'https://www.algolia.com', title: 'Instant Search as a Service', target: '_blank'}
+            %img{src:"img/algolia-logo.svg", width: 100}
+          presents:
+        %h1
+          %img{src:"img/logo-instantsearch.svg", height:70}
+        %p.vp
+          The library of UI widgets to build the best instant-search experience with
+          %a{href:"https://www.algolia.com"} Algolia's Hosted Search API.
+        .spacer40
+        %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
+        %span &nbsp;
+        %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
+        .spacer100
+        -# %img{src:"img/icon-widget.svg", width:70}
+        %h2 There’s a widget for that
+        %p.lead
+          Pick from an extensive library of widgets to power your search
+          %br
+          and build a state of the art instant search experience.
+        .spacer30
+        .row
+          .col-xs-6.widget-intro.w-1
+            %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50}
+            %h4 Search Box
+            %p Search at each keystroke
+          .col-xs-6.widget-intro.w-2
+            %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50}
+            %h4 Filters
+            %p List of links or checkboxes
+        .spacer30
+        .row
+          .col-xs-6.widget-intro.w-3
+            %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50}
+            %h4 Slider
+            %p Filter numerical values
+          .col-xs-6.widget-intro.w-4
+            %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50}
+            %h4 Results
+            %p Grid of search results
+%section#widget-customization-1.window
+  .container
+    .row
+      .col-xs-6
+        %img{src:"img/icon-infinite.svg", width:70}
+        %h2 Infinite possibilities
+        %p.lead Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
+%section#widget-customization-2.window
+  .container
+    .row
+      .col-xs-6
+        %img{src:"img/icon-community.svg", width:70}
+        %h2 Bring your own widget
+        %p.lead Sometimes you want to deviate from the standard path and build a custom feature. You can do that by forking a widget or coding your own and integrating into the open source project.
+        .widget-intro.w-1
+          %img.m-r.m-t{src:"img/icon-widget-custom.svg", width:50}
+          %h4 Custom Widget
+          %p Fork and custom your own widgets.
+        .spacer30
+%section#widget-customization-3.window.pos-rel
+  .container
+    .row
+      .col-xs-6
+        %img{src:"img/icon-theme.svg", width:70}
+        %h2 Themes
+        %p.lead Each widget has been designed to be heavily styled & customized. Be it using templates or simple CSS rules, make them look like the way you want.
+  .anim-container
+    .container
+      .row
+        .col-xs-6
+        .col-xs-6
+          #anim
+            .widget.widget-1
+            .widget.widget-2
+            .widget.widget-3
+            .widget.widget-4
+            .widget.widget-5
+            .widget.widget-6
+            .widget.widget-7
+            .screen.screen-1
+              %img{src:"img/combinations.svg", width:420}
+            .screen.screen-2
+              %img{src:"img/combinations.svg", width:420}
+            .screen.screen-3
+              %img{src:"img/combinations.svg", width:420}
+
+
+%svg#curveUpColor{xmlns:"http://www.w3.org/2000/svg", version:"1.1", width:"100%", height:"100", viewBox:"0 0 100 100", preserveAspectRatio:"none"}
+  %path{d:"M0 100 C40 0 60 0 100 100 Z"}
+%section.bg-white
+  .container
+    .spacer100
+    .row
+      .col-xs-4.col-xs-offset-1
+        %section#instantsearch-vp-1
+          .text-center
+            %img{src:"img/icon-ux.svg"}
+            %h2 Search UX done right
+          %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
+      .col-xs-4.col-xs-offset-2
+        %section#instantsearch-vp-2
+          .text-center
+            %img{src:"img/icon-update.svg"}
+            %h2 Always improving
+          %p The instant-search experience is already deployed in hundreds of websites. We inject all the feedback and collective experience we get back into the widgets.
+    .spacer100
+    .panel.panel-default.text-center
+      .panel-body
+        .row
+          .col-xs-8.text-right
+            .spacer5
+            %span.h4
+              %strong Explore Instantsearch.js.
+              Learn more about instant search's features and widgets.
+          .col-xs-4
+            %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
+
+{% contentfor site-footer %}
+<script type="text/javascript" src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>
+//twitter
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+{% endcontentfor %}

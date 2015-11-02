@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{{ site.description }}">
+
+    <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{{ "/css/default-theme.css" | prepend: site.baseurl}}" />
+
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/ScrollMagic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/animation.gsap.min.js"></script>
+    {% if site.env == 'development' %}
+      <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
+      <script src="http://localhost:35730/livereload.js"></script>
+    {% endif %}
+    <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Raleway:300,800" />
+    <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" />
+
+    <!--[if IE]><link rel="shortcut icon" href="{{ "/img/favicon.png" | prepend: site.baseurl }}"><![endif]-->
+    <link rel="icon" href="{{ "/img/favicon.png" | prepend: site.baseurl }}">
+
+  </head>
+
+  <body>
+    {% include header.html %}
+
+    {{ content }}
+
+    {%if page.noFooter == null %}
+      {% include footer.html %}
+      {% contentblock site-footer %}
+    {% endif %}
+  </body>
+
+</html>

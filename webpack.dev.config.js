@@ -1,8 +1,8 @@
 module.exports = {
-  entry: './example/app.js',
+  entry: './dev/app.js',
   devtool: 'source-map',
   output: {
-    path: './example/',
+    path: './dev/',
     filename: 'bundle.js'
   },
   module: {
@@ -13,7 +13,7 @@ module.exports = {
     }]
   },
   devServer: {
-    contentBase: 'example/',
+    contentBase: 'dev/',
     host: '0.0.0.0',
     compress: true
   }

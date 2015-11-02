@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-pagination</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-100.000000, -197.000000)">
+            <g id="icon-widget-pagination" sketch:type="MSLayerGroup" transform="translate(100.000000, 197.000000)">
+                <g id="Group" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+                </g>
+                <g id="Oval-37-+-Shape-+-Shape" transform="translate(14.000000, 27.000000)" fill="#FFFFFF" sketch:type="MSShapeGroup">
+                    <circle id="Oval-37" cx="5" cy="5" r="5"></circle>
+                    <path d="M19,7.22222222 L19,7.22222222 C20.2272994,7.22222222 21.2222222,6.22729944 21.2222222,5 C21.2222222,3.77270056 20.2272994,2.77777778 19,2.77777778 C17.7727006,2.77777778 16.7777778,3.77270056 16.7777778,5 C16.7777778,6.22729944 17.7727006,7.22222222 19,7.22222222 L19,7.22222222 Z M19,9 L19,9 C16.790861,9 15,7.209139 15,5 C15,2.790861 16.790861,1 19,1 C21.209139,1 23,2.790861 23,5 C23,7.209139 21.209139,9 19,9 L19,9 Z" id="Shape"></path>
+                    <path d="M32,7.22222222 L32,7.22222222 C33.2272994,7.22222222 34.2222222,6.22729944 34.2222222,5 C34.2222222,3.77270056 33.2272994,2.77777778 32,2.77777778 C30.7727006,2.77777778 29.7777778,3.77270056 29.7777778,5 C29.7777778,6.22729944 30.7727006,7.22222222 32,7.22222222 L32,7.22222222 Z M32,9 L32,9 C29.790861,9 28,7.209139 28,5 C28,2.790861 29.790861,1 32,1 C34.209139,1 36,2.790861 36,5 C36,7.209139 34.209139,9 32,9 L32,9 Z" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
