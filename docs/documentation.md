@@ -189,6 +189,7 @@ Once all the widgets have been added to the instantsearch instance, just start t
 <div class="code-box">
   <div class="code-sample-snippet ignore">
 {% highlight html %}
+<!doctype html>
 <html>
   <head>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.min.css" />
