@@ -1056,6 +1056,7 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
+      page: 0,
       hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
