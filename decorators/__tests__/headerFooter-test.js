@@ -56,9 +56,7 @@ describe('headerFooter', () => {
     };
     expect(out).toEqualJSX(
       <div className="root">
-        <div className="ais-header">
-          <Template {...templateProps} />
-        </div>
+        <Template cssClass="ais-header" {...templateProps} />
         <div className="body">
           <TestComponent {...defaultProps} />
         </div>
@@ -87,9 +85,7 @@ describe('headerFooter', () => {
         <div className="body">
           <TestComponent {...defaultProps} />
         </div>
-        <div className="ais-footer">
-          <Template {...templateProps} />
-        </div>
+        <Template cssClass="ais-footer" {...templateProps} />
       </div>
     );
   });

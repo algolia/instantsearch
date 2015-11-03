@@ -7,13 +7,13 @@ class Hits extends React.Component {
   renderWithResults() {
     let renderedHits = map(this.props.results.hits, hit => {
       return (
-        <div className={this.props.cssClasses.item} key={hit.objectID}>
-          <Template
-            data={hit}
-            templateKey="item"
-            {...this.props.templateProps}
-          />
-        </div>
+        <Template
+          cssClass={this.props.cssClasses.item}
+          data={hit}
+          key={hit.objectID}
+          templateKey="item"
+          {...this.props.templateProps}
+        />
       );
     });
 
@@ -23,13 +23,12 @@ class Hits extends React.Component {
   renderNoResults() {
     let className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
     return (
-      <div className={className}>
-        <Template
-          data={this.props.results}
-          templateKey="empty"
-          {...this.props.templateProps}
-        />
-      </div>
+      <Template
+        cssClass={className}
+        data={this.props.results}
+        templateKey="empty"
+        {...this.props.templateProps}
+      />
     );
   }
 
