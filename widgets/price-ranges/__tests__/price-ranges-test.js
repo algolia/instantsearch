@@ -33,7 +33,7 @@ describe('priceRanges()', () => {
     priceRanges.__Rewire__('headerFooter', headerFooter);
 
     container = document.createElement('div');
-    widget = priceRanges({container, facetName: 'aFacetname'});
+    widget = priceRanges({container, attributeName: 'aNumAttr'});
     results = {
       hits: [1],
       nbHits: 1,
@@ -47,7 +47,7 @@ describe('priceRanges()', () => {
   });
 
   it('adds the attribute as a facet', () => {
-    expect(widget.getConfiguration()).toEqual({facets: ['aFacetname']});
+    expect(widget.getConfiguration()).toEqual({facets: ['aNumAttr']});
   });
 
   context('without refinements', function() {

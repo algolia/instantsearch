@@ -1,7 +1,7 @@
 | Param | Description |
 | --- | --- |
 |  <span class='attr-required'>`options.container`</span> | Valid CSS Selector as a string or DOMElement |
-|  <span class='attr-required'>`options.facetName`</span> | Name of the attribute for faceting |
+|  <span class='attr-required'>`options.attributeName`</span> | Name of the attribute for faceting |
 |  <span class='attr-optional'>`options.cssClasses`</span> | CSS classes to add |
 |  <span class='attr-optional'>`options.cssClasses.root`</span> | CSS class to add to the root element |
 |  <span class='attr-optional'>`options.cssClasses.header`</span> | CSS class to add to the header element |

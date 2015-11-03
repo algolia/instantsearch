@@ -583,7 +583,7 @@ This filtering widget lets the user choose either or not to filter values to `tr
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price',
+    attributeName: 'price',
     templates: {
       header: 'Price'
     },
@@ -618,7 +618,7 @@ The range slider filters values of a single numeric attribute using 2 cursors: t
 search.addWidget(
   instantsearch.widgets.priceRanges({
     container: '#priceranges.widget-container',
-    facetName: 'price',
+    attributeName: 'price',
     labels: {
       currency: '$',
       separator: 'to',

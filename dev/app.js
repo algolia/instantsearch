@@ -151,7 +151,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price',
+    attributeName: 'price',
     cssClasses: {
       header: 'facet-title'
     },
