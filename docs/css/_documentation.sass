@@ -162,7 +162,6 @@
   border-radius: 5px
   position: relative
   overflow-x: hidden
-  max-height: 500px
   &:after
     font-size: 11px
     content: "Widget display"
@@ -257,3 +256,42 @@
   width: 100%
   padding: 2px 3px
 
+// debug
+.debug-widget
+  position: relative
+  &.widget-container:after
+    z-index: 11
+    border: none
+  [class^=ais-]
+    cursor: pointer
+    &:hover
+      outline: 1px solid #660000
+      &:before
+        content: "." attr(class)
+        text-align: right
+        white-space: nowrap
+        font-size: 11px
+        z-index: 10
+        position: absolute
+        top: 0
+        right: 0
+        left: 0
+        padding: 4px 6px
+        line-height: 1em
+        background-color: $gray-light
+        color: #660000
+    [class^=ais-]
+      &:hover
+        outline: 1px solid #990000
+        &:before
+          color: #990000
+      [class^=ais-]
+        &:hover
+          outline: 1px solid #CC3300
+          &:before
+            color: #CC3300
+        [class^=ais-]
+          &:hover
+            outline: 1px solid #FF6600
+            &:before
+              color: #FF6600
