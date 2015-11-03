@@ -1,7 +1,7 @@
-var utils = require('../lib/utils.js');
-var forEach = require('lodash/collection/forEach');
-var bem = require('../lib/utils').bemHelper('ais-search-box');
-var cx = require('classnames');
+let utils = require('../lib/utils.js');
+let forEach = require('lodash/collection/forEach');
+let bem = require('../lib/utils').bemHelper('ais-search-box');
+let cx = require('classnames');
 
 /**
  * Instantiate a searchbox
@@ -21,7 +21,7 @@ function searchBox({
   poweredBy = false,
   autofocus = 'auto'
 }) {
-  var input = utils.getContainerNode(container);
+  let input = utils.getContainerNode(container);
 
   if (!input) {
     throw new Error('Usage: searchBox({container[, placeholder, cssClasses.{input,poweredBy}, poweredBy, autofocus]})');
@@ -39,7 +39,7 @@ function searchBox({
 
   return {
     init: function(initialState, helper) {
-      var defaultAttributes = {
+      let defaultAttributes = {
         autocapitalize: 'off',
         autocomplete: 'off',
         autocorrect: 'off',
@@ -67,12 +67,12 @@ function searchBox({
 
       // Optional "powered by Algolia" widget
       if (poweredBy) {
-        var React = require('react');
-        var ReactDOM = require('react-dom');
-        var PoweredBy = require('../components/PoweredBy/PoweredBy.js');
-        var poweredByContainer = document.createElement('div');
+        let React = require('react');
+        let ReactDOM = require('react-dom');
+        let PoweredBy = require('../components/PoweredBy/PoweredBy.js');
+        let poweredByContainer = document.createElement('div');
         input.parentNode.appendChild(poweredByContainer);
-        var poweredByCssClasses = {
+        let poweredByCssClasses = {
           root: cx(bem('powered-by'), cssClasses.poweredBy),
           link: bem('powered-by-link')
         };

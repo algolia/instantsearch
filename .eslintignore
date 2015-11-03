@@ -1,3 +1,4 @@
 dist/
 docs/
 dev/bundle.js
+dev/app.js
