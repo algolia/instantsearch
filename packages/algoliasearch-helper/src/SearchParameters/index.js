@@ -359,7 +359,7 @@ function SearchParameters(newParameters) {
       // IE8/9 has no console (BUT if devtools opened), nevermind there's no
       // developer working ONLY in IE8/9
       console &&
-      console.error(
+      console.error( //eslint-disable-line no-console
         'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'
       );
     }
@@ -1323,6 +1323,14 @@ SearchParameters.prototype = {
       return newInstance;
     });
   },
+
+  /**
+   * Returns an object with only the selected attributes.
+   * @param {string[]} filters filters to retrieve only a subset of the state. It
+   * accepts strings that can be either attributes of the SearchParameters (e.g. hitsPerPage)
+   * or attributes of the index with the notation 'attribute:nameOfMyAttribute'
+   * @return {object}
+   */
   filter: function(filters) {
     return filterState(this, filters);
   },
