@@ -25,12 +25,16 @@ To get started, check out [algolia.github.com/instantsearch.js](https://algolia.
 
 
 - [Setup](#setup)
-  - [npm, browserify, webpack](#npm-browserify-webpack)
-  - [`<script>`](#script)
+  - [From a CDN](#from-a-cdn)
+  - [With npm, browserify, webpack](#with-npm-browserify-webpack)
 - [Quick Start](#quick-start)
 - [Browser support](#browser-support)
 - [Development workflow](#development-workflow)
 - [Test](#test)
+- [Instant search configuration](#instant-search-configuration)
+  - [Number locale](#number-locale)
+  - [Initial search parameters](#initial-search-parameters)
+  - [URL synchronisation](#url-synchronisation)
 - [License](#license)
 - [More...](#more)
 
