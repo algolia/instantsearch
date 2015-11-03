@@ -35,10 +35,11 @@ class RefinementList extends React.Component {
       [this.props.cssClasses.active]: facetValue.isRefined
     });
 
+    let key = facetValue[this.props.facetNameKey] + '/' + facetValue.isRefined + '/' + facetValue.count;
     return (
       <div
         className={cssClassItem}
-        key={facetValue[this.props.facetNameKey]}
+        key={key}
         onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
       >
         <Template data={templateData} templateKey="item" {...this.props.templateProps} />
