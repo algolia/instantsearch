@@ -29,7 +29,8 @@ describe('RefinementList', () => {
       data: {
         cssClasses: {
           list: 'list',
-          item: 'item'
+          item: 'item',
+          active: 'active'
         }
       }
     };
@@ -55,6 +56,26 @@ describe('RefinementList', () => {
         </div>
       </div>
     );
+    expect(out.props.children[0].key).toEqual('facet1/undefined/undefined');
+    expect(out.props.children[1].key).toEqual('facet2/undefined/undefined');
+  });
+
+  it('should render default list highlighted', () => {
+    let out = render({facetValues: [{name: 'facet1', isRefined: true, count: 42}]});
+    let activeTemplateProp = {...templateProps};
+    activeTemplateProp.data.count = 42;
+    activeTemplateProp.data.isRefined = true;
+    expect(out).toEqualJSX(
+      <div {...parentListProps}>
+        <div className="item active" onClick={itemProps.onClick}>
+          <Template
+            {...activeTemplateProp}
+            data={{...templateProps.data, name: 'facet1'}}
+          />
+        </div>
+      </div>
+    );
+    expect(out.props.children[0].key).toEqual('facet1/true/42');
   });
 
   context('sublist', () => {
@@ -127,7 +148,8 @@ describe('RefinementList', () => {
     return {
       cssClasses: {
         list: 'list',
-        item: 'item'
+        item: 'item',
+        active: 'active'
       },
       facetValues: [
         {name: 'facet1'},
