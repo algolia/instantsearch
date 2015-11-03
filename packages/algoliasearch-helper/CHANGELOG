@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.6.5 - 2015-11-03
+  * FIX: hierarchical toggle refine + new query with no result led to throw
+
 2.6.4 - 2015-11-02
   * FIX: setPage 0 when toggling hierarchical refinements (consistency)
 
