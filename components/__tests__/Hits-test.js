@@ -42,20 +42,18 @@ describe('Hits', () => {
 
     expect(out).toEqualJSX(
       <div className="custom-root">
-        <div className="custom-item">
-          <Template
-            data={results.hits[0]}
-            key={results.hits[0].objectID}
-            templateKey="item"
-          />
-        </div>
-        <div className="custom-item">
-          <Template
-            data={results.hits[1]}
-            key={results.hits[1].objectID}
-            templateKey="item"
-          />
-        </div>
+        <Template
+          cssClass="custom-item"
+          data={results.hits[0]}
+          key={results.hits[0].objectID}
+          templateKey="item"
+        />
+        <Template
+          cssClass="custom-item"
+          data={results.hits[1]}
+          key={results.hits[1].objectID}
+          templateKey="item"
+        />
       </div>
     );
   });
@@ -76,12 +74,11 @@ describe('Hits', () => {
     let out = renderer.getRenderOutput();
 
     expect(out).toEqualJSX(
-      <div className="custom-root custom-empty">
-        <Template
-          data={results}
-          templateKey="empty"
-        />
-      </div>
+      <Template
+        cssClass="custom-root custom-empty"
+        data={results}
+        templateKey="empty"
+      />
     );
   });
 });

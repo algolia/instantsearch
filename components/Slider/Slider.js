@@ -13,16 +13,14 @@ class Slider extends React.Component {
 
   render() {
     return (
-      <div>
-        <Nouislider
-          {...this.props}
-          animate={false}
-          behaviour={'snap'}
-          connect
-          cssPrefix={cssPrefix}
-          onChange={this.handleChange.bind(this)}
-        />
-      </div>
+      <Nouislider
+        {...this.props}
+        animate={false}
+        behaviour={'snap'}
+        connect
+        cssPrefix={cssPrefix}
+        onChange={this.handleChange.bind(this)}
+      />
     );
   }
 }
