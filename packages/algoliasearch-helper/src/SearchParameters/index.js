@@ -206,6 +206,11 @@ function SearchParameters(newParameters) {
    */
   this.minWordSizefor2Typos = params.minWordSizefor2Typos;
   /**
+   * Configure the precision of the proximity ranking criterion
+   * @see https://www.algolia.com/doc/rest#param-minProximity
+   */
+  this.minProximity = params.minProximity;
+  /**
    * Should the engine allow typos on numerics.
    * @see https://www.algolia.com/doc/rest#param-allowTyposOnNumericTokens
    * @member {boolean}
@@ -304,7 +309,7 @@ function SearchParameters(newParameters) {
   /**
    * Remove duplicates based on the index setting attributeForDistinct
    * @see https://www.algolia.com/doc/rest#param-distinct
-   * @member {boolean}
+   * @member {number}
    */
   this.distinct = params.distinct;
   /**
@@ -356,12 +361,13 @@ function SearchParameters(newParameters) {
 
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
-      // IE8/9 has no console (BUT if devtools opened), nevermind there's no
-      // developer working ONLY in IE8/9
-      console &&
-      console.error( //eslint-disable-line no-console
-        'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'
-      );
+      var message = 'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)';
+      if (window) {
+        // IE8/9 has no console (BUT if devtools opened), nevermind there's no
+        // developer working ONLY in IE8/9
+        window.console &&
+        window.console.error(message);
+      } else console.error(message);// eslint-disable-line no-console
     }
   }, this);
 }
@@ -386,7 +392,11 @@ SearchParameters._parseNumbers = function(partialState) {
     'minWordSizefor2Typos',
     'minWordSizefor1Typo',
     'page',
-    'maxValuesPerFacet'
+    'maxValuesPerFacet',
+    'distinct',
+    'minimumAroundRadius',
+    'hitsPerPage',
+    'minProximity'
   ];
 
   forEach(numberKeys, function(k) {
@@ -1313,11 +1323,13 @@ SearchParameters.prototype = {
       throw error;
     }
 
+    var parsedParams = SearchParameters._parseNumbers(params);
+
     return this.mutateMe(function mergeWith(newInstance) {
       var ks = keys(params);
 
       forEach(ks, function(k) {
-        newInstance[k] = params[k];
+        newInstance[k] = parsedParams[k];
       });
 
       return newInstance;
