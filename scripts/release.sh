@@ -42,7 +42,7 @@ conventional-changelog -p angular | nd | less -r 2>/dev/null
 # printf "\n\nRelease: Please enter the new chosen version > "
 printf "\n=> Release: please type the new chosen version > "
 read -e newVersion
-VERSION=$newVersion node ./scripts/bump-package-version.js
+VERSION=$newVersion babel-node ./scripts/bump-package-version.js
 
 # build new version
 NODE_ENV=production VERSION=$newVersion npm run build
