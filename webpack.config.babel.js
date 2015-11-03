@@ -1,6 +1,6 @@
-let webpack = require('webpack');
+import webpack from 'webpack';
 
-module.exports = {
+export default {
   entry: './index.js',
   output: {
     path: './dist/',

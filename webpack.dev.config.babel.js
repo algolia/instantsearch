@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   entry: './dev/app.js',
   devtool: 'source-map',
   output: {
