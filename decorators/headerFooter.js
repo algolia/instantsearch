@@ -16,9 +16,11 @@ function headerFooter(ComposedComponent) {
       }
       let className = cx(this.props.cssClasses[type], `ais-${type}`);
       return (
-        <div className={className}>
-          <Template templateKey={type} {...this.props.templateProps} transformData={null} />
-        </div>
+        <Template {...this.props.templateProps}
+          cssClass={className}
+          templateKey={type}
+          transformData={null}
+        />
       );
     }
     render() {

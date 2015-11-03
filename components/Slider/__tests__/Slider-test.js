@@ -28,17 +28,15 @@ describe('Slider', () => {
   it('should render <NouiSlider {...props} />', () => {
     let out = render();
     expect(out).toEqualJSX(
-      <div>
-        <Nouislider
-          animate={false}
-          behaviour="snap"
-          connect
-          cssClasses={{}}
-          cssPrefix="ais-range-slider--"
-          onChange={() => {}}
-          templateProps={{}}
-        />
-      </div>
+      <Nouislider
+        animate={false}
+        behaviour="snap"
+        connect
+        cssClasses={{}}
+        cssPrefix="ais-range-slider--"
+        onChange={() => {}}
+        templateProps={{}}
+      />
     );
   });
 

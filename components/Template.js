@@ -22,11 +22,12 @@ class Template extends React.Component {
       return null;
     }
 
-    return <div dangerouslySetInnerHTML={{__html: content}} />;
+    return <div className={this.props.cssClass} dangerouslySetInnerHTML={{__html: content}} />;
   }
 }
 
 Template.propTypes = {
+  cssClass: React.PropTypes.string,
   data: React.PropTypes.object,
   templateKey: React.PropTypes.string,
   templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
