@@ -213,6 +213,23 @@
       &.active
         font-weight: bolder
         background: #163350
+  .copy-btn
+    position: absolute
+    right: 5px
+    top: 5px
+    display: none
+    color: $brand-primary
+    background-color: #0A1724
+    border-color: $brand-primary
+    &:active, &:focus
+      outline: 0px
+    &:active
+      color: #0A1724
+      background-color: $brand-primary
+      border-color: #0A1724
+  &:hover
+    .copy-btn
+      display: block
   .jsdoc
     border: none
     color: #A3B6CB

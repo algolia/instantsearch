@@ -120,8 +120,23 @@
     });
   }
 
+  function copyButtons() {
+    $('.code-box').each(function() {
+      var $snippet = $(this).find('.code-sample-snippet');
+      $snippet.prepend(
+        '<button type="button" class="btn btn-default btn-xs copy-btn"><i class="fa fa-clipboard"></i> Copy to clipboard</button>'
+      );
+    });
+    new Clipboard('.copy-btn', {
+      text: function(trigger) {
+        return $(trigger).closest('.code-sample-snippet').find('pre').text();
+      }
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
   anchorableTitles();
+  copyButtons();
 })(window.jQuery);
