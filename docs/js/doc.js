@@ -44,6 +44,7 @@
       $box.find('.toggle-doc-button').removeClass('active');
       $btn.addClass('active');
       $box.find('.code-sample-snippet, .html-container').hide();
+      $('.debug-widget').removeClass('debug-widget');
       $box.find('.jsdoc').show();
     });
     $(document).on('click', '.toggle-doc-button.snippet-btn', function(e) {
@@ -52,6 +53,7 @@
       $box.find('.toggle-doc-button').removeClass('active');
       $btn.addClass('active');
       $box.find('.jsdoc, .html-container').hide();
+      $('.debug-widget').removeClass('debug-widget');
       $box.find('.code-sample-snippet').show();
     });
   }
@@ -105,6 +107,8 @@
       $box.find('.toggle-doc-button').removeClass('active');
       $btn.addClass('active');
       $box.find('.code-sample-snippet, .jsdoc').hide();
+      $('.debug-widget').removeClass('debug-widget');
+      $widget.addClass('debug-widget');
       $box.find('.html-container').show();
     });
   }
