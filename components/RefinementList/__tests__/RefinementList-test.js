@@ -56,8 +56,8 @@ describe('RefinementList', () => {
         </div>
       </div>
     );
-    expect(out.props.children[0].key).toEqual('facet1/undefined/undefined');
-    expect(out.props.children[1].key).toEqual('facet2/undefined/undefined');
+    expect(out.props.children[0].key).toEqual('facet1');
+    expect(out.props.children[1].key).toEqual('facet2');
   });
 
   it('should render default list highlighted', () => {
