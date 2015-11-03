@@ -1,11 +1,11 @@
-var jsdoc2md = require('jsdoc-to-markdown');
-var dmd = require('dmd');
-var fs = require('fs');
-var util = require('util');
-var path = require('path');
+let jsdoc2md = require('jsdoc-to-markdown');
+let dmd = require('dmd');
+let fs = require('fs');
+let util = require('util');
+let path = require('path');
 
 /* paths used by this script */
-var p = {
+let p = {
   src: path.resolve(__dirname, '../../widgets/**/*.js'),
   json: path.resolve(__dirname, '../../source.json'),
   output: path.resolve(__dirname, '../../docs/_includes/widget-jsdoc/%s.md')
@@ -18,10 +18,10 @@ jsdoc2md({src: p.src, json: true})
 
 function dataReady() {
   /* parse the jsdoc-parse output.. */
-  var data = require(p.json);
+  let data = require(p.json);
 
   /* ..because we want an array of class names */
-  var classes = data.reduce(function(prev, curr) {
+  let classes = data.reduce(function(prev, curr) {
     if (curr.kind === 'function') prev.push(curr.name);
     return prev;
   }, []);
@@ -31,10 +31,10 @@ function dataReady() {
 }
 
 function renderMarkdown(classes, index) {
-  var className = classes[index];
+  let className = classes[index];
 
 
-  var templateFile = path.resolve(__dirname, './widgetTemplate.hbs');
+  let templateFile = path.resolve(__dirname, './widgetTemplate.hbs');
 
   fs.readFile(templateFile, 'utf8', function(err, data) {
     if (err) {
@@ -45,8 +45,8 @@ function renderMarkdown(classes, index) {
       'rendering %s', className
     ));
 
-    var template = util.format(data, className);
-    var config = {
+    let template = util.format(data, className);
+    let config = {
       template: template,
       helper: ['./scripts/helpers']
     };
@@ -55,7 +55,7 @@ function renderMarkdown(classes, index) {
         .pipe(dmd(config))
         .pipe(fs.createWriteStream(util.format(p.output, className)))
         .on('close', function() {
-          var next = index + 1;
+          let next = index + 1;
           if (classes[next]) {
             renderMarkdown(classes, next);
           } else {
