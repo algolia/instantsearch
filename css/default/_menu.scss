@@ -1,0 +1,29 @@
+@import "../base";
+@import "variables";
+
+@include component(menu) {
+  @include modifier(header) {
+    /* widget header */
+  }
+  @include modifier(body) {
+    /* widget body */
+  }
+  @include modifier(list) {
+    /* item list */
+  }
+  @include modifier(item) {
+    /* list item */
+    @include element(active) {
+      /* active list item */
+    }
+  }
+  @include modifier(link) {
+    /* item link */
+  }
+  @include modifier(count) {
+    /* item count */
+  }
+  @include modifier(footer) {
+    /* widget footer */
+  }
+}

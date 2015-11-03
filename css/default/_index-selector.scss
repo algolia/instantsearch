@@ -2,5 +2,7 @@
 @import "variables";
 
 @include component(index-selector) {
-  @include modifier(item);
+  @include modifier(item) {
+    /* selector item */
+  }
 }

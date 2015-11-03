@@ -1,0 +1,32 @@
+@import "../base";
+@import "variables";
+
+@include component(refinement-list) {
+  @include modifier(header) {
+    /* widget header */
+  }
+  @include modifier(body) {
+    /* wudget footer */
+  }
+  @include modifier(list) {
+    /* item list */
+  }
+  @include modifier(item) {
+    /* list item */
+    @include element(active) {
+      /* active list item */
+    }
+  }
+  @include modifier(label) {
+    /* item label */
+  }
+  @include modifier(checkbox) {
+    /* item checkbox */
+  }
+  @include modifier(count) {
+    /* item count */
+  }
+  @include modifier(footer) {
+    /* widget footer */
+  }
+}

@@ -1,0 +1,30 @@
+@import "../base";
+@import "variables";
+
+@include component(pagination) {
+  @include modifier(item) {
+    /* pagination item */
+    @include element(disabled) {
+      /* disabled pagination item */
+      visibility: hidden;
+    }
+  }
+  @include modifier(item-first) {
+    /* first pagination item */
+  }
+  @include modifier(item-previous) {
+    /* previous pagination item */
+  }
+  @include modifier(item-page) {
+    /* page */
+    @include element(active) {
+      /* active page */
+    }
+  }
+  @include modifier(item-next) {
+    /* next pagination item */
+  }
+  @include modifier(item-last) {
+    /* last pagination item */
+  }
+}

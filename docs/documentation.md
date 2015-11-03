@@ -59,6 +59,7 @@ The library is open-source, based on [React.js](http://facebook.github.io/react/
 <div class="code-box">
   <div class="code-sample-snippet ignore">
 {% highlight html %}
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css">
 <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
 {% endhighlight %}
   </div>
@@ -83,6 +84,7 @@ npm install instantsearch.js --save
   <div class="code-sample-snippet ignore">
 {% highlight javascript %}
 var instantsearch = require('instantsearch.js');
+// TODO: include the instantsearch.js/dist/instantsearch.css file as well
 {% endhighlight %}
   </div>
 </div>
@@ -192,7 +194,7 @@ Once all the widgets have been added to the instantsearch instance, just start t
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/themes/default.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
   </head>
   <body>
     <input type="text" id="search-box" />
@@ -880,11 +882,11 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis 
 
 ### Custom Themes
 
-All widgets have been designed to be heavily stylizable with CSS themes. **Instantsearch.js** ships with vanilla CSS themes, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
+All widgets have been designed to be heavily stylizable with CSS rules. **Instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 
 We're using [BEM](http://getbem.com/introduction/), a methodology that helps you to achieve reusable components and code sharing in the front-end.
 
-If you want to build you own theme, we recommend you to start from our default (skeleton) theme: [themes/default](https://github.com/algolia/instantsearch.js/blob/master/themes/default.sass).
+If you want to build you own theme, we recommend you to start from our default skeleton: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
 
 <div class="h4">
 BEM modifiers
@@ -917,7 +919,7 @@ BEM modifiers
   </div>
 </div>
 
-We're providing a few SASS mixins to help you write BEM rules. Those mixins can be loaded from the `_base.sass` file.
+We're providing a few SCSS mixins to help you write BEM rules. Those mixins can be loaded from the `_base.scss` file.
 
 <div class="clearfix"></div>
 <div class="h4">
@@ -928,7 +930,7 @@ Example
 <div class="code-sample-snippet ignore">
 <div class="row">
 <div class="col-sm-6">
-<strong class="text-white">With SASS</strong>
+<strong class="text-white">With SCSS</strong>
 {% highlight scss %}
 @import 'base'
 

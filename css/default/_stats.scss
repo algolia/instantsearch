@@ -1,0 +1,17 @@
+@import "../base";
+@import "variables";
+
+@include component(stats) {
+  @include modifier(header) {
+    /* widget header */
+  }
+  @include modifier(body) {
+    /* widget body */
+  }
+  @include modifier(time) {
+    /* processing time */
+  }
+  @include modifier(footer) {
+    /* widget footer */
+  }
+}

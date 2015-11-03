@@ -1,7 +1,0 @@
-@import "../base";
-@import "variables";
-
-@include component(hits) {
-  @include element(empty);
-  @include modifier(item);
-}

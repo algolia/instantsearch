@@ -1,0 +1,37 @@
+@import "../base";
+@import "variables";
+
+@include component(hierarchical-menu) {
+  @include modifier(header) {
+    /* widget header */
+  }
+  @include modifier(body) {
+    /* widget body */
+  }
+  @include modifier(list) {
+    /* item list */
+    @include element(lvl0) {
+      /* item list level 0 */
+    }
+    @include element(lvl1) {
+      /* item list level 1 */
+    }
+  }
+
+  @include modifier(item) {
+    /* list item */
+    @include element(active) {
+      /* active list item */
+    }
+  }
+
+  @include modifier(link) {
+    /* item link */
+  }
+  @include modifier(count) {
+    /* item count */
+  }
+  @include modifier(footer) {
+    /* widget footer */
+  }
+}
