@@ -158,9 +158,10 @@ search.addWidget(
     templates: {
       header: 'Price'
     },
+    step: 10,
     tooltips: {
       format: function(formattedValue) {
-        return '$' + formattedValue;
+        return '$' + Math.round(formattedValue).toLocaleString();
       }
     }
   })
@@ -185,23 +186,5 @@ search.addWidget(
 search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
-
-search.addWidget(
-  instantsearch.widgets.priceRanges({
-    container: '#price-ranges',
-    attributeName: 'price',
-    templates: {
-      header: 'Price ranges'
-    },
-    cssClasses: {
-      header: 'facet-title',
-      body: 'nav nav-stacked',
-      range: 'facet-value',
-      form: '',
-      input: 'fixed-input-sm',
-      button: 'btn btn-default btn-sm'
-    }
-  })
-);
 
 search.start();
