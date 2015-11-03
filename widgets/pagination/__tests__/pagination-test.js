@@ -19,6 +19,7 @@ describe('pagination()', () => {
   let widget;
   let results;
   let helper;
+  let cssClasses;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -26,7 +27,18 @@ describe('pagination()', () => {
     pagination.__Rewire__('autoHideContainer', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
-    widget = pagination({container, scrollTo: false});
+    cssClasses = {
+      root: 'root',
+      item: 'item',
+      page: 'page',
+      previous: 'previous',
+      next: 'next',
+      first: 'first',
+      last: 'last',
+      active: 'active',
+      disabled: 'disabled'
+    };
+    widget = pagination({container, scrollTo: false, cssClasses});
     results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 200, hitsPerPage: 10, nbPages: 20};
     helper = {
       setCurrentPage: sinon.spy(),
@@ -90,9 +102,19 @@ describe('pagination()', () => {
     pagination.__ResetDependency__('autoHideContainer');
   });
 
-  function getProps(extraProps = {}) {
+  function getProps() {
     return {
-      cssClasses: {},
+      cssClasses: {
+        root: 'ais-pagination root',
+        item: 'ais-pagination--item item',
+        page: 'ais-pagination--item ais-pagination--item-page page',
+        previous: 'ais-pagination--item ais-pagination--item-previous previous',
+        next: 'ais-pagination--item ais-pagination--item-next next',
+        first: 'ais-pagination--item ais-pagination--item-first first',
+        last: 'ais-pagination--item ais-pagination--item-last last',
+        active: 'ais-pagination--item  ais-pagination--item-page ais-pagination--item-page__active active',
+        disabled: 'ais-pagination--item ais-pagination--item__disabled disabled'
+      },
       currentPage: 0,
       shouldAutoHideContainer: false,
       labels: {first: '«', last: '»', next: '›', previous: '‹'},
@@ -101,8 +123,7 @@ describe('pagination()', () => {
       padding: 3,
       setCurrentPage: () => {},
       showFirstLast: true,
-      createURL: () => '#',
-      ...extraProps
+      createURL: () => '#'
     };
   }
 });
