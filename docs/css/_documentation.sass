@@ -262,6 +262,22 @@
   &.widget-container:after
     z-index: 11
     border: none
+  > [class^=ais-]
+    outline: 1px solid #660000
+    &:before
+      content: "." attr(class)
+      text-align: right
+      white-space: nowrap
+      font-size: 11px
+      z-index: 10
+      position: absolute
+      top: 0
+      right: 0
+      left: 0
+      padding: 4px 6px
+      line-height: 1em
+      background-color: $gray-light
+      color: #660000
   [class^=ais-]
     cursor: pointer
     &:hover
