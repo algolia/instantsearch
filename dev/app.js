@@ -93,6 +93,30 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.numericRefinementList({
+    container: '#price-numeric-list',
+    attributeName: 'price',
+    operator: 'or',
+    options: [
+      {name: 'All'},
+      {end: 4, name: 'less than 4'},
+      {start: 4, end: 4, name: '4'},
+      {start: 5, end: 10, name: 'between 5 and 10'},
+      {start: 10, name: 'more than 10'}
+    ],
+    cssClasses: {
+      header: 'facet-title',
+      link: 'facet-value',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
+    },
+    templates: {
+      header: 'Price numeric list'
+    }
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#price-range',
     facetName: 'price_range',
