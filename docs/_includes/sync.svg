@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="176px" height="168px" viewBox="0 0 176 168" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+<!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+<title>sync</title>
+<desc>Created with Sketch.</desc>
+<defs></defs>
+<g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+<g id="instansearch-website" sketch:type="MSArtboardGroup" transform="translate(-364.000000, -712.000000)">
+<g id="sync" sketch:type="MSLayerGroup" transform="translate(364.000000, 712.000000)">
+<path class="path" d="M86,32 L32,142 L149.017093,142 L86,32 Z" id="Path-164" stroke="#FFFFFF" stroke-width="3" sketch:type="MSShapeGroup"></path>
+<path class="path2" d="M84.6906741,13.0274625 L15.0085464,152 L166.008546,152 L84.6906741,13.0274625 Z" id="Path-164-Copy" stroke="#FFFFFF" stroke-width="3" sketch:type="MSShapeGroup"></path>
+<g id="icon-widget-searchbox-copy-2" transform="translate(52.887237, 0.329058)" sketch:type="MSShapeGroup">
+<g id="Group">
+<rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+<circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+<circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+</g>
+<path d="M42.1860684,40.6275695 C42.1860684,40.2108971 42.0146682,39.8064798 41.7330822,39.5246131 L37.5337775,35.321124 C38.5254501,33.8872808 39.0518935,32.171571 39.0518935,30.431351 C39.0518935,25.6641287 35.1953892,21.8037815 30.4329126,21.8037815 C25.6704359,21.8037815 21.8139316,25.6641287 21.8139316,30.431351 C21.8139316,35.1985733 25.6704359,39.0589205 30.4329126,39.0589205 C32.1714002,39.0589205 33.8854021,38.5319524 35.3178179,37.5392918 L39.5171226,41.7305258 C39.7987086,42.0246475 40.2027233,42.1962185 40.6189809,42.1962185 C41.4759819,42.1962185 42.1860684,41.4854244 42.1860684,40.6275695 Z M35.9177186,30.431351 C35.9177186,33.4583534 33.4569016,35.9216225 30.4329126,35.9216225 C27.4089235,35.9216225 24.9481065,33.4583534 24.9481065,30.431351 C24.9481065,27.4043487 27.4089235,24.9410795 30.4329126,24.9410795 C33.4569016,24.9410795 35.9177186,27.4043487 35.9177186,30.431351 Z" id="Icons/Search" fill="#FFFFFF" transform="translate(32.000000, 32.000000) rotate(10.000000) translate(-32.000000, -32.000000) "></path>
+</g>
+<g id="icon-widget-menu-copy-2" transform="translate(111.387237, 103.329058)" sketch:type="MSShapeGroup">
+<g id="Group">
+<rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+<circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+<circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+</g>
+<path d="M12,18.5 C12,17.6715729 12.6774915,17 13.4950437,17 L50.5049563,17 C51.3306461,17 52,17.6657972 52,18.5 C52,19.3284271 51.3225085,20 50.5049563,20 L13.4950437,20 C12.6693539,20 12,19.3342028 12,18.5 Z M12,31.5 C12,30.6715729 12.6774915,30 13.4950437,30 L50.5049563,30 C51.3306461,30 52,30.6657972 52,31.5 C52,32.3284271 51.3225085,33 50.5049563,33 L13.4950437,33 C12.6693539,33 12,32.3342028 12,31.5 Z M12,44.5 C12,43.6715729 12.6774915,43 13.4950437,43 L50.5049563,43 C51.3306461,43 52,43.6657972 52,44.5 C52,45.3284271 51.3225085,46 50.5049563,46 L13.4950437,46 C12.6693539,46 12,45.3342028 12,44.5 Z" id="Rectangle-13-Copy-5" fill="#FFFFFF"></path>
+</g>
+<g id="icon-widget-filter-copy-2" transform="translate(0.387237, 103.329058)" sketch:type="MSShapeGroup">
+<g id="Group-Copy">
+<rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+<circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+<circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+<circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+</g>
+<path d="M28.9712576,39.3755969 C29.0019937,39.4073468 29.0343516,39.438042 29.0683224,39.4675723 C29.7118298,40.0269648 30.6780427,39.9527563 31.2363705,39.3104736 L44.8052699,23.7012404 C45.366424,23.0557064 45.2981578,22.0879471 44.6591058,21.5324277 C44.0155984,20.9730352 43.0493855,21.0472437 42.4910576,21.6895264 L29.9982116,36.0609019 L23.7655866,28.8910869 C23.2114311,28.253604 22.2486006,28.1832865 21.6050932,28.7426789 C20.9660412,29.2981984 20.8969125,30.2649656 21.4513744,30.9028009 L28.4973128,39.0082259 C28.6340561,39.1655311 28.7956839,39.2883014 28.9712576,39.3755969 Z" id="Rectangle-10-Copy" fill="#FFFFFF"></path>
+</g>
+</g>
+</g>
+</g>
+</svg>

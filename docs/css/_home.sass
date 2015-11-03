@@ -27,23 +27,35 @@ html, body
 
 .widget-intro
   font-weight: 300
-  opacity: 0
-  animation: arrow 1s ease-in-out
-  animation-fill-mode: forwards
+  // opacity: 0
+  // animation: arrow 1s ease-in-out
+  // animation-fill-mode: forwards
+  position: absolute
+  width: 240px
+  img
+    position: relative
+    float: left
+    top: -4px
 .w-1
-  animation-delay: 0
+  // animation-delay: 0
+  top: -60px
+  left: 340px
 .w-2
-  animation-delay: .5s
+  // animation-delay: .5s
+  top: 440px
+  left: 60px
 .w-3
-  animation-delay: 1s
+  // animation-delay: 1s
+  top: -40px
+  left: 40px
 .w-4
-  animation-delay: 1.5s
+  // animation-delay: 1.5s
+  top: 150px
+  left: 480px
 
 footer.site-footer
   background-color: white
   margin-top: 0
-
-
 
 .window
   padding: 500px 0 200px
@@ -121,7 +133,26 @@ h2
   color: white
   pointer-events: none
 
+.path
+  stroke-dasharray: 10
+  animation: dash 20s linear infinite reverse
+
+.path2
+  stroke-dasharray: 10
+  animation: dash 20s linear infinite
+
+@keyframes dash
+  to
+    stroke-dashoffset: 1000
+
+#anim-overlay
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 9999
+
 #anim
+  opacity: 0
   z-index: 1200
   width: 420px
   height: 400px
@@ -129,7 +160,8 @@ h2
   border-radius: 10px
   position: relative
   transition: all
-  perspective: 700px
+  // overflow: hidden
+  perspective: 1200px
   transform-style: preserve-3d
   .screen
     position: absolute
@@ -144,51 +176,56 @@ h2
     top: 440px
     left: 460px
   .widget
-    background-color: #1D96C7
+    background-color: rgba(#1D96C7,.2)
+    border: solid 2px rgba(#1D96C7,.6)
     position: absolute
-    opacity: .9
+    transform-style: preserve-3d
   .widget-1
     //searchbox
-    width: 400px
+    width: 280px
     height: 30px
     top: 10px
-    left: 10px
+    right: 10px
   .widget-2
     //results
-    width: 250px
-    height: 310px
-    top: 50px
-    left: 160px
+    width: 280px
+    height: 270px
+    top: 70px
+    right: 10px
   .widget-3
     //facet
-    width: 140px
-    height: 80px
+    width: 110px
+    height: 50px
     top: 50px
     left: 10px
   .widget-4
     //facet
-    width: 140px
-    height: 80px
-    top: 140px
+    width: 110px
+    height: 70px
+    top: 110px
     left: 10px
   .widget-5
     //facet
-    width: 140px
-    height: 80px
-    top: 230px
+    width: 110px
+    height: 110px
+    top: 190px
     left: 10px
   .widget-6
     //facet
-    width: 140px
-    height: 70px
-    top: 320px
+    width: 110px
+    height: 80px
+    top: 310px
     left: 10px
   .widget-7
     //pagination
-    width: 250px
+    width: 170px
     height: 20px
-    top: 370px
-    left: 160px
+    top: 350px
+    right: 60px
+  .legend
+    font-size: 1.2em
+    border-left: solid 2px white
+    padding: 0 0 60px 10px
 
 
 footer.site-footer

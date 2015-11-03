@@ -17,14 +17,15 @@ $(function () {
     scenes[i] = new ScrollMagic.Scene({
         triggerElement: windows[i]
       })
+      // .setPin("#target", {pushFollowers: false})
       .offset(20)
-      //.addIndicators() // add indicators (requires plugin)
+      .addIndicators() // add indicators (requires plugin)
       .addTo(controller);
   };
 
   function floatingWidgets(){
-    TweenMax.to(".widget", 1, {opacity: .8 });
-    TweenMax.fromTo(".widget-1, .widget-1-b", 2,
+    // TweenMax.to(".widget", 1, {opacity: .4 });
+    TweenMax.fromTo(".widget-1", 2,
       {z: 40},
       {z: 90, repeat: -1, yoyo: true, ease: Power2.linear}
     );
@@ -46,8 +47,7 @@ $(function () {
     );
   };
 
-  TweenMax.set("#anim", {rotationX: 50, rotationZ:-6});
-  floatingWidgets();
+
 
   function fadeScaleInWidgets(){
     TweenMax.to(".widget-1", .5, {scale:1 , opacity:1 }).delay(.2);
@@ -85,13 +85,26 @@ $(function () {
     TweenMax.to(".widget", .2, {z: 0, opacity:0, scale:0 });
   };
 
+  TweenMax.fromTo("#anim", 2,
+      {opacity: 0, scale: 0},
+      {opacity: 1, scale: 1}
+    ).delay(.4);
+
+  TweenMax.set(".widget", {opacity: 0, scale: 0});
+  TweenMax.set("#anim-overlay", {opacity:0});
+  // fadeScaleInWidgets();
+  // floatingWidgets();
+
+  // TweenMax.to("#anim", 2, {rotationX: 30, rotationZ:-6, ease:Power2.easeInOut });
+
   scenes[0].on("start", function (event) {
     // console.log("Hit start point of scene 1.");
-    TweenMax.to("#anim", 1, {scale: 1});
-    TweenMax.to("#anim", 2, {rotationX: 50, rotationZ:-6, ease:Power2.easeInOut });
+    TweenMax.to("#anim", .5, {scale: 1,rotationX: 30, rotationZ:-6, ease:Power2.easeInOut });
+    TweenMax.to("#anim-overlay", 2, {opacity:1}).delay(.2);
     TweenMax.to(".screen", 1, {opacity: 0});
     TweenMax.to('#space-overlay', 1, {backgroundColor:'#1D96C7' });
-    floatingWidgets();
+    fadeScaleInWidgets().delay(1);
+    // floatingWidgets();
   });
 
   scenes[1].on("start", function (event) {
