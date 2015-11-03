@@ -33,7 +33,7 @@ describe('rangeSlider()', () => {
     rangeSlider.__Rewire__('headerFooter', headerFooter);
 
     container = document.createElement('div');
-    widget = rangeSlider({container, facetName: 'aFacetName'});
+    widget = rangeSlider({container, attributeName: 'aNumAttr'});
     results = {
       getFacetStats: sinon.stub().returns({
         min: 1.99,
@@ -53,7 +53,7 @@ describe('rangeSlider()', () => {
   });
 
   it('configures the disjunctiveFacets', () => {
-    expect(widget.getConfiguration()).toEqual({disjunctiveFacets: ['aFacetName']});
+    expect(widget.getConfiguration()).toEqual({disjunctiveFacets: ['aNumAttr']});
   });
 
   it('calls twice ReactDOM.render(<Slider props />, container)', () => {
@@ -97,7 +97,7 @@ describe('rangeSlider()', () => {
     widget._refine(helper, stats, [stats.min + 1, stats.max]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aFacetName', '>=', stats.min + 1]);
+    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '>=', stats.min + 1]);
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
@@ -106,7 +106,7 @@ describe('rangeSlider()', () => {
     widget._refine(helper, stats, [stats.min, stats.max - 1]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aFacetName', '<=', stats.max - 1]);
+    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '<=', stats.max - 1]);
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
@@ -115,8 +115,8 @@ describe('rangeSlider()', () => {
     widget._refine(helper, stats, [stats.min + 1, stats.max - 1]);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aFacetName', '>=', stats.min + 1]);
-    expect(helper.addNumericRefinement.getCall(1).args).toEqual(['aFacetName', '<=', stats.max - 1]);
+    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '>=', stats.min + 1]);
+    expect(helper.addNumericRefinement.getCall(1).args).toEqual(['aNumAttr', '<=', stats.max - 1]);
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
