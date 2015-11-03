@@ -1,8 +1,11 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 let defaults = require('lodash/object/defaults');
+let cx = require('classnames');
 
 let utils = require('../../lib/utils.js');
+let bem = utils.bemHelper('ais-pagination');
+
 let autoHideContainer = require('../../decorators/autoHideContainer');
 let defaultLabels = {
   previous: '‹',
@@ -38,7 +41,7 @@ let defaultLabels = {
  */
 function pagination({
     container,
-    cssClasses = {},
+    cssClasses: userCssClasses = {},
     labels = {},
     maxPages = 20,
     padding = 3,
@@ -78,6 +81,17 @@ function pagination({
       let nbPages = results.nbPages;
       let nbHits = results.nbHits;
       let hasNoResults = nbHits === 0;
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        item: cx(bem('item'), userCssClasses.item),
+        page: cx(bem('item'), bem('item-page'), userCssClasses.page),
+        previous: cx(bem('item'), bem('item-previous'), userCssClasses.previous),
+        next: cx(bem('item'), bem('item-next'), userCssClasses.next),
+        first: cx(bem('item'), bem('item-first'), userCssClasses.first),
+        last: cx(bem('item'), bem('item-last'), userCssClasses.last),
+        active: cx(bem('item'), bem('item-page'), bem('item-page', 'active'), userCssClasses.active),
+        disabled: cx(bem('item'), bem('item', 'disabled'), userCssClasses.disabled)
+      };
 
       if (maxPages !== undefined) {
         nbPages = Math.min(maxPages, results.nbPages);
