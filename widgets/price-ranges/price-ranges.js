@@ -15,7 +15,7 @@ let cx = require('classnames');
 /**
  * Instantiate a price ranges on a numerical facet
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
- * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string} [options.cssClasses.header] CSS class to add to the header element
@@ -42,7 +42,7 @@ let cx = require('classnames');
  */
 function priceRanges({
     container,
-    facetName,
+    attributeName,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     labels = {
@@ -53,29 +53,29 @@ function priceRanges({
     hideContainerWhenNoResults = true
   }) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: priceRanges({container, facetName, [cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}, templates.{header,item,footer}, labels.{currency,separator,button}, hideContainerWhenNoResults]})';
+  let usage = 'Usage: priceRanges({container, attributeName, [cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}, templates.{header,item,footer}, labels.{currency,separator,button}, hideContainerWhenNoResults]})';
 
   let PriceRanges = headerFooter(require('../../components/PriceRanges/PriceRanges'));
   if (hideContainerWhenNoResults === true) {
     PriceRanges = autoHideContainer(PriceRanges);
   }
 
-  if (!container || !facetName) {
+  if (!container || !attributeName) {
     throw new Error(usage);
   }
 
   return {
     getConfiguration: () => ({
-      facets: [facetName]
+      facets: [attributeName]
     }),
 
     _generateRanges: function(results) {
-      let stats = results.getFacetStats(facetName);
+      let stats = results.getFacetStats(attributeName);
       return generateRanges(stats);
     },
 
     _extractRefinedRange: function(helper) {
-      let refinements = helper.getRefinements(facetName);
+      let refinements = helper.getRefinements(attributeName);
       let from;
       let to;
 
@@ -96,13 +96,13 @@ function priceRanges({
     _refine: function(helper, from, to) {
       let facetValues = this._extractRefinedRange(helper);
 
-      helper.clearRefinements(facetName);
+      helper.clearRefinements(attributeName);
       if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
         if (typeof from !== 'undefined') {
-          helper.addNumericRefinement(facetName, '>', from - 1);
+          helper.addNumericRefinement(attributeName, '>', from - 1);
         }
         if (typeof to !== 'undefined') {
-          helper.addNumericRefinement(facetName, '<', to + 1);
+          helper.addNumericRefinement(attributeName, '<', to + 1);
         }
       }
 
@@ -149,13 +149,13 @@ function priceRanges({
       ReactDOM.render(
         <PriceRanges
           createURL={(from, to, isRefined) => {
-            let newState = state.clearRefinements(facetName);
+            let newState = state.clearRefinements(attributeName);
             if (!isRefined) {
               if (typeof from !== 'undefined') {
-                newState = newState.addNumericRefinement(facetName, '>', from - 1);
+                newState = newState.addNumericRefinement(attributeName, '>', from - 1);
               }
               if (typeof to !== 'undefined') {
-                newState = newState.addNumericRefinement(facetName, '<', to + 1);
+                newState = newState.addNumericRefinement(attributeName, '<', to + 1);
               }
             }
             return createURL(newState);
