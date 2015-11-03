@@ -12,6 +12,23 @@ class Slider extends React.Component {
   }
 
   render() {
+    // setup pips
+    let pips;
+    if (this.props.pips === false) {
+      pips = undefined;
+    } else if (this.props.pips === true || typeof this.props.pips === 'undefined') {
+      pips = {
+        mode: 'positions',
+        density: 3,
+        values: [0, 50, 100],
+        stepped: true,
+        format: {
+          to: (v) => { return Number(v).toLocaleString(); }
+        }
+      };
+    } else {
+      pips = this.props.pips;
+    }
     return (
       <Nouislider
         {...this.props}
@@ -20,6 +37,7 @@ class Slider extends React.Component {
         connect
         cssPrefix={cssPrefix}
         onChange={this.handleChange.bind(this)}
+        pips={pips}
       />
     );
   }
@@ -28,6 +46,7 @@ class Slider extends React.Component {
 Slider.propTypes = {
   onChange: React.PropTypes.func,
   onSlide: React.PropTypes.func,
+  pips: React.PropTypes.object,
   range: React.PropTypes.object.isRequired,
   start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
   tooltips: React.PropTypes.oneOfType([

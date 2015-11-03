@@ -63,9 +63,11 @@ describe('rangeSlider()', () => {
     let props = {
       cssClasses: {body: null, root: null},
       onChange: () => {},
-      range: {max: 4999.98, min: 1.99},
+      pips: true,
+      range: {max: 5000, min: 1},
       shouldAutoHideContainer: false,
       start: [-Infinity, Infinity],
+      step: 1,
       templateProps: {
         templates: {footer: '', header: ''},
         templatesConfig: undefined,

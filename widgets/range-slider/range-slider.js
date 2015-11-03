@@ -37,6 +37,8 @@ function rangeSlider({
       root: null,
       body: null
     },
+    step = 1,
+    pips = true,
     hideContainerWhenNoResults = true
   }) {
   let containerNode = utils.getContainerNode(container);
@@ -105,9 +107,11 @@ function rangeSlider({
         <Slider
           cssClasses={cssClasses}
           onChange={this._refine.bind(this, helper, stats)}
-          range={{min: stats.min, max: stats.max}}
+          pips={pips}
+          range={{min: Math.floor(stats.min), max: Math.ceil(stats.max)}}
           shouldAutoHideContainer={hasNoRefinements}
           start={[currentRefinement.min, currentRefinement.max]}
+          step={step}
           templateProps={templateProps}
           tooltips={tooltips}
         />,

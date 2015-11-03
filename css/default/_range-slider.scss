@@ -1,15 +1,21 @@
 @import "../base";
 @import "variables";
 
+$range-slider-handle-size: 20px;
+$range-slider-target-height: 6px;
+$range-slider-bg: $gray-light;
+$range-slider-marker-bg: #DDD;
+$range-slider-bar-color: $blue-light;
+$range-slider-handle-bg: $white;
+
 @include component(range-slider) {
   @include modifier(target) {
     position: relative;
     direction: ltr;
-    background: $gray-light;
-    height: 18px;
-    &, * {
-      box-sizing: border-box;
-    }
+    background: $range-slider-bg;
+    height: $range-slider-target-height;
+    margin-top: 2em;
+    margin-bottom: 4em;
   }
 
   @include modifier(base) {
@@ -17,6 +23,10 @@
     height: 100%;
     position: relative;
     z-index: 1;
+    border-top: 1px solid $range-slider-marker-bg;
+    border-bottom: 1px solid $range-slider-marker-bg;
+    border-left: 2px solid $range-slider-marker-bg;
+    border-right: 2px solid $range-slider-marker-bg;
   }
 
   @include modifier(origin) {
@@ -27,100 +37,85 @@
     bottom: 0;
   }
 
-  @include modifier(state-tap) {
-    @include component(range-slider) {
-      @include modifier(origin) {
-        transition: left .3s, top .3s;
-      }
-    }
-  }
-
-  @include modifier(state-drag) {
-    * {
-      cursor: inherit;
-    }
-  }
-
-  // Painting and performance;
-  // Browsers can paint handles in their own layer.
-  //
-  @include modifier(base) {
-    transform: translate3d(0, 0, 0);
-  }
-
   @include modifier(connect) {
-    background: $blue-light;
-    transition: background 450ms;
+    background: $range-slider-bar-color;
   }
 
   @include modifier(background) {
-    background: $gray-light;
+    background: $range-slider-bg;
   }
 
   @include modifier(handle) {
-    width: 1px;
-    height: 28px;
+    width: $range-slider-handle-size;
+    height: $range-slider-handle-size;
     position: relative;
     z-index: 1;
-    background: $blue-light;
+    background: $range-slider-handle-bg;
+    border: 1px solid $range-slider-bar-color;
+    border-radius: 50%;
     cursor: pointer;
   }
 
   @include modifier(handle-lower) {
-    bottom: 10px;
+    left: -($range-slider-handle-size / 2);
+    bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
   }
 
-  @include modifier(active) {
-    background: $blue-dark;
+  @include modifier(handle-upper) {
+    right: $range-slider-handle-size / 2;
+    bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
   }
 
   @include modifier(tooltip) {
     position: absolute;
-    color: $blue-dark;
-    border: 1px solid $blue-light;
     background: $white;
-    padding: 2px 3px;
+    top: -2em;
+    font-size: .8em;
   }
 
-  @include modifier(handle) {
-    &:hover {
-      background: $blue-dark;
-      @include component(range-slider) {
-        @include modifier(tooltip) {
-          background: $blue-light;
-          color: $white;
-          border-color: $blue-dark;
-        }
-      }
+  @include modifier(pips) {
+    box-sizing: border-box;
+    position: absolute;
+    height: 3em;
+    top: 100%;
+    left: 0;
+    width: 100%;
+  }
+
+  @include modifier(value) {
+    width: $range-slider-handle-size * 2;
+    position: absolute;
+    text-align: center;
+    margin-left: -$range-slider-handle-size;
+    padding-top: 15px;
+    font-size: .8em;
+  }
+  @include modifier(value-sub) {
+    font-size: .8em;
+    padding-top: 15px;
+  }
+
+  @include modifier(marker) {
+    position: absolute;
+    background: $range-slider-marker-bg;
+    margin-left: -1px;
+    width: 1px;
+    height: 5px;
+  }
+  @include modifier(marker-sub) {
+    background: $range-slider-marker-bg;
+    width: 2px;
+    margin-left: -2px;
+    height: 7px + $range-slider-target-height;
+  }
+  @include modifier(marker-large) {
+    background: $range-slider-marker-bg;
+    width: 2px;
+    margin-left: -2px;
+    height: 12px;
+    &:first-child {
+      margin-left: 0;
     }
   }
 
-  @include modifier(active) {
-    @include component(range-slider) {
-      @include modifier(tooltip) {
-        background: $blue-light;
-        color: $white;
-        border-color: $blue-dark;
-      }
-    }
-  }
-
-  @include modifier(handle-lower) {
-    @include component(range-slider) {
-      @include modifier(tooltip) {
-        border-radius: 5px 5px 5px 0;
-        top: -24px;
-      }
-    }
-  }
-
-  @include modifier(handle-upper) {
-    @include component(range-slider) {
-      @include modifier(tooltip) {
-        bottom: -24px;
-        border-radius: 5px 0 5px 5px;
-        right: 0;
-      }
-    }
-  }
 }
