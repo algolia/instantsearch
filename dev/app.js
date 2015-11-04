@@ -151,7 +151,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price',
+    attributeName: 'price',
     cssClasses: {
       header: 'facet-title'
     },
@@ -187,4 +187,25 @@ search.once('render', function() {
   document.querySelector('.search').className = 'row search search--visible';
 });
 
+<<<<<<< HEAD
+=======
+search.addWidget(
+  instantsearch.widgets.priceRanges({
+    container: '#price-ranges',
+    attributeName: 'price',
+    templates: {
+      header: 'Price ranges'
+    },
+    cssClasses: {
+      header: 'facet-title',
+      body: 'nav nav-stacked',
+      range: 'facet-value',
+      form: '',
+      input: 'fixed-input-sm',
+      button: 'btn btn-default btn-sm'
+    }
+  })
+);
+
+>>>>>>> f209f5d... fix(numerical widgets): s/facetName/attributeName
 search.start();
