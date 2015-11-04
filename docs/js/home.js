@@ -10,9 +10,6 @@ $(function () {
   // get all section window
   var windows = $("section.window");
 
-
-
-
   //intro
   var intro = new TimelineMax();
   intro
@@ -20,9 +17,10 @@ $(function () {
     .set("#anim", {opacity: 0, scale: 0})
     .set("#anim img", {opacity: 0})
     .set("#anim-overlay", {opacity: 0})
+    .set("#anim-overlay img", {scale: 0})
     .set(".widget", {opacity: 0, scale: 0})
     .to("#anim", 2, {opacity: 1, scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut})
-    .to("#anim img", 1.4, {opacity: 1}, "1")
+    .to("#anim img", 1, {opacity: 1}, "-=1")
     .to(".widget-1", .3, {scale:1 , opacity:1 })
     .to(".widget-2", .3, {scale:1 , opacity:1 })
     .to(".widget-3", .3, {scale:1 , opacity:1 })
@@ -30,7 +28,8 @@ $(function () {
     .to(".widget-5", .3, {scale:1 , opacity:1 }, "-=.2")
     .to(".widget-6", .3, {scale:1 , opacity:1 }, "-=.2")
     .to(".widget-7", .3, {scale:1 , opacity:1 }, "-=.5")
-    .to("#anim-overlay", .5, {opacity: 1, ease:Power2.easeInOut }, "3.5");
+    .to("#anim-overlay", .3, {opacity: 1, ease:Power2.easeInOut }, "3.5")
+    .to("#anim-overlay img", .4, {scale: 1, ease:Bounce.easeOut }, "3.6");
 
   // an array to stock our timelines, relative to each sections
   var tl = [];
@@ -46,7 +45,8 @@ $(function () {
     .to(".widget-6", 8, {x: -200, y: 200 }, "-=8")
     .to(".widget-7", 8, {y: 350 }, "-=8")
     .to("#anim", 8, {opacity: 1, scale: 1, rotationX: 0, rotationZ: 0, ease:Power2.easeInOut}, "-=8")
-    .to(".illus-sync", 4, {opacity:1}, "-=4");
+    .to(".illus-sync", 4, {opacity:1}, "-=4")
+    .to('#space-overlay', 8, {backgroundColor:'#00B6BA' }, "0");
 
   // First Section: There is a widget
   tl[1] = new TimelineMax();
@@ -62,12 +62,22 @@ $(function () {
     .to(".screen-2 .widget", 5, {opacity: 1, scale: 1},"-=2")
     .to(".screen-3", 3, {opacity: 1})
     .to(".screen-3 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to('#space-overlay', 8, {backgroundColor:'#F6624E' }, "0");
 
   // First Section: There is a widget
   tl[2] = new TimelineMax();
   tl[2]
-    .to("#anim", 5, {scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut })
-    .to(".screen", 2, {opacity: 0}, "-=2")
+    .to("#anim", 10, {scale: 1, y:100, rotationX: 20, rotationZ: -6, ease:Power2.easeInOut })
+    .to(".screen", 5, {opacity: 0}, "-=8")
+    .to(".widget-5", 8, {z: 200})
+    .to(".widget-5", 4, {rotationY: 180, backgroundColor:'#674492'}, "-=4")
+    .to(".widget-5", 4, {z: 0})
+    .to('#space-overlay', 8, {backgroundColor:'#674492' }, "0");
+
+  tl[3] = new TimelineMax();
+  tl[3]
+    .to("#anim", 12, {y: -400, rotationX: 60}, "2s")
+    .to("#anim", 4, {opacity: 0}, "5");
 
   // create scene for every window
   var scenes = [];
@@ -77,83 +87,26 @@ $(function () {
         triggerElement: windows[i],
         duration: 800
       })
-      // .setPin("#target", {pushFollowers: false})
       .setTween(tl[i])
       .offset(20)
       .addIndicators() // add indicators (requires plugin)
       .addTo(controller);
   };
 
-
-  function floatingWidgets(){
-    // TweenMax.to(".widget", 1, {opacity: .4 });
-    TweenMax.fromTo(".widget-1", 2,
-      {z: 40},
-      {z: 90, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-3", 2,
-      {z: 40},
-      {z: 80, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-2, .widget-4", 2,
-      {z: 40},
-      {z: 70, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-5", 2,
-      {z: 40},
-      {z: 60, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-6, .widget-7", 2,
-      {z: 40},
-      {z: 50, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-  };
-
-  function combineWidgets(){
-    TweenMax.to("#anim", .5, {rotationX: 0, rotationZ:0, ease:Power2.easeInOut });
-    TweenMax.to("#anim", .5, {scale: .5});
-    TweenMax.to(".screen", .3, {opacity: 1});
-    TweenMax.fromTo(".screen-1", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.4);
-    TweenMax.fromTo(".screen-2", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.6);
-    TweenMax.fromTo(".screen-3", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.8);
-  };
-
-  function themeWidgets(color){
-    TweenMax.to(".widget", .2, {backgroundColor: color });
-  };
   scenes[0].on("start", function (event) {
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#1D96C7' });
+    intro.seek(20);
   });
 
-  scenes[1].on("start", function (event) {
-    // TweenMax.to(".illus-sync", 2, {opacity:1});
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#00B6BA' });
-  });
-
-  scenes[2].on("start", function (event) {
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#F6624E' });
-  });
-
-  scenes[3].on("start", function (event) {
-    TweenMax.to( '.anim-container', 1, {css:{position:'absolute', top: 400, left: 0}});
-
-  });
   scenes[3].on("leave", function (event) {
     $('body:after').addClass('hide');
-    TweenMax.to('.anim-container', .3, {css:{position:'fixed', top: 240, left: 0}});
   });
+
+
+
 
 
   // Space Canvas
+
   var canvas;
   var context;
   var screenH;
