@@ -29,13 +29,12 @@ html, body
   color: #1D96C7 !important
 
 
-
 footer.site-footer
   background-color: white
   margin-top: 0
 
 .window
-  padding: 300px 0 200px
+  padding: 400px 0 200px
   width: 100%
   display: block
   color: white
@@ -156,6 +155,12 @@ h2
 
 
 .screen
+  opacity: 0
+  z-index: 1200
+  width: 420px
+  height: 400px
+  background-color: white
+  border-radius: 10px
   position: absolute
 .screen-1
   top: 0
@@ -175,7 +180,6 @@ h2
   background-color: white
   border-radius: 10px
   position: relative
-  transition: all
   perspective: 1200px
   transform-style: preserve-3d
   img
@@ -184,53 +188,53 @@ h2
     background-color: rgba(#1D96C7,.4)
     position: absolute
     transform-style: preserve-3d
-  .widget-1
-    //searchbox
-    width: 280px
-    height: 30px
-    top: 10px
-    right: 10px
-  .widget-2
-    //results
-    width: 280px
-    height: 270px
-    top: 70px
-    right: 10px
-  .widget-3
-    //facet
-    width: 110px
-    height: 50px
-    top: 50px
-    left: 10px
-  .widget-4
-    //facet
-    width: 110px
-    height: 70px
-    top: 110px
-    left: 10px
-  .widget-5
-    //facet
-    width: 110px
-    height: 110px
-    top: 190px
-    left: 10px
-  .widget-6
-    //facet
-    width: 110px
-    height: 80px
-    top: 310px
-    left: 10px
-  .widget-7
-    //pagination
-    width: 170px
-    height: 20px
-    top: 350px
-    right: 60px
   .legend
     font-size: 1.2em
     border-left: solid 2px white
     padding: 0 0 60px 10px
 
+.widget-1
+  //searchbox
+  width: 280px
+  height: 30px
+  top: 10px
+  right: 10px
+.widget-2
+  //results
+  width: 280px
+  height: 270px
+  top: 70px
+  right: 10px
+.widget-3
+  //facet
+  width: 110px
+  height: 50px
+  top: 50px
+  left: 10px
+.widget-4
+  //facet
+  width: 110px
+  height: 70px
+  top: 110px
+  left: 10px
+.widget-5
+  //facet
+  width: 110px
+  height: 110px
+  top: 190px
+  left: 10px
+.widget-6
+  //facet
+  width: 110px
+  height: 80px
+  top: 310px
+  left: 10px
+.widget-7
+  //pagination
+  width: 170px
+  height: 20px
+  top: 350px
+  right: 60px
 
 footer.site-footer
   text-align: center

@@ -23,14 +23,14 @@ $(function () {
     .set(".widget", {opacity: 0, scale: 0})
     .to("#anim", 2, {opacity: 1, scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut})
     .to("#anim img", 1.4, {opacity: 1}, "1")
-    .to(".widget-1", .5, {scale:1 , opacity:1 }, "-=.2")
-    .to(".widget-2", .5, {scale:1 , opacity:1 }, "-=.2")
-    .to(".widget-3", .5, {scale:1 , opacity:1 }, "-=.2")
-    .to(".widget-4", .5, {scale:1 , opacity:1 }, "-=.3")
-    .to(".widget-5", .5, {scale:1 , opacity:1 }, "-=.3")
-    .to(".widget-6", .5, {scale:1 , opacity:1 }, "-=.3")
-    .to(".widget-7", .5, {scale:1 , opacity:1 }, "-=1.5")
-    .to("#anim-overlay", .5, {opacity: 1, ease:Power2.easeInOut }, "3");
+    .to(".widget-1", .3, {scale:1 , opacity:1 })
+    .to(".widget-2", .3, {scale:1 , opacity:1 })
+    .to(".widget-3", .3, {scale:1 , opacity:1 })
+    .to(".widget-4", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-5", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-6", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-7", .3, {scale:1 , opacity:1 }, "-=.5")
+    .to("#anim-overlay", .5, {opacity: 1, ease:Power2.easeInOut }, "3.5");
 
   // an array to stock our timelines, relative to each sections
   var tl = [];
@@ -51,14 +51,23 @@ $(function () {
   // First Section: There is a widget
   tl[1] = new TimelineMax();
   tl[1]
-    .to(".illus-sync", 3, {scale: 0})
-    .to(".screen", 8, {opacity: 1})
-    .to("#anim", 8, {scale: .5}, "-=8");
+    .to(".widget", .2, {x: 0, y: 0, z: 0, scale: 0 })
+    .to(".illus-sync", 3, {scale: 0, opacity: 0})
+    .to("#anim", 5, {scale: .5 })
+    .to("#anim img", 4, {opacity: 0}, "-=8")
+    .to("#anim > .widget", 2, {opacity: 1, scale: 1})
+    .to(".screen-1", 3, {opacity: 1})
+    .to(".screen-1 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to(".screen-2", 3, {opacity: 1})
+    .to(".screen-2 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to(".screen-3", 3, {opacity: 1})
+    .to(".screen-3 .widget", 5, {opacity: 1, scale: 1},"-=2")
 
   // First Section: There is a widget
   tl[2] = new TimelineMax();
   tl[2]
-    .set("#anim-screens", {opacity: 0});
+    .to("#anim", 5, {scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut })
+    .to(".screen", 2, {opacity: 0}, "-=2")
 
   // create scene for every window
   var scenes = [];
@@ -127,7 +136,7 @@ $(function () {
 
   scenes[1].on("start", function (event) {
     // TweenMax.to(".illus-sync", 2, {opacity:1});
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#F6624E' });
+    TweenMax.to('#space-overlay', 1, {backgroundColor:'#00B6BA' });
   });
 
   scenes[2].on("start", function (event) {
