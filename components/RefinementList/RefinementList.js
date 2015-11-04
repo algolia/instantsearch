@@ -35,7 +35,14 @@ class RefinementList extends React.Component {
       [this.props.cssClasses.active]: facetValue.isRefined
     });
 
-    let key = facetValue[this.props.facetNameKey] + '/' + facetValue.isRefined + '/' + facetValue.count;
+    let key = facetValue[this.props.facetNameKey];
+    if (facetValue.count !== undefined) {
+      key += '/' + facetValue.isRefined;
+    }
+
+    if (facetValue.count !== undefined) {
+      key += '/' + facetValue.count;
+    }
     return (
       <div
         className={cssClassItem}
