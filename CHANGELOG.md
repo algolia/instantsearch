@@ -1,3 +1,13 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/algolia/instantsearch.js/compare/v0.8.2...v0.9.0) (2015-11-04)
+
+
+### Features
+
+* **numericRefinementList:** create numericRefinementList widget using refinementList component ([a29e9c7](https://github.com/algolia/instantsearch.js/commit/a29e9c7))
+
+
+
 <a name="0.8.2"></a>
 ## [0.8.2](https://github.com/algolia/instantsearch.js/compare/v0.8.1...v0.8.2) (2015-11-04)
 
