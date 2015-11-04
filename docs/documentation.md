@@ -95,7 +95,7 @@ If you already have a JavaScript build system, you can use **instantsearch.js** 
 ### Initialization
 
 <div class="code-box">
-  <div class="code-sample-snippet">
+  <div class="code-sample-snippet config">
 {% highlight javascript %}
 var search = instantsearch({
   appId: '$appId',
@@ -171,7 +171,7 @@ Most widgets requires you to configure the DOM element they will use to display 
 ### Start
 
 <div class="code-box">
-  <div class="code-sample-snippet last">
+  <div class="code-sample-snippet start">
 {% highlight javascript %}
 search.start();
 {% endhighlight %}
