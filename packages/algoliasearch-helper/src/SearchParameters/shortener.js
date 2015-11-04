@@ -34,6 +34,7 @@ var keys2Short = {
   length: 'l',
   maxValuesPerFacet: 'mVPF',
   minimumAroundRadius: 'mAR',
+  minProximity: 'mP',
   minWordSizefor1Typo: 'mWS1T',
   minWordSizefor2Typos: 'mWS2T',
   numericFilters: 'nF',

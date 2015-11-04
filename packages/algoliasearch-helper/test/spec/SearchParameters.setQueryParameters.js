@@ -17,8 +17,8 @@ test('setQueryParameters should be able to mix an actual state with a new set of
   };
   var newSP = originalSP.setQueryParameters(params);
 
-  t.equal(newSP.facets, params.facets, 'Facets should be updated (existing parameter)');
-  t.equal(newSP.attributesToHighlight, newSP.attributesToHighlight, 'attributesToHighlight should be updated (existing parameter)');
+  t.deepEquals(newSP.facets, params.facets, 'Facets should be updated (existing parameter)');
+  t.deepEquals(newSP.attributesToHighlight, newSP.attributesToHighlight, 'attributesToHighlight should be updated (existing parameter)');
   t.equal(newSP.replaceSynonymsInHighlight, newSP.replaceSynonymsInHighlight, 'replaceSynonymsInHighlight should be updated (new parameter)');
   t.equal(newSP.ignorePlurals, originalSP.ignorePlurals, 'ignorePlurals should be the same as the original');
 
