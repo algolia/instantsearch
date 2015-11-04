@@ -532,6 +532,53 @@ results that have either the value `a` or `b` will match.
 
 <div  id="brands" class="widget-container"></div>
 
+#### numericRefinementList
+
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.numericRefinementList({
+    container: '#popularity',
+    attributeName: 'popularity',
+    options: [
+	  {name: 'All'},
+	  {end: 4, name: 'less than 4'},
+	  {start: 4, end: 4, name: '4'},
+	  {start: 5, end: 10, name: 'between 5 and 10'},
+	  {start: 10, name: 'more than 10'}
+    ],
+    templates: {
+      header: 'Price'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      link: '',
+      active: ''
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.numericRefinementList(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/refinementList.md %}
+  </div>
+</div>
+
+<img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg">
+This filtering widget lets the user choose one value for a single numeric attribute. You can specify if you want it to be a equality or a range by giving a "start" and an "end" value
+{:.description}
+
+<div  id="popularity" class="widget-container"></div>
+
 #### toggle
 
 <div class="code-box">
