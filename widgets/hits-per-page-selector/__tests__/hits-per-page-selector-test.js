@@ -102,6 +102,13 @@ describe('hitsPerPageSelector()', () => {
     }).toThrow(/No option in `options` with `value: -1`/);
   });
 
+  it('should not throw an error if state does not have a `hitsPerPage`', () => {
+    delete helper.state.hitsPerPage;
+    expect(() => {
+      widget.init(helper.state, helper);
+    }).toNotThrow(/No option in `options`/);
+  });
+
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
     hitsPerPageSelector.__ResetDependency__('autoHideContainer');
