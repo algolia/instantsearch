@@ -6,7 +6,7 @@
   function search() {
     function t(tmpl, vars) {
       Object.keys(vars).forEach(function(k) {
-        tmpl = tmpl.replace('$' + k, vars[k]);
+        tmpl = tmpl.replace(new RegExp('\\$' + k, 'g'), vars[k]);
       });
       return tmpl;
     }
@@ -15,11 +15,17 @@
       apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
       indexName: 'instant_search'
     };
-    var codeSnippets = q('.code-sample-snippet:not(.last):not(.ignore)');
-    var lastSnippets = q('.code-sample-snippet.last');
-    var source = codeSnippets
-      .concat(lastSnippets)
-      .map(function(d) {return d.textContent;});
+    var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
+    var configSnippet = q('.code-sample-snippet.config')[0]; 
+    var startSnippet = q('.code-sample-snippet.start')[0];
+
+    var source = codeSnippets.map(function(snippet) {
+      var functionBody = [configSnippet, snippet, startSnippet]
+          .map(function(e) { return e.textContent; })
+          .join(';');
+      return "(function() {" + functionBody + "})();";
+    });
+
     source = t(source.join('\n'), constants);
     eval(source);
   }
@@ -120,8 +126,23 @@
     });
   }
 
+  function copyButtons() {
+    $('.code-box').each(function() {
+      var $snippet = $(this).find('.code-sample-snippet');
+      $snippet.prepend(
+        '<button type="button" class="btn btn-default btn-xs copy-btn"><i class="fa fa-clipboard"></i> Copy to clipboard</button>'
+      );
+    });
+    new Clipboard('.copy-btn', {
+      text: function(trigger) {
+        return $(trigger).closest('.code-sample-snippet').find('pre').text();
+      }
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
   anchorableTitles();
+  copyButtons();
 })(window.jQuery);

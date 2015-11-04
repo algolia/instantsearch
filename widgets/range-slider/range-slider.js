@@ -13,7 +13,7 @@ let defaultTemplates = {
 /**
  * Instantiate a slider based on a numeric attribute
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
  * You can also provide
@@ -30,13 +30,15 @@ let defaultTemplates = {
  */
 function rangeSlider({
     container = null,
-    facetName = null,
+    attributeName = null,
     tooltips = true,
     templates = defaultTemplates,
     cssClasses = {
       root: null,
       body: null
     },
+    step = 1,
+    pips = true,
     hideContainerWhenNoResults = true
   }) {
   let containerNode = utils.getContainerNode(container);
@@ -48,11 +50,11 @@ function rangeSlider({
 
   return {
     getConfiguration: () => ({
-      disjunctiveFacets: [facetName]
+      disjunctiveFacets: [attributeName]
     }),
     _getCurrentRefinement(helper) {
-      let min = helper.state.getNumericRefinement(facetName, '>=');
-      let max = helper.state.getNumericRefinement(facetName, '<=');
+      let min = helper.state.getNumericRefinement(attributeName, '>=');
+      let max = helper.state.getNumericRefinement(attributeName, '<=');
 
       if (min && min.length) {
         min = min[0];
@@ -72,17 +74,17 @@ function rangeSlider({
       };
     },
     _refine(helper, stats, newValues) {
-      helper.clearRefinements(facetName);
+      helper.clearRefinements(attributeName);
       if (newValues[0] > stats.min) {
-        helper.addNumericRefinement(facetName, '>=', newValues[0]);
+        helper.addNumericRefinement(attributeName, '>=', newValues[0]);
       }
       if (newValues[1] < stats.max) {
-        helper.addNumericRefinement(facetName, '<=', newValues[1]);
+        helper.addNumericRefinement(attributeName, '<=', newValues[1]);
       }
       helper.search();
     },
     render({results, helper, templatesConfig}) {
-      let stats = results.getFacetStats(facetName);
+      let stats = results.getFacetStats(attributeName);
 
       let currentRefinement = this._getCurrentRefinement(helper);
 
@@ -105,9 +107,11 @@ function rangeSlider({
         <Slider
           cssClasses={cssClasses}
           onChange={this._refine.bind(this, helper, stats)}
-          range={{min: stats.min, max: stats.max}}
+          pips={pips}
+          range={{min: Math.floor(stats.min), max: Math.ceil(stats.max)}}
           shouldAutoHideContainer={hasNoRefinements}
           start={[currentRefinement.min, currentRefinement.max]}
+          step={step}
           templateProps={templateProps}
           tooltips={tooltips}
         />,

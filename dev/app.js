@@ -1,4 +1,4 @@
-// force using index because package 'main' is dist/
+// force using index because package 'main' is dist-es5-module/
 var instantsearch = require('../index');
 
 var search = instantsearch({
@@ -93,6 +93,30 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.numericRefinementList({
+    container: '#price-numeric-list',
+    attributeName: 'price',
+    operator: 'or',
+    options: [
+      {name: 'All'},
+      {end: 4, name: 'less than 4'},
+      {start: 4, end: 4, name: '4'},
+      {start: 5, end: 10, name: 'between 5 and 10'},
+      {start: 10, name: 'more than 10'}
+    ],
+    cssClasses: {
+      header: 'facet-title',
+      link: 'facet-value',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
+    },
+    templates: {
+      header: 'Price numeric list'
+    }
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#price-range',
     facetName: 'price_range',
@@ -151,16 +175,17 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price',
+    attributeName: 'price',
     cssClasses: {
       header: 'facet-title'
     },
     templates: {
       header: 'Price'
     },
+    step: 10,
     tooltips: {
       format: function(formattedValue) {
-        return '$' + formattedValue;
+        return '$' + Math.round(formattedValue).toLocaleString();
       }
     }
   })
@@ -189,7 +214,7 @@ search.once('render', function() {
 search.addWidget(
   instantsearch.widgets.priceRanges({
     container: '#price-ranges',
-    facetName: 'price',
+    attributeName: 'price',
     templates: {
       header: 'Price ranges'
     },

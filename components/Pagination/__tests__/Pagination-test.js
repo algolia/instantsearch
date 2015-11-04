@@ -10,9 +10,6 @@ import PaginationLink from '../PaginationLink';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-let bem = require('../../../lib/utils').bemHelper('ais-pagination');
-let cx = require('classnames');
-
 describe('Pagination', () => {
   let renderer;
 
@@ -21,10 +18,15 @@ describe('Pagination', () => {
     renderer = createRenderer();
   });
 
-  it('should not display the first/last link by default', () => {
+  it('should render five elements', () => {
     let out = render();
 
     expect(out.props.children.length).toEqual(5);
+  });
+
+  it('should not display the first/last link by default', () => {
+    let out = render();
+
     expect(out.props.children[0]).toEqual(null);
     expect(out.props.children[4]).toEqual(null);
   });
@@ -32,7 +34,6 @@ describe('Pagination', () => {
   it('should display the first/last link', () => {
     let out = render({showFirstLast: true});
 
-    expect(out.props.children.length).toEqual(5);
     expect(out.props.children[0]).toNotEqual(null);
     expect(out.props.children[4]).toNotEqual(null);
   });
@@ -41,26 +42,20 @@ describe('Pagination', () => {
     let padding = 4;
     let out = render({padding});
 
-    expect(out.props.children.length).toEqual(5);
     expect(out.props.children[2].length).toEqual(padding + 1 + padding);
   });
 
   it('should flag the current page as active', () => {
     let out = render({currentPage: 0});
 
-    expect(out.props.children.length).toEqual(5);
-    expect(out.props.children[2][0].props.className)
-      .toEqual(cx(bem('item-page', 'active'), bem('item'), bem('item-page')));
-    expect(out.props.children[2][1].props.className)
-      .toEqual(cx(bem('item'), bem('item-page')));
+    expect(out.props.children[2][0].props.className).toBe('active page');
+    expect(out.props.children[2][1].props.className).toBe('page');
   });
 
   it('should disable the first page if already on it', () => {
     let out = render({currentPage: 0, showFirstLast: true});
 
-    expect(out.props.children.length).toEqual(5);
-    expect(out.props.children[0].props.className)
-      .toEqual(cx(bem('item', 'disabled'), bem('item'), bem('item-first')));
+    expect(out.props.children[0].props.className).toBe('disabled first');
   });
 
   it('should build the associated URL', () => {
@@ -73,7 +68,7 @@ describe('Pagination', () => {
     expect(out).toEqualJSX(
       <PaginationLink
         ariaLabel={undefined}
-        className="ais-pagination--item"
+        className={null}
         handleClick={() => {}}
         key="test"
         label="test"
@@ -93,7 +88,7 @@ describe('Pagination', () => {
     expect(out).toEqualJSX(
       <PaginationLink
         ariaLabel={undefined}
-        className="ais-pagination--item__disabled ais-pagination--item"
+        className=""
         handleClick={() => {}}
         key="test"
         label="test"
@@ -105,9 +100,7 @@ describe('Pagination', () => {
   it('should disable last first page if already on it', () => {
     let out = render({currentPage: 19, showFirstLast: true});
 
-    expect(out.props.children.length).toEqual(5);
-    expect(out.props.children[4].props.className)
-      .toEqual(cx(bem('item', 'disabled'), bem('item'), bem('item-last')));
+    expect(out.props.children[4].props.className).toBe('disabled last');
   });
 
   it('should handle special clicks', () => {
@@ -130,7 +123,17 @@ describe('Pagination', () => {
 
   function render(extraProps = {}) {
     let props = {
-      cssClasses: {},
+      cssClasses: {
+        root: 'root',
+        item: 'item',
+        page: 'page',
+        previous: 'previous',
+        next: 'next',
+        first: 'first',
+        last: 'last',
+        active: 'active',
+        disabled: 'disabled'
+      },
       labels: {first: '', last: '', next: '', previous: ''},
       currentPage: 0,
       nbHits: 200,

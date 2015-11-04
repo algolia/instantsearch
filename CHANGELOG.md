@@ -1,3 +1,94 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/algolia/instantsearch.js/compare/v0.8.2...v0.9.0) (2015-11-04)
+
+
+### Features
+
+* **numericRefinementList:** create numericRefinementList widget using refinementList component ([a29e9c7](https://github.com/algolia/instantsearch.js/commit/a29e9c7))
+
+
+
+<a name="0.8.2"></a>
+## [0.8.2](https://github.com/algolia/instantsearch.js/compare/v0.8.1...v0.8.2) (2015-11-04)
+
+
+### Bug Fixes
+
+* **doc:** All wigdets in docs are not anymore linked together #fix #446 ([4361320](https://github.com/algolia/instantsearch.js/commit/4361320)), closes [#446](https://github.com/algolia/instantsearch.js/issues/446)
+* **hitsPerPageSelector:** Issue when state did not have a `hitsPerPage` ([dc9371c](https://github.com/algolia/instantsearch.js/commit/dc9371c))
+
+
+
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/algolia/instantsearch.js/compare/v0.8.0...v0.8.1) (2015-11-04)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** handle cases where no results after a search ([0a1d0ac](https://github.com/algolia/instantsearch.js/commit/0a1d0ac)), closes [#385](https://github.com/algolia/instantsearch.js/issues/385)
+
+### Features
+
+* **build:** allow building React based custom widgets ([cfbbfe4](https://github.com/algolia/instantsearch.js/commit/cfbbfe4)), closes [#373](https://github.com/algolia/instantsearch.js/issues/373)
+
+
+
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/algolia/instantsearch.js/compare/v0.7.0...v0.8.0) (2015-11-03)
+
+
+### Bug Fixes
+
+* **cssClasses:** Fixed duplication of classNames ([e193f45](https://github.com/algolia/instantsearch.js/commit/e193f45)), closes [#388](https://github.com/algolia/instantsearch.js/issues/388)
+* **doc:** add doctype were missing ([86a18aa](https://github.com/algolia/instantsearch.js/commit/86a18aa))
+* **doc:** new color scheme ([deccc17](https://github.com/algolia/instantsearch.js/commit/deccc17))
+* **doc:** only show a scrollbar when needed ([f2d955b](https://github.com/algolia/instantsearch.js/commit/f2d955b))
+* **hierarchical:** setPage 0 when toggling ([a976539](https://github.com/algolia/instantsearch.js/commit/a976539)), closes [#371](https://github.com/algolia/instantsearch.js/issues/371)
+* **jsdoc:** use babel-node ([453dc21](https://github.com/algolia/instantsearch.js/commit/453dc21))
+* **live-doc:** generates missing ul ([b43e6e2](https://github.com/algolia/instantsearch.js/commit/b43e6e2))
+* **live-doc:** move scrollbars, removes useless ones ([548ae5f](https://github.com/algolia/instantsearch.js/commit/548ae5f))
+* **live-doc:** moves octocat link to top. Removes stackOverflow ([8ff6a79](https://github.com/algolia/instantsearch.js/commit/8ff6a79))
+* **live-doc:** Moves version in the main content ([27731c3](https://github.com/algolia/instantsearch.js/commit/27731c3))
+* **live-reload:** integrates the links into the menu flow ([c118051](https://github.com/algolia/instantsearch.js/commit/c118051))
+* **numerical widgets:** s/facetName/attributeName ([f209f5d](https://github.com/algolia/instantsearch.js/commit/f209f5d)), closes [#431](https://github.com/algolia/instantsearch.js/issues/431)
+* **refinementList:** ensure the key reflects the underlying state ([b048f0b](https://github.com/algolia/instantsearch.js/commit/b048f0b)), closes [#398](https://github.com/algolia/instantsearch.js/issues/398)
+
+### Features
+
+* **examples:** try examples instead of themes ([bedffce](https://github.com/algolia/instantsearch.js/commit/bedffce))
+* **headerFooter:** Only add markup if a template is defined ([7a2d22d](https://github.com/algolia/instantsearch.js/commit/7a2d22d)), closes [#370](https://github.com/algolia/instantsearch.js/issues/370)
+* **priceRanges:** Add BEM classes and tests ([ad58d7a](https://github.com/algolia/instantsearch.js/commit/ad58d7a)), closes [#387](https://github.com/algolia/instantsearch.js/issues/387)
+
+
+### BREAKING CHANGES
+
+* numerical widgets: the priceRanges and rangeSlider widgets are now using `attributeName` instead of `facetName`.
+* priceRanges: `ais-price-ranges--range` are now named
+`ais-price-ranges--item` and are wrapped in
+a `ais-price-ranges--list`.
+
+I've moved the bottom form into it's own PriceRangesForm component,
+along with its own tests. I've fixed a minor typo where the component
+was internally named PriceRange (without the final __s__).
+
+I factorize some logic form the render in individual methods and
+manage to individually test them. This was not an easy task. I had to
+mock the default `render` (so it does nothing) before instanciating
+the component. Then, I was able to call each inner method
+individually. This requires to stub prototype methods in beforeEach,
+then restore them in afterEach. I've added a few helper methods, this
+can surely be simplified again but this gives nice granularity in
+testing.
+
+I've renamed the `range` items to `item` and wrapped them in a `list`.
+I've also added classes to all elements we add (`label`, `separator`,
+etc). I've removed the empty `span`s.
+* headerFooter: The `<div class="ais-header">` and `<div
+class="ais-footer">` markup is only added when
+a `templates.{header,footer}` is passed.
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/algolia/instantsearch.js/compare/v0.6.5...v0.7.0) (2015-10-28)
 

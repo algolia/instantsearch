@@ -95,7 +95,7 @@ If you already have a JavaScript build system, you can use **instantsearch.js** 
 ### Initialization
 
 <div class="code-box">
-  <div class="code-sample-snippet">
+  <div class="code-sample-snippet config">
 {% highlight javascript %}
 var search = instantsearch({
   appId: '$appId',
@@ -171,7 +171,7 @@ Most widgets requires you to configure the DOM element they will use to display 
 ### Start
 
 <div class="code-box">
-  <div class="code-sample-snippet last">
+  <div class="code-sample-snippet start">
 {% highlight javascript %}
 search.start();
 {% endhighlight %}
@@ -532,6 +532,53 @@ results that have either the value `a` or `b` will match.
 
 <div  id="brands" class="widget-container"></div>
 
+#### numericRefinementList
+
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.numericRefinementList({
+    container: '#popularity',
+    attributeName: 'popularity',
+    options: [
+	  {name: 'All'},
+	  {end: 4, name: 'less than 4'},
+	  {start: 4, end: 4, name: '4'},
+	  {start: 5, end: 10, name: 'between 5 and 10'},
+	  {start: 10, name: 'more than 10'}
+    ],
+    templates: {
+      header: 'Price'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      link: '',
+      active: ''
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.numericRefinementList(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/refinementList.md %}
+  </div>
+</div>
+
+<img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg">
+This filtering widget lets the user choose one value for a single numeric attribute. You can specify if you want it to be a equality or a range by giving a "start" and an "end" value
+{:.description}
+
+<div  id="popularity" class="widget-container"></div>
+
 #### toggle
 
 <div class="code-box">
@@ -583,7 +630,7 @@ This filtering widget lets the user choose either or not to filter values to `tr
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price',
+    attributeName: 'price',
     templates: {
       header: 'Price'
     },
@@ -608,7 +655,7 @@ instantsearch.widgets.rangeSlider(options);
 The range slider filters values of a single numeric attribute using 2 cursors: the lower and the upper bounds.
 {:.description}
 
-<div  id="price" class="widget-container"></div>
+<div id="price" class="widget-container"></div>
 
 #### priceRanges
 
@@ -618,7 +665,7 @@ The range slider filters values of a single numeric attribute using 2 cursors: t
 search.addWidget(
   instantsearch.widgets.priceRanges({
     container: '#priceranges.widget-container',
-    facetName: 'price',
+    attributeName: 'price',
     labels: {
       currency: '$',
       separator: 'to',
@@ -656,7 +703,7 @@ instantsearch.widgets.priceRanges(options);
 This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.
 {:.description}
 
-<div  id="priceranges" class="widget-container"></div>
+<div id="priceranges" class="widget-container"></div>
 
 ### Sort
 
@@ -795,7 +842,7 @@ search.templatesConfig.helpers.discount = function(/*text, render*/) {
 
 ### Options
 
-You can configure the options passed to under;ying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
+You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
 
 Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
 

@@ -1,6 +1,6 @@
-let webpack = require('webpack');
+import webpack from 'webpack';
 
-module.exports = {
+export default {
   entry: './index.js',
   output: {
     path: './dist/',
@@ -11,6 +11,10 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.js$/, exclude: /node_modules/, loader: 'babel'
+    }, {
+      test: require.resolve('react'), loader: 'expose?React'
+    }, {
+      test: require.resolve('react-dom'), loader: 'expose?ReactDOM'
     }]
   },
   plugins: [
