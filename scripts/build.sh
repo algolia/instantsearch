@@ -8,7 +8,10 @@ license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia Inc. and other
 
 bundle='instantsearch'
 
-webpack
+# build for jsdelivr, with everything inlined while exposing React + ReactDOM (for plugins)
+webpack --config webpack.config.jsdelivr.babel.js
+# only transpile to ES5 for package.json main entry
+babel index.js -o dist/${bundle}.module.js
 
 for source in "$ROOT"/css/[^_]*.scss; do
   base=`basename "$source" .scss`
