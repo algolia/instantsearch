@@ -109,6 +109,7 @@ $(function () {
 
   scenes[1].on("start", function (event) {
     // console.log("Hit start point of scene 2.");
+    TweenMax.to("#anim-overlay", .5, {opacity:0});
     fadeScaleOutWidgets();
     fadeScaleInWidgets();
     combineWidgets();
