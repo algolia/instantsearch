@@ -16,36 +16,49 @@ $(function () {
   //intro
   var intro = new TimelineMax();
   intro
+    .set(".screen", {opacity: 0})
     .set("#anim", {opacity: 0, scale: 0})
     .set("#anim img", {opacity: 0})
     .set("#anim-overlay", {opacity: 0})
     .set(".widget", {opacity: 0, scale: 0})
     .to("#anim", 2, {opacity: 1, scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut})
-    .to("#anim img", 1.4, {opacity: 1}, "-=1")
-    .to(".widget-1", .5, {scale:1 , opacity:1 })
+    .to("#anim img", 1.4, {opacity: 1}, "1")
+    .to(".widget-1", .5, {scale:1 , opacity:1 }, "-=.2")
     .to(".widget-2", .5, {scale:1 , opacity:1 }, "-=.2")
     .to(".widget-3", .5, {scale:1 , opacity:1 }, "-=.2")
     .to(".widget-4", .5, {scale:1 , opacity:1 }, "-=.3")
     .to(".widget-5", .5, {scale:1 , opacity:1 }, "-=.3")
     .to(".widget-6", .5, {scale:1 , opacity:1 }, "-=.3")
     .to(".widget-7", .5, {scale:1 , opacity:1 }, "-=1.5")
-    .to("#anim-overlay", .5, {opacity: 1, ease:Power2.easeInOut });
+    .to("#anim-overlay", .5, {opacity: 1, ease:Power2.easeInOut }, "3");
 
   // an array to stock our timelines, relative to each sections
   var tl = [];
   // First Section: There is a widget
   tl[0] = new TimelineMax();
   tl[0]
-    .to(".widget-intro", 2, {opacity:0})
-    .to(".widget", 8, {z: 400, opacity:0})
+    .to(".widget-intro", 2, {opacity: 0})
+    .to(".widget", 8, {z: 400, opacity: 0})
+    .to(".widget-1", 8, {y: -350 }, "-=8")
+    .to(".widget-3", 8, {x: -200, y: -50 }, "-=8")
+    .to(".widget-4", 8, {x: -200 }, "-=8")
+    .to(".widget-5", 8, {x: -200, y: 50 }, "-=8")
+    .to(".widget-6", 8, {x: -200, y: 200 }, "-=8")
+    .to(".widget-7", 8, {y: 350 }, "-=8")
     .to("#anim", 8, {opacity: 1, scale: 1, rotationX: 0, rotationZ: 0, ease:Power2.easeInOut}, "-=8")
-    .to(".illus-sync", 4, {opacity:1}), "-=4";
+    .to(".illus-sync", 4, {opacity:1}, "-=4");
 
   // First Section: There is a widget
   tl[1] = new TimelineMax();
-  // tl[1]
+  tl[1]
+    .to(".illus-sync", 3, {scale: 0})
+    .to(".screen", 8, {opacity: 1})
+    .to("#anim", 8, {scale: .5}, "-=8");
 
-
+  // First Section: There is a widget
+  tl[2] = new TimelineMax();
+  tl[2]
+    .set("#anim-screens", {opacity: 0});
 
   // create scene for every window
   var scenes = [];
