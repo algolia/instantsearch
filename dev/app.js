@@ -1,4 +1,4 @@
-// force using index because package 'main' is dist/
+// force using index because package 'main' is dist-es5-module/
 var instantsearch = require('../index');
 
 var search = instantsearch({
