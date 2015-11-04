@@ -1,6 +1,6 @@
 CHANGELOG
 
-unreleased
+2.6.6 - 2015-11-04
   * FIX : adds missing attribute minProximity in SearchParameters
   * FIX : adds numeric missing parameters in the parsing function
   * CHORE : updates jsdoc links (were outdated)

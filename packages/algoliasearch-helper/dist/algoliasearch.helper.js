@@ -7591,7 +7591,7 @@ function SearchParameters(newParameters) {
   /**
    * Query string of the instant search. The empty string is a valid query.
    * @member {string}
-   * @see https://www.algolia.com/doc#query
+   * @see https://www.algolia.com/doc/rest#param-query
    */
   this.query = params.query || '';
 
@@ -7661,7 +7661,7 @@ function SearchParameters(newParameters) {
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
    * @private
-   * @see https://www.algolia.com/doc#tagFilters
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
@@ -7671,189 +7671,194 @@ function SearchParameters(newParameters) {
   /**
    * Number of hits to be returned by the search API
    * @member {number}
-   * @see https://www.algolia.com/doc#hitsPerPage
+   * @see https://www.algolia.com/doc/rest#param-hitsPerPage
    */
   this.hitsPerPage = params.hitsPerPage;
   /**
    * Number of values for each facetted attribute
    * @member {number}
-   * @see https://www.algolia.com/doc#maxValuesPerFacet
+   * @see https://www.algolia.com/doc/rest#param-maxValuesPerFacet
    */
   this.maxValuesPerFacet = params.maxValuesPerFacet;
   /**
    * The current page number
    * @member {number}
-   * @see https://www.algolia.com/doc#page
+   * @see https://www.algolia.com/doc/rest#param-page
    */
   this.page = params.page || 0;
   /**
    * How the query should be treated by the search engine.
    * Possible values: prefixAll, prefixLast, prefixNone
-   * @see https://www.algolia.com/doc#queryType
+   * @see https://www.algolia.com/doc/rest#param-queryType
    * @member {string}
    */
   this.queryType = params.queryType;
   /**
    * How the typo tolerance behave in the search engine.
    * Possible values: true, false, min, strict
-   * @see https://www.algolia.com/doc#typoTolerance
+   * @see https://www.algolia.com/doc/rest#param-typoTolerance
    * @member {string}
    */
   this.typoTolerance = params.typoTolerance;
 
   /**
    * Number of characters to wait before doing one character replacement.
-   * @see https://www.algolia.com/doc#minWordSizefor1Typo
+   * @see https://www.algolia.com/doc/rest#param-minWordSizefor1Typo
    * @member {number}
    */
   this.minWordSizefor1Typo = params.minWordSizefor1Typo;
   /**
    * Number of characters to wait before doing a second character replacement.
-   * @see https://www.algolia.com/doc#minWordSizefor2Typos
+   * @see https://www.algolia.com/doc/rest#param-minWordSizefor2Typos
    * @member {number}
    */
   this.minWordSizefor2Typos = params.minWordSizefor2Typos;
   /**
+   * Configure the precision of the proximity ranking criterion
+   * @see https://www.algolia.com/doc/rest#param-minProximity
+   */
+  this.minProximity = params.minProximity;
+  /**
    * Should the engine allow typos on numerics.
-   * @see https://www.algolia.com/doc#allowTyposOnNumericTokens
+   * @see https://www.algolia.com/doc/rest#param-allowTyposOnNumericTokens
    * @member {boolean}
    */
   this.allowTyposOnNumericTokens = params.allowTyposOnNumericTokens;
   /**
    * Should the plurals be ignored
-   * @see https://www.algolia.com/doc#ignorePlurals
+   * @see https://www.algolia.com/doc/rest#param-ignorePlurals
    * @member {boolean}
    */
   this.ignorePlurals = params.ignorePlurals;
   /**
    * Restrict which attribute is searched.
-   * @see https://www.algolia.com/doc#restrictSearchableAttributes
+   * @see https://www.algolia.com/doc/rest#param-restrictSearchableAttributes
    * @member {string}
    */
   this.restrictSearchableAttributes = params.restrictSearchableAttributes;
   /**
    * Enable the advanced syntax.
-   * @see https://www.algolia.com/doc#advancedSyntax
+   * @see https://www.algolia.com/doc/rest#param-advancedSyntax
    * @member {boolean}
    */
   this.advancedSyntax = params.advancedSyntax;
   /**
    * Enable the analytics
-   * @see https://www.algolia.com/doc#analytics
+   * @see https://www.algolia.com/doc/rest#param-analytics
    * @member {boolean}
    */
   this.analytics = params.analytics;
   /**
    * Tag of the query in the analytics.
-   * @see https://www.algolia.com/doc#analyticsTags
+   * @see https://www.algolia.com/doc/rest#param-analyticsTags
    * @member {string}
    */
   this.analyticsTags = params.analyticsTags;
   /**
    * Enable the synonyms
-   * @see https://www.algolia.com/doc#synonyms
+   * @see https://www.algolia.com/doc/rest#param-synonyms
    * @member {boolean}
    */
   this.synonyms = params.synonyms;
   /**
    * Should the engine replace the synonyms in the highlighted results.
-   * @see https://www.algolia.com/doc#replaceSynonymsInHighlight
+   * @see https://www.algolia.com/doc/rest#param-replaceSynonymsInHighlight
    * @member {boolean}
    */
   this.replaceSynonymsInHighlight = params.replaceSynonymsInHighlight;
   /**
    * Add some optional words to those defined in the dashboard
-   * @see https://www.algolia.com/doc#optionalWords
+   * @see https://www.algolia.com/doc/rest#param-optionalWords
    * @member {string}
    */
   this.optionalWords = params.optionalWords;
   /**
    * Possible values are "lastWords" "firstWords" "allOptional" "none" (default)
-   * @see https://www.algolia.com/doc#removeWordsIfNoResults
+   * @see https://www.algolia.com/doc/rest#param-removeWordsIfNoResults
    * @member {string}
    */
   this.removeWordsIfNoResults = params.removeWordsIfNoResults;
   /**
    * List of attributes to retrieve
-   * @see https://www.algolia.com/doc#attributesToRetrieve
+   * @see https://www.algolia.com/doc/rest#param-attributesToRetrieve
    * @member {string}
    */
   this.attributesToRetrieve = params.attributesToRetrieve;
   /**
    * List of attributes to highlight
-   * @see https://www.algolia.com/doc#attributesToHighlight
+   * @see https://www.algolia.com/doc/rest#param-attributesToHighlight
    * @member {string}
    */
   this.attributesToHighlight = params.attributesToHighlight;
   /**
    * Code to be embedded on the left part of the highlighted results
-   * @see https://www.algolia.com/doc#highlightPreTag
+   * @see https://www.algolia.com/doc/rest#param-highlightPreTag
    * @member {string}
    */
   this.highlightPreTag = params.highlightPreTag;
   /**
    * Code to be embedded on the right part of the highlighted results
-   * @see https://www.algolia.com/doc#highlightPostTag
+   * @see https://www.algolia.com/doc/rest#param-highlightPostTag
    * @member {string}
    */
   this.highlightPostTag = params.highlightPostTag;
   /**
    * List of attributes to snippet
-   * @see https://www.algolia.com/doc#attributesToSnippet
+   * @see https://www.algolia.com/doc/rest#param-attributesToSnippet
    * @member {string}
    */
   this.attributesToSnippet = params.attributesToSnippet;
   /**
    * Enable the ranking informations in the response, set to 1 to activate
-   * @see https://www.algolia.com/doc#getRankingInfo
+   * @see https://www.algolia.com/doc/rest#param-getRankingInfo
    * @member {number}
    */
   this.getRankingInfo = params.getRankingInfo;
   /**
    * Remove duplicates based on the index setting attributeForDistinct
-   * @see https://www.algolia.com/doc#distinct
-   * @member {boolean}
+   * @see https://www.algolia.com/doc/rest#param-distinct
+   * @member {number}
    */
   this.distinct = params.distinct;
   /**
    * Center of the geo search.
-   * @see https://www.algolia.com/doc#aroundLatLng
+   * @see https://www.algolia.com/doc/rest#param-aroundLatLng
    * @member {string}
    */
   this.aroundLatLng = params.aroundLatLng;
   /**
    * Center of the search, retrieve from the user IP.
-   * @see https://www.algolia.com/doc#aroundLatLngViaIP
+   * @see https://www.algolia.com/doc/rest#param-aroundLatLngViaIP
    * @member {boolean}
    */
   this.aroundLatLngViaIP = params.aroundLatLngViaIP;
   /**
    * Radius of the geo search.
-   * @see https://www.algolia.com/doc#aroundRadius
+   * @see https://www.algolia.com/doc/rest#param-aroundRadius
    * @member {number}
    */
   this.aroundRadius = params.aroundRadius;
   /**
    * Precision of the geo search.
-   * @see https://www.algolia.com/doc#aroundPrecision
+   * @see https://www.algolia.com/doc/rest#param-aroundPrecision
    * @member {number}
    */
   this.minimumAroundRadius = params.minimumAroundRadius;
   /**
    * Precision of the geo search.
-   * @see https://www.algolia.com/doc#minimumAroundRadius
+   * @see https://www.algolia.com/doc/rest#param-minimumAroundRadius
    * @member {number}
    */
   this.aroundPrecision = params.aroundPrecision;
   /**
    * Geo search inside a box.
-   * @see https://www.algolia.com/doc#insideBoundingBox
+   * @see https://www.algolia.com/doc/rest#param-insideBoundingBox
    * @member {string}
    */
   this.insideBoundingBox = params.insideBoundingBox;
   /**
    * Geo search inside a polygon.
-   * @see https://www.algolia.com/doc#insidePolygon
+   * @see https://www.algolia.com/doc/rest#param-insidePolygon
    * @member {string}
    */
   this.insidePolygon = params.insidePolygon;
@@ -7864,12 +7869,13 @@ function SearchParameters(newParameters) {
 
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (!this.hasOwnProperty(paramName)) {
-      // IE8/9 has no console (BUT if devtools opened), nevermind there's no
-      // developer working ONLY in IE8/9
-      window.console &&
-      window.console.error(
-        'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)'
-      );
+      var message = 'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)';
+      if (window) {
+        // IE8/9 has no console (BUT if devtools opened), nevermind there's no
+        // developer working ONLY in IE8/9
+        window.console &&
+        window.console.error(message);
+      } else console.error(message);// eslint-disable-line no-console
     }
   }, this);
 }
@@ -7894,7 +7900,11 @@ SearchParameters._parseNumbers = function(partialState) {
     'minWordSizefor2Typos',
     'minWordSizefor1Typo',
     'page',
-    'maxValuesPerFacet'
+    'maxValuesPerFacet',
+    'distinct',
+    'minimumAroundRadius',
+    'hitsPerPage',
+    'minProximity'
   ];
 
   forEach(numberKeys, function(k) {
@@ -8821,16 +8831,26 @@ SearchParameters.prototype = {
       throw error;
     }
 
+    var parsedParams = SearchParameters._parseNumbers(params);
+
     return this.mutateMe(function mergeWith(newInstance) {
       var ks = keys(params);
 
       forEach(ks, function(k) {
-        newInstance[k] = params[k];
+        newInstance[k] = parsedParams[k];
       });
 
       return newInstance;
     });
   },
+
+  /**
+   * Returns an object with only the selected attributes.
+   * @param {string[]} filters filters to retrieve only a subset of the state. It
+   * accepts strings that can be either attributes of the SearchParameters (e.g. hitsPerPage)
+   * or attributes of the index with the notation 'attribute:nameOfMyAttribute'
+   * @return {object}
+   */
   filter: function(filters) {
     return filterState(this, filters);
   },
@@ -8928,6 +8948,7 @@ var keys2Short = {
   length: 'l',
   maxValuesPerFacet: 'mVPF',
   minimumAroundRadius: 'mAR',
+  minProximity: 'mP',
   minWordSizefor1Typo: 'mWS1T',
   minWordSizefor2Typos: 'mWS2T',
   numericFilters: 'nF',
@@ -10890,7 +10911,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.5';
+module.exports = '2.6.6';
 
 },{}]},{},[1])(1)
 });
