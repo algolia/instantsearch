@@ -1,3 +1,17 @@
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/algolia/instantsearch.js/compare/v0.8.0...v0.8.1) (2015-11-04)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** handle cases where no results after a search ([0a1d0ac](https://github.com/algolia/instantsearch.js/commit/0a1d0ac)), closes [#385](https://github.com/algolia/instantsearch.js/issues/385)
+
+### Features
+
+* **build:** allow building React based custom widgets ([cfbbfe4](https://github.com/algolia/instantsearch.js/commit/cfbbfe4)), closes [#373](https://github.com/algolia/instantsearch.js/issues/373)
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/algolia/instantsearch.js/compare/v0.7.0...v0.8.0) (2015-11-03)
 
