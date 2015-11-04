@@ -32,6 +32,8 @@ describe('search-box()', () => {
     };
     helper = {
       on: sinon.spy(),
+      setQuery: sinon.spy(),
+      search: sinon.spy(),
       state: {
         query: ''
       }
@@ -163,6 +165,74 @@ describe('search-box()', () => {
       widget = searchBox({container, poweredBy: true});
       widget.init(initialState, helper);
       expect(ReactDOM.render.notCalled).toBe(false);
+    });
+  });
+
+  context('keyup', () => {
+    let input;
+    beforeEach(() => {
+      container = document.createElement('div');
+      input = createHTMLNodeFromString('<input />');
+      input.addEventListener = sinon.spy();
+    });
+
+    context('instant search', () => {
+      beforeEach(() => {
+        widget = searchBox({container, autofocus: 'auto'});
+        widget.getInput = sinon.stub().returns(input);
+      });
+
+      it('performs the search on keyup', () => {
+        // Given
+        helper.state.query = 'foo';
+        // When
+        widget.init(initialState, helper);
+        // Then
+        expect(input.addEventListener.called).toEqual(true);
+        expect(input.addEventListener.args[0].length).toEqual(2);
+        expect(input.addEventListener.args[0][0]).toEqual('keyup');
+        let fn = input.addEventListener.args[0][1];
+        fn({});
+        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.search.calledOnce).toBe(true);
+      });
+    });
+
+    context('non-instant search', () => {
+      beforeEach(() => {
+        widget = searchBox({container, autofocus: 'auto', searchOnEnterKeyPressOnly: true});
+        widget.getInput = sinon.stub().returns(input);
+      });
+
+      it('performs the search on <ENTER>', () => {
+        // Given
+        helper.state.query = 'foo';
+        // When
+        widget.init(initialState, helper);
+        // Then
+        expect(input.addEventListener.called).toEqual(true);
+        expect(input.addEventListener.args[0].length).toEqual(2);
+        expect(input.addEventListener.args[0][0]).toEqual('keyup');
+        let fn = input.addEventListener.args[0][1];
+        fn({keyCode: 13});
+        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.search.calledOnce).toBe(true);
+      });
+
+      it('doesn\'t perform the search on keyup', () => {
+        // Given
+        helper.state.query = 'foo';
+        // When
+        widget.init(initialState, helper);
+        // Then
+        expect(input.addEventListener.called).toEqual(true);
+        expect(input.addEventListener.args[0].length).toEqual(2);
+        expect(input.addEventListener.args[0][0]).toEqual('keyup');
+        let fn = input.addEventListener.args[0][1];
+        fn({});
+        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.search.calledOnce).toBe(false);
+      });
     });
   });
 

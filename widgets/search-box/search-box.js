@@ -5,6 +5,8 @@ let forEach = require('lodash/collection/forEach');
 let bem = require('../../lib/utils').bemHelper('ais-search-box');
 let cx = require('classnames');
 
+const KEY_ENTER = 13;
+
 /**
  * Instantiate a searchbox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
@@ -16,6 +18,7 @@ let cx = require('classnames');
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @param  {boolean} [wrapInput=true] Wrap the input in a div.ais-search-box
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
+ * @param  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search once <Enter> is pressed only
  * @return {Object}
  */
 function searchBox({
@@ -24,10 +27,11 @@ function searchBox({
   cssClasses = {},
   poweredBy = false,
   wrapInput = true,
-  autofocus = 'auto'
+  autofocus = 'auto',
+  searchOnEnterKeyPressOnly = false
 }) {
   if (!container) {
-    throw new Error('Usage: searchBox({container[, placeholder, cssClasses.{input,poweredBy}, poweredBy, wrapInput, autofocus]})');
+    throw new Error('Usage: searchBox({container[, placeholder, cssClasses.{input,poweredBy}, poweredBy, wrapInput, autofocus, searchOnEnterKeyPressOnly]})');
   }
 
   container = utils.getContainerNode(container);
@@ -96,8 +100,11 @@ function searchBox({
 
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, initialState.query);
-      input.addEventListener('keyup', () => {
-        helper.setQuery(input.value).search();
+      input.addEventListener('keyup', (e) => {
+        helper.setQuery(input.value);
+        if (!searchOnEnterKeyPressOnly || e.keyCode === KEY_ENTER) {
+          helper.search();
+        }
       });
 
       if (isInputTargeted) {
