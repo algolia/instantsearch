@@ -7,3 +7,4 @@ npm test
 npm prune
 npm run shrinkwrap --dev
 ./scripts/validate-commit-msgs.sh
+npm run build
