@@ -1,3 +1,14 @@
+<a name="0.8.2"></a>
+## [0.8.2](https://github.com/algolia/instantsearch.js/compare/v0.8.1...v0.8.2) (2015-11-04)
+
+
+### Bug Fixes
+
+* **doc:** All wigdets in docs are not anymore linked together #fix #446 ([4361320](https://github.com/algolia/instantsearch.js/commit/4361320)), closes [#446](https://github.com/algolia/instantsearch.js/issues/446)
+* **hitsPerPageSelector:** Issue when state did not have a `hitsPerPage` ([dc9371c](https://github.com/algolia/instantsearch.js/commit/dc9371c))
+
+
+
 <a name="0.8.1"></a>
 ## [0.8.1](https://github.com/algolia/instantsearch.js/compare/v0.8.0...v0.8.1) (2015-11-04)
 
