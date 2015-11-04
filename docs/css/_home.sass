@@ -1,0 +1,204 @@
+html, body
+  height: 100%
+  width: 100%
+  background-attachment: fixed
+  position: relative
+
+
+// scroll down
+#space-overlay:after
+  animation: arrow 1s ease-in-out infinite alternate
+  background: transparent url("../img/arrow.svg") no-repeat center bottom
+  background-size: contain
+  bottom: 24px
+  height: 19px
+  content: ''
+  display: block
+  left: 50%
+  margin-left: -32px
+  position: fixed
+  width: 64px
+  z-index: 99
+
+.navbar-brand
+  color: white !important
+.navbar-nav > .active > a
+  color: #1D96C7 !important
+
+.widget-intro
+  font-weight: 300
+  opacity: 0
+  animation: arrow 1s ease-in-out
+  animation-fill-mode: forwards
+.w-1
+  animation-delay: 0
+.w-2
+  animation-delay: .5s
+.w-3
+  animation-delay: 1s
+.w-4
+  animation-delay: 1.5s
+
+footer.site-footer
+  background-color: white
+  margin-top: 0
+
+
+
+.window
+  padding: 500px 0 200px
+  width: 100%
+  display: block
+  color: white
+.hero
+  padding-top: 100px
+  opacity: 1
+
+.vp
+  font-size: 1.4em
+  font-weight: 300
+  color: rgba(white,.7)
+  a
+    color: white
+    border-bottom: solid 1px rgba(#1D96C7,.7)
+    &:hover
+    text-decoration: none
+
+.navbar
+  background-color: #0B1724
+  border-radius: 0
+
+#space
+  position: fixed
+  top: 0
+  left: 0
+  z-index: -1
+
+#space-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  z-index: -2
+  background-image: linear-gradient(-30deg, rgba(#182848,0.4) 0%, rgba(#182848,1) 90%)
+  background-color: #1D96C7
+
+#curveUpColor
+  z-index: 99
+  display: block
+  path
+    fill: white
+
+.presented-by
+  color: rgba(white,.5)
+  font-size: .9em
+  img
+    position: relative
+    top: -5px
+    margin-right: 4px
+
+.bg-white
+  background-color: white
+
+h2
+  font-size: 1.8em
+  font-weight: normal
+  letter-spacing: 1px
+  margin-bottom: 1em
+
+.lead
+  font-size: 1.2em
+  opacity: .8
+  font-weight: 300
+
+.anim-container
+  position: fixed
+  top: 240px
+  width: 100%
+  perspective: 700px
+  perspective-origin: 55% 75%
+  color: white
+  pointer-events: none
+
+#anim
+  z-index: 1200
+  width: 420px
+  height: 400px
+  background-color: white
+  border-radius: 10px
+  position: relative
+  transition: all
+  perspective: 700px
+  transform-style: preserve-3d
+  .screen
+    position: absolute
+    opacity: 0
+  .screen-1
+    top: 0
+    left: 460px
+  .screen-2
+    top: 440px
+    left: 0
+  .screen-3
+    top: 440px
+    left: 460px
+  .widget
+    background-color: #1D96C7
+    position: absolute
+    opacity: .9
+  .widget-1
+    //searchbox
+    width: 400px
+    height: 30px
+    top: 10px
+    left: 10px
+  .widget-2
+    //results
+    width: 250px
+    height: 310px
+    top: 50px
+    left: 160px
+  .widget-3
+    //facet
+    width: 140px
+    height: 80px
+    top: 50px
+    left: 10px
+  .widget-4
+    //facet
+    width: 140px
+    height: 80px
+    top: 140px
+    left: 10px
+  .widget-5
+    //facet
+    width: 140px
+    height: 80px
+    top: 230px
+    left: 10px
+  .widget-6
+    //facet
+    width: 140px
+    height: 70px
+    top: 320px
+    left: 10px
+  .widget-7
+    //pagination
+    width: 250px
+    height: 20px
+    top: 370px
+    left: 160px
+
+
+footer.site-footer
+  text-align: center
+
+
+@keyframes arrow
+  0%
+    opacity: 0
+    transform: translateY(-16px)
+  100%
+    opacity: 1
+    transform: translateY(0)

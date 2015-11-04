@@ -1,0 +1,21 @@
+# Site settings
+title: Instantsearch.js
+description: instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia
+baseurl: "/instantsearch.js" # the subpath of your site, e.g. /blog/
+twitter_username: algolia
+github_username: algolia
+
+# Navigation
+navigation:
+ - text: Widgets
+   url: /widgets/
+ - text: Themes
+   url: /themes/
+ - text: About
+   url: /about/
+# Build settings
+markdown: kramdown
+
+# Assets
+sass:
+  sass_dir: css

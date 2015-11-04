@@ -15,6 +15,11 @@
 
 API is unstable. We welcome any idea and pull request.
 
+To get started, check out [algolia.github.com/instantsearch.js](https://algolia.github.com/instantsearch.js)!
+
+
+## Table of contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
@@ -22,32 +27,12 @@ API is unstable. We welcome any idea and pull request.
 - [Setup](#setup)
   - [npm, browserify, webpack](#npm-browserify-webpack)
   - [`<script>`](#script)
-- [Usage](#usage)
-- [Widget API](#widget-api)
-- [Templates](#templates)
-  - [Examples](#examples)
-  - [Template configuration](#template-configuration)
-- [Themes](#themes)
+- [Quick Start](#quick-start)
+- [Browser support](#browser-support)
 - [Development workflow](#development-workflow)
 - [Test](#test)
-- [Instant search configuration](#instant-search-configuration)
-  - [Number locale](#number-locale)
-  - [Initial search parameters](#initial-search-parameters)
-  - [URL synchronisation](#url-synchronisation)
-- [Available widgets](#available-widgets)
-  - [searchBox](#searchbox)
-  - [stats](#stats)
-  - [indexSelector](#indexselector)
-  - [hitsPerPageSelector](#hitsperpageselector)
-  - [pagination](#pagination)
-  - [hits](#hits)
-  - [toggle](#toggle)
-  - [refinementList](#refinementlist)
-  - [menu](#menu)
-  - [rangeSlider](#rangeslider)
-  - [priceRanges](#priceranges)
-  - [hierarchicalMenu](#hierarchicalmenu)
-- [Browser support](#browser-support)
+- [License](#license)
+- [More...](#more)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -67,7 +52,7 @@ instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
 <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
 ```
 
-## Usage
+## Quick Start
 
 ```js
 var instantsearch = require('instantsearch.js');
@@ -81,7 +66,7 @@ var search = instantsearch({
   }
 });
 
-// add a widget
+// add a search box widget
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
@@ -89,106 +74,32 @@ search.addWidget(
   })
 );
 
+// add a hits widget
+search.addWidget(
+  instantsearch.widgets.hits({
+    container: '#hits-container',
+    hitsPerPage: 10
+  })
+);
+
 // start
 search.start();
 ```
+## Browser support
 
-## Widget API
+We natively support IE10+ and all other modern browsers without any dependency need
+on your side.
 
-```js
-function mySuperWidget(opts) {
+To get < IE10 support, please insert this code in the `<head>`:
 
-  return {
-    getConfiguration: function(searchParameters) {
-      return {
-        // helper params
-      }
-    },
-    init: function(initialState, helper) {
-      // helper: see http://algolia.github.io/algoliasearch-helper-js/docs/
-      // called before first `helper.on('result');`
-    },
-    render: function(results, state, helper) {
-      // content: see http://algolia.github.io/algoliasearch-helper-js/docs/SearchResults.html
-      // helper: see http://algolia.github.io/algoliasearch-helper-js/docs/
-      // called at each `helper.on('result')`
-    }
-  }
-}
-
-search.addWidget(mySuperWidget());
+```html
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+<![endif]-->
 ```
 
-## Templates
-
-Most of the widgets accept a `template` or `templates` option that let you
-change the default rendering.
-
-`template` can be defined either as a Mustache (Hogan) string or as a function receiving
-the widget data.
-
-See the documentation of each widget to see which data is passed to the
-template.
-
-### Examples
-
-```js
-// Mustache template example
-search.addWidget(
-  instantsearch.widgets.stats({
-    container: '#stats',
-    templates: {
-      body: '<div>You have {{nbHits}} results, fetched in {{processingTimeMS}}ms.</div>'
-    }
-  })
-);
-// Function template example
-search.addWidget(
-  instantsearch.widgets.stats({
-    container: '#stats',
-    templates: {
-      body: function(data) {
-        return '<div>You have ' + data.nbHits + 'results, fetched in ' + data.processingTimMS +'ms.</div>'
-      }
-    }
-  })
-);
-```
-
-### Template configuration
-
-In order to help you when defining your templates, `instantsearch.js` exposes
-a few helpers. All helpers are accessible in the Mustache templating through
-`{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}`. To
-use them in the function templates, you'll have to call
-`search.templatesConfig.helpers.nameOfTheHelper` where `search` is your current
-`instantsearch` instance.
-
-Here is the list of the currently available helpers:
-
-- `formatNumber`: Will accept a number as input and returned the formatted
-  version of the number in the locale defined with the `numberLocale` config
-  option (defaults to `en-EN`).
-  eg. `100000` will be formatted as `100 000` with `en-EN`
-
-Here is the syntax of a helper (`render` is using `search.templatesConfig.compileOptions`):
-```js
-search.templatesConfig.helpers.emphasis = function(text, render) {
-  return '<em>' + render(text) + '</em>';
-};
-```
-
-In your helper, `this` always refers to the data:
-```js
-search.templatesConfig.helpers.discount = function(/*text, render*/) {
-  var discount = this.price * 0.3;
-  return '$ -' + discount;
-};
-```
-
-You can configure the options passed to `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
-
-Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
+We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
 
 ## Themes
 
@@ -295,6 +206,7 @@ instantsearch({
 });
 ```
 
+<<<<<<< HEAD
 ## Available widgets
 
 [searchBox]: ./widgets-screenshots/search-box.png
@@ -1270,19 +1182,14 @@ search.addWidget(
 .ais-hierarchical-menu--footer {
 }
 ```
+=======
+>>>>>>> 1b78e68... chore(website): here and there improvements
 
-## Browser support
+## License
 
-We natively support IE10+ and all other modern browsers without any dependency need
-on your side.
+instantsearch.js is [MIT licensed](./LICENSE).
 
-To get < IE10 support, please insert this code in the `<head>`:
+## More...
 
-```html
-<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-<!--[if lte IE 9]>
-  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
-<![endif]-->
-```
 
-We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
+There's only so much we can cram in here. To read more about the community and guidelines for submitting pull requests, please read the [Contributing document](CONTRIBUTING.md).

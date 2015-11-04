@@ -1,0 +1,20 @@
+<header class="site-header">
+
+  <nav class="navbar navbar-default  navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
+      </div>
+
+      <ul class="nav navbar-nav">
+        {% assign url = page.url | remove: 'index.html' %}
+        {% for link in site.navigation %}
+          <li {% if url == link.url %}class="active"{% endif %}>
+            <a href="{{ site.baseurl }}{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </nav>
+
+</header>

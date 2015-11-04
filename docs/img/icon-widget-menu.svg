@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="64px" height="64px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12072) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-widget-menu</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-254.000000, -197.000000)">
+            <g id="icon-widget-menu" sketch:type="MSLayerGroup" transform="translate(254.000000, 197.000000)">
+                <g id="Group" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-1" stroke="#2897C5" stroke-width="2" fill="#2897C5" x="0" y="0" width="64" height="64" rx="8"></rect>
+                    <circle id="Oval-1" fill="#147CA7" cx="8" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy" fill="#147CA7" cx="55" cy="8" r="4"></circle>
+                    <circle id="Oval-1-Copy-2" fill="#147CA7" cx="55" cy="56" r="4"></circle>
+                    <circle id="Oval-1-Copy-3" fill="#147CA7" cx="8" cy="56" r="4"></circle>
+                </g>
+                <path d="M12,18.5 C12,17.6715729 12.6774915,17 13.4950437,17 L50.5049563,17 C51.3306461,17 52,17.6657972 52,18.5 C52,19.3284271 51.3225085,20 50.5049563,20 L13.4950437,20 C12.6693539,20 12,19.3342028 12,18.5 Z M12,31.5 C12,30.6715729 12.6774915,30 13.4950437,30 L50.5049563,30 C51.3306461,30 52,30.6657972 52,31.5 C52,32.3284271 51.3225085,33 50.5049563,33 L13.4950437,33 C12.6693539,33 12,32.3342028 12,31.5 Z M12,44.5 C12,43.6715729 12.6774915,43 13.4950437,43 L50.5049563,43 C51.3306461,43 52,43.6657972 52,44.5 C52,45.3284271 51.3225085,46 50.5049563,46 L13.4950437,46 C12.6693539,46 12,45.3342028 12,44.5 Z" id="Rectangle-13-Copy-5" fill="#FFFFFF" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>
