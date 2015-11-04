@@ -8,136 +8,105 @@ $(function () {
   });
 
   // get all section window
-  var windows = document.querySelectorAll("section.window");
+  var windows = $("section.window");
+
+  //intro
+  var intro = new TimelineMax();
+  intro
+    .set(".screen", {opacity: 0})
+    .set("#anim", {opacity: 0, scale: 0})
+    .set("#anim img", {opacity: 0})
+    .set("#anim-overlay", {opacity: 0})
+    .set("#anim-overlay img", {scale: 0})
+    .set(".widget", {opacity: 0, scale: 0})
+    .to("#anim", 2, {opacity: 1, scale: 1, rotationX: 30, rotationZ: -6, ease:Power2.easeInOut})
+    .to("#anim img", 1, {opacity: 1}, "-=1")
+    .to(".widget-1", .3, {scale:1 , opacity:1 })
+    .to(".widget-2", .3, {scale:1 , opacity:1 })
+    .to(".widget-3", .3, {scale:1 , opacity:1 })
+    .to(".widget-4", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-5", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-6", .3, {scale:1 , opacity:1 }, "-=.2")
+    .to(".widget-7", .3, {scale:1 , opacity:1 }, "-=.5")
+    .to("#anim-overlay", .3, {opacity: 1, ease:Power2.easeInOut }, "3.5")
+    .to("#anim-overlay img", .4, {scale: 1, ease:Bounce.easeOut }, "3.6");
+
+  // an array to stock our timelines, relative to each sections
+  var tl = [];
+  // First Section: There is a widget
+  tl[0] = new TimelineMax();
+  tl[0]
+    .to(".widget-intro", 2, {opacity: 0})
+    .to(".widget", 8, {z: 400, opacity: 0})
+    .to(".widget-1", 8, {y: -350 }, "-=8")
+    .to(".widget-3", 8, {x: -200, y: -50 }, "-=8")
+    .to(".widget-4", 8, {x: -200 }, "-=8")
+    .to(".widget-5", 8, {x: -200, y: 50 }, "-=8")
+    .to(".widget-6", 8, {x: -200, y: 200 }, "-=8")
+    .to(".widget-7", 8, {y: 350 }, "-=8")
+    .to("#anim", 8, {opacity: 1, scale: 1, rotationX: 0, rotationZ: 0, ease:Power2.easeInOut}, "-=8")
+    .to(".illus-sync", 4, {opacity:1}, "-=4")
+    .to('#space-overlay', 8, {backgroundColor:'#00B6BA' }, "0");
+
+  // First Section: There is a widget
+  tl[1] = new TimelineMax();
+  tl[1]
+    .to(".widget", .2, {x: 0, y: 0, z: 0, scale: 0 })
+    .to(".illus-sync", 3, {scale: 0, opacity: 0})
+    .to("#anim", 5, {scale: .5 })
+    .to("#anim img", 4, {opacity: 0}, "-=8")
+    .to("#anim > .widget", 2, {opacity: 1, scale: 1})
+    .to(".screen-1", 3, {opacity: 1})
+    .to(".screen-1 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to(".screen-2", 3, {opacity: 1})
+    .to(".screen-2 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to(".screen-3", 3, {opacity: 1})
+    .to(".screen-3 .widget", 5, {opacity: 1, scale: 1},"-=2")
+    .to('#space-overlay', 8, {backgroundColor:'#F6624E' }, "0");
+
+  // First Section: There is a widget
+  tl[2] = new TimelineMax();
+  tl[2]
+    .to("#anim", 10, {scale: 1, y:100, rotationX: 20, rotationZ: -6, ease:Power2.easeInOut })
+    .to(".screen", 5, {opacity: 0}, "-=8")
+    .to(".widget-5", 8, {z: 200})
+    .to(".widget-5", 4, {rotationY: 180, backgroundColor:'#674492'}, "-=4")
+    .to(".widget-5", 4, {z: 0})
+    .to('#space-overlay', 8, {backgroundColor:'#674492' }, "0");
+
+  tl[3] = new TimelineMax();
+  tl[3]
+    .to("#anim", 12, {y: -400, rotationX: 60}, "2s")
+    .to("#anim", 4, {opacity: 0}, "5");
 
   // create scene for every window
   var scenes = [];
   for (var i=0; i<windows.length; i++) {
 
     scenes[i] = new ScrollMagic.Scene({
-        triggerElement: windows[i]
+        triggerElement: windows[i],
+        duration: 800
       })
-      // .setPin("#target", {pushFollowers: false})
+      .setTween(tl[i])
       .offset(20)
       .addIndicators() // add indicators (requires plugin)
       .addTo(controller);
   };
 
-  function floatingWidgets(){
-    // TweenMax.to(".widget", 1, {opacity: .4 });
-    TweenMax.fromTo(".widget-1", 2,
-      {z: 40},
-      {z: 90, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-3", 2,
-      {z: 40},
-      {z: 80, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-2, .widget-4", 2,
-      {z: 40},
-      {z: 70, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-5", 2,
-      {z: 40},
-      {z: 60, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-    TweenMax.fromTo(".widget-6, .widget-7", 2,
-      {z: 40},
-      {z: 50, repeat: -1, yoyo: true, ease: Power2.linear}
-    );
-  };
-
-
-
-  function fadeScaleInWidgets(){
-    TweenMax.to(".widget-1", .5, {scale:1 , opacity:1 }).delay(.2);
-    TweenMax.to(".widget-2", .5, {scale:1 , opacity:1 }).delay(.2);
-    TweenMax.to(".widget-3", .5, {scale:1 , opacity:1 }).delay(.2);
-    TweenMax.to(".widget-4", .5, {scale:1 , opacity:1 }).delay(.3);
-    TweenMax.to(".widget-5", .5, {scale:1 , opacity:1 }).delay(.4);
-    TweenMax.to(".widget-6", .5, {scale:1 , opacity:1 }).delay(.5);
-    TweenMax.to(".widget-7", .5, {scale:1 , opacity:1 }).delay(.2);
-  };
-
-  function combineWidgets(){
-    TweenMax.to("#anim", .5, {rotationX: 0, rotationZ:0, ease:Power2.easeInOut });
-    TweenMax.to("#anim", .5, {scale: .5});
-    TweenMax.to(".screen", .3, {opacity: 1});
-    TweenMax.fromTo(".screen-1", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.4);
-    TweenMax.fromTo(".screen-2", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.6);
-    TweenMax.fromTo(".screen-3", 1,
-      {scale: 0},
-      {scale: 1}
-    ).delay(.8);
-  };
-
-  function themeWidgets(color){
-    TweenMax.to(".widget", .2, {backgroundColor: color });
-  };
-
-  function fadeScaleOutWidgets(){
-    TweenMax.to(".widget", .2, {z: 0, opacity:0, scale:0 });
-  };
-
-  TweenMax.fromTo("#anim", 2,
-      {opacity: 0, scale: 0},
-      {opacity: 1, scale: 1}
-    ).delay(.4);
-
-  TweenMax.set(".widget", {opacity: 0, scale: 0});
-  TweenMax.set("#anim-overlay", {opacity:0});
-  // fadeScaleInWidgets();
-  // floatingWidgets();
-
-  // TweenMax.to("#anim", 2, {rotationX: 30, rotationZ:-6, ease:Power2.easeInOut });
-
   scenes[0].on("start", function (event) {
-    // console.log("Hit start point of scene 1.");
-    TweenMax.to("#anim", .5, {scale: 1,rotationX: 30, rotationZ:-6, ease:Power2.easeInOut });
-    TweenMax.to("#anim-overlay", 2, {opacity:1}).delay(.2);
-    TweenMax.to(".screen", 1, {opacity: 0});
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#1D96C7' });
-    fadeScaleInWidgets().delay(1);
-    // floatingWidgets();
+    intro.seek(20);
   });
 
-  scenes[1].on("start", function (event) {
-    // console.log("Hit start point of scene 2.");
-    fadeScaleOutWidgets();
-    fadeScaleInWidgets();
-    combineWidgets();
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#F6624E' });
-  });
-
-  scenes[2].on("start", function (event) {
-    // console.log("Hit start point of scene 3.");
-    fadeScaleOutWidgets();
-    themeWidgets('#1D96C7');
-    TweenMax.to("#anim", 1, {scale: 1});
-    TweenMax.to(".screen", 1, {opacity: 0});
-    TweenMax.to(".widget-3", 1, {scale: 1, opacity:1, ease:Power2.easeInOut});
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#31B899' });
-  });
-
-  scenes[3].on("start", function (event) {
-    // console.log("Hit start point of scene 4.");
-    fadeScaleInWidgets();
-    themeWidgets('#F6624E');
-    TweenMax.to( '.anim-container', 1, {css:{position:'absolute', top: 400, left: 0}});
-    TweenMax.to('#space-overlay', 1, {backgroundColor:'#612C4F' });
-  });
   scenes[3].on("leave", function (event) {
     $('body:after').addClass('hide');
-    TweenMax.to('.anim-container', .3, {css:{position:'fixed', top: 240, left: 0}});
   });
 
+
+
+
+
   // Space Canvas
+
   var canvas;
   var context;
   var screenH;
@@ -231,4 +200,3 @@ $(function () {
   }
 
 });
-
