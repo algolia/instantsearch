@@ -149,20 +149,13 @@ h2
     left: 450px
   .illus-sync
     opacity: 0
+    position: absolute
+    top: 350px
+    left: 350px
 
 
-#anim
-  opacity: 0
-  z-index: 1200
-  width: 420px
-  height: 400px
-  background-color: white
-  border-radius: 10px
+#anim-screens
   position: relative
-  transition: all
-  overflow: hidden
-  perspective: 1200px
-  transform-style: preserve-3d
   .screen
     position: absolute
     opacity: 0
@@ -175,6 +168,20 @@ h2
   .screen-3
     top: 440px
     left: 460px
+
+#anim
+  opacity: 0
+  z-index: 1200
+  width: 420px
+  height: 400px
+  background-color: white
+  border-radius: 10px
+  position: relative
+  transition: all
+  perspective: 1200px
+  transform-style: preserve-3d
+  img
+    border-radius: 10px
   .widget
     background-color: rgba(#1D96C7,.4)
     position: absolute
