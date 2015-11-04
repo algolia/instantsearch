@@ -608,7 +608,7 @@ instantsearch.widgets.rangeSlider(options);
 The range slider filters values of a single numeric attribute using 2 cursors: the lower and the upper bounds.
 {:.description}
 
-<div  id="price" class="widget-container"></div>
+<div id="price" class="widget-container"></div>
 
 #### priceRanges
 
@@ -656,7 +656,7 @@ instantsearch.widgets.priceRanges(options);
 This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.
 {:.description}
 
-<div  id="priceranges" class="widget-container"></div>
+<div id="priceranges" class="widget-container"></div>
 
 ### Sort
 
@@ -795,7 +795,7 @@ search.templatesConfig.helpers.discount = function(/*text, render*/) {
 
 ### Options
 
-You can configure the options passed to under;ying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
+You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
 
 Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
 
