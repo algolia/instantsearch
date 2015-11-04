@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+mkdir -p dist/
+mkdir -p dist-es5-module/
+
 set -ev # exit when error
 
 ROOT=`dirname "$0"`/..
@@ -10,8 +13,14 @@ bundle='instantsearch'
 
 # build for jsdelivr, with everything inlined while exposing React + ReactDOM (for plugins)
 webpack --config webpack.config.jsdelivr.babel.js
+
 # only transpile to ES5 for package.json main entry
-babel index.js -o dist/${bundle}.module.js
+babel -q index.js -o dist-es5-module/index.js
+declare -a sources=("components" "decorators" "lib" "shams" "widgets")
+for source in "${sources[@]}"
+do
+  babel -q --out-dir dist-es5-module/${source} ${source}
+done
 
 for source in "$ROOT"/css/[^_]*.scss; do
   base=`basename "$source" .scss`
