@@ -58,7 +58,7 @@ function numericRefinementList({
       return {};
     },
 
-    render: function({helper, templatesConfig, state, createURL}) {
+    render: function({helper, templatesConfig, state, createURL, results}) {
       let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
@@ -72,7 +72,7 @@ function numericRefinementList({
         return option;
       });
 
-      let hasNoResults = facetValues.length === 0;
+      let hasNoResults = results.hits.length === 0;
 
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
