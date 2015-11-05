@@ -13,8 +13,8 @@ class Selector extends React.Component {
     return (
       <select
         className={this.props.cssClasses.root}
+        defaultValue={currentValue}
         onChange={handleChange}
-        value={currentValue}
       >
         {options.map((option) => {
           return <option className={this.props.cssClasses.item} key={option.value} value={option.value}>{option.label}</option>;
