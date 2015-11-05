@@ -46,7 +46,10 @@ class Slider extends React.Component {
 Slider.propTypes = {
   onChange: React.PropTypes.func,
   onSlide: React.PropTypes.func,
-  pips: React.PropTypes.object,
+  pips: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.object
+  ]),
   range: React.PropTypes.object.isRequired,
   start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
   tooltips: React.PropTypes.oneOfType([
