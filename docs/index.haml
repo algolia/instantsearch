@@ -7,20 +7,20 @@ layout: default
   .container
     .row
       .col-xs-6
-        .spacer40
+        .spacer100
         .presented-by
           %a{href: 'https://www.algolia.com', title: 'Instant Search as a Service', target: '_blank'}
             %img{src:"img/algolia-logo.svg", width: 100}
           presents:
-        %h1
-          %img{src:"img/logo-instantsearch.svg", height:70}
+        %h1.logo
+          {% svg img/logo-instantsearch.svg %}
         %p.vp
           The library of UI widgets to build the best instant-search experience with
           %a{href:"https://www.algolia.com"} Algolia's Hosted Search API.
-        .spacer40
-        %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
-        %span &nbsp;
-        %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
+        -# .spacer40
+        -# %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
+        -# %span &nbsp;
+        -# %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
         .spacer100
         -# %img{src:"img/icon-widget.svg", width:70}
         %h2 There’s a widget for that
@@ -28,58 +28,41 @@ layout: default
           Pick from an extensive library of widgets to power your search
           %br
           and build a state of the art instant search experience.
-        .spacer30
-        .row
-          .col-xs-6.widget-intro.w-1
-            %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50}
-            %h4 Search Box
-            %p Search at each keystroke
-          .col-xs-6.widget-intro.w-2
-            %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50}
-            %h4 Filters
-            %p List of links or checkboxes
-        .spacer30
-        .row
-          .col-xs-6.widget-intro.w-3
-            %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50}
-            %h4 Slider
-            %p Filter numerical values
-          .col-xs-6.widget-intro.w-4
-            %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50}
-            %h4 Results
-            %p Grid of search results
-%section#widget-customization-1.window
+
+%section#widget-customization-1.window.pos-rel
+  .container
+    .row
+      .col-xs-6
+        %img{src:"img/icon-theme.svg", width:70}
+        %h2 More than widgets
+        %p.lead You code becomes easy to write and maintain as you won't need to build all the glue code between widgets to track the state of your facets, decode URL parameters, etc. Everything is packaged in the lib.
+%section#widget-customization-2.window
   .container
     .row
       .col-xs-6
         %img{src:"img/icon-infinite.svg", width:70}
         %h2 Infinite possibilities
         %p.lead Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
-%section#widget-customization-2.window
+%section#widget-customization-3.window
   .container
     .row
       .col-xs-6
         %img{src:"img/icon-community.svg", width:70}
         %h2 Bring your own widget
         %p.lead Sometimes you want to deviate from the standard path and build a custom feature. You can do that by forking a widget or coding your own and integrating into the open source project.
-        .widget-intro.w-1
+        .w-1
           %img.m-r.m-t{src:"img/icon-widget-custom.svg", width:50}
           %h4 Custom Widget
           %p Fork and custom your own widgets.
         .spacer30
-%section#widget-customization-3.window.pos-rel
-  .container
-    .row
-      .col-xs-6
-        %img{src:"img/icon-theme.svg", width:70}
-        %h2 Themes
-        %p.lead Each widget has been designed to be heavily styled & customized. Be it using templates or simple CSS rules, make them look like the way you want.
+
   .anim-container
     .container
       .row
         .col-xs-6
-        .col-xs-6
+        .col-xs-6.pos-rel
           #anim
+            %img{src:"img/drone-search.png", width:420}
             .widget.widget-1
             .widget.widget-2
             .widget.widget-3
@@ -88,11 +71,53 @@ layout: default
             .widget.widget-6
             .widget.widget-7
             .screen.screen-1
-              %img{src:"img/combinations.svg", width:420}
+              .widget.widget-1
+              .widget.widget-2
+              .widget.widget-3
+              .widget.widget-4
+              .widget.widget-5
+              .widget.widget-6
+              .widget.widget-7
+              -# %img{src:"img/combinations.svg", width:420}
             .screen.screen-2
-              %img{src:"img/combinations.svg", width:420}
+              .widget.widget-1
+              .widget.widget-2
+              .widget.widget-3
+              .widget.widget-4
+              .widget.widget-5
+              .widget.widget-6
+              .widget.widget-7
+              -# %img{src:"img/combinations.svg", width:420}
             .screen.screen-3
-              %img{src:"img/combinations.svg", width:420}
+              .widget.widget-1
+              .widget.widget-2
+              .widget.widget-3
+              .widget.widget-4
+              .widget.widget-5
+              .widget.widget-6
+              .widget.widget-7
+              -# %img{src:"img/combinations.svg", width:420}
+          #anim-overlay
+            .widget-intro.w-1
+              %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50}
+              %h4 Search Box
+              %p Search at each keystroke
+            .widget-intro.w-2
+              %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50}
+              %h4 Filters
+              %p List of links or checkboxes
+            .widget-intro.w-3
+              %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50}
+              %h4 Slider
+              %p Filter numerical values
+            .widget-intro.w-4
+              %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50}
+              %h4 Results
+              %p Grid of search results
+            .illus-sync
+              {% svg img/sync.svg %}
+.spacer100
+
 
 
 %svg#curveUpColor{xmlns:"http://www.w3.org/2000/svg", version:"1.1", width:"100%", height:"100", viewBox:"0 0 100 100", preserveAspectRatio:"none"}

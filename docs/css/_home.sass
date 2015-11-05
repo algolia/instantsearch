@@ -4,6 +4,9 @@ html, body
   background-attachment: fixed
   position: relative
 
+.logo
+  svg
+    height: 70px
 
 // scroll down
 #space-overlay:after
@@ -25,28 +28,13 @@ html, body
 .navbar-nav > .active > a
   color: #1D96C7 !important
 
-.widget-intro
-  font-weight: 300
-  opacity: 0
-  animation: arrow 1s ease-in-out
-  animation-fill-mode: forwards
-.w-1
-  animation-delay: 0
-.w-2
-  animation-delay: .5s
-.w-3
-  animation-delay: 1s
-.w-4
-  animation-delay: 1.5s
 
 footer.site-footer
   background-color: white
   margin-top: 0
 
-
-
 .window
-  padding: 500px 0 200px
+  padding: 400px 0 200px
   width: 100%
   display: block
   color: white
@@ -121,75 +109,133 @@ h2
   color: white
   pointer-events: none
 
+.path
+  stroke-dasharray: 10
+  animation: dash 20s linear infinite reverse
+
+.path2
+  stroke-dasharray: 10
+  animation: dash 20s linear infinite
+
+@keyframes dash
+  to
+    stroke-dashoffset: 1000
+
+#anim-overlay
+  position: absolute
+  top: 0
+  left: 0
+  z-index: 9999
+  opacity: 0
+  .widget-intro
+    font-weight: 300
+    position: absolute
+    width: 240px
+    img
+      position: relative
+      float: left
+      top: -6px
+  .w-1
+    top: -60px
+    left: 340px
+  .w-2
+    top: 440px
+    left: 60px
+  .w-3
+    top: -40px
+    left: 40px
+  .w-4
+    top: 140px
+    left: 450px
+  .illus-sync
+    opacity: 0
+    position: absolute
+    top: 350px
+    left: 350px
+
+
+
+.screen
+  opacity: 0
+  z-index: 1200
+  width: 420px
+  height: 400px
+  background-color: white
+  border-radius: 10px
+  position: absolute
+.screen-1
+  top: 0
+  left: 460px
+.screen-2
+  top: 440px
+  left: 0
+.screen-3
+  top: 440px
+  left: 460px
+
 #anim
+  opacity: 0
   z-index: 1200
   width: 420px
   height: 400px
   background-color: white
   border-radius: 10px
   position: relative
-  transition: all
-  perspective: 700px
+  perspective: 1200px
   transform-style: preserve-3d
-  .screen
-    position: absolute
-    opacity: 0
-  .screen-1
-    top: 0
-    left: 460px
-  .screen-2
-    top: 440px
-    left: 0
-  .screen-3
-    top: 440px
-    left: 460px
+  img
+    border-radius: 10px
   .widget
-    background-color: #1D96C7
+    background-color: rgba(#1D96C7,.4)
     position: absolute
-    opacity: .9
-  .widget-1
-    //searchbox
-    width: 400px
-    height: 30px
-    top: 10px
-    left: 10px
-  .widget-2
-    //results
-    width: 250px
-    height: 310px
-    top: 50px
-    left: 160px
-  .widget-3
-    //facet
-    width: 140px
-    height: 80px
-    top: 50px
-    left: 10px
-  .widget-4
-    //facet
-    width: 140px
-    height: 80px
-    top: 140px
-    left: 10px
-  .widget-5
-    //facet
-    width: 140px
-    height: 80px
-    top: 230px
-    left: 10px
-  .widget-6
-    //facet
-    width: 140px
-    height: 70px
-    top: 320px
-    left: 10px
-  .widget-7
-    //pagination
-    width: 250px
-    height: 20px
-    top: 370px
-    left: 160px
+    transform-style: preserve-3d
+  .legend
+    font-size: 1.2em
+    border-left: solid 2px white
+    padding: 0 0 60px 10px
 
+.widget-1
+  //searchbox
+  width: 280px
+  height: 30px
+  top: 10px
+  right: 10px
+.widget-2
+  //results
+  width: 280px
+  height: 270px
+  top: 70px
+  right: 10px
+.widget-3
+  //facet
+  width: 110px
+  height: 50px
+  top: 50px
+  left: 10px
+.widget-4
+  //facet
+  width: 110px
+  height: 70px
+  top: 110px
+  left: 10px
+.widget-5
+  //facet
+  width: 110px
+  height: 110px
+  top: 190px
+  left: 10px
+.widget-6
+  //facet
+  width: 110px
+  height: 80px
+  top: 310px
+  left: 10px
+.widget-7
+  //pagination
+  width: 170px
+  height: 20px
+  top: 350px
+  right: 60px
 
 footer.site-footer
   text-align: center

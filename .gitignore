@@ -4,3 +4,4 @@ dist-es5-module/
 dev/bundle.js*
 examples/*/*.css
 npm-debug.log
+.DS_Store
