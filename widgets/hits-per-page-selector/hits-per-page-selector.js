@@ -2,7 +2,7 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 
 let utils = require('../../lib/utils.js');
-let reduce = require('lodash/collection/reduce');
+let any = require('lodash/collection/any');
 let bem = utils.bemHelper('ais-hits-per-page-selector');
 let cx = require('classnames');
 let autoHideContainer = require('../../decorators/autoHideContainer');
@@ -40,9 +40,9 @@ function hitsPerPageSelector({
 
   return {
     init: function(state) {
-      let isCurrentInOptions = reduce(options, function(res, option) {
-        return res || +state.hitsPerPage === +option.value;
-      }, false);
+      let isCurrentInOptions = any(options, function(option) {
+        return +state.hitsPerPage === +option.value;
+      });
 
       if (!isCurrentInOptions) {
         options = [{value: undefined, label: ''}].concat(options);
