@@ -84,7 +84,7 @@
         source += '  ';
       }
       source += line + '\n';
-      if (line.indexOf('<') === 0 && line.indexOf('</') !== 0) {
+      if (line.indexOf('<') === 0 && line.indexOf('</') !== 0 && line.indexOf('<input') === -1) {
         ++indent;
       }
     });
