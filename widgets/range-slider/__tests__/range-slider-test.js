@@ -8,6 +8,8 @@ import jsdom from 'mocha-jsdom';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+import AlgoliasearchHelper from 'algoliasearch-helper';
+
 describe('rangeSlider()', () => {
   jsdom({useEach: true});
 
@@ -35,21 +37,47 @@ describe('rangeSlider()', () => {
     container = document.createElement('div');
     widget = rangeSlider({container, attributeName: 'aNumAttr'});
     results = {
-      getFacetStats: sinon.stub().returns({
-        min: 1.99,
-        max: 4999.98,
-        avg: 243.349,
-        sum: 2433490.0
-      })
+      disjunctiveFacets: [{
+        name: 'aNumAttr',
+        data: {
+          19.99: 610,
+          39.99: 593,
+          29.99: 488,
+          49.99: 486,
+          99.99: 430,
+          14.99: 376,
+          59.99: 323,
+          34.99: 286,
+          79.99: 282,
+          9.99: 277,
+          599.99: 105,
+          999.99: 104,
+          799.99: 96,
+          899.99: 88,
+          699.99: 84,
+          1099.99: 53,
+          1199.99: 49,
+          649.99: 48,
+          1299.99: 46,
+          749.99: 34
+        },
+        exhaustive: true,
+        stats: {
+          min: 1.99,
+          max: 4999.98,
+          avg: 243.349,
+          sum: 2433490
+        }
+      }]
     };
-    helper = {
-      state: {
-        getNumericRefinement: sinon.stub().returns([])
-      },
-      addNumericRefinement: sinon.spy(),
-      clearRefinements: sinon.spy(),
-      search: sinon.spy()
-    };
+    helper = new AlgoliasearchHelper(
+      {search: function() {}},
+      'indexName',
+      {disjunctiveFacets: ['aNumAttr']}
+    );
+    sinon.spy(helper, 'addNumericRefinement');
+    sinon.spy(helper, 'clearRefinements');
+    sinon.spy(helper, 'search');
   });
 
   it('configures the disjunctiveFacets', () => {
@@ -87,38 +115,50 @@ describe('rangeSlider()', () => {
   });
 
   it('doesn\'t call the refinement functions if not refined', () => {
+    let state0 = helper.state;
     widget.render({results, helper});
-    expect(helper.state.getNumericRefinement.calledTwice).toBe(true, 'getNumericRefinement called once');
-    expect(helper.clearRefinements.called).toBe(false, 'clearRefinements never called');
-    expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
+    let state1 = helper.state;
+    expect(state1).toEqual(state0);
     expect(helper.search.called).toBe(false, 'search never called');
   });
 
   it('calls the refinement functions if refined with min+1', () => {
-    let stats = results.getFacetStats();
-    widget._refine(helper, stats, [stats.min + 1, stats.max]);
-    expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '>=', stats.min + 1]);
+    let stats = results.disjunctiveFacets[0].stats;
+    let targetValue = Math.floor(stats.min) + 1;
+
+    let state0 = helper.state;
+    widget._refine(helper, stats, [targetValue, stats.max]);
+    let state1 = helper.state;
+
     expect(helper.search.calledOnce).toBe(true, 'search called once');
+    expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '>=', targetValue));
   });
 
   it('calls the refinement functions if refined with max-1', () => {
-    let stats = results.getFacetStats();
-    widget._refine(helper, stats, [stats.min, stats.max - 1]);
-    expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '<=', stats.max - 1]);
+    let stats = results.disjunctiveFacets[0].stats;
+    let targetValue = Math.ceil(stats.max) - 1;
+
+    let state0 = helper.state;
+    widget._refine(helper, stats, [stats.min, targetValue]);
+    let state1 = helper.state;
+
     expect(helper.search.calledOnce).toBe(true, 'search called once');
+    expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '<=', targetValue));
   });
 
   it('calls the refinement functions if refined with min+1 and max-1', () => {
-    let stats = results.getFacetStats();
-    widget._refine(helper, stats, [stats.min + 1, stats.max - 1]);
-    expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
-    expect(helper.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
-    expect(helper.addNumericRefinement.getCall(0).args).toEqual(['aNumAttr', '>=', stats.min + 1]);
-    expect(helper.addNumericRefinement.getCall(1).args).toEqual(['aNumAttr', '<=', stats.max - 1]);
+    let stats = results.disjunctiveFacets[0].stats;
+    let targetValue = [Math.floor(stats.min) + 1, Math.ceil(stats.max) - 1];
+
+    let state0 = helper.state;
+    widget._refine(helper, stats, targetValue);
+    let state1 = helper.state;
+
+    let expectedState = state0.
+      addNumericRefinement('aNumAttr', '>=', targetValue[0]).
+      addNumericRefinement('aNumAttr', '<=', targetValue[1]);
+
+    expect(state1).toEqual(expectedState);
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
