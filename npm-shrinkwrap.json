@@ -5,8 +5,8 @@
   "node-version": "v4.1.1",
   "dependencies": {
     "algoliasearch": {
-      "version": "3.9.0",
-      "resolved": "https://registry.npmjs.org/algoliasearch/-/algoliasearch-3.9.0.tgz",
+      "version": "3.9.1",
+      "resolved": "https://registry.npmjs.org/algoliasearch/-/algoliasearch-3.9.1.tgz",
       "dependencies": {
         "agentkeepalive": {
           "version": "2.0.3",
@@ -89,8 +89,8 @@
       }
     },
     "algoliasearch-helper": {
-      "version": "2.6.5",
-      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.5.tgz",
+      "version": "2.6.6",
+      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.6.tgz",
       "dependencies": {
         "lodash-compat": {
           "version": "3.10.1",
