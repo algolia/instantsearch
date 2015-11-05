@@ -2,8 +2,8 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 
 let utils = require('../../lib/utils.js');
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 let bem = require('../../lib/utils').bemHelper('ais-stats');
 let cx = require('classnames');
 
@@ -23,25 +23,25 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|Function} [options.templates.body] Body template
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
 function stats({
     container,
     cssClasses: userCssClasses = {},
-    hideContainerWhenNoResults = true,
+    autoHideContainer = true,
     templates = defaultTemplates,
     transformData
   }) {
   let containerNode = utils.getContainerNode(container);
 
-  let Stats = headerFooter(require('../../components/Stats/Stats.js'));
-  if (hideContainerWhenNoResults === true) {
-    Stats = autoHideContainer(Stats);
+  let Stats = headerFooterHOC(require('../../components/Stats/Stats.js'));
+  if (autoHideContainer === true) {
+    Stats = autoHideContainerHOC(Stats);
   }
 
   if (!containerNode) {
-    throw new Error('Usage: stats({container[, template, transformData, hideContainerWhenNoResults]})');
+    throw new Error('Usage: stats({container[, template, transformData, autoHideContainer]})');
   }
 
   return {

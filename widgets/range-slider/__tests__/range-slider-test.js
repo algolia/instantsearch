@@ -28,9 +28,9 @@ describe('rangeSlider()', () => {
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(Slider);
-    rangeSlider.__Rewire__('autoHideContainer', autoHideContainer);
+    rangeSlider.__Rewire__('autoHideContainerHOC', autoHideContainer);
     headerFooter = sinon.stub().returns(Slider);
-    rangeSlider.__Rewire__('headerFooter', headerFooter);
+    rangeSlider.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = rangeSlider({container, attributeName: 'aNumAttr'});
@@ -124,7 +124,7 @@ describe('rangeSlider()', () => {
 
   afterEach(() => {
     rangeSlider.__ResetDependency__('ReactDOM');
-    rangeSlider.__ResetDependency__('autoHideContainer');
-    rangeSlider.__ResetDependency__('headerFooter');
+    rangeSlider.__ResetDependency__('autoHideContainerHOC');
+    rangeSlider.__ResetDependency__('headerFooterHOC');
   });
 });

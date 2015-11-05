@@ -4,8 +4,8 @@ let ReactDOM = require('react-dom');
 let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-hierarchical-menu');
 let cx = require('classnames');
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 
 let defaultTemplates = require('./defaultTemplates.js');
 
@@ -31,7 +31,7 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|Function} [options.templates.item] Item template
  * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @return {Object}
  */
 function hierarchicalMenu({
@@ -41,16 +41,16 @@ function hierarchicalMenu({
     limit = 100,
     sortBy = ['name:asc'],
     cssClasses: userCssClasses = {},
-    hideContainerWhenNoResults = true,
+    autoHideContainer = true,
     templates = defaultTemplates,
     transformData
   }) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, hideContainerWhenNoResults]})';
+  let usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, autoHideContainer]})';
 
-  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
-  if (hideContainerWhenNoResults === true) {
-    RefinementList = autoHideContainer(RefinementList);
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  if (autoHideContainer === true) {
+    RefinementList = autoHideContainerHOC(RefinementList);
   }
 
   if (!container || !attributes || !attributes.length) {
@@ -72,7 +72,7 @@ function hierarchicalMenu({
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {
       let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
-      let hasNoRefinements = facetValues.length === 0;
+      let hasNoFacetValues = facetValues.length === 0;
 
       let templateProps = utils.prepareTemplateProps({
         transformData,
@@ -101,7 +101,7 @@ function hierarchicalMenu({
           facetNameKey="path"
           facetValues={facetValues}
           limit={limit}
-          shouldAutoHideContainer={hasNoRefinements}
+          shouldAutoHideContainer={hasNoFacetValues}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

@@ -29,8 +29,8 @@ describe('priceRanges()', () => {
     headerFooter = sinon.stub().returns(PriceRanges);
 
     priceRanges.__Rewire__('ReactDOM', ReactDOM);
-    priceRanges.__Rewire__('autoHideContainer', autoHideContainer);
-    priceRanges.__Rewire__('headerFooter', headerFooter);
+    priceRanges.__Rewire__('autoHideContainerHOC', autoHideContainer);
+    priceRanges.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = priceRanges({container, attributeName: 'aNumAttr'});
@@ -141,7 +141,7 @@ describe('priceRanges()', () => {
 
   afterEach(() => {
     priceRanges.__ResetDependency__('ReactDOM');
-    priceRanges.__ResetDependency__('autoHideContainer');
-    priceRanges.__ResetDependency__('headerFooter');
+    priceRanges.__ResetDependency__('autoHideContainerHOC');
+    priceRanges.__ResetDependency__('headerFooterHOC');
   });
 });

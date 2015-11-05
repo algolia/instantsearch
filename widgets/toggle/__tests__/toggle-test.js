@@ -49,8 +49,8 @@ describe('toggle()', () => {
       headerFooter = sinon.stub().returns(RefinementList);
 
       toggle.__Rewire__('ReactDOM', ReactDOM);
-      toggle.__Rewire__('autoHideContainer', autoHideContainer);
-      toggle.__Rewire__('headerFooter', headerFooter);
+      toggle.__Rewire__('autoHideContainerHOC', autoHideContainer);
+      toggle.__Rewire__('headerFooterHOC', headerFooter);
 
       container = document.createElement('div');
       label = 'Hello, ';
@@ -209,8 +209,8 @@ describe('toggle()', () => {
 
     afterEach(() => {
       toggle.__ResetDependency__('ReactDOM');
-      toggle.__ResetDependency__('autoHideContainer');
-      toggle.__ResetDependency__('headerFooter');
+      toggle.__ResetDependency__('autoHideContainerHOC');
+      toggle.__ResetDependency__('headerFooterHOC');
     });
   });
 });

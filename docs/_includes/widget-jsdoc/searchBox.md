@@ -9,6 +9,6 @@
 |  <span class='attr-optional'>`poweredBy`</span> | Show a powered by Algolia link below the input |
 |  <span class='attr-optional'>`wrapInput`</span> | Wrap the input in a div.ais-search-box |
 |  <span class='attr-optional'>`autofocus`</span> | autofocus on the input |
-|  <span class='attr-optional'>`searchOnEnterKeyPressOnly`</span> | If false, trigger the search once <Enter> is pressed only |
+|  <span class='attr-optional'>`searchOnEnterKeyPressOnly`</span> | If set, trigger the search once <Enter> is pressed only |
 
 <p class="attr-legend">* <span>Required</span></p>

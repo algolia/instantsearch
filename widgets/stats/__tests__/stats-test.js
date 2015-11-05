@@ -26,9 +26,9 @@ describe('stats()', () => {
     ReactDOM = {render: sinon.spy()};
     stats.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(Stats);
-    stats.__Rewire__('autoHideContainer', autoHideContainer);
+    stats.__Rewire__('autoHideContainerHOC', autoHideContainer);
     headerFooter = sinon.stub().returns(Stats);
-    stats.__Rewire__('headerFooter', headerFooter);
+    stats.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = stats({container});
@@ -78,7 +78,7 @@ describe('stats()', () => {
 
   afterEach(() => {
     stats.__ResetDependency__('ReactDOM');
-    stats.__ResetDependency__('autoHideContainer');
-    stats.__ResetDependency__('headerFooter');
+    stats.__ResetDependency__('autoHideContainerHOC');
+    stats.__ResetDependency__('headerFooterHOC');
   });
 });

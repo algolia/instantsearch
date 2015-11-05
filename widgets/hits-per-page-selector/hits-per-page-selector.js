@@ -5,7 +5,7 @@ let utils = require('../../lib/utils.js');
 let any = require('lodash/collection/any');
 let bem = utils.bemHelper('ais-hits-per-page-selector');
 let cx = require('classnames');
-let autoHideContainer = require('../../decorators/autoHideContainer');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -16,7 +16,7 @@ let autoHideContainer = require('../../decorators/autoHideContainer');
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
  * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
- * @param  {boolean} [hideContainerWhenNoResults=false] Hide the container when no results match
+ * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */
 
@@ -24,14 +24,14 @@ function hitsPerPageSelector({
     container,
     options,
     cssClasses: userCssClasses = {},
-    hideContainerWhenNoResults = false
+    autoHideContainer = false
   }) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, hideContainerWhenNoResults]})';
+  let usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, autoHideContainer]})';
 
   let Selector = require('../../components/Selector');
-  if (hideContainerWhenNoResults === true) {
-    Selector = autoHideContainer(Selector);
+  if (autoHideContainer === true) {
+    Selector = autoHideContainerHOC(Selector);
   }
 
   if (!container || !options) {

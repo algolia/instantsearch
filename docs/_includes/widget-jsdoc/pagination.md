@@ -20,6 +20,6 @@
 |  <span class='attr-optional'>`options.padding`</span> | The number of pages to display on each side of the current page |
 |  <span class='attr-optional'>`options.scrollTo`</span> | Where to scroll after a click, set to `false` to disable |
 |  <span class='attr-optional'>`options.showFirstLast`</span> | Define if the First and Last links should be displayed |
-|  <span class='attr-optional'>`options.hideContainerWhenNoResults`</span> | Hide the container when no results match |
+|  <span class='attr-optional'>`options.autoHideContainer`</span> | Hide the container when no results match |
 
 <p class="attr-legend">* <span>Required</span></p>
