@@ -168,7 +168,7 @@ describe('search-box()', () => {
     });
   });
 
-  context('keyup', () => {
+  context('input event listenner', () => {
     let input;
     beforeEach(() => {
       container = document.createElement('div');
@@ -176,25 +176,30 @@ describe('search-box()', () => {
       input.addEventListener = sinon.spy();
     });
 
+    function simulateInputEvent() {
+      // Given
+      helper.state.query = 'foo';
+      // When
+      widget.init(initialState, helper);
+      // Then
+      expect(input.addEventListener.called).toEqual(true);
+      expect(input.addEventListener.args[1].length).toEqual(3);
+      expect(input.addEventListener.args[1][0]).toEqual('input');
+      let fn = input.addEventListener.args[1][1];
+
+      return fn({currentTarget: {value: 'test'}});
+    }
+
     context('instant search', () => {
       beforeEach(() => {
         widget = searchBox({container, autofocus: 'auto'});
         widget.getInput = sinon.stub().returns(input);
       });
 
-      it('performs the search on keyup', () => {
-        // Given
-        helper.state.query = 'foo';
-        // When
-        widget.init(initialState, helper);
-        // Then
-        expect(input.addEventListener.called).toEqual(true);
-        expect(input.addEventListener.args[0].length).toEqual(2);
-        expect(input.addEventListener.args[0][0]).toEqual('keyup');
-        let fn = input.addEventListener.args[0][1];
-        fn({});
+      it('performs a search on any change', () => {
+        simulateInputEvent();
         expect(helper.setQuery.calledOnce).toBe(true);
-        expect(helper.search.calledOnce).toBe(true);
+        expect(helper.search.called).toBe(true);
       });
     });
 
@@ -204,32 +209,63 @@ describe('search-box()', () => {
         widget.getInput = sinon.stub().returns(input);
       });
 
-      it('performs the search on <ENTER>', () => {
-        // Given
-        helper.state.query = 'foo';
-        // When
-        widget.init(initialState, helper);
-        // Then
-        expect(input.addEventListener.called).toEqual(true);
-        expect(input.addEventListener.args[0].length).toEqual(2);
-        expect(input.addEventListener.args[0][0]).toEqual('keyup');
-        let fn = input.addEventListener.args[0][1];
-        fn({keyCode: 13});
+      it('does not performs (will be handle by keyup event)', () => {
+        simulateInputEvent();
+        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.search.called).toBe(false);
+      });
+    });
+  });
+
+  context('keyup', () => {
+    let input;
+    beforeEach(() => {
+      container = document.createElement('div');
+      input = createHTMLNodeFromString('<input />');
+      input.addEventListener = sinon.spy();
+    });
+
+    function simulateKeyUpEvent(args) {
+      // Given
+      helper.state.query = 'foo';
+      // When
+      widget.init(initialState, helper);
+      // Then
+      expect(input.addEventListener.called).toEqual(true);
+      expect(input.addEventListener.args[0].length).toEqual(2);
+      expect(input.addEventListener.args[0][0]).toEqual('keyup');
+      let fn = input.addEventListener.args[0][1];
+
+      return fn(args);
+    }
+
+    context('instant search', () => {
+      beforeEach(() => {
+        widget = searchBox({container, autofocus: 'auto'});
+        widget.getInput = sinon.stub().returns(input);
+      });
+
+      it('do not perform the search on keyup event (should be done by input event)', () => {
+        simulateKeyUpEvent({});
+        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.search.called).toBe(false);
+      });
+    });
+
+    context('non-instant search', () => {
+      beforeEach(() => {
+        widget = searchBox({container, autofocus: 'auto', searchOnEnterKeyPressOnly: true});
+        widget.getInput = sinon.stub().returns(input);
+      });
+
+      it('performs the search on keyup if <ENTER>', () => {
+        simulateKeyUpEvent({keyCode: 13});
         expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.calledOnce).toBe(true);
       });
 
-      it('doesn\'t perform the search on keyup', () => {
-        // Given
-        helper.state.query = 'foo';
-        // When
-        widget.init(initialState, helper);
-        // Then
-        expect(input.addEventListener.called).toEqual(true);
-        expect(input.addEventListener.args[0].length).toEqual(2);
-        expect(input.addEventListener.args[0][0]).toEqual('keyup');
-        let fn = input.addEventListener.args[0][1];
-        fn({});
+      it('doesn\'t perform the search on keyup if not <ENTER>', () => {
+        simulateKeyUpEvent({});
         expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.calledOnce).toBe(false);
       });
