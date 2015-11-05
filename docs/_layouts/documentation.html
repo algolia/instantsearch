@@ -22,6 +22,18 @@ layout: default
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
+{% if site.env == 'development' %}
+  <script src="http://localhost:8080/instantsearch.js"></script>
+  <script type="text/javascript">
+    if (!window.instantsearch) {
+      // if the latest/dev version wasn't loaded, use JSDelivr
+      // latest version is required while creating doc of new (non-published) widgets
+      window.console && window.console.log('Dev version of instantsearch.js not found, using published version instead.')
+      document.write('\x3Cscript src="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js">\x3C/script>');
+    }
+  </script>
+{% else %}
+  <script src="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
+{% endif %}
 <script src="https://cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
 <script src="{{ "/js/doc.js" | prepend: site.baseurl }}"></script>
