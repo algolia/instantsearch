@@ -18,6 +18,9 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")
+ * @param  {Object} [options.values] Lets you define the values to filter on when toggling
+ * @param  {*} [options.values.on] Value to filter on when checked
+ * @param  {*} [options.values.off] Value to filter on when unchecked
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -41,6 +44,7 @@ function toggle({
     container,
     facetName,
     label,
+    values: userValues = {on: true, off: undefined},
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
     transformData,
@@ -58,12 +62,44 @@ function toggle({
     throw new Error(usage);
   }
 
+  let hasAnOffValue = (userValues.off !== undefined);
+
   return {
     getConfiguration: () => ({
       facets: [facetName]
     }),
+    init: (state, helper) => {
+      if (userValues.off === undefined) {
+        return;
+      }
+      // Add filtering on the 'off' value if set
+      let isRefined = state.isFacetRefined(facetName, userValues.on);
+      if (!isRefined) {
+        helper.addFacetRefinement(facetName, userValues.off);
+      }
+    },
+    toggleRefinement: (helper, isRefined) => {
+      let on = userValues.on;
+      let off = userValues.off;
+
+      // Checking
+      if (!isRefined) {
+        if (hasAnOffValue) {
+          helper.removeFacetRefinement(facetName, off);
+        }
+        helper.addFacetRefinement(facetName, on);
+      } else {
+        // Unchecking
+        helper.removeFacetRefinement(facetName, on);
+        if (hasAnOffValue) {
+          helper.addFacetRefinement(facetName, off);
+        }
+      }
+
+      helper.search();
+    },
     render: function({helper, results, templatesConfig, state, createURL}) {
-      let isRefined = helper.hasRefinements(facetName);
+      let isRefined = helper.state.isFacetRefined(facetName, userValues.on);
       let values = find(results.getFacetValues(facetName), {name: isRefined.toString()});
       let hasNoResults = results.nbHits === 0;
 
@@ -93,6 +129,8 @@ function toggle({
         count: cx(bem('count'), userCssClasses.count)
       };
 
+      let toggleRefinement = this.toggleRefinement.bind(this, helper, isRefined);
+
       ReactDOM.render(
         <RefinementList
           createURL={() => createURL(state.toggleRefinement(facetName, facetValue.isRefined))}
@@ -100,7 +138,7 @@ function toggle({
           facetValues={[facetValue]}
           shouldAutoHideContainer={hasNoResults}
           templateProps={templateProps}
-          toggleRefinement={toggleRefinement.bind(null, helper, facetName, facetValue.isRefined)}
+          toggleRefinement={toggleRefinement}
         />,
         containerNode
       );
@@ -108,11 +146,5 @@ function toggle({
   };
 }
 
-function toggleRefinement(helper, facetName, isRefined) {
-  let action = isRefined ? 'remove' : 'add';
-
-  helper[action + 'FacetRefinement'](facetName, true);
-  helper.search();
-}
 
 module.exports = toggle;
