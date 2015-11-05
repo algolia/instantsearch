@@ -29,8 +29,8 @@ describe('Selector', () => {
     expect(out).toEqualJSX(
       <select
         className="custom-root"
+        defaultValue="index-a"
         onChange={() => {}}
-        value="index-a"
       >
         <option className="custom-item" value="index-a">Index A</option>
         <option className="custom-item" value="index-b">Index B</option>
@@ -50,8 +50,8 @@ describe('Selector', () => {
     expect(out).toEqualJSX(
       <select
         className="custom-root"
+        defaultValue={10}
         onChange={() => {}}
-        value={10}
       >
         <option className="custom-item" value={10}>10 results per page</option>
         <option className="custom-item" value={20}>20 results per page</option>
