@@ -17,21 +17,21 @@ noFooter: true
 <div class="row">
 <div class="col-sm-4">
 <div class="sticker sticker-algolia">
-<img src="../img/logo-algolia.svg" width="26"/>
+<img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
 </div>
 <br>
 Built on top of <a href="https://www.algolia.com" target="_blank">Algolia Search API</a>
 </div>
 <div class="col-sm-4">
 <div class="sticker sticker-open-source">
-<img src="../img/logo-open-source.svg" width="30"/>
+<img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
 </div>
 <br>
 Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js" target="_blank">Github</a>
 </div>
 <div class="col-sm-4">
 <div class="sticker sticker-ux">
-<img src="../img/logo-UX.svg" width="30"/>
+<img src="{{site.baseurl}}/img/logo-UX.svg" width="30"/>
 </div>
 <br>
 UI/UX Best practices
