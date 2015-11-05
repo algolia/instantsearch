@@ -83,9 +83,16 @@ function rangeSlider({
       }
       helper.search();
     },
+    getDisjunctiveFacetPosition(results, facetName) {
+      let facets = results.disjunctiveFacets;
+      for (let i = 0; facets.length; i++) {
+        if (facets[i].name === facetName) return i;
+      }
+      return -1;
+    },
     render({results, helper, templatesConfig}) {
-      let stats = results.getFacetStats(attributeName);
-
+      let facetPosition = this.getDisjunctiveFacetPosition(results, attributeName);
+      let stats = results.disjunctiveFacets[facetPosition].stats;
       let currentRefinement = this._getCurrentRefinement(helper);
 
       if (stats === undefined) {

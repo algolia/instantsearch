@@ -74,7 +74,7 @@
     "lodash": "^3.10.1",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",
-    "react-nouislider": "^1.5.1",
+    "react-nouislider": "^1.5.2",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"
