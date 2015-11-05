@@ -85,9 +85,9 @@ function priceRanges({
 
       refinements.forEach(v => {
         if (v.operator.indexOf('>') !== -1) {
-          from = v.value[0] + 1;
+          from = Math.floor(v.value[0]);
         } else if (v.operator.indexOf('<') !== -1) {
-          to = v.value[0] - 1;
+          to = Math.ceil(v.value[0]);
         }
       });
       return [{from, to, isRefined: true}];
@@ -99,10 +99,10 @@ function priceRanges({
       helper.clearRefinements(attributeName);
       if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
         if (typeof from !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '>', from - 1);
+          helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
         }
         if (typeof to !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '<', to + 1);
+          helper.addNumericRefinement(attributeName, '<=', Math.ceil(to));
         }
       }
 
@@ -152,10 +152,10 @@ function priceRanges({
             let newState = state.clearRefinements(attributeName);
             if (!isRefined) {
               if (typeof from !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '>', from - 1);
+                newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(from));
               }
               if (typeof to !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '<', to + 1);
+                newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(to));
               }
             }
             return createURL(newState);
