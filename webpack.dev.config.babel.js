@@ -1,9 +1,14 @@
 export default {
-  entry: './dev/app.js',
+  entry: {
+    bundle: './dev/app.js',
+    instantsearch: './index.js'
+  },
   devtool: 'source-map',
   output: {
     path: './dev/',
-    filename: 'bundle.js'
+    filename: '[name].js',
+    library: '[name]',
+    libraryTarget: 'umd'
   },
   module: {
     loaders: [{
