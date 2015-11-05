@@ -66,8 +66,8 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
-    "algoliasearch": "^3.9.0",
-    "algoliasearch-helper": "^2.6.5",
+    "algoliasearch": "^3.9.1",
+    "algoliasearch-helper": "^2.6.6",
     "classnames": "^2.2.0",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
