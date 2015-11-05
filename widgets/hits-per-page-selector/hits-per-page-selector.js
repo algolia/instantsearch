@@ -41,14 +41,14 @@ function hitsPerPageSelector({
   return {
     init: function(state) {
       let isCurrentInOptions = reduce(options, function(res, option) {
-        if (state.hitsPerPage === undefined) {
-          return true;
-        }
         return res || +state.hitsPerPage === +option.value;
       }, false);
 
       if (!isCurrentInOptions) {
-        throw new Error('[hitsPerPageSelector]: No option in `options` with `value: ' + state.hitsPerPage + '`');
+        options = [{value: undefined, label: ''}].concat(options);
+        if (window.console) {
+          window.console.log('[Warning][hitsPerPageSelector] No option in `options` with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
+        }
       }
     },
 

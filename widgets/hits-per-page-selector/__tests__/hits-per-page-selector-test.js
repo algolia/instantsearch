@@ -23,6 +23,7 @@ describe('hitsPerPageSelector()', () => {
   let helper;
   let results;
   let autoHideContainer;
+  let consoleLog;
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);
@@ -30,6 +31,7 @@ describe('hitsPerPageSelector()', () => {
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
     hitsPerPageSelector.__Rewire__('autoHideContainer', autoHideContainer);
+    consoleLog = sinon.spy(window.console, 'log');
 
     container = document.createElement('div');
     options = [
@@ -90,16 +92,16 @@ describe('hitsPerPageSelector()', () => {
   it('should throw if there is no name attribute in a passed object', () => {
     options.length = 0;
     options.push({label: 'Label without a value'});
-    expect(() => {
-      widget.init(helper.state, helper);
-    }).toThrow(/No option in `options` with `value: 20`/);
+    widget.init(helper.state, helper);
+    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
+    expect(consoleLog.firstCall.args[0]).toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: 20\)/);
   });
 
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
-    expect(() => {
-      widget.init(helper.state, helper);
-    }).toThrow(/No option in `options` with `value: -1`/);
+    widget.init(helper.state, helper);
+    expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
+    expect(consoleLog.firstCall.args[0]).toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: -1\)/);
   });
 
   it('should not throw an error if state does not have a `hitsPerPage`', () => {
@@ -112,5 +114,6 @@ describe('hitsPerPageSelector()', () => {
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
     hitsPerPageSelector.__ResetDependency__('autoHideContainer');
+    consoleLog.restore();
   });
 });
