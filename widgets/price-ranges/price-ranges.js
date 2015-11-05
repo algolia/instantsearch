@@ -152,10 +152,10 @@ function priceRanges({
             let newState = state.clearRefinements(attributeName);
             if (!isRefined) {
               if (typeof from !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '>', from - 1);
+                newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(from));
               }
               if (typeof to !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '<', to + 1);
+                newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(to));
               }
             }
             return createURL(newState);

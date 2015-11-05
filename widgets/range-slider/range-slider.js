@@ -76,10 +76,10 @@ function rangeSlider({
     _refine(helper, stats, newValues) {
       helper.clearRefinements(attributeName);
       if (newValues[0] > stats.min) {
-        helper.addNumericRefinement(attributeName, '>=', newValues[0]);
+        helper.addNumericRefinement(attributeName, '>=', Math.round(newValues[0]));
       }
       if (newValues[1] < stats.max) {
-        helper.addNumericRefinement(attributeName, '<=', newValues[1]);
+        helper.addNumericRefinement(attributeName, '<=', Math.round(newValues[1]));
       }
       helper.search();
     },
