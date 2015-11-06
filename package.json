@@ -27,6 +27,7 @@
     "babel-plugin-rewire": "^0.1.22",
     "clean-css": "^3.4.6",
     "conventional-changelog": "^0.5.1",
+    "deep-equal": "^1.0.1",
     "dmd": "^1.2.0",
     "doctoc": "^0.15.0",
     "eslint": "^1.7.3",
