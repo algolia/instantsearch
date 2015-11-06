@@ -9,8 +9,8 @@ layout: default
       .col-xs-6
         .spacer100
         .presented-by
-          %a{href: 'https://www.algolia.com', title: 'Instant Search as a Service', target: '_blank'}
-            %img{src:"img/algolia-logo.svg", width: 100}
+          %a{href: "https://www.algolia.com", title: "Instant Search as a Service", target: "_blank"}
+            %img{src:"img/algolia-logo.svg", width: 100, alt:"Logo Algolia"}
           presents:
         %h1.logo
           {% svg img/logo-instantsearch.svg %}
@@ -21,8 +21,6 @@ layout: default
         -# %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
         -# %span &nbsp;
         -# %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
-        .spacer100
-        -# %img{src:"img/icon-widget.svg", width:70}
         %h2 There’s a widget for that
         %p.lead
           Pick from an extensive library of widgets to power your search
@@ -33,21 +31,21 @@ layout: default
   .container
     .row
       .col-xs-6
-        %img{src:"img/icon-theme.svg", width:70}
+        %img{src:"img/icon-theme.svg", width:70, alt:"Widgets"}
         %h2 More than widgets
         %p.lead You code becomes easy to write and maintain as you won't need to build all the glue code between widgets to track the state of your facets, decode URL parameters, etc. Everything is packaged in the lib.
 %section#widget-customization-2.window
   .container
     .row
       .col-xs-6
-        %img{src:"img/icon-infinite.svg", width:70}
+        %img{src:"img/icon-infinite.svg", width:70, alt:"Infinite"}
         %h2 Infinite possibilities
         %p.lead Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
 %section#widget-customization-3.window
   .container
     .row
       .col-xs-6
-        %img{src:"img/icon-community.svg", width:70}
+        %img{src:"img/icon-community.svg", width:70, alt:"Community"}
         %h2 Bring your own widget
         %p.lead Sometimes you want to deviate from the standard path and build a custom feature. You can do that by forking a widget or coding your own and integrating into the open source project.
         .w-1
@@ -62,7 +60,7 @@ layout: default
         .col-xs-6
         .col-xs-6.pos-rel
           #anim
-            %img{src:"img/drone-search.png", width:420}
+            %img{src:"img/drone-search.png", width:420, alt:"Drone Shop Layout"}
             .widget.widget-1
             .widget.widget-2
             .widget.widget-3
@@ -78,7 +76,6 @@ layout: default
               .widget.widget-5
               .widget.widget-6
               .widget.widget-7
-              -# %img{src:"img/combinations.svg", width:420}
             .screen.screen-2
               .widget.widget-1
               .widget.widget-2
@@ -87,7 +84,6 @@ layout: default
               .widget.widget-5
               .widget.widget-6
               .widget.widget-7
-              -# %img{src:"img/combinations.svg", width:420}
             .screen.screen-3
               .widget.widget-1
               .widget.widget-2
@@ -96,22 +92,21 @@ layout: default
               .widget.widget-5
               .widget.widget-6
               .widget.widget-7
-              -# %img{src:"img/combinations.svg", width:420}
           #anim-overlay
             .widget-intro.w-1
-              %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50}
+              %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50, alt:"Widget Search Box"}
               %h4 Search Box
               %p Search at each keystroke
             .widget-intro.w-2
-              %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50}
+              %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50, alt:"Widget Filters"}
               %h4 Filters
               %p List of links or checkboxes
             .widget-intro.w-3
-              %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50}
+              %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50, alt:"Widget Slider"}
               %h4 Slider
               %p Filter numerical values
             .widget-intro.w-4
-              %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50}
+              %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50, alt:"Widget Results"}
               %h4 Results
               %p Grid of search results
             .illus-sync
@@ -129,13 +124,13 @@ layout: default
       .col-xs-4.col-xs-offset-1
         %section#instantsearch-vp-1
           .text-center
-            %img{src:"img/icon-ux.svg"}
+            %img{src:"img/icon-ux.svg", alt:"UX"}
             %h2 Search UX done right
           %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
       .col-xs-4.col-xs-offset-2
         %section#instantsearch-vp-2
           .text-center
-            %img{src:"img/icon-update.svg"}
+            %img{src:"img/icon-update.svg", alt:"Update"}
             %h2 Always improving
           %p The instant-search experience is already deployed in hundreds of websites. We inject all the feedback and collective experience we get back into the widgets.
     .spacer100
