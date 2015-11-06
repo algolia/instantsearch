@@ -4,6 +4,8 @@ let ReactDOM = require('react-dom');
 let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-refinement-list');
 let cx = require('classnames');
+let find = require('lodash/collection/find');
+let includes = require('lodash/collection/includes');
 
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 let headerFooterHOC = require('../../decorators/headerFooter');
@@ -131,9 +133,7 @@ function isRefined(state, attributeName, option) {
 }
 
 function refine(state, attributeName, options, facetValue) {
-  let refinedOption = options.find(function(option) {
-    return option.name === facetValue;
-  });
+  let refinedOption = find(options, {name: facetValue});
 
   let currentRefinements = state.getNumericRefinements(attributeName);
 
@@ -181,10 +181,9 @@ function refine(state, attributeName, options, facetValue) {
 
 function hasNumericRefinement(currentRefinements, operator, value) {
   let hasOperatorRefinements = currentRefinements[operator] !== undefined;
+  let includesValue = includes(currentRefinements[operator], value);
 
-  return hasOperatorRefinements && currentRefinements[operator].find(function(refinement) {
-    return refinement === value;
-  }) !== undefined;
+  return hasOperatorRefinements && includesValue;
 }
 
 module.exports = numericRefinementList;
