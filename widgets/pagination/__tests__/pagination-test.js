@@ -24,7 +24,7 @@ describe('pagination()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHideContainer', sinon.stub().returns(Pagination));
+    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     cssClasses = {
@@ -99,7 +99,7 @@ describe('pagination()', () => {
 
   afterEach(() => {
     pagination.__ResetDependency__('ReactDOM');
-    pagination.__ResetDependency__('autoHideContainer');
+    pagination.__ResetDependency__('autoHideContainerHOC');
   });
 
   function getProps() {

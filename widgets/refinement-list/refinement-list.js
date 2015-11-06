@@ -5,8 +5,8 @@ let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-refinement-list');
 let cx = require('classnames');
 
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 
 let defaultTemplates = require('./defaultTemplates');
 
@@ -33,7 +33,7 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
  * @return {Object}
  */
 function refinementList({
@@ -45,14 +45,14 @@ function refinementList({
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
-    hideContainerWhenNoResults = true
+    autoHideContainer = true
   }) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
 
-  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
-  if (hideContainerWhenNoResults === true) {
-    RefinementList = autoHideContainer(RefinementList);
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  if (autoHideContainer === true) {
+    RefinementList = autoHideContainerHOC(RefinementList);
   }
 
   if (!container || !facetName) {
@@ -90,7 +90,7 @@ function refinementList({
 
       let facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
 
-      let hasNoResults = facetValues.length === 0;
+      let hasNoFacetValues = facetValues.length === 0;
 
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
@@ -110,7 +110,7 @@ function refinementList({
           createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          shouldAutoHideContainer={hasNoResults}
+          shouldAutoHideContainer={hasNoFacetValues}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
         />,

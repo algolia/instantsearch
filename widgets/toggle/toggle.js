@@ -6,8 +6,8 @@ let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-toggle');
 let cx = require('classnames');
 
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 
 let defaultTemplates = require('./defaultTemplates');
 
@@ -34,7 +34,7 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|Function} [options.templates.item] Item template
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
  * @return {Object}
  */
 function toggle({
@@ -44,14 +44,14 @@ function toggle({
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
     transformData,
-    hideContainerWhenNoResults = true
+    autoHideContainer = true
   } = {}) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
 
-  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
-  if (hideContainerWhenNoResults === true) {
-    RefinementList = autoHideContainer(RefinementList);
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  if (autoHideContainer === true) {
+    RefinementList = autoHideContainerHOC(RefinementList);
   }
 
   if (!container || !facetName || !label) {

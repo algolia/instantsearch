@@ -2,8 +2,8 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 
 let utils = require('../../lib/utils.js');
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 
 let defaultTemplates = {
   header: '',
@@ -25,7 +25,7 @@ let defaultTemplates = {
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}
  */
 function rangeSlider({
@@ -39,13 +39,13 @@ function rangeSlider({
     },
     step = 1,
     pips = true,
-    hideContainerWhenNoResults = true
+    autoHideContainer = true
   }) {
   let containerNode = utils.getContainerNode(container);
 
-  let Slider = headerFooter(require('../../components/Slider/Slider'));
-  if (hideContainerWhenNoResults === true) {
-    Slider = autoHideContainer(Slider);
+  let Slider = headerFooterHOC(require('../../components/Slider/Slider'));
+  if (autoHideContainer === true) {
+    Slider = autoHideContainerHOC(Slider);
   }
 
   return {

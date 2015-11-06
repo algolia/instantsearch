@@ -29,7 +29,7 @@ describe('indexSelector()', () => {
     ReactDOM = {render: sinon.spy()};
 
     indexSelector.__Rewire__('ReactDOM', ReactDOM);
-    indexSelector.__Rewire__('autoHideContainer', autoHideContainer);
+    indexSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
     indices = [
@@ -102,6 +102,6 @@ describe('indexSelector()', () => {
 
   afterEach(() => {
     indexSelector.__ResetDependency__('ReactDOM');
-    indexSelector.__ResetDependency__('autoHideContainer');
+    indexSelector.__ResetDependency__('autoHideContainerHOC');
   });
 });

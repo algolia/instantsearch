@@ -21,6 +21,7 @@ describe('numericRefinementList()', () => {
   let RefinementList;
   let numericRefinementList;
   let options;
+  let results;
 
   beforeEach(() => {
     numericRefinementList = require('../numeric-refinement-list');
@@ -28,9 +29,9 @@ describe('numericRefinementList()', () => {
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('autoHideContainer', autoHideContainer);
+    numericRefinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
     headerFooter = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('headerFooter', headerFooter);
+    numericRefinementList.__Rewire__('headerFooterHOC', headerFooter);
 
     options = [
       {name: 'All'},
@@ -50,14 +51,17 @@ describe('numericRefinementList()', () => {
       search: sinon.spy(),
       setState: sinon.spy()
     };
+    results = {
+      hits: []
+    };
 
     helper.state.clearRefinements = sinon.stub().returns(helper.state);
     helper.state.addNumericRefinement = sinon.stub().returns(helper.state);
   });
 
   it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
-    widget.render({helper});
-    widget.render({helper});
+    widget.render({helper, results});
+    widget.render({helper, results});
 
     let props = {
       cssClasses: {
@@ -103,7 +107,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('doesn\'t call the refinement functions if not refined', () => {
-    widget.render({helper});
+    widget.render({helper, results});
     expect(helper.state.clearRefinements.called).toBe(false, 'clearRefinements called one');
     expect(helper.state.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
     expect(helper.search.called).toBe(false, 'search never called');
@@ -144,7 +148,7 @@ describe('numericRefinementList()', () => {
 
   afterEach(() => {
     numericRefinementList.__ResetDependency__('ReactDOM');
-    numericRefinementList.__ResetDependency__('autoHideContainer');
-    numericRefinementList.__ResetDependency__('headerFooter');
+    numericRefinementList.__ResetDependency__('autoHideContainerHOC');
+    numericRefinementList.__ResetDependency__('headerFooterHOC');
   });
 });

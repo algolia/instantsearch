@@ -4,8 +4,8 @@ let ReactDOM = require('react-dom');
 let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-menu');
 let cx = require('classnames');
-let autoHideContainer = require('../../decorators/autoHideContainer');
-let headerFooter = require('../../decorators/headerFooter');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+let headerFooterHOC = require('../../decorators/headerFooter');
 
 let defaultTemplates = require('./defaultTemplates.js');
 
@@ -30,7 +30,7 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [hideContainerWhenNoResults=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @return {Object}
  */
 function menu({
@@ -41,14 +41,14 @@ function menu({
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
-    hideContainerWhenNoResults = true
+    autoHideContainer = true
   }) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, hideContainerWhenNoResults]})';
+  let usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, autoHideContainer]})';
 
-  let RefinementList = headerFooter(require('../../components/RefinementList/RefinementList.js'));
-  if (hideContainerWhenNoResults === true) {
-    RefinementList = autoHideContainer(RefinementList);
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  if (autoHideContainer === true) {
+    RefinementList = autoHideContainerHOC(RefinementList);
   }
 
   if (!container || !facetName) {
@@ -68,7 +68,7 @@ function menu({
     }),
     render: function({results, helper, templatesConfig, state, createURL}) {
       let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
-      let hasNoRefinements = facetValues.length === 0;
+      let hasNoFacetValues = facetValues.length === 0;
 
       let templateProps = utils.prepareTemplateProps({
         transformData,
@@ -94,7 +94,7 @@ function menu({
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          shouldAutoHideContainer={hasNoRefinements}
+          shouldAutoHideContainer={hasNoFacetValues}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,

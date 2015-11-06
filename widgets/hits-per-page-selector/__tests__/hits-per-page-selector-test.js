@@ -30,7 +30,7 @@ describe('hitsPerPageSelector()', () => {
     ReactDOM = {render: sinon.spy()};
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
-    hitsPerPageSelector.__Rewire__('autoHideContainer', autoHideContainer);
+    hitsPerPageSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
     consoleLog = sinon.spy(window.console, 'log');
 
     container = document.createElement('div');
@@ -113,7 +113,7 @@ describe('hitsPerPageSelector()', () => {
 
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
-    hitsPerPageSelector.__ResetDependency__('autoHideContainer');
+    hitsPerPageSelector.__ResetDependency__('autoHideContainerHOC');
     consoleLog.restore();
   });
 });

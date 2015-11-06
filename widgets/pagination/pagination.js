@@ -6,7 +6,7 @@ let cx = require('classnames');
 let utils = require('../../lib/utils.js');
 let bem = utils.bemHelper('ais-pagination');
 
-let autoHideContainer = require('../../decorators/autoHideContainer');
+let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 let defaultLabels = {
   previous: '‹',
   next: '›',
@@ -36,7 +36,7 @@ let defaultLabels = {
  * @param  {number} [options.padding=3] The number of pages to display on each side of the current page
  * @param  {string|DOMElement|boolean} [options.scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
- * @param  {boolean} [options.hideContainerWhenNoResults=true] Hide the container when no results match
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
 function pagination({
@@ -46,7 +46,7 @@ function pagination({
     maxPages = 20,
     padding = 3,
     showFirstLast = true,
-    hideContainerWhenNoResults = true,
+    autoHideContainer = true,
     scrollTo = 'body'
   }) {
   if (scrollTo === true) {
@@ -57,12 +57,12 @@ function pagination({
   let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
 
   let Pagination = require('../../components/Pagination/Pagination.js');
-  if (hideContainerWhenNoResults === true) {
-    Pagination = autoHideContainer(Pagination);
+  if (autoHideContainer === true) {
+    Pagination = autoHideContainerHOC(Pagination);
   }
 
   if (!container) {
-    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, hideContainerWhenNoResults]})');
+    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, autoHideContainer]})');
   }
 
   labels = defaults(labels, defaultLabels);

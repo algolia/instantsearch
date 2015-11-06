@@ -9,6 +9,6 @@
 |  <span class='attr-optional'>`options.cssClasses`</span> | CSS classes to add to the wrapping elements: root, body |
 |  <span class='attr-optional'>`options.cssClasses.root`</span> | CSS class to add to the root element |
 |  <span class='attr-optional'>`options.cssClasses.body`</span> | CSS class to add to the body element |
-|  <span class='attr-optional'>`hideContainerWhenNoResults`</span> | Hide the container when no results match |
+|  <span class='attr-optional'>`options.autoHideContainer`</span> | Hide the container when no refinements available |
 
 <p class="attr-legend">* <span>Required</span></p>

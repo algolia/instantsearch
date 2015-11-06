@@ -21,6 +21,6 @@
 |  <span class='attr-optional'>`options.templates.item`</span> | Item template, provided with `name`, `count`, `isRefined` |
 |  <span class='attr-optional'>`options.templates.footer`</span> | Footer template |
 |  <span class='attr-optional'>`options.transformData`</span> | Function to change the object passed to the item template |
-|  <span class='attr-optional'>`hideContainerWhenNoResults`</span> | Hide the container when there's no results |
+|  <span class='attr-optional'>`options.autoHideContainer`</span> | Hide the container when no items in the refinement list |
 
 <p class="attr-legend">* <span>Required</span></p>

@@ -23,6 +23,6 @@
 |  <span class='attr-optional'>`options.labels.currency`</span> | Currency label |
 |  <span class='attr-optional'>`options.labels.separator`</span> | Separator labe, between min and max |
 |  <span class='attr-optional'>`options.labels.button`</span> | Button label |
-|  <span class='attr-optional'>`hideContainerWhenNoResults`</span> | Hide the container when no results match |
+|  <span class='attr-optional'>`options.autoHideContainer`</span> | Hide the container when no refinements available |
 
 <p class="attr-legend">* <span>Required</span></p>
