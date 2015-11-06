@@ -1,4 +1,4 @@
-/* global TimelineMax, ScrollMagic, Power2, $ */
+/* global TimelineMax, ScrollMagic, Power2, Bounce, $ */
 'use strict';
 
 $(function () {
@@ -68,9 +68,9 @@ $(function () {
   // Second Section
   tl[1] = new TimelineMax();
   tl[1]
-    .to($widgets, .2, {x:0, y:0, z:0, scale:0 })
+    .to($widgets, 0.2, {x:0, y:0, z:0, scale:0 })
     .to($illusSync, 3, {scale:0, opacity:0})
-    .to($anim, 5, {scale:.5 })
+    .to($anim, 5, {scale:0.5 })
     .to('#anim img', 4, {opacity:0}, '-=8')
     .to('#anim > .widget', 2, {opacity:1, scale:1})
     .to('.screen-1', 3, {opacity:1})
@@ -111,12 +111,12 @@ $(function () {
       .addTo(controller);
   }
 
-  scenes[0].on('start', function (event) {
+  scenes[0].on('start', function () {
     intro.seek(20);
   });
 
-  scenes[3].on('leave', function (event) {
-    $('body:after').addClass('hide')
+  scenes[3].on('leave', function () {
+    $('body:after').addClass('hide');
   });
 
 });
@@ -165,7 +165,7 @@ function animate() {
   context.clearRect(0, 0, screenW, screenH);
   $.each(stars, function() {
     this.draw(context);
-  })
+  });
 }
 
 // Star
@@ -175,7 +175,7 @@ function Star(x, y, length, opacity) {
   this.length = parseInt(length);
   this.opacity = opacity;
   this.factor = 1;
-  this.increment = Math.random() * .03;
+  this.increment = Math.random() * 0.03;
 }
 
 // Draw a star
@@ -199,7 +199,7 @@ Star.prototype.draw = function() {
 
   this.opacity += this.increment * this.factor;
 
-  context.beginPath()
+  context.beginPath();
   for (var i = 5; i--;) {
     context.lineTo(0, this.length);
     context.translate(0, this.length);
@@ -215,4 +215,4 @@ Star.prototype.draw = function() {
   // context.shadowColor = '#1D96C7';
   context.fill();
   context.restore();
-}
+};
