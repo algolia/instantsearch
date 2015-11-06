@@ -38,8 +38,6 @@
       line-height: 1.7em
       list-style: none
 
-// Main Content
-
 // Left panel
 .widget-description
   padding-right: 0
@@ -294,12 +292,14 @@
     z-index: 11
     border: none
   > [class^=ais-]
+    padding: 4px
     outline: 1px solid #660000
     &:before
       content: "." attr(class)
       text-align: right
       white-space: nowrap
-      font-size: 11px
+      font-size: 12px
+      font-weight: bold
       z-index: 10
       position: absolute
       top: 0
@@ -311,13 +311,15 @@
       color: #660000
   [class^=ais-]
     cursor: pointer
+    padding: 4px
     &:hover
       outline: 1px solid #660000
       &:before
         content: "." attr(class)
         text-align: right
         white-space: nowrap
-        font-size: 11px
+        font-size: 12px
+        font-weight: bold
         z-index: 10
         position: absolute
         top: 0

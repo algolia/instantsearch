@@ -8,42 +8,62 @@ html, body
   svg
     height: 70px
 
-.fa.fa-heart
-  color: #E61870
-
-// scroll down
-#space-overlay:after
-  animation: arrow 1s ease-in-out infinite alternate
-  background: transparent url("../img/arrow.svg") no-repeat center bottom
-  background-size: contain
-  bottom: 24px
-  height: 19px
-  content: ''
-  display: block
-  left: 50%
-  margin-left: -32px
-  position: fixed
-  width: 64px
-  z-index: 99
-
+.navbar
+  background-color: #0B1724
+  border-radius: 0
 .navbar-brand
   color: white !important
 .navbar-nav > .active > a
   color: #1D96C7 !important
 
 
-footer.site-footer
-  background-color: white
-  margin-top: 0
+.presented-by
+  color: rgba(white,.5)
+  font-size: .9em
+  img
+    position: relative
+    top: -5px
+    margin-right: 4px
+
+#space
+  position: fixed
+  top: 0
+  left: 0
+  z-index: -1
+  opacity: 0
+  animation: fadeIn 3s ease-in-out
+
+#space-overlay
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  z-index: -2
+  background: linear-gradient(-30deg, rgba(#182848,0.4) 0%, rgba(#182848,1) 90%) #1D96C7
+  &:after // scroll down
+    animation: arrow 1s ease-in-out infinite alternate
+    background: transparent url("../img/arrow.svg") no-repeat center bottom
+    background-size: contain
+    bottom: 24px
+    height: 19px
+    content: ''
+    display: block
+    left: 50%
+    margin-left: -32px
+    position: fixed
+    width: 64px
+    z-index: 99
+
 
 .window
   padding: 400px 0 200px
   width: 100%
   display: block
   color: white
-.hero
-  padding-top: 100px
-  opacity: 1
+  &.hero
+    padding-top: 100px
+    opacity: 1
 
 .vp
   font-size: 1.4em
@@ -55,42 +75,12 @@ footer.site-footer
     &:hover
     text-decoration: none
 
-.navbar
-  background-color: #0B1724
-  border-radius: 0
-
-#space
-  position: fixed
-  top: 0
-  left: 0
-  z-index: -1
-
-#space-overlay
-  position: fixed
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  z-index: -2
-  background-image: linear-gradient(-30deg, rgba(#182848,0.4) 0%, rgba(#182848,1) 90%)
-  background-color: #1D96C7
 
 #curveUpColor
   z-index: 99
   display: block
   path
     fill: white
-
-.presented-by
-  color: rgba(white,.5)
-  font-size: .9em
-  img
-    position: relative
-    top: -5px
-    margin-right: 4px
-
-.bg-white
-  background-color: white
 
 h2
   font-size: 1.8em
@@ -112,17 +102,6 @@ h2
   color: white
   pointer-events: none
 
-.path
-  stroke-dasharray: 10
-  animation: dash 20s linear infinite reverse
-
-.path2
-  stroke-dasharray: 10
-  animation: dash 20s linear infinite
-
-@keyframes dash
-  to
-    stroke-dashoffset: 1000
 
 #anim-overlay
   position: absolute
@@ -150,12 +129,18 @@ h2
   .w-4
     top: 140px
     left: 450px
-  .illus-sync
-    opacity: 0
-    position: absolute
-    top: 350px
-    left: 350px
 
+.illus-sync
+  opacity: 0
+  position: absolute
+  top: 350px
+  left: 350px
+  .path
+    stroke-dasharray: 10
+    animation: dash 20s linear infinite reverse
+  .path2
+    stroke-dasharray: 10
+    animation: dash 20s linear infinite
 
 
 .screen
@@ -240,9 +225,31 @@ h2
   top: 350px
   right: 60px
 
-footer.site-footer
-  text-align: center
 
+
+
+
+//keyframes
+
+@keyframes fadeIn
+  0%
+    opacity: 0
+  100%
+    opacity: 1
+
+@keyframes fadeOut
+  0%
+    opacity: 1
+  100%
+    opacity: 0
+
+@keyframes fadeInUp
+  0%
+    opacity: 0
+    transform: translateY(20px)
+  100%
+    opacity: 1
+    transform: translateY(0)
 
 @keyframes arrow
   0%
@@ -251,3 +258,7 @@ footer.site-footer
   100%
     opacity: 1
     transform: translateY(0)
+
+@keyframes dash
+  100%
+    stroke-dashoffset: 700
