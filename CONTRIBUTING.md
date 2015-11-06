@@ -25,8 +25,8 @@ Then, when you are ready:
 - Add either `do not merge` or `ready for review` labels given your context
 - wait for **review**
 - do the necessary changes and add more commits
-- once you are good, **squash** your pull request to avoid commits like "fix dangling comma in bro.js", "fix after review"
-  - basically everything that can be squash should be merged, example:
+- once you are done, [squash](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html) your commits to avoid things like "fix dangling comma in bro.js", "fix after review"
+  - example:
     - `feat(widget): new feature blabla..`
     - `refactor new feature blablabla...` (bad, not following our [commit message guidelines](#commit-message-guidelines)
   - **both commits should be squashed* in a single commit: `feat(widget) ..`
