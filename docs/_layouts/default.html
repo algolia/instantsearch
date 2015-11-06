@@ -9,17 +9,9 @@
     <meta name="description" content="{{ site.description }}">
 
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="{{ "/css/default-theme.css" | prepend: site.baseurl}}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.4.0/css/font-awesome.min.css" />
 
-    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/ScrollMagic.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/animation.gsap.min.js"></script>
-    {% if site.env == 'development' %}
-      <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
-      <script src="http://localhost:35730/livereload.js"></script>
-    {% endif %}
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Raleway:300,800" />
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" />
 
@@ -33,10 +25,22 @@
 
     {{ content }}
 
-    {%if page.noFooter == null %}
-      {% include footer.html %}
-      {% contentblock site-footer %}
-    {% endif %}
+{%if page.noFooter == null %}
+    {% include footer.html %}
+{% endif %}
+
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TweenMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TimelineMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/ScrollMagic.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/animation.gsap.min.js"></script>
+{% if site.env == 'development' %}
+    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
+    <script src="http://localhost:35730/livereload.js"></script>
+{% endif %}
+
+  {% contentblock site-footer %}
   </body>
 
 </html>
