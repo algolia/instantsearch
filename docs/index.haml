@@ -6,8 +6,8 @@ layout: default
 %section.hero.window
   .container
     .row
-      .col-xs-6
-        .spacer100
+      .col-sm-6
+        .spacer80
         .presented-by
           %a{href: "https://www.algolia.com", title: "Instant Search as a Service", target: "_blank"}
             %img{src:"img/algolia-logo.svg", width: 100, alt:"Logo Algolia"}
@@ -17,7 +17,7 @@ layout: default
         %p.vp
           The library of UI widgets to build the best instant-search experience with
           %a{href:"https://www.algolia.com"} Algolia's Hosted Search API.
-        -# .spacer40
+        .spacer80
         -# %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
         -# %span &nbsp;
         -# %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
@@ -30,21 +30,21 @@ layout: default
 %section#widget-customization-1.window.pos-rel
   .container
     .row
-      .col-xs-6
+      .col-sm-6
         %img{src:"img/icon-theme.svg", width:70, alt:"Widgets"}
         %h2 More than widgets
         %p.lead You code becomes easy to write and maintain as you won't need to build all the glue code between widgets to track the state of your facets, decode URL parameters, etc. Everything is packaged in the lib.
 %section#widget-customization-2.window
   .container
     .row
-      .col-xs-6
+      .col-sm-6
         %img{src:"img/icon-infinite.svg", width:70, alt:"Infinite"}
         %h2 Infinite possibilities
         %p.lead Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
 %section#widget-customization-3.window
   .container
     .row
-      .col-xs-6
+      .col-sm-6
         %img{src:"img/icon-community.svg", width:70, alt:"Community"}
         %h2 Bring your own widget
         %p.lead Sometimes you want to deviate from the standard path and build a custom feature. You can do that by forking a widget or coding your own and integrating into the open source project.
@@ -54,7 +54,7 @@ layout: default
           %p Fork and custom your own widgets.
         .spacer30
 
-  .anim-container
+  .anim-container.hidden-xs
     .container
       .row
         .col-xs-6
@@ -147,6 +147,6 @@ layout: default
 
 {% contentfor site-footer %}
 <script type="text/javascript" src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>
-//twitter
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-{% endcontentfor %}
+-# //twitter
+-# <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+-# {% endcontentfor %}
