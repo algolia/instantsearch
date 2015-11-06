@@ -69,9 +69,9 @@ $(function () {
   tl[1] = new TimelineMax();
   tl[1]
     .to($widgets, 0.2, {x:0, y:0, z:0, scale:0 })
-    .to($illusSync, 3, {scale:0, opacity:0})
-    .to($anim, 5, {scale:0.5 })
-    .to('#anim img', 4, {opacity:0}, '-=8')
+    .to($illusSync, 3, {scale:0, opacity:0}, '+=3')
+    .to($anim, 3, {scale:0.5 }, '-=3')
+    .to('#anim img', 4, {opacity:0}, '-=5')
     .to('#anim > .widget', 2, {opacity:1, scale:1})
     .to('.screen-1', 3, {opacity:1})
     .to('.screen-1 .widget', 5, {opacity:1, scale:1},'-=2')
@@ -86,9 +86,9 @@ $(function () {
   tl[2]
     .to($anim, 10, {scale:1, y:100, rotationX:20, rotationZ:-6, ease:Power2.easeInOut })
     .to($screens, 5, {opacity:0}, '-=8')
-    .to($animWidget5, 8, {z:200})
-    .to($animWidget5, 4, {rotationY:180, backgroundColor:'#674492'}, '-=4')
-    .to($animWidget5, 4, {z:0}, '-=2')
+    .to($animWidget5, 4, {z:200})
+    .to($animWidget5, 4, {rotationY:180, backgroundColor:'#674492'}, '-=2')
+    .to($animWidget5, 4, {z:0})
     .to($overlay, 8, {backgroundColor:'#674492' }, '0');
 
   // Fourth Section
@@ -129,8 +129,8 @@ var context;
 var screenH;
 var screenW;
 var stars = [];
-var fps = 30;
-var numStars = 300;
+var fps = 10;
+var numStars = 200;
 
 // Calculate the screen size
 screenH = $(window).height();
@@ -148,11 +148,11 @@ context = canvas[0].getContext('2d');
 for (var i = 0; i < numStars; i++) {
   var x = Math.round(Math.random() * screenW);
   var y = Math.round(Math.random() * screenH);
-  var length = 1 + Math.random() * 2;
+  var len = 1 + Math.random() * 2;
   var opacity = Math.random();
 
   // Create a new star and draw
-  var star = new Star(x, y, length, opacity);
+  var star = new Star(x, y, len, opacity);
 
   // Add the the stars array
   stars.push(star);
