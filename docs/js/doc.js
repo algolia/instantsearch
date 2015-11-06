@@ -130,7 +130,7 @@
     $('.code-box').each(function() {
       var $snippet = $(this).find('.code-sample-snippet');
       $snippet.prepend(
-        '<button type="button" class="btn btn-default btn-xs copy-btn"><i class="fa fa-clipboard"></i> Copy to clipboard</button>'
+        '<button type="button" class="btn btn-default btn-xs copy-btn"><i class="fa fa-clipboard"></i> Copy</button>'
       );
     });
     new Clipboard('.copy-btn', {

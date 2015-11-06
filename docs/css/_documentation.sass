@@ -209,6 +209,7 @@
       color: $brand-primary
       background-color: #0A1724
       border: none
+      transition: all .2s
       &:hover
         color: #fff
       &:active, &:focus
@@ -217,22 +218,27 @@
         font-weight: bolder
         background: #163350
   .copy-btn
+    display: block
     position: absolute
     right: 5px
     top: 5px
-    display: none
-    color: $brand-primary
-    background-color: #0A1724
-    border-color: $brand-primary
+    opacity: 0
+    font-size: .9em
+    background-color: rgba($brand-primary,.1)
+    border: none
+    text-transform: uppercase
+    color: rgba(white,.4)
+    transition: opacity .2s
     &:active, &:focus
-      outline: 0px
+      outline: 0
     &:active
+      color: white !important
+      background-color: rgba($brand-primary,.4)
       color: #0A1724
-      background-color: $brand-primary
-      border-color: #0A1724
   &:hover
     .copy-btn
       display: block
+      opacity: 1
   .jsdoc
     border: none
     color: #A3B6CB
