@@ -10800,8 +10800,8 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.1.tgz"
     },
     "react-nouislider": {
-      "version": "1.5.1",
-      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.5.1.tgz",
+      "version": "1.5.2",
+      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.5.2.tgz",
       "dependencies": {
         "nouislider-algolia-fork": {
           "version": "8.1.1",
