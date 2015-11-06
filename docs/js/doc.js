@@ -1,4 +1,5 @@
-/* global instantsearch */
+/* global Clipboard */
+'use strict';
 
 (function($) {
   function q(select) { return Array.prototype.slice.call(document.querySelectorAll(select), 0);}
@@ -23,7 +24,7 @@
       var functionBody = [configSnippet, snippet, startSnippet]
           .map(function(e) { return e.textContent; })
           .join(';');
-      return "(function() {" + functionBody + "})();";
+      return '(function() {' + functionBody + '})();';
     });
 
     source = t(source.join('\n'), constants);
@@ -44,7 +45,7 @@
         );
       }
     });
-    $(document).on('click', '.toggle-doc-button.jsdoc-btn', function(e) {
+    $(document).on('click', '.toggle-doc-button.jsdoc-btn', function() {
       var $btn = $(this);
       var $box = $btn.closest('.code-box');
       $box.find('.toggle-doc-button').removeClass('active');
@@ -53,7 +54,7 @@
       $('.debug-widget').removeClass('debug-widget');
       $box.find('.jsdoc').show();
     });
-    $(document).on('click', '.toggle-doc-button.snippet-btn', function(e) {
+    $(document).on('click', '.toggle-doc-button.snippet-btn', function() {
       var $btn = $(this);
       var $box = $btn.closest('.code-box');
       $box.find('.toggle-doc-button').removeClass('active');
@@ -98,7 +99,7 @@
       buttons.append('<button type="button" class="toggle-doc-button html-btn btn btn-default btn-sm" data-widget-container="' + id + '">View HTML</button>');
       buttons.after('<pre class="html-container highlight" id="html-' + id + '" style="display: none"></pre>');
     });
-    $(document).on('click', '.toggle-doc-button.html-btn', function(e) {
+    $(document).on('click', '.toggle-doc-button.html-btn', function() {
       var $btn = $(this);
       var $box = $btn.closest('.code-box');
       var id = $(this).data('widget-container');
