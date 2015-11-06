@@ -83,7 +83,9 @@ describe('toggle()', () => {
           transformData: undefined
         };
         helper = {
-          hasRefinements: sinon.stub().returns(false),
+          state: {
+            isFacetRefined: sinon.stub().returns(false)
+          },
           removeFacetRefinement: sinon.spy(),
           addFacetRefinement: sinon.spy(),
           search: sinon.spy()
@@ -163,7 +165,9 @@ describe('toggle()', () => {
 
       it('when refined', () => {
         helper = {
-          hasRefinements: sinon.stub().returns(true)
+          state: {
+            isFacetRefined: sinon.stub().returns(true)
+          }
         };
         results = {
           hits: [{Hello: ', world!'}],
@@ -198,12 +202,128 @@ describe('toggle()', () => {
         expect(helper.addFacetRefinement.calledOnce).toBe(true);
         expect(helper.addFacetRefinement.calledWithExactly(facetName, true));
         helper.hasRefinements = sinon.stub().returns(true);
-        ReactDOM.render.reset();
-        widget.render({results, helper});
-        toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
-        toggleRefinement();
-        expect(helper.removeFacetRefinement.calledOnce).toBe(true);
-        expect(helper.removeFacetRefinement.calledWithExactly(facetName, true));
+      });
+    });
+
+    context('toggleRefinement', () => {
+      let helper;
+      let values;
+
+      function toggleOn() {
+        widget.toggleRefinement(helper, false);
+      }
+      function toggleOff() {
+        widget.toggleRefinement(helper, true);
+      }
+
+      beforeEach(() => {
+        helper = {
+          removeFacetRefinement: sinon.spy(),
+          addFacetRefinement: sinon.spy(),
+          search: sinon.spy()
+        };
+      });
+
+      context('default values', () => {
+        it('toggle on should add filter to true', () => {
+          // Given
+          widget = toggle({container, facetName, label});
+
+          // When
+          toggleOn();
+
+          // Then
+          expect(helper.addFacetRefinement.calledWith(facetName, true)).toBe(true);
+          expect(helper.removeFacetRefinement.called).toBe(false);
+        });
+        it('toggle off should remove all filters', () => {
+          // Given
+          widget = toggle({container, facetName, label});
+
+          // When
+          toggleOff();
+
+          // Then
+          expect(helper.removeFacetRefinement.calledWith(facetName, true)).toBe(true);
+          expect(helper.addFacetRefinement.called).toBe(false);
+        });
+      });
+      context('specific values', () => {
+        it('toggle on should change the refined value', () => {
+          // Given
+          values = {on: 'on', off: 'off'};
+          widget = toggle({container, facetName, label, values});
+
+          // When
+          toggleOn();
+
+          // Then
+          expect(helper.removeFacetRefinement.calledWith(facetName, 'off')).toBe(true);
+          expect(helper.addFacetRefinement.calledWith(facetName, 'on')).toBe(true);
+        });
+        it('toggle off should change the refined value', () => {
+          // Given
+          values = {on: 'on', off: 'off'};
+          widget = toggle({container, facetName, label, values});
+
+          // When
+          toggleOff();
+
+          // Then
+          expect(helper.removeFacetRefinement.calledWith(facetName, 'on')).toBe(true);
+          expect(helper.addFacetRefinement.calledWith(facetName, 'off')).toBe(true);
+        });
+      });
+    });
+
+    context('custom off value', () => {
+      it('should add a refinement for custom off value on init', () => {
+        // Given
+        let values = {on: 'on', off: 'off'};
+        widget = toggle({container, facetName, label, values});
+        let state = {
+          isFacetRefined: sinon.stub().returns(false)
+        };
+        let helper = {
+          addFacetRefinement: sinon.spy()
+        };
+
+        // When
+        widget.init(state, helper);
+
+        // Then
+        expect(helper.addFacetRefinement.calledWith(facetName, 'off')).toBe(true);
+      });
+      it('should not add a refinement for custom off value on init if already checked', () => {
+        // Given
+        let values = {on: 'on', off: 'off'};
+        widget = toggle({container, facetName, label, values});
+        let state = {
+          isFacetRefined: sinon.stub().returns(true)
+        };
+        let helper = {
+          addFacetRefinement: sinon.spy()
+        };
+
+        // When
+        widget.init(state, helper);
+
+        // Then
+        expect(helper.addFacetRefinement.called).toBe(false);
+      });
+      it('should not add a refinement for no custom off value on init', () => {
+        // Given
+        widget = toggle({container, facetName, label});
+        let state = {};
+        let helper = {
+          addFacetRefinement: sinon.spy()
+        };
+
+        // When
+        widget.init(state, helper);
+
+        // Then
+        expect(helper.addFacetRefinement.called).toBe(false);
       });
     });
 

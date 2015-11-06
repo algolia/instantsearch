@@ -3,6 +3,9 @@
 |  <span class='attr-required'>`options.container`</span> | CSS Selector or DOMElement to insert the widget |
 |  <span class='attr-required'>`options.facetName`</span> | Name of the attribute for faceting (eg. "free_shipping") |
 |  <span class='attr-required'>`options.label`</span> | Human-readable name of the filter (eg. "Free Shipping") |
+|  <span class='attr-optional'>`options.values`</span> | Lets you define the values to filter on when toggling |
+|  <span class='attr-optional'>`options.values.on`</span> | Value to filter on when checked |
+|  <span class='attr-optional'>`options.values.off`</span> | Value to filter on when unchecked |
 |  <span class='attr-optional'>`options.cssClasses`</span> | CSS classes to add |
 |  <span class='attr-optional'>`options.cssClasses.root`</span> | CSS class to add to the root element |
 |  <span class='attr-optional'>`options.cssClasses.header`</span> | CSS class to add to the header element |

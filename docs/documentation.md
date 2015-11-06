@@ -589,6 +589,10 @@ search.addWidget(
     container: '#free-shipping',
     facetName: 'free_shipping',
     label: 'Free Shipping',
+    values: {
+      on: true,
+      off: false
+    },
     templates: {
       header: 'Shipping'
     },
