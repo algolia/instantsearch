@@ -25,16 +25,16 @@ Then, when you are ready:
 - Add either `do not merge` or `ready for review` labels given your context
 - wait for **review**
 - do the necessary changes and add more commits
-- once you are good, **rebase** your pull request to avoid commits like "fix dangling comma in bro.js", "fix after review"
-  - basically everything that can be merged should be merged, example:
+- once you are done, [squash](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html) your commits to avoid things like "fix dangling comma in bro.js", "fix after review"
+  - example:
     - `feat(widget): new feature blabla..`
     - `refactor new feature blablabla...` (bad, not following our [commit message guidelines](#commit-message-guidelines)
-  - **both commits should be merged* in a single commit: `feat(widget) ..`
+  - **both commits should be squashed* in a single commit: `feat(widget) ..`
 - when **updating** your feature branch on develop, **always use rebase instead of merge**
 
 # When to close issues?
 
-When the fix was released, having the fix in `develop` is not sufficient, it needs to be part of a release for us to close the issue.
+Once the fix is done, having the fix in `develop` is not sufficient, it needs to be part of a release for us to close the issue.
 
 So that you never ask yourself "Is this released?".
 
