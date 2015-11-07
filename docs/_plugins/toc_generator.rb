@@ -28,6 +28,23 @@ module Jekyll
 
       html.join
     end
+
+    def toc_generate_menu(html)
+      doc = Nokogiri::HTML(html)
+
+      html = []
+      html << '<select>'
+      current_level = 1
+      doc.css('h1, h2, h3, h4').each do |tag|
+        level = tag.name[1].to_i
+        html << "<option value=\"#{tag['id']}\">#{tag.text}</option>"
+        current_level = level
+      end
+
+      html << '</select>'
+
+      html.join
+    end
   end
 
 end

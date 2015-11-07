@@ -6,10 +6,13 @@ layout: default
   <div class="hfull row">
     <div class="col-lg-2 col-md-3 hidden-xs hidden-sm widget-nav hfull">
       <div class="documentation-menu">
-        {{ content | toc_generate }}
+        {{ content | toc_generate}}
       </div>
     </div>
     <div class="col-lg-10 col-md-9 widget-description hfull">
+      <div class="toc-menu hidden-md hidden-lg">
+        {{ content | toc_generate_menu}}
+      </div>
       <div class="code-samples hidden-xs"></div>
       <article class="documentation-content">
         <!-- <h1 class="documentation-title">{{ page.title }}</h1> -->

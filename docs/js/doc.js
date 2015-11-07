@@ -141,9 +141,17 @@
     });
   }
 
+  function tocMenu(){
+    $('.toc-menu select').change(function(){
+      var href = $(this).val();
+      window.location.hash = href;
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
   anchorableTitles();
   copyButtons();
+  tocMenu();
 })(window.jQuery);

@@ -47,6 +47,16 @@ code {
   }
 }
 
+.toc-menu {
+  position: absolute;
+  top:0;
+  left: 0;
+  width:100%;
+  background: #122440;
+  padding: 5px 30px;
+  z-index: 2;
+}
+
 // Main Content
 
 // Left panel
@@ -56,7 +66,7 @@ code {
 
 .main-documentation {
   height: 100%;
-  padding-top: 52px;
+  padding-top: 50px;
   .description {
     min-height: 84px;
   }
@@ -263,6 +273,7 @@ code {
       color: $brand-primary;
       background-color: #0a1724;
       border: none;
+      transition: opacity 0.2s;
       &:hover {
         color: white;
       }
@@ -440,7 +451,7 @@ code {
 
 @media (max-width: $screen-xs-max) {
   .main-documentation {
-    padding: 52px 0 0 0;
+    padding: 57px 0 0 0;
     .row {
       margin: 0; 
     }
@@ -452,6 +463,9 @@ code {
       -webkit-overflow-scrolling: touch;
       padding: 0;
     }
+  }
+  .toc-menu {
+    padding: 5px 9.5px;
   }
   .documentation-content{
     padding: 20px 0;
