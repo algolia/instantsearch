@@ -3,13 +3,14 @@ require 'nokogiri'
 module Jekyll
 
   module TOCGenerator
+    @@selector = 'h1, h2, h3, h4:not(.no-toc)'
 
     def toc_generate(html)
       doc = Nokogiri::HTML(html)
 
       html = []
       current_level = 1
-      doc.css('h1, h2, h3, h4').each do |tag|
+      doc.css(@@selector).each do |tag|
         level = tag.name[1].to_i
         if level > current_level
           current_level.upto(level - 1) do
@@ -35,7 +36,7 @@ module Jekyll
       html = []
       html << '<select>'
       current_level = 1
-      doc.css('h1, h2, h3, h4').each do |tag|
+      doc.css(@@selector).each do |tag|
         level = tag.name[1].to_i
         html << "<option value=\"#{tag['id']}\">#{tag.text}</option>"
         current_level = level

@@ -54,6 +54,7 @@ The library is open-source, based on [React.js](http://facebook.github.io/react/
 ### Setup
 
 #### From a CDN
+{:.no-toc}
 
 <div class="codebox-combo">
 
@@ -73,6 +74,7 @@ The fastest way to get started is to use a built version of **instantsearch.js**
 This will expose the global `instantsearch` function.
 
 #### From NPM
+{:.no-toc}
 
 <div class="codebox-combo">
 
@@ -998,15 +1000,13 @@ The widget may implement some of the following methods (depending on the need of
 
 
 
-<div class="h4">
-Example with jQuery
-</div>
+#### Example with jQuery
+{:.no-toc}
 
 You may want to use an existing jQuery library to power your custom widget: that's definitely doable. Take a look at this jQuery-based custom widgets we've done: [<i class="fa fa-github"></i> algolia/instantsearch-ion.rangeSlider](https://github.com/algolia/instantsearch-ion.rangeSlider).
 
-<div class="h4">
-Example with React
-</div>
+#### Example with React
+{:.no-toc}
 
 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis suscipit voluptas esse quam fugiat recusandae harum, illum, sint animi excepturi at. Aliquid accusamus ratione atque sit ipsam quia itaque.
 
@@ -1018,9 +1018,8 @@ We're using [BEM](http://getbem.com/introduction/), a methodology that helps you
 
 If you want to build you own theme, we recommend you to start from our default skeleton: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
 
-<div class="h4">
-BEM modifiers
-</div>
+#### BEM modifiers
+{:.no-toc}
 
 <div class="codebox-combo">
 
@@ -1056,9 +1055,8 @@ We're providing a few SCSS mixins to help you write BEM rules. Those mixins can 
 </div>
 
 <div class="clearfix"></div>
-<div class="h4">
-Example
-</div>
+#### Example
+{:.no-toc}
 
 <div class="codebox-combo">
 

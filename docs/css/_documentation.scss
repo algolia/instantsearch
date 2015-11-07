@@ -144,7 +144,7 @@ code {
       }
     }
   }
-  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > .h1, > .h2, > .h3, > .h4, > .h5, > pre, > .highlight, > ul, > .row {
+  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > pre, > .highlight, > ul, > .row {
     margin-right: 50%;
     max-width: 50%;
   }
@@ -469,12 +469,12 @@ code {
   }
   .documentation-content{
     padding: 20px 0;
-    p, h1, h2, h3, h4, .h4, div[id], ul, .highlight {
+    p, h1, h2, h3, h4, div[id], ul, .highlight {
       margin-right: 0;
       width: 100%;
       max-width: 100%;
     }
-    p, h1, h2, h3 {
+    p, h1, h2, h3, h4 {
       padding: 9.5px;
     }
   }
