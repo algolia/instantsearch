@@ -10,15 +10,16 @@ $(function () {
     }
   });
 
-  // get all section window
+  // get animation elements
   var windows = $('section.window');
   var $anim = $('#anim');
   var $overlay = $('#anim-overlay');
   var $screens = $('.screen');
   var $widgets = $('.widget');
-  var $widgetTooltips = $('.widget-intro');
+  var $widgetsTooltips = $('.widget-intro');
   var $illusSync = $('.illus-sync');
-
+  var $screenshotWebsite = $('#screenshot-website');
+  var $widgetsIcons = $('#anim-overlay img');
   var $animWidget1 = $anim.find('.widget-1');
   var $animWidget2 = $anim.find('.widget-2');
   var $animWidget3 = $anim.find('.widget-3');
@@ -32,12 +33,12 @@ $(function () {
   intro
     .set($screens, {opacity:0})
     .set($anim, {opacity:0, scale:0})
-    .set('#anim img', {opacity:0})
+    .set($screenshotWebsite, {opacity:0})
     .set($overlay, {opacity:0})
-    .set('#anim-overlay img', {scale:0})
+    .set($widgetsIcons, {scale:0})
     .set($widgets, {opacity:0, scale:0})
     .to($anim, 2, {opacity:1, scale:1, rotationX:30, rotationZ:-6, ease:Power2.easeInOut})
-    .to('#anim img', 1, {opacity:1}, '-=1')
+    .to($screenshotWebsite, 1, {opacity:1}, '-=1')
     .to($animWidget1, 0.3, {scale:1 , opacity:1 })
     .to($animWidget2, 0.3, {scale:1 , opacity:1 })
     .to($animWidget3, 0.3, {scale:1 , opacity:1 })
@@ -46,14 +47,14 @@ $(function () {
     .to($animWidget6, 0.3, {scale:1 , opacity:1 }, '-=.2')
     .to($animWidget7, 0.3, {scale:1 , opacity:1 }, '-=.5')
     .to($overlay, 0.3, {opacity:1, ease:Power2.easeInOut }, '3.5')
-    .to('#anim-overlay img', 0.4, {scale:1, ease:Bounce.easeInOut }, '3.6');
+    .to($widgetsIcons, 0.4, {scale:1, ease:Bounce.easeInOut }, '3.6');
 
   // An array to stock our timelines, relative to each sections
   var tl = [];
   // First Section
   tl[0] = new TimelineMax();
   tl[0]
-    .to($widgetTooltips, 2, {opacity:0})
+    .to($widgetsTooltips, 2, {opacity:0})
     .to($widgets, 8, {z:400, opacity:0})
     .to($animWidget1, 8, {y:-350 }, '-=8')
     .to($animWidget3, 8, {x:-200, y:-50 }, '-=8')
@@ -71,7 +72,7 @@ $(function () {
     .to($widgets, 0.2, {x:0, y:0, z:0, scale:0 })
     .to($illusSync, 3, {scale:0, opacity:0}, '+=3')
     .to($anim, 3, {scale:0.5 }, '-=3')
-    .to('#anim img', 4, {opacity:0}, '-=5')
+    .to($screenshotWebsite, 4, {opacity:0}, '-=5')
     .to('#anim > .widget', 2, {opacity:1, scale:1})
     .to('.screen-1', 3, {opacity:1})
     .to('.screen-1 .widget', 5, {opacity:1, scale:1},'-=2')
@@ -124,13 +125,7 @@ $(function () {
 
 // Space Canvas
 
-var canvas;
-var context;
-var screenH;
-var screenW;
-var stars = [];
-var fps = 10;
-var numStars = 200;
+var canvas, context, screenH, screenW, stars = [], fps = 10, numStars = 200;
 
 // Calculate the screen size
 screenH = $(window).height();
@@ -144,15 +139,17 @@ canvas.attr('height', screenH);
 canvas.attr('width', screenW);
 context = canvas[0].getContext('2d');
 
+var x, y, len, opacity, star;
+
 // Create all the stars
 for (var i = 0; i < numStars; i++) {
-  var x = Math.round(Math.random() * screenW);
-  var y = Math.round(Math.random() * screenH);
-  var len = 1 + Math.random() * 2;
-  var opacity = Math.random();
+  x = Math.round(Math.random() * screenW);
+  y = Math.round(Math.random() * screenH);
+  len = 1 + Math.random() * 2;
+  opacity = Math.random();
 
   // Create a new star and draw
-  var star = new Star(x, y, len, opacity);
+  star = new Star(x, y, len, opacity);
 
   // Add the the stars array
   stars.push(star);
