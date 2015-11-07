@@ -68,7 +68,7 @@ layout: default
             .widget.widget-5
             .widget.widget-6
             .widget.widget-7
-            .screen.screen-1
+            .screen#screen-1
               .widget.widget-1
               .widget.widget-2
               .widget.widget-3
@@ -76,7 +76,7 @@ layout: default
               .widget.widget-5
               .widget.widget-6
               .widget.widget-7
-            .screen.screen-2
+            .screen#screen-2
               .widget.widget-1
               .widget.widget-2
               .widget.widget-3
@@ -84,7 +84,7 @@ layout: default
               .widget.widget-5
               .widget.widget-6
               .widget.widget-7
-            .screen.screen-3
+            .screen#screen-3
               .widget.widget-1
               .widget.widget-2
               .widget.widget-3
@@ -123,26 +123,27 @@ layout: default
       .col-xs-4.col-xs-offset-1
         %section#instantsearch-vp-1
           .text-center
-            %img{src:"img/icon-ux.svg", alt:"UX"}
+            .illus-wrapper
+              %img{src:"img/icon-ux.svg", alt:"UX", width:40}
             %h2 Search UX done right
           %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
       .col-xs-4.col-xs-offset-2
         %section#instantsearch-vp-2
           .text-center
-            %img{src:"img/icon-update.svg", alt:"Update"}
+            .illus-wrapper
+              %img{src:"img/icon-update.svg", alt:"Update", width:40}
             %h2 Always improving
           %p The instant-search experience is already deployed in hundreds of websites. We inject all the feedback and collective experience we get back into the widgets.
     .spacer100
-    .panel.panel-default.text-center
-      .panel-body
-        .row
-          .col-xs-8.text-right
-            .spacer5
-            %span.h4
-              %strong Explore Instantsearch.js.
-              Learn more about instant search's features and widgets.
-          .col-xs-4
-            %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
+    #panel-get-started
+      .row
+        .col-xs-8.text-right
+          .spacer5
+          %span.h4
+            %strong Explore Instantsearch.js.
+            Learn more about instant search's features and widgets.
+        .col-xs-4
+          %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
 
 {% contentfor site-footer %}
 

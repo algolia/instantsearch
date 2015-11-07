@@ -74,12 +74,12 @@ $(function () {
     .to($anim, 3, {scale:0.5 }, '-=3')
     .to($screenshotWebsite, 4, {opacity:0}, '-=5')
     .to('#anim > .widget', 2, {opacity:1, scale:1})
-    .to('.screen-1', 3, {opacity:1})
-    .to('.screen-1 .widget', 5, {opacity:1, scale:1},'-=2')
-    .to('.screen-2', 3, {opacity:1})
-    .to('.screen-2 .widget', 5, {opacity:1, scale:1},'-=2')
-    .to('.screen-3', 3, {opacity:1})
-    .to('.screen-3 .widget', 5, {opacity:1, scale:1},'-=2')
+    .to('#screen-1', 3, {opacity:1})
+    .to('#screen-1 .widget', 5, {opacity:1, scale:1},'-=2')
+    .to('#screen-2', 3, {opacity:1})
+    .to('#screen-2 .widget', 5, {opacity:1, scale:1},'-=2')
+    .to('#screen-3', 3, {opacity:1})
+    .to('#screen-3 .widget', 5, {opacity:1, scale:1},'-=2')
     .to($overlay, 8, {backgroundColor:'#F6624E' }, '0');
 
   // Third Section
