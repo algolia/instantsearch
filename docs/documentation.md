@@ -9,7 +9,7 @@ noFooter: true
 
 ## Introduction
 
-<div class="shameless-marketing text-center">
+<div class="shameless-marketing text-center hidden-xs">
 <img src="../img/logo-instantsearch.svg" height="50"/>
 <p class="lead">Build the perfect UI with Instantsearch.js,<br>an extensive library of widgets for search experience.</p>
 <p class="version">Version : {{ site.version }}</p>
@@ -699,6 +699,7 @@ search.addWidget(
 {% highlight javascript %}
 instantsearch.widgets.priceRanges(options);
 {% endhighlight %}
+
 {% include widget-jsdoc/priceRanges.md %}
   </div>
 </div>

@@ -4,16 +4,13 @@ layout: default
 
 <div class="container-fluid main-documentation">
   <div class="hfull row">
-    <div class="col-lg-2 col-md-3 widget-nav hfull">
+    <div class="col-lg-2 col-md-3 hidden-xs hidden-sm widget-nav hfull">
       <div class="documentation-menu">
         {{ content | toc_generate }}
-
-        <div class="documentation-menu-footer">
-        </div>
       </div>
     </div>
     <div class="col-lg-10 col-md-9 widget-description hfull">
-      <div class="code-samples"></div>
+      <div class="code-samples hidden-xs"></div>
       <article class="documentation-content">
         <!-- <h1 class="documentation-title">{{ page.title }}</h1> -->
         {{ content }}
