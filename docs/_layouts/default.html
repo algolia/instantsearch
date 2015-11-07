@@ -23,13 +23,14 @@
   <body>
     {% include header.html %}
 
+    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+
     {{ content }}
 
 {%if page.noFooter == null %}
     {% include footer.html %}
 {% endif %}
 
-    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TweenMax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TimelineMax.min.js"></script>

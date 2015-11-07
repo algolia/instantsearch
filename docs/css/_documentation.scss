@@ -448,11 +448,10 @@ code {
       max-width: 100%;
     }
     .widget-description {
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
       padding: 0;
     }
-  }
-  .navbar-nav {
-    display: none;
   }
   .documentation-content{
     padding: 20px 0;
