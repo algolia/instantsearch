@@ -107,7 +107,7 @@ $(function () {
       })
       .setTween(tl[i])
       .offset(20)
-      .addIndicators() // add indicators (requires plugin)
+      // .addIndicators() // add indicators (requires plugin)
       .addTo(controller);
   }
 
