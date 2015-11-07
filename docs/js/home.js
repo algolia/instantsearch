@@ -14,6 +14,7 @@ $(function () {
   var windows = $('section.window');
   var $anim = $('#anim');
   var $overlay = $('#anim-overlay');
+  var $spaceOverlay = $('#space-overlay');
   var $screens = $('.screen');
   var $widgets = $('.widget');
   var $widgetsTooltips = $('.widget-intro');
@@ -64,7 +65,7 @@ $(function () {
     .to($animWidget7, 8, {y:350 }, '-=8')
     .to($anim, 8, {opacity:1, scale:1, rotationX:0, rotationZ:0, ease:Power2.easeInOut}, '-=8')
     .to($illusSync, 4, {opacity:1}, '-=4')
-    .to($overlay, 8, {backgroundColor:'#00B6BA' }, '0');
+    .to($spaceOverlay, 8, {backgroundColor:'#00B6BA' }, '0');
 
   // Second Section
   tl[1] = new TimelineMax();
@@ -80,7 +81,7 @@ $(function () {
     .to('#screen-2 .widget', 5, {opacity:1, scale:1},'-=2')
     .to('#screen-3', 3, {opacity:1})
     .to('#screen-3 .widget', 5, {opacity:1, scale:1},'-=2')
-    .to($overlay, 8, {backgroundColor:'#F6624E' }, '0');
+    .to($spaceOverlay, 8, {backgroundColor:'#F6624E' }, '0');
 
   // Third Section
   tl[2] = new TimelineMax();
@@ -90,7 +91,7 @@ $(function () {
     .to($animWidget5, 4, {z:200})
     .to($animWidget5, 4, {rotationY:180, backgroundColor:'#674492'}, '-=2')
     .to($animWidget5, 4, {z:0})
-    .to($overlay, 8, {backgroundColor:'#674492' }, '0');
+    .to($spaceOverlay, 8, {backgroundColor:'#674492' }, '0');
 
   // Fourth Section
   tl[3] = new TimelineMax();
