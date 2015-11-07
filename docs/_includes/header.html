@@ -8,7 +8,7 @@
         <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav pull-right">
           {% assign url = page.url | remove: 'index.html' %}
           {% for link in site.navigation %}
             <li {% if url == link.url %}class="active"{% endif %}>

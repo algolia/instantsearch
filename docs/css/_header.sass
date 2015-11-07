@@ -7,14 +7,20 @@ header.site-header
     margin-bottom: 0
     background-color: #0B1724
     border-radius: 0
+    border: none
     .navbar-brand
       font-weight: 600
       color: white !important
+    .navbar-nav
+      > li > a
+        padding-bottom: 0
       > .active > a
         color: #1D96C7 !important
+        background-color: transparent
     .fa-github
-      font-size: 160%
+      font-size: 2em
+      position: relative
+      top: -4px
 
 .main-content
   margin-top: $navbar-height
-

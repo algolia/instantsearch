@@ -1,4 +1,4 @@
-/* global TimelineMax, ScrollMagic, Power2, Bounce, $ */
+/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce */
 'use strict';
 
 $(function () {
@@ -114,10 +114,12 @@ $(function () {
 
   scenes[0].on('start', function () {
     intro.seek(20);
+    TweenMax.to('header.site-header nav.navbar', 0.4, {backgroundColor:'rgba(0,0,0,0)'});
   });
 
   scenes[3].on('leave', function () {
     $('body:after').addClass('hide');
+    TweenMax.to('header.site-header nav.navbar', 0.4, {backgroundColor:'rgba(0,0,0,1)'});
   });
 
 });
