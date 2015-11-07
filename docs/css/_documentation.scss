@@ -1,3 +1,6 @@
+code {
+  word-wrap: break-word;
+}
 // Layout
 
 // Navigation
@@ -146,7 +149,7 @@
   }
   > .highlight, > .row .highlight {
     pre {
-      border: 1px solid #a3b6cb;
+      border: 0;
       .o {
         color: inherit;
       }
@@ -220,6 +223,17 @@
     border: solid 1px #e4e4e4;
     border-width: 0 1px 1px 0;
     border-radius: 5px 0 3px 0;
+  }
+}
+
+.codebox-combo {
+  clear: both;
+  & > p {
+    float: left;
+    max-width: 50%;
+  }
+  .code-box {
+    float: right;
   }
 }
 
@@ -433,9 +447,6 @@
     img {
       max-width: 100%;
     }
-    code {
-      word-wrap: break-word;
-    }
     .widget-description {
       padding: 0;
     }
@@ -445,7 +456,7 @@
   }
   .documentation-content{
     padding: 20px 0;
-    p, h1, h2, h3, h4, .h4, div[id], ul {
+    p, h1, h2, h3, h4, .h4, div[id], ul, .highlight {
       margin-right: 0;
       width: 100%;
       max-width: 100%;
@@ -453,6 +464,10 @@
     p, h1, h2, h3 {
       padding: 9.5px;
     }
+  }
+  .highlight pre {
+    margin: 0;
+    border-radius: 0;
   }
   .code-box {
     width: 100%;
@@ -472,9 +487,6 @@
            background: #0a1724;
          }
        }
-     }
-     .highlight pre {
-       margin: 0;
      }
      .jsdoc {
        margin: 0;
