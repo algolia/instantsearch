@@ -10,30 +10,27 @@ noFooter: true
 ## Introduction
 
 <div class="shameless-marketing text-center hidden-xs">
-<img src="../img/logo-instantsearch.svg" height="50"/>
+<img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
 <p class="lead">Build the perfect UI with Instantsearch.js,<br>an extensive library of widgets for search experience.</p>
 <p class="version">Version : {{ site.version }}</p>
 <div class="spacer40"></div>
 <div class="row">
-<div class="col-sm-4">
+<div class="col-md-4 m-b">
 <div class="sticker sticker-algolia">
 <img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
 </div>
-<br>
 Built on top of <a href="https://www.algolia.com" target="_blank">Algolia Search API</a>
 </div>
-<div class="col-sm-4">
+<div class="col-md-4 m-b">
 <div class="sticker sticker-open-source">
 <img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
 </div>
-<br>
 Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js" target="_blank">Github</a>
 </div>
-<div class="col-sm-4">
+<div class="col-md-4 m-b">
 <div class="sticker sticker-ux">
 <img src="{{site.baseurl}}/img/logo-UX.svg" width="30"/>
 </div>
-<br>
 UI/UX Best practices
 </div>
 </div>
@@ -260,9 +257,8 @@ This example shows you how to create a very simple search results page with a se
 </div>
 
 <div class="spacer100"></div>
-<div class="text-center">
-  <img src="../img/add-widgets.jpg" alt="Add widgets">
-</div>
+
+<img class="img-responsive" src="../img/add-widgets.jpg" alt="Add widgets">
 
 ## Widgets
 
