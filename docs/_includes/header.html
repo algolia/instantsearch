@@ -2,24 +2,22 @@
   <nav class="navbar navbar-default  navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav" aria-expanded="false">
+        <button type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav">
           Menu <i class="fa fa-bars m-l"></i>
         </button>
         <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav pull-right">
           {% assign url = page.url | remove: 'index.html' %}
           {% for link in site.navigation %}
             <li {% if url == link.url %}class="active"{% endif %}>
               <a href="{{ site.baseurl }}{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a>
             </li>
           {% endfor %}
-            <li class="github">
-              <a
-                href="http://github.com/algolia/instantsearch.js"
-                title="See more, open issues and get answers in our Github repository">
-                  <i class="fa fa-github"></i>
+            <li>
+              <a href="http://github.com/algolia/instantsearch.js" title="See more, open issues and get answers in our Github repository">
+                <i class="fa fa-github"></i>
               </a>
             </li>
         </ul>

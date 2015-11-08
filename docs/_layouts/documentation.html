@@ -22,6 +22,9 @@ layout: default
   </div>
 </div>
 
+
+{% contentfor site-footer %}
+
 {% if site.env == 'development' %}
   <script src="http://localhost:8080/instantsearch.js"></script>
   <script type="text/javascript">
@@ -37,3 +40,5 @@ layout: default
 {% endif %}
 <script src="https://cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
 <script src="{{ "/js/doc.js" | prepend: site.baseurl }}"></script>
+
+{% endcontentfor %}

@@ -261,7 +261,7 @@ This example shows you how to create a very simple search results page with a se
 
 <div class="spacer100"></div>
 <div class="text-center">
-  <img src="../img/add-widgets.png">
+  <img src="../img/add-widgets.jpg" alt="Add widgets">
 </div>
 
 ## Widgets
