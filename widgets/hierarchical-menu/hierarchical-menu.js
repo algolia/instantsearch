@@ -13,7 +13,7 @@ let defaultTemplates = require('./defaultTemplates.js');
  * Create a hierarchical menu using multiple attributes
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
- * You need to follow some conventions:
+ * Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow.
  * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {number} [options.limit=100] How much facet values to get
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
