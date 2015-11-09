@@ -15,6 +15,11 @@
     }
     @include element(lvl1) {
       /* item list level 1 */
+      margin-left: 10px;
+    }
+    @include element(lvl2) {
+      /* item list level 0 */
+      margin-left: 10px;
     }
   }
 
