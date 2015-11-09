@@ -2,6 +2,7 @@ let React = require('react');
 let ReactDOM = require('react-dom');
 
 let utils = require('../../lib/utils.js');
+let find = require('lodash/collection/find');
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 let headerFooterHOC = require('../../decorators/headerFooter');
 
@@ -84,9 +85,7 @@ function rangeSlider({
       helper.search();
     },
     render({results, helper, templatesConfig}) {
-      let facet = results.disjunctiveFacets.find(
-        function(f) { return f.name === attributeName; }
-      );
+      let facet = find(results.disjunctiveFacets, {name: attributeName});
       let stats = facet.stats;
       let currentRefinement = this._getCurrentRefinement(helper);
 
