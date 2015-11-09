@@ -15,6 +15,10 @@ export default {
       test: /\.js$/, exclude: /node_modules/, loader: 'babel'
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw'
+    }, {
+      test: require.resolve('react'), loader: 'expose?React'
+    }, {
+      test: require.resolve('react-dom'), loader: 'expose?ReactDOM'
     }]
   },
   devServer: {
