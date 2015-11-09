@@ -1,42 +1,42 @@
 @import "../base";
 @import "variables";
 
-@include component(hierarchical-menu) {
-  @include modifier(header) {
+@include block(hierarchical-menu) {
+  @include element(header) {
     /* widget header */
   }
-  @include modifier(body) {
+  @include element(body) {
     /* widget body */
   }
-  @include modifier(list) {
+  @include element(list) {
     /* item list */
-    @include element(lvl0) {
+    @include modifier(lvl0) {
       /* item list level 0 */
     }
-    @include element(lvl1) {
+    @include modifier(lvl1) {
       /* item list level 1 */
       margin-left: 10px;
     }
-    @include element(lvl2) {
+    @include modifier(lvl2) {
       /* item list level 0 */
       margin-left: 10px;
     }
   }
 
-  @include modifier(item) {
+  @include element(item) {
     /* list item */
-    @include element(active) {
+    @include modifier(active) {
       /* active list item */
     }
   }
 
-  @include modifier(link) {
+  @include element(link) {
     /* item link */
   }
-  @include modifier(count) {
+  @include element(count) {
     /* item count */
   }
-  @include modifier(footer) {
+  @include element(footer) {
     /* widget footer */
   }
 }

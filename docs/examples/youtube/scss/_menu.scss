@@ -1,14 +1,14 @@
 @import "base";
 @import "variables";
 
-@include component(menu) {
-  @include modifier(header);
-  @include modifier(body);
-  @include modifier(list);
-  @include modifier(item) {
-    @include element(active);
+@include block(menu) {
+  @include element(header);
+  @include element(body);
+  @include element(list);
+  @include element(item) {
+    @include modifier(active);
   }
-  @include modifier(link);
-  @include modifier(count);
-  @include modifier(footer);
+  @include element(link);
+  @include element(count);
+  @include element(footer);
 }

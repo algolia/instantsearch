@@ -1,14 +1,14 @@
 @import "base";
 @import "variables";
 
-@include component(price-ranges) {
-  @include modifier(header);
-  @include modifier(body);
-  @include modifier(footer);
-  @include modifier(form);
-  @include modifier(range) {
-    @include element(active);
+@include block(price-ranges) {
+  @include element(header);
+  @include element(body);
+  @include element(footer);
+  @include element(form);
+  @include element(range) {
+    @include modifier(active);
   }
-  @include modifier(input-group);
-  @include modifier(button);
+  @include element(input-group);
+  @include element(button);
 }

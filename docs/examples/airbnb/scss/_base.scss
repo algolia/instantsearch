@@ -1,26 +1,26 @@
-@mixin component($component) {
-  .ais-#{$component} {
-    @content
-  }
-}
-
-@mixin modifier($modifier) {
-  &--#{$modifier} {
+@mixin block($block) {
+  .ais-#{$block} {
     @content
   }
 }
 
 @mixin element($element) {
-  &__#{$element} {
+  &--#{$element} {
     @content
   }
 }
 
-@mixin bem($component, $modifier, $element: "") {
-  @include component($component) {
-    @include modifier($modifier) {
+@mixin modifier($modifier) {
+  &__#{$modifier} {
+    @content
+  }
+}
+
+@mixin bem($block, $element, $modifier: "") {
+  @include block($block) {
+    @include element($element) {
       @if $element != "" {
-        @include element($element) {
+        @include modifier($modifier) {
           @content;
         }
       } @else {
@@ -29,3 +29,4 @@
     }
   }
 }
+

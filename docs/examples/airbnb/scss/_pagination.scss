@@ -1,17 +1,17 @@
 @import "base";
 @import "variables";
 
-@include component(pagination) {
-  @include modifier(item) {
-    @include element(disabled) {
+@include block(pagination) {
+  @include element(item) {
+    @include modifier(disabled) {
       visibility: hidden;
     }
   }
-  @include modifier(item-first);
-  @include modifier(item-previous);
-  @include modifier(item-page) {
-    @include element(active);
+  @include element(item-first);
+  @include element(item-previous);
+  @include element(item-page) {
+    @include modifier(active);
   }
-  @include modifier(item-next);
-  @include modifier(item-last);
+  @include element(item-next);
+  @include element(item-last);
 }

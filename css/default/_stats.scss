@@ -1,17 +1,17 @@
 @import "../base";
 @import "variables";
 
-@include component(stats) {
-  @include modifier(header) {
+@include block(stats) {
+  @include element(header) {
     /* widget header */
   }
-  @include modifier(body) {
+  @include element(body) {
     /* widget body */
   }
-  @include modifier(time) {
+  @include element(time) {
     /* processing time */
   }
-  @include modifier(footer) {
+  @include element(footer) {
     /* widget footer */
   }
 }

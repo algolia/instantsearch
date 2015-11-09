@@ -8,8 +8,8 @@ $range-slider-marker-bg: #DDD;
 $range-slider-bar-color: $blue-light;
 $range-slider-handle-bg: $white;
 
-@include component(range-slider) {
-  @include modifier(target) {
+@include block(range-slider) {
+  @include element(target) {
     position: relative;
     direction: ltr;
     background: $range-slider-bg;
@@ -18,7 +18,7 @@ $range-slider-handle-bg: $white;
     margin-bottom: 4em;
   }
 
-  @include modifier(base) {
+  @include element(base) {
     width: 100%;
     height: 100%;
     position: relative;
@@ -29,7 +29,7 @@ $range-slider-handle-bg: $white;
     border-right: 2px solid $range-slider-marker-bg;
   }
 
-  @include modifier(origin) {
+  @include element(origin) {
     position: absolute;
     right: 0;
     top: 0;
@@ -37,15 +37,15 @@ $range-slider-handle-bg: $white;
     bottom: 0;
   }
 
-  @include modifier(connect) {
+  @include element(connect) {
     background: $range-slider-bar-color;
   }
 
-  @include modifier(background) {
+  @include element(background) {
     background: $range-slider-bg;
   }
 
-  @include modifier(handle) {
+  @include element(handle) {
     width: $range-slider-handle-size;
     height: $range-slider-handle-size;
     position: relative;
@@ -56,24 +56,24 @@ $range-slider-handle-bg: $white;
     cursor: pointer;
   }
 
-  @include modifier(handle-lower) {
+  @include element(handle-lower) {
     left: -($range-slider-handle-size / 2);
     bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
   }
 
-  @include modifier(handle-upper) {
+  @include element(handle-upper) {
     right: $range-slider-handle-size / 2;
     bottom: ($range-slider-handle-size / 2 - $range-slider-target-height / 2);
   }
 
-  @include modifier(tooltip) {
+  @include element(tooltip) {
     position: absolute;
     background: $white;
     top: -2em;
     font-size: .8em;
   }
 
-  @include modifier(pips) {
+  @include element(pips) {
     box-sizing: border-box;
     position: absolute;
     height: 3em;
@@ -82,7 +82,7 @@ $range-slider-handle-bg: $white;
     width: 100%;
   }
 
-  @include modifier(value) {
+  @include element(value) {
     width: $range-slider-handle-size * 2;
     position: absolute;
     text-align: center;
@@ -90,25 +90,25 @@ $range-slider-handle-bg: $white;
     padding-top: 15px;
     font-size: .8em;
   }
-  @include modifier(value-sub) {
+  @include element(value-sub) {
     font-size: .8em;
     padding-top: 15px;
   }
 
-  @include modifier(marker) {
+  @include element(marker) {
     position: absolute;
     background: $range-slider-marker-bg;
     margin-left: -1px;
     width: 1px;
     height: 5px;
   }
-  @include modifier(marker-sub) {
+  @include element(marker-sub) {
     background: $range-slider-marker-bg;
     width: 2px;
     margin-left: -2px;
     height: 7px + $range-slider-target-height;
   }
-  @include modifier(marker-large) {
+  @include element(marker-large) {
     background: $range-slider-marker-bg;
     width: 2px;
     margin-left: -2px;

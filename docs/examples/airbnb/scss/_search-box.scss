@@ -1,8 +1,8 @@
 @import "base";
 @import "variables";
 
-@include component(search-box) {
-  @include modifier(powered-by) {
+@include block(search-box) {
+  @include element(powered-by) {
     font-size: .8em;
     text-align: right;
     margin-top: 2px;
@@ -11,7 +11,7 @@
   // Image replacement technique used:
   // http://www.zeldman.com/2012/03/01/replacing-the-9999px-hack-new-image-replacement/
   //
-  @include modifier(powered-by-link) {
+  @include element(powered-by-link) {
     display: inline-block;
     width: 45px;
     height: 16px;
