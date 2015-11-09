@@ -2,22 +2,26 @@
   <nav class="navbar navbar-default  navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <button type="button" class="text-white navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav">
-          Menu <i class="fa fa-bars m-l"></i>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav">
+          Menu&nbsp;&nbsp;<i class="fa fa-bars"></i>
         </button>
         <a class="navbar-brand" href="{{ site.baseurl }}/">{{ site.title }}</a>
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav pull-right">
-          {% assign url = page.url | remove: 'index.html' %}
+        <ul class="nav navbar-nav navbar-right">
+          {% assign url = page.url %}
+          <li class="visible-xs {% if url == '/index.html' %}active{% endif %}">
+            <a href="{{ site.baseurl }}/" title="Home">Home</a>
+          </li>
           {% for link in site.navigation %}
             <li {% if url == link.url %}class="active"{% endif %}>
               <a href="{{ site.baseurl }}{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a>
             </li>
           {% endfor %}
             <li>
-              <a href="http://github.com/algolia/instantsearch.js" title="See more, open issues and get answers in our Github repository">
-                <i class="fa fa-github"></i>
+              <a href="http://github.com/algolia/instantsearch.js" title="See more, open issues and get answers in our Github repository" target="_blank">
+                <i class="fa fa-github hidden-xs"></i>
+                <span class="visible-xs">View project on github</span>
               </a>
             </li>
         </ul>

@@ -12,7 +12,7 @@
 .ais-stats--body {
 }
 .ais-stats--time {
-  font-size: small;
+  font-size: 0.8em;
 }
 .ais-stats--footer {
 }
@@ -30,19 +30,15 @@
 }
 .ais-hits__empty {
 }
-.ais-hits em{
-  background: #D8EBFD;
+.ais-hits em {
 }
 
 /* PAGINATION */
 .ais-pagination {
 }
 .ais-pagination--item {
-  display:inline-block;
-  padding: 3px;
 }
 .ais-pagination--item__disabled {
-  visibility: hidden;
 }
 .ais-pagination--item-first {
 }
@@ -51,7 +47,7 @@
 .ais-pagination--item-page {
 }
 .ais-pagination--item-page__active {
-  color:black;
+  color: black;
 }
 .ais-pagination--item-next {
 }

@@ -6,6 +6,7 @@ let bem = require('../../lib/utils').bemHelper('ais-search-box');
 let cx = require('classnames');
 
 const KEY_ENTER = 13;
+const KEY_SUPPRESS = 8;
 
 /**
  * Instantiate a searchbox
@@ -100,12 +101,33 @@ function searchBox({
 
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, initialState.query);
+
+      // Keep keyup to handle searchOnEnterKeyPressOnly
       input.addEventListener('keyup', (e) => {
         helper.setQuery(input.value);
-        if (!searchOnEnterKeyPressOnly || e.keyCode === KEY_ENTER) {
+        if (searchOnEnterKeyPressOnly && e.keyCode === KEY_ENTER) {
+          helper.search();
+        }
+
+        // IE8/9 compatibility
+        if (window.attachEvent && e.keyCode === KEY_SUPPRESS) {
           helper.search();
         }
       });
+
+      function inputCallback(e) {
+        let target = (e.currentTarget) ? e.currentTarget : e.srcElement;
+        helper.setQuery(target.value);
+        if (!searchOnEnterKeyPressOnly) {
+          helper.search();
+        }
+      }
+
+      if (window.attachEvent) { // IE8/9 compatibility
+        input.attachEvent('onpropertychange', inputCallback);
+      } else {
+        input.addEventListener('input', inputCallback, false);
+      }
 
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node

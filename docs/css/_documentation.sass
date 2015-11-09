@@ -1,12 +1,16 @@
+code
+  word-wrap: break-word
+
 // Layout
 
 // Navigation
-
 .widget-nav
   padding: 0
   padding-left: 15px
   font-weight: lighter
   background-color: $gray-light
+  position: fixed
+  +position(60px,null,0,0)
 
 .documentation-menu
   height: 100%
@@ -33,7 +37,7 @@
         color: $brand-primary
         text-decoration: none
     ul
-      font-size: .85em
+      font-size: 0.85em
       padding: 0 0 5px 10px
       line-height: 1.7em
       list-style: none
@@ -44,29 +48,33 @@
 
 .main-documentation
   height: 100%
-  padding-top: 52px
+  padding-top: 50px
   .description
     min-height: 84px
 
 .shameless-marketing
   float: right
   width: 43%
-  color: rgba(white,.75)
+  color: rgba(white, 0.75)
+  font-size: .9em
+  img
+    position: relative
   .sticker
-    width: 60px
-    height: 60px
+    +size(60px,60px)
     line-height: 58px
     margin: 0 auto
     border-radius: 50%
     opacity: 0
     animation: arrow 1s ease-in-out
     animation-fill-mode: forwards
-    border: solid 2px rgba(white,.5)
+    border: solid 2px rgba(white, 0.5)
+    margin-bottom: 10px
+    p
+      padding: 0
     img
-      position: relative
       top: -2px
   .sticker-algolia
-    animation-delay: .5s
+    animation-delay: 0.5s
     img
       top: -4px
   .sticker-open-source
@@ -74,21 +82,14 @@
   .sticker-ux
     animation-delay: 1.5s
 
-
 .documentation-content
-  position: absolute
-  top: 0
-  left: 0
-  right: 0
-  bottom: 0
   padding: 30px
-  overflow-y: scroll
-  font-size: 13px
+  font-size: 14px
   line-height: 1.8em
-  color: rgba(0,0,0,0.75)
+  color: rgba(0, 0, 0, 0.75)
   h1[id], h2[id], h3[id]
     clear: both
-  h1[id], h2[id], h3[id], h4[id], h5[id] // anchorable titles
+  h1[id], h2[id], h3[id], h4[id], h5[id]
     &:before
       content: ""
       display: block
@@ -107,19 +108,16 @@
     &:hover
       a.anchor
         visibility: visible
-
-  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > .h1, > .h2, > .h3, > .h4, > .h5, > pre, > .highlight, > ul, > .row
+  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > pre, > .highlight, > ul, > .row
     margin-right: 50%
     max-width: 50%
-  > p
-    font-size: 1.15em
-  > ul
-    font-size: 1.1em
-    li
-      padding-bottom: 6px
+  ul
+    padding: 0 10px 0 30px
+  li
+    padding-bottom: 6px
   > .highlight, > .row .highlight
     pre
-      border: 1px solid #A3B6CB
+      border: 0
       .o
         color: inherit
   h2, .h2
@@ -131,12 +129,12 @@
     &:first-child
       margin-top: 0
   h3, .h3
-    margin: 2em 0 .8em
+    margin: 2em 0 0.8em
     font-size: 1.7em
     font-weight: bold
     clear: both
   h4, .h4
-    border-bottom: dashed 1px #ccc
+    border-bottom: dashed 1px #cccccc
     padding: 0 0 8px
     margin: 2em 0 1em 0
     font-size: 1.3em
@@ -144,59 +142,65 @@
     clear: both
   > p, > ul
     code
-      background-color: #F3F3F3
-      border: 1px solid darken(#F3F3F3,7%)
+      background-color: #f3f3f3
+      border: 1px solid darken(#f3f3f3, 7%)
       color: $text-color
       font-weight: bold
 
 .widget-icon
   margin: 4px 20px 20px 0
-  height: 60px
 
 .html-container
   border: none
-  color: #A3B6CB
+  color: #a3b6cb
   padding: 9.5px
   margin: 0 0 10px
-  background-color: #0A1724
+  background-color: #0a1724
   word-wrap: normal
   white-space: pre
   overflow-x: scroll
 
 .widget-container
   padding: 50px 40px 40px
-  border: solid 1px #E4E4E4
+  border: solid 1px #e4e4e4
   border-radius: 5px
   position: relative
   overflow-x: hidden
+  clear: left
   &:after
     font-size: 11px
     content: "Widget display"
     top: 0
     left: 0
-    color: #999
+    color: #999999
     padding: 4px 6px
     line-height: 1em
     position: absolute
     background-color: $gray-light
-    border: solid 1px #E4E4E4
+    border: solid 1px #e4e4e4
     border-width: 0 1px 1px 0
     border-radius: 5px 0 3px 0
+
+.codebox-combo
+  clear: both
+  & > p
+    float: left
+    max-width: 50%
+  .code-box
+    float: right
 
 // Code box
 
 .code-samples
-  background-color: #172C4F
-  background: linear-gradient(to bottom, #0a1724 0%,#172c4f 100%)
+  background-color: #172c4f
+  background: linear-gradient(to bottom, #0a1724 0%, #172c4f 100%)
   position: absolute
   width: 46%
-  top: 0
-  right: 0
-  bottom: 0
+  +position(0,0,0,null)
 
 .code-box
   position: relative
-  width: 43%
+  width: 44%
   float: right
   clear: right
   .btn-group
@@ -206,15 +210,14 @@
     .toggle-doc-button
       text-align: right
       color: $brand-primary
-      background-color: #0A1724
+      background-color: #0a1724
       border: none
-      transition: all .2s
+      transition: color  .2s, background-color .2s
       &:hover
-        color: #fff
+        color: white
       &:active, &:focus
         outline: 0px
       &.active
-        font-weight: bolder
         background: #163350
   .copy-btn
     display: block
@@ -223,36 +226,36 @@
     top: 5px
     opacity: 0
     font-size: .9em
-    background-color: rgba($brand-primary,.1)
+    background-color: rgba($brand-primary, 0.1)
     border: none
     text-transform: uppercase
-    color: rgba(white,.4)
+    color: rgba(white, 0.4)
     transition: opacity .2s
     &:active, &:focus
-      outline: 0
+      outline: 0px
     &:active
-      color: white !important
-      background-color: rgba($brand-primary,.4)
-      color: #0A1724
+      color: #0a1724
+      background-color: $brand-primary
+      border-color: #0a1724
   &:hover
     .copy-btn
       display: block
       opacity: 1
   .jsdoc
     border: none
-    color: #A3B6CB
+    color: #a3b6cb
     padding: 9.5px
     margin: 0 0 10px
-    background-color: #0A1724
+    background-color: #0a1724
     code
-      background-color: #0A1724
+      background-color: #0a1724
     .attr-optional code
-      color: #46AEDA
+      color: #46aeda
     .attr-required code
       color: $success-color
     h5
       text-decoration: underline
-      color: #ddd
+      color: #dddddd
     pre
       background: transparent
       border: none
@@ -269,7 +272,7 @@
         border-bottom: solid 1px #758393
       td
         padding: 0.5em
-        border-bottom: solid 1px #162B50
+        border-bottom: solid 1px #162b50
         code
           color: white
     .attr-legend
@@ -278,7 +281,12 @@
       text-align: right
       span
         font-size: 10px
-        color: #58D158
+        color: #58d158
+
+// Widgets
+#q input
+  width: 100%
+  padding: 2px 3px
 
 // debug
 .debug-widget
@@ -287,14 +295,12 @@
     z-index: 11
     border: none
   > [class^=ais-]
-    padding: 4px
     outline: 1px solid #660000
     &:before
       content: "." attr(class)
       text-align: right
       white-space: nowrap
-      font-size: 12px
-      font-weight: bold
+      font-size: 11px
       z-index: 10
       position: absolute
       top: 0
@@ -313,6 +319,7 @@
         content: "." attr(class)
         text-align: right
         white-space: nowrap
+        font-size: 11px
         font-size: 12px
         font-weight: bold
         z-index: 10
@@ -331,11 +338,65 @@
           color: #990000
       [class^=ais-]
         &:hover
-          outline: 1px solid #CC3300
+          outline: 1px solid #cc3300
           &:before
-            color: #CC3300
+            color: #cc3300
         [class^=ais-]
           &:hover
-            outline: 1px solid #FF6600
+            outline: 1px solid #ff6600
             &:before
-              color: #FF6600
+              color: #ff6600
+
+@media (max-width: $screen-sm-max)
+  .main-documentation
+    padding: 60px 0 0 0
+    .row
+      margin: 0
+    img
+      max-width: 100%
+  .documentation-content
+    padding: 60px 0 0 0
+    font-size: .95em
+  .toc-menu
+    position: fixed
+    top: 60
+    left: 0
+    width: 100%
+    background: $gray-light
+    padding: 8px 10px
+    z-index: 2
+  .widget-description
+    p, h1, h2, h3, h4
+      padding: 0 0 0 20px
+
+@media (max-width: $screen-xs-max)
+  .widget-container
+    clear: both
+  .code-box
+    width: 100%
+    background: #172c4f
+    margin-bottom: 1em
+    .btn-group
+      position: static
+    .copy-btn
+      display: none
+      visibility: hidden
+    .btn-group
+      .toggle-doc-button
+        background: #163350
+        &.active
+          background: #0a1724
+    .jsdoc
+      margin: 0
+  .widget-description
+    -webkit-overflow-scrolling: touch
+    padding: 0
+    p, h1, h2, h3, h4, div[id], ul, .highlight
+      margin-right: 0
+      width: 100%
+      max-width: 100%
+    p, h1, h2, h3, h4
+      padding: 9.5px
+  .highlight pre
+    margin: 0
+    border-radius: 0
