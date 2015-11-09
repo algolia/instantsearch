@@ -145,6 +145,7 @@
     $('.toc-menu select').change(function(){
       var href = $(this).val();
       window.location.hash = href;
+      $('html, body').animate({scrollTop: '-=100px'}, 800);
     });
   }
 

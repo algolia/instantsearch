@@ -38,7 +38,7 @@ module Jekyll
       current_level = 1
       doc.css(@@selector).each do |tag|
         level = tag.name[1].to_i
-        html << "<option value=\"#{tag['id']}\">#{tag.text}</option>"
+        html << "<option value=\"##{tag['id']}\">#{tag.text}</option>"
         current_level = level
       end
 

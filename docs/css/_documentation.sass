@@ -9,6 +9,8 @@ code
   padding-left: 15px
   font-weight: lighter
   background-color: $gray-light
+  position: fixed
+  +position(60px,null,0,0)
 
 .documentation-menu
   height: 100%
@@ -55,6 +57,8 @@ code
   width: 43%
   color: rgba(white, 0.75)
   font-size: .9em
+  img
+    position: relative
   .sticker
     +size(60px,60px)
     line-height: 58px
@@ -65,8 +69,9 @@ code
     animation-fill-mode: forwards
     border: solid 2px rgba(white, 0.5)
     margin-bottom: 10px
+    p
+      padding: 0
     img
-      position: relative
       top: -2px
   .sticker-algolia
     animation-delay: 0.5s
@@ -78,9 +83,6 @@ code
     animation-delay: 1.5s
 
 .documentation-content
-  position: absolute
-  +position(0,0,0,0)
-  overflow-y: scroll
   padding: 30px
   font-size: 14px
   line-height: 1.8em
@@ -198,7 +200,7 @@ code
 
 .code-box
   position: relative
-  width: 43%
+  width: 44%
   float: right
   clear: right
   .btn-group
@@ -345,40 +347,31 @@ code
             &:before
               color: #ff6600
 
-@media (max-width: $screen-xs-max)
+@media (max-width: $screen-sm-max)
   .main-documentation
     padding: 60px 0 0 0
     .row
       margin: 0
     img
       max-width: 100%
-    .widget-container
-      clear: both
-    .widget-description
-      overflow: scroll
-      -webkit-overflow-scrolling: touch
-      padding: 0
+  .documentation-content
+    padding: 60px 0 0 0
+    font-size: .95em
   .toc-menu
-    position: absolute
-    top: 0
+    position: fixed
+    top: 60
     left: 0
     width: 100%
     background: $gray-light
     padding: 8px 10px
     z-index: 2
-    margin-bottom: 20px
-  .documentation-content
-    padding: 40px 0 0 0
-    font-size: .95em
-    p, h1, h2, h3, h4, div[id], ul, .highlight
-      margin-right: 0
-      width: 100%
-      max-width: 100%
+  .widget-description
     p, h1, h2, h3, h4
-      padding: 9.5px
-  .highlight pre
-    margin: 0
-    border-radius: 0
+      padding: 0 0 0 20px
+
+@media (max-width: $screen-xs-max)
+  .widget-container
+    clear: both
   .code-box
     width: 100%
     background: #172c4f
@@ -395,3 +388,15 @@ code
           background: #0a1724
     .jsdoc
       margin: 0
+  .widget-description
+    -webkit-overflow-scrolling: touch
+    padding: 0
+    p, h1, h2, h3, h4, div[id], ul, .highlight
+      margin-right: 0
+      width: 100%
+      max-width: 100%
+    p, h1, h2, h3, h4
+      padding: 9.5px
+  .highlight pre
+    margin: 0
+    border-radius: 0
