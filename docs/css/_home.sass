@@ -25,7 +25,9 @@ h2
   left: 0
   z-index: -1
   opacity: 0
-  animation: fadeIn 3s ease-in-out forwards
+  transition: opacity ease-in-out 3s
+  &.loaded
+    opacity: 1
 
 #space-overlay
   position: fixed
