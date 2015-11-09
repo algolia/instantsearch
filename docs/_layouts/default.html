@@ -32,14 +32,16 @@
 {%if page.noFooter == null %}
     {% include footer.html %}
 {% endif %}
-
-    <script src="https://use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
     <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ "/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
+    <script src="https://use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
+{%if page.url == '/index.html' %}
     <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TweenMax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gsap/1.11.8/TimelineMax.min.js"></script>
     <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/ScrollMagic.min.js"></script>
     <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/animation.gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+{% endif %}
+
 {% if site.env == 'development' %}
     <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
     <script src="http://localhost:35730/livereload.js"></script>

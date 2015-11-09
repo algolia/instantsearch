@@ -7,14 +7,14 @@ layout: default
   .container
     .row
       .col-sm-6
-        .spacer80
-        .spacer80
+        .spacer100
         .presented-by
           %a{href: "https://www.algolia.com", title: "Instant Search as a Service", target: "_blank"}
             %img{src:"img/algolia-logo.svg", width: 100, alt:"Logo Algolia"}
           presents:
+        .spacer40
         %h1.logo
-          %img.img-responsive.m-r{src:"img/logo-instantsearch.svg", alt:"Logo InstantSearch.js"}
+          %img.img-responsive.m-r{src:"img/logo-instantsearch.svg", alt:"Logo InstantSearch.js", width:500}
         %p.vp
           The library of UI widgets to build the best instant-search experience with
           %a{href:"https://www.algolia.com"} Algolia's Hosted Search API.
@@ -113,14 +113,14 @@ layout: default
   .container
     .spacer100
     .row
-      .col-xs-4.col-xs-offset-2
+      .col-md-4.col-md-offset-2.col-sm-offset-2.col-sm-8.m-b
         %section#instantsearch-vp-1
           .text-center
             .illus-wrapper
               %img{src:"img/icon-ux.svg", alt:"UX", width:40}
             %h2 Search UX done right
           %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
-      .col-xs-4
+      .col-md-4.col-md-offset-0.col-sm-offset-2.col-sm-8
         %section#instantsearch-vp-2
           .text-center
             .illus-wrapper
@@ -130,12 +130,12 @@ layout: default
     .spacer100
     #panel-get-started
       .row
-        .col-xs-8.text-right
+        .col-sm-8.text-right
           .spacer5
           %span.h4
             %strong Explore Instantsearch.js.
             Learn more about instant search's features and widgets.
-        .col-xs-4
+        .col-sm-4
           %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
 
 {% contentfor site-footer %}
