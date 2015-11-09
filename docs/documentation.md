@@ -524,11 +524,6 @@ instantsearch.widgets.hierarchicalMenu(options);
   </div>
 </div>
 
-<<<<<<< HEAD
-</div>
-=======
->>>>>>> develop
-
 <div  id="hierarchical-categories" class="widget-container"></div>
 
 ### Filters
