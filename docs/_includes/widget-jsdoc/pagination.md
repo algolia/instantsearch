@@ -4,6 +4,7 @@
 |  <span class='attr-optional'>`options.cssClasses`</span> | CSS classes to be added |
 |  <span class='attr-optional'>`options.cssClasses.root`</span> | CSS classes added to the parent <ul> |
 |  <span class='attr-optional'>`options.cssClasses.item`</span> | CSS classes added to each <li> |
+|  <span class='attr-optional'>`options.cssClasses.link`</span> | CSS classes added to each link |
 |  <span class='attr-optional'>`options.cssClasses.page`</span> | CSS classes added to page <li> |
 |  <span class='attr-optional'>`options.cssClasses.previous`</span> | CSS classes added to the previous <li> |
 |  <span class='attr-optional'>`options.cssClasses.next`</span> | CSS classes added to the next <li> |

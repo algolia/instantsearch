@@ -30,6 +30,7 @@ describe('pagination()', () => {
     cssClasses = {
       root: 'root',
       item: 'item',
+      link: 'link',
       page: 'page',
       previous: 'previous',
       next: 'next',
@@ -107,13 +108,14 @@ describe('pagination()', () => {
       cssClasses: {
         root: 'ais-pagination root',
         item: 'ais-pagination--item item',
-        page: 'ais-pagination--item ais-pagination--item-page page',
-        previous: 'ais-pagination--item ais-pagination--item-previous previous',
-        next: 'ais-pagination--item ais-pagination--item-next next',
-        first: 'ais-pagination--item ais-pagination--item-first first',
-        last: 'ais-pagination--item ais-pagination--item-last last',
-        active: 'ais-pagination--item  ais-pagination--item-page ais-pagination--item-page__active active',
-        disabled: 'ais-pagination--item ais-pagination--item__disabled disabled'
+        link: 'ais-pagination--link link',
+        page: 'ais-pagination--item__page page',
+        previous: 'ais-pagination--item__previous previous',
+        next: 'ais-pagination--item__next next',
+        first: 'ais-pagination--item__first first',
+        last: 'ais-pagination--item__last last',
+        active: 'ais-pagination--item__active active',
+        disabled: 'ais-pagination--item__disabled disabled'
       },
       currentPage: 0,
       shouldAutoHideContainer: false,

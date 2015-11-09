@@ -48,14 +48,14 @@ describe('Pagination', () => {
   it('should flag the current page as active', () => {
     let out = render({currentPage: 0});
 
-    expect(out.props.children[2][0].props.className).toBe('active page');
-    expect(out.props.children[2][1].props.className).toBe('page');
+    expect(out.props.children[2][0].props.cssClasses.item).toBe('item page active');
+    expect(out.props.children[2][1].props.cssClasses.item).toBe('item page');
   });
 
   it('should disable the first page if already on it', () => {
     let out = render({currentPage: 0, showFirstLast: true});
 
-    expect(out.props.children[0].props.className).toBe('disabled first');
+    expect(out.props.children[0].props.cssClasses.item).toBe('item first disabled');
   });
 
   it('should build the associated URL', () => {
@@ -68,7 +68,7 @@ describe('Pagination', () => {
     expect(out).toEqualJSX(
       <PaginationLink
         ariaLabel={undefined}
-        className={null}
+        cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
         key="test"
         label="test"
@@ -88,7 +88,7 @@ describe('Pagination', () => {
     expect(out).toEqualJSX(
       <PaginationLink
         ariaLabel={undefined}
-        className=""
+        cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
         key="test"
         label="test"
@@ -97,10 +97,10 @@ describe('Pagination', () => {
     expect(createURL.called).toBe(false, 'createURL should not be called');
   });
 
-  it('should disable last first page if already on it', () => {
+  it('should disable last page if already on it', () => {
     let out = render({currentPage: 19, showFirstLast: true});
 
-    expect(out.props.children[4].props.className).toBe('disabled last');
+    expect(out.props.children[4].props.cssClasses.item).toBe('item last disabled');
   });
 
   it('should handle special clicks', () => {
