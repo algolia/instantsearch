@@ -91,7 +91,7 @@ search.addWidget(
     }
   })
 );
-
+ 
 search.addWidget(
   instantsearch.widgets.numericRefinementList({
     container: '#price-numeric-list',
