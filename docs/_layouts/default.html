@@ -9,7 +9,12 @@
     <meta name="description" content="{{ site.description }}">
 
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
-    <link rel="stylesheet" href="{{ "/css/default-theme.css" | prepend: site.baseurl}}" />
+    {% if site.env == 'development' %}
+      <link rel="stylesheet" href="http://localhost:8080/instantsearch.css" />
+    {% else %}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.css" />
+    {% endif %}
+    <link rel="stylesheet" href="{{ "/css/default-theme.css" | prepend: site.baseurl }}">
 
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Raleway:300,800" />
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" />
