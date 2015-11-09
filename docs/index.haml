@@ -106,39 +106,41 @@ layout: default
               {% svg img/sync.svg %}
 .spacer100
 
-%svg#curveUpColor{xmlns:"http://www.w3.org/2000/svg", version:"1.1", width:"100%", height:"100", viewBox:"0 0 100 100", preserveAspectRatio:"none"}
-  %path{d:"M0 100 C40 0 60 0 100 100 Z"}
+%section.white-bottom
 
-%section.bg-white
-  .container
-    .spacer100
-    .row
-      .col-md-4.col-md-offset-2.col-sm-offset-2.col-sm-8.m-b
-        %section#instantsearch-vp-1
-          .text-center
-            .illus-wrapper
-              %img{src:"img/icon-ux.svg", alt:"UX", width:40}
-            %h2 Search UX done right
-          %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
-      .col-md-4.col-md-offset-0.col-sm-offset-2.col-sm-8
-        %section#instantsearch-vp-2
-          .text-center
-            .illus-wrapper
-              %img{src:"img/icon-update.svg", alt:"Update", width:40}
-            %h2 Always improving
-          %p The instant-search experience is already deployed in hundreds of websites. We inject all the feedback and collective experience we get back into the widgets.
-    .spacer100
-    #panel-get-started
+  %svg#curveUpColor{xmlns:"http://www.w3.org/2000/svg", version:"1.1", width:"100%", height:"100", viewBox:"0 0 100 100", preserveAspectRatio:"none"}
+    %path{d:"M0 100 C40 0 60 0 100 100 Z"}
+
+  %section.bg-white
+    .container
+      .spacer100
       .row
-        .col-sm-8.text-right
-          .spacer5
-          %span.h4
-            %strong Explore Instantsearch.js.
-            Learn more about instant search's features and widgets.
-        .col-sm-4
-          %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
+        .col-md-4.col-md-offset-2.col-sm-offset-2.col-sm-8.m-b
+          %section#instantsearch-vp-1
+            .text-center
+              .illus-wrapper
+                %img{src:"img/icon-ux.svg", alt:"UX", width:40}
+              %h2 Search UX done right
+            %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
+        .col-md-4.col-md-offset-0.col-sm-offset-2.col-sm-8
+          %section#instantsearch-vp-2
+            .text-center
+              .illus-wrapper
+                %img{src:"img/icon-update.svg", alt:"Update", width:40}
+              %h2 Always improving
+            %p The instant-search experience is already deployed in hundreds of websites. We inject all the feedback and collective experience we get back into the widgets.
+      .spacer100
+      #panel-get-started
+        .row
+          .col-sm-8.text-right
+            .spacer5
+            %span.h4
+              %strong Explore Instantsearch.js.
+              Learn more about instant search's features and widgets.
+          .col-sm-4
+            %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with Instantsearch.js
 
-{% contentfor site-footer %}
+  {% contentfor site-footer %}
 
 <script type="text/javascript" src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>
 

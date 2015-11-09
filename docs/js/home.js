@@ -115,14 +115,31 @@ $(function () {
 
   scenes[0].on('start', function () {
     intro.seek(20);
-    TweenMax.to('header.site-header nav.navbar', 0.4, {backgroundColor:'rgba(0,0,0,0)'});
   });
 
   scenes[3].on('leave', function () {
     $('body:after').addClass('hide');
-    TweenMax.to('header.site-header nav.navbar', 0.4, {backgroundColor:'rgba(0,0,0,1)'});
   });
 
+  var isMenuOverWhite = false;
+  $(window).load(checkMenuOverWhite)
+  // change the menu to use black font when we arrive at the white background
+  $(window).scroll(throttle(checkMenuOverWhite, 50));
+
+  function checkMenuOverWhite() {
+    var $navbar = $('.site-header .navbar');
+    var $whiteBottom = $('.white-bottom');
+    var currentIsMenuOverWhite = overlap($navbar, $whiteBottom);
+
+    if (currentIsMenuOverWhite !== isMenuOverWhite) {
+      isMenuOverWhite = currentIsMenuOverWhite;
+      if (isMenuOverWhite) {
+        TweenMax.to('header.site-header nav.navbar a', 0.1, {color:'rgba(0,0,0,1)'});
+      } else {
+        TweenMax.to('header.site-header nav.navbar a', 0.1, {color:'rgba(255,255,255,1)'});
+      }
+    }
+  }
 });
 
 
@@ -216,3 +233,38 @@ Star.prototype.draw = function() {
   context.fill();
   context.restore();
 };
+
+// http://stackoverflow.com/questions/14012766/detecting-whether-two-divs-overlap
+function overlap($div1, $div2) {
+  var rect1 = $div1[0].getBoundingClientRect();
+  var rect2 = $div2[0].getBoundingClientRect();
+
+  return !(rect1.right < rect2.left ||
+    rect1.left > rect2.right ||
+    rect1.bottom < rect2.top + 80 ||
+    rect1.top > rect2.bottom);
+}
+
+// https://remysharp.com/2010/07/21/throttling-function-calls
+function throttle(fn, threshhold, scope) {
+  threshhold || (threshhold = 250);
+  var last,
+      deferTimer;
+  return function () {
+    var context = scope || this;
+
+    var now = +new Date,
+        args = arguments;
+    if (last && now < last + threshhold) {
+      // hold on to it
+      clearTimeout(deferTimer);
+      deferTimer = setTimeout(function () {
+        last = now;
+        fn.apply(context, args);
+      }, threshhold);
+    } else {
+      last = now;
+      fn.apply(context, args);
+    }
+  };
+}
