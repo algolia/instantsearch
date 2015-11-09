@@ -484,7 +484,8 @@ instantsearch.widgets.menu(options);
 <img class="widget-icon pull-left" src="../img/icon-widget-menu.svg">
 The hierarchical menu is a widget that lets the user explore a tree-like structure.
 It is based on a set of faceted attributes that represent the different levels of depth. It is
-commonly used in e-commerce website for hierarchical categorization of products.
+commonly used in e-commerce websites for hierarchical categorization of products.
+From a UX point of view, we suggest to not display more than two levels deep.
 {:.description}
 
 <div class="code-box">
@@ -516,14 +517,17 @@ search.addWidget(
 
   <div class="jsdoc" style='display:none'>
 {% highlight javascript %}
-instantsearch.widgets.menu(options);
+instantsearch.widgets.hierarchicalMenu(options);
 {% endhighlight %}
 
 {% include widget-jsdoc/hierarchicalMenu.md %}
   </div>
 </div>
 
+<<<<<<< HEAD
 </div>
+=======
+>>>>>>> develop
 
 <div  id="hierarchical-categories" class="widget-container"></div>
 

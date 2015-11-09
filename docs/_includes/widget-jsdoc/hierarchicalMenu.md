@@ -1,7 +1,7 @@
 | Param | Description |
 | --- | --- |
 |  <span class='attr-required'>`options.container`</span> | CSS Selector or DOMElement to insert the widget |
-|  <span class='attr-required'>`options.attributes`</span> | Array of attributes to use to generate the hierarchy of the menu. You need to follow some conventions: |
+|  <span class='attr-required'>`options.attributes`</span> | Array of attributes to use to generate the hierarchy of the menu. Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow. |
 |  <span class='attr-optional'>`options.sortBy`</span> | How to sort refinements. Possible values: `count|isRefined|name:asc|desc` |
 |  <span class='attr-optional'>`options.limit`</span> | How much facet values to get |
 |  <span class='attr-optional'>`options.cssClasses`</span> | CSS classes to add to the wrapping elements: root, list, item |

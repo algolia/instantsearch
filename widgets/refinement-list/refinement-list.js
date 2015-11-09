@@ -47,17 +47,18 @@ function refinementList({
     transformData,
     autoHideContainer = true
   }) {
-  let containerNode = utils.getContainerNode(container);
+  let RefinementList = require('../../components/RefinementList/RefinementList.js');
   let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
+  if (!container || !facetName) {
+    throw new Error(usage);
+  }
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  RefinementList = headerFooterHOC(RefinementList);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
 
-  if (!container || !facetName) {
-    throw new Error(usage);
-  }
+  let containerNode = utils.getContainerNode(container);
 
   if (operator) {
     operator = operator.toLowerCase();
@@ -72,14 +73,16 @@ function refinementList({
         [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
       };
 
-      // set the maxValuesPerFacet to max(limit, currentValue)
-      if (!configuration.maxValuesPerFacet || limit > configuration.maxValuesPerFacet) {
-        widgetConfiguration.maxValuesPerFacet = limit;
-      }
+      let currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
 
       return widgetConfiguration;
     },
-
+    toggleRefinement: (helper, facetValue) => {
+      helper
+        .toggleRefinement(facetName, facetValue)
+        .search();
+    },
     render: function({results, helper, templatesConfig, state, createURL}) {
       let templateProps = utils.prepareTemplateProps({
         transformData,
@@ -105,6 +108,8 @@ function refinementList({
         count: cx(bem('count'), userCssClasses.count)
       };
 
+      let toggleRefinement = this.toggleRefinement.bind(this, helper);
+
       ReactDOM.render(
         <RefinementList
           createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
@@ -112,18 +117,12 @@ function refinementList({
           facetValues={facetValues}
           shouldAutoHideContainer={hasNoFacetValues}
           templateProps={templateProps}
-          toggleRefinement={toggleRefinement.bind(null, helper, facetName)}
+          toggleRefinement={toggleRefinement}
         />,
         containerNode
       );
     }
   };
-}
-
-function toggleRefinement(helper, facetName, facetValue) {
-  helper
-    .toggleRefinement(facetName, facetValue)
-    .search();
 }
 
 module.exports = refinementList;
