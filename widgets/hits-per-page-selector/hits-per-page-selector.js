@@ -14,8 +14,8 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @param  {number} options.options[0].value number of hits to display per page
  * @param  {string} options.options[0].label Label to display in the option
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */

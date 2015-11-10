@@ -18,7 +18,7 @@ let defaultTemplates = {
  * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
  * You can also provide
- * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
+ * `tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}`
  * So that you can format the tooltip display value as you want
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
