@@ -20,6 +20,7 @@ fi
 
 printf "\n\nRelease: update working tree"
 git pull origin master
+git fetch origin --tags
 
 printf "\n\nRelease: merge develop branch"
 git fetch origin develop
@@ -71,8 +72,8 @@ printf "\n\nRelease: almost done, check everything in another terminal tab.\n"
 read -p "=> Release: when ready, press [ENTER] to push to github and publish the package"
 
 printf "\n\nRelease: push to github, publish on npm"
-git push
-git push --tags
+git push origin master
+git push origin --tags
 npm publish
 git checkout develop
 git pull
