@@ -19,13 +19,13 @@ noFooter: true
 <div class="sticker sticker-algolia">
 <img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
 </div>
-Built on top of <a href="https://www.algolia.com" target="_blank">Algolia Search API</a>
+Built on top of <a href="https://www.algolia.com">Algolia Search API</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-open-source">
 <img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
 </div>
-Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js" target="_blank">Github</a>
+Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js">Github</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-ux">
