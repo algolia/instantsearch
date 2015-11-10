@@ -86,7 +86,7 @@ function rangeSlider({
     },
     render({results, helper, templatesConfig}) {
       let facet = find(results.disjunctiveFacets, {name: attributeName});
-      let stats = facet.stats;
+      let stats = facet !== undefined ? facet.stats : undefined;
       let currentRefinement = this._getCurrentRefinement(helper);
 
       if (stats === undefined) {
