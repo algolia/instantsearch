@@ -38,7 +38,7 @@
     "expect": "^1.12.2",
     "expect-jsx": "^2.1.0",
     "expose-loader": "^0.7.0",
-    "gh-pages": "^0.4.0",
+    "gh-pages": "^0.5.0",
     "jsdoc-parse": "^1.1.1",
     "jsdoc-to-markdown": "^1.2.0",
     "jsdom": "^7.0.2",
