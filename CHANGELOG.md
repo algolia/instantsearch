@@ -1,3 +1,34 @@
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/algolia/instantsearch.js/compare/v0.11.1...v0.12.0) (2015-11-10)
+
+
+### Bug Fixes
+
+* **pagination:** Fix double BEM classes on elements ([2ede317](https://github.com/algolia/instantsearch.js/commit/2ede317)), closes [#500](https://github.com/algolia/instantsearch.js/issues/500)
+* **price-ranges:** fix usage + add test ([89601d7](https://github.com/algolia/instantsearch.js/commit/89601d7))
+* **range-slider:** check usage + display (fixes #395) ([301643a](https://github.com/algolia/instantsearch.js/commit/301643a)), closes [#395](https://github.com/algolia/instantsearch.js/issues/395)
+* **rangeSlider:** error when no result ([70e8554](https://github.com/algolia/instantsearch.js/commit/70e8554))
+* **theme:** Revert default spacing into pagination ([d755fd5](https://github.com/algolia/instantsearch.js/commit/d755fd5))
+
+
+### BREAKING CHANGES
+
+* pagination: Removes all `__disabled`, `__first`, `__last`,
+`__next`, `__previous`, `__active` and `__page` classes added on the links in the
+pagination. It only ads them to the parent `li`. Links instead now
+have a `.ais-pagination--link` class
+
+Previously, the same CSS classes where added to both the `item` (`li`) and the
+link inside it. I've split them in `--item` and `--link`.
+
+I've also made the various active/first/disabled/etc modifiers as
+actual `__modifier` classes.
+
+I've updated the tests, the CSS skeleton, the examples and the docs
+accordingly.
+
+
+
 <a name="0.11.1"></a>
 ## [0.11.1](https://github.com/algolia/instantsearch.js/compare/v0.11.0...v0.11.1) (2015-11-10)
 
