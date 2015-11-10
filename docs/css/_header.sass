@@ -46,5 +46,14 @@ header.site-header
       position: relative
       top: -4px
 
+header.over-white-background
+  .navbar-brand, .navbar-toggle
+    color: black !important
+
+@media (min-width: $screen-xs-max)
+  header.over-white-background
+    .navbar-nav a
+      color: black !important
+
 .main-content
   margin-top: $navbar-height
