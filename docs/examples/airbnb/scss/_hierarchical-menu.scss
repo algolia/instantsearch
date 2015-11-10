@@ -1,19 +1,19 @@
 @import "base";
 @import "variables";
 
-@include component(hierarchical-menu) {
-  @include modifier(header);
-  @include modifier(body);
-  @include modifier(list) {
-    @include element(lvl0);
-    @include element(lvl1);
+@include block(hierarchical-menu) {
+  @include element(header);
+  @include element(body);
+  @include element(list) {
+    @include modifier(lvl0);
+    @include modifier(lvl1);
   }
 
-  @include modifier(item) {
-    @include element(active);
+  @include element(item) {
+    @include modifier(active);
   }
 
-  @include modifier(link);
-  @include modifier(count);
-  @include modifier(footer);
+  @include element(link);
+  @include element(count);
+  @include element(footer);
 }

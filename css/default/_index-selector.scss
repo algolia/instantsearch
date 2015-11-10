@@ -1,8 +1,8 @@
 @import "../base";
 @import "variables";
 
-@include component(index-selector) {
-  @include modifier(item) {
+@include block(index-selector) {
+  @include element(item) {
     /* selector item */
   }
 }

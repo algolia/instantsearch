@@ -1,8 +1,8 @@
 @import "base";
 @import "variables";
 
-@include component(range-slider) {
-  @include modifier(target) {
+@include block(range-slider) {
+  @include element(target) {
     position: relative;
     direction: ltr;
     background: $gray-light;
@@ -12,14 +12,14 @@
     }
   }
 
-  @include modifier(base) {
+  @include element(base) {
     width: 100%;
     height: 100%;
     position: relative;
     z-index: 1;
   }
 
-  @include modifier(origin) {
+  @include element(origin) {
     position: absolute;
     right: 0;
     top: 0;
@@ -27,15 +27,15 @@
     bottom: 0;
   }
 
-  @include modifier(state-tap) {
-    @include component(range-slider) {
-      @include modifier(origin) {
+  @include element(state-tap) {
+    @include block(range-slider) {
+      @include element(origin) {
         transition: left .3s, top .3s;
       }
     }
   }
 
-  @include modifier(state-drag) {
+  @include element(state-drag) {
     * {
       cursor: inherit;
     }
@@ -44,20 +44,20 @@
   // Painting and performance;
   // Browsers can paint handles in their own layer.
   //
-  @include modifier(base) {
+  @include element(base) {
     transform: translate3d(0, 0, 0);
   }
 
-  @include modifier(connect) {
+  @include element(connect) {
     background: $blue-light;
     transition: background 450ms;
   }
 
-  @include modifier(background) {
+  @include element(background) {
     background: $gray-light;
   }
 
-  @include modifier(handle) {
+  @include element(handle) {
     border: 1px solid #ccc;
     border-radius: 50%;
     width: 20px;
@@ -68,22 +68,22 @@
     cursor: pointer;
   }
 
-  @include modifier(handle-lower) {
+  @include element(handle-lower) {
     bottom: 7px;
   }
 
-  @include modifier(handle-upper) {
+  @include element(handle-upper) {
     bottom: 7px;
   }
 
-  @include modifier(tooltip) {
+  @include element(tooltip) {
     position: absolute;
     top: -20px;
   }
 
-  @include modifier(active) {
-    @include component(range-slider) {
-      @include modifier(tooltip) {
+  @include element(active) {
+    @include block(range-slider) {
+      @include element(tooltip) {
         background: $blue-light;
         color: $white;
         border-color: $blue-dark;
@@ -91,9 +91,9 @@
     }
   }
 
-  @include modifier(handle-upper) {
-    @include component(range-slider) {
-      @include modifier(tooltip) {
+  @include element(handle-upper) {
+    @include block(range-slider) {
+      @include element(tooltip) {
         right: 0;
       }
     }
