@@ -1,7 +1,13 @@
 options:
   formatter: stylish
 files:
-  include: '+(examples|css)/**/*.s+(a|c)ss'
+  include: '**/*.scss'
+  ignore:
+    - 'node_modules/**/*'
+    - 'docs/examples/*/main.scss' # Jekyll files requiring front-matter
+    - 'docs/css/main.scss' # Jekyll files requiring front-matter
+    - 'docs/css/bootstrap/**/*' # Vendor
+    - 'docs/css/_syntax-highlighting.scss' # Vendor
 rules:
   # Extends
   extends-before-mixins: 1
@@ -18,7 +24,7 @@ rules:
 
   # Disallows
   no-color-keywords: 1
-  no-color-literals: 1
+  no-color-literals: 0
   no-css-comments: 0
   no-debug: 1
   no-duplicate-properties: 1
