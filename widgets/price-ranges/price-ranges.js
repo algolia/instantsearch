@@ -51,9 +51,17 @@ function priceRanges({
       separator: 'to'
     },
     autoHideContainer = true
-  }) {
+  } = {}) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: priceRanges({container, attributeName, [cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}, templates.{header,item,footer}, labels.{currency,separator,button}, autoHideContainer]})';
+  const usage = `Usage:
+priceRanges({
+  container,
+  attributeName,
+  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}={} ],
+  [ templates.{header,item,footer}={} ],
+  [ labels.{currency,separator,button}={currency: '$', button: 'Go', separator: 'to'} ],
+  [ autoHideContainer=true ]
+})`;
 
   let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges'));
   if (autoHideContainer === true) {
