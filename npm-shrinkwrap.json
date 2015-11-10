@@ -3609,8 +3609,8 @@
       "resolved": "https://registry.npmjs.org/expose-loader/-/expose-loader-0.7.0.tgz"
     },
     "gh-pages": {
-      "version": "0.4.0",
-      "resolved": "https://registry.npmjs.org/gh-pages/-/gh-pages-0.4.0.tgz",
+      "version": "0.5.0",
+      "resolved": "https://registry.npmjs.org/gh-pages/-/gh-pages-0.5.0.tgz",
       "dependencies": {
         "async": {
           "version": "0.2.9",

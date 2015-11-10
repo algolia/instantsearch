@@ -21,16 +21,16 @@ search.addWidget(
 var hitTemplate =
   '<div class="hit media">' +
     '<div class="media-left">' +
-      '<div class="media-object"><img src="{{ image }}" /></div>' +
+      '<div class="media-object"><img src="{{image}}" /></div>' +
     '</div>' +
     '<div class="media-body">' +
-      '<h4 class="media-heading">{{{ _highlightResult.title.value }}}</h4>' +
-      '<p>{{ year }} - {{ genre }}</p>' +
+      '<h4 class="media-heading">{{{_highlightResult.title.value}}}</h4>' +
+      '<p>{{year}} - {{genre}}</p>' +
     '</div>' +
   '</div>';
 
 var noResultsTemplate =
-  '<div class="text-center">No results found matching <strong>{{ query }}</strong>.</div>';
+  '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
 search.addWidget(
   instantsearch.widgets.hits({

@@ -35,7 +35,7 @@ let cx = require('classnames');
  * @param  {string|Function} [options.templates.item] Item template
  * @param  {Object} [options.labels] Labels to use for the widget
  * @param  {string|Function} [options.labels.currency] Currency label
- * @param  {string|Function} [options.labels.separator] Separator labe, between min and max
+ * @param  {string|Function} [options.labels.separator] Separator label, between min and max
  * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}
@@ -51,9 +51,17 @@ function priceRanges({
       separator: 'to'
     },
     autoHideContainer = true
-  }) {
+  } = {}) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: priceRanges({container, attributeName, [cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}, templates.{header,item,footer}, labels.{currency,separator,button}, autoHideContainer]})';
+  const usage = `Usage:
+priceRanges({
+  container,
+  attributeName,
+  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}={} ],
+  [ templates.{header,item,footer}={} ],
+  [ labels.{currency,separator,button}={currency: '$', button: 'Go', separator: 'to'} ],
+  [ autoHideContainer=true ]
+})`;
 
   let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges'));
   if (autoHideContainer === true) {

@@ -2,13 +2,13 @@ let React = require('react');
 
 class PaginationLink extends React.Component {
   render() {
-    let {className, label, ariaLabel, handleClick, url} = this.props;
+    let {cssClasses, label, ariaLabel, handleClick, url} = this.props;
 
     return (
-      <li className={className}>
+      <li className={cssClasses.item}>
         <a
           ariaLabel={ariaLabel}
-          className={className}
+          className={cssClasses.link}
           dangerouslySetInnerHTML={{__html: label}}
           href={url}
           onClick={handleClick}
@@ -23,7 +23,10 @@ PaginationLink.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number
   ]).isRequired,
-  className: React.PropTypes.string,
+  cssClasses: React.PropTypes.shape({
+    item: React.PropTypes.string,
+    link: React.PropTypes.string
+  }),
   handleClick: React.PropTypes.func.isRequired,
   label: React.PropTypes.oneOfType([
     React.PropTypes.string,

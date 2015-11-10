@@ -18,7 +18,7 @@ let defaultTemplates = {
  * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
  * The default tooltip will show the formatted corresponding value without any other token.
  * You can also provide
- * tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}
+ * `tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}`
  * So that you can format the tooltip display value as you want
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
@@ -41,8 +41,21 @@ function rangeSlider({
     step = 1,
     pips = true,
     autoHideContainer = true
-  }) {
+  } = {}) {
   let containerNode = utils.getContainerNode(container);
+  if (!containerNode || !attributeName) {
+    throw new Error(`Usage:
+rangeSlider({
+  container,
+  attributeName,
+  [ tooltips=true ],
+  [ templates={ header: '', footer: ''} ],
+  [ cssClasses={ root: null, body: null } ],
+  [ step=1 ],
+  [ pips=true ],
+  [ autoHideContainer=true ]
+});`);
+  }
 
   let Slider = headerFooterHOC(require('../../components/Slider/Slider'));
   if (autoHideContainer === true) {
@@ -86,7 +99,7 @@ function rangeSlider({
     },
     render({results, helper, templatesConfig}) {
       let facet = find(results.disjunctiveFacets, {name: attributeName});
-      let stats = facet.stats;
+      let stats = facet !== undefined ? facet.stats : undefined;
       let currentRefinement = this._getCurrentRefinement(helper);
 
       if (stats === undefined) {

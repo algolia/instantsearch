@@ -3,15 +3,14 @@
 
 @include block(pagination) {
   @include element(item) {
-    @include modifier(disabled) {
-      visibility: hidden;
-    }
-  }
-  @include element(item-first);
-  @include element(item-previous);
-  @include element(item-page) {
+    @include modifier(disabled);
     @include modifier(active);
+    @include modifier(first);
+    @include modifier(previous);
+    @include modifier(page);
+    @include modifier(next);
+    @include modifier(last);
   }
-  @include element(item-next);
-  @include element(item-last);
+  @include element(link);
 }
+

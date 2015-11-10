@@ -237,7 +237,7 @@ This example shows you how to create a very simple search results page with a se
         instantsearch.widgets.hits({
           container: '#hits-container',
           templates: {
-            item: 'Hit {% raw %}{{ objectID }}{% endraw %}: FIXME'
+            item: 'Hit {% raw %}{{objectID}}{% endraw %}: FIXME'
           }
         })
       );
@@ -351,7 +351,8 @@ instantsearch.widgets.hits(options);
 <div class="codebox-combo">
 
 <img class="widget-icon pull-left" src="../img/icon-widget-results.svg">
-The hits widget is the main component for displaying results from Algolia. It accepts a [Mustache]() template string or a function returning a string. See the [templates](#templates) section.
+The hitsPerPageSelector widget lets you select the number of results you want
+displayed.
 {:.description}
 
 <div class="code-box">
@@ -522,6 +523,7 @@ instantsearch.widgets.hierarchicalMenu(options);
 
 {% include widget-jsdoc/hierarchicalMenu.md %}
   </div>
+</div>
 </div>
 
 <div  id="hierarchical-categories" class="widget-container"></div>

@@ -6,12 +6,12 @@ layout: default
   <div class="row">
     <div class="col-lg-2 col-md-3 hidden-xs hidden-sm widget-nav">
       <div class="documentation-menu">
-        {{ content | toc_generate}}
+        {{ content | toc_generate }}
       </div>
     </div>
     <div class="col-lg-offset-2 col-md-offset-3 col-lg-10 col-md-9 widget-description clearfix">
       <div class="toc-menu visible-xs visible-sm">
-        {{ content | toc_generate_menu}}
+        {{ content | toc_generate_menu }}
       </div>
       <div class="code-samples hidden-xs"></div>
       <article class="documentation-content">
@@ -26,11 +26,11 @@ layout: default
 {% contentfor site-footer %}
 
 {% if site.env == 'development' %}
-  <script src="http://localhost:8080/instantsearch.js"></script>
+  <script src="//localhost:8080/instantsearch.js"></script>
 {% else %}
-  <script src="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
+  <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
 {% endif %}
-<script src="https://cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
+<script src="//cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
 <script src="{{ "/js/doc.js" | prepend: site.baseurl }}"></script>
 
 {% endcontentfor %}

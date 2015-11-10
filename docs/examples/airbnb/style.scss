@@ -20,6 +20,7 @@ body {
 }
 
 header {
+  position: relative;
   padding: 0;
   border-bottom: 1px solid $airbnb-gray-light;
 
@@ -52,7 +53,6 @@ header {
       outline: none;
     }
   }
-
 }
 
 nav {
@@ -147,7 +147,7 @@ nav {
 #hits {
   .hit {
     img {
-      max-width: 100%;
+      width: 100%;
     }
 
     em {
@@ -158,14 +158,20 @@ nav {
     .infos {
       font-size: 0.8em;
       padding: 10px 20px;
+      height: 90px;
     }
   }
 }
 
+#main {
+  max-width: 1280px;
+}
+
+#pagination {
+  text-align: center;
+}
+
 #map {
-  position: fixed;
-  background: $airbnb-gray-lighter;
-  top: 58px;
-  bottom: 0;
-  right: 0;
+  height: 200px;
+  margin: 10px 0;
 }

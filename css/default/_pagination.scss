@@ -4,27 +4,32 @@
 @include block(pagination) {
   @include element(item) {
     /* pagination item */
+    display: inline-block;
+    padding: 3px;
     @include modifier(disabled) {
       /* disabled pagination item */
       visibility: hidden;
     }
-  }
-  @include element(item-first) {
-    /* first pagination item */
-  }
-  @include element(item-previous) {
-    /* previous pagination item */
-  }
-  @include element(item-page) {
-    /* page */
     @include modifier(active) {
-      /* active page */
+      /* active pagination item */
+    }
+    @include modifier(first) {
+      /* first pagination item */
+    }
+    @include modifier(previous) {
+      /* previous pagination item */
+    }
+    @include modifier(page) {
+      /* page pagination item */
+    }
+    @include modifier(next) {
+      /* next pagination item */
+    }
+    @include modifier(last) {
+      /* last pagination item */
     }
   }
-  @include element(item-next) {
-    /* next pagination item */
-  }
-  @include element(item-last) {
-    /* last pagination item */
+  @include element(link) {
+    /* pagination link */
   }
 }
