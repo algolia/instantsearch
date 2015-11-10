@@ -41,8 +41,21 @@ function rangeSlider({
     step = 1,
     pips = true,
     autoHideContainer = true
-  }) {
+  } = {}) {
   let containerNode = utils.getContainerNode(container);
+  if (!containerNode || !attributeName) {
+    throw new Error(`Usage:
+rangeSlider({
+  container,
+  attributeName,
+  [ tooltips=true ],
+  [ templates={ header: '', footer: ''} ],
+  [ cssClasses={ root: null, body: null } ],
+  [ step=1 ],
+  [ pips=true ],
+  [ autoHideContainer=true ]
+});`);
+  }
 
   let Slider = headerFooterHOC(require('../../components/Slider/Slider'));
   if (autoHideContainer === true) {
