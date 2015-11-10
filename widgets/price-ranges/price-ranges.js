@@ -35,7 +35,7 @@ let cx = require('classnames');
  * @param  {string|Function} [options.templates.item] Item template
  * @param  {Object} [options.labels] Labels to use for the widget
  * @param  {string|Function} [options.labels.currency] Currency label
- * @param  {string|Function} [options.labels.separator] Separator labe, between min and max
+ * @param  {string|Function} [options.labels.separator] Separator label, between min and max
  * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}

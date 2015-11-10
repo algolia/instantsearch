@@ -21,7 +21,7 @@
 |  <span class='attr-optional'>`options.templates.item`</span> | Item template |
 |  <span class='attr-optional'>`options.labels`</span> | Labels to use for the widget |
 |  <span class='attr-optional'>`options.labels.currency`</span> | Currency label |
-|  <span class='attr-optional'>`options.labels.separator`</span> | Separator labe, between min and max |
+|  <span class='attr-optional'>`options.labels.separator`</span> | Separator label, between min and max |
 |  <span class='attr-optional'>`options.labels.button`</span> | Button label |
 |  <span class='attr-optional'>`options.autoHideContainer`</span> | Hide the container when no refinements available |
 

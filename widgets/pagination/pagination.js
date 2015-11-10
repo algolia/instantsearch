@@ -18,16 +18,16 @@ let defaultLabels = {
  * Add a pagination menu to navigate through the results
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent <ul>
- * @param  {string} [options.cssClasses.item] CSS classes added to each <li>
+ * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<ul>`
+ * @param  {string} [options.cssClasses.item] CSS classes added to each `<li>`
  * @param  {string} [options.cssClasses.link] CSS classes added to each link
- * @param  {string} [options.cssClasses.page] CSS classes added to page <li>
- * @param  {string} [options.cssClasses.previous] CSS classes added to the previous <li>
- * @param  {string} [options.cssClasses.next] CSS classes added to the next <li>
- * @param  {string} [options.cssClasses.first] CSS classes added to the first <li>
- * @param  {string} [options.cssClasses.last] CSS classes added to the last <li>
- * @param  {string} [options.cssClasses.active] CSS classes added to the active <li>
- * @param  {string} [options.cssClasses.disabled] CSS classes added to the disabled <li>
+ * @param  {string} [options.cssClasses.page] CSS classes added to page `<li>`
+ * @param  {string} [options.cssClasses.previous] CSS classes added to the previous `<li>`
+ * @param  {string} [options.cssClasses.next] CSS classes added to the next `<li>`
+ * @param  {string} [options.cssClasses.first] CSS classes added to the first `<li>`
+ * @param  {string} [options.cssClasses.last] CSS classes added to the last `<li>`
+ * @param  {string} [options.cssClasses.active] CSS classes added to the active `<li>`
+ * @param  {string} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
  * @param  {Object} [options.labels] Text to display in the various links (prev, next, first, last)
  * @param  {string} [options.labels.previous] Label for the Previous link
  * @param  {string} [options.labels.next] Label for the Next link
