@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Airbnb-like search by Algolia</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css' />
+  <link rel="stylesheet" type="text/css" href="style.css" />
+  <!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <header>
+    <span class="logo">A</span>
+    <i class="fa fa-search"></i>
+    <input type="text" class="form-control" id="q" />
+  </header>
+  <section class="row">
+    <div class="col-sm-7">
+      <nav>
+        <div class="row">
+          <div class="col-sm-3">Dates</div>
+          <div class="col-sm-3"><div class="date">10/30/3015</div></div>
+          <div class="col-sm-3"><div class="date">11/30/3015</div></div>
+          <div class="col-sm-3">
+            <div class="guests">
+              <select>
+                <option value="1">1 Guest</option>
+                <option value="2">2 Guests</option>
+                <option value="3">3 Guests</option>
+                <option value="4">4 Guests</option>
+                <option value="5">5 Guests</option>
+                <option value="6">6 Guests</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">Room Type</div>
+          <div class="col-sm-9">
+            <div id="room_types"></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3">Price Range</div>
+          <div class="col-sm-9">
+            <div id="price"></div>
+          </div>
+        </div>
+      </nav>
+      <div id="stats"></div>
+      <div id="hits"></div>
+      <div id="pagination"></div>
+    </div>
+    <div class="col-sm-5" id="map">
+    </div>
+  </section>
+  <script src="https://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+  <script src="search.js"></script>
+</body>
+</html>
