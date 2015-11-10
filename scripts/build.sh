@@ -3,6 +3,9 @@
 mkdir -p dist/
 mkdir -p dist-es5-module/
 
+rm -rf dist/*
+rm -rf dist-es5-module/*
+
 set -ev # exit when error
 
 ROOT=`dirname "$0"`/..
