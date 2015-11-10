@@ -2,6 +2,11 @@
 
 set -e # exit when error
 
+if [[ -n $(npm owner add `npm whoami`) ]]; then
+  printf "Release: Not an owner of the npm repo, ask for it"
+  exit 1
+fi
+
 currentBranch=`git rev-parse --abbrev-ref HEAD`
 if [ $currentBranch != 'master' ]; then
   printf "Release: You must be on master"
