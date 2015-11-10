@@ -20,6 +20,7 @@ let defaultLabels = {
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent <ul>
  * @param  {string} [options.cssClasses.item] CSS classes added to each <li>
+ * @param  {string} [options.cssClasses.link] CSS classes added to each link
  * @param  {string} [options.cssClasses.page] CSS classes added to page <li>
  * @param  {string} [options.cssClasses.previous] CSS classes added to the previous <li>
  * @param  {string} [options.cssClasses.next] CSS classes added to the next <li>
@@ -84,13 +85,14 @@ function pagination({
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         item: cx(bem('item'), userCssClasses.item),
-        page: cx(bem('item'), bem('item-page'), userCssClasses.page),
-        previous: cx(bem('item'), bem('item-previous'), userCssClasses.previous),
-        next: cx(bem('item'), bem('item-next'), userCssClasses.next),
-        first: cx(bem('item'), bem('item-first'), userCssClasses.first),
-        last: cx(bem('item'), bem('item-last'), userCssClasses.last),
-        active: cx(bem('item'), bem('item-page'), bem('item-page', 'active'), userCssClasses.active),
-        disabled: cx(bem('item'), bem('item', 'disabled'), userCssClasses.disabled)
+        link: cx(bem('link'), userCssClasses.link),
+        page: cx(bem('item', 'page'), userCssClasses.page),
+        previous: cx(bem('item', 'previous'), userCssClasses.previous),
+        next: cx(bem('item', 'next'), userCssClasses.next),
+        first: cx(bem('item', 'first'), userCssClasses.first),
+        last: cx(bem('item', 'last'), userCssClasses.last),
+        active: cx(bem('item', 'active'), userCssClasses.active),
+        disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
       };
 
       if (maxPages !== undefined) {

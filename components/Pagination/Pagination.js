@@ -23,13 +23,17 @@ class Pagination extends React.Component {
     this.props.setCurrentPage(pageNumber);
   }
 
-  pageLink({label, ariaLabel, pageNumber, className = null, isDisabled = false, isActive = false, createURL}) {
+  pageLink({label, ariaLabel, pageNumber, additionalClassName = null, isDisabled = false, isActive = false, createURL}) {
     let handleClick = this.handleClick.bind(this, pageNumber);
 
+    let cssClasses = {
+      item: cx(this.props.cssClasses.item, additionalClassName),
+      link: cx(this.props.cssClasses.link)
+    };
     if (isDisabled) {
-      className = cx(this.props.cssClasses.disabled, className);
+      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.disabled);
     } else if (isActive) {
-      className = cx(this.props.cssClasses.active, className);
+      cssClasses.item = cx(cssClasses.item, this.props.cssClasses.active);
     }
 
     let url = createURL && !isDisabled ? createURL(pageNumber) : '#';
@@ -37,7 +41,7 @@ class Pagination extends React.Component {
     return (
       <PaginationLink
         ariaLabel={ariaLabel}
-        className={className}
+        cssClasses={cssClasses}
         handleClick={handleClick}
         key={label}
         label={label}
@@ -49,7 +53,7 @@ class Pagination extends React.Component {
   previousPageLink(pager, createURL) {
     return this.pageLink({
       ariaLabel: 'Previous',
-      className: this.props.cssClasses.previous,
+      additionalClassName: this.props.cssClasses.previous,
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.previous,
       pageNumber: pager.currentPage - 1,
@@ -60,7 +64,7 @@ class Pagination extends React.Component {
   nextPageLink(pager, createURL) {
     return this.pageLink({
       ariaLabel: 'Next',
-      className: this.props.cssClasses.next,
+      additionalClassName: this.props.cssClasses.next,
       isDisabled: pager.isLastPage(),
       label: this.props.labels.next,
       pageNumber: pager.currentPage + 1,
@@ -71,7 +75,7 @@ class Pagination extends React.Component {
   firstPageLink(pager, createURL) {
     return this.pageLink({
       ariaLabel: 'First',
-      className: this.props.cssClasses.first,
+      additionalClassName: this.props.cssClasses.first,
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.first,
       pageNumber: 0,
@@ -82,7 +86,7 @@ class Pagination extends React.Component {
   lastPageLink(pager, createURL) {
     return this.pageLink({
       ariaLabel: 'Last',
-      className: this.props.cssClasses.last,
+      additionalClassName: this.props.cssClasses.last,
       isDisabled: pager.isLastPage(),
       label: this.props.labels.last,
       pageNumber: pager.total - 1,
@@ -98,7 +102,7 @@ class Pagination extends React.Component {
 
       pages.push(this.pageLink({
         ariaLabel: pageNumber + 1,
-        className: this.props.cssClasses.page,
+        additionalClassName: this.props.cssClasses.page,
         isActive: isActive,
         label: pageNumber + 1,
         pageNumber: pageNumber,
@@ -135,6 +139,7 @@ Pagination.propTypes = {
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.string,
     item: React.PropTypes.string,
+    link: React.PropTypes.string,
     page: React.PropTypes.string,
     previous: React.PropTypes.string,
     next: React.PropTypes.string,
