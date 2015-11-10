@@ -13,11 +13,6 @@
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
 
-API is unstable. We welcome any idea and pull request.
-
-To get started, check out [algolia.github.com/instantsearch.js](https://algolia.github.com/instantsearch.js)!
-
-
 ## Table of contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
