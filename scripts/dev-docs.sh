@@ -2,5 +2,4 @@
 
 set -ev # exit when error
 
-npm run dev &
-cd docs && bundle install && bundle exec guard
+cd docs && bundle install && npm run dev & bundle exec guard & wait
