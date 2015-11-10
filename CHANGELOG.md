@@ -1,7 +1,6 @@
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/algolia/instantsearch.js/compare/v0.10.0...v0.11.0) (2015-11-06)
 
-# 0.11.0 (2015-11-10)
 ### Bug Fixes
 
 * **bem:** Make scss mixins actually follow BEM ([fcfb408](https://github.com/algolia/instantsearch.js/commit/fcfb408))
