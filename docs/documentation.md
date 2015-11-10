@@ -351,7 +351,8 @@ instantsearch.widgets.hits(options);
 <div class="codebox-combo">
 
 <img class="widget-icon pull-left" src="../img/icon-widget-results.svg">
-The hits widget is the main component for displaying results from Algolia. It accepts a [Mustache]() template string or a function returning a string. See the [templates](#templates) section.
+The hitsPerPageSelector widget lets you select the number of results you want
+displayed.
 {:.description}
 
 <div class="code-box">
