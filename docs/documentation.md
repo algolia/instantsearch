@@ -524,6 +524,7 @@ instantsearch.widgets.hierarchicalMenu(options);
 {% include widget-jsdoc/hierarchicalMenu.md %}
   </div>
 </div>
+</div>
 
 <div  id="hierarchical-categories" class="widget-container"></div>
 
