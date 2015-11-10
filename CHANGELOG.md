@@ -1,112 +1,22 @@
 <a name="0.11.0"></a>
+# [0.11.0](https://github.com/algolia/instantsearch.js/compare/v0.10.0...v0.11.0) (2015-11-06)
+
 # 0.11.0 (2015-11-10)
-
-
 ### Bug Fixes
 
-* add missing 'use strict's ([397294e](https://github.com/algolia/instantsearch.js/commit/397294e))
-* add title for brands ([2e67c47](https://github.com/algolia/instantsearch.js/commit/2e67c47))
-* allow adding css classes to the searchBox wrapper ([6ef0b0b](https://github.com/algolia/instantsearch.js/commit/6ef0b0b)), closes [#22](https://github.com/algolia/instantsearch.js/issues/22) [#24](https://github.com/algolia/instantsearch.js/issues/24)
-* allow html in pagination labels ([4147358](https://github.com/algolia/instantsearch.js/commit/4147358)), closes [#36](https://github.com/algolia/instantsearch.js/issues/36)
-* Allow not specifying `cssClass` on index selector ([4e9324f](https://github.com/algolia/instantsearch.js/commit/4e9324f))
-* allow passing only one key of transformData as an object ([e0ce89f](https://github.com/algolia/instantsearch.js/commit/e0ce89f))
-* Handle plural forms in template ([1bfd109](https://github.com/algolia/instantsearch.js/commit/1bfd109))
-* **transformData:** add an explicit error message ([94c53d3](https://github.com/algolia/instantsearch.js/commit/94c53d3)), closes [#212](https://github.com/algolia/instantsearch.js/issues/212)
-* cap the number of page displayed ([bc6c2e2](https://github.com/algolia/instantsearch.js/commit/bc6c2e2))
-* change no results message ([80acf33](https://github.com/algolia/instantsearch.js/commit/80acf33))
-* do not use memoize & co ([32c64e6](https://github.com/algolia/instantsearch.js/commit/32c64e6))
-* expose main dist/ instead of index.js ([98bd889](https://github.com/algolia/instantsearch.js/commit/98bd889))
-* Fix merge issues ([3b5e8f4](https://github.com/algolia/instantsearch.js/commit/3b5e8f4))
-* fixed hits display height, no more scroll jumps ([6b4319d](https://github.com/algolia/instantsearch.js/commit/6b4319d))
-* folder requires uses a trailing / to ease recognition of /index.js ([3ef55a3](https://github.com/algolia/instantsearch.js/commit/3ef55a3))
-* Handle zero, one and many ([5434ca2](https://github.com/algolia/instantsearch.js/commit/5434ca2))
-* hits widget should allow hitsPerPage configuration, pagination should not ([a2221a8](https://github.com/algolia/instantsearch.js/commit/a2221a8))
-* instantSearch => instantsearch ([bdcbf18](https://github.com/algolia/instantsearch.js/commit/bdcbf18)), closes [#7](https://github.com/algolia/instantsearch.js/issues/7)
-* **api:** rename hideContainerWhenNoResults to autoHideContainer ([3f64bef](https://github.com/algolia/instantsearch.js/commit/3f64bef)), closes [#407](https://github.com/algolia/instantsearch.js/issues/407)
-* **autohide:** Rename attribute to `hideContainerWhenNoResults` ([ecb6756](https://github.com/algolia/instantsearch.js/commit/ecb6756)), closes [#325](https://github.com/algolia/instantsearch.js/issues/325)
 * **bem:** Make scss mixins actually follow BEM ([fcfb408](https://github.com/algolia/instantsearch.js/commit/fcfb408))
-* **core:** recursively merge arrays in searchParameters ([dbadcdb](https://github.com/algolia/instantsearch.js/commit/dbadcdb)), closes [#80](https://github.com/algolia/instantsearch.js/issues/80)
-* **cssClasses:** Fixed duplication of classNames ([e193f45](https://github.com/algolia/instantsearch.js/commit/e193f45)), closes [#388](https://github.com/algolia/instantsearch.js/issues/388)
-* **doc:** add doctype were missing ([86a18aa](https://github.com/algolia/instantsearch.js/commit/86a18aa))
-* **doc:** All wigdets in docs are not anymore linked together #fix #446 ([4361320](https://github.com/algolia/instantsearch.js/commit/4361320)), closes [#446](https://github.com/algolia/instantsearch.js/issues/446)
 * **doc:** bolder font for the navigation ([64f6d56](https://github.com/algolia/instantsearch.js/commit/64f6d56))
-* **doc:** ensure the documentation content doesn't overflow ([1e28a4e](https://github.com/algolia/instantsearch.js/commit/1e28a4e)), closes [#444](https://github.com/algolia/instantsearch.js/issues/444)
-* **doc:** new color scheme ([deccc17](https://github.com/algolia/instantsearch.js/commit/deccc17))
-* **doc:** only show a scrollbar when needed ([f2d955b](https://github.com/algolia/instantsearch.js/commit/f2d955b))
-* **example:** Example searchbox ([cdad6c7](https://github.com/algolia/instantsearch.js/commit/cdad6c7)), closes [#157](https://github.com/algolia/instantsearch.js/issues/157)
-* **generateRanges:** avoid any infinite loop. Fix #351 ([4965222](https://github.com/algolia/instantsearch.js/commit/4965222)), closes [#351](https://github.com/algolia/instantsearch.js/issues/351)
-* **hideIfEmpty:** should be hideWhenNoResults ([21877a0](https://github.com/algolia/instantsearch.js/commit/21877a0))
-* **hierarchical:** setPage 0 when toggling ([a976539](https://github.com/algolia/instantsearch.js/commit/a976539)), closes [#371](https://github.com/algolia/instantsearch.js/issues/371)
-* **hierarchicalFacets:** use a real attribute name for the hierarchicalFacet name ([0d2a455](https://github.com/algolia/instantsearch.js/commit/0d2a455))
-* **hierarchicalMenu:** handle cases where no results after a search ([0a1d0ac](https://github.com/algolia/instantsearch.js/commit/0a1d0ac)), closes [#385](https://github.com/algolia/instantsearch.js/issues/385)
-* **hits:** Fix warning about unique key in iterator ([0c9468c](https://github.com/algolia/instantsearch.js/commit/0c9468c))
-* **Hits:** handle the display when there is no result ([544ff5c](https://github.com/algolia/instantsearch.js/commit/544ff5c))
-* **hitsPerPageSelector:** Be more tolerant in options ([e14a344](https://github.com/algolia/instantsearch.js/commit/e14a344))
-* **hitsPerPageSelector:** Issue when state did not have a `hitsPerPage` ([dc9371c](https://github.com/algolia/instantsearch.js/commit/dc9371c))
-* **index-selector:** Fix tests passing with incorrect parameters ([8fc31b9](https://github.com/algolia/instantsearch.js/commit/8fc31b9))
-* **index-selector:** Update usage and error ([a7e4c10](https://github.com/algolia/instantsearch.js/commit/a7e4c10))
 * **InstantSearch:** throw error when init and render are not defined. Fixes #499 ([2830cd3](https://github.com/algolia/instantsearch.js/commit/2830cd3)), closes [#499](https://github.com/algolia/instantsearch.js/issues/499)
-* **jsdoc:** use babel-node ([453dc21](https://github.com/algolia/instantsearch.js/commit/453dc21))
 * **live-doc:** adds a start at a responsive display ([c83967e](https://github.com/algolia/instantsearch.js/commit/c83967e))
 * **live-doc:** adds navigation menu for smaller screens ([a6bb71e](https://github.com/algolia/instantsearch.js/commit/a6bb71e))
 * **live-doc:** fixes flow for texts ([3855071](https://github.com/algolia/instantsearch.js/commit/3855071))
-* **live-doc:** generates missing ul ([b43e6e2](https://github.com/algolia/instantsearch.js/commit/b43e6e2))
 * **live-doc:** Momentum scroll for iPhone ([60a36ff](https://github.com/algolia/instantsearch.js/commit/60a36ff))
-* **live-doc:** move scrollbars, removes useless ones ([548ae5f](https://github.com/algolia/instantsearch.js/commit/548ae5f))
-* Pass nbHits, hitsPerPage, nbPages and page to Stats widget ([deefd23](https://github.com/algolia/instantsearch.js/commit/deefd23)), closes [#106](https://github.com/algolia/instantsearch.js/issues/106)
-* **live-doc:** moves octocat link to top. Removes stackOverflow ([8ff6a79](https://github.com/algolia/instantsearch.js/commit/8ff6a79))
-* **live-doc:** Moves version in the main content ([27731c3](https://github.com/algolia/instantsearch.js/commit/27731c3))
 * **live-doc:** uses only h4 and fixes style of h4 (mobile) ([0fdd2d0](https://github.com/algolia/instantsearch.js/commit/0fdd2d0))
-* **live-reload:** integrates the links into the menu flow ([c118051](https://github.com/algolia/instantsearch.js/commit/c118051))
-* **menu:** send an empty array values when no values ([12cd7dc](https://github.com/algolia/instantsearch.js/commit/12cd7dc)), closes [#107](https://github.com/algolia/instantsearch.js/issues/107)
 * **middle-click:** Allow middle click on links ([a7601c0](https://github.com/algolia/instantsearch.js/commit/a7601c0))
-* **multipleChoiceList:** `limit` should be pure JS ([68bdf81](https://github.com/algolia/instantsearch.js/commit/68bdf81))
-* **numeric widgets:** synchronizes rounded value between widgets ([b314160](https://github.com/algolia/instantsearch.js/commit/b314160))
-* **numeric-refinement:** Replace Array.find with lodash find/includes ([b3e815c](https://github.com/algolia/instantsearch.js/commit/b3e815c))
-* **numerical widgets:** s/facetName/attributeName ([f209f5d](https://github.com/algolia/instantsearch.js/commit/f209f5d)), closes [#431](https://github.com/algolia/instantsearch.js/issues/431)
-* **onClick:** do not replace the browser's behavior on special clicks ([8562d49](https://github.com/algolia/instantsearch.js/commit/8562d49)), closes [#278](https://github.com/algolia/instantsearch.js/issues/278)
-* **package.json:** typo in repository ([33cf196](https://github.com/algolia/instantsearch.js/commit/33cf196))
-* **pagination:** do not generate the URL for disabled pages. ([e5d78ab](https://github.com/algolia/instantsearch.js/commit/e5d78ab)), closes [#282](https://github.com/algolia/instantsearch.js/issues/282)
-* **pagination:** handle cases where maxPages is low ([d3c9959](https://github.com/algolia/instantsearch.js/commit/d3c9959)), closes [#100](https://github.com/algolia/instantsearch.js/issues/100)
-* **pagination:** missing showFirstLast attribute when instanciating ([28fa0ae](https://github.com/algolia/instantsearch.js/commit/28fa0ae))
-* **poweredBy:** Extract its hiding capabilities ([f5fa9ee](https://github.com/algolia/instantsearch.js/commit/f5fa9ee)), closes [#189](https://github.com/algolia/instantsearch.js/issues/189)
-* **price-ranges:** makes it uses same operator as the slider ([ad6f5c2](https://github.com/algolia/instantsearch.js/commit/ad6f5c2))
-* **priceRanges:** fixed 'active' CSS class not using BEM ([ec0d1b1](https://github.com/algolia/instantsearch.js/commit/ec0d1b1))
-* **priceRanges:** plug the URL computation. Fix #354 ([fbf4022](https://github.com/algolia/instantsearch.js/commit/fbf4022)), closes [#354](https://github.com/algolia/instantsearch.js/issues/354)
-* **range-slider:** fixes bound definition ([e15c9b7](https://github.com/algolia/instantsearch.js/commit/e15c9b7))
 * **range-slider:** Use lodash find instead of Array.prototype.find ([056153c](https://github.com/algolia/instantsearch.js/commit/056153c))
-* **rangeSlider:** refinements cleanuo ([16c132c](https://github.com/algolia/instantsearch.js/commit/16c132c)), closes [#147](https://github.com/algolia/instantsearch.js/issues/147)
-* **rangeSlider:** restore wrongly removed state nesting ([3ed3d39](https://github.com/algolia/instantsearch.js/commit/3ed3d39))
-* **React:** require React in order for JSX to work in widgets ([64d6011](https://github.com/algolia/instantsearch.js/commit/64d6011))
-* **react-nouislider:** upgrade react-nouislider to avoid mutating props ([1b7cd1d](https://github.com/algolia/instantsearch.js/commit/1b7cd1d))
-* **refinementList:** ensure the key reflects the underlying state ([b048f0b](https://github.com/algolia/instantsearch.js/commit/b048f0b)), closes [#398](https://github.com/algolia/instantsearch.js/issues/398)
-* **refinementList:** Remove `singleRefine` attribute ([db73e38](https://github.com/algolia/instantsearch.js/commit/db73e38)), closes [#220](https://github.com/algolia/instantsearch.js/issues/220)
-* **refinementList:** singleRefine is not dependant from operator ([d29dff6](https://github.com/algolia/instantsearch.js/commit/d29dff6))
-* **RefinementList:** click on child should not click on parent ([d476da2](https://github.com/algolia/instantsearch.js/commit/d476da2)), closes [#191](https://github.com/algolia/instantsearch.js/issues/191)
-* **search-box:** Fix #137 autofocus must be configurable ([51f01be](https://github.com/algolia/instantsearch.js/commit/51f01be)), closes [#137](https://github.com/algolia/instantsearch.js/issues/137)
-* **searchBox:** allow searchBox to reuse an `<input>` ([e820cc3](https://github.com/algolia/instantsearch.js/commit/e820cc3))
-* **searchBox:** do not update input's value if focused ([0e85f0d](https://github.com/algolia/instantsearch.js/commit/0e85f0d)), closes [#163](https://github.com/algolia/instantsearch.js/issues/163)
 * **searchBox:** handling pasting event with contextual menu. ([a172458](https://github.com/algolia/instantsearch.js/commit/a172458)), closes [#467](https://github.com/algolia/instantsearch.js/issues/467)
-* **searchBox:** Use `hasAttribute` instead of `getAttribute` ([a122af9](https://github.com/algolia/instantsearch.js/commit/a122af9))
-* **SearchBox:** Missing poweredBy in the not focused SearchBox ([ef695ff](https://github.com/algolia/instantsearch.js/commit/ef695ff))
-* **selector:** makes component as uncontrolled component ([1dda12a](https://github.com/algolia/instantsearch.js/commit/1dda12a))
-* **slider:** allow handles to reach the real start and end of the slider ([03ed3f5](https://github.com/algolia/instantsearch.js/commit/03ed3f5))
-* **slider:** fix tap event throwing ([d906d3e](https://github.com/algolia/instantsearch.js/commit/d906d3e)), closes [#120](https://github.com/algolia/instantsearch.js/issues/120)
-* **slider:** fixed `pip` propTypes constraint ([c77b7f4](https://github.com/algolia/instantsearch.js/commit/c77b7f4))
-* **slider:** hide slider if when no hits/matches ([31e4a80](https://github.com/algolia/instantsearch.js/commit/31e4a80)), closes [#107](https://github.com/algolia/instantsearch.js/issues/107)
-* **Slider:** cssClasses.body handled by headerFooter HOC ([d8d20b2](https://github.com/algolia/instantsearch.js/commit/d8d20b2))
-* **stats:** Move CSS classes definition to widget from component ([99073cd](https://github.com/algolia/instantsearch.js/commit/99073cd))
-* **template:** throw when no way to deal with the template type ([f5d151a](https://github.com/algolia/instantsearch.js/commit/f5d151a))
-* **template:** transformData checks too strict ([609f123](https://github.com/algolia/instantsearch.js/commit/609f123)), closes [#347](https://github.com/algolia/instantsearch.js/issues/347)
-* **Template:** add default value for template ([4291014](https://github.com/algolia/instantsearch.js/commit/4291014))
-* **templatesConfig:** helpers are now following Mustache spec ([8f3502f](https://github.com/algolia/instantsearch.js/commit/8f3502f))
-* **transformData:** this test is not needed, already covered by Template ([36e5b9c](https://github.com/algolia/instantsearch.js/commit/36e5b9c))
-* **url-sync:** handle both hash and query parameter fix #165 ([8d84de6](https://github.com/algolia/instantsearch.js/commit/8d84de6)), closes [#165](https://github.com/algolia/instantsearch.js/issues/165)
-* **url-sync:** make input not to lose focus ([63488d3](https://github.com/algolia/instantsearch.js/commit/63488d3))
-* **validate-commit:** Update the regexp ([96b93ba](https://github.com/algolia/instantsearch.js/commit/96b93ba))
 * **website:** defered doc scripts ([0c1324f](https://github.com/algolia/instantsearch.js/commit/0c1324f))
 * **website:** doc layout responsive ([a4dc894](https://github.com/algolia/instantsearch.js/commit/a4dc894))
-* **website:** fix images path ([a3f62eb](https://github.com/algolia/instantsearch.js/commit/a3f62eb))
 * **website:** fixed space overlay color animation ([200b8a7](https://github.com/algolia/instantsearch.js/commit/200b8a7))
 * **website:** Fixes & responsive stuff for doc ([7a8f920](https://github.com/algolia/instantsearch.js/commit/7a8f920))
 * **website:** footer markup ([95364a1](https://github.com/algolia/instantsearch.js/commit/95364a1))
@@ -116,213 +26,19 @@
 * **website:** jsdelivr for every scripts ([06591d4](https://github.com/algolia/instantsearch.js/commit/06591d4))
 * **website:** Nav Icon + logo ([c1f419c](https://github.com/algolia/instantsearch.js/commit/c1f419c))
 * **website:** only load what's needed in bootstrap ([4843474](https://github.com/algolia/instantsearch.js/commit/4843474))
-* Use `appId` and `apiKey` keys ([5716552](https://github.com/algolia/instantsearch.js/commit/5716552))
 * **website:** removed animation debug ([01ac079](https://github.com/algolia/instantsearch.js/commit/01ac079))
-* Keep `en-EN` as demo default ([6c2a043](https://github.com/algolia/instantsearch.js/commit/6c2a043))
-* More explicit error message when DOM selector is invalid ([d36a2ad](https://github.com/algolia/instantsearch.js/commit/d36a2ad)), closes [#105](https://github.com/algolia/instantsearch.js/issues/105)
-* no more needed to override css class here ([2b314c0](https://github.com/algolia/instantsearch.js/commit/2b314c0))
-* no need for a flag in refinementList refine() ([9b8fa3f](https://github.com/algolia/instantsearch.js/commit/9b8fa3f))
-* no state needed for Hogan component ([d8a3a4c](https://github.com/algolia/instantsearch.js/commit/d8a3a4c))
-* react-nouislider will live in our repo for now ([49520f1](https://github.com/algolia/instantsearch.js/commit/49520f1))
-* reduce the dependency between REACT components and helper ([9309a4c](https://github.com/algolia/instantsearch.js/commit/9309a4c))
-* Remove `htmlAttribute` in favor of `cssClass` ([59a0bc5](https://github.com/algolia/instantsearch.js/commit/59a0bc5))
-* remove data-role from searchBox ([bdfe6d3](https://github.com/algolia/instantsearch.js/commit/bdfe6d3))
-* remove linebreak ([e5f1720](https://github.com/algolia/instantsearch.js/commit/e5f1720))
-* rename BEM root algolia-magic to as ([5f3329d](https://github.com/algolia/instantsearch.js/commit/5f3329d)), closes [#24](https://github.com/algolia/instantsearch.js/issues/24)
-* rename results component to hits ([7b9eb25](https://github.com/algolia/instantsearch.js/commit/7b9eb25))
-* Set `cssClass` as optional in documentation ([e7ac953](https://github.com/algolia/instantsearch.js/commit/e7ac953))
-* set visibility:hidden by default for uneeded pagination links ([19fddba](https://github.com/algolia/instantsearch.js/commit/19fddba)), closes [#37](https://github.com/algolia/instantsearch.js/issues/37)
-* strict container check ([ec23e34](https://github.com/algolia/instantsearch.js/commit/ec23e34))
-* switch back to divs, rendering glitch ([b44943a](https://github.com/algolia/instantsearch.js/commit/b44943a))
-* toggleRefine was no more working ([e6e35df](https://github.com/algolia/instantsearch.js/commit/e6e35df))
-* update algoliasearch and algoliasearch-helper ([e944d12](https://github.com/algolia/instantsearch.js/commit/e944d12))
-* upgrade all libs, switch to ^ dependencies ([79d0a64](https://github.com/algolia/instantsearch.js/commit/79d0a64))
-* use cssClass instead of inputClass or addClass ([6826bd6](https://github.com/algolia/instantsearch.js/commit/6826bd6))
-* use toggleRefinement ([b497b02](https://github.com/algolia/instantsearch.js/commit/b497b02))
-* widgets.searchbox => widgets.searchBox ([6c49e18](https://github.com/algolia/instantsearch.js/commit/6c49e18))
-* wrap in an li the checkbox ([dfe629d](https://github.com/algolia/instantsearch.js/commit/dfe629d))
 * **website:** space bg fadeIn ([5e09844](https://github.com/algolia/instantsearch.js/commit/5e09844))
 * **website:** unclosed content block ([d42dc3e](https://github.com/algolia/instantsearch.js/commit/d42dc3e))
 
 ### Features
 
-* Add `htmlAttributes` to indexSelector ([ceed8ae](https://github.com/algolia/instantsearch.js/commit/ceed8ae))
-* Add stats widget ([8290542](https://github.com/algolia/instantsearch.js/commit/8290542))
-* Add support for `className` ([898a2fa](https://github.com/algolia/instantsearch.js/commit/898a2fa))
-* Add Toggle example ([d801807](https://github.com/algolia/instantsearch.js/commit/d801807))
-* Check that currentIndex is in indices list ([494dbe9](https://github.com/algolia/instantsearch.js/commit/494dbe9))
-* example now uses the instant_search index ([63b4b50](https://github.com/algolia/instantsearch.js/commit/63b4b50))
-* expose instantsearch.version ([ae5ef94](https://github.com/algolia/instantsearch.js/commit/ae5ef94))
-* expose instantsearch() as main init method ([27baf55](https://github.com/algolia/instantsearch.js/commit/27baf55)), closes [#6](https://github.com/algolia/instantsearch.js/issues/6)
-* formatNumber in Stats widget ([cf6a83c](https://github.com/algolia/instantsearch.js/commit/cf6a83c))
-* hierarchicalWidget ([1facd9d](https://github.com/algolia/instantsearch.js/commit/1facd9d))
-* **url-sync:** Add `is_v` version to url ([9f597a0](https://github.com/algolia/instantsearch.js/commit/9f597a0)), closes [#70](https://github.com/algolia/instantsearch.js/issues/70)
-* indexSelector widget ([b60ed36](https://github.com/algolia/instantsearch.js/commit/b60ed36))
-* multipleChoiceList => refinementList ([423542d](https://github.com/algolia/instantsearch.js/commit/423542d)), closes [#64](https://github.com/algolia/instantsearch.js/issues/64)
-* multipleChoiceList first iteration ([bc91bfb](https://github.com/algolia/instantsearch.js/commit/bc91bfb))
-* MutlipleChoiceList second pass ([ac74dfb](https://github.com/algolia/instantsearch.js/commit/ac74dfb))
-* pagination component ([fad2720](https://github.com/algolia/instantsearch.js/commit/fad2720))
-* pimp the npm run dev example using instant search data ([ea666ad](https://github.com/algolia/instantsearch.js/commit/ea666ad)), closes [#20](https://github.com/algolia/instantsearch.js/issues/20)
-* **bem:** Add BEM to the index-selector widget ([564da51](https://github.com/algolia/instantsearch.js/commit/564da51))
-* **bem:** Add BEM-styling to the Stats widget ([92cebeb](https://github.com/algolia/instantsearch.js/commit/92cebeb))
-* **build:** Add minified CSS theme version to build ([77f0640](https://github.com/algolia/instantsearch.js/commit/77f0640))
-* **build:** allow building React based custom widgets ([cfbbfe4](https://github.com/algolia/instantsearch.js/commit/cfbbfe4)), closes [#373](https://github.com/algolia/instantsearch.js/issues/373)
-* **core/lifecycle-event:** emits `render` when render ([7f03ae9](https://github.com/algolia/instantsearch.js/commit/7f03ae9))
-* **es7:** Enable `es7.objectRestSpread` ([fc2fbc4](https://github.com/algolia/instantsearch.js/commit/fc2fbc4))
-* **examples:** try examples instead of themes ([bedffce](https://github.com/algolia/instantsearch.js/commit/bedffce))
-* **headerFooter:** Add BEM classes to header and footer ([9e9d438](https://github.com/algolia/instantsearch.js/commit/9e9d438)), closes [#259](https://github.com/algolia/instantsearch.js/issues/259)
-* **headerFooter:** Only add markup if a template is defined ([7a2d22d](https://github.com/algolia/instantsearch.js/commit/7a2d22d)), closes [#370](https://github.com/algolia/instantsearch.js/issues/370)
-* **hierarchical-menu:** Add BEM classes ([58ec191](https://github.com/algolia/instantsearch.js/commit/58ec191))
-* **hierarchical-menu:** Add CSS classes dependent on the depth ([1256ea8](https://github.com/algolia/instantsearch.js/commit/1256ea8))
 * **hierarchicalMenu:** Adding indentation with default theme ([34885d2](https://github.com/algolia/instantsearch.js/commit/34885d2))
-* **hits:** Add BEM styling to the `hits` widget ([6681960](https://github.com/algolia/instantsearch.js/commit/6681960))
-* **hits-per-page-selector:** New widget to change hitsPerPage ([a3e0f78](https://github.com/algolia/instantsearch.js/commit/a3e0f78)), closes [#331](https://github.com/algolia/instantsearch.js/issues/331)
-* **menu:** Add BEM classes ([467f49e](https://github.com/algolia/instantsearch.js/commit/467f49e))
-* **menu:** first widget version ([a888143](https://github.com/algolia/instantsearch.js/commit/a888143))
-* **menu,refinementList:** add header/item/footer templating solution ([58275dc](https://github.com/algolia/instantsearch.js/commit/58275dc)), closes [#101](https://github.com/algolia/instantsearch.js/issues/101)
-* **numericRefinementList:** create numericRefinementList widget using refinementList component ([a29e9c7](https://github.com/algolia/instantsearch.js/commit/a29e9c7))
-* **pagination:** add `scrollTo` option ([e6cd621](https://github.com/algolia/instantsearch.js/commit/e6cd621)), closes [#73](https://github.com/algolia/instantsearch.js/issues/73)
-* **pagination:** add hitsPerPage and maxPages options ([7e558ce](https://github.com/algolia/instantsearch.js/commit/7e558ce))
-* **priceRanges:** Add BEM classes and tests ([ad58d7a](https://github.com/algolia/instantsearch.js/commit/ad58d7a)), closes [#387](https://github.com/algolia/instantsearch.js/issues/387)
-* **priceRanges:** new Amazon-style price ranges widget ([e5fe344](https://github.com/algolia/instantsearch.js/commit/e5fe344))
-* **priceRanges:** polish priceRanges widget ([0994e6f](https://github.com/algolia/instantsearch.js/commit/0994e6f))
-* **rangeSlider:** add headerFooter decorator ([19090c3](https://github.com/algolia/instantsearch.js/commit/19090c3))
-* **refinement-list:** Add BEM naming ([b09b830](https://github.com/algolia/instantsearch.js/commit/b09b830))
-* **refinementlist:** Move default templates to its own file ([cb6fa16](https://github.com/algolia/instantsearch.js/commit/cb6fa16))
-* **refinementList:** Limits improvement ([ebcc8a9](https://github.com/algolia/instantsearch.js/commit/ebcc8a9))
-* **searchbox:** Make the searchBox BEMish ([db8bd60](https://github.com/algolia/instantsearch.js/commit/db8bd60))
-* **searchBox:** ability to be non-instant ([b3ef871](https://github.com/algolia/instantsearch.js/commit/b3ef871)), closes [#458](https://github.com/algolia/instantsearch.js/issues/458)
-* **searchBox:** Add `wrapInput` option ([b327dbc](https://github.com/algolia/instantsearch.js/commit/b327dbc))
-* **searchBox:** add headerFooter decorator to the Component ([5974a88](https://github.com/algolia/instantsearch.js/commit/5974a88))
-* **searchBox:** add poweredBy option, disabled by default ([c9da165](https://github.com/algolia/instantsearch.js/commit/c9da165))
-* **slider:** allow overriding css classes from a user stylesheet ([a1e87dd](https://github.com/algolia/instantsearch.js/commit/a1e87dd))
-* **slider:** first iteration ([229bb02](https://github.com/algolia/instantsearch.js/commit/229bb02))
-* **slider:** second iteration ([885aff6](https://github.com/algolia/instantsearch.js/commit/885aff6))
-* **stats:** add query variable to the template ([75f457d](https://github.com/algolia/instantsearch.js/commit/75f457d))
-* **templatesConfig:** helpers and options transferred to Template ([456d781](https://github.com/algolia/instantsearch.js/commit/456d781)), closes [#99](https://github.com/algolia/instantsearch.js/issues/99)
-* **theme:** Add `searchBox` widget to default theme ([def831f](https://github.com/algolia/instantsearch.js/commit/def831f))
-* **theme:** Add debug.css file ([ff8f2dc](https://github.com/algolia/instantsearch.js/commit/ff8f2dc)), closes [#249](https://github.com/algolia/instantsearch.js/issues/249)
-* **theme:** Move `indexSelector` styling to default.css ([1841ef1](https://github.com/algolia/instantsearch.js/commit/1841ef1))
-* **theme:** Move all default css rules to `default.css` ([57c8c65](https://github.com/algolia/instantsearch.js/commit/57c8c65))
-* **toggle:** add headerFooter decorator ([8a70c7d](https://github.com/algolia/instantsearch.js/commit/8a70c7d))
-* **toggle:** Adding BEM class naming ([8730c97](https://github.com/algolia/instantsearch.js/commit/8730c97))
-* **toggle:** Allow custom on/off values ([9b6c2bf](https://github.com/algolia/instantsearch.js/commit/9b6c2bf)), closes [#409](https://github.com/algolia/instantsearch.js/issues/409)
-* **transformData:** add to every widget using the Template component ([d080a03](https://github.com/algolia/instantsearch.js/commit/d080a03)), closes [#116](https://github.com/algolia/instantsearch.js/issues/116)
-* **transformData:** refinementList + menu implementation ([0a0e36e](https://github.com/algolia/instantsearch.js/commit/0a0e36e))
-* Switch/Toggle widget ([3b2a450](https://github.com/algolia/instantsearch.js/commit/3b2a450))
-* Use `helpers.formatNumber` syntax instead of `_formatNumber` ([6207514](https://github.com/algolia/instantsearch.js/commit/6207514))
-* Warn users if we do not override `helpers` in templates ([a4199a5](https://github.com/algolia/instantsearch.js/commit/a4199a5))
-* **urls:** ability to create an URL from a set of params ([9ca8369](https://github.com/algolia/instantsearch.js/commit/9ca8369)), closes [#372](https://github.com/algolia/instantsearch.js/issues/372)
-* **urlSync:** add urlSync widget ([50fc4ce](https://github.com/algolia/instantsearch.js/commit/50fc4ce))
-* **urlSync:** url generation for widget links. Fix #29 ([23dd505](https://github.com/algolia/instantsearch.js/commit/23dd505)), closes [#29](https://github.com/algolia/instantsearch.js/issues/29)
-* **widgets:** auto hide some widgets ([187b4bd](https://github.com/algolia/instantsearch.js/commit/187b4bd))
-
-### Performance Improvements
-
-* **hitsPerPageSelector:** Use the correct lodash function ([be9aea7](https://github.com/algolia/instantsearch.js/commit/be9aea7))
 
 
 ### BREAKING CHANGES
 
 * hierarchicalMenu: Hierarchical menu levels 1 and 2 now have
 a margin-left added in the default theme.
-* menu,refinementList: Removed from menu and refinementList:
-- rootClass => cssClasses.root
-- itemCLass => cssClasses.item
-- template => templates.item
-
-Added to menu and refinementList:
-- cssClasses{root,list,item}
-- templates{header,item,footer}
-- widget (container) is automatically hidden by default
-- hideWhenNoResults=true
-
-This was done to allow more templating solutions like discussed in #101.
-* numerical widgets: the priceRanges and rangeSlider widgets are now using `attributeName` instead of `facetName`.
-* priceRanges: `ais-price-ranges--range` are now named
-`ais-price-ranges--item` and are wrapped in
-a `ais-price-ranges--list`.
-
-I've moved the bottom form into it's own PriceRangesForm component,
-along with its own tests. I've fixed a minor typo where the component
-was internally named PriceRange (without the final __s__).
-
-I factorize some logic form the render in individual methods and
-manage to individually test them. This was not an easy task. I had to
-mock the default `render` (so it does nothing) before instanciating
-the component. Then, I was able to call each inner method
-individually. This requires to stub prototype methods in beforeEach,
-then restore them in afterEach. I've added a few helper methods, this
-can surely be simplified again but this gives nice granularity in
-testing.
-
-I've renamed the `range` items to `item` and wrapped them in a `list`.
-I've also added classes to all elements we add (`label`, `separator`,
-etc). I've removed the empty `span`s.
-* headerFooter: The `<div class="ais-header">` and `<div
-class="ais-footer">` markup is only added when
-a `templates.{header,footer}` is passed.
-* urls: the instantsearch.createURL method is now taking a
-simple JS object and not a SearchParameter instance anymore.
-* searchBox: The `input` used by the search-box widget is now
-wrapped in a `<div class="ais-search-box">` by default. This can be
-turned off with `wrapInput: false`.
-
-This PR is a bit long, I had to do some minor refactoring to keep the
-new code understandable. I simply split the large `init` method into
-calls to smaller methods.
-
-There is some vanilla JS DOM manipulation involved to handle all the
-possible cases: targeting an `input` or a `div`, adding or not the
-`poweredBy`, adding or not the wrapping div.
-
-Note that there is no `targetNode.insertAfter(newNode)` method, so
-I had to resort to the old trick of `parentNode.insertBefore(newNode,
-targetNode.nextSibling)`.
-* priceRanges: the `input-group` modifier has been renamed to `form`
-* autohide: Widget attribute is now named
-`hideContainerWhenNoResults` instead of `hideWhenNoResults` to be more
-explicit on what it is really doing.
-
-Also internally renamed the `autoHide` decorator to
-`autoHideContainer`
-* build: You should now include the `default.css` file in your
-page to get the default styling.
-
-- Added `clean-css` as minifier
-- Updated build script
-- Updated documentation about loading it from jsdeliver
-- `npm shrinkwrap` madness
-* hits: The hit template and transform data key is renamed
-from `hit` to `item` to stay consistent with the other widgets
-* api: use autoHideContainer instead of
-hideContainerWhenNoResults
-* stats: `cssClasses.root` now applies to the main root
-element (above header and footer) and no longer to the template
-wrapper. To style the template wrapper, use `cssClasses.body`
-* theme: Classes are now named `ais-index-selector` and
-`ais-index-selector--item` to stay consistent with other widgets.
-
-Updated tests as well. Widget is responsible for adding default
-classes + user-defined ones. Then component simply add them to the
-markup.
-* theme: "Powered by" styles are now
-`ais-search-box--powered-by` and `ais-search-box--powered-by-link`.
-* urlSync: urlSync is not a widget anymore. It's now an option of
-instantsearch(appID, apiKey, opts);. See the README.md for more info.
-* searchbox: The `searchBox` widget now expect
-a `cssClasses.{input, poweredBy}`
-* bem: We now use a `span.ais-stats--time` instead of
-a `small` tag in the stats widget.
-* bem: We now use `cssClasses.select` and
-`cssClasses.option` instead of `cssClass` for the index-selector
-widget.
-* toggle: S:
-- toggle: removed template
-* searchBox: - removed: inputClass
-* menu: The default template now has the count element inside
-the link, not outside.
-
 
 
 <a name="0.10.0"></a>
