@@ -237,7 +237,7 @@ This example shows you how to create a very simple search results page with a se
         instantsearch.widgets.hits({
           container: '#hits-container',
           templates: {
-            item: 'Hit {% raw %}{{ objectID }}{% endraw %}: FIXME'
+            item: 'Hit {% raw %}{{objectID}}{% endraw %}: FIXME'
           }
         })
       );
