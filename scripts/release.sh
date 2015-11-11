@@ -62,9 +62,13 @@ conventional-changelog -p angular -i CHANGELOG.md -w
 printf "\n\nRelease: generate README.mc TOC"
 npm run doctoc
 
+# regenerate widgets jsdoc
+printf "\n\nRelease: regenerate widgets jsdoc"
+npm run jsdoc:widget
+
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md
+git add lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
