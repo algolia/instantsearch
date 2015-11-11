@@ -1,7 +1,0 @@
-@import "base";
-@import "variables";
-
-@include block(hits) {
-  @include modifier(empty);
-  @include element(item);
-}

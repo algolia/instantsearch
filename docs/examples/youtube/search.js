@@ -70,7 +70,8 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#ratings',
-    facetName: 'rating'
+    attributeName: 'rating',
+    pips: false
   })
 );
 

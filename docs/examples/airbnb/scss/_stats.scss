@@ -1,9 +1,0 @@
-@import "base";
-@import "variables";
-
-@include block(stats) {
-  @include element(header);
-  @include element(body);
-  @include element(time);
-  @include element(footer);
-}

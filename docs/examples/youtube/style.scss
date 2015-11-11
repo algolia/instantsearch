@@ -2,10 +2,6 @@
 # this ensures Jekyll reads the file to be transformed into CSS later
 ---
 
-// the relative path is not working here,
-// Jekyll will always look in the sass_dir
-@import "../examples/youtube/scss/default";
-
 $white: #FFFFFF;
 $youtube-red: #E91D00;
 $youtube-red-dark: #CE1312;
@@ -139,6 +135,17 @@ section {
 
     #ratings {
       margin: 40px 30px;
+
+      .ais-range-slider--target {
+      }
+
+      .ais-range-slider--handle {
+        border-color: $youtube-red;
+      }
+
+      .ais-range-slider--connect {
+        background-color: $youtube-red;
+      }
     }
 
   }

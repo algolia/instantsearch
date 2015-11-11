@@ -1,6 +1,0 @@
-@import "base";
-@import "variables";
-
-@include block(index-selector) {
-  @include element(item);
-}

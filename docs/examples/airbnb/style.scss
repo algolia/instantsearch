@@ -2,10 +2,6 @@
 # this ensures Jekyll reads the file to be transformed into CSS later
 ---
 
-// the relative path is not working here,
-// Jekyll will always look in the sass_dir
-@import "../examples/airbnb/scss/default";
-
 $white: #FFFFFF;
 $airbnb-red: #FF585B;
 $airbnb-gray-light: #DCE0E0;
@@ -106,18 +102,30 @@ nav {
 }
 
 #price {
-  padding-top: 30px;
+  .ais-range-slider--target {
+  }
+
+  .ais-range-slider--handle {
+    border-color: $airbnb-red;
+  }
+
+  .ais-range-slider--connect {
+    background-color: $airbnb-red;
+  }
 }
 
 #room_types {
-  .item {
+  .ais-refinement-list--count {
+    display: none;
+  }
+  .ais-refinement-list--item {
     display: inline-block;
     padding: 10px 20px 5px 15px;
     background: $airbnb-gray-lighter;
     margin-right: 10px;
     cursor: pointer;
   }
-  input {
+  .ais-refinement-list--checkbox {
     position: relative;
     float: right;
     -webkit-appearance: none;
@@ -131,9 +139,8 @@ nav {
       outline: none;
     }
   }
-
-  .active {
-    input:before {
+  .ais-refinement-list--item__active {
+    .ais-refinement-list--checkbox:before {
       content: "\2713";
       position: absolute;
       font-size: 0.85em;
