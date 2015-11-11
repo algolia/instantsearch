@@ -15,7 +15,7 @@ $range-slider-handle-bg: $white;
     background: $range-slider-bg;
     height: $range-slider-target-height;
     margin-top: 2em;
-    margin-bottom: 4em;
+    margin-bottom: 2em;
   }
 
   @include element(base) {
@@ -69,7 +69,7 @@ $range-slider-handle-bg: $white;
   @include element(tooltip) {
     position: absolute;
     background: $white;
-    top: -2em;
+    top: -$range-slider-handle-size - 2px;
     font-size: .8em;
   }
 
