@@ -116,19 +116,7 @@ var search = instantsearch({
 instantsearch(options);
 {% endhighlight %}
 
-| Option | Description |
-| <span class="attr-required">`options.appId`</span>* | The application ID |
-| <span class="attr-required">`options.apiKey`</span>* | The search key to access algolia |
-| <span class="attr-required">`options.index`</span>* | The name of the main index |
-| <span class="attr-optional">`options.numberLocale`</span> | The locale used to display numbers. By default, `'en-EN'` |
-| <span class="attr-optional">`options.searchParameters`</span> | Initial search configuration. By default, `{}` |
-| <span class="attr-optional">`options.urlSync`</span> | Url synchronisation configuration. By default, `null` |
-| <span class="attr-optional">`options.urlSync.trackedParameters`</span> | Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. |
-| <span class="attr-optional">`options.urlSync.useHash`</span> | If set to true, the url will be hash based. Otherwise, it'll use the query parameters using the modern history API. |
-| <span class="attr-optional">`options.urlSync.threshold`</span> | Time in ms after which a new state is created in the browser history. The default value is 700. |
-
-  <p class="attr-legend">* <span>Required</span></p>
-  </div>
+{% include widget-jsdoc/instantsearch.md %}
 </div>
 </div>
 
@@ -164,10 +152,7 @@ The build your search results page, you need to combine widgets together. Widget
 search.addWidget(widget)
 {% endhighlight %}
 
-| Option | Description |
-| <span class="attr-optional">`widget.render`</span> | Called after each search response has been received |
-| <span class="attr-optional">`widget.getConfiguration`</span> | Let the widget update the configuration of the search with new parameters |
-| <span class="attr-optional">`widget.init`</span> | Called once before the first search |
+{% include widget-jsdoc/addWidget.md %}
 
   </div>
 </div>
@@ -189,13 +174,6 @@ Once all the widgets have been added to the instantsearch instance, just start t
 {% highlight javascript %}
 search.start();
 {% endhighlight %}
-  </div>
-  <div class="jsdoc" style="display: none">
-{% highlight javascript %}
-search.start();
-{% endhighlight %}
-
-  *No parameters*
   </div>
 </div>
 

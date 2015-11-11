@@ -3,16 +3,31 @@ let dmd = require('dmd');
 let fs = require('fs');
 let util = require('util');
 let path = require('path');
+let Transform = require('stream').Transform;
 
 /* paths used by this script */
 let p = {
-  src: path.resolve(__dirname, '../../widgets/**/*.js'),
+  src: [path.resolve(__dirname, '../../widgets/**/*.js'), path.resolve(__dirname, '../../lib/InstantSearch.js')],
   json: path.resolve(__dirname, '../../source.json'),
   output: path.resolve(__dirname, '../../docs/_includes/widget-jsdoc/%s.md')
 };
 
+// convert kind='constructor' to kind='function'
+let ctorToFunction = new Transform({decodeStrings: false});
+ctorToFunction._transform = (chunk, encoding, done) => {
+  let data = eval(chunk.toString()); // eslint-disable-line
+  data.forEach(function(e) {
+    if (e.kind === 'constructor') {
+      e.kind = 'function';
+    }
+  });
+  done(null, JSON.stringify(data));
+};
+
+
 /* we only need to parse the source code once, so cache it */
 jsdoc2md({src: p.src, json: true})
+  .pipe(ctorToFunction)
   .pipe(fs.createWriteStream(p.json))
   .on('close', dataReady);
 
@@ -32,7 +47,6 @@ function dataReady() {
 
 function renderMarkdown(classes, index) {
   let className = classes[index];
-
 
   let templateFile = path.resolve(__dirname, './widgetTemplate.hbs');
 
