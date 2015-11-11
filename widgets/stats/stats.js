@@ -26,13 +26,21 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
+const usage = `Usage:
+stats({
+  container,
+  [ template ],
+  [ transformData ],
+  [ autoHideContainer]
+})`;
 function stats({
     container,
     cssClasses: userCssClasses = {},
     autoHideContainer = true,
     templates = defaultTemplates,
     transformData
-  }) {
+  } = {}) {
+  if (!container) throw new Error(usage);
   let containerNode = utils.getContainerNode(container);
 
   let Stats = headerFooterHOC(require('../../components/Stats/Stats.js'));
@@ -41,7 +49,7 @@ function stats({
   }
 
   if (!containerNode) {
-    throw new Error('Usage: stats({container[, template, transformData, autoHideContainer]})');
+    throw new Error(usage);
   }
 
   return {

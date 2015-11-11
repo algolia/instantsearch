@@ -14,14 +14,15 @@ import PriceRanges from '../../../components/PriceRanges/PriceRanges';
 
 describe('priceRanges call', () => {
   jsdom({useEach: true});
-  it('throws an exception when no attributeName', () => {
-    const containerNode = document.createElement('div');
-    expect(priceRanges.bind(null, {containerNode})).toThrow();
-  });
 
   it('throws an exception when no container', () => {
-    const attributeName = 'myAttribute';
-    expect(priceRanges.bind(null, {attributeName})).toThrow();
+    const attributeName = '';
+    expect(priceRanges.bind(null, {attributeName})).toThrow(/^Usage:/);
+  });
+
+  it('throws an exception when no attributeName', () => {
+    const container = document.createElement('div');
+    expect(priceRanges.bind(null, {container})).toThrow(/^Usage:/);
   });
 });
 

@@ -40,6 +40,17 @@ let defaultLabels = {
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
+const usage = `Usage:
+pagination({
+  container,
+  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
+  [ labels.{previous,next,first,last} ],
+  [ maxPages=20 ],
+  [ padding=3 ],
+  [ showFirstLast=true ],
+  [ autoHideContainer=true ],
+  [ scrollTo='body' ]
+})`;
 function pagination({
     container,
     cssClasses: userCssClasses = {},
@@ -49,21 +60,20 @@ function pagination({
     showFirstLast = true,
     autoHideContainer = true,
     scrollTo = 'body'
-  }) {
+  } = {}) {
+  if (!container) {
+    throw new Error(usage);
+  }
+
   if (scrollTo === true) {
     scrollTo = 'body';
   }
 
   let containerNode = utils.getContainerNode(container);
   let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
-
   let Pagination = require('../../components/Pagination/Pagination.js');
   if (autoHideContainer === true) {
     Pagination = autoHideContainerHOC(Pagination);
-  }
-
-  if (!container) {
-    throw new Error('Usage: pagination({container[, cssClasses.{root,item,page,previous,next,first,last,active,disabled}, labels.{previous,next,first,last}, maxPages, showFirstLast, autoHideContainer]})');
   }
 
   labels = defaults(labels, defaultLabels);

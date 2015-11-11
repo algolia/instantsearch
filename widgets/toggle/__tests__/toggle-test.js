@@ -24,13 +24,13 @@ describe('toggle()', () => {
     it('throws when no facetName', () => {
       expect(() => {
         toggle({container: document.createElement('div')});
-      }).toThrow(/Usage: /);
+      }).toThrow(/Usage:/);
     });
 
     it('throws when no label', () => {
       expect(() => {
         toggle({container: document.createElement('div'), facetName: 'Hello'});
-      }).toThrow(/Usage: /);
+      }).toThrow(/Usage:/);
     });
   });
 

@@ -33,6 +33,17 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @return {Object}
  */
+const usage = `Usage:
+menu({
+  container,
+  facetName,
+  [sortBy],
+  [limit],
+  [cssClasses.{root,list,item}],
+  [templates.{header,item,footer}],
+  [transformData],
+  [autoHideContainer]
+})`;
 function menu({
     container,
     facetName,
@@ -42,17 +53,15 @@ function menu({
     templates = defaultTemplates,
     transformData,
     autoHideContainer = true
-  }) {
-  let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: menu({container, facetName, [sortBy, limit, cssClasses.{root,list,item}, templates.{header,item,footer}, transformData, autoHideContainer]})';
+  } = {}) {
+  if (!container || !facetName) {
+    throw new Error(usage);
+  }
 
+  let containerNode = utils.getContainerNode(container);
   let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  if (!container || !facetName) {
-    throw new Error(usage);
   }
 
   // we use a hierarchicalFacet for the menu because that's one of the use cases

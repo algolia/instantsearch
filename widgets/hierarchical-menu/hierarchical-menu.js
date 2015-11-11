@@ -14,14 +14,16 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
  * Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow.
- * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string} [options.separator=' > '] Separator used in the attributes to separate level values.
  * @param  {number} [options.limit=100] How much facet values to get
+ * @param  {string[]} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [options.cssClasses.depth] CSS class to add to the depth element
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
@@ -34,27 +36,38 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @return {Object}
  */
+const usage = `Usage:
+hierarchicalMenu({
+  container,
+  attributes,
+  [ separator=' > ' ],
+  [ limit=100 ],
+  [ sortBy=['name:asc'] ],
+  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
+  [ templates.{header, item, footer} ],
+  [ transformData ],
+  [ autoHideContainer=true ]
+})`;
 function hierarchicalMenu({
     container,
-    attributes = [],
-    separator,
+    attributes,
+    separator = ' > ',
     limit = 100,
     sortBy = ['name:asc'],
     cssClasses: userCssClasses = {},
     autoHideContainer = true,
     templates = defaultTemplates,
     transformData
-  }) {
+  } = {}) {
+  if (!container || !attributes || !attributes.length) {
+    throw new Error(usage);
+  }
+
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: hierarchicalMenu({container, attributes, [separator, sortBy, limit, cssClasses.{root, list, item}, templates.{header, item, footer}, transformData, autoHideContainer]})';
 
   let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  if (!container || !attributes || !attributes.length) {
-    throw new Error(usage);
   }
 
   // we need to provide a hierarchicalFacet name for the search state

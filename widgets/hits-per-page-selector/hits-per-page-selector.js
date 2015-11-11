@@ -20,22 +20,27 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @return {Object}
  */
 
+const usage = `Usage:
+hitsPerPageSelector({
+  container,
+  options,
+  [ cssClasses.{root,item}={} ],
+  [ autoHideContainer=false ]
+})`;
 function hitsPerPageSelector({
     container,
     options,
     cssClasses: userCssClasses = {},
     autoHideContainer = false
-  }) {
-  let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: hitsPerPageSelector({container, options[, cssClasses.{root,item}, autoHideContainer]})';
+  } = {}) {
+  if (!container || !options) {
+    throw new Error(usage);
+  }
 
+  let containerNode = utils.getContainerNode(container);
   let Selector = require('../../components/Selector');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
-  }
-
-  if (!container || !options) {
-    throw new Error(usage);
   }
 
   return {

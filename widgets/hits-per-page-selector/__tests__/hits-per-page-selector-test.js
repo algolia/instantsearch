@@ -11,6 +11,20 @@ expect.extend(expectJSX);
 import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
 
+describe('hitsPerPageSelector call', () => {
+  jsdom({useEach: true});
+
+  it('throws an exception when no options', () => {
+    const container = document.createElement('div');
+    expect(hitsPerPageSelector.bind(null, {container})).toThrow(/^Usage:/);
+  });
+
+  it('throws an exception when no container', () => {
+    const options = {a: {value: 'value', label: 'My value'}};
+    expect(hitsPerPageSelector.bind(null, {options})).toThrow(/^Usage:/);
+  });
+});
+
 describe('hitsPerPageSelector()', () => {
   jsdom({useEach: true});
 
