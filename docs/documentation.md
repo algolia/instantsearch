@@ -734,7 +734,7 @@ This filtering widget lets the user choose between ranges of price. Those ranges
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.priceRanges({
-    container: '#priceranges.widget-container',
+    container: '#price-ranges',
     attributeName: 'price',
     labels: {
       currency: '$',
@@ -772,7 +772,7 @@ instantsearch.widgets.priceRanges(options);
 
 </div>
 
-<div id="priceranges" class="widget-container"></div>
+<div id="price-ranges" class="widget-container"></div>
 
 ### Sort
 
