@@ -320,6 +320,12 @@ function SearchResults(state, algoliaResponse) {
       if (hierarchicalFacet) {
         position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
         var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
+
+        // previous refinements and no results so not able to find it
+        if (attributeIndex === -1) {
+          return;
+        }
+
         this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
       } else {
         position = disjunctiveFacetsIndices[dfacet];
