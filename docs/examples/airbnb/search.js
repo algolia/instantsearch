@@ -56,19 +56,15 @@ search.addWidget(
     container: '#room_types',
     facetName: 'room_type',
     operator: 'or',
-    limit: 10,
-    cssClasses: {
-      item: 'item',
-      count: 'hide',
-      active: 'active'
-    }
+    limit: 10
   })
 );
 
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price'
+    attributeName: 'price',
+    pips: false
   })
 );
 
