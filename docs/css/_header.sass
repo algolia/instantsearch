@@ -1,8 +1,11 @@
 header.site-header
   position: fixed
+
   top: 0
   width: 100%
   z-index: 99
+  background: linear-gradient(to right, rgba(#0a1724, .8) -50%, rgba(#172c4f, .5) 100%)
+  transition: background 2s ease
   nav.navbar
     margin-bottom: 0
     background-color: #0B1724
@@ -45,15 +48,6 @@ header.site-header
       text-align: center
       position: relative
       top: -4px
-
-header.over-white-background
-  .navbar-brand, .navbar-toggle
-    color: black !important
-
-@media (min-width: $screen-xs-max)
-  header.over-white-background
-    .navbar-nav a
-      color: black !important
 
 .main-content
   margin-top: $navbar-height

@@ -120,27 +120,6 @@ $(function () {
   scenes[3].on('leave', function () {
     $('body:after').addClass('hide');
   });
-
-  var isMenuOverWhite = false;
-  $(window).load(checkMenuOverWhite)
-  // change the menu to use black font when we arrive at the white background
-  $(window).scroll(throttle(checkMenuOverWhite, 50));
-
-  function checkMenuOverWhite() {
-    var $navbar = $('.site-header .navbar');
-    var $whiteBottom = $('.white-bottom');
-    var $header = $('header');
-    var currentIsMenuOverWhite = divOver($navbar, $whiteBottom);
-
-    if (currentIsMenuOverWhite !== isMenuOverWhite) {
-      isMenuOverWhite = currentIsMenuOverWhite;
-      if (isMenuOverWhite) {
-        $header.addClass('over-white-background');
-      } else {
-        $header.removeClass('over-white-background');
-      }
-    }
-  }
 });
 
 
@@ -234,35 +213,3 @@ Star.prototype.draw = function() {
   context.fill();
   context.restore();
 };
-
-// http://stackoverflow.com/questions/14012766/detecting-whether-two-divs-overlap
-function divOver($div1, $div2) {
-  var rect1 = $div1[0].getBoundingClientRect();
-  var rect2 = $div2[0].getBoundingClientRect();
-
-  return !(rect1.bottom < rect2.top + 80);
-}
-
-// https://remysharp.com/2010/07/21/throttling-function-calls
-function throttle(fn, threshhold, scope) {
-  threshhold || (threshhold = 250);
-  var last,
-      deferTimer;
-  return function () {
-    var context = scope || this;
-
-    var now = +new Date,
-        args = arguments;
-    if (last && now < last + threshhold) {
-      // hold on to it
-      clearTimeout(deferTimer);
-      deferTimer = setTimeout(function () {
-        last = now;
-        fn.apply(context, args);
-      }, threshhold);
-    } else {
-      last = now;
-      fn.apply(context, args);
-    }
-  };
-}
