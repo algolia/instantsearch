@@ -26,11 +26,13 @@
   <body class="{% body_class %}">
     {% include header.html %}
 
-    {{ content }}
+    <div class="site-content">
+      {{ content }}
 
-{%if page.noFooter == null %}
-    {% include footer.html %}
-{% endif %}
+      {%if page.noFooter == null %}
+        {% include footer.html %}
+      {% endif %}
+    </div>
     <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ "/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
     <script src="//use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
