@@ -667,7 +667,7 @@ instantsearch.widgets.toggle(options);
 
 <img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
 The range slider filters values of a single numeric attribute using 2 cursors: the lower and the upper bounds.
-{:.description}
+{:.description}. The min and max values are automatically computed by Algolia using the data in the index.
 
 <div class="code-box">
   <div class="code-sample-snippet">
