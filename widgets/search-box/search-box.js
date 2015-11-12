@@ -10,6 +10,7 @@ const KEY_SUPPRESS = 8;
 
 /**
  * Instantiate a searchbox
+ * @function searchBox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} [options.placeholder] Input's placeholder
  * @param  {Object} [options.cssClasses] CSS classes to add

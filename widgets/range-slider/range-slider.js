@@ -13,6 +13,7 @@ let defaultTemplates = {
 
 /**
  * Instantiate a slider based on a numeric attribute
+ * @function rangeSlider
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.

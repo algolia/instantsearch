@@ -12,6 +12,7 @@ let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of refinements based on a facet
+ * @function refinementList
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.facetName Name of the attribute for faceting
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`

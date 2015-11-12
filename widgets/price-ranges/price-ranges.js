@@ -14,6 +14,7 @@ let cx = require('classnames');
 
 /**
  * Instantiate a price ranges on a numerical facet
+ * @function priceRanges
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {Object} [options.cssClasses] CSS classes to add

@@ -9,8 +9,8 @@
 | <span class='attr-optional'>`options.templates.empty`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> &#124; <code>function</code></span> | Template to use when there are no results. |
 | <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> &#124; <code>function</code></span> | Template to use for each result. |
 | <span class='attr-optional'>`options.transformData`</span><span class="attr-infos">Type: <code>Object</code></span> | Method to change the object passed to the templates |
-| <span class='attr-optional'>`options.transformData.empty`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>function</code></span> | Method used to change the object passed to the empty template |
-| <span class='attr-optional'>`options.transformData.item`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>function</code></span> | Method used to change the object passed to the item template |
+| <span class='attr-optional'>`options.transformData.empty`</span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span> | Method used to change the object passed to the empty template |
+| <span class='attr-optional'>`options.transformData.item`</span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span> | Method used to change the object passed to the item template |
 | <span class='attr-optional'>`hitsPerPage`</span><span class="attr-infos">Default:<code class="attr-default">20</code><br />Type: <code>number</code></span> | The number of hits to display per page |
 
 <p class="attr-legend">* <span>Required</span></p>
