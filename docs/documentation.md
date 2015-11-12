@@ -117,9 +117,10 @@ instantsearch(options);
 {% endhighlight %}
 
 {% include widget-jsdoc/instantsearch.md %}
-</div>
+  </div>
 </div>
 
+</div>
 
 If you don't have any index yet, learn how to push your data with the [Algolia getting started](https://www.algolia.com/getstarted).
 
