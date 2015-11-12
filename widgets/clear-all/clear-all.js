@@ -12,6 +12,7 @@ let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Allows to clear all refinements at once
+ * @function clearAll
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
