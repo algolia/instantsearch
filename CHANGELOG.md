@@ -1,3 +1,9 @@
+<a name="0.12.3"></a>
+## [0.12.3](https://github.com/algolia/instantsearch.js/compare/v0.12.2...v0.12.3) (2015-11-12)
+
+
+
+
 <a name="0.12.2"></a>
 ## [0.12.2](https://github.com/algolia/instantsearch.js/compare/v0.12.1...v0.12.2) (2015-11-12)
 
