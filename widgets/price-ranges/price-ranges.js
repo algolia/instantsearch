@@ -40,6 +40,15 @@ let cx = require('classnames');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}
  */
+const usage = `Usage:
+priceRanges({
+  container,
+  attributeName,
+  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
+  [ templates.{header,item,footer} ],
+  [ labels.{currency,separator,button} ],
+  [ autoHideContainer=true ]
+})`;
 function priceRanges({
     container,
     attributeName,
@@ -52,24 +61,14 @@ function priceRanges({
     },
     autoHideContainer = true
   } = {}) {
-  let containerNode = utils.getContainerNode(container);
-  const usage = `Usage:
-priceRanges({
-  container,
-  attributeName,
-  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer}={} ],
-  [ templates.{header,item,footer}={} ],
-  [ labels.{currency,separator,button}={currency: '$', button: 'Go', separator: 'to'} ],
-  [ autoHideContainer=true ]
-})`;
+  if (!container || !attributeName) {
+    throw new Error(usage);
+  }
 
+  let containerNode = utils.getContainerNode(container);
   let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges'));
   if (autoHideContainer === true) {
     PriceRanges = autoHideContainerHOC(PriceRanges);
-  }
-
-  if (!container || !attributeName) {
-    throw new Error(usage);
   }
 
   return {

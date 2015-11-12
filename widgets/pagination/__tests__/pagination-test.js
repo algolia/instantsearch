@@ -11,6 +11,13 @@ expect.extend(expectJSX);
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
 
+describe('pagination call', () => {
+  jsdom({useEach: true});
+
+  it('throws an exception when no container', () => {
+    expect(pagination.bind(null)).toThrow(/^Usage/);
+  });
+});
 describe('pagination()', () => {
   jsdom({useEach: true});
 

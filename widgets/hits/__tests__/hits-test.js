@@ -11,6 +11,14 @@ expect.extend(expectJSX);
 import hits from '../hits';
 import Hits from '../../../components/Hits';
 
+describe('hits call', () => {
+  jsdom({useEach: true});
+
+  it('throws an exception when no container', () => {
+    expect(hits).toThrow(/^Usage:/);
+  });
+});
+
 describe('hits()', () => {
   jsdom({useEach: true});
 

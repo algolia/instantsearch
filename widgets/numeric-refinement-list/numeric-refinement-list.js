@@ -16,6 +16,7 @@ let defaultTemplates = require('./defaultTemplates');
  * Instantiate a list of refinements based on a facet
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for filtering
+ * @param  {Object[]} options.options List of all the options
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -34,6 +35,18 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
+const usage = `Usage:
+numericRefinementList({
+  container,
+  attributeName,
+  options,
+  [ sortBy ],
+  [ limit ],
+  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData ],
+  [ autoHideContainer ]
+})`;
 function numericRefinementList({
   container,
   attributeName,
@@ -43,16 +56,14 @@ function numericRefinementList({
   transformData,
   autoHideContainer = true
   }) {
-  let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: numericRefinementList({container, attributeName, options, [sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
+  if (!container || !attributeName || !options) {
+    throw new Error(usage);
+  }
 
+  let containerNode = utils.getContainerNode(container);
   let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  if (!container || !attributeName) {
-    throw new Error(usage);
   }
 
   return {

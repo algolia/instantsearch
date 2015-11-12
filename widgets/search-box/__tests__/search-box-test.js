@@ -44,7 +44,7 @@ describe('search-box()', () => {
     it('throws an error if container is not defined', () => {
       expect(() => {
         searchBox({container: null});
-      }).toThrow(/Usage: /);
+      }).toThrow(/Usage:/);
     });
   });
 

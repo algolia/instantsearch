@@ -8,6 +8,29 @@ import jsdom from 'mocha-jsdom';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+describe('numericRefinementList call', () => {
+  jsdom({useEach: true});
+  const numericRefinementList = require('../numeric-refinement-list');
+
+  it('throws an exception when no container', () => {
+    const attributeName = '';
+    const options = [];
+    expect(numericRefinementList.bind(null, {attributeName, options})).toThrow(/^Usage/);
+  });
+
+  it('throws an exception when no attributeName', () => {
+    const container = document.createElement('div');
+    const options = [];
+    expect(numericRefinementList.bind(null, {container, options})).toThrow(/^Usage/);
+  });
+
+  it('throws an exception when no options', () => {
+    const container = document.createElement('div');
+    const attributeName = '';
+    expect(numericRefinementList.bind(null, {attributeName, container})).toThrow(/^Usage/);
+  });
+});
+
 describe('numericRefinementList()', () => {
   jsdom({useEach: true});
 

@@ -40,6 +40,17 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
  * @return {Object}
  */
+const usage = `Usage:
+toggle({
+  container,
+  facetName,
+  label,
+  [ userValues={on: true, off: undefined} ],
+  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData ],
+  [ autoHideContainer=true ]
+})`;
 function toggle({
     container,
     facetName,
@@ -51,7 +62,6 @@ function toggle({
     autoHideContainer = true
   } = {}) {
   let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: toggle({container, facetName, label[, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
 
   let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {

@@ -13,14 +13,15 @@ import AlgoliasearchHelper from 'algoliasearch-helper';
 describe('rangeSlider call', () => {
   jsdom({useEach: true});
   const rangeSlider = require('../range-slider');
-  it('throws an exception when no attributeName', () => {
-    const containerNode = document.createElement('div');
-    expect(rangeSlider.bind(null, {containerNode})).toThrow();
-  });
 
   it('throws an exception when no container', () => {
-    const attributeName = 'myAttribute';
-    expect(rangeSlider.bind(null, {attributeName})).toThrow();
+    const attributeName = '';
+    expect(rangeSlider.bind(null, {attributeName})).toThrow(/^Usage:/);
+  });
+
+  it('throws an exception when no attributeName', () => {
+    const container = document.createElement('div');
+    expect(rangeSlider.bind(null, {container})).toThrow(/^Usage:/);
   });
 });
 

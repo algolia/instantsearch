@@ -22,6 +22,16 @@ const KEY_SUPPRESS = 8;
  * @param  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search once `<Enter>` is pressed only
  * @return {Object}
  */
+const usage = `Usage:
+searchBox({
+  container,
+  [ placeholder ],
+  [ cssClasses.{input,poweredBy} ],
+  [ poweredBy ],
+  [ wrapInput ],
+  [ autofocus ],
+  [ searchOnEnterKeyPressOnly ]
+})`;
 function searchBox({
   container,
   placeholder = '',
@@ -32,7 +42,7 @@ function searchBox({
   searchOnEnterKeyPressOnly = false
 }) {
   if (!container) {
-    throw new Error('Usage: searchBox({container[, placeholder, cssClasses.{input,poweredBy}, poweredBy, wrapInput, autofocus, searchOnEnterKeyPressOnly]})');
+    throw new Error(usage);
   }
 
   container = utils.getContainerNode(container);

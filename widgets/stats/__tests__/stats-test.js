@@ -11,6 +11,14 @@ import Stats from '../../../components/Stats/Stats';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+describe('stats call', () => {
+  jsdom({useEach: true});
+
+  it('should throw when called without container', () => {
+    expect(() => stats()).toThrow(/^Usage:/);
+  });
+});
+
 describe('stats()', () => {
   jsdom({useEach: true});
 

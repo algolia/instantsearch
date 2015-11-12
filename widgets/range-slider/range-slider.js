@@ -29,9 +29,21 @@ let defaultTemplates = {
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}
  */
+const usage = `Usage:
+rangeSlider({
+  container,
+  attributeName,
+  [ tooltips=true ],
+  [ templates.{header, footer} ],
+  [ cssClasses.{root, body} ],
+  [ step=1 ],
+  [ pips=true ],
+  [ autoHideContainer=true ]
+});
+`;
 function rangeSlider({
-    container = null,
-    attributeName = null,
+    container,
+    attributeName,
     tooltips = true,
     templates = defaultTemplates,
     cssClasses = {
@@ -42,21 +54,11 @@ function rangeSlider({
     pips = true,
     autoHideContainer = true
   } = {}) {
-  let containerNode = utils.getContainerNode(container);
-  if (!containerNode || !attributeName) {
-    throw new Error(`Usage:
-rangeSlider({
-  container,
-  attributeName,
-  [ tooltips=true ],
-  [ templates={ header: '', footer: ''} ],
-  [ cssClasses={ root: null, body: null } ],
-  [ step=1 ],
-  [ pips=true ],
-  [ autoHideContainer=true ]
-});`);
+  if (!container || !attributeName) {
+    throw new Error(usage);
   }
 
+  let containerNode = utils.getContainerNode(container);
   let Slider = headerFooterHOC(require('../../components/Slider/Slider'));
   if (autoHideContainer === true) {
     Slider = autoHideContainerHOC(Slider);

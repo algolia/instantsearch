@@ -11,6 +11,20 @@ expect.extend(expectJSX);
 import indexSelector from '../index-selector';
 import Selector from '../../../components/Selector';
 
+describe('indexSelector call', () => {
+  jsdom({useEach: true});
+
+  it('throws an exception when no options', () => {
+    const container = document.createElement('div');
+    expect(indexSelector.bind(null, {container})).toThrow(/^Usage/);
+  });
+
+  it('throws an exception when no indices', () => {
+    const indices = [];
+    expect(indexSelector.bind(null, {indices})).toThrow(/^Usage/);
+  });
+});
+
 describe('indexSelector()', () => {
   jsdom({useEach: true});
 

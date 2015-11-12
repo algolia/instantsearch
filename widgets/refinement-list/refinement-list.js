@@ -36,6 +36,18 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
  * @return {Object}
  */
+const usage = `Usage:
+refinementList({
+  container,
+  facetName,
+  [ operator='or' ],
+  [ sortBy=['count:desc'] ],
+  [ limit=1000 ],
+  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}],
+  [ templates.{header,item,footer} ],
+  [ transformData ],
+  [ autoHideContainer=true ]
+})`;
 function refinementList({
     container,
     facetName,
@@ -48,7 +60,7 @@ function refinementList({
     autoHideContainer = true
   }) {
   let RefinementList = require('../../components/RefinementList/RefinementList.js');
-  let usage = 'Usage: refinementList({container, facetName, [operator, sortBy, limit, cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count}, templates.{header,item,footer}, transformData, autoHideContainer]})';
+
   if (!container || !facetName) {
     throw new Error(usage);
   }

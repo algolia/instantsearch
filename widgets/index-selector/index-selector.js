@@ -20,22 +20,27 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */
+const usage = `Usage:
+indexSelector({
+  container,
+  indices,
+  [cssClasses.{root,item}={}],
+  [autoHideContainer=false]
+})`;
 function indexSelector({
     container,
     indices,
     cssClasses: userCssClasses = {},
     autoHideContainer = false
-  }) {
-  let containerNode = utils.getContainerNode(container);
-  let usage = 'Usage: indexSelector({container, indices[, cssClasses.{root,item}, autoHideContainer]})';
+  } = {}) {
+  if (!container || !indices) {
+    throw new Error(usage);
+  }
 
+  let containerNode = utils.getContainerNode(container);
   let Selector = require('../../components/Selector');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
-  }
-
-  if (!container || !indices) {
-    throw new Error(usage);
   }
 
   let selectorOptions = map(indices, function(index) {
