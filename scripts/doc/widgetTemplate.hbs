@@ -1,8 +1,7 @@
 {{#function name="%s"}}
 {{tableHead params "name|Param" "description|Description" ~}}
 {{#tableRow params "name" "type" "defaultvalue" "description" ~}}
-| {{#if @col1}} {{#if optional}}<span class='attr-optional'>{{else}}<span class='attr-required'>{{/if}}`{{name}}`</span> | {{/if~}}
-{{#if @col3}}{{{stripNewlines (inlineLinks description)}}} |{{/if}}
+| {{#if optional}}<span class='attr-optional'>{{else}}<span class='attr-required'>{{/if}}`{{name}}`</span><span class="attr-infos">{{#unless (equal defaultvalue undefined)}}Default:<code class="attr-default">{{defaultvalue}}</code><br />{{/unless}}Type: {{>linked-type-list types=type.names delimiter=" &#124; " }}</span> | {{{stripNewlines (inlineLinks description)}}} |
 {{/tableRow}}
 {{/function}}
 
