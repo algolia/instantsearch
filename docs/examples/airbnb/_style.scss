@@ -1,7 +1,3 @@
----
-# this ensures Jekyll reads the file to be transformed into CSS later
----
-
 $white: #FFFFFF;
 $airbnb-red: #FF585B;
 $airbnb-gray-light: #DCE0E0;
@@ -9,7 +5,6 @@ $airbnb-gray-lighter: #EDEFED;
 $airbnb-text-color: #565A5C;
 
 body {
-  color: $airbnb-text-color;
   font-family: Roboto;
   font-size: 16px;
   color: $airbnb-text-color;
@@ -41,8 +36,8 @@ header {
     top: 13px;
     left: 110px;
     width: 50%;
-    border: none;
-    box-shadow: none;
+    border: 0;
+    box-shadow: 0;
 
     &:focus {
       box-shadow: none;
@@ -53,7 +48,7 @@ header {
 
 nav {
   padding: 0 20px;
-  font-size: 0.8em;
+  font-size: .8em;
   font-weight: bold;
 
   .row {
@@ -73,8 +68,7 @@ nav {
     padding: 7px 10px;
     select {
       background: transparent;
-      border: none;
-      -webkit-appearance: none;
+      border: 0;
       width: 100%;
       &:focus {
         outline: none;
@@ -84,10 +78,10 @@ nav {
       content: '\25bc';
       position: absolute;
       pointer-events: none;
-      color: #82888a;
+      color: #82888A;
       top: 0;
       right: 20px;
-      padding-top: 0.7em;
+      padding-top: .7em;
       line-height: 1;
       width: 2em;
       text-align: center;
@@ -128,8 +122,7 @@ nav {
   .ais-refinement-list--checkbox {
     position: relative;
     float: right;
-    -webkit-appearance: none;
-    background: white;
+    background: #FFF;
     height: 1.25em;
     width: 1.25em;
     vertical-align: top;
@@ -159,11 +152,11 @@ nav {
 
     em {
       font-style: normal;
-      background: #ffaeae;
+      background: #FFAEAE;
     }
 
     .infos {
-      font-size: 0.8em;
+      font-size: .8em;
       padding: 10px 20px;
       height: 90px;
     }
@@ -182,3 +175,4 @@ nav {
   height: 200px;
   margin: 10px 0;
 }
+
