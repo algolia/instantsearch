@@ -20,15 +20,15 @@ search.addWidget(
 
 var hitTemplate =
   '<div class="hit col-sm-6">' +
-    '<img src="{{ picture_url }}" /><br />' +
+    '<img src="{{picture_url}}" /><br />' +
     '<div class="infos">' +
-      '<h4 class="media-heading">{{{ _highlightResult.name.value }}}</h4>' +
-      '<p>{{ room_type }} - {{{ _highlightResult.city.value }}}, {{{ _highlightResult.country.value }}}</p>' +
+      '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
+      '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
     '</div>' +
   '</div>';
 
 var noResultsTemplate =
-  '<div class="text-center">No results found matching <strong>{{ query }}</strong>.</div>';
+  '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
 search.addWidget(
   instantsearch.widgets.hits({
@@ -56,19 +56,15 @@ search.addWidget(
     container: '#room_types',
     facetName: 'room_type',
     operator: 'or',
-    limit: 10,
-    cssClasses: {
-      item: 'item',
-      count: 'hide',
-      active: 'active'
-    }
+    limit: 10
   })
 );
 
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
-    facetName: 'price'
+    attributeName: 'price',
+    pips: false
   })
 );
 

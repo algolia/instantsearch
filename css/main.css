@@ -3723,6 +3723,12 @@ header.site-header {
       position: relative;
       top: -4px; }
 
+header.over-white-background .navbar-brand, header.over-white-background .navbar-toggle {
+  color: black !important; }
+
+@media (min-width: 767px) {
+  header.over-white-background .navbar-nav a {
+    color: black !important; } }
 .main-content {
   margin-top: 60px; }
 
@@ -4098,8 +4104,9 @@ code {
 .documentation-content {
   padding: 30px;
   font-size: 14px;
-  line-height: 1.8em;
   color: rgba(0, 0, 0, 0.75); }
+  .documentation-content p {
+    line-height: 1.8em; }
   .documentation-content h1[id], .documentation-content h2[id], .documentation-content h3[id] {
     clear: both; }
   .documentation-content h1[id]:before, .documentation-content h2[id]:before, .documentation-content h3[id]:before, .documentation-content h4[id]:before, .documentation-content h5[id]:before {
@@ -4261,6 +4268,10 @@ code {
       color: #46aeda; }
     .code-box .jsdoc .attr-required code {
       color: #58D158; }
+    .code-box .jsdoc .attr-infos {
+      display: block;
+      font-size: 0.8em;
+      margin-left: 10px; }
     .code-box .jsdoc h5 {
       text-decoration: underline;
       color: #dddddd; }
@@ -4349,6 +4360,10 @@ code {
       outline: 1px solid #ff6600; }
       .debug-widget [class^=ais-] [class^=ais-] [class^=ais-] [class^=ais-]:hover:before {
         color: #ff6600; }
+    .debug-widget [class^=ais-] label:hover input[class^=ais-]:hover:before {
+      display: none; }
+    .debug-widget [class^=ais-] label:hover input[class^=ais-]:focus:before, .debug-widget [class^=ais-] label:hover input[class^=ais-]:active:before {
+      display: block; }
 
 @media (max-width: 991px) {
   .main-documentation {

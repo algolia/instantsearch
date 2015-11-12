@@ -129,14 +129,15 @@ $(function () {
   function checkMenuOverWhite() {
     var $navbar = $('.site-header .navbar');
     var $whiteBottom = $('.white-bottom');
-    var currentIsMenuOverWhite = overlap($navbar, $whiteBottom);
+    var $header = $('header');
+    var currentIsMenuOverWhite = divOver($navbar, $whiteBottom);
 
     if (currentIsMenuOverWhite !== isMenuOverWhite) {
       isMenuOverWhite = currentIsMenuOverWhite;
       if (isMenuOverWhite) {
-        TweenMax.to('header.site-header nav.navbar a', 0.1, {color:'rgba(0,0,0,1)'});
+        $header.addClass('over-white-background');
       } else {
-        TweenMax.to('header.site-header nav.navbar a', 0.1, {color:'rgba(255,255,255,1)'});
+        $header.removeClass('over-white-background');
       }
     }
   }
@@ -235,14 +236,11 @@ Star.prototype.draw = function() {
 };
 
 // http://stackoverflow.com/questions/14012766/detecting-whether-two-divs-overlap
-function overlap($div1, $div2) {
+function divOver($div1, $div2) {
   var rect1 = $div1[0].getBoundingClientRect();
   var rect2 = $div2[0].getBoundingClientRect();
 
-  return !(rect1.right < rect2.left ||
-    rect1.left > rect2.right ||
-    rect1.bottom < rect2.top + 80 ||
-    rect1.top > rect2.bottom);
+  return !(rect1.bottom < rect2.top + 80);
 }
 
 // https://remysharp.com/2010/07/21/throttling-function-calls

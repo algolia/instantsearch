@@ -10,9 +10,8 @@
 
     <link rel="stylesheet" href="/instantsearch.js/css/main.css">
     
-      <link rel="stylesheet" href="http://localhost:8080/instantsearch.css" />
+      <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
     
-    <link rel="stylesheet" href="/instantsearch.js/css/default-theme.css">
 
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Raleway:300,800" />
     <link rel="stylesheet" media="screen" href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" />
@@ -52,7 +51,7 @@
             </li>
           
             <li>
-              <a href="http://github.com/algolia/instantsearch.js" title="See more, open issues and get answers in our Github repository" target="_blank">
+              <a href="http://github.com/algolia/instantsearch.js" title="See more, open issues and get answers in our Github repository">
                 <i class="fa fa-github hidden-xs"></i>
                 <span class="visible-xs">View project on github</span>
               </a>
@@ -84,20 +83,20 @@
 <div class="shameless-marketing text-center hidden-xs">
   <p><img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js" /></p>
   <p class="lead">Build the perfect UI with Instantsearch.js,<br />an extensive library of widgets for search experience.</p>
-  <p class="version">Version : </p>
+  <p class="version">Version : 0.12.2</p>
   <div class="spacer40"></div>
   <div class="row">
     <div class="col-md-4 m-b">
       <div class="sticker sticker-algolia">
         <p><img src="/instantsearch.js/img/logo-algolia-notext.svg" width="26" /></p>
       </div>
-      <p>Built on top of <a href="https://www.algolia.com" target="_blank">Algolia Search API</a></p>
+      <p>Built on top of <a href="https://www.algolia.com">Algolia Search API</a></p>
     </div>
     <div class="col-md-4 m-b">
       <div class="sticker sticker-open-source">
         <p><img src="/instantsearch.js/img/logo-open-source.svg" width="30" /></p>
       </div>
-      <p>Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js" target="_blank">Github</a></p>
+      <p>Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js">Github</a></p>
     </div>
     <div class="col-md-4 m-b">
       <div class="sticker sticker-ux">
@@ -198,53 +197,57 @@
       </div>
 
       <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
-            <td>Option</td>
-            <td>Description</td>
+            <td><span class="attr-required"><code>options.appId</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>The Algolia application ID</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.appId</code></span>*</td>
-            <td>The application ID</td>
+            <td><span class="attr-required"><code>options.apiKey</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>The Algolia search-only API key</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.apiKey</code></span>*</td>
-            <td>The search key to access algolia</td>
-          </tr>
-          <tr>
-            <td><span class="attr-required"><code>options.index</code></span>*</td>
+            <td><span class="attr-required"><code>options.index</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>The name of the main index</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.numberLocale</code></span></td>
-            <td>The locale used to display numbers. By default, <code>'en-EN'</code></td>
+            <td><span class="attr-optional"><code>options.numberLocale</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>The locale used to display numbers.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.searchParameters</code></span></td>
-            <td>Initial search configuration. By default, <code>{}</code></td>
+            <td><span class="attr-optional"><code>options.searchParameters</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Initial search configuration.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync</code></span></td>
-            <td>Url synchronisation configuration. By default, <code>null</code></td>
+            <td><span class="attr-optional"><code>options.urlSync</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Url synchronization configuration.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.trackedParameters</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.useHash</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>If set to true, the url will be hash based. Otherwise, it’ll use the query parameters using the modern history API.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.threshold</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.threshold</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Time in ms after which a new state is created in the browser history. The default value is 700.</td>
           </tr>
         </tbody>
       </table>
 
       <p class="attr-legend">* <span>Required</span></p>
+
     </div>
   </div>
+
 </div>
 
 <p>If you don’t have any index yet, learn how to push your data with the <a href="https://www.algolia.com/getstarted">Algolia getting started</a>.</p>
@@ -282,25 +285,33 @@
       </div>
 
       <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
         <tbody>
           <tr>
-            <td>Option</td>
-            <td>Description</td>
+            <td><span class="attr-optional"><code>widget</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>The widget to add</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>widget.render</code></span></td>
+            <td><span class="attr-optional"><code>widget.render</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Called after each search response has been received</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>widget.getConfiguration</code></span></td>
+            <td><span class="attr-optional"><code>widget.getConfiguration</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Let the widget update the configuration of the search with new parameters</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>widget.init</code></span></td>
+            <td><span class="attr-optional"><code>widget.init</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Called once before the first search</td>
           </tr>
         </tbody>
       </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
 
     </div>
   </div>
@@ -324,14 +335,6 @@
         <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span></code></pre>
       </div>
 
-    </div>
-    <div class="jsdoc" style="display: none">
-
-      <div class="highlight">
-        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">start</span><span class="p">();</span></code></pre>
-      </div>
-
-      <p><em>No parameters</em></p>
     </div>
   </div>
 
@@ -374,7 +377,7 @@
         <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">hits</span><span class="p">({</span>
           <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#hits-container&#39;</span><span class="p">,</span>
           <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
-            <span class="nx">item</span><span class="o">:</span> <span class="s1">&#39;Hit {{ objectID }}: FIXME&#39;</span>
+            <span class="nx">item</span><span class="o">:</span> <span class="s1">&#39;Hit {{objectID}}: FIXME&#39;</span>
           <span class="p">}</span>
         <span class="p">})</span>
       <span class="p">);</span>
@@ -444,44 +447,44 @@ The search box is the widget to use for text input. Underneath, it is based on t
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.placeholder</code></span></td>
+            <td><span class="attr-optional"><code>options.placeholder</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Input’s placeholder</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to add</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-            <td>CSS class to add to the wrapping div (if wrapInput set to <code>true</code>)</td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the wrapping div (if <code>wrapInput</code> set to <code>true</code>)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.input</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.input</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>CSS class to add to the input</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.poweredBy</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.poweredBy</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>CSS class to add to the poweredBy element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>poweredBy</code></span></td>
+            <td><span class="attr-optional"><code>poweredBy</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span></td>
             <td>Show a powered by Algolia link below the input</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>wrapInput</code></span></td>
-            <td>Wrap the input in a div.ais-search-box</td>
+            <td><span class="attr-optional"><code>wrapInput</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Wrap the input in a <code>div.ais-search-box</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>autofocus</code></span></td>
+            <td><span class="attr-optional"><code>autofocus</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;auto&#x27;</code><br />Type: <code>boolean</code> | <code>string</code></span></td>
             <td>autofocus on the input</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>searchOnEnterKeyPressOnly</code></span></td>
-            <td>If set, trigger the search once <enter> is pressed only</enter></td>
+            <td><span class="attr-optional"><code>searchOnEnterKeyPressOnly</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span></td>
+            <td>If set, trigger the search once <code>&lt;Enter&gt;</code> is pressed only</td>
           </tr>
         </tbody>
       </table>
@@ -534,51 +537,51 @@ The hits widget is the main component for displaying results from Algolia. It ac
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to add</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>CSS class to add to the wrapping element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.empty</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.empty</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>CSS class to add to the wrapping element when no results</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>CSS class to add to each result</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates</code></span></td>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.empty</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.empty</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Template to use when there are no results.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.item</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Template to use for each result.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Method to change the object passed to the templates</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData.empty</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.empty</code></span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span></td>
             <td>Method used to change the object passed to the empty template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData.item</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span></td>
             <td>Method used to change the object passed to the item template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>hitsPerPage</code></span></td>
+            <td><span class="attr-optional"><code>hitsPerPage</code></span><span class="attr-infos">Default:<code class="attr-default">20</code><br />Type: <code>number</code></span></td>
             <td>The number of hits to display per page</td>
           </tr>
         </tbody>
@@ -598,7 +601,8 @@ The hits widget is the main component for displaying results from Algolia. It ac
 <div class="codebox-combo">
 
   <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-results.svg" />
-The hits widget is the main component for displaying results from Algolia. It accepts a <a href="">Mustache</a> template string or a function returning a string. See the <a href="#templates">templates</a> section.</p>
+The hitsPerPageSelector widget lets you select the number of results you want
+displayed.</p>
 
   <div class="code-box">
     <div class="code-sample-snippet">
@@ -635,35 +639,35 @@ The hits widget is the main component for displaying results from Algolia. It ac
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.options</code></span></td>
+            <td><span class="attr-required"><code>options.options</code></span><span class="attr-infos">Type: <code>Array</code></span></td>
             <td>Array of objects defining the different values and labels</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.options[0].value</code></span></td>
+            <td><span class="attr-required"><code>options.options[0].value</code></span><span class="attr-infos">Type: <code>number</code></span></td>
             <td>number of hits to display per page</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.options[0].label</code></span></td>
+            <td><span class="attr-required"><code>options.options[0].label</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Label to display in the option</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to be added</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-            <td>CSS classes added to the parent <select></select></td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the parent <code>&lt;select&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-            <td>CSS classes added to each <option></option></td>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to each <code>&lt;option&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span></td>
             <td>Hide the container when no results match</td>
           </tr>
         </tbody>
@@ -717,87 +721,91 @@ pages.</p>
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to be added</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-            <td>CSS classes added to the parent &lt;ul&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the parent <code>&lt;ul&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-            <td>CSS classes added to each &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to each <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.page</code></span></td>
-            <td>CSS classes added to page &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.link</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to each link</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.previous</code></span></td>
-            <td>CSS classes added to the previous &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.page</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to page <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.next</code></span></td>
-            <td>CSS classes added to the next &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.previous</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the previous <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.first</code></span></td>
-            <td>CSS classes added to the first &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.next</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the next <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.last</code></span></td>
-            <td>CSS classes added to the last &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.first</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the first <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
-            <td>CSS classes added to the active &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.last</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the last <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.disabled</code></span></td>
-            <td>CSS classes added to the disabled &lt;li&gt;</td>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the active <code>&lt;li&gt;</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.labels</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.disabled</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the disabled <code>&lt;li&gt;</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.labels</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Text to display in the various links (prev, next, first, last)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.labels.previous</code></span></td>
+            <td><span class="attr-optional"><code>options.labels.previous</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Label for the Previous link</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.labels.next</code></span></td>
+            <td><span class="attr-optional"><code>options.labels.next</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Label for the Next link</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.labels.first</code></span></td>
+            <td><span class="attr-optional"><code>options.labels.first</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Label for the First link</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.labels.last</code></span></td>
+            <td><span class="attr-optional"><code>options.labels.last</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Label for the Last link</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.maxPages</code></span></td>
+            <td><span class="attr-optional"><code>options.maxPages</code></span><span class="attr-infos">Default:<code class="attr-default">20</code><br />Type: <code>number</code></span></td>
             <td>The max number of pages to browse</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.padding</code></span></td>
+            <td><span class="attr-optional"><code>options.padding</code></span><span class="attr-infos">Default:<code class="attr-default">3</code><br />Type: <code>number</code></span></td>
             <td>The number of pages to display on each side of the current page</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.scrollTo</code></span></td>
+            <td><span class="attr-optional"><code>options.scrollTo</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;body&#x27;</code><br />Type: <code>string</code> | <code>DOMElement</code> | <code>boolean</code></span></td>
             <td>Where to scroll after a click, set to <code>false</code> to disable</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.showFirstLast</code></span></td>
+            <td><span class="attr-optional"><code>options.showFirstLast</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
             <td>Define if the First and Last links should be displayed</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
             <td>Hide the container when no results match</td>
           </tr>
         </tbody>
@@ -866,83 +874,83 @@ of an ecommerce website.</p>
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.facetName</code></span></td>
+            <td><span class="attr-required"><code>options.facetName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
             <td>Name of the attribute for faceting</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.sortBy</code></span></td>
+            <td><span class="attr-optional"><code>options.sortBy</code></span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code></span></td>
             <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.limit</code></span></td>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">100</code><br />Type: <code>string</code></span></td>
             <td>How many facets values to retrieve</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to add to the wrapping elements: root, list, item</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the root element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the header element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the body element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the footer element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the list element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each item element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each active element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.link</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.link</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each link (when using the default template)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.count</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.count</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each count element (when using the default template)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates</code></span></td>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.item</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Method to change the object passed to the item template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
             <td>Hide the container when there are no items in the menu</td>
           </tr>
         </tbody>
@@ -1011,83 +1019,91 @@ From a UX point of view, we suggest to not display more than two levels deep.</p
         </thead>
         <tbody>
           <tr>
-            <td><span class="attr-required"><code>options.container</code></span></td>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
             <td>CSS Selector or DOMElement to insert the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-required"><code>options.attributes</code></span></td>
+            <td><span class="attr-required"><code>options.attributes</code></span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span></td>
             <td>Array of attributes to use to generate the hierarchy of the menu. Refer to <a href="https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets">the readme</a> for the convention to follow.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.sortBy</code></span></td>
-            <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
+            <td><span class="attr-optional"><code>options.separator</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27; &gt; &#x27;</code><br />Type: <code>string</code></span></td>
+            <td>Separator used in the attributes to separate level values.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.limit</code></span></td>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">100</code><br />Type: <code>number</code></span></td>
             <td>How much facet values to get</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
+            <td><span class="attr-optional"><code>options.sortBy</code></span><span class="attr-infos">Default:<code class="attr-default">[&#x27;name:asc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code></span></td>
+            <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>CSS classes to add to the wrapping elements: root, list, item</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the root element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the header element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the body element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the footer element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to the list element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.depth</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the depth element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each item element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each active element</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.link</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.link</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each link (when using the default template)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.count</code></span></td>
+            <td><span class="attr-optional"><code>options.cssClasses.count</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
             <td>CSS class to add to each count element (when using the default template)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates</code></span></td>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template (root level only)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.item</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Item template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template (root level only)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Method to change the object passed to the item template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
             <td>Hide the container when there are no items in the menu</td>
           </tr>
         </tbody>
@@ -1097,24 +1113,25 @@ From a UX point of view, we suggest to not display more than two levels deep.</p
 
     </div>
   </div>
+</div>
 
-  <div id="hierarchical-categories" class="widget-container"></div>
+<div id="hierarchical-categories" class="widget-container"></div>
 
-  <h3 id="filters">Filters</h3>
+<h3 id="filters">Filters</h3>
 
-  <h4 id="refinementlist">refinementList</h4>
+<h4 id="refinementlist">refinementList</h4>
 
-  <div class="codebox-combo">
+<div class="codebox-combo">
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg" />
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg" />
 This filtering widget lets the user choose one or multiple values for a single faceted attribute. You can specify if you want to filters to be ORed or ANDed. For example, if you filter on <code>a</code> and <code>b</code> with <code>OR</code>, the
 results that have either the value <code>a</code> or <code>b</code> will match.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">refinementList</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#brands&#39;</span><span class="p">,</span>
     <span class="nx">facetName</span><span class="o">:</span> <span class="s1">&#39;brand&#39;</span><span class="p">,</span>
@@ -1137,135 +1154,135 @@ results that have either the value <code>a</code> or <code>b</code> will match.<
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">refinementList</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.facetName</code></span></td>
-              <td>Name of the attribute for faceting</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.operator</code></span></td>
-              <td>How to apply refinements. Possible values: <code>or</code>, <code>and</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.sortBy</code></span></td>
-              <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.limit</code></span></td>
-              <td>How much facet values to get</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add to the wrapping elements: root, list, item</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
-              <td>CSS class to add to the header element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
-              <td>CSS class to add to the footer element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
-              <td>CSS class to add to the list element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-              <td>CSS class to add to each item element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
-              <td>CSS class to add to each active element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.label</code></span></td>
-              <td>CSS class to add to each label element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span></td>
-              <td>CSS class to add to each checkbox element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.count</code></span></td>
-              <td>CSS class to add to each count element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.header</code></span></td>
-              <td>Header template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.item</code></span></td>
-              <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
-              <td>Footer template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.transformData</code></span></td>
-              <td>Function to change the object passed to the item template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no items in the refinement list</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">refinementList</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.facetName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the attribute for faceting</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.operator</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code><br />Type: <code>string</code></span></td>
+            <td>How to apply refinements. Possible values: <code>or</code>, <code>and</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.sortBy</code></span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code></span></td>
+            <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">1000</code><br />Type: <code>string</code></span></td>
+            <td>How much facet values to get</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add to the wrapping elements: root, list, item</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the header element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the footer element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the list element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each item element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each active element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.label</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each label element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each checkbox element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.count</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each count element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Header template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Footer template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the item template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no items in the refinement list</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="brands" class="widget-container"></div>
+</div>
 
-  <h4 id="numericrefinementlist">numericRefinementList</h4>
+<div id="brands" class="widget-container"></div>
 
-  <div class="codebox-combo">
+<h4 id="numericrefinementlist">numericRefinementList</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg" />
+<div class="codebox-combo">
+
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg" />
 This filtering widget lets the user choose one value for a single numeric attribute. You can specify if you want it to be a equality or a range by giving a “start” and an “end” value</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#popularity&#39;</span><span class="p">,</span>
     <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;popularity&#39;</span><span class="p">,</span>
@@ -1290,135 +1307,135 @@ This filtering widget lets the user choose one value for a single numeric attrib
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.facetName</code></span></td>
-              <td>Name of the attribute for faceting</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.operator</code></span></td>
-              <td>How to apply refinements. Possible values: <code>or</code>, <code>and</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.sortBy</code></span></td>
-              <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.limit</code></span></td>
-              <td>How much facet values to get</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add to the wrapping elements: root, list, item</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
-              <td>CSS class to add to the header element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
-              <td>CSS class to add to the footer element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
-              <td>CSS class to add to the list element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-              <td>CSS class to add to each item element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
-              <td>CSS class to add to each active element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.label</code></span></td>
-              <td>CSS class to add to each label element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span></td>
-              <td>CSS class to add to each checkbox element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.count</code></span></td>
-              <td>CSS class to add to each count element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.header</code></span></td>
-              <td>Header template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.item</code></span></td>
-              <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
-              <td>Footer template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.transformData</code></span></td>
-              <td>Function to change the object passed to the item template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no items in the refinement list</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.facetName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the attribute for faceting</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.operator</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code><br />Type: <code>string</code></span></td>
+            <td>How to apply refinements. Possible values: <code>or</code>, <code>and</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.sortBy</code></span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code></span></td>
+            <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">1000</code><br />Type: <code>string</code></span></td>
+            <td>How much facet values to get</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add to the wrapping elements: root, list, item</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the header element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the footer element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the list element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each item element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each active element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.label</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each label element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each checkbox element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.count</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each count element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Header template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Footer template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the item template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no items in the refinement list</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="popularity" class="widget-container"></div>
+</div>
 
-  <h4 id="toggle">toggle</h4>
+<div id="popularity" class="widget-container"></div>
 
-  <div class="codebox-combo">
+<h4 id="toggle">toggle</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-toggle.svg" />
+<div class="codebox-combo">
+
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-toggle.svg" />
 This filtering widget lets the user choose either or not to filter values to <code>true</code> for a single faceted boolean attribute.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">toggle</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#free-shipping&#39;</span><span class="p">,</span>
     <span class="nx">facetName</span><span class="o">:</span> <span class="s1">&#39;free_shipping&#39;</span><span class="p">,</span>
@@ -1444,139 +1461,140 @@ This filtering widget lets the user choose either or not to filter values to <co
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.facetName</code></span></td>
-              <td>Name of the attribute for faceting (eg. “free_shipping”)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.label</code></span></td>
-              <td>Human-readable name of the filter (eg. “Free Shipping”)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.values</code></span></td>
-              <td>Lets you define the values to filter on when toggling</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.values.on</code></span></td>
-              <td>Value to filter on when checked</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.values.off</code></span></td>
-              <td>Value to filter on when unchecked</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
-              <td>CSS class to add to the header element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
-              <td>CSS class to add to the footer element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
-              <td>CSS class to add to the list element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-              <td>CSS class to add to each item element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
-              <td>CSS class to add to each active element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.label</code></span></td>
-              <td>CSS class to add to each label element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span></td>
-              <td>CSS class to add to each checkbox element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.count</code></span></td>
-              <td>CSS class to add to each count element (when using the default template)</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.header</code></span></td>
-              <td>Header template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.item</code></span></td>
-              <td>Item template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
-              <td>Footer template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.transformData</code></span></td>
-              <td>Function to change the object passed to the item template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when there’s no results</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.facetName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the attribute for faceting (eg. “free_shipping”)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.label</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Human-readable name of the filter (eg. “Free Shipping”)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.values</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Lets you define the values to filter on when toggling</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.values.on</code></span><span class="attr-infos">Type: <code>\*</code></span></td>
+            <td>Value to filter on when checked</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.values.off</code></span><span class="attr-infos">Type: <code>\*</code></span></td>
+            <td>Value to filter on when unchecked</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the header element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the footer element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the list element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each item element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each active element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.label</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each label element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.checkbox</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each checkbox element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.count</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to each count element (when using the default template)</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Header template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Item template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Footer template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the item template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when there’s no results</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="free-shipping" class="widget-container"></div>
+</div>
 
-  <h4 id="rangeslider">rangeSlider</h4>
+<div id="free-shipping" class="widget-container"></div>
 
-  <div class="codebox-combo">
+<h4 id="rangeslider">rangeSlider</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-slider.svg" />
-The range slider filters values of a single numeric attribute using 2 cursors: the lower and the upper bounds.</p>
+<div class="codebox-combo">
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <p><img class="widget-icon pull-left" src="../img/icon-widget-slider.svg" />
+The range slider filters values of a single numeric attribute using 2 cursors: the lower and the upper bounds.
+{:.description}. The min and max values are automatically computed by Algolia using the data in the index.</p>
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+  <div class="code-box">
+    <div class="code-sample-snippet">
+
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">rangeSlider</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#price&#39;</span><span class="p">,</span>
     <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span>
@@ -1590,89 +1608,89 @@ The range slider filters values of a single numeric attribute using 2 cursors: t
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">rangeSlider</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.attributeName</code></span></td>
-              <td>Name of the attribute for faceting</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.tooltips</code></span></td>
-              <td>Should we show tooltips or not. The default tooltip will show the formatted corresponding value without any other token. You can also provide tooltips: {format: function(formattedValue, rawValue) {return ‘$’ + formattedValue}} So that you can format the tooltip display value as you want</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.header</code></span></td>
-              <td>Header template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
-              <td>Footer template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add to the wrapping elements: root, body</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no refinements available</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">rangeSlider</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.attributeName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the attribute for faceting</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.tooltips</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code> | <code>Object</code></span></td>
+            <td>Should we show tooltips or not. The default tooltip will show the formatted corresponding value without any other token. You can also provide <code>tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}</code> So that you can format the tooltip display value as you want</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Header template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Footer template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add to the wrapping elements: root, body</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no refinements available</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="price" class="widget-container"></div>
+</div>
 
-  <h4 id="priceranges">priceRanges</h4>
+<div id="price" class="widget-container"></div>
 
-  <div class="codebox-combo">
+<h4 id="priceranges">priceRanges</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-slider.svg" />
+<div class="codebox-combo">
+
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-slider.svg" />
 This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">priceRanges</span><span class="p">({</span>
-    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#priceranges.widget-container&#39;</span><span class="p">,</span>
+    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#price-ranges&#39;</span><span class="p">,</span>
     <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span>
     <span class="nx">labels</span><span class="o">:</span> <span class="p">{</span>
       <span class="nx">currency</span><span class="o">:</span> <span class="s1">&#39;$&#39;</span><span class="p">,</span>
@@ -1697,145 +1715,145 @@ This filtering widget lets the user choose between ranges of price. Those ranges
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">priceRanges</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>Valid CSS Selector as a string or DOMElement</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.attributeName</code></span></td>
-              <td>Name of the attribute for faceting</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
-              <td>CSS class to add to the header element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.list</code></span></td>
-              <td>CSS class to add to the wrapping list element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-              <td>CSS class to add to each item element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.active</code></span></td>
-              <td>CSS class to add to the active item element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.link</code></span></td>
-              <td>CSS class to add to each link element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.form</code></span></td>
-              <td>CSS class to add to the form element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.label</code></span></td>
-              <td>CSS class to add to each wrapping label of the form</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.input</code></span></td>
-              <td>CSS class to add to each input of the form</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.currency</code></span></td>
-              <td>CSS class to add to each currency element of the form</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.separator</code></span></td>
-              <td>CSS class to add to the separator of the form</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.button</code></span></td>
-              <td>CSS class to add to the submit button of the form</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
-              <td>CSS class to add to the footer element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.item</code></span></td>
-              <td>Item template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.labels</code></span></td>
-              <td>Labels to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.labels.currency</code></span></td>
-              <td>Currency label</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.labels.separator</code></span></td>
-              <td>Separator labe, between min and max</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.labels.button</code></span></td>
-              <td>Button label</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no refinements available</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">priceRanges</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>Valid CSS Selector as a string or DOMElement</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.attributeName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the attribute for faceting</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the header element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the wrapping list element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to each item element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the active item element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.link</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to each link element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.form</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the form element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.label</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to each wrapping label of the form</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.input</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to each input of the form</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.currency</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to each currency element of the form</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.separator</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the separator of the form</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.button</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the submit button of the form</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the footer element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Item template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.labels</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Labels to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.labels.currency</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Currency label</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.labels.separator</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Separator label, between min and max</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.labels.button</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Button label</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no refinements available</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="priceranges" class="widget-container"></div>
+</div>
 
-  <h3 id="sort">Sort</h3>
+<div id="price-ranges" class="widget-container"></div>
 
-  <h4 id="indexselector">indexSelector</h4>
+<h3 id="sort">Sort</h3>
 
-  <div class="codebox-combo">
+<h4 id="indexselector">indexSelector</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-index.svg" />
+<div class="codebox-combo">
+
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-index.svg" />
 This widget lets you select which index you want to use for the search. Since Algolia uses slave indices to deal with the different sort orders of a single dataset, this widget is particularly useful to switch between those sort orders.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">indexSelector</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#index-selector-container&#39;</span><span class="p">,</span>
     <span class="nx">indices</span><span class="o">:</span> <span class="p">[</span>
@@ -1849,81 +1867,81 @@ This widget lets you select which index you want to use for the search. Since Al
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">indexSelector</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.indices</code></span></td>
-              <td>Array of objects defining the different indices to choose from.</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.indices[0].name</code></span></td>
-              <td>Name of the index to target</td>
-            </tr>
-            <tr>
-              <td><span class="attr-required"><code>options.indices[0].label</code></span></td>
-              <td>Label displayed in the dropdown</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to be added</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS classes added to the parent <select></select></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.item</code></span></td>
-              <td>CSS classes added to each <option></option></td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no results match</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">indexSelector</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.indices</code></span><span class="attr-infos">Type: <code>Array</code></span></td>
+            <td>Array of objects defining the different indices to choose from.</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.indices[0].name</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Name of the index to target</td>
+          </tr>
+          <tr>
+            <td><span class="attr-required"><code>options.indices[0].label</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>Label displayed in the dropdown</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to be added</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to the parent <select></select></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS classes added to each <option></option></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no results match</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="index-selector-container" class="widget-container"></div>
+</div>
 
-  <h3 id="information-display">Information display</h3>
+<div id="index-selector-container" class="widget-container"></div>
 
-  <h4 id="stats">stats</h4>
+<h3 id="information-display">Information display</h3>
 
-  <div class="codebox-combo">
+<h4 id="stats">stats</h4>
 
-    <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-stats.svg" />
+<div class="codebox-combo">
+
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-stats.svg" />
 This widget lets you display meta informations of the current search. It helps the user to understand how many results matched and how fast it was.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">stats</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#stats-container&#39;</span><span class="p">,</span>
     <span class="nx">cssClasses</span><span class="o">:</span> <span class="p">{</span>
@@ -1934,97 +1952,97 @@ This widget lets you display meta informations of the current search. It helps t
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">stats</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Param</th>
-              <th>Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="attr-required"><code>options.container</code></span></td>
-              <td>CSS Selector or DOMElement to insert the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses</code></span></td>
-              <td>CSS classes to add</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.root</code></span></td>
-              <td>CSS class to add to the root element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.header</code></span></td>
-              <td>CSS class to add to the header element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.body</code></span></td>
-              <td>CSS class to add to the body element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.footer</code></span></td>
-              <td>CSS class to add to the footer element</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.cssClasses.time</code></span></td>
-              <td>CSS class to add to the element wrapping the time processingTimeMs</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates</code></span></td>
-              <td>Templates to use for the widget</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.header</code></span></td>
-              <td>Header template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.body</code></span></td>
-              <td>Body template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.templates.footer</code></span></td>
-              <td>Footer template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.transformData</code></span></td>
-              <td>Function to change the object passed to the <code>body</code> template</td>
-            </tr>
-            <tr>
-              <td><span class="attr-optional"><code>options.autoHideContainer</code></span></td>
-              <td>Hide the container when no results match</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="attr-legend">* <span>Required</span></p>
-
-      </div>
     </div>
+    <div class="jsdoc" style="display:none">
 
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">stats</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Param</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
+            <td>CSS Selector or DOMElement to insert the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>CSS classes to add</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the root element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the header element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the body element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the footer element</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.cssClasses.time</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td>CSS class to add to the element wrapping the time processingTimeMs</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Templates to use for the widget</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Header template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
+            <td>Body template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td>Footer template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>body</code> template</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
+            <td>Hide the container when no results match</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="attr-legend">* <span>Required</span></p>
+
+    </div>
   </div>
 
-  <div id="stats-container" class="widget-container"></div>
+</div>
 
-  <h2 id="templates">Templates</h2>
+<div id="stats-container" class="widget-container"></div>
 
-  <p>Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a <a href="https://mustache.github.io/">Mustache</a> string or as a function receiving the widget data.</p>
+<h2 id="templates">Templates</h2>
 
-  <p>See the documentation of each widget to see which data is passed to the template.</p>
+<p>Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a <a href="https://mustache.github.io/">Mustache</a> string or as a function receiving the widget data.</p>
 
-  <h3 id="examples">Examples</h3>
+<p>See the documentation of each widget to see which data is passed to the template.</p>
 
-  <div class="highlight">
-    <pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Mustache template example</span>
+<h3 id="examples">Examples</h3>
+
+<div class="highlight">
+  <pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Mustache template example</span>
 <span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">stats</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#stats&#39;</span><span class="p">,</span>
@@ -2046,48 +2064,48 @@ This widget lets you display meta informations of the current search. It helps t
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
-  </div>
+</div>
 
-  <h3 id="helpers">Helpers</h3>
+<h3 id="helpers">Helpers</h3>
 
-  <p>In order to help you when defining your templates, <strong>instantsearch.js</strong> exposes a few helpers.</p>
+<p>In order to help you when defining your templates, <strong>instantsearch.js</strong> exposes a few helpers.</p>
 
-  <p>All helpers are accessible in the Mustache templating through <code>{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}</code>. To use them in the function templates, you’ll have to call <code>search.templatesConfig.helpers.nameOfTheHelper</code> where <code>search</code> is your current <strong>instantsearch.js</strong> instance.</p>
+<p>All helpers are accessible in the Mustache templating through <code>{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}</code>. To use them in the function templates, you’ll have to call <code>search.templatesConfig.helpers.nameOfTheHelper</code> where <code>search</code> is your current <strong>instantsearch.js</strong> instance.</p>
 
-  <p>Here is the list of the currently available helpers:</p>
+<p>Here is the list of the currently available helpers:</p>
 
-  <ul>
-    <li><code>formatNumber</code>: Will accept a number as input and returned the formatted
+<ul>
+  <li><code>formatNumber</code>: Will accept a number as input and returned the formatted
 version of the number in the locale defined with the <code>numberLocale</code> config
 option (defaults to <code>en-EN</code>).
 eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-EN</code></li>
-  </ul>
+</ul>
 
-  <p>Here is the syntax of a helper:</p>
+<p>Here is the syntax of a helper:</p>
 
-  <div class="highlight">
-    <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">emphasis</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">render</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight">
+  <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">emphasis</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">render</span><span class="p">)</span> <span class="p">{</span>
   <span class="k">return</span> <span class="s1">&#39;&lt;em&gt;&#39;</span> <span class="o">+</span> <span class="nx">render</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/em&gt;&#39;</span><span class="p">;</span>
 <span class="p">};</span></code></pre>
-  </div>
+</div>
 
-  <p>In your helper, <code>this</code> always refers to the data:</p>
+<p>In your helper, <code>this</code> always refers to the data:</p>
 
-  <div class="highlight">
-    <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">discount</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*text, render*/</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight">
+  <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">discount</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*text, render*/</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">discount</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">price</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">;</span>
   <span class="k">return</span> <span class="s1">&#39;$ -&#39;</span> <span class="o">+</span> <span class="nx">discount</span><span class="p">;</span>
 <span class="p">};</span></code></pre>
-  </div>
+</div>
 
-  <h3 id="options">Options</h3>
+<h3 id="options">Options</h3>
 
-  <p>You can configure the options passed to underlying <code>Hogan.compile</code> by using <code>search.templatesConfig.compileOptions</code>. We accept all <a href="https://github.com/twitter/hogan.js/#compilation-options">compile options</a>.</p>
+<p>You can configure the options passed to underlying <code>Hogan.compile</code> by using <code>search.templatesConfig.compileOptions</code>. We accept all <a href="https://github.com/twitter/hogan.js/#compilation-options">compile options</a>.</p>
 
-  <p>Theses options will be passed to the <code>Hogan.compile</code> calls when you pass a custom template.</p>
+<p>Theses options will be passed to the <code>Hogan.compile</code> calls when you pass a custom template.</p>
 
-  <div class="highlight">
-    <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
+<div class="highlight">
+  <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
   <span class="nx">appId</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="nx">apiKey</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="nx">indexName</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -2097,32 +2115,32 @@ eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">});</span></code></pre>
-  </div>
+</div>
 
-  <h2 id="customize">Customize</h2>
+<h2 id="customize">Customize</h2>
 
-  <h3 id="custom-widgets">Custom Widgets</h3>
+<h3 id="custom-widgets">Custom Widgets</h3>
 
-  <p><strong>instantsearch.js</strong> has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:</p>
+<p><strong>instantsearch.js</strong> has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:</p>
 
-  <ul>
-    <li><code>getConfiguration()</code>: configures the underlying AlgoliaSearch JS Helper,</li>
-    <li><code>init()</code>: called once after the initialization,</li>
-    <li><code>render()</code>: called as soon as the underlying state has changed.</li>
-  </ul>
+<ul>
+  <li><code>getConfiguration()</code>: configures the underlying AlgoliaSearch JS Helper,</li>
+  <li><code>init()</code>: called once after the initialization,</li>
+  <li><code>render()</code>: called as soon as the underlying state has changed.</li>
+</ul>
 
-  <div class="codebox-combo">
+<div class="codebox-combo">
 
-    <p>The widgets API is agnostic. In the built-in widgets, we use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">VanillaJS</a>
+  <p>The widgets API is agnostic. In the built-in widgets, we use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">VanillaJS</a>
 for simple widgets such as the searchBox and for the most advanced, we use
 <a href="https://facebook.github.io/react://facebook.github.io/react/">ReactJS</a>.
 If your code base is relying on an other framework, feel free to use it to create your own widget!</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet ignore">
+  <div class="code-box">
+    <div class="code-sample-snippet ignore">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">mySingletonWidget</span> <span class="o">=</span> <span class="p">{</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">mySingletonWidget</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">getConfiguration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">searchParams</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
     <span class="p">};</span>
@@ -2136,67 +2154,67 @@ If your code base is relying on an other framework, feel free to use it to creat
 <span class="p">};</span>
 
 <span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">mySingletonWidget</span><span class="p">);</span></code></pre>
-        </div>
-
       </div>
-      <div class="jsdoc" style="display:none">
 
-        <div class="highlight">
-          <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">widget</span><span class="p">)</span></code></pre>
-        </div>
+    </div>
+    <div class="jsdoc" style="display:none">
 
-        <p>The widget may implement some of the following methods (depending on the need of the widget):</p>
-
-        <ul>
-          <li><span class="attr-optional"><code>widget.getConfiguration</code></span>: Configures the underlying AlgoliaSearch JS helper. Takes a <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">SearchParameter</a> and should return the properties needed as an object.</li>
-          <li><span class="attr-optional"><code>widget.init</code></span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
-            <ul>
-              <li>state: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-              <li>helper: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> user to create new search query</li>
-              <li>templatesConfig: the template configuration</li>
-            </ul>
-          </li>
-          <li><span class="attr-optional"><code>widget.render</code></span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
-            <ul>
-              <li>results: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchResults.html">results</a> of the query</li>
-              <li>state: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-              <li>helper: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> user to create new search query</li>
-              <li>createURL: function provided to create urls</li>
-            </ul>
-          </li>
-        </ul>
-
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">widget</span><span class="p">)</span></code></pre>
       </div>
+
+      <p>The widget may implement some of the following methods (depending on the need of the widget):</p>
+
+      <ul>
+        <li><span class="attr-optional"><code>widget.getConfiguration</code></span>: Configures the underlying AlgoliaSearch JS helper. Takes a <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">SearchParameter</a> and should return the properties needed as an object.</li>
+        <li><span class="attr-optional"><code>widget.init</code></span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
+          <ul>
+            <li>state: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
+            <li>helper: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> user to create new search query</li>
+            <li>templatesConfig: the template configuration</li>
+          </ul>
+        </li>
+        <li><span class="attr-optional"><code>widget.render</code></span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
+          <ul>
+            <li>results: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchResults.html">results</a> of the query</li>
+            <li>state: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
+            <li>helper: the <a href="http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> user to create new search query</li>
+            <li>createURL: function provided to create urls</li>
+          </ul>
+        </li>
+      </ul>
+
     </div>
   </div>
+</div>
 
-  <h4 class="no-toc" id="example-with-jquery">Example with jQuery</h4>
+<h4 class="no-toc" id="example-with-jquery">Example with jQuery</h4>
 
-  <p>You may want to use an existing jQuery library to power your custom widget: that’s definitely doable. Take a look at this jQuery-based custom widgets we’ve done: <a href="https://github.com/algolia/instantsearch-ion.rangeSlider"><i class="fa fa-github"></i> algolia/instantsearch-ion.rangeSlider</a>.</p>
+<p>You may want to use an existing jQuery library to power your custom widget: that’s definitely doable. Take a look at this jQuery-based custom widgets we’ve done: <a href="https://github.com/algolia/instantsearch-ion.rangeSlider"><i class="fa fa-github"></i> algolia/instantsearch-ion.rangeSlider</a>.</p>
 
-  <h4 class="no-toc" id="example-with-react">Example with React</h4>
+<h4 class="no-toc" id="example-with-react">Example with React</h4>
 
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis suscipit voluptas esse quam fugiat recusandae harum, illum, sint animi excepturi at. Aliquid accusamus ratione atque sit ipsam quia itaque.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis suscipit voluptas esse quam fugiat recusandae harum, illum, sint animi excepturi at. Aliquid accusamus ratione atque sit ipsam quia itaque.</p>
 
-  <h3 id="custom-themes">Custom Themes</h3>
+<h3 id="custom-themes">Custom Themes</h3>
 
-  <p>All widgets have been designed to be heavily stylizable with CSS rules. <strong>Instantsearch.js</strong> ships with a vanilla CSS theme, but its source code utilizes <a href="http://sass-lang.com/">Sass</a>, a popular CSS preprocessor.</p>
+<p>All widgets have been designed to be heavily stylizable with CSS rules. <strong>Instantsearch.js</strong> ships with a vanilla CSS theme, but its source code utilizes <a href="http://sass-lang.com/">Sass</a>, a popular CSS preprocessor.</p>
 
-  <p>We’re using <a href="http://getbem.com/introduction/">BEM</a>, a methodology that helps you to achieve reusable components and code sharing in the front-end.</p>
+<p>We’re using <a href="http://getbem.com/introduction/">BEM</a>, a methodology that helps you to achieve reusable components and code sharing in the front-end.</p>
 
-  <p>If you want to build you own theme, we recommend you to start from our default skeleton: <a href="https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss">instantsearch.css</a>.</p>
+<p>If you want to build you own theme, we recommend you to start from our default skeleton: <a href="https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss">instantsearch.css</a>.</p>
 
-  <h4 class="no-toc" id="bem-modifiers">BEM modifiers</h4>
+<h4 class="no-toc" id="bem-modifiers">BEM modifiers</h4>
 
-  <div class="codebox-combo">
+<div class="codebox-combo">
 
-    <p>We’re providing a few SCSS mixins to help you write BEM rules. Those mixins can be loaded from the <code>_base.scss</code> file.</p>
+  <p>We’re providing a few SCSS mixins to help you write BEM rules. Those mixins can be loaded from the <code>_base.scss</code> file.</p>
 
-    <div class="code-box">
-      <div class="code-sample-snippet ignore">
+  <div class="code-box">
+    <div class="code-sample-snippet ignore">
 
-        <div class="highlight">
-          <pre><code class="language-scss" data-lang="scss"><span class="c1">// .ais-&lt;component&gt;--&lt;element&gt;</span>
+      <div class="highlight">
+        <pre><code class="language-scss" data-lang="scss"><span class="c1">// .ais-&lt;component&gt;--&lt;element&gt;</span>
 <span class="k">@include</span><span class="nd"> bem</span><span class="p">(</span><span class="n">component</span><span class="o">,</span> <span class="n">element</span><span class="p">)</span> <span class="p">{</span>
   <span class="na">color</span><span class="o">:</span> <span class="nb">red</span>
 <span class="p">}</span>
@@ -2216,28 +2234,28 @@ If your code base is relying on an other framework, feel free to use it to creat
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span></code></pre>
-        </div>
-
       </div>
-    </div>
 
+    </div>
   </div>
 
-  <div class="clearfix"></div>
-  <p class="no-toc">#### Example</p>
+</div>
 
-  <div class="codebox-combo">
+<div class="clearfix"></div>
+<p class="no-toc">#### Example</p>
 
-    <p>If you want to style the <strong>search-box</strong> widget, you can do:</p>
+<div class="codebox-combo">
 
-    <div class="code-box">
-      <div class="code-sample-snippet ignore">
-        <div class="row">
-          <div class="col-sm-6">
-            <p><strong class="text-white">With SCSS</strong></p>
+  <p>If you want to style the <strong>search-box</strong> widget, you can do:</p>
 
-            <div class="highlight">
-              <pre><code class="language-scss" data-lang="scss"><span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">base&#39;</span>
+  <div class="code-box">
+    <div class="code-sample-snippet ignore">
+      <div class="row">
+        <div class="col-sm-6">
+          <p><strong class="text-white">With SCSS</strong></p>
+
+          <div class="highlight">
+            <pre><code class="language-scss" data-lang="scss"><span class="k">@import</span> <span class="s1">&#39;</span><span class="s2">base&#39;</span>
 
 <span class="o">@</span><span class="n">include</span> <span class="nf">bem</span><span class="p">(</span><span class="n">search-box</span><span class="o">,</span> <span class="n">input</span><span class="p">)</span> <span class="p">{</span>
   <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="mh">#A9A9A9</span><span class="p">;</span>
@@ -2246,23 +2264,22 @@ If your code base is relying on an other framework, feel free to use it to creat
   <span class="na">width</span><span class="o">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span>
   <span class="na">color</span><span class="o">:</span> <span class="mh">#636363</span><span class="p">;</span>
 <span class="p">}</span></code></pre>
-            </div>
-
           </div>
-          <div class="col-sm-6">
-            <p><strong class="text-white">With CSS</strong></p>
 
-            <div class="highlight">
-              <pre><code class="language-css" data-lang="css"><span class="nc">.ais-search-box--input</span> <span class="p">{</span>
+        </div>
+        <div class="col-sm-6">
+          <p><strong class="text-white">With CSS</strong></p>
+
+          <div class="highlight">
+            <pre><code class="language-css" data-lang="css"><span class="nc">.ais-search-box--input</span> <span class="p">{</span>
   <span class="k">border</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="m">#A9A9A9</span><span class="p">;</span>
   <span class="k">height</span><span class="o">:</span> <span class="m">40px</span><span class="p">;</span>
   <span class="k">padding</span><span class="o">:</span> <span class="m">0</span> <span class="m">8px</span><span class="p">;</span>
   <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
   <span class="k">color</span><span class="o">:</span> <span class="m">#636363</span><span class="p">;</span>
 <span class="p">}</span></code></pre>
-            </div>
-
           </div>
+
         </div>
       </div>
     </div>
@@ -2279,20 +2296,17 @@ If your code base is relying on an other framework, feel free to use it to creat
 
 
 
-    <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
     <script src="/instantsearch.js/js/bootstrap.min.js"></script>
-    <script src="https://use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
+    <script src="//use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
 
 
-
-    <script src="https://cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
-    <script src="http://localhost:35730/livereload.js"></script>
 
 
   
-<script src="http://localhost:8080/instantsearch.js"></script>
+<script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
 
-<script src="https://cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
+<script src="//cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
 
 <script src="/instantsearch.js/js/doc.js"></script>
 

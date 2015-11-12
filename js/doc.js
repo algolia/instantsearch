@@ -95,7 +95,7 @@
   function htmlTabs() {
     $('.widget-container').each(function() {
       var id = $(this).attr('id');
-      var buttons = $('.code-box pre:contains("#' + id + '")').closest('.code-box').find('.btn-group');
+      var buttons = $('.code-box pre:contains("container: \'#' + id + '\'")').closest('.code-box').find('.btn-group');
       buttons.append('<button type="button" class="toggle-doc-button html-btn btn btn-default btn-sm" data-widget-container="' + id + '">View HTML</button>');
       buttons.after('<pre class="html-container highlight" id="html-' + id + '" style="display: none"></pre>');
     });
