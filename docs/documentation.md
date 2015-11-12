@@ -328,7 +328,7 @@ instantsearch.widgets.hits(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-results.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-hitperpage.svg">
 The hitsPerPageSelector widget lets you select the number of results you want
 displayed.
 {:.description}
@@ -460,7 +460,7 @@ instantsearch.widgets.menu(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-menu.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-hierarchical.svg">
 The hierarchical menu is a widget that lets the user explore a tree-like structure.
 It is based on a set of faceted attributes that represent the different levels of depth. It is
 commonly used in e-commerce websites for hierarchical categorization of products.
@@ -562,7 +562,7 @@ instantsearch.widgets.refinementList(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-numerical.svg">
 This filtering widget lets the user choose one value for a single numeric attribute. You can specify if you want it to be a equality or a range by giving a "start" and an "end" value
 {:.description}
 
@@ -703,7 +703,7 @@ instantsearch.widgets.rangeSlider(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-pricerange.svg">
 This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.
 {:.description}
 
@@ -1030,6 +1030,7 @@ We're providing a few SCSS mixins to help you write BEM rules. Those mixins can 
 </div>
 
 <div class="clearfix"></div>
+
 #### Example
 {:.no-toc}
 
