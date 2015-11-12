@@ -11,6 +11,7 @@ let defaultTemplates = require('./defaultTemplates.js');
 
 /**
  * Display various stats about the current search state
+ * @function stats
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string} [options.cssClasses.root] CSS class to add to the root element

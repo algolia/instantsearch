@@ -15,6 +15,7 @@ let defaultTemplates = require('./defaultTemplates');
  * Instantiate the toggling of a boolean facet filter on and off.
  * Note that it will not toggle between `true` and `false, but between `true`
  * and `undefined`.
+ * @function toggle
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.facetName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")

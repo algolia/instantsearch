@@ -10,6 +10,7 @@ let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Display the list of results (hits) from the current search
+ * @function hits
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element

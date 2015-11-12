@@ -14,6 +14,7 @@ let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of refinements based on a facet
+ * @function numericRefinementList
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for filtering
  * @param  {Object[]} options.options List of all the options

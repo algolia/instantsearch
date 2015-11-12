@@ -10,6 +10,7 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
+ * @function indexSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {string} options.indices[0].name Name of the index to target

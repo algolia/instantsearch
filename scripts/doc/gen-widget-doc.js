@@ -3,31 +3,22 @@ let dmd = require('dmd');
 let fs = require('fs');
 let util = require('util');
 let path = require('path');
-let Transform = require('stream').Transform;
+let rimraf = require('rimraf');
+let mkdirp = require('mkdirp');
 
 /* paths used by this script */
 let p = {
   src: [path.resolve(__dirname, '../../widgets/**/*.js'), path.resolve(__dirname, '../../lib/InstantSearch.js')],
   json: path.resolve(__dirname, '../../source.json'),
-  output: path.resolve(__dirname, '../../docs/_includes/widget-jsdoc/%s.md')
+  output: path.resolve(__dirname, '../../docs/_includes/widget-jsdoc')
 };
 
-// convert kind='constructor' to kind='function'
-let ctorToFunction = new Transform({decodeStrings: false});
-ctorToFunction._transform = (chunk, encoding, done) => {
-  let data = eval(chunk.toString()); // eslint-disable-line
-  data.forEach(function(e) {
-    if (e.kind === 'constructor') {
-      e.kind = 'function';
-    }
-  });
-  done(null, JSON.stringify(data));
-};
-
+// clean
+rimraf.sync(p.output);
+mkdirp.sync(p.output);
 
 /* we only need to parse the source code once, so cache it */
 jsdoc2md({src: p.src, json: true})
-  .pipe(ctorToFunction)
   .pipe(fs.createWriteStream(p.json))
   .on('close', dataReady);
 
@@ -67,7 +58,7 @@ function renderMarkdown(classes, index) {
 
     fs.createReadStream(p.json)
         .pipe(dmd(config))
-        .pipe(fs.createWriteStream(util.format(p.output, className)))
+        .pipe(fs.createWriteStream(util.format(path.join(p.output, '%s.md'), className)))
         .on('close', function() {
           let next = index + 1;
           if (classes[next]) {

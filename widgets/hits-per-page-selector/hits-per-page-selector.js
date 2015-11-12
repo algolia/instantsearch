@@ -9,6 +9,7 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
+ * @function hitsPerPageSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.options Array of objects defining the different values and labels
  * @param  {number} options.options[0].value number of hits to display per page

@@ -16,6 +16,7 @@ let defaultLabels = {
 
 /**
  * Add a pagination menu to navigate through the results
+ * @function pagination
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<ul>`
