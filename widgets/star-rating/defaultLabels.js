@@ -1,0 +1,3 @@
+module.exports = {
+  andUp: '& Up'
+};

@@ -134,17 +134,15 @@ section {
     }
 
     #ratings {
-      margin: 40px 30px;
-
-      .ais-range-slider--target {
+      margin-left: 10px;
+      .ais-stars-list--link {
+        font-size: .9em;
       }
-
-      .ais-range-slider--handle {
-        border-color: $youtube-red;
+      .ais-stars-list--link:hover, .ais-stars-list--link:active, .ais-stars-list--link:focus {
+        text-decoration: none;
       }
-
-      .ais-range-slider--connect {
-        background-color: $youtube-red;
+      .ais-stars-list--count {
+        font-size: 8px;
       }
     }
 
