@@ -1,13 +1,18 @@
 /* eslint-env mocha */
 
+import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
+import {createRenderer} from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list';
+import Template from '../../../components/Template.js';
+
+const helpers = require('../../../lib/helpers.js')('en-US');
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -16,6 +21,7 @@ describe('refinementList()', () => {
   let options;
   let widget;
   let ReactDOM;
+  let renderer = createRenderer();
 
   jsdom({useEach: true});
 
@@ -179,6 +185,16 @@ describe('refinementList()', () => {
       results = {getFacetValues: sinon.stub().returns(['foo', 'bar'])};
       state = {toggleRefinement: sinon.spy()};
       createURL = sinon.spy();
+    });
+
+    it('formats counts', () => {
+      const props = {
+        templatesConfig: {helpers},
+        templates: require('../defaultTemplates')
+      };
+      renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
+      let out = renderer.getRenderOutput();
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
     });
 
     context('cssClasses', () => {
