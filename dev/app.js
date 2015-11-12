@@ -75,6 +75,13 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.clearAll({
+    container: '#clear-all',
+    autoHideContainer: false
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
     facetName: 'brand',

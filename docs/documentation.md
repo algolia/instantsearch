@@ -753,6 +753,47 @@ instantsearch.widgets.priceRanges(options);
 
 <div id="price-ranges" class="widget-container"></div>
 
+#### clearAll
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
+This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.clearAll({
+    container: '#clear-all',
+    templates: {
+      link: 'Reset everything'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      link: '',
+      },
+      autoHideContainer: false
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.clearAll(options);
+{% endhighlight %}
+{% include widget-jsdoc/clearAll.md %}
+  </div>
+</div>
+
+</div>
+
+<div id="clear-all" class="widget-container"></div>
+
 ### Sort
 
 #### indexSelector
