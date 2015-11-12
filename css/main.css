@@ -2313,7 +2313,7 @@ tbody.collapse.in {
 
 .navbar {
   position: relative;
-  min-height: 60px;
+  min-height: 50px;
   margin-bottom: 20px;
   border: 1px solid transparent; }
   .navbar:before, .navbar:after {
@@ -2415,10 +2415,10 @@ tbody.collapse.in {
 
 .navbar-brand {
   float: left;
-  padding: 20px 15px;
+  padding: 15px 15px;
   font-size: 18px;
   line-height: 20px;
-  height: 60px; }
+  height: 50px; }
   .navbar-brand:hover, .navbar-brand:focus {
     text-decoration: none; }
   .navbar-brand > img {
@@ -2432,8 +2432,8 @@ tbody.collapse.in {
   float: right;
   margin-right: 15px;
   padding: 9px 10px;
-  margin-top: 13px;
-  margin-bottom: 13px;
+  margin-top: 8px;
+  margin-bottom: 8px;
   background-color: transparent;
   background-image: none;
   border: 1px solid transparent;
@@ -2452,7 +2452,7 @@ tbody.collapse.in {
       display: none; } }
 
 .navbar-nav {
-  margin: 10px -15px; }
+  margin: 7.5px -15px; }
   .navbar-nav > li > a {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -2480,8 +2480,8 @@ tbody.collapse.in {
       .navbar-nav > li {
         float: left; }
         .navbar-nav > li > a {
-          padding-top: 20px;
-          padding-bottom: 20px; } }
+          padding-top: 15px;
+          padding-bottom: 15px; } }
 
 .navbar-form {
   margin-left: -15px;
@@ -2491,8 +2491,8 @@ tbody.collapse.in {
   border-bottom: 1px solid transparent;
   -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 0 rgba(255, 255, 255, 0.1);
-  margin-top: 13px;
-  margin-bottom: 13px; }
+  margin-top: 8px;
+  margin-bottom: 8px; }
   @media (min-width: 768px) {
     .navbar-form .form-group {
       display: inline-block;
@@ -2560,18 +2560,18 @@ tbody.collapse.in {
   border-bottom-left-radius: 0; }
 
 .navbar-btn {
-  margin-top: 13px;
-  margin-bottom: 13px; }
+  margin-top: 8px;
+  margin-bottom: 8px; }
   .navbar-btn.btn-sm {
-    margin-top: 15px;
-    margin-bottom: 15px; }
+    margin-top: 10px;
+    margin-bottom: 10px; }
   .navbar-btn.btn-xs {
-    margin-top: 19px;
-    margin-bottom: 19px; }
+    margin-top: 14px;
+    margin-bottom: 14px; }
 
 .navbar-text {
-  margin-top: 20px;
-  margin-bottom: 20px; }
+  margin-top: 15px;
+  margin-bottom: 15px; }
   @media (min-width: 768px) {
     .navbar-text {
       float: left;
@@ -3677,7 +3677,9 @@ header.site-header {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 99; }
+  z-index: 99;
+  background: linear-gradient(to right, rgba(10, 23, 36, 0.8) -50%, rgba(23, 44, 79, 0.5) 100%);
+  transition: background 2s ease; }
   header.site-header nav.navbar {
     margin-bottom: 0;
     background-color: #0B1724;
@@ -3723,14 +3725,8 @@ header.site-header {
       position: relative;
       top: -4px; }
 
-header.over-white-background .navbar-brand, header.over-white-background .navbar-toggle {
-  color: black !important; }
-
-@media (min-width: 767px) {
-  header.over-white-background .navbar-nav a {
-    color: black !important; } }
 .main-content {
-  margin-top: 60px; }
+  margin-top: 50px; }
 
 html, body {
   position: relative;
