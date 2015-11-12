@@ -1,0 +1,83 @@
+// Search input in the navbar
+.search-form
+  margin-top: 12px
+  width: 300px
+
+  input
+    border-radius: 0
+    line-height: 2.5em
+    padding: 0 5px
+    &:focus, &:active
+      outline: none
+
+  // Main autocomplete wrapper
+  .aa-dropdown-menu
+    background-color: white
+    border-radius: 4px
+    border: 1px solid $dark-blue
+    color: $text-color
+    font-size: 14px
+    margin: 2px 0 0
+    left: -230px !important
+    padding: 4px
+    text-align: left
+    width: 510px
+    em
+      font-style: normal
+
+  // Suggestion category separator
+  .suggestion-category
+    background-color: $dark-blue
+    border-bottom: 1px solid white
+    border-top: 1px solid white
+    color: white
+    font-size: 14px
+    font-weight: bold
+    padding: 5px 10px
+    text-align: left
+    em
+      color: $light-blue
+
+  // Use table display for the two columns
+  .suggestion
+    display: table
+    width: 100%
+
+  .suggestion-subcategory-main
+    background-color: lighten($dark-blue, 20%)
+    border-right: 1px solid $dark-blue
+    color: white
+    display: table-cell
+    max-width: 150px
+    min-width: 150px
+    overflow: hidden
+    padding: 5px 7px 5px 5px
+    text-align: right
+    text-overflow: ellipsis
+    vertical-align: top
+    width: 150px
+    em
+      color: $light-blue
+    code
+      color: $text-color
+
+  .suggestion-content
+    border-bottom: 1px solid $light-blue
+    cursor: pointer
+    display: table-cell
+    padding: 5px 10px
+    em
+      background-color: $light-blue
+
+  .suggestion-title
+    font-weight: bold
+
+  .suggestion-text
+    font-size: 0.8em
+    line-height: 1.5em
+
+  .aa-cursor .suggestion-title,
+  .aa-cursor .suggestion-text,
+  .aa-cursor .suggestion-title code,
+  .aa-cursor .suggestion-title em
+    color: $brand-primary

@@ -1,0 +1,18 @@
+<script id="suggestion-item-template" type="text/template">
+{%raw %}
+{{#isCategoryHeader}}<div class="suggestion-category">{{{category}}}</div>{{/isCategoryHeader}}
+<div class="suggestion {{#isCategoryHeader}}suggestion-is-category-header{{/isCategoryHeader}}">
+  <div class="suggestion-subcategory-main">{{#isSubcategoryHeader}}{{{subcategory}}}{{/isSubcategoryHeader}}</div>
+  <div class="suggestion-content">
+    <div class="suggestion-subcategory-secondary">{{{subcategory}}}</div>
+    <div class="suggestion-title">{{{title}}}</div>
+    <div class="suggestion-text">{{{text}}}</div>
+  </div>
+</div>
+{% endraw %}
+</script>
+<script id="suggestion-footer-template" type="text/template">
+{%raw %}
+<a href="http://www.algolia.com/?utm_source=babeljs&amp;utm_medium=link&amp;utm_campaign=babeljs_documentation_search" target="_blank" class="suggestion-footer text-hide">Powered by Algolia</a>
+{% endraw %}
+</script>
