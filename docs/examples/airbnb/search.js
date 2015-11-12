@@ -68,4 +68,10 @@ search.addWidget(
   })
 );
 
+search.addWidget(
+  instantsearch.widgets.googleMaps({
+    container: document.querySelector('#map')
+  })
+);
+
 search.start();
