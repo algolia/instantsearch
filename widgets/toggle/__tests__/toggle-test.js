@@ -4,15 +4,21 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
+import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
+import Template from '../../../components/Template.js';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+const helpers = require('../../../lib/helpers.js')('en-US');
+
 describe('toggle()', () => {
   jsdom({useEach: true});
+
+  let renderer = createRenderer();
 
   context('bad usage', () => {
     it('throws when no container', () => {
@@ -121,6 +127,13 @@ describe('toggle()', () => {
         expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
         expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
         expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+      });
+
+      it('formats counts', () => {
+        templateProps.templatesConfig = {helpers};
+        renderer.render(<Template data={{count: 1000}} {...templateProps} templateKey="item" />);
+        let out = renderer.getRenderOutput();
+        expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
       });
 
       it('with facet values', () => {
