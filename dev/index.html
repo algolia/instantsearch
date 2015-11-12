@@ -36,10 +36,10 @@
           <input id="search-box" class="form-control" />
         </div>
         <div class="row">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div id="stats"></div>
           </div>
-          <div class="col-md-4 text-right">
+          <div class="col-md-3 text-right">
             <div class="form-inline">
               <div class="form-group">
                 <label for="hits-per-page-select">Show:</label>
@@ -47,7 +47,15 @@
               </div>
             </div>
           </div>
-          <div class="col-md-4 text-right">
+          <div class="col-md-3 text-right">
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="index-selector-select">Popularity:</label>
+                <span id="popularity-selector"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
             <div class="form-inline">
               <div class="form-group">
                 <label for="index-selector-select">Sort by:</label>
@@ -55,7 +63,6 @@
               </div>
             </div>
           </div>
-
         </div>
         <div id="hits"></div>
         <div id="pagination" class="text-center"></div>

@@ -347,7 +347,8 @@ search.addWidget(
       {value: 24, label: '24 per page'}
     ],
     cssClasses: {
-      select: ''
+      root: '',
+      item: ''
     }
   })
 );
@@ -753,13 +754,54 @@ instantsearch.widgets.priceRanges(options);
 
 <div id="price-ranges" class="widget-container"></div>
 
+#### numericSelector
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="../img/icon-widget-index.svg">
+This filtering widget lets the user choose between numerical refinements from a dropdown menu.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.numericSelector({
+    container: '#popularity-selector',
+    attributeName: 'popularity',
+    operator: '<=',
+    options: [
+      { label: 'Top 1', value: 1 },
+      { label: 'Top 10', value: 10 },
+      { label: 'Top 100', value: 100 }
+    ],
+    cssClasses: {
+      root: '',
+      item: ''
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.numericSelector(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/numericSelector.md %}
+  </div>
+</div>
+
+</div>
+
+<div id="popularity-selector" class="widget-container"></div>
+
 #### clearAll
 
 <div class="codebox-combo">
 
 <img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
-This filtering widget lets the user choose between ranges of price. Those ranges are dynamically computed based on the returned results.
-{:.description}
+This widget clears all the refinements that are currently applied.
 
 <div class="code-box">
   <div class="code-sample-snippet">
@@ -776,8 +818,8 @@ search.addWidget(
       body: '',
       footer: '',
       link: '',
-      },
-      autoHideContainer: false
+    },
+    autoHideContainer: false
   })
 );
 {% endhighlight %}
@@ -786,6 +828,7 @@ search.addWidget(
 {% highlight javascript %}
 instantsearch.widgets.clearAll(options);
 {% endhighlight %}
+
 {% include widget-jsdoc/clearAll.md %}
   </div>
 </div>
