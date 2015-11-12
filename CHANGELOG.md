@@ -1,3 +1,13 @@
+<a name="0.12.2"></a>
+## [0.12.2](https://github.com/algolia/instantsearch.js/compare/v0.12.1...v0.12.2) (2015-11-12)
+
+
+### Bug Fixes
+
+* **layout:** missing div (did we lost that fix?) ([9a515e4](https://github.com/algolia/instantsearch.js/commit/9a515e4))
+
+
+
 <a name="0.12.1"></a>
 ## [0.12.1](https://github.com/algolia/instantsearch.js/compare/v0.12.0...v0.12.1) (2015-11-12)
 
