@@ -1,3 +1,18 @@
+<a name="0.12.1"></a>
+## [0.12.1](https://github.com/algolia/instantsearch.js/compare/v0.12.0...v0.12.1) (2015-11-12)
+
+
+### Bug Fixes
+
+* **counts:** missing formatNumber calls ([65e5ba0](https://github.com/algolia/instantsearch.js/commit/65e5ba0)), closes [#560](https://github.com/algolia/instantsearch.js/issues/560)
+* **doc:** ensure selector is not conflicting ([6528f2c](https://github.com/algolia/instantsearch.js/commit/6528f2c)), closes [#505](https://github.com/algolia/instantsearch.js/issues/505)
+* **docs:** improved label/input hover debug ([58573db](https://github.com/algolia/instantsearch.js/commit/58573db)), closes [#503](https://github.com/algolia/instantsearch.js/issues/503)
+* **examples/airbnb:** Use default theme from CDN ([f379c0a](https://github.com/algolia/instantsearch.js/commit/f379c0a)), closes [#522](https://github.com/algolia/instantsearch.js/issues/522)
+* **examples/youtube:** use the default theme ([cf9a4b6](https://github.com/algolia/instantsearch.js/commit/cf9a4b6))
+* **rangeSlider:** fixed tooltip CSS & outdated default theme. ([c4be2ef](https://github.com/algolia/instantsearch.js/commit/c4be2ef))
+
+
+
 <a name="0.12.0"></a>
 # [0.12.0](https://github.com/algolia/instantsearch.js/compare/v0.11.1...v0.12.0) (2015-11-10)
 
