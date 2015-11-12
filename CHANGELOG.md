@@ -1,3 +1,13 @@
+<a name="0.13.0"></a>
+# [0.13.0](https://github.com/algolia/instantsearch.js/compare/v0.12.3...v0.13.0) (2015-11-12)
+
+
+### Features
+
+* **clearAll:** New widget ([9e61a14](https://github.com/algolia/instantsearch.js/commit/9e61a14))
+
+
+
 <a name="0.12.3"></a>
 ## [0.12.3](https://github.com/algolia/instantsearch.js/compare/v0.12.2...v0.12.3) (2015-11-12)
 
