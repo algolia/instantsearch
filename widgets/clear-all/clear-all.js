@@ -28,7 +28,7 @@ let defaultTemplates = require('./defaultTemplates');
  * @return {Object}
  */
 const usage = `Usage:
-toggle({
+clearAll({
   container,
   [cssClasses.{root,header,body,footer,link}={}],
   [templates.{header,link,footer}={header: '', link: 'Clear all', footer: ''}],
