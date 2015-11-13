@@ -1,3 +1,21 @@
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/algolia/instantsearch.js/compare/v0.13.0...v0.14.0) (2015-11-13)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** handle limit option ([968cf58](https://github.com/algolia/instantsearch.js/commit/968cf58)), closes [#585](https://github.com/algolia/instantsearch.js/issues/585) [#235](https://github.com/algolia/instantsearch.js/issues/235)
+* **numeric-selector:** makes init comply with the new API ([068e8d3](https://github.com/algolia/instantsearch.js/commit/068e8d3))
+
+### Features
+
+* **core:** sends a custom User Agent ([2561154](https://github.com/algolia/instantsearch.js/commit/2561154))
+* **lifecycle:** makes init API consistent with the rest ([e7ed81f](https://github.com/algolia/instantsearch.js/commit/e7ed81f))
+
+### BREAKING CHANGES
+
+* all widgets using "facetName" are now using "attributeName"
+
 <a name="0.13.0"></a>
 # [0.13.0](https://github.com/algolia/instantsearch.js/compare/v0.12.3...v0.13.0) (2015-11-12)
 
