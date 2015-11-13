@@ -42,7 +42,7 @@ hierarchicalMenu({
   container,
   attributes,
   [ separator=' > ' ],
-  [ limit=100 ],
+  [ limit=1000 ],
   [ sortBy=['name:asc'] ],
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
   [ templates.{header, item, footer} ],
@@ -53,7 +53,7 @@ function hierarchicalMenu({
     container,
     attributes,
     separator = ' > ',
-    limit = 100,
+    limit = 1000,
     sortBy = ['name:asc'],
     cssClasses: userCssClasses = {},
     autoHideContainer = true,
@@ -85,7 +85,7 @@ function hierarchicalMenu({
       }]
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {
-      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
+      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
       let hasNoFacetValues = facetValues.length === 0;
 
       let templateProps = utils.prepareTemplateProps({
@@ -114,7 +114,6 @@ function hierarchicalMenu({
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          limit={limit}
           shouldAutoHideContainer={hasNoFacetValues}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
@@ -131,11 +130,23 @@ function toggleRefinement(helper, attributeName, facetValue) {
     .search();
 }
 
-function getFacetValues(results, hierarchicalFacetName, sortBy) {
+function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
   let values = results
-    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
+    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
 
-  return values.data || [];
+  return sliceFacetValues(values, limit);
+}
+
+function sliceFacetValues(values, limit) {
+  return values
+    .slice(0, limit)
+    .map(function(subValue) {
+      if (Array.isArray(subValue.data)) {
+        subValue.data = sliceFacetValues(subValue.data, limit);
+      }
+
+      return subValue;
+    });
 }
 
 module.exports = hierarchicalMenu;
