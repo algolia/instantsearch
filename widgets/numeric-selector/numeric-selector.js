@@ -44,7 +44,7 @@ function numericSelector({
   }
 
   return {
-    init: function(state, helper) {
+    init: function({helper}) {
       const currentValue = this._getRefinedValue(helper) || options[0].value;
       if (currentValue !== undefined) {
         helper.addNumericRefinement(attributeName, operator, currentValue);
