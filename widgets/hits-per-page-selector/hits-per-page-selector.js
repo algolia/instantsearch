@@ -51,10 +51,20 @@ function hitsPerPageSelector({
       });
 
       if (!isCurrentInOptions) {
-        options = [{value: undefined, label: ''}].concat(options);
-        if (window.console) {
-          window.console.log('[Warning][hitsPerPageSelector] No option in `options` with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
+        if (state.hitsPerPage === undefined) {
+          if (window.console) {
+            window.console.log(
+              '[Warning][hitsPerPageSelector] hitsPerPage not defined.' +
+              'You should probably used a `hits` widget or set the value `hitsPerPage` ' +
+              'using the searchParameters attribute of the instantSearch constructor.');
+          }
+        } else if (window.console) {
+          window.console.log(
+            '[Warning][hitsPerPageSelector] No option in `options` ' +
+            'with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
         }
+
+        options = [{value: undefined, label: ''}].concat(options);
       }
     },
 

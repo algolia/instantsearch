@@ -17,12 +17,13 @@
       indexName: 'instant_search'
     };
     var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
-    var configSnippet = q('.code-sample-snippet.config')[0];
+    var configSnippet = "var search = instantsearch({appId: '$appId', apiKey: '$apiKey'," +
+      "indexName: '$indexName', searchParameters: {hitsPerPage: 6}});\n"
     var startSnippet = q('.code-sample-snippet.start')[0];
 
     var source = codeSnippets.map(function(snippet) {
       var functionBody = [configSnippet, snippet, startSnippet]
-          .map(function(e) { return e.textContent; })
+          .map(function(e) { return e.textContent ? e.textContent : e; })
           .join(';');
       return '(function() {' + functionBody + '})();';
     });
