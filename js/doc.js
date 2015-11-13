@@ -17,12 +17,13 @@
       indexName: 'instant_search'
     };
     var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
-    var configSnippet = q('.code-sample-snippet.config')[0];
+    var configSnippet = "var search = instantsearch({appId: '$appId', apiKey: '$apiKey'," +
+      "indexName: '$indexName', searchParameters: {hitsPerPage: 6}});\n"
     var startSnippet = q('.code-sample-snippet.start')[0];
 
     var source = codeSnippets.map(function(snippet) {
       var functionBody = [configSnippet, snippet, startSnippet]
-          .map(function(e) { return e.textContent; })
+          .map(function(e) { return e.textContent ? e.textContent : e; })
           .join(';');
       return '(function() {' + functionBody + '})();';
     });
@@ -35,33 +36,45 @@
     $('.code-box').each(function() {
       var $this = $(this);
       var code = $this.find('.code-sample-snippet');
-      var doc = $this.find('.jsdoc');
-      if (code.length > 0 && doc.length > 0) {
-        $(this).prepend(
-          '<div class="btn-group">' +
-            '<button type="button" class="toggle-doc-button snippet-btn btn btn-default btn-sm active">Snippet</button>' +
-            '<button type="button" class="toggle-doc-button jsdoc-btn btn btn-default btn-sm">All options</button>' +
-          '</div>'
-        );
+      var jsdoc = $this.find('.jsdoc');
+      var requirements = $this.find('.requirements');
+      var hasCode = code.length > 0;
+      var hasJsdoc = jsdoc.length > 0;
+      var hasRequirements = requirements.length > 0;
+
+      var needButtons = (hasCode && (hasJsdoc || hasRequirements));
+      if (!needButtons) {
+        return;
       }
+
+      function getButton(label, target) {
+        var $button = $('<button type="button" class="btn btn-default btn-sm toggle-doc-button">' + label + '</button>');
+        $button.attr('name', target);
+        return $button;
+      }
+      var $btnGroup = $('<div class="btn-group js-doc-toggle"></div>');
+      $btnGroup.append(getButton('Snippet', 'snippet').addClass('active'));
+      if (hasJsdoc) {
+        $btnGroup.append(getButton('All options', 'jsdoc'));
+      }
+      if (hasRequirements) {
+        $btnGroup.append(getButton('Requirements', 'requirements'));
+      }
+
+      $this.prepend($btnGroup);
     });
-    $(document).on('click', '.toggle-doc-button.jsdoc-btn', function() {
-      var $btn = $(this);
-      var $box = $btn.closest('.code-box');
-      $box.find('.toggle-doc-button').removeClass('active');
-      $btn.addClass('active');
-      $box.find('.code-sample-snippet, .html-container').hide();
+    $(document).on('click', '.toggle-doc-button', function() {
+      var $this = $(this);
+      var $codeBox = $this.closest('.code-box');
+      var $btnGroup = $codeBox.find('.btn-group');
+      // Set the current one as active
+      $btnGroup.find('.toggle-doc-button').removeClass('active');
+      $this.addClass('active');
+      // Show the specified target
+      $codeBox.find('.js-toggle-snippet,.js-toggle-jsdoc,.js-toggle-requirements,.js-toggle-html').hide();
+      $codeBox.find('.js-toggle-' + $this.attr('name')).show();
+      // Remove HTML debug if any
       $('.debug-widget').removeClass('debug-widget');
-      $box.find('.jsdoc').show();
-    });
-    $(document).on('click', '.toggle-doc-button.snippet-btn', function() {
-      var $btn = $(this);
-      var $box = $btn.closest('.code-box');
-      $box.find('.toggle-doc-button').removeClass('active');
-      $btn.addClass('active');
-      $box.find('.jsdoc, .html-container').hide();
-      $('.debug-widget').removeClass('debug-widget');
-      $box.find('.code-sample-snippet').show();
     });
   }
 
@@ -96,13 +109,12 @@
     $('.widget-container').each(function() {
       var id = $(this).attr('id');
       var buttons = $('.code-box pre:contains("container: \'#' + id + '\'")').closest('.code-box').find('.btn-group');
-      buttons.append('<button type="button" class="toggle-doc-button html-btn btn btn-default btn-sm" data-widget-container="' + id + '">View HTML</button>');
-      buttons.after('<pre class="html-container highlight" id="html-' + id + '" style="display: none"></pre>');
+      buttons.append('<button type="button" class="toggle-doc-button html-btn btn btn-default btn-sm" name="html" data-widget-container="' + id + '">View HTML</button>');
+      buttons.after('<pre class="html-container highlight js-toggle-html" id="html-' + id + '" style="display: none">kjkjkj</pre>');
     });
     $(document).on('click', '.toggle-doc-button.html-btn', function() {
-      var $btn = $(this);
-      var $box = $btn.closest('.code-box');
-      var id = $(this).data('widget-container');
+      var $this = $(this);
+      var id = $this.data('widget-container');
       var $widget = $('#' + id);
       var source = cleanupAndHighlightMarkup($widget.html());
       var htmlSource = $('<div />').text(source).html();
@@ -111,12 +123,7 @@
         .replace(/(&lt;\/?[a-z]+(&gt;)?)/g, '<span class="nt">$1</span>') // highlight tags
         .replace(/(&gt;)\n/g, '<span class="nt">&gt;</span>\n') // highlight closing chevron
       );
-      $box.find('.toggle-doc-button').removeClass('active');
-      $btn.addClass('active');
-      $box.find('.code-sample-snippet, .jsdoc').hide();
-      $('.debug-widget').removeClass('debug-widget');
       $widget.addClass('debug-widget');
-      $box.find('.html-container').show();
     });
   }
 

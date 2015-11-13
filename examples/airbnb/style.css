@@ -116,6 +116,25 @@ nav {
 #main {
   max-width: 1280px; }
 
+#guests .ais-numeric-selector {
+  position: relative;
+  appearance: none;
+  background: inherit;
+  width: 100%;
+  border: 1px solid #C4C4C4;
+  height: 34px;
+  padding: 8px 10px; }
+  #guests .ais-numeric-selector:focus {
+    outline: none; }
+  #guests .ais-numeric-selector:after {
+    position: absolute;
+    content: '\25bc';
+    color: #82888a;
+    top: 0;
+    right: 0;
+    width: 2em;
+    text-align: center; }
+
 #pagination {
   text-align: center; }
 

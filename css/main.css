@@ -4085,13 +4085,20 @@ code {
     border: solid 2px rgba(255, 255, 255, 0.5);
     margin-bottom: 10px; }
     .shameless-marketing .sticker p {
-      padding: 0; }
+      padding: 0;
+      height: 100%;
+      padding: 0;
+      margin: 0; }
     .shameless-marketing .sticker img {
-      top: -2px; }
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin-top: -2px; }
   .shameless-marketing .sticker-algolia {
     animation-delay: 0.5s; }
     .shameless-marketing .sticker-algolia img {
-      top: -4px; }
+      margin-top: -4px; }
   .shameless-marketing .sticker-open-source {
     animation-delay: 1s; }
   .shameless-marketing .sticker-ux {
@@ -4297,6 +4304,17 @@ code {
       .code-box .jsdoc .attr-legend span {
         font-size: 10px;
         color: #58d158; }
+  .code-box .requirements {
+    display: none;
+    border: none;
+    color: #a3b6cb;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    background-color: #0a1724; }
+    .code-box .requirements code {
+      font-size: 1em;
+      background: none;
+      color: #58d158; }
 
 #q input {
   width: 100%;
