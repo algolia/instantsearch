@@ -13,7 +13,7 @@ let defaultTemplates = require('./defaultTemplates.js');
  * Create a menu out of a facet
  * @function menu
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
@@ -37,7 +37,7 @@ let defaultTemplates = require('./defaultTemplates.js');
 const usage = `Usage:
 menu({
   container,
-  facetName,
+  attributeName,
   [sortBy],
   [limit],
   [cssClasses.{root,list,item}],
@@ -47,7 +47,7 @@ menu({
 })`;
 function menu({
     container,
-    facetName,
+    attributeName,
     sortBy = ['count:desc'],
     limit = 100,
     cssClasses: userCssClasses = {},
@@ -55,7 +55,7 @@ function menu({
     transformData,
     autoHideContainer = true
   } = {}) {
-  if (!container || !facetName) {
+  if (!container || !attributeName) {
     throw new Error(usage);
   }
 
@@ -67,13 +67,13 @@ function menu({
 
   // we use a hierarchicalFacet for the menu because that's one of the use cases
   // of hierarchicalFacet: a flat menu
-  let hierarchicalFacetName = facetName;
+  let hierarchicalFacetName = attributeName;
 
   return {
     getConfiguration: () => ({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
-        attributes: [facetName]
+        attributes: [attributeName]
       }]
     }),
     render: function({results, helper, templatesConfig, state, createURL}) {
@@ -114,9 +114,9 @@ function menu({
   };
 }
 
-function toggleRefinement(helper, facetName, facetValue) {
+function toggleRefinement(helper, attributeName, facetValue) {
   helper
-    .toggleRefinement(facetName, facetValue)
+    .toggleRefinement(attributeName, facetValue)
     .search();
 }
 
