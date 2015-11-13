@@ -81,7 +81,7 @@ function numericSelector({
 
     _getRefinedValue: function(helper) {
       const refinements = helper.getRefinements(attributeName);
-      return find(refinements, {operator: operator});
+      return find(refinements, {operator});
     }
   };
 }
