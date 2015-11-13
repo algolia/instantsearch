@@ -1,7 +1,7 @@
 | Param | Description |
 | --- | --- |
 | <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | CSS Selector or DOMElement to insert the widget |
-| <span class='attr-required'>`options.facetName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting |
+| <span class='attr-required'>`options.attributeName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting |
 | <span class='attr-optional'>`options.operator`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code><br />Type: <code>string</code></span> | How to apply refinements. Possible values: `or`, `and` |
 | <span class='attr-optional'>`options.sortBy`</span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code></span> | How to sort refinements. Possible values: `count|isRefined|name:asc|desc` |
 | <span class='attr-optional'>`options.limit`</span><span class="attr-infos">Default:<code class="attr-default">1000</code><br />Type: <code>string</code></span> | How much facet values to get |

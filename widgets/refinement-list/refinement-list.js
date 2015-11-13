@@ -14,7 +14,7 @@ let defaultTemplates = require('./defaultTemplates');
  * Instantiate a list of refinements based on a facet
  * @function refinementList
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.facetName Name of the attribute for faceting
+ * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=1000] How much facet values to get
@@ -40,7 +40,7 @@ let defaultTemplates = require('./defaultTemplates');
 const usage = `Usage:
 refinementList({
   container,
-  facetName,
+  attributeName,
   [ operator='or' ],
   [ sortBy=['count:desc'] ],
   [ limit=1000 ],
@@ -51,7 +51,7 @@ refinementList({
 })`;
 function refinementList({
     container,
-    facetName,
+    attributeName,
     operator = 'or',
     sortBy = ['count:desc'],
     limit = 1000,
@@ -62,7 +62,7 @@ function refinementList({
   }) {
   let RefinementList = require('../../components/RefinementList/RefinementList.js');
 
-  if (!container || !facetName) {
+  if (!container || !attributeName) {
     throw new Error(usage);
   }
 
@@ -83,7 +83,7 @@ function refinementList({
   return {
     getConfiguration: (configuration) => {
       let widgetConfiguration = {
-        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [facetName]
+        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName]
       };
 
       let currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
@@ -93,7 +93,7 @@ function refinementList({
     },
     toggleRefinement: (helper, facetValue) => {
       helper
-        .toggleRefinement(facetName, facetValue)
+        .toggleRefinement(attributeName, facetValue)
         .search();
     },
     render: function({results, helper, templatesConfig, state, createURL}) {
@@ -104,7 +104,7 @@ function refinementList({
         templates
       });
 
-      let facetValues = results.getFacetValues(facetName, {sortBy: sortBy}).slice(0, limit);
+      let facetValues = results.getFacetValues(attributeName, {sortBy: sortBy}).slice(0, limit);
 
       let hasNoFacetValues = facetValues.length === 0;
 
@@ -125,7 +125,7 @@ function refinementList({
 
       ReactDOM.render(
         <RefinementList
-          createURL={(facetValue) => createURL(state.toggleRefinement(facetName, facetValue))}
+          createURL={(facetValue) => createURL(state.toggleRefinement(attributeName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={hasNoFacetValues}

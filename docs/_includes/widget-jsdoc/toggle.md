@@ -1,7 +1,7 @@
 | Param | Description |
 | --- | --- |
 | <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | CSS Selector or DOMElement to insert the widget |
-| <span class='attr-required'>`options.facetName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting (eg. "free_shipping") |
+| <span class='attr-required'>`options.attributeName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting (eg. "free_shipping") |
 | <span class='attr-required'>`options.label`</span><span class="attr-infos">Type: <code>string</code></span> | Human-readable name of the filter (eg. "Free Shipping") |
 | <span class='attr-optional'>`options.values`</span><span class="attr-infos">Type: <code>Object</code></span> | Lets you define the values to filter on when toggling |
 | <span class='attr-optional'>`options.values.on`</span><span class="attr-infos">Type: <code>\*</code></span> | Value to filter on when checked |

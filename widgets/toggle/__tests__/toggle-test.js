@@ -27,7 +27,7 @@ describe('toggle()', () => {
       }).toThrow(/Container must be `string` or `HTMLElement`/);
     });
 
-    it('throws when no facetName', () => {
+    it('throws when no attributeName', () => {
       expect(() => {
         toggle({container: document.createElement('div')});
       }).toThrow(/Usage:/);
@@ -35,7 +35,7 @@ describe('toggle()', () => {
 
     it('throws when no label', () => {
       expect(() => {
-        toggle({container: document.createElement('div'), facetName: 'Hello'});
+        toggle({container: document.createElement('div'), attributeName: 'Hello'});
       }).toThrow(/Usage:/);
     });
   });
@@ -46,7 +46,7 @@ describe('toggle()', () => {
     let headerFooter;
     let container;
     let widget;
-    let facetName;
+    let attributeName;
     let label;
 
     beforeEach(() => {
@@ -60,16 +60,16 @@ describe('toggle()', () => {
 
       container = document.createElement('div');
       label = 'Hello, ';
-      facetName = 'world!';
+      attributeName = 'world!';
     });
 
     it('configures hitsPerPage', () => {
-      widget = toggle({container, facetName, label});
+      widget = toggle({container, attributeName, label});
       expect(widget.getConfiguration()).toEqual({facets: ['world!']});
     });
 
     it('uses autoHideContainer() and headerFooter()', () => {
-      widget = toggle({container, facetName, label});
+      widget = toggle({container, attributeName, label});
       expect(autoHideContainer.calledOnce).toBe(true);
       expect(headerFooter.calledOnce).toBe(true);
       expect(headerFooter.calledBefore(autoHideContainer)).toBe(true);
@@ -121,7 +121,7 @@ describe('toggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         widget.render({results, helper});
         widget.render({results, helper});
         expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
@@ -142,7 +142,7 @@ describe('toggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         widget.render({results, helper});
         widget.render({results, helper});
 
@@ -162,7 +162,7 @@ describe('toggle()', () => {
           nbHits: 0,
           getFacetValues: sinon.stub().returns([])
         };
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         widget.render({results, helper});
         widget.render({results, helper});
 
@@ -187,7 +187,7 @@ describe('toggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         widget.render({results, helper});
         widget.render({results, helper});
 
@@ -207,13 +207,13 @@ describe('toggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         widget.render({results, helper});
         let toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();
         expect(helper.addFacetRefinement.calledOnce).toBe(true);
-        expect(helper.addFacetRefinement.calledWithExactly(facetName, true));
+        expect(helper.addFacetRefinement.calledWithExactly(attributeName, true));
         helper.hasRefinements = sinon.stub().returns(true);
       });
     });
@@ -240,24 +240,24 @@ describe('toggle()', () => {
       context('default values', () => {
         it('toggle on should add filter to true', () => {
           // Given
-          widget = toggle({container, facetName, label});
+          widget = toggle({container, attributeName, label});
 
           // When
           toggleOn();
 
           // Then
-          expect(helper.addFacetRefinement.calledWith(facetName, true)).toBe(true);
+          expect(helper.addFacetRefinement.calledWith(attributeName, true)).toBe(true);
           expect(helper.removeFacetRefinement.called).toBe(false);
         });
         it('toggle off should remove all filters', () => {
           // Given
-          widget = toggle({container, facetName, label});
+          widget = toggle({container, attributeName, label});
 
           // When
           toggleOff();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(facetName, true)).toBe(true);
+          expect(helper.removeFacetRefinement.calledWith(attributeName, true)).toBe(true);
           expect(helper.addFacetRefinement.called).toBe(false);
         });
       });
@@ -265,26 +265,26 @@ describe('toggle()', () => {
         it('toggle on should change the refined value', () => {
           // Given
           values = {on: 'on', off: 'off'};
-          widget = toggle({container, facetName, label, values});
+          widget = toggle({container, attributeName, label, values});
 
           // When
           toggleOn();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(facetName, 'off')).toBe(true);
-          expect(helper.addFacetRefinement.calledWith(facetName, 'on')).toBe(true);
+          expect(helper.removeFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
+          expect(helper.addFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
         });
         it('toggle off should change the refined value', () => {
           // Given
           values = {on: 'on', off: 'off'};
-          widget = toggle({container, facetName, label, values});
+          widget = toggle({container, attributeName, label, values});
 
           // When
           toggleOff();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(facetName, 'on')).toBe(true);
-          expect(helper.addFacetRefinement.calledWith(facetName, 'off')).toBe(true);
+          expect(helper.removeFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
+          expect(helper.addFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
         });
       });
     });
@@ -293,7 +293,7 @@ describe('toggle()', () => {
       it('should add a refinement for custom off value on init', () => {
         // Given
         let values = {on: 'on', off: 'off'};
-        widget = toggle({container, facetName, label, values});
+        widget = toggle({container, attributeName, label, values});
         let state = {
           isFacetRefined: sinon.stub().returns(false)
         };
@@ -305,12 +305,12 @@ describe('toggle()', () => {
         widget.init({state, helper});
 
         // Then
-        expect(helper.addFacetRefinement.calledWith(facetName, 'off')).toBe(true);
+        expect(helper.addFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
       });
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
         let values = {on: 'on', off: 'off'};
-        widget = toggle({container, facetName, label, values});
+        widget = toggle({container, attributeName, label, values});
         let state = {
           isFacetRefined: sinon.stub().returns(true)
         };
@@ -326,7 +326,7 @@ describe('toggle()', () => {
       });
       it('should not add a refinement for no custom off value on init', () => {
         // Given
-        widget = toggle({container, facetName, label});
+        widget = toggle({container, attributeName, label});
         let state = {};
         let helper = {
           addFacetRefinement: sinon.spy()

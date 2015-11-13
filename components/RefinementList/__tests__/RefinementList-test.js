@@ -127,8 +127,8 @@ describe('RefinementList', () => {
             />
             <RefinementList
               {...templateProps.data}
+              attributeNameKey="name"
               depth={1}
-              facetNameKey="name"
               facetValues={customProps.facetValues[0].data}
               templateProps={{}}
             />

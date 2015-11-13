@@ -26,7 +26,7 @@ class RefinementList extends React.Component {
     let data = facetValue;
 
     if (this.props.createURL) {
-      data.url = this.props.createURL(facetValue[this.props.facetNameKey]);
+      data.url = this.props.createURL(facetValue[this.props.attributeNameKey]);
     }
 
     let templateData = {...facetValue, cssClasses: this.props.cssClasses};
@@ -35,7 +35,7 @@ class RefinementList extends React.Component {
       [this.props.cssClasses.active]: facetValue.isRefined
     });
 
-    let key = facetValue[this.props.facetNameKey];
+    let key = facetValue[this.props.attributeNameKey];
     if (facetValue.isRefined !== undefined) {
       key += '/' + facetValue.isRefined;
     }
@@ -47,7 +47,7 @@ class RefinementList extends React.Component {
       <div
         className={cssClassItem}
         key={key}
-        onClick={this.handleClick.bind(this, facetValue[this.props.facetNameKey])}
+        onClick={this.handleClick.bind(this, facetValue[this.props.attributeNameKey])}
       >
         <Template data={templateData} templateKey="item" {...this.props.templateProps} />
         {subList}
@@ -120,6 +120,7 @@ class RefinementList extends React.Component {
 
 RefinementList.propTypes = {
   Template: React.PropTypes.func,
+  attributeNameKey: React.PropTypes.string,
   createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
@@ -128,7 +129,6 @@ RefinementList.propTypes = {
     list: React.PropTypes.string
   }),
   depth: React.PropTypes.number,
-  facetNameKey: React.PropTypes.string,
   facetValues: React.PropTypes.array,
   templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired
@@ -137,7 +137,7 @@ RefinementList.propTypes = {
 RefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
-  facetNameKey: 'name'
+  attributeNameKey: 'name'
 };
 
 module.exports = RefinementList;

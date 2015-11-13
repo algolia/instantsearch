@@ -37,9 +37,9 @@ describe('refinementList()', () => {
   });
 
   context('instanciated with wrong parameters', () => {
-    it('should fail if no facetName', () => {
+    it('should fail if no attributeName', () => {
       // Given
-      options = {container, facetName: undefined};
+      options = {container, attributeName: undefined};
 
       // Then
       expect(() => {
@@ -49,7 +49,7 @@ describe('refinementList()', () => {
     });
     it('should fail if no container', () => {
       // Given
-      options = {container: undefined, facetName: 'foo'};
+      options = {container: undefined, attributeName: 'foo'};
 
       // Then
       expect(() => {
@@ -61,7 +61,7 @@ describe('refinementList()', () => {
 
   context('autoHideContainer', () => {
     beforeEach(() => {
-      options = {container, facetName: 'facetName'};
+      options = {container, attributeName: 'facetName'};
     });
     it('should be called if autoHideContainer set to true', () => {
       // Given
@@ -87,7 +87,7 @@ describe('refinementList()', () => {
 
   context('operator', () => {
     beforeEach(() => {
-      options = {container, facetName: 'facetName'};
+      options = {container, attributeName: 'facetName'};
     });
     it('should accept [and, or, AND, OR]', () => {
       expect(() => {
@@ -116,7 +116,7 @@ describe('refinementList()', () => {
   context('getConfiguration', () => {
     let configuration;
     beforeEach(() => {
-      options = {container, facetName: 'facetName'};
+      options = {container, attributeName: 'attributeName'};
     });
     it('should add a facet for AND operator', () => {
       // Given
@@ -128,7 +128,7 @@ describe('refinementList()', () => {
       let actual = widget.getConfiguration(configuration);
 
       // Then
-      expect(actual.facets).toInclude('facetName');
+      expect(actual.facets).toInclude('attributeName');
     });
     it('should add disjunctiveFacet for OR operator', () => {
       // Given
@@ -140,7 +140,7 @@ describe('refinementList()', () => {
       let actual = widget.getConfiguration(configuration);
 
       // Then
-      expect(actual.disjunctiveFacets).toInclude('facetName');
+      expect(actual.disjunctiveFacets).toInclude('attributeName');
     });
     it('should set the maxValuePerFacet to the specified limit if higher', () => {
       // Given
@@ -181,7 +181,7 @@ describe('refinementList()', () => {
     }
 
     beforeEach(() => {
-      options = {container, facetName: 'facetName'};
+      options = {container, attributeName: 'facetName'};
       results = {getFacetValues: sinon.stub().returns(['foo', 'bar'])};
       state = {toggleRefinement: sinon.spy()};
       createURL = sinon.spy();
@@ -260,7 +260,7 @@ describe('refinementList()', () => {
   context('toggleRefinement', () => {
     let helper;
     beforeEach(() => {
-      options = {container, facetName: 'facetName'};
+      options = {container, attributeName: 'facetName'};
       helper = {
         toggleRefinement: sinon.stub().returnsThis(),
         search: sinon.spy()
@@ -272,10 +272,10 @@ describe('refinementList()', () => {
       widget = refinementList(options);
 
       // When
-      widget.toggleRefinement(helper, 'facetName', 'facetValue');
+      widget.toggleRefinement(helper, 'attributeName', 'facetValue');
 
       // Then
-      expect(helper.toggleRefinement.calledWith('facetName', 'facetValue'));
+      expect(helper.toggleRefinement.calledWith('attributeName', 'facetValue'));
 
       // Then
     });
@@ -284,7 +284,7 @@ describe('refinementList()', () => {
       widget = refinementList(options);
 
       // When
-      widget.toggleRefinement(helper, 'facetName', 'facetValue');
+      widget.toggleRefinement(helper, 'attributeName', 'facetValue');
 
       // Then
       expect(helper.search.called);

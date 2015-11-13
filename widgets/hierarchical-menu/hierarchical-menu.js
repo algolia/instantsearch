@@ -110,9 +110,9 @@ function hierarchicalMenu({
 
       ReactDOM.render(
         <RefinementList
+          attributeNameKey="path"
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
-          facetNameKey="path"
           facetValues={facetValues}
           limit={limit}
           shouldAutoHideContainer={hasNoFacetValues}
@@ -125,9 +125,9 @@ function hierarchicalMenu({
   };
 }
 
-function toggleRefinement(helper, facetName, facetValue) {
+function toggleRefinement(helper, attributeName, facetValue) {
   helper
-    .toggleRefinement(facetName, facetValue)
+    .toggleRefinement(attributeName, facetValue)
     .search();
 }
 
