@@ -103,14 +103,14 @@ describe('indexSelector()', () => {
     indices.length = 0;
     indices.push({label: 'Label without a name'});
     expect(() => {
-      widget.init(null, helper);
+      widget.init({helper});
     }).toThrow(/Index index-a not present/);
   });
 
   it('must include the current index at initialization time', () => {
     helper.getIndex = sinon.stub().returns('non-existing-index');
     expect(() => {
-      widget.init(null, helper);
+      widget.init({helper});
     }).toThrow(/Index non-existing-index not present/);
   });
 

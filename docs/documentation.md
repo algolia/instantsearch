@@ -1025,7 +1025,7 @@ var mySingletonWidget = {
     };
   },
 
-  init: function(state, helper, templatesConfig) {
+  init: function(options) {
   },
 
   render: function(options) {

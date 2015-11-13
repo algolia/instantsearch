@@ -20,14 +20,14 @@ describe('search-box()', () => {
 
   let ReactDOM;
   let container;
-  let initialState;
+  let state;
   let helper;
   let widget;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     searchBox.__Rewire__('ReactDOM', ReactDOM);
-    initialState = {
+    state = {
       query: ''
     };
     helper = {
@@ -59,13 +59,13 @@ describe('search-box()', () => {
     });
 
     it('adds an input inside the div', () => {
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       let inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       let input = container.getElementsByTagName('input')[0];
       expect(input.getAttribute('autocapitalize')).toEqual('off');
       expect(input.getAttribute('autocomplete')).toEqual('off');
@@ -82,7 +82,7 @@ describe('search-box()', () => {
     it('reuse the existing input', () => {
       container = createHTMLNodeFromString('<input />');
       widget = searchBox({container});
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       expect(container.tagName).toEqual('INPUT');
       expect(container.getAttribute('autocapitalize')).toEqual('off');
       expect(container.getAttribute('autocomplete')).toEqual('off');
@@ -97,7 +97,7 @@ describe('search-box()', () => {
     it('passes HTML attributes', () => {
       container = createHTMLNodeFromString('<input id="foo" class="my-class" placeholder="Search" />');
       widget = searchBox({container});
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       expect(container.getAttribute('id')).toEqual('foo');
       expect(container.getAttribute('class')).toEqual('my-class ais-search-box--input');
       expect(container.getAttribute('placeholder')).toEqual('Search');
@@ -111,7 +111,7 @@ describe('search-box()', () => {
       widget = searchBox({container});
 
       // When
-      widget.init(initialState, helper);
+      widget.init({state, helper});
 
       // Then
       let wrapper = container.querySelectorAll('div.ais-search-box')[0];
@@ -127,7 +127,7 @@ describe('search-box()', () => {
       widget = searchBox({container});
 
       // When
-      widget.init(initialState, helper);
+      widget.init({state, helper});
 
       // Then
       let wrapper = container.parentNode;
@@ -140,7 +140,7 @@ describe('search-box()', () => {
       widget = searchBox({container, wrapInput: false});
 
       // When
-      widget.init(initialState, helper);
+      widget.init({state, helper});
 
       // Then
       let wrapper = container.querySelectorAll('div.ais-search-box');
@@ -157,13 +157,13 @@ describe('search-box()', () => {
 
     it('do not add the poweredBy if not specified', () => {
       widget = searchBox({container});
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       expect(ReactDOM.render.notCalled).toBe(true);
     });
 
     it('add the poweredBy if specified', () => {
       widget = searchBox({container, poweredBy: true});
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       expect(ReactDOM.render.notCalled).toBe(false);
     });
   });
@@ -180,7 +180,7 @@ describe('search-box()', () => {
       // Given
       helper.state.query = 'foo';
       // When
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       // Then
       expect(input.addEventListener.called).toEqual(true);
       expect(input.addEventListener.args[1].length).toEqual(3);
@@ -229,7 +229,7 @@ describe('search-box()', () => {
       // Given
       helper.state.query = 'foo';
       // When
-      widget.init(initialState, helper);
+      widget.init({state, helper});
       // Then
       expect(input.addEventListener.called).toEqual(true);
       expect(input.addEventListener.args[0].length).toEqual(2);
@@ -290,7 +290,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(true);
       });
@@ -299,7 +299,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(false);
       });
@@ -315,7 +315,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(true);
       });
@@ -324,7 +324,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(true);
       });
@@ -340,7 +340,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = '';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(false);
       });
@@ -349,7 +349,7 @@ describe('search-box()', () => {
         // Given
         helper.state.query = 'foo';
         // When
-        widget.init(initialState, helper);
+        widget.init({state, helper});
         // Then
         expect(input.focus.called).toEqual(false);
       });

@@ -45,7 +45,7 @@ function hitsPerPageSelector({
   }
 
   return {
-    init: function(state) {
+    init: function({state}) {
       let isCurrentInOptions = any(options, function(option) {
         return +state.hitsPerPage === +option.value;
       });

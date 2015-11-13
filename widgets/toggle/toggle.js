@@ -30,9 +30,12 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each
+ * label element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each
+ * checkbox element (when using the default template)
+ * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count
+ * element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
  * @param  {string|Function} [options.templates.item] Item template
@@ -79,7 +82,7 @@ function toggle({
     getConfiguration: () => ({
       facets: [facetName]
     }),
-    init: (state, helper) => {
+    init: ({state, helper}) => {
       if (userValues.off === undefined) {
         return;
       }
