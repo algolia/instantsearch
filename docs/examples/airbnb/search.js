@@ -54,7 +54,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#room_types',
-    facetName: 'room_type',
+    attributeName: 'room_type',
     operator: 'or',
     limit: 10
   })

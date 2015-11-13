@@ -84,7 +84,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
-    facetName: 'brand',
+    attributeName: 'brand',
     operator: 'or',
     limit: 10,
     cssClasses: {
@@ -126,7 +126,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#price-range',
-    facetName: 'price_range',
+    attributeName: 'price_range',
     operator: 'and',
     limit: 10,
     cssClasses: {
@@ -148,7 +148,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free-shipping',
-    facetName: 'free_shipping',
+    attributeName: 'free_shipping',
     label: 'Free Shipping',
     cssClasses: {
       header: 'facet-title',
@@ -165,7 +165,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.menu({
     container: '#categories',
-    facetName: 'categories',
+    attributeName: 'categories',
     limit: 10,
     cssClasses: {
       header: 'facet-title',
