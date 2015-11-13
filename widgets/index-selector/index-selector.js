@@ -49,7 +49,7 @@ function indexSelector({
   });
 
   return {
-    init: function(state, helper) {
+    init: function({helper}) {
       let currentIndex = helper.getIndex();
       let isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {

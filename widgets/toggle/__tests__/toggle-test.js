@@ -302,7 +302,7 @@ describe('toggle()', () => {
         };
 
         // When
-        widget.init(state, helper);
+        widget.init({state, helper});
 
         // Then
         expect(helper.addFacetRefinement.calledWith(facetName, 'off')).toBe(true);
@@ -319,7 +319,7 @@ describe('toggle()', () => {
         };
 
         // When
-        widget.init(state, helper);
+        widget.init({state, helper});
 
         // Then
         expect(helper.addFacetRefinement.called).toBe(false);
@@ -333,7 +333,7 @@ describe('toggle()', () => {
         };
 
         // When
-        widget.init(state, helper);
+        widget.init({state, helper});
 
         // Then
         expect(helper.addFacetRefinement.called).toBe(false);

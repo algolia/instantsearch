@@ -106,22 +106,24 @@ describe('hitsPerPageSelector()', () => {
   it('should throw if there is no name attribute in a passed object', () => {
     options.length = 0;
     options.push({label: 'Label without a value'});
-    widget.init(helper.state, helper);
+    widget.init({state: helper.state, helper});
     expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: 20\)/);
+    expect(consoleLog.firstCall.args[0]).
+      toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: 20\)/);
   });
 
   it('must include the current hitsPerPage at initialization time', () => {
     helper.state.hitsPerPage = -1;
-    widget.init(helper.state, helper);
+    widget.init({state: helper.state, helper});
     expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
-    expect(consoleLog.firstCall.args[0]).toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: -1\)/);
+    expect(consoleLog.firstCall.args[0]).
+      toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: -1\)/);
   });
 
   it('should not throw an error if state does not have a `hitsPerPage`', () => {
     delete helper.state.hitsPerPage;
     expect(() => {
-      widget.init(helper.state, helper);
+      widget.init({state: helper.state, helper});
     }).toNotThrow(/No option in `options`/);
   });
 

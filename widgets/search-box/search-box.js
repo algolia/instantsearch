@@ -14,13 +14,15 @@ const KEY_SUPPRESS = 8;
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} [options.placeholder] Input's placeholder
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping div (if `wrapInput` set to `true`)
+ * @param  {string} [options.cssClasses.root] CSS class to add to the
+ * wrapping div (if `wrapInput` set to `true`)
  * @param  {string} [options.cssClasses.input] CSS class to add to the input
  * @param  {string} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
  * @param  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
- * @param  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search once `<Enter>` is pressed only
+ * @param  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * once `<Enter>` is pressed only
  * @return {Object}
  */
 const usage = `Usage:
@@ -106,12 +108,12 @@ function searchBox({
         poweredByContainer
       );
     },
-    init: function(initialState, helper) {
+    init: function({state, helper}) {
       let isInputTargeted = container.tagName === 'INPUT';
       let input = this.getInput();
 
       // Add all the needed attributes and listeners to the input
-      this.addDefaultAttributesToInput(input, initialState.query);
+      this.addDefaultAttributesToInput(input, state.query);
 
       // Keep keyup to handle searchOnEnterKeyPressOnly
       input.addEventListener('keyup', (e) => {
@@ -158,8 +160,8 @@ function searchBox({
       }
 
       // Update value when query change outside of the input
-      helper.on('change', function(state) {
-        if (input !== document.activeElement && input.value !== state.query) {
+      helper.on('change', function(newState) {
+        if (input !== document.activeElement && input.value !== newState.query) {
           input.value = state.query;
         }
       });
