@@ -61,7 +61,6 @@ code
     position: relative
   .sticker
     +size(60px,60px)
-    line-height: 58px
     margin: 0 auto
     border-radius: 50%
     opacity: 0
@@ -79,11 +78,9 @@ code
       top: 50%
       left: 50%
       transform: translate(-50%, -50%)
-      margin-top: -2px
   .sticker-algolia
     animation-delay: 0.5s
-    img
-      margin-top: -4px
+    margin-top: -2px
   .sticker-open-source
     animation-delay: 1s
   .sticker-ux
@@ -154,6 +151,11 @@ code
       border: 1px solid darken(#f3f3f3, 7%)
       color: $text-color
       font-weight: bold
+  .version
+    font-size: .9em
+    margin-top: 2em
+    strong
+      color: white
 
 .widget-icon
   margin: 4px 20px 20px 0
