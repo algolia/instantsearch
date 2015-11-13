@@ -4,6 +4,7 @@
 
 $white: #FFFFFF;
 $airbnb-red: #FF585B;
+$airbnb-gray: #C4C4C4;
 $airbnb-gray-light: #DCE0E0;
 $airbnb-gray-lighter: #EDEFED;
 $airbnb-text-color: #565A5C;
@@ -172,6 +173,30 @@ nav {
 
 #main {
   max-width: 1280px;
+}
+
+#guests {
+  .ais-numeric-selector {
+    position: relative;
+    appearance: none;
+    background: inherit;
+    width: 100%;
+    border: 1px solid $airbnb-gray;
+    height: 34px;
+    padding: 8px 10px;
+    &:focus {
+      outline: none;
+    }
+    &:after {
+      position: absolute;
+      content: '\25bc';
+      color: #82888a;
+      top: 0;
+      right: 0;
+      width: 2em;
+      text-align: center;
+    }
+  }
 }
 
 #pagination {

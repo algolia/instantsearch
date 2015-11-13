@@ -236,4 +236,17 @@ search.addWidget(
   })
 );
 
+search.addWidget(
+  instantsearch.widgets.numericSelector({
+    container: '#popularity-selector',
+    attributeName: 'popularity',
+    options: [
+      { label: 'Select a value', value: undefined },
+      { label: '1st', value: 1 },
+      { label: '2nd', value: 2 },
+      { label: '3rd', value: 3 }
+    ]
+  })
+);
+
 search.start();
