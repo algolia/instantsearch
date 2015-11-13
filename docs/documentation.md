@@ -947,19 +947,19 @@ instantsearch.widgets.clearAll(options);
 
 ### Sort
 
-#### indexSelector
+#### sortBySelector
 
 <div class="codebox-combo">
 
 <img class="widget-icon pull-left" src="../img/icon-widget-index.svg">
-This widget lets you select which index you want to use for the search. Since Algolia uses slave indices to deal with the different sort orders of a single dataset, this widget is particularly useful to switch between those sort orders.
+This widget lets you change the sort order by letting you select which index you want to use for the search. That's the right way to go to switch between your slave indices.
 {:.description}
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet">
 {% highlight javascript %}
 search.addWidget(
-  instantsearch.widgets.indexSelector({
+  instantsearch.widgets.sortBySelector({
     container: '#index-selector-container',
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
@@ -976,9 +976,9 @@ search.addWidget(
   </div>
   <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 {% highlight javascript %}
-instantsearch.widgets.indexSelector(options);
+instantsearch.widgets.sortBySelector(options);
 {% endhighlight %}
-{% include widget-jsdoc/indexSelector.md %}
+{% include widget-jsdoc/sortBySelector.md %}
   </div>
   <div class="requirements js-toggle-requirements">
 You need to create slave indices for every sort order you need, and
