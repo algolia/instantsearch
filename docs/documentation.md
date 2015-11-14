@@ -854,6 +854,56 @@ instantsearch.widgets.numericSelector(options);
 
 <div id="popularity-selector" class="widget-container"></div>
 
+#### starRating
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
+This filtering widget lets the user refine by a number of stars. The underlying rating attribute needs to have from 0 to `max` stars.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.starRating({
+    container: '#stars',
+    attributeName: 'price',
+    max: 5,
+    labels: {
+      andUp: '& Up'
+    },
+    cssClasses: {
+      root: '',
+      header: '',
+      body: '',
+      footer: '',
+      list: '',
+      item: '',
+      active: '',
+      link: '',
+      disabledLink: '',
+      star: '',
+      emptyStar: '',
+      active: ''
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.starRating(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/starRating.md %}
+  </div>
+</div>
+
+</div>
+
+<div id="stars" class="widget-container"></div>
+
 #### clearAll
 
 <div class="codebox-combo">

@@ -19,7 +19,7 @@
 @mixin bem($block, $element, $modifier: "") {
   @include block($block) {
     @include element($element) {
-      @if $element != "" {
+      @if $modifier != "" {
         @include modifier($modifier) {
           @content;
         }
