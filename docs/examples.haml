@@ -5,29 +5,56 @@ permalink: /examples/
 ---
 
 .hero
-  %h1.text-center Examples
+  %h1.text-center Check out our examples!
 
 .spacer40
 .container
-  .row
-    .col-sm-8.col-sm-push-2
-      %p.lead <strong>Instantsearch.js</strong> allows you to customize the appearance of your widgets very easily.
-      %p.lead Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem, illum praesentium quae, ipsa sint similique quas mollitia voluptatum cumque excepturi amet dolorem dicta minus voluptate vel impedit.
+  .m800.m-l-r-auto
+    %p.lead <strong>Instantsearch.js</strong> allows you to customize the appearance of your widgets very easily.
+    %p.lead Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem, illum praesentium quae, ipsa sint similique quas mollitia voluptatum cumque excepturi amet dolorem dicta minus voluptate vel impedit.
+    .spacer40
+    .demo-item.clearfix
+      %a{href: '{{ "/examples/youtube/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/youtube/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a{href: '{{ "/examples/youtube/" | prepend: site.baseurl }}'}
+        %h3 Media
+      %p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem.
+      .built-with
+        %img.widget-icon{src:"../img/icon-widget-searchbox.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-results.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-stats.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-pagination.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-refinement.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-slider.svg", width:30}
+      %a{href: '{{ "/examples/youtube.zip" | prepend: site.baseurl }}'} View/download source code
 
-  .spacer40
-  %h2.text-center Check out our examples!
-  .row.text-center
-    .col-sm-4
-      %h3 Youtube
-      %img.m-b.img-responsive.img-thumbnail{src: "{{ "/examples/youtube/capture.png" | prepend: site.baseurl }}"}
-      %a.btn.btn-default.primary-btn{href: '{{ "/examples/youtube/" | prepend: site.baseurl }}'} Live Preview
+    .spacer40
+    .demo-item.clearfix
+      %a{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/amazon/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}'}
+        %h3 Ecommerce
+      %p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem.
+      .built-with
+        %img.widget-icon{src:"../img/icon-widget-searchbox.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-results.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-stats.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-clearall.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-index.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-pagination.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-hierarchical.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-refinement.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-pricerange.svg", width:30}
+      %a{href: '{{ "/examples/amazon.zip" | prepend: site.baseurl }}'} View/download source code
 
-    .col-sm-4
-      %h3 Amazon
-      %img.m-b.img-responsive.img-thumbnail{src:"http://placehold.it/600x400"}
-      %a.btn.btn-default.primary-btn{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}'} Live Preview
-
-    .col-sm-4
-      %h3 Airbnb
-      %img.m-b.img-responsive.img-thumbnail{src: "{{ "/examples/airbnb/capture.png" | prepend: site.baseurl }}"}
-      %a.btn.btn-default.primary-btn{href: '{{ "/examples/airbnb/" | prepend: site.baseurl }}'} Live Preview
+    .spacer40
+    .demo-item.clearfix
+      %a{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/airbnb/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a{href: '{{ "/examples/amazon/" | prepend: site.baseurl }}'}
+        %h3 Tourism
+      %p Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad.
+      .built-with
+        %img.widget-icon{src:"../img/icon-widget-searchbox.svg", width:30}
+        %img.widget-icon{src:"../img/icon-widget-custom.svg", width:30}
+      %a{href: '{{ "/examples/airbnb.zip" | prepend: site.baseurl }}'} View/download source code
