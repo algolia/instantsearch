@@ -11226,8 +11226,8 @@
       "resolved": "https://registry.npmjs.org/raw-loader/-/raw-loader-0.5.1.tgz"
     },
     "react": {
-      "version": "0.14.1",
-      "resolved": "https://registry.npmjs.org/react/-/react-0.14.1.tgz",
+      "version": "0.14.2",
+      "resolved": "https://registry.npmjs.org/react/-/react-0.14.2.tgz",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
@@ -11268,8 +11268,8 @@
           "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.3.2.tgz",
           "dependencies": {
             "core-js": {
-              "version": "1.2.5",
-              "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.5.tgz"
+              "version": "1.2.6",
+              "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.6.tgz"
             },
             "loose-envify": {
               "version": "1.1.0",
@@ -11304,12 +11304,12 @@
       }
     },
     "react-addons-test-utils": {
-      "version": "0.14.1",
-      "resolved": "https://registry.npmjs.org/react-addons-test-utils/-/react-addons-test-utils-0.14.1.tgz"
+      "version": "0.14.2",
+      "resolved": "https://registry.npmjs.org/react-addons-test-utils/-/react-addons-test-utils-0.14.2.tgz"
     },
     "react-dom": {
-      "version": "0.14.1",
-      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.1.tgz"
+      "version": "0.14.2",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.2.tgz"
     },
     "react-nouislider": {
       "version": "1.5.2",
