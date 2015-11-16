@@ -10,7 +10,7 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
- * @function indexSelector
+ * @function sortBySelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {string} options.indices[0].name Name of the index to target
@@ -22,13 +22,13 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @return {Object}
  */
 const usage = `Usage:
-indexSelector({
+sortBySelector({
   container,
   indices,
   [cssClasses.{root,item}={}],
   [autoHideContainer=false]
 })`;
-function indexSelector({
+function sortBySelector({
     container,
     indices,
     cssClasses: userCssClasses = {},
@@ -53,7 +53,7 @@ function indexSelector({
       let currentIndex = helper.getIndex();
       let isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {
-        throw new Error('[indexSelector]: Index ' + currentIndex + ' not present in `indices`');
+        throw new Error('[sortBySelector]: Index ' + currentIndex + ' not present in `indices`');
       }
     },
 
@@ -85,4 +85,4 @@ function indexSelector({
   };
 }
 
-module.exports = indexSelector;
+module.exports = sortBySelector;

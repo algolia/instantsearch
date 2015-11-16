@@ -5,7 +5,7 @@ import jsdom from 'mocha-jsdom';
 
 import menu from '../menu';
 
-describe('indexSelector call', () => {
+describe('menu', () => {
   jsdom({useEach: true});
 
   it('throws an exception when no attributeName', () => {

@@ -8,24 +8,24 @@ import jsdom from 'mocha-jsdom';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-import indexSelector from '../index-selector';
+import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
-describe('indexSelector call', () => {
+describe('sortBySelector call', () => {
   jsdom({useEach: true});
 
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
-    expect(indexSelector.bind(null, {container})).toThrow(/^Usage/);
+    expect(sortBySelector.bind(null, {container})).toThrow(/^Usage/);
   });
 
   it('throws an exception when no indices', () => {
     const indices = [];
-    expect(indexSelector.bind(null, {indices})).toThrow(/^Usage/);
+    expect(sortBySelector.bind(null, {indices})).toThrow(/^Usage/);
   });
 });
 
-describe('indexSelector()', () => {
+describe('sortBySelector()', () => {
   jsdom({useEach: true});
 
   let ReactDOM;
@@ -42,8 +42,8 @@ describe('indexSelector()', () => {
     autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = {render: sinon.spy()};
 
-    indexSelector.__Rewire__('ReactDOM', ReactDOM);
-    indexSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
+    sortBySelector.__Rewire__('ReactDOM', ReactDOM);
+    sortBySelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
     indices = [
@@ -54,7 +54,7 @@ describe('indexSelector()', () => {
       root: 'custom-root',
       item: 'custom-item'
     };
-    widget = indexSelector({container, indices, cssClasses});
+    widget = sortBySelector({container, indices, cssClasses});
     helper = {
       getIndex: sinon.stub().returns('index-a'),
       setIndex: sinon.spy(),
@@ -115,7 +115,7 @@ describe('indexSelector()', () => {
   });
 
   afterEach(() => {
-    indexSelector.__ResetDependency__('ReactDOM');
-    indexSelector.__ResetDependency__('autoHideContainerHOC');
+    sortBySelector.__ResetDependency__('ReactDOM');
+    sortBySelector.__ResetDependency__('autoHideContainerHOC');
   });
 });

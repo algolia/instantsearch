@@ -164,7 +164,7 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.indexSelector({
+  instantsearch.widgets.sortBySelector({
     container: '#index-selector',
     indices: [
       {name: 'ikea', label: 'Featured'},
