@@ -12,7 +12,7 @@ noFooter: true
 <div class="shameless-marketing text-center hidden-xs">
 <img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
 <div class="lead">
-  <p>Build the perfect UI with Instantsearch.js,<br>an extensive library of widgets for search experience.</p>
+  <p>Build the perfect UI with instantsearch.js,<br>an extensive library of widgets for search experience.</p>
   <p class="version">Version: <strong>{{ site.version }}</strong></p>
 </div>
 <div class="spacer40"></div>
@@ -1188,7 +1188,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis 
 
 ### Custom Themes
 
-All widgets have been designed to be heavily stylizable with CSS rules. **Instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
+All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 
 We're using [BEM](http://getbem.com/introduction/), a methodology that helps you to achieve reusable components and code sharing in the front-end.
 

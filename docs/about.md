@@ -4,7 +4,7 @@ title: About instantsearch.js
 permalink: /about/
 ---
 
-**Instantsearch.js** is an open source project developed and maintained by [Algolia](https://www.algolia.com) [on github](https://github.com/algolia/instantsearch.js) and released under MIT license. Our mission has always been to help developers implement great search experiences in no time. We started by focusing our efforts on the speed and relevance of the search engine itself, and we quickly discovered that querying the engine from the frontend was important – end users crave Google- and Amazon-like experiences: fast and relevant search results pages which do not require page reloads.
+**instantsearch.js** is an open source project developed and maintained by [Algolia](https://www.algolia.com) [on github](https://github.com/algolia/instantsearch.js) and released under MIT license. Our mission has always been to help developers implement great search experiences in no time. We started by focusing our efforts on the speed and relevance of the search engine itself, and we quickly discovered that querying the engine from the frontend was important – end users crave Google- and Amazon-like experiences: fast and relevant search results pages which do not require page reloads.
 
 We dedicated all our energy to developing a product that could be used directly from the frontend, without compromising on required security features. For example [secured API Keys](https://www.algolia.com/doc/ruby#secured-api-keys) allow us to replicate on the frontend all the restriction enforcements we take for granted on the backend. Unfortunately, we also discovered that implementing the UI itself is complex and time consuming because of tricky issues such as handling refinement states, updating the URL, etc...
 
