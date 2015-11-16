@@ -71,7 +71,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.starRating({
     container: '#ratings',
-    facetName: 'rating',
+    attributeName: 'rating',
     cssClasses: {
       list: 'nav',
       count: 'badge pull-right'

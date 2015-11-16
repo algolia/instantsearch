@@ -4,7 +4,7 @@ let ReactDOM = require('react-dom');
 let findIndex = require('lodash/array/findIndex');
 let map = require('lodash/collection/map');
 let utils = require('../../lib/utils.js');
-let bem = utils.bemHelper('ais-index-selector');
+let bem = utils.bemHelper('ais-sort-by-selector');
 let cx = require('classnames');
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 

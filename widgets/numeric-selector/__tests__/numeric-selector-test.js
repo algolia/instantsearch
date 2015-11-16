@@ -19,7 +19,7 @@ describe('numericSelector()', () => {
   let options;
   let cssClasses;
   let widget;
-  let props;
+  let expectedProps;
   let helper;
   let results;
   let autoHideContainer;
@@ -41,6 +41,19 @@ describe('numericSelector()', () => {
       item: 'custom-item'
     };
     widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
+    expectedProps = {
+      cssClasses: {
+        root: 'ais-numeric-selector custom-root',
+        item: 'ais-numeric-selector--item custom-item'
+      },
+      currentValue: undefined,
+      shouldAutoHideContainer: true,
+      options: [
+        {value: 1, label: 'first'},
+        {value: 2, label: 'second'}
+      ],
+      setValue: () => {}
+    };
     helper = {
       addNumericRefinement: sinon.spy(),
       clearRefinements: sinon.spy(),
@@ -60,24 +73,22 @@ describe('numericSelector()', () => {
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
     widget.render({helper, results, state: helper.state});
     widget.render({helper, results, state: helper.state});
-    props = {
-      cssClasses: {
-        root: 'ais-numeric-selector custom-root',
-        item: 'ais-numeric-selector--item custom-item'
-      },
-      currentValue: undefined,
-      shouldAutoHideContainer: true,
-      options: [
-        {value: 1, label: 'first'},
-        {value: 2, label: 'second'}
-      ],
-      setValue: () => {}
-    };
+
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+  });
+
+  it('computes refined values and pass them to <Selector props />', () => {
+    helper.getRefinements = sinon.stub().returns([{
+      operator: '=',
+      value: [20]
+    }]);
+    expectedProps.currentValue = 20;
+    widget.render({helper, results, state: helper.state});
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
   });
 
   it('sets the underlying numeric refinement', () => {

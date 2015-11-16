@@ -12,7 +12,7 @@ noFooter: true
 <div class="shameless-marketing text-center hidden-xs">
 <img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
 <div class="lead">
-  <p>Build the perfect UI with Instantsearch.js,<br>an extensive library of widgets for search experience.</p>
+  <p>Build the perfect UI with instantsearch.js,<br>an extensive library of widgets for search experience.</p>
   <p class="version">Version: <strong>{{ site.version }}</strong></p>
 </div>
 <div class="spacer40"></div>
@@ -618,40 +618,40 @@ This filtering widget lets the user choose one value for a single numeric attrib
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet">
-{% highlight javascript %}
-search.addWidget(
-  instantsearch.widgets.numericRefinementList({
-    container: '#popularity',
-    attributeName: 'popularity',
-    options: [
-	  {name: 'All'},
-	  {end: 4, name: 'less than 4'},
-	  {start: 4, end: 4, name: '4'},
-	  {start: 5, end: 10, name: 'between 5 and 10'},
-	  {start: 10, name: 'more than 10'}
-    ],
-    templates: {
-      header: 'Price'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      link: '',
-      active: ''
-    }
-  })
-);
-{% endhighlight %}
+    {% highlight javascript %}
+    search.addWidget(
+      instantsearch.widgets.numericRefinementList({
+        container: '#popularity',
+        attributeName: 'popularity',
+        options: [
+        {name: 'All'},
+        {end: 4, name: 'less than 4'},
+        {start: 4, end: 4, name: '4'},
+        {start: 5, end: 10, name: 'between 5 and 10'},
+        {start: 10, name: 'more than 10'}
+        ],
+        templates: {
+          header: 'Price'
+        },
+        cssClasses: {
+          root: '',
+          header: '',
+          body: '',
+          footer: '',
+          list: '',
+          link: '',
+          active: ''
+        }
+      })
+    );
+    {% endhighlight %}
   </div>
   <div class="jsdoc js-toggle-jsdoc" style='display:none'>
-{% highlight javascript %}
-instantsearch.widgets.numericRefinementList(options);
-{% endhighlight %}
+    {% highlight javascript %}
+    instantsearch.widgets.numericRefinementList(options);
+    {% endhighlight %}
 
-{% include widget-jsdoc/numericRefinementList.md %}
+    {% include widget-jsdoc/numericRefinementList.md %}
   </div>
 </div>
 
@@ -829,11 +829,11 @@ search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
     attributeName: 'popularity',
-    operator: '<=',
+    operator: '>=',
     options: [
-      { label: 'Top 1', value: 1 },
-      { label: 'Top 10', value: 10 },
-      { label: 'Top 100', value: 100 }
+      { label: 'Top 10', value: 9900 },
+      { label: 'Top 100', value: 9800 },
+      { label: 'Top 500', value: 9700 }
     ],
     cssClasses: {
       root: '',
@@ -860,7 +860,7 @@ instantsearch.widgets.numericSelector(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-star-rating.svg">
 This filtering widget lets the user refine by a number of stars. The underlying rating attribute needs to have from 0 to `max` stars.
 {:.description}
 
@@ -962,7 +962,7 @@ This widget lets you change the sort order by letting you select which index you
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.sortBySelector({
-    container: '#index-selector-container',
+    container: '#sort-by-selector-container',
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
@@ -992,7 +992,7 @@ page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-result
 
 </div>
 
-<div id="index-selector-container" class="widget-container"></div>
+<div id="sort-by-selector-container" class="widget-container"></div>
 
 ### Information display
 
@@ -1035,12 +1035,9 @@ instantsearch.widgets.stats(options);
 
 ## Templates
 
-Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data.
-
-See the documentation of each widget to see which data is passed to the template.
-
-### Examples
-
+<div class="codebox-combo">
+<div class="code-box">
+  <div class="code-sample-snippet">
 {% highlight javascript %}
 // Mustache template example
 search.addWidget(
@@ -1065,8 +1062,36 @@ search.addWidget(
   })
 );
 {% endhighlight %}
+  </div>
+</div>
+
+Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data.
+
+See the documentation of each widget to see which data is passed to the template.
+
+</div>
 
 ### Helpers
+
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
+  <!-- <strong class="text-white">Here is the syntax of a helper</strong> -->
+{% highlight javascript %}
+search.templatesConfig.helpers.emphasis = function(text, render) {
+  return '<em>' + render(text) + '</em>';
+};
+{% endhighlight %}
+  </div>
+  <div class="code-sample-snippet ignore">
+  <strong class="text-white">In your helper, `this` always refers to the data</strong>
+{% highlight javascript %}
+search.templatesConfig.helpers.discount = function(/*text, render*/) {
+  var discount = this.price * 0.3;
+  return '$ -' + discount;
+};
+{% endhighlight %}
+  </div>
+</div>
 
 In order to help you when defining your templates, **instantsearch.js** exposes a few helpers.
 
@@ -1074,34 +1099,13 @@ All helpers are accessible in the Mustache templating through `{% raw %}{{#helpe
 
 Here is the list of the currently available helpers:
 
-- `formatNumber`: Will accept a number as input and returned the formatted
-  version of the number in the locale defined with the `numberLocale` config
-  option (defaults to `en-EN`).
-  eg. `100000` will be formatted as `100 000` with `en-EN`
+`formatNumber`: Will accept a number as input and returned the formatted version of the number in the locale defined with the `numberLocale` config option (defaults to `en-EN`). eg. `100000` will be formatted as `100 000` with `en-EN`
 
-Here is the syntax of a helper:
-
-{% highlight javascript %}
-search.templatesConfig.helpers.emphasis = function(text, render) {
-  return '<em>' + render(text) + '</em>';
-};
-{% endhighlight %}
-
-In your helper, `this` always refers to the data:
-
-{% highlight javascript %}
-search.templatesConfig.helpers.discount = function(/*text, render*/) {
-  var discount = this.price * 0.3;
-  return '$ -' + discount;
-};
-{% endhighlight %}
 
 ### Options
 
-You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
-
-Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
-
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
 {% highlight javascript %}
 var search = instantsearch({
   appId: '',
@@ -1114,23 +1118,19 @@ var search = instantsearch({
   }
 });
 {% endhighlight %}
+  </div>
+</div>
+
+You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
+
+Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
+
 
 ## Customize
 
 ### Custom Widgets
 
-**instantsearch.js** has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:
-
- * `getConfiguration()`: configures the underlying AlgoliaSearch JS Helper,
- * `init()`: called once after the initialization,
- * `render()`: called as soon as the underlying state has changed.
-
 <div class="codebox-combo">
-
-The widgets API is agnostic. In the built-in widgets, we use [VanillaJS](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-for simple widgets such as the searchBox and for the most advanced, we use
-[ReactJS](https://facebook.github.io/react://facebook.github.io/react/).
-If your code base is relying on an other framework, feel free to use it to create your own widget!
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -1151,8 +1151,8 @@ var mySingletonWidget = {
 search.addWidget(mySingletonWidget);
 {% endhighlight %}
 
-</div>
-<div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  </div>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 
 {% highlight javascript %}
 search.addWidget(widget)
@@ -1172,7 +1172,21 @@ The widget may implement some of the following methods (depending on the need of
     - createURL: function provided to create urls
 
   </div>
-</div></div>
+</div>
+
+
+**instantsearch.js** has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:
+
+ * `getConfiguration()`: configures the underlying AlgoliaSearch JS Helper,
+ * `init()`: called once after the initialization,
+ * `render()`: called as soon as the underlying state has changed.
+
+The widgets API is agnostic. In the built-in widgets, we use [VanillaJS](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+for simple widgets such as the searchBox and for the most advanced, we use
+[ReactJS](https://facebook.github.io/react://facebook.github.io/react/).
+If your code base is relying on an other framework, feel free to use it to create your own widget!
+
+</div>
 
 
 
@@ -1188,7 +1202,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti perspiciatis 
 
 ### Custom Themes
 
-All widgets have been designed to be heavily stylizable with CSS rules. **Instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
+All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 
 We're using [BEM](http://getbem.com/introduction/), a methodology that helps you to achieve reusable components and code sharing in the front-end.
 
@@ -1272,3 +1286,4 @@ If you want to style the **search-box** widget, you can do:
 </div>
 </div>
 </div>
+

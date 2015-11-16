@@ -61,7 +61,7 @@ describe('refinementList()', () => {
 
   context('autoHideContainer', () => {
     beforeEach(() => {
-      options = {container, attributeName: 'facetName'};
+      options = {container, attributeName: 'attributeName'};
     });
     it('should be called if autoHideContainer set to true', () => {
       // Given
@@ -87,7 +87,7 @@ describe('refinementList()', () => {
 
   context('operator', () => {
     beforeEach(() => {
-      options = {container, attributeName: 'facetName'};
+      options = {container, attributeName: 'attributeName'};
     });
     it('should accept [and, or, AND, OR]', () => {
       expect(() => {
@@ -181,7 +181,7 @@ describe('refinementList()', () => {
     }
 
     beforeEach(() => {
-      options = {container, attributeName: 'facetName'};
+      options = {container, attributeName: 'attributeName'};
       results = {getFacetValues: sinon.stub().returns(['foo', 'bar'])};
       state = {toggleRefinement: sinon.spy()};
       createURL = sinon.spy();
@@ -260,7 +260,7 @@ describe('refinementList()', () => {
   context('toggleRefinement', () => {
     let helper;
     beforeEach(() => {
-      options = {container, attributeName: 'facetName'};
+      options = {container, attributeName: 'attributeName'};
       helper = {
         toggleRefinement: sinon.stub().returnsThis(),
         search: sinon.spy()
