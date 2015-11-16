@@ -66,7 +66,7 @@ var search = instantsearch({
   }
 });
 
-// add a search box widget
+// add a searchBox widget
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',

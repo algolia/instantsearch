@@ -27,7 +27,7 @@ Built on top of <a href="https://www.algolia.com">Algolia Search API</a>
 <div class="sticker sticker-open-source">
 <img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
 </div>
-Driven by community and available on  <a href="http://github.com/algolia/instantsearch.js">Github</a>
+Community driven and available on  <a href="http://github.com/algolia/instantsearch.js">Github</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-ux">
@@ -40,11 +40,11 @@ UI/UX Best practices
 
 **instantsearch.js** is a JavaScript library that lets you create an instant search results page using Algolia's REST API.
 
-Everything is about adding the meaningful widgets to compose the final search results page. Widgets are the UI components that will either deal with the input of the search (like the search bar or the facets/filters over attributes) or the output (like the actual results or some meta information about the search).
+The final search results page is ultimately made up of individual components or widgets. Widgets are UI components that deal with either the search input (like the search bar or facets/filters) or the search output (like the actual results).
 
-Each widget is independent and their rendering is bound to the search. They follow the **instantsearch.js** lifecycle:
+Each widget is independent, and their rendering is bound to the search. They follow the **instantsearch.js** lifecycle:
 
-  - **Configuration**: each widget add new query parameters to the underlying Algolia API client.
+  - **Configuration**: each widget adds new query parameters to the underlying Algolia API client.
   - **Initial rendering**: before the initial search, the widget may update the UI.
   - **Rendering**: on each search, after the results come back from Algolia, the widgets update themselves.
 
@@ -101,7 +101,7 @@ var instantsearch = require('instantsearch.js');
 
 <div class="codebox-combo">
 
-To initialize the **instantsearch.js** library you need an Algolia account with a configured & non-empty index. You'll find your Algolia credentials on the [credentials page of your dashboard](https://www.algolia.com/licensing). Use the **APPLICATION\_ID** `appId`, the **search only API\_KEY** `apiKey` and an index name `indexName` as the required parameters of the `instantsearch` function.
+To initialize the **instantsearch.js** library, you need an Algolia account with a configured and non-empty index. You'll find your Algolia credentials on the [credentials page of your dashboard](https://www.algolia.com/licensing). Use the **APPLICATION\_ID** `appId`, the **search only API\_KEY** `apiKey` and an index name `indexName` to configure the required parameters of the `instantsearch` function.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet config">
@@ -128,7 +128,7 @@ the index.
 
 </div>
 
-If you don't have any index yet, learn how to push your data with our [getting started guide](https://www.algolia.com/getstarted).
+If you don't have any indices yet, learn how to push your data with the [Algolia getting started guide](https://www.algolia.com/getstarted).
 
 We also expose a few options that can be used to configure the default and initial behavior of the instantsearch instance.
 
@@ -136,7 +136,7 @@ We also expose a few options that can be used to configure the default and initi
 
 <div class="codebox-combo">
 
-To build your search result page, you need to combine widgets together. Widgets are simple objects which hold the handler to part of the instant search lifecycle. Start by adding a `searchBox` widget, a `hits` widget and a `pagination` widget to build a fundamental results page.
+To build your search results page, you need to combine widgets together. Widgets are simple objects which hold the handler to part of the instant search lifecycle. Start by adding a `searchBox` widget, a `hits` widget and a `pagination` widget to build a fundamental results page.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -166,9 +166,9 @@ search.addWidget(widget)
 
 </div>
 
-Most widgets requires you to configure the DOM element they will use to display themselves.
+Most widgets require you to configure the DOM element they will use to display themselves.
 
-**instantsearch.js** comes with [built-in widgets](#widgets) but you can also build your [own custom widgets](#custom-widgets).
+**instantsearch.js** comes with [built-in widgets](#widgets), but you can also build your [own custom widgets](#custom-widgets).
 
 ### Start
 
@@ -190,7 +190,7 @@ search.start();
 
 <div class="codebox-combo">
 
-This example shows you how to create a very simple search results page with a search box, a list of hits and a pagination widget.
+This example shows you how to create a very simple search results page with a searchBox, a list of hits and a pagination widget.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
