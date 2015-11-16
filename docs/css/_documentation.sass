@@ -1,3 +1,5 @@
+$header-nav-spacing: 50px
+
 code
   word-wrap: break-word
 
@@ -10,7 +12,7 @@ code
   font-weight: lighter
   background-color: $gray-light
   position: fixed
-  +position(60px,null,0,0)
+  +position($header-nav-spacing, null, 0, 0)
 
 .documentation-menu
   height: 100%
@@ -48,7 +50,7 @@ code
 
 .main-documentation
   height: 100%
-  padding-top: 50px
+  padding-top: $header-nav-spacing
   .description
     min-height: 84px
 
@@ -396,7 +398,7 @@ code
     font-size: .95em
   .toc-menu
     position: fixed
-    top: 60
+    top: $header-nav-spacing
     left: 0
     width: 100%
     background: $gray-light
