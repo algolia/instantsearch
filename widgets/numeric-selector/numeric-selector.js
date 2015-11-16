@@ -81,7 +81,10 @@ function numericSelector({
 
     _getRefinedValue: function(helper) {
       const refinements = helper.getRefinements(attributeName);
-      return find(refinements, {operator});
+      const refinedValue = find(refinements, {operator});
+      return refinedValue &&
+        refinedValue.value !== undefined &&
+        refinedValue.value[0] !== undefined ? refinedValue.value[0] : undefined;
     }
   };
 }
