@@ -10,7 +10,9 @@
 
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
     {% if site.env == 'development' %}
-      <link rel="stylesheet" href="//localhost:8080/instantsearch.css" />
+      <script id="dev-build-css">
+        document.write('<link rel="stylesheet" href="http://' + window.location.hostname +':8080/instantsearch.css">');
+      </script>
     {% else %}
       <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
     {% endif %}
@@ -48,7 +50,9 @@
 
 {% if site.env == 'development' %}
     <!-- <script src="//cdn.jsdelivr.net/scrollmagic/2.0.5/plugins/debug.addIndicators.min.js"></script> -->
-    <script src="//localhost:35730/livereload.js"></script>
+    <script>
+      document.write('\x3Cscript src="http://' + window.location.hostname +':35730/livereload.js">\x3C/script>');
+    </script>
 {% endif %}
 
   {% include marketing.html %}

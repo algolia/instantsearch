@@ -4,6 +4,7 @@ description: instantsearch.js is a library of widgets to build high performance 
 baseurl: "/instantsearch.js" # the subpath of your site, e.g. /blog/
 twitter_username: algolia
 github_username: algolia
+host: 0.0.0.0
 
 # Navigation
 navigation:
