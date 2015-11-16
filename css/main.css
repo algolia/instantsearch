@@ -4076,7 +4076,6 @@ code {
   .shameless-marketing .sticker {
     width: 60px;
     height: 60px;
-    line-height: 58px;
     margin: 0 auto;
     border-radius: 50%;
     opacity: 0;
@@ -4093,12 +4092,10 @@ code {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      margin-top: -2px; }
+      transform: translate(-50%, -50%); }
   .shameless-marketing .sticker-algolia {
-    animation-delay: 0.5s; }
-    .shameless-marketing .sticker-algolia img {
-      margin-top: -4px; }
+    animation-delay: 0.5s;
+    margin-top: -2px; }
   .shameless-marketing .sticker-open-source {
     animation-delay: 1s; }
   .shameless-marketing .sticker-ux {
@@ -4165,6 +4162,11 @@ code {
     border: 1px solid #e1e1e1;
     color: rgba(0, 0, 0, 0.75);
     font-weight: bold; }
+  .documentation-content .version {
+    font-size: 0.9em;
+    margin-top: 2em; }
+    .documentation-content .version strong {
+      color: white; }
 
 .widget-icon {
   margin: 4px 20px 20px 0; }
@@ -4435,6 +4437,77 @@ code {
   .highlight pre {
     margin: 0;
     border-radius: 0; } }
+.search-form {
+  margin-top: 12px;
+  width: 300px; }
+  .search-form input {
+    border-radius: 0;
+    line-height: 2.5em;
+    padding: 0 5px; }
+    .search-form input:focus, .search-form input:active {
+      outline: none; }
+  .search-form .aa-dropdown-menu {
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #0D1D30;
+    color: rgba(0, 0, 0, 0.75);
+    font-size: 14px;
+    margin: 2px 0 0;
+    left: -230px !important;
+    padding: 4px;
+    text-align: left;
+    width: 510px; }
+    .search-form .aa-dropdown-menu em {
+      font-style: normal; }
+  .search-form .suggestion-category {
+    background-color: #0D1D30;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    text-align: left; }
+    .search-form .suggestion-category em {
+      color: #b7cfeb; }
+  .search-form .suggestion {
+    display: table;
+    width: 100%; }
+  .search-form .suggestion-subcategory-main {
+    background-color: #234d80;
+    border-right: 1px solid #0D1D30;
+    color: white;
+    display: table-cell;
+    max-width: 150px;
+    min-width: 150px;
+    overflow: hidden;
+    padding: 5px 7px 5px 5px;
+    text-align: right;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    width: 150px; }
+    .search-form .suggestion-subcategory-main em {
+      color: #b7cfeb; }
+    .search-form .suggestion-subcategory-main code {
+      color: rgba(0, 0, 0, 0.75); }
+  .search-form .suggestion-content {
+    border-bottom: 1px solid #b7cfeb;
+    cursor: pointer;
+    display: table-cell;
+    padding: 5px 10px; }
+    .search-form .suggestion-content em {
+      background-color: #b7cfeb; }
+  .search-form .suggestion-title {
+    font-weight: bold; }
+  .search-form .suggestion-text {
+    font-size: 0.8em;
+    line-height: 1.5em; }
+  .search-form .aa-cursor .suggestion-title,
+  .search-form .aa-cursor .suggestion-text,
+  .search-form .aa-cursor .suggestion-title code,
+  .search-form .aa-cursor .suggestion-title em {
+    color: #1D96C7; }
+
 footer.site-footer {
   padding-top: 2em;
   margin-top: 0;

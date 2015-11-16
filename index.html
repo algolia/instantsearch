@@ -33,10 +33,15 @@
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          
-          <li class="visible-xs active">
-            <a href="/instantsearch.js/" title="Home">Home</a>
+          <li>
+            <form class="form search-form" action="#">
+              <div class="input-group">
+                <input class="form-control" type="text" id="doc-search" />
+                <span class="input-group-addon text-lg">&#128270;</span>
+              </div>
+            </form>
           </li>
+          
           
             <li >
               <a href="/instantsearch.js/documentation/" title="">Documentation</a>
@@ -256,7 +261,7 @@
   </p>
   <div class="spacer50"></div>
   <ul class="list-inline">
-    <li>Currently v0.14.0</li>
+    <li>Currently v0.14.1</li>
     <li>•</li>
     <li>Code licensed under <a href="https://github.com/algolia/instantsearch.js/blob/master/LICENSE">MIT</a></li>
     <li>•</li>
@@ -295,8 +300,31 @@
   <div class="spacer80"></div>
 </footer>
 
+    <script id="suggestion-item-template" type="text/template">
+
+{{#isCategoryHeader}}<div class="suggestion-category">{{{category}}}</div>{{/isCategoryHeader}}
+<div class="suggestion {{#isCategoryHeader}}suggestion-is-category-header{{/isCategoryHeader}}">
+  <div class="suggestion-subcategory-main">{{#isSubcategoryHeader}}{{{subcategory}}}{{/isSubcategoryHeader}}</div>
+  <div class="suggestion-content">
+    <div class="suggestion-subcategory-secondary">{{{subcategory}}}</div>
+    <div class="suggestion-title">{{{title}}}</div>
+    <div class="suggestion-text">{{{text}}}</div>
+  </div>
+</div>
+
+</script>
+<script id="suggestion-footer-template" type="text/template">
+
+<a href="http://www.algolia.com/?utm_source=babeljs&amp;utm_medium=link&amp;utm_campaign=babeljs_documentation_search" target="_blank" class="suggestion-footer text-hide">Powered by Algolia</a>
+
+</script>
+
     <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
     <script src="/instantsearch.js/js/bootstrap.min.js"></script>
+    <script src="//cdn.jsdelivr.net/hogan.js/3.0/hogan.min.js"></script>
+    <script src="//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script src="/instantsearch.js/js/search.js"></script>
     <script src="//use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
 
     <script src="//cdn.jsdelivr.net/gsap/1.11.8/TweenMax.min.js"></script>

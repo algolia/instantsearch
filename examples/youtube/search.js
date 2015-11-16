@@ -3,7 +3,8 @@
 var search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
-  indexName: 'movies'
+  indexName: 'movies',
+  urlSync: {}
 });
 
 search.addWidget(
@@ -56,7 +57,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#genres',
-    facetName: 'genre',
+    attributeName: 'genre',
     operator: 'and',
     limit: 10,
     cssClasses: {
@@ -68,10 +69,13 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.rangeSlider({
+  instantsearch.widgets.starRating({
     container: '#ratings',
-    attributeName: 'rating',
-    pips: false
+    facetName: 'rating',
+    cssClasses: {
+      list: 'nav',
+      count: 'badge pull-right'
+    }
   })
 );
 
