@@ -962,7 +962,7 @@ This widget lets you change the sort order by letting you select which index you
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.sortBySelector({
-    container: '#index-selector-container',
+    container: '#sort-by-selector-container',
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
@@ -992,7 +992,7 @@ page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-result
 
 </div>
 
-<div id="index-selector-container" class="widget-container"></div>
+<div id="sort-by-selector-container" class="widget-container"></div>
 
 ### Information display
 
