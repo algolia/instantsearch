@@ -26,7 +26,9 @@ layout: default
 {% contentfor site-footer %}
 
 {% if site.env == 'development' %}
-  <script src="//localhost:8080/instantsearch.js"></script>
+  <script id="dev-build-js">
+  document.write('\x3Cscript src="http://' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
+  </script>
 {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
 {% endif %}
