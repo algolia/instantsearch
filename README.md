@@ -57,6 +57,8 @@ npm install instantsearch.js --save-dev
 
 ```js
 var instantsearch = require('instantsearch.js');
+// or use the 'instantsearch' global variable when using the jsDelivr build
+
 var search = instantsearch({
   appId: appId, // Mandatory
   apiKey: apiKey, // Mandatory
@@ -101,23 +103,6 @@ To get < IE10 support, please insert this code in the `<head>`:
 ```
 
 We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
-
-## Development workflow
-
-```sh
-npm run dev
-# open http://localhost:8080
-# make changes in your widgets, or in example/app.js
-```
-
-## Test
-
-```sh
-npm test # jsdom + lint
-npm run test:watch # jsdom
-npm run test:watch:browser # chrome
-npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
-```
 
 ## Instant search configuration
 
@@ -190,11 +175,38 @@ instantsearch({
 });
 ```
 
+## Development workflow
+
+Only the local example:
+
+```sh
+npm run dev
+# open http://localhost:8080
+# make changes in your widgets, or in example/app.js
+```
+
+Local example and docs:
+
+```sh
+npm run dev:docs
+# open http://localhost:4000/instantsearch.js/
+```
+
+## Test
+
+```sh
+npm test # jsdom + lint
+npm run test:watch # jsdom
+npm run test:watch:browser # chrome
+npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
+```
+
+Most of the time `npm run test:watch` is sufficient.
+
 ## License
 
 instantsearch.js is [MIT licensed](./LICENSE).
 
+## Contributing
 
-## More...
-
-There's only so much we can cram in here. To read more about the community and guidelines for submitting pull requests, please read the [Contributing document](CONTRIBUTING.md).
+We have a [contributing guide](CONTRIBUTING.md), join us!
