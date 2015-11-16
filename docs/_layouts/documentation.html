@@ -26,7 +26,7 @@ layout: default
 {% contentfor site-footer %}
 
 {% if site.env == 'development' %}
-  <script src="//localhost:8080/instantsearch.js"></script>
+  <script src="{{ "/js/instantsearch.js" | prepend: site.baseurl }}"></script>
 {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
 {% endif %}
