@@ -1,4 +1,4 @@
-Instantsearch.js website
+instantsearch.js website
 =========================
 
 # Development
