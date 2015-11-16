@@ -1,5 +1,3 @@
-$header-nav-spacing: 50px
-
 code
   word-wrap: break-word
 
@@ -12,7 +10,7 @@ code
   font-weight: lighter
   background-color: $gray-light
   position: fixed
-  +position($header-nav-spacing, null, 0, 0)
+  +position($navbar-height,null,0,0)
 
 .documentation-menu
   height: 100%
@@ -50,7 +48,7 @@ code
 
 .main-documentation
   height: 100%
-  padding-top: $header-nav-spacing
+  padding-top: $navbar-height
   .description
     min-height: 84px
 
@@ -147,12 +145,16 @@ code
     font-size: 1.3em
     font-weight: bold
     clear: both
-  > p, > ul
+  code
+    background-color: #f3f3f3
+    border: 1px solid darken(#f3f3f3, 7%)
+    color: $text-color
+    font-weight: bold
+  .code-box
     code
-      background-color: #f3f3f3
-      border: 1px solid darken(#f3f3f3, 7%)
-      color: $text-color
-      font-weight: bold
+      background: transparent
+      border: none
+      font-weight: normal
   .version
     font-size: .9em
     margin-top: 2em
@@ -310,12 +312,18 @@ code
       font-size: 1em
       background: none
       color: #58d158
-    
 
 // Widgets
 #q input
   width: 100%
   padding: 2px 3px
+
+.ais-hierarchical-menu--item__active > div > a,
+.ais-menu--item__active > div > a,
+.ais-pagination--item__active a
+  font-weight: bold
+  color: #0a1724
+
 
 // debug
 .debug-widget
@@ -398,7 +406,7 @@ code
     font-size: .95em
   .toc-menu
     position: fixed
-    top: $header-nav-spacing
+    top: $navbar-height
     left: 0
     width: 100%
     background: $gray-light

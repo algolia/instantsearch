@@ -1,83 +1,99 @@
 // Search input in the navbar
 .search-form
   margin-top: 12px
-  width: 300px
-
+  position: relative
   input
     border-radius: 0
-    line-height: 2.5em
-    padding: 0 5px
+    line-height: 2.3em
+    height: 36px
+    padding: 0 5px 0 30px
+    background-color: transparent
+    border: solid 2px rgba($brand-primary,.5s)
+    border-radius: 40px
+    position: relative
+    top: -5px
+    color: white
+    width: 36px
+    overflow: hidden
     &:focus, &:active
       outline: none
+      box-shadow: none
+      width: 300px
+      border: solid 2px $brand-primary
+      transition: all .2s
+  .search-icon
+    display: block
+    width: 20px
+    height: 20px
+    position: absolute
+    top: 2px
+    left: 10px
+    text-align: center
+    color: $brand-primary
+    pointer-events: none
+
 
   // Main autocomplete wrapper
   .aa-dropdown-menu
     background-color: white
-    border-radius: 4px
-    border: 1px solid $dark-blue
+    border-radius: 0 0 4px 4px
+    box-shadow: 0 0 0 4px rgba($dark-blue,.3)
     color: $text-color
     font-size: 14px
     margin: 2px 0 0
-    left: -230px !important
-    padding: 4px
+    left: -140px !important
+    padding: 8px
     text-align: left
     width: 510px
-    em
-      font-style: normal
 
   // Suggestion category separator
   .suggestion-category
-    background-color: $dark-blue
-    border-bottom: 1px solid white
-    border-top: 1px solid white
-    color: white
-    font-size: 14px
+    color: $brand-primary
+    border-bottom: solid 2px $brand-primary
+    font-size: 15px
     font-weight: bold
-    padding: 5px 10px
+    padding: 10px 0 2px 0
     text-align: left
-    em
-      color: $light-blue
 
   // Use table display for the two columns
   .suggestion
     display: table
     width: 100%
 
+  em
+    background-color: rgba($brand-primary,.2)
+    color: $dark-blue
+    font-style: normal
+
   .suggestion-subcategory-main
-    background-color: lighten($dark-blue, 20%)
-    border-right: 1px solid $dark-blue
-    color: white
+    border-right: 1px solid $brand-primary
     display: table-cell
     max-width: 150px
     min-width: 150px
     overflow: hidden
-    padding: 5px 7px 5px 5px
+    padding: 10px 15px 10px 10px
     text-align: right
     text-overflow: ellipsis
     vertical-align: top
     width: 150px
-    em
-      color: $light-blue
+    font-weight: bold
     code
       color: $text-color
 
   .suggestion-content
-    border-bottom: 1px solid $light-blue
+    border-bottom: 1px solid rgba($brand-primary,.2)
     cursor: pointer
     display: table-cell
-    padding: 5px 10px
-    em
-      background-color: $light-blue
+    padding: 10px 15px
+
+  .aa-cursor .suggestion-content
+    background: rgba($brand-primary,.2)
+    color: $dark-blue
 
   .suggestion-title
     font-weight: bold
 
   .suggestion-text
-    font-size: 0.8em
+    font-size: 0.9em
     line-height: 1.5em
-
-  .aa-cursor .suggestion-title,
-  .aa-cursor .suggestion-text,
-  .aa-cursor .suggestion-title code,
-  .aa-cursor .suggestion-title em
-    color: $brand-primary
+    color: lighten($gray,20%)

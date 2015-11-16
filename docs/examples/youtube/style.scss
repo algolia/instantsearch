@@ -51,9 +51,7 @@ header {
 
   .input-group {
     margin-top: 5px;
-
     .form-control {
-      height: 28px;
       &:focus {
         outline: none;
         box-shadow: none;
@@ -110,11 +108,18 @@ section {
       margin-top: 20px;
     }
 
+    .badge {
+      font-size: .8em;
+      background: #bbb;
+      position: relative;
+      top: 1px;
+    }
+
     #genres {
       label {
         display: block;
         cursor: pointer;
-        padding: 2px 10px;
+        padding: 2px 4px 2px 8px;
         font-weight: normal;
         font-size: .9em;
         &:hover {
@@ -125,11 +130,13 @@ section {
           display: none;
         }
       }
-      .active label {
-        border: 1px solid $youtube-red-dark;
-      }
-      .badge {
-        font-size: 8px;
+      .active{
+        label {
+          border: 1px solid $youtube-red-dark;
+        }
+        .badge {
+          background: $youtube-text-color;
+        }
       }
     }
 
@@ -143,6 +150,9 @@ section {
       }
       .ais-stars-list--count {
         font-size: 8px;
+      }
+      .ais-star-rating--item{
+        margin-bottom: 6px;
       }
     }
 
