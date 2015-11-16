@@ -1,3 +1,13 @@
+<a name="0.14.1"></a>
+## [0.14.1](https://github.com/algolia/instantsearch.js/compare/v0.14.0...v0.14.1) (2015-11-16)
+
+
+### Bug Fixes
+
+* **docs:** minor CSS fixes ([94fa868](https://github.com/algolia/instantsearch.js/commit/94fa868)), closes [#573](https://github.com/algolia/instantsearch.js/issues/573)
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/algolia/instantsearch.js/compare/v0.13.0...v0.14.0) (2015-11-13)
 
