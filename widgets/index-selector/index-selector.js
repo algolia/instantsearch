@@ -12,12 +12,14 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * Instantiate a dropdown element to choose the current targeted index
  * @function indexSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.label The optional label displayed before the select.
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {string} options.indices[0].name Name of the index to target
  * @param  {string} options.indices[0].label Label displayed in the dropdown
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
  * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string} [options.cssClasses.label] CSS classes added to the parent <label>
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */
@@ -25,12 +27,14 @@ const usage = `Usage:
 indexSelector({
   container,
   indices,
-  [cssClasses.{root,item}={}],
+  [label],
+  [cssClasses.{root,item,label}={}],
   [autoHideContainer=false]
 })`;
 function indexSelector({
     container,
     indices,
+    label,
     cssClasses: userCssClasses = {},
     autoHideContainer = false
   } = {}) {
@@ -69,12 +73,14 @@ function indexSelector({
 
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item)
+        item: cx(bem('item'), userCssClasses.item),
+        label: cx(bem('label'), userCssClasses.label)
       };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
           currentValue={currentIndex}
+          label={label}
           options={selectorOptions}
           setValue={setIndex}
           shouldAutoHideContainer={hasNoResults}
