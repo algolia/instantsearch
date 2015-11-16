@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
     {% if site.env == 'development' %}
-      <link rel="stylesheet" href="//localhost:8080/instantsearch.css" />
+      <link rel="stylesheet" href="{{ "/css/instantsearch.css" | prepend: site.baseurl }}" />
     {% else %}
       <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
     {% endif %}
