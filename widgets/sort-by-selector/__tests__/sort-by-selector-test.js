@@ -75,8 +75,8 @@ describe('sortBySelector()', () => {
     widget.render({helper, results});
     props = {
       cssClasses: {
-        root: 'ais-index-selector custom-root',
-        item: 'ais-index-selector--item custom-item'
+        root: 'ais-sort-by-selector custom-root',
+        item: 'ais-sort-by-selector--item custom-item'
       },
       currentValue: 'index-a',
       shouldAutoHideContainer: true,
