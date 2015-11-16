@@ -829,11 +829,11 @@ search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
     attributeName: 'popularity',
-    operator: '<=',
+    operator: '>=',
     options: [
-      { label: 'Top 1', value: 1 },
-      { label: 'Top 10', value: 10 },
-      { label: 'Top 100', value: 100 }
+      { label: 'Top 10', value: 9900 },
+      { label: 'Top 100', value: 9800 },
+      { label: 'Top 500', value: 9700 }
     ],
     cssClasses: {
       root: '',
