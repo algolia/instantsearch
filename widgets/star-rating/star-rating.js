@@ -12,7 +12,7 @@ let defaultTemplates = require('./defaultTemplates');
 let defaultLabels = require('./defaultLabels');
 
 const usage = `Usage:
-starsList({
+starRating({
   container,
   attributeName,
   [ max=5 ],
