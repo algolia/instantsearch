@@ -27,6 +27,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.indexSelector({
     container: '#index-selector',
+    label: 'Sort by',
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
@@ -41,6 +42,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.hitsPerPageSelector({
     container: '#hits-per-page-selector',
+    label: 'Hits per page',
     options: [
       {value: 6, label: '6 per page'},
       {value: 12, label: '12 per page'},
@@ -240,6 +242,7 @@ search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
     attributeName: 'popularity',
+    label: 'Popularity',
     options: [
       { label: 'Select a value', value: undefined },
       { label: '1st', value: 1 },

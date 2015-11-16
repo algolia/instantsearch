@@ -11,11 +11,13 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * Instantiate a dropdown element to choose the number of hits to display per page
  * @function hitsPerPageSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} options.label The optional label displayed before the select.
  * @param  {Array} options.options Array of objects defining the different values and labels
  * @param  {number} options.options[0].value number of hits to display per page
  * @param  {string} options.options[0].label Label to display in the option
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string} [options.cssClasses.label] CSS classes added to the `<label>`
  * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
@@ -24,12 +26,14 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 const usage = `Usage:
 hitsPerPageSelector({
   container,
+  label,
   options,
-  [ cssClasses.{root,item}={} ],
+  [ cssClasses.{root,item,label}={} ],
   [ autoHideContainer=false ]
 })`;
 function hitsPerPageSelector({
     container,
+    label,
     options,
     cssClasses: userCssClasses = {},
     autoHideContainer = false
@@ -80,12 +84,14 @@ function hitsPerPageSelector({
 
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item)
+        item: cx(bem('item'), userCssClasses.item),
+        label: cx(bem('label'), userCssClasses.label)
       };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
           currentValue={currentValue}
+          label={label}
           options={options}
           setValue={setHitsPerPage}
           shouldAutoHideContainer={hasNoResults}

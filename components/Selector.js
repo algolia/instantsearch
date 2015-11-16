@@ -1,4 +1,5 @@
 let React = require('react');
+let {nextId} = require('../lib/utils.js');
 
 class Selector extends React.Component {
   handleChange(event) {
@@ -9,11 +10,12 @@ class Selector extends React.Component {
     let {currentValue, options} = this.props;
 
     let handleChange = this.handleChange.bind(this);
-
-    return (
+    const id = nextId('selector');
+    let select = (
       <select
         className={this.props.cssClasses.root}
         defaultValue={currentValue}
+        id={id}
         onChange={handleChange}
       >
         {options.map((option) => {
@@ -21,6 +23,12 @@ class Selector extends React.Component {
         })}
       </select>
     );
+    return this.props.label ? (
+      <span>
+        <label className={this.props.cssClasses.label} htmlFor={id}>{this.props.label}</label>
+        {select}
+      </span>
+    ) : select;
   }
 }
 
@@ -33,12 +41,17 @@ Selector.propTypes = {
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
       React.PropTypes.arrayOf(React.PropTypes.string)
+    ]),
+    label: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.arrayOf(React.PropTypes.string)
     ])
   }),
   currentValue: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
   ]).isRequired,
+  label: React.PropTypes.string,
   options: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       value: React.PropTypes.oneOfType([
