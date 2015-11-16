@@ -40,13 +40,19 @@ header.aisdemo-navbar {
   margin: 0;
   padding: 0;
   border-bottom: 1px solid $aisdemo-color-gray-light !important;
-
+  position: relative;
+  .is-logo{
+    display: inline-block;
+    position: relative;
+    top: -8px;
+    left: 16px;
+  }
   .logo {
-    font-family: Courier;
-    font-size: 40px;
-    line-height: 1;
     display: inline-block;
     padding: 14px 22px;
+    font-size: 40px;
+    line-height: 1;
+    font-family: Courier;
     color: $aisdemo-primary-color;
     border-right: 1px solid $aisdemo-color-gray-light;
   }
@@ -55,14 +61,14 @@ header.aisdemo-navbar {
     font-size: 30px;
     position: absolute;
     top: 17px;
-    left: 90px;
+    left: 140px;
     color: $aisdemo-color-gray-light;
   }
 
   #q {
     position: absolute;
     top: 15px;
-    left: 120px;
+    left: 180px;
     width: 50%;
     border: none;
     box-shadow: none;
@@ -221,10 +227,20 @@ header.aisdemo-navbar {
 
 #hits {
   .hit {
-    img {
-      width: 100%;
+    .pictures-wrapper{
+      position: relative;
+      .picture {
+        width: 100%;
+      }
+      .profile {
+        position: absolute;
+        bottom: -16px;
+        right: 12px;
+        width: 60px;
+        border: 4px solid rgba(255,255,255,.3);
+        border-radius: 30px;
+      }
     }
-
     .infos {
       height: 90px;
       padding: 16px 20px;
@@ -244,18 +260,9 @@ header.aisdemo-navbar {
         color: $aisdemo-primary-color;
       }
 
-      img.profile {
-        position: absolute;
-        top: 170px;
-        right: 17px;
-        width: 60px;
-        border: 4px solid rgba(255,255,255,.3);
-        border-radius: 30px;
-      }
     }
   }
 }
-
 
 
 /* PAGINATION

@@ -27,12 +27,17 @@ hr {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
+.is-logo{
+  float: left;
+}
 .logo {
   margin-left: 15px;
   font-size: 30px;
   font-weight: bold;
-  line-height: 20px;
+  float: left;
+  &:hover{
+    text-decoration: none;
+  }
   i {
     margin-left: 5px;
     color: $youtube-red;

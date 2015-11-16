@@ -83,6 +83,10 @@ header {
   height: $header-height;
   padding: 10px;
   background: $dark-blue;
+  .is-logo{
+    float: left;
+    margin-right: 12px;
+  }
   .logo {
     float: left;
     margin-right: 16px;
