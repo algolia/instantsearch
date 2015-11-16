@@ -57,7 +57,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#genres',
-    facetName: 'genre',
+    attributeName: 'genre',
     operator: 'and',
     limit: 10,
     cssClasses: {
