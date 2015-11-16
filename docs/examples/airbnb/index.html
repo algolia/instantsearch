@@ -21,37 +21,72 @@
   <![endif]-->
 </head>
 <body>
-  <div class="container-fluid" id="main">
-    <header>
+
+  <!-- Header -->
+  <div class="container-fluid" style="padding-left: 0; padding-right: 0;">
+    <header class="navbar navbar-static-top aisdemo-navbar">
       <span class="logo">A</span>
       <i class="fa fa-search"></i>
       <input type="text" class="form-control" id="q" />
     </header>
-    <nav>
-      <div class="row">
-        <div class="col-sm-3">Dates</div>
-        <div class="col-sm-3"><input class="date form-control" value="10/30/3015" disabled /></div>
-        <div class="col-sm-3"><input class="date form-control" value="11/30/3015" disabled /></div>
-        <div class="col-sm-3"><div id="guests"></div></div>
-      </div>
-      <div class="row">
-        <div class="col-sm-3">Room Type</div>
-        <div class="col-sm-9">
-          <div id="room_types"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-3">Price Range</div>
-        <div class="col-sm-9">
-          <div id="price"></div>
-        </div>
-      </div>
-    </nav>
-    <div id="stats"></div>
-    <div id="map"></div>
-    <div id="hits"></div>
-    <div id="pagination"></div>
   </div>
+  <!-- /Header -->
+
+  <!-- Filters and map -->
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- Left col -->
+      <div class="col-sm-7 aisdemo-left_column">
+
+        <div class="aisdemo-filters">
+          <!-- Dates & Guests -->
+          <div class="row aisdemo-filter">
+            <div class="col-sm-2 aisdemo-filter-title">Dates</div>
+            <div class="col-sm-3"><div class="date">10/30/3015</div></div>
+            <div class="col-sm-3"><div class="date">11/30/3015</div></div>
+            <div class="col-sm-3"><div id="guests"></div></div>
+          </div>
+          <!-- Room types -->
+          <div class="row aisdemo-filter">
+            <div class="col-sm-2 aisdemo-filter-title">Room Type</div>
+            <div id="room_types"></div>
+          </div>
+          <!-- Price -->
+          <div class="row aisdemo-filter">
+            <div class="col-sm-2 aisdemo-filter-title">Price Range</div>
+            <div class="col-sm-9" id="price"></div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div id="stats"></div>
+        </div>
+
+      </div>
+      <!-- /Left col -->
+
+      <!-- Right col -->
+      <div class="col-sm-5 aisdemo-right_column">
+        <div id="map"></div>
+      </div>
+      <!-- /Right col -->
+
+    </div>
+  </div>
+  <!-- /Filters and Map -->
+
+  <!-- Results -->
+  <div class="container-fluid" id="results">
+    <div class="row">
+      <div id="hits"></div>
+    </div>
+    <div class="row">
+      <div id="pagination"></div>
+    </div>
+  </div>
+  <!-- /Results -->
+
   <script src="//maps.googleapis.com/maps/api/js"></script>
   {% if site.env == 'development' %}
   <script src="//localhost:8080/instantsearch.js"></script>

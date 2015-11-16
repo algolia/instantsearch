@@ -8,7 +8,8 @@ var search = instantsearch({
 
 search.addWidget(
   instantsearch.widgets.searchBox({
-    container: '#q'
+    container: '#q',
+    placeholder: 'Where are you going?'
   })
 );
 
@@ -19,21 +20,21 @@ search.addWidget(
 );
 
 var hitTemplate =
-  '<div class="hit col-sm-6">' +
-    '<img src="{{picture_url}}" /><br />' +
-    '<div class="infos">' +
-      '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
-      '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
-    '</div>' +
+  '<div class="hit col-sm-3">' +
+  '<img src="{{picture_url}}" /><br />' +
+  '<div class="infos">' +
+  '<img class="profile" src="{{user.user.thumbnail_url}}" />' +
+  '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
+  '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
+  '</div>' +
   '</div>';
 
-var noResultsTemplate =
-  '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
+var noResultsTemplate = '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
 search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
-    hitsPerPage: 10,
+    hitsPerPage: 12,
     templates: {
       empty: noResultsTemplate,
       item: hitTemplate
@@ -44,6 +45,7 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
+    scrollTo: '#results',
     cssClasses: {
       root: 'pagination',
       active: 'active'
@@ -56,6 +58,7 @@ search.addWidget(
     container: '#room_types',
     attributeName: 'room_type',
     operator: 'or',
+    cssClasses: {item: ['col-sm-3']},
     limit: 10
   })
 );
@@ -64,9 +67,10 @@ search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
     attributeName: 'price',
-    pips: false
+    pips: false,
+    tooltips: {format: function(formattedValue, rawValue) {return '$' + parseInt(formattedValue)}}
   })
-);
+  );
 
 search.addWidget(
   instantsearch.widgets.googleMaps({
