@@ -1,6 +1,6 @@
-# instantsearch.js
+![instantsearch.js logo][readme-logo]
 
-*instantsearch.js* is a library of widgets to build high performance instant search experiences using Algolia
+**instantsearch.js** is a library of widgets designed for high performance instant search experiences using Algolia.
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
@@ -12,6 +12,7 @@
 [downloads-url]: http://npm-stat.com/charts.html?package=instantsearch.js
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
+[readme-logo]: ./readme-logo.png
 
 ## Table of contents
 
