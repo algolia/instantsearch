@@ -31,8 +31,13 @@
 {%if page.noFooter == null %}
     {% include footer.html %}
 {% endif %}
+    {% include search-templates.html %}
     <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
     <script src="{{ "/js/bootstrap.min.js" | prepend: site.baseurl }}"></script>
+    <script src="//cdn.jsdelivr.net/hogan.js/3.0/hogan.min.js"></script>
+    <script src="//cdn.jsdelivr.net/autocomplete.js/0/autocomplete.jquery.min.js"></script>
+    <script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+    <script src="{{ "/js/search.js" | prepend: site.baseurl }}"></script>
     <script src="//use.fonticons.com/dff9b562.js"></script> <!-- replace font-awesome -->
 {%if page.url == '/index.html' %}
     <script src="//cdn.jsdelivr.net/gsap/1.11.8/TweenMax.min.js"></script>

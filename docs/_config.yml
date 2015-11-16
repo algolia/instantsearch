@@ -21,3 +21,39 @@ markdown: kramdown
 # Assets
 sass:
   sass_dir: css
+
+# Gems
+gems:
+  - algoliasearch-jekyll
+
+# search
+algolia:
+  application_id: YE0A9ATLJG
+  index_name: instantsearch.js
+  excluded_files:
+    - index.haml
+  record_css_selector: p,li,tr,h1,h2,h3,h4,h5,h6
+  settings:
+    highlightPostTag: </em>
+    highlightPreTag: <em>
+    ignorePlurals: true
+    attributesToIndex:
+      - title
+      - text
+      - category,subcategory,display_title
+    attributesToHighlight:
+      - category
+      - subcategory
+      - display_title
+      - text
+    customRanking:
+      - desc(weight_tag_name)
+      - asc(weight_order)
+    ranking:
+      - typo
+      - words
+      - proximity
+      - attribute
+      - custom
+    attributesToSnippet:
+      - text:20

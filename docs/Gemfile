@@ -14,5 +14,8 @@ group :development, :test do
   gem 'guard-jekyll-plus'
   gem 'guard-livereload'
   gem 'guard-bundler', require: false
-  gem 'algoliasearch-jekyll', '~> 0.4.3'
+end
+
+group :jekyll_plugins do
+  gem 'algoliasearch-jekyll', '~> 0.5.3'
 end

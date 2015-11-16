@@ -9,10 +9,15 @@
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          {% assign url = page.url %}
-          <li class="visible-xs {% if url == '/index.html' %}active{% endif %}">
-            <a href="{{ site.baseurl }}/" title="Home">Home</a>
+          <li>
+            <form class="form search-form" action="#">
+              <div class="input-group">
+                <input class="form-control" type="text" id="doc-search" />
+                <span class="input-group-addon text-lg">&#128270;</span>
+              </div>
+            </form>
           </li>
+          {% assign url = page.url %}
           {% for link in site.navigation %}
             <li {% if url == link.url %}class="active"{% endif %}>
               <a href="{{ site.baseurl }}{{ link.url }}" title="{{ link.title }}">{{ link.text }}</a>
