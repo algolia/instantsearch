@@ -192,3 +192,9 @@ header.aisdemo-navbar {
     color: #fff;
     border-color: #ff585b !important;
     background: #ff585b; }
+
+.thank-you {
+  text-align: center;
+  font-size: 0.8em; }
+  .thank-you a {
+    color: #ff585b; }

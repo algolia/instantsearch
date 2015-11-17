@@ -263,6 +263,7 @@ aside {
       width: 49%; } }
   .hit .product-picture-wrapper {
     display: table;
+    table-layout: fixed;
     width: 100%;
     text-align: center;
     margin-bottom: 10px; }
@@ -333,3 +334,8 @@ aside {
   #pagination i.fa {
     position: relative;
     top: 5px; }
+
+.thank-you {
+  text-align: center;
+  font-size: 0.8em;
+  padding: 10px; }

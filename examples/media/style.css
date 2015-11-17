@@ -142,3 +142,8 @@ section {
         color: #167AC6;
         font-weight: bold;
         font-size: 14px; }
+  section .thank-you {
+    text-align: center;
+    font-size: 0.8em; }
+    section .thank-you a {
+      color: #CE1312; }
