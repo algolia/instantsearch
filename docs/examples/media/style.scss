@@ -3,13 +3,13 @@
 ---
 
 $white: #FFFFFF;
-$youtube-red: #E91D00;
-$youtube-red-dark: #CE1312;
-$youtube-gray: #E8E8E8;
-$youtube-gray-light: #F8F8F8;
-$youtube-bg: #F1F1F1;
-$youtube-text-color: #333333;
-$youtube-blue: #167AC6;
+$media-red: #E91D00;
+$media-red-dark: #CE1312;
+$media-gray: #E8E8E8;
+$media-gray-light: #F8F8F8;
+$media-bg: #F1F1F1;
+$media-text-color: #333333;
+$media-blue: #167AC6;
 $header-height: 56px;
 $highlight-color: #FFFFE4;
 $shadow-color: rgba(0, 0, 0, .1);
@@ -20,7 +20,7 @@ body {
 }
 
 a {
-  color: $youtube-text-color;
+  color: $media-text-color;
 }
 
 hr {
@@ -40,14 +40,14 @@ hr {
   }
   i {
     margin-left: 5px;
-    color: $youtube-red;
+    color: $media-red;
   }
 }
 
 header {
   background: $white;
   padding: 10px;
-  border-bottom: 1px solid $youtube-gray;
+  border-bottom: 1px solid $media-gray;
   position: fixed;
   top: 0;
   left: 0;
@@ -66,13 +66,13 @@ header {
     .input-group-btn button {
       padding-left: 30px;
       padding-right: 30px;
-      background: $youtube-gray-light;
+      background: $media-gray-light;
     }
   }
 }
 
 section {
-  background: $youtube-bg;
+  background: $media-bg;
   min-height: 100%;
   z-index: 1;
 
@@ -83,7 +83,7 @@ section {
     bottom: 0;
     width: 230px;
     background: $white;
-    border-right: 1px solid $youtube-gray;
+    border-right: 1px solid $media-gray;
 
     .nav {
       margin: 10px 20px;
@@ -94,19 +94,19 @@ section {
           margin: 10px 0;
           &:hover {
             color: $white;
-            background: $youtube-text-color;
+            background: $media-text-color;
           }
         }
 
         &.separator {
           height: 1px;
-          background: $youtube-gray;
+          background: $media-gray;
         }
       }
     }
 
     h5 {
-      color: $youtube-red-dark;
+      color: $media-red-dark;
       margin-left: 30px;
       text-transform: uppercase;
       font-size: 10px;
@@ -129,7 +129,7 @@ section {
         font-size: .9em;
         &:hover {
           color: $white;
-          background: $youtube-text-color;
+          background: $media-text-color;
         }
         input {
           display: none;
@@ -137,10 +137,10 @@ section {
       }
       .active{
         label {
-          border: 1px solid $youtube-red-dark;
+          border: 1px solid $media-red-dark;
         }
         .badge {
-          background: $youtube-text-color;
+          background: $media-text-color;
         }
       }
     }
@@ -183,17 +183,17 @@ section {
 
     #pagination {
       .pagination a {
-        background: $youtube-gray-light;
+        background: $media-gray-light;
         padding: 3px 8px;
-        color: $youtube-text-color;
+        color: $media-text-color;
         margin-right: 4px;
         &.active {
-          border-color: darken($youtube-gray, 20%);
-          background: $youtube-gray;
+          border-color: darken($media-gray, 20%);
+          background: $media-gray;
         }
         &:hover {
-          border-color: darken($youtube-gray, 10%);
-          background: darken($youtube-gray-light, 5%);
+          border-color: darken($media-gray, 10%);
+          background: darken($media-gray-light, 5%);
         }
       }
     }
@@ -218,10 +218,18 @@ section {
       }
 
       .media-heading {
-        color: $youtube-blue;
+        color: $media-blue;
         font-weight: bold;
         font-size: 14px;
       }
+    }
+  }
+
+  .thank-you {
+    text-align: center;
+    font-size: 0.8em;
+    a {
+      color: #CE1312;
     }
   }
 }
