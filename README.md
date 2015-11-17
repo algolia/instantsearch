@@ -2,7 +2,7 @@
 
 **instantsearch.js** is a library of widgets designed for high performance instant search experiences using Algolia.
 
-Have a look at the website: http://community.algolia.com/instantsearch.js/.
+Have a look at the website: https://community.algolia.com/instantsearch.js/.
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
@@ -15,7 +15,7 @@ Have a look at the website: http://community.algolia.com/instantsearch.js/.
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
 [readme-logo]: ./readme-logo.png
-[logo-url]: http://community.algolia.com/instantsearch.js/
+[logo-url]: https://community.algolia.com/instantsearch.js/
 
 ## Table of contents
 
@@ -43,7 +43,7 @@ Have a look at the website: http://community.algolia.com/instantsearch.js/.
 
 ### From a CDN
 
-instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
+instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/):
 
 ```html
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />

@@ -27,7 +27,7 @@ Built on top of the <a href="https://www.algolia.com">Algolia Search API</a>
 <div class="sticker sticker-open-source">
 <img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
 </div>
-Community driven and available on <a href="http://github.com/algolia/instantsearch.js">Github</a>
+Community driven and available on <a href="https://github.com/algolia/instantsearch.js">Github</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-ux">
@@ -48,7 +48,7 @@ Each widget is independent, and their rendering is bound to the search. They fol
   - **Initial rendering**: before the initial search, the widget may update the UI.
   - **Rendering**: on each search, after the results come back from Algolia, the widgets update themselves.
 
-The library is open-source, based on [React.js](http://facebook.github.io/react/) and hosted on GitHub: [<i class="fa fa-github"></i> algolia/instantsearch.js](https://github.com/algolia/instantsearch.js). All contributions are welcome.
+The library is open-source, based on [React.js](https://facebook.github.io/react/) and hosted on GitHub: [<i class="fa fa-github"></i> algolia/instantsearch.js](https://github.com/algolia/instantsearch.js). All contributions are welcome.
 
 ### Setup
 

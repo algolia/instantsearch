@@ -27,7 +27,7 @@ layout: default
 
 {% if site.env == 'development' %}
   <script id="dev-build-js">
-  document.write('\x3Cscript src="http://' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
+  document.write('\x3Cscript src="//' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
   </script>
 {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>

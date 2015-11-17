@@ -12,7 +12,7 @@
   <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
   {% if site.env == 'development' %}
     <script>
-      document.write('<link rel="stylesheet" href="http://' + window.location.hostname +':8080/instantsearch.css">');
+      document.write('<link rel="stylesheet" href="//' + window.location.hostname +':8080/instantsearch.css">');
     </script>
   {% else %}
   <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
@@ -86,7 +86,7 @@
     </div>
     <div class="row">
       <div id="pagination"></div>
-      <div class="thank-you">Data courtesy of <a href="http://www.airbnb.com/">airbnb.com</a></div>
+      <div class="thank-you">Data courtesy of <a href="https://www.airbnb.com/">airbnb.com</a></div>
     </div>
   </div>
   <!-- /Results -->
@@ -94,7 +94,7 @@
   <script src="//maps.googleapis.com/maps/api/js"></script>
   {% if site.env == 'development' %}
     <script>
-      document.write('\x3Cscript src="http://' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
+      document.write('\x3Cscript src="//' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
     </script>
   {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
