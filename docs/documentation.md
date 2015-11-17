@@ -77,10 +77,10 @@ This will expose the global `instantsearch` function.
 
 <div class="codebox-combo">
 
-If you already have a JavaScript build system, you can use **instantsearch.js** from NPM:
+If you have a JavaScript build system, you can use **instantsearch.js** from NPM:
 
 <div class="code-box">
-  <div class="code-sample-snippet js-toggle-snippet ignore">
+  <div class="code-sample-snippet js-toggle-snippet ignore text-white">
 {% highlight sh %}
 npm install instantsearch.js --save
 {% endhighlight %}
@@ -90,12 +90,13 @@ npm install instantsearch.js --save
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight javascript %}
 var instantsearch = require('instantsearch.js');
-// TODO: include the instantsearch.js/dist/instantsearch.css file as well
 {% endhighlight %}
   </div>
 </div>
 
 </div>
+
+You will also need to manually load into your application the [instantsearch css file](http://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css).
 
 ### Initialization
 
@@ -121,8 +122,7 @@ instantsearch(options);
 {% include widget-jsdoc/instantsearch.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-Make sure you are using the **search-only API key** and that you have created
-the index.
+Use your **search-only API key**. You index should also contain data.
   </div>
 </div>
 
@@ -144,7 +144,8 @@ To build your search results page, you need to combine several widgets. Start by
 <div id="search-box"></div>
 
 <script>
-  // [...]
+  // var search = instantsearch..
+
   search.addWidget(
     instantsearch.widgets.searchBox({
       container: '#search-box',
@@ -197,6 +198,7 @@ This example shows you how to create a very simple search results page that incl
 <html>
   <head>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
+    <title>instantsearch.js basics</title>
   </head>
   <body>
     <input type="text" id="search-box" />
@@ -210,12 +212,14 @@ This example shows you how to create a very simple search results page that incl
         apiKey: 'YourSearchOnlyAPIKey',
         indexName: 'YourIndexName'
       });
+
       search.addWidget(
         instantsearch.widgets.searchBox({
           container: '#search-box',
           placeholder: 'Search for products...'
         })
       );
+
       search.addWidget(
         instantsearch.widgets.hits({
           container: '#hits-container',
@@ -224,11 +228,13 @@ This example shows you how to create a very simple search results page that incl
           }
         })
       );
+
       search.addWidget(
         instantsearch.widgets.pagination({
           container: '#pagination-container'
         })
       );
+
       search.start();
     </script>
   </body>
@@ -263,12 +269,7 @@ search.addWidget(
     container: '#q',
     placeholder: 'Search for products',
     autofocus: false,
-    poweredBy: true,
-    cssClasses: {
-      root: '',
-      input: '',
-      poweredBy: ''
-    }
+    poweredBy: true
   })
 );
 {% endhighlight %}
@@ -361,11 +362,7 @@ search.addWidget(
       {value: 6, label: '6 per page'},
       {value: 12, label: '12 per page'},
       {value: 24, label: '24 per page'}
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+    ]
   })
 );
 {% endraw %}
@@ -383,7 +380,7 @@ instantsearch.widgets.hitsPerPageSelector(options);
   </div>
   <div class="requirements js-toggle-requirements">
 The [hits](#hits) widget lets you define the default number of results
-displayed. This value must also be defined in the `options` parameter.
+displayed. This value must be defined in the `options` parameter.
   </div>
 </div>
 
@@ -409,19 +406,8 @@ search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination-container',
     maxPages: 20,
-    scrollTo: false, // 'body' by default
-    cssClasses: {
-      root: '',
-      item: '',
-      link: '',
-      page: '',
-      previous: '',
-      next: '',
-      first: '',
-      last: '',
-      active: '',
-      disabled: ''
-    }
+    // default is to scroll to 'body', here we disable this behavior
+    scrollTo: false
   })
 );
     {% endhighlight %}
@@ -459,18 +445,6 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Categories'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -485,14 +459,14 @@ instantsearch.widgets.menu(options);
 {% include widget-jsdoc/menu.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-The attribute defined in `attributeName` must also be defined as an
+The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
 </div>
 
-<div  id="categories" class="widget-container"></div>
+<div id="categories" class="widget-container"></div>
 
 #### hierarchicalMenu
 
@@ -513,18 +487,6 @@ search.addWidget(
     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
     templates: {
       header: 'Hierarchical categories'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -540,8 +502,9 @@ instantsearch.widgets.hierarchicalMenu(options);
   </div>
   <div class="requirements js-toggle-requirements">
 The attribute used for faceting must be an object that follows a [specific
-convention](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets). For
-example, to build this example menu, we have data that looks like:
+convention](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets).
+
+For example, to build the example menu, our objects are defined like this:
 {% highlight javascript %}
 {
   "objectID": 4815162342,
@@ -550,16 +513,19 @@ example, to build this example menu, we have data that looks like:
     "lvl1": "Appliances > Air Conditioners"
     "lvl2": "Appliances > Air Conditioners > Portable Air Conditioners"
   }
+}
 {% endhighlight %}
 
-The root attribute (here, `hierarchicalCategories`) must also be defined as an
+All attributes (`hierarchicalCategories.lvl0/1/2`) should be defined as
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+
+Each level must repeat the parent breadcrumb.
 
   </div>
 </div>
 </div>
 
-<div  id="hierarchical-categories" class="widget-container"></div>
+<div id="hierarchical-categories" class="widget-container"></div>
 
 ### Filters
 
@@ -583,18 +549,6 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Brands'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -608,14 +562,14 @@ instantsearch.widgets.refinementList(options);
 {% include widget-jsdoc/refinementList.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-The attribute defined in `attributeName` must also be defined as an
+The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
 </div>
 
-<div  id="brands" class="widget-container"></div>
+<div id="brands" class="widget-container"></div>
 
 #### numericRefinementList
 
@@ -633,41 +587,36 @@ This widget lets the user refine search results based on a numerical attribute. 
         container: '#popularity',
         attributeName: 'popularity',
         options: [
-        {name: 'All'},
-        {end: 4, name: 'less than 4'},
-        {start: 4, end: 4, name: '4'},
-        {start: 5, end: 10, name: 'between 5 and 10'},
-        {start: 10, name: 'more than 10'}
+          {name: 'All'},
+          {end: 4, name: 'less than 4'},
+          {start: 4, end: 4, name: '4'},
+          {start: 5, end: 10, name: 'between 5 and 10'},
+          {start: 10, name: 'more than 10'}
         ],
         templates: {
           header: 'Price'
-        },
-        cssClasses: {
-          root: '',
-          header: '',
-          body: '',
-          footer: '',
-          list: '',
-          link: '',
-          active: ''
         }
       })
     );
     {% endhighlight %}
   </div>
   <div class="jsdoc js-toggle-jsdoc" style='display:none'>
-    {% highlight javascript %}
-    instantsearch.widgets.numericRefinementList(options);
-    {% endhighlight %}
+{% highlight javascript %}
+instantsearch.widgets.numericRefinementList(options);
+{% endhighlight %}
 
-    {% include widget-jsdoc/numericRefinementList.md %}
+{% include widget-jsdoc/numericRefinementList.md %}
+  </div>
+  <div class="requirements js-toggle-requirements">
+The attribute defined in `attributeName` must be defined as an
+[attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
 
 </div>
 
-<div  id="popularity" class="widget-container"></div>
+<div id="popularity" class="widget-container"></div>
 
 #### toggle
 
@@ -691,18 +640,6 @@ search.addWidget(
     },
     templates: {
       header: 'Shipping'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -715,14 +652,14 @@ instantsearch.widgets.toggle(options);
 {% include widget-jsdoc/toggle.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-The attribute defined in `attributeName` must also be defined as an
+The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
 </div>
 
-<div  id="free-shipping" class="widget-container"></div>
+<div id="free-shipping" class="widget-container"></div>
 
 #### rangeSlider
 
@@ -758,7 +695,7 @@ instantsearch.widgets.rangeSlider(options);
 {% include widget-jsdoc/rangeSlider.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-The attribute defined in `attributeName` must also be defined as an
+The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
@@ -788,19 +725,6 @@ search.addWidget(
     },
     templates: {
       header: 'Price'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      currency: '',
-      separator: '',
-      button: ''
     }
   })
 );
@@ -814,7 +738,7 @@ instantsearch.widgets.priceRanges(options);
 {% include widget-jsdoc/priceRanges.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-The attribute defined in `attributeName` must also be defined as an
+The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
@@ -832,7 +756,7 @@ This filtering widget lets the user choose between numerical refinements from a 
 {:.description}
 
 <div class="code-box">
-  <div class="code-sample-snippet">
+  <div class="code-sample-snippet js-toggle-snippet">
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.numericSelector({
@@ -840,24 +764,24 @@ search.addWidget(
     attributeName: 'popularity',
     operator: '>=',
     options: [
-      { label: 'Top 10', value: 9900 },
-      { label: 'Top 100', value: 9800 },
-      { label: 'Top 500', value: 9700 }
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+      {label: 'Top 10', value: 9900},
+      {label: 'Top 100', value: 9800},
+      {label: 'Top 500', value: 9700}
+    ]
   })
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 {% highlight javascript %}
 instantsearch.widgets.numericSelector(options);
 {% endhighlight %}
 
 {% include widget-jsdoc/numericSelector.md %}
+  </div>
+  <div class="requirements js-toggle-requirements">
+The attribute defined in `attributeName` must be defined as an
+[attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
@@ -870,43 +794,34 @@ instantsearch.widgets.numericSelector(options);
 <div class="codebox-combo">
 
 <img class="widget-icon pull-left" src="../img/icon-widget-star-rating.svg">
-This filtering widget lets the user refine search results by the number of stars associated with an item. The underlying rating attribute needs to have from 0 to `max` stars.
+This widget lets the user refine search results by clicking on stars. The stars are based on the selected `attributeName`. The underlying rating attribute needs to have from 0 to `max` stars.
 {:.description}
 
 <div class="code-box">
-  <div class="code-sample-snippet">
+  <div class="code-sample-snippet js-toggle-snippet">
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.starRating({
     container: '#stars',
-    attributeName: 'price',
+    attributeName: 'rating',
     max: 5,
     labels: {
       andUp: '& Up'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      disabledLink: '',
-      star: '',
-      emptyStar: ''
     }
   })
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 {% highlight javascript %}
 instantsearch.widgets.starRating(options);
 {% endhighlight %}
 
 {% include widget-jsdoc/starRating.md %}
+  </div>
+  <div class="requirements js-toggle-requirements">
+The attribute defined in `attributeName` must be defined as an
+[attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
   </div>
 </div>
 
@@ -929,13 +844,6 @@ search.addWidget(
     container: '#clear-all',
     templates: {
       link: 'Reset everything'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      link: '',
     },
     autoHideContainer: false
   })
@@ -975,11 +883,7 @@ search.addWidget(
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+    ]
   })
 );
 {% endhighlight %}
@@ -991,9 +895,10 @@ instantsearch.widgets.sortBySelector(options);
 {% include widget-jsdoc/sortBySelector.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-You need to create slave indices for every sort order you need, and
+You must have slave indices for every sort order you need. Then
 configure their `ranking` to use a custom attribute as the first criterion.
-You can find more information [in our FAQ
+
+Find detailed explanations [in our FAQ
 page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-results-with-a-specific-attribute).
   </div>
 </div>
@@ -1002,7 +907,7 @@ page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-result
 
 <div id="sort-by-container" class="widget-container"></div>
 
-### Information display
+### Metadata
 
 #### stats
 
@@ -1017,13 +922,7 @@ This widget lets you display how many results matched the query and how fast the
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.stats({
-    container: '#stats-container',
-    cssClasses: {
-      header: '',
-      body: '',
-      footer: '',
-      time: ''
-    }
+    container: '#stats-container'
   })
 );
 {% endhighlight %}
@@ -1082,7 +981,6 @@ search.addWidget(
 
 <div class="code-box">
   <div class="code-sample-snippet ignore">
-  <!-- <strong class="text-white">Here is the syntax of a helper</strong> -->
 {% highlight javascript %}
 search.templatesConfig.helpers.emphasis = function(text, render) {
   return '<em>' + render(text) + '</em>';
@@ -1119,7 +1017,7 @@ var search = instantsearch({
   indexName: '',
   templatesConfig: {
     compileOptions: {
-      // [...]
+      // all the Hogan compile options
     }
   }
 });
@@ -1134,7 +1032,7 @@ Theses options will be passed to the `Hogan.compile` calls when you pass a custo
 
 ## Customize
 
-### Custom Widgets
+### Custom widgets
 
 <div class="codebox-combo">
 
@@ -1204,7 +1102,7 @@ You may also want to use jQuery to power your custom widgets and that's definite
 
 You can also use React for your next widget. Have a look at a simple example, [<i class='fa fa-github'></i> instantsearch/instantsearch-React-widget ](https://github.com/instantsearch/instantsearch-React-widget), or dig into a full fledged React component integration, [<i class='fa fa-github'></i> instantsearch/instantsearch-googlemaps](https://github.com/instantsearch/instantsearch-googlemaps).
 
-### Custom Themes
+### Custom themes
 
 All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 

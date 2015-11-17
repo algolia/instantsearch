@@ -53,7 +53,7 @@ instantsearch.js is available on [jsDelivr](http://www.jsdelivr.com/):
 ### With npm, browserify, webpack
 
 ```sh
-npm install instantsearch.js --save-dev
+npm install instantsearch.js --save
 ```
 
 ## Quick Start

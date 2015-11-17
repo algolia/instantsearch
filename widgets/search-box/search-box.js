@@ -13,10 +13,10 @@ const KEY_SUPPRESS = 8;
  * @function searchBox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} [options.placeholder] Input's placeholder
- * @param  {boolean} [poweredBy=false] Show a powered by Algolia link below the input
- * @param  {boolean} [wrapInput=true] Wrap the input in a `div.ais-search-box`
+ * @param  {boolean} [options.poweredBy=false] Show a powered by Algolia link below the input
+ * @param  {boolean} [options.wrapInput=true] Wrap the input in a `div.ais-search-box`
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
- * @param  {boolean} [searchOnEnterKeyPressOnly=false] If set, trigger the search
+ * @param  {boolean} [options.searchOnEnterKeyPressOnly=false] If set, trigger the search
  * once `<Enter>` is pressed only
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string} [options.cssClasses.root] CSS class to add to the
