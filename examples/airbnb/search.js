@@ -1,3 +1,4 @@
+'use strict';
 /* global instantsearch */
 
 var search = instantsearch({
@@ -21,9 +22,11 @@ search.addWidget(
 
 var hitTemplate =
   '<div class="hit col-sm-3">' +
-  '<img src="{{picture_url}}" /><br />' +
+  '<div class="pictures-wrapper">' +
+    '<img class="picture" src="{{picture_url}}" />' +
+    '<img class="profile" src="{{user.user.thumbnail_url}}" />' +
+  '</div>' +
   '<div class="infos">' +
-  '<img class="profile" src="{{user.user.thumbnail_url}}" />' +
   '<h4 class="media-heading">{{{_highlightResult.name.value}}}</h4>' +
   '<p>{{room_type}} - {{{_highlightResult.city.value}}}, {{{_highlightResult.country.value}}}</p>' +
   '</div>' +

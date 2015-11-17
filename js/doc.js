@@ -150,9 +150,13 @@
 
   function tocMenu(){
     $('.toc-menu select').change(function(){
+      var $body = $('body');
       var href = $(this).val();
+      var scroll0 = $body.scrollTop();
       window.location.hash = href;
-      $('html, body').animate({scrollTop: '-=100px'}, 800);
+      var scroll1 = $body.scrollTop();
+      var deltaScroll = scroll1 - scroll0;
+      $body.scrollTop($body.scrollTop() - (deltaScroll>0?200:0)).animate({scrollTop: (deltaScroll>0?'+':'-')+'=100px'}, 300)
     });
   }
 

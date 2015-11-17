@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Examples - Instantsearch.js</title>
+    <title>Examples - instantsearch.js</title>
     <meta name="description" content="instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia">
 
     <link rel="stylesheet" href="/instantsearch.js/css/main.css">
@@ -29,16 +29,14 @@
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav">
           Menu&nbsp;&nbsp;<i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand" href="/instantsearch.js/">Instantsearch.js</a>
+        <a class="navbar-brand" href="/instantsearch.js/">instantsearch.js</a>
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li>
+          <li class="hidden-xs">
             <form class="form search-form" action="#">
-              <div class="input-group">
-                <input class="form-control" type="text" id="doc-search" />
-                <span class="input-group-addon text-lg">&#128270;</span>
-              </div>
+              <input class="form-control" type="text" id="doc-search" />
+              <div class="search-icon"><i class="fa fa-search"></i></div>
             </form>
           </li>
           
@@ -70,12 +68,11 @@
 
     <div class='hero'>
   <h1 class='text-center'>Check out our examples!</h1>
+  <p class='text-center lead'><strong>instantsearch.js</strong> allows you to customize the appearance of your widgets very easily.</p>
 </div>
 <div class='spacer40'></div>
 <div class='container'>
   <div class='m800 m-l-r-auto'>
-    <p class='lead'><strong>Instantsearch.js</strong> allows you to customize the appearance of your widgets very easily.</p>
-    <p class='lead'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem, illum praesentium quae, ipsa sint similique quas mollitia voluptatum cumque excepturi amet dolorem dicta minus voluptate vel impedit.</p>
     <div class='spacer40'></div>
     <div class='demo-item clearfix'>
       <a href='/instantsearch.js/examples/youtube/'>
@@ -85,13 +82,13 @@
         <h3>Media</h3>
       </a>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem.</p>
-      <div class='built-with'>
-        <img class='widget-icon' src='../img/icon-widget-searchbox.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-results.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-stats.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-pagination.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-refinement.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-slider.svg' width='30'>
+      <div class='built-with m-b'>
+        <img src='../img/icon-widget-searchbox.svg' width='30'>
+        <img src='../img/icon-widget-results.svg' width='30'>
+        <img src='../img/icon-widget-stats.svg' width='30'>
+        <img src='../img/icon-widget-pagination.svg' width='30'>
+        <img src='../img/icon-widget-refinement.svg' width='30'>
+        <img src='../img/icon-widget-slider.svg' width='30'>
       </div>
       <a href='/instantsearch.js/examples/youtube.zip'>View/download source code</a>
     </div>
@@ -104,31 +101,38 @@
         <h3>Ecommerce</h3>
       </a>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad, quidem.</p>
-      <div class='built-with'>
-        <img class='widget-icon' src='../img/icon-widget-searchbox.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-results.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-stats.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-clearall.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-index.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-pagination.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-hierarchical.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-refinement.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-pricerange.svg' width='30'>
+      <div class='built-with m-b'>
+        <img src='../img/icon-widget-searchbox.svg' width='30'>
+        <img src='../img/icon-widget-results.svg' width='30'>
+        <img src='../img/icon-widget-stats.svg' width='30'>
+        <img src='../img/icon-widget-clearall.svg' width='30'>
+        <img src='../img/icon-widget-index.svg' width='30'>
+        <img src='../img/icon-widget-pagination.svg' width='30'>
+        <img src='../img/icon-widget-hierarchical.svg' width='30'>
+        <img src='../img/icon-widget-refinement.svg' width='30'>
+        <img src='../img/icon-widget-pricerange.svg' width='30'>
+        <img src='../img/icon-widget-star-rating.svg' width='30'>
       </div>
       <a href='/instantsearch.js/examples/amazon.zip'>View/download source code</a>
     </div>
     <div class='spacer40'></div>
     <div class='demo-item clearfix'>
-      <a href='/instantsearch.js/examples/amazon/'>
+      <a href='/instantsearch.js/examples/airbnb/'>
         <img class='m-b img-thumbnail pull-left m-r' src='/instantsearch.js/examples/airbnb/capture.png' width='270'>
       </a>
-      <a href='/instantsearch.js/examples/amazon/'>
+      <a href='/instantsearch.js/examples/airbnb/'>
         <h3>Tourism</h3>
       </a>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quo blanditiis ad.</p>
-      <div class='built-with'>
-        <img class='widget-icon' src='../img/icon-widget-searchbox.svg' width='30'>
-        <img class='widget-icon' src='../img/icon-widget-custom.svg' width='30'>
+      <div class='built-with m-b'>
+        <img src='../img/icon-widget-searchbox.svg' width='30'>
+        <img src='../img/icon-widget-stats.svg' width='30'>
+        <img src='../img/icon-widget-pagination.svg' width='30'>
+        <img src='../img/icon-widget-results.svg' width='30'>
+        <img src='../img/icon-widget-slider.svg' width='30'>
+        <img src='../img/icon-widget-refinement.svg' width='30'>
+        <img src='../img/icon-widget-numerical.svg' width='30'>
+        <img src='../img/icon-widget-custom.svg' width='30'>
       </div>
       <a href='/instantsearch.js/examples/airbnb.zip'>View/download source code</a>
     </div>
@@ -144,7 +148,7 @@
   </p>
   <div class="spacer50"></div>
   <ul class="list-inline">
-    <li>Currently v0.14.1</li>
+    <li>Currently v0.14.2</li>
     <li>•</li>
     <li>Code licensed under <a href="https://github.com/algolia/instantsearch.js/blob/master/LICENSE">MIT</a></li>
     <li>•</li>

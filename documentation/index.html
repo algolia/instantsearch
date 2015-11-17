@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Documentation - Instantsearch.js</title>
+    <title>Documentation - instantsearch.js</title>
     <meta name="description" content="instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia">
 
     <link rel="stylesheet" href="/instantsearch.js/css/main.css">
@@ -29,16 +29,14 @@
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#instant-search-nav">
           Menu&nbsp;&nbsp;<i class="fa fa-bars"></i>
         </button>
-        <a class="navbar-brand" href="/instantsearch.js/">Instantsearch.js</a>
+        <a class="navbar-brand" href="/instantsearch.js/">instantsearch.js</a>
       </div>
       <div id="instant-search-nav" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li>
+          <li class="hidden-xs">
             <form class="form search-form" action="#">
-              <div class="input-group">
-                <input class="form-control" type="text" id="doc-search" />
-                <span class="input-group-addon text-lg">&#128270;</span>
-              </div>
+              <input class="form-control" type="text" id="doc-search" />
+              <div class="search-icon"><i class="fa fa-search"></i></div>
             </form>
           </li>
           
@@ -72,12 +70,12 @@
   <div class="row">
     <div class="col-lg-2 col-md-3 hidden-xs hidden-sm widget-nav">
       <div class="documentation-menu">
-        <ul><li><a href="#introduction">Introduction</a></li><ul><li><a href="#setup">Setup</a></li><li><a href="#initialization">Initialization</a></li><li><a href="#adding-widgets">Adding Widgets</a></li><li><a href="#start">Start</a></li></ul><li><a href="#widgets">Widgets</a></li><ul><li><a href="#fundamental-widgets">Fundamental widgets</a></li><ul><li><a href="#searchbox">searchBox</a></li><li><a href="#hits">hits</a></li><li><a href="#hitsperpageselector">hitsPerPageSelector</a></li></ul><li><a href="#navigation">Navigation</a></li><ul><li><a href="#pagination">pagination</a></li><li><a href="#menu">menu</a></li><li><a href="#hierarchicalmenu">hierarchicalMenu</a></li></ul><li><a href="#filters">Filters</a></li><ul><li><a href="#refinementlist">refinementList</a></li><li><a href="#numericrefinementlist">numericRefinementList</a></li><li><a href="#toggle">toggle</a></li><li><a href="#rangeslider">rangeSlider</a></li><li><a href="#priceranges">priceRanges</a></li><li><a href="#numericselector">numericSelector</a></li><li><a href="#starrating">starRating</a></li><li><a href="#clearall">clearAll</a></li></ul><li><a href="#sort">Sort</a></li><ul><li><a href="#sortbyselector">sortBySelector</a></li></ul><li><a href="#information-display">Information display</a></li><ul><li><a href="#stats">stats</a></li></ul></ul><li><a href="#templates">Templates</a></li><ul><li><a href="#examples">Examples</a></li><li><a href="#helpers">Helpers</a></li><li><a href="#options">Options</a></li></ul><li><a href="#customize">Customize</a></li><ul><li><a href="#custom-widgets">Custom Widgets</a></li><li><a href="#custom-themes">Custom Themes</a></li></ul>
+        <ul><li><a href="#introduction">Introduction</a></li><ul><li><a href="#setup">Setup</a></li><li><a href="#initialization">Initialization</a></li><li><a href="#adding-widgets">Adding Widgets</a></li><li><a href="#start">Start</a></li></ul><li><a href="#widgets">Widgets</a></li><ul><li><a href="#fundamental-widgets">Fundamental widgets</a></li><ul><li><a href="#searchbox">searchBox</a></li><li><a href="#hits">hits</a></li><li><a href="#hitsperpageselector">hitsPerPageSelector</a></li></ul><li><a href="#navigation">Navigation</a></li><ul><li><a href="#pagination">pagination</a></li><li><a href="#menu">menu</a></li><li><a href="#hierarchicalmenu">hierarchicalMenu</a></li></ul><li><a href="#filters">Filters</a></li><ul><li><a href="#refinementlist">refinementList</a></li><li><a href="#numericrefinementlist">numericRefinementList</a></li><li><a href="#toggle">toggle</a></li><li><a href="#rangeslider">rangeSlider</a></li><li><a href="#priceranges">priceRanges</a></li><li><a href="#numericselector">numericSelector</a></li><li><a href="#starrating">starRating</a></li><li><a href="#clearall">clearAll</a></li></ul><li><a href="#sort">Sort</a></li><ul><li><a href="#sortbyselector">sortBySelector</a></li></ul><li><a href="#information-display">Information display</a></li><ul><li><a href="#stats">stats</a></li></ul></ul><li><a href="#templates">Templates</a></li><ul><li><a href="#helpers">Helpers</a></li><li><a href="#options">Options</a></li></ul><li><a href="#customize">Customize</a></li><ul><li><a href="#custom-widgets">Custom Widgets</a></li><li><a href="#custom-themes">Custom Themes</a></li></ul>
       </div>
     </div>
     <div class="col-lg-offset-2 col-md-offset-3 col-lg-10 col-md-9 widget-description clearfix">
       <div class="toc-menu visible-xs visible-sm">
-        <select><option value="#introduction">Introduction</option><option value="#setup">Setup</option><option value="#initialization">Initialization</option><option value="#adding-widgets">Adding Widgets</option><option value="#start">Start</option><option value="#widgets">Widgets</option><option value="#fundamental-widgets">Fundamental widgets</option><option value="#searchbox">searchBox</option><option value="#hits">hits</option><option value="#hitsperpageselector">hitsPerPageSelector</option><option value="#navigation">Navigation</option><option value="#pagination">pagination</option><option value="#menu">menu</option><option value="#hierarchicalmenu">hierarchicalMenu</option><option value="#filters">Filters</option><option value="#refinementlist">refinementList</option><option value="#numericrefinementlist">numericRefinementList</option><option value="#toggle">toggle</option><option value="#rangeslider">rangeSlider</option><option value="#priceranges">priceRanges</option><option value="#numericselector">numericSelector</option><option value="#starrating">starRating</option><option value="#clearall">clearAll</option><option value="#sort">Sort</option><option value="#sortbyselector">sortBySelector</option><option value="#information-display">Information display</option><option value="#stats">stats</option><option value="#templates">Templates</option><option value="#examples">Examples</option><option value="#helpers">Helpers</option><option value="#options">Options</option><option value="#customize">Customize</option><option value="#custom-widgets">Custom Widgets</option><option value="#custom-themes">Custom Themes</option></select>
+        <select><option value="#introduction">Introduction</option><option value="#setup">Setup</option><option value="#initialization">Initialization</option><option value="#adding-widgets">Adding Widgets</option><option value="#start">Start</option><option value="#widgets">Widgets</option><option value="#fundamental-widgets">Fundamental widgets</option><option value="#searchbox">searchBox</option><option value="#hits">hits</option><option value="#hitsperpageselector">hitsPerPageSelector</option><option value="#navigation">Navigation</option><option value="#pagination">pagination</option><option value="#menu">menu</option><option value="#hierarchicalmenu">hierarchicalMenu</option><option value="#filters">Filters</option><option value="#refinementlist">refinementList</option><option value="#numericrefinementlist">numericRefinementList</option><option value="#toggle">toggle</option><option value="#rangeslider">rangeSlider</option><option value="#priceranges">priceRanges</option><option value="#numericselector">numericSelector</option><option value="#starrating">starRating</option><option value="#clearall">clearAll</option><option value="#sort">Sort</option><option value="#sortbyselector">sortBySelector</option><option value="#information-display">Information display</option><option value="#stats">stats</option><option value="#templates">Templates</option><option value="#helpers">Helpers</option><option value="#options">Options</option><option value="#customize">Customize</option><option value="#custom-widgets">Custom Widgets</option><option value="#custom-themes">Custom Themes</option></select>
       </div>
       <div class="code-samples hidden-xs"></div>
       <article class="documentation-content">
@@ -88,8 +86,8 @@
 <div class="shameless-marketing text-center hidden-xs">
   <p><img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
-    <p>Build the perfect UI with Instantsearch.js,<br />an extensive library of widgets for search experience.</p>
-    <p class="version">Version: <strong>0.14.1</strong></p>
+    <p>Build the perfect UI with instantsearch.js,<br />an extensive library of widgets for search experience.</p>
+    <p class="version">Version: <strong>0.14.2</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -1338,30 +1336,30 @@ This filtering widget lets the user choose one value for a single numeric attrib
 
       <div class="highlight">
         <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
-  <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">({</span>
-    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#popularity&#39;</span><span class="p">,</span>
-    <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;popularity&#39;</span><span class="p">,</span>
-    <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
-	  <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;All&#39;</span><span class="p">},</span>
-	  <span class="p">{</span><span class="nx">end</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;less than 4&#39;</span><span class="p">},</span>
-	  <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span><span class="p">},</span>
-	  <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;between 5 and 10&#39;</span><span class="p">},</span>
-	  <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;more than 10&#39;</span><span class="p">}</span>
-    <span class="p">],</span>
-    <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">header</span><span class="o">:</span> <span class="s1">&#39;Price&#39;</span>
-    <span class="p">},</span>
-    <span class="nx">cssClasses</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">header</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">footer</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">list</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">link</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-      <span class="nx">active</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
-    <span class="p">}</span>
-  <span class="p">})</span>
-<span class="p">);</span></code></pre>
+      <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">({</span>
+        <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#popularity&#39;</span><span class="p">,</span>
+        <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;popularity&#39;</span><span class="p">,</span>
+        <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;All&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">end</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;less than 4&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;4&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">5</span><span class="p">,</span> <span class="nx">end</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;between 5 and 10&#39;</span><span class="p">},</span>
+        <span class="p">{</span><span class="nx">start</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;more than 10&#39;</span><span class="p">}</span>
+        <span class="p">],</span>
+        <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">header</span><span class="o">:</span> <span class="s1">&#39;Price&#39;</span>
+        <span class="p">},</span>
+        <span class="nx">cssClasses</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">header</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">footer</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">list</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">link</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+          <span class="nx">active</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+    <span class="p">);</span></code></pre>
       </div>
 
     </div>
@@ -1371,92 +1369,8 @@ This filtering widget lets the user choose one value for a single numeric attrib
         <pre><code class="language-javascript" data-lang="javascript"><span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericRefinementList</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></code></pre>
       </div>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Param</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="attr-required"><code>options.container</code></span><span class="attr-infos">Type: <code>string</code> | <code>DOMElement</code></span></td>
-            <td>CSS Selector or DOMElement to insert the widget</td>
-          </tr>
-          <tr>
-            <td><span class="attr-required"><code>options.attributeName</code></span><span class="attr-infos">Type: <code>string</code></span></td>
-            <td>Name of the attribute for filtering</td>
-          </tr>
-          <tr>
-            <td><span class="attr-required"><code>options.options</code></span><span class="attr-infos">Type: <code>Array.&lt;Object&gt;</code></span></td>
-            <td>List of all the options</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
-            <td>CSS classes to add to the wrapping elements: root, list, item</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.root</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to the root element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to the header element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.body</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to the body element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to the footer element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.list</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to the list element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.label</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to each link element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to each item element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.radio</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to each radio element (when using the default template)</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.cssClasses.active</code></span><span class="attr-infos">Type: <code>string</code> | <code>Array.&lt;string&gt;</code></span></td>
-            <td>CSS class to add to each active element</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
-            <td>Templates to use for the widget</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Header template</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Footer template</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the item template</td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
-            <td>Hide the container when no results match</td>
-          </tr>
-        </tbody>
-      </table>
+      <pre><code>| Param | Description | | --- | --- | | &lt;span class='attr-required'&gt;`options.container`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;DOMElement&lt;/code&gt;&lt;/span&gt; | CSS Selector or DOMElement to insert the widget | | &lt;span class='attr-required'&gt;`options.attributeName`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt;&lt;/span&gt; | Name of the attribute for filtering | | &lt;span class='attr-required'&gt;`options.options`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;Array.&amp;lt;Object&amp;gt;&lt;/code&gt;&lt;/span&gt; | List of all the options | | &lt;span class='attr-optional'&gt;`options.cssClasses`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;Object&lt;/code&gt;&lt;/span&gt; | CSS classes to add to the wrapping elements: root, list, item | | &lt;span class='attr-optional'&gt;`options.cssClasses.root`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to the root element | | &lt;span class='attr-optional'&gt;`options.cssClasses.header`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to the header element | | &lt;span class='attr-optional'&gt;`options.cssClasses.body`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to the body element | | &lt;span class='attr-optional'&gt;`options.cssClasses.footer`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to the footer element | | &lt;span class='attr-optional'&gt;`options.cssClasses.list`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to the list element | | &lt;span class='attr-optional'&gt;`options.cssClasses.label`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to each link element | | &lt;span class='attr-optional'&gt;`options.cssClasses.item`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to each item element | | &lt;span class='attr-optional'&gt;`options.cssClasses.radio`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to each radio element (when using the default template) | | &lt;span class='attr-optional'&gt;`options.cssClasses.active`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;Array.&amp;lt;string&amp;gt;&lt;/code&gt;&lt;/span&gt; | CSS class to add to each active element | | &lt;span class='attr-optional'&gt;`options.templates`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;Object&lt;/code&gt;&lt;/span&gt; | Templates to use for the widget | | &lt;span class='attr-optional'&gt;`options.templates.header`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;function&lt;/code&gt;&lt;/span&gt; | Header template | | &lt;span class='attr-optional'&gt;`options.templates.item`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;function&lt;/code&gt;&lt;/span&gt; | Item template, provided with `name`, `count`, `isRefined` | | &lt;span class='attr-optional'&gt;`options.templates.footer`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;string&lt;/code&gt; &amp;#124; &lt;code&gt;function&lt;/code&gt;&lt;/span&gt; | Footer template | | &lt;span class='attr-optional'&gt;`options.transformData`&lt;/span&gt;&lt;span class="attr-infos"&gt;Type: &lt;code&gt;function&lt;/code&gt;&lt;/span&gt; | Function to change the object passed to the item template | | &lt;span class='attr-optional'&gt;`options.autoHideContainer`&lt;/span&gt;&lt;span class="attr-infos"&gt;Default:&lt;code class="attr-default"&gt;true&lt;/code&gt;&lt;br /&gt;Type: &lt;code&gt;boolean&lt;/code&gt;&lt;/span&gt; | Hide the container when no results match |
+</code></pre>
 
       <p class="attr-legend">* <span>Required</span></p>
 
@@ -1910,11 +1824,11 @@ This filtering widget lets the user choose between numerical refinements from a 
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">numericSelector</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#popularity-selector&#39;</span><span class="p">,</span>
     <span class="nx">attributeName</span><span class="o">:</span> <span class="s1">&#39;popularity&#39;</span><span class="p">,</span>
-    <span class="nx">operator</span><span class="o">:</span> <span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span>
+    <span class="nx">operator</span><span class="o">:</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span>
     <span class="nx">options</span><span class="o">:</span> <span class="p">[</span>
-      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 1&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">1</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 10&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">10</span> <span class="p">},</span>
-      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 100&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">100</span> <span class="p">}</span>
+      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 10&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">9900</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 100&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">9800</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Top 500&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">9700</span> <span class="p">}</span>
     <span class="p">],</span>
     <span class="nx">cssClasses</span><span class="o">:</span> <span class="p">{</span>
       <span class="nx">root</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -1995,7 +1909,7 @@ This filtering widget lets the user choose between numerical refinements from a 
 
 <div class="codebox-combo">
 
-  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-slider.svg" />
+  <p class="description"><img class="widget-icon pull-left" src="../img/icon-widget-star-rating.svg" />
 This filtering widget lets the user refine by a number of stars. The underlying rating attribute needs to have from 0 to <code>max</code> stars.</p>
 
   <div class="code-box">
@@ -2266,7 +2180,7 @@ This widget lets you change the sort order by letting you select which index you
       <div class="highlight">
         <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">sortBySelector</span><span class="p">({</span>
-    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#index-selector-container&#39;</span><span class="p">,</span>
+    <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#sort-by-selector-container&#39;</span><span class="p">,</span>
     <span class="nx">indices</span><span class="o">:</span> <span class="p">[</span>
       <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;instant_search&#39;</span><span class="p">,</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Most relevant&#39;</span><span class="p">},</span>
       <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;instant_search_price_asc&#39;</span><span class="p">,</span> <span class="nx">label</span><span class="o">:</span> <span class="s1">&#39;Lowest price&#39;</span><span class="p">},</span>
@@ -2343,7 +2257,7 @@ page</a>.</p>
 
 </div>
 
-<div id="index-selector-container" class="widget-container"></div>
+<div id="sort-by-selector-container" class="widget-container"></div>
 
 <h3 id="information-display">Information display</h3>
 
@@ -2452,14 +2366,12 @@ This widget lets you display meta informations of the current search. It helps t
 
 <h2 id="templates">Templates</h2>
 
-<p>Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a <a href="https://mustache.github.io/">Mustache</a> string or as a function receiving the widget data.</p>
+<div class="codebox-combo">
+  <div class="code-box">
+    <div class="code-sample-snippet">
 
-<p>See the documentation of each widget to see which data is passed to the template.</p>
-
-<h3 id="examples">Examples</h3>
-
-<div class="highlight">
-  <pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Mustache template example</span>
+      <div class="highlight">
+        <pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Mustache template example</span>
 <span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span>
   <span class="nx">instantsearch</span><span class="p">.</span><span class="nx">widgets</span><span class="p">.</span><span class="nx">stats</span><span class="p">({</span>
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#stats&#39;</span><span class="p">,</span>
@@ -2481,9 +2393,42 @@ This widget lets you display meta informations of the current search. It helps t
     <span class="p">}</span>
   <span class="p">})</span>
 <span class="p">);</span></code></pre>
+      </div>
+
+    </div>
+  </div>
+
+  <p>Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a <a href="https://mustache.github.io/">Mustache</a> string or as a function receiving the widget data.</p>
+
+  <p>See the documentation of each widget to see which data is passed to the template.</p>
+
 </div>
 
 <h3 id="helpers">Helpers</h3>
+
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
+    <p><!-- <strong class="text-white">Here is the syntax of a helper</strong> --></p>
+
+    <div class="highlight">
+      <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">emphasis</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">render</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="s1">&#39;&lt;em&gt;&#39;</span> <span class="o">+</span> <span class="nx">render</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/em&gt;&#39;</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+    </div>
+
+  </div>
+  <div class="code-sample-snippet ignore">
+    <p><strong class="text-white">In your helper, <code>this</code> always refers to the data</strong></p>
+
+    <div class="highlight">
+      <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">discount</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*text, render*/</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">discount</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">price</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">;</span>
+  <span class="k">return</span> <span class="s1">&#39;$ -&#39;</span> <span class="o">+</span> <span class="nx">discount</span><span class="p">;</span>
+<span class="p">};</span></code></pre>
+    </div>
+
+  </div>
+</div>
 
 <p>In order to help you when defining your templates, <strong>instantsearch.js</strong> exposes a few helpers.</p>
 
@@ -2491,38 +2436,15 @@ This widget lets you display meta informations of the current search. It helps t
 
 <p>Here is the list of the currently available helpers:</p>
 
-<ul>
-  <li><code>formatNumber</code>: Will accept a number as input and returned the formatted
-version of the number in the locale defined with the <code>numberLocale</code> config
-option (defaults to <code>en-EN</code>).
-eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-EN</code></li>
-</ul>
-
-<p>Here is the syntax of a helper:</p>
-
-<div class="highlight">
-  <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">emphasis</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">render</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="s1">&#39;&lt;em&gt;&#39;</span> <span class="o">+</span> <span class="nx">render</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&lt;/em&gt;&#39;</span><span class="p">;</span>
-<span class="p">};</span></code></pre>
-</div>
-
-<p>In your helper, <code>this</code> always refers to the data:</p>
-
-<div class="highlight">
-  <pre><code class="language-javascript" data-lang="javascript"><span class="nx">search</span><span class="p">.</span><span class="nx">templatesConfig</span><span class="p">.</span><span class="nx">helpers</span><span class="p">.</span><span class="nx">discount</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/*text, render*/</span><span class="p">)</span> <span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">discount</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">price</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">;</span>
-  <span class="k">return</span> <span class="s1">&#39;$ -&#39;</span> <span class="o">+</span> <span class="nx">discount</span><span class="p">;</span>
-<span class="p">};</span></code></pre>
-</div>
+<p><code>formatNumber</code>: Will accept a number as input and returned the formatted version of the number in the locale defined with the <code>numberLocale</code> config option (defaults to <code>en-EN</code>). eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-EN</code></p>
 
 <h3 id="options">Options</h3>
 
-<p>You can configure the options passed to underlying <code>Hogan.compile</code> by using <code>search.templatesConfig.compileOptions</code>. We accept all <a href="https://github.com/twitter/hogan.js/#compilation-options">compile options</a>.</p>
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
 
-<p>Theses options will be passed to the <code>Hogan.compile</code> calls when you pass a custom template.</p>
-
-<div class="highlight">
-  <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
+    <div class="highlight">
+      <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
   <span class="nx">appId</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="nx">apiKey</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
   <span class="nx">indexName</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
@@ -2532,26 +2454,20 @@ eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">});</span></code></pre>
+    </div>
+
+  </div>
 </div>
+
+<p>You can configure the options passed to underlying <code>Hogan.compile</code> by using <code>search.templatesConfig.compileOptions</code>. We accept all <a href="https://github.com/twitter/hogan.js/#compilation-options">compile options</a>.</p>
+
+<p>Theses options will be passed to the <code>Hogan.compile</code> calls when you pass a custom template.</p>
 
 <h2 id="customize">Customize</h2>
 
 <h3 id="custom-widgets">Custom Widgets</h3>
 
-<p><strong>instantsearch.js</strong> has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:</p>
-
-<ul>
-  <li><code>getConfiguration()</code>: configures the underlying AlgoliaSearch JS Helper,</li>
-  <li><code>init()</code>: called once after the initialization,</li>
-  <li><code>render()</code>: called as soon as the underlying state has changed.</li>
-</ul>
-
 <div class="codebox-combo">
-
-  <p>The widgets API is agnostic. In the built-in widgets, we use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">VanillaJS</a>
-for simple widgets such as the searchBox and for the most advanced, we use
-<a href="https://facebook.github.io/react://facebook.github.io/react/">ReactJS</a>.
-If your code base is relying on an other framework, feel free to use it to create your own widget!</p>
 
   <div class="code-box">
     <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -2603,6 +2519,20 @@ If your code base is relying on an other framework, feel free to use it to creat
 
     </div>
   </div>
+
+  <p><strong>instantsearch.js</strong> has been designed to be easily extended. You can easily create your own widget by instantiating an object that exposes some of those methods:</p>
+
+  <ul>
+    <li><code>getConfiguration()</code>: configures the underlying AlgoliaSearch JS Helper,</li>
+    <li><code>init()</code>: called once after the initialization,</li>
+    <li><code>render()</code>: called as soon as the underlying state has changed.</li>
+  </ul>
+
+  <p>The widgets API is agnostic. In the built-in widgets, we use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">VanillaJS</a>
+for simple widgets such as the searchBox and for the most advanced, we use
+<a href="https://facebook.github.io/react://facebook.github.io/react/">ReactJS</a>.
+If your code base is relying on an other framework, feel free to use it to create your own widget!</p>
+
 </div>
 
 <h4 class="no-toc" id="example-with-jquery">Example with jQuery</h4>
@@ -2615,7 +2545,7 @@ If your code base is relying on an other framework, feel free to use it to creat
 
 <h3 id="custom-themes">Custom Themes</h3>
 
-<p>All widgets have been designed to be heavily stylizable with CSS rules. <strong>Instantsearch.js</strong> ships with a vanilla CSS theme, but its source code utilizes <a href="http://sass-lang.com/">Sass</a>, a popular CSS preprocessor.</p>
+<p>All widgets have been designed to be heavily stylizable with CSS rules. <strong>instantsearch.js</strong> ships with a vanilla CSS theme, but its source code utilizes <a href="http://sass-lang.com/">Sass</a>, a popular CSS preprocessor.</p>
 
 <p>We’re using <a href="http://getbem.com/introduction/">BEM</a>, a methodology that helps you to achieve reusable components and code sharing in the front-end.</p>
 
@@ -2703,6 +2633,7 @@ If your code base is relying on an other framework, feel free to use it to creat
     </div>
   </div>
 </div>
+
 
       </article>
     </div>

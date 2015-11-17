@@ -28,6 +28,9 @@ header {
   height: 60px;
   padding: 10px;
   background: #222F3F; }
+  header .is-logo {
+    float: left;
+    margin-right: 12px; }
   header .logo {
     float: left;
     margin-right: 16px;
@@ -225,7 +228,7 @@ aside {
   #results-topbar label {
     font-weight: normal;
     font-size: .8em; }
-  #results-topbar #index-selector {
+  #results-topbar #sort-by-selector {
     display: inline-block; }
 
 #clear-all {

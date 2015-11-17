@@ -56,10 +56,10 @@
       return {
         isCategoryHeader: hit.isCategoryHeader,
         isSubcategoryHeader: hit.isSubcategoryHeader,
-        category: hit._highlightResult.category.value,
-        subcategory: hit._highlightResult.subcategory.value,
-        title: hit._highlightResult.display_title.value,
-        text: hit._snippetResult ? hit._snippetResult.text.value : hit.text,
+        category: hit._highlightResult.category && hit._highlightResult.category.value,
+        subcategory: hit._highlightResult.subcategory && hit._highlightResult.subcategory.value,
+        title: hit._highlightResult.display_title && hit._highlightResult.display_title.value,
+        text: hit._snippetResult && hit._snippetResult.text ? hit._snippetResult.text.value : hit.text,
         url: hit.url
       };
     });
