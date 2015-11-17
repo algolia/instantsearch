@@ -11,7 +11,9 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
   <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
   {% if site.env == 'development' %}
-  <link rel="stylesheet" href="//localhost:8080/instantsearch.css" />
+    <script>
+      document.write('<link rel="stylesheet" href="http://' + window.location.hostname +':8080/instantsearch.css">');
+    </script>
   {% else %}
   <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
   {% endif %}
@@ -55,7 +57,9 @@
     </article>
   </section>
   {% if site.env == 'development' %}
-  <script src="//localhost:8080/instantsearch.js"></script>
+    <script>
+      document.write('\x3Cscript src="http://' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
+    </script>
   {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
   {% endif %}
