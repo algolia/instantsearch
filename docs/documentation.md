@@ -886,8 +886,7 @@ search.addWidget(
       link: '',
       disabledLink: '',
       star: '',
-      emptyStar: '',
-      active: ''
+      emptyStar: ''
     }
   })
 );
