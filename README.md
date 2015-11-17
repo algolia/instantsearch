@@ -1,4 +1,4 @@
-![instantsearch.js logo][readme-logo]
+[![instantsearch.js logo][readme-logo]][[logo-url]]
 
 **instantsearch.js** is a library of widgets designed for high performance instant search experiences using Algolia.
 
@@ -13,6 +13,7 @@
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
 [readme-logo]: ./readme-logo.png
+[logo-url]: http://community.algolia.com/instantsearch.js/
 
 ## Table of contents
 
