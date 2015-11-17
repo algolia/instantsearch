@@ -265,12 +265,7 @@ search.addWidget(
     container: '#q',
     placeholder: 'Search for products',
     autofocus: false,
-    poweredBy: true,
-    cssClasses: {
-      root: '',
-      input: '',
-      poweredBy: ''
-    }
+    poweredBy: true
   })
 );
 {% endhighlight %}
@@ -363,11 +358,7 @@ search.addWidget(
       {value: 6, label: '6 per page'},
       {value: 12, label: '12 per page'},
       {value: 24, label: '24 per page'}
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+    ]
   })
 );
 {% endraw %}
@@ -411,19 +402,7 @@ search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination-container',
     maxPages: 20,
-    scrollTo: false, // 'body' by default
-    cssClasses: {
-      root: '',
-      item: '',
-      link: '',
-      page: '',
-      previous: '',
-      next: '',
-      first: '',
-      last: '',
-      active: '',
-      disabled: ''
-    }
+    scrollTo: false // 'body' by default
   })
 );
     {% endhighlight %}
@@ -461,18 +440,6 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Categories'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -516,18 +483,6 @@ search.addWidget(
     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
     templates: {
       header: 'Hierarchical categories'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -586,18 +541,6 @@ search.addWidget(
     limit: 10,
     templates: {
       header: 'Brands'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -644,15 +587,6 @@ This filtering widget lets the user choose one value for a single numeric attrib
         ],
         templates: {
           header: 'Price'
-        },
-        cssClasses: {
-          root: '',
-          header: '',
-          body: '',
-          footer: '',
-          list: '',
-          link: '',
-          active: ''
         }
       })
     );
@@ -693,18 +627,6 @@ search.addWidget(
     },
     templates: {
       header: 'Shipping'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      label: '',
-      checkbox: '',
-      count: ''
     }
   })
 );
@@ -791,19 +713,6 @@ search.addWidget(
     },
     templates: {
       header: 'Price'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      currency: '',
-      separator: '',
-      button: ''
     }
   })
 );
@@ -846,11 +755,7 @@ search.addWidget(
       { label: 'Top 10', value: 9900 },
       { label: 'Top 100', value: 9800 },
       { label: 'Top 500', value: 9700 }
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+    ]
   })
 );
 {% endhighlight %}
@@ -886,19 +791,6 @@ search.addWidget(
     max: 5,
     labels: {
       andUp: '& Up'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      list: '',
-      item: '',
-      active: '',
-      link: '',
-      disabledLink: '',
-      star: '',
-      emptyStar: ''
     }
   })
 );
@@ -932,13 +824,6 @@ search.addWidget(
     container: '#clear-all',
     templates: {
       link: 'Reset everything'
-    },
-    cssClasses: {
-      root: '',
-      header: '',
-      body: '',
-      footer: '',
-      link: '',
     },
     autoHideContainer: false
   })
@@ -978,11 +863,7 @@ search.addWidget(
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
       {name: 'instant_search_price_desc', label: 'Highest price'}
-    ],
-    cssClasses: {
-      root: '',
-      item: ''
-    }
+    ]
   })
 );
 {% endhighlight %}
@@ -1020,13 +901,7 @@ This widget lets you display meta informations of the current search. It helps t
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.stats({
-    container: '#stats-container',
-    cssClasses: {
-      header: '',
-      body: '',
-      footer: '',
-      time: ''
-    }
+    container: '#stats-container'
   })
 );
 {% endhighlight %}
