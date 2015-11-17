@@ -25,14 +25,14 @@
   - [With npm, browserify, webpack](#with-npm-browserify-webpack)
 - [Quick Start](#quick-start)
 - [Browser support](#browser-support)
-- [Development workflow](#development-workflow)
-- [Test](#test)
 - [Instant search configuration](#instant-search-configuration)
   - [Number locale](#number-locale)
   - [Initial search parameters](#initial-search-parameters)
   - [URL synchronisation](#url-synchronisation)
+- [Development workflow](#development-workflow)
+- [Test](#test)
 - [License](#license)
-- [More...](#more)
+- [Contributing](#contributing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
