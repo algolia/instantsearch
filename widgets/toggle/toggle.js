@@ -22,6 +22,13 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {Object} [options.values] Lets you define the values to filter on when toggling
  * @param  {*} [options.values.on] Value to filter on when checked
  * @param  {*} [options.values.off] Value to filter on when unchecked
+ * element (when using the default template)
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -35,13 +42,6 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each
  * checkbox element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count
- * element (when using the default template)
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
- * @param  {string|Function} [options.templates.item] Item template
- * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
  * @return {Object}
  */
 const usage = `Usage:

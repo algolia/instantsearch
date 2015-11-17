@@ -15,10 +15,10 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @param  {Array} options.indices Array of objects defining the different indices to choose from.
  * @param  {string} options.indices[0].name Name of the index to target
  * @param  {string} options.indices[0].label Label displayed in the dropdown
+ * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
  * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */
 const usage = `Usage:

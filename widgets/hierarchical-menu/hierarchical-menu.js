@@ -18,6 +18,12 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string} [options.separator=' > '] Separator used in the attributes to separate level values.
  * @param  {number} [options.limit=100] How much facet values to get
  * @param  {string[]} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.header=''] Header template (root level only)
+ * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
+ * @param  {Function} [options.transformData] Method to change the object passed to the item template
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -29,12 +35,6 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template (root level only)
- * @param  {string|Function} [options.templates.item] Item template
- * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
- * @param  {Function} [options.transformData] Method to change the object passed to the item template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @return {Object}
  */
 const usage = `Usage:

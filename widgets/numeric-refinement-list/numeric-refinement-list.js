@@ -18,6 +18,12 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for filtering
  * @param  {Object[]} options.options List of all the options
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.header] Header template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -28,12 +34,6 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
  * @param  {string|string[]} [options.cssClasses.radio] CSS class to add to each radio element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @return {Object}
  */
 const usage = `Usage:
