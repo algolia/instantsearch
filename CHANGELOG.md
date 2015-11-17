@@ -1,3 +1,13 @@
+<a name="0.14.4"></a>
+## [0.14.4](https://github.com/algolia/instantsearch.js/compare/v0.14.3...v0.14.4) (2015-11-17)
+
+
+### Bug Fixes
+
+* **doc:** Expand input on documentation page ([6814a14](https://github.com/algolia/instantsearch.js/commit/6814a14))
+
+
+
 <a name="0.14.3"></a>
 ## [0.14.3](https://github.com/algolia/instantsearch.js/compare/v0.14.2...v0.14.3) (2015-11-17)
 
