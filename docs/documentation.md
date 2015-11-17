@@ -411,7 +411,19 @@ search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination-container',
     maxPages: 20,
-    cssClass: ''
+    scrollTo: false, // 'body' by default
+    cssClasses: {
+      root: '',
+      item: '',
+      link: '',
+      page: '',
+      previous: '',
+      next: '',
+      first: '',
+      last: '',
+      active: '',
+      disabled: ''
+    }
   })
 );
     {% endhighlight %}
