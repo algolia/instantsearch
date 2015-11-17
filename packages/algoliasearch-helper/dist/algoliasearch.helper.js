@@ -9419,6 +9419,12 @@ function SearchResults(state, algoliaResponse) {
       if (hierarchicalFacet) {
         position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
         var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
+
+        // previous refinements and no results so not able to find it
+        if (attributeIndex === -1) {
+          return;
+        }
+
         this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
       } else {
         position = disjunctiveFacetsIndices[dfacet];
@@ -10911,7 +10917,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.6';
+module.exports = '2.6.7';
 
 },{}]},{},[1])(1)
 });
