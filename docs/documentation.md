@@ -1286,4 +1286,3 @@ If you want to style the **search-box** widget, you can do:
 </div>
 </div>
 </div>
-
