@@ -730,7 +730,7 @@ The attribute defined in `attributeName` must also be defined as an
 
 <img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
 The rangeSlider widget lets users filter results within a numerical range, based on an attribute.
-{:.description}. The min and max values are automatically computed by Algolia using the data in the index.
+The min and max values are automatically computed by Algolia using the data in the index.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet">
@@ -773,7 +773,6 @@ The attribute defined in `attributeName` must also be defined as an
 
 <img class="widget-icon pull-left" src="../img/icon-widget-pricerange.svg">
 This filtering widget lets the user choose a price range. The ranges are dynamically computed based on the returned results.
-{:.description}
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet">
@@ -1182,6 +1181,7 @@ The widget may implement some of the following methods (depending on the need of
 </div>
 
 **instantsearch.js** was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:
+
 
  * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/docs/)
  * `init()`: called once after the initialization
