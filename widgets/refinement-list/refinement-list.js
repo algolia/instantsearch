@@ -18,6 +18,12 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=1000] How much facet values to get
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.header] Header template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
@@ -29,12 +35,6 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
  * @return {Object}
  */
 const usage = `Usage:

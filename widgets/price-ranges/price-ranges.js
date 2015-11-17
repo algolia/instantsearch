@@ -17,6 +17,13 @@ let cx = require('classnames');
  * @function priceRanges
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.attributeName Name of the attribute for faceting
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.item] Item template
+ * @param  {Object} [options.labels] Labels to use for the widget
+ * @param  {string|Function} [options.labels.currency] Currency label
+ * @param  {string|Function} [options.labels.separator] Separator label, between min and max
+ * @param  {string|Function} [options.labels.button] Button label
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string} [options.cssClasses.header] CSS class to add to the header element
@@ -32,13 +39,6 @@ let cx = require('classnames');
  * @param  {string} [options.cssClasses.separator] CSS class to add to the separator of the form
  * @param  {string} [options.cssClasses.button] CSS class to add to the submit button of the form
  * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.item] Item template
- * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.currency] Currency label
- * @param  {string|Function} [options.labels.separator] Separator label, between min and max
- * @param  {string|Function} [options.labels.button] Button label
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @return {Object}
  */
 const usage = `Usage:

@@ -12,10 +12,6 @@ let defaultTemplates = require('./defaultTemplates');
  * Display the list of results (hits) from the current search
  * @function hits
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string} [options.cssClasses.item] CSS class to add to each result
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.empty=''] Template to use when there are no results.
  * @param  {string|Function} [options.templates.item=''] Template to use for each result.
@@ -23,6 +19,10 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {Function} [options.transformData.empty=identity] Method used to change the object passed to the empty template
  * @param  {Function} [options.transformData.item=identity] Method used to change the object passed to the item template
  * @param  {number} [hitsPerPage=20] The number of hits to display per page
+ * @param  {Object} [options.cssClasses] CSS classes to add
+ * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {string} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {string} [options.cssClasses.item] CSS class to add to each result
  * @return {Object}
  */
 const usage = `Usage:

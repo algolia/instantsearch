@@ -16,10 +16,10 @@ let bem = utils.bemHelper('ais-numeric-selector');
  * @param  {number} options.options[i].value The numerical value to refine with
  * @param  {string} options.options[i].label Label to display in the option
  * @param  {string} [options.operator] The operator to use to refine
+ * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
  * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @return {Object}
  */
 

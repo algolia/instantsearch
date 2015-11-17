@@ -14,17 +14,17 @@ let defaultTemplates = require('./defaultTemplates');
  * Allows to clear all refinements at once
  * @function clearAll
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {Object} [options.templates] Templates to use for the widget
+ * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.link] Link template
+ * @param  {string|Function} [options.templates.footer=''] Footer template
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no refinement to clear
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to the link element
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
- * @param  {string|Function} [options.templates.link] Link template
- * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no refinement to clear
  * @return {Object}
  */
 const usage = `Usage:
