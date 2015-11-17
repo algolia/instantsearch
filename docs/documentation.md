@@ -1189,26 +1189,26 @@ The widget may implement some of the following methods (depending on the need of
 
 </div>
 
-#### Example with vanillaJS
+#### Example with plain JavaScript
 {:.no-toc}
 
-To extend the capabilities of instantsearch.js, you don't need to use any dependencies, you can use plain javascript. Have a look at our simple js example [<i class='fa fa-github'></i> instantsearch/instantsearch-JavaScript-widget](https://github.com/instantsearch/instantsearch-JavaScript-widget) to get started.
+You can extend the capabilities of instantsearch.js using plain JavaScript, without using ny dependencies. Have a look at our simple js example [<i class='fa fa-github'></i> instantsearch/instantsearch-JavaScript-widget](https://github.com/instantsearch/instantsearch-JavaScript-widget) to get started.
 
 #### Example with jQuery
 {:.no-toc}
 
-You may also want to use jQuery to power your custom widgets and that's definitely possible. To get you started, you can check the simple example we made [<i class='fa fa-github'></i> instantsearch/instantsearch-jQuery-widget](https://github.com/instantsearch/instantsearch-jQuery-widget). We also made an other example integrating ion.rangeSlider jQuery plugin : [<i class="fa fa-github"></i> instantsearch/instantsearch-ion.rangeSlider](https://github.com/instantsearch/instantsearch-ion.rangeSlider).
+You can also use jQuery to power your custom widgets. To get started, check out the simple example we made [<i class='fa fa-github'></i> instantsearch/instantsearch-jQuery-widget](https://github.com/instantsearch/instantsearch-jQuery-widget). We also made an other example integrating ion.rangeSlider jQuery plugin : [<i class="fa fa-github"></i> instantsearch/instantsearch-ion.rangeSlider](https://github.com/instantsearch/instantsearch-ion.rangeSlider).
 
 #### Example with React
 {:.no-toc}
 
-You can also use React for your next widget. Have a look at a simple example, [<i class='fa fa-github'></i> instantsearch/instantsearch-React-widget ](https://github.com/instantsearch/instantsearch-React-widget), or dig into a full fledged React component integration, [<i class='fa fa-github'></i> instantsearch/instantsearch-googlemaps](https://github.com/instantsearch/instantsearch-googlemaps).
+A third option for your widgets is React. Take a look at this simple example, [<i class='fa fa-github'></i> instantsearch/instantsearch-React-widget ](https://github.com/instantsearch/instantsearch-React-widget), or dig into a full fledged React component integration, [<i class='fa fa-github'></i> instantsearch/instantsearch-googlemaps](https://github.com/instantsearch/instantsearch-googlemaps).
 
 ### Custom Themes
 
 All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 
-We're using [BEM](http://getbem.com/introduction/), a methodology that helps you to achieve reusable components and code sharing in the front-end.
+We're using [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
 
 If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
 
