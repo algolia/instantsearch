@@ -251,7 +251,7 @@ This example shows you how to create a very simple search results page that incl
 
 ## Widgets
 
-### Fundamental widgets
+### Basics
 
 #### searchBox
 
