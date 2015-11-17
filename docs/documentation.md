@@ -838,11 +838,11 @@ search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
     attributeName: 'popularity',
-    operator: '<=',
+    operator: '>=',
     options: [
-      { label: 'Top 1', value: 1 },
-      { label: 'Top 10', value: 10 },
-      { label: 'Top 100', value: 100 }
+      { label: 'Top 10', value: 9900 },
+      { label: 'Top 100', value: 9800 },
+      { label: 'Top 500', value: 9700 }
     ],
     cssClasses: {
       root: '',
@@ -869,7 +869,7 @@ instantsearch.widgets.numericSelector(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
+<img class="widget-icon pull-left" src="../img/icon-widget-star-rating.svg">
 This filtering widget lets the user refine search results by the number of stars associated with an item. The underlying rating attribute needs to have from 0 to `max` stars.
 {:.description}
 
@@ -970,7 +970,7 @@ This widget lets you reorder your results. You need multiple indices for this to
 {% highlight javascript %}
 search.addWidget(
   instantsearch.widgets.sortBySelector({
-    container: '#index-selector-container',
+    container: '#sort-by-container',
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
@@ -1000,7 +1000,7 @@ page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-result
 
 </div>
 
-<div id="index-selector-container" class="widget-container"></div>
+<div id="sort-by-container" class="widget-container"></div>
 
 ### Information display
 
@@ -1043,12 +1043,9 @@ instantsearch.widgets.stats(options);
 
 ## Templates
 
-Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data.
-
-See the documentation of each widget to see which data is passed to the template.
-
-### Examples
-
+<div class="codebox-combo">
+<div class="code-box">
+  <div class="code-sample-snippet">
 {% highlight javascript %}
 // Mustache template example
 search.addWidget(
@@ -1061,7 +1058,7 @@ search.addWidget(
 );
 
 // Function template example
-search.addWidget(
+search.addWidget
   instantsearch.widgets.stats({
     container: '#stats',
     templates: {
@@ -1073,43 +1070,48 @@ search.addWidget(
   })
 );
 {% endhighlight %}
+  </div>
+</div>
+
+  Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data.
+
+  See the documentation of each widget to see which data is passed to the template.
+</div>
 
 ### Helpers
 
-In order to help you when defining your templates, **instantsearch.js** exposes a few helpers.
-
-All helpers are accessible in the Mustache templating through `{% raw %}{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}{% endraw %}`. To use them in the function templates, you'll have to call `search.templatesConfig.helpers.nameOfTheHelper` where `search` is your current **instantsearch.js** instance.
-
-Here is the list of the currently available helpers:
-
-- `formatNumber`: Will accept a number as input and return the formatted
-  version of the number in the locale defined with the `numberLocale` config
-  option (defaults to `en-EN`).
-  eg. `100000` will be formatted as `100 000` with `en-EN`
-
-Here is the syntax of a helper:
-
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
+  <!-- <strong class="text-white">Here is the syntax of a helper</strong> -->
 {% highlight javascript %}
 search.templatesConfig.helpers.emphasis = function(text, render) {
   return '<em>' + render(text) + '</em>';
 };
 {% endhighlight %}
-
-In your helper, `this` always refers to the data:
-
+  </div>
+  <div class="code-sample-snippet ignore">
+  <strong class="text-white">In your helper, `this` always refers to the data</strong>
 {% highlight javascript %}
 search.templatesConfig.helpers.discount = function(/*text, render*/) {
   var discount = this.price * 0.3;
   return '$ -' + discount;
 };
 {% endhighlight %}
+  </div>
+</div>
+
+In order to help you use templates, **instantsearch.js** exposes a few helpers.
+
+All helpers are accessible in the Mustache templating through `{% raw %}{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}{% endraw %}`. To use them in the function templates, you'll have to call `search.templatesConfig.helpers.nameOfTheHelper` where `search` is your current **instantsearch.js** instance.
+
+Currently we have one helper:
+
+`formatNumber`: Will accept a number as input and return the formatted version of the number in the locale defined with the `numberLocale` config option (defaults to `en-EN`). eg. `100000` will be formatted as `100 000` with `en-EN`
 
 ### Options
 
-You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
-
-Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
-
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
 {% highlight javascript %}
 var search = instantsearch({
   appId: '',
@@ -1122,23 +1124,19 @@ var search = instantsearch({
   }
 });
 {% endhighlight %}
+  </div>
+</div>
+
+You can configure the options passed to underlying `Hogan.compile` by using `search.templatesConfig.compileOptions`. We accept all [compile options](https://github.com/twitter/hogan.js/#compilation-options).
+
+Theses options will be passed to the `Hogan.compile` calls when you pass a custom template.
+
 
 ## Customize
 
 ### Custom Widgets
 
-**instantsearch.js** was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:
-
- * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/docs/)
- * `init()`: called once after the initialization
- * `render()`: called every time the search data changes
-
 <div class="codebox-combo">
-
-The widgets API is agnostic. In the built-in widgets, we use [VanillaJS](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-for simple widgets such as the searchBox. For the more advanced widgets, we use
-[ReactJS](https://facebook.github.io/react://facebook.github.io/react/).
-If your code base relies on another framework, feel free to use it to create your own widget!
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -1159,8 +1157,8 @@ var mySingletonWidget = {
 search.addWidget(mySingletonWidget);
 {% endhighlight %}
 
-</div>
-<div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  </div>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 
 {% highlight javascript %}
 search.addWidget(widget)
@@ -1168,19 +1166,27 @@ search.addWidget(widget)
 
 The widget may implement some of the following methods (depending on the need of the widget):
 
-  - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameter](http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html) and should return the properties needed as an object.
+  - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameter](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) and should return the properties needed as an object.
   - <span class="attr-optional">`widget.init`</span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
-    - state: the [search state](http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
+    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
     - templatesConfig: the template configuration
   - <span class="attr-optional">`widget.render`</span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
-    - results: the [results](http://algolia.github.io/algoliasearch-helper-js/docs/SearchResults.html) of the query
-    - state: the [search state](http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](http://algolia.github.io/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
+    - results: the [results](https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html) of the query
+    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
     - createURL: function provided to create urls
 
   </div>
-</div></div>
+</div>
+
+**instantsearch.js** was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:
+
+ * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/docs/)
+ * `init()`: called once after the initialization
+ * `render()`: called every time we have new search data
+
+</div>
 
 #### Example with vanillaJS
 {:.no-toc}
@@ -1199,11 +1205,11 @@ You can also use React for your next widget. Have a look at a simple example, [<
 
 ### Custom Themes
 
-All widgets have been designed to be heavily stylizable with CSS rules. **Instantsearch.js** ships with a vanilla CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
+All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
 
-We're using [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
+We're using [BEM](http://getbem.com/introduction/), a methodology that helps you to achieve reusable components and code sharing in the front-end.
 
-If you want to build you own theme, we recommend you start from our default skeleton: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
+If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
 
 #### BEM modifiers
 {:.no-toc}
