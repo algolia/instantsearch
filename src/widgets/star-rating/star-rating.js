@@ -97,7 +97,9 @@ function starRating({
         if (!val || val > max - 1) {
           return;
         }
-        allValues[val] += facet.count;
+        for (let v = val; v >= 1; --v) {
+          allValues[v] += facet.count;
+        }
       });
       let refinedStar = this._getRefinedStar(helper);
       for (let star = max - 1; star >= 1; --star) {
