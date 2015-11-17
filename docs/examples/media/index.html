@@ -6,10 +6,10 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Ecommerce search with instantsearch.js by Algolia</title>
+  <title>Media search by Algolia</title>
   <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-
+  <link href="//fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
   {% if site.env == 'development' %}
   <link rel="stylesheet" href="//localhost:8080/instantsearch.css" />
   {% else %}
@@ -20,60 +20,45 @@
   <script src="//cdn.polyfill.io/v2/polyfill.min.js"></script>
   <![endif]-->
 </head>
-
 <body>
-  <div class="container-fluid">
-    <header class="content-wrapper">
+  <header class="row">
+    <div class="col-sm-3">
       <a href="https://community.algolia.com/instantsearch.js/" class="is-logo"><img src="logo-is.png" width=40 ></a>
-      <a href="./" class="logo">amazing</a>
+      <a href="./" class="logo">You<i class="fa fa-youtube-play"></i></a>
+    </div>
+    <div class="col-sm-4">
       <div class="input-group">
         <input type="text" class="form-control" id="q" />
         <span class="input-group-btn">
           <button class="btn btn-default"><i class="fa fa-search"></i></button>
         </span>
       </div>
-    </header>
-
-    <div class="content-wrapper">
-
-      <aside>
-        <div id="clear-all"></div>
-        <section class="facet-wrapper">
-          <div class="facet-category-title" class="facet">Show results for</div>
-          <div id="categories"></div>
-        </section>
-        <section class="facet-wrapper">
-          <div class="facet-category-title">Refine by</div>
-          <div id="materials" class="facet"></div>
-          <div id="colors" class="facet"></div>
-          <div id="rating" class="facet"></div>
-          <div id="prices" class="facet"></div>
-        </section>
-      </aside>
-
-      <div class="results-wrapper">
-        <section id="results-topbar">
-          <div class="sort-by">
-            <label>Sort by</label>
-            <div id="sort-by-selector"></div>
-          </div>
-          <div id="stats" class="text-muted"></div>
-        </section>
-        <main id="hits"></main>
-        <section id="pagination"></section>
-      </div>
-
     </div>
-  </div>
-
+  </header>
+  <section class="row">
+    <aside>
+      <ul class="nav nav-list">
+        <li><a href=""><i class="fa fa-home"></i> Home</a></li>
+        <li class="separator"></li>
+      </ul>
+      <h5><i class="fa fa-chevron-right"></i> Genres</h5>
+      <div id="genres"></div>
+      <h5><i class="fa fa-chevron-right"></i> Ratings</h5>
+      <div id="ratings"></div>
+      <div class="thank-you">Data courtesy of <a href="http://www.imdb.com/">imdb.com</a></div>
+    </aside>
+    <article>
+      <div id="stats" class="text-right text-muted"></div>
+      <hr />
+      <div id="hits"></div>
+      <div id="pagination" class="text-center"></div>
+    </article>
+  </section>
   {% if site.env == 'development' %}
   <script src="//localhost:8080/instantsearch.js"></script>
   {% else %}
   <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.js"></script>
   {% endif %}
-
-  <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
   <script src="search.js"></script>
-
 </body>
 </html>
