@@ -4162,6 +4162,8 @@ code {
     border: 1px solid #e1e1e1;
     color: rgba(0, 0, 0, 0.75);
     font-weight: bold; }
+  .documentation-content .code-box .text-white code {
+    color: #FFFFFF; }
   .documentation-content .code-box code {
     background: transparent;
     border: none;
@@ -4183,7 +4185,7 @@ code {
   background-color: #0a1724;
   word-wrap: normal;
   white-space: pre;
-  overflow-x: scroll; }
+  overflow-x: auto; }
 
 .widget-container {
   padding: 50px 40px 40px;
