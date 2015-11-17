@@ -41,7 +41,9 @@ test('hierarchical facets: simple usage', function(t) {
       'page': 0,
       'nbPages': 0,
       'hitsPerPage': 1,
-      'facets': {}
+      'facets': {
+        'categories.lvl0': {'beers': 20, 'fruits': 5, 'sales': 20}
+      }
     }, {
       'query': 'badquery',
       'index': indexName,
@@ -60,7 +62,7 @@ test('hierarchical facets: simple usage', function(t) {
   helper.setQuery('badquery').search();
 
   helper.once('result', function(content) {
-    t.deepEqual(content.hierarchicalFacets, [{name: 'categories', count: null, isRefined: true, path: null, data: null}], 'lol');
+    t.deepEqual(content.hierarchicalFacets, [{name: 'categories', count: null, isRefined: true, path: null, data: null}], 'Good facets values');
     t.end();
   });
 });
