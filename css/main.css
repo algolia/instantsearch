@@ -4463,7 +4463,7 @@ code {
     color: white;
     width: 36px;
     overflow: hidden; }
-    .search-form input:focus, .search-form input:active {
+    .search-form input:focus, .search-form input:active, .search-form input.search-active {
       outline: none;
       box-shadow: none;
       width: 300px;

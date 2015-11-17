@@ -35,7 +35,9 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-xs">
             <form class="form search-form" action="#">
-              <input class="form-control" type="text" id="doc-search" />
+            
+              <input class="form-control search-active" placeholder="Search in the documentation" type="text" id="doc-search" />
+            
               <div class="search-icon"><i class="fa fa-search"></i></div>
             </form>
           </li>
@@ -87,7 +89,7 @@
   <p><img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high performance instant search experience.</p>
-    <p class="version">Version: <strong>0.14.3</strong></p>
+    <p class="version">Version: <strong>0.14.4</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -2376,7 +2378,7 @@ This widget lets you display how many results matched the query and how fast the
 
 <div class="codebox-combo">
   <div class="code-box">
-    <div class="code-sample-snippet">
+    <div class="code-sample-snippet ignore">
 
       <div class="highlight">
         <pre><code class="language-javascript" data-lang="javascript"><span class="c1">// Mustache template example</span>
@@ -2395,7 +2397,7 @@ This widget lets you display how many results matched the query and how fast the
     <span class="nx">container</span><span class="o">:</span> <span class="s1">&#39;#stats&#39;</span><span class="p">,</span>
     <span class="nx">templates</span><span class="o">:</span> <span class="p">{</span>
       <span class="nx">body</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">&#39;&lt;div&gt;You have &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">nbHits</span> <span class="o">+</span> <span class="s1">&#39;results, fetched in &#39;</span> <span class="o">+</span>
+        <span class="k">return</span> <span class="s1">&#39;&lt;div&gt;You have &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">nbHits</span> <span class="o">+</span> <span class="s1">&#39; results, fetched in &#39;</span> <span class="o">+</span>
           <span class="nx">data</span><span class="p">.</span><span class="nx">processingTimMS</span> <span class="o">+</span><span class="s1">&#39;ms.&lt;/div&gt;&#39;</span>
       <span class="p">}</span>
     <span class="p">}</span>
