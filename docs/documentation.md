@@ -1059,7 +1059,7 @@ search.addWidget(
 );
 
 // Function template example
-search.addWidget
+search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
     templates: {
