@@ -1,3 +1,14 @@
+<a name="0.14.2"></a>
+## [0.14.2](https://github.com/algolia/instantsearch.js/compare/v0.14.1...v0.14.2) (2015-11-17)
+
+
+### Bug Fixes
+
+* **numericSelector:** pass currentValue as the refined value, not the full obj ([9286b4b](https://github.com/algolia/instantsearch.js/commit/9286b4b))
+* **website:** search icon ([623f071](https://github.com/algolia/instantsearch.js/commit/623f071))
+
+
+
 <a name="0.14.1"></a>
 ## [0.14.1](https://github.com/algolia/instantsearch.js/compare/v0.14.0...v0.14.1) (2015-11-16)
 
