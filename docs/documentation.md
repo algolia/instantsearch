@@ -1045,7 +1045,7 @@ instantsearch.widgets.stats(options);
 
 <div class="codebox-combo">
 <div class="code-box">
-  <div class="code-sample-snippet">
+  <div class="code-sample-snippet ignore">
 {% highlight javascript %}
 // Mustache template example
 search.addWidget(
@@ -1063,7 +1063,7 @@ search.addWidget(
     container: '#stats',
     templates: {
       body: function(data) {
-        return '<div>You have ' + data.nbHits + 'results, fetched in ' +
+        return '<div>You have ' + data.nbHits + ' results, fetched in ' +
           data.processingTimMS +'ms.</div>'
       }
     }
