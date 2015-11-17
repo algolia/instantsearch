@@ -1,3 +1,14 @@
+<a name="0.14.3"></a>
+## [0.14.3](https://github.com/algolia/instantsearch.js/compare/v0.14.2...v0.14.3) (2015-11-17)
+
+
+### Bug Fixes
+
+* **examples:** media logo ([64f850e](https://github.com/algolia/instantsearch.js/commit/64f850e))
+* **website:** demos link to https ([b69c0f5](https://github.com/algolia/instantsearch.js/commit/b69c0f5))
+
+
+
 <a name="0.14.2"></a>
 ## [0.14.2](https://github.com/algolia/instantsearch.js/compare/v0.14.1...v0.14.2) (2015-11-17)
 
