@@ -11,7 +11,11 @@
         <ul class="nav navbar-nav navbar-right">
           <li class="hidden-xs">
             <form class="form search-form" action="#">
-              <input class="form-control" type="text" id="doc-search" />
+            {% if page.title == 'Documentation' %}
+              <input class="form-control search-active" placeholder="Search in the documentation" type="text" id="doc-search" />
+            {% else %}
+              <input class="form-control" placeholder="Search in the documentation" type="text" id="doc-search" />
+            {% endif %}
               <div class="search-icon"><i class="fa fa-search"></i></div>
             </form>
           </li>
