@@ -381,6 +381,7 @@ aside {
   }
   .product-picture-wrapper {
     display: table;
+    table-layout: fixed;
     width: 100%;
     text-align: center;
     margin-bottom: 10px;
