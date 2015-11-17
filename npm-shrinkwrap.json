@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "0.14.5",
+  "version": "0.14.6",
   "npm-shrinkwrap-version": "200.4.0",
   "node-version": "v4.1.1",
   "dependencies": {
