@@ -8,7 +8,7 @@ guard 'jekyll-plus', :serve => true do
 end
 
 guard 'livereload', port: '35730' do
-  watch /^_site/
+  watch /^.*/
 end
 
 guard :bundler do
