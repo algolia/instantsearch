@@ -3,7 +3,7 @@
 (function($) {
   'use strict';
 
-  var algolia = algoliasearch('YE0A9ATLJG', '1abceba46dace8485375bc325f0144b5');
+  var algolia = algoliasearch('latency', '7e05cab6d894e94ffee4148458f716d9');
   var $searchInput = $('#doc-search');
 
   function goToSuggestion(event, item) {
