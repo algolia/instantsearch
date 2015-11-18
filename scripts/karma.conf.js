@@ -7,11 +7,11 @@ module.exports = function(config) {
     basePath: '',
 
     preprocessors: {
-      '@(components|lib|widgets)/**/*-test.js': ['webpack', 'sourcemap']
+      '@(src)/**/*-test.js': ['webpack', 'sourcemap']
     },
 
     files: [
-      '@(components|lib|widgets)/**/*-test.js'
+      '@(src)/**/*-test.js'
     ],
 
     webpack: {
