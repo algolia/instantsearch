@@ -12,7 +12,7 @@ noFooter: true
 <div class="shameless-marketing text-center hidden-xs">
 <img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
 <div class="lead">
-  <p>Build the perfect UI with instantsearch.js,<br> a library of widgets designed to help you create a high performance instant search experience.</p>
+  <p>Build the perfect UI with instantsearch.js,<br> a library of widgets designed to help you create a high-performance instant-search experience.</p>
   <p class="version">Version: <strong>{{ site.version }}</strong></p>
 </div>
 <div class="spacer40"></div>
