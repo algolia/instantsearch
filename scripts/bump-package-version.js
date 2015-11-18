@@ -8,7 +8,7 @@ if (!process.env.VERSION) {
 }
 
 let semver = require('semver');
-let currentVersion = require('../lib/version.js');
+let currentVersion = require('../src/lib/version.js');
 let newVersion = process.env.VERSION;
 
 if (!semver.valid(newVersion)) {
@@ -21,12 +21,12 @@ if (semver.gte(currentVersion, newVersion)) {
 
 console.log('Releasing ' + newVersion);
 
-console.log('..Updating lib/version.js');
+console.log('..Updating src/lib/version.js');
 
-let versionFile = path.join(__dirname, '../lib/version.js');
+let versionFile = path.join(__dirname, '../src/lib/version.js');
 let newContent = "module.exports = '" + newVersion + "';\n";
 fs.writeFileSync(versionFile, newContent);
 
-console.log('..Updating bower.json and package.json');
+console.log('..Updating package.json, npm-shrinwrap.json');
 
 mversion.update(newVersion);

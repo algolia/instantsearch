@@ -8,7 +8,7 @@ let mkdirp = require('mkdirp');
 
 /* paths used by this script */
 let p = {
-  src: [path.resolve(__dirname, '../../widgets/**/*.js'), path.resolve(__dirname, '../../lib/InstantSearch.js')],
+  src: [path.resolve(__dirname, '../../src/widgets/**/*.js'), path.resolve(__dirname, '../../src/lib/InstantSearch.js')],
   json: path.resolve(__dirname, '../../source.json'),
   output: path.resolve(__dirname, '../../docs/_includes/widget-jsdoc')
 };
