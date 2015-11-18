@@ -11,12 +11,13 @@ $media-bg: #F1F1F1;
 $media-text-color: #333333;
 $media-blue: #167AC6;
 $header-height: 56px;
-$highlight-color: #FFFFE4;
+$highlight-color: #FFFFD4;
 $shadow-color: rgba(0, 0, 0, .1);
 
 body {
   min-height: 100%;
   font-family: Roboto;
+  background: #F1F1F1;
 }
 
 a {
@@ -24,11 +25,11 @@ a {
 }
 
 hr {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 14px;
 }
 .is-logo{
   float: left;
+  margin-left: 18px;
 }
 .logo {
   margin-left: 15px;
@@ -54,19 +55,24 @@ header {
   right: 0;
   z-index: 2;
 
-  .input-group {
-    margin-top: 5px;
-    .form-control {
-      &:focus {
-        outline: none;
-        box-shadow: none;
+  .searchbox-container {
+    margin-left: 240px;
+    max-width: 400px;
+    .input-group {
+      margin-top: 5px;
+      .form-control {
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
       }
-    }
 
-    .input-group-btn button {
-      padding-left: 30px;
-      padding-right: 30px;
-      background: $media-gray-light;
+      .input-group-btn button {
+        padding-left: 20px;
+        padding-right: 20px;
+        background: $media-gray-light;
+        border-radius: 0;
+      }
     }
   }
 }
@@ -78,15 +84,15 @@ section {
 
   aside {
     position: fixed;
-    top: $header-height;
+    top: $header-height + 14px;
     left: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 230px;
     background: $white;
     border-right: 1px solid $media-gray;
 
     .nav {
-      margin: 10px 20px;
+      margin: 0 20px;
       li {
         a {
           display: block;
@@ -124,9 +130,10 @@ section {
       label {
         display: block;
         cursor: pointer;
-        padding: 2px 4px 2px 8px;
+        padding: 4px 4px 4px 8px;
         font-weight: normal;
         font-size: .9em;
+        margin: 0 0 -1px 0;
         &:hover {
           color: $white;
           background: $media-text-color;
@@ -138,6 +145,7 @@ section {
       .active{
         label {
           border: 1px solid $media-red-dark;
+          margin-top: -1px;
         }
         .badge {
           background: $media-text-color;
@@ -159,22 +167,27 @@ section {
       .ais-star-rating--item{
         margin-bottom: 6px;
       }
+      .ais-star-rating--item__active a {
+        color: $media-red-dark;
+      }
     }
 
   }
 
   article {
-    margin-top: $header-height + 10px;
-    margin-bottom: 50px;
-    margin-left: 400px;
+    margin-top: $header-height + 14px;
+    margin-bottom: 10px;
+    margin-left: 237px;
+    margin-right: 10px;
     padding: 10px 0;
-    width: 700px;
+    max-width: 100%;
     background: $white;
     box-shadow: 0 1px 2px $shadow-color;
 
     #stats {
-      padding-right: 10px;
+      padding-right: 14px;
       font-size: .8em;
+      line-height: 24px;
     }
 
     #hits {
@@ -200,10 +213,13 @@ section {
 
     .hit {
       margin-bottom: 10px;
+      height: 130px;
+      border: 1px solid #f3f3f3;
 
       em {
         font-style: normal;
         background: $highlight-color;
+        text-decoration: underline;
       }
 
       .media-object {
@@ -219,17 +235,34 @@ section {
 
       .media-heading {
         color: $media-blue;
-        font-weight: bold;
-        font-size: 14px;
+        font-weight: normal;
+        font-size: 18px;
       }
     }
   }
 
   .thank-you {
-    text-align: center;
     font-size: 0.8em;
+    margin-top: 18px;
+    margin-left: 30px;
     a {
       color: #CE1312;
     }
   }
+}
+
+.ais-search-box--input {
+  padding-left: 14px;
+}
+
+.genre, .year {
+  margin: 12px 0;
+}
+
+.year {
+  font-weight: bold;
+}
+
+.genre .badge{
+  background: #bbb;
 }

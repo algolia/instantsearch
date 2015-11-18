@@ -25,8 +25,8 @@ var hitTemplate =
       '<div class="media-object"><img src="{{image}}" /></div>' +
     '</div>' +
     '<div class="media-body">' +
-      '<h4 class="media-heading">{{{_highlightResult.title.value}}}</h4>' +
-      '<p>{{year}} - {{genre}}</p>' +
+      '<h4 class="media-heading">{{{_highlightResult.title.value}}} {{#stars}}<span class="ais-star-rating--star{{^.}}__empty{{/.}}"></span>{{/stars}}</h4>' +
+      '<p class="year">{{year}}</p><p class="genre">{{#genre}}<span class="badge">{{.}}</span> {{/genre}}</p>' +
     '</div>' +
   '</div>';
 
@@ -40,6 +40,13 @@ search.addWidget(
     templates: {
       empty: noResultsTemplate,
       item: hitTemplate
+    },
+    transformData: function(hit) {
+      hit.stars = [];
+      for (var i = 1; i <= 5; ++i) {
+        hit.stars.push(i <= hit.rating);
+      }
+      return hit;
     }
   })
 );
