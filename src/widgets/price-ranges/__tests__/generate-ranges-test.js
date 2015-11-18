@@ -7,14 +7,14 @@ import generateRanges from '../generate-ranges';
 describe('generateRanges()', () => {
   it('should generate ranges', () => {
     let stats = {
-      min: 1.99,
+      min: 1.01,
       max: 4999.98,
       avg: 243.349,
       sum: 2433490.0
     };
     let expected = [
-      {to: 1},
-      {from: 1, to: 80},
+      {to: 2},
+      {from: 2, to: 80},
       {from: 80, to: 160},
       {from: 160, to: 240},
       {from: 240, to: 1820},
