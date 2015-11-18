@@ -29,7 +29,7 @@ gems:
 
 # search
 algolia:
-  application_id: YE0A9ATLJG
+  application_id: latency
   index_name: instantsearch.js
   excluded_files:
     - index.haml
