@@ -25,7 +25,7 @@ do
   babel -q --out-dir dist-es5-module/${source} ${source}
 done
 
-for source in "$ROOT"/css/[^_]*.scss; do
+for source in "$ROOT"/src/css/[^_]*.scss; do
   base=`basename "$source" .scss`
   echo "$license" > dist/$base.css
   echo >> dist/$base.css
