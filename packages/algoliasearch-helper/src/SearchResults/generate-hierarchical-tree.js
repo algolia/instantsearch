@@ -18,9 +18,11 @@ function generateTrees(state) {
     var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
       state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
     var hierarchicalSeparator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    var hierarchicalPrefixPath = state._getHierarchicalPrefixPath(hierarchicalFacet);
     var sortBy = prepareHierarchicalFacetSortBy(state._getHierarchicalFacetSortBy(hierarchicalFacet));
 
-    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalFacetRefinement);
+    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPrefixPath,
+      hierarchicalFacetRefinement);
 
     return reduce(hierarchicalFacetResult, generateTreeFn, {
       name: state.hierarchicalFacets[hierarchicalFacetIndex].name,
@@ -32,7 +34,7 @@ function generateTrees(state) {
   };
 }
 
-function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefinement) {
+function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPrefixPath, currentRefinement) {
   return function generateTree(hierarchicalTree, hierarchicalFacetResult, currentHierarchicalLevel) {
     var parent = hierarchicalTree;
 
@@ -59,7 +61,10 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefineme
       //
       // If parent refinement is `beers`, then we do not want to have `bières > Belges`
       // showing up
-      var onlyMatchingValuesFn = filterFacetValues(parent.path, currentRefinement, hierarchicalSeparator);
+
+      var onlyMatchingValuesFn = filterFacetValues(parent.path || hierarchicalPrefixPath,
+        currentRefinement, hierarchicalSeparator);
+
       parent.data = sortByOrder(
         map(
           pick(hierarchicalFacetResult.data, onlyMatchingValuesFn),
