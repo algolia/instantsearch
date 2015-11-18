@@ -1,16 +1,17 @@
 body {
   min-height: 100%;
-  font-family: Roboto; }
+  font-family: Roboto;
+  background: #F1F1F1; }
 
 a {
   color: #333333; }
 
 hr {
-  margin-top: 10px;
-  margin-bottom: 10px; }
+  margin: 10px 14px; }
 
 .is-logo {
-  float: left; }
+  float: left;
+  margin-left: 18px; }
 
 .logo {
   margin-left: 15px;
@@ -32,15 +33,19 @@ header {
   left: 0;
   right: 0;
   z-index: 2; }
-  header .input-group {
-    margin-top: 5px; }
-    header .input-group .form-control:focus {
-      outline: none;
-      box-shadow: none; }
-    header .input-group .input-group-btn button {
-      padding-left: 30px;
-      padding-right: 30px;
-      background: #F8F8F8; }
+  header .searchbox-container {
+    margin-left: 240px;
+    max-width: 400px; }
+    header .searchbox-container .input-group {
+      margin-top: 5px; }
+      header .searchbox-container .input-group .form-control:focus {
+        outline: none;
+        box-shadow: none; }
+      header .searchbox-container .input-group .input-group-btn button {
+        padding-left: 20px;
+        padding-right: 20px;
+        background: #F8F8F8;
+        border-radius: 0; }
 
 section {
   background: #F1F1F1;
@@ -48,14 +53,14 @@ section {
   z-index: 1; }
   section aside {
     position: fixed;
-    top: 56px;
+    top: 70px;
     left: 0;
-    bottom: 0;
+    bottom: 10px;
     width: 230px;
     background: #FFFFFF;
     border-right: 1px solid #E8E8E8; }
     section aside .nav {
-      margin: 10px 20px; }
+      margin: 0 20px; }
       section aside .nav li a {
         display: block;
         padding: 2px 10px;
@@ -80,16 +85,18 @@ section {
     section aside #genres label {
       display: block;
       cursor: pointer;
-      padding: 2px 4px 2px 8px;
+      padding: 4px 4px 4px 8px;
       font-weight: normal;
-      font-size: .9em; }
+      font-size: .9em;
+      margin: 0 0 -1px 0; }
       section aside #genres label:hover {
         color: #FFFFFF;
         background: #333333; }
       section aside #genres label input {
         display: none; }
     section aside #genres .active label {
-      border: 1px solid #CE1312; }
+      border: 1px solid #CE1312;
+      margin-top: -1px; }
     section aside #genres .active .badge {
       background: #333333; }
     section aside #ratings {
@@ -102,17 +109,21 @@ section {
         font-size: 8px; }
       section aside #ratings .ais-star-rating--item {
         margin-bottom: 6px; }
+      section aside #ratings .ais-star-rating--item__active a {
+        color: #CE1312; }
   section article {
-    margin-top: 66px;
-    margin-bottom: 50px;
-    margin-left: 400px;
+    margin-top: 70px;
+    margin-bottom: 10px;
+    margin-left: 237px;
+    margin-right: 10px;
     padding: 10px 0;
-    width: 700px;
+    max-width: 100%;
     background: #FFFFFF;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); }
     section article #stats {
-      padding-right: 10px;
-      font-size: .8em; }
+      padding-right: 14px;
+      font-size: .8em;
+      line-height: 24px; }
     section article #hits {
       padding: 0 15px; }
     section article #pagination .pagination a {
@@ -127,10 +138,13 @@ section {
         border-color: #cfcfcf;
         background: #ebebeb; }
     section article .hit {
-      margin-bottom: 10px; }
+      margin-bottom: 10px;
+      height: 130px;
+      border: 1px solid #f3f3f3; }
       section article .hit em {
         font-style: normal;
-        background: #FFFFE4; }
+        background: #FFFFD4;
+        text-decoration: underline; }
       section article .hit .media-object {
         height: 130px;
         width: 210px;
@@ -140,10 +154,23 @@ section {
           width: 100%; }
       section article .hit .media-heading {
         color: #167AC6;
-        font-weight: bold;
-        font-size: 14px; }
+        font-weight: normal;
+        font-size: 18px; }
   section .thank-you {
-    text-align: center;
-    font-size: 0.8em; }
+    font-size: 0.8em;
+    margin-top: 18px;
+    margin-left: 30px; }
     section .thank-you a {
       color: #CE1312; }
+
+.ais-search-box--input {
+  padding-left: 14px; }
+
+.genre, .year {
+  margin: 12px 0; }
+
+.year {
+  font-weight: bold; }
+
+.genre .badge {
+  background: #bbb; }
