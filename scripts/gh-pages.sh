@@ -15,4 +15,5 @@ for example in _site/examples/*; do
     (cd "$example" && zip -r ../$name.zip *)
   fi
 done
+bundle exec jekyll algolia push
 gh-pages --dist _site --branch gh-pages
