@@ -14,7 +14,7 @@ Have a look at the website: https://community.algolia.com/instantsearch.js/.
 [downloads-url]: http://npm-stat.com/charts.html?package=instantsearch.js
 [version-svg]: https://img.shields.io/npm/v/instantsearch.js.svg?style=flat-square
 [package-url]: https://npmjs.org/package/instantsearch.js
-[readme-logo]: ./readme-logo.png
+[readme-logo]: ./docs/readme-logo.png
 [logo-url]: https://community.algolia.com/instantsearch.js/
 
 ## Table of contents

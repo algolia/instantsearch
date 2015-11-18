@@ -14,7 +14,7 @@ describe('instantsearch()', () => {
   });
 
   it('includes the latest version', () => {
-    let pkg = require('../../package.json');
+    let pkg = require('../../../package.json');
     expect(instantsearch.version).toEqual(pkg.version);
   });
 
