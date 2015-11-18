@@ -80,7 +80,7 @@ This will expose the global `instantsearch` function.
 If you have a JavaScript build system, you can use **instantsearch.js** from NPM:
 
 <div class="code-box">
-  <div class="code-sample-snippet js-toggle-snippet ignore text-white">
+  <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight sh %}
 npm install instantsearch.js --save
 {% endhighlight %}
