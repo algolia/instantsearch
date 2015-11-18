@@ -21,7 +21,7 @@ noFooter: true
 <div class="sticker sticker-algolia">
 <img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
 </div>
-Built on top of the <a href="https://www.algolia.com">Algolia Search API</a>
+Built on top of the <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage">Algolia Search API</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-open-source">
