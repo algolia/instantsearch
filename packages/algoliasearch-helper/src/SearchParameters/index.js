@@ -1380,6 +1380,15 @@ SearchParameters.prototype = {
   },
 
   /**
+   * Helper function to get the hierarchicalFacet prefix path or null
+   * @param  {object} hierarchicalFacet
+   * @return {string} returns the hierarchicalFacet.prefixPath or null as default
+   */
+  _getHierarchicalPrefixPath: function(hierarchicalFacet) {
+    return hierarchicalFacet.prefixPath || null;
+  },
+
+  /**
    * Helper function to get the hierarchicalFacet by it's name
    * @param  {string} hierarchicalFacetName
    * @return {object} a hierarchicalFacet
