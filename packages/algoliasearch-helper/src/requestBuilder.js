@@ -61,6 +61,7 @@ var requestBuilder = {
       .concat(state.disjunctiveFacets)
       .concat(this._getHitsHierarchicalFacetsAttributes(state));
 
+
     var facetFilters = this._getFacetFilters(state);
     var numericFilters = this._getNumericFilters(state);
     var tagFilters = this._getTagFilters(state);
@@ -216,28 +217,41 @@ var requestBuilder = {
 
       var hierarchicalFacet = state.getHierarchicalFacetByName(facetName);
       var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+      var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
       var attributeToRefine;
+      var attributesIndex;
 
       // we ask for parent facet values only when the `facet` is the current hierarchical facet
       if (facet === facetName) {
         // if we are at the root level already, no need to ask for facet values, we get them from
         // the hits query
-        if (facetValue.indexOf(separator) === -1 || hierarchicalRootLevel === true) {
+        if (facetValue.indexOf(separator) === -1 || (!rootPath && hierarchicalRootLevel === true) ||
+          (rootPath && rootPath.split(separator).length === facetValue.split(separator).length)) {
           return;
         }
 
-        attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 2];
-        facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+        if (!rootPath) {
+          attributesIndex = facetValue.split(separator).length - 2;
+          facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+        } else {
+          attributesIndex = rootPath.split(separator).length - 1;
+          facetValue = rootPath;
+        }
+
+        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
       } else {
-        attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 1];
+        attributesIndex = facetValue.split(separator).length - 1;
+
+        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
       }
 
-      facetFilters.push([attributeToRefine + ':' + facetValue]);
+      if (attributeToRefine) {
+        facetFilters.push([attributeToRefine + ':' + facetValue]);
+      }
     });
 
     return facetFilters;
   },
-
 
   _getHitsHierarchicalFacetsAttributes: function(state) {
     var out = [];
@@ -262,15 +276,22 @@ var requestBuilder = {
   },
 
   _getDisjunctiveHierarchicalFacetAttribute: function(state, hierarchicalFacet, rootLevel) {
+    var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
     if (rootLevel === true) {
-      return [hierarchicalFacet.attributes[0]];
+      var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
+      var attributeIndex = 0;
+
+      if (rootPath) {
+        attributeIndex = rootPath.split(separator).length;
+      }
+      return [hierarchicalFacet.attributes[attributeIndex]];
     }
 
     var hierarchicalRefinement = state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
     // if refinement is 'beers > IPA > Flying dog',
     // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
-    var parentLevel = hierarchicalRefinement.split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
+    var parentLevel = hierarchicalRefinement.split(separator).length - 1;
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
   }
 };
