@@ -26,10 +26,12 @@ function generateRanges(stats) {
   let from;
   let facetValues = [];
   if (min !== max) {
-    next = round(min, precision);
+    next = min;
+
     facetValues.push({
       to: next
     });
+
     while (next < avg) {
       from = facetValues[facetValues.length - 1].to;
       next = round(from + (avg - min) / 3, precision);
