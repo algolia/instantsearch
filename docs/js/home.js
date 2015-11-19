@@ -1,4 +1,4 @@
-/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce */
+/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE*/
 'use strict';
 
 
@@ -142,21 +142,21 @@ document.addEventListener('DOMContentLoaded', function(){
       var height = window.innerHeight;
       var aspect = width / height;
       camera.aspect = aspect;
-      renderer.setSize( window.innerWidth, window.innerHeight );
-    }
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
 
     setSize();
     window.addEventListener('resize', setSize);
 
-    $space.appendChild( renderer.domElement );
+    $space.appendChild(renderer.domElement);
 
     var particles = new THREE.Geometry();
-    var sphere = new THREE.Sphere( new THREE.Vector3(0,0,0), radiusScene);
-    var rand1 = function(){
+    var sphere = new THREE.Sphere(new THREE.Vector3(0,0,0), radiusScene);
+    var rand1 = function() {
       return rand.nextRange(-radiusScene, radiusScene);
     };
 
-    for(var i = 0; i < 30000; i++ ){
+    for (var i = 0; i < 30000; i++ ){
       var p = new THREE.Vector3(rand1(), rand1(), rand1());
       p = sphere.clampPoint(p);
       particles.vertices.push(p);
@@ -177,20 +177,28 @@ document.addEventListener('DOMContentLoaded', function(){
     camera.position.z = -1500;
     camera.position.y = 1500;
 
-    camera.rotation.x = - Math.PI / 2 + 0.5;
+    camera.rotation.x = -Math.PI / 2 + 0.5;
 
+    var epsilon = 0.001;
     var timelineMap = function(x) {
       var res = x;
-      if(x>200) res  += 30 * Math.max((Math.min(x, 800) - 200), 0);
-      if(x>1100) res += 30 * Math.max((Math.min(x, 1700) - 1100), 0);
-      if(x>2000) res += 30 * Math.max((Math.min(x, 2600) - 2000), 0);
-      return res;
+      if (x > 200) res += 30 * Math.max((Math.min(x, 800) - 200), 0);
+      if (x > 1100) res += 30 * Math.max((Math.min(x, 1700) - 1100), 0);
+      if (x > 2000) res += 30 * Math.max((Math.min(x, 2600) - 2000), 0);
+      return res / 100;/// 100;
     };
     var currentTSpring = 0;
+    var previousTSping = null;
     var render = function () {
-      var dt = timelineMap(window.scrollY);
-      currentTSpring = (dt - currentTSpring) / 50 ;
       requestAnimationFrame( render );
+
+      var dt = timelineMap(window.scrollY);
+
+      currentTSpring += (dt - currentTSpring) / 10;
+      if ((dt + epsilon) > currentTSpring && (dt - epsilon) < currentTSpring) currentTSpring = dt;
+
+      if (previousTSping === currentTSpring) return;
+      previousTSping = currentTSpring;
 
       var angle = currentTSpring/60;
 
@@ -203,4 +211,3 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   document.body.appendChild(threeScript);
 });
-
