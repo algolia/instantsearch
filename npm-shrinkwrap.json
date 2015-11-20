@@ -2,7 +2,7 @@
   "name": "instantsearch.js",
   "version": "1.0.0",
   "npm-shrinkwrap-version": "200.4.0",
-  "node-version": "v4.1.1",
+  "node-version": "v4.2.1",
   "dependencies": {
     "algoliasearch": {
       "version": "3.9.1",
@@ -89,8 +89,8 @@
       }
     },
     "algoliasearch-helper": {
-      "version": "2.6.7",
-      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.7.tgz",
+      "version": "2.6.9",
+      "resolved": "https://registry.npmjs.org/algoliasearch-helper/-/algoliasearch-helper-2.6.9.tgz",
       "dependencies": {
         "lodash-compat": {
           "version": "3.10.1",
@@ -514,16 +514,6 @@
           "version": "1.1.1",
           "resolved": "https://registry.npmjs.org/output-file-sync/-/output-file-sync-1.1.1.tgz",
           "dependencies": {
-            "mkdirp": {
-              "version": "0.5.1",
-              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-              "dependencies": {
-                "minimist": {
-                  "version": "0.0.8",
-                  "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                }
-              }
-            },
             "xtend": {
               "version": "4.0.0",
               "resolved": "https://registry.npmjs.org/xtend/-/xtend-4.0.0.tgz"
@@ -780,16 +770,6 @@
           "version": "1.1.1",
           "resolved": "https://registry.npmjs.org/output-file-sync/-/output-file-sync-1.1.1.tgz",
           "dependencies": {
-            "mkdirp": {
-              "version": "0.5.1",
-              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-              "dependencies": {
-                "minimist": {
-                  "version": "0.0.8",
-                  "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                }
-              }
-            },
             "xtend": {
               "version": "4.0.0",
               "resolved": "https://registry.npmjs.org/xtend/-/xtend-4.0.0.tgz"
@@ -875,16 +855,6 @@
                 "install": {
                   "version": "0.1.8",
                   "resolved": "https://registry.npmjs.org/install/-/install-0.1.8.tgz"
-                },
-                "mkdirp": {
-                  "version": "0.5.1",
-                  "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-                  "dependencies": {
-                    "minimist": {
-                      "version": "0.0.8",
-                      "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                    }
-                  }
                 },
                 "q": {
                   "version": "1.1.2",
@@ -3346,16 +3316,6 @@
             }
           }
         },
-        "mkdirp": {
-          "version": "0.5.1",
-          "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-          "dependencies": {
-            "minimist": {
-              "version": "0.0.8",
-              "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-            }
-          }
-        },
         "object-assign": {
           "version": "2.1.1",
           "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-2.1.1.tgz"
@@ -3479,8 +3439,8 @@
           "resolved": "https://registry.npmjs.org/collapse-white-space/-/collapse-white-space-1.0.0.tgz"
         },
         "react": {
-          "version": "0.14.2",
-          "resolved": "https://registry.npmjs.org/react/-/react-0.14.2.tgz",
+          "version": "0.14.3",
+          "resolved": "https://registry.npmjs.org/react/-/react-0.14.3.tgz",
           "dependencies": {
             "envify": {
               "version": "3.4.0",
@@ -3521,8 +3481,8 @@
               "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.3.2.tgz",
               "dependencies": {
                 "core-js": {
-                  "version": "1.2.5",
-                  "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.5.tgz"
+                  "version": "1.2.6",
+                  "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.6.tgz"
                 },
                 "loose-envify": {
                   "version": "1.1.0",
@@ -6055,16 +6015,6 @@
               "version": "0.2.0",
               "resolved": "https://registry.npmjs.org/memory-fs/-/memory-fs-0.2.0.tgz"
             },
-            "mkdirp": {
-              "version": "0.5.1",
-              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-              "dependencies": {
-                "minimist": {
-                  "version": "0.0.8",
-                  "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                }
-              }
-            },
             "node-libs-browser": {
               "version": "0.5.3",
               "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.5.3.tgz",
@@ -7081,16 +7031,6 @@
                     }
                   }
                 },
-                "mkdirp": {
-                  "version": "0.5.1",
-                  "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-                  "dependencies": {
-                    "minimist": {
-                      "version": "0.0.8",
-                      "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                    }
-                  }
-                },
                 "object-assign": {
                   "version": "2.1.1",
                   "resolved": "https://registry.npmjs.org/object-assign/-/object-assign-2.1.1.tgz"
@@ -7473,16 +7413,6 @@
               "version": "3.0.8",
               "resolved": "https://registry.npmjs.org/graceful-fs/-/graceful-fs-3.0.8.tgz"
             },
-            "mkdirp": {
-              "version": "0.5.1",
-              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-              "dependencies": {
-                "minimist": {
-                  "version": "0.0.8",
-                  "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                }
-              }
-            },
             "strip-bom": {
               "version": "1.0.0",
               "resolved": "https://registry.npmjs.org/strip-bom/-/strip-bom-1.0.0.tgz",
@@ -7607,16 +7537,6 @@
                   "version": "0.0.10",
                   "resolved": "https://registry.npmjs.org/utile/-/utile-0.0.10.tgz",
                   "dependencies": {
-                    "mkdirp": {
-                      "version": "0.5.1",
-                      "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-                      "dependencies": {
-                        "minimist": {
-                          "version": "0.0.8",
-                          "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                        }
-                      }
-                    },
                     "ncp": {
                       "version": "0.2.7",
                       "resolved": "https://registry.npmjs.org/ncp/-/ncp-0.2.7.tgz"
@@ -7717,16 +7637,6 @@
               "version": "0.0.10",
               "resolved": "https://registry.npmjs.org/utile/-/utile-0.0.10.tgz",
               "dependencies": {
-                "mkdirp": {
-                  "version": "0.5.1",
-                  "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-                  "dependencies": {
-                    "minimist": {
-                      "version": "0.0.8",
-                      "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                    }
-                  }
-                },
                 "ncp": {
                   "version": "0.2.7",
                   "resolved": "https://registry.npmjs.org/ncp/-/ncp-0.2.7.tgz"
@@ -9240,16 +9150,6 @@
             "trim-newlines": {
               "version": "1.0.0",
               "resolved": "https://registry.npmjs.org/trim-newlines/-/trim-newlines-1.0.0.tgz"
-            }
-          }
-        },
-        "mkdirp": {
-          "version": "0.5.1",
-          "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-          "dependencies": {
-            "minimist": {
-              "version": "0.0.8",
-              "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
             }
           }
         },
@@ -12282,16 +12182,6 @@
           "version": "0.2.0",
           "resolved": "https://registry.npmjs.org/memory-fs/-/memory-fs-0.2.0.tgz"
         },
-        "mkdirp": {
-          "version": "0.5.1",
-          "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-          "dependencies": {
-            "minimist": {
-              "version": "0.0.8",
-              "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-            }
-          }
-        },
         "node-libs-browser": {
           "version": "0.5.3",
           "resolved": "https://registry.npmjs.org/node-libs-browser/-/node-libs-browser-0.5.3.tgz",
@@ -13725,16 +13615,6 @@
             "memory-fs": {
               "version": "0.2.0",
               "resolved": "https://registry.npmjs.org/memory-fs/-/memory-fs-0.2.0.tgz"
-            },
-            "mkdirp": {
-              "version": "0.5.1",
-              "resolved": "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.1.tgz",
-              "dependencies": {
-                "minimist": {
-                  "version": "0.0.8",
-                  "resolved": "https://registry.npmjs.org/minimist/-/minimist-0.0.8.tgz"
-                }
-              }
             },
             "node-libs-browser": {
               "version": "0.5.3",
