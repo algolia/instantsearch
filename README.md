@@ -46,8 +46,8 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/](ht
 instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/):
 
 ```html
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
-<script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+<script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 ```
 
 ### With npm, browserify, webpack
