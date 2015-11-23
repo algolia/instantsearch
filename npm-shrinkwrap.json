@@ -2004,10 +2004,6 @@
         }
       }
     },
-    "deep-equal": {
-      "version": "1.0.1",
-      "resolved": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
-    },
     "dmd": {
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/dmd/-/dmd-1.2.0.tgz",
@@ -3457,9 +3453,13 @@
       "resolved": "https://registry.npmjs.org/events/-/events-1.1.0.tgz"
     },
     "expect": {
-      "version": "1.12.2",
-      "resolved": "https://registry.npmjs.org/expect/-/expect-1.12.2.tgz",
+      "version": "1.13.0",
+      "resolved": "https://registry.npmjs.org/expect/-/expect-1.13.0.tgz",
       "dependencies": {
+        "deep-equal": {
+          "version": "1.0.1",
+          "resolved": "https://registry.npmjs.org/deep-equal/-/deep-equal-1.0.1.tgz"
+        },
         "is-regexp": {
           "version": "1.0.0",
           "resolved": "https://registry.npmjs.org/is-regexp/-/is-regexp-1.0.0.tgz"
