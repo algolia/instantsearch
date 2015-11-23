@@ -8,22 +8,31 @@ class Paginator {
   }
 
   pages() {
-    let current = this.currentPage;
-    let padding = this.padding;
-    let paddingLeft = Math.min(this.calculatePaddingLeft(current, padding, this.total), this.total);
-    let paddingRight = Math.max(Math.min(2 * padding + 1, this.total) - paddingLeft, 1);
-    let first = Math.max(current - paddingLeft, 0);
-    let last = current + paddingRight;
+    const {total, currentPage, padding} = this;
+
+    const totalDisplayedPages = this.nbPagesDisplayed(padding, total);
+    if (totalDisplayedPages === total) return range(0, total);
+
+    const paddingLeft = this.calculatePaddingLeft(currentPage, padding, total, totalDisplayedPages);
+    const paddingRight = totalDisplayedPages - paddingLeft;
+
+    const first = currentPage - paddingLeft;
+    const last = currentPage + paddingRight;
+
     return range(first, last);
   }
 
-  calculatePaddingLeft(current, padding, total) {
+  nbPagesDisplayed(padding, total) {
+    return Math.min(2 * padding + 1, total);
+  }
+
+  calculatePaddingLeft(current, padding, total, totalDisplayedPages) {
     if (current <= padding) {
       return current;
     }
 
     if (current >= (total - padding)) {
-      return 2 * padding + 1 - (total - current);
+      return totalDisplayedPages - (total - current);
     }
 
     return padding;
