@@ -104,16 +104,16 @@ describe('starRating()', () => {
   });
 
   it('hide the count==0 when there is a refinement', () => {
-    helper.getRefinements = sinon.stub().returns([{value: '2'}]);
-    results.getFacetValues = sinon.stub().returns([{name: '2', count: 42}]);
+    helper.getRefinements = sinon.stub().returns([{value: '1'}]);
+    results.getFacetValues = sinon.stub().returns([{name: '1', count: 42}]);
     widget.render({helper, results});
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
     expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
       {
         count: 42,
         isRefined: true,
-        name: '2',
-        stars: [true, true, false, false, false],
+        name: '1',
+        stars: [true, false, false, false, false],
         labels: defaultLabels
       }
     ]);
