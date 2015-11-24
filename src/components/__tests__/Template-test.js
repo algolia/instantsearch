@@ -113,6 +113,44 @@ describe('Template', () => {
     expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
   });
 
+  it('transformData with a function is using a deep cloned version of the data', () => {
+    templates = {test: ''};
+    data = {a: {}};
+    templateKey = 'test';
+    let called = false;
+    transformData = clonedData => {
+      called = true;
+      expect(clonedData).toNotBe(data);
+      expect(clonedData.a).toNotBe(data.a);
+      expect(clonedData).toEqual(data);
+      return clonedData;
+    };
+
+    let props = getProps();
+    renderer.render(<Template {...props} />);
+    expect(called).toBe(true);
+  });
+
+  it('transformData with an object is using a deep cloned version of the data', () => {
+    templates = {test: ''};
+    data = {a: {}};
+    templateKey = 'test';
+    let called = false;
+    transformData = {
+      test: clonedData => {
+        called = true;
+        expect(clonedData).toNotBe(data);
+        expect(clonedData.a).toNotBe(data.a);
+        expect(clonedData).toEqual(data);
+        return clonedData;
+      }
+    };
+
+    let props = getProps();
+    renderer.render(<Template {...props} />);
+    expect(called).toBe(true);
+  });
+
   it('throws an error if the transformData is not returning anything', () => {
     templates = {test: 'it supports {{feature}}'};
     data = {feature: 'replace me'};
