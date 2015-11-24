@@ -9123,7 +9123,8 @@ function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator,
                            hierarchicalShowParentLevel) {
   return function(facetCount, facetValue) {
     // we want the facetValue is a child of hierarchicalRootPath
-    if (hierarchicalRootPath && facetValue.indexOf(hierarchicalRootPath) !== 0) {
+    if (hierarchicalRootPath &&
+      (facetValue.indexOf(hierarchicalRootPath) !== 0 || hierarchicalRootPath === facetValue)) {
       return false;
     }
 
@@ -10998,7 +10999,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.8';
+module.exports = '2.6.9';
 
 },{}]},{},[1])(1)
 });
