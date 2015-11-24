@@ -90,7 +90,8 @@ function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator,
                            hierarchicalShowParentLevel) {
   return function(facetCount, facetValue) {
     // we want the facetValue is a child of hierarchicalRootPath
-    if (hierarchicalRootPath && facetValue.indexOf(hierarchicalRootPath) !== 0) {
+    if (hierarchicalRootPath &&
+      (facetValue.indexOf(hierarchicalRootPath) !== 0 || hierarchicalRootPath === facetValue)) {
       return false;
     }
 
