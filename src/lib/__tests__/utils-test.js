@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 
-import deepEqual from 'deep-equal';
 import expect from 'expect';
 import jsdom from 'mocha-jsdom';
 import algoliasearchHelper from 'algoliasearch-helper';
@@ -153,7 +152,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: '_tags', name: 'tag1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve multiple tags', function() {
@@ -162,7 +161,7 @@ describe('getRefinements', function() {
       {attributeName: '_tags', name: 'tag1'},
       {attributeName: '_tags', name: 'tag2'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve one facetRefinement', function() {
@@ -170,7 +169,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'facet1', name: 'facet1val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve multiple facetsRefinements on one facet', function() {
@@ -181,8 +180,8 @@ describe('getRefinements', function() {
       {attributeName: 'facet1', name: 'facet1val1'},
       {attributeName: 'facet1', name: 'facet1val2'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should retrieve multiple facetsRefinements on multiple facets', function() {
@@ -195,9 +194,9 @@ describe('getRefinements', function() {
       {attributeName: 'facet1', name: 'facet1val2'},
       {attributeName: 'facet2', name: 'facet2val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2]);
   });
 
   it('should have a count for a facetRefinement if available', function() {
@@ -213,7 +212,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'facet1', name: 'facet1val1', count: 4}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should have exhaustive for a facetRefinement if available', function() {
@@ -227,7 +226,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'facet1', name: 'facet1val1', exhaustive: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve one facetExclude', function() {
@@ -235,7 +234,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'facet1', name: 'facet1exclude1', exclude: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve multiple facetsExcludes on one facet', function() {
@@ -246,8 +245,8 @@ describe('getRefinements', function() {
       {attributeName: 'facet1', name: 'facet1exclude1', exclude: true},
       {attributeName: 'facet1', name: 'facet1exclude2', exclude: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should retrieve multiple facetsExcludes on multiple facets', function() {
@@ -260,9 +259,9 @@ describe('getRefinements', function() {
       {attributeName: 'facet1', name: 'facet1exclude2', exclude: true},
       {attributeName: 'facet2', name: 'facet2exclude1', exclude: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2]);
   });
 
   it('should retrieve one disjunctiveFacetRefinement', function() {
@@ -270,7 +269,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve multiple disjunctiveFacetsRefinements on one facet', function() {
@@ -281,8 +280,8 @@ describe('getRefinements', function() {
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'},
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should retrieve multiple disjunctiveFacetsRefinements on multiple facets', function() {
@@ -295,9 +294,9 @@ describe('getRefinements', function() {
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'},
       {attributeName: 'disjunctiveFacet2', name: 'disjunctiveFacet2val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2]);
   });
 
   it('should have a count for a disjunctiveFacetRefinement if available', function() {
@@ -313,7 +312,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', count: 4}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should have exhaustive for a disjunctiveFacetRefinement if available', function() {
@@ -327,7 +326,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', exhaustive: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve one hierarchicalFacetRefinement', function() {
@@ -335,7 +334,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve hierarchicalFacetsRefinements on multiple facets', function() {
@@ -346,8 +345,8 @@ describe('getRefinements', function() {
       {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
       {attributeName: 'hierarchicalFacet2', name: 'hierarchicalFacet2lvl0val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should retrieve hierarchicalFacetsRefinements on multiple facets and multiple levels', function() {
@@ -358,8 +357,8 @@ describe('getRefinements', function() {
       {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
       {attributeName: 'hierarchicalFacet2', name: 'hierarchicalFacet2lvl0val1 > lvl1val1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should have a count for a hierarchicalFacetRefinement if available', function() {
@@ -375,7 +374,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', count: 4}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should have exhaustive for a hierarchicalFacetRefinement if available', function() {
@@ -389,7 +388,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', exhaustive: true}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve a numericRefinement on one facet', function() {
@@ -397,7 +396,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'numericFacet1', operator: '>', name: '1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve a numericRefinement on one disjunctive facet', function() {
@@ -405,7 +404,7 @@ describe('getRefinements', function() {
     const expected = [
       {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
 
   it('should retrieve multiple numericRefinements with same operator', function() {
@@ -416,8 +415,8 @@ describe('getRefinements', function() {
       {attributeName: 'numericFacet1', operator: '>', name: '1'},
       {attributeName: 'numericFacet1', operator: '>', name: '2'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
   });
 
   it('should retrieve multiple conjunctive and numericRefinements', function() {
@@ -434,10 +433,10 @@ describe('getRefinements', function() {
       {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'},
       {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '2'}
     ];
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[3], deepEqual);
-    expect(utils.getRefinements(results, helper.state)).toInclude(expected[4], deepEqual);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[2]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[3]);
+    expect(utils.getRefinements(results, helper.state)).toInclude(expected[4]);
   });
 });
