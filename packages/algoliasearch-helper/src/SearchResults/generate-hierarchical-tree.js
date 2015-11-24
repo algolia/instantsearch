@@ -18,13 +18,20 @@ function generateTrees(state) {
     var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
       state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
     var hierarchicalSeparator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
-    var hierarchicalPrefixPath = state._getHierarchicalPrefixPath(hierarchicalFacet);
+    var hierarchicalRootPath = state._getHierarchicalRootPath(hierarchicalFacet);
+    var hierarchicalShowParentLevel = state._getHierarchicalShowParentLevel(hierarchicalFacet);
     var sortBy = prepareHierarchicalFacetSortBy(state._getHierarchicalFacetSortBy(hierarchicalFacet));
 
-    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPrefixPath,
-      hierarchicalFacetRefinement);
+    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalRootPath,
+      hierarchicalShowParentLevel, hierarchicalFacetRefinement);
 
-    return reduce(hierarchicalFacetResult, generateTreeFn, {
+    var results = hierarchicalFacetResult;
+
+    if (hierarchicalRootPath) {
+      results = hierarchicalFacetResult.slice(hierarchicalRootPath.split(hierarchicalSeparator).length);
+    }
+
+    return reduce(results, generateTreeFn, {
       name: state.hierarchicalFacets[hierarchicalFacetIndex].name,
       count: null, // root level, no count
       isRefined: true, // root level, always refined
@@ -34,7 +41,8 @@ function generateTrees(state) {
   };
 }
 
-function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPrefixPath, currentRefinement) {
+function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalRootPath,
+                                  hierarchicalShowParentLevel, currentRefinement) {
   return function generateTree(hierarchicalTree, hierarchicalFacetResult, currentHierarchicalLevel) {
     var parent = hierarchicalTree;
 
@@ -62,8 +70,8 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPre
       // If parent refinement is `beers`, then we do not want to have `bières > Belges`
       // showing up
 
-      var onlyMatchingValuesFn = filterFacetValues(parent.path || hierarchicalPrefixPath,
-        currentRefinement, hierarchicalSeparator);
+      var onlyMatchingValuesFn = filterFacetValues(parent.path || hierarchicalRootPath,
+        currentRefinement, hierarchicalSeparator, hierarchicalRootPath, hierarchicalShowParentLevel);
 
       parent.data = sortByOrder(
         map(
@@ -78,18 +86,28 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalPre
   };
 }
 
-function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator) {
+function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator, hierarchicalRootPath,
+                           hierarchicalShowParentLevel) {
   return function(facetCount, facetValue) {
-    // we always want root levels
-    return facetValue.indexOf(hierarchicalSeparator) === -1 ||
+    // we want the facetValue is a child of hierarchicalRootPath
+    if (hierarchicalRootPath && facetValue.indexOf(hierarchicalRootPath) !== 0) {
+      return false;
+    }
+
+    // we always want root levels (only when there is no prefix path)
+    return !hierarchicalRootPath && facetValue.indexOf(hierarchicalSeparator) === -1 ||
+      // if there is a rootPath, being root level mean 1 level under rootPath
+      hierarchicalRootPath &&
+      facetValue.split(hierarchicalSeparator).length - hierarchicalRootPath.split(hierarchicalSeparator).length === 1 ||
       // if current refinement is a root level and current facetValue is a root level,
       // keep the facetValue
       facetValue.indexOf(hierarchicalSeparator) === -1 &&
       currentRefinement.indexOf(hierarchicalSeparator) === -1 ||
       // currentRefinement is a child of the facet value
-      currentRefinement.indexOf(facetValue + hierarchicalSeparator) === 0 ||
+      currentRefinement.indexOf(facetValue) === 0 ||
       // facetValue is a child of the current parent, add it
-      facetValue.indexOf(parentPath + hierarchicalSeparator) === 0;
+      facetValue.indexOf(parentPath + hierarchicalSeparator) === 0 &&
+      (hierarchicalShowParentLevel || facetValue.indexOf(currentRefinement) === 0);
   };
 }
 
