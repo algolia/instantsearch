@@ -132,6 +132,8 @@ h2
     stroke-dasharray: 10
     animation: dash 20s linear infinite
 
+// We're using a hack from http://stackoverflow.com/a/27065674
+// for anti-aliasing (`outline: 1px solid transparent`)
 #anim
   position: relative
   +size(420px,400px)
@@ -141,12 +143,14 @@ h2
   border-radius: 10px
   perspective: 1200px
   transform-style: preserve-3d
+  outline: 1px solid transparent
   img
     border-radius: 10px
   .widget
     background-color: rgba(#1D96C7,.4)
     position: absolute
     transform-style: preserve-3d
+    outline: 1px solid transparent
   .legend
     font-size: 1.2em
     border-left: solid 2px white
@@ -180,6 +184,7 @@ h2
   opacity: 0
   background-color: white
   border-radius: 10px
+  outline: 1px solid transparent
 #screen-1
   +position(0,null,null,460px)
   .widget-1 //searchbox
