@@ -80,8 +80,10 @@ describe('hierarchicalMenu()', () => {
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
+          rootPath: null,
           attributes: ['hello', 'world'],
-          separator: ' > '
+          separator: ' > ',
+          showParentLevel: true
         }]
       });
     });
@@ -92,8 +94,38 @@ describe('hierarchicalMenu()', () => {
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
+          rootPath: null,
           attributes: ['hello', 'world'],
-          separator: ' ? '
+          separator: ' ? ',
+          showParentLevel: true
+        }]
+      });
+    });
+
+    it('understand the showParentLevel option', () => {
+      expect(
+        hierarchicalMenu({showParentLevel: false, ...options}).getConfiguration()
+      ).toEqual({
+        hierarchicalFacets: [{
+          name: 'hello',
+          rootPath: null,
+          attributes: ['hello', 'world'],
+          separator: ' > ',
+          showParentLevel: false
+        }]
+      });
+    });
+
+    it('understand the rootPath option', () => {
+      expect(
+        hierarchicalMenu({rootPath: 'Beer', ...options}).getConfiguration()
+      ).toEqual({
+        hierarchicalFacets: [{
+          name: 'hello',
+          rootPath: 'Beer',
+          attributes: ['hello', 'world'],
+          separator: ' > ',
+          showParentLevel: true
         }]
       });
     });
