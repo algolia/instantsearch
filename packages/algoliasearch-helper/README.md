@@ -43,14 +43,6 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Events](#events)
   - [Query](#query)
   - [Filtering results](#filtering-results)
-  - [Facet utilities](#facet-utilities)
-  - [Tags](#tags)
-  - [Pagination](#pagination)
-  - [Index](#index)
-  - [One time query](#one-time-query)
-  - [URL Helpers](#url-helpers)
-  - [Query parameters](#query-parameters)
-  - [Results format](#results-format)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

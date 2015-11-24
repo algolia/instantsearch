@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.6.8 - 2015-11-24
+  * FEATURE: add prefix path option to hierarchical facet
+  * FEATURE: add showParentLevel options to the hierararchical facet
+
 2.6.7 - 2015-11-17
   * FIX : does not throw when no results when using hierarchical facets
 

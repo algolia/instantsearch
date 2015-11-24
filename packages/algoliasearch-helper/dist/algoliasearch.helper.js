@@ -7948,6 +7948,22 @@ SearchParameters._parseNumbers = function(partialState) {
 SearchParameters.make = function makeSearchParameters(newParameters) {
   var instance = new SearchParameters(newParameters);
 
+  forEach(newParameters.hierarchicalFacets, function(facet) {
+    if (facet.rootPath) {
+      var currentRefinement = instance.getHierarchicalRefinement(facet.name);
+
+      if (currentRefinement.length > 0 && currentRefinement[0].indexOf(facet.rootPath) !== 0) {
+        instance = instance.clearRefinements(facet.name);
+      }
+
+      // get it again in case it has been cleared
+      currentRefinement = instance.getHierarchicalRefinement(facet.name);
+      if (currentRefinement.length === 0) {
+        instance = instance.toggleHierarchicalFacetRefinement(facet.name, facet.rootPath);
+      }
+    }
+  });
+
   return deepFreeze(instance);
 };
 
@@ -8888,6 +8904,27 @@ SearchParameters.prototype = {
   },
 
   /**
+   * Helper function to get the hierarchicalFacet prefix path or null
+   * @param  {object} hierarchicalFacet
+   * @return {string} returns the hierarchicalFacet.rootPath or null as default
+   */
+  _getHierarchicalRootPath: function(hierarchicalFacet) {
+    return hierarchicalFacet.rootPath || null;
+  },
+
+  /**
+   * Helper function to check if we show the parent level of the hierarchicalFacet
+   * @param  {object} hierarchicalFacet
+   * @return {string} returns the hierarchicalFacet.showParentLevel or true as default
+   */
+  _getHierarchicalShowParentLevel: function(hierarchicalFacet) {
+    if (typeof hierarchicalFacet.showParentLevel === 'boolean') {
+      return hierarchicalFacet.showParentLevel;
+    }
+    return true;
+  },
+
+  /**
    * Helper function to get the hierarchicalFacet by it's name
    * @param  {string} hierarchicalFacetName
    * @return {object} a hierarchicalFacet
@@ -9014,11 +9051,20 @@ function generateTrees(state) {
     var hierarchicalFacetRefinement = state.hierarchicalFacetsRefinements[hierarchicalFacet.name] &&
       state.hierarchicalFacetsRefinements[hierarchicalFacet.name][0] || '';
     var hierarchicalSeparator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+    var hierarchicalRootPath = state._getHierarchicalRootPath(hierarchicalFacet);
+    var hierarchicalShowParentLevel = state._getHierarchicalShowParentLevel(hierarchicalFacet);
     var sortBy = prepareHierarchicalFacetSortBy(state._getHierarchicalFacetSortBy(hierarchicalFacet));
 
-    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalFacetRefinement);
+    var generateTreeFn = generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalRootPath,
+      hierarchicalShowParentLevel, hierarchicalFacetRefinement);
 
-    return reduce(hierarchicalFacetResult, generateTreeFn, {
+    var results = hierarchicalFacetResult;
+
+    if (hierarchicalRootPath) {
+      results = hierarchicalFacetResult.slice(hierarchicalRootPath.split(hierarchicalSeparator).length);
+    }
+
+    return reduce(results, generateTreeFn, {
       name: state.hierarchicalFacets[hierarchicalFacetIndex].name,
       count: null, // root level, no count
       isRefined: true, // root level, always refined
@@ -9028,7 +9074,8 @@ function generateTrees(state) {
   };
 }
 
-function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefinement) {
+function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalRootPath,
+                                  hierarchicalShowParentLevel, currentRefinement) {
   return function generateTree(hierarchicalTree, hierarchicalFacetResult, currentHierarchicalLevel) {
     var parent = hierarchicalTree;
 
@@ -9055,7 +9102,10 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefineme
       //
       // If parent refinement is `beers`, then we do not want to have `bières > Belges`
       // showing up
-      var onlyMatchingValuesFn = filterFacetValues(parent.path, currentRefinement, hierarchicalSeparator);
+
+      var onlyMatchingValuesFn = filterFacetValues(parent.path || hierarchicalRootPath,
+        currentRefinement, hierarchicalSeparator, hierarchicalRootPath, hierarchicalShowParentLevel);
+
       parent.data = sortByOrder(
         map(
           pick(hierarchicalFacetResult.data, onlyMatchingValuesFn),
@@ -9069,18 +9119,28 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, currentRefineme
   };
 }
 
-function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator) {
+function filterFacetValues(parentPath, currentRefinement, hierarchicalSeparator, hierarchicalRootPath,
+                           hierarchicalShowParentLevel) {
   return function(facetCount, facetValue) {
-    // we always want root levels
-    return facetValue.indexOf(hierarchicalSeparator) === -1 ||
+    // we want the facetValue is a child of hierarchicalRootPath
+    if (hierarchicalRootPath && facetValue.indexOf(hierarchicalRootPath) !== 0) {
+      return false;
+    }
+
+    // we always want root levels (only when there is no prefix path)
+    return !hierarchicalRootPath && facetValue.indexOf(hierarchicalSeparator) === -1 ||
+      // if there is a rootPath, being root level mean 1 level under rootPath
+      hierarchicalRootPath &&
+      facetValue.split(hierarchicalSeparator).length - hierarchicalRootPath.split(hierarchicalSeparator).length === 1 ||
       // if current refinement is a root level and current facetValue is a root level,
       // keep the facetValue
       facetValue.indexOf(hierarchicalSeparator) === -1 &&
       currentRefinement.indexOf(hierarchicalSeparator) === -1 ||
       // currentRefinement is a child of the facet value
-      currentRefinement.indexOf(facetValue + hierarchicalSeparator) === 0 ||
+      currentRefinement.indexOf(facetValue) === 0 ||
       // facetValue is a child of the current parent, add it
-      facetValue.indexOf(parentPath + hierarchicalSeparator) === 0;
+      facetValue.indexOf(parentPath + hierarchicalSeparator) === 0 &&
+      (hierarchicalShowParentLevel || facetValue.indexOf(currentRefinement) === 0);
   };
 }
 
@@ -10543,6 +10603,7 @@ var requestBuilder = {
       .concat(state.disjunctiveFacets)
       .concat(this._getHitsHierarchicalFacetsAttributes(state));
 
+
     var facetFilters = this._getFacetFilters(state);
     var numericFilters = this._getNumericFilters(state);
     var tagFilters = this._getTagFilters(state);
@@ -10698,28 +10759,41 @@ var requestBuilder = {
 
       var hierarchicalFacet = state.getHierarchicalFacetByName(facetName);
       var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+      var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
       var attributeToRefine;
+      var attributesIndex;
 
       // we ask for parent facet values only when the `facet` is the current hierarchical facet
       if (facet === facetName) {
         // if we are at the root level already, no need to ask for facet values, we get them from
         // the hits query
-        if (facetValue.indexOf(separator) === -1 || hierarchicalRootLevel === true) {
+        if (facetValue.indexOf(separator) === -1 || (!rootPath && hierarchicalRootLevel === true) ||
+          (rootPath && rootPath.split(separator).length === facetValue.split(separator).length)) {
           return;
         }
 
-        attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 2];
-        facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+        if (!rootPath) {
+          attributesIndex = facetValue.split(separator).length - 2;
+          facetValue = facetValue.slice(0, facetValue.lastIndexOf(separator));
+        } else {
+          attributesIndex = rootPath.split(separator).length - 1;
+          facetValue = rootPath;
+        }
+
+        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
       } else {
-        attributeToRefine = hierarchicalFacet.attributes[facetValue.split(separator).length - 1];
+        attributesIndex = facetValue.split(separator).length - 1;
+
+        attributeToRefine = hierarchicalFacet.attributes[attributesIndex];
       }
 
-      facetFilters.push([attributeToRefine + ':' + facetValue]);
+      if (attributeToRefine) {
+        facetFilters.push([attributeToRefine + ':' + facetValue]);
+      }
     });
 
     return facetFilters;
   },
-
 
   _getHitsHierarchicalFacetsAttributes: function(state) {
     var out = [];
@@ -10744,15 +10818,22 @@ var requestBuilder = {
   },
 
   _getDisjunctiveHierarchicalFacetAttribute: function(state, hierarchicalFacet, rootLevel) {
+    var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
     if (rootLevel === true) {
-      return [hierarchicalFacet.attributes[0]];
+      var rootPath = state._getHierarchicalRootPath(hierarchicalFacet);
+      var attributeIndex = 0;
+
+      if (rootPath) {
+        attributeIndex = rootPath.split(separator).length;
+      }
+      return [hierarchicalFacet.attributes[attributeIndex]];
     }
 
     var hierarchicalRefinement = state.getHierarchicalRefinement(hierarchicalFacet.name)[0] || '';
     // if refinement is 'beers > IPA > Flying dog',
     // then we want `facets: ['beers > IPA']` as disjunctive facet (parent level values)
 
-    var parentLevel = hierarchicalRefinement.split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length - 1;
+    var parentLevel = hierarchicalRefinement.split(separator).length - 1;
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
   }
 };
@@ -10917,7 +10998,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":15,"lodash/collection/map":17,"lodash/function/bind":23,"lodash/lang/isArray":136,"lodash/lang/isPlainObject":142,"lodash/lang/isString":143,"lodash/object/mapKeys":154,"lodash/object/mapValues":155,"lodash/object/pick":159,"qs":165,"qs/lib/utils":168}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.6.7';
+module.exports = '2.6.8';
 
 },{}]},{},[1])(1)
 });
