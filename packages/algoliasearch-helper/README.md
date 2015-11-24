@@ -490,6 +490,49 @@ The available sort tokens are:
 - name
 - path
 
+##### Restrict results and hierarchical values to non-root level
+
+Let's say you have a lot of levels:
+
+```
+- fruits
+  - yellow
+    - citrus
+      - spicy
+```
+
+But you only want to get the values starting at "citrus", you can use `rootPath`
+
+You can specify an root path to filter the hierarchical values
+
+```
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3'],
+    rootPath: 'fruits > yellow > citrus'
+  }]
+});
+```
+
+Having a rootPath will refine the results on it **automatically**.
+
+##### Hide parent level of current parent level
+
+By default the hierarchical facet is going to return the child and parent facet values of the current refinement.
+
+If you do not want to get the parent facet values you can set showParentLevel to false
+
+````
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    showParentLevel: false
+  }]
+});
+``
+
 ##### Asking for the current breadcrumb
 
 ```js
