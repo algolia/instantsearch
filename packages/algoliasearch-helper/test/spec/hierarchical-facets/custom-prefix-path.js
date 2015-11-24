@@ -16,11 +16,13 @@ test('hierarchical facets: custom prefix path', function(t) {
   var helper = algoliasearchHelper(client, indexName, {
     hierarchicalFacets: [{
       name: 'categories',
-      attributes: ['categories.lvl0', 'categories.lvl1'],
+      attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2'],
       rootPath: 'beers',
       separator: ' | '
     }]
   });
+
+  helper.toggleRefine('categories', 'beers | Belgian');
 
   var search = sinon.stub(client, 'search');
 
@@ -33,6 +35,19 @@ test('hierarchical facets: custom prefix path', function(t) {
       'page': 0,
       'nbPages': 1,
       'hitsPerPage': 20,
+      'facets': {
+        'categories.lvl0': {'beers': 3},
+        'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1},
+        'categories.lvl2': {'beers | Belgian | Blond': 2, 'beers | Belgian | Dark': 1}
+      }
+    }, {
+      'query': 'a',
+      'index': indexName,
+      'hits': [{'objectID': 'one'}],
+      'nbHits': 1,
+      'page': 0,
+      'nbPages': 1,
+      'hitsPerPage': 1,
       'facets': {
         'categories.lvl0': {'beers': 3},
         'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1}
@@ -48,15 +63,6 @@ test('hierarchical facets: custom prefix path', function(t) {
       'facets': {
         'categories.lvl1': {'beers | IPA': 2, 'beers | Belgian': 1}
       }
-    }, {
-      'query': 'a',
-      'index': indexName,
-      'hits': [{'objectID': 'one'}],
-      'nbHits': 1,
-      'page': 0,
-      'nbPages': 1,
-      'hitsPerPage': 1,
-      'facets': {}
     }]
   };
 
@@ -69,8 +75,20 @@ test('hierarchical facets: custom prefix path', function(t) {
       'name': 'Belgian',
       'path': 'beers | Belgian',
       'count': 1,
-      'isRefined': false,
-      'data': null
+      'isRefined': true,
+      'data': [{
+        'name': 'Blond',
+        'path': 'beers | Belgian | Blond',
+        'count': 2,
+        'isRefined': false,
+        'data': null
+      }, {
+        'name': 'Dark',
+        'path': 'beers | Belgian | Dark',
+        'count': 1,
+        'isRefined': false,
+        'data': null
+      }]
     }, {
       'name': 'IPA',
       'path': 'beers | IPA',
