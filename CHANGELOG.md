@@ -1,5 +1,5 @@
-<a name="1.1.0-beta"></a>
-# [1.1.0-beta](https://github.com/algolia/instantsearch.js/compare/v1.0.0...v1.1.0-beta) (2015-11-25)
+<a name="1.1.0-beta.0"></a>
+# [1.1.0-beta.0](https://github.com/algolia/instantsearch.js/compare/v1.0.0...v1.1.0-beta.0) (2015-11-25)
 
 
 ### Bug Fixes
