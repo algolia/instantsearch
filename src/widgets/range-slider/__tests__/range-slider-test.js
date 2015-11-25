@@ -94,6 +94,49 @@ describe('rangeSlider()', () => {
     });
   });
 
+  context('when rangestats min === stats max', () => {
+    beforeEach(() => {
+      results = {
+        disjunctiveFacets: [{
+          name: 'aNumAttr',
+          data: {
+            65: 1
+          },
+          exhaustive: true,
+          stats: {
+            min: 65,
+            max: 65,
+            avg: 65,
+            sum: 65
+          }
+        }]
+      };
+    });
+
+    it('should shouldAutoHideContainer', () => {
+      widget.render({results, helper});
+
+      let props = {
+        cssClasses: {body: null, root: null},
+        onChange: () => {},
+        pips: true,
+        range: {max: 65, min: 65},
+        shouldAutoHideContainer: true,
+        start: [-Infinity, Infinity],
+        step: 1,
+        templateProps: {
+          templates: {footer: '', header: ''},
+          templatesConfig: undefined,
+          transformData: undefined,
+          useCustomCompileOptions: {footer: false, header: false}
+        },
+        tooltips: true
+      };
+
+      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
+    });
+  });
+
   context('with results', () => {
     beforeEach(() => {
       results = {
