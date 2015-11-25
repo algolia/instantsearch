@@ -8,7 +8,7 @@
     "build": "./scripts/build.sh",
     "dev": "./scripts/dev.sh",
     "dev:docs": "./scripts/dev-docs.sh",
-    "doctoc": "doctoc --maxlevel 3 README.md",
+    "doctoc": "doctoc --maxlevel 3 README.md CONTRIBUTING.md",
     "jsdoc:widget": "babel-node ./scripts/doc/gen-widget-doc.js",
     "gh-pages": "./scripts/gh-pages.sh",
     "lint": "eslint . --quiet --no-color && sass-lint --verbose",

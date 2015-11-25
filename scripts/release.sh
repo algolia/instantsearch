@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+[ -z $HOTFIX ] && HOTFIX='0'
+
 set -e # exit when error
 
 if [[ -n $(npm owner add `npm whoami`) ]]; then
@@ -22,9 +24,11 @@ printf "\n\nRelease: update working tree"
 git pull origin master
 git fetch origin --tags
 
-printf "\n\nRelease: merge develop branch"
-git fetch origin develop
-git merge origin/develop
+if [ $HOTFIX == '0' ]; then
+  printf "\n\nRelease: merge develop branch"
+  git fetch origin develop
+  git merge origin/develop
+fi
 
 printf "Release: npm install"
 npm install
@@ -59,7 +63,7 @@ changelog=`conventional-changelog -p angular`
 conventional-changelog -p angular -i CHANGELOG.md -w
 
 # regenerate readme TOC
-printf "\n\nRelease: generate README.md TOC"
+printf "\n\nRelease: generate TOCS"
 npm run doctoc
 
 # regenerate widgets jsdoc
