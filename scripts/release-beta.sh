@@ -73,9 +73,15 @@ npm run doctoc
 printf "\n\nBeta release: regenerate widgets jsdoc"
 npm run jsdoc:widget
 
+# add a timestamp fake file to avoid having beta released published to jsdelivr
+# https://github.com/jsdelivr/jsdelivr/pull/8107#issuecomment-159562676
+timestamp=$(date "+%Y.%m.%d-%H.%M.%S")
+tmpfile="dist/avoid-jsdelivr-beta-publish-$timestamp"
+touch $tmpfile
+
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc
+git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc dist/$tmpfile
 printf "$commitMessage" | git commit --file -
 
 printf "\n\nBeta release: almost done, check everything in another terminal tab.\n"

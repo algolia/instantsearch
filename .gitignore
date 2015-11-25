@@ -5,3 +5,4 @@ dev/bundle.js*
 examples/*/*.css
 npm-debug.log
 .DS_Store
+dist/avoid-jsdelivr-beta-publish*
