@@ -2,12 +2,18 @@
 
 set -e # exit when error
 
+COMMIT_MSG=`git log --format=%B --no-merges -n 1`
+
 if [ $TRAVIS_PULL_REQUEST == "false" ]; then
-  echo "No need to check pull request done on develop branch when not in a pull request"
-  exit 0
+  MSG="No need to check pull request done on develop branch when not in a pull request"
+  EXIT=0
+elif [ $COMMIT_MSG == *"HOTFIX"* && $TRAVIS_BRANCH != 'master' ]; then
+  MSG="Hotfix must be submitted to master, good"
+  EXIT=1
+elif [ $TRAVIS_BRANCH != 'develop' ]; then
+  MSG="Pull request must be done on develop branch"
+  EXIT=1
 fi
 
-if [ $TRAVIS_BRANCH != 'develop' ]; then
-  echo "Pull request must be done on develop branch"
-  exit 1
-fi
+echo $MSG;
+exit $EXIT;
