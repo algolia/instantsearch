@@ -66,7 +66,7 @@ VERSION=$newVersion babel-node ./scripts/bump-package-version.js
 NODE_ENV=production VERSION=$newVersion npm run build
 
 # regenerate readme TOC
-printf "\n\nBeta release: generate README.mc TOC"
+printf "\n\nBeta release: generate TOCS"
 npm run doctoc
 
 # regenerate widgets jsdoc

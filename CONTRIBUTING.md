@@ -1,48 +1,63 @@
-Hi collaborator!
+Hi (future) collaborator!
 
-We use **pull request** based approach to development.
+**tl;dr;**
+- submit pull requests to develop branch
+- use conventional changelog commit style messages
+- squash your commits
+- have fun
 
-**Have a fix or a new feature**? Search for corresponding issues first then
-create a new one.
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Where to start?](#where-to-start)
+- [New API proposal](#new-api-proposal)
+- [How to create issues](#how-to-create-issues)
+- [Development workflow](#development-workflow)
+- [Adding/Updating a package](#addingupdating-a-package)
+- [Removing a package](#removing-a-package)
+- [Commit message guidelines](#commit-message-guidelines)
+  - [Revert](#revert)
+  - [Type](#type)
+  - [Scope](#scope)
+  - [Subject](#subject)
+  - [Body](#body)
+  - [Footer](#footer)
+- [Stash your commits](#stash-your-commits)
+- [When are issues closed?](#when-are-issues-closed)
+- [Milestones](#milestones)
+- [Releasing](#releasing)
+  - [Beta releases](#beta-releases)
+- [Hotfixes](#hotfixes)
+  - [Releasing hotfixes](#releasing-hotfixes)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Where to start?
+
+Have a fix or a new feature? [Search for corresponding issues](https://github.com/algolia/instantsearch.js/issues) first then create a new one.
+
+Always check the status of the [develop branch](https://github.com/algolia/instantsearch.js/tree/develop) for the freshest code.
+
+Always submit pull requests to the develop branch.
+
+**Wanna help us?** All issues belonging to the [`next` milestone](https://github.com/algolia/instantsearch.js/milestones/next) can be worked on.
+
+# New API proposal
 
 If you have a new **API proposal** or change, create an issue describing it precisely:
-- JavaScript example
+- JavaScript API example
 - Resulting DOM/effect
 
 Here's an example: [New widget: hitsPerPageSelector (#331)](https://github.com/algolia/instantsearch.js/issues/331).
 
-# Workflow
+# How to write issues
 
-Most of our work should be based on issues. So that we are sure to have at least two or three people that agreed we needed to change something.
+Start with some context, when and/or where you encountered the issue.
 
-Then, when you are ready:
-- **assign** the issue to yourself, change the label to `in progress`. You can use the [waffle.io board](https://waffle.io/algolia/instantsearch.js/join). 
-- **create a branch** starting from the **develop** branch, name it like feat/blabla, fix/blabla, refactor/blabla
-- see the [development workflow](#development-workflow)
-- use our [commit message guidelines](#commit-message-guidelines) to provide a meaningful commit message: it will be inserted into the changelog automatically
-- add a [#fix #issue](https://help.github.com/articles/closing-issues-via-commit-messages/) when relevant, in the commit body
-- **submit** your pull request to the develop branch
-- Add either `do not merge` or `ready for review` labels given your context
-- wait for **review**
-- do the necessary changes and add more commits
-- once you are done, [squash](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html) your commits to avoid things like "fix dangling comma in bro.js", "fix after review"
-  - example:
-    - `feat(widget): new feature blabla..`
-    - `refactor new feature blablabla...` (bad, not following our [commit message guidelines](#commit-message-guidelines)
-  - **both commits should be squashed* in a single commit: `feat(widget) ..`
-- when **updating** your feature branch on develop, **always use rebase instead of merge**
-
-# When to close issues?
-
-Once the fix is done, having the fix in `develop` is not sufficient, it needs to be part of a release for us to close the issue.
-
-So that you never ask yourself "Is this released?".
-
-Instead of closing the issue, you can just add the ` ✔ to be released` label.
+Since instantsearch.js is a UI library, if your issue is UI related then adding a screenshot or (better) a GIF will make your issue a lot easier to understand.
 
 # Development workflow
-
-Join our [waffle.io board](https://waffle.io/algolia/instantsearch.js/join)!
 
 Rapidly iterate with our example app:
 
@@ -57,14 +72,14 @@ Run the tests and lint:
 npm test
 ```
 
-## Adding/Updating a package
+# Adding/Updating a package
 
 ```sh
 npm install package --save[-dev]
 npm run shrinkwrap
 ```
 
-## Removing a package
+# Removing a package
 
 ```sh
 npm remove package --save[-dev]
@@ -84,7 +99,7 @@ Here are the rules to write commit messages, they are the same than [angular/ang
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
 format that includes a **type**, a **scope** and a **subject**:
 
-```
+```text
 <type>(<scope>): <subject>
 <BLANK LINE>
 <body>
@@ -135,18 +150,63 @@ reference GitHub issues that this commit **Closes**.
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
+# Stash your commits
+
+Once you are done with a fix or feature and the review was done, [squash](http://gitready.com/advanced/2009/02/10/squashing-commits-with-rebase.html) your commits to avoid things like "fix dangling comma in bro.js", "fix after review"
+
+Example:
+    - `feat(widget): new feature blabla..`
+    - `refactor new feature blablabla...`
+    - `fix after review ...`
+  - **both commits should be squashed* in a single commit: `feat(widget) ..`
+
+# When are issues closed?
+
+Once the a fix is done, having the fix in the `develop` branch is not sufficient, it needs to be part of a release for us to close the issue.
+
+So that you never ask yourself "Is this released?".
+
+Instead of closing the issue, we willat add a ` ✔ to be released` label.
+
 # Milestones
 
-- `next` => Ideas, questions, refactors, bugs that were discuseed, turned into clear actions by the maintainers
-- `x.x.x` => selected `next` actions to be done in a release
+- `next` => Ideas, questions, refactors, bugs that were discuseed, turned into clear actions by the maintainers. You can work on this.
+- `x.x.x` => selected `next` actions to be done in a release. You can work on this.
 - no milestone => Still need investigation / discussion
 
-# Labels
+# Releasing
 
-- `needs api proposal` good change or addition idea. Now in need of a clear API proposal
-- `new widget` new widget idea
-- `ready` change accepted and can be done by anyone
-- `in progress` you are working on it
-- `question` anything that's not an accepted bug/new feature
-- `do not merge` still working on a pull request, you want feedback but it's not finished
-- `✔ to be released` corresponding pull request was merged. Now waiting for a release before closing the issue
+If you are a maintainer, you can release.
+
+We use [semver](http://semver-ftw.org/).
+
+You must be on the master branch.
+
+```sh
+npm run release
+```
+
+## Beta releases
+
+You must be on the develop branch.
+
+```sh
+npm run beta-release
+```
+
+# Hotfixes
+
+All our work is done on the develop branch but it could be necessary to push a hotfix to the master
+branch and do a patch release. To fix a very important bug.
+
+For this, you should:
+- add `HOTFIX` to the commit message **body**
+- submit your pull request to the master branch
+
+## Releasing hotfixes
+
+You must be on the master branch.
+
+```sh
+HOTFIX=1 npm run release
+```
