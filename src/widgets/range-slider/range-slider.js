@@ -112,7 +112,7 @@ function rangeSlider({
         };
       }
 
-      let hasNoRefinements = stats.min === null && stats.max === null;
+      let hasNoRefinements = stats.min === stats.max;
 
       let templateProps = utils.prepareTemplateProps({
         defaultTemplates,
