@@ -59,7 +59,7 @@ changelog=`conventional-changelog -p angular`
 conventional-changelog -p angular -i CHANGELOG.md -w
 
 # regenerate readme TOC
-printf "\n\nRelease: generate README.mc TOC"
+printf "\n\nRelease: generate README.md TOC"
 npm run doctoc
 
 # regenerate widgets jsdoc

@@ -22,7 +22,7 @@ search.addWidget(
 var hitTemplate =
   '<div class="hit media">' +
     '<div class="media-left">' +
-      '<div class="media-object"><img src="{{image}}" /></div>' +
+      '<div class="media-object" style="background-image: url(\'{{image}}\');"></div>' +
     '</div>' +
     '<div class="media-body">' +
       '<h4 class="media-heading">{{{_highlightResult.title.value}}} {{#stars}}<span class="ais-star-rating--star{{^.}}__empty{{/.}}"></span>{{/stars}}</h4>' +

@@ -29,7 +29,10 @@ h2 {
   left: 0;
   z-index: -1;
   opacity: 0;
-  animation: fadeIn 3s ease-in-out forwards;
+  transition: opacity ease-in-out 3s;
+  &.loaded {
+    opacity: 1;
+  }
 }
 
 #space-overlay {
@@ -39,7 +42,6 @@ h2 {
   left: 0;
   z-index: -2;
   background: linear-gradient(-30deg, rgba(#182848, 0.4) 0%, rgba(#182848, 1) 90%) #1d96c7;
-  // scroll down 
   &:after {
     content: "";
     display: block;
@@ -165,6 +167,8 @@ h2 {
   }
 }
 
+// We're using a hack from http://stackoverflow.com/a/27065674
+// for anti-aliasing (`outline: 1px solid transparent`)
 #anim {
   position: relative;
   @include size(420px, 400px);
@@ -174,6 +178,7 @@ h2 {
   border-radius: 10px;
   perspective: 1200px;
   transform-style: preserve-3d;
+  outline: 1px solid transparent;
   img {
     border-radius: 10px;
   }
@@ -181,44 +186,38 @@ h2 {
     background-color: rgba(#1d96c7, 0.4);
     position: absolute;
     transform-style: preserve-3d;
+    outline: 1px solid transparent;
   }
   .legend {
     font-size: 1.2em;
     border-left: solid 2px white;
     padding: 0 0 60px 10px;
   }
-  //searchbox 
-  > .widget-1 {
+  > .widget-1 //searchbox {
     @include size(280px, 30px);
     @include position(10px, 10px);
   }
-  //results 
-  > .widget-2 {
+  > .widget-2 //results {
     @include size(280px, 270px);
     @include position(70px, 10px);
   }
-  //facet 
-  > .widget-3 {
+  > .widget-3 //facet {
     @include size(110px, 50px);
     @include position(50px, null, null, 10px);
   }
-  //facet 
-  > .widget-4 {
+  > .widget-4 //facet {
     @include size(110px, 70px);
     @include position(110px, null, null, 10px);
   }
-  //facet 
-  > .widget-5 {
+  > .widget-5 //facet {
     @include size(110px, 110px);
     @include position(190px, null, null, 10px);
   }
-  //facet 
-  > .widget-6 {
+  > .widget-6 //facet {
     @include size(110px, 80px);
     @include position(310px, null, null, 10px);
   }
-  //pagination 
-  > .widget-7 {
+  > .widget-7 //pagination {
     @include size(170px, 20px);
     @include position(350px, 60px);
   }
@@ -231,27 +230,24 @@ h2 {
   opacity: 0;
   background-color: white;
   border-radius: 10px;
+  outline: 1px solid transparent;
 }
 
 #screen-1 {
   @include position(0, null, null, 460px);
-  //searchbox 
-  .widget-1 {
+  .widget-1 //searchbox {
     @include size(400px, 50px);
     @include position(10px, 10px);
   }
-  //results 
-  .widget-2 {
+  .widget-2 //results {
     @include size(200px, 270px);
     @include position(70px, 10px);
   }
-  //facet 
-  .widget-3 {
+  .widget-3 //facet {
     @include size(190px, 320px);
     @include position(70px, null, null, 10px);
   }
-  //pagination 
-  .widget-4 {
+  .widget-4 //pagination {
     @include size(200px, 40px);
     @include position(350px, 10px);
   }
@@ -259,23 +255,19 @@ h2 {
 
 #screen-2 {
   @include position(440px);
-  //searchbox 
-  .widget-1 {
+  .widget-1 //searchbox {
     @include size(400px, 30px);
     @include position(10px, 10px);
   }
-  //filters 
-  .widget-2 {
+  .widget-2 //filters {
     @include size(400px, 30px);
     @include position(50px, 10px);
   }
-  //facet 
-  .widget-3 {
+  .widget-3 //facet {
     @include size(130px, 200px);
     @include position(90px, null, null, 10px);
   }
-  //results 
-  .widget-4 {
+  .widget-4 //results {
     @include size(260px, 300px);
     @include position(90px, 10px);
   }
@@ -283,30 +275,24 @@ h2 {
 
 #screen-3 {
   @include position(440px, null, null, 460px);
-  //searchbox 
-  .widget-1 {
+  .widget-1 //searchbox {
     @include size(400px, 60px);
     @include position(10px, 10px);
   }
-  //map 
-  .widget-2 {
+  .widget-2 //map {
     @include size(400px, 180px);
     @include position(80px, 10px);
   }
-  //filter 
-  .widget-3 {
+  .widget-3 //filter {
     @include size(130px, 120px);
     @include position(270px, 10px);
   }
-  //filter 
-  .widget-4 {
+  .widget-4 //filter {
     @include size(120px, 120px);
     @include position(270px, 150px);
   }
-  //filter 
-  .widget-5 {
+  .widget-5 //filter {
     @include size(130px, 120px);
     @include position(270px, 280px);
   }
 }
-

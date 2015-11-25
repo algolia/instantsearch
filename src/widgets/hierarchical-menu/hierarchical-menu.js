@@ -16,6 +16,8 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
  * Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow.
  * @param  {string} [options.separator=' > '] Separator used in the attributes to separate level values.
+ * @param  {string} [options.rootPath] Prefix path to use if the first level is not the root level.
+ * @param  {string} [options.showParentLevel=false] Show the parent level of the current refined value
  * @param  {number} [options.limit=100] How much facet values to get
  * @param  {string[]} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Object} [options.templates] Templates to use for the widget
@@ -42,6 +44,8 @@ hierarchicalMenu({
   container,
   attributes,
   [ separator=' > ' ],
+  [ rootPath ],
+  [ showParentLevel=true ],
   [ limit=1000 ],
   [ sortBy=['name:asc'] ],
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
@@ -53,6 +57,8 @@ function hierarchicalMenu({
     container,
     attributes,
     separator = ' > ',
+    rootPath = null,
+    showParentLevel = true,
     limit = 1000,
     sortBy = ['name:asc'],
     cssClasses: userCssClasses = {},
@@ -81,7 +87,9 @@ function hierarchicalMenu({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
         attributes,
-        separator
+        separator,
+        rootPath,
+        showParentLevel
       }]
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {

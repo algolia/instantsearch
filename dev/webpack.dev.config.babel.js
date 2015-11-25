@@ -1,3 +1,5 @@
+import {join} from 'path';
+
 export default {
   entry: {
     bundle: './dev/app.js',
@@ -20,6 +22,16 @@ export default {
     }, {
       test: require.resolve('react-dom'), loader: 'expose?ReactDOM'
     }]
+  },
+  // when module not found, find locally first
+  // helps fixing the npm link not working with webpack
+  // http://stackoverflow.com/a/33722844/147079
+  resolve: {
+    fallback: [join(__dirname, '..', 'node_modules')]
+  },
+  // same issue, for loaders like babel
+  resolveLoader: {
+    fallback: [join(__dirname, '..', 'node_modules')]
   },
   devServer: {
     contentBase: 'dev/',

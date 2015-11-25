@@ -7,19 +7,19 @@
 <head>
   <meta charset="UTF-8">
   <title>E-commerce search with instantsearch.js by Algolia</title>
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
 
   {% if site.env == 'development' %}
     <script>
       document.write('<link rel="stylesheet" href="//' + window.location.hostname +':8080/instantsearch.css">');
     </script>
   {% else %}
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
   {% endif %}
   <link rel="stylesheet" type="text/css" href="main.css" />
   <!--[if lte IE 9]>
-  <script src="//cdn.polyfill.io/v2/polyfill.min.js"></script>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
   <![endif]-->
 </head>
 
@@ -74,10 +74,10 @@
       document.write('\x3Cscript src="//' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
     </script>
   {% else %}
-  <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
   {% endif %}
 
-  <script src="//cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>
   <script src="search.js"></script>
 
 </body>

@@ -2,7 +2,7 @@
 layout: default
 ---
 #space-overlay
-%canvas#space
+%div#space
 %section.hero.window
   .container
     .row
@@ -17,7 +17,7 @@ layout: default
           %img.img-responsive.m-r{src:"img/logo-instantsearch.svg", alt:"Logo instantsearch.js", width:500}
         %p.vp
           A library of UI widgets to help you build the best instant-search experience with
-          %a{href:"https://www.algolia.com"} Algolia's Hosted Search API.
+          %a{href:"https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage"} Algolia's Hosted Search API.
         .spacer80
         -# %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
         -# %span &nbsp;
@@ -34,7 +34,7 @@ layout: default
       .col-sm-6
         %img{src:"img/icon-theme.svg", width:70, alt:"Widgets"}
         %h2 More than widgets
-        %p.lead Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page.Everything is packaged in one library.
+        %p.lead Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page. Everything is packaged in one library.
 %section#widget-customization-2.window
   .container
     .row
@@ -135,10 +135,10 @@ layout: default
         .col-sm-8.text-right
           .spacer5
           %span.h4
-            %strong Explore instantsearch.js.
-            Learn more about instant search features and widgets.
+            %strong Get inspired.
+            We created multiple examples using instantsearch.js
         .col-sm-4
-          %a.btn.btn-primary{href: "{{ '/documentation/' | prepend: site.baseurl }}"} Get started with instantsearch.js
+          %a.btn.btn-primary{href: "{{ '/examples/' | prepend: site.baseurl }}"} See it in action!
 
 {% contentfor site-footer %}
 <script type="text/javascript" src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>

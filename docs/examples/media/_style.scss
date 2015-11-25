@@ -220,13 +220,11 @@ section {
 
       .media-object {
         height: 130px;
-        width: 210px;
+        width: 130px;
         overflow: hidden;
-
-        img {
-          margin-top: -30px;
-          width: 100%;
-        }
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
       }
 
       .media-heading {

@@ -1,3 +1,19 @@
+<a name="1.1.0-beta.0"></a>
+# [1.1.0-beta.0](https://github.com/algolia/instantsearch.js/compare/v1.0.0...v1.1.0-beta.0) (2015-11-25)
+
+
+### Bug Fixes
+
+* **pagination:** fix #668 edge case ([d8f1196](https://github.com/algolia/instantsearch.js/commit/d8f1196)), closes [#668](https://github.com/algolia/instantsearch.js/issues/668)
+* **priceRanges:** Remove round from first range ([bf82395](https://github.com/algolia/instantsearch.js/commit/bf82395))
+* **starRating:** Retrieve the correct count and use numericRefinement ([f00ce38](https://github.com/algolia/instantsearch.js/commit/f00ce38)), closes [#615](https://github.com/algolia/instantsearch.js/issues/615)
+
+### Features
+
+* **hierarchical:** expose rootPath and showParentLevel ([6e9bb7c](https://github.com/algolia/instantsearch.js/commit/6e9bb7c))
+
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/algolia/instantsearch.js/compare/v0.14.9...v1.0.0) (2015-11-18)
 

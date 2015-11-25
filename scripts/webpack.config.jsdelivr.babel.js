@@ -2,6 +2,7 @@ import webpack from 'webpack';
 
 export default {
   entry: './index.js',
+  devtool: 'source-map',
   output: {
     path: './dist/',
     filename: 'instantsearch.js',

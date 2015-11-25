@@ -12,7 +12,7 @@ noFooter: true
 <div class="shameless-marketing text-center hidden-xs">
 <img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
 <div class="lead">
-  <p>Build the perfect UI with instantsearch.js,<br> a library of widgets designed to help you create a high performance instant search experience.</p>
+  <p>Build the perfect UI with instantsearch.js,<br> a library of widgets designed to help you create a high-performance instant-search experience.</p>
   <p class="version">Version: <strong>{{ site.version }}</strong></p>
 </div>
 <div class="spacer40"></div>
@@ -21,7 +21,7 @@ noFooter: true
 <div class="sticker sticker-algolia">
 <img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
 </div>
-Built on top of the <a href="https://www.algolia.com">Algolia Search API</a>
+Built on top of the <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage">Algolia Search API</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-open-source">
@@ -62,8 +62,8 @@ The fastest way to get started is to use a built version of **instantsearch.js**
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight html %}
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css">
-<script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 {% endhighlight %}
   </div>
 </div>
@@ -96,7 +96,7 @@ var instantsearch = require('instantsearch.js');
 
 </div>
 
-You will also need to manually load into your application the [instantsearch css file](http://cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css).
+You will also need to manually load into your application the [instantsearch css file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css).
 
 ### Initialization
 
@@ -197,7 +197,7 @@ This example shows you how to create a very simple search results page that incl
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     <title>instantsearch.js basics</title>
   </head>
   <body>
@@ -205,7 +205,7 @@ This example shows you how to create a very simple search results page that incl
     <div id="hits-container"></div>
     <div id="pagination-container"></div>
 
-    <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+    <script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
     <script>
       var search = instantsearch({
         appId: 'YourApplicationID',

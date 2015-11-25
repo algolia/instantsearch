@@ -1,5 +1,6 @@
-/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce */
+/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE*/
 'use strict';
+
 
 $(function () {
 
@@ -122,94 +123,91 @@ $(function () {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function(){
+  var threeScript = document.createElement('script');
+  threeScript.src = 'js/three.min.js';
+  threeScript.addEventListener('load', function(){
+    var $space = document.querySelector('#space');
+    var rand = new PRNG();
 
-// Space Canvas
+    var radiusScene = 10000;
+    var scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x000000, 1/radiusScene);
 
-var canvas, context, screenH, screenW, stars = [], fps = 10, numStars = 200;
+    var renderer = new THREE.WebGLRenderer({ alpha: true });
+    var camera = new THREE.PerspectiveCamera( 55, .66, 0.1, radiusScene * 10 );
 
-// Calculate the screen size
-screenH = $(window).height();
-screenW = $(window).width();
+    var setSize = function setSize() {
+      var width = window.innerWidth;
+      var height = window.innerHeight;
+      var aspect = width / height;
+      camera.aspect = aspect;
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
 
-// Get the canvas
-canvas = $('#space');
+    setSize();
+    window.addEventListener('resize', setSize);
 
-// Fill out the canvas
-canvas.attr('height', screenH);
-canvas.attr('width', screenW);
-context = canvas[0].getContext('2d');
+    $space.appendChild(renderer.domElement);
 
-var x, y, len, opacity, star;
+    var particles = new THREE.Geometry();
+    var sphere = new THREE.Sphere(new THREE.Vector3(0,0,0), radiusScene);
+    var rand1 = function() {
+      return rand.nextRange(-radiusScene, radiusScene);
+    };
 
-// Create all the stars
-for (var i = 0; i < numStars; i++) {
-  x = Math.round(Math.random() * screenW);
-  y = Math.round(Math.random() * screenH);
-  len = 1 + Math.random() * 2;
-  opacity = Math.random();
+    for (var i = 0; i < 30000; i++ ){
+      var p = new THREE.Vector3(rand1(), rand1(), rand1());
+      p = sphere.clampPoint(p);
+      particles.vertices.push(p);
+    }
 
-  // Create a new star and draw
-  star = new Star(x, y, len, opacity);
+    var pMaterial = new THREE.PointsMaterial({
+      color: 0xFFFFFF,
+      size: 1,
+      sizeAttenuation: false,
+      alphaTest: 0.5,
+      transparent: true,
+      blending: THREE.AdditiveBlending
+    });
+    var particleSystem = new THREE.Points(particles, pMaterial);
 
-  // Add the the stars array
-  stars.push(star);
-}
+    scene.add(particleSystem);
 
-setInterval(animate, 1000 / fps);
+    camera.position.z = -1500;
+    camera.position.y = 1500;
 
-// Animate the canvas
-function animate() {
-  context.clearRect(0, 0, screenW, screenH);
-  $.each(stars, function() {
-    this.draw(context);
+    camera.rotation.x = -Math.PI / 2 + 0.5;
+
+    var epsilon = 0.001;
+    var timelineMap = function(x) {
+      var res = x;
+      if (x > 200) res += 30 * Math.max((Math.min(x, 800) - 200), 0);
+      if (x > 1100) res += 30 * Math.max((Math.min(x, 1700) - 1100), 0);
+      if (x > 2000) res += 30 * Math.max((Math.min(x, 2600) - 2000), 0);
+      return res / 100;/// 100;
+    };
+    var currentTSpring = 0;
+    var previousTSping = null;
+    var render = function () {
+      requestAnimationFrame( render );
+
+      var dt = timelineMap(window.scrollY);
+
+      currentTSpring += (dt - currentTSpring) / 10;
+      if ((dt + epsilon) > currentTSpring && (dt - epsilon) < currentTSpring) currentTSpring = dt;
+
+      if (previousTSping === currentTSpring) return;
+      previousTSping = currentTSpring;
+
+      var angle = currentTSpring/60;
+
+      particleSystem.rotation.y = -angle;
+      renderer.render(scene, camera);
+    };
+
+    render();
+    $space.className = 'loaded';
   });
-}
-
-// Star
-function Star(x, y, length, opacity) {
-  this.x = parseInt(x);
-  this.y = parseInt(y);
-  this.length = parseInt(length);
-  this.opacity = opacity;
-  this.factor = 1;
-  this.increment = Math.random() * 0.03;
-}
-
-// Draw a star
-Star.prototype.draw = function() {
-  context.rotate((Math.PI * 1 / 10));
-
-  // Save the context
-  context.save();
-
-  // move into the middle of the canvas, just to make room
-  context.translate(this.x, this.y);
-
-  // Change the opacity
-  if (this.opacity > 1) {
-    this.factor = -1;
-  } else if (this.opacity <= 0) {
-    this.factor = 1;
-    this.x = Math.round(Math.random() * screenW);
-    this.y = Math.round(Math.random() * screenH);
-  }
-
-  this.opacity += this.increment * this.factor;
-
-  context.beginPath();
-  for (var i = 5; i--;) {
-    context.lineTo(0, this.length);
-    context.translate(0, this.length);
-    context.rotate((Math.PI * 2 / 10));
-    context.lineTo(0, -this.length);
-    context.translate(0, -this.length);
-    context.rotate(-(Math.PI * 6 / 10));
-  }
-  context.lineTo(0, this.length);
-  context.closePath();
-  context.fillStyle = 'rgba(200, 200, 250, ' + this.opacity + ')';
-  // context.shadowBlur = 5;
-  // context.shadowColor = '#1D96C7';
-  context.fill();
-  context.restore();
-};
+  document.body.appendChild(threeScript);
+});
