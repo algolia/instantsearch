@@ -3,15 +3,15 @@ header.site-header {
   top: 0;
   width: 100%;
   z-index: 99;
-  background: linear-gradient(to right, rgba(#0a1724, 0.8) -50%, rgba(#172c4f, 0.5) 100%);
+  background: linear-gradient(to right, rgba(#0A1724, 0.8) -50%, rgba(#172C4F, 0.5) 100%);
   transition: background 2s ease;
   nav.navbar {
     margin-bottom: 0;
-    background-color: #0b1724;
+    background-color: #0B1724;
     border-radius: 0;
-    border: none;
+    border: 0;
     .navbar-collapse.in {
-      background-color: #0b1724 !important;
+      background-color: #0B1724 !important;
       animation: fadeInUp 0.2s ease-in-out;
       position: fixed;
       @include position(0, 0, 0, 0);
@@ -45,7 +45,7 @@ header.site-header {
         padding-bottom: 0;
       }
       > .active > a {
-        color: #1d96c7 !important;
+        color: #1D96C7 !important;
         background-color: transparent;
       }
     }

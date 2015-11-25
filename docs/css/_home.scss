@@ -41,7 +41,7 @@ h2 {
   top: 0;
   left: 0;
   z-index: -2;
-  background: linear-gradient(-30deg, rgba(#182848, 0.4) 0%, rgba(#182848, 1) 90%) #1d96c7;
+  background: linear-gradient(-30deg, rgba(#182848, 0.4) 0%, rgba(#182848, 1) 90%) #1D96C7;
   &:after {
     content: "";
     display: block;
@@ -81,7 +81,7 @@ h2 {
   color: rgba(white, 0.7);
   a {
     color: white;
-    border-bottom: solid 1px rgba(#1d96c7, 0.7);
+    border-bottom: solid 1px rgba(#1D96C7, 0.7);
     &:hover {}
     text-decoration: none;
   }
@@ -110,7 +110,7 @@ h2 {
 }
 
 #panel-get-started {
-  background-color: #efefef;
+  background-color: #EFEFEF;
   padding: 4em 2em;
 }
 
@@ -183,7 +183,7 @@ h2 {
     border-radius: 10px;
   }
   .widget {
-    background-color: rgba(#1d96c7, 0.4);
+    background-color: rgba(#1D96C7, 0.4);
     position: absolute;
     transform-style: preserve-3d;
     outline: 1px solid transparent;
@@ -193,31 +193,35 @@ h2 {
     border-left: solid 2px white;
     padding: 0 0 60px 10px;
   }
-  > .widget-1 //searchbox {
+  //searchbox
+  > .widget-1 {
     @include size(280px, 30px);
     @include position(10px, 10px);
   }
-  > .widget-2 //results {
+  //results
+  > .widget-2{
     @include size(280px, 270px);
     @include position(70px, 10px);
   }
-  > .widget-3 //facet {
+  //facet
+  > .widget-3 {
     @include size(110px, 50px);
     @include position(50px, null, null, 10px);
   }
-  > .widget-4 //facet {
+  > .widget-4 {
     @include size(110px, 70px);
     @include position(110px, null, null, 10px);
   }
-  > .widget-5 //facet {
+  > .widget-5 {
     @include size(110px, 110px);
     @include position(190px, null, null, 10px);
   }
-  > .widget-6 //facet {
+  > .widget-6 {
     @include size(110px, 80px);
     @include position(310px, null, null, 10px);
   }
-  > .widget-7 //pagination {
+  //pagination
+  > .widget-7 {
     @include size(170px, 20px);
     @include position(350px, 60px);
   }
@@ -235,19 +239,23 @@ h2 {
 
 #screen-1 {
   @include position(0, null, null, 460px);
-  .widget-1 //searchbox {
+  //searchbox
+  .widget-1 {
     @include size(400px, 50px);
     @include position(10px, 10px);
   }
-  .widget-2 //results {
+  //results
+  .widget-2 {
     @include size(200px, 270px);
     @include position(70px, 10px);
   }
-  .widget-3 //facet {
+  //facet
+  .widget-3 {
     @include size(190px, 320px);
     @include position(70px, null, null, 10px);
   }
-  .widget-4 //pagination {
+  //pagination
+  .widget-4 {
     @include size(200px, 40px);
     @include position(350px, 10px);
   }
@@ -255,19 +263,23 @@ h2 {
 
 #screen-2 {
   @include position(440px);
-  .widget-1 //searchbox {
+  //searchbox
+  .widget-1 {
     @include size(400px, 30px);
     @include position(10px, 10px);
   }
-  .widget-2 //filters {
+  //filters
+  .widget-2 {
     @include size(400px, 30px);
     @include position(50px, 10px);
   }
-  .widget-3 //facet {
+  //facet
+  .widget-3  {
     @include size(130px, 200px);
     @include position(90px, null, null, 10px);
   }
-  .widget-4 //results {
+  //results
+  .widget-4  {
     @include size(260px, 300px);
     @include position(90px, 10px);
   }
@@ -275,23 +287,26 @@ h2 {
 
 #screen-3 {
   @include position(440px, null, null, 460px);
-  .widget-1 //searchbox {
+  //searchbox
+  .widget-1 {
     @include size(400px, 60px);
     @include position(10px, 10px);
   }
-  .widget-2 //map {
+  //map
+  .widget-2 {
     @include size(400px, 180px);
     @include position(80px, 10px);
   }
-  .widget-3 //filter {
+  //facet
+  .widget-3 {
     @include size(130px, 120px);
     @include position(270px, 10px);
   }
-  .widget-4 //filter {
+  .widget-4 {
     @include size(120px, 120px);
     @include position(270px, 150px);
   }
-  .widget-5 //filter {
+  .widget-5 {
     @include size(130px, 120px);
     @include position(270px, 280px);
   }

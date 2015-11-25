@@ -1,11 +1,11 @@
 /* VARIABLES
 // ------------------------- */
-$aisdemo-primary-color: #ff585b;
-$aisdemo-text-color: #565a5c;
+$aisdemo-primary-color: #FF585B;
+$aisdemo-text-color: #565A5C;
 $aisdemo-text-lighter-color: #949697;
-$aisdemo-color-white: #fff;
-$aisdemo-color-gray-light: #dce0e0;
-$aisdemo-color-gray-lighter: #edefed;
+$aisdemo-color-white: #FFFFFF;
+$aisdemo-color-gray-light: #DCE0E0;
+$aisdemo-color-gray-lighter: #EDEFED;
 
 
 
@@ -30,7 +30,7 @@ body {
 
 /* HEADER
 // ------------------------- */
-header.aisdemo-navbar {
+.aisdemo-navbar {
   margin: 0;
   padding: 0;
   border-bottom: 1px solid $aisdemo-color-gray-light !important;
@@ -64,7 +64,7 @@ header.aisdemo-navbar {
     top: 15px;
     left: 180px;
     width: 50%;
-    border: none;
+    border: 0;
     box-shadow: none;
     &:focus {
       outline: none;
@@ -122,7 +122,7 @@ header.aisdemo-navbar {
     content: '\25bc';
     text-align: center;
     pointer-events: none;
-    color: #82888a;
+    color: #82888A;
   }
 
   #room_types {
@@ -166,7 +166,7 @@ header.aisdemo-navbar {
         width: 1.25em;
         content: '\2713';
         text-align: center;
-        color: #ff5a5f;
+        color: #FF5A5F;
       }
     }
   }
@@ -216,7 +216,7 @@ header.aisdemo-navbar {
 // ------------------------- */
 #results {
   padding: 40px 20px;
-  background: #edefed;
+  background: #EDEFED;
 }
 
 #hits {
@@ -291,7 +291,7 @@ header.aisdemo-navbar {
   text-align: center;
   font-size: 0.8em;
   a {
-    color: #ff585b;
+    color: #FF585B;
   }
 }
 

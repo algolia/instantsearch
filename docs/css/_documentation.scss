@@ -25,14 +25,16 @@ code {
     list-style: none;
     margin: 0;
     padding: 15px 0;
-    ul ul li:before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      background-color: $brand-primary;
-      border-radius: 1px;
-      margin-right: 4px;
-      display: inline-block;
+    ul ul li {
+      &:before {
+        display: inline-block;
+        content: "";
+        width: 8px;
+        height: 8px;
+        background-color: $brand-primary;
+        border-radius: 1px;
+        margin-right: 4px;
+      }
     }
     a {
       color: #242424;
@@ -42,7 +44,7 @@ code {
       }
     }
     ul {
-      font-size: 0.85em;
+      font-size: .85em;
       padding: 0 0 5px 10px;
       line-height: 1.7em;
       list-style: none;
@@ -66,8 +68,8 @@ code {
 .shameless-marketing {
   float: right;
   width: 43%;
-  color: rgba(white, 0.75);
-  font-size: 0.9em;
+  color: rgba(#FFFFFF, .75);
+  font-size: .9em;
   img {
     position: relative;
   }
@@ -78,10 +80,9 @@ code {
     opacity: 0;
     animation: arrow 1s ease-in-out;
     animation-fill-mode: forwards;
-    border: solid 2px rgba(white, 0.5);
+    border: solid 2px rgba(#FFFFFF, .5);
     margin-bottom: 10px;
     p {
-      padding: 0;
       height: 100%;
       padding: 0;
       margin: 0;
@@ -94,7 +95,7 @@ code {
     }
   }
   .sticker-algolia {
-    animation-delay: 0.5s;
+    animation-delay: .5s;
     margin-top: -2px;
   }
   .sticker-open-source {
@@ -108,12 +109,14 @@ code {
 .documentation-content {
   padding: 30px;
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.75);
+  color: rgba(0, 0, 0, .75);
   p {
     line-height: 1.8em;
   }
-  h1[id], h2[id], h3[id] {
-    clear: both;
+  h1, h2, h3 {
+    &[id]{
+      clear: both;
+    }
   }
   h1[id], h2[id], h3[id], h4[id], h5[id] {
     &:before {
@@ -124,10 +127,10 @@ code {
     }
     a.anchor {
       display: inline-block;
-      font-size: 0.7em;
+      font-size: .7em;
       visibility: hidden;
-      padding-right: 0.2em;
-      margin-top: -0.5em;
+      padding-right: .2em;
+      margin-top: -.5em;
       color: inherit;
       &:hover, &:active, &:focus {
         color: inherit;
@@ -169,40 +172,40 @@ code {
     }
   }
   h3, .h3 {
-    margin: 2em 0 0.8em;
+    margin: 2em 0 .8em;
     font-size: 1.7em;
     font-weight: bold;
     clear: both;
   }
   h4, .h4 {
-    border-bottom: dashed 1px #cccccc;
+    border-bottom: dashed 1px #CCCCCC;
     padding: 0 0 8px;
-    margin: 2em 0 1em 0;
+    margin: 2em 0 1em;
     font-size: 1.3em;
     font-weight: bold;
     clear: both;
   }
   code {
-    background-color: #f3f3f3;
-    border: 1px solid darken(#f3f3f3, 7%);
+    background-color: #F3F3F3;
+    border: 1px solid darken(#F3F3F3, 7%);
     color: $code-color;
     font-weight: bold;
   }
   .code-box {
-    .text-white code {
-      color: white;
+    .text-#FFFFFF code {
+      color: #FFFFFF;
     }
     code {
       background: transparent;
-      border: none;
+      border: 0;
       font-weight: normal;
     }
   }
   .version {
-    font-size: 0.9em;
+    font-size: .9em;
     margin-top: 2em;
     strong {
-      color: white;
+      color: #FFFFFF;
     }
   }
 }
@@ -212,11 +215,11 @@ code {
 }
 
 .html-container {
-  border: none;
-  color: #a3b6cb;
+  border: 0;
+  color: #A3B6CB;
   padding: 9.5px;
   margin: 0 0 10px;
-  background-color: #0a1724;
+  background-color: #0A1724;
   word-wrap: normal;
   white-space: pre;
   overflow-x: auto;
@@ -224,7 +227,7 @@ code {
 
 .widget-container {
   padding: 50px 40px 40px;
-  border: solid 1px #e4e4e4;
+  border: solid 1px #E4E4E4;
   border-radius: 5px;
   position: relative;
   overflow-x: hidden;
@@ -239,9 +242,9 @@ code {
     line-height: 1em;
     position: absolute;
     background-color: $gray-light;
-    border: solid 1px #e4e4e4;
+    border: solid 1px #E4E4E4;
     border-width: 0 1px 1px 0;
-    border-radius: 5px 0 3px 0;
+    border-radius: 5px 0 3px;
   }
 }
 
@@ -259,8 +262,8 @@ code {
 // Code box
 
 .code-samples {
-  background-color: #172c4f;
-  background: linear-gradient(to bottom, #0a1724 0%, #172c4f 100%);
+  background-color: #172C4F;
+  background: linear-gradient(to bottom, #0A1724 0%, #172C4F 100%);
   position: absolute;
   width: 46%;
   @include position(0, 0, 0, null);
@@ -278,11 +281,11 @@ code {
     .toggle-doc-button {
       text-align: right;
       color: $brand-primary;
-      background-color: #0a1724;
-      border: none;
-      transition: color 0.2s, background-color 0.2s;
+      background-color: #0A1724;
+      border: 0;
+      transition: color .2s, background-color .2s;
       &:hover {
-        color: white;
+        color: #FFFFFF;
       }
       &:active, &:focus {
         outline: 0px;
@@ -298,19 +301,19 @@ code {
     right: 5px;
     top: 5px;
     opacity: 0;
-    font-size: 0.9em;
-    background-color: rgba($brand-primary, 0.1);
-    border: none;
+    font-size: .9em;
+    background-color: rgba($brand-primary, .1);
+    border: 0;
     text-transform: uppercase;
-    color: rgba(white, 0.4);
-    transition: opacity 0.2s;
+    color: rgba(#FFFFFF, .4);
+    transition: opacity .2s;
     &:active, &:focus {
       outline: 0px;
     }
     &:active {
-      color: #0a1724;
+      color: #0A1724;
       background-color: $brand-primary;
-      border-color: #0a1724;
+      border-color: #0A1724;
     }
   }
   &:hover {
@@ -320,32 +323,32 @@ code {
     }
   }
   .jsdoc {
-    border: none;
-    color: #a3b6cb;
+    border: 0;
+    color: #A3B6CB;
     padding: 9.5px;
     margin: 0 0 10px;
-    background-color: #0a1724;
+    background-color: #0A1724;
     code {
-      background-color: #0a1724;
+      background-color: #0A1724;
     }
     .attr-optional code {
-      color: #46aeda;
+      color: #46AEDA;
     }
     .attr-required code {
       color: $success-color;
     }
     .attr-infos {
       display: block;
-      font-size: 0.8em;
+      font-size: .8em;
       margin-left: 10px;
     }
     h5 {
       text-decoration: underline;
-      color: #dddddd;
+      color: #DDDDDD;
     }
     pre {
       background: transparent;
-      border: none;
+      border: 0;
       padding: 0;
       margin-bottom: 1.5em;
     }
@@ -360,10 +363,10 @@ code {
         border-bottom: solid 1px #758393;
       }
       td {
-        padding: 0.5em;
-        border-bottom: solid 1px #162b50;
+        padding: .5em;
+        border-bottom: solid 1px #162B50;
         code {
-          color: white;
+          color: #FFFFFF;
         }
       }
     }
@@ -373,21 +376,21 @@ code {
       text-align: right;
       span {
         font-size: 10px;
-        color: #58d158;
+        color: #58D158;
       }
     }
   }
   .requirements {
     display: none;
-    border: none;
-    color: #a3b6cb;
+    border: 0;
+    color: #A3B6CB;
     padding: 9.5px;
     margin: 0 0 10px;
-    background-color: #0a1724;
+    background-color: #0A1724;
     code {
       font-size: 1em;
       background: none;
-      color: #58d158;
+      color: #58D158;
     }
   }
 }
@@ -402,7 +405,7 @@ code {
 .ais-menu--item__active > div > a,
 .ais-pagination--item__active a {
   font-weight: bold;
-  color: #0a1724;
+  color: #0A1724;
 }
 
 // debug
@@ -410,7 +413,7 @@ code {
   position: relative;
   &.widget-container:after {
     z-index: 11;
-    border: none;
+    border: 0;
   }
   > [class^=ais-] {
     outline: 1px solid #660000;
@@ -462,16 +465,16 @@ code {
       }
       [class^=ais-] {
         &:hover {
-          outline: 1px solid #cc3300;
+          outline: 1px solid #CC3300;
           &:before {
-            color: #cc3300;
+            color: #CC3300;
           }
         }
         [class^=ais-] {
           &:hover {
-            outline: 1px solid #ff6600;
+            outline: 1px solid #FF6600;
             &:before {
-              color: #ff6600;
+              color: #FF6600;
             }
           }
         }
@@ -480,12 +483,12 @@ code {
     label:hover {
       // hovering a label containing a input forwards the `:hover` state to the input
       // let's hide it except when you focus/activate it
-      input[class^=ais-]:hover {
+      [class^=ais-]:hover {
         &:before {
           display: none;
         }
       }
-      input[class^=ais-]:focus, input[class^=ais-]:active {
+      [class^=ais-]:focus, [class^=ais-]:active {
         &:before {
           display: block;
         }
@@ -506,7 +509,7 @@ code {
   }
   .documentation-content {
     padding: 60px 0 0 0;
-    font-size: 0.95em;
+    font-size: .95em;
   }
   .toc-menu {
     position: fixed;
@@ -530,7 +533,7 @@ code {
   }
   .code-box {
     width: 100%;
-    background: #172c4f;
+    background: #172C4F;
     margin-bottom: 1em;
     .btn-group {
       position: static;
@@ -543,7 +546,7 @@ code {
       .toggle-doc-button {
         background: #163350;
         &.active {
-          background: #0a1724;
+          background: #0A1724;
         }
       }
     }

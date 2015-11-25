@@ -101,7 +101,7 @@ header {
     border-radius: 5px;
     overflow: hidden;
     #q {
-      border: none;
+      border: 0;
       height: 100%;
       &:focus {
         outline: none;
@@ -111,7 +111,7 @@ header {
     .input-group-btn button {
       height: 100%;
       padding: 0 30px;
-      border: none;
+      border: 0;
       background: $primary-color;
     }
   }
