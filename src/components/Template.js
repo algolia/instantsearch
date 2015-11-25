@@ -1,6 +1,7 @@
 let React = require('react');
 let mapValues = require('lodash/object/mapValues');
 let curry = require('lodash/function/curry');
+let cloneDeep = require('lodash/lang/cloneDeep');
 let hogan = require('hogan.js');
 
 class Template extends React.Component {
@@ -66,13 +67,15 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
+  let clonedData = cloneDeep(originalData);
+
   let data;
   if (typeof fn === 'function') {
-    data = fn(originalData);
+    data = fn(clonedData);
   } else if (typeof fn === 'object') {
     // ex: transformData: {hit, empty}
     if (fn[templateKey]) {
-      data = fn[templateKey](originalData);
+      data = fn[templateKey](clonedData);
     } else {
       // if the templateKey doesn't exist, just use the
       // original data
