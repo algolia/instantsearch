@@ -13,6 +13,7 @@
     "gh-pages": "./scripts/gh-pages.sh",
     "lint": "eslint . --quiet --no-color && sass-lint --verbose",
     "release": "./scripts/release.sh",
+    "release-beta": "./scripts/release-beta.sh",
     "test": "BABEL_ENV=test mocha --opts scripts/mocha.opts --reporter dot && npm run lint",
     "test:watch": "BABEL_ENV=test mocha --opts scripts/mocha.opts --reporter min --watch",
     "test:watch:browser": "BABEL_ENV=test karma start scripts/karma.conf.js",
