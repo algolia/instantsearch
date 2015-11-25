@@ -57,9 +57,6 @@ else
   You can force specifying a different bump by using CHOOSE_BUMP=1 npm run release-beta"
 fi
 
-echo $newVersion
-exit
-
 VERSION=$newVersion babel-node ./scripts/bump-package-version.js
 
 # build new version
