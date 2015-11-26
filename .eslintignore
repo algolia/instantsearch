@@ -1,5 +1,4 @@
 dist/
 dist-es5-module/
 docs/
-dev/bundle.js
 dev/app.js

@@ -1,15 +1,23 @@
 #! /usr/bin/env bash
 
-: ${VERSION?"Please provide the VERSION env variable"}
+set -ev # exit when error
+
+currentBranch=`git rev-parse --abbrev-ref HEAD`
+
+if [ $currentBranch != 'master' ]; then
+  printf "update-website: You must be on master"
+  exit 1
+fi
+
+VERSION=`cat package.json | json version`
 
 set -e # exit when error
 
 printf "\nPublish website to gh-pages\n"
 
 cd docs
-rm -rf node_modules/gh-pages/.cache
-rm -rf _site
 bundle install
+rm -rf _site
 JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build
 for example in _site/examples/*; do
   if [ -d "$example" ]; then
@@ -17,4 +25,5 @@ for example in _site/examples/*; do
     (cd "$example" && zip -r ../$name.zip *)
   fi
 done
-gh-pages --dist _site --branch gh-pages
+cd ..
+babel-node scripts/gh-pages.js
