@@ -2,7 +2,11 @@
 
 set -ev # exit when error
 
-currentBranch=`git rev-parse --abbrev-ref HEAD`
+if [ -z $TRAVIS_BRANCH ]; then
+  currentBranch=`git rev-parse --abbrev-ref HEAD`
+else
+  currentBranch=$TRAVIS_BRANCH
+fi
 
 if [ $currentBranch != 'master' ]; then
   printf "update-website: You must be on master"
