@@ -84,9 +84,9 @@ git push origin master
 git push origin --tags
 npm publish
 git checkout develop
-git pull
+git pull origin develop
 git merge master
-git push
+git push origin develop
 git checkout master
 
 printf "Release:
