@@ -45,17 +45,21 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/](ht
 
 instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/) and [cdnjs](https://cdnjs.com):
 
-To use cdn service from jsdelivr, try this example code below:
+Using jsDelivr:
 ```html
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
 <script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 ```
 
-This is the example code for using cdn service from cdnjs.com:
+Using jsDelivr you will get auto updates for all the 1.x.x versions without any breaking change.
+
+Using cdnjs:
 ```html
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.js"></script>
 ```
+
+Using cdnjs you must manually update if you need it.
 
 ### With npm, browserify, webpack
 
