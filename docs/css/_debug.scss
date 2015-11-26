@@ -1,0 +1,93 @@
+// debug
+.debug-widget {
+  position: relative;
+  &.widget-container {
+    &:after {
+      z-index: 11;
+      border: 0;
+    }
+  }
+  > [class^=ais-] {
+    outline: 1px solid #660000;
+    &:before {
+      content: "." attr(class);
+      text-align: right;
+      white-space: nowrap;
+      font-size: 11px;
+      z-index: 10;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      padding: 4px 6px;
+      line-height: 1em;
+      background-color: $gray-light;
+      color: #660000;
+    }
+  }
+  [class^=ais-] {
+    cursor: pointer;
+    padding: 4px;
+    &:hover {
+      outline: 1px solid #660000;
+      &:before {
+        content: "." attr(class);
+        text-align: right;
+        white-space: nowrap;
+        font-size: 12px;
+        font-weight: bold;
+        z-index: 10;
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        padding: 4px 6px;
+        line-height: 1em;
+        background-color: $gray-light;
+        color: #660000;
+      }
+    }
+    [class^=ais-] {
+      &:hover {
+        outline: 1px solid #990000;
+        &:before {
+          color: #990000;
+        }
+      }
+      [class^=ais-] {
+        &:hover {
+          outline: 1px solid #CC3300;
+          &:before {
+            color: #CC3300;
+          }
+        }
+        [class^=ais-] {
+          &:hover {
+            outline: 1px solid #FF6600;
+            &:before {
+              color: #FF6600;
+            }
+          }
+        }
+      }
+    }
+    label {
+      &:hover {
+        // hovering a label containing a input forwards the `:hover` state to the input
+        // let's hide it except when you focus/activate it
+        [class^=ais-] {
+          &:hover {
+            &:before {
+              display: none;
+            }
+          }
+          &:focus, &:active {
+            &:before {
+              display: block;
+            }
+          }
+        }
+      }
+    }
+  }
+}

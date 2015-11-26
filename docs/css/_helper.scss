@@ -502,7 +502,7 @@
 }
 
 .faded {
-  opacity: 0.3;
+  opacity: .3;
 }
 
 // CSS for <sub> and <sup>
@@ -514,22 +514,18 @@ sub, sup {
 }
 
 sup {
-  top: -0.7em;
+  top: -.7em;
 }
 
 sub {
-  bottom: -0.25em;
-}
-
-[ng\:cloak], [ng-cloak], .ng-cloak {
-  display: none !important;
+  bottom: -.25em;
 }
 
 .text-white {
-  color: white;
+  color: #FFFFFF;
 }
 
 .bg-white {
-  background-color: white;
+  background-color: #FFFFFF;
 }
 

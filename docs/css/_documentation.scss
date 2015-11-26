@@ -2,8 +2,6 @@ code {
   word-wrap: break-word;
 }
 
-// Layout
-
 // Navigation
 .widget-nav {
   padding: 0;
@@ -114,18 +112,20 @@ code {
     line-height: 1.8em;
   }
   h1, h2, h3 {
-    &[id]{
+    &[id] {
       clear: both;
     }
   }
-  h1[id], h2[id], h3[id], h4[id], h5[id] {
-    &:before {
-      content: "";
-      display: block;
-      height: $anchor-offset;
-      margin: -$anchor-offset 0 0;
+  h1, h2, h3, h4, h5 {
+    &[id] {
+      &:before {
+        content: "";
+        display: block;
+        height: $anchor-offset;
+        margin: -$anchor-offset 0 0;
+      }
     }
-    a.anchor {
+    .anchor {
       display: inline-block;
       font-size: .7em;
       visibility: hidden;
@@ -138,14 +138,20 @@ code {
       }
     }
     &:hover {
-      a.anchor {
+      .anchor {
         visibility: visible;
       }
     }
   }
-  > p, > div[id], > h1, > h2, > h3, > h4, > h5, > pre, > .highlight, > ul, > .row {
+  > p, > h1, > h2, > h3, > h4, > h5, > pre, > .highlight, > ul, > .row {
     margin-right: 50%;
     max-width: 50%;
+  }
+  > div {
+    &[id] {
+      margin-right: 50%;
+      max-width: 50%;
+    }
   }
   ul {
     padding: 0 10px 0 30px;
@@ -288,7 +294,7 @@ code {
         color: #FFFFFF;
       }
       &:active, &:focus {
-        outline: 0px;
+        outline: 0;
       }
       &.active {
         background: #163350;
@@ -308,7 +314,7 @@ code {
     color: rgba(#FFFFFF, .4);
     transition: opacity .2s;
     &:active, &:focus {
-      outline: 0px;
+      outline: 0;
     }
     &:active {
       color: #0A1724;
@@ -408,98 +414,10 @@ code {
   color: #0A1724;
 }
 
-// debug
-.debug-widget {
-  position: relative;
-  &.widget-container:after {
-    z-index: 11;
-    border: 0;
-  }
-  > [class^=ais-] {
-    outline: 1px solid #660000;
-    &:before {
-      content: "." attr(class);
-      text-align: right;
-      white-space: nowrap;
-      font-size: 11px;
-      z-index: 10;
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      padding: 4px 6px;
-      line-height: 1em;
-      background-color: $gray-light;
-      color: #660000;
-    }
-  }
-  [class^=ais-] {
-    cursor: pointer;
-    padding: 4px;
-    &:hover {
-      outline: 1px solid #660000;
-      &:before {
-        content: "." attr(class);
-        text-align: right;
-        white-space: nowrap;
-        font-size: 11px;
-        font-size: 12px;
-        font-weight: bold;
-        z-index: 10;
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        padding: 4px 6px;
-        line-height: 1em;
-        background-color: $gray-light;
-        color: #660000;
-      }
-    }
-    [class^=ais-] {
-      &:hover {
-        outline: 1px solid #990000;
-        &:before {
-          color: #990000;
-        }
-      }
-      [class^=ais-] {
-        &:hover {
-          outline: 1px solid #CC3300;
-          &:before {
-            color: #CC3300;
-          }
-        }
-        [class^=ais-] {
-          &:hover {
-            outline: 1px solid #FF6600;
-            &:before {
-              color: #FF6600;
-            }
-          }
-        }
-      }
-    }
-    label:hover {
-      // hovering a label containing a input forwards the `:hover` state to the input
-      // let's hide it except when you focus/activate it
-      [class^=ais-]:hover {
-        &:before {
-          display: none;
-        }
-      }
-      [class^=ais-]:focus, [class^=ais-]:active {
-        &:before {
-          display: block;
-        }
-      }
-    }
-  }
-}
 
 @media (max-width: $screen-sm-max) {
   .main-documentation {
-    padding: 60px 0 0 0;
+    padding: 60px 0 0;
     .row {
       margin: 0;
     }
@@ -508,7 +426,7 @@ code {
     }
   }
   .documentation-content {
-    padding: 60px 0 0 0;
+    padding: 60px 0 0;
     font-size: .95em;
   }
   .toc-menu {
@@ -557,13 +475,20 @@ code {
   .widget-description {
     -webkit-overflow-scrolling: touch;
     padding: 0;
-    p, h1, h2, h3, h4, div[id], ul, .highlight {
+    p, h1, h2, h3, h4, ul, .highlight {
       margin-right: 0;
       width: 100%;
       max-width: 100%;
     }
     p, h1, h2, h3, h4 {
       padding: 9.5px;
+    }
+    div {
+      &[id] {
+        margin-right: 0;
+        width: 100%;
+        max-width: 100%;
+      }
     }
   }
   .highlight pre {
