@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-if [ CI != 'true' ]; then
+if [ $CI != 'true' ]; then
   printf "finish-release: Only doable on CI\n"
   printf "finish-release: You can also manually update gh-pages and clear the cdn cache if needed"
   exit 1
