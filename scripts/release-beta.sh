@@ -52,7 +52,8 @@ else
   # when already on a beta version, let's bump the beta-.X
   newVersion=`semver ${currentVersion} -i prerelease -preid beta`
 
-  read -p "=> Beta release: The new version will be ${newVersion},
+  read -p "
+  => Beta release: The new version will be ${newVersion},
   press [ENTER] to continue, CTRL+C to abort.
   You can force specifying a different bump by using CHOOSE_BUMP=1 npm run release-beta"
 fi
@@ -70,15 +71,16 @@ npm run doctoc
 printf "\n\nBeta release: regenerate widgets jsdoc"
 npm run jsdoc:widget
 
-# add a timestamp fake file to avoid having beta released published to jsdelivr
+# add a timestamp fake file to dist/ to avoid having beta released published to jsdelivr automatically
 # https://github.com/jsdelivr/jsdelivr/pull/8107#issuecomment-159562676
+# You will have to close the open PR afterwards
 timestamp=$(date "+%Y.%m.%d-%H.%M.%S")
 tmpfile="dist/avoid-jsdelivr-beta-publish-$timestamp"
 touch $tmpfile
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc dist/$tmpfile
+git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md CONTRIBUTING.md README.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 
 printf "\n\nBeta release: almost done, check everything in another terminal tab.\n"
@@ -87,3 +89,4 @@ read -p "=> Beta release: when ready, press [ENTER] to push to github and publis
 printf "\n\nBeta release: push to github, publish on npm"
 git push origin develop
 npm publish --tag beta
+rm $tmpfile

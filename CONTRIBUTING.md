@@ -12,7 +12,7 @@ Hi (future) collaborator!
 
 - [Where to start?](#where-to-start)
 - [New API proposal](#new-api-proposal)
-- [How to create issues](#how-to-create-issues)
+- [How to write issues](#how-to-write-issues)
 - [Development workflow](#development-workflow)
 - [Adding/Updating a package](#addingupdating-a-package)
 - [Removing a package](#removing-a-package)
