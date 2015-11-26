@@ -43,14 +43,6 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Events](#events)
   - [Query](#query)
   - [Filtering results](#filtering-results)
-  - [Facet utilities](#facet-utilities)
-  - [Tags](#tags)
-  - [Pagination](#pagination)
-  - [Index](#index)
-  - [One time query](#one-time-query)
-  - [URL Helpers](#url-helpers)
-  - [Query parameters](#query-parameters)
-  - [Results format](#results-format)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -489,6 +481,49 @@ The available sort tokens are:
 - isRefined
 - name
 - path
+
+##### Restrict results and hierarchical values to non-root level
+
+Let's say you have a lot of levels:
+
+```
+- fruits
+  - yellow
+    - citrus
+      - spicy
+```
+
+But you only want to get the values starting at "citrus", you can use `rootPath`
+
+You can specify an root path to filter the hierarchical values
+
+```
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3'],
+    rootPath: 'fruits > yellow > citrus'
+  }]
+});
+```
+
+Having a rootPath will refine the results on it **automatically**.
+
+##### Hide parent level of current parent level
+
+By default the hierarchical facet is going to return the child and parent facet values of the current refinement.
+
+If you do not want to get the parent facet values you can set showParentLevel to false
+
+````
+var helper = algoliasearchHelper(client, indexName, {
+  hierarchicalFacets: [{
+    name: 'products',
+    attributes: ['categories.lvl0', 'categories.lvl1'],
+    showParentLevel: false
+  }]
+});
+``
 
 ##### Asking for the current breadcrumb
 
