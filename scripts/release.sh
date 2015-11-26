@@ -68,7 +68,7 @@ npm run doctoc
 
 # regenerate widgets jsdoc
 printf "\n\nRelease: regenerate widgets jsdoc"
-npm run jsdoc:widget
+npm run docs:jsdoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
@@ -87,8 +87,8 @@ git checkout develop
 git pull
 git merge master
 git push
+git checkout master
 
-printf "\n\nRelease: update https://community.algolia.com/instantsearch.js/ by pushing to gh-pages"
-VERSION=$newVersion npm run gh-pages
-
-printf "\n\nRelease: done! Flush the jsDelivr cache when the PR is merged: http://www.jsdelivr.com/\n"
+printf "Release:
+Package was published to npm.
+A job on travis-ci will be automatically launched to finalize the release."

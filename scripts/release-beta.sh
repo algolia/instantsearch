@@ -69,7 +69,7 @@ npm run doctoc
 
 # regenerate widgets jsdoc
 printf "\n\nBeta release: regenerate widgets jsdoc"
-npm run jsdoc:widget
+npm run docs:jsdoc
 
 # add a timestamp fake file to dist/ to avoid having beta released published to jsdelivr automatically
 # https://github.com/jsdelivr/jsdelivr/pull/8107#issuecomment-159562676
