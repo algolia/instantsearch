@@ -1,8 +1,11 @@
 #! /usr/bin/env bash
+echo $PATH
+
+[ -z $CI ] && CI='false'
 
 if [ $CI != 'true' ]; then
   printf "finish-release: Only doable on CI\n"
-  printf "finish-release: You can also manually update gh-pages and clear the cdn cache if needed"
+  printf "finish-release: You can also manually update gh-pages and clear the cdn cache if needed\n"
   exit 1
 fi
 
@@ -13,11 +16,11 @@ JSDELIVER_URL="http://cdn.jsdelivr.net/instantsearch.js/$VERSION/instantsearch.m
 
 while true; do
   STATUS=$(curl -L -I $JSDELIVER_URL 2>/dev/null | head -n 1 | cut -d$' ' -f2);
-  if [ STATUS == '200' ]; then
-    # was merged and published to jsdelivr
+  if [ $STATUS == '200' ]; then
+    printf "$VERSION is now available on jsDelivr\n"
     break;
   else
-    echo "$JSDELIVER_URL returned status $STATUS"
+    printf "$VERSION is not yet published on jsDelivr, retrying in 30s (status was $STATUS)\n"
   fi
   sleep 30
 done
