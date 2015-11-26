@@ -1,6 +1,8 @@
 language: node_js
 node_js: 4
-before_install: npm prune
+before_install:
+  - npm prune
+  - rvm install 2.2
 before_cache: npm prune
 install: npm install
 script: ./scripts/test-ci.sh
