@@ -5,12 +5,16 @@ set -ev # exit when error
 # we are building gh-pages
 if [ $TRAVIS_BRANCH == 'gh-pages' ]; then
   echo "Skipping tests since branch being built is gh-pages"
-  exit 0
-fi
+  npm run docs:update-website-search-index
+else
+  ./scripts/validate-pr-done-on-develop.sh
+  npm test
+  npm prune
+  npm run shrinkwrap --dev
+  ./scripts/validate-commit-msgs.sh
+  NODE_ENV=production npm run build
 
-./scripts/validate-pr-done-on-develop.sh
-npm test
-npm prune
-npm run shrinkwrap --dev
-./scripts/validate-commit-msgs.sh
-NODE_ENV=production npm run build
+  if [ $TRAVIS_PULL_REQUEST == 'false' ] && [ $TRAVIS_BRANCH == 'master' ]; then
+    npm run finish-release
+  fi
+fi
