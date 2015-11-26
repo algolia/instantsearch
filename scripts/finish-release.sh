@@ -1,6 +1,4 @@
 #! /usr/bin/env bash
-echo $PATH
-
 [ -z $CI ] && CI='false'
 
 if [ $CI != 'true' ]; then

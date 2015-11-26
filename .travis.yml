@@ -7,11 +7,13 @@ script: ./scripts/test-ci.sh
 deploy:
   # when master is pushed + test success: deploy website
   - provider: script
+    skip_cleanup: true # avoid npm modules being removed
     script: npm run finish-release
     on:
       branch: master
   # when website is successfully deployed, update the documentation search index
   - provider: script
+    skip_cleanup: true # avoid npm modules being removed
     script: npm run docs:update-website-search-index
     on:
       branch: gh-pages
