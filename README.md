@@ -43,11 +43,18 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/](ht
 
 ### From a CDN
 
-instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/):
+instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/) and [cdnjs](https://cdnjs.com):
 
+To use cdn service from jsdelivr, try this example code below:
 ```html
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.css" />
 <script src="//cdn.jsdelivr.net/instantsearch.js/0/instantsearch.min.js"></script>
+```
+
+This is the example code for using cdn service from cdnjs.com:
+```html
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.js"></script>
 ```
 
 ### With npm, browserify, webpack
