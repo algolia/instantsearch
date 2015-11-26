@@ -5,7 +5,7 @@
 body {
   font-family: Roboto;
   font-size: 16px;
-  color: #565a5c; }
+  color: #565A5C; }
 
 .aisdemo-left_column {
   height: 400px; }
@@ -16,38 +16,38 @@ body {
 
 /* HEADER
 // ------------------------- */
-header.aisdemo-navbar {
+.aisdemo-navbar {
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid #dce0e0 !important;
+  border-bottom: 1px solid #DCE0E0;
   position: relative; }
-  header.aisdemo-navbar .is-logo {
+  .aisdemo-navbar .is-logo {
     display: inline-block;
     position: relative;
     top: -8px;
     left: 16px; }
-  header.aisdemo-navbar .logo {
+  .aisdemo-navbar .logo {
     display: inline-block;
     padding: 14px 22px;
     font-size: 40px;
     line-height: 1;
     font-family: Courier;
-    color: #ff585b;
-    border-right: 1px solid #dce0e0; }
-  header.aisdemo-navbar .fa-search {
+    color: #FF585B;
+    border-right: 1px solid #DCE0E0; }
+  .aisdemo-navbar .fa-search {
     font-size: 30px;
     position: absolute;
     top: 17px;
     left: 140px;
-    color: #dce0e0; }
-  header.aisdemo-navbar #q {
+    color: #DCE0E0; }
+  .aisdemo-navbar #q {
     position: absolute;
     top: 15px;
     left: 180px;
     width: 50%;
-    border: none;
+    border: 0;
     box-shadow: none; }
-    header.aisdemo-navbar #q:focus {
+    .aisdemo-navbar #q:focus {
       outline: none;
       box-shadow: none; }
 
@@ -58,23 +58,22 @@ header.aisdemo-navbar {
   margin-bottom: 0;
   padding-top: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid #dce0e0; }
+  border-bottom: 1px solid #DCE0E0; }
 .aisdemo-filters .aisdemo-filter-title {
   font-size: 1em;
   font-weight: normal;
   padding-top: 9px;
   padding-left: 30px; }
-.aisdemo-filters .date,
-.aisdemo-filters #guests select {
-  font-size: 0.8em;
+.aisdemo-filters .date, .aisdemo-filters #guests select {
+  font-size: .8em;
   padding: 8px 10px;
-  border: 1px solid #dce0e0; }
+  border: 1px solid #DCE0E0; }
 .aisdemo-filters #guests select {
   width: 100%;
   padding-right: 20px;
   border-radius: 0;
   background: transparent;
-  -webkit-appearance: none; }
+  appearance: none; }
   .aisdemo-filters #guests select:focus {
     outline: none; }
 .aisdemo-filters .guests-caret:before {
@@ -87,19 +86,19 @@ header.aisdemo-navbar {
   content: '\25bc';
   text-align: center;
   pointer-events: none;
-  color: #82888a; }
+  color: #82888A; }
 .aisdemo-filters #room_types .ais-refinement-list--count {
   display: none; }
 .aisdemo-filters #room_types .ais-refinement-list--item {
   display: inline-block;
   cursor: pointer; }
   .aisdemo-filters #room_types .ais-refinement-list--item label {
-    font-size: 0.8em;
+    font-size: .8em;
     font-weight: normal;
     box-sizing: border-box;
     width: 100%;
     padding: 9px 10px 7px;
-    background: #edefed; }
+    background: #EDEFED; }
 .aisdemo-filters #room_types .ais-refinement-list--checkbox {
   position: relative;
   bottom: 3px;
@@ -108,9 +107,9 @@ header.aisdemo-navbar {
   height: 1.25em;
   margin-left: 20px;
   vertical-align: top;
-  border: 1px solid #dce0e0;
-  background: white;
-  -webkit-appearance: none; }
+  border: 1px solid #DCE0E0;
+  background: #FFFFFF;
+  appearance: none; }
   .aisdemo-filters #room_types .ais-refinement-list--checkbox:focus {
     outline: none; }
 .aisdemo-filters #room_types .ais-refinement-list--item__active .ais-refinement-list--checkbox:before {
@@ -119,15 +118,15 @@ header.aisdemo-navbar {
   width: 1.25em;
   content: '\2713';
   text-align: center;
-  color: #ff5a5f; }
+  color: #FF5A5F; }
 .aisdemo-filters #price .ais-range-slider--target {
   margin: 30px 9px 18px; }
 .aisdemo-filters #price .ais-range-slider--handle {
-  border-color: #ff585b; }
+  border-color: #FF585B; }
 .aisdemo-filters #price .ais-range-slider--tooltip:last-child {
   right: 0; }
 .aisdemo-filters #price .ais-range-slider--connect {
-  background-color: #ff585b; }
+  background-color: #FF585B; }
 
 /* STATS
 // ------------------------- */
@@ -147,7 +146,7 @@ header.aisdemo-navbar {
 // ------------------------- */
 #results {
   padding: 40px 20px;
-  background: #edefed; }
+  background: #EDEFED; }
 
 #hits .hit .pictures-wrapper {
   position: relative; }
@@ -171,7 +170,7 @@ header.aisdemo-navbar {
     color: #949697; }
   #hits .hit .infos em {
     font-style: normal;
-    color: #ff585b; }
+    color: #FF585B; }
 
 /* PAGINATION
 // ------------------------- */
@@ -181,20 +180,20 @@ header.aisdemo-navbar {
     display: inline-block;
     margin: 1px; }
   #pagination .ais-pagination--link {
-    color: #ff585b;
+    color: #FF585B;
     border-radius: 4px;
     background: transparent; }
-  #pagination .pagination > .active > a,
-  #pagination .pagination > li > a:focus,
-  #pagination .pagination > li > a:hover,
-  #pagination .pagination > li > span:focus,
-  #pagination .pagination > li > span:hover {
-    color: #fff;
-    border-color: #ff585b !important;
-    background: #ff585b; }
+  #pagination .pagination > .active > a {
+    color: #FFFFFF;
+    border-color: #FF585B;
+    background: #FF585B; }
+  #pagination .pagination > li > a:focus, #pagination .pagination > li > a:hover, #pagination .pagination > li > span:focus, #pagination .pagination > li > span:hover {
+    color: #FFFFFF;
+    border-color: #FF585B;
+    background: #FF585B; }
 
 .thank-you {
   text-align: center;
-  font-size: 0.8em; }
+  font-size: .8em; }
   .thank-you a {
-    color: #ff585b; }
+    color: #FF585B; }
