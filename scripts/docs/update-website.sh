@@ -20,7 +20,6 @@ set -e # exit when error
 printf "\nPublish website to gh-pages\n"
 
 cd docs
-command -v rvm && rvm use 2 || echo 'no rvm, using system ruby version'
 bundle install
 rm -rf _site
 JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build
