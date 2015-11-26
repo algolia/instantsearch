@@ -55,8 +55,8 @@ Using jsDelivr you will get auto updates for all the 1.x.x versions without any 
 
 Using cdnjs:
 ```html
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.css" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.0.0/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.1.0/instantsearch.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.1.0/instantsearch.min.js"></script>
 ```
 
 Using cdnjs you must manually update if you need it.
