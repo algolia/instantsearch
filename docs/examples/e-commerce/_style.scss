@@ -1,22 +1,14 @@
----
-# this ensures Jekyll reads the file to be transformed into CSS later
----
-
 $gray-light: #EEE;
 $gray: #888;
-
 $dark-blue: #222F3F;
-
 $brand-primary: #0063C3;
 $primary-color: #FFBE61;
 $secondary-color: #B32500;
+$highlight-color: #FFFFE4;
+$shadow-color: rgba(0, 0, 0, .1);
 
 $header-height: 60px;
 $sidebar-width: 230px;
-
-$highlight-color: #FFFFE4;
-
-$shadow-color: rgba(0, 0, 0, .1);
 
 @mixin clearfix {
   &:after {
@@ -26,14 +18,13 @@ $shadow-color: rgba(0, 0, 0, .1);
   }
 }
 
-
 // commons
 
 body {
   font-family: Verdana, sans-serif;
 }
 
-a, a:focus {
+a {
   color: $brand-primary;
   text-decoration: none;
 }
@@ -43,35 +34,14 @@ hr {
   margin-top: 10px;
   margin-bottom: 10px;
 }
-.transparent{
+.transparent {
   opacity: 0;
 }
 
-// helpers
-
-// .text-muted
-// .pull-right
-// .container-fluid
-
-.content-wrapper{
+.content-wrapper {
   margin: 0 -15px;
   min-width: 620px;
 }
-
-// layout
-
-// header
-// .content-wrapper
-//   aside
-//   .results-wrapper
-//     section#results-topbar
-//     main#hits
-//     section#pagination
-
-
-
-// Facets
-
 
 // Results
 
@@ -83,7 +53,7 @@ header {
   height: $header-height;
   padding: 10px;
   background: $dark-blue;
-  .is-logo{
+  .is-logo {
     float: left;
     margin-right: 12px;
   }
@@ -92,8 +62,8 @@ header {
     margin-right: 16px;
     font-size: 30px;
     font-weight: bold;
-    color: white;
-    &:hover{
+    color: #FFFFFF;
+    &:hover {
       text-decoration: none;
     }
   }
@@ -105,7 +75,7 @@ header {
     border-radius: 5px;
     overflow: hidden;
     #q {
-      border: none;
+      border: 0;
       height: 100%;
       &:focus {
         outline: none;
@@ -115,7 +85,7 @@ header {
     .input-group-btn button {
       height: 100%;
       padding: 0 30px;
-      border: none;
+      border: 0;
       background: $primary-color;
     }
   }
@@ -130,166 +100,163 @@ aside {
   width: $sidebar-width;
   padding: 20px;
   border-right: 1px solid $gray-light;
-  background: white;
+  background: #FFFFFF;
   .facet-category-title {
     font-size: 1.2em;
     color: $gray;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
   }
-  .facet-wrapper{
+  .facet-wrapper {
     padding-bottom: 12px;
     border-bottom: solid 1px $gray-light;
     margin-bottom: 12px;
     font-size: .87em;
   }
-  .facet{
+  .facet {
     margin-bottom: 16px;
   }
-  .facet-title{
+  .facet-title {
     font-weight: bold;
-    margin: 4px 0 4px 0;
+    margin: 4px 0;
   }
   .facet-item, a {
-    color: black;
+    color: #000000;
     &:hover {
       color: $secondary-color;
       text-decoration: none;
     }
-    &.active{
+    &.active {
       font-weight: bold;
     }
-    input{
+    input {
       margin-right: 4px;
     }
   }
-  .facet-name{
+  .facet-name {
     width: 100%;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
     display: inline-block;
   }
-  .facet-count{
+  .facet-count {
     margin-left: 4px;
     color: $gray;
   }
   #colors {
     @include clearfix;
   }
-  .facet-color{
+  .facet-color {
     width: 28px;
     height: 28px;
     border-radius: 3px;
-    margin: 0 6px 6px 0;
+    margin: 0 6px 6px;
     display: block;
     overflow: hidden;
     float: left;
-    &.checked{
-      box-shadow: inset 0 0 0 4px rgba(white, .5);
+    &.checked {
+      box-shadow: inset 0 0 0 4px rgba(#FFFFFF, .5);
     }
-    &[data-facet-value="White"]{
-      background-color: white;
+    &[data-facet-value="White"] {
+      background-color: #FFFFFF;
       box-shadow: inset 0 0 0 1px #CCC;
-      &.checked{
-        box-shadow: inset 0 0 0 4px rgba(black, .1);
+      &.checked {
+        box-shadow: inset 0 0 0 4px rgba(#000000, .1);
       }
     }
-     &[data-facet-value="Black"]{
-      background-color: black;
+    &[data-facet-value="Black"] {
+      background-color: #000000;
     }
-     &[data-facet-value="Black-brown"]{
+    &[data-facet-value="Black-brown"] {
       background-color: #382919;
     }
-    &[data-facet-value="Pink"]{
+    &[data-facet-value="Pink"] {
       background-color: #C0116D;
     }
-      &[data-facet-value="Gray"]{
+    &[data-facet-value="Gray"] {
       background-color: #6F6E6C;
     }
-      &[data-facet-value="Blue"]{
+    &[data-facet-value="Blue"] {
       background-color: #5182A1;
     }
-      &[data-facet-value="Green"]{
+    &[data-facet-value="Green"] {
       background-color: #1E9C5E;
     }
-      &[data-facet-value="Brown"]{
+    &[data-facet-value="Brown"] {
       background-color: #7B6A63;
     }
-    &[data-facet-value="Brown"]{
-      background-color: #7B6A63;
-    }
-    &[data-facet-value="Red"]{
+    &[data-facet-value="Red"] {
       background-color: #BC1C1A;
     }
-    &[data-facet-value="Dark gray"]{
+    &[data-facet-value="Dark gray"] {
       background-color: #444348;
     }
-    &[data-facet-value="Silver color"]{
+    &[data-facet-value="Silver color"] {
       background-color: #AAAAA8;
     }
-    &[data-facet-value="Light brown"]{
+    &[data-facet-value="Light brown"] {
       background-color: #C19A6E;
     }
-    &[data-facet-value="Black-brown stain"]{
+    &[data-facet-value="Black-brown stain"] {
       background-color: #4B4640;
     }
-    &[data-facet-value="Off-white"]{
+    &[data-facet-value="Off-white"] {
       background-color: #D0C8B4;
     }
-    &[data-facet-value="Beige"]{
+    &[data-facet-value="Beige"] {
       background-color: #C9B8A3;
     }
-    &[data-facet-value="Light green"]{
+    &[data-facet-value="Light green"] {
       background-color: #ABBD9B;
     }
-    &[data-facet-value="White stain"]{
+    &[data-facet-value="White stain"] {
       background-color: #E4E1DC;
     }
-    &[data-facet-value="Turquoise"]{
+    &[data-facet-value="Turquoise"] {
       background-color: #46BCC9;
     }
-    &[data-facet-value="Birch effect"]{
+    &[data-facet-value="Birch effect"] {
       background-color: #CBBFA4;
     }
-    &[data-facet-value="Yellow"]{
+    &[data-facet-value="Yellow"] {
       background-color: #F5E500;
     }
-    &[data-facet-value="Dark blue"]{
+    &[data-facet-value="Dark blue"] {
       background-color: #374063;
     }
-     &[data-facet-value="Galvanized"]{
+    &[data-facet-value="Galvanized"] {
       background-color: #726F6A;
     }
-    &[data-facet-value="Birch"]{
+    &[data-facet-value="Birch"] {
       background-color: #726F6A;
     }
-    &[data-facet-value="Dark brown"]{
+    &[data-facet-value="Dark brown"] {
       background-color: #74523E;
     }
-    &[data-facet-value="High gloss gray"]{
+    &[data-facet-value="High gloss gray"] {
       background-color: #E5E5E5;
     }
-    &[data-facet-value="Gray/white"]{
+    &[data-facet-value="Gray/white"] {
       background-color: #E5E5E5;
     }
-    &[data-facet-value="Red/white"]{
+    &[data-facet-value="Red/white"] {
       background-color: #FA757B;
     }
-    &[data-facet-value="Clear"]{
+    &[data-facet-value="Clear"] {
       background-color: #D5DAE0;
     }
-    &[data-facet-value="Matte black"]{
+    &[data-facet-value="Matte black"] {
       background-color: #616872;
     }
-    &[data-facet-value="Matte white"]{
+    &[data-facet-value="Matte white"] {
       background-color: #DCDBD7;
     }
-    &[data-facet-value="White stained oak effect"]{
+    &[data-facet-value="White stained oak effect"] {
       background-color: #E7E8E0;
     }
     // to fix - add more colors
   }
-  .ais-price-ranges--form{
+  .ais-price-ranges--form {
     margin-top: 8px;
   }
   .ais-price-ranges--currency {
@@ -303,7 +270,7 @@ aside {
     border: solid 1px $gray;
     font-weight: normal;
   }
-  .ais-price-ranges--button{
+  .ais-price-ranges--button {
     display: block;
     float: right;
     width: 22px;
@@ -318,7 +285,7 @@ aside {
     background-color: $gray-light;
     &:hover {
       color: $brand-primary;
-      background-color: white;
+      background-color: #FFFFFF;
     }
     &:focus {
       outline: none;
@@ -339,16 +306,16 @@ aside {
   .sort-by {
     float: right;
   }
-  label{
+  label {
     font-weight: normal;
     font-size: .8em;
   }
-  #sort-by-selector{
+  #sort-by-selector {
     display: inline-block;
   }
 }
 
-#clear-all{
+#clear-all {
   display: block;
   margin-bottom: 16px;
   .btn {
@@ -374,9 +341,9 @@ aside {
   border-bottom: solid 1px $gray-light;
   margin: .5%;
   border: solid 1px $gray-light;
-  box-shadow: 0 0 3px lighten($gray-light,3%);
+  box-shadow: 0 0 3px lighten($gray-light, 3%);
   position: relative;
-  @media( max-width: 960px){
+  @media( max-width: 960px) {
     width: 49%;
   }
   .product-picture-wrapper {
@@ -391,10 +358,10 @@ aside {
     vertical-align: middle;
     margin: 0 auto;
     img {
-      transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
+      transition: opacity 500ms cubic-bezier(.19, 1, .22, 1);
       height: 150px;
       max-width: 100%;
-      @media( min-width: 1200px){
+      @media( min-width: 1400px) {
         height: inherit;
       }
     }
@@ -405,17 +372,16 @@ aside {
     overflow: hidden;
   }
   .product-name {
-    color: $brand-primary;
     font-weight: bold;
-    color: black;
+    color: #000000;
     font-size: .9em;
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     min-width: 120px;
   }
   .product-type {
     font-size: .8em;
-    margin: 0 0 10px 0;
-    color: lighten($gray,10%);
+    margin: 0 0 10px;
+    color: lighten($gray, 10%);
   }
   .product-rating {
     //float: right;
@@ -424,12 +390,12 @@ aside {
   .product-price {
     font-size: 1.1em;
     font-weight: bold;
-    color: black;
+    color: #000000;
     float: right;
     letter-spacing: -1px;
   }
   em {
-    color: black !important;
+    color: #000000;
     font-style: normal;
     background-color: $primary-color;
   }
@@ -442,15 +408,15 @@ aside {
   font-size: 1.2em;
   line-height: 3em;
   text-align: center;
-  .ais-pagination--item__active a{
-    color: black;
+  .ais-pagination--item__active a {
+    color: #000000;
     font-weight: bold;
   }
-  .ais-pagination--item__disabled{
+  .ais-pagination--item__disabled {
     visibility: visible;
     a {
-      color: darken($gray-light,20%);
-      &:hover{
+      color: darken($gray-light, 20%);
+      &:hover {
         cursor: default;
         text-decoration: none;
       }
@@ -463,7 +429,7 @@ aside {
   li {
     padding: 0 8px;
   }
-  i.fa {
+  .fa {
     position: relative;
     top: 5px;
   }
@@ -471,7 +437,8 @@ aside {
 
 .thank-you {
   text-align: center;
-  font-size: 0.8em;
+  font-size: .8em;
   padding: 10px;
 }
+
 

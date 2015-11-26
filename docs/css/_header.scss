@@ -1,0 +1,66 @@
+.site-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+  background: linear-gradient(to right, rgba(#0A1724, .8) -50%, rgba(#172C4F, .5) 100%);
+  transition: background 2s ease;
+  .navbar {
+    margin-bottom: 0;
+    background-color: #0B1724;
+    border-radius: 0;
+    border: 0;
+    .navbar-collapse.in {
+      background-color: #0B1724;
+      animation: fadeInUp .2s ease-in-out;
+      position: fixed;
+      @include position(0, 0, 0, 0);
+      padding: 20%;
+      font-size: 1.2em;
+      li {
+        padding-bottom: 1em;
+      }
+    }
+    .navbar-brand {
+      font-weight: 600;
+      color: #FFFFFF;
+      z-index: 1;
+    }
+    .navbar-header {
+      position: relative;
+      z-index: 2;
+    }
+    .navbar-toggle {
+      background-color: $brand-primary;
+      border: solid 1px $brand-primary;
+      color: #FFFFFF;
+      &.collapsed {
+        background-color: transparent;
+        border: solid 1px rgba(#FFFFFF, .4);
+        color: #FFFFFF;
+      }
+    }
+    .navbar-nav {
+      > li > a {
+        padding-bottom: 0;
+      }
+      > .active > a {
+        color: #1D96C7;
+        background-color: transparent;
+      }
+    }
+    .fa-github {
+      font-size: 2em;
+      width: 30px;
+      display: inline-block;
+      text-align: center;
+      position: relative;
+      top: -4px;
+    }
+  }
+}
+
+.main-content {
+  margin-top: $navbar-height;
+}
+

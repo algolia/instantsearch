@@ -1,7 +1,3 @@
----
-# this ensures Jekyll reads the file to be transformed into CSS later
----
-
 $white: #FFFFFF;
 $media-red: #E91D00;
 $media-red-dark: #CE1312;
@@ -27,7 +23,7 @@ a {
 hr {
   margin: 10px 14px;
 }
-.is-logo{
+.is-logo {
   float: left;
   margin-left: 18px;
 }
@@ -36,7 +32,7 @@ hr {
   font-size: 30px;
   font-weight: bold;
   float: left;
-  &:hover{
+  &:hover {
     text-decoration: none;
   }
   i {
@@ -121,7 +117,7 @@ section {
 
     .badge {
       font-size: .8em;
-      background: #bbb;
+      background: #BBBBBB;
       position: relative;
       top: 1px;
     }
@@ -133,7 +129,7 @@ section {
         padding: 4px 4px 4px 8px;
         font-weight: normal;
         font-size: .9em;
-        margin: 0 0 -1px 0;
+        margin: 0 0 -1px;
         &:hover {
           color: $white;
           background: $media-text-color;
@@ -142,7 +138,7 @@ section {
           display: none;
         }
       }
-      .active{
+      .active {
         label {
           border: 1px solid $media-red-dark;
           margin-top: -1px;
@@ -157,14 +153,14 @@ section {
       margin-left: 10px;
       .ais-stars-list--link {
         font-size: .9em;
-      }
-      .ais-stars-list--link:hover, .ais-stars-list--link:active, .ais-stars-list--link:focus {
-        text-decoration: none;
+        &:hover, &:active, &:focus {
+          text-decoration: none;
+        }
       }
       .ais-stars-list--count {
         font-size: 8px;
       }
-      .ais-star-rating--item{
+      .ais-star-rating--item {
         margin-bottom: 6px;
       }
       .ais-star-rating--item__active a {
@@ -214,7 +210,7 @@ section {
     .hit {
       margin-bottom: 10px;
       height: 130px;
-      border: 1px solid #f3f3f3;
+      border: 1px solid #F3F3F3;
 
       em {
         font-style: normal;
@@ -240,7 +236,7 @@ section {
   }
 
   .thank-you {
-    font-size: 0.8em;
+    font-size: .8em;
     margin-top: 18px;
     margin-left: 30px;
     a {
@@ -261,6 +257,7 @@ section {
   font-weight: bold;
 }
 
-.genre .badge{
-  background: #bbb;
+.genre .badge {
+  background: #BBBBBB;
 }
+
