@@ -30,4 +30,4 @@ for example in _site/examples/*; do
   fi
 done
 cd ..
-babel-node scripts/gh-pages.js
+babel-node scripts/docs/gh-pages.js
