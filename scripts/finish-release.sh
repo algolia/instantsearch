@@ -23,5 +23,5 @@ while true; do
   sleep 30
 done
 
-curl -silent -L $CACHE_URL
+curl --silent -L $CACHE_URL
 npm run docs:update-website
