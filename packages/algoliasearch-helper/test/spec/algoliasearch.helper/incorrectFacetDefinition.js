@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 var _ = require('lodash');
 

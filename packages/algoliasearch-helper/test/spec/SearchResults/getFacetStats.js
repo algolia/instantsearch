@@ -1,8 +1,8 @@
 'use strict';
 
 var test = require('tape');
-var SearchResults = require('../../src/SearchResults');
-var SearchParameters = require('../../src/SearchParameters');
+var SearchResults = require('../../../src/SearchResults');
+var SearchParameters = require('../../../src/SearchParameters');
 
 var bind = require('lodash/function/bind');
 

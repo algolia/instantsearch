@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 test('setqueryparameter should update existing parameter', function(t) {
   var sp = new SearchParameters({

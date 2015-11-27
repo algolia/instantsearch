@@ -2,7 +2,7 @@
 
 var test = require('tape');
 var sinon = require('sinon');
-var algoliaSearchHelper = require('../../index');
+var algoliaSearchHelper = require('../../../index');
 
 test('Change events should be emitted as soon as the state change, but search should be triggered (refactored)', function(t) {
   var helper = algoliaSearchHelper(undefined, 'Index', {

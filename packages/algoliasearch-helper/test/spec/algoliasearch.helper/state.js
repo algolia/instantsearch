@@ -1,10 +1,10 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 var SearchParameters = algoliasearchHelper.SearchParameters;
-var shortener = require('../../src/SearchParameters/shortener');
+var shortener = require('../../../src/SearchParameters/shortener');
 
 var mapKeys = require('lodash/object/mapKeys');
 

@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 test('setQueryParameters should be able to mix an actual state with a new set of parameters', function(t) {
   var originalSP = new SearchParameters({

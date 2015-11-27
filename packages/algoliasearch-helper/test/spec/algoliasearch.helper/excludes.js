@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 test('addExclude should add an exclusion', function(t) {
   var helper = algoliasearchHelper(null, null, {
