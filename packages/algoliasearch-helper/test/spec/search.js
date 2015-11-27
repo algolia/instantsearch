@@ -65,6 +65,12 @@ test('Search should call the algolia client according to the number of refinemen
       expectedCityValuesFn,
       'Facet values for "city" should be correctly ordered using a sort function');
 
+    var queries = mock.expectations.search[0].args[0][0];
+    for (var i = 0; i < queries.length; i++) {
+      var query = queries[i];
+      t.equal(query.query, undefined);
+      t.equal(query.params.query, '');
+    }
     t.ok(mock.verify(), 'Mock constraints should be verified!');
 
     t.end();
