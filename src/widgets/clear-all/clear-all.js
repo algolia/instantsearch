@@ -1,7 +1,14 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let {bemHelper, getContainerNode, prepareTemplateProps, getRefinements} = require('../../lib/utils.js');
+let {
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+  getRefinements,
+  clearRefinementsFromState,
+  clearRefinementsAndSearch
+} = require('../../lib/utils.js');
 let bem = bemHelper('ais-clear-all');
 let cx = require('classnames');
 
@@ -51,10 +58,6 @@ function clearAll({
   }
 
   return {
-    _clearAll: function(helper) {
-      helper.clearTags().clearRefinements().search();
-    },
-
     render: function({results, helper, state, templatesConfig, createURL}) {
       let hasRefinements = getRefinements(results, state).length !== 0;
 
@@ -66,9 +69,9 @@ function clearAll({
         link: cx(bem('link'), userCssClasses.link)
       };
 
-      let url = createURL(state.clearRefinements());
+      let url = createURL(clearRefinementsFromState(state));
 
-      let handleClick = this._clearAll.bind(null, helper);
+      let handleClick = clearRefinementsAndSearch.bind(null, helper);
 
       let templateProps = prepareTemplateProps({
         defaultTemplates,
