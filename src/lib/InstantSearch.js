@@ -19,7 +19,7 @@ function defaultCreateURL() { return '#'; }
  * @param  {string} options.index The name of the main index
  * @param  {string} [options.numberLocale] The locale used to display numbers.
  * @param  {string} [options.searchParameters] Initial search configuration.
- * @param  {string} [options.urlSync] Url synchronization configuration.
+ * @param  {Object} [options.urlSync] Url synchronization configuration.
  * @param  {string} [options.urlSync.trackedParameters] Parameters that will
  * be synchronized in the URL. By default, it will track the query, all the
  * refinable attribute (facets and numeric filters), the index and the page.
