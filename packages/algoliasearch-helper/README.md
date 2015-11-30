@@ -515,7 +515,7 @@ By default the hierarchical facet is going to return the child and parent facet 
 
 If you do not want to get the parent facet values you can set showParentLevel to false
 
-````
+```js
 var helper = algoliasearchHelper(client, indexName, {
   hierarchicalFacets: [{
     name: 'products',
@@ -523,7 +523,7 @@ var helper = algoliasearchHelper(client, indexName, {
     showParentLevel: false
   }]
 });
-``
+```
 
 ##### Asking for the current breadcrumb
 
