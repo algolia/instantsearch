@@ -10,6 +10,7 @@ group :development, :test do
   gem 'sass'
   gem 'guard'
   gem 'nokogiri'
+  gem 'autoprefixer-rails'
   gem 'jekyll-contentblocks'
   gem 'guard-jekyll-plus'
   gem 'guard-livereload'
