@@ -1,0 +1,4 @@
+instrumentation:
+    root: src
+    excludes: ["**/__tests__/**"]
+    include-all-sources: true
