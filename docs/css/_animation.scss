@@ -1,4 +1,4 @@
-keyframes fadeIn {
+@keyframes fadeIn {
   from {
     opacity: 0;
   }
@@ -8,7 +8,7 @@ keyframes fadeIn {
 }
 
 
-keyframes fadeOut {
+@keyframes fadeOut {
   from {
     opacity: 1;
   }
@@ -18,7 +18,7 @@ keyframes fadeOut {
 }
 
 
-keyframes fadeInUp {
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -30,7 +30,7 @@ keyframes fadeInUp {
 }
 
 
-keyframes arrow {
+@keyframes arrow {
   from {
     opacity: 0;
     transform: translateY(-16px);
@@ -42,7 +42,7 @@ keyframes arrow {
 }
 
 
-keyframes dash {
+@keyframes dash {
   to {
     stroke-dashoffset: 700;
   }
