@@ -82,6 +82,36 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.currentRefinedValues({
+    container: '#current-refined-values',
+    cssClasses: {
+      header: 'facet-title',
+      link: 'facet-value facet-value-removable',
+      count: 'facet-count pull-right'
+    },
+    templates: {
+      header: 'Current refinements'
+    },
+    attributes: [
+      {
+        name: 'price',
+        label: 'Price',
+        transformData: (data) => { data.name = `$${data.name}`; return data; }
+      },
+      {
+        name: 'price_range',
+        label: 'Price range',
+        transformData: (data) => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
+      },
+      {
+        name: 'free_shipping',
+        transformData: (data) => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
+      }
+    ]
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
     attributeName: 'brand',
