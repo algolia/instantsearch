@@ -9,6 +9,9 @@ GEM
       awesome_print (~> 1.6)
       json (~> 1.8)
       nokogiri (~> 1.6)
+    autoprefixer-rails (6.1.1)
+      execjs
+      json
     awesome_print (1.6.1)
     blankslate (2.1.2.4)
     classifier-reborn (2.0.3)
@@ -125,6 +128,7 @@ PLATFORMS
 
 DEPENDENCIES
   algoliasearch-jekyll (~> 0.5.3)
+  autoprefixer-rails
   guard
   guard-bundler
   guard-jekyll-plus
