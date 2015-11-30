@@ -41,8 +41,8 @@ describe('clearAll()', () => {
     results = {};
     helper = {
       state: {
-        clearRefinements: sinon.spy(),
-        clearTags: sinon.spy()
+        clearRefinements: sinon.stub().returnsThis(),
+        clearTags: sinon.stub().returnsThis()
       },
       search: sinon.spy()
     };

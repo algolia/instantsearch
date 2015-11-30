@@ -4,6 +4,7 @@ import expect from 'expect';
 import jsdom from 'mocha-jsdom';
 import algoliasearchHelper from 'algoliasearch-helper';
 import utils from '../utils';
+import isEmpty from 'lodash/lang/isEmpty';
 
 describe('getContainerNode', () => {
   jsdom({useEach: true});
@@ -438,5 +439,141 @@ describe('getRefinements', function() {
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[2]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[3]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[4]);
+  });
+});
+
+describe('clearRefinementsFromState', () => {
+  let helper;
+  let state;
+
+  beforeEach(() => {
+    helper = algoliasearchHelper({}, 'my_index', {
+      facets: ['facet1', 'facet2', 'numericFacet1', 'facetExclude1'],
+      disjunctiveFacets: ['disjunctiveFacet1', 'numericDisjunctiveFacet'],
+      hierarchicalFacets: [{
+        name: 'hierarchicalFacet1',
+        attributes: ['hierarchicalFacet1.lvl0', 'hierarchicalFacet1.lvl1'],
+        separator: ' > '
+      }]
+    });
+    helper
+      .toggleRefinement('facet1', 'facet1val1')
+      .toggleRefinement('facet1', 'facet1val2')
+      .toggleRefinement('facet2', 'facet2val1')
+      .toggleRefinement('facet2', 'facet2val2')
+      .toggleRefinement('disjunctiveFacet1', 'facet1val1')
+      .toggleRefinement('disjunctiveFacet1', 'facet1val2')
+      .toggleExclude('facetExclude1', 'facetExclude1val1')
+      .toggleExclude('facetExclude1', 'facetExclude1val2')
+      .addNumericRefinement('numericFacet1', '>', '1')
+      .addNumericRefinement('numericFacet1', '>', '2')
+      .addNumericRefinement('numericDisjunctiveFacet1', '>', '1')
+      .addNumericRefinement('numericDisjunctiveFacet1', '>', '2')
+      .toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
+      .addTag('tag1')
+      .addTag('tag2');
+    state = helper.state;
+  });
+
+  context('without arguments', () => {
+    it('should clear everything', () => {
+      let newState = utils.clearRefinementsFromState(state);
+      expect(isEmpty(newState.facetsRefinements)).toBe(true, 'state shouldn\'t have facetsRefinements');
+      expect(isEmpty(newState.facetsExcludes)).toBe(true, 'state shouldn\'t have facetsExcludes');
+      expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(true, 'state shouldn\'t have disjunctiveFacetsRefinements');
+      expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(true, 'state shouldn\'t have hierarchicalFacetsRefinements');
+      expect(isEmpty(newState.numericRefinements)).toBe(true, 'state shouldn\'t have numericRefinements');
+      expect(isEmpty(newState.tagRefinements)).toBe(true, 'state shouldn\'t have tagRefinements');
+    });
+  });
+
+  it('should clear one facet', () => {
+    let newState = utils.clearRefinementsFromState(state, ['facet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear facets', () => {
+    let newState = utils.clearRefinementsFromState(state, ['facet1', 'facet2']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(true, 'state shouldn\'t have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear excludes', () => {
+    let newState = utils.clearRefinementsFromState(state, ['facetExclude1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(true, 'state shouldn\'t have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear disjunctive facets', () => {
+    let newState = utils.clearRefinementsFromState(state, ['disjunctiveFacet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(true, 'state shouldn\'t have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear hierarchical facets', () => {
+    let newState = utils.clearRefinementsFromState(state, ['hierarchicalFacet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(true, 'state shouldn\'t have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear one numeric facet', () => {
+    let newState = utils.clearRefinementsFromState(state, ['numericFacet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear one numeric facet', () => {
+    let newState = utils.clearRefinementsFromState(state, ['numericDisjunctiveFacet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear numeric facets', () => {
+    let newState = utils.clearRefinementsFromState(state, ['numericFacet1', 'numericDisjunctiveFacet1']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(true, 'state shouldn\'t have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
+  });
+
+  it('should clear tags', () => {
+    let newState = utils.clearRefinementsFromState(state, ['_tags']);
+    expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
+    expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');
+    expect(isEmpty(newState.disjunctiveFacetsRefinements)).toBe(false, 'state should have disjunctiveFacetsRefinements');
+    expect(isEmpty(newState.hierarchicalFacetsRefinements)).toBe(false, 'state should have hierarchicalFacetsRefinements');
+    expect(isEmpty(newState.numericRefinements)).toBe(false, 'state should have numericRefinements');
+    expect(isEmpty(newState.tagRefinements)).toBe(true, 'state shouldn\'t have tagRefinements');
   });
 });
