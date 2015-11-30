@@ -19,7 +19,6 @@ var requestBuilder = {
     // One query for the hits
     queries.push({
       indexName: index,
-      query: state.query,
       params: this._getHitsSearchParams(state)
     });
 
@@ -27,7 +26,6 @@ var requestBuilder = {
     forEach(state.getRefinedDisjunctiveFacets(), function(refinedFacet) {
       queries.push({
         indexName: index,
-        query: state.query,
         params: this._getDisjunctiveFacetSearchParams(state, refinedFacet)
       });
     }, this);
@@ -42,7 +40,6 @@ var requestBuilder = {
       if (currentRefinement.length > 0 && currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length > 1) {
         queries.push({
           indexName: index,
-          query: state.query,
           params: this._getDisjunctiveFacetSearchParams(state, refinedFacet, true)
         });
       }
