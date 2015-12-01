@@ -2,7 +2,7 @@ let find = require('lodash/collection/find');
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let bem = utils.bemHelper('ais-toggle');
 let cx = require('classnames');
 
@@ -67,7 +67,7 @@ function toggle({
   } = {}) {
   let containerNode = utils.getContainerNode(container);
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }

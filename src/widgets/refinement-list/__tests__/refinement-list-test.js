@@ -10,9 +10,9 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list';
-import Template from '../../../components/Template.js';
+import Template from '../../../components/Template';
 
-const helpers = require('../../../lib/helpers.js')('en-US');
+const helpers = require('../../../lib/helpers')('en-US');
 
 describe('refinementList()', () => {
   let autoHideContainer;

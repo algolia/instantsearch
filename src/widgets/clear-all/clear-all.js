@@ -8,7 +8,7 @@ let {
   getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch
-} = require('../../lib/utils.js');
+} = require('../../lib/utils');
 let bem = bemHelper('ais-clear-all');
 let cx = require('classnames');
 
@@ -52,7 +52,7 @@ function clearAll({
   }
 
   let containerNode = getContainerNode(container);
-  let ClearAll = headerFooterHOC(require('../../components/ClearAll/ClearAll.js'));
+  let ClearAll = headerFooterHOC(require('../../components/ClearAll/ClearAll'));
   if (autoHideContainer === true) {
     ClearAll = autoHideContainerHOC(ClearAll);
   }

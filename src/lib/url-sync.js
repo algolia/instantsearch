@@ -1,6 +1,6 @@
 let algoliasearchHelper = require('algoliasearch-helper');
 let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
-let majorVersionNumber = require('../lib/version.js').split('.')[0];
+let majorVersionNumber = require('../lib/version').split('.')[0];
 
 let isEqual = require('lodash/lang/isEqual');
 let merge = require('lodash/object/merge');

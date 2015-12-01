@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let bem = utils.bemHelper('ais-refinement-list');
 let cx = require('classnames');
 let find = require('lodash/collection/find');
@@ -62,7 +62,7 @@ function numericRefinementList({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }

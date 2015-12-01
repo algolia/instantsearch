@@ -1,9 +1,9 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 
-let generateRanges = require('./generate-ranges.js');
+let generateRanges = require('./generate-ranges');
 
 let defaultTemplates = require('./defaultTemplates');
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');

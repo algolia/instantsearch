@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let bem = utils.bemHelper('ais-refinement-list');
 let cx = require('classnames');
 
@@ -60,7 +60,7 @@ function refinementList({
     transformData,
     autoHideContainer = true
   }) {
-  let RefinementList = require('../../components/RefinementList/RefinementList.js');
+  let RefinementList = require('../../components/RefinementList/RefinementList');
 
   if (!container || !attributeName) {
     throw new Error(usage);

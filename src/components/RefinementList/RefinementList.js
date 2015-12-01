@@ -4,7 +4,7 @@ let cx = require('classnames');
 
 let Template = require('../Template');
 
-let {isSpecialClick} = require('../../lib/utils.js');
+let {isSpecialClick} = require('../../lib/utils');
 
 class RefinementList extends React.Component {
   refine(value) {

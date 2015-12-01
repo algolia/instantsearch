@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let find = require('lodash/collection/find');
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 let headerFooterHOC = require('../../decorators/headerFooter');

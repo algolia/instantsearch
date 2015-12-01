@@ -7,13 +7,13 @@ import jsdom from 'mocha-jsdom';
 import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
-import Template from '../../../components/Template.js';
+import RefinementList from '../../../components/RefinementList/RefinementList';
+import Template from '../../../components/Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-const helpers = require('../../../lib/helpers.js')('en-US');
+const helpers = require('../../../lib/helpers')('en-US');
 
 describe('toggle()', () => {
   jsdom({useEach: true});

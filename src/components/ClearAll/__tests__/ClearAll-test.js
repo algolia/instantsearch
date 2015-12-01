@@ -4,8 +4,8 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import TestUtils from 'react-addons-test-utils';
-import ClearAll from '../ClearAll.js';
-import Template from '../../Template.js';
+import ClearAll from '../ClearAll';
+import Template from '../../Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
