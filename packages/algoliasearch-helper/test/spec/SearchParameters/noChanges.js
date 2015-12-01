@@ -2,7 +2,7 @@
 
 var test = require('tape');
 
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 test('[No changes] setHitsPerPage', function(t) {
   var state = SearchParameters.make({

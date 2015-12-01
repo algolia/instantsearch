@@ -3,7 +3,7 @@
 var test = require('tape');
 var forEach = require('lodash/collection/forEach');
 
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 var stateWithStringForIntegers = {
   minWordSizefor1Typo: '1',

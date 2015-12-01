@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliaSearchHelper = require('../../index.js');
+var algoliaSearchHelper = require('../../../index.js');
 
 test('getQueryParameter', function(t) {
   var bind = require('lodash/function/bind');
