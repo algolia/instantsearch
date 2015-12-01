@@ -1,7 +1,7 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let any = require('lodash/collection/any');
 let bem = utils.bemHelper('ais-hits-per-page-selector');
 let cx = require('classnames');

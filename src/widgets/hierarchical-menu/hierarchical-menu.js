@@ -1,13 +1,13 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let bem = utils.bemHelper('ais-hierarchical-menu');
 let cx = require('classnames');
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
 let headerFooterHOC = require('../../decorators/headerFooter');
 
-let defaultTemplates = require('./defaultTemplates.js');
+let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Create a hierarchical menu using multiple attributes
@@ -72,7 +72,7 @@ function hierarchicalMenu({
 
   let containerNode = utils.getContainerNode(container);
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }

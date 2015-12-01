@@ -59,7 +59,7 @@ Usage: instantsearch({
     this.searchParameters = searchParameters || {};
     this.widgets = [];
     this.templatesConfig = {
-      helpers: require('./helpers.js')({numberLocale}),
+      helpers: require('./helpers')({numberLocale}),
       compileOptions: {}
     };
     this.urlSync = urlSync;

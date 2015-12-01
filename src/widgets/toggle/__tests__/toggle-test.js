@@ -13,7 +13,7 @@ import Template from '../../../components/Template.js';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-const helpers = require('../../../lib/helpers.js')('en-US');
+const helpers = require('../../../lib/helpers')('en-US');
 
 describe('toggle()', () => {
   jsdom({useEach: true});

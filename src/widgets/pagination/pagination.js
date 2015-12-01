@@ -3,7 +3,7 @@ let ReactDOM = require('react-dom');
 let defaults = require('lodash/object/defaults');
 let cx = require('classnames');
 
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let bem = utils.bemHelper('ais-pagination');
 
 let autoHideContainerHOC = require('../../decorators/autoHideContainer');
@@ -72,7 +72,7 @@ function pagination({
 
   let containerNode = utils.getContainerNode(container);
   let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
-  let Pagination = require('../../components/Pagination/Pagination.js');
+  let Pagination = require('../../components/Pagination/Pagination');
   if (autoHideContainer === true) {
     Pagination = autoHideContainerHOC(Pagination);
   }

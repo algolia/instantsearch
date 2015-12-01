@@ -8,7 +8,7 @@ if (!process.env.VERSION) {
 }
 
 let semver = require('semver');
-let currentVersion = require('../src/lib/version.js');
+let currentVersion = require('../src/lib/version');
 let newVersion = process.env.VERSION;
 
 if (!semver.valid(newVersion)) {

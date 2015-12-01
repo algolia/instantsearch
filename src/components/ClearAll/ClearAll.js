@@ -1,8 +1,8 @@
 let React = require('react');
 
-let Template = require('../Template.js');
+let Template = require('../Template');
 
-let {isSpecialClick} = require('../../lib/utils.js');
+let {isSpecialClick} = require('../../lib/utils');
 
 class ClearAll extends React.Component {
   handleClick(e) {

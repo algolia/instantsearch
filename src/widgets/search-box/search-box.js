@@ -1,6 +1,6 @@
 let React = require('react');
 let ReactDOM = require('react-dom');
-let utils = require('../../lib/utils.js');
+let utils = require('../../lib/utils');
 let forEach = require('lodash/collection/forEach');
 let bem = require('../../lib/utils').bemHelper('ais-search-box');
 let cx = require('classnames');
@@ -94,7 +94,7 @@ function searchBox({
       input.classList.add(cx(bem('input'), cssClasses.input));
     },
     addPoweredBy: function(input) {
-      let PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
+      let PoweredBy = require('../../components/PoweredBy/PoweredBy');
       let poweredByContainer = document.createElement('div');
       input.parentNode.insertBefore(poweredByContainer, input.nextSibling);
       let poweredByCssClasses = {
