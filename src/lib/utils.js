@@ -2,6 +2,7 @@ let reduce = require('lodash/collection/reduce');
 let forEach = require('lodash/collection/forEach');
 let find = require('lodash/collection/find');
 let get = require('lodash/object/get');
+let isEmpty = require('lodash/lang/isEmpty');
 
 let utils = {
   getContainerNode,
@@ -9,7 +10,9 @@ let utils = {
   prepareTemplateProps,
   isSpecialClick,
   isDomElement,
-  getRefinements
+  getRefinements,
+  clearRefinementsFromState,
+  clearRefinementsAndSearch
 };
 
 /**
@@ -179,6 +182,27 @@ function getRefinements(results, state) {
   });
 
   return res;
+}
+
+function clearRefinementsFromState(state, attributeNames) {
+  if (isEmpty(attributeNames)) {
+    state = state.clearTags();
+    state = state.clearRefinements();
+    return state;
+  }
+
+  forEach(attributeNames, (attributeName) => {
+    if (attributeName === '_tags') {
+      state = state.clearTags();
+    } else {
+      state = state.clearRefinements(attributeName);
+    }
+  });
+  return state;
+}
+
+function clearRefinementsAndSearch(helper, attributeNames) {
+  helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
 }
 
 module.exports = utils;
