@@ -73,7 +73,9 @@ body {
   padding-right: 20px;
   border-radius: 0;
   background: transparent;
-  appearance: none; }
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
   .aisdemo-filters #guests select:focus {
     outline: none; }
 .aisdemo-filters .guests-caret:before {
@@ -109,7 +111,9 @@ body {
   vertical-align: top;
   border: 1px solid #DCE0E0;
   background: #FFFFFF;
-  appearance: none; }
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none; }
   .aisdemo-filters #room_types .ais-refinement-list--checkbox:focus {
     outline: none; }
 .aisdemo-filters #room_types .ais-refinement-list--item__active .ais-refinement-list--checkbox:before {

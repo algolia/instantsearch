@@ -270,6 +270,7 @@ aside {
     vertical-align: middle;
     margin: 0 auto; }
     .hit .product-picture img {
+      -webkit-transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
       transition: opacity 500ms cubic-bezier(0.19, 1, 0.22, 1);
       height: 150px;
       max-width: 100%; }
