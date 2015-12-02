@@ -7,14 +7,21 @@ ghpages.clean();
 
 if (process.env.CI === 'true') {
   ghpages.publish(basePath, {
-    repo: 'https://' + process.env.GH_TOKEN + '@github.com/algolia/instantsearch.js.git'
+    repo: 'https://' + process.env.GH_TOKEN + '@github.com/algolia/instantsearch.js.git',
+    logger: log
   }, end);
 } else {
-  ghpages.publish(basePath, end);
+  ghpages.publish(basePath, {logger: log}, end);
 }
 
 function end(err) {
   if (err) {
     throw err;
+  } else {
+    console.log('published gh-pages')
   }
+}
+
+function log(msg) {
+  console.log(msg);
 }
