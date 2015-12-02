@@ -1,8 +1,8 @@
-let reduce = require('lodash/collection/reduce');
-let forEach = require('lodash/collection/forEach');
-let find = require('lodash/collection/find');
-let get = require('lodash/object/get');
-let isEmpty = require('lodash/lang/isEmpty');
+import reduce from 'lodash/collection/reduce';
+import forEach from 'lodash/collection/forEach';
+import find from 'lodash/collection/find';
+import get from 'lodash/object/get';
+import isEmpty from 'lodash/lang/isEmpty';
 
 let utils = {
   getContainerNode,
@@ -214,4 +214,4 @@ function clearRefinementsAndSearch(helper, attributeNames) {
   helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
 }
 
-module.exports = utils;
+export default utils;

@@ -1,11 +1,11 @@
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-let React = require('react');
+import React from 'react';
 
-let cx = require('classnames');
+import cx from 'classnames';
 
-let Template = require('../components/Template');
+import Template from '../components/Template.js';
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
@@ -65,4 +65,4 @@ function headerFooter(ComposedComponent) {
   return HeaderFooter;
 }
 
-module.exports = headerFooter;
+export default headerFooter;

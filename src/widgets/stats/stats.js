@@ -1,13 +1,13 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
-let bem = require('../../lib/utils').bemHelper('ais-stats');
-let cx = require('classnames');
+import utils from '../../lib/utils.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+let bem = require('../../lib/utils.js').bemHelper('ais-stats');
+import cx from 'classnames';
 
-let defaultTemplates = require('./defaultTemplates');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Display various stats about the current search state
@@ -44,7 +44,7 @@ function stats({
   if (!container) throw new Error(usage);
   let containerNode = utils.getContainerNode(container);
 
-  let Stats = headerFooterHOC(require('../../components/Stats/Stats'));
+  let Stats = headerFooterHOC(require('../../components/Stats/Stats.js'));
   if (autoHideContainer === true) {
     Stats = autoHideContainerHOC(Stats);
   }
@@ -89,4 +89,4 @@ function stats({
   };
 }
 
-module.exports = stats;
+export default stats;

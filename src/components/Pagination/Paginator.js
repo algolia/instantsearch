@@ -1,4 +1,4 @@
-let range = require('lodash/utility/range');
+import range from 'lodash/utility/range';
 
 class Paginator {
   constructor(params) {
@@ -47,4 +47,4 @@ class Paginator {
   }
 }
 
-module.exports = Paginator;
+export default Paginator;

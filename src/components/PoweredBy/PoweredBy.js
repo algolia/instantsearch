@@ -1,4 +1,4 @@
-let React = require('react');
+import React from 'react';
 
 class PoweredBy extends React.Component {
   render() {
@@ -18,4 +18,4 @@ PoweredBy.propTypes = {
   })
 };
 
-module.exports = PoweredBy;
+export default PoweredBy;

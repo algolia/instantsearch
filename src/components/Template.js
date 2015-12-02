@@ -1,8 +1,8 @@
-let React = require('react');
-let mapValues = require('lodash/object/mapValues');
-let curry = require('lodash/function/curry');
-let cloneDeep = require('lodash/lang/cloneDeep');
-let hogan = require('hogan.js');
+import React from 'react';
+import mapValues from 'lodash/object/mapValues';
+import curry from 'lodash/function/curry';
+import cloneDeep from 'lodash/lang/cloneDeep';
+import hogan from 'hogan.js';
 
 class Template extends React.Component {
   render() {
@@ -122,4 +122,4 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
   });
 }
 
-module.exports = Template;
+export default Template;

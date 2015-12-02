@@ -12,7 +12,7 @@ import AlgoliasearchHelper from 'algoliasearch-helper';
 
 describe('rangeSlider call', () => {
   jsdom({useEach: true});
-  const rangeSlider = require('../range-slider');
+  const rangeSlider = require('../range-slider.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -40,8 +40,8 @@ describe('rangeSlider()', () => {
   let rangeSlider;
 
   beforeEach(() => {
-    rangeSlider = require('../range-slider');
-    Slider = require('../../../components/Slider/Slider');
+    rangeSlider = require('../range-slider.js');
+    Slider = require('../../../components/Slider/Slider.js');
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(Slider);

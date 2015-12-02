@@ -1,4 +1,4 @@
-let React = require('react');
+import React from 'react';
 
 // This component is only used in tests, as a placeholder
 class TestComponent extends React.Component {
@@ -8,4 +8,4 @@ class TestComponent extends React.Component {
 }
 
 
-module.exports = TestComponent;
+export default TestComponent;

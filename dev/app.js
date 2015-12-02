@@ -1,5 +1,5 @@
 // force using index because package 'main' is dist-es5-module/
-var instantsearch = require('../index');
+var instantsearch = require('../index.js');
 
 var search = instantsearch({
   appId: 'latency',

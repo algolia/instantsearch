@@ -1,16 +1,16 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
+import utils from '../../lib/utils.js';
 
-let generateRanges = require('./generate-ranges');
+import generateRanges from './generate-ranges.js';
 
-let defaultTemplates = require('./defaultTemplates');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import defaultTemplates from './defaultTemplates.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
 let bem = utils.bemHelper('ais-price-ranges');
-let cx = require('classnames');
+import cx from 'classnames';
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -67,7 +67,7 @@ function priceRanges({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges'));
+  let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges.js'));
   if (autoHideContainer === true) {
     PriceRanges = autoHideContainerHOC(PriceRanges);
   }
@@ -182,4 +182,4 @@ function priceRanges({
   };
 }
 
-module.exports = priceRanges;
+export default priceRanges;

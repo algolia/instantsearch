@@ -1,13 +1,13 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-menu');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Create a menu out of a facet
@@ -60,7 +60,7 @@ function menu({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList'));
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -127,4 +127,4 @@ function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
   return values.data && values.data.slice(0, limit) || [];
 }
 
-module.exports = menu;
+export default menu;

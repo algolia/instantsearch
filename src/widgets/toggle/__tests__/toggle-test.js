@@ -13,7 +13,7 @@ import Template from '../../../components/Template';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-const helpers = require('../../../lib/helpers')('en-US');
+const helpers = require('../../../lib/helpers.js')('en-US');
 
 describe('toggle()', () => {
   jsdom({useEach: true});
@@ -84,7 +84,7 @@ describe('toggle()', () => {
       beforeEach(() => {
         templateProps = {
           templatesConfig: undefined,
-          templates: require('../defaultTemplates'),
+          templates: require('../defaultTemplates.js'),
           useCustomCompileOptions: {header: false, item: false, footer: false},
           transformData: undefined
         };

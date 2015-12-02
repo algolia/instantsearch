@@ -1,8 +1,8 @@
-let React = require('react');
+import React from 'react';
 
-let Template = require('../Template');
-let PriceRangesForm = require('./PriceRangesForm');
-let cx = require('classnames');
+import Template from '../Template.js';
+import PriceRangesForm from './PriceRangesForm.js';
+import cx from 'classnames';
 
 class PriceRanges extends React.Component {
   getForm() {
@@ -94,4 +94,4 @@ PriceRanges.defaultProps = {
   cssClasses: {}
 };
 
-module.exports = PriceRanges;
+export default PriceRanges;

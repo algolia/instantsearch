@@ -12,7 +12,7 @@ expect.extend(expectJSX);
 import refinementList from '../refinement-list';
 import Template from '../../../components/Template';
 
-const helpers = require('../../../lib/helpers')('en-US');
+const helpers = require('../../../lib/helpers.js')('en-US');
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -190,7 +190,7 @@ describe('refinementList()', () => {
     it('formats counts', () => {
       const props = {
         templatesConfig: {helpers},
-        templates: require('../defaultTemplates')
+        templates: require('../defaultTemplates.js')
       };
       renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
       let out = renderer.getRenderOutput();

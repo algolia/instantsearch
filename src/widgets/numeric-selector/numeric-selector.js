@@ -1,10 +1,10 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
-let cx = require('classnames');
-let find = require('lodash/collection/find');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import utils from '../../lib/utils.js';
+import cx from 'classnames';
+import find from 'lodash/collection/find';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 let bem = utils.bemHelper('ais-numeric-selector');
 
@@ -34,7 +34,7 @@ function numericSelector({
   let containerNode = utils.getContainerNode(container);
   let usage = 'Usage: numericSelector({container, attributeName, options[, cssClasses.{root,item}, autoHideContainer]})';
 
-  let Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector.js');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
@@ -89,4 +89,4 @@ function numericSelector({
   };
 }
 
-module.exports = numericSelector;
+export default numericSelector;

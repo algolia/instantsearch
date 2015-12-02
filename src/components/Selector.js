@@ -1,4 +1,4 @@
-let React = require('react');
+import React from 'react';
 
 class Selector extends React.Component {
   handleChange(event) {
@@ -51,4 +51,4 @@ Selector.propTypes = {
   setValue: React.PropTypes.func.isRequired
 };
 
-module.exports = Selector;
+export default Selector;

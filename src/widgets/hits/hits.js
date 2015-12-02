@@ -1,12 +1,12 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-hits');
-let cx = require('classnames');
+import cx from 'classnames';
 
-let Hits = require('../../components/Hits');
-let defaultTemplates = require('./defaultTemplates');
+import Hits from '../../components/Hits.js';
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Display the list of results (hits) from the current search
@@ -74,4 +74,4 @@ function hits({
   };
 }
 
-module.exports = hits;
+export default hits;

@@ -1,10 +1,8 @@
-let React = require('react');
+import React from 'react';
+import cx from 'classnames';
+import {isSpecialClick} from '../../lib/utils.js';
 
-let cx = require('classnames');
-
-let Template = require('../Template');
-
-let {isSpecialClick} = require('../../lib/utils');
+import Template from '../Template.js';
 
 class RefinementList extends React.Component {
   refine(value) {
@@ -140,4 +138,4 @@ RefinementList.defaultProps = {
   attributeNameKey: 'name'
 };
 
-module.exports = RefinementList;
+export default RefinementList;

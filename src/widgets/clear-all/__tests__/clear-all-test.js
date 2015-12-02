@@ -59,7 +59,7 @@ describe('clearAll()', () => {
       hasRefinements: false,
       shouldAutoHideContainer: true,
       templateProps: {
-        templates: require('../defaultTemplates'),
+        templates: require('../defaultTemplates.js'),
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {header: false, footer: false, link: false}
