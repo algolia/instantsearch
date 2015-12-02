@@ -138,11 +138,11 @@ describe('getRefinements', function() {
       hierarchicalFacets: [{
         name: 'hierarchicalFacet1',
         attributes: ['hierarchicalFacet1.lvl0', 'hierarchicalFacet1.lvl1'],
-        separator: '>'
+        separator: ' > '
       }, {
         name: 'hierarchicalFacet2',
         attributes: ['hierarchicalFacet2.lvl0', 'hierarchicalFacet2.lvl1'],
-        separator: '>'
+        separator: ' > '
       }]
     });
     results = {};
@@ -151,7 +151,7 @@ describe('getRefinements', function() {
   it('should retrieve one tag', function() {
     helper.addTag('tag1');
     const expected = [
-      {attributeName: '_tags', name: 'tag1'}
+      {type: 'tag', attributeName: '_tags', name: 'tag1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -159,8 +159,8 @@ describe('getRefinements', function() {
   it('should retrieve multiple tags', function() {
     helper.addTag('tag1').addTag('tag2');
     const expected = [
-      {attributeName: '_tags', name: 'tag1'},
-      {attributeName: '_tags', name: 'tag2'}
+      {type: 'tag', attributeName: '_tags', name: 'tag1'},
+      {type: 'tag', attributeName: '_tags', name: 'tag2'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -168,7 +168,7 @@ describe('getRefinements', function() {
   it('should retrieve one facetRefinement', function() {
     helper.toggleRefinement('facet1', 'facet1val1');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1val1'}
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -178,8 +178,8 @@ describe('getRefinements', function() {
       .toggleRefinement('facet1', 'facet1val1')
       .toggleRefinement('facet1', 'facet1val2');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1val1'},
-      {attributeName: 'facet1', name: 'facet1val2'}
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val1'},
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val2'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -191,9 +191,9 @@ describe('getRefinements', function() {
       .toggleRefinement('facet1', 'facet1val2')
       .toggleRefinement('facet2', 'facet2val1');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1val1'},
-      {attributeName: 'facet1', name: 'facet1val2'},
-      {attributeName: 'facet2', name: 'facet2val1'}
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val1'},
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val2'},
+      {type: 'facet', attributeName: 'facet2', name: 'facet2val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -211,7 +211,7 @@ describe('getRefinements', function() {
       }]
     };
     const expected = [
-      {attributeName: 'facet1', name: 'facet1val1', count: 4}
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val1', count: 4}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -225,7 +225,7 @@ describe('getRefinements', function() {
       }]
     };
     const expected = [
-      {attributeName: 'facet1', name: 'facet1val1', exhaustive: true}
+      {type: 'facet', attributeName: 'facet1', name: 'facet1val1', exhaustive: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -233,7 +233,7 @@ describe('getRefinements', function() {
   it('should retrieve one facetExclude', function() {
     helper.toggleExclude('facet1', 'facet1exclude1');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1exclude1', exclude: true}
+      {type: 'exclude', attributeName: 'facet1', name: 'facet1exclude1', exclude: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -243,8 +243,8 @@ describe('getRefinements', function() {
       .toggleExclude('facet1', 'facet1exclude1')
       .toggleExclude('facet1', 'facet1exclude2');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1exclude1', exclude: true},
-      {attributeName: 'facet1', name: 'facet1exclude2', exclude: true}
+      {type: 'exclude', attributeName: 'facet1', name: 'facet1exclude1', exclude: true},
+      {type: 'exclude', attributeName: 'facet1', name: 'facet1exclude2', exclude: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -256,9 +256,9 @@ describe('getRefinements', function() {
       .toggleExclude('facet1', 'facet1exclude2')
       .toggleExclude('facet2', 'facet2exclude1');
     const expected = [
-      {attributeName: 'facet1', name: 'facet1exclude1', exclude: true},
-      {attributeName: 'facet1', name: 'facet1exclude2', exclude: true},
-      {attributeName: 'facet2', name: 'facet2exclude1', exclude: true}
+      {type: 'exclude', attributeName: 'facet1', name: 'facet1exclude1', exclude: true},
+      {type: 'exclude', attributeName: 'facet1', name: 'facet1exclude2', exclude: true},
+      {type: 'exclude', attributeName: 'facet2', name: 'facet2exclude1', exclude: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -268,7 +268,7 @@ describe('getRefinements', function() {
   it('should retrieve one disjunctiveFacetRefinement', function() {
     helper.addDisjunctiveFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1');
     const expected = [
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'}
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -278,8 +278,8 @@ describe('getRefinements', function() {
       .addDisjunctiveFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val1')
       .addDisjunctiveFacetRefinement('disjunctiveFacet1', 'disjunctiveFacet1val2');
     const expected = [
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'},
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'}
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'},
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -291,9 +291,9 @@ describe('getRefinements', function() {
       .toggleRefinement('disjunctiveFacet1', 'disjunctiveFacet1val2')
       .toggleRefinement('disjunctiveFacet2', 'disjunctiveFacet2val1');
     const expected = [
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'},
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'},
-      {attributeName: 'disjunctiveFacet2', name: 'disjunctiveFacet2val1'}
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1'},
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val2'},
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet2', name: 'disjunctiveFacet2val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -311,7 +311,7 @@ describe('getRefinements', function() {
       }]
     };
     const expected = [
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', count: 4}
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', count: 4}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -325,7 +325,7 @@ describe('getRefinements', function() {
       }]
     };
     const expected = [
-      {attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', exhaustive: true}
+      {type: 'disjunctive', attributeName: 'disjunctiveFacet1', name: 'disjunctiveFacet1val1', exhaustive: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -333,7 +333,7 @@ describe('getRefinements', function() {
   it('should retrieve one hierarchicalFacetRefinement', function() {
     helper.toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1');
     const expected = [
-      {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'}
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -343,8 +343,8 @@ describe('getRefinements', function() {
       .toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
       .toggleRefinement('hierarchicalFacet2', 'hierarchicalFacet2lvl0val1');
     const expected = [
-      {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
-      {attributeName: 'hierarchicalFacet2', name: 'hierarchicalFacet2lvl0val1'}
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet2', name: 'hierarchicalFacet2lvl0val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -355,8 +355,8 @@ describe('getRefinements', function() {
       .toggleRefinement('hierarchicalFacet1', 'hierarchicalFacet1lvl0val1')
       .toggleRefinement('hierarchicalFacet2', 'hierarchicalFacet2lvl0val1 > lvl1val1');
     const expected = [
-      {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
-      {attributeName: 'hierarchicalFacet2', name: 'hierarchicalFacet2lvl0val1 > lvl1val1'}
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1lvl0val1'},
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet2', name: 'lvl1val1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -368,12 +368,12 @@ describe('getRefinements', function() {
       hierarchicalFacets: [{
         name: 'hierarchicalFacet1',
         data: {
-          hierarchicalFacet1val1: 4
+          hierarchicalFacet1val1: {name: 'hierarchicalFacet1val1', count: 4}
         }
       }]
     };
     const expected = [
-      {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', count: 4}
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', count: 4}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -383,11 +383,13 @@ describe('getRefinements', function() {
     results = {
       hierarchicalFacets: [{
         name: 'hierarchicalFacet1',
-        exhaustive: true
+        data: [
+          {name: 'hierarchicalFacet1val1', exhaustive: true}
+        ]
       }]
     };
     const expected = [
-      {attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', exhaustive: true}
+      {type: 'hierarchical', attributeName: 'hierarchicalFacet1', name: 'hierarchicalFacet1val1', exhaustive: true}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -395,7 +397,7 @@ describe('getRefinements', function() {
   it('should retrieve a numericRefinement on one facet', function() {
     helper.addNumericRefinement('numericFacet1', '>', '1');
     const expected = [
-      {attributeName: 'numericFacet1', operator: '>', name: '1'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -403,7 +405,7 @@ describe('getRefinements', function() {
   it('should retrieve a numericRefinement on one disjunctive facet', function() {
     helper.addNumericRefinement('numericDisjunctiveFacet1', '>', '1');
     const expected = [
-      {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'}
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -413,8 +415,8 @@ describe('getRefinements', function() {
       .addNumericRefinement('numericFacet1', '>', '1')
       .addNumericRefinement('numericFacet1', '>', '2');
     const expected = [
-      {attributeName: 'numericFacet1', operator: '>', name: '1'},
-      {attributeName: 'numericFacet1', operator: '>', name: '2'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -428,11 +430,11 @@ describe('getRefinements', function() {
       .addNumericRefinement('numericDisjunctiveFacet1', '>', '1')
       .addNumericRefinement('numericDisjunctiveFacet1', '>', '2');
     const expected = [
-      {attributeName: 'numericFacet1', operator: '>', name: '1'},
-      {attributeName: 'numericFacet1', operator: '>', name: '2'},
-      {attributeName: 'numericFacet1', operator: '<=', name: '3'},
-      {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'},
-      {attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '2'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2'},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '<=', name: '3'},
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'},
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '2'}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
