@@ -30,6 +30,7 @@ Hi (future) collaborator!
   - [Beta releases](#beta-releases)
 - [Hotfixes](#hotfixes)
   - [Releasing hotfixes](#releasing-hotfixes)
+  - [Documentation updates](#documentation-updates)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -210,3 +211,10 @@ You must be on the master branch.
 ```sh
 HOTFIX=1 npm run release
 ```
+
+## Documentation updates
+
+If you have important documentation update to release without wanting to release
+a new version of instantsearch.js, you can do a documentation hotfix.
+
+Then once the hotfix is merged into master, the documentation will be updated automatically.
