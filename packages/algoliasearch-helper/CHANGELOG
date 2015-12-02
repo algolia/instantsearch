@@ -1,5 +1,11 @@
 CHANGELOG
 
+2.7.0 - 2015-12-02
+  * feature(algoliasearch.helper): adds getNumericRefinement (fix #214)
+  * fix(request-builder): makes queries less ambiguous for client (fix #205)
+  * fix(core): makes node dependencies explicit (fix #256)
+  * chore(tests): reorganizes tests
+
 2.6.9 - 2015-11-24
   * FIX : exclude hierarchical facet when the rootPath equal to the facet
 
