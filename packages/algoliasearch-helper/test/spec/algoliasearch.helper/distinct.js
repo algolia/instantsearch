@@ -3,8 +3,8 @@
 var test = require('tape');
 var forEach = require('lodash/collection/forEach');
 
-var algoliasearchHelper = require('../../index.js');
-var requestBuilder = require('../../src/requestBuilder');
+var algoliasearchHelper = require('../../../index.js');
+var requestBuilder = require('../../../src/requestBuilder');
 
 test('Distinct not set', function(t) {
   var helper = algoliasearchHelper(null, null, {

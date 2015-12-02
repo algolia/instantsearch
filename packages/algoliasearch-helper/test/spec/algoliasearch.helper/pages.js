@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 test('setChange should change the current page', function(t) {
   var helper = algoliasearchHelper(null, null, null);

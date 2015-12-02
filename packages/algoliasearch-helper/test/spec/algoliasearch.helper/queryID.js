@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 test('the queryid should keep increasing when new requests arrives', function(t) {
   var initialQueryID;
@@ -22,7 +22,7 @@ test('the queryid should keep increasing when new requests arrives', function(t)
 });
 
 test('the response handler should check that the query is not outdated', function(t) {
-  var testData = require('./search.testdata');
+  var testData = require('../search.testdata');
   var shouldTriggerResult = true;
   var callCount = 0;
 

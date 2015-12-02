@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 var forEach = require('lodash/collection/forEach');
 var keys = require('lodash/object/keys');
 var isEmpty = require('lodash/lang/isEmpty');
