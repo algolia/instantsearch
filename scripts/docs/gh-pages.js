@@ -18,7 +18,7 @@ function end(err) {
   if (err) {
     throw err;
   } else {
-    console.log('published gh-pages')
+    console.log('published gh-pages');
   }
 }
 
