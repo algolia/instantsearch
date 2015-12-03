@@ -52,7 +52,7 @@ var RefinementList = require('./RefinementList');
  * for the properties of a new SearchParameters
  * @see SearchParameters.make
  * @example <caption>SearchParameters of the first query in
- *   <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ *   <a href="http://demos.algolia.com/instant-search-demo/">the instant search demo</a></caption>
 {
    "query": "",
    "disjunctiveFacets": [
