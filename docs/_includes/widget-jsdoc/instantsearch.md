@@ -2,7 +2,7 @@
 | --- | --- |
 | <span class='attr-required'>`options.appId`</span><span class="attr-infos">Type: <code>string</code></span> | The Algolia application ID |
 | <span class='attr-required'>`options.apiKey`</span><span class="attr-infos">Type: <code>string</code></span> | The Algolia search-only API key |
-| <span class='attr-required'>`options.index`</span><span class="attr-infos">Type: <code>string</code></span> | The name of the main index |
+| <span class='attr-required'>`options.indexName`</span><span class="attr-infos">Type: <code>string</code></span> | The name of the main index |
 | <span class='attr-optional'>`options.numberLocale`</span><span class="attr-infos">Type: <code>string</code></span> | The locale used to display numbers. |
 | <span class='attr-optional'>`options.searchParameters`</span><span class="attr-infos">Type: <code>string</code></span> | Initial search configuration. |
 | <span class='attr-optional'>`options.urlSync`</span><span class="attr-infos">Type: <code>Object</code> &#124; <code>boolean</code></span> | Url synchronization configuration. Setting to `true` will synchronize the needed search parameters with the browser url. |

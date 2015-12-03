@@ -16,7 +16,7 @@ function defaultCreateURL() { return '#'; }
  * @function instantsearch
  * @param  {string} options.appId The Algolia application ID
  * @param  {string} options.apiKey The Algolia search-only API key
- * @param  {string} options.index The name of the main index
+ * @param  {string} options.indexName The name of the main index
  * @param  {string} [options.numberLocale] The locale used to display numbers.
  * @param  {string} [options.searchParameters] Initial search configuration.
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
