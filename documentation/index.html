@@ -193,7 +193,10 @@
         <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
   <span class="nx">appId</span><span class="o">:</span> <span class="s1">&#39;$appId&#39;</span><span class="p">,</span>
   <span class="nx">apiKey</span><span class="o">:</span> <span class="s1">&#39;$apiKey&#39;</span><span class="p">,</span>
-  <span class="nx">indexName</span><span class="o">:</span> <span class="s1">&#39;$indexName&#39;</span>
+  <span class="nx">indexName</span><span class="o">:</span> <span class="s1">&#39;$indexName&#39;</span><span class="p">,</span>
+  <span class="nx">urlSync</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">trackedParameters</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="s1">&#39;attribute:*&#39;</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="s1">&#39;page&#39;</span><span class="p">,</span> <span class="s1">&#39;hitsPerPage&#39;</span><span class="p">]</span>
+  <span class="p">}</span>
 <span class="p">});</span></code></pre>
       </div>
 
@@ -263,7 +266,14 @@
 
 <p>If you don’t have any indices yet, learn how to push your data with the <a href="https://www.algolia.com/getstarted">Algolia getting started guide</a>.</p>
 
-<p>We also expose a few options that can be used to configure the default and initial behavior of the instantsearch instance.</p>
+<p>InstantSearch.js also offers the ability to synchronise the current search with the URL. It provides two benefits :</p>
+
+<ul>
+  <li>The browser history is aware of the changes in the search, which let the user navigate back and forth in it search</li>
+  <li>The current search can be shared with other users by copy/pasting the URL</li>
+</ul>
+
+<p>To configure this feature, the url sync configuration object should be provided when configuring <code>instantsearch</code>. An example is provided on the right.</p>
 
 <h3 id="adding-widgets">Adding Widgets</h3>
 
