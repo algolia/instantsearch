@@ -110,7 +110,10 @@ To initialize the **instantsearch.js** library, you need an Algolia account with
 var search = instantsearch({
   appId: '$appId',
   apiKey: '$apiKey',
-  indexName: '$indexName'
+  indexName: '$indexName',
+  urlSync: {
+    trackedParameters: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage']
+  }
 });
 {% endhighlight %}
   </div>
@@ -130,7 +133,12 @@ Use your **search-only API key**. You index should also contain data.
 
 If you don't have any indices yet, learn how to push your data with the [Algolia getting started guide](https://www.algolia.com/getstarted).
 
-We also expose a few options that can be used to configure the default and initial behavior of the instantsearch instance.
+InstantSearch.js also offers the ability to synchronise the current search with the URL. It provides two benefits :
+
+  - The browser history is aware of the changes in the search, which let the user navigate back and forth in it search
+  - The current search can be shared with other users by copy/pasting the URL
+
+To configure this feature, the url sync configuration object should be provided when configuring `instantsearch`. An example is provided on the right.
 
 ### Adding Widgets
 
