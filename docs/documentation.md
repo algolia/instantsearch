@@ -111,9 +111,7 @@ var search = instantsearch({
   appId: '$appId',
   apiKey: '$apiKey',
   indexName: '$indexName',
-  urlSync: {
-    trackedParameters: ['query', 'attribute:*', 'index', 'page', 'hitsPerPage']
-  }
+  urlSync: true
 });
 {% endhighlight %}
   </div>
@@ -133,12 +131,14 @@ Use your **search-only API key**. You index should also contain data.
 
 If you don't have any indices yet, learn how to push your data with the [Algolia getting started guide](https://www.algolia.com/getstarted).
 
-InstantSearch.js also offers the ability to synchronise the current search with the URL. It provides two benefits :
+#### Url synchronization
 
-  - The browser history is aware of the changes in the search, which let the user navigate back and forth in it search
-  - The current search can be shared with other users by copy/pasting the URL
+You can synchronise the current search with the browser url. It provides two benefits:
 
-To configure this feature, the url sync configuration object should be provided when configuring `instantsearch`. An example is provided on the right.
+  - Working back/next browser buttons
+  - Copy and share the current search url
+
+To configure this feature, pass `urlSync: true` to the `instantsearch()` call. See the example and options.
 
 ### Adding Widgets
 
