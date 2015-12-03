@@ -269,12 +269,13 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
+    operator: '>=',
     attributeName: 'popularity',
     options: [
-      { label: 'Select a value', value: undefined },
-      { label: '1st', value: 1 },
-      { label: '2nd', value: 2 },
-      { label: '3rd', value: 3 }
+      { label: 'Default', value: 0 },
+      { label: 'Top 10', value: 9991 },
+      { label: 'Top 100', value: 9901 },
+      { label: 'Top 500', value: 9501 }
     ]
   })
 );
