@@ -159,9 +159,7 @@ function SearchParameters(newParameters) {
   this.tagFilters = params.tagFilters;
 
   /**
-   * Contains the tag filters in the raw format of the Algolia API. Setting this
-   * parameter is not compatible with the of the add/remove/toggle methods of the
-   * tag api.
+   * Contains the  optional tag filters in the raw format of the Algolia API.
    * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
@@ -169,9 +167,7 @@ function SearchParameters(newParameters) {
   this.optionalTagFilters = params.optionalTagFilters;
 
   /**
-   * Contains the tag filters in the raw format of the Algolia API. Setting this
-   * parameter is not compatible with the of the add/remove/toggle methods of the
-   * tag api.
+   * Contains the optional facet filters in the raw format of the Algolia API.
    * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
