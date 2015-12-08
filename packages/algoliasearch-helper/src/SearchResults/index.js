@@ -212,6 +212,11 @@ function SearchResults(state, algoliaResponse) {
    */
   this.query = mainSubResponse.query;
   /**
+   * The query as parsed by the engine given all the rules.
+   * @member {string}
+   */
+  this.parsedQuery = mainSubResponse.parsedQuery;
+  /**
    * all the records that match the search parameters. It also contains _highlightResult,
    * which describe which and how the attributes are matched.
    * @member {object[]}
@@ -247,6 +252,35 @@ function SearchResults(state, algoliaResponse) {
    * @member {number}
    */
   this.processingTimeMS = sum(algoliaResponse.results, 'processingTimeMS');
+  /**
+   * The position if the position was guessed by IP.
+   * @member {string}
+   * @example "48.8637,2.3615",
+   */
+  this.aroundLatLng = mainSubResponse.aroundLatLng;
+  /**
+   * The radius computed by Algolia.
+   * @member {string}
+   * @example "126792922",
+   */
+  this.automaticRadius = mainSubResponse.automaticRadius;
+  /**
+   * String identifying the server used to serve this request.
+   * @member {string}
+   * @example "c7-use-2.algolia.net",
+   */
+  this.serverUsed = mainSubResponse.serverUsed;
+  /**
+   * Boolean that indicates if the computation of the counts did time out.
+   * @member {boolean}
+   */
+  this.timeoutCounts = mainSubResponse.timeoutCounts;
+  /**
+   * Boolean that indicates if the computation of the hits did time out.
+   * @member {boolean}
+   */
+  this.timeoutHits = mainSubResponse.timeoutHits;
+
   /**
    * disjunctive facets results
    * @member {SearchResults.Facet[]}
