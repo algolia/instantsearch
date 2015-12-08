@@ -25,7 +25,7 @@ describe('PoweredBy', () => {
     });
     expect(out).toEqualJSX(
     <div className="pb-root">
-      Powered by
+      Search by
       <a className="pb-link" href="https://www.algolia.com/" target="_blank">Algolia</a>
     </div>);
   });
