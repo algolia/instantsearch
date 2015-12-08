@@ -74,6 +74,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
   );
 }
 
+/*eslint-disable */
 /**
  * Constructor for SearchResults
  * @class
@@ -81,7 +82,8 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
  * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
  * @param {object} algoliaResponse the response from algolia client
- * @example <caption>SearchResults of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ * @example <caption>SearchResults of the first query in
+ * <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
    "hitsPerPage": 10,
    "processingTimeMS": 2,
@@ -203,6 +205,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
    "index": "bestbuy"
 }
  **/
+/*eslint-enable */
 function SearchResults(state, algoliaResponse) {
   var mainSubResponse = algoliaResponse.results[0];
 
@@ -308,7 +311,10 @@ function SearchResults(state, algoliaResponse) {
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
-    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey);
+    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(
+      state.hierarchicalFacets,
+      facetKey
+    );
 
     if (hierarchicalFacet) {
       this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
@@ -360,7 +366,11 @@ function SearchResults(state, algoliaResponse) {
           return;
         }
 
-        this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+        this.hierarchicalFacets[position][attributeIndex].data = merge(
+          {},
+          this.hierarchicalFacets[position][attributeIndex].data,
+          facetResults
+        );
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
@@ -390,11 +400,12 @@ function SearchResults(state, algoliaResponse) {
   // if we have some root level values for hierarchical facets, merge them
   forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
     var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
+    var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
 
     var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
     // if we are already at a root refinement (or no refinement at all), there is no
     // root level values request
-    if (currentRefinement.length === 0 || currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length < 2) {
+    if (currentRefinement.length === 0 || currentRefinement[0].split(separator).length < 2) {
       return;
     }
 
@@ -420,11 +431,15 @@ function SearchResults(state, algoliaResponse) {
       var defaultData = {};
 
       if (currentRefinement.length > 0) {
-        var root = currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet))[0];
+        var root = currentRefinement[0].split(separator)[0];
         defaultData[root] = this.hierarchicalFacets[position][attributeIndex].data[root];
       }
 
-      this.hierarchicalFacets[position][attributeIndex].data = defaults(defaultData, facetResults, this.hierarchicalFacets[position][attributeIndex].data);
+      this.hierarchicalFacets[position][attributeIndex].data = defaults(
+        defaultData,
+        facetResults,
+        this.hierarchicalFacets[position][attributeIndex].data
+      );
     }, this);
 
     nextDisjunctiveResult++;
