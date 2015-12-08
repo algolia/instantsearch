@@ -1,8 +1,8 @@
 // Issue with eslint + high-order components like decorators
 /* eslint react/prop-types: 0 */
 
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 function autoHideContainer(ComposedComponent) {
   class AutoHide extends React.Component {
@@ -38,4 +38,4 @@ function autoHideContainer(ComposedComponent) {
   return AutoHide;
 }
 
-module.exports = autoHideContainer;
+export default autoHideContainer;

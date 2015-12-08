@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   header: ``,
   item: `
     {{#from}}

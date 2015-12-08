@@ -75,4 +75,4 @@ function generateRanges(stats) {
   return facetValues;
 }
 
-module.exports = generateRanges;
+export default generateRanges;

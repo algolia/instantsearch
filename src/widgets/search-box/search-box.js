@@ -1,9 +1,9 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-let utils = require('../../lib/utils');
-let forEach = require('lodash/collection/forEach');
-let bem = require('../../lib/utils').bemHelper('ais-search-box');
-let cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import utils from '../../lib/utils.js';
+import forEach from 'lodash/collection/forEach';
+let bem = require('../../lib/utils.js').bemHelper('ais-search-box');
+import cx from 'classnames';
 
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
@@ -94,7 +94,7 @@ function searchBox({
       input.classList.add(cx(bem('input'), cssClasses.input));
     },
     addPoweredBy: function(input) {
-      let PoweredBy = require('../../components/PoweredBy/PoweredBy');
+      let PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
       let poweredByContainer = document.createElement('div');
       input.parentNode.insertBefore(poweredByContainer, input.nextSibling);
       let poweredByCssClasses = {
@@ -173,4 +173,4 @@ function searchBox({
   };
 }
 
-module.exports = searchBox;
+export default searchBox;

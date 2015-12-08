@@ -1,14 +1,14 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-refinement-list');
-let cx = require('classnames');
+import cx from 'classnames';
 
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -60,7 +60,7 @@ function refinementList({
     transformData,
     autoHideContainer = true
   }) {
-  let RefinementList = require('../../components/RefinementList/RefinementList');
+  let RefinementList = require('../../components/RefinementList/RefinementList.js');
 
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -138,4 +138,4 @@ function refinementList({
   };
 }
 
-module.exports = refinementList;
+export default refinementList;

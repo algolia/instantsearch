@@ -1,7 +1,7 @@
-let React = require('react');
-let map = require('lodash/collection/map');
+import React from 'react';
+import map from 'lodash/collection/map';
 
-let Template = require('./Template');
+import Template from './Template.js';
 
 class Hits extends React.Component {
   renderWithResults() {
@@ -54,4 +54,4 @@ Hits.defaultProps = {
   results: {hits: []}
 };
 
-module.exports = Hits;
+export default Hits;

@@ -1,14 +1,14 @@
-let algoliasearch = require('algoliasearch');
-let algoliasearchHelper = require('algoliasearch-helper');
+import algoliasearch from 'algoliasearch';
+import algoliasearchHelper from 'algoliasearch-helper';
 
-let forEach = require('lodash/collection/forEach');
-let merge = require('lodash/object/merge');
-let union = require('lodash/array/union');
+import forEach from 'lodash/collection/forEach';
+import merge from 'lodash/object/merge';
+import union from 'lodash/array/union';
 
 let EventEmitter = require('events').EventEmitter;
 
-let urlSyncWidget = require('./url-sync');
-let version = require('./version');
+import urlSyncWidget from './url-sync.js';
+import version from './version.js';
 
 function defaultCreateURL() { return '#'; }
 
@@ -59,7 +59,7 @@ Usage: instantsearch({
     this.searchParameters = searchParameters || {};
     this.widgets = [];
     this.templatesConfig = {
-      helpers: require('./helpers')({numberLocale}),
+      helpers: require('./helpers.js')({numberLocale}),
       compileOptions: {}
     };
     this.urlSync = urlSync;
@@ -158,4 +158,4 @@ function enhanceConfiguration(configuration, widgetDefinition) {
   );
 }
 
-module.exports = InstantSearch;
+export default InstantSearch;

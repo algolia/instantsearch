@@ -1,12 +1,12 @@
-let React = require('react');
-let forEach = require('lodash/collection/forEach');
-let defaultsDeep = require('lodash/object/defaultsDeep');
-let {isSpecialClick} = require('../../lib/utils');
+import React from 'react';
+import forEach from 'lodash/collection/forEach';
+import defaultsDeep from 'lodash/object/defaultsDeep';
+import {isSpecialClick} from '../../lib/utils.js';
 
-let Paginator = require('./Paginator');
-let PaginationLink = require('./PaginationLink');
+import Paginator from './Paginator.js';
+import PaginationLink from './PaginationLink.js';
 
-let cx = require('classnames');
+import cx from 'classnames';
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -168,4 +168,4 @@ Pagination.defaultProps = {
   nbPages: 0
 };
 
-module.exports = Pagination;
+export default Pagination;

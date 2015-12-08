@@ -8,8 +8,8 @@ import jsdom from 'mocha-jsdom';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-let defaultTemplates = require('../defaultTemplates');
-let defaultLabels = require('../defaultLabels');
+import defaultTemplates from '../defaultTemplates.js';
+import defaultLabels from '../defaultLabels.js';
 
 describe('starRating()', () => {
   jsdom({useEach: true});
@@ -26,8 +26,8 @@ describe('starRating()', () => {
   let results;
 
   beforeEach(() => {
-    starRating = require('../star-rating');
-    RefinementList = require('../../../components/RefinementList/RefinementList');
+    starRating = require('../star-rating.js');
+    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     starRating.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);

@@ -1,21 +1,22 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let {
+import {
   bemHelper,
   getContainerNode,
   prepareTemplateProps,
   getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch
-} = require('../../lib/utils');
+} from '../../lib/utils.js';
+import cx from 'classnames';
+
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+import defaultTemplates from './defaultTemplates.js';
+
 let bem = bemHelper('ais-clear-all');
-let cx = require('classnames');
-
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
-
-let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Allows to clear all refinements at once
@@ -52,7 +53,7 @@ function clearAll({
   }
 
   let containerNode = getContainerNode(container);
-  let ClearAll = headerFooterHOC(require('../../components/ClearAll/ClearAll'));
+  let ClearAll = headerFooterHOC(require('../../components/ClearAll/ClearAll.js'));
   if (autoHideContainer === true) {
     ClearAll = autoHideContainerHOC(ClearAll);
   }
@@ -94,4 +95,4 @@ function clearAll({
   };
 }
 
-module.exports = clearAll;
+export default clearAll;

@@ -1,6 +1,6 @@
-let React = require('react');
+import React from 'react';
 
-let Nouislider = require('react-nouislider');
+import Nouislider from 'react-nouislider';
 
 let cssPrefix = 'ais-range-slider--';
 
@@ -58,4 +58,4 @@ Slider.propTypes = {
   ])
 };
 
-module.exports = Slider;
+export default Slider;

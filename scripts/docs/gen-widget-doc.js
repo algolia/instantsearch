@@ -1,10 +1,10 @@
-let jsdoc2md = require('jsdoc-to-markdown');
-let dmd = require('dmd');
-let fs = require('fs');
-let util = require('util');
-let path = require('path');
-let rimraf = require('rimraf');
-let mkdirp = require('mkdirp');
+import jsdoc2md from 'jsdoc-to-markdown';
+import dmd from 'dmd';
+import fs from 'fs';
+import util from 'util';
+import path from 'path';
+import rimraf from 'rimraf';
+import mkdirp from 'mkdirp';
 
 /* paths used by this script */
 let p = {

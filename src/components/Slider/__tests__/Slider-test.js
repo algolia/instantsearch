@@ -20,7 +20,7 @@ describe('Slider', () => {
     renderer = createRenderer();
 
     // need to be required AFTER jsdom has initialized global.window/navigator
-    Slider = require('../Slider');
+    Slider = require('../Slider.js');
     Nouislider = require('react-nouislider');
   });
 

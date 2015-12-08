@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   header: '',
   body: `{{#hasNoResults}}No results{{/hasNoResults}}
   {{#hasOneResult}}1 result{{/hasOneResult}}

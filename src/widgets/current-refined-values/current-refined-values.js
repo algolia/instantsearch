@@ -1,7 +1,7 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let {
+import {
   bemHelper,
   isDomElement,
   getContainerNode,
@@ -9,27 +9,28 @@ let {
   getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch
-} = require('../../lib/utils.js');
+} from '../../lib/utils.js';
+
+import cx from 'classnames';
+
+import isUndefined from 'lodash/lang/isUndefined';
+import isBoolean from 'lodash/lang/isBoolean';
+import isString from 'lodash/lang/isString';
+import isArray from 'lodash/lang/isArray';
+import isPlainObject from 'lodash/lang/isPlainObject';
+import isFunction from 'lodash/lang/isFunction';
+import isEmpty from 'lodash/lang/isEmpty';
+
+import map from 'lodash/collection/map';
+import reduce from 'lodash/collection/reduce';
+import filter from 'lodash/collection/filter';
+
+import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+
+import defaultTemplates from './defaultTemplates';
 
 let bem = bemHelper('ais-current-refined-values');
-let cx = require('classnames');
-
-let isUndefined = require('lodash/lang/isUndefined');
-let isBoolean = require('lodash/lang/isBoolean');
-let isString = require('lodash/lang/isString');
-let isArray = require('lodash/lang/isArray');
-let isPlainObject = require('lodash/lang/isPlainObject');
-let isFunction = require('lodash/lang/isFunction');
-let isEmpty = require('lodash/lang/isEmpty');
-
-let map = require('lodash/collection/map');
-let reduce = require('lodash/collection/reduce');
-let filter = require('lodash/collection/filter');
-
-let headerFooterHOC = require('../../decorators/headerFooter.js');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-
-let defaultTemplates = require('./defaultTemplates');
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them
@@ -243,4 +244,4 @@ function clearRefinement(helper, refinement) {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
 }
 
-module.exports = currentRefinedValues;
+export default currentRefinedValues;

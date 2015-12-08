@@ -1,9 +1,9 @@
-let algoliasearchHelper = require('algoliasearch-helper');
+import algoliasearchHelper from 'algoliasearch-helper';
 let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
-let majorVersionNumber = require('../lib/version').split('.')[0];
+let majorVersionNumber = require('../lib/version.js').split('.')[0];
 
-let isEqual = require('lodash/lang/isEqual');
-let merge = require('lodash/object/merge');
+import isEqual from 'lodash/lang/isEqual';
+import merge from 'lodash/object/merge';
 
 function timerMaker(t0) {
   let t = t0;
@@ -177,4 +177,4 @@ function urlSync(options = {}) {
 }
 
 
-module.exports = urlSync;
+export default urlSync;

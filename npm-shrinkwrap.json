@@ -3747,8 +3747,12 @@
       "resolved": "https://registry.npmjs.org/eslint-config-airbnb/-/eslint-config-airbnb-0.1.0.tgz"
     },
     "eslint-config-algolia": {
-      "version": "4.2.0",
-      "resolved": "https://registry.npmjs.org/eslint-config-algolia/-/eslint-config-algolia-4.2.0.tgz"
+      "version": "4.5.0",
+      "resolved": "https://registry.npmjs.org/eslint-config-algolia/-/eslint-config-algolia-4.5.0.tgz"
+    },
+    "eslint-plugin-algolia": {
+      "version": "1.5.0",
+      "resolved": "https://registry.npmjs.org/eslint-plugin-algolia/-/eslint-plugin-algolia-1.5.0.tgz"
     },
     "eslint-plugin-react": {
       "version": "3.6.3",

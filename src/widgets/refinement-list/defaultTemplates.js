@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   header: '',
   item: `<label class="{{cssClasses.label}}">
   <input type="checkbox" class="{{cssClasses.checkbox}}" value="{{name}}" {{#isRefined}}checked{{/isRefined}} />{{name}}

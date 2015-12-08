@@ -1,15 +1,15 @@
-let find = require('lodash/collection/find');
-let React = require('react');
-let ReactDOM = require('react-dom');
+import find from 'lodash/collection/find';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-toggle');
-let cx = require('classnames');
+import cx from 'classnames';
 
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -67,7 +67,7 @@ function toggle({
   } = {}) {
   let containerNode = utils.getContainerNode(container);
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList'));
+  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -161,4 +161,4 @@ function toggle({
 }
 
 
-module.exports = toggle;
+export default toggle;

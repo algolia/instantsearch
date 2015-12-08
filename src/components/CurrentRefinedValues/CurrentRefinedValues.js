@@ -1,10 +1,10 @@
-let React = require('react');
+import React from 'react';
 
-let Template = require('../Template.js');
+import Template from '../Template.js';
 
-let {isSpecialClick} = require('../../lib/utils.js');
-let map = require('lodash/collection/map');
-let cloneDeep = require('lodash/lang/cloneDeep');
+import {isSpecialClick} from '../../lib/utils.js';
+import map from 'lodash/collection/map';
+import cloneDeep from 'lodash/lang/cloneDeep';
 
 class CurrentRefinedValues extends React.Component {
   _clearAllElement(position, requestedPosition) {
@@ -129,4 +129,4 @@ CurrentRefinedValues.propTypes = {
   templateProps: React.PropTypes.object.isRequired
 };
 
-module.exports = CurrentRefinedValues;
+export default CurrentRefinedValues;

@@ -1,6 +1,6 @@
-let React = require('react');
+import React from 'react';
 
-let Template = require('../Template');
+import Template from '../Template.js';
 
 class Stats extends React.Component {
   render() {
@@ -36,4 +36,4 @@ Stats.propTypes = {
   templateProps: React.PropTypes.object.isRequired
 };
 
-module.exports = Stats;
+export default Stats;

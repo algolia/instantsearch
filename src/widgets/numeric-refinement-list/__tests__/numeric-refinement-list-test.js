@@ -10,7 +10,7 @@ expect.extend(expectJSX);
 
 describe('numericRefinementList call', () => {
   jsdom({useEach: true});
-  const numericRefinementList = require('../numeric-refinement-list');
+  const numericRefinementList = require('../numeric-refinement-list.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -47,8 +47,8 @@ describe('numericRefinementList()', () => {
   let results;
 
   beforeEach(() => {
-    numericRefinementList = require('../numeric-refinement-list');
-    RefinementList = require('../../../components/RefinementList/RefinementList');
+    numericRefinementList = require('../numeric-refinement-list.js');
+    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);
