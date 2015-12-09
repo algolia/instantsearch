@@ -60,7 +60,7 @@ Usage: instantsearch({
     this.client = client;
     this.helper = null;
     this.indexName = indexName;
-    this.searchParameters = searchParameters || {};
+    this.searchParameters = {...searchParameters, index: indexName};
     this.widgets = [];
     this.templatesConfig = {
       helpers: require('./helpers.js')({numberLocale}),
