@@ -17,19 +17,20 @@ function defaultCreateURL() { return '#'; }
  * @param  {string} options.appId The Algolia application ID
  * @param  {string} options.apiKey The Algolia search-only API key
  * @param  {string} options.indexName The name of the main index
- * @param  {string} [options.numberLocale] The locale used to display numbers.
- * @param  {string} [options.searchParameters] Initial search configuration.
+ * @param  {string} [options.numberLocale] The locale used to display numbers. This will be passed
+ * to Number.prototype.toLocaleString()
+ * @param  {Object} [options.searchParameters] Initial search configuration.
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
- * @param  {string} [options.urlSync.trackedParameters] Parameters that will
+ * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
  * be synchronized in the URL. By default, it will track the query, all the
  * refinable attribute (facets and numeric filters), the index and the page.
  * All the algoliasearch helper parameters can be filtered:
  * https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html
- * @param  {string} [options.urlSync.useHash] If set to true, the url will be
+ * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
- * @param  {string} [options.urlSync.threshold] Time in ms after which a new
+ * @param  {number} [options.urlSync.threshold] Time in ms after which a new
  * state is created in the browser history. The default value is 700.
  * @return {Object} the instantsearch instance
  */
