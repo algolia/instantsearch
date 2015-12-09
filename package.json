@@ -73,7 +73,7 @@
     "sass-lint": "^1.3.2",
     "semver": "^5.0.3",
     "sinon": "sinonjs/sinon#a97374641599ed2f451e9a22f784060cf7a38b3e",
-    "uglifyjs": "^2.4.10",
+    "uglify-js": "^2.6.1",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.12.1"
   },
