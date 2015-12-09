@@ -227,10 +227,10 @@
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.numberLocale</code></span><span class="attr-infos">Type: <code>string</code></span></td>
-            <td>The locale used to display numbers.</td>
+            <td>The locale used to display numbers. This will be passed to Number.prototype.toLocaleString()</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.searchParameters</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td><span class="attr-optional"><code>options.searchParameters</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Initial search configuration.</td>
           </tr>
           <tr>
@@ -238,15 +238,15 @@
             <td>Url synchronization configuration. Setting to <code>true</code> will synchronize the needed search parameters with the browser url.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span></td>
             <td>Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. All the algoliasearch helper parameters can be filtered: https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>boolean</code></span></td>
             <td>If set to true, the url will be hash based. Otherwise, it’ll use the query parameters using the modern history API.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.urlSync.threshold</code></span><span class="attr-infos">Type: <code>string</code></span></td>
+            <td><span class="attr-optional"><code>options.urlSync.threshold</code></span><span class="attr-infos">Type: <code>number</code></span></td>
             <td>Time in ms after which a new state is created in the browser history. The default value is 700.</td>
           </tr>
         </tbody>
