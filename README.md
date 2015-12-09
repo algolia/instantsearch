@@ -2,7 +2,7 @@
 
 **instantsearch.js** is a library of UI widgets to help you build the best instant-search experience with [Algolia's Hosted Search API](https://www.algolia.com/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=InstantSearch%20repository).
 
-Have a look at the website: [https://community.algolia.com/instantsearch.js/](https://community.algolia.com/instantsearch.js/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=InstantSearch%20repository).
+Have a look at the website: [https://community.algolia.com/instantsearch.js/][instantsearch-website].
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
@@ -16,6 +16,8 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/](ht
 [package-url]: https://npmjs.org/package/instantsearch.js
 [readme-logo]: ./docs/readme-logo.png
 [logo-url]: https://community.algolia.com/instantsearch.js/
+[instantsearch-website]: https://community.algolia.com/instantsearch.js/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=InstantSearch%20repository
+[instantsearch-website-docs]: https://community.algolia.com/instantsearch.js/documentation/?utm_medium=social-owned&utm_source=GitHub&utm_campaign=InstantSearch%20repository
 
 ## Table of contents
 
@@ -119,6 +121,8 @@ To get < IE10 support, please insert this code in the `<head>`:
 We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
 
 ## Instant search configuration
+
+Also see our [documentation website][instantsearch-website-docs].
 
 The main configuration of instantsearch.js is done through a configuration object.
 The minimal configuration is made a of three attributes :
