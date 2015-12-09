@@ -162,7 +162,7 @@ function searchBox({
       // Update value when query change outside of the input
       helper.on('change', function(newState) {
         if (input !== document.activeElement && input.value !== newState.query) {
-          input.value = state.query;
+          input.value = newState.query;
         }
       });
 
