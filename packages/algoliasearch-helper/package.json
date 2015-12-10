@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "algoliasearch": "latest",
-    "browserify": "^11.2.0",
+    "browserify": "^12.0.1",
     "browzers": "^1.0.0",
     "bulk-require": "^0.2.1",
     "bulkify": "^1.1.1",
@@ -72,8 +72,8 @@
     "sinon": "^1.17.2",
     "tape": "^4.2.2",
     "uglify-js": "^2.5.0",
-    "watchify": "^3.5.0",
-    "zuul": "^3.7.1",
+    "watchify": "^3.6.1",
+    "zuul": "^3.8.0",
     "zuul-ngrok": "3.0.0"
   },
   "dependencies": {
