@@ -50,7 +50,7 @@
   "devDependencies": {
     "algoliasearch": "latest",
     "browserify": "^12.0.1",
-    "browzers": "^1.0.0",
+    "browzers": "^1.3.0",
     "bulk-require": "^0.2.1",
     "bulkify": "^1.1.1",
     "doctoc": "^0.15.0",
