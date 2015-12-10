@@ -63,7 +63,7 @@
     "jsdoc": "bobylito/jsdoc#aecd558f1cd2640bea5348322839b7730165f530",
     "minami": "algolia/minami#81c8243b73ed5224dc3ce9fd79aab8bbf8da0488",
     "mversion": "^1.10.1",
-    "npm-shrinkwrap": "^5.4.1",
+    "npm-shrinkwrap": "^200.4.0",
     "onchange": "^2.0.0",
     "opn-cli": "^1.0.0",
     "phantomjs": "^1.9.18",
