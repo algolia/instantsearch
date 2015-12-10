@@ -277,11 +277,14 @@ function SearchResults(state, algoliaResponse) {
     var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey);
 
     if (hierarchicalFacet) {
-      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
+      // Place the hierarchicalFacet data at the correct index depending on the attributes order that was defined at the
+      // helper initialization
+      var facetIndex = hierarchicalFacet.attributes.indexOf(facetKey);
+      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})][facetIndex] = {
         attribute: facetKey,
         data: facetValueObject,
         exhaustive: mainSubResponse.exhaustiveFacetsCount
-      });
+      };
     } else {
       var isFacetDisjunctive = indexOf(state.disjunctiveFacets, facetKey) !== -1;
       var isFacetConjunctive = indexOf(state.facets, facetKey) !== -1;
@@ -307,6 +310,9 @@ function SearchResults(state, algoliaResponse) {
       }
     }
   }, this);
+
+  // Make sure we do not keep wholes within the hierarchical facets
+  this.hierarchicalFacets = compact(this.hierarchicalFacets);
 
   // aggregate the refined disjunctive facets
   forEach(disjunctiveFacets, function(disjunctiveFacet) {
