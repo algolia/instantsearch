@@ -7,8 +7,8 @@ var zuulConfig = module.exports = {
   }, {
     transform: 'envify'
   }],
+  html: './test/ie8-polyfill.html',
   scripts: [
-
     // browser integration tests will use the dist file, so that we test the
     // build process also
     '/dist/algoliasearch.helper.min.js'
