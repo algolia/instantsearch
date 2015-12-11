@@ -73,6 +73,99 @@ algoliasearchHelper.url = require('./src/url');
 module.exports = algoliasearchHelper;
 
 },{"./src/SearchParameters":171,"./src/SearchResults":174,"./src/algoliasearch.helper":175,"./src/url":179,"./src/version.js":180}],2:[function(require,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+    draining = false;
+    if (currentQueue.length) {
+        queue = currentQueue.concat(queue);
+    } else {
+        queueIndex = -1;
+    }
+    if (queue.length) {
+        drainQueue();
+    }
+}
+
+function drainQueue() {
+    if (draining) {
+        return;
+    }
+    var timeout = setTimeout(cleanUpNextTick);
+    draining = true;
+
+    var len = queue.length;
+    while(len) {
+        currentQueue = queue;
+        queue = [];
+        while (++queueIndex < len) {
+            if (currentQueue) {
+                currentQueue[queueIndex].run();
+            }
+        }
+        queueIndex = -1;
+        len = queue.length;
+    }
+    currentQueue = null;
+    draining = false;
+    clearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+    var args = new Array(arguments.length - 1);
+    if (arguments.length > 1) {
+        for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+        }
+    }
+    queue.push(new Item(fun, args));
+    if (queue.length === 1 && !draining) {
+        setTimeout(drainQueue, 0);
+    }
+};
+
+// v8 likes predictible objects
+function Item(fun, array) {
+    this.fun = fun;
+    this.array = array;
+}
+Item.prototype.run = function () {
+    this.fun.apply(null, this.array);
+};
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+process.umask = function() { return 0; };
+
+},{}],3:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -156,18 +249,11 @@ EventEmitter.prototype.emit = function(type) {
         break;
       // slower
       default:
-        len = arguments.length;
-        args = new Array(len - 1);
-        for (i = 1; i < len; i++)
-          args[i - 1] = arguments[i];
+        args = Array.prototype.slice.call(arguments, 1);
         handler.apply(this, args);
     }
   } else if (isObject(handler)) {
-    len = arguments.length;
-    args = new Array(len - 1);
-    for (i = 1; i < len; i++)
-      args[i - 1] = arguments[i];
-
+    args = Array.prototype.slice.call(arguments, 1);
     listeners = handler.slice();
     len = listeners.length;
     for (i = 0; i < len; i++)
@@ -205,7 +291,6 @@ EventEmitter.prototype.addListener = function(type, listener) {
 
   // Check for listener leak
   if (isObject(this._events[type]) && !this._events[type].warned) {
-    var m;
     if (!isUndefined(this._maxListeners)) {
       m = this._maxListeners;
     } else {
@@ -327,7 +412,7 @@ EventEmitter.prototype.removeAllListeners = function(type) {
 
   if (isFunction(listeners)) {
     this.removeListener(type, listeners);
-  } else {
+  } else if (listeners) {
     // LIFO order
     while (listeners.length)
       this.removeListener(type, listeners[listeners.length - 1]);
@@ -348,15 +433,20 @@ EventEmitter.prototype.listeners = function(type) {
   return ret;
 };
 
+EventEmitter.prototype.listenerCount = function(type) {
+  if (this._events) {
+    var evlistener = this._events[type];
+
+    if (isFunction(evlistener))
+      return 1;
+    else if (evlistener)
+      return evlistener.length;
+  }
+  return 0;
+};
+
 EventEmitter.listenerCount = function(emitter, type) {
-  var ret;
-  if (!emitter._events || !emitter._events[type])
-    ret = 0;
-  else if (isFunction(emitter._events[type]))
-    ret = 1;
-  else
-    ret = emitter._events[type].length;
-  return ret;
+  return emitter.listenerCount(type);
 };
 
 function isFunction(arg) {
@@ -374,99 +464,6 @@ function isObject(arg) {
 function isUndefined(arg) {
   return arg === void 0;
 }
-
-},{}],3:[function(require,module,exports){
-// shim for using process in browser
-
-var process = module.exports = {};
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = setTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    clearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        setTimeout(drainQueue, 0);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
 
 },{}],4:[function(require,module,exports){
 /**
@@ -7300,7 +7297,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":167,"_process":3,"inherits":166}],169:[function(require,module,exports){
+},{"./support/isBuffer":167,"_process":2,"inherits":166}],169:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7560,7 +7557,7 @@ var RefinementList = require('./RefinementList');
  * for the properties of a new SearchParameters
  * @see SearchParameters.make
  * @example <caption>SearchParameters of the first query in
- *   <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ *   <a href="http://demos.algolia.com/instant-search-demo/">the instant search demo</a></caption>
 {
    "query": "",
    "disjunctiveFacets": [
@@ -7665,6 +7662,22 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
+
+  /**
+   * Contains the  optional tag filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalTagFilters = params.optionalTagFilters;
+
+  /**
+   * Contains the optional facet filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalFacetFilters = params.optionalFacetFilters;
 
 
   // Misc. parameters
@@ -9001,7 +9014,9 @@ var keys2Short = {
   synonyms: 's',
   tagFilters: 'tF',
   tagRefinements: 'tR',
-  typoTolerance: 'tT'
+  typoTolerance: 'tT',
+  optionalTagFilters: 'oTF',
+  optionalFacetFilters: 'oFF'
 };
 
 var short2Keys = invert(keys2Short);
@@ -9234,6 +9249,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
   );
 }
 
+/*eslint-disable */
 /**
  * Constructor for SearchResults
  * @class
@@ -9241,7 +9257,8 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
  * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
  * @param {object} algoliaResponse the response from algolia client
- * @example <caption>SearchResults of the first query in <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ * @example <caption>SearchResults of the first query in
+ * <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
    "hitsPerPage": 10,
    "processingTimeMS": 2,
@@ -9363,6 +9380,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
    "index": "bestbuy"
 }
  **/
+/*eslint-enable */
 function SearchResults(state, algoliaResponse) {
   var mainSubResponse = algoliaResponse.results[0];
 
@@ -9371,6 +9389,11 @@ function SearchResults(state, algoliaResponse) {
    * @member {string}
    */
   this.query = mainSubResponse.query;
+  /**
+   * The query as parsed by the engine given all the rules.
+   * @member {string}
+   */
+  this.parsedQuery = mainSubResponse.parsedQuery;
   /**
    * all the records that match the search parameters. It also contains _highlightResult,
    * which describe which and how the attributes are matched.
@@ -9408,6 +9431,35 @@ function SearchResults(state, algoliaResponse) {
    */
   this.processingTimeMS = sum(algoliaResponse.results, 'processingTimeMS');
   /**
+   * The position if the position was guessed by IP.
+   * @member {string}
+   * @example "48.8637,2.3615",
+   */
+  this.aroundLatLng = mainSubResponse.aroundLatLng;
+  /**
+   * The radius computed by Algolia.
+   * @member {string}
+   * @example "126792922",
+   */
+  this.automaticRadius = mainSubResponse.automaticRadius;
+  /**
+   * String identifying the server used to serve this request.
+   * @member {string}
+   * @example "c7-use-2.algolia.net",
+   */
+  this.serverUsed = mainSubResponse.serverUsed;
+  /**
+   * Boolean that indicates if the computation of the counts did time out.
+   * @member {boolean}
+   */
+  this.timeoutCounts = mainSubResponse.timeoutCounts;
+  /**
+   * Boolean that indicates if the computation of the hits did time out.
+   * @member {boolean}
+   */
+  this.timeoutHits = mainSubResponse.timeoutHits;
+
+  /**
    * disjunctive facets results
    * @member {SearchResults.Facet[]}
    */
@@ -9434,14 +9486,20 @@ function SearchResults(state, algoliaResponse) {
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
-    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(state.hierarchicalFacets, facetKey);
+    var hierarchicalFacet = findMatchingHierarchicalFacetFromAttributeName(
+      state.hierarchicalFacets,
+      facetKey
+    );
 
     if (hierarchicalFacet) {
-      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})].push({
+      // Place the hierarchicalFacet data at the correct index depending on the attributes order that was defined at the
+      // helper initialization
+      var facetIndex = hierarchicalFacet.attributes.indexOf(facetKey);
+      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})][facetIndex] = {
         attribute: facetKey,
         data: facetValueObject,
         exhaustive: mainSubResponse.exhaustiveFacetsCount
-      });
+      };
     } else {
       var isFacetDisjunctive = indexOf(state.disjunctiveFacets, facetKey) !== -1;
       var isFacetConjunctive = indexOf(state.facets, facetKey) !== -1;
@@ -9468,6 +9526,9 @@ function SearchResults(state, algoliaResponse) {
     }
   }, this);
 
+  // Make sure we do not keep wholes within the hierarchical facets
+  this.hierarchicalFacets = compact(this.hierarchicalFacets);
+
   // aggregate the refined disjunctive facets
   forEach(disjunctiveFacets, function(disjunctiveFacet) {
     var result = algoliaResponse.results[nextDisjunctiveResult];
@@ -9486,7 +9547,11 @@ function SearchResults(state, algoliaResponse) {
           return;
         }
 
-        this.hierarchicalFacets[position][attributeIndex].data = merge({}, this.hierarchicalFacets[position][attributeIndex].data, facetResults);
+        this.hierarchicalFacets[position][attributeIndex].data = merge(
+          {},
+          this.hierarchicalFacets[position][attributeIndex].data,
+          facetResults
+        );
       } else {
         position = disjunctiveFacetsIndices[dfacet];
 
@@ -9516,11 +9581,12 @@ function SearchResults(state, algoliaResponse) {
   // if we have some root level values for hierarchical facets, merge them
   forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
     var hierarchicalFacet = state.getHierarchicalFacetByName(refinedFacet);
+    var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
 
     var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
     // if we are already at a root refinement (or no refinement at all), there is no
     // root level values request
-    if (currentRefinement.length === 0 || currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length < 2) {
+    if (currentRefinement.length === 0 || currentRefinement[0].split(separator).length < 2) {
       return;
     }
 
@@ -9546,11 +9612,15 @@ function SearchResults(state, algoliaResponse) {
       var defaultData = {};
 
       if (currentRefinement.length > 0) {
-        var root = currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet))[0];
+        var root = currentRefinement[0].split(separator)[0];
         defaultData[root] = this.hierarchicalFacets[position][attributeIndex].data[root];
       }
 
-      this.hierarchicalFacets[position][attributeIndex].data = defaults(defaultData, facetResults, this.hierarchicalFacets[position][attributeIndex].data);
+      this.hierarchicalFacets[position][attributeIndex].data = defaults(
+        defaultData,
+        facetResults,
+        this.hierarchicalFacets[position][attributeIndex].data
+      );
     }, this);
 
     nextDisjunctiveResult++;
@@ -10505,7 +10575,7 @@ AlgoliaSearchHelper.prototype._change = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":171,"./SearchResults":174,"./requestBuilder":178,"./url":179,"events":2,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isEmpty":134,"lodash/string/trim":158,"util":168}],176:[function(require,module,exports){
+},{"./SearchParameters":171,"./SearchResults":174,"./requestBuilder":178,"./url":179,"events":3,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isEmpty":134,"lodash/string/trim":158,"util":168}],176:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/collection/forEach');
@@ -11006,7 +11076,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isArray":133,"lodash/lang/isPlainObject":139,"lodash/lang/isString":140,"lodash/object/mapKeys":151,"lodash/object/mapValues":152,"lodash/object/pick":156,"qs":162,"qs/lib/utils":165}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.7.0';
+module.exports = '2.8.0';
 
 },{}]},{},[1])(1)
 });

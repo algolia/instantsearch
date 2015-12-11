@@ -1,5 +1,11 @@
 CHANGELOG
 
+2.8.0 - 2015-12-11
+  * feat(search-parameters): adds support for optionnal tag and facet filters
+  * fix(search-results): adds missing results parameters (fix #261)
+  * fix(hierarchicalFacets): ensures the order of the hierarchical facets matches the order of the declared hierarchical attributes
+  * test(CI): IE8 now requires a polyfill
+
 2.7.0 - 2015-12-02
   * feature(algoliasearch.helper): adds getNumericRefinement (fix #214)
   * fix(request-builder): makes queries less ambiguous for client (fix #205)
