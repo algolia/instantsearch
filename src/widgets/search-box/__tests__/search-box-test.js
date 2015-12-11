@@ -168,7 +168,7 @@ describe('search-box()', () => {
     });
   });
 
-  context('input event listenner', () => {
+  context('input event listener', () => {
     let input;
     beforeEach(() => {
       container = document.createElement('div');
