@@ -681,6 +681,16 @@ AlgoliaSearchHelper.prototype.getRefinements = function(facetName) {
 };
 
 /**
+ * Return the current refinement for the (attribute, operator)
+ * @param {string} attribute of the record
+ * @param {string} operator applied
+ * @return {number} value of the refinement
+ */
+AlgoliaSearchHelper.prototype.getNumericRefinement = function(attribute, operator) {
+  return this.state.getNumericRefinement(attribute, operator);
+};
+
+/**
  * Get the current breadcrumb for a hierarchical facet, as an array
  * @param  {string} facetName Hierarchical facet name
  * @return {array}

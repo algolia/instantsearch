@@ -52,7 +52,7 @@ var RefinementList = require('./RefinementList');
  * for the properties of a new SearchParameters
  * @see SearchParameters.make
  * @example <caption>SearchParameters of the first query in
- *   <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
+ *   <a href="http://demos.algolia.com/instant-search-demo/">the instant search demo</a></caption>
 {
    "query": "",
    "disjunctiveFacets": [
@@ -157,6 +157,22 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
+
+  /**
+   * Contains the  optional tag filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalTagFilters = params.optionalTagFilters;
+
+  /**
+   * Contains the optional facet filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalFacetFilters = params.optionalFacetFilters;
 
 
   // Misc. parameters

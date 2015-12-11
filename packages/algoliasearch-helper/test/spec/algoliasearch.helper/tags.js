@@ -1,8 +1,8 @@
 'use strict';
 
 var test = require('tape');
-var algoliasearchHelper = require('../../index');
-var requestBuilder = require('../../src/requestBuilder');
+var algoliasearchHelper = require('../../../index');
+var requestBuilder = require('../../../src/requestBuilder');
 
 test('Tag filters: operations on tags list', function(t) {
   var helper = algoliasearchHelper(null, null, null);

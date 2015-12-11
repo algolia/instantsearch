@@ -2,7 +2,7 @@
 
 var test = require('tape');
 var algoliaSearch = require('algoliasearch');
-var algoliasearchHelper = require('../../index');
+var algoliasearchHelper = require('../../../index');
 
 test('Numeric filters: numeric filters from constructor', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');

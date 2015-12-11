@@ -50,7 +50,9 @@ var keys2Short = {
   synonyms: 's',
   tagFilters: 'tF',
   tagRefinements: 'tR',
-  typoTolerance: 'tT'
+  typoTolerance: 'tT',
+  optionalTagFilters: 'oTF',
+  optionalFacetFilters: 'oFF'
 };
 
 var short2Keys = invert(keys2Short);

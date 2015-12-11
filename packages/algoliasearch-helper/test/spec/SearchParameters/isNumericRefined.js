@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var SearchParameters = require('../../src/SearchParameters');
+var SearchParameters = require('../../../src/SearchParameters');
 
 test('isNumericRefined with 3 parameters', function(t) {
   var params = new SearchParameters();

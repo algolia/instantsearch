@@ -29,20 +29,29 @@ This is the library you will need to easily build a good search UX like our [ins
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [Features](#features)
-- [Example](#example)
-- [Helper cheatsheet](#helper-cheatsheet)
-  - [Add the helper in your project](#add-the-helper-in-your-project)
-  - [Regular `<script>` tag](#regular-script-tag)
-  - [With NPM](#with-npm)
-  - [With bower](#with-bower)
-  - [Init the helper](#init-the-helper)
-  - [Helper lifecycle](#helper-lifecycle)
-  - [Objects](#objects)
-  - [Search](#search)
-  - [Events](#events)
-  - [Query](#query)
-  - [Filtering results](#filtering-results)
+  - [Features](#features)
+  - [Example](#example)
+  - [Helper cheatsheet](#helper-cheatsheet)
+    - [Add the helper in your project](#add-the-helper-in-your-project)
+    - [Regular `<script>` tag](#regular-script-tag)
+    - [With NPM](#with-npm)
+    - [With bower](#with-bower)
+    - [Init the helper](#init-the-helper)
+    - [Helper lifecycle](#helper-lifecycle)
+    - [Objects](#objects)
+    - [Search](#search)
+    - [Events](#events)
+    - [Query](#query)
+    - [Filtering results](#filtering-results)
+    - [Facet utilities](#facet-utilities)
+    - [Tags](#tags)
+    - [Pagination](#pagination)
+    - [Index](#index)
+    - [One time query](#one-time-query)
+    - [URL Helpers](#url-helpers)
+    - [Query parameters](#query-parameters)
+    - [Results format](#results-format)
+- [Browser support](#browser-support)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -515,7 +524,7 @@ By default the hierarchical facet is going to return the child and parent facet 
 
 If you do not want to get the parent facet values you can set showParentLevel to false
 
-````
+```js
 var helper = algoliasearchHelper(client, indexName, {
   hierarchicalFacets: [{
     name: 'products',
@@ -523,7 +532,7 @@ var helper = algoliasearchHelper(client, indexName, {
     showParentLevel: false
   }]
 });
-``
+```
 
 ##### Asking for the current breadcrumb
 
@@ -1290,3 +1299,15 @@ Here is an example of a result object you get with the `result` event.
    "index": "bestbuy"
 }
 ```
+
+# Browser support
+
+This project works fine on any [ES5](https://en.wikipedia.org/wiki/ECMAScript#5th_Edition) browser, basically >= IE9+.
+
+To get IE8 support you will have to include this:
+
+<!--[if lte IE 8]>
+  <script src="//cdn.jsdelivr.net/core-js/2/shim.min.js"></script>
+<![endif]-->
+
+Which will simulate most of the ES5 features in IE8.
