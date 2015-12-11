@@ -158,6 +158,22 @@ function SearchParameters(newParameters) {
    */
   this.tagFilters = params.tagFilters;
 
+  /**
+   * Contains the  optional tag filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalTagFilters = params.optionalTagFilters;
+
+  /**
+   * Contains the optional facet filters in the raw format of the Algolia API.
+   * @private
+   * @see https://www.algolia.com/doc/rest#param-tagFilters
+   * @member {string}
+   */
+  this.optionalFacetFilters = params.optionalFacetFilters;
+
 
   // Misc. parameters
   /**

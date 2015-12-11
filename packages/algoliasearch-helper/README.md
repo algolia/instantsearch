@@ -1298,3 +1298,15 @@ Here is an example of a result object you get with the `result` event.
    "index": "bestbuy"
 }
 ```
+
+# Browser support
+
+This project works fine on any [ES5](https://en.wikipedia.org/wiki/ECMAScript#5th_Edition) browser, basically >= IE9+.
+
+To get IE8 support you will have to include this:
+
+<!--[if lte IE 8]>
+  <script src="//cdn.jsdelivr.net/core-js/2/shim.min.js"></script>
+<![endif]-->
+
+Which will simulate most of the ES5 features in IE8.
