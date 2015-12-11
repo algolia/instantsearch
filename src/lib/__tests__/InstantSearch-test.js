@@ -37,7 +37,7 @@ describe('InstantSearch lifecycle', () => {
 
     appId = 'appId';
     apiKey = 'apiKey';
-    indexName = 'lifeycle';
+    indexName = 'lifecycle';
 
     searchParameters = {some: 'configuration', values: [-2, -1], another: {config: 'parameter'}};
 
@@ -192,7 +192,7 @@ describe('InstantSearch lifecycle', () => {
       expect(order).toBe(true);
     });
 
-    it('recursevly merges searchParameters.values array', () => {
+    it('recursively merges searchParameters.values array', () => {
       expect(algoliasearchHelper.args[0][2].values).toEqual([-2, -1, 0, 1, 2, 3, 4]);
     });
   });

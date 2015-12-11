@@ -97,7 +97,7 @@ describe('numericSelector()', () => {
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it('cancles the underying numeric refinement', () => {
+  it('cancels the underlying numeric refinement', () => {
     widget._refine(helper, undefined);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
