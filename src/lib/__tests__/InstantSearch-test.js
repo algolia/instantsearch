@@ -39,7 +39,7 @@ describe('InstantSearch lifecycle', () => {
     apiKey = 'apiKey';
     indexName = 'lifecycle';
 
-    searchParameters = {some: 'configuration', values: [-2, -1], another: {config: 'parameter'}};
+    searchParameters = {some: 'configuration', values: [-2, -1], index: indexName, another: {config: 'parameter'}};
 
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
@@ -113,7 +113,7 @@ describe('InstantSearch lifecycle', () => {
           .toEqual([
             client,
             indexName,
-            {some: 'modified', values: [-2, -1], another: {different: 'parameter', config: 'parameter'}}
+            {some: 'modified', values: [-2, -1], index: indexName, another: {different: 'parameter', config: 'parameter'}}
           ]);
       });
 

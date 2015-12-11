@@ -21,7 +21,7 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
-    let className = `${this.props.cssClasses.root} ${this.props.cssClasses.empty}`;
+    let className = this.props.cssClasses.root + ' ' + this.props.cssClasses.empty;
     return (
       <Template
         cssClass={className}
