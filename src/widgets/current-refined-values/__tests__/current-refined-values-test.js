@@ -488,10 +488,10 @@ describe('currentRefinedValues()', () => {
         {type: 'disjunctive', attributeName: 'disjunctiveFacet', name: 'disjunctiveFacet-val1', count: 3, exhaustive: true},
         {type: 'disjunctive', attributeName: 'disjunctiveFacet', name: 'disjunctiveFacet-val2', count: 4, exhaustive: true},
         {type: 'hierarchical', attributeName: 'hierarchicalFacet', name: 'hierarchicalFacet-val2', count: 6, exhaustive: true},
-        {type: 'numeric', attributeName: 'numericFacet', name: 1, operator: '>='},
-        {type: 'numeric', attributeName: 'numericFacet', name: 2, operator: '<='},
-        {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: 3, operator: '>='},
-        {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: 4, operator: '<='},
+        {type: 'numeric', attributeName: 'numericFacet', name: '1', operator: '>='},
+        {type: 'numeric', attributeName: 'numericFacet', name: '2', operator: '<='},
+        {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: '3', operator: '>='},
+        {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: '4', operator: '<='},
         {type: 'tag', attributeName: '_tags', name: 'tag1'},
         {type: 'tag', attributeName: '_tags', name: 'tag2'}
       ];
