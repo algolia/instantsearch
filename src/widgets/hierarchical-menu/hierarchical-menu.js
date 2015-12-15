@@ -22,7 +22,7 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string[]} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template (root level only)
- * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
