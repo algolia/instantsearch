@@ -921,7 +921,7 @@ of an e-commerce website.</p>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
@@ -1069,7 +1069,7 @@ From a UX point of view, we suggest not displaying more than two levels deep.</p
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template</td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
@@ -1233,7 +1233,7 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
@@ -1373,7 +1373,7 @@ This widget lets the user refine search results based on a numerical attribute. 
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
@@ -2010,7 +2010,7 @@ This widget lets the user refine search results by clicking on stars. The stars 
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code></td>
+            <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
@@ -2482,20 +2482,24 @@ This widget lets you display how many results matched the query and how fast the
     <div class="code-sample-snippet js-toggle-snippet ignore">
 
       <div class="highlight">
-        <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">mySingletonWidget</span> <span class="o">=</span> <span class="p">{</span>
+        <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">customWidget</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">getConfiguration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">searchParams</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
+      <span class="c1">// see &quot;All options&quot; for more details on the API</span>
     <span class="p">};</span>
   <span class="p">},</span>
 
   <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// see &quot;All options&quot; for more details on the API</span>
   <span class="p">},</span>
 
+  <span class="c1">// Called every time there is new data</span>
   <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// see &quot;All options&quot; for more details on the API</span>
   <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">mySingletonWidget</span><span class="p">);</span></code></pre>
+<span class="nx">search</span><span class="p">.</span><span class="nx">addWidget</span><span class="p">(</span><span class="nx">customWidget</span><span class="p">);</span></code></pre>
       </div>
 
     </div>
@@ -2537,6 +2541,8 @@ This widget lets you display how many results matched the query and how fast the
   <li><code>init()</code>: called once after the initialization</li>
   <li><code>render()</code>: called every time we have new search data</li>
 </ul>
+
+<p>You must at least define <code>init</code> or <code>render</code> methods.</p>
 
 <h4 class="no-toc" id="jquery-widget">jQuery widget</h4>
 
