@@ -20,7 +20,7 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string} [options.limit=1000] How much facet values to get
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
