@@ -60,10 +60,15 @@ Since instantsearch.js is a UI library, if your issue is UI related then adding 
 
 # Development workflow
 
+Requirements:
+- [Node.js](https://nodejs.org/en/)
+- npm@2
+- [Ruby](https://www.ruby-lang.org/en/)
+- [Bundler](http://bundler.io/)
+
 Rapidly iterate with our example app:
 
 ```sh
-npm install
 npm run dev
 ```
 
@@ -73,9 +78,17 @@ Run the tests and lint:
 npm test
 ```
 
+Launch the website docs dev tool:
+```
+npm run dev:docs
+```
+
 # Adding/Updating a package
 
+We use a specific shrinkwrapping tool
+
 ```sh
+npm install
 npm install package --save[-dev]
 npm run shrinkwrap
 ```
@@ -83,6 +96,7 @@ npm run shrinkwrap
 # Removing a package
 
 ```sh
+npm install
 npm remove package --save[-dev]
 npm run shrinkwrap
 ```
