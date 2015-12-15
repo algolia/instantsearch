@@ -1047,20 +1047,24 @@ Theses options will be passed to the `Hogan.compile` calls when you pass a custo
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight javascript %}
-var mySingletonWidget = {
+var customWidget = {
   getConfiguration: function(searchParams) {
     return {
+      // see "All options" for more details on the API
     };
   },
 
   init: function(options) {
+    // see "All options" for more details on the API
   },
 
+  // Called every time there is new data
   render: function(options) {
+    // see "All options" for more details on the API
   }
 };
 
-search.addWidget(mySingletonWidget);
+search.addWidget(customWidget);
 {% endhighlight %}
 
   </div>
@@ -1089,10 +1093,11 @@ The widget may implement some of the following methods (depending on the need of
 
 **instantsearch.js** was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:
 
-
  * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/docs/)
  * `init()`: called once after the initialization
  * `render()`: called every time we have new search data
+
+You must at least define `init` or `render` methods.
 
 #### jQuery widget
 {:.no-toc}
