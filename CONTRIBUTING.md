@@ -85,7 +85,7 @@ npm run dev:docs
 
 # Adding/Updating a package
 
-We use a specific shrinkwrapping tool
+We use a [specific shrinkwrapping tool](https://github.com/uber/npm-shrinkwrap) and npm@2.
 
 ```sh
 npm install
@@ -181,7 +181,7 @@ Once the a fix is done, having the fix in the `develop` branch is not sufficient
 
 So that you never ask yourself "Is this released?".
 
-Instead of closing the issue, we willat add a ` ✔ to be released` label.
+Instead of closing the issue, we will add a ` ✔ to be released` label.
 
 # Milestones
 
@@ -195,19 +195,19 @@ If you are a maintainer, you can release.
 
 We use [semver](http://semver-ftw.org/).
 
-You must be on the master branch.
-
-```sh
-npm run release
-```
+This task will merge develop into master.
 
 ## Beta releases
 
 You must be on the develop branch.
 
 ```sh
-npm run beta-release
+npm run release:beta
 ```
+
+This task will release a beta version of what is currently in develop branch.
+
+It will not update the `latest` tag of the npm release nor update jsDelivr /1/.
 
 # Hotfixes
 
