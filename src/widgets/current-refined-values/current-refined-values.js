@@ -34,6 +34,7 @@ let bem = bemHelper('ais-current-refined-values');
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them
+ * @function currentRefinedValues
  * @param  {string|DOMElement}  options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array}             [option.attributes] Attributes configuration
  * @param  {string}            [option.attributes[].name] Required attribute name

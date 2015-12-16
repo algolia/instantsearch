@@ -10,6 +10,7 @@ let bem = utils.bemHelper('ais-numeric-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
+ * @function numericSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the numeric attribute to use
  * @param  {Array} options.options Array of objects defining the different values and labels
