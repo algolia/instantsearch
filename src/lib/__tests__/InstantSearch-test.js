@@ -37,9 +37,9 @@ describe('InstantSearch lifecycle', () => {
 
     appId = 'appId';
     apiKey = 'apiKey';
-    indexName = 'lifeycle';
+    indexName = 'lifecycle';
 
-    searchParameters = {some: 'configuration', values: [-2, -1], another: {config: 'parameter'}};
+    searchParameters = {some: 'configuration', values: [-2, -1], index: indexName, another: {config: 'parameter'}};
 
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
@@ -113,7 +113,7 @@ describe('InstantSearch lifecycle', () => {
           .toEqual([
             client,
             indexName,
-            {some: 'modified', values: [-2, -1], another: {different: 'parameter', config: 'parameter'}}
+            {some: 'modified', values: [-2, -1], index: indexName, another: {different: 'parameter', config: 'parameter'}}
           ]);
       });
 
@@ -192,7 +192,7 @@ describe('InstantSearch lifecycle', () => {
       expect(order).toBe(true);
     });
 
-    it('recursevly merges searchParameters.values array', () => {
+    it('recursively merges searchParameters.values array', () => {
       expect(algoliasearchHelper.args[0][2].values).toEqual([-2, -1, 0, 1, 2, 3, 4]);
     });
   });

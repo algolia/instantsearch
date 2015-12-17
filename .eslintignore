@@ -3,3 +3,4 @@ dist/
 dist-es5-module/
 docs/
 dev/app.js
+scripts/karma.conf.js

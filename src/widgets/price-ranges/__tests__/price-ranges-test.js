@@ -102,7 +102,7 @@ describe('priceRanges()', () => {
         },
         refine() {},
         templateProps: {
-          templates: require('../defaultTemplates'),
+          templates: require('../defaultTemplates.js'),
           templatesConfig: undefined,
           transformData: undefined,
           useCustomCompileOptions: {header: false, footer: false, item: false}

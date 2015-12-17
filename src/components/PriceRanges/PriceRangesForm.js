@@ -1,4 +1,4 @@
-let React = require('react');
+import React from 'react';
 
 class PriceRangesForm extends React.Component {
   getInput(type) {
@@ -55,5 +55,5 @@ PriceRangesForm.defaultProps = {
 };
 
 
-module.exports = PriceRangesForm;
+export default PriceRangesForm;
 

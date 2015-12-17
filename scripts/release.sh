@@ -72,7 +72,7 @@ npm run docs:jsdoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc
+git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
@@ -84,7 +84,7 @@ git push origin master
 git push origin --tags
 npm publish
 # also update beta
-npm publish --tag beta
+npm dist-tag add instantsearch.js@$newVersion beta
 git checkout develop
 git pull origin develop
 git merge master

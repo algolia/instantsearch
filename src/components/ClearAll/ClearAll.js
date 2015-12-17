@@ -1,8 +1,6 @@
-let React = require('react');
-
-let Template = require('../Template.js');
-
-let {isSpecialClick} = require('../../lib/utils.js');
+import React from 'react';
+import Template from '../Template.js';
+import {isSpecialClick} from '../../lib/utils.js';
 
 class ClearAll extends React.Component {
   handleClick(e) {
@@ -46,4 +44,4 @@ ClearAll.propTypes = {
   url: React.PropTypes.string.isRequired
 };
 
-module.exports = ClearAll;
+export default ClearAll;

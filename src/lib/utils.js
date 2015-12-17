@@ -1,8 +1,8 @@
-let reduce = require('lodash/collection/reduce');
-let forEach = require('lodash/collection/forEach');
-let find = require('lodash/collection/find');
-let get = require('lodash/object/get');
-let isEmpty = require('lodash/lang/isEmpty');
+import reduce from 'lodash/collection/reduce';
+import forEach from 'lodash/collection/forEach';
+import find from 'lodash/collection/find';
+import get from 'lodash/object/get';
+import isEmpty from 'lodash/lang/isEmpty';
 
 let utils = {
   getContainerNode,
@@ -126,18 +126,27 @@ function prepareTemplates(defaultTemplates, templates) {
   }, {templates: {}, useCustomCompileOptions: {}});
 }
 
-function getRefinement(attributeName, name, resultsFacets) {
-  let res = {attributeName, name};
-  let facet = find(resultsFacets, (_facet) => { return _facet.name === attributeName; });
-  if (facet !== undefined) {
-    const count = get(facet, 'data.' + name);
-    const exhaustive = get(facet, 'exhaustive');
-    if (count !== undefined) {
-      res.count = count;
+function getRefinement(state, type, attributeName, name, resultsFacets) {
+  let res = {type, attributeName, name};
+  let facet = find(resultsFacets, {name: attributeName});
+  let count;
+  if (type === 'hierarchical') {
+    let facetDeclaration = state.getHierarchicalFacetByName(attributeName);
+    let splitted = name.split(facetDeclaration.separator);
+    res.name = splitted[splitted.length - 1];
+    for (let i = 0; facet !== undefined && i < splitted.length; ++i) {
+      facet = find(facet.data, {name: splitted[i]});
     }
-    if (exhaustive !== undefined) {
-      res.exhaustive = exhaustive;
-    }
+    count = get(facet, 'count');
+  } else {
+    count = get(facet, 'data["' + res.name + '"]');
+  }
+  const exhaustive = get(facet, 'exhaustive');
+  if (count !== undefined) {
+    res.count = count;
+  }
+  if (exhaustive !== undefined) {
+    res.exhaustive = exhaustive;
   }
   return res;
 }
@@ -147,38 +156,39 @@ function getRefinements(results, state) {
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
     forEach(refinements, (name) => {
-      res.push(getRefinement(attributeName, name, results.facets));
+      res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
     });
   });
 
   forEach(state.facetsExcludes, (refinements, attributeName) => {
     forEach(refinements, (name) => {
-      res.push({attributeName, name, exclude: true});
+      res.push({type: 'exclude', attributeName, name, exclude: true});
     });
   });
 
   forEach(state.disjunctiveFacetsRefinements, (refinements, attributeName) => {
     forEach(refinements, (name) => {
-      res.push(getRefinement(attributeName, name, results.disjunctiveFacets));
+      res.push(getRefinement(state, 'disjunctive', attributeName, name, results.disjunctiveFacets));
     });
   });
 
   forEach(state.hierarchicalFacetsRefinements, (refinements, attributeName) => {
     forEach(refinements, (name) => {
-      res.push(getRefinement(attributeName, name, results.hierarchicalFacets));
+      res.push(getRefinement(state, 'hierarchical', attributeName, name, results.hierarchicalFacets));
     });
   });
 
   forEach(state.numericRefinements, (operators, attributeName) => {
     forEach(operators, (values, operator) => {
       forEach(values, (name) => {
-        res.push({attributeName, name, operator});
+        name = name + '';
+        res.push({type: 'numeric', attributeName, name, operator});
       });
     });
   });
 
   forEach(state.tagRefinements, (name) => {
-    res.push({attributeName: '_tags', name});
+    res.push({type: 'tag', attributeName: '_tags', name});
   });
 
   return res;
@@ -205,4 +215,4 @@ function clearRefinementsAndSearch(helper, attributeNames) {
   helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
 }
 
-module.exports = utils;
+export default utils;

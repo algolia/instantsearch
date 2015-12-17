@@ -1,9 +1,9 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-let utils = require('../../lib/utils.js');
-let forEach = require('lodash/collection/forEach');
-let bem = require('../../lib/utils').bemHelper('ais-search-box');
-let cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import utils from '../../lib/utils.js';
+import forEach from 'lodash/collection/forEach';
+let bem = require('../../lib/utils.js').bemHelper('ais-search-box');
+import cx from 'classnames';
 
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
@@ -162,7 +162,7 @@ function searchBox({
       // Update value when query change outside of the input
       helper.on('change', function(newState) {
         if (input !== document.activeElement && input.value !== newState.query) {
-          input.value = state.query;
+          input.value = newState.query;
         }
       });
 
@@ -173,4 +173,4 @@ function searchBox({
   };
 }
 
-module.exports = searchBox;
+export default searchBox;

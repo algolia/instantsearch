@@ -1,5 +1,5 @@
 // force using index because package 'main' is dist-es5-module/
-var instantsearch = require('../index');
+var instantsearch = require('../index.js');
 
 var search = instantsearch({
   appId: 'latency',
@@ -78,6 +78,36 @@ search.addWidget(
   instantsearch.widgets.clearAll({
     container: '#clear-all',
     autoHideContainer: false
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.currentRefinedValues({
+    container: '#current-refined-values',
+    cssClasses: {
+      header: 'facet-title',
+      link: 'facet-value facet-value-removable',
+      count: 'facet-count pull-right'
+    },
+    templates: {
+      header: 'Current refinements'
+    },
+    attributes: [
+      {
+        name: 'price',
+        label: 'Price',
+        transformData: (data) => { data.name = `$${data.name}`; return data; }
+      },
+      {
+        name: 'price_range',
+        label: 'Price range',
+        transformData: (data) => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
+      },
+      {
+        name: 'free_shipping',
+        transformData: (data) => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
+      }
+    ]
   })
 );
 
@@ -239,12 +269,13 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
+    operator: '>=',
     attributeName: 'popularity',
     options: [
-      { label: 'Select a value', value: undefined },
-      { label: '1st', value: 1 },
-      { label: '2nd', value: 2 },
-      { label: '3rd', value: 3 }
+      { label: 'Default', value: 0 },
+      { label: 'Top 10', value: 9991 },
+      { label: 'Top 100', value: 9901 },
+      { label: 'Top 500', value: 9501 }
     ]
   })
 );

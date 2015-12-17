@@ -1,12 +1,12 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-let defaults = require('lodash/object/defaults');
-let cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import defaults from 'lodash/object/defaults';
+import cx from 'classnames';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-pagination');
 
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 let defaultLabels = {
   previous: '‹',
   next: '›',
@@ -129,4 +129,4 @@ function pagination({
   };
 }
 
-module.exports = pagination;
+export default pagination;

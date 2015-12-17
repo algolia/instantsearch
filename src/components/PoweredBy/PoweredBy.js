@@ -1,10 +1,10 @@
-let React = require('react');
+import React from 'react';
 
 class PoweredBy extends React.Component {
   render() {
     return (
       <div className={this.props.cssClasses.root}>
-        Powered by
+        Search by
         <a className={this.props.cssClasses.link} href="https://www.algolia.com/" target="_blank">Algolia</a>
       </div>
     );
@@ -18,4 +18,4 @@ PoweredBy.propTypes = {
   })
 };
 
-module.exports = PoweredBy;
+export default PoweredBy;

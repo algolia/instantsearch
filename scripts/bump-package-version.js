@@ -1,14 +1,14 @@
-let fs = require('fs');
-let path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-let mversion = require('mversion');
+import mversion from 'mversion';
+
+import semver from 'semver';
+import currentVersion from '../src/lib/version.js';
 
 if (!process.env.VERSION) {
   throw new Error('release: Usage is VERSION=MAJOR.MINOR.PATCH npm run release');
 }
-
-let semver = require('semver');
-let currentVersion = require('../src/lib/version.js');
 let newVersion = process.env.VERSION;
 
 if (!semver.valid(newVersion)) {
@@ -24,7 +24,7 @@ console.log('Releasing ' + newVersion);
 console.log('..Updating src/lib/version.js');
 
 let versionFile = path.join(__dirname, '../src/lib/version.js');
-let newContent = "module.exports = '" + newVersion + "';\n";
+let newContent = "export default '" + newVersion + "';\n";
 fs.writeFileSync(versionFile, newContent);
 
 console.log('..Updating package.json, npm-shrinwrap.json');

@@ -1,11 +1,11 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
-let any = require('lodash/collection/any');
+import utils from '../../lib/utils.js';
+import any from 'lodash/collection/any';
 let bem = utils.bemHelper('ais-hits-per-page-selector');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -39,7 +39,7 @@ function hitsPerPageSelector({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector.js');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
@@ -96,4 +96,4 @@ function hitsPerPageSelector({
   };
 }
 
-module.exports = hitsPerPageSelector;
+export default hitsPerPageSelector;

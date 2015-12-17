@@ -5,6 +5,7 @@ import sinon from 'sinon';
 import jsdom from 'mocha-jsdom';
 
 import searchBox from '../search-box';
+import EventEmitter from 'events';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -31,12 +32,12 @@ describe('search-box()', () => {
       query: ''
     };
     helper = {
-      on: sinon.spy(),
       setQuery: sinon.spy(),
       search: sinon.spy(),
       state: {
         query: ''
-      }
+      },
+      ...EventEmitter.prototype
     };
   });
 
@@ -168,7 +169,7 @@ describe('search-box()', () => {
     });
   });
 
-  context('input event listenner', () => {
+  context('input event listener', () => {
     let input;
     beforeEach(() => {
       container = document.createElement('div');
@@ -270,6 +271,17 @@ describe('search-box()', () => {
         expect(helper.search.calledOnce).toBe(false);
       });
     });
+  });
+
+  it('updates the input on an helper update', () => {
+    container = document.createElement('div');
+    widget = searchBox({container});
+    widget.init({state, helper});
+    let input = container.querySelector('input');
+    expect(input.value).toBe('');
+    input.blur();
+    helper.emit('change', {query: 'iphone'});
+    expect(input.value).toBe('iphone');
   });
 
   context('focus', () => {
