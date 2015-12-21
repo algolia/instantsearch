@@ -80,7 +80,7 @@ helper.on('result', function(data){
   console.log(data.hits);
 });
 
-helper.addDisjunctiveFacetRefinement('director', 'Clint Eastword');
+helper.addDisjunctiveFacetRefinement('director', 'Clint Eastwood');
 helper.addDisjunctiveFacetRefinement('director', 'Sofia Coppola');
 
 helper.addNumericRefinement('year', '=', 2003);
