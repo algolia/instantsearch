@@ -67,7 +67,7 @@ var requestBuilder = {
       tagFilters: tagFilters
     };
 
-    if (state.distinct === true || state.distinct === false) {
+    if (state.distinct === true || state.distinct === false || typeof state.distinct === 'number') {
       additionalParams.distinct = state.distinct;
     }
 
@@ -110,7 +110,7 @@ var requestBuilder = {
       additionalParams.facets = facet;
     }
 
-    if (state.distinct === true || state.distinct === false) {
+    if (state.distinct === true || state.distinct === false || typeof state.distinct === 'number') {
       additionalParams.distinct = state.distinct;
     }
 
