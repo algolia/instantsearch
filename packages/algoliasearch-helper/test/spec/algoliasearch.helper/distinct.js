@@ -152,3 +152,49 @@ test('Distinct to false', function(t) {
 
   t.end();
 });
+
+test('Distinct as a number', function(t) {
+  var distinctValue = 2;
+  var helper = algoliasearchHelper(null, null, {
+    facets: ['facetConj'],
+    disjunctiveFacets: ['facet']
+  }).setQueryParameter('distinct', distinctValue);
+
+  var state0 = helper.state;
+
+  var disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(helper.state);
+  t.equal(disjunctiveFacetSearchParam.distinct, distinctValue, '[disjunctive] distinct should be ' + distinctValue);
+
+  var facetSearchParam = requestBuilder._getHitsSearchParams(helper.state);
+  t.equal(facetSearchParam.distinct, distinctValue, '[hits] distinct should be ' + distinctValue);
+
+  helper.setState(state0);
+  helper.setQuery('not empty');
+  disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(helper.state);
+  t.equal(disjunctiveFacetSearchParam.distinct, distinctValue, '[disjunctive][query not empty] distinct should be ' + distinctValue);
+  facetSearchParam = requestBuilder._getHitsSearchParams(helper.state);
+  t.equal(facetSearchParam.distinct, distinctValue, '[hits][query not empty] distinct should be ' + distinctValue);
+
+  helper.setState(state0);
+  helper.addDisjunctiveRefine('facet', 'value');
+  disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(helper.state);
+  t.equal(disjunctiveFacetSearchParam.distinct, distinctValue, '[disjunctive][disjunctive refinement] distinct should be ' + distinctValue);
+  facetSearchParam = requestBuilder._getHitsSearchParams(helper.state);
+  t.equal(facetSearchParam.distinct, distinctValue, '[hits][disjunctive refinement] distinct should be ' + distinctValue);
+
+  helper.setState(state0);
+  helper.addRefine('facetConj', 'value');
+  disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(helper.state);
+  t.equal(disjunctiveFacetSearchParam.distinct, distinctValue, '[disjunctive][conjunctive refinement] distinct should be ' + distinctValue);
+  facetSearchParam = requestBuilder._getHitsSearchParams(helper.state);
+  t.equal(facetSearchParam.distinct, distinctValue, '[hits][conjunctive refinement] distinct should be ' + distinctValue);
+
+  helper.setState(state0);
+  helper.addNumericRefinement('attribute', '>', '0');
+  disjunctiveFacetSearchParam = requestBuilder._getDisjunctiveFacetSearchParams(helper.state);
+  t.equal(disjunctiveFacetSearchParam.distinct, distinctValue, '[disjunctive][numeric refinement] distinct should be ' + distinctValue);
+  facetSearchParam = requestBuilder._getHitsSearchParams(helper.state);
+  t.equal(facetSearchParam.distinct, distinctValue, '[hits][numeric refinement] distinct should be ' + distinctValue);
+
+  t.end();
+});

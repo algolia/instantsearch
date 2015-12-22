@@ -325,7 +325,7 @@ function SearchParameters(newParameters) {
   /**
    * Remove duplicates based on the index setting attributeForDistinct
    * @see https://www.algolia.com/doc/rest#param-distinct
-   * @member {number}
+   * @member {boolean|number}
    */
   this.distinct = params.distinct;
   /**

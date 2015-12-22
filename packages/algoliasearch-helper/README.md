@@ -936,7 +936,7 @@ helper.setQueryParameter('hitsPerPage', 20).search();
         <p class="p2"><span class="s2">distinct</span></p>
       </td>
       <td valign="top" class="td5">
-        <p class="p3"><span class="s1">boolean</span></p>
+        <p class="p3"><span class="s1">boolean|number</span></p>
       </td>
       <td valign="top" class="td6">
         <p class="p4"><span class="s1">Remove duplicates based on the index setting attributeForDistinct</span></p>
