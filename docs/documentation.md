@@ -1130,7 +1130,7 @@ All widgets have been designed to be heavily stylizable with CSS rules. **instan
 
 We're using [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
 
-If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
+If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/src/css/instantsearch.scss).
 
 #### BEM modifiers
 {:.no-toc}
