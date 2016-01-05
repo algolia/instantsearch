@@ -23,7 +23,7 @@ let defaultLabels = {
  * @param  {string} [options.labels.next] Label for the Next link
  * @param  {string} [options.labels.first] Label for the First link
  * @param  {string} [options.labels.last] Label for the Last link
- * @param  {number} [options.maxPages=20] The max number of pages to browse
+ * @param  {number} [options.maxPages] The max number of pages to browse
  * @param  {number} [options.padding=3] The number of pages to display on each side of the current page
  * @param  {string|DOMElement|boolean} [options.scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
@@ -46,7 +46,7 @@ pagination({
   container,
   [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
   [ labels.{previous,next,first,last} ],
-  [ maxPages=20 ],
+  [ maxPages ],
   [ padding=3 ],
   [ showFirstLast=true ],
   [ autoHideContainer=true ],
@@ -56,7 +56,7 @@ function pagination({
     container,
     cssClasses: userCssClasses = {},
     labels = {},
-    maxPages = 20,
+    maxPages,
     padding = 3,
     showFirstLast = true,
     autoHideContainer = true,
@@ -88,9 +88,15 @@ function pagination({
       helper.search();
     },
 
+    getMaxPage: function(results) {
+      if (maxPages !== undefined) {
+        return Math.min(maxPages, results.nbPages);
+      }
+      return results.nbPages;
+    },
+
     render: function({results, helper, createURL, state}) {
       let currentPage = results.page;
-      let nbPages = results.nbPages;
       let nbHits = results.nbHits;
       let hasNoResults = nbHits === 0;
       let cssClasses = {
@@ -106,10 +112,6 @@ function pagination({
         disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
       };
 
-      if (maxPages !== undefined) {
-        nbPages = Math.min(maxPages, results.nbPages);
-      }
-
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
@@ -117,7 +119,7 @@ function pagination({
           currentPage={currentPage}
           labels={labels}
           nbHits={nbHits}
-          nbPages={nbPages}
+          nbPages={this.getMaxPage(results)}
           padding={padding}
           setCurrentPage={this.setCurrentPage.bind(this, helper)}
           shouldAutoHideContainer={hasNoResults}
