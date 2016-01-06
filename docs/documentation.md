@@ -57,7 +57,7 @@ The library is open-source, based on [React.js](https://facebook.github.io/react
 
 <div class="codebox-combo">
 
-The fastest way to get started is to use a built version of **instantsearch.js** from a CDN:
+Use a builded version of **instantsearch.js** from the [jsDelivr](https://www.jsdelivr.com/) CDN:
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -68,16 +68,18 @@ The fastest way to get started is to use a built version of **instantsearch.js**
   </div>
 </div>
 
-</div>
+You will then have access to the `instantsearch` function in the global scope (window).
 
-This will expose the global `instantsearch` function.
+The jsDelivr CDN is highly available with [over 110 locations](https://www.jsdelivr.com/features/network-map) in the world.
+
+</div>
 
 #### From NPM
 {:.no-toc}
 
 <div class="codebox-combo">
 
-If you have a JavaScript build system, you can use **instantsearch.js** from NPM:
+If you have a JavaScript build system, you can install **instantsearch.js** from NPM:
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -94,15 +96,15 @@ var instantsearch = require('instantsearch.js');
   </div>
 </div>
 
-</div>
+You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css) into your page.
 
-You will also need to manually load into your application the [instantsearch css file](http://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css).
+</div>
 
 ### Initialization
 
 <div class="codebox-combo">
 
-To initialize the **instantsearch.js** library, you need an Algolia account with a configured and non-empty index. You can find your Algolia credentials on the [credentials page of your dashboard](https://www.algolia.com/licensing). Use the **APPLICATION\_ID** `appId`, the **search only API\_KEY** `apiKey` and an index name `indexName` to configure the required parameters of the `instantsearch` function.
+To initialize the **instantsearch.js** library, you need an Algolia account with a configured and non-empty index.
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet config">
@@ -127,18 +129,24 @@ Use your **search-only API key**. You index should also contain data.
   </div>
 </div>
 
-</div>
+You can find your Algolia credentials on the [credentials page of your dashboard](https://www.algolia.com/licensing).
+
+Use the **APPLICATION\_ID** `appId`, the **search only API\_KEY** `apiKey` and an index name `indexName` to configure the required parameters of the `instantsearch` function.
 
 If you don't have any indices yet, learn how to push your data with the [Algolia getting started guide](https://www.algolia.com/getstarted).
 
-#### Url synchronization
+**Url synchronization**
 
 You can synchronise the current search with the browser url. It provides two benefits:
 
   - Working back/next browser buttons
   - Copy and share the current search url
 
-To configure this feature, pass `urlSync: true` to the `instantsearch()` call. See the example and options.
+To configure this feature, pass `urlSync: true` option to `instantsearch()`.
+
+The `urlSync` option has more parameters, see the `instantsearch` function documentation.
+
+</div>
 
 ### Adding Widgets
 
