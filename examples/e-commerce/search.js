@@ -21,13 +21,14 @@ search.addWidget(
 );
 
 search.on('render', function() {
-  $('.product-picture img').addClass('transparent');
-  $('.product-picture img').one('load', function() {
+  $(".product-picture img").addClass('transparent');
+  $(".product-picture img").one("load", function() {
       $(this).removeClass('transparent');
   }).each(function() {
       if(this.complete) $(this).load();
   });
 });
+
 
 var hitTemplate =
   '<article class="hit">' +
@@ -45,8 +46,9 @@ var hitTemplate =
 var noResultsTemplate =
   '<div class="text-center">No results found matching <strong>{{query}}</strong>.</div>';
 
+
 var menuTemplate =
-  '<a href="javascript:void(0);" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"><i class="fa fa-angle-right"></i> {{name}}</span class="facet-name"></a>';
+  '<a href="javascript:void(0);" class="facet-item {{#isRefined}}active{{/isRefined}}"><span class="facet-name"><i class="fa fa-angle-right"></i>  {{name}}</span class="facet-name"></a>';
 
 var facetTemplateCheckbox =
   '<a href="javascript:void(0);" class="facet-item">' +
@@ -56,6 +58,7 @@ var facetTemplateCheckbox =
 
 var facetTemplateColors =
   '<a href="javascript:void(0);" data-facet-value="{{name}}" class="facet-color {{#isRefined}}checked{{/isRefined}}"></a>';
+
 
 search.addWidget(
   instantsearch.widgets.hits({
@@ -94,6 +97,9 @@ search.addWidget(
     container: '#categories',
     attributes: ['category', 'sub_category', 'sub_sub_category'],
     sortBy: ['name:asc'],
+    cssClasses: {
+      active: 'active'
+    },
     templates: {
       item: menuTemplate
     }
@@ -106,6 +112,9 @@ search.addWidget(
     attributeName: 'materials',
     operator: 'or',
     limit: 10,
+    cssClasses: {
+      active: 'active'
+    },
     templates: {
       item: facetTemplateCheckbox,
       header: '<div class="facet-title">Materials</div class="facet-title">'
@@ -119,6 +128,9 @@ search.addWidget(
     attributeName: 'colors',
     operator: 'or',
     limit: 10,
+    cssClasses: {
+      active: 'active'
+    },
     templates: {
       item: facetTemplateColors,
       header: '<div class="facet-title">Colors</div class="facet-title">'
@@ -175,5 +187,6 @@ search.addWidget(
     autoHideContainer: true
   })
 );
+
 
 search.start();
