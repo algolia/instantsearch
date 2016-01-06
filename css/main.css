@@ -593,7 +593,7 @@ samp {
 code {
   padding: 2px 4px;
   font-size: 90%;
-  color: #A3B6CB;
+  color: #65717D;
   background-color: #f9f2f4;
   border-radius: 4px; }
 
@@ -4064,14 +4064,16 @@ code {
     list-style: none;
     margin: 0;
     padding: 15px 0; }
-    .documentation-menu > ul ul ul li:before {
-      display: inline-block;
-      content: "";
-      width: 8px;
-      height: 8px;
-      background-color: #1D96C7;
-      border-radius: 1px;
-      margin-right: 4px; }
+    .documentation-menu > ul ul ul li {
+      font-weight: normal; }
+      .documentation-menu > ul ul ul li:before {
+        display: inline-block;
+        content: "";
+        width: 8px;
+        height: 8px;
+        background-color: #1D96C7;
+        border-radius: 1px;
+        margin-right: 4px; }
     .documentation-menu > ul a {
       color: #242424; }
       .documentation-menu > ul a:hover {
@@ -4144,8 +4146,8 @@ code {
   .documentation-content h1[id]:before, .documentation-content h2[id]:before, .documentation-content h3[id]:before, .documentation-content h4[id]:before, .documentation-content h5[id]:before {
     content: "";
     display: block;
-    height: 100px;
-    margin: -100px 0 0; }
+    height: 70px;
+    margin: -70px 0 0; }
   .documentation-content h1 .anchor, .documentation-content h2 .anchor, .documentation-content h3 .anchor, .documentation-content h4 .anchor, .documentation-content h5 .anchor {
     display: inline-block;
     font-size: .7em;
@@ -4195,7 +4197,7 @@ code {
   .documentation-content code {
     background-color: #F3F3F3;
     border: 1px solid #e1e1e1;
-    color: #A3B6CB;
+    color: #65717D;
     font-weight: bold; }
   .documentation-content .code-box .text-#FFFFFF code {
     color: #FFFFFF; }
@@ -4245,9 +4247,10 @@ code {
 
 .codebox-combo {
   clear: both; }
-  .codebox-combo > p {
+  .codebox-combo > p, .codebox-combo > ul {
     float: left;
-    max-width: 50%; }
+    max-width: 50%;
+    clear: left; }
   .codebox-combo .code-box {
     float: right; }
 
