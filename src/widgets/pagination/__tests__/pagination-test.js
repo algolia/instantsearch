@@ -136,3 +136,53 @@ describe('pagination()', () => {
     };
   }
 });
+
+describe('pagination MaxPage', () => {
+  jsdom({useEach: true});
+
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let cssClasses;
+  let paginationOptions;
+
+  beforeEach(() => {
+    ReactDOM = {render: sinon.spy()};
+    pagination.__Rewire__('ReactDOM', ReactDOM);
+    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
+
+    container = document.createElement('div');
+    cssClasses = {
+      root: 'root',
+      item: 'item',
+      link: 'link',
+      page: 'page',
+      previous: 'previous',
+      next: 'next',
+      first: 'first',
+      last: 'last',
+      active: 'active',
+      disabled: 'disabled'
+    };
+    results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 300, hitsPerPage: 10, nbPages: 30};
+    paginationOptions = {container, scrollTo: false, cssClasses};
+  });
+
+  it('does to have any default', () => {
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(30);
+  });
+
+  it('does reduce the number of page if lower than nbPages', () => {
+    paginationOptions.maxPages = 20;
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(20);
+  });
+
+  it('does not reduce the number of page if greater than nbPages', () => {
+    paginationOptions.maxPages = 40;
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(30);
+  });
+});
