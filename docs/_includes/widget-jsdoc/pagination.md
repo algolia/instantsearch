@@ -6,7 +6,7 @@
 | <span class='attr-optional'>`options.labels.next`</span><span class="attr-infos">Type: <code>string</code></span> | Label for the Next link |
 | <span class='attr-optional'>`options.labels.first`</span><span class="attr-infos">Type: <code>string</code></span> | Label for the First link |
 | <span class='attr-optional'>`options.labels.last`</span><span class="attr-infos">Type: <code>string</code></span> | Label for the Last link |
-| <span class='attr-optional'>`options.maxPages`</span><span class="attr-infos">Default:<code class="attr-default">20</code><br />Type: <code>number</code></span> | The max number of pages to browse |
+| <span class='attr-optional'>`options.maxPages`</span><span class="attr-infos">Type: <code>number</code></span> | The max number of pages to browse |
 | <span class='attr-optional'>`options.padding`</span><span class="attr-infos">Default:<code class="attr-default">3</code><br />Type: <code>number</code></span> | The number of pages to display on each side of the current page |
 | <span class='attr-optional'>`options.scrollTo`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;body&#x27;</code><br />Type: <code>string</code> &#124; <code>DOMElement</code> &#124; <code>boolean</code></span> | Where to scroll after a click, set to `false` to disable |
 | <span class='attr-optional'>`options.showFirstLast`</span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span> | Define if the First and Last links should be displayed |
