@@ -24,6 +24,7 @@ code {
     margin: 0;
     padding: 15px 0;
     ul ul li {
+      font-weight: normal;
       &:before {
         display: inline-block;
         content: "";
@@ -256,9 +257,10 @@ code {
 
 .codebox-combo {
   clear: both;
-  & > p {
+  & > p, & > ul {
     float: left;
     max-width: 50%;
+    clear: left
   }
   .code-box {
     float: right;

@@ -1,3 +1,18 @@
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/algolia/instantsearch.js/compare/v1.1.0...v1.1.1) (2016-01-07)
+
+
+### Bug Fixes
+
+* **style:** keyframes ([40eb0a5](https://github.com/algolia/instantsearch.js/commit/40eb0a5))
+* **url-sync:** adds indexName in the helper configuration ([c2c0bc7](https://github.com/algolia/instantsearch.js/commit/c2c0bc7))
+
+### Features
+
+* **clearRefinements:** Added two utils methods ([49564e1](https://github.com/algolia/instantsearch.js/commit/49564e1))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/algolia/instantsearch.js/compare/v1.0.0...v1.1.0) (2015-11-26)
 
