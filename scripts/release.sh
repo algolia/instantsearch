@@ -83,8 +83,6 @@ printf "\n\nRelease: push to github, publish on npm"
 git push origin master
 git push origin --tags
 npm publish
-# also update beta
-npm dist-tag add instantsearch.js@$newVersion beta
 git checkout develop
 git pull origin develop
 git merge master
