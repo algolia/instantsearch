@@ -197,18 +197,6 @@ We use [semver](http://semver-ftw.org/).
 
 This task will merge develop into master.
 
-## Beta releases
-
-You must be on the develop branch.
-
-```sh
-npm run release:beta
-```
-
-This task will release a beta version of what is currently in develop branch.
-
-It will not update the `latest` tag of the npm release nor update jsDelivr /1/.
-
 # Hotfixes
 
 All our work is done on the develop branch but it could be necessary to push a hotfix to the master
