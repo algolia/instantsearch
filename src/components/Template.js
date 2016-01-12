@@ -1,30 +1,39 @@
 import React from 'react';
-import mapValues from 'lodash/object/mapValues';
+
 import curry from 'lodash/function/curry';
 import cloneDeep from 'lodash/lang/cloneDeep';
+import keys from 'lodash/object/keys';
+import omit from 'lodash/object/omit';
+import mapValues from 'lodash/object/mapValues';
+
 import hogan from 'hogan.js';
 
-class Template extends React.Component {
-  render() {
-    let compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
-      this.props.templatesConfig.compileOptions :
-      {};
+function Template(props) {
+  const useCustomCompileOptions = props.useCustomCompileOptions[props.templateKey];
+  const compileOptions = useCustomCompileOptions ? props.templatesConfig.compileOptions : {};
 
-    let content = renderTemplate({
-      template: this.props.templates[this.props.templateKey],
-      compileOptions: compileOptions,
-      helpers: this.props.templatesConfig.helpers,
-      data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
-    });
+  const content = renderTemplate({
+    template: props.templates[props.templateKey],
+    compileOptions: compileOptions,
+    helpers: props.templatesConfig.helpers,
+    data: transformData(props.transformData, props.templateKey, props.data)
+  });
 
-    if (content === null) {
-      // Adds a noscript to the DOM but virtual DOM is null
-      // See http://facebook.github.io/react/docs/component-specs.html#render
-      return null;
-    }
-
-    return <div className={this.props.cssClass} dangerouslySetInnerHTML={{__html: content}} />;
+  if (content === null) {
+    // Adds a noscript to the DOM but virtual DOM is null
+    // See http://facebook.github.io/react/docs/component-specs.html#render
+    return null;
   }
+
+  const otherProps = omit(props, keys(Template.propTypes));
+
+  return (
+    <div
+      {...otherProps}
+      className={props.cssClass}
+      dangerouslySetInnerHTML={{__html: content}}
+    />
+  );
 }
 
 Template.propTypes = {

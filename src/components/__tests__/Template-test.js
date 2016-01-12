@@ -8,191 +8,222 @@ import Template from '../Template';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-describe('Template', () => {
+let {createRenderer} = TestUtils;
+
+describe.only('Template', () => {
   let renderer;
-  let templates;
-  let data;
-  let templateKey;
-  let useCustomCompileOptions;
-  let templatesConfig;
-  let transformData;
 
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
     renderer = createRenderer();
-    templates = {};
-    data = {};
-    templateKey = null;
-    useCustomCompileOptions = {};
-    templatesConfig = {helpers: {}, compileOptions: {}};
-    transformData = null;
   });
 
-  it('supports templates as strings', () => {
-    templates = {test: 'it works with {{type}}'};
-    data = {type: 'strings'};
-    templateKey = 'test';
+  describe('without helpers', () => {
+    it('supports templates as strings', () => {
+      const props = getProps({
+        templates: {test: 'it works with {{type}}'},
+        data: {type: 'strings'}
+      });
 
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    let out = renderer.getRenderOutput();
+      renderer.render(<Template {...props} />);
+      const out = renderer.getRenderOutput();
 
-    expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it works with strings'}}></div>);
-  });
+      const content = 'it works with strings';
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+    });
 
-  it('supports templates as functions', () => {
-    templates = {test: templateData => 'it also works with ' + templateData.type};
-    data = {type: 'functions'};
-    templateKey = 'test';
+    it('supports templates as functions', () => {
+      const props = getProps({
+        templates: {test: templateData => 'it also works with ' + templateData.type},
+        data: {type: 'functions'}
+      });
 
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    let out = renderer.getRenderOutput();
+      renderer.render(<Template {...props} />);
+      const out = renderer.getRenderOutput();
 
-    expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it also works with functions'}}></div>);
-  });
+      const content = 'it also works with functions';
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+    });
 
-  it('can configure compilation options', () => {
-    templates = {test: 'it configures compilation <%options%>'};
-    data = {options: 'delimiters'};
-    templateKey = 'test';
-    useCustomCompileOptions.test = true;
-    templatesConfig.compileOptions.delimiters = '<% %>';
+    it('can configure compilation options', () => {
+      const props = getProps({
+        templates: {test: 'it configures compilation <%options%>'},
+        data: {options: 'delimiters'},
+        useCustomCompileOptions: {test: true},
+        templatesConfig: {compileOptions: {delimiters: '<% %>'}}
+      });
 
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    let out = renderer.getRenderOutput();
+      renderer.render(<Template {...props} />);
+      const out = renderer.getRenderOutput();
 
-    expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it configures compilation delimiters'}}></div>);
+      const content = 'it configures compilation delimiters';
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+    });
   });
 
   describe('using helpers', () => {
     beforeEach(() => {
-      templates = {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'};
-      data = {feature: 'helpers'};
-      templateKey = 'test';
     });
 
     it('call the relevant function', () => {
-      templatesConfig.helpers.emphasis = (text, render) => {
-        return '<em>' + render(text) + '</em>';
-      };
+      const props = getProps({
+        templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
+        data: {feature: 'helpers'},
+        templatesConfig: {helpers: {emphasis: (text, render) => '<em>' + render(text) + '</em>'}}
+      });
 
-      let props = getProps();
       renderer.render(<Template {...props} />);
-      let out = renderer.getRenderOutput();
+      const out = renderer.getRenderOutput();
 
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it supports <em>helpers</em>'}}></div>);
+      const content = 'it supports <em>helpers</em>';
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
     });
 
     it('sets the function context (`this`) to the template `data`', done => {
-      templatesConfig.helpers.emphasis = function() {
-        // context will be different when using arrow function (lexical scope used)
-        expect(this).toBe(data);
-        done();
-      };
+      const data = {feature: 'helpers'};
+      const props = getProps({
+        templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
+        data: data,
+        templatesConfig: {
+          helpers: {
+            emphasis: function() {
+              // context will be different when using arrow function (lexical scope used)
+              expect(this).toBe(data);
+              done();
+            }
+          }
+        }
+      });
 
-      let props = getProps();
       renderer.render(<Template {...props} />);
     });
   });
 
-  it('supports passing a transformData map function', () => {
-    templates = {test: 'it supports {{feature}}'};
-    data = {feature: 'replace me'};
-    templateKey = 'test';
-    transformData = originalData => {
-      originalData.feature = 'transformData';
-      return originalData;
-    };
+  describe('transform data usage', () => {
+    it('supports passing a transformData map function', () => {
+      const props = getProps({
+        templates: {test: 'it supports {{feature}}'},
+        data: {feature: 'replace me'},
+        transformData: (originalData) => {
+          originalData.feature = 'transformData';
+          return originalData;
+        }
+      });
 
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    let out = renderer.getRenderOutput();
-
-    expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: 'it supports transformData'}}></div>);
-  });
-
-  it('transformData with a function is using a deep cloned version of the data', () => {
-    templates = {test: ''};
-    data = {a: {}};
-    templateKey = 'test';
-    let called = false;
-    transformData = clonedData => {
-      called = true;
-      expect(clonedData).toNotBe(data);
-      expect(clonedData.a).toNotBe(data.a);
-      expect(clonedData).toEqual(data);
-      return clonedData;
-    };
-
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    expect(called).toBe(true);
-  });
-
-  it('transformData with an object is using a deep cloned version of the data', () => {
-    templates = {test: ''};
-    data = {a: {}};
-    templateKey = 'test';
-    let called = false;
-    transformData = {
-      test: clonedData => {
-        called = true;
-        expect(clonedData).toNotBe(data);
-        expect(clonedData.a).toNotBe(data.a);
-        expect(clonedData).toEqual(data);
-        return clonedData;
-      }
-    };
-
-    let props = getProps();
-    renderer.render(<Template {...props} />);
-    expect(called).toBe(true);
-  });
-
-  it('throws an error if the transformData is not returning anything', () => {
-    templates = {test: 'it supports {{feature}}'};
-    data = {feature: 'replace me'};
-    templateKey = 'test';
-    transformData = () => {
-      // return case if missing
-    };
-
-    let props = getProps();
-    expect(() => {
       renderer.render(<Template {...props} />);
-    }).toThrow('`transformData` must return a `object`, got `undefined`.');
-  });
 
-  it('doesn\'t throw an error if the transformData is an object without the templateKey', () => {
-    templates = {test: 'it supports {{feature}}'};
-    data = {feature: 'replace me'};
-    templateKey = 'test';
-    transformData = {
-      anotherKey: (d) => { return d; }
-    };
-    let props = getProps();
-    expect(() => {
+      const out = renderer.getRenderOutput();
+      const content = 'it supports transformData';
+      const expectedJSX = <div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>;
+
+      expect(out).toEqualJSX(expectedJSX);
+    });
+
+    it('transformData with a function is using a deep cloned version of the data', () => {
+      let called = false;
+      const data = {a: {}};
+      const props = getProps({
+        templates: {test: ''},
+        data: data,
+        transformData: clonedData => {
+          called = true;
+          expect(clonedData).toNotBe(data);
+          expect(clonedData.a).toNotBe(data.a);
+          expect(clonedData).toEqual(data);
+          return clonedData;
+        }
+      });
+
       renderer.render(<Template {...props} />);
-    }).toNotThrow();
-  });
+      expect(called).toBe(true);
+    });
 
-  it('throws an error if the transformData returns an unexpected type', () => {
-    templates = {test: 'it supports {{feature}}'};
-    data = {feature: 'replace me'};
-    templateKey = 'test';
-    transformData = () => {
-      return true;
-    };
+    it('transformData with an object is using a deep cloned version of the data', () => {
+      let called = false;
+      const data = {a: {}};
+      const props = getProps({
+        templates: {test: ''},
+        data: data,
+        transformData: {
+          test: clonedData => {
+            called = true;
+            expect(clonedData).toNotBe(data);
+            expect(clonedData.a).toNotBe(data.a);
+            expect(clonedData).toEqual(data);
+            return clonedData;
+          }
+        }
+      });
 
-    let props = getProps();
-    expect(() => {
       renderer.render(<Template {...props} />);
-    }).toThrow('`transformData` must return a `object`, got `boolean`.');
+      expect(called).toBe(true);
+    });
+
+    it('throws an error if the transformData is not returning anything', () => {
+      const props = getProps({
+        templates: {test: 'it supports {{feature}}'},
+        data: {feature: 'replace me'},
+        transformData: () => { /* missing return value */ }
+      });
+
+      expect(() => {
+        renderer.render(<Template {...props} />);
+      }).toThrow('`transformData` must return a `object`, got `undefined`.');
+    });
+
+    it('does not throw an error if the transformData is an object without the templateKey', () => {
+      const props = getProps({
+        templates: {test: 'it supports {{feature}}'},
+        data: {feature: 'replace me'},
+        transformData: {
+          anotherKey: (d) => { return d; }
+        }
+      });
+
+      expect(() => {
+        renderer.render(<Template {...props} />);
+      }).toNotThrow();
+    });
+
+    it('throws an error if the transformData returns an unexpected type', () => {
+      const props = getProps({
+        templates: {test: 'it supports {{feature}}'},
+        data: {feature: 'replace me'},
+        transformData: () => {
+          return true;
+        }
+      });
+
+      expect(() => {
+        renderer.render(<Template {...props} />);
+      }).toThrow('`transformData` must return a `object`, got `boolean`.');
+    });
   });
 
-  function getProps() {
+  describe('misc feature', () => {
+    it('accepts props that are not defined in the proptypes', () => {
+      function fn() {}
+
+      const props = getProps({});
+      renderer.render(<Template onClick={fn} {...props}/>);
+
+      const out = renderer.getRenderOutput();
+      const expectedProps = {
+        className: undefined,
+        dangerouslySetInnerHTML: {__html: ''},
+        onClick: fn
+      };
+      expect(out).toEqualJSX(<div {...expectedProps}></div>);
+    });
+  });
+
+  function getProps({
+    templates = {test: ''},
+    data = {},
+    templateKey = 'test',
+    useCustomCompileOptions = {},
+    templatesConfig = {helper: {}, compileOptions: {}},
+    transformData = null
+  }) {
     return {templates, data, templateKey, useCustomCompileOptions, templatesConfig, transformData};
   }
 });
