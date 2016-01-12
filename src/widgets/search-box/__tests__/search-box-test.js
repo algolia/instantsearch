@@ -49,22 +49,22 @@ describe('search-box()', () => {
   });
 
   context('targeting a div', () => {
+    let opts;
+
     beforeEach(() => {
       container = document.createElement('div');
-      widget = searchBox({container});
-    });
-
-    it('configures nothing', () => {
-      expect(widget.getConfiguration).toEqual(undefined);
+      opts = {container};
     });
 
     it('adds an input inside the div', () => {
+      widget = searchBox(opts);
       widget.init({state, helper});
       let inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
+      widget = searchBox(opts);
       widget.init({state, helper});
       let input = container.getElementsByTagName('input')[0];
       expect(input.getAttribute('autocapitalize')).toEqual('off');
@@ -75,6 +75,23 @@ describe('search-box()', () => {
       expect(input.getAttribute('role')).toEqual('textbox');
       expect(input.getAttribute('spellcheck')).toEqual('false');
       expect(input.getAttribute('type')).toEqual('text');
+    });
+
+    it('supports cssClasses option', () => {
+      opts.cssClasses = {
+        root: 'root-class',
+        input: 'input-class'
+      };
+
+      widget = searchBox(opts);
+      widget.init({state, helper});
+      let actualRootClasses = container.querySelector('input').parentNode.getAttribute('class');
+      let actualInputClasses = container.querySelector('input').getAttribute('class');
+      let expectedRootClasses = 'ais-search-box root-class';
+      let expectedInputClasses = 'ais-search-box--input input-class';
+
+      expect(actualRootClasses).toEqual(expectedRootClasses);
+      expect(actualInputClasses).toEqual(expectedInputClasses);
     });
   });
 
@@ -101,6 +118,20 @@ describe('search-box()', () => {
       expect(container.getAttribute('id')).toEqual('foo');
       expect(container.getAttribute('class')).toEqual('my-class ais-search-box--input');
       expect(container.getAttribute('placeholder')).toEqual('Search');
+    });
+
+    it('supports cssClasses', () => {
+      container = createHTMLNodeFromString('<input class="my-class" />');
+      widget = searchBox({container, cssClasses: {root: 'root-class', input: 'input-class'}});
+      widget.init({state, helper});
+
+      let actualRootClasses = container.parentNode.getAttribute('class');
+      let actualInputClasses = container.getAttribute('class');
+      let expectedRootClasses = 'ais-search-box root-class';
+      let expectedInputClasses = 'my-class ais-search-box--input input-class';
+
+      expect(actualRootClasses).toEqual(expectedRootClasses);
+      expect(actualInputClasses).toEqual(expectedInputClasses);
     });
   });
 
