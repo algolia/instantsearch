@@ -3,6 +3,8 @@ import forEach from 'lodash/collection/forEach';
 import find from 'lodash/collection/find';
 import get from 'lodash/object/get';
 import isEmpty from 'lodash/lang/isEmpty';
+import keys from 'lodash/object/keys';
+import uniq from 'lodash/array/uniq';
 
 let utils = {
   getContainerNode,
@@ -112,16 +114,17 @@ function prepareTemplateProps({
   };
 }
 
-function prepareTemplates(defaultTemplates, templates) {
-  return reduce(defaultTemplates, (config, defaultTemplate, key) => {
-    let isCustomTemplate = templates && templates[key] !== undefined && (templates[key] !== defaultTemplate);
-    if (isCustomTemplate) {
-      config.templates[key] = templates[key];
-      config.useCustomCompileOptions[key] = true;
-    } else {
-      config.templates[key] = defaultTemplate;
-      config.useCustomCompileOptions[key] = false;
-    }
+function prepareTemplates(defaultTemplates = [], templates = []) {
+  const allKeys = uniq([...(keys(defaultTemplates)), ...(keys(templates))]);
+
+  return reduce(allKeys, (config, key) => {
+    const defaultTemplate = defaultTemplates[key];
+    const customTemplate = templates[key];
+    const isCustomTemplate = customTemplate !== undefined && (customTemplate !== defaultTemplate);
+
+    config.templates[key] = isCustomTemplate ? customTemplate : defaultTemplate;
+    config.useCustomCompileOptions[key] = isCustomTemplate;
+
     return config;
   }, {templates: {}, useCustomCompileOptions: {}});
 }
