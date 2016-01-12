@@ -292,4 +292,25 @@ describe('refinementList()', () => {
       // Then
     });
   });
+
+  context('show more', () => {
+    it('should return a configuration with the highest limit value (default value)', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {}};
+      const wdgt = refinementList(opts);
+      const partialConfig = wdgt.getConfiguration({});
+      expect(partialConfig.maxValuesPerFacet).toBe(100);
+    });
+
+    it('should return a configuration with the highest limit value (custom value)', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {limit: 99}};
+      const wdgt = refinementList(opts);
+      const partialConfig = wdgt.getConfiguration({});
+      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
+    });
+
+    it('should not accept a show more limit that is < limit', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 100, showMore: {limit: 1}};
+      expect(() => refinementList(opts)).toThrow();
+    });
+  });
 });

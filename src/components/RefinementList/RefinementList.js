@@ -5,6 +5,13 @@ import {isSpecialClick} from '../../lib/utils.js';
 import Template from '../Template.js';
 
 class RefinementList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isShowMoreOpen: false
+    };
+  }
+
   refine(value) {
     this.props.toggleRefinement(value);
   }
@@ -45,7 +52,7 @@ class RefinementList extends React.Component {
       <div
         className={cssClassItem}
         key={key}
-        onClick={this.handleClick.bind(this, facetValue[this.props.attributeNameKey])}
+        onClick={this.handleItemClick.bind(this, facetValue[this.props.attributeNameKey])}
       >
         <Template data={templateData} templateKey="item" {...this.props.templateProps} />
         {subList}
@@ -69,7 +76,7 @@ class RefinementList extends React.Component {
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  handleClick(value, e) {
+  handleItemClick(value, e) {
     if (isSpecialClick(e)) {
       // do not alter the default browser behavior
       // if one special key is down
@@ -101,6 +108,11 @@ class RefinementList extends React.Component {
     this.refine(value);
   }
 
+  handleClickShowMore() {
+    const isShowMoreOpen = !this.state.isShowMoreOpen;
+    this.setState({isShowMoreOpen});
+  }
+
   render() {
     // Adding `-lvl0` classes
     let cssClassList = [this.props.cssClasses.list];
@@ -108,9 +120,20 @@ class RefinementList extends React.Component {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
+    const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
+    const showmoreBtn =
+      this.props.showMore ?
+        <Template
+          onClick={() => this.handleClickShowMore()}
+          templateKey={'showmore-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}
+          {...this.props.templateProps}
+        /> :
+        undefined;
+
     return (
       <div className={cx(cssClassList)}>
-        {this.props.facetValues.map(this._generateFacetItem, this)}
+        {this.props.facetValues.map(this._generateFacetItem, this).slice(0, limit)}
+        {showmoreBtn}
       </div>
     );
   }
@@ -128,6 +151,9 @@ RefinementList.propTypes = {
   }),
   depth: React.PropTypes.number,
   facetValues: React.PropTypes.array,
+  limitMax: React.PropTypes.number,
+  limitMin: React.PropTypes.number,
+  showMore: React.PropTypes.bool,
   templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired
 };

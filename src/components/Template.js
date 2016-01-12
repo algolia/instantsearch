@@ -13,7 +13,8 @@ function Template(props) {
   const compileOptions = useCustomCompileOptions ? props.templatesConfig.compileOptions : {};
 
   const content = renderTemplate({
-    template: props.templates[props.templateKey],
+    templates: props.templates,
+    templateKey: props.templateKey,
     compileOptions: compileOptions,
     helpers: props.templatesConfig.helpers,
     data: transformData(props.transformData, props.templateKey, props.data)
@@ -79,9 +80,10 @@ function transformData(fn, templateKey, originalData) {
   let clonedData = cloneDeep(originalData);
 
   let data;
-  if (typeof fn === 'function') {
+  const typeFn = typeof fn;
+  if (typeFn === 'function') {
     data = fn(clonedData);
-  } else if (typeof fn === 'object') {
+  } else if (typeFn === 'object') {
     // ex: transformData: {hit, empty}
     if (fn[templateKey]) {
       data = fn[templateKey](clonedData);
@@ -91,7 +93,7 @@ function transformData(fn, templateKey, originalData) {
       data = originalData;
     }
   } else {
-    throw new Error('`transformData` must be a function or an object');
+    throw new Error(`transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`);
   }
 
   let dataType = typeof data;
@@ -102,12 +104,14 @@ function transformData(fn, templateKey, originalData) {
   return data;
 }
 
-function renderTemplate({template, compileOptions, helpers, data}) {
-  let isTemplateString = typeof template === 'string';
-  let isTemplateFunction = typeof template === 'function';
+function renderTemplate({templates, templateKey, compileOptions, helpers, data}) {
+  const template = templates[templateKey];
+  const templateType = typeof template;
+  const isTemplateString = templateType === 'string';
+  const isTemplateFunction = templateType === 'function';
 
   if (!isTemplateString && !isTemplateFunction) {
-    throw new Error('Template must be `string` or `function`');
+    throw new Error(`Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`);
   } else if (isTemplateFunction) {
     return template(data);
   } else {

@@ -10,7 +10,7 @@ expect.extend(expectJSX);
 
 let {createRenderer} = TestUtils;
 
-describe.only('Template', () => {
+describe('Template', () => {
   let renderer;
 
   beforeEach(() => {

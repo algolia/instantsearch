@@ -114,7 +114,7 @@ function prepareTemplateProps({
   };
 }
 
-function prepareTemplates(defaultTemplates = [], templates = []) {
+function prepareTemplates(defaultTemplates = {}, templates = {}) {
   const allKeys = uniq([...(keys(defaultTemplates)), ...(keys(templates))]);
 
   return reduce(allKeys, (config, key) => {
