@@ -1,3 +1,13 @@
+<a name="1.1.3"></a>
+## [1.1.3](https://github.com/algolia/instantsearch.js/compare/v1.1.2...v1.1.3) (2016-01-12)
+
+
+### Bug Fixes
+
+* **searchBox:** fixes cssClasses option ([660ee2f](https://github.com/algolia/instantsearch.js/commit/660ee2f)), closes [#775](https://github.com/algolia/instantsearch.js/issues/775)
+
+
+
 <a name="1.1.2"></a>
 ## [1.1.2](https://github.com/algolia/instantsearch.js/compare/v1.1.1...v1.1.2) (2016-01-08)
 

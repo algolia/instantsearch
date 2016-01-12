@@ -19,10 +19,10 @@ const KEY_SUPPRESS = 8;
  * @param  {boolean} [options.searchOnEnterKeyPressOnly=false] If set, trigger the search
  * once `<Enter>` is pressed only
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the
  * wrapping div (if `wrapInput` set to `true`)
- * @param  {string} [options.cssClasses.input] CSS class to add to the input
- * @param  {string} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
+ * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
+ * @param  {string|string[]} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @return {Object}
  */
 const usage = `Usage:
@@ -66,7 +66,8 @@ function searchBox({
     wrapInput: function(input) {
       // Wrap input in a .ais-search-box div
       let wrapper = document.createElement('div');
-      wrapper.classList.add(cx(bem(null), cssClasses.root));
+      let CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
+      wrapper.classList.add.apply(wrapper.classList, CSSClassesToAdd);
       wrapper.appendChild(input);
       return wrapper;
     },
@@ -91,7 +92,8 @@ function searchBox({
       });
 
       // Add classes
-      input.classList.add(cx(bem('input'), cssClasses.input));
+      let CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
+      input.classList.add.apply(input.classList, CSSClassesToAdd);
     },
     addPoweredBy: function(input) {
       let PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
