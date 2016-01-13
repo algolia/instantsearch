@@ -79,7 +79,7 @@ var search = instantsearch({
   appId: appId, // Mandatory
   apiKey: apiKey, // Mandatory
   indexName: indexName, // Mandatory
-  numberLocale: 'fr-FR' // Optional, defaults to 'en-EN',
+  numberLocale: 'fr-FR', // Optional, defaults to 'en-EN',
   urlSync: { // optionnal, activate url sync if defined
     useHash: false
   }
