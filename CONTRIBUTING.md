@@ -27,7 +27,6 @@ Hi (future) collaborator!
 - [When are issues closed?](#when-are-issues-closed)
 - [Milestones](#milestones)
 - [Releasing](#releasing)
-  - [Beta releases](#beta-releases)
 - [Hotfixes](#hotfixes)
   - [Releasing hotfixes](#releasing-hotfixes)
   - [Documentation updates](#documentation-updates)
