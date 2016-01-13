@@ -29,16 +29,16 @@ let defaultLabels = {
  * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<ul>`
- * @param  {string} [options.cssClasses.item] CSS classes added to each `<li>`
- * @param  {string} [options.cssClasses.link] CSS classes added to each link
- * @param  {string} [options.cssClasses.page] CSS classes added to page `<li>`
- * @param  {string} [options.cssClasses.previous] CSS classes added to the previous `<li>`
- * @param  {string} [options.cssClasses.next] CSS classes added to the next `<li>`
- * @param  {string} [options.cssClasses.first] CSS classes added to the first `<li>`
- * @param  {string} [options.cssClasses.last] CSS classes added to the last `<li>`
- * @param  {string} [options.cssClasses.active] CSS classes added to the active `<li>`
- * @param  {string} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<ul>`
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<li>`
+ * @param  {string|string[]} [options.cssClasses.link] CSS classes added to each link
+ * @param  {string|string[]} [options.cssClasses.page] CSS classes added to page `<li>`
+ * @param  {string|string[]} [options.cssClasses.previous] CSS classes added to the previous `<li>`
+ * @param  {string|string[]} [options.cssClasses.next] CSS classes added to the next `<li>`
+ * @param  {string|string[]} [options.cssClasses.first] CSS classes added to the first `<li>`
+ * @param  {string|string[]} [options.cssClasses.last] CSS classes added to the last `<li>`
+ * @param  {string|string[]} [options.cssClasses.active] CSS classes added to the active `<li>`
+ * @param  {string|string[]} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
  * @return {Object}
  */
 const usage = `Usage:

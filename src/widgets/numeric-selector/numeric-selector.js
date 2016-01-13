@@ -19,8 +19,8 @@ let bem = utils.bemHelper('ais-numeric-selector');
  * @param  {string} [options.operator] The operator to use to refine
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
  * @return {Object}
  */
 
