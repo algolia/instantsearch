@@ -20,9 +20,9 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {Function} [options.transformData.item=identity] Method used to change the object passed to the item template
  * @param  {number} [hitsPerPage=20] The number of hits to display per page
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the wrapping element
- * @param  {string} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
- * @param  {string} [options.cssClasses.item] CSS class to add to each result
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the wrapping element
+ * @param  {string|string[]} [options.cssClasses.empty] CSS class to add to the wrapping element when no results
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
  * @return {Object}
  */
 const usage = `Usage:

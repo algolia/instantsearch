@@ -17,8 +17,8 @@ import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
  * @param  {string} options.indices[0].label Label displayed in the dropdown
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each <option>
  * @return {Object}
  */
 const usage = `Usage:

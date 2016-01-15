@@ -20,11 +20,11 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @return {Object}
  */
 const usage = `Usage:

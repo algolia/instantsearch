@@ -25,20 +25,20 @@ import cx from 'classnames';
  * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string} [options.cssClasses.list] CSS class to add to the wrapping list element
- * @param  {string} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string} [options.cssClasses.active] CSS class to add to the active item element
- * @param  {string} [options.cssClasses.link] CSS class to add to each link element
- * @param  {string} [options.cssClasses.form] CSS class to add to the form element
- * @param  {string} [options.cssClasses.label] CSS class to add to each wrapping label of the form
- * @param  {string} [options.cssClasses.input] CSS class to add to each input of the form
- * @param  {string} [options.cssClasses.currency] CSS class to add to each currency element of the form
- * @param  {string} [options.cssClasses.separator] CSS class to add to the separator of the form
- * @param  {string} [options.cssClasses.button] CSS class to add to the submit button of the form
- * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the wrapping list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to the active item element
+ * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link element
+ * @param  {string|string[]} [options.cssClasses.form] CSS class to add to the form element
+ * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each wrapping label of the form
+ * @param  {string|string[]} [options.cssClasses.input] CSS class to add to each input of the form
+ * @param  {string|string[]} [options.cssClasses.currency] CSS class to add to each currency element of the form
+ * @param  {string|string[]} [options.cssClasses.separator] CSS class to add to the separator of the form
+ * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the submit button of the form
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @return {Object}
  */
 const usage = `Usage:
