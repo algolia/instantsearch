@@ -5,7 +5,7 @@ import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
 import union from 'lodash/array/union';
 
-let EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
 
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -20,7 +20,8 @@ function defaultCreateURL() { return '#'; }
  * @param  {string} [options.numberLocale] The locale used to display numbers. This will be passed
  * to Number.prototype.toLocaleString()
  * @param  {Object} [options.searchParameters] Additional parameters to pass to
- * the Algolia API. [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
+ * the Algolia API.
+ * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
@@ -66,7 +67,7 @@ Usage: instantsearch({
       helpers: require('./helpers.js')({numberLocale}),
       compileOptions: {}
     };
-    this.urlSync = urlSync;
+    this.urlSync = urlSync === true ? {} : urlSync;
   }
 
   /**
@@ -93,8 +94,12 @@ Usage: instantsearch({
     if (this.urlSync) {
       let syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
+      this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
-    } else this._createURL = defaultCreateURL;
+    } else {
+      this._createURL = defaultCreateURL;
+      this._onHistoryChange = function() {};
+    }
 
     this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
 
@@ -136,10 +141,10 @@ Usage: instantsearch({
   }
 
   _init(state, helper) {
+    const {_onHistoryChange, templatesConfig} = this;
     forEach(this.widgets, function(widget) {
       if (widget.init) {
-        const templatesConfig = this.templatesConfig;
-        widget.init({state, helper, templatesConfig});
+        widget.init({state, helper, templatesConfig, onHistoryChange: _onHistoryChange});
       }
     }, this);
   }

@@ -39,7 +39,12 @@ describe('InstantSearch lifecycle', () => {
     apiKey = 'apiKey';
     indexName = 'lifecycle';
 
-    searchParameters = {some: 'configuration', values: [-2, -1], index: indexName, another: {config: 'parameter'}};
+    searchParameters = {
+      some: 'configuration',
+      values: [-2, -1],
+      index: indexName,
+      another: {config: 'parameter'}
+    };
 
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
@@ -113,7 +118,12 @@ describe('InstantSearch lifecycle', () => {
           .toEqual([
             client,
             indexName,
-            {some: 'modified', values: [-2, -1], index: indexName, another: {different: 'parameter', config: 'parameter'}}
+            {
+              some: 'modified',
+              values: [-2, -1],
+              index: indexName,
+              another: {different: 'parameter', config: 'parameter'}
+            }
           ]);
       });
 
@@ -125,12 +135,11 @@ describe('InstantSearch lifecycle', () => {
         expect(widget.init.calledOnce).toBe(true, 'widget.init called once');
         expect(widget.init.calledAfter(widget.getConfiguration))
           .toBe(true, 'widget.init() was called after widget.getConfiguration()');
-        expect(widget.init.args[0][0]).
-          toEqual({
-            state: helper.state,
-            helper,
-            templatesConfig: search.templatesConfig
-          });
+        const args = widget.init.args[0][0];
+        expect(args.state).toBe(helper.state);
+        expect(args.helper).toBe(helper);
+        expect(args.templatesConfig).toBe(search.templatesConfig);
+        expect(args.onHistoryChange).toBe(search._onHistoryChange);
       });
 
       it('does not call widget.render', () => {
