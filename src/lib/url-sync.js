@@ -1,6 +1,7 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 let majorVersionNumber = require('../lib/version.js').split('.')[0];
+import urlHelper from 'algoliasearch-helper/src/url';
 
 import isEqual from 'lodash/lang/isEqual';
 import merge from 'lodash/object/merge';
@@ -104,41 +105,41 @@ class URLSync {
     return config;
   }
 
-  onPopState(helper) {
-    let qs = this.urlUtils.readUrl();
-    let partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
-    let fullState = merge({}, this.originalConfig, partialState);
+  init({helper}) {
+    helper.on('change', (state) => {
+      this.renderURLFromState(state);
+    });
+    this.onHistoryChange(this.onPopState.bind(this, helper));
+  }
+
+  onPopState(helper, fullState) {
     // compare with helper.state
     let partialHelperState = helper.getState(this.trackedParameters);
     let fullHelperState = merge({}, this.originalConfig, partialHelperState);
 
     if (isEqual(fullHelperState, fullState)) return;
 
-    helper.setState(fullState).search();
+    helper.overrideStateWithoutTriggeringChangeEvent(fullState).search();
   }
 
-  init({helper}) {
-    this.urlUtils.onpopstate(this.onPopState.bind(this, helper));
-  }
-
-  render({helper}) {
-    let helperState = helper.getState(this.trackedParameters);
+  renderURLFromState(state) {
     let currentQueryString = this.urlUtils.readUrl();
-    let urlState = AlgoliaSearchHelper.getConfigurationFromQueryString(currentQueryString);
-
-    if (isEqual(helperState, urlState)) return;
-
-    // Add instantsearch version to reconciliate old url with newer versions
     let foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString);
     foreignConfig.is_v = majorVersionNumber;
 
-    let qs = helper.getStateAsQueryString({filters: this.trackedParameters, moreAttributes: foreignConfig});
+    let qs = urlHelper.getQueryStringFromState(
+      state.filter(this.trackedParameters),
+      {moreAttributes: foreignConfig}
+    );
+
     if (this.timer() < this.threshold) {
       this.urlUtils.replaceState(qs);
     } else {
       this.urlUtils.pushState(qs);
     }
   }
+
+  // External API's
 
   createURL(state) {
     let currentQueryString = this.urlUtils.readUrl();
@@ -148,6 +149,15 @@ class URLSync {
     foreignConfig.is_v = majorVersionNumber;
 
     return this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState));
+  }
+
+  onHistoryChange(fn) {
+    this.urlUtils.onpopstate(() => {
+      let qs = this.urlUtils.readUrl();
+      let partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
+      let fullState = merge({}, this.originalConfig, partialState);
+      fn(fullState);
+    });
   }
 }
 

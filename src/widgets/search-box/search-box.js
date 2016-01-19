@@ -110,7 +110,7 @@ function searchBox({
         poweredByContainer
       );
     },
-    init: function({state, helper}) {
+    init: function({state, helper, onHistoryChange}) {
       let isInputTargeted = container.tagName === 'INPUT';
       let input = this.getInput();
 
@@ -162,10 +162,8 @@ function searchBox({
       }
 
       // Update value when query change outside of the input
-      helper.on('change', function(newState) {
-        if (input !== document.activeElement && input.value !== newState.query) {
-          input.value = newState.query;
-        }
+      onHistoryChange(function(fullState) {
+        input.value = fullState.query || '';
       });
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
