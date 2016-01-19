@@ -114,6 +114,31 @@ search.addWidget(
     container: '#brands',
     attributeName: 'brand',
     operator: 'or',
+    limit: 3,
+    cssClasses: {
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
+    },
+    templates: {
+      header: 'Brands'
+    },
+    showMore: {
+      templates: {
+        'active': '<button>Show less</button>',
+        'inactive': '<button>Show more</button>'
+      },
+      limit: 10
+    }
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#brands-2',
+    attributeName: 'brand',
+    operator: 'or',
     limit: 10,
     cssClasses: {
       header: 'facet-title',

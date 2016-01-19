@@ -30,3 +30,13 @@
     /* widget footer */
   }
 }
+
+/* Sub block for the show more of the refinement list */
+@include block(showmore) {
+  @include modifier(active) {
+    /* Show more button is activated */
+  }
+  @include modifier(inactive) {
+    /* Show more button is deactivated */
+  }
+}
