@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,7 +12,8 @@ import hits from '../hits';
 import Hits from '../../../components/Hits';
 
 describe('hits call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no container', () => {
     expect(hits).toThrow(/^Must provide a container/);
@@ -20,7 +21,8 @@ describe('hits call', () => {
 });
 
 describe('hits()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;

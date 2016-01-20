@@ -1,12 +1,13 @@
 /* eslint-env mocha */
 
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import menu from '../menu';
 
 describe('menu', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no attributeName', () => {
     const container = document.createElement('div');

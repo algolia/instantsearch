@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,7 +12,8 @@ import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
 
 describe('hitsPerPageSelector call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
@@ -26,7 +27,8 @@ describe('hitsPerPageSelector call', () => {
 });
 
 describe('hitsPerPageSelector()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;

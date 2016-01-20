@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import {createRenderer} from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
@@ -23,7 +23,8 @@ describe('refinementList()', () => {
   let ReactDOM;
   let renderer = createRenderer();
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     container = document.createElement('div');

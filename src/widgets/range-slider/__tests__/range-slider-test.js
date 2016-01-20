@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -11,7 +11,8 @@ expect.extend(expectJSX);
 import AlgoliasearchHelper from 'algoliasearch-helper';
 
 describe('rangeSlider call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
   const rangeSlider = require('../range-slider.js');
 
   it('throws an exception when no container', () => {
@@ -26,7 +27,8 @@ describe('rangeSlider call', () => {
 });
 
 describe('rangeSlider()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;

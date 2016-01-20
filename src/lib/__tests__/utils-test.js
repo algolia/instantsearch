@@ -1,13 +1,14 @@
 /* eslint-env mocha */
 
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import algoliasearchHelper from 'algoliasearch-helper';
 import utils from '../utils';
 import isEmpty from 'lodash/lang/isEmpty';
 
 describe('getContainerNode', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('should be able to get a node from a node', () => {
     let d = document.body;
@@ -36,7 +37,8 @@ describe('getContainerNode', () => {
 });
 
 describe('isDomElement', function() {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('should return true for dom element', () => {
     expect(utils.isDomElement(document.body)).toBe(true);

@@ -4,13 +4,14 @@ import EventEmitter from 'events';
 import expect from 'expect';
 import range from 'lodash/utility/range';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import SearchParameters from 'algoliasearch-helper/src/SearchParameters';
 import InstantSearch from '../InstantSearch';
 
 describe('InstantSearch lifecycle', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let algoliasearch;
   let algoliasearchHelper;
