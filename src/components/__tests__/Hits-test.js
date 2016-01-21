@@ -21,7 +21,7 @@ describe('Hits', () => {
     templateProps = {};
   });
 
-  it('render hits when present', () => {
+  it('render hits when present (item template)', () => {
     results = {hits: [{
       objectID: 'hello'
     }, {
@@ -55,6 +55,42 @@ describe('Hits', () => {
           templateKey="item"
         />
       </div>
+    );
+  });
+
+  it('render hits when present (allItems template)', () => {
+    results = {hits: [{
+      objectID: 'hello'
+    }, {
+      objectID: 'mom'
+    }]};
+
+    const templateProps2 = {
+      ...templateProps,
+      templates: {
+        allItems: 'all items'
+      }
+    };
+
+    let props = {
+      results,
+      templateProps: templateProps2,
+      cssClasses: {
+        root: 'custom-root',
+        allItems: 'custom-item',
+        empty: 'custom-empty'
+      }
+    };
+    renderer.render(<Hits {...props} />);
+    let out = renderer.getRenderOutput();
+
+    expect(out).toEqualJSX(
+      <Template
+        cssClass="custom-item"
+        data={results}
+        templateKey="allItems"
+        {...templateProps2}
+      />
     );
   });
 

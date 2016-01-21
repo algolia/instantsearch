@@ -15,7 +15,7 @@ describe('hits call', () => {
   jsdom({useEach: true});
 
   it('throws an exception when no container', () => {
-    expect(hits).toThrow(/^Usage:/);
+    expect(hits).toThrow(/^Must provide a container/);
   });
 });
 
@@ -63,6 +63,10 @@ describe('hits()', () => {
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Hits {...props} />);
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+  });
+
+  it('does not accept both item and allItems templates', () => {
+    expect(hits.bind({container, templates: {item: '', allItems: ''}})).toThrow();
   });
 
   afterEach(() => {
