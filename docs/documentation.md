@@ -265,6 +265,39 @@ This example shows you how to create a very simple search results page that incl
 
 <img class="img-responsive" src="../img/add-widgets.jpg" alt="Add widgets">
 
+### Events
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet ignore">
+{% highlight js %}
+var search = instantsearch({
+  appId: '$appId',
+  apiKey: '$apiKey',
+  indexName: '$indexName',
+  urlSync: true
+});
+
+var onRenderHandler = function() {};
+search.on('render', onRenderHandler);
+// on renderHandler will be called
+// until removeListener is called
+search.removeListener(onRenderHandler);
+
+search.once('render', function(){  });
+// triggered once then removed automatically
+{% endhighlight %}
+  </div>
+</div>
+
+instantsearch emits events during its lifecylce. The currently supported events are:
+
+ - `render` : fired when a rendering of all the widgets has been completed
+
+instantsearch events are based on the [Node EventEmitter](https://nodejs.org/api/events.html)
+class. See the example for a quick overview of the API or go to the
+[Node documentation](https://nodejs.org/api/events.html) for more details.
+
+
 ## Widgets
 
 ### Basics
