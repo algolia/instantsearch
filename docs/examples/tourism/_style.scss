@@ -177,6 +177,14 @@ body {
       border-color: $aisdemo-primary-color;
     }
 
+    .ais-range-slider--handle-lower {
+      transform: translateX(-50%);
+    }
+
+    .ais-range-slider--handle-upper {
+      transform: translateX(50%);
+    }
+
     .ais-range-slider--tooltip {
       &:last-child {
         right: 0;
