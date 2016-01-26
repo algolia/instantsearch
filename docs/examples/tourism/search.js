@@ -87,12 +87,12 @@ search.addWidget(
     attributeName: 'person_capacity',
     operator: '>=',
     options: [
-      { label: '1 guest', value: 1 },
-      { label: '2 guests', value: 2 },
-      { label: '3 guests', value: 3 },
-      { label: '4 guests', value: 4 },
-      { label: '5 guests', value: 5 },
-      { label: '6 guests', value: 6 }
+      { label: '1 guest', value: 1},
+      { label: '2 guests', value: 2},
+      { label: '3 guests', value: 3},
+      { label: '4 guests', value: 4},
+      { label: '5 guests', value: 5},
+      { label: '6 guests', value: 6}
     ]
   })
 );
