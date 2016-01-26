@@ -52,12 +52,23 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.hits({
+    container: '#hits-table',
+    templates: {
+      empty: require('./templates/no-results.html'),
+      allItems: require('./templates/all-items.html')
+    },
+    hitsPerPage: 24
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.hits({
     container: '#hits',
     templates: {
       empty: require('./templates/no-results.html'),
       item: require('./templates/item.html')
     },
-    hitsPerPage: 6
+    hitsPerPage: 24
   })
 );
 
