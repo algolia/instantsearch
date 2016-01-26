@@ -912,6 +912,40 @@ instantsearch.widgets.clearAll(options);
 
 <div id="clear-all" class="widget-container"></div>
 
+#### currentRefinedValues
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
+This widget list all the refinements currently applied. It also lets
+the user clear them one by one. This widget can also contain a
+`clear all` link to remove all filters.
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.currentRefinedValues({
+    container: '#current-refined-values',
+    clearAll: 'after'
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.currentRefinedValues(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/currentRefinedValues.md %}
+  </div>
+</div>
+
+</div>
+
+<div id="current-refined-values" class="widget-container"></div>
+
+
 ### Sort
 
 #### sortBySelector
