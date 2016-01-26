@@ -1,22 +1,21 @@
 <div class="spacer100 bg-white"></div>
-<footer class="site-footer">
+<footer class="site-footer container">
   <p>
     Designed and built with <i class="fa fa-heart"></i> by <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage"><img src="{{site.baseurl}}/img/logo-algolia-dark.png" alt="Algolia" height="20"></a>
   </p>
   <div class="spacer50"></div>
+  <p>Currently v{{ site.version }}</p>
   <ul class="list-inline">
-    <li>Currently v{{ site.version }}</li>
-    <li>•</li>
-    <li>Code licensed under <a href="https://github.com/algolia/instantsearch.js/blob/master/LICENSE">MIT</a></li>
-    <li>•</li>
     <li><a href="https://github.com/algolia/instantsearch.js">GitHub</a></li>
     <li>•</li>
     <li><a href="https://github.com/algolia/instantsearch.js/issues">Issues</a></li>
     <li>•</li>
     <li><a href="https://github.com/algolia/instantsearch.js/releases">Releases</a></li>
-    <li>•</li>
-    <li>Updated {{ site.time | date: '%c' }}</li>
   </ul>
+  <div class="spacer20"></div>
+  <p>Updated {{ site.time | date: '%c' }}</p>
+  <div class="spacer20"></div>
+  <p>Code licensed under <a href="https://github.com/algolia/instantsearch.js/blob/master/LICENSE">MIT</a></p>
   <div class="spacer50"></div>
   <div class="m400 m-l-r-auto">
     {% include newsletter-mc.html %}
