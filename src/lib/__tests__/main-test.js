@@ -13,9 +13,8 @@ describe('instantsearch()', () => {
     instantsearch = require('../main.js');
   });
 
-  it('includes the latest version', () => {
-    let pkg = require('../../../package.json');
-    expect(instantsearch.version).toEqual(pkg.version);
+  it('includes a version', () => {
+    expect(instantsearch.version).toBeA('string');
   });
 
   it('statically creates a URL', () => {

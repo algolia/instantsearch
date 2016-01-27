@@ -44,9 +44,9 @@ describe('currentRefinedValues()', () => {
     context('options.container', () => {
       it('doesn\'t throw usage with a string', () => {
         let element = document.createElement('div');
-        element.id = 'testid';
+        element.id = 'testid2';
         document.body.appendChild(element);
-        parameters.container = '#testid';
+        parameters.container = '#testid2';
         expect(boundWidget).toNotThrow();
       });
 
