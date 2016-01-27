@@ -213,10 +213,12 @@ npm run dev:docs
 ## Test
 
 ```sh
-npm test # jsdom + lint
-npm run test:watch # jsdom
-npm run test:watch:browser # chrome
-npm run test:watch:browser -- --browsers ChromeCanary # force Chrome Canary
+npm test # unit tests, jsdom + lint
+npm run test:watch # unit tests, jsdom, watch
+
+npm run test:browser # unit tests, chrome
+npm run test:browser:watch # unit tests, chrome, watch
+npm run test:browser -- --browsers ChromeCanary # force Chrome Canary
 ```
 
 Most of the time `npm run test:watch` is sufficient.
