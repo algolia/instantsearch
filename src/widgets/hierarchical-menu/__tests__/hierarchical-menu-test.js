@@ -172,7 +172,7 @@ describe('hierarchicalMenu()', () => {
 
     it('understand provided cssClasses', () => {
       let userCssClasses = {
-        root: 'root',
+        root: ['root', 'cx'],
         header: 'header',
         body: 'body',
         footer: 'footer',
@@ -187,7 +187,7 @@ describe('hierarchicalMenu()', () => {
       widget.render({results});
       let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
       expect(actual).toEqual({
-        root: 'ais-hierarchical-menu root',
+        root: 'ais-hierarchical-menu root cx',
         header: 'ais-hierarchical-menu--header header',
         body: 'ais-hierarchical-menu--body body',
         footer: 'ais-hierarchical-menu--footer footer',

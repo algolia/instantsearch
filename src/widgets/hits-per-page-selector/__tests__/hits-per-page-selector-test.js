@@ -53,7 +53,7 @@ describe('hitsPerPageSelector()', () => {
       {value: 20, label: '20 results'}
     ];
     cssClasses = {
-      root: 'custom-root',
+      root: ['custom-root', 'cx'],
       item: 'custom-item'
     };
     widget = hitsPerPageSelector({container, options, cssClasses});
@@ -79,7 +79,7 @@ describe('hitsPerPageSelector()', () => {
     widget.render({helper, results, state: helper.state});
     props = {
       cssClasses: {
-        root: 'ais-hits-per-page-selector custom-root',
+        root: 'ais-hits-per-page-selector custom-root cx',
         item: 'ais-hits-per-page-selector--item custom-item'
       },
       currentValue: 20,

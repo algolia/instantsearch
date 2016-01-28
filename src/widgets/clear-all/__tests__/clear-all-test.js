@@ -36,7 +36,7 @@ describe('clearAll()', () => {
     clearAll.__Rewire__('headerFooterHOC', headerFooterHOC);
 
     container = document.createElement('div');
-    widget = clearAll({container, autoHideContainer: true});
+    widget = clearAll({container, autoHideContainer: true, cssClasses: {root: ['root', 'cx']}});
 
     results = {};
     helper = {
@@ -50,7 +50,7 @@ describe('clearAll()', () => {
     props = {
       clearAll: sinon.spy(),
       cssClasses: {
-        root: 'ais-clear-all',
+        root: 'ais-clear-all root cx',
         header: 'ais-clear-all--header',
         body: 'ais-clear-all--body',
         footer: 'ais-clear-all--footer',

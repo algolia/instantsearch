@@ -82,7 +82,7 @@ describe('search-box()', () => {
 
     it('supports cssClasses option', () => {
       opts.cssClasses = {
-        root: 'root-class',
+        root: ['root-class', 'cx'],
         input: 'input-class'
       };
 
@@ -90,7 +90,7 @@ describe('search-box()', () => {
       widget.init({state, helper, onHistoryChange});
       let actualRootClasses = container.querySelector('input').parentNode.getAttribute('class');
       let actualInputClasses = container.querySelector('input').getAttribute('class');
-      let expectedRootClasses = 'ais-search-box root-class';
+      let expectedRootClasses = 'ais-search-box root-class cx';
       let expectedInputClasses = 'ais-search-box--input input-class';
 
       expect(actualRootClasses).toEqual(expectedRootClasses);

@@ -201,7 +201,7 @@ describe('refinementList()', () => {
       it('should call the component with the correct classes', () => {
         // Given
         let cssClasses = {
-          root: 'root',
+          root: ['root', 'cx'],
           header: 'header',
           body: 'body',
           footer: 'footer',
@@ -218,7 +218,7 @@ describe('refinementList()', () => {
         let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
 
         // Then
-        expect(actual.root).toBe('ais-refinement-list root');
+        expect(actual.root).toBe('ais-refinement-list root cx');
         expect(actual.header).toBe('ais-refinement-list--header header');
         expect(actual.body).toBe('ais-refinement-list--body body');
         expect(actual.footer).toBe('ais-refinement-list--footer footer');

@@ -31,7 +31,7 @@ import defaultShowMoreTemplates from './defaultShowMoreTemplates.js';
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no items in the refinement list
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element

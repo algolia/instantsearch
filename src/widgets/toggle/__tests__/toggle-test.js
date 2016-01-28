@@ -136,6 +136,24 @@ describe('toggle()', () => {
         expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
       });
 
+      it('understands cssClasses', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          nbHits: 1,
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        props.cssClasses.root += ' root cx';
+        props = {
+          facetValues: [{count: 1, isRefined: false, name: label}],
+          shouldAutoHideContainer: false,
+          ...props
+        };
+        let cssClasses = {root: ['root', 'cx']};
+        widget = toggle({container, attributeName, label, cssClasses});
+        widget.render({results, helper});
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+      });
+
       it('with facet values', () => {
         results = {
           hits: [{Hello: ', world!'}],

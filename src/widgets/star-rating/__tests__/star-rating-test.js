@@ -36,7 +36,7 @@ describe('starRating()', () => {
     starRating.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = starRating({container, attributeName: 'anAttrName'});
+    widget = starRating({container, attributeName: 'anAttrName', cssClasses: {body: ['body', 'cx']}});
     helper = {
       clearRefinements: sinon.spy(),
       addDisjunctiveFacetRefinement: sinon.spy(),
@@ -61,7 +61,7 @@ describe('starRating()', () => {
     let props = {
       cssClasses: {
         active: 'ais-star-rating--item__active',
-        body: 'ais-star-rating--body',
+        body: 'ais-star-rating--body body cx',
         footer: 'ais-star-rating--footer',
         header: 'ais-star-rating--header',
         item: 'ais-star-rating--item',
