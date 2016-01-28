@@ -861,6 +861,17 @@ describe('currentRefinedValues()', () => {
         expect(ReactDOM.render.calledOnce).toBe(true);
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
       });
+
+      it('should work with an array', () => {
+        parameters.cssClasses.body = ['custom-body', 'custom-body-2'];
+
+        currentRefinedValues(parameters).render(renderParameters);
+
+        expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-body custom-body-2';
+
+        expect(ReactDOM.render.calledOnce).toBe(true);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+      });
     });
 
     context('with attributes', () => {

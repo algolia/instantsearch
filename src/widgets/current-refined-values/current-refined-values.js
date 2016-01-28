@@ -106,7 +106,7 @@ function currentRefinedValues({
     reduce(userCssClasses, (res, val, key) => {
       return res &&
        userCssClassesKeys.indexOf(key) !== -1 &&
-       isString(val);
+       isString(val) || isArray(val);
     }, true);
 
   const showUsage = false ||
