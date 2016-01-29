@@ -61,8 +61,7 @@ class RefinementList extends React.Component {
   }
 
   // Click events on DOM tree like LABEL > INPUT will result in two click events
-  // instead of one. No matter the framework: see
-  // a label, you will get two click events instead of one.
+  // instead of one.
   // No matter the framework, see https://www.google.com/search?q=click+label+twice
   //
   // Thus making it hard to distinguish activation from deactivation because both click events
