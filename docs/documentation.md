@@ -1023,6 +1023,32 @@ instantsearch.widgets.stats(options);
 
 <div id="stats-container" class="widget-container"></div>
 
+## Community widgets
+
+Community widgets are solving specific use cases and so cannot make it into the core instantsearch.js library.
+
+You may want to create and publish your own community widget, we have a [dedicated section](#custom-widgets) on how to create them.
+
+If you want your widget to be listed here, [open an issue](https://github.com/algolia/instantsearch.js/issues).
+ 
+### googleMaps
+
+The [googleMaps](https://github.com/instantsearch/instantsearch-googlemaps) widget can display your [Algolia geo hits](https://www.algolia.com/doc/rest#geo-search-parameters) on a map using [Google Maps APIs](https://developers.google.com/maps/).
+
+**Widget demo**:
+<img src="{{site.baseurl}}/img/googleMaps.gif" width="100%" />
+
+See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
+
+### ionRangeSlider
+
+Provides [Ion.RangeSlider](https://github.com/IonDen/ion.rangeSlider) as a widget. This is a jQuery plugin so you will need to use jQuery in your page.
+
+**Widget demo**:
+<img src="{{site.baseurl}}/img/ionRangeSlider.gif" width="100%" />
+
+See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
+
 ## Templates
 
 <div class="codebox-combo">
