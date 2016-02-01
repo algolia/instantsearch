@@ -252,6 +252,10 @@ npm run test:functional:dev:debug-server
 
 Useful when you want to modify the functional test app.
 
+### It's not working!
+
+Your docker installation must be compatible and ready to make the [--net="host"](https://docs.docker.com/engine/reference/run/#network-host) works.
+
 ## License
 
 instantsearch.js is [MIT licensed](./LICENSE).
