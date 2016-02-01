@@ -16,11 +16,10 @@ function createHTMLNodeFromString(string) {
   return parent.firstChild;
 }
 
-describe('search-box()', () => {
+describe('searchBox()', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
 
-  let ReactDOM;
   let container;
   let state;
   let helper;
@@ -28,8 +27,6 @@ describe('search-box()', () => {
   let onHistoryChange;
 
   beforeEach(() => {
-    ReactDOM = {render: sinon.spy()};
-    searchBox.__Rewire__('ReactDOM', ReactDOM);
     state = {
       query: ''
     };
@@ -193,13 +190,17 @@ describe('search-box()', () => {
     it('do not add the poweredBy if not specified', () => {
       widget = searchBox({container});
       widget.init({state, helper, onHistoryChange});
-      expect(ReactDOM.render.notCalled).toBe(true);
+      expect(container.querySelector('.ais-search-box--powered-by')).toBe(null);
     });
 
-    it('add the poweredBy if specified', () => {
+    it('adds the poweredBy if specified', () => {
       widget = searchBox({container, poweredBy: true});
       widget.init({state, helper, onHistoryChange});
-      expect(ReactDOM.render.notCalled).toBe(false);
+      const poweredBy = container.querySelector('.ais-search-box--powered-by');
+      const poweredByLink = poweredBy.querySelector('a');
+      const expectedLink = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
+      expect(poweredBy).toNotBe(null);
+      expect(poweredByLink.getAttribute('href')).toBe(expectedLink);
     });
   });
 
@@ -404,10 +405,6 @@ describe('search-box()', () => {
         expect(input.focus.called).toEqual(false);
       });
     });
-  });
-
-  afterEach(() => {
-    searchBox.__ResetDependency__('ReactDOM');
   });
 });
 

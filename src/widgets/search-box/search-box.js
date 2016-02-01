@@ -103,9 +103,16 @@ function searchBox({
         root: cx(bem('powered-by'), cssClasses.poweredBy),
         link: bem('powered-by-link')
       };
+      let link = 'https://www.algolia.com/?' +
+        'utm_source=instantsearch.js&' +
+        'utm_medium=website&' +
+        `utm_content=${location.hostname}&` +
+        'utm_campaign=poweredby';
+
       ReactDOM.render(
         <PoweredBy
           cssClasses={poweredByCssClasses}
+          link={link}
         />,
         poweredByContainer
       );
