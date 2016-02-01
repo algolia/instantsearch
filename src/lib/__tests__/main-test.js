@@ -1,10 +1,11 @@
 /* eslint-env mocha */
 
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 describe('instantsearch()', () => {
-  jsdom({useEach: true}); // to ensure the global.window is set
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();}); // to ensure the global.window is set
 
   let instantsearch;
 

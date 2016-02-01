@@ -3,13 +3,14 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('numericRefinementList call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
   const numericRefinementList = require('../numeric-refinement-list.js');
 
   it('throws an exception when no container', () => {
@@ -32,7 +33,8 @@ describe('numericRefinementList call', () => {
 });
 
 describe('numericRefinementList()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;

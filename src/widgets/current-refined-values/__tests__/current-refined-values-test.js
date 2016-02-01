@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import map from 'lodash/collection/map';
 import filter from 'lodash/collection/filter';
@@ -21,7 +21,8 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('currentRefinedValues()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   context('types checking', () => {
     let boundWidget;

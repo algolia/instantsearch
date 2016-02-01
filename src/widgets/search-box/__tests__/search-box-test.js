@@ -2,7 +2,7 @@
 
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import searchBox from '../search-box';
 import EventEmitter from 'events';
@@ -17,7 +17,8 @@ function createHTMLNodeFromString(string) {
 }
 
 describe('search-box()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;

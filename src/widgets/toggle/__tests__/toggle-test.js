@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
@@ -16,7 +16,8 @@ expect.extend(expectJSX);
 const helpers = require('../../../lib/helpers.js')('en-US');
 
 describe('toggle()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let renderer = createRenderer();
 

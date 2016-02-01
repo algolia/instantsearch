@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -13,7 +13,8 @@ import generateRanges from '../generate-ranges';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges';
 
 describe('priceRanges call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -35,7 +36,8 @@ describe('priceRanges()', () => {
   let autoHideContainer;
   let headerFooter;
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};

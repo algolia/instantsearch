@@ -223,6 +223,35 @@ npm run test:browser -- --browsers ChromeCanary # force Chrome Canary
 
 Most of the time `npm run test:watch` is sufficient.
 
+## Functional tests
+
+You need [docker](https://docs.docker.com/engine/installation/).
+
+Run it like so:
+
+```sh
+docker pull elgalu/selenium:2.50.0b
+docker run --net="host" --privileged --name=grid -e VNC_PASSWORD=fun -e NOVNC=true elgalu/selenium:2.50.0b
+```
+
+Then run functional tests dev command with auto reload:
+
+```sh
+npm run test:functional:dev
+```
+
+You can see the live browser at http://localhost:26080/vnc.html (password: fun).
+
+You can use the full webdriverio API: http://webdriver.io/api.html.
+
+You can run the underlying web server for debugging purposes:
+
+```sh
+npm run test:functional:dev:debug-server
+```
+
+Useful when you want to modify the functional test app.
+
 ## License
 
 instantsearch.js is [MIT licensed](./LICENSE).
