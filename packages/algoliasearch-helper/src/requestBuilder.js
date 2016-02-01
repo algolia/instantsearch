@@ -67,10 +67,6 @@ var requestBuilder = {
       tagFilters: tagFilters
     };
 
-    if (state.distinct === true || state.distinct === false) {
-      additionalParams.distinct = state.distinct;
-    }
-
     if (facetFilters.length > 0) {
       additionalParams.facetFilters = facetFilters;
     }
@@ -108,10 +104,6 @@ var requestBuilder = {
       additionalParams.facets = this._getDisjunctiveHierarchicalFacetAttribute(state, hierarchicalFacet, hierarchicalRootLevel);
     } else {
       additionalParams.facets = facet;
-    }
-
-    if (state.distinct === true || state.distinct === false) {
-      additionalParams.distinct = state.distinct;
     }
 
     if (numericFilters.length > 0) {
