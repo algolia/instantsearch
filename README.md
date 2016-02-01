@@ -227,12 +227,11 @@ Most of the time `npm run test:watch` is sufficient.
 
 You need [docker](https://docs.docker.com/engine/installation/).
 
-Pull the $latest from https://github.com/elgalu/docker-selenium.
-
 Run it like so:
 
 ```sh
-docker run --net="host" --privileged --name=grid -e VNC_PASSWORD=fun -e NOVNC=true elgalu/selenium:$latest
+docker pull elgalu/selenium:2.50.0b
+docker run --net="host" --privileged --name=grid -e VNC_PASSWORD=fun -e NOVNC=true elgalu/selenium:2.50.0b
 ```
 
 Then run functional tests dev command with auto reload:
