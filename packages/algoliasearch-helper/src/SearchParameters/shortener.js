@@ -52,7 +52,10 @@ var keys2Short = {
   tagRefinements: 'tR',
   typoTolerance: 'tT',
   optionalTagFilters: 'oTF',
-  optionalFacetFilters: 'oFF'
+  optionalFacetFilters: 'oFF',
+  snippetEllipsisText: 'sET',
+  disableExactOnAttributes: 'dEOA',
+  enableExactOnSingleWordQuery: 'eEOSWQ'
 };
 
 var short2Keys = invert(keys2Short);
