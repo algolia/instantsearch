@@ -20,7 +20,7 @@
       hitsPerPage: 6,
       disjunctiveFacets: ['brand'],
       disjunctiveFacetsRefinements: {
-        brand:['Samsung'] 
+        brand:['Samsung']
       }
     };
     var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
@@ -167,10 +167,19 @@
     });
   }
 
+  // given the dynamic height of the page (widgets init), we need to manually
+  // re-scroll on the right anchor on load
+  function scrollToRightAnchor() {
+    $(window).load(function() {
+      $(window.location.hash)[0].scrollIntoView(true);
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
   anchorableTitles();
   copyButtons();
   tocMenu();
+  scrollToRightAnchor();
 })(window.jQuery);
