@@ -7830,7 +7830,7 @@ function SearchParameters(newParameters) {
   /**
    * Remove duplicates based on the index setting attributeForDistinct
    * @see https://www.algolia.com/doc/rest#param-distinct
-   * @member {number}
+   * @member {boolean|number}
    */
   this.distinct = params.distinct;
   /**
@@ -7875,6 +7875,32 @@ function SearchParameters(newParameters) {
    * @member {string}
    */
   this.insidePolygon = params.insidePolygon;
+  /**
+   * Allows to specify an ellipsis character for the snippet when we truncate the text
+   * (added before and after if truncated).
+   * The default value is an empty string and we recommend to set it to "…"
+   * @see https://www.algolia.com/doc/rest#param-insidePolygon
+   * @member {string}
+   */
+  this.snippetEllipsisText = params.snippetEllipsisText;
+  /**
+   * Allows to specific some attributes name on which exact won't be applied.
+   * Attributes are separated with a comma (for example "name,address" ), you can also use a
+   * JSON string array encoding (for example encodeURIComponent('["name","address"]') ).
+   * By default the list is empty.
+   * @see https://www.algolia.com/doc/rest#param-disableExactOnAttributes
+   * @member {string|string[]}
+   */
+  this.disableExactOnAttributes = params.disableExactOnAttributes;
+  /**
+   * Applies 'exact' on single word queries if the word contains at least 3 characters
+   * and is not a stop word.
+   * Can take two values: true or false.
+   * By default, its set to false.
+   * @see https://www.algolia.com/doc/rest#param-enableExactOnSingleWordQuery
+   * @member {boolean}
+   */
+  this.enableExactOnSingleWordQuery = params.enableExactOnSingleWordQuery;
 
   // Undocumented parameters, still needed otherwise we fail
   this.offset = params.offset;
@@ -9016,7 +9042,10 @@ var keys2Short = {
   tagRefinements: 'tR',
   typoTolerance: 'tT',
   optionalTagFilters: 'oTF',
-  optionalFacetFilters: 'oFF'
+  optionalFacetFilters: 'oFF',
+  snippetEllipsisText: 'sET',
+  disableExactOnAttributes: 'dEOA',
+  enableExactOnSingleWordQuery: 'eEOSWQ'
 };
 
 var short2Keys = invert(keys2Short);
@@ -10690,10 +10719,6 @@ var requestBuilder = {
       tagFilters: tagFilters
     };
 
-    if (state.distinct === true || state.distinct === false) {
-      additionalParams.distinct = state.distinct;
-    }
-
     if (facetFilters.length > 0) {
       additionalParams.facetFilters = facetFilters;
     }
@@ -10731,10 +10756,6 @@ var requestBuilder = {
       additionalParams.facets = this._getDisjunctiveHierarchicalFacetAttribute(state, hierarchicalFacet, hierarchicalRootLevel);
     } else {
       additionalParams.facets = facet;
-    }
-
-    if (state.distinct === true || state.distinct === false) {
-      additionalParams.distinct = state.distinct;
     }
 
     if (numericFilters.length > 0) {
@@ -11076,7 +11097,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":171,"./SearchParameters/shortener":172,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isArray":133,"lodash/lang/isPlainObject":139,"lodash/lang/isString":140,"lodash/object/mapKeys":151,"lodash/object/mapValues":152,"lodash/object/pick":156,"qs":162,"qs/lib/utils":165}],180:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.8.0';
+module.exports = '2.8.1';
 
 },{}]},{},[1])(1)
 });

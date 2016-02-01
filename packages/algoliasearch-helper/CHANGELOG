@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.8.1 - 2016-02-01
+  * feat: add snippetEllipsisText, disableExactOnAttributes, enableExactOnSingleWordQuery
+  * docs(readme): fix wrong /doc links
+
 2.8.0 - 2015-12-11
   * feat(search-parameters): adds support for optionnal tag and facet filters
   * fix(search-results): adds missing results parameters (fix #261)
