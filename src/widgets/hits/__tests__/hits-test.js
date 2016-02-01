@@ -45,7 +45,7 @@ describe('hits()', () => {
       templates: defaultTemplates,
       useCustomCompileOptions: {hit: false, empty: false}
     };
-    widget = hits({container});
+    widget = hits({container, cssClasses: {root: ['root', 'cx']}});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
@@ -80,7 +80,7 @@ describe('hits()', () => {
       results,
       templateProps,
       cssClasses: {
-        root: 'ais-hits',
+        root: 'ais-hits root cx',
         item: 'ais-hits--item',
         empty: 'ais-hits__empty'
       }

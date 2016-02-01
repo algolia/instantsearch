@@ -37,13 +37,13 @@ describe('numericSelector()', () => {
       {value: 2, label: 'second'}
     ];
     cssClasses = {
-      root: 'custom-root',
+      root: ['custom-root', 'cx'],
       item: 'custom-item'
     };
     widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
     expectedProps = {
       cssClasses: {
-        root: 'ais-numeric-selector custom-root',
+        root: 'ais-numeric-selector custom-root cx',
         item: 'ais-numeric-selector--item custom-item'
       },
       currentValue: undefined,

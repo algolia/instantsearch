@@ -47,7 +47,7 @@ describe('priceRanges()', () => {
     priceRanges.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = priceRanges({container, attributeName: 'aNumAttr'});
+    widget = priceRanges({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
     results = {
       hits: [1],
       nbHits: 1,
@@ -90,7 +90,7 @@ describe('priceRanges()', () => {
           label: 'ais-price-ranges--label',
           list: 'ais-price-ranges--list',
           link: 'ais-price-ranges--link',
-          root: 'ais-price-ranges',
+          root: 'ais-price-ranges root cx',
           separator: 'ais-price-ranges--separator'
         },
         shouldAutoHideContainer: false,

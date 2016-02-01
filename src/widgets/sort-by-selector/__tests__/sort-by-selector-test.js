@@ -51,7 +51,7 @@ describe('sortBySelector()', () => {
       {name: 'index-b', label: 'Index B'}
     ];
     cssClasses = {
-      root: 'custom-root',
+      root: ['custom-root', 'cx'],
       item: 'custom-item'
     };
     widget = sortBySelector({container, indices, cssClasses});
@@ -75,7 +75,7 @@ describe('sortBySelector()', () => {
     widget.render({helper, results});
     props = {
       cssClasses: {
-        root: 'ais-sort-by-selector custom-root',
+        root: 'ais-sort-by-selector custom-root cx',
         item: 'ais-sort-by-selector--item custom-item'
       },
       currentValue: 'index-a',

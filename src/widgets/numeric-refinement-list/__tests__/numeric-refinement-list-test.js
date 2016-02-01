@@ -65,7 +65,12 @@ describe('numericRefinementList()', () => {
     ];
 
     container = document.createElement('div');
-    widget = numericRefinementList({container, attributeName: 'price', options: options});
+    widget = numericRefinementList({
+      container,
+      attributeName: 'price',
+      options,
+      cssClasses: {root: ['root', 'cx']}
+    });
     helper = {
       state: {
         getNumericRefinements: sinon.stub().returns([])
@@ -96,7 +101,7 @@ describe('numericRefinementList()', () => {
         label: 'ais-refinement-list--label',
         list: 'ais-refinement-list--list',
         radio: 'ais-refinement-list--radio',
-        root: 'ais-refinement-list'
+        root: 'ais-refinement-list root cx'
       },
       facetValues: [
         {attributeName: 'price', isRefined: true, name: 'All'},

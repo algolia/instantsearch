@@ -35,7 +35,7 @@ describe('pagination()', () => {
 
     container = document.createElement('div');
     cssClasses = {
-      root: 'root',
+      root: ['root', 'cx'],
       item: 'item',
       link: 'link',
       page: 'page',
@@ -113,7 +113,7 @@ describe('pagination()', () => {
   function getProps() {
     return {
       cssClasses: {
-        root: 'ais-pagination root',
+        root: 'ais-pagination root cx',
         item: 'ais-pagination--item item',
         link: 'ais-pagination--link link',
         page: 'ais-pagination--item__page page',

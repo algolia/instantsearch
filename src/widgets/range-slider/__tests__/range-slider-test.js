@@ -50,7 +50,7 @@ describe('rangeSlider()', () => {
     rangeSlider.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = rangeSlider({container, attributeName: 'aNumAttr'});
+    widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
 
     helper = new AlgoliasearchHelper(
       {search: function() {}},
@@ -71,7 +71,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 0, min: 0},
@@ -117,7 +122,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 65, min: 65},
@@ -184,7 +194,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 5000, min: 1},

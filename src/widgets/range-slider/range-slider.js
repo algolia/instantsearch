@@ -5,6 +5,8 @@ import utils from '../../lib/utils.js';
 import find from 'lodash/collection/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
+import cx from 'classnames';
+let bem = require('../../lib/utils.js').bemHelper('ais-range-slider');
 
 let defaultTemplates = {
   header: '',
@@ -25,9 +27,11 @@ let defaultTemplates = {
  * @param  {string|Function} [options.templates.header=''] Header template
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, body
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @return {Object}
  */
 const usage = `Usage:
@@ -36,7 +40,7 @@ rangeSlider({
   attributeName,
   [ tooltips=true ],
   [ templates.{header, footer} ],
-  [ cssClasses.{root, body} ],
+  [ cssClasses.{root, header, body, footer} ],
   [ step=1 ],
   [ pips=true ],
   [ autoHideContainer=true ]
@@ -47,10 +51,7 @@ function rangeSlider({
     attributeName,
     tooltips = true,
     templates = defaultTemplates,
-    cssClasses = {
-      root: null,
-      body: null
-    },
+    cssClasses: userCssClasses = {},
     step = 1,
     pips = true,
     autoHideContainer = true
@@ -101,6 +102,13 @@ function rangeSlider({
       helper.search();
     },
     render({results, helper, templatesConfig}) {
+      let cssClasses = {
+        root: cx(bem(null), userCssClasses.root),
+        header: cx(bem('header'), userCssClasses.header),
+        body: cx(bem('body'), userCssClasses.body),
+        footer: cx(bem('footer'), userCssClasses.footer)
+      };
+
       let facet = find(results.disjunctiveFacets, {name: attributeName});
       let stats = facet !== undefined ? facet.stats : undefined;
       let currentRefinement = this._getCurrentRefinement(helper);

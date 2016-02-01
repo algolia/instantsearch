@@ -39,7 +39,7 @@ describe('stats()', () => {
     stats.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = stats({container});
+    widget = stats({container, cssClasses: {body: ['body', 'cx']}});
     results = {
       hits: [{}, {}],
       nbHits: 20,
@@ -60,7 +60,7 @@ describe('stats()', () => {
     widget.render({results});
     let props = {
       cssClasses: {
-        body: 'ais-stats--body',
+        body: 'ais-stats--body body cx',
         header: 'ais-stats--header',
         footer: 'ais-stats--footer',
         root: 'ais-stats',
