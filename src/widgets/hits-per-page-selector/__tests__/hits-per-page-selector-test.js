@@ -47,7 +47,7 @@ describe('hitsPerPageSelector()', () => {
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
     hitsPerPageSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    consoleLog = sinon.spy(window.console, 'log');
+    consoleLog = sinon.stub(window.console, 'log');
 
     container = document.createElement('div');
     options = [

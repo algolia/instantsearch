@@ -54,7 +54,7 @@ function hitsPerPageSelector({
         if (state.hitsPerPage === undefined) {
           if (window.console) {
             window.console.log(
-              '[Warning][hitsPerPageSelector] hitsPerPage not defined.' +
+              '[Warning][hitsPerPageSelector] hitsPerPage not defined. ' +
               'You should probably used a `hits` widget or set the value `hitsPerPage` ' +
               'using the searchParameters attribute of the instantsearch constructor.');
           }
