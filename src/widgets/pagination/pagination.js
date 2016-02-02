@@ -1,12 +1,12 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-let defaults = require('lodash/object/defaults');
-let cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import defaults from 'lodash/object/defaults';
+import cx from 'classnames';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-pagination');
 
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 let defaultLabels = {
   previous: '‹',
   next: '›',
@@ -23,22 +23,22 @@ let defaultLabels = {
  * @param  {string} [options.labels.next] Label for the Next link
  * @param  {string} [options.labels.first] Label for the First link
  * @param  {string} [options.labels.last] Label for the Last link
- * @param  {number} [options.maxPages=20] The max number of pages to browse
+ * @param  {number} [options.maxPages] The max number of pages to browse
  * @param  {number} [options.padding=3] The number of pages to display on each side of the current page
  * @param  {string|DOMElement|boolean} [options.scrollTo='body'] Where to scroll after a click, set to `false` to disable
  * @param  {boolean} [options.showFirstLast=true] Define if the First and Last links should be displayed
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<ul>`
- * @param  {string} [options.cssClasses.item] CSS classes added to each `<li>`
- * @param  {string} [options.cssClasses.link] CSS classes added to each link
- * @param  {string} [options.cssClasses.page] CSS classes added to page `<li>`
- * @param  {string} [options.cssClasses.previous] CSS classes added to the previous `<li>`
- * @param  {string} [options.cssClasses.next] CSS classes added to the next `<li>`
- * @param  {string} [options.cssClasses.first] CSS classes added to the first `<li>`
- * @param  {string} [options.cssClasses.last] CSS classes added to the last `<li>`
- * @param  {string} [options.cssClasses.active] CSS classes added to the active `<li>`
- * @param  {string} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<ul>`
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<li>`
+ * @param  {string|string[]} [options.cssClasses.link] CSS classes added to each link
+ * @param  {string|string[]} [options.cssClasses.page] CSS classes added to page `<li>`
+ * @param  {string|string[]} [options.cssClasses.previous] CSS classes added to the previous `<li>`
+ * @param  {string|string[]} [options.cssClasses.next] CSS classes added to the next `<li>`
+ * @param  {string|string[]} [options.cssClasses.first] CSS classes added to the first `<li>`
+ * @param  {string|string[]} [options.cssClasses.last] CSS classes added to the last `<li>`
+ * @param  {string|string[]} [options.cssClasses.active] CSS classes added to the active `<li>`
+ * @param  {string|string[]} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
  * @return {Object}
  */
 const usage = `Usage:
@@ -46,7 +46,7 @@ pagination({
   container,
   [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
   [ labels.{previous,next,first,last} ],
-  [ maxPages=20 ],
+  [ maxPages ],
   [ padding=3 ],
   [ showFirstLast=true ],
   [ autoHideContainer=true ],
@@ -56,7 +56,7 @@ function pagination({
     container,
     cssClasses: userCssClasses = {},
     labels = {},
-    maxPages = 20,
+    maxPages,
     padding = 3,
     showFirstLast = true,
     autoHideContainer = true,
@@ -88,9 +88,15 @@ function pagination({
       helper.search();
     },
 
+    getMaxPage: function(results) {
+      if (maxPages !== undefined) {
+        return Math.min(maxPages, results.nbPages);
+      }
+      return results.nbPages;
+    },
+
     render: function({results, helper, createURL, state}) {
       let currentPage = results.page;
-      let nbPages = results.nbPages;
       let nbHits = results.nbHits;
       let hasNoResults = nbHits === 0;
       let cssClasses = {
@@ -106,10 +112,6 @@ function pagination({
         disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
       };
 
-      if (maxPages !== undefined) {
-        nbPages = Math.min(maxPages, results.nbPages);
-      }
-
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
@@ -117,7 +119,7 @@ function pagination({
           currentPage={currentPage}
           labels={labels}
           nbHits={nbHits}
-          nbPages={nbPages}
+          nbPages={this.getMaxPage(results)}
           padding={padding}
           setCurrentPage={this.setCurrentPage.bind(this, helper)}
           shouldAutoHideContainer={hasNoResults}
@@ -129,4 +131,4 @@ function pagination({
   };
 }
 
-module.exports = pagination;
+export default pagination;

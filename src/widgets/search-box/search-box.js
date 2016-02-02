@@ -1,9 +1,9 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
-let utils = require('../../lib/utils.js');
-let forEach = require('lodash/collection/forEach');
-let bem = require('../../lib/utils').bemHelper('ais-search-box');
-let cx = require('classnames');
+import React from 'react';
+import ReactDOM from 'react-dom';
+import utils from '../../lib/utils.js';
+import forEach from 'lodash/collection/forEach';
+let bem = require('../../lib/utils.js').bemHelper('ais-search-box');
+import cx from 'classnames';
 
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
@@ -103,14 +103,21 @@ function searchBox({
         root: cx(bem('powered-by'), cssClasses.poweredBy),
         link: bem('powered-by-link')
       };
+      let link = 'https://www.algolia.com/?' +
+        'utm_source=instantsearch.js&' +
+        'utm_medium=website&' +
+        `utm_content=${location.hostname}&` +
+        'utm_campaign=poweredby';
+
       ReactDOM.render(
         <PoweredBy
           cssClasses={poweredByCssClasses}
+          link={link}
         />,
         poweredByContainer
       );
     },
-    init: function({state, helper}) {
+    init: function({state, helper, onHistoryChange}) {
       let isInputTargeted = container.tagName === 'INPUT';
       let input = this.getInput();
 
@@ -162,10 +169,8 @@ function searchBox({
       }
 
       // Update value when query change outside of the input
-      helper.on('change', function(newState) {
-        if (input !== document.activeElement && input.value !== newState.query) {
-          input.value = state.query;
-        }
+      onHistoryChange(function(fullState) {
+        input.value = fullState.query || '';
       });
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
@@ -175,4 +180,4 @@ function searchBox({
   };
 }
 
-module.exports = searchBox;
+export default searchBox;

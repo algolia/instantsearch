@@ -1,7 +1,7 @@
-let React = require('react');
-let map = require('lodash/collection/map');
+import React from 'react';
+import map from 'lodash/collection/map';
 
-let Template = require('./Template');
+import Template from './Template.js';
 
 class Hits extends React.Component {
   renderWithResults() {
@@ -20,6 +20,17 @@ class Hits extends React.Component {
     return <div className={this.props.cssClasses.root}>{renderedHits}</div>;
   }
 
+  renderAllResults() {
+    return (
+      <Template
+        cssClass={this.props.cssClasses.allItems}
+        data={this.props.results}
+        templateKey="allItems"
+        {...this.props.templateProps}
+      />
+    );
+  }
+
   renderNoResults() {
     let className = this.props.cssClasses.root + ' ' + this.props.cssClasses.empty;
     return (
@@ -34,6 +45,13 @@ class Hits extends React.Component {
 
   render() {
     if (this.props.results.hits.length > 0) {
+      const useAllItemsTemplate =
+        this.props.templateProps &&
+        this.props.templateProps.templates &&
+        this.props.templateProps.templates.allItems;
+      if (useAllItemsTemplate) {
+        return this.renderAllResults();
+      }
       return this.renderWithResults();
     }
     return this.renderNoResults();
@@ -44,6 +62,7 @@ Hits.propTypes = {
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.string,
     item: React.PropTypes.string,
+    allItems: React.PropTypes.string,
     empty: React.PropTypes.string
   }),
   results: React.PropTypes.object,
@@ -54,4 +73,4 @@ Hits.defaultProps = {
   results: {hits: []}
 };
 
-module.exports = Hits;
+export default Hits;

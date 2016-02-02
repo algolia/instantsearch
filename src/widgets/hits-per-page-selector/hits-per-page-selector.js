@@ -1,11 +1,11 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
-let any = require('lodash/collection/any');
+import utils from '../../lib/utils.js';
+import any from 'lodash/collection/any';
 let bem = utils.bemHelper('ais-hits-per-page-selector');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -16,8 +16,8 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @param  {string} options.options[0].label Label to display in the option
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
  * @return {Object}
  */
 
@@ -39,7 +39,7 @@ function hitsPerPageSelector({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector.js');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
@@ -54,7 +54,7 @@ function hitsPerPageSelector({
         if (state.hitsPerPage === undefined) {
           if (window.console) {
             window.console.log(
-              '[Warning][hitsPerPageSelector] hitsPerPage not defined.' +
+              '[Warning][hitsPerPageSelector] hitsPerPage not defined. ' +
               'You should probably used a `hits` widget or set the value `hitsPerPage` ' +
               'using the searchParameters attribute of the instantsearch constructor.');
           }
@@ -96,4 +96,4 @@ function hitsPerPageSelector({
   };
 }
 
-module.exports = hitsPerPageSelector;
+export default hitsPerPageSelector;

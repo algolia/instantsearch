@@ -46,7 +46,7 @@ read -p "=> Release: press [ENTER] to view changes since latest version.."
 
 # nd (markdown renderer in terminal)
 # has some output going on to stderr because of node v4, no big deal
-conventional-changelog -p angular | nd | less -r 2>/dev/null
+conventional-changelog -p angular | less
 
 # choose and bump new version
 # printf "\n\nRelease: Please enter the new chosen version > "
@@ -72,7 +72,7 @@ npm run docs:jsdoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md docs/_includes/widget-jsdoc
+git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
@@ -83,8 +83,6 @@ printf "\n\nRelease: push to github, publish on npm"
 git push origin master
 git push origin --tags
 npm publish
-# also update beta
-npm publish --tag beta
 git checkout develop
 git pull origin develop
 git merge master

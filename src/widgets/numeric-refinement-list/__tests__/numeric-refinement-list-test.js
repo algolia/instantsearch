@@ -3,14 +3,15 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('numericRefinementList call', () => {
-  jsdom({useEach: true});
-  const numericRefinementList = require('../numeric-refinement-list');
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
+  const numericRefinementList = require('../numeric-refinement-list.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -32,7 +33,8 @@ describe('numericRefinementList call', () => {
 });
 
 describe('numericRefinementList()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -47,8 +49,8 @@ describe('numericRefinementList()', () => {
   let results;
 
   beforeEach(() => {
-    numericRefinementList = require('../numeric-refinement-list');
-    RefinementList = require('../../../components/RefinementList/RefinementList');
+    numericRefinementList = require('../numeric-refinement-list.js');
+    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);
@@ -65,7 +67,12 @@ describe('numericRefinementList()', () => {
     ];
 
     container = document.createElement('div');
-    widget = numericRefinementList({container, attributeName: 'price', options: options});
+    widget = numericRefinementList({
+      container,
+      attributeName: 'price',
+      options,
+      cssClasses: {root: ['root', 'cx']}
+    });
     helper = {
       state: {
         getNumericRefinements: sinon.stub().returns([])
@@ -96,7 +103,7 @@ describe('numericRefinementList()', () => {
         label: 'ais-refinement-list--label',
         list: 'ais-refinement-list--list',
         radio: 'ais-refinement-list--radio',
-        root: 'ais-refinement-list'
+        root: 'ais-refinement-list root cx'
       },
       facetValues: [
         {attributeName: 'price', isRefined: true, name: 'All'},

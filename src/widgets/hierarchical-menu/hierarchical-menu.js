@@ -1,13 +1,13 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-hierarchical-menu');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates.js');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Create a hierarchical menu using multiple attributes
@@ -19,14 +19,14 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string} [options.rootPath] Prefix path to use if the first level is not the root level.
  * @param  {string} [options.showParentLevel=false] Show the parent level of the current refined value
  * @param  {number} [options.limit=100] How much facet values to get
- * @param  {string[]} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string[]|Function} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template (root level only)
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
@@ -157,4 +157,4 @@ function sliceFacetValues(values, limit) {
     });
 }
 
-module.exports = hierarchicalMenu;
+export default hierarchicalMenu;

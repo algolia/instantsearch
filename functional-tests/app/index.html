@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <title>Instant search demo built with instantsearch.js</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <!--[if lte IE 9]>
+  <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="./instantsearch.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1><a href="./">Instant search demo</a> <small>using instantsearch.js</small></h1>
+    </div>
+
+    <div class="row search search--hidden">
+    <div id="clear-all"></div>
+
+      <div class="col-md-3">
+        <div class="facet" id="current-refined-values"></div>
+        <div class="facet" id="hierarchical-categories"></div>
+        <div class="facet" id="brands"></div>
+        <div class="facet" id="price-range"></div>
+        <div class="facet" id="free-shipping"></div>
+        <div class="facet" id="price"></div>
+        <div class="facet" id="categories"></div>
+        <div class="facet" id="price-ranges"></div>
+        <div class="facet" id="price-numeric-list"></div>
+      </div>
+      <div class="col-md-9">
+        <div class="form-group">
+          <input id="search-box" class="form-control" />
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <div id="stats"></div>
+          </div>
+          <div class="col-md-3 text-right">
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="hits-per-page-select">Show:</label>
+                <span id="hits-per-page-selector"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="sort-by-selector-select">Popularity:</label>
+                <span id="popularity-selector"></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 text-right">
+            <div class="form-inline">
+              <div class="form-group">
+                <label for="sort-by-selector-select">Sort by:</label>
+                <span id="sort-by-selector"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="hits"></div>
+        <div id="pagination" class="text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/template" id="item">
+    <div class="hit">
+      <div class="media">
+        <a class="pull-left" href="{{url}}">
+          <img class="media-object" src="{{image}}">
+        </a>
+        <div class="media-body">
+          <h3 class="pull-right text-right text-info">${{price}}</h3>
+          <h4>{{{_highlightResult.name.value}}}</h4>
+          <p>{{{_highlightResult.description.value}}}</p>
+          {{#free_shipping}}<span class="badge pull-right">Free Shipping</span>{{/free_shipping}}
+        </div>
+      </div>
+    </div>
+  </script>
+
+  <script type="text/template" id="empty">
+    No matching products, try another search.
+  </script>
+
+  <!-- IN DEV MODE thils will load dist/instantsearch.js -->
+  <script src="./instantsearch.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

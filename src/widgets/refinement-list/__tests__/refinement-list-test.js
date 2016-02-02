@@ -3,14 +3,14 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import {createRenderer} from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list';
-import Template from '../../../components/Template.js';
+import Template from '../../../components/Template';
 
 const helpers = require('../../../lib/helpers.js')('en-US');
 
@@ -23,7 +23,8 @@ describe('refinementList()', () => {
   let ReactDOM;
   let renderer = createRenderer();
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -190,7 +191,7 @@ describe('refinementList()', () => {
     it('formats counts', () => {
       const props = {
         templatesConfig: {helpers},
-        templates: require('../defaultTemplates')
+        templates: require('../defaultTemplates.js')
       };
       renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
       let out = renderer.getRenderOutput();
@@ -201,7 +202,7 @@ describe('refinementList()', () => {
       it('should call the component with the correct classes', () => {
         // Given
         let cssClasses = {
-          root: 'root',
+          root: ['root', 'cx'],
           header: 'header',
           body: 'body',
           footer: 'footer',
@@ -218,7 +219,7 @@ describe('refinementList()', () => {
         let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
 
         // Then
-        expect(actual.root).toBe('ais-refinement-list root');
+        expect(actual.root).toBe('ais-refinement-list root cx');
         expect(actual.header).toBe('ais-refinement-list--header header');
         expect(actual.body).toBe('ais-refinement-list--body body');
         expect(actual.footer).toBe('ais-refinement-list--footer footer');
@@ -290,6 +291,27 @@ describe('refinementList()', () => {
       expect(helper.search.called);
 
       // Then
+    });
+  });
+
+  context('show more', () => {
+    it('should return a configuration with the highest limit value (default value)', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {}};
+      const wdgt = refinementList(opts);
+      const partialConfig = wdgt.getConfiguration({});
+      expect(partialConfig.maxValuesPerFacet).toBe(100);
+    });
+
+    it('should return a configuration with the highest limit value (custom value)', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {limit: 99}};
+      const wdgt = refinementList(opts);
+      const partialConfig = wdgt.getConfiguration({});
+      expect(partialConfig.maxValuesPerFacet).toBe(opts.showMore.limit);
+    });
+
+    it('should not accept a show more limit that is < limit', () => {
+      const opts = {container, attributeName: 'attributeName', limit: 100, showMore: {limit: 1}};
+      expect(() => refinementList(opts)).toThrow();
     });
   });
 });

@@ -4,7 +4,7 @@ import React from 'react';
 
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -13,7 +13,8 @@ import clearAll from '../clear-all';
 import ClearAll from '../../../components/ClearAll/ClearAll';
 
 describe('clearAll()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -36,7 +37,7 @@ describe('clearAll()', () => {
     clearAll.__Rewire__('headerFooterHOC', headerFooterHOC);
 
     container = document.createElement('div');
-    widget = clearAll({container, autoHideContainer: true});
+    widget = clearAll({container, autoHideContainer: true, cssClasses: {root: ['root', 'cx']}});
 
     results = {};
     helper = {
@@ -50,7 +51,7 @@ describe('clearAll()', () => {
     props = {
       clearAll: sinon.spy(),
       cssClasses: {
-        root: 'ais-clear-all',
+        root: 'ais-clear-all root cx',
         header: 'ais-clear-all--header',
         body: 'ais-clear-all--body',
         footer: 'ais-clear-all--footer',
@@ -59,7 +60,7 @@ describe('clearAll()', () => {
       hasRefinements: false,
       shouldAutoHideContainer: true,
       templateProps: {
-        templates: require('../defaultTemplates'),
+        templates: require('../defaultTemplates.js'),
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {header: false, footer: false, link: false}

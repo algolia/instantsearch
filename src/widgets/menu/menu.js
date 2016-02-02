@@ -1,20 +1,20 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-menu');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates.js');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Create a menu out of a facet
  * @function menu
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
- * @param  {string[]} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=100] How many facets values to retrieve
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
@@ -22,7 +22,7 @@ let defaultTemplates = require('./defaultTemplates.js');
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Method to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
@@ -127,4 +127,4 @@ function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
   return values.data && values.data.slice(0, limit) || [];
 }
 
-module.exports = menu;
+export default menu;

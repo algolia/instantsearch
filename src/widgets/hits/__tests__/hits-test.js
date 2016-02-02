@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,15 +12,17 @@ import hits from '../hits';
 import Hits from '../../../components/Hits';
 
 describe('hits call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no container', () => {
-    expect(hits).toThrow(/^Usage:/);
+    expect(hits).toThrow(/^Must provide a container/);
   });
 });
 
 describe('hits()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -45,7 +47,7 @@ describe('hits()', () => {
       templates: defaultTemplates,
       useCustomCompileOptions: {hit: false, empty: false}
     };
-    widget = hits({container});
+    widget = hits({container, cssClasses: {root: ['root', 'cx']}});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
@@ -65,6 +67,10 @@ describe('hits()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('does not accept both item and allItems templates', () => {
+    expect(hits.bind({container, templates: {item: '', allItems: ''}})).toThrow();
+  });
+
   afterEach(() => {
     hits.__ResetDependency__('ReactDOM');
     hits.__ResetDependency__('defaultTemplates');
@@ -76,7 +82,7 @@ describe('hits()', () => {
       results,
       templateProps,
       cssClasses: {
-        root: 'ais-hits',
+        root: 'ais-hits root cx',
         item: 'ais-hits--item',
         empty: 'ais-hits__empty'
       }

@@ -265,6 +265,39 @@ This example shows you how to create a very simple search results page that incl
 
 <img class="img-responsive" src="../img/add-widgets.jpg" alt="Add widgets">
 
+### Events
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet ignore">
+{% highlight js %}
+var search = instantsearch({
+  appId: '$appId',
+  apiKey: '$apiKey',
+  indexName: '$indexName',
+  urlSync: true
+});
+
+var onRenderHandler = function() {};
+search.on('render', onRenderHandler);
+// on renderHandler will be called
+// until removeListener is called
+search.removeListener(onRenderHandler);
+
+search.once('render', function(){  });
+// triggered once then removed automatically
+{% endhighlight %}
+  </div>
+</div>
+
+instantsearch emits events during its lifecylce. The currently supported events are:
+
+ - `render` : fired when a rendering of all the widgets has been completed
+
+instantsearch events are based on the [Node EventEmitter](https://nodejs.org/api/events.html)
+class. See the example for a quick overview of the API or go to the
+[Node documentation](https://nodejs.org/api/events.html) for more details.
+
+
 ## Widgets
 
 ### Basics
@@ -879,6 +912,40 @@ instantsearch.widgets.clearAll(options);
 
 <div id="clear-all" class="widget-container"></div>
 
+#### currentRefinedValues
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
+This widget list all the refinements currently applied. It also lets
+the user clear them one by one. This widget can also contain a
+`clear all` link to remove all filters.
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.currentRefinedValues({
+    container: '#current-refined-values',
+    clearAll: 'after'
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+{% highlight javascript %}
+instantsearch.widgets.currentRefinedValues(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/currentRefinedValues.md %}
+  </div>
+</div>
+
+</div>
+
+<div id="current-refined-values" class="widget-container"></div>
+
+
 ### Sort
 
 #### sortBySelector
@@ -955,6 +1022,32 @@ instantsearch.widgets.stats(options);
 </div>
 
 <div id="stats-container" class="widget-container"></div>
+
+## Community widgets
+
+Community widgets are solving specific use cases and so cannot make it into the core instantsearch.js library.
+
+You may want to create and publish your own community widget, we have a [dedicated section](#custom-widgets) on how to create them.
+
+If you want your widget to be listed here, [open an issue](https://github.com/algolia/instantsearch.js/issues).
+ 
+### googleMaps
+
+The [googleMaps](https://github.com/instantsearch/instantsearch-googlemaps) widget can display your [Algolia geo hits](https://www.algolia.com/doc/rest#geo-search-parameters) on a map using [Google Maps APIs](https://developers.google.com/maps/).
+
+**Widget demo**:
+<img src="{{site.baseurl}}/img/googleMaps.gif" width="100%" />
+
+See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
+
+### ionRangeSlider
+
+Provides [Ion.RangeSlider](https://github.com/IonDen/ion.rangeSlider) as a widget. This is a jQuery plugin so you will need to use jQuery in your page.
+
+**Widget demo**:
+<img src="{{site.baseurl}}/img/ionRangeSlider.gif" width="100%" />
+
+See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
 
 ## Templates
 
@@ -1138,7 +1231,7 @@ All widgets have been designed to be heavily stylizable with CSS rules. **instan
 
 We're using [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
 
-If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/css/instantsearch.scss).
+If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/src/css/instantsearch.scss).
 
 #### BEM modifiers
 {:.no-toc}

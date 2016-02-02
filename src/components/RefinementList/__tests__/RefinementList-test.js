@@ -56,8 +56,8 @@ describe('RefinementList', () => {
         </div>
       </div>
     );
-    expect(out.props.children[0].key).toEqual('facet1');
-    expect(out.props.children[1].key).toEqual('facet2');
+    expect(out.props.children[0][0].key).toEqual('facet1');
+    expect(out.props.children[0][1].key).toEqual('facet2');
   });
 
   it('should render default list highlighted', () => {
@@ -75,7 +75,26 @@ describe('RefinementList', () => {
         </div>
       </div>
     );
-    expect(out.props.children[0].key).toEqual('facet1/true/42');
+    expect(out.props.children[0][0].key).toEqual('facet1/true/42');
+  });
+
+  context('showmore', () => {
+    it('should display the number accordingly to the state : closed', () => {
+      const out = render({
+        facetValues: [
+          {name: 'facet1', isRefined: false, count: 42},
+          {name: 'facet2', isRefined: false, count: 42}
+        ],
+        showMore: true,
+        limitMin: 1,
+        limitMax: 2
+      });
+      expect(out.props.children.length).toBe(2);
+    });
+
+    it('should display the number accordingly to the state : open', () => {
+      // FIXME find a way to test this state...
+    });
   });
 
   context('sublist', () => {
@@ -140,7 +159,7 @@ describe('RefinementList', () => {
 
   function render(extraProps = {}) {
     let props = getProps(extraProps);
-    renderer.render(<RefinementList {...props} templateProps={{}} />);
+    renderer.render(<RefinementList {...props} ref="list" templateProps={{}} />);
     return renderer.getRenderOutput();
   }
 

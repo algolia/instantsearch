@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,14 +12,16 @@ import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
 
 describe('pagination call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no container', () => {
     expect(pagination.bind(null)).toThrow(/^Usage/);
   });
 });
 describe('pagination()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -35,7 +37,7 @@ describe('pagination()', () => {
 
     container = document.createElement('div');
     cssClasses = {
-      root: 'root',
+      root: ['root', 'cx'],
       item: 'item',
       link: 'link',
       page: 'page',
@@ -113,7 +115,7 @@ describe('pagination()', () => {
   function getProps() {
     return {
       cssClasses: {
-        root: 'ais-pagination root',
+        root: 'ais-pagination root cx',
         item: 'ais-pagination--item item',
         link: 'ais-pagination--link link',
         page: 'ais-pagination--item__page page',
@@ -135,4 +137,55 @@ describe('pagination()', () => {
       createURL: () => '#'
     };
   }
+});
+
+describe('pagination MaxPage', () => {
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
+
+  let ReactDOM;
+  let container;
+  let widget;
+  let results;
+  let cssClasses;
+  let paginationOptions;
+
+  beforeEach(() => {
+    ReactDOM = {render: sinon.spy()};
+    pagination.__Rewire__('ReactDOM', ReactDOM);
+    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
+
+    container = document.createElement('div');
+    cssClasses = {
+      root: 'root',
+      item: 'item',
+      link: 'link',
+      page: 'page',
+      previous: 'previous',
+      next: 'next',
+      first: 'first',
+      last: 'last',
+      active: 'active',
+      disabled: 'disabled'
+    };
+    results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 300, hitsPerPage: 10, nbPages: 30};
+    paginationOptions = {container, scrollTo: false, cssClasses};
+  });
+
+  it('does to have any default', () => {
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(30);
+  });
+
+  it('does reduce the number of page if lower than nbPages', () => {
+    paginationOptions.maxPages = 20;
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(20);
+  });
+
+  it('does not reduce the number of page if greater than nbPages', () => {
+    paginationOptions.maxPages = 40;
+    widget = pagination(paginationOptions);
+    expect(widget.getMaxPage(results)).toEqual(30);
+  });
 });

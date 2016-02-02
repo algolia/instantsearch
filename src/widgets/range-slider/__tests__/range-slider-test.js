@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -11,8 +11,9 @@ expect.extend(expectJSX);
 import AlgoliasearchHelper from 'algoliasearch-helper';
 
 describe('rangeSlider call', () => {
-  jsdom({useEach: true});
-  const rangeSlider = require('../range-slider');
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
+  const rangeSlider = require('../range-slider.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -26,7 +27,8 @@ describe('rangeSlider call', () => {
 });
 
 describe('rangeSlider()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -40,8 +42,8 @@ describe('rangeSlider()', () => {
   let rangeSlider;
 
   beforeEach(() => {
-    rangeSlider = require('../range-slider');
-    Slider = require('../../../components/Slider/Slider');
+    rangeSlider = require('../range-slider.js');
+    Slider = require('../../../components/Slider/Slider.js');
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(Slider);
@@ -50,7 +52,7 @@ describe('rangeSlider()', () => {
     rangeSlider.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = rangeSlider({container, attributeName: 'aNumAttr'});
+    widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
 
     helper = new AlgoliasearchHelper(
       {search: function() {}},
@@ -71,7 +73,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 0, min: 0},
@@ -117,7 +124,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 65, min: 65},
@@ -184,7 +196,12 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
 
       let props = {
-        cssClasses: {body: null, root: null},
+        cssClasses: {
+          root: 'ais-range-slider root cx',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
         onChange: () => {},
         pips: true,
         range: {max: 5000, min: 1},

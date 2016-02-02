@@ -1,4 +1,4 @@
-let React = require('react');
+import React from 'react';
 
 class PaginationLink extends React.Component {
   render() {
@@ -35,4 +35,4 @@ PaginationLink.propTypes = {
   url: React.PropTypes.string
 };
 
-module.exports = PaginationLink;
+export default PaginationLink;

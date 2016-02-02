@@ -1,14 +1,14 @@
-let algoliasearch = require('algoliasearch');
-let algoliasearchHelper = require('algoliasearch-helper');
+import algoliasearch from 'algoliasearch';
+import algoliasearchHelper from 'algoliasearch-helper';
 
-let forEach = require('lodash/collection/forEach');
-let merge = require('lodash/object/merge');
-let union = require('lodash/array/union');
+import forEach from 'lodash/collection/forEach';
+import merge from 'lodash/object/merge';
+import union from 'lodash/array/union';
 
-let EventEmitter = require('events').EventEmitter;
+import {EventEmitter} from 'events';
 
-let urlSyncWidget = require('./url-sync');
-let version = require('./version');
+import urlSyncWidget from './url-sync.js';
+import version from './version.js';
 
 function defaultCreateURL() { return '#'; }
 
@@ -19,14 +19,15 @@ function defaultCreateURL() { return '#'; }
  * @param  {string} options.indexName The name of the main index
  * @param  {string} [options.numberLocale] The locale used to display numbers. This will be passed
  * to Number.prototype.toLocaleString()
- * @param  {Object} [options.searchParameters] Initial search configuration.
+ * @param  {Object} [options.searchParameters] Additional parameters to pass to
+ * the Algolia API.
+ * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
  * be synchronized in the URL. By default, it will track the query, all the
  * refinable attribute (facets and numeric filters), the index and the page.
- * All the algoliasearch helper parameters can be filtered:
- * https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html
+ * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
  * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
@@ -66,7 +67,7 @@ Usage: instantsearch({
       helpers: require('./helpers.js')({numberLocale}),
       compileOptions: {}
     };
-    this.urlSync = urlSync;
+    this.urlSync = urlSync === true ? {} : urlSync;
   }
 
   /**
@@ -93,8 +94,12 @@ Usage: instantsearch({
     if (this.urlSync) {
       let syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
+      this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
-    } else this._createURL = defaultCreateURL;
+    } else {
+      this._createURL = defaultCreateURL;
+      this._onHistoryChange = function() {};
+    }
 
     this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
 
@@ -136,10 +141,10 @@ Usage: instantsearch({
   }
 
   _init(state, helper) {
+    const {_onHistoryChange, templatesConfig} = this;
     forEach(this.widgets, function(widget) {
       if (widget.init) {
-        const templatesConfig = this.templatesConfig;
-        widget.init({state, helper, templatesConfig});
+        widget.init({state, helper, templatesConfig, onHistoryChange: _onHistoryChange});
       }
     }, this);
   }
@@ -162,4 +167,4 @@ function enhanceConfiguration(configuration, widgetDefinition) {
   );
 }
 
-module.exports = InstantSearch;
+export default InstantSearch;

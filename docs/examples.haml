@@ -4,7 +4,7 @@ title: Examples
 permalink: /examples/
 ---
 
-.hero
+.hero.container
   %h1.text-center Check out our examples!
   %p.text-center.lead <strong>instantsearch.js</strong> lets you build valuable search experiences.
 
@@ -13,8 +13,8 @@ permalink: /examples/
   .m800.m-l-r-auto
     .spacer40
     .demo-item.clearfix
-      %a{href: '{{ "/examples/media/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/media/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a.pull-left.link-thumbnail{href: '{{ "/examples/media/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.m-r{src: "{{ "/examples/media/capture.png" | prepend: site.baseurl }}", width: 270}
       %a{href: '{{ "/examples/media/" | prepend: site.baseurl }}'}
         %h3 Media
       %p Browsing video, music and other media becomes much more intuitive with instant search.
@@ -31,8 +31,8 @@ permalink: /examples/
 
     .spacer40
     .demo-item.clearfix
-      %a{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/e-commerce/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a.pull-left.link-thumbnail{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.m-r{src: "{{ "/examples/e-commerce/capture.png" | prepend: site.baseurl }}", width: 270}
       %a{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
         %h3 E-commerce
       %p An instant-search experience helps shoppers more easily find and buy what they want.
@@ -53,8 +53,8 @@ permalink: /examples/
 
     .spacer40
     .demo-item.clearfix
-      %a{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.pull-left.m-r{src: "{{ "/examples/tourism/capture.png" | prepend: site.baseurl }}", width: 270}
+      %a.pull-left.link-thumbnail{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
+        %img.m-b.img-thumbnail.m-r{src: "{{ "/examples/tourism/capture.png" | prepend: site.baseurl }}", width: 270}
       %a{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
         %h3 Tourism
       %p Travel the world at the speed of search with instant results.

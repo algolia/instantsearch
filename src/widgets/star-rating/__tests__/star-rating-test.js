@@ -3,16 +3,17 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-let defaultTemplates = require('../defaultTemplates');
-let defaultLabels = require('../defaultLabels');
+import defaultTemplates from '../defaultTemplates.js';
+import defaultLabels from '../defaultLabels.js';
 
 describe('starRating()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -26,8 +27,8 @@ describe('starRating()', () => {
   let results;
 
   beforeEach(() => {
-    starRating = require('../star-rating');
-    RefinementList = require('../../../components/RefinementList/RefinementList');
+    starRating = require('../star-rating.js');
+    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     starRating.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);
@@ -36,7 +37,7 @@ describe('starRating()', () => {
     starRating.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = starRating({container, attributeName: 'anAttrName'});
+    widget = starRating({container, attributeName: 'anAttrName', cssClasses: {body: ['body', 'cx']}});
     helper = {
       clearRefinements: sinon.spy(),
       addDisjunctiveFacetRefinement: sinon.spy(),
@@ -61,7 +62,7 @@ describe('starRating()', () => {
     let props = {
       cssClasses: {
         active: 'ais-star-rating--item__active',
-        body: 'ais-star-rating--body',
+        body: 'ais-star-rating--body body cx',
         footer: 'ais-star-rating--footer',
         header: 'ais-star-rating--header',
         item: 'ais-star-rating--item',

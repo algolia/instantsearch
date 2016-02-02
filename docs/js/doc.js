@@ -16,9 +16,16 @@
       apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
       indexName: 'instant_search'
     };
+    var initialSearchState = {
+      hitsPerPage: 6,
+      disjunctiveFacets: ['brand'],
+      disjunctiveFacetsRefinements: {
+        brand:['Samsung']
+      }
+    };
     var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
     var configSnippet = "var search = instantsearch({appId: '$appId', apiKey: '$apiKey'," +
-      "indexName: '$indexName', searchParameters: {hitsPerPage: 6}});\n"
+      "indexName: '$indexName', searchParameters: " + JSON.stringify(initialSearchState) + "});\n"
     var startSnippet = q('.code-sample-snippet.start')[0];
 
     var source = codeSnippets.map(function(snippet) {
@@ -160,10 +167,19 @@
     });
   }
 
+  // given the dynamic height of the page (widgets init), we need to manually
+  // re-scroll on the right anchor on load
+  function scrollToRightAnchor() {
+    $(window).load(function() {
+      $(window.location.hash)[0].scrollIntoView(true);
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
   anchorableTitles();
   copyButtons();
   tocMenu();
+  scrollToRightAnchor();
 })(window.jQuery);

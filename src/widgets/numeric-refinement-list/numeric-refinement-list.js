@@ -1,16 +1,16 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-refinement-list');
-let cx = require('classnames');
-let find = require('lodash/collection/find');
-let includes = require('lodash/collection/includes');
+import cx from 'classnames';
+import find from 'lodash/collection/find';
+import includes from 'lodash/collection/includes';
 
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-let defaultTemplates = require('./defaultTemplates');
+import defaultTemplates from './defaultTemplates.js';
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -24,7 +24,7 @@ let defaultTemplates = require('./defaultTemplates');
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the item template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements: root, list, item
+ * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
@@ -198,4 +198,4 @@ function hasNumericRefinement(currentRefinements, operator, value) {
   return hasOperatorRefinements && includesValue;
 }
 
-module.exports = numericRefinementList;
+export default numericRefinementList;

@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -20,7 +20,8 @@ describe('hierarchicalMenu()', () => {
   let widget;
   let ReactDOM;
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -172,7 +173,7 @@ describe('hierarchicalMenu()', () => {
 
     it('understand provided cssClasses', () => {
       let userCssClasses = {
-        root: 'root',
+        root: ['root', 'cx'],
         header: 'header',
         body: 'body',
         footer: 'footer',
@@ -187,7 +188,7 @@ describe('hierarchicalMenu()', () => {
       widget.render({results});
       let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
       expect(actual).toEqual({
-        root: 'ais-hierarchical-menu root',
+        root: 'ais-hierarchical-menu root cx',
         header: 'ais-hierarchical-menu--header header',
         body: 'ais-hierarchical-menu--body body',
         footer: 'ais-hierarchical-menu--footer footer',

@@ -4,13 +4,14 @@ import EventEmitter from 'events';
 import expect from 'expect';
 import range from 'lodash/utility/range';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import SearchParameters from 'algoliasearch-helper/src/SearchParameters';
 import InstantSearch from '../InstantSearch';
 
 describe('InstantSearch lifecycle', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let algoliasearch;
   let algoliasearchHelper;
@@ -37,9 +38,14 @@ describe('InstantSearch lifecycle', () => {
 
     appId = 'appId';
     apiKey = 'apiKey';
-    indexName = 'lifeycle';
+    indexName = 'lifecycle';
 
-    searchParameters = {some: 'configuration', values: [-2, -1], index: indexName, another: {config: 'parameter'}};
+    searchParameters = {
+      some: 'configuration',
+      values: [-2, -1],
+      index: indexName,
+      another: {config: 'parameter'}
+    };
 
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
@@ -113,7 +119,12 @@ describe('InstantSearch lifecycle', () => {
           .toEqual([
             client,
             indexName,
-            {some: 'modified', values: [-2, -1], index: indexName, another: {different: 'parameter', config: 'parameter'}}
+            {
+              some: 'modified',
+              values: [-2, -1],
+              index: indexName,
+              another: {different: 'parameter', config: 'parameter'}
+            }
           ]);
       });
 
@@ -125,12 +136,11 @@ describe('InstantSearch lifecycle', () => {
         expect(widget.init.calledOnce).toBe(true, 'widget.init called once');
         expect(widget.init.calledAfter(widget.getConfiguration))
           .toBe(true, 'widget.init() was called after widget.getConfiguration()');
-        expect(widget.init.args[0][0]).
-          toEqual({
-            state: helper.state,
-            helper,
-            templatesConfig: search.templatesConfig
-          });
+        const args = widget.init.args[0][0];
+        expect(args.state).toBe(helper.state);
+        expect(args.helper).toBe(helper);
+        expect(args.templatesConfig).toBe(search.templatesConfig);
+        expect(args.onHistoryChange).toBe(search._onHistoryChange);
       });
 
       it('does not call widget.render', () => {
@@ -192,7 +202,7 @@ describe('InstantSearch lifecycle', () => {
       expect(order).toBe(true);
     });
 
-    it('recursevly merges searchParameters.values array', () => {
+    it('recursively merges searchParameters.values array', () => {
       expect(algoliasearchHelper.args[0][2].values).toEqual([-2, -1, 0, 1, 2, 3, 4]);
     });
   });

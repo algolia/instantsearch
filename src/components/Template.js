@@ -1,30 +1,40 @@
-let React = require('react');
-let mapValues = require('lodash/object/mapValues');
-let curry = require('lodash/function/curry');
-let cloneDeep = require('lodash/lang/cloneDeep');
-let hogan = require('hogan.js');
+import React from 'react';
 
-class Template extends React.Component {
-  render() {
-    let compileOptions = this.props.useCustomCompileOptions[this.props.templateKey] ?
-      this.props.templatesConfig.compileOptions :
-      {};
+import curry from 'lodash/function/curry';
+import cloneDeep from 'lodash/lang/cloneDeep';
+import keys from 'lodash/object/keys';
+import omit from 'lodash/object/omit';
+import mapValues from 'lodash/object/mapValues';
 
-    let content = renderTemplate({
-      template: this.props.templates[this.props.templateKey],
-      compileOptions: compileOptions,
-      helpers: this.props.templatesConfig.helpers,
-      data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
-    });
+import hogan from 'hogan.js';
 
-    if (content === null) {
-      // Adds a noscript to the DOM but virtual DOM is null
-      // See http://facebook.github.io/react/docs/component-specs.html#render
-      return null;
-    }
+function Template(props) {
+  const useCustomCompileOptions = props.useCustomCompileOptions[props.templateKey];
+  const compileOptions = useCustomCompileOptions ? props.templatesConfig.compileOptions : {};
 
-    return <div className={this.props.cssClass} dangerouslySetInnerHTML={{__html: content}} />;
+  const content = renderTemplate({
+    templates: props.templates,
+    templateKey: props.templateKey,
+    compileOptions: compileOptions,
+    helpers: props.templatesConfig.helpers,
+    data: transformData(props.transformData, props.templateKey, props.data)
+  });
+
+  if (content === null) {
+    // Adds a noscript to the DOM but virtual DOM is null
+    // See http://facebook.github.io/react/docs/component-specs.html#render
+    return null;
   }
+
+  const otherProps = omit(props, keys(Template.propTypes));
+
+  return (
+    <div
+      {...otherProps}
+      className={props.cssClass}
+      dangerouslySetInnerHTML={{__html: content}}
+    />
+  );
 }
 
 Template.propTypes = {
@@ -70,9 +80,10 @@ function transformData(fn, templateKey, originalData) {
   let clonedData = cloneDeep(originalData);
 
   let data;
-  if (typeof fn === 'function') {
+  const typeFn = typeof fn;
+  if (typeFn === 'function') {
     data = fn(clonedData);
-  } else if (typeof fn === 'object') {
+  } else if (typeFn === 'object') {
     // ex: transformData: {hit, empty}
     if (fn[templateKey]) {
       data = fn[templateKey](clonedData);
@@ -82,7 +93,7 @@ function transformData(fn, templateKey, originalData) {
       data = originalData;
     }
   } else {
-    throw new Error('`transformData` must be a function or an object');
+    throw new Error(`transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`);
   }
 
   let dataType = typeof data;
@@ -93,12 +104,14 @@ function transformData(fn, templateKey, originalData) {
   return data;
 }
 
-function renderTemplate({template, compileOptions, helpers, data}) {
-  let isTemplateString = typeof template === 'string';
-  let isTemplateFunction = typeof template === 'function';
+function renderTemplate({templates, templateKey, compileOptions, helpers, data}) {
+  const template = templates[templateKey];
+  const templateType = typeof template;
+  const isTemplateString = templateType === 'string';
+  const isTemplateFunction = templateType === 'function';
 
   if (!isTemplateString && !isTemplateFunction) {
-    throw new Error('Template must be `string` or `function`');
+    throw new Error(`Template must be 'string' or 'function', was '${templateType}' (key: ${templateKey})`);
   } else if (isTemplateFunction) {
     return template(data);
   } else {
@@ -122,4 +135,4 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
   });
 }
 
-module.exports = Template;
+export default Template;

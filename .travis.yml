@@ -1,11 +1,12 @@
 language: node_js
-node_js: 4
+node_js: 5
 before_install:
   - git config --global user.email "algobot@users.noreply.github.com"
   - git config --global user.name "algobot"
   - npm prune
   - rvm install 2.2.0
   - rvm use 2.2.0
+  - npm install -g npm@2
 before_cache: npm prune
 install: npm install
 script: ./scripts/test-ci.sh
@@ -19,8 +20,13 @@ sudo: false
 cache:
   directories:
     - node_modules
+addons:
+  sauce_connect: true
 env:
   global:
+    - SAUCE_USERNAME=instantsearchjs
+    # we make this public so that we can still run tests on PRS coming from forks
+    - SAUCE_ACCESS_KEY=a3b366ec-c8d3-46af-8710-4d66992514ac
     - secure: gP965MQhMUCCHSPZkiifzUdi9ZLnqIxr7yFyseeAXMSSrZyRT9RXbhF3A/7+du3EPQ+HF8S087+DF3XGYsNdvpOaKvvBh6C5KE15BSD7nw2tB+Q4kEd4LnxQB9I7Q9HYcvAErl/xlQ1nBJnkRTka1Zej97iYqBrEjO2Riwfu+cRQlxXMYOf9ZrRrlmYySlQVvBrliU499UaL/cYqZ8Y6/VIr8P8ju0Y7KVuSLoVHOQgK6c8PL4Y6JB4pelDXAljgrSrnNPEB3YAuyEvrP5apw4PZQ9D8Mopdt0FLKuuW1wpXB3G5TL4dieHnQWqth/FqVFDsvssdWjKP9mzgp0l4A7GslcJwyNx3Jea1EYqhFcCMacw6K+tCF9bA6jPavfjWw0IwThqnW6ZrJCzyDcaLxX+DJ5xrY4V0YgamfAxFCCTLG3F8xLVHbiHrI8RhqDItPcOj0k6884MWbanOzCZfRKXyrRpDWuUmnLc627vxvF2w645CDh43DwZJMQdBMIEkucfLNemQnw1kWpcz1au2zMdca2XM8Em9kpt/xQTFhEd1aSi8eAgTMebvJudkVCijkDce5p8uArsGLjIB6q5wG0+f91k0OOTgsopOr5sgAQTFB3l4kZWZYOiv9vFQ+K3uKmvgjOxw76XIPc4dnlWMA10llFNz9qKUn7u7sHbLuns=
     - secure: B4TDAPszGM93UU5GYuAUCJcunLAaerDMGjQLMTkPKA7jjWICX14fuowbN7BAtxnfCCYwSuyEpnBSf2C9ppA0eKa9ber+91n+Au/aVUp0QOcfQJyONGWIJSziiFH4IO7vlv+jM1C6kYAfRPoOkYTJGwG2W99HF7Ph+rmt2OGvX3kII5tlyXyTuraA+/0CEznL1fW3W3RZmyTNhpO1wxTmwpc8j2ed3bRMJv2LIeTAPTJq7h2obvK27Mlet9dYNaulsZEch2MHm+TFQBv4+n10rlvkpoBcb7PBBJHVUD6/xSoo80SasQdmAYJVNN8Lql6FUmuYx9m2/OgC2MaRcx/FDhF/KTY0lswK3+qnKS2wPjjXqLpqXjjN+hPEm8jTW/qQ1FKSfPfOUNhLW6nu8/InWqtLY/2sLWH8BQizAADpV1bRBI+CvKZ4cUbMZjmwKigqPQXLqo/gPuWsagiwRHr720v6Re7Z3gwdjDqn1s4v4acuUsunW/Akjz46+YfLa6XEHY73JmPQSXr48pQAgMd682grclo+CSMYRy2MoKpSPLnoNSbCZagLUpSbzBN47bMmuymVYA/GCSToPrXevsMKJsonQeL9BwVMYmT7pUcXSr05/ehDTpLN5MaR7X220k5gQPR7d+n3ir4GR4vLrix3B5GAOorTb79pTmEQhkUdBpI=
     - secure: Kl58s2KaFUdi1E4tvmJDMiZh+yrqupuAVL2gR/avkmcp46zRsTqsgSmWIS/mdEtnj4Ujcuejxfpab59CSa6csCo7ToePj8Ywso3Zjxhq+fmYJ4yZ5MA79L0+Vnz/Pw72N1TjsowKE8rTm/vHOsNQZFwoZ9Gl08VmM4ozhZviO7GqXD3araia260vRf5ohql4uUDqn3Q3spcSXDfBg0EvDPWFgiXHMwxWGA2OLGlAXHoql8dYIADKQ3PYWFHV8MO8vq1h3JD0zUm3GwF4qNYsma7FKhzYAQkNGf3igs6/MJ/d90VPw+eAYTT8s/Wwatmac0/dBxEn0roDLuMExbD1/MXgfPMph9GIWBzSGy54TQnNEWv0HM3mf3JcZU30nY91OvaK7HJuq7p7m/Av1+MqAtPPKOYD8TyXcOhDA95N1ezkQcUC59DoNIn/e5uvFW5PcY8nKObPxLd+r73KIFWkAqLPtxaZzjHY9JiMCQ7W8RGrR6OfvF1V2rK9accOMHQyu6gdWH55L4K2VQR5Th61b/NnrsuARt7i8YBBEd7v/Amp2sNIwnipmgjGOWbulZfyMy+eepaDfTTTNo2rR9ENnbGt434u/djDGhSdwUbM+geTYkDSaDW8V6WAcc/pRM8ph/FF9wTz01unU48LAyWPK/Xf4r6nDvNd5pPDX2LkWVM=

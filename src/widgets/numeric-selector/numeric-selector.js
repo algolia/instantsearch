@@ -1,15 +1,16 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
-let cx = require('classnames');
-let find = require('lodash/collection/find');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import utils from '../../lib/utils.js';
+import cx from 'classnames';
+import find from 'lodash/collection/find';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 let bem = utils.bemHelper('ais-numeric-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
+ * @function numericSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the numeric attribute to use
  * @param  {Array} options.options Array of objects defining the different values and labels
@@ -18,8 +19,8 @@ let bem = utils.bemHelper('ais-numeric-selector');
  * @param  {string} [options.operator] The operator to use to refine
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string} [options.cssClasses.item] CSS classes added to each `<option>`
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
  * @return {Object}
  */
 
@@ -34,7 +35,7 @@ function numericSelector({
   let containerNode = utils.getContainerNode(container);
   let usage = 'Usage: numericSelector({container, attributeName, options[, cssClasses.{root,item}, autoHideContainer]})';
 
-  let Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector.js');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
@@ -89,4 +90,4 @@ function numericSelector({
   };
 }
 
-module.exports = numericSelector;
+export default numericSelector;

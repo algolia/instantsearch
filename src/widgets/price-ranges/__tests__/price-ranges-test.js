@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -13,7 +13,8 @@ import generateRanges from '../generate-ranges';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges';
 
 describe('priceRanges call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -35,7 +36,8 @@ describe('priceRanges()', () => {
   let autoHideContainer;
   let headerFooter;
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -47,7 +49,7 @@ describe('priceRanges()', () => {
     priceRanges.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = priceRanges({container, attributeName: 'aNumAttr'});
+    widget = priceRanges({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
     results = {
       hits: [1],
       nbHits: 1,
@@ -90,19 +92,19 @@ describe('priceRanges()', () => {
           label: 'ais-price-ranges--label',
           list: 'ais-price-ranges--list',
           link: 'ais-price-ranges--link',
-          root: 'ais-price-ranges',
+          root: 'ais-price-ranges root cx',
           separator: 'ais-price-ranges--separator'
         },
         shouldAutoHideContainer: false,
         facetValues: generateRanges(results.getFacetStats()),
+        currency: '$',
         labels: {
-          currency: '$',
           separator: 'to',
           button: 'Go'
         },
         refine() {},
         templateProps: {
-          templates: require('../defaultTemplates'),
+          templates: require('../defaultTemplates.js'),
           templatesConfig: undefined,
           transformData: undefined,
           useCustomCompileOptions: {header: false, footer: false, item: false}

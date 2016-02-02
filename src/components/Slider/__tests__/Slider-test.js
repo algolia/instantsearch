@@ -2,14 +2,15 @@
 
 import React from 'react';
 import expect from 'expect';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import TestUtils from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('Slider', () => {
-  jsdom({useEach: true}); // to ensure the global.window is set
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();}); // to ensure the global.window is set
 
   let renderer;
   let Slider;
@@ -20,7 +21,7 @@ describe('Slider', () => {
     renderer = createRenderer();
 
     // need to be required AFTER jsdom has initialized global.window/navigator
-    Slider = require('../Slider');
+    Slider = require('../Slider.js');
     Nouislider = require('react-nouislider');
   });
 

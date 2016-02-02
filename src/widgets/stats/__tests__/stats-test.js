@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import stats from '../stats';
 import Stats from '../../../components/Stats/Stats';
@@ -12,7 +12,8 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('stats call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('should throw when called without container', () => {
     expect(() => stats()).toThrow(/^Usage:/);
@@ -20,7 +21,8 @@ describe('stats call', () => {
 });
 
 describe('stats()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -39,7 +41,7 @@ describe('stats()', () => {
     stats.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = stats({container});
+    widget = stats({container, cssClasses: {body: ['body', 'cx']}});
     results = {
       hits: [{}, {}],
       nbHits: 20,
@@ -60,7 +62,7 @@ describe('stats()', () => {
     widget.render({results});
     let props = {
       cssClasses: {
-        body: 'ais-stats--body',
+        body: 'ais-stats--body body cx',
         header: 'ais-stats--header',
         footer: 'ais-stats--footer',
         root: 'ais-stats',

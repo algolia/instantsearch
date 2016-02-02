@@ -3,12 +3,12 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
-import RefinementList from '../../../components/RefinementList/RefinementList.js';
-import Template from '../../../components/Template.js';
+import RefinementList from '../../../components/RefinementList/RefinementList';
+import Template from '../../../components/Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -16,7 +16,8 @@ expect.extend(expectJSX);
 const helpers = require('../../../lib/helpers.js')('en-US');
 
 describe('toggle()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let renderer = createRenderer();
 
@@ -84,7 +85,7 @@ describe('toggle()', () => {
       beforeEach(() => {
         templateProps = {
           templatesConfig: undefined,
-          templates: require('../defaultTemplates'),
+          templates: require('../defaultTemplates.js'),
           useCustomCompileOptions: {header: false, item: false, footer: false},
           transformData: undefined
         };
@@ -134,6 +135,24 @@ describe('toggle()', () => {
         renderer.render(<Template data={{count: 1000}} {...templateProps} templateKey="item" />);
         let out = renderer.getRenderOutput();
         expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
+      });
+
+      it('understands cssClasses', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          nbHits: 1,
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+        };
+        props.cssClasses.root += ' root cx';
+        props = {
+          facetValues: [{count: 1, isRefined: false, name: label}],
+          shouldAutoHideContainer: false,
+          ...props
+        };
+        let cssClasses = {root: ['root', 'cx']};
+        widget = toggle({container, attributeName, label, cssClasses});
+        widget.render({results, helper});
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('with facet values', () => {

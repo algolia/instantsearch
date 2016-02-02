@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,7 +12,8 @@ import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
 
 describe('hitsPerPageSelector call', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
@@ -26,7 +27,8 @@ describe('hitsPerPageSelector call', () => {
 });
 
 describe('hitsPerPageSelector()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -45,7 +47,7 @@ describe('hitsPerPageSelector()', () => {
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
     hitsPerPageSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    consoleLog = sinon.spy(window.console, 'log');
+    consoleLog = sinon.stub(window.console, 'log');
 
     container = document.createElement('div');
     options = [
@@ -53,7 +55,7 @@ describe('hitsPerPageSelector()', () => {
       {value: 20, label: '20 results'}
     ];
     cssClasses = {
-      root: 'custom-root',
+      root: ['custom-root', 'cx'],
       item: 'custom-item'
     };
     widget = hitsPerPageSelector({container, options, cssClasses});
@@ -79,7 +81,7 @@ describe('hitsPerPageSelector()', () => {
     widget.render({helper, results, state: helper.state});
     props = {
       cssClasses: {
-        root: 'ais-hits-per-page-selector custom-root',
+        root: 'ais-hits-per-page-selector custom-root cx',
         item: 'ais-hits-per-page-selector--item custom-item'
       },
       currentValue: 20,

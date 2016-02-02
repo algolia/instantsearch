@@ -1,12 +1,12 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let findIndex = require('lodash/array/findIndex');
-let map = require('lodash/collection/map');
-let utils = require('../../lib/utils.js');
+import findIndex from 'lodash/array/findIndex';
+import map from 'lodash/collection/map';
+import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-sort-by-selector');
-let cx = require('classnames');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
+import cx from 'classnames';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 
 /**
  * Instantiate a dropdown element to choose the current targeted index
@@ -17,8 +17,8 @@ let autoHideContainerHOC = require('../../decorators/autoHideContainer');
  * @param  {string} options.indices[0].label Label displayed in the dropdown
  * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string} [options.cssClasses.root] CSS classes added to the parent <select>
- * @param  {string} [options.cssClasses.item] CSS classes added to each <option>
+ * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent <select>
+ * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each <option>
  * @return {Object}
  */
 const usage = `Usage:
@@ -39,7 +39,7 @@ function sortBySelector({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let Selector = require('../../components/Selector');
+  let Selector = require('../../components/Selector.js');
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
@@ -85,4 +85,4 @@ function sortBySelector({
   };
 }
 
-module.exports = sortBySelector;
+export default sortBySelector;

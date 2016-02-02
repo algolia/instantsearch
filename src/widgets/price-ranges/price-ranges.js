@@ -1,16 +1,16 @@
-let React = require('react');
-let ReactDOM = require('react-dom');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-let utils = require('../../lib/utils.js');
+import utils from '../../lib/utils.js';
 
-let generateRanges = require('./generate-ranges.js');
+import generateRanges from './generate-ranges.js';
 
-let defaultTemplates = require('./defaultTemplates');
-let autoHideContainerHOC = require('../../decorators/autoHideContainer');
-let headerFooterHOC = require('../../decorators/headerFooter');
+import defaultTemplates from './defaultTemplates.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
 let bem = utils.bemHelper('ais-price-ranges');
-let cx = require('classnames');
+import cx from 'classnames';
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -18,33 +18,34 @@ let cx = require('classnames');
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.item] Item template. Template data: `from`, `to` and `currency`
+ * @param  {string} [options.currency='$'] The currency to display
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.currency] Currency label
  * @param  {string|Function} [options.labels.separator] Separator label, between min and max
  * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
  * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string} [options.cssClasses.list] CSS class to add to the wrapping list element
- * @param  {string} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string} [options.cssClasses.active] CSS class to add to the active item element
- * @param  {string} [options.cssClasses.link] CSS class to add to each link element
- * @param  {string} [options.cssClasses.form] CSS class to add to the form element
- * @param  {string} [options.cssClasses.label] CSS class to add to each wrapping label of the form
- * @param  {string} [options.cssClasses.input] CSS class to add to each input of the form
- * @param  {string} [options.cssClasses.currency] CSS class to add to each currency element of the form
- * @param  {string} [options.cssClasses.separator] CSS class to add to the separator of the form
- * @param  {string} [options.cssClasses.button] CSS class to add to the submit button of the form
- * @param  {string} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the wrapping list element
+ * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.active] CSS class to add to the active item element
+ * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link element
+ * @param  {string|string[]} [options.cssClasses.form] CSS class to add to the form element
+ * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each wrapping label of the form
+ * @param  {string|string[]} [options.cssClasses.input] CSS class to add to each input of the form
+ * @param  {string|string[]} [options.cssClasses.currency] CSS class to add to each currency element of the form
+ * @param  {string|string[]} [options.cssClasses.separator] CSS class to add to the separator of the form
+ * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the submit button of the form
+ * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @return {Object}
  */
 const usage = `Usage:
 priceRanges({
   container,
   attributeName,
+  [ currency=$ ],
   [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
   [ templates.{header,item,footer} ],
   [ labels.{currency,separator,button} ],
@@ -55,11 +56,8 @@ function priceRanges({
     attributeName,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
-    labels = {
-      currency: '$',
-      button: 'Go',
-      separator: 'to'
-    },
+    labels: userLabels = {},
+    currency = '$',
     autoHideContainer = true
   } = {}) {
   if (!container || !attributeName) {
@@ -67,7 +65,7 @@ function priceRanges({
   }
 
   let containerNode = utils.getContainerNode(container);
-  let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges'));
+  let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges.js'));
   if (autoHideContainer === true) {
     PriceRanges = autoHideContainerHOC(PriceRanges);
   }
@@ -119,6 +117,14 @@ function priceRanges({
 
     render: function({results, helper, templatesConfig, state, createURL}) {
       let facetValues;
+      let labels = {
+        button: 'Go',
+        separator: 'to',
+        ...userLabels
+      };
+
+      // before we had opts.currency, you had to pass labels.currency
+      if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
 
       if (results.hits.length > 0) {
         facetValues = this._extractRefinedRange(helper);
@@ -170,6 +176,7 @@ function priceRanges({
             return createURL(newState);
           }}
           cssClasses={cssClasses}
+          currency={currency}
           facetValues={facetValues}
           labels={labels}
           refine={this._refine.bind(this, helper)}
@@ -182,4 +189,4 @@ function priceRanges({
   };
 }
 
-module.exports = priceRanges;
+export default priceRanges;

@@ -101,6 +101,11 @@ body {
   padding-left: 10px;
 }
 
+.facet-value-removable:hover {
+  text-decoration: line-through;
+  font-weight: normal;
+}
+
 .ais-refinement-list--label,
 .ais-toggle--label {
   display: block;
@@ -112,4 +117,8 @@ body {
 
 .ais-refinement-list--label input[type=radio]{
   margin: 4px 8px 0 0;
+}
+
+.ais-showmore__active, .ais-showmore__inactive {
+  cursor: pointer;
 }

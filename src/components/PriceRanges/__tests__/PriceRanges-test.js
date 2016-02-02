@@ -4,7 +4,7 @@ import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -17,7 +17,8 @@ describe('PriceRanges', () => {
   let renderer;
   let stubbedMethods;
 
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     stubbedMethods = [];
@@ -102,7 +103,8 @@ describe('PriceRanges', () => {
             item: 'item',
             link: 'link',
             active: 'active'
-          }
+          },
+          currency: '$'
         };
         facetValue = {
           from: 1,
@@ -122,7 +124,7 @@ describe('PriceRanges', () => {
         expect(item).toEqualJSX(
           <div className="item" key="1_10">
             <a className="link" href="url" onClick={() => {}}>
-              <Template data={facetValue} templateKey="item"/>
+              <Template data={{currency: '$', ...facetValue}} templateKey="item"/>
             </a>
           </div>
         );
@@ -139,7 +141,7 @@ describe('PriceRanges', () => {
         expect(item).toEqualJSX(
           <div className="item active" key="1_10">
             <a className="link" href="url" onClick={() => {}}>
-              <Template data={facetValue} templateKey="item"/>
+              <Template data={{currency: '$', ...facetValue}} templateKey="item"/>
             </a>
           </div>
         );
@@ -171,7 +173,8 @@ describe('PriceRanges', () => {
         // Given
         let props = {
           cssClasses: 'cssClasses',
-          labels: 'labels',
+          labels: {button: 'hello'},
+          currency: '$',
           refine: 'refine'
         };
         let component = getComponentWithMockRendering(props);
@@ -183,7 +186,7 @@ describe('PriceRanges', () => {
         expect(form).toEqualJSX(
           <PriceRangesForm
             cssClasses={props.cssClasses}
-            labels={props.labels}
+            labels={{button: 'hello', currency: '$'}}
             refine={() => {}}
           />
         );

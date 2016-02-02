@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'mocha-jsdom';
+import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,7 +12,8 @@ import numericSelector from '../numeric-selector';
 import Selector from '../../../components/Selector';
 
 describe('numericSelector()', () => {
-  jsdom({useEach: true});
+  beforeEach(function() {this.jsdom = jsdom();});
+  afterEach(function() {this.jsdom();});
 
   let ReactDOM;
   let container;
@@ -37,13 +38,13 @@ describe('numericSelector()', () => {
       {value: 2, label: 'second'}
     ];
     cssClasses = {
-      root: 'custom-root',
+      root: ['custom-root', 'cx'],
       item: 'custom-item'
     };
     widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
     expectedProps = {
       cssClasses: {
-        root: 'ais-numeric-selector custom-root',
+        root: 'ais-numeric-selector custom-root cx',
         item: 'ais-numeric-selector--item custom-item'
       },
       currentValue: undefined,
@@ -97,7 +98,7 @@ describe('numericSelector()', () => {
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it('cancles the underying numeric refinement', () => {
+  it('cancels the underlying numeric refinement', () => {
     widget._refine(helper, undefined);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');

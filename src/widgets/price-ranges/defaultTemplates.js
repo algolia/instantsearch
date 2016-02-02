@@ -1,11 +1,11 @@
-module.exports = {
+export default {
   header: ``,
   item: `
     {{#from}}
       {{^to}}
         &ge;
       {{/to}}
-      \${{from}}
+      {{currency}}{{from}}
     {{/from}}
     {{#to}}
       {{#from}}
@@ -14,7 +14,7 @@ module.exports = {
       {{^from}}
         &le;
       {{/from}}
-      \${{to}}
+      {{to}}
     {{/to}}
   `,
   footer: ``

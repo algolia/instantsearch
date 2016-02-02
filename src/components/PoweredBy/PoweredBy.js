@@ -1,11 +1,11 @@
-let React = require('react');
+import React from 'react';
 
 class PoweredBy extends React.Component {
   render() {
     return (
       <div className={this.props.cssClasses.root}>
-        Powered by
-        <a className={this.props.cssClasses.link} href="https://www.algolia.com/" target="_blank">Algolia</a>
+        Search by
+        <a className={this.props.cssClasses.link} href={this.props.link} target="_blank">Algolia</a>
       </div>
     );
   }
@@ -15,7 +15,8 @@ PoweredBy.propTypes = {
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.string,
     link: React.PropTypes.string
-  })
+  }),
+  link: React.PropTypes.string.isRequired
 };
 
-module.exports = PoweredBy;
+export default PoweredBy;

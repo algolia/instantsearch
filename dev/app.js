@@ -1,13 +1,11 @@
 // force using index because package 'main' is dist-es5-module/
-var instantsearch = require('../index');
+var instantsearch = require('../index.js');
 
 var search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
-  urlSync: {
-    useHash: true
-  }
+  urlSync: window.history && 'pushState' in window.history ? true : {useHash: true}
 });
 
 search.addWidget(
@@ -54,12 +52,23 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.hits({
+    container: '#hits-table',
+    templates: {
+      empty: require('./templates/no-results.html'),
+      allItems: require('./templates/all-items.html')
+    },
+    hitsPerPage: 24
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.hits({
     container: '#hits',
     templates: {
       empty: require('./templates/no-results.html'),
       item: require('./templates/item.html')
     },
-    hitsPerPage: 6
+    hitsPerPage: 24
   })
 );
 
@@ -82,8 +91,63 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.currentRefinedValues({
+    container: '#current-refined-values',
+    cssClasses: {
+      header: 'facet-title',
+      link: 'facet-value facet-value-removable',
+      count: 'facet-count pull-right'
+    },
+    templates: {
+      header: 'Current refinements'
+    },
+    attributes: [
+      {
+        name: 'price',
+        label: 'Price',
+        transformData: (data) => { data.name = `$${data.name}`; return data; }
+      },
+      {
+        name: 'price_range',
+        label: 'Price range',
+        transformData: (data) => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
+      },
+      {
+        name: 'free_shipping',
+        transformData: (data) => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
+      }
+    ]
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     container: '#brands',
+    attributeName: 'brand',
+    operator: 'or',
+    limit: 3,
+    cssClasses: {
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active'
+    },
+    templates: {
+      header: 'Brands'
+    },
+    showMore: {
+      templates: {
+        'active': '<button>Show less</button>',
+        'inactive': '<button>Show more</button>'
+      },
+      limit: 10
+    }
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    container: '#brands-2',
     attributeName: 'brand',
     operator: 'or',
     limit: 10,
@@ -239,14 +303,16 @@ search.addWidget(
 search.addWidget(
   instantsearch.widgets.numericSelector({
     container: '#popularity-selector',
+    operator: '>=',
     attributeName: 'popularity',
     options: [
-      { label: 'Select a value', value: undefined },
-      { label: '1st', value: 1 },
-      { label: '2nd', value: 2 },
-      { label: '3rd', value: 3 }
+      { label: 'Default', value: 0 },
+      { label: 'Top 10', value: 9991 },
+      { label: 'Top 100', value: 9901 },
+      { label: 'Top 500', value: 9501 }
     ]
   })
 );
 
 search.start();
+

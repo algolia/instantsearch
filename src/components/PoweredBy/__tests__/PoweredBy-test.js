@@ -21,12 +21,13 @@ describe('PoweredBy', () => {
       cssClasses: {
         root: 'pb-root',
         link: 'pb-link'
-      }
+      },
+      link: 'www.google.com'
     });
     expect(out).toEqualJSX(
     <div className="pb-root">
-      Powered by
-      <a className="pb-link" href="https://www.algolia.com/" target="_blank">Algolia</a>
+      Search by
+      <a className="pb-link" href="www.google.com" target="_blank">Algolia</a>
     </div>);
   });
 
