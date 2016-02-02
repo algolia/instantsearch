@@ -32,7 +32,7 @@
 }
 
 /* Sub block for the show more of the refinement list */
-@include block(showmore) {
+@include block(show-more) {
   @include modifier(active) {
     /* Show more button is activated */
   }

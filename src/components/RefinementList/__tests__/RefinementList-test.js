@@ -78,7 +78,7 @@ describe('RefinementList', () => {
     expect(out.props.children[0][0].key).toEqual('facet1/true/42');
   });
 
-  context('showmore', () => {
+  context('showMore', () => {
     it('should display the number accordingly to the state : closed', () => {
       const out = render({
         facetValues: [
