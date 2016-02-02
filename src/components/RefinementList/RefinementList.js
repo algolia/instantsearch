@@ -120,11 +120,11 @@ class RefinementList extends React.Component {
     }
 
     const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
-    const showmoreBtn =
+    const showMoreBtn =
       this.props.showMore ?
         <Template
           onClick={() => this.handleClickShowMore()}
-          templateKey={'showmore-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}
+          templateKey={'show-more-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}
           {...this.props.templateProps}
         /> :
         undefined;
@@ -132,7 +132,7 @@ class RefinementList extends React.Component {
     return (
       <div className={cx(cssClassList)}>
         {this.props.facetValues.map(this._generateFacetItem, this).slice(0, limit)}
-        {showmoreBtn}
+        {showMoreBtn}
       </div>
     );
   }

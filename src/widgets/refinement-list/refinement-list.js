@@ -20,11 +20,11 @@ import defaultShowMoreTemplates from './defaultShowMoreTemplates.js';
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).
- * @param  {object|boolean} [options.showmore] pass a configuration object, or true to use the default configuration
- * @param  {object} [options.showmore.templates] templates to use
- * @param  {object} [options.showmore.templates.active] template used when more facets are displayed
- * @param  {object} [options.showmore.templates.inactive] template used when less facets are displayed
- * @param  {object} [options.showmore.limit] the max number of facets values to display when the show more feature is active
+ * @param  {object|boolean} [options.showMore] pass a configuration object, or true to use the default configuration
+ * @param  {object} [options.showMore.templates] templates to use
+ * @param  {object} [options.showMore.templates.active] template used when more facets are displayed
+ * @param  {object} [options.showMore.templates.inactive] template used when less facets are displayed
+ * @param  {object} [options.showMore.limit] the max number of facets values to display when the show more feature is active
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
@@ -55,7 +55,7 @@ refinementList({
   [ templates.{header,item,footer} ],
   [ transformData ],
   [ autoHideContainer=true ],
-  [ showmore.{templates: {active, inactive}, limit} ]
+  [ showMore.{templates: {active, inactive}, limit} ]
 })`;
 function refinementList({
     container,
@@ -71,7 +71,7 @@ function refinementList({
   }) {
   let showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
-    throw new Error('showmore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
   let widgetMaxValuesPerFacet = (showMoreConfig && showMoreConfig.limit) || limit;
 
@@ -94,7 +94,7 @@ function refinementList({
     }
   }
 
-  const showMoreTemplates = showMoreConfig && prefixKeys('showmore-', showMoreConfig.templates);
+  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates =
     showMoreTemplates ?
       {...templates, ...showMoreTemplates} :
