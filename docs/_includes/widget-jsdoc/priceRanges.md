@@ -3,26 +3,26 @@
 | <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | Valid CSS Selector as a string or DOMElement |
 | <span class='attr-required'>`options.attributeName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting |
 | <span class='attr-optional'>`options.templates`</span><span class="attr-infos">Type: <code>Object</code></span> | Templates to use for the widget |
-| <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Item template |
+| <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Item template. Template data: `from`, `to` and `currency` |
+| <span class='attr-optional'>`options.currency`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;$&#x27;</code><br />Type: <code>string</code></span> | The currency to display |
 | <span class='attr-optional'>`options.labels`</span><span class="attr-infos">Type: <code>Object</code></span> | Labels to use for the widget |
-| <span class='attr-optional'>`options.labels.currency`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Currency label |
 | <span class='attr-optional'>`options.labels.separator`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Separator label, between min and max |
 | <span class='attr-optional'>`options.labels.button`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Button label |
 | <span class='attr-optional'>`options.autoHideContainer`</span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span> | Hide the container when no refinements available |
 | <span class='attr-optional'>`options.cssClasses`</span><span class="attr-infos">Type: <code>Object</code></span> | CSS classes to add |
-| <span class='attr-optional'>`options.cssClasses.root`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the root element |
-| <span class='attr-optional'>`options.cssClasses.header`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the header element |
-| <span class='attr-optional'>`options.cssClasses.body`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the body element |
-| <span class='attr-optional'>`options.cssClasses.list`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the wrapping list element |
-| <span class='attr-optional'>`options.cssClasses.item`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to each item element |
-| <span class='attr-optional'>`options.cssClasses.active`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the active item element |
-| <span class='attr-optional'>`options.cssClasses.link`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to each link element |
-| <span class='attr-optional'>`options.cssClasses.form`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the form element |
-| <span class='attr-optional'>`options.cssClasses.label`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to each wrapping label of the form |
-| <span class='attr-optional'>`options.cssClasses.input`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to each input of the form |
-| <span class='attr-optional'>`options.cssClasses.currency`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to each currency element of the form |
-| <span class='attr-optional'>`options.cssClasses.separator`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the separator of the form |
-| <span class='attr-optional'>`options.cssClasses.button`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the submit button of the form |
-| <span class='attr-optional'>`options.cssClasses.footer`</span><span class="attr-infos">Type: <code>string</code></span> | CSS class to add to the footer element |
+| <span class='attr-optional'>`options.cssClasses.root`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the root element |
+| <span class='attr-optional'>`options.cssClasses.header`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the header element |
+| <span class='attr-optional'>`options.cssClasses.body`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the body element |
+| <span class='attr-optional'>`options.cssClasses.list`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the wrapping list element |
+| <span class='attr-optional'>`options.cssClasses.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each item element |
+| <span class='attr-optional'>`options.cssClasses.active`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the active item element |
+| <span class='attr-optional'>`options.cssClasses.link`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each link element |
+| <span class='attr-optional'>`options.cssClasses.form`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the form element |
+| <span class='attr-optional'>`options.cssClasses.label`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each wrapping label of the form |
+| <span class='attr-optional'>`options.cssClasses.input`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each input of the form |
+| <span class='attr-optional'>`options.cssClasses.currency`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each currency element of the form |
+| <span class='attr-optional'>`options.cssClasses.separator`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the separator of the form |
+| <span class='attr-optional'>`options.cssClasses.button`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the submit button of the form |
+| <span class='attr-optional'>`options.cssClasses.footer`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the footer element |
 
 <p class="attr-legend">* <span>Required</span></p>

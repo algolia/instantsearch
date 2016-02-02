@@ -36,6 +36,8 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/][in
   - [URL synchronisation](#url-synchronisation)
 - [Development workflow](#development-workflow)
 - [Test](#test)
+- [Functional tests](#functional-tests)
+  - [It's not working!](#its-not-working)
 - [License](#license)
 - [Contributing](#contributing)
 

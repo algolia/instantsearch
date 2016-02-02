@@ -1,3 +1,33 @@
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/algolia/instantsearch.js/compare/v1.1.3...v1.2.0) (2016-02-02)
+
+
+### Bug Fixes
+
+* **all:** typos ([fa8ba09](https://github.com/algolia/instantsearch.js/commit/fa8ba09))
+* **currentRefinedValues:** allow array of strings for cssClasses.* ([55b3a3f](https://github.com/algolia/instantsearch.js/commit/55b3a3f))
+* **docs:** fixed bad link to scss in custom themes section ([823a859](https://github.com/algolia/instantsearch.js/commit/823a859))
+* **getRefinements:** a name should be a string ([7efd1fd](https://github.com/algolia/instantsearch.js/commit/7efd1fd))
+* **getRefinements:** hierarchical facets ([fe0fc5d](https://github.com/algolia/instantsearch.js/commit/fe0fc5d))
+* **index:** Use module.exports instead of export on index ([81e7eee](https://github.com/algolia/instantsearch.js/commit/81e7eee))
+* **pagination:** remove default value of maxPages. Fixes #761 ([607fe9a](https://github.com/algolia/instantsearch.js/commit/607fe9a)), closes [#761](https://github.com/algolia/instantsearch.js/issues/761)
+* **prepareTemplates:** uses templates with keys that are not in defaults ([c4bf8ec](https://github.com/algolia/instantsearch.js/commit/c4bf8ec))
+* **rangeSlider:**     prevent slider from extending farther than the last pip ([6e534f5](https://github.com/algolia/instantsearch.js/commit/6e534f5))
+* **search-box:** update value when state changes from the outside ([4550f99](https://github.com/algolia/instantsearch.js/commit/4550f99))
+* **url-sync:** adds indexName in the helper configuration ([e50bafd](https://github.com/algolia/instantsearch.js/commit/e50bafd))
+* **url-sync:** Makes url sync more reliable ([3157abc](https://github.com/algolia/instantsearch.js/commit/3157abc)), closes [#730](https://github.com/algolia/instantsearch.js/issues/730) [#729](https://github.com/algolia/instantsearch.js/issues/729)
+
+### Features
+
+* **currentRefinedValues:** new widget ([6c926d0](https://github.com/algolia/instantsearch.js/commit/6c926d0)), closes [#404](https://github.com/algolia/instantsearch.js/issues/404)
+* **hits:** adds allItems template as an alternative to item ([1f3f889](https://github.com/algolia/instantsearch.js/commit/1f3f889))
+* **poweredBy:** automatically add utm link to poweredBy ([05d1425](https://github.com/algolia/instantsearch.js/commit/05d1425)), closes [#711](https://github.com/algolia/instantsearch.js/issues/711)
+* **priceRanges:** add currency option ([f41484a](https://github.com/algolia/instantsearch.js/commit/f41484a))
+* **refinementlist:** lets configure showmore feature ([3b8688a](https://github.com/algolia/instantsearch.js/commit/3b8688a))
+* **Template:** accepts any parameters and forwards them ([5170f53](https://github.com/algolia/instantsearch.js/commit/5170f53))
+
+
+
 <a name="1.1.3"></a>
 ## [1.1.3](https://github.com/algolia/instantsearch.js/compare/v1.1.2...v1.1.3) (2016-01-12)
 
