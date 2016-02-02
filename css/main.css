@@ -3756,9 +3756,6 @@ h2 {
   opacity: .8;
   font-weight: 300; }
 
-.url_index .site-header .navbar {
-  background-color: transparent; }
-
 #space {
   position: fixed;
   top: 0;
@@ -4036,6 +4033,12 @@ h2 {
     top: 270px;
     right: 280px; }
 
+@media (max-width: 600px) {
+  .link-thumbnail {
+    width: 100%; } }
+@media (max-width: 450px) {
+  .link-thumbnail {
+    text-align: center; } }
 .page-content {
   font-size: 1.1em;
   line-height: 1.5em; }
@@ -4419,7 +4422,6 @@ code {
       margin: 0; }
 
   .widget-description {
-    -webkit-overflow-scrolling: touch;
     padding: 0; }
     .widget-description p, .widget-description h1, .widget-description h2, .widget-description h3, .widget-description h4, .widget-description ul, .widget-description .highlight {
       margin-right: 0;

@@ -7,10 +7,10 @@ body {
   font-size: 16px;
   color: #565A5C; }
 
-.aisdemo-left_column {
+.aisdemo--left-column {
   height: 400px; }
 
-.aisdemo-right_column {
+.aisdemo--right-column {
   padding-right: 0;
   padding-left: 0; }
 
@@ -127,6 +127,14 @@ body {
   margin: 30px 9px 18px; }
 .aisdemo-filters #price .ais-range-slider--handle {
   border-color: #FF585B; }
+.aisdemo-filters #price .ais-range-slider--handle-lower {
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%); }
+.aisdemo-filters #price .ais-range-slider--handle-upper {
+  -webkit-transform: translateX(50%);
+      -ms-transform: translateX(50%);
+          transform: translateX(50%); }
 .aisdemo-filters #price .ais-range-slider--tooltip:last-child {
   right: 0; }
 .aisdemo-filters #price .ais-range-slider--connect {
