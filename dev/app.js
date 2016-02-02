@@ -137,8 +137,8 @@ search.addWidget(
     },
     showMore: {
       templates: {
-        'active': '<button>Show less</button>',
-        'inactive': '<button>Show more</button>'
+        active: '<button>Show less</button>',
+        inactive: '<button>Show more</button>'
       },
       limit: 10
     }
@@ -230,7 +230,14 @@ search.addWidget(
   instantsearch.widgets.menu({
     container: '#categories',
     attributeName: 'categories',
-    limit: 10,
+    limit: 3,
+    showMore: {
+      templates: {
+        active: '<button>Show less</button>',
+        inactive: '<button>Show more</button>'
+      },
+      limit: 10
+    },
     cssClasses: {
       header: 'facet-title',
       link: 'facet-value',

@@ -6,6 +6,7 @@ let bem = utils.bemHelper('ais-menu');
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 import defaultTemplates from './defaultTemplates.js';
 
@@ -15,7 +16,12 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
- * @param  {string} [options.limit=100] How many facets values to retrieve
+ * @param  {string} [options.limit=10] How many facets values to retrieve
+ * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
+ * @param  {object} [options.showMore.templates] Templates to use for showMore
+ * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked
+ * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
+ * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
@@ -39,22 +45,30 @@ menu({
   container,
   attributeName,
   [sortBy],
-  [limit],
+  [limit=10],
   [cssClasses.{root,list,item}],
   [templates.{header,item,footer}],
   [transformData],
   [autoHideContainer]
+  [showMore.{templates: {active, inactive}, limit}]
 })`;
 function menu({
     container,
     attributeName,
     sortBy = ['count:desc'],
-    limit = 100,
+    limit = 10,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
-    autoHideContainer = true
+    autoHideContainer = true,
+    showMore = false
   } = {}) {
+  let showMoreConfig = getShowMoreConfig(showMore);
+  if (showMoreConfig && showMoreConfig.limit < limit) {
+    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+  }
+  let widgetMaxValuesPerFacet = (showMoreConfig && showMoreConfig.limit) || limit;
+
   if (!container || !attributeName) {
     throw new Error(usage);
   }
@@ -69,22 +83,35 @@ function menu({
   // of hierarchicalFacet: a flat menu
   let hierarchicalFacetName = attributeName;
 
+  const showMoreTemplates = showMoreConfig && utils.prefixKeys('show-more-', showMoreConfig.templates);
+  const allTemplates =
+    showMoreTemplates ?
+      {...templates, ...showMoreTemplates} :
+      templates;
+
   return {
-    getConfiguration: () => ({
-      hierarchicalFacets: [{
-        name: hierarchicalFacetName,
-        attributes: [attributeName]
-      }]
-    }),
+    getConfiguration: configuration => {
+      let widgetConfiguration = {
+        hierarchicalFacets: [{
+          name: hierarchicalFacetName,
+          attributes: [attributeName]
+        }]
+      };
+
+      let currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, widgetMaxValuesPerFacet);
+
+      return widgetConfiguration;
+    },
     render: function({results, helper, templatesConfig, state, createURL}) {
-      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
+      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
       let hasNoFacetValues = facetValues.length === 0;
 
       let templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates: allTemplates
       });
 
       let cssClasses = {
@@ -104,7 +131,10 @@ function menu({
           createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
+          limitMax={widgetMaxValuesPerFacet}
+          limitMin={limit}
           shouldAutoHideContainer={hasNoFacetValues}
+          showMore={showMoreConfig !== null}
           templateProps={templateProps}
           toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
         />,
@@ -120,11 +150,11 @@ function toggleRefinement(helper, attributeName, facetValue) {
     .search();
 }
 
-function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
+function getFacetValues(results, hierarchicalFacetName, sortBy) {
   let values = results
     .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
 
-  return values.data && values.data.slice(0, limit) || [];
+  return values.data || [];
 }
 
 export default menu;

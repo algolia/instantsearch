@@ -5,6 +5,7 @@ import get from 'lodash/object/get';
 import isEmpty from 'lodash/lang/isEmpty';
 import keys from 'lodash/object/keys';
 import uniq from 'lodash/array/uniq';
+import mapKeys from 'lodash/object/mapKeys';
 
 let utils = {
   getContainerNode,
@@ -14,7 +15,8 @@ let utils = {
   isDomElement,
   getRefinements,
   clearRefinementsFromState,
-  clearRefinementsAndSearch
+  clearRefinementsAndSearch,
+  prefixKeys
 };
 
 /**
@@ -216,6 +218,14 @@ function clearRefinementsFromState(state, attributeNames) {
 
 function clearRefinementsAndSearch(helper, attributeNames) {
   helper.setState(clearRefinementsFromState(helper.state, attributeNames)).search();
+}
+
+function prefixKeys(prefix, obj) {
+  if (obj) {
+    return mapKeys(obj, function(v, k) {
+      return prefix + k;
+    });
+  }
 }
 
 export default utils;
