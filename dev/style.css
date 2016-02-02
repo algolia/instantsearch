@@ -119,6 +119,6 @@ body {
   margin: 4px 8px 0 0;
 }
 
-.ais-showmore__active, .ais-showmore__inactive {
+.ais-show-more__active, .ais-show-more__inactive {
   cursor: pointer;
 }
