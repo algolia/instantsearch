@@ -6,10 +6,15 @@ import cx from 'classnames';
 
 class PriceRanges extends React.Component {
   getForm() {
+    let labels = {
+      currency: this.props.currency,
+      ...this.props.labels
+    };
+
     return (
       <PriceRangesForm
         cssClasses={this.props.cssClasses}
-        labels={this.props.labels}
+        labels={labels}
         refine={this.refine.bind(this)}
       />
     );
@@ -30,6 +35,10 @@ class PriceRanges extends React.Component {
     let url = this.getURLFromFacetValue(facetValue);
     let key = facetValue.from + '_' + facetValue.to;
     let handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
+    let data = {
+      currency: this.props.currency,
+      ...facetValue
+    };
     return (
       <div className={cssClassItem} key={key}>
         <a
@@ -37,7 +46,7 @@ class PriceRanges extends React.Component {
           href={url}
           onClick={handleClick}
         >
-          <Template data={facetValue} templateKey="item" {...this.props.templateProps} />
+          <Template data={data} templateKey="item" {...this.props.templateProps} />
         </a>
       </div>
     );
@@ -80,10 +89,10 @@ PriceRanges.propTypes = {
     list: React.PropTypes.string,
     separator: React.PropTypes.string
   }),
+  currency: React.PropTypes.string,
   facetValues: React.PropTypes.array,
   labels: React.PropTypes.shape({
     button: React.PropTypes.string,
-    currency: React.PropTypes.string,
     to: React.PropTypes.string
   }),
   refine: React.PropTypes.func.isRequired,

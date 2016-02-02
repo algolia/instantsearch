@@ -5,7 +5,7 @@ export default {
       {{^to}}
         &ge;
       {{/to}}
-      \${{from}}
+      {{currency}}{{from}}
     {{/from}}
     {{#to}}
       {{#from}}
@@ -14,7 +14,7 @@ export default {
       {{^from}}
         &le;
       {{/from}}
-      \${{to}}
+      {{to}}
     {{/to}}
   `,
   footer: ``
