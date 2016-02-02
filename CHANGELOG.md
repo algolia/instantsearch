@@ -1,3 +1,13 @@
+<a name="1.2.1"></a>
+## [1.2.1](https://github.com/algolia/instantsearch.js/compare/v1.2.0...v1.2.1) (2016-02-02)
+
+
+### Bug Fixes
+
+* **showmore:** now showMore in doc and also show-more BEM ([a020439](https://github.com/algolia/instantsearch.js/commit/a020439))
+
+
+
 <a name="1.2.0"></a>
 # [1.2.0](https://github.com/algolia/instantsearch.js/compare/v1.1.3...v1.2.0) (2016-02-02)
 
