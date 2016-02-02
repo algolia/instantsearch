@@ -124,7 +124,17 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      let form = input.parentElement.parentNode;
+      // like jquery closest()
+      function closest(el, selector) {
+        var matches = el.webkitMatchesSelector ? 'webkitMatchesSelector' : (el.msMatchesSelector ? 'msMatchesSelector' : 'matches');
+        while (el.parentElement) {
+          if (el[matches](selector)) return el;
+          el = el.parentElement;
+        }
+        return null;
+      }
+
+      let form = closest(input,'form');
       // Handle form reset
       form.addEventListener('reset', (e) => {
         input.defaultValue = '';
