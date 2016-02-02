@@ -260,7 +260,7 @@ code {
   & > p, & > ul {
     float: left;
     max-width: 50%;
-    clear: left
+    clear: left;
   }
   .code-box {
     float: right;
@@ -475,7 +475,6 @@ code {
     }
   }
   .widget-description {
-    -webkit-overflow-scrolling: touch;
     padding: 0;
     p, h1, h2, h3, h4, ul, .highlight {
       margin-right: 0;

@@ -15,6 +15,11 @@ rules:
   extends-before-declarations: 1
   placeholder-in-extend: 1
 
+  class-name-format:
+    - 1
+    -
+      convention: 'hyphenatedbem'
+
   # Mixins
   mixins-before-declarations: 0
 
@@ -32,9 +37,9 @@ rules:
   no-empty-rulesets: 1
   no-extends: 0
   no-ids: 0
-  no-important: 1
+  no-important: 0
   no-invalid-hex: 1
-  no-mergeable-selectors: 1
+  no-mergeable-selectors: 0 # unusable https://github.com/sasstools/sass-lint/issues/307
   no-misspelled-properties: 1
   no-qualifying-elements: 1
   no-trailing-zero: 1
