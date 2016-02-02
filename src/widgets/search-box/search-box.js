@@ -124,7 +124,14 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // Keep keyup to handle searchOnEnterKeyPressOnly
+      let form = input.parentElement.parentNode;
+      // Handle form reset
+      form.addEventListener('reset', (e) => {
+        input.defaultValue = '';
+        helper.setQuery('');
+        helper.search();
+      });
+
       input.addEventListener('keyup', (e) => {
         helper.setQuery(input.value);
         if (searchOnEnterKeyPressOnly && e.keyCode === KEY_ENTER) {
@@ -150,16 +157,6 @@ function searchBox({
       } else {
         input.addEventListener('input', inputCallback, false);
       }
-
-      // custom clear event
-      function inputClearCallback(e) {
-        let target = (e.currentTarget) ? e.currentTarget : e.srcElement;
-        input.defaultValue = '';
-        helper.setQuery('');
-        helper.search();
-      }
-      
-      input.addEventListener('clear', inputClearCallback, false);
 
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node
