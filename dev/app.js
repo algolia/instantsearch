@@ -12,7 +12,8 @@ search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    poweredBy: true
+    poweredBy: true,
+    wrapInput: false
   })
 );
 
@@ -315,4 +316,3 @@ search.addWidget(
 );
 
 search.start();
-

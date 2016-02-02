@@ -151,6 +151,16 @@ function searchBox({
         input.addEventListener('input', inputCallback, false);
       }
 
+      // custom clear event
+      function inputClearCallback(e) {
+        let target = (e.currentTarget) ? e.currentTarget : e.srcElement;
+        input.defaultValue = '';
+        helper.setQuery('');
+        helper.search();
+      }
+      
+      input.addEventListener('clear', inputClearCallback, false);
+
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node
         let placeholderNode = document.createElement('div');
