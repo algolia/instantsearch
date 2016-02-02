@@ -126,7 +126,7 @@ function searchBox({
 
       // like jquery closest()
       function closest(el, selector) {
-        var matches = el.webkitMatchesSelector ? 'webkitMatchesSelector' : (el.msMatchesSelector ? 'msMatchesSelector' : 'matches');
+        let matches = el.webkitMatchesSelector ? 'webkitMatchesSelector' : (el.msMatchesSelector ? 'msMatchesSelector' : 'matches');
         while (el.parentElement) {
           if (el[matches](selector)) return el;
           el = el.parentElement;
