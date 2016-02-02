@@ -18,9 +18,9 @@ import cx from 'classnames';
  * @param  {string|DOMElement} options.container Valid CSS Selector as a string or DOMElement
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.item] Item template. Template data: `from`, `to` and `currency`
+ * @param  {string} [options.currency='$'] The currency to display
  * @param  {Object} [options.labels] Labels to use for the widget
- * @param  {string|Function} [options.labels.currency] Currency label
  * @param  {string|Function} [options.labels.separator] Separator label, between min and max
  * @param  {string|Function} [options.labels.button] Button label
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
@@ -45,6 +45,7 @@ const usage = `Usage:
 priceRanges({
   container,
   attributeName,
+  [ currency=$ ],
   [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
   [ templates.{header,item,footer} ],
   [ labels.{currency,separator,button} ],
@@ -55,11 +56,8 @@ function priceRanges({
     attributeName,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
-    labels = {
-      currency: '$',
-      button: 'Go',
-      separator: 'to'
-    },
+    labels: userLabels = {},
+    currency = '$',
     autoHideContainer = true
   } = {}) {
   if (!container || !attributeName) {
@@ -119,6 +117,14 @@ function priceRanges({
 
     render: function({results, helper, templatesConfig, state, createURL}) {
       let facetValues;
+      let labels = {
+        button: 'Go',
+        separator: 'to',
+        ...userLabels
+      };
+
+      // before we had opts.currency, you had to pass labels.currency
+      if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
 
       if (results.hits.length > 0) {
         facetValues = this._extractRefinedRange(helper);
@@ -170,6 +176,7 @@ function priceRanges({
             return createURL(newState);
           }}
           cssClasses={cssClasses}
+          currency={currency}
           facetValues={facetValues}
           labels={labels}
           refine={this._refine.bind(this, helper)}

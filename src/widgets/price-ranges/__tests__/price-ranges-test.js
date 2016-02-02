@@ -97,8 +97,8 @@ describe('priceRanges()', () => {
         },
         shouldAutoHideContainer: false,
         facetValues: generateRanges(results.getFacetStats()),
+        currency: '$',
         labels: {
-          currency: '$',
           separator: 'to',
           button: 'Go'
         },
