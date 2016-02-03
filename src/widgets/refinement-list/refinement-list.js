@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import mapKeys from 'lodash/object/mapKeys';
 
 import utils from '../../lib/utils.js';
 let bem = utils.bemHelper('ais-refinement-list');
@@ -8,9 +7,9 @@ import cx from 'classnames';
 
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 import defaultTemplates from './defaultTemplates.js';
-import defaultShowMoreTemplates from './defaultShowMoreTemplates.js';
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -20,11 +19,11 @@ import defaultShowMoreTemplates from './defaultShowMoreTemplates.js';
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).
- * @param  {object|boolean} [options.showMore] pass a configuration object, or true to use the default configuration
- * @param  {object} [options.showMore.templates] templates to use
- * @param  {object} [options.showMore.templates.active] template used when more facets are displayed
- * @param  {object} [options.showMore.templates.inactive] template used when less facets are displayed
- * @param  {object} [options.showMore.limit] the max number of facets values to display when the show more feature is active
+ * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
+ * @param  {object} [options.showMore.templates] Templates to use for showMore
+ * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked
+ * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
+ * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
@@ -67,7 +66,7 @@ function refinementList({
     templates = defaultTemplates,
     transformData,
     autoHideContainer = true,
-    showMore
+    showMore = false
   }) {
   let showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
@@ -94,7 +93,7 @@ function refinementList({
     }
   }
 
-  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
+  const showMoreTemplates = showMoreConfig && utils.prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates =
     showMoreTemplates ?
       {...templates, ...showMoreTemplates} :
@@ -159,35 +158,6 @@ function refinementList({
       );
     }
   };
-}
-
-const defaultShowMoreConfig = {
-  templates: defaultShowMoreTemplates,
-  limit: 100
-};
-
-function getShowMoreConfig(showMoreOptions) {
-  if (showMoreOptions === true) {
-    return defaultShowMoreConfig;
-  } else if (showMoreOptions) {
-    let config = {...showMoreOptions};
-    if (!showMoreOptions.templates) {
-      config.templates = defaultShowMoreConfig.templates;
-    }
-    if (!showMoreOptions.limit) {
-      config.limit = defaultShowMoreConfig.limit;
-    }
-    return config;
-  }
-  return null;
-}
-
-function prefixKeys(prefix, obj) {
-  if (obj) {
-    return mapKeys(obj, function(v, k) {
-      return prefix + k;
-    });
-  }
 }
 
 export default refinementList;
