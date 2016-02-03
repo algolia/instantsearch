@@ -106,7 +106,7 @@
   <p><img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.2.1</strong></p>
+    <p class="version">Version: <strong>1.2.2</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -977,8 +977,28 @@ of an e-commerce website.</p>
             <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">100</code><br />Type: <code>string</code></span></td>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">10</code><br />Type: <code>string</code></span></td>
             <td>How many facets values to retrieve</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.showMore</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> | <code>boolean</code></span></td>
+            <td>Limit the number of results and display a showMore button</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.showMore.templates</code></span><span class="attr-infos">Type: <code>object</code></span></td>
+            <td>Templates to use for showMore</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.showMore.templates.active</code></span><span class="attr-infos">Type: <code>object</code></span></td>
+            <td>Template used when showMore was clicked</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.showMore.templates.inactive</code></span><span class="attr-infos">Type: <code>object</code></span></td>
+            <td>Template used when showMore not clicked</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.showMore.limit</code></span><span class="attr-infos">Type: <code>object</code></span></td>
+            <td>Max number of facets values to display when showMore is clicked</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
@@ -1121,7 +1141,7 @@ From a UX point of view, we suggest not displaying more than two levels deep.</p
             <td>Show the parent level of the current refined value</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">100</code><br />Type: <code>number</code></span></td>
+            <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">10</code><br />Type: <code>number</code></span></td>
             <td>How much facet values to get</td>
           </tr>
           <tr>
@@ -1293,24 +1313,24 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
             <td>How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.showMore</code></span><span class="attr-infos">Type: <code>object</code> | <code>boolean</code></span></td>
-            <td>pass a configuration object, or true to use the default configuration</td>
+            <td><span class="attr-optional"><code>options.showMore</code></span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> | <code>boolean</code></span></td>
+            <td>Limit the number of results and display a showMore button</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.showMore.templates</code></span><span class="attr-infos">Type: <code>object</code></span></td>
-            <td>templates to use</td>
+            <td>Templates to use for showMore</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.showMore.templates.active</code></span><span class="attr-infos">Type: <code>object</code></span></td>
-            <td>template used when more facets are displayed</td>
+            <td>Template used when showMore was clicked</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.showMore.templates.inactive</code></span><span class="attr-infos">Type: <code>object</code></span></td>
-            <td>template used when less facets are displayed</td>
+            <td>Template used when showMore not clicked</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.showMore.limit</code></span><span class="attr-infos">Type: <code>object</code></span></td>
-            <td>the max number of facets values to display when the show more feature is active</td>
+            <td>Max number of facets values to display when showMore is clicked</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.templates</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
