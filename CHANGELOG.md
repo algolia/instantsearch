@@ -1,3 +1,13 @@
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/algolia/instantsearch.js/compare/v1.2.1...v1.2.2) (2016-02-03)
+
+
+### Features
+
+* **menu:** add showMore option ([e7e7677](https://github.com/algolia/instantsearch.js/commit/e7e7677)), closes [#815](https://github.com/algolia/instantsearch.js/issues/815)
+
+
+
 <a name="1.2.1"></a>
 ## [1.2.1](https://github.com/algolia/instantsearch.js/compare/v1.2.0...v1.2.1) (2016-02-02)
 

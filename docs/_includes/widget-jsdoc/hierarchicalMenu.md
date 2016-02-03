@@ -5,7 +5,7 @@
 | <span class='attr-optional'>`options.separator`</span><span class="attr-infos">Default:<code class="attr-default">&#x27; &gt; &#x27;</code><br />Type: <code>string</code></span> | Separator used in the attributes to separate level values. |
 | <span class='attr-optional'>`options.rootPath`</span><span class="attr-infos">Type: <code>string</code></span> | Prefix path to use if the first level is not the root level. |
 | <span class='attr-optional'>`options.showParentLevel`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>string</code></span> | Show the parent level of the current refined value |
-| <span class='attr-optional'>`options.limit`</span><span class="attr-infos">Default:<code class="attr-default">100</code><br />Type: <code>number</code></span> | How much facet values to get |
+| <span class='attr-optional'>`options.limit`</span><span class="attr-infos">Default:<code class="attr-default">10</code><br />Type: <code>number</code></span> | How much facet values to get |
 | <span class='attr-optional'>`options.sortBy`</span><span class="attr-infos">Default:<code class="attr-default">[&#x27;name:asc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code> &#124; <code>function</code></span> | How to sort refinements. Possible values: `count|isRefined|name:asc|desc` |
 | <span class='attr-optional'>`options.templates`</span><span class="attr-infos">Type: <code>Object</code></span> | Templates to use for the widget |
 | <span class='attr-optional'>`options.templates.header`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> &#124; <code>function</code></span> | Header template (root level only) |
