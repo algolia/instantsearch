@@ -31,7 +31,7 @@ describe('Template', () => {
       expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
     });
 
-    it('supports templates as functions', () => {
+    it('supports templates as functions returning a string', () => {
       const props = getProps({
         templates: {test: templateData => 'it also works with ' + templateData.type},
         data: {type: 'functions'}
@@ -42,6 +42,19 @@ describe('Template', () => {
 
       const content = 'it also works with functions';
       expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+    });
+
+    it('supports templates as functions returning a React element', () => {
+      const props = getProps({
+        templates: {test: templateData => <p>it also works with {templateData.type}</p>},
+        data: {type: 'functions'}
+      });
+
+      renderer.render(<Template {...props} />);
+      const out = renderer.getRenderOutput();
+
+      const content = 'it also works with functions';
+      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={null}><p>{content}</p></div>);
     });
 
     it('can configure compilation options', () => {
