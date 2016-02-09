@@ -1030,7 +1030,7 @@ Community widgets are solving specific use cases and so cannot make it into the 
 You may want to create and publish your own community widget, we have a [dedicated section](#custom-widgets) on how to create them.
 
 If you want your widget to be listed here, [open an issue](https://github.com/algolia/instantsearch.js/issues).
- 
+
 ### googleMaps
 
 The [googleMaps](https://github.com/instantsearch/instantsearch-googlemaps) widget can display your [Algolia geo hits](https://www.algolia.com/doc/rest#geo-search-parameters) on a map using [Google Maps APIs](https://developers.google.com/maps/).
@@ -1081,7 +1081,7 @@ search.addWidget(
   </div>
 </div>
 
-  Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data.
+  Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data and returning either a string or a React element.
 
   See the documentation of each widget to see which data is passed to the template.
 </div>
