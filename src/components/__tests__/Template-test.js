@@ -54,7 +54,7 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it also works with functions';
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={null}><p>{content}</p></div>);
+      expect(out).toEqualJSX(<div className={undefined}><p>{content}</p></div>);
     });
 
     it('can configure compilation options', () => {

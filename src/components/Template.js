@@ -27,16 +27,22 @@ function Template(props) {
   }
 
   const otherProps = omit(props, keys(Template.propTypes));
-  const isElement = React.isValidElement(content);
+
+  if (React.isValidElement(content)) {
+    return (
+      <div
+        {...otherProps}
+        className={props.cssClass}
+      >{content}</div>
+    );
+  }
 
   return (
     <div
       {...otherProps}
       className={props.cssClass}
-      dangerouslySetInnerHTML={isElement ? null : {__html: content}}
-    >
-      {isElement ? content : null}
-    </div>
+      dangerouslySetInnerHTML={{__html: content}}
+    />
   );
 }
 
