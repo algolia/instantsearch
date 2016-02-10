@@ -40,7 +40,7 @@ class InstantSearch extends EventEmitter {
     appId = null,
     apiKey = null,
     indexName = null,
-    numberLocale = 'en-EN',
+    numberLocale,
     searchParameters = {},
     urlSync = null
   }) {
