@@ -67,57 +67,49 @@ function numericRefinementList({
     RefinementList = autoHideContainerHOC(RefinementList);
   }
 
-  return {
-    getConfiguration: () => {
-      return {};
-    },
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    label: cx(bem('label'), userCssClasses.label),
+    radio: cx(bem('radio'), userCssClasses.radio),
+    active: cx(bem('item', 'active'), userCssClasses.active)
+  };
 
-    render: function({helper, results, templatesConfig, state, createURL}) {
-      let templateProps = utils.prepareTemplateProps({
+  return {
+    init({templatesConfig, helper}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
 
-      let facetValues = options.map(function(option) {
-        option.isRefined = isRefined(helper.state, attributeName, option);
-        option.attributeName = attributeName;
-        return option;
+      this._toggleRefinement = facetValue => helper
+        .setState(refine(helper.state, attributeName, options, facetValue))
+        .search();
+    },
+    render: function({results, state, createURL}) {
+      let facetValues = options.map(facetValue => {
+        facetValue.isRefined = isRefined(state, attributeName, facetValue);
+        facetValue.attributeName = attributeName;
+        facetValue.url = createURL(refine(state, attributeName, options, facetValue.name));
+        return facetValue;
       });
-
-      let hasNoResults = results.nbHits === 0;
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        label: cx(bem('label'), userCssClasses.label),
-        radio: cx(bem('radio'), userCssClasses.radio),
-        active: cx(bem('item', 'active'), userCssClasses.active)
-      };
 
       ReactDOM.render(
         <RefinementList
-          createURL={(facetValue) => createURL(refine(state, attributeName, options, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          shouldAutoHideContainer={hasNoResults}
-          templateProps={templateProps}
-          toggleRefinement={this._toggleRefinement.bind(null, helper)}
+          shouldAutoHideContainer={results.nbHits === 0}
+          templateProps={this._templateProps}
+          toggleRefinement={this._toggleRefinement}
         />,
         containerNode
       );
-    },
-    _toggleRefinement: function(helper, facetValue) {
-      let newState = refine(helper.state, attributeName, options, facetValue);
-
-      helper.setState(newState);
-
-      helper.search();
     }
   };
 }

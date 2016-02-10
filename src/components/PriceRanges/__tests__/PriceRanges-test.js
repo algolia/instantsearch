@@ -58,46 +58,11 @@ describe('PriceRanges', () => {
       stubMethod('render');
     });
 
-    context('getURLFromFacetValue', () => {
-      it('should be a # if no createURL method passed', () => {
-        // Given
-        let component = getComponentWithMockRendering({
-          createURL: null
-        });
-
-        // When
-        let url = component.getURLFromFacetValue();
-
-        // Then
-        expect(url).toEqual('#');
-      });
-      it('should call the createURL method passed with the facetValue', () => {
-        // Given
-        let mockCreateURL = sinon.spy();
-        let component = getComponentWithMockRendering({
-          createURL: mockCreateURL
-        });
-        let facetValue = {
-          from: 6,
-          to: 8,
-          isRefined: true
-        };
-
-        // When
-        component.getURLFromFacetValue(facetValue);
-
-        // Then
-        expect(mockCreateURL.called).toBe(true);
-        expect(mockCreateURL.calledWith(6, 8, true)).toBe(true);
-      });
-    });
-
     context('getItemFromFacetValue', () => {
       let props;
       let facetValue;
 
       beforeEach(() => {
-        stubMethod('getURLFromFacetValue', 'url');
         props = {
           cssClasses: {
             item: 'item',
@@ -109,7 +74,8 @@ describe('PriceRanges', () => {
         facetValue = {
           from: 1,
           to: 10,
-          isRefined: false
+          isRefined: false,
+          url: 'url'
         };
       });
 

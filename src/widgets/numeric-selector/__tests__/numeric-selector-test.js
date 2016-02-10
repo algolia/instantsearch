@@ -65,6 +65,8 @@ describe('numericSelector()', () => {
       hits: [],
       nbHits: 0
     };
+    widget.init({helper});
+    helper.addNumericRefinement.reset();
   });
 
   it('doesn\'t configure anything', () => {
@@ -93,13 +95,13 @@ describe('numericSelector()', () => {
   });
 
   it('sets the underlying numeric refinement', () => {
-    widget._refine(helper, 2);
+    widget._refine(2);
     expect(helper.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
   it('cancels the underlying numeric refinement', () => {
-    widget._refine(helper, undefined);
+    widget._refine(undefined);
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
     expect(helper.search.calledOnce).toBe(true, 'search called once');

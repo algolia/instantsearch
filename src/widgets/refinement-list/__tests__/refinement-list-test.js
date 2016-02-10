@@ -178,14 +178,15 @@ describe('refinementList()', () => {
 
     function renderWidget(userOptions) {
       widget = refinementList({...options, ...userOptions});
-      return widget.render({results, helper, templatesConfig, state, createURL});
+      widget.init({helper, createURL});
+      return widget.render({results, helper, templatesConfig, state});
     }
 
     beforeEach(() => {
       options = {container, attributeName: 'attributeName'};
-      results = {getFacetValues: sinon.stub().returns(['foo', 'bar'])};
+      results = {getFacetValues: sinon.stub().returns([{name: 'foo'}, {name: 'bar'}])};
       state = {toggleRefinement: sinon.spy()};
-      createURL = sinon.spy();
+      createURL = () => '#';
     });
 
     it('formats counts', () => {
@@ -235,7 +236,7 @@ describe('refinementList()', () => {
     context('autoHideContainer', () => {
       it('should set shouldAutoHideContainer to false if there are facetValues', () => {
         // Given
-        results.getFacetValues = sinon.stub().returns(['foo', 'bar']);
+        results.getFacetValues = sinon.stub().returns([{name: 'foo'}, {name: 'bar'}]);
 
         // When
         renderWidget();
@@ -271,6 +272,7 @@ describe('refinementList()', () => {
     it('should do a refinement on the selected facet', () => {
       // Given
       widget = refinementList(options);
+      widget.init({helper});
 
       // When
       widget.toggleRefinement(helper, 'attributeName', 'facetValue');
@@ -283,6 +285,7 @@ describe('refinementList()', () => {
     it('should start a search on refinement', () => {
       // Given
       widget = refinementList(options);
+      widget.init({helper});
 
       // When
       widget.toggleRefinement(helper, 'attributeName', 'facetValue');

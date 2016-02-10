@@ -44,40 +44,38 @@ function numericSelector({
     throw new Error(usage);
   }
 
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem('item'), userCssClasses.item)
+  };
+
   return {
     init: function({helper}) {
       const currentValue = this._getRefinedValue(helper) || options[0].value;
       if (currentValue !== undefined) {
         helper.addNumericRefinement(attributeName, operator, currentValue);
       }
+
+      this._refine = value => {
+        helper.clearRefinements(attributeName);
+        if (value !== undefined) {
+          helper.addNumericRefinement(attributeName, operator, value);
+        }
+        helper.search();
+      };
     },
 
     render: function({helper, results}) {
-      const currentValue = this._getRefinedValue(helper);
-      const hasNoResults = results.nbHits === 0;
-
-      const cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item)
-      };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
-          currentValue={currentValue}
+          currentValue={this._getRefinedValue(helper)}
           options={options}
-          setValue={this._refine.bind(this, helper)}
-          shouldAutoHideContainer={hasNoResults}
+          setValue={this._refine}
+          shouldAutoHideContainer={results.nbHits === 0}
         />,
         containerNode
       );
-    },
-
-    _refine: function(helper, value) {
-      helper.clearRefinements(attributeName);
-      if (value !== undefined) {
-        helper.addNumericRefinement(attributeName, operator, value);
-      }
-      helper.search();
     },
 
     _getRefinedValue: function(helper) {

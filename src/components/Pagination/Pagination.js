@@ -11,21 +11,10 @@ import cx from 'classnames';
 class Pagination extends React.Component {
   constructor(props) {
     super(defaultsDeep(props, Pagination.defaultProps));
-  }
-
-  handleClick(pageNumber, event) {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return;
-    }
-    event.preventDefault();
-    this.props.setCurrentPage(pageNumber);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   pageLink({label, ariaLabel, pageNumber, additionalClassName = null, isDisabled = false, isActive = false, createURL}) {
-    let handleClick = this.handleClick.bind(this, pageNumber);
-
     let cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
       link: cx(this.props.cssClasses.link)
@@ -42,9 +31,10 @@ class Pagination extends React.Component {
       <PaginationLink
         ariaLabel={ariaLabel}
         cssClasses={cssClasses}
-        handleClick={handleClick}
-        key={label}
+        handleClick={this.handleClick}
+        key={label + pageNumber}
         label={label}
+        pageNumber={pageNumber}
         url={url}
       />
     );
@@ -111,6 +101,16 @@ class Pagination extends React.Component {
     });
 
     return pages;
+  }
+
+  handleClick(pageNumber, event) {
+    if (isSpecialClick(event)) {
+      // do not alter the default browser behavior
+      // if one special key is down
+      return;
+    }
+    event.preventDefault();
+    this.props.setCurrentPage(pageNumber);
   }
 
   render() {

@@ -9,6 +9,15 @@ import Template from '../components/Template.js';
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
+    componentWillMount() {
+      // Only add header/footer if a template is defined
+      this._header = this.getTemplate('header');
+      this._footer = this.getTemplate('footer');
+      this._classNames = {
+        root: cx(this.props.cssClasses.root),
+        body: cx(this.props.cssClasses.body)
+      };
+    }
     getTemplate(type) {
       let templates = this.props.templateProps.templates;
       if (!templates || !templates[type]) {
@@ -24,22 +33,13 @@ function headerFooter(ComposedComponent) {
       );
     }
     render() {
-      let classNames = {
-        root: cx(this.props.cssClasses.root),
-        body: cx(this.props.cssClasses.body)
-      };
-
-      // Only add header/footer if a template is defined
-      let header = this.getTemplate('header');
-      let footer = this.getTemplate('footer');
-
       return (
-        <div className={classNames.root}>
-          {header}
-          <div className={classNames.body}>
+        <div className={this._classNames.root}>
+          {this._header}
+          <div className={this._classNames.body}>
             <ComposedComponent {...this.props} />
           </div>
-          {footer}
+          {this._footer}
         </div>
       );
     }

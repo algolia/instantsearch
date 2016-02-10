@@ -144,7 +144,13 @@ Usage: instantsearch({
     const {_onHistoryChange, templatesConfig} = this;
     forEach(this.widgets, function(widget) {
       if (widget.init) {
-        widget.init({state, helper, templatesConfig, onHistoryChange: _onHistoryChange});
+        widget.init({
+          state,
+          helper,
+          templatesConfig,
+          createURL: this._createURL,
+          onHistoryChange: _onHistoryChange
+        });
       }
     }, this);
   }

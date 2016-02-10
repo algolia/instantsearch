@@ -48,6 +48,7 @@ describe('hits()', () => {
       useCustomCompileOptions: {hit: false, empty: false}
     };
     widget = hits({container, cssClasses: {root: ['root', 'cx']}});
+    widget.init({});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 

@@ -72,6 +72,21 @@ function starRating({
     throw new Error(usage);
   }
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    link: cx(bem('link'), userCssClasses.link),
+    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
+    count: cx(bem('count'), userCssClasses.count),
+    star: cx(bem('star'), userCssClasses.star),
+    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
+    active: cx(bem('item', 'active'), userCssClasses.active)
+  };
+
   return {
     getConfiguration: () => {
       return {
@@ -79,14 +94,17 @@ function starRating({
       };
     },
 
-    render: function({helper, results, templatesConfig, state, createURL}) {
-      let templateProps = utils.prepareTemplateProps({
+    init({templatesConfig, helper}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
+      this._toggleRefinement = this._toggleRefinement.bind(this, helper);
+    },
 
+    render: function({helper, results, state, createURL}) {
       let facetValues = [];
       let allValues = {};
       for (let v = max - 1; v >= 0; --v) {
@@ -117,35 +135,18 @@ function starRating({
           name: '' + star,
           count: count,
           isRefined: refinedStar === star,
+          url: createURL(state.toggleRefinement(attributeName, stars)),
           labels
         });
       }
 
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        link: cx(bem('link'), userCssClasses.link),
-        disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
-        count: cx(bem('count'), userCssClasses.count),
-        star: cx(bem('star'), userCssClasses.star),
-        emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-        active: cx(bem('item', 'active'), userCssClasses.active)
-      };
-
       ReactDOM.render(
         <RefinementList
-          createURL={(stars) => {
-            return createURL(state.toggleRefinement(attributeName, stars));
-          }}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={templateProps}
-          toggleRefinement={this._toggleRefinement.bind(this, helper)}
+          templateProps={this._templateProps}
+          toggleRefinement={this._toggleRefinement}
         />,
         containerNode
       );

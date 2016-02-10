@@ -91,17 +91,24 @@ function rangeSlider({
         max
       };
     },
-    _refine(helper, stats, newValues) {
+    _refine(helper, oldValues, newValues) {
       helper.clearRefinements(attributeName);
-      if (newValues[0] > stats.min) {
+      if (newValues[0] > oldValues.min) {
         helper.addNumericRefinement(attributeName, '>=', Math.round(newValues[0]));
       }
-      if (newValues[1] < stats.max) {
+      if (newValues[1] < oldValues.max) {
         helper.addNumericRefinement(attributeName, '<=', Math.round(newValues[1]));
       }
       helper.search();
     },
-    render({results, helper, templatesConfig}) {
+    init({templatesConfig}) {
+      this._templateProps = utils.prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
+    },
+    render({results, helper}) {
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
@@ -120,24 +127,16 @@ function rangeSlider({
         };
       }
 
-      let hasNoRefinements = stats.min === stats.max;
-
-      let templateProps = utils.prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates
-      });
-
       ReactDOM.render(
         <Slider
           cssClasses={cssClasses}
           onChange={this._refine.bind(this, helper, stats)}
           pips={pips}
           range={{min: Math.floor(stats.min), max: Math.ceil(stats.max)}}
-          shouldAutoHideContainer={hasNoRefinements}
+          shouldAutoHideContainer={stats.min === stats.max}
           start={[currentRefinement.min, currentRefinement.max]}
           step={step}
-          templateProps={templateProps}
+          templateProps={this._templateProps}
           tooltips={tooltips}
         />,
         containerNode

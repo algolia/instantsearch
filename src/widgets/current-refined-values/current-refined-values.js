@@ -140,6 +140,10 @@ function currentRefinedValues({
   }, {});
 
   return {
+    init({helper}) {
+      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
+    },
+
     render: function({results, helper, state, templatesConfig, createURL}) {
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
@@ -160,7 +164,6 @@ function currentRefinedValues({
       });
 
       const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
-      let clearAllClick = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
 
       const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
       let clearRefinementURLs = refinements.map((refinement) => createURL(clearRefinementFromState(state, refinement)));
@@ -171,7 +174,7 @@ function currentRefinedValues({
       ReactDOM.render(
         <CurrentRefinedValues
           attributes={attributesObj}
-          clearAllClick={clearAllClick}
+          clearAllClick={this._clearRefinementsAndSearch}
           clearAllPosition={clearAll}
           clearAllURL={clearAllURL}
           clearRefinementClicks={clearRefinementClicks}

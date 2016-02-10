@@ -99,6 +99,19 @@ function refinementList({
       {...templates, ...showMoreTemplates} :
       templates;
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    label: cx(bem('label'), userCssClasses.label),
+    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+    count: cx(bem('count'), userCssClasses.count)
+  };
+
   return {
     getConfiguration: (configuration) => {
       let widgetConfiguration = {
@@ -110,49 +123,36 @@ function refinementList({
 
       return widgetConfiguration;
     },
-    toggleRefinement: (helper, facetValue) => {
-      helper
-        .toggleRefinement(attributeName, facetValue)
-        .search();
-    },
-    render: function({results, helper, templatesConfig, state, createURL}) {
-      let templateProps = utils.prepareTemplateProps({
+    init({templatesConfig, helper, createURL}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates: allTemplates
       });
-
-      let facetValues = results.getFacetValues(attributeName, {sortBy: sortBy});
-
-      let hasNoFacetValues = facetValues.length === 0;
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        label: cx(bem('label'), userCssClasses.label),
-        checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-        count: cx(bem('count'), userCssClasses.count)
-      };
-
-      let toggleRefinement = this.toggleRefinement.bind(this, helper);
+      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(attributeName, facetValue));
+      this.toggleRefinement = facetValue => helper
+        .toggleRefinement(attributeName, facetValue)
+        .search();
+    },
+    render: function({results, state}) {
+      let facetValues = results
+        .getFacetValues(attributeName, {sortBy: sortBy})
+        .map(facetValue => {
+          facetValue.url = this._createURL(state, facetValue);
+          return facetValue;
+        });
 
       ReactDOM.render(
         <RefinementList
-          createURL={(facetValue) => createURL(state.toggleRefinement(attributeName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
           limitMax={widgetMaxValuesPerFacet}
           limitMin={limit}
-          shouldAutoHideContainer={hasNoFacetValues}
+          shouldAutoHideContainer={facetValues.length === 0}
           showMore={showMoreConfig !== null}
-          templateProps={templateProps}
-          toggleRefinement={toggleRefinement}
+          templateProps={this._templateProps}
+          toggleRefinement={this.toggleRefinement}
         />,
         containerNode
       );

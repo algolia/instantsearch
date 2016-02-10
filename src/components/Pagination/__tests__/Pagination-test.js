@@ -62,6 +62,7 @@ describe('Pagination', () => {
     let createURL = sinon.stub().returns('/page');
     let out = new Pagination({cssClasses: {}}).pageLink({
       label: 'test',
+      pageNumber: 8,
       createURL
     });
 
@@ -70,8 +71,9 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
-        key="test"
+        key="test8"
         label="test"
+        pageNumber={8}
         url="/page"
       />);
     expect(createURL.calledOnce).toBe(true, 'createURL should be called once');
@@ -82,6 +84,7 @@ describe('Pagination', () => {
     let out = new Pagination({cssClasses: {}}).pageLink({
       label: 'test',
       isDisabled: true,
+      pageNumber: 8,
       createURL
     });
 
@@ -90,8 +93,9 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
-        key="test"
+        key="test8"
         label="test"
+        pageNumber={8}
         url="#"
       />);
     expect(createURL.called).toBe(false, 'createURL should not be called');

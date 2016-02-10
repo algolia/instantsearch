@@ -1,8 +1,22 @@
 import React from 'react';
 
+import {isEqual} from 'lodash';
+
 class PaginationLink extends React.Component {
+  componentWillMount() {
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(this.props, nextProps);
+  }
+
+  handleClick(e) {
+    this.props.handleClick(this.props.pageNumber, e);
+  }
+
   render() {
-    let {cssClasses, label, ariaLabel, handleClick, url} = this.props;
+    let {cssClasses, label, ariaLabel, url} = this.props;
 
     return (
       <li className={cssClasses.item}>
@@ -11,7 +25,7 @@ class PaginationLink extends React.Component {
           className={cssClasses.link}
           dangerouslySetInnerHTML={{__html: label}}
           href={url}
-          onClick={handleClick}
+          onClick={this.handleClick}
         ></a>
       </li>
     );
@@ -32,6 +46,7 @@ PaginationLink.propTypes = {
     React.PropTypes.string,
     React.PropTypes.number
   ]).isRequired,
+  pageNumber: React.PropTypes.number,
   url: React.PropTypes.string
 };
 

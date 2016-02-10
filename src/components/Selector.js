@@ -1,6 +1,14 @@
 import React from 'react';
 
 class Selector extends React.Component {
+  componentWillMount() {
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
   handleChange(event) {
     this.props.setValue(event.target.value);
   }
@@ -8,13 +16,11 @@ class Selector extends React.Component {
   render() {
     let {currentValue, options} = this.props;
 
-    let handleChange = this.handleChange.bind(this);
-
     return (
       <select
         className={this.props.cssClasses.root}
         defaultValue={currentValue}
-        onChange={handleChange}
+        onChange={this.handleChange}
       >
         {options.map((option) => {
           return <option className={this.props.cssClasses.item} key={option.value} value={option.value}>{option.label}</option>;

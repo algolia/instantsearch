@@ -47,6 +47,8 @@ describe('numericRefinementList()', () => {
   let numericRefinementList;
   let options;
   let results;
+  let createURL;
+  let state;
 
   beforeEach(() => {
     numericRefinementList = require('../numeric-refinement-list.js');
@@ -79,7 +81,12 @@ describe('numericRefinementList()', () => {
       },
       addNumericRefinement: sinon.spy(),
       search: sinon.spy(),
-      setState: sinon.spy()
+      setState: sinon.stub().returnsThis()
+    };
+    state = {
+      getNumericRefinements: sinon.stub().returns([]),
+      clearRefinements: sinon.stub().returnsThis(),
+      addNumericRefinement: sinon.stub().returnsThis()
     };
     results = {
       hits: []
@@ -87,11 +94,13 @@ describe('numericRefinementList()', () => {
 
     helper.state.clearRefinements = sinon.stub().returns(helper.state);
     helper.state.addNumericRefinement = sinon.stub().returns(helper.state);
+    createURL = () => '#';
+    widget.init({helper});
   });
 
   it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
-    widget.render({helper, results});
-    widget.render({helper, results});
+    widget.render({state, results, createURL});
+    widget.render({state, results, createURL});
 
     let props = {
       cssClasses: {
@@ -106,13 +115,12 @@ describe('numericRefinementList()', () => {
         root: 'ais-refinement-list root cx'
       },
       facetValues: [
-        {attributeName: 'price', isRefined: true, name: 'All'},
-        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
-        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
-        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
-        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10}
+        {attributeName: 'price', isRefined: true, name: 'All', url: '#'},
+        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4', url: '#'},
+        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4, url: '#'},
+        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5, url: '#'},
+        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10, url: '#'}
       ],
-      createURL: () => {},
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
       templateProps: {
@@ -137,14 +145,14 @@ describe('numericRefinementList()', () => {
   });
 
   it('doesn\'t call the refinement functions if not refined', () => {
-    widget.render({helper, results});
+    widget.render({state, results, createURL});
     expect(helper.state.clearRefinements.called).toBe(false, 'clearRefinements called one');
     expect(helper.state.addNumericRefinement.called).toBe(false, 'addNumericRefinement never called');
     expect(helper.search.called).toBe(false, 'search never called');
   });
 
   it('calls the refinement functions if refined with "4"', () => {
-    widget._toggleRefinement(helper, '4');
+    widget._toggleRefinement('4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '=', 4]);
@@ -152,7 +160,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._toggleRefinement(helper, 'between 5 and 10');
+    widget._toggleRefinement('between 5 and 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 5]);
@@ -161,7 +169,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._toggleRefinement(helper, 'less than 4');
+    widget._toggleRefinement('less than 4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '<=', 4]);
@@ -169,7 +177,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._toggleRefinement(helper, 'more than 10');
+    widget._toggleRefinement('more than 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 10]);

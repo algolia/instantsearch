@@ -67,6 +67,7 @@ describe('clearAll()', () => {
       },
       url: '#all-cleared'
     };
+    widget.init({helper});
   });
 
   it('configures nothing', () => {

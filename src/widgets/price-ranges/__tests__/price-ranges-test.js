@@ -33,8 +33,10 @@ describe('priceRanges()', () => {
   let widget;
   let results;
   let helper;
+  let state;
   let autoHideContainer;
   let headerFooter;
+  let createURL;
 
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
@@ -77,8 +79,14 @@ describe('priceRanges()', () => {
         search: sinon.spy()
       };
 
+      state = {
+        clearRefinements: sinon.stub().returnsThis(),
+        addNumericRefinement: sinon.stub().returnsThis()
+      };
+
+      createURL = sinon.stub().returns('#createURL');
+
       props = {
-        createURL: sinon.spy(),
         cssClasses: {
           active: 'ais-price-ranges--item__active',
           body: 'ais-price-ranges--body',
@@ -96,7 +104,10 @@ describe('priceRanges()', () => {
           separator: 'ais-price-ranges--separator'
         },
         shouldAutoHideContainer: false,
-        facetValues: generateRanges(results.getFacetStats()),
+        facetValues: generateRanges(results.getFacetStats()).map(facetValue => {
+          facetValue.url = '#createURL';
+          return facetValue;
+        }),
         currency: '$',
         labels: {
           separator: 'to',
@@ -110,11 +121,12 @@ describe('priceRanges()', () => {
           useCustomCompileOptions: {header: false, footer: false, item: false}
         }
       };
+      widget.init({helper});
     });
 
     it('calls twice ReactDOM.render(<PriceRanges props />, container)', () => {
-      widget.render({results, helper});
-      widget.render({results, helper});
+      widget.render({results, helper, state, createURL});
+      widget.render({results, helper, state, createURL});
 
       expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
@@ -124,31 +136,31 @@ describe('priceRanges()', () => {
     });
 
     it('calls the decorators', () => {
-      widget.render({results, helper});
+      widget.render({results, helper, state, createURL});
       expect(headerFooter.calledOnce).toBe(true);
       expect(autoHideContainer.calledOnce).toBe(true);
     });
 
     it('calls getRefinements to check if there are some refinements', () => {
-      widget.render({results, helper});
+      widget.render({results, helper, state, createURL});
       expect(helper.getRefinements.calledOnce).toBe(true, 'getRefinements called once');
     });
 
     it('refines on the lower bound', () => {
-      widget._refine(helper, 10, undefined);
+      widget._refine(10, undefined);
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.addNumericRefinement.calledOnce).toBe(true, 'helper.addNumericRefinement called once');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the upper bound', () => {
-      widget._refine(helper, undefined, 10);
+      widget._refine(undefined, 10);
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');
     });
 
     it('refines on the 2 bounds', () => {
-      widget._refine(helper, 10, 20);
+      widget._refine(10, 20);
       expect(helper.clearRefinements.calledOnce).toBe(true, 'helper.clearRefinements called once');
       expect(helper.addNumericRefinement.calledTwice).toBe(true, 'helper.addNumericRefinement called twice');
       expect(helper.search.calledOnce).toBe(true, 'helper.search called once');

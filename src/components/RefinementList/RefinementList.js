@@ -3,6 +3,8 @@ import cx from 'classnames';
 import {isSpecialClick} from '../../lib/utils.js';
 
 import Template from '../Template.js';
+import RefinementListItem from './RefinementListItem.js';
+import {isEqual} from 'lodash';
 
 class RefinementList extends React.Component {
   constructor(props) {
@@ -10,6 +12,11 @@ class RefinementList extends React.Component {
     this.state = {
       isShowMoreOpen: false
     };
+    this.handleItemClick = this.handleItemClick.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState !== this.state || !isEqual(this.props.facetValues, nextProps.facetValues);
   }
 
   refine(value) {
@@ -17,21 +24,16 @@ class RefinementList extends React.Component {
   }
 
   _generateFacetItem(facetValue) {
-    let subList;
+    let subItems;
     let hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subList = (
+      subItems = (
         <RefinementList
           {...this.props}
           depth={this.props.depth + 1}
           facetValues={facetValue.data}
         />
       );
-    }
-    let data = facetValue;
-
-    if (this.props.createURL) {
-      data.url = this.props.createURL(facetValue[this.props.attributeNameKey]);
     }
 
     let templateData = {...facetValue, cssClasses: this.props.cssClasses};
@@ -48,15 +50,18 @@ class RefinementList extends React.Component {
     if (facetValue.count !== undefined) {
       key += '/' + facetValue.count;
     }
+
     return (
-      <div
-        className={cssClassItem}
+      <RefinementListItem
+        facetValue={facetValue[this.props.attributeNameKey]}
+        handleClick={this.handleItemClick}
+        itemClassName={cssClassItem}
         key={key}
-        onClick={this.handleItemClick.bind(this, facetValue[this.props.attributeNameKey])}
-      >
-        <Template data={templateData} templateKey="item" {...this.props.templateProps} />
-        {subList}
-      </div>
+        subItems={subItems}
+        templateData={templateData}
+        templateKey="item"
+        templateProps={this.props.templateProps}
+      />
     );
   }
 
@@ -141,7 +146,6 @@ class RefinementList extends React.Component {
 RefinementList.propTypes = {
   Template: React.PropTypes.func,
   attributeNameKey: React.PropTypes.string,
-  createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
     depth: React.PropTypes.string,
