@@ -82,6 +82,19 @@ function hierarchicalMenu({
   // we use the first attribute name
   let hierarchicalFacetName = attributes[0];
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    depth: bem('list', 'lvl'),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count)
+  };
+
   return {
     getConfiguration: () => ({
       hierarchicalFacets: [{
@@ -92,69 +105,50 @@ function hierarchicalMenu({
         showParentLevel
       }]
     }),
-    render: function({results, helper, templatesConfig, createURL, state}) {
-      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
-      let hasNoFacetValues = facetValues.length === 0;
+    init({helper, templatesConfig, createURL}) {
+      this._toggleRefinement = facetValue => helper
+        .toggleRefinement(hierarchicalFacetName, facetValue)
+        .search();
 
-      let templateProps = utils.prepareTemplateProps({
+      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
+    },
+    _prepareFacetValues(facetValues, state) {
+      return facetValues
+        .slice(0, limit)
+        .map(subValue => {
+          if (Array.isArray(subValue.data)) {
+            subValue.data = this._prepareFacetValues(subValue.data, state);
+          }
 
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        depth: bem('list', 'lvl'),
-        item: cx(bem('item'), userCssClasses.item),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        link: cx(bem('link'), userCssClasses.link),
-        count: cx(bem('count'), userCssClasses.count)
-      };
+          subValue.url = this._createURL(state, subValue);
+
+          return subValue;
+        });
+    },
+    render: function({results, state}) {
+      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
+      facetValues = this._prepareFacetValues(facetValues, state);
 
       ReactDOM.render(
         <RefinementList
           attributeNameKey="path"
-          createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
-          shouldAutoHideContainer={hasNoFacetValues}
-          templateProps={templateProps}
-          toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
+          shouldAutoHideContainer={facetValues.length === 0}
+          templateProps={this._templateProps}
+          toggleRefinement={this._toggleRefinement}
         />,
         containerNode
       );
     }
   };
-}
-
-function toggleRefinement(helper, attributeName, facetValue) {
-  helper
-    .toggleRefinement(attributeName, facetValue)
-    .search();
-}
-
-function getFacetValues(results, hierarchicalFacetName, sortBy, limit) {
-  let values = results
-    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
-
-  return sliceFacetValues(values, limit);
-}
-
-function sliceFacetValues(values, limit) {
-  return values
-    .slice(0, limit)
-    .map(function(subValue) {
-      if (Array.isArray(subValue.data)) {
-        subValue.data = sliceFacetValues(subValue.data, limit);
-      }
-
-      return subValue;
-    });
 }
 
 export default hierarchicalMenu;

@@ -54,6 +54,7 @@ describe('pagination()', () => {
       setCurrentPage: sinon.spy(),
       search: sinon.spy()
     };
+    widget.init({helper});
   });
 
   it('configures nothing', () => {
@@ -92,12 +93,14 @@ describe('pagination()', () => {
 
     it('should not scroll', () => {
       widget = pagination({container, scrollTo: false});
+      widget.init({helper});
       widget.setCurrentPage(helper, 2);
       expect(scrollIntoView.calledOnce).toBe(false, 'scrollIntoView never called');
     });
 
     it('should scroll to body', () => {
       widget = pagination({container});
+      widget.init({helper});
       widget.setCurrentPage(helper, 2);
       expect(scrollIntoView.calledOnce).toBe(true, 'scrollIntoView called once');
     });

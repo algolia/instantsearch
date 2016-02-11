@@ -59,13 +59,15 @@ describe('sortBySelector()', () => {
     widget = sortBySelector({container, indices, cssClasses});
     helper = {
       getIndex: sinon.stub().returns('index-a'),
-      setIndex: sinon.spy(),
+      setIndex: sinon.stub().returnsThis(),
       search: sinon.spy()
     };
+
     results = {
       hits: [],
       nbHits: 0
     };
+    widget.init({helper});
   });
 
   it('doesn\'t configure anything', () => {
@@ -96,7 +98,7 @@ describe('sortBySelector()', () => {
   });
 
   it('sets the underlying index', () => {
-    widget.setIndex(helper, 'index-b');
+    widget.setIndex('index-b');
     expect(helper.setIndex.calledOnce).toBe(true, 'setIndex called once');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });

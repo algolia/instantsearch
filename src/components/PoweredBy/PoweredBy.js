@@ -1,6 +1,10 @@
 import React from 'react';
 
 class PoweredBy extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
   render() {
     return (
       <div className={this.props.cssClasses.root}>

@@ -3,6 +3,11 @@ import React from 'react';
 import Template from '../Template.js';
 
 class Stats extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return this.props.nbHits !== nextProps.hits ||
+      this.props.processingTimeMS !== nextProps.processingTimeMS;
+  }
+
   render() {
     let data = {
       hasManyResults: this.props.nbHits > 1,

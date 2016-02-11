@@ -58,35 +58,31 @@ function clearAll({
     ClearAll = autoHideContainerHOC(ClearAll);
   }
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    link: cx(bem('link'), userCssClasses.link)
+  };
+
   return {
-    render: function({results, helper, state, templatesConfig, createURL}) {
+    init({helper, templatesConfig}) {
+      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper);
+      this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
+    },
+
+    render: function({results, state, createURL}) {
       let hasRefinements = getRefinements(results, state).length !== 0;
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        link: cx(bem('link'), userCssClasses.link)
-      };
-
       let url = createURL(clearRefinementsFromState(state));
-
-      let handleClick = clearRefinementsAndSearch.bind(null, helper);
-
-      let templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates
-      });
 
       ReactDOM.render(
         <ClearAll
-          clearAll={handleClick}
+          clearAll={this._clearRefinementsAndSearch}
           cssClasses={cssClasses}
           hasRefinements={hasRefinements}
           shouldAutoHideContainer={!hasRefinements}
-          templateProps={templateProps}
+          templateProps={this._templateProps}
           url={url}
         />,
         containerNode

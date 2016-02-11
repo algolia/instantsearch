@@ -53,24 +53,25 @@ function stats({
     throw new Error(usage);
   }
 
+  let cssClasses = {
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    header: cx(bem('header'), userCssClasses.header),
+    root: cx(bem(null), userCssClasses.root),
+    time: cx(bem('time'), userCssClasses.time)
+  };
+
   return {
-    render: function({results, templatesConfig}) {
-      let hasNoResults = results.nbHits === 0;
-      let templateProps = utils.prepareTemplateProps({
+    init({templatesConfig}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
+    },
 
-      let cssClasses = {
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        header: cx(bem('header'), userCssClasses.header),
-        root: cx(bem(null), userCssClasses.root),
-        time: cx(bem('time'), userCssClasses.time)
-      };
-
+    render: function({results}) {
       ReactDOM.render(
         <Stats
           cssClasses={cssClasses}
@@ -80,8 +81,8 @@ function stats({
           page={results.page}
           processingTimeMS={results.processingTimeMS}
           query={results.query}
-          shouldAutoHideContainer={hasNoResults}
-          templateProps={templateProps}
+          shouldAutoHideContainer={results.nbHits === 0}
+          templateProps={this._templateProps}
         />,
         containerNode
       );

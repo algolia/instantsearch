@@ -164,6 +164,20 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.starRating({
+    container: '#rating',
+    attributeName: 'rating',
+    max: 5,
+    labels: {
+      andUp: '& Up'
+    },
+    templates: {
+      header: 'Rating'
+    }
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.numericRefinementList({
     container: '#price-numeric-list',
     attributeName: 'price',

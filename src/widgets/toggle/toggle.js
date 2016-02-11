@@ -78,11 +78,32 @@ function toggle({
 
   let hasAnOffValue = (userValues.off !== undefined);
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    label: cx(bem('label'), userCssClasses.label),
+    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+    count: cx(bem('count'), userCssClasses.count)
+  };
+
   return {
     getConfiguration: () => ({
       facets: [attributeName]
     }),
-    init: ({state, helper}) => {
+    init({state, helper, templatesConfig}) {
+      this._templateProps = utils.prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
+      this.toggleRefinement = this.toggleRefinement.bind(this, helper);
+
       if (userValues.off === undefined) {
         return;
       }
@@ -112,47 +133,24 @@ function toggle({
 
       helper.search();
     },
-    render: function({helper, results, templatesConfig, state, createURL}) {
+    render: function({helper, results, state, createURL}) {
       let isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
       let values = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
-      let hasNoResults = results.nbHits === 0;
-
-      let templateProps = utils.prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates
-      });
 
       let facetValue = {
         name: label,
         isRefined: isRefined,
-        count: values && values.count || null
+        count: values && values.count || null,
+        url: createURL(state.toggleRefinement(attributeName, isRefined))
       };
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        label: cx(bem('label'), userCssClasses.label),
-        checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-        count: cx(bem('count'), userCssClasses.count)
-      };
-
-      let toggleRefinement = this.toggleRefinement.bind(this, helper, isRefined);
 
       ReactDOM.render(
         <RefinementList
-          createURL={() => createURL(state.toggleRefinement(attributeName, facetValue.isRefined))}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
-          shouldAutoHideContainer={hasNoResults}
-          templateProps={templateProps}
-          toggleRefinement={toggleRefinement}
+          shouldAutoHideContainer={results.nbHits === 0}
+          templateProps={this._templateProps}
+          toggleRefinement={this.toggleRefinement}
         />,
         containerNode
       );

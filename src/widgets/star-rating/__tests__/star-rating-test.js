@@ -19,6 +19,8 @@ describe('starRating()', () => {
   let container;
   let widget;
   let helper;
+  let state;
+  let createURL;
 
   let autoHideContainer;
   let headerFooter;
@@ -45,10 +47,15 @@ describe('starRating()', () => {
       search: sinon.spy(),
       setState: sinon.spy()
     };
+    state = {
+      toggleRefinement: sinon.spy()
+    };
     results = {
       getFacetValues: sinon.stub().returns([]),
       hits: []
     };
+    createURL = () => '#';
+    widget.init({helper});
   });
 
   it('configures the underlying disjunctive facet', () => {
@@ -56,8 +63,8 @@ describe('starRating()', () => {
   });
 
   it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
-    widget.render({helper, results});
-    widget.render({helper, results});
+    widget.render({state, helper, results, createURL});
+    widget.render({state, helper, results, createURL});
 
     let props = {
       cssClasses: {
@@ -75,12 +82,11 @@ describe('starRating()', () => {
         root: 'ais-star-rating'
       },
       facetValues: [
-        {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels},
-        {isRefined: false, stars: [true, true, false, false, false], count: 0, name: '2', labels: defaultLabels},
-        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels}
+        {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels, url: '#'},
+        {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels, url: '#'},
+        {isRefined: false, stars: [true, true, false, false, false], count: 0, name: '2', labels: defaultLabels, url: '#'},
+        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels, url: '#'}
       ],
-      createURL: () => {},
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
       templateProps: {
@@ -107,7 +113,7 @@ describe('starRating()', () => {
   it('hide the count==0 when there is a refinement', () => {
     helper.getRefinements = sinon.stub().returns([{value: '1'}]);
     results.getFacetValues = sinon.stub().returns([{name: '1', count: 42}]);
-    widget.render({helper, results});
+    widget.render({state, helper, results, createURL});
     expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
     expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
       {
@@ -115,14 +121,15 @@ describe('starRating()', () => {
         isRefined: true,
         name: '1',
         stars: [true, false, false, false, false],
-        labels: defaultLabels
+        labels: defaultLabels,
+        url: '#'
       }
     ]);
   });
 
   it('doesn\'t call the refinement functions if not refined', () => {
     helper.getRefinements = sinon.stub().returns([]);
-    widget.render({helper, results});
+    widget.render({state, helper, results, createURL});
     expect(helper.clearRefinements.called).toBe(false, 'clearRefinements never called');
     expect(helper.addDisjunctiveFacetRefinement.called).toBe(false, 'addDisjunctiveFacetRefinement never called');
     expect(helper.search.called).toBe(false, 'search never called');
@@ -130,7 +137,7 @@ describe('starRating()', () => {
 
   it('refines the search', () => {
     helper.getRefinements = sinon.stub().returns([]);
-    widget._toggleRefinement(helper, '3');
+    widget._toggleRefinement('3');
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addDisjunctiveFacetRefinement.calledThrice).toBe(true, 'addDisjunctiveFacetRefinement called thrice');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
@@ -138,7 +145,7 @@ describe('starRating()', () => {
 
   it('toggles the refinements', () => {
     helper.getRefinements = sinon.stub().returns([{value: '2'}]);
-    widget._toggleRefinement(helper, '2');
+    widget._toggleRefinement('2');
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addDisjunctiveFacetRefinement.called).toBe(false, 'addDisjunctiveFacetRefinement never called');
     expect(helper.search.calledOnce).toBe(true, 'search called once');
@@ -146,7 +153,7 @@ describe('starRating()', () => {
 
   it('toggles the refinements with another facet', () => {
     helper.getRefinements = sinon.stub().returns([{value: '2'}]);
-    widget._toggleRefinement(helper, '4');
+    widget._toggleRefinement('4');
     expect(helper.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.addDisjunctiveFacetRefinement.calledTwice).toBe(true, 'addDisjunctiveFacetRefinement called twice');
     expect(helper.search.calledOnce).toBe(true, 'search called once');

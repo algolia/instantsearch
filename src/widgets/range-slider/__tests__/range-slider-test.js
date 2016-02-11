@@ -62,6 +62,7 @@ describe('rangeSlider()', () => {
     sinon.spy(helper, 'addNumericRefinement');
     sinon.spy(helper, 'clearRefinements');
     sinon.spy(helper, 'search');
+    widget.init({helper});
   });
 
   context('without result', () => {

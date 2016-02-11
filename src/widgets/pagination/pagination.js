@@ -77,15 +77,30 @@ function pagination({
     Pagination = autoHideContainerHOC(Pagination);
   }
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem('item'), userCssClasses.item),
+    link: cx(bem('link'), userCssClasses.link),
+    page: cx(bem('item', 'page'), userCssClasses.page),
+    previous: cx(bem('item', 'previous'), userCssClasses.previous),
+    next: cx(bem('item', 'next'), userCssClasses.next),
+    first: cx(bem('item', 'first'), userCssClasses.first),
+    last: cx(bem('item', 'last'), userCssClasses.last),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
+  };
+
   labels = defaults(labels, defaultLabels);
 
   return {
-    setCurrentPage: function(helper, pageNumber) {
-      helper.setCurrentPage(pageNumber);
-      if (scrollToNode !== false) {
-        scrollToNode.scrollIntoView();
-      }
-      helper.search();
+    init({helper}) {
+      this.setCurrentPage = page => {
+        helper.setCurrentPage(page);
+        if (scrollToNode !== false) {
+          scrollToNode.scrollIntoView();
+        }
+        helper.search();
+      };
     },
 
     getMaxPage: function(results) {
@@ -95,34 +110,18 @@ function pagination({
       return results.nbPages;
     },
 
-    render: function({results, helper, createURL, state}) {
-      let currentPage = results.page;
-      let nbHits = results.nbHits;
-      let hasNoResults = nbHits === 0;
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item),
-        link: cx(bem('link'), userCssClasses.link),
-        page: cx(bem('item', 'page'), userCssClasses.page),
-        previous: cx(bem('item', 'previous'), userCssClasses.previous),
-        next: cx(bem('item', 'next'), userCssClasses.next),
-        first: cx(bem('item', 'first'), userCssClasses.first),
-        last: cx(bem('item', 'last'), userCssClasses.last),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
-      };
-
+    render: function({results, state, createURL}) {
       ReactDOM.render(
         <Pagination
           createURL={(page) => createURL(state.setPage(page))}
           cssClasses={cssClasses}
-          currentPage={currentPage}
+          currentPage={results.page}
           labels={labels}
-          nbHits={nbHits}
+          nbHits={results.nbHits}
           nbPages={this.getMaxPage(results)}
           padding={padding}
-          setCurrentPage={this.setCurrentPage.bind(this, helper)}
-          shouldAutoHideContainer={hasNoResults}
+          setCurrentPage={this.setCurrentPage}
+          shouldAutoHideContainer={results.nbHits === 0}
           showFirstLast={showFirstLast}
         />,
         containerNode

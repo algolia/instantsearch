@@ -538,7 +538,7 @@ describe('currentRefinedValues()', () => {
 
     it('should render twice <CurrentRefinedValues ... />', () => {
       const widget = currentRefinedValues(parameters);
-
+      widget.init({helper});
       widget.render(renderParameters);
       widget.render(renderParameters);
 
@@ -557,7 +557,9 @@ describe('currentRefinedValues()', () => {
 
         parameters.container = '#testid';
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
@@ -568,7 +570,9 @@ describe('currentRefinedValues()', () => {
 
         parameters.container = element;
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
@@ -586,7 +590,9 @@ describe('currentRefinedValues()', () => {
 
           refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
@@ -600,7 +606,9 @@ describe('currentRefinedValues()', () => {
 
           refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
@@ -624,7 +632,9 @@ describe('currentRefinedValues()', () => {
             return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1;
           });
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
@@ -656,7 +666,9 @@ describe('currentRefinedValues()', () => {
 
           refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
@@ -670,7 +682,9 @@ describe('currentRefinedValues()', () => {
 
           refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
@@ -699,7 +713,9 @@ describe('currentRefinedValues()', () => {
           });
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
@@ -746,7 +762,9 @@ describe('currentRefinedValues()', () => {
           });
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
@@ -773,7 +791,9 @@ describe('currentRefinedValues()', () => {
       it('should pass it as clearAllPosition', () => {
         parameters.clearAll = 'before';
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
 
         expectedProps.clearAllPosition = 'before';
 
@@ -786,7 +806,9 @@ describe('currentRefinedValues()', () => {
       it('should pass it in templateProps', () => {
         parameters.templates.item = 'MY CUSTOM TEMPLATE';
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
 
         expectedProps.templateProps.templates.item = 'MY CUSTOM TEMPLATE';
 
@@ -810,7 +832,9 @@ describe('currentRefinedValues()', () => {
         it('shouldAutoHideContainer should be true with autoHideContainer = true', () => {
           parameters.autoHideContainer = true;
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           expect(ReactDOM.render.calledOnce).toBe(true);
           expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
@@ -819,7 +843,9 @@ describe('currentRefinedValues()', () => {
         it('shouldAutoHideContainer should be true with autoHideContainer = false', () => {
           parameters.autoHideContainer = false;
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           expect(ReactDOM.render.calledOnce).toBe(true);
           expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
@@ -830,7 +856,9 @@ describe('currentRefinedValues()', () => {
         it('shouldAutoHideContainer should be false with autoHideContainer = true', () => {
           parameters.autoHideContainer = true;
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           expectedProps.shouldAutoHideContainer = false;
 
@@ -841,7 +869,9 @@ describe('currentRefinedValues()', () => {
         it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
           parameters.autoHideContainer = false;
 
-          currentRefinedValues(parameters).render(renderParameters);
+          const widget = currentRefinedValues(parameters);
+          widget.init({helper});
+          widget.render(renderParameters);
 
           expectedProps.shouldAutoHideContainer = false;
 
@@ -855,7 +885,9 @@ describe('currentRefinedValues()', () => {
       it('should be passed in the cssClasses', () => {
         parameters.cssClasses.body = 'custom-passed-body';
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-passed-body';
 
@@ -866,7 +898,9 @@ describe('currentRefinedValues()', () => {
       it('should work with an array', () => {
         parameters.cssClasses.body = ['custom-body', 'custom-body-2'];
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-body custom-body-2';
 
@@ -888,7 +922,9 @@ describe('currentRefinedValues()', () => {
         });
         refinements = [].concat(firstRefinements).concat(secondRefinements).concat(otherRefinements);
 
-        currentRefinedValues(parameters).render(renderParameters);
+        const widget = currentRefinedValues(parameters);
+        widget.init({helper});
+        widget.render(renderParameters);
 
         setRefinementsInExpectedProps();
         expectedProps.attributes = {

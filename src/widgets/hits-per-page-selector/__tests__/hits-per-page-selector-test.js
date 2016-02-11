@@ -40,6 +40,7 @@ describe('hitsPerPageSelector()', () => {
   let results;
   let autoHideContainer;
   let consoleLog;
+  let state;
 
   beforeEach(() => {
     autoHideContainer = sinon.stub().returns(Selector);
@@ -63,8 +64,11 @@ describe('hitsPerPageSelector()', () => {
       state: {
         hitsPerPage: 20
       },
-      setQueryParameter: sinon.spy(),
+      setQueryParameter: sinon.stub().returnsThis(),
       search: sinon.spy()
+    };
+    state = {
+      hitsPerPage: 10
     };
     results = {
       hits: [],
@@ -77,14 +81,15 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
-    widget.render({helper, results, state: helper.state});
-    widget.render({helper, results, state: helper.state});
+    widget.init({helper, state: helper.state});
+    widget.render({results, state});
+    widget.render({results, state});
     props = {
       cssClasses: {
         root: 'ais-hits-per-page-selector custom-root cx',
         item: 'ais-hits-per-page-selector--item custom-item'
       },
-      currentValue: 20,
+      currentValue: 10,
       shouldAutoHideContainer: true,
       options: [
         {value: 10, label: '10 results'},
@@ -100,6 +105,7 @@ describe('hitsPerPageSelector()', () => {
   });
 
   it('sets the underlying hitsPerPage', () => {
+    widget.init({helper, state: helper.state});
     widget.setHitsPerPage(helper, helper.state, 10);
     expect(helper.setQueryParameter.calledOnce).toBe(true, 'setQueryParameter called once');
     expect(helper.search.calledOnce).toBe(true, 'search called once');

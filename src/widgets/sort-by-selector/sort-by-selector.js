@@ -48,6 +48,11 @@ function sortBySelector({
     return {label: index.label, value: index.name};
   });
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem('item'), userCssClasses.item)
+  };
+
   return {
     init: function({helper}) {
       let currentIndex = helper.getIndex();
@@ -55,29 +60,19 @@ function sortBySelector({
       if (!isIndexInList) {
         throw new Error('[sortBySelector]: Index ' + currentIndex + ' not present in `indices`');
       }
-    },
-
-    setIndex: function(helper, indexName) {
-      helper.setIndex(indexName);
-      helper.search();
+      this.setIndex = indexName => helper
+        .setIndex(indexName)
+        .search();
     },
 
     render: function({helper, results}) {
-      let currentIndex = helper.getIndex();
-      let hasNoResults = results.nbHits === 0;
-      let setIndex = this.setIndex.bind(this, helper);
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item)
-      };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
-          currentValue={currentIndex}
+          currentValue={helper.getIndex()}
           options={selectorOptions}
-          setValue={setIndex}
-          shouldAutoHideContainer={hasNoResults}
+          setValue={this.setIndex}
+          shouldAutoHideContainer={results.nbHits === 0}
         />,
         containerNode
       );

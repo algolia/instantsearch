@@ -89,6 +89,18 @@ function menu({
       {...templates, ...showMoreTemplates} :
       templates;
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count)
+  };
+
   return {
     getConfiguration: configuration => {
       let widgetConfiguration = {
@@ -103,58 +115,44 @@ function menu({
 
       return widgetConfiguration;
     },
-    render: function({results, helper, templatesConfig, state, createURL}) {
-      let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy);
-      let hasNoFacetValues = facetValues.length === 0;
-
-      let templateProps = utils.prepareTemplateProps({
+    init({templatesConfig, helper, createURL}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates: allTemplates
       });
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        link: cx(bem('link'), userCssClasses.link),
-        count: cx(bem('count'), userCssClasses.count)
-      };
+      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+      this._toggleRefinement = facetValue => helper
+        .toggleRefinement(hierarchicalFacetName, facetValue)
+        .search();
+    },
+    _prepareFacetValues(facetValues, state) {
+      return facetValues
+        .map(facetValue => {
+          facetValue.url = this._createURL(state, facetValue);
+          return facetValue;
+        });
+    },
+    render: function({results, state}) {
+      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
+      facetValues = this._prepareFacetValues(facetValues, state);
 
       ReactDOM.render(
         <RefinementList
-          createURL={(facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue))}
           cssClasses={cssClasses}
           facetValues={facetValues}
           limitMax={widgetMaxValuesPerFacet}
           limitMin={limit}
-          shouldAutoHideContainer={hasNoFacetValues}
+          shouldAutoHideContainer={facetValues.length === 0}
           showMore={showMoreConfig !== null}
-          templateProps={templateProps}
-          toggleRefinement={toggleRefinement.bind(null, helper, hierarchicalFacetName)}
+          templateProps={this._templateProps}
+          toggleRefinement={this._toggleRefinement}
         />,
         containerNode
       );
     }
   };
-}
-
-function toggleRefinement(helper, attributeName, facetValue) {
-  helper
-    .toggleRefinement(attributeName, facetValue)
-    .search();
-}
-
-function getFacetValues(results, hierarchicalFacetName, sortBy) {
-  let values = results
-    .getFacetValues(hierarchicalFacetName, {sortBy: sortBy});
-
-  return values.data || [];
 }
 
 export default menu;

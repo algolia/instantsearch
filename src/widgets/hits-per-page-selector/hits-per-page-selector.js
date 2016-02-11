@@ -44,8 +44,13 @@ function hitsPerPageSelector({
     Selector = autoHideContainerHOC(Selector);
   }
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem('item'), userCssClasses.item)
+  };
+
   return {
-    init: function({state}) {
+    init: function({helper, state}) {
       let isCurrentInOptions = any(options, function(option) {
         return +state.hitsPerPage === +option.value;
       });
@@ -66,28 +71,22 @@ function hitsPerPageSelector({
 
         options = [{value: undefined, label: ''}].concat(options);
       }
+
+      this.setHitsPerPage = value => helper
+        .setQueryParameter('hitsPerPage', +value)
+        .search();
     },
 
-    setHitsPerPage: function(helper, value) {
-      helper.setQueryParameter('hitsPerPage', +value);
-      helper.search();
-    },
-
-    render: function({helper, state, results}) {
+    render: function({state, results}) {
       let currentValue = state.hitsPerPage;
       let hasNoResults = results.nbHits === 0;
-      let setHitsPerPage = this.setHitsPerPage.bind(this, helper);
 
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        item: cx(bem('item'), userCssClasses.item)
-      };
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
           currentValue={currentValue}
           options={options}
-          setValue={setHitsPerPage}
+          setValue={this.setHitsPerPage}
           shouldAutoHideContainer={hasNoResults}
         />,
         containerNode

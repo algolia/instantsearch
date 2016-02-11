@@ -3,8 +3,18 @@ import React from 'react';
 import Template from '../Template.js';
 import PriceRangesForm from './PriceRangesForm.js';
 import cx from 'classnames';
+import {isEqual} from 'lodash';
 
 class PriceRanges extends React.Component {
+  componentWillMount() {
+    this.form = this.getForm();
+    this.refine = this.refine.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(this.props.facetValues, nextProps.facetValues);
+  }
+
   getForm() {
     let labels = {
       currency: this.props.currency,
@@ -15,16 +25,9 @@ class PriceRanges extends React.Component {
       <PriceRangesForm
         cssClasses={this.props.cssClasses}
         labels={labels}
-        refine={this.refine.bind(this)}
+        refine={this.refine}
       />
     );
-  }
-
-  getURLFromFacetValue(facetValue) {
-    if (!this.props.createURL) {
-      return '#';
-    }
-    return this.props.createURL(facetValue.from, facetValue.to, facetValue.isRefined);
   }
 
   getItemFromFacetValue(facetValue) {
@@ -32,7 +35,6 @@ class PriceRanges extends React.Component {
       this.props.cssClasses.item,
       {[this.props.cssClasses.active]: facetValue.isRefined}
     );
-    let url = this.getURLFromFacetValue(facetValue);
     let key = facetValue.from + '_' + facetValue.to;
     let handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
     let data = {
@@ -43,7 +45,7 @@ class PriceRanges extends React.Component {
       <div className={cssClassItem} key={key}>
         <a
           className={this.props.cssClasses.link}
-          href={url}
+          href={facetValue.url}
           onClick={handleClick}
         >
           <Template data={data} templateKey="item" {...this.props.templateProps} />
@@ -62,7 +64,6 @@ class PriceRanges extends React.Component {
   }
 
   render() {
-    let form = this.getForm();
     return (
       <div>
         <div className={this.props.cssClasses.list}>
@@ -70,14 +71,13 @@ class PriceRanges extends React.Component {
             return this.getItemFromFacetValue(facetValue);
           })}
         </div>
-        {form}
+        {this.form}
       </div>
     );
   }
 }
 
 PriceRanges.propTypes = {
-  createURL: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
     button: React.PropTypes.string,

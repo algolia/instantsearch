@@ -3,6 +3,15 @@ import Template from '../Template.js';
 import {isSpecialClick} from '../../lib/utils.js';
 
 class ClearAll extends React.Component {
+  componentWillMount() {
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.url !== nextProps.url ||
+      this.props.hasRefinements !== nextProps.hasRefinements;
+  }
+
   handleClick(e) {
     if (isSpecialClick(e)) {
       // do not alter the default browser behavior
@@ -14,16 +23,15 @@ class ClearAll extends React.Component {
   }
 
   render() {
-    const className = this.props.cssClasses.link;
     const data = {
       hasRefinements: this.props.hasRefinements
     };
 
     return (
       <a
-        className={className}
+        className={this.props.cssClasses.link}
         href={this.props.url}
-        onClick={this.handleClick.bind(this)}
+        onClick={this.handleClick}
       >
         <Template
           data={data}

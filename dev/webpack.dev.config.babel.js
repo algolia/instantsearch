@@ -1,4 +1,5 @@
 import {join} from 'path';
+import webpack from 'webpack';
 
 export default {
   entry: {
@@ -37,5 +38,12 @@ export default {
     contentBase: 'dev/',
     host: '0.0.0.0',
     compress: true
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  ]
 };

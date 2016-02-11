@@ -70,6 +70,32 @@ function priceRanges({
     PriceRanges = autoHideContainerHOC(PriceRanges);
   }
 
+  let labels = {
+    button: 'Go',
+    separator: 'to',
+    ...userLabels
+  };
+
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    list: cx(bem('list'), userCssClasses.list),
+    link: cx(bem('link'), userCssClasses.link),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    form: cx(bem('form'), userCssClasses.form),
+    label: cx(bem('label'), userCssClasses.label),
+    input: cx(bem('input'), userCssClasses.input),
+    currency: cx(bem('currency'), userCssClasses.currency),
+    button: cx(bem('button'), userCssClasses.button),
+    separator: cx(bem('separator'), userCssClasses.separator),
+    footer: cx(bem('footer'), userCssClasses.footer)
+  };
+
+  // before we had opts.currency, you had to pass labels.currency
+  if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
+
   return {
     getConfiguration: () => ({
       facets: [attributeName]
@@ -115,16 +141,17 @@ function priceRanges({
       helper.search();
     },
 
-    render: function({results, helper, templatesConfig, state, createURL}) {
-      let facetValues;
-      let labels = {
-        button: 'Go',
-        separator: 'to',
-        ...userLabels
-      };
+    init({helper, templatesConfig}) {
+      this._refine = this._refine.bind(this, helper);
+      this._templateProps = utils.prepareTemplateProps({
+        defaultTemplates,
+        templatesConfig,
+        templates
+      });
+    },
 
-      // before we had opts.currency, you had to pass labels.currency
-      if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
+    render: function({results, helper, state, createURL}) {
+      let facetValues;
 
       if (results.hits.length > 0) {
         facetValues = this._extractRefinedRange(helper);
@@ -136,52 +163,29 @@ function priceRanges({
         facetValues = [];
       }
 
-      let templateProps = utils.prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates
+      facetValues.map(facetValue => {
+        let newState = state.clearRefinements(attributeName);
+        if (!facetValue.isRefined) {
+          if (facetValue.from !== undefined) {
+            newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
+          }
+          if (facetValue.to !== undefined) {
+            newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
+          }
+        }
+        facetValue.url = createURL(newState);
+        return facetValue;
       });
-
-      let hasNoRefinements = facetValues.length === 0;
-
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        list: cx(bem('list'), userCssClasses.list),
-        link: cx(bem('link'), userCssClasses.link),
-        item: cx(bem('item'), userCssClasses.item),
-        active: cx(bem('item', 'active'), userCssClasses.active),
-        form: cx(bem('form'), userCssClasses.form),
-        label: cx(bem('label'), userCssClasses.label),
-        input: cx(bem('input'), userCssClasses.input),
-        currency: cx(bem('currency'), userCssClasses.currency),
-        button: cx(bem('button'), userCssClasses.button),
-        separator: cx(bem('separator'), userCssClasses.separator),
-        footer: cx(bem('footer'), userCssClasses.footer)
-      };
 
       ReactDOM.render(
         <PriceRanges
-          createURL={(from, to, isRefined) => {
-            let newState = state.clearRefinements(attributeName);
-            if (!isRefined) {
-              if (typeof from !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(from));
-              }
-              if (typeof to !== 'undefined') {
-                newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(to));
-              }
-            }
-            return createURL(newState);
-          }}
           cssClasses={cssClasses}
           currency={currency}
           facetValues={facetValues}
           labels={labels}
-          refine={this._refine.bind(this, helper)}
-          shouldAutoHideContainer={hasNoRefinements}
-          templateProps={templateProps}
+          refine={this._refine}
+          shouldAutoHideContainer={facetValues.length === 0}
+          templateProps={this._templateProps}
         />,
         containerNode
       );

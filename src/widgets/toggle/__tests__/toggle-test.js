@@ -80,7 +80,9 @@ describe('toggle()', () => {
       let templateProps;
       let results;
       let helper;
+      let state;
       let props;
+      let createURL;
 
       beforeEach(() => {
         templateProps = {
@@ -97,6 +99,9 @@ describe('toggle()', () => {
           addFacetRefinement: sinon.spy(),
           search: sinon.spy()
         };
+        state = {
+          toggleRefinement: sinon.spy()
+        };
         props = {
           cssClasses: {
             root: 'ais-toggle',
@@ -111,9 +116,10 @@ describe('toggle()', () => {
             count: 'ais-toggle--count'
           },
           templateProps,
-          toggleRefinement: function() {},
-          createURL: () => '#'
+          toggleRefinement: function() {}
         };
+        createURL = () => '#';
+        widget.init({state});
       });
 
       it('calls twice ReactDOM.render', () => {
@@ -123,8 +129,8 @@ describe('toggle()', () => {
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
         widget = toggle({container, attributeName, label});
-        widget.render({results, helper});
-        widget.render({results, helper});
+        widget.render({results, helper, state, createURL});
+        widget.render({results, helper, state, createURL});
         expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
         expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
         expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
@@ -141,17 +147,18 @@ describe('toggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2, url: '#'}, {name: 'false', count: 1, url: '#'}])
         };
         props.cssClasses.root += ' root cx';
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label}],
+          facetValues: [{count: 1, isRefined: false, name: label, url: '#'}],
           shouldAutoHideContainer: false,
           ...props
         };
         let cssClasses = {root: ['root', 'cx']};
         widget = toggle({container, attributeName, label, cssClasses});
-        widget.render({results, helper});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
@@ -162,11 +169,12 @@ describe('toggle()', () => {
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
         widget = toggle({container, attributeName, label});
-        widget.render({results, helper});
-        widget.render({results, helper});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
+        widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label}],
+          facetValues: [{count: 1, isRefined: false, name: label, url: '#'}],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -182,11 +190,12 @@ describe('toggle()', () => {
           getFacetValues: sinon.stub().returns([])
         };
         widget = toggle({container, attributeName, label});
-        widget.render({results, helper});
-        widget.render({results, helper});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
+        widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{name: label, isRefined: false, count: null}],
+          facetValues: [{name: label, isRefined: false, count: null, url: '#'}],
           shouldAutoHideContainer: true,
           ...props
         };
@@ -207,11 +216,12 @@ describe('toggle()', () => {
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
         widget = toggle({container, attributeName, label});
-        widget.render({results, helper});
-        widget.render({results, helper});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
+        widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 2, isRefined: true, name: label}],
+          facetValues: [{count: 2, isRefined: true, name: label, url: '#'}],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -227,7 +237,8 @@ describe('toggle()', () => {
           getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
         widget = toggle({container, attributeName, label});
-        widget.render({results, helper});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
         let toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();

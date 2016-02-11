@@ -4,7 +4,7 @@ import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import RefinementList from '../RefinementList';
-import Template from '../../Template';
+import RefinementListItem from '../RefinementListItem';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -13,47 +13,54 @@ describe('RefinementList', () => {
   let renderer;
   let parentListProps;
   let itemProps;
-  let templateProps;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
-    parentListProps = {
-      className: 'list'
+    let cssClasses = {
+      list: 'list',
+      item: 'item',
+      active: 'active'
     };
-    itemProps = {
-      className: 'item',
-      onClick: () => {}
-    };
-    templateProps = {
+    let templateData = {cssClasses};
+    let commonItemProps = {
+      handleClick: () => {},
+      itemClassName: 'item',
+      subItems: undefined,
       templateKey: 'item',
-      data: {
-        cssClasses: {
-          list: 'list',
-          item: 'item',
-          active: 'active'
-        }
-      }
+      templateProps: {}
     };
+
+    parentListProps = {className: 'list'};
+    itemProps = [{
+      ...commonItemProps,
+      facetValue: 'facet1',
+      templateData: {
+        ...templateData,
+        name: 'facet1'
+      }
+    }, {
+      ...commonItemProps,
+      facetValue: 'facet2',
+      templateData: {
+        ...templateData,
+        name: 'facet2'
+      }
+    }];
     renderer = createRenderer();
   });
 
 
   it('should render default list', () => {
     let out = render();
+
     expect(out).toEqualJSX(
       <div {...parentListProps}>
-        <div {...itemProps}>
-          <Template
-            {...templateProps}
-            data={{...templateProps.data, name: 'facet1'}}
-          />
-        </div>
-        <div {...itemProps}>
-          <Template
-            {...templateProps}
-            data={{...templateProps.data, name: 'facet2'}}
-          />
-        </div>
+        <RefinementListItem
+          {...itemProps[0]}
+        />
+        <RefinementListItem
+          {...itemProps[1]}
+        />
       </div>
     );
     expect(out.props.children[0][0].key).toEqual('facet1');
@@ -62,17 +69,17 @@ describe('RefinementList', () => {
 
   it('should render default list highlighted', () => {
     let out = render({facetValues: [{name: 'facet1', isRefined: true, count: 42}]});
-    let activeTemplateProp = {...templateProps};
-    activeTemplateProp.data.count = 42;
-    activeTemplateProp.data.isRefined = true;
+    itemProps[0].templateData = {
+      ...itemProps[0].templateData,
+      count: 42,
+      isRefined: true
+    };
+    itemProps[0].itemClassName += ' active';
     expect(out).toEqualJSX(
       <div {...parentListProps}>
-        <div className="item active" onClick={itemProps.onClick}>
-          <Template
-            {...activeTemplateProp}
-            data={{...templateProps.data, name: 'facet1'}}
-          />
-        </div>
+        <RefinementListItem
+          {...itemProps[0]}
+        />
       </div>
     );
     expect(out.props.children[0][0].key).toEqual('facet1/true/42');
@@ -98,7 +105,7 @@ describe('RefinementList', () => {
   });
 
   context('sublist', () => {
-    it('uses autoHideContainer() and headerFooter()', () => {
+    it('works', () => {
       let customProps = {
         cssClasses: {
           depth: 'depth',
@@ -118,40 +125,26 @@ describe('RefinementList', () => {
       parentListProps = {
         className: 'list depth0'
       };
-      itemProps = {
-        className: 'item',
-        onClick: () => {}
+      itemProps[0].templateData.cssClasses = customProps.cssClasses;
+      itemProps[0].templateData = {
+        ...itemProps[0].templateData,
+        data: customProps.facetValues[0].data
       };
-      templateProps = {
-        templateKey: 'item',
-        data: {
-          cssClasses: {
-            depth: 'depth',
-            list: 'list',
-            item: 'item'
-          }
-        }
-      };
+      itemProps[0].subItems = (
+        <RefinementList
+          attributeNameKey="name"
+          cssClasses={customProps.cssClasses}
+          depth={1}
+          facetValues={customProps.facetValues[0].data}
+          templateProps={{}}
+        />
+      );
       let out = render(customProps);
       expect(out).toEqualJSX(
         <div {...parentListProps}>
-          <div {...itemProps}>
-            <Template
-              {...templateProps}
-              data={{
-                ...templateProps.data,
-                name: 'facet1',
-                data: customProps.facetValues[0].data
-              }}
-            />
-            <RefinementList
-              {...templateProps.data}
-              attributeNameKey="name"
-              depth={1}
-              facetValues={customProps.facetValues[0].data}
-              templateProps={{}}
-            />
-          </div>
+          <RefinementListItem
+            {...itemProps[0]}
+          />
         </div>
       );
     });

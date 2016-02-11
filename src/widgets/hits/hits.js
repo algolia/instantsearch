@@ -60,20 +60,21 @@ function hits({
 
   return {
     getConfiguration: () => ({hitsPerPage}),
-    render: function({results, templatesConfig}) {
-      let templateProps = utils.prepareTemplateProps({
+    init({templatesConfig}) {
+      this._templateProps = utils.prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates
       });
-
+    },
+    render: function({results}) {
       ReactDOM.render(
         <Hits
           cssClasses={cssClasses}
           hits={results.hits}
           results={results}
-          templateProps={templateProps}
+          templateProps={this._templateProps}
         />,
         containerNode
       );

@@ -142,6 +142,9 @@ describe('hierarchicalMenu()', () => {
       footer: 'footer'
     };
     let templateProps;
+    let helper;
+    let state;
+    let createURL;
 
     beforeEach(() => {
       hierarchicalMenu.__Rewire__('defaultTemplates', defaultTemplates);
@@ -163,12 +166,17 @@ describe('hierarchicalMenu()', () => {
         list: 'ais-hierarchical-menu--list',
         root: 'ais-hierarchical-menu'
       };
-      data = {data: ['foo', 'bar']};
-      results = {getFacetValues: sinon.spy(() => {
-        return data;
-      })};
-
+      data = {data: [{name: 'foo'}, {name: 'bar'}]};
+      results = {getFacetValues: sinon.spy(() => data)};
+      helper = {
+        toggleRefinement: sinon.stub().returnsThis(),
+        search: sinon.spy()
+      };
+      state = {
+        toggleRefinement: sinon.spy()
+      };
       options = {container, attributes};
+      createURL = () => '#';
     });
 
     it('understand provided cssClasses', () => {
@@ -185,7 +193,8 @@ describe('hierarchicalMenu()', () => {
       };
 
       widget = hierarchicalMenu({...options, cssClasses: userCssClasses});
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
       expect(actual).toEqual({
         root: 'ais-hierarchical-menu root cx',
@@ -203,14 +212,14 @@ describe('hierarchicalMenu()', () => {
 
     it('calls ReactDOM.render', () => {
       widget = hierarchicalMenu(options);
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(ReactDOM.render.calledOnce).toBe(true);
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
         <RefinementList
           attributeNameKey="path"
-          createURL={() => {}}
           cssClasses={cssClasses}
-          facetValues={['foo', 'bar']}
+          facetValues={[{name: 'foo', url: '#'}, {name: 'bar', url: '#'}]}
           shouldAutoHideContainer={false}
           templateProps={templateProps}
           toggleRefinement={() => {}}
@@ -220,7 +229,8 @@ describe('hierarchicalMenu()', () => {
 
     it('asks for results.getFacetValues', () => {
       widget = hierarchicalMenu(options);
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(results.getFacetValues.calledOnce).toBe(true);
       expect(results.getFacetValues.getCall(0).args).toEqual([
         'hello', {
@@ -233,7 +243,8 @@ describe('hierarchicalMenu()', () => {
 
     it('has a sortBy option', () => {
       widget = hierarchicalMenu({...options, sortBy: ['count:asc']});
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(results.getFacetValues.calledOnce).toBe(true);
       expect(results.getFacetValues.getCall(0).args).toEqual([
         'hello', {
@@ -250,7 +261,8 @@ describe('hierarchicalMenu()', () => {
         item: 'item2',
         footer: 'footer2'
       }});
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0].props.templateProps.templates)
         .toEqual({
           header: 'header2',
@@ -262,36 +274,30 @@ describe('hierarchicalMenu()', () => {
     it('sets shouldAutoHideContainer to true when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer).toBe(true);
     });
 
     it('sets facetValues to empty array when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([]);
     });
 
     it('has a toggleRefinement method', () => {
-      let search = sinon.spy();
-      let toggleRefinement = sinon.spy(
-        () => ({
-          search
-        })
-      );
-
-      let helper = {toggleRefinement};
-
       widget = hierarchicalMenu(options);
-      widget.render({results, helper});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       let elementToggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
       elementToggleRefinement('mom');
-      expect(toggleRefinement.calledOnce).toBe(true);
-      expect(toggleRefinement.getCall(0).args)
+      expect(helper.toggleRefinement.calledOnce).toBe(true);
+      expect(helper.toggleRefinement.getCall(0).args)
         .toEqual(['hello', 'mom']);
-      expect(search.calledOnce).toBe(true);
-      expect(toggleRefinement.calledBefore(search)).toBe(true);
+      expect(helper.search.calledOnce).toBe(true);
+      expect(helper.toggleRefinement.calledBefore(helper.search)).toBe(true);
     });
 
     it('has a limit option', () => {
@@ -312,16 +318,17 @@ describe('hierarchicalMenu()', () => {
 
       data = {data: firstLevel};
       let expectedFacetValues = [
-        {name: 'one'},
-        {name: 'two', data: [
-          {name: 'six'},
-          {name: 'seven'},
-          {name: 'eight'}
+        {name: 'one', url: '#'},
+        {name: 'two', url: '#', data: [
+          {name: 'six', url: '#'},
+          {name: 'seven', url: '#'},
+          {name: 'eight', url: '#'}
         ]},
-        {name: 'three'}
+        {name: 'three', url: '#'}
       ];
       widget = hierarchicalMenu({...options, limit: 3});
-      widget.render({results});
+      widget.init({helper, createURL});
+      widget.render({results, state});
       let actualFacetValues = ReactDOM.render.firstCall.args[0].props.facetValues;
       expect(actualFacetValues)
         .toEqual(expectedFacetValues);

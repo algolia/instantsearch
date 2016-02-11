@@ -1,6 +1,14 @@
 import React from 'react';
 
 class PriceRangesForm extends React.Component {
+  componentWillMount() {
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  shouldComponentUpdate() {
+    return false;
+  }
+
   getInput(type) {
     return (
       <label className={this.props.cssClasses.label}>
@@ -19,7 +27,7 @@ class PriceRangesForm extends React.Component {
   render() {
     let fromInput = this.getInput('from');
     let toInput = this.getInput('to');
-    let onSubmit = this.handleSubmit.bind(this);
+    let onSubmit = this.handleSubmit;
     return (
       <form className={this.props.cssClasses.form} onSubmit={onSubmit} ref="form">
         {fromInput}

@@ -2,6 +2,9 @@
   "env": {
     "test": {
       "plugins": ["babel-plugin-rewire"]
+    },
+    "production": {
+      "optional": ["optimisation"]
     }
   },
   "stage": 2
