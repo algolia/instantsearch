@@ -66,6 +66,13 @@ function rangeSlider({
     Slider = autoHideContainerHOC(Slider);
   }
 
+  let cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer)
+  };
+
   return {
     getConfiguration: () => ({
       disjunctiveFacets: [attributeName]
@@ -109,13 +116,6 @@ function rangeSlider({
       });
     },
     render({results, helper}) {
-      let cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        footer: cx(bem('footer'), userCssClasses.footer)
-      };
-
       let facet = find(results.disjunctiveFacets, {name: attributeName});
       let stats = facet !== undefined ? facet.stats : undefined;
       let currentRefinement = this._getCurrentRefinement(helper);
@@ -125,6 +125,10 @@ function rangeSlider({
           min: null,
           max: null
         };
+      }
+
+      if (tooltips.format !== undefined) {
+        tooltips = [{to: tooltips.format}, {to: tooltips.format}];
       }
 
       ReactDOM.render(
