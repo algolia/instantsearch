@@ -39,6 +39,7 @@ class Slider extends React.Component {
     } else {
       pips = this.props.pips;
     }
+
     return (
       <Nouislider
         {...this.props}
@@ -64,7 +65,11 @@ Slider.propTypes = {
   start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
   tooltips: React.PropTypes.oneOfType([
     React.PropTypes.bool,
-    React.PropTypes.object
+    React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        to: React.PropTypes.func
+      })
+    )
   ])
 };
 
