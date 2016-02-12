@@ -642,14 +642,37 @@ helper.clearTags().search();
 #### Get the current page
 
 ```js
-helper.getCurrentPage();
+helper.getPage();
 ```
 
 #### Change page
 
 ```js
-helper.setCurrentPage(3).search();
+helper.setPage(3).search();
 ```
+
+#### Automatic reset to page 0
+
+During a search, changing the parameters will update the result set, which can then change
+the number of pages in the result set. Therefore, the behavior has been standardized so
+that any operation that may change the number of page will reset the pagination to page 0.
+
+This may lead to some unexpected behavior. For example:
+
+```js
+helper.setPage(4);
+helper.getPage(); // 4
+helper.setQuery('foo');
+helper.getPage(); // 0
+```
+
+Non exhaustive list of operations that trigger a reset:
+ - refinements (conjunctive, exclude, disjunctive, hierarchical, numeric)
+ - tags 
+ - index (setIndex)
+ - setQuery
+ - setHitsPerPage
+ - setTypoTolerance
 
 ### Index
 

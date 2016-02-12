@@ -358,7 +358,7 @@ AlgoliaSearchHelper.prototype.toggleTag = function(tag) {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.nextPage = function() {
-  return this.setCurrentPage(this.state.page + 1);
+  return this.setPage(this.state.page + 1);
 };
 
 /**
@@ -366,8 +366,25 @@ AlgoliaSearchHelper.prototype.nextPage = function() {
  * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.previousPage = function() {
-  return this.setCurrentPage(this.state.page - 1);
+  return this.setPage(this.state.page - 1);
 };
+
+function setCurrentPage(page) {
+  if (page < 0) throw new Error('Page requested below 0.');
+
+  this.state = this.state.setPage(page);
+  this._change();
+  return this;
+}
+
+/**
+ * Change the current page
+ * @deprecated
+ * @param  {number} page The page number
+ * @return {AlgoliaSearchHelper}
+ * @fires change
+ */
+AlgoliaSearchHelper.prototype.setCurrentPage = setCurrentPage;
 
 /**
  * Change the current page
@@ -375,13 +392,7 @@ AlgoliaSearchHelper.prototype.previousPage = function() {
  * @return {AlgoliaSearchHelper}
  * @fires change
  */
-AlgoliaSearchHelper.prototype.setCurrentPage = function(page) {
-  if (page < 0) throw new Error('Page requested below 0.');
-
-  this.state = this.state.setPage(page);
-  this._change();
-  return this;
-};
+AlgoliaSearchHelper.prototype.setPage = setCurrentPage;
 
 /**
  * Configure the underlying index name
@@ -604,13 +615,21 @@ AlgoliaSearchHelper.prototype.getIndex = function() {
   return this.state.index;
 };
 
+function getCurrentPage() {
+  return this.state.page;
+}
+
+/**
+ * Get the currently selected page
+ * @deprecated
+ * @return {number} the current page
+ */
+AlgoliaSearchHelper.prototype.getCurrentPage = getCurrentPage;
 /**
  * Get the currently selected page
  * @return {number} the current page
  */
-AlgoliaSearchHelper.prototype.getCurrentPage = function() {
-  return this.state.page;
-};
+AlgoliaSearchHelper.prototype.getPage = getCurrentPage;
 
 /**
  * Get all the filtering tags
