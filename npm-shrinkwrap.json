@@ -11668,12 +11668,12 @@
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.7.tgz"
     },
     "react-nouislider": {
-      "version": "1.7.1",
-      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.7.1.tgz",
+      "version": "1.8.2",
+      "resolved": "https://registry.npmjs.org/react-nouislider/-/react-nouislider-1.8.2.tgz",
       "dependencies": {
-        "nouislider-algolia-fork": {
-          "version": "8.2.1-patch1",
-          "resolved": "https://registry.npmjs.org/nouislider-algolia-fork/-/nouislider-algolia-fork-8.2.1-patch1.tgz"
+        "nouislider": {
+          "version": "8.3.0",
+          "resolved": "https://registry.npmjs.org/nouislider/-/nouislider-8.3.0.tgz"
         }
       }
     },

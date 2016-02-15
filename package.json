@@ -92,7 +92,7 @@
     "lodash": "^3.10.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
-    "react-nouislider": "^1.7.1",
+    "react-nouislider": "^1.8.2",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"
