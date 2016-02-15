@@ -630,24 +630,24 @@ This widget lets the user refine search results based on a numerical attribute. 
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet">
-    {% highlight javascript %}
-    search.addWidget(
-      instantsearch.widgets.numericRefinementList({
-        container: '#popularity',
-        attributeName: 'popularity',
-        options: [
-          {name: 'All'},
-          {end: 4, name: 'less than 4'},
-          {start: 4, end: 4, name: '4'},
-          {start: 5, end: 10, name: 'between 5 and 10'},
-          {start: 10, name: 'more than 10'}
-        ],
-        templates: {
-          header: 'Price'
-        }
-      })
-    );
-    {% endhighlight %}
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.numericRefinementList({
+    container: '#popularity',
+    attributeName: 'popularity',
+    options: [
+      {name: 'All'},
+      {end: 4, name: 'less than 4'},
+      {start: 4, end: 4, name: '4'},
+      {start: 5, end: 10, name: 'between 5 and 10'},
+      {start: 10, name: 'more than 10'}
+    ],
+    templates: {
+      header: 'Price'
+    }
+  })
+);
+{% endhighlight %}
   </div>
   <div class="jsdoc js-toggle-jsdoc" style='display:none'>
 {% highlight javascript %}
