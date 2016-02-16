@@ -351,7 +351,7 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
   t.end();
 });
 
-test('getConfigurationFromQueryString should parse page as number and be consistent with the state', function(t) {
+test('getStateFromQueryString should parse page as number and be consistent with the state', function(t) {
   var index = 'indexNameInTheHelper';
   var helper = algoliasearchHelper(null, index, {});
 
@@ -369,6 +369,28 @@ test('getConfigurationFromQueryString should parse page as number and be consist
     partialStateFromQueryString.page,
     helper.state.page,
     'Page should be consistent throught query string serialization/deserialization');
+  t.end();
+});
+
+test('getStateFromQueryString should use its options', function(t) {
+  var partialStateFromQueryString = algoliasearchHelper.url.getStateFromQueryString(
+    'is_notexistingparam=val&is_MyQuery=test&is_p=3&extra_param=val',
+    {
+      prefix: 'is_',
+      mapping: {
+        q: 'MyQuery'
+      }
+    }
+  );
+
+  t.deepEquals(
+    partialStateFromQueryString,
+    {
+      query: 'test',
+      page: 3
+    },
+    'Partial state should have used both the prefix and the mapping'
+  );
   t.end();
 });
 
@@ -399,15 +421,28 @@ test('should be able to get configuration that is not from algolia', function(t)
       prefix: 'wtf_'
     }
   );
-
+  var qsWithPrefixAndMapping = helper.getStateAsQueryString(
+    {
+      filters: filters,
+      moreAttributes: moar,
+      prefix: 'wtf_',
+      mapping: {
+        p: 'mypage'
+      }
+    }
+  );
   var config1 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithoutPrefix);
   var config2 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithPrefix, {prefix: 'wtf_'});
+  var config3 = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(qsWithPrefixAndMapping, {prefix: 'wtf_', mapping: {p: 'mypage'}});
 
   t.deepEquals(
     config1,
     moar);
   t.deepEquals(
     config2,
+    moar);
+  t.deepEquals(
+    config3,
     moar);
   t.end();
 });

@@ -20,6 +20,7 @@ var mapValues = require('lodash/object/mapValues');
 var isString = require('lodash/lang/isString');
 var isPlainObject = require('lodash/lang/isPlainObject');
 var isArray = require('lodash/lang/isArray');
+var invert = require('lodash/object/invert');
 var encode = require('qs/lib/utils').encode;
 
 function recursiveEncode(input) {
@@ -37,11 +38,14 @@ function recursiveEncode(input) {
 
 var refinementsParameters = ['dFR', 'fR', 'nR', 'hFR', 'tR'];
 var stateKeys = shortener.ENCODED_PARAMETERS;
-function sortQueryStringValues(prefixRegexp, a, b) {
+function sortQueryStringValues(prefixRegexp, invertedMapping, a, b) {
   if (prefixRegexp !== null) {
     a = a.replace(prefixRegexp, '');
     b = b.replace(prefixRegexp, '');
   }
+
+  a = invertedMapping[a] || a;
+  b = invertedMapping[b] || b;
 
   if (stateKeys.indexOf(a) !== -1 || stateKeys.indexOf(b) !== -1) {
     if (a === 'q') return -1;
@@ -65,23 +69,24 @@ function sortQueryStringValues(prefixRegexp, a, b) {
  * @param {object} options accepted options :
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
+ *   - mapping : map short attributes to another value e.g. {q: 'query'}
  * @return {object} partial search parameters object (same properties than in the
  * SearchParameters but not exhaustive)
  */
 exports.getStateFromQueryString = function(queryString, options) {
   var prefixForParameters = options && options.prefix || '';
+  var mapping = options && options.mapping || {};
+  var invertedMapping = invert(mapping);
 
   var partialStateWithPrefix = qs.parse(queryString);
   var prefixRegexp = new RegExp('^' + prefixForParameters);
   var partialState = mapKeys(
     partialStateWithPrefix,
     function(v, k) {
-      if (prefixForParameters && prefixRegexp.test(k)) {
-        var encodedKey = k.replace(prefixRegexp, '');
-        return shortener.decode(encodedKey);
-      }
-      var decodedKey = shortener.decode(k);
-      return decodedKey || k;
+      var hasPrefix = prefixForParameters && prefixRegexp.test(k);
+      var unprefixedKey = hasPrefix ? k.replace(prefixRegexp, '') : k;
+      var decodedKey = shortener.decode(invertedMapping[unprefixedKey] || unprefixedKey);
+      return decodedKey || unprefixedKey;
     }
   );
 
@@ -96,11 +101,14 @@ exports.getStateFromQueryString = function(queryString, options) {
  * @param {string} queryString the query string to read
  * @param {object} options the options
  *   - prefixForParameters : prefix used for the helper configuration keys
+ *   - mapping : map short attributes to another value e.g. {q: 'query'}
  * @return {object} the object containing the parsed configuration that doesn't
  * to the helper
  */
 exports.getUnrecognizedParametersInQueryString = function(queryString, options) {
   var prefixForParameters = options && options.prefix;
+  var mapping = options && options.mapping || {};
+  var invertedMapping = invert(mapping);
 
   var foreignConfig = {};
   var config = qs.parse(queryString);
@@ -111,7 +119,7 @@ exports.getUnrecognizedParametersInQueryString = function(queryString, options) 
     });
   } else {
     forEach(config, function(v, key) {
-      if (!shortener.decode(key)) foreignConfig[key] = v;
+      if (!shortener.decode(invertedMapping[key] || key)) foreignConfig[key] = v;
     });
   }
 
@@ -123,6 +131,7 @@ exports.getUnrecognizedParametersInQueryString = function(queryString, options) 
  * @param {SearchParameters} state state to serialize
  * @param {object} [options] May contain the following parameters :
  *  - prefix : prefix in front of the keys
+ *  - mapping : map short attributes to another value e.g. {q: 'query'}
  *  - moreAttributes : more values to be added in the query string. Those values
  *    won't be prefixed.
  * @return {string} the query string
@@ -130,18 +139,20 @@ exports.getUnrecognizedParametersInQueryString = function(queryString, options) 
 exports.getQueryStringFromState = function(state, options) {
   var moreAttributes = options && options.moreAttributes;
   var prefixForParameters = options && options.prefix || '';
+  var mapping = options && options.mapping || {};
+  var invertedMapping = invert(mapping);
   var partialStateWithEncodedValues = recursiveEncode(state);
 
   var encodedState = mapKeys(
     partialStateWithEncodedValues,
     function(v, k) {
       var shortK = shortener.encode(k);
-      return prefixForParameters + shortK;
+      return prefixForParameters + (mapping[shortK] || shortK);
     }
   );
 
   var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
-  var sort = bind(sortQueryStringValues, null, prefixRegexp);
+  var sort = bind(sortQueryStringValues, null, prefixRegexp, invertedMapping);
   if (moreAttributes) {
     var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
     var moreQs = qs.stringify(moreAttributes, {encode: false});
