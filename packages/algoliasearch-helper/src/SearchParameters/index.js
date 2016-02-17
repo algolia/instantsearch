@@ -21,6 +21,7 @@ var pluck = require('lodash/collection/pluck');
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
 var deepFreeze = require('../functions/deepFreeze');
+var warnOnce = require('../functions/warnOnce');
 
 var filterState = require('./filterState');
 
@@ -402,20 +403,22 @@ function SearchParameters(newParameters) {
   this.length = params.length;
 
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
-    if (!this.hasOwnProperty(paramName)) {
-      var message = 'Unsupported SearchParameter: `' + paramName + '` (this will throw in the next version)';
-      if (window) {
-        // IE8/9 has no console (BUT if devtools opened), nevermind there's no
-        // developer working ONLY in IE8/9
-        window.console &&
-        window.console.error(message);
-      } else console.error(message);// eslint-disable-line no-console
+    if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
+      this[paramName] = paramValue;
+
+      var message =
+        'Unknown SearchParameter: `' +
+        paramName +
+        '` (this might raise an error in the Algolia API)';
+
+      warnOnce(message);
     }
   }, this);
 }
 
 /**
- * List all the properties in SearchParameters
+ * List all the properties in SearchParameters and therefore all the know Algolia properties
+ * This doesn't contain any beta/hidden features.
  */
 SearchParameters.PARAMETERS = keys(new SearchParameters());
 
@@ -512,17 +515,17 @@ SearchParameters.validate = function(currentState, parameters) {
 
   var ks = keys(params);
   var unknownKeys = filter(ks, function(k) {
-    return !currentState.hasOwnProperty(k);
+    return SearchParameters.PARAMETERS.indexOf(k) === -1;
   });
 
   if (unknownKeys.length === 1) {
-    return new Error(
-      'Property ' + unknownKeys[0] + ' is not defined on SearchParameters ' +
-      '(see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+    warnOnce('Unknown parameter ' + unknownKeys[0] + ' (this might rise an error in the Algolia API)');
   } else if (unknownKeys.length > 1) {
-    return new Error(
-      'Properties ' + unknownKeys.join(' ') + ' are not defined on SearchParameters ' +
-      '(see http://algolia.github.io/algoliasearch-helper-js/docs/SearchParameters.html)');
+    warnOnce(
+      'Unknown parameters ' +
+      unknownKeys.join(', ') +
+      ' (this might raise an error in the Algolia API)'
+    );
   }
 
   if (currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0) {

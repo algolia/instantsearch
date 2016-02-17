@@ -1,6 +1,7 @@
 'use strict';
 
 var test = require('tape');
+var forOwn = require('lodash/object/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
 test('setQueryParameters should be able to mix an actual state with a new set of parameters', function(t) {
@@ -25,10 +26,8 @@ test('setQueryParameters should be able to mix an actual state with a new set of
   t.end();
 });
 
-test('setQueryParameters should not add unknown properties', function(t) {
-  var partial = require('lodash/function/partial');
-
-  var originalSP = new SearchParameters({
+test('setQueryParameters should add unknown properties', function(t) {
+  var state0 = new SearchParameters({
     facets: ['a', 'b'],
     ignorePlurals: false,
     attributesToHighlight: ''
@@ -39,8 +38,11 @@ test('setQueryParameters should not add unknown properties', function(t) {
     facet: ['city', 'country']
   };
 
-  t.throws(partial(originalSP.setQueryParameters, params),
-    'The new searchParameters should be strictly equal');
+  var state1 = state0.setQueryParameters(params);
+
+  forOwn(params, function(v, k) {
+    t.deepEquals(state1[k], v);
+  });
 
   t.end();
 });
