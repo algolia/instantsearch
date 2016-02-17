@@ -11,7 +11,15 @@ function autoHideContainer(ComposedComponent) {
     }
 
     componentWillReceiveProps(nextProps) {
+      if (this.props.shouldAutoHideContainer === nextProps.shouldAutoHideContainer) {
+        return;
+      }
+
       this._hideOrShowContainer(nextProps);
+    }
+
+    shouldComponentUpdate(nextProps) {
+      return nextProps.shouldAutoHideContainer === false;
     }
 
     _hideOrShowContainer(props) {
@@ -20,10 +28,6 @@ function autoHideContainer(ComposedComponent) {
     }
 
     render() {
-      if (this.props.shouldAutoHideContainer === true) {
-        return <div />;
-      }
-
       return <ComposedComponent {...this.props} />;
     }
   }
