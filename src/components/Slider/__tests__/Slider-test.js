@@ -15,6 +15,7 @@ describe('Slider', () => {
   let renderer;
   let Slider;
   let Nouislider;
+  let props;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -23,6 +24,9 @@ describe('Slider', () => {
     // need to be required AFTER jsdom has initialized global.window/navigator
     Slider = require('../Slider.js');
     Nouislider = require('react-nouislider');
+    props = {
+      range: {min: 0, max: 5000}
+    };
   });
 
 
@@ -33,17 +37,22 @@ describe('Slider', () => {
         animate={false}
         behaviour="snap"
         connect
-        cssClasses={{}}
         cssPrefix="ais-range-slider--"
         onChange={() => {}}
         pips={{density: 3, format: {to: function noRefCheck() {}}, mode: 'positions', stepped: true, values: [0, 50, 100]}}
-        templateProps={{}}
+        range={props.range}
       />
     );
   });
 
+  it('should not render anything when ranges are equal', () => {
+    props.range.min = props.range.max = 8;
+    let out = render();
+    expect(out).toEqual(null);
+  });
+
   function render() {
-    renderer.render(<Slider cssClasses={{}} templateProps={{}} />);
+    renderer.render(<Slider {...props} />);
     return renderer.getRenderOutput();
   }
 });
