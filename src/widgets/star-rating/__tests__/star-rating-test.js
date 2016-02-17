@@ -81,6 +81,7 @@ describe('starRating()', () => {
         emptyStar: 'ais-star-rating--star__empty',
         root: 'ais-star-rating'
       },
+      collapsible: false,
       facetValues: [
         {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels, url: '#'},
         {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels, url: '#'},

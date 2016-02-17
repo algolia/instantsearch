@@ -68,6 +68,7 @@ describe('stats()', () => {
         root: 'ais-stats',
         time: 'ais-stats--time'
       },
+      collapsible: false,
       hitsPerPage: 2,
       nbHits: 20,
       nbPages: 10,

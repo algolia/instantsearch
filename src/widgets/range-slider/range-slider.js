@@ -32,6 +32,8 @@ let defaultTemplates = {
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -43,7 +45,8 @@ rangeSlider({
   [ cssClasses.{root, header, body, footer} ],
   [ step=1 ],
   [ pips=true ],
-  [ autoHideContainer=true ]
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 });
 `;
 function rangeSlider({
@@ -51,6 +54,7 @@ function rangeSlider({
     attributeName,
     tooltips = true,
     templates = defaultTemplates,
+    collapsible = false,
     cssClasses: userCssClasses = {},
     step = 1,
     pips = true,
@@ -133,6 +137,7 @@ function rangeSlider({
 
       ReactDOM.render(
         <Slider
+          collapsible={collapsible}
           cssClasses={cssClasses}
           onChange={this._refine.bind(this, helper, stats)}
           pips={pips}

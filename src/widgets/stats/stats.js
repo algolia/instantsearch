@@ -39,6 +39,7 @@ function stats({
     cssClasses: userCssClasses = {},
     autoHideContainer = true,
     templates = defaultTemplates,
+    collapsible = false,
     transformData
   } = {}) {
   if (!container) throw new Error(usage);
@@ -74,6 +75,7 @@ function stats({
     render: function({results}) {
       ReactDOM.render(
         <Stats
+          collapsible={collapsible}
           cssClasses={cssClasses}
           hitsPerPage={results.hitsPerPage}
           nbHits={results.nbHits}

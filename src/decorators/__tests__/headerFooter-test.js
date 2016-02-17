@@ -21,6 +21,7 @@ describe('headerFooter', () => {
         root: 'root',
         body: 'body'
       },
+      collapsible: false,
       templateProps: {
       }
     };
@@ -30,8 +31,8 @@ describe('headerFooter', () => {
   it('should render the component in a root and body', () => {
     let out = render(defaultProps);
     expect(out).toEqualJSX(
-      <div className="root">
-        <div className="body">
+      <div className="ais-root root">
+        <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
       </div>
@@ -55,9 +56,9 @@ describe('headerFooter', () => {
       }
     };
     expect(out).toEqualJSX(
-      <div className="root">
-        <Template cssClass="ais-header" {...templateProps} />
-        <div className="body">
+      <div className="ais-root root">
+        <Template cssClass="ais-header" {...templateProps} onClick={null} />
+        <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
       </div>
@@ -81,11 +82,11 @@ describe('headerFooter', () => {
       }
     };
     expect(out).toEqualJSX(
-      <div className="root">
-        <div className="body">
+      <div className="ais-root root">
+        <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
-        <Template cssClass="ais-footer" {...templateProps} />
+        <Template cssClass="ais-footer" {...templateProps} onClick={null} />
       </div>
     );
   });

@@ -122,3 +122,21 @@ body {
 .ais-show-more__active, .ais-show-more__inactive {
   cursor: pointer;
 }
+
+.ais-header {
+  position: relative;
+}
+
+.collapse-arrow {
+  position: absolute;
+  right: 0;
+}
+
+.collapse-arrow:after {
+  content: "[-]";
+  font-family: monospace;
+}
+
+.ais-root__collapsed .collapse-arrow:after {
+  content: "[+]";
+}

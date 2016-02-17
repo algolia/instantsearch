@@ -218,6 +218,7 @@ describe('hierarchicalMenu()', () => {
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
         <RefinementList
           attributeNameKey="path"
+          collapsible={false}
           cssClasses={cssClasses}
           facetValues={[{name: 'foo', url: '#'}, {name: 'bar', url: '#'}]}
           shouldAutoHideContainer={false}

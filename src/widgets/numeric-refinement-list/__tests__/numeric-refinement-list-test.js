@@ -114,6 +114,7 @@ describe('numericRefinementList()', () => {
         radio: 'ais-refinement-list--radio',
         root: 'ais-refinement-list root cx'
       },
+      collapsible: false,
       facetValues: [
         {attributeName: 'price', isRefined: true, name: 'All', url: '#'},
         {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4', url: '#'},

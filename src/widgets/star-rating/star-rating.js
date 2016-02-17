@@ -20,7 +20,8 @@ starRating({
   [ templates.{header,item,footer} ],
   [ labels.{andUp} ],
   [ transformData ],
-  [ autoHideContainer=true ]
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 })`;
 
 /**
@@ -50,17 +51,20 @@ starRating({
  * @param  {string|string[]} [options.cssClasses.star] CSS class to add to each star element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.emptyStar] CSS class to add to each empty star element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 function starRating({
-  container,
-  attributeName,
-  max = 5,
-  cssClasses: userCssClasses = {},
-  labels = defaultLabels,
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true
+    container,
+    attributeName,
+    max = 5,
+    cssClasses: userCssClasses = {},
+    labels = defaultLabels,
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true
   }) {
   let containerNode = utils.getContainerNode(container);
   let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
@@ -142,6 +146,7 @@ function starRating({
 
       ReactDOM.render(
         <RefinementList
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={results.nbHits === 0}

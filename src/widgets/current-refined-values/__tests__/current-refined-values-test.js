@@ -508,6 +508,7 @@ describe('currentRefinedValues()', () => {
           _tags: {name: '_tags'}
         },
         clearAllClick: () => {},
+        collapsible: false,
         clearAllPosition: 'after',
         clearAllURL: '#cleared',
         cssClasses: {

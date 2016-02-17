@@ -9,16 +9,30 @@ import Template from '../components/Template.js';
 
 function headerFooter(ComposedComponent) {
   class HeaderFooter extends React.Component {
-    componentWillMount() {
-      // Only add header/footer if a template is defined
-      this._header = this.getTemplate('header');
-      this._footer = this.getTemplate('footer');
-      this._classNames = {
-        root: cx(this.props.cssClasses.root),
-        body: cx(this.props.cssClasses.body)
+    constructor(props) {
+      super(props);
+      this.handleHeaderClick = this.handleHeaderClick.bind(this);
+      this.state = {
+        collapsed: props.collapsible && props.collapsible.collapsed
       };
+
+      this._headerElement = this._getElement({
+        type: 'header',
+        handleClick: props.collapsible ? this.handleHeaderClick : null
+      });
+
+      this._cssClasses = {
+        root: cx('ais-root', this.props.cssClasses.root),
+        body: cx('ais-body', this.props.cssClasses.body)
+      };
+
+      this._footerElement = this._getElement({type: 'footer'});
     }
-    getTemplate(type) {
+    shouldComponentUpdate(nextProps, nextState) {
+      return nextState.collapsed === false ||
+        nextState !== this.state;
+    }
+    _getElement({type, handleClick = null}) {
       let templates = this.props.templateProps.templates;
       if (!templates || !templates[type]) {
         return null;
@@ -27,25 +41,54 @@ function headerFooter(ComposedComponent) {
       return (
         <Template {...this.props.templateProps}
           cssClass={className}
+          onClick={handleClick}
           templateKey={type}
           transformData={null}
         />
       );
     }
+    handleHeaderClick() {
+      this.setState({
+        collapsed: !this.state.collapsed
+      });
+    }
     render() {
+      let rootCssClasses = [this._cssClasses.root];
+
+      if (this.props.collapsible) {
+        rootCssClasses.push('ais-root__collapsible');
+      }
+
+      if (this.state.collapsed) {
+        rootCssClasses.push('ais-root__collapsed');
+      }
+
+      const cssClasses = {
+        ...this._cssClasses,
+        root: cx(rootCssClasses)
+      };
+
       return (
-        <div className={this._classNames.root}>
-          {this._header}
-          <div className={this._classNames.body}>
+        <div className={cssClasses.root}>
+          {this._headerElement}
+          <div
+            className={cssClasses.body}
+          >
             <ComposedComponent {...this.props} />
           </div>
-          {this._footer}
+          {this._footerElement}
         </div>
       );
     }
   }
 
   HeaderFooter.propTypes = {
+    collapsible: React.PropTypes.oneOfType([
+      React.PropTypes.bool,
+      React.PropTypes.shape({
+        collapsed: React.PropTypes.bool
+      })
+    ]),
     cssClasses: React.PropTypes.shape({
       root: React.PropTypes.string,
       header: React.PropTypes.string,
@@ -56,7 +99,8 @@ function headerFooter(ComposedComponent) {
   };
 
   HeaderFooter.defaultProps = {
-    cssClasses: {}
+    cssClasses: {},
+    collapsible: false
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)
