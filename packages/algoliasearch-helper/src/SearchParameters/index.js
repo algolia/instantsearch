@@ -11,9 +11,9 @@ var omit = require('lodash/object/omit');
 var indexOf = require('lodash/array/indexOf');
 var isArray = require('lodash/lang/isArray');
 var isEmpty = require('lodash/lang/isEmpty');
+var isEqual = require('lodash/lang/isEqual');
 var isUndefined = require('lodash/lang/isUndefined');
 var isString = require('lodash/lang/isString');
-var isNumber = require('lodash/lang/isNumber');
 var isFunction = require('lodash/lang/isFunction');
 var find = require('lodash/collection/find');
 var pluck = require('lodash/collection/pluck');
@@ -21,10 +21,25 @@ var pluck = require('lodash/collection/pluck');
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
 var deepFreeze = require('../functions/deepFreeze');
+var valToNumber = require('../functions/valToNumber');
 
 var filterState = require('./filterState');
 
 var RefinementList = require('./RefinementList');
+
+/**
+ * like _.find but using _.isEqual to be able to use it
+ * to find arrays.
+ * @private
+ * @param {any[]} array array to search into
+ * @param {any} searchedValue the value we're looking for
+ * @return {any} the searched value or undefined
+ */
+function findArray(array, searchedValue) {
+  return find(array, function(currentValue) {
+    return isEqual(currentValue, searchedValue);
+  });
+}
 
 /**
  * @typedef {string[]} SearchParameters.FacetList
@@ -698,21 +713,7 @@ SearchParameters.prototype = {
    * searchparameter.addNumericRefinement('size', '=', 40);
    */
   addNumericRefinement: function(attribute, operator, v) {
-    var value;
-    if (isNumber(v)) {
-      value = v;
-    } else if (isString(v)) {
-      value = parseFloat(v);
-    } else if (isArray(v)) {
-      value = map(
-        v,
-        function(number) {
-          return isString(number) ? parseFloat(number) : number;
-        }
-      );
-    } else {
-      throw new Error('The value should be a number, a parseable string or an array of those.');
-    }
+    var value = valToNumber(v);
 
     if (this.isNumericRefined(attribute, operator, value)) return this;
 
@@ -779,6 +780,7 @@ SearchParameters.prototype = {
     }
     return this.facetsExcludes[facetName] || [];
   },
+
   /**
    * Remove all the numeric filter for a given (attribute, operator)
    * @method
@@ -788,11 +790,12 @@ SearchParameters.prototype = {
    */
   removeNumericRefinement: function(attribute, operator, paramValue) {
     if (paramValue !== undefined) {
-      if (!this.isNumericRefined(attribute, operator, paramValue)) return this;
+      var paramValueAsNumber = valToNumber(paramValue);
+      if (!this.isNumericRefined(attribute, operator, paramValueAsNumber)) return this;
       return this.setQueryParameters({
         page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
-          return key === attribute && value.op === operator && value.val === paramValue;
+          return key === attribute && value.op === operator && isEqual(value.val, paramValueAsNumber);
         })
       });
     } else if (operator !== undefined) {
@@ -1250,15 +1253,19 @@ SearchParameters.prototype = {
   isNumericRefined: function isNumericRefined(attribute, operator, value) {
     if (isUndefined(value) && isUndefined(operator)) {
       return !!this.numericRefinements[attribute];
-    } else if (isUndefined(value)) {
-      return this.numericRefinements[attribute] &&
-        !isUndefined(this.numericRefinements[attribute][operator]);
     }
 
-    var parsedValue = parseFloat(value);
-    return this.numericRefinements[attribute] &&
-      !isUndefined(this.numericRefinements[attribute][operator]) &&
-      indexOf(this.numericRefinements[attribute][operator], parsedValue) !== -1;
+    var isOperatorDefined = this.numericRefinements[attribute] &&
+      !isUndefined(this.numericRefinements[attribute][operator]);
+
+    if (isUndefined(value) || !isOperatorDefined) {
+      return isOperatorDefined;
+    }
+
+    var parsedValue = valToNumber(value);
+    var isAttributeValueDefined = !isUndefined(findArray(this.numericRefinements[attribute][operator], parsedValue));
+
+    return isOperatorDefined && isAttributeValueDefined;
   },
   /**
    * Returns true if the tag refined, false otherwise

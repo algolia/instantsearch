@@ -19,6 +19,14 @@ test('isNumericRefined with 3 parameters', function(t) {
   t.notOk(paramsWithNumerics.isNumericRefined('age', '<', '7'));
   t.notOk(paramsWithNumerics.isNumericRefined('size', '>', '3'));
 
+  var paramsWithArray = params.addNumericRefinement('age', '=', [3, '4']);
+  t.ok(paramsWithArray.isNumericRefined('age', '=', [3, 4]));
+  t.ok(paramsWithArray.isNumericRefined('age', '=', ['3', 4]));
+  t.ok(paramsWithArray.isNumericRefined('age', '=', [3, '4']));
+  t.ok(paramsWithArray.isNumericRefined('age', '=', ['3', '4']));
+  t.notOk(paramsWithArray.isNumericRefined('age', '=', 3));
+  t.notOk(paramsWithArray.isNumericRefined('age', '=', '3'));
+
   t.end();
 });
 
