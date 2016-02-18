@@ -16,7 +16,7 @@ class Template extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return !isEqual(this.props.data, nextProps.data);
+    return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey;
   }
 
   render() {
