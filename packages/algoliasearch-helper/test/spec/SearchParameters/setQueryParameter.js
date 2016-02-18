@@ -43,15 +43,16 @@ test('setQueryParameter should not create a new instance if the update is non ef
   t.end();
 });
 
-test('setQueryParameter should throw an error when trying to add an unknown parameter', function(t) {
-  var bind = require('lodash/function/bind');
+test(
+  'setQueryParameter should not throw an error when trying to add an unknown parameter, and actually add it',
+  function(t) {
+    var state0 = new SearchParameters();
 
-  var sp = new SearchParameters({
-    facets: ['facet']
-  });
+    var state1 = state0.setQueryParameter('betaParameter', 'configValue');
+    // manual test that the warnonce message actually display message once
+    state0.setQueryParameter('betaParameter', 'configValue');
+    t.deepEquals(state1.betaParameter, 'configValue');
 
-  t.throws(bind(sp.setQueryParameter, sp, 'unknown', ''),
-    'Unknown parameter should throw an exception');
-
-  t.end();
-});
+    t.end();
+  }
+);
