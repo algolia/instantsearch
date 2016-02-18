@@ -417,7 +417,7 @@ describe('getRefinements', function() {
   it('should retrieve a numericRefinement on one facet', function() {
     helper.addNumericRefinement('numericFacet1', '>', '1');
     const expected = [
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1', numericValue: 1}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -425,7 +425,7 @@ describe('getRefinements', function() {
   it('should retrieve a numericRefinement on one disjunctive facet', function() {
     helper.addNumericRefinement('numericDisjunctiveFacet1', '>', '1');
     const expected = [
-      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'}
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1', numericValue: 1}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
   });
@@ -435,8 +435,8 @@ describe('getRefinements', function() {
       .addNumericRefinement('numericFacet1', '>', '1')
       .addNumericRefinement('numericFacet1', '>', '2');
     const expected = [
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'},
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1', numericValue: 1},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2', numericValue: 2}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);
@@ -450,11 +450,11 @@ describe('getRefinements', function() {
       .addNumericRefinement('numericDisjunctiveFacet1', '>', '1')
       .addNumericRefinement('numericDisjunctiveFacet1', '>', '2');
     const expected = [
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1'},
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2'},
-      {type: 'numeric', attributeName: 'numericFacet1', operator: '<=', name: '3'},
-      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1'},
-      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '2'}
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '1', numericValue: 1},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '>', name: '2', numericValue: 2},
+      {type: 'numeric', attributeName: 'numericFacet1', operator: '<=', name: '3', numericValue: 3},
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '1', numericValue: 1},
+      {type: 'numeric', attributeName: 'numericDisjunctiveFacet1', operator: '>', name: '2', numericValue: 2}
     ];
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[0]);
     expect(utils.getRefinements(results, helper.state)).toInclude(expected[1]);

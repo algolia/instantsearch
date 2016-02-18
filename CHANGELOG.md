@@ -1,3 +1,13 @@
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/algolia/instantsearch.js/compare/v1.2.2...v1.2.3) (2016-02-18)
+
+
+### Bug Fixes
+
+* **currentRefinedValues:** clear numeric refinements using original value ([9a0ad45](https://github.com/algolia/instantsearch.js/commit/9a0ad45)), closes [#844](https://github.com/algolia/instantsearch.js/issues/844)
+
+
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/algolia/instantsearch.js/compare/v1.2.1...v1.2.2) (2016-02-03)
 
