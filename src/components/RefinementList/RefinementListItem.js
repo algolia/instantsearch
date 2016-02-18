@@ -12,8 +12,12 @@ class RefinementListItem extends React.Component {
     return !isEqual(this.props, nextProps);
   }
 
-  handleClick(e) {
-    this.props.handleClick(this.props.facetValue, e);
+  handleClick(originalEvent) {
+    this.props.handleClick({
+      facetValueToRefine: this.props.facetValueToRefine,
+      isRefined: this.props.isRefined,
+      originalEvent
+    });
   }
 
   render() {
@@ -34,11 +38,12 @@ class RefinementListItem extends React.Component {
 }
 
 RefinementListItem.propTypes = {
-  facetValue: React.PropTypes.oneOfType([
+  facetValueToRefine: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
   ]).isRequired,
   handleClick: React.PropTypes.func.isRequired,
+  isRefined: React.PropTypes.bool.isRequired,
   itemClassName: React.PropTypes.string,
   subItems: React.PropTypes.object,
   templateData: React.PropTypes.object.isRequired,

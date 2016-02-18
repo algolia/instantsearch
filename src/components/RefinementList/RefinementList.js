@@ -19,8 +19,8 @@ class RefinementList extends React.Component {
     return nextState !== this.state || !isEqual(this.props.facetValues, nextProps.facetValues);
   }
 
-  refine(value) {
-    this.props.toggleRefinement(value);
+  refine(facetValueToRefine, isRefined) {
+    this.props.toggleRefinement(facetValueToRefine, isRefined);
   }
 
   _generateFacetItem(facetValue) {
@@ -53,8 +53,9 @@ class RefinementList extends React.Component {
 
     return (
       <RefinementListItem
-        facetValue={facetValue[this.props.attributeNameKey]}
+        facetValueToRefine={facetValue[this.props.attributeNameKey]}
         handleClick={this.handleItemClick}
+        isRefined={facetValue.isRefined}
         itemClassName={cssClassItem}
         key={key}
         subItems={subItems}
@@ -80,36 +81,36 @@ class RefinementList extends React.Component {
   //
   // Finally, we always stop propagation of the event to avoid multiple levels RefinementLists to fail: click
   // on child would click on parent also
-  handleItemClick(value, e) {
-    if (isSpecialClick(e)) {
+  handleItemClick({facetValueToRefine, originalEvent, isRefined}) {
+    if (isSpecialClick(originalEvent)) {
       // do not alter the default browser behavior
       // if one special key is down
       return;
     }
 
-    if (e.target.tagName === 'INPUT') {
-      this.refine(value);
+    if (originalEvent.target.tagName === 'INPUT') {
+      this.refine(facetValueToRefine, isRefined);
       return;
     }
 
-    let parent = e.target;
+    let parent = originalEvent.target;
 
-    while (parent !== e.currentTarget) {
+    while (parent !== originalEvent.currentTarget) {
       if (parent.tagName === 'LABEL' && (parent.querySelector('input[type="checkbox"]')
           || parent.querySelector('input[type="radio"]'))) {
         return;
       }
 
       if (parent.tagName === 'A' && parent.href) {
-        e.preventDefault();
+        originalEvent.preventDefault();
       }
 
       parent = parent.parentNode;
     }
 
-    e.stopPropagation();
+    originalEvent.stopPropagation();
 
-    this.refine(value);
+    this.refine(facetValueToRefine, isRefined);
   }
 
   handleClickShowMore() {
