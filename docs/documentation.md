@@ -1047,7 +1047,7 @@ Provides [Ion.RangeSlider](https://github.com/IonDen/ion.rangeSlider) as a widge
 **Widget demo**:
 <img src="{{site.baseurl}}/img/ionRangeSlider.gif" width="100%" />
 
-See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
+See the [full documentation](https://github.com/instantsearch/instantsearch-ion.rangeSlider#readme).
 
 ## Templates
 
