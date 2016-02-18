@@ -185,9 +185,14 @@ function getRefinements(results, state) {
 
   forEach(state.numericRefinements, (operators, attributeName) => {
     forEach(operators, (values, operator) => {
-      forEach(values, (name) => {
-        name = name + '';
-        res.push({type: 'numeric', attributeName, name, operator});
+      forEach(values, (value) => {
+        res.push({
+          type: 'numeric',
+          attributeName,
+          name: value + '',
+          numericValue: value,
+          operator
+        });
       });
     });
   });

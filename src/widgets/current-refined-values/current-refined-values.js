@@ -233,7 +233,7 @@ function clearRefinementFromState(state, refinement) {
   case 'exclude':
     return state.removeExcludeRefinement(refinement.attributeName, refinement.name);
   case 'numeric':
-    return state.removeNumericRefinement(refinement.attributeName, refinement.operator, refinement.name);
+    return state.removeNumericRefinement(refinement.attributeName, refinement.operator, refinement.numericValue);
   case 'tag':
     return state.removeTagRefinement(refinement.name);
   default:
