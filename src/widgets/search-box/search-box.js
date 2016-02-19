@@ -124,7 +124,24 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // Keep keyup to handle searchOnEnterKeyPressOnly
+      // like jquery closest()
+      function closest(el, selector) {
+        let matches = el.webkitMatchesSelector ? 'webkitMatchesSelector' : (el.msMatchesSelector ? 'msMatchesSelector' : 'matches');
+        while (el.parentElement) {
+          if (el[matches](selector)) return el;
+          el = el.parentElement;
+        }
+        return null;
+      }
+
+      let form = closest(input,'form');
+      // Handle form reset
+      form.addEventListener('reset', (e) => {
+        input.defaultValue = '';
+        helper.setQuery('');
+        helper.search();
+      });
+
       input.addEventListener('keyup', (e) => {
         helper.setQuery(input.value);
         if (searchOnEnterKeyPressOnly && e.keyCode === KEY_ENTER) {
