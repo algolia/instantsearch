@@ -44,6 +44,14 @@ function searchBox({
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false
 }) {
+  // the 'input' event is triggered when the input value changes
+  // in any case: typing, copy pasting with mouse..
+  // 'onpropertychange' is the IE8 alternative until we support IE8
+  // but it's flawed: http://help.dottoro.com/ljhxklln.php
+  const INPUT_EVENT = window.addEventListener ?
+    'input' :
+    'propertychange';
+
   if (!container) {
     throw new Error(usage);
   }
@@ -124,31 +132,37 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // Keep keyup to handle searchOnEnterKeyPressOnly
-      input.addEventListener('keyup', (e) => {
-        helper.setQuery(input.value);
-        if (searchOnEnterKeyPressOnly && e.keyCode === KEY_ENTER) {
-          helper.search();
-        }
+      // always set the query on every change
+      addListener(input, INPUT_EVENT, setQuery);
 
-        // IE8/9 compatibility
-        if (window.attachEvent && e.keyCode === KEY_SUPPRESS) {
-          helper.search();
-        }
-      });
-
-      function inputCallback(e) {
-        let target = (e.currentTarget) ? e.currentTarget : e.srcElement;
-        helper.setQuery(target.value);
-        if (!searchOnEnterKeyPressOnly) {
-          helper.search();
-        }
+      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
+      // can be removed as soon as we remove support for it
+      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
+        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, setQuery));
+        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, search));
       }
 
-      if (window.attachEvent) { // IE8/9 compatibility
-        input.attachEvent('onpropertychange', inputCallback);
+      // only search on enter
+      if (searchOnEnterKeyPressOnly) {
+        addListener(input, 'keyup', ifKey(KEY_ENTER, search));
       } else {
-        input.addEventListener('input', inputCallback, false);
+        addListener(input, INPUT_EVENT, search);
+      }
+
+      function setQuery(e) {
+        helper.setQuery(getValue(e));
+      }
+
+      function search() {
+        helper.search();
+      }
+
+      function getValue(e) {
+        return ((e.currentTarget) ? e.currentTarget : e.srcElement).value;
+      }
+
+      function ifKey(expectedKeyCode, fnToExecute) {
+        return actualEvent => actualEvent.keyCode === expectedKeyCode && fnToExecute(actualEvent);
       }
 
       if (isInputTargeted) {
@@ -178,6 +192,14 @@ function searchBox({
       }
     }
   };
+}
+
+function addListener(el, type, fn) {
+  if (el.addEventListener) {
+    el.addEventListener(type, fn);
+  } else {
+    el.attachEvent('on' + type, fn);
+  }
 }
 
 export default searchBox;

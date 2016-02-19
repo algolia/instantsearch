@@ -209,7 +209,6 @@ describe('searchBox()', () => {
     beforeEach(() => {
       container = document.createElement('div');
       input = createHTMLNodeFromString('<input />');
-      input.addEventListener = sinon.spy();
     });
 
     function simulateInputEvent() {
@@ -218,12 +217,9 @@ describe('searchBox()', () => {
       // When
       widget.init({state, helper, onHistoryChange});
       // Then
-      expect(input.addEventListener.called).toEqual(true);
-      expect(input.addEventListener.args[1].length).toEqual(3);
-      expect(input.addEventListener.args[1][0]).toEqual('input');
-      let fn = input.addEventListener.args[1][1];
-
-      return fn({currentTarget: {value: 'test'}});
+      input.value = 'test';
+      let event = new Event('input');
+      input.dispatchEvent(event);
     }
 
     context('instant search', () => {
@@ -234,8 +230,12 @@ describe('searchBox()', () => {
 
       it('performs a search on any change', () => {
         simulateInputEvent();
-        expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.called).toBe(true);
+      });
+
+      it('sets the query on any change', () => {
+        simulateInputEvent();
+        expect(helper.setQuery.calledOnce).toBe(true);
       });
     });
 
@@ -258,7 +258,6 @@ describe('searchBox()', () => {
     beforeEach(() => {
       container = document.createElement('div');
       input = createHTMLNodeFromString('<input />');
-      input.addEventListener = sinon.spy();
     });
 
     function simulateKeyUpEvent(args) {
@@ -267,12 +266,9 @@ describe('searchBox()', () => {
       // When
       widget.init({state, helper, onHistoryChange});
       // Then
-      expect(input.addEventListener.called).toEqual(true);
-      expect(input.addEventListener.args[0].length).toEqual(2);
-      expect(input.addEventListener.args[0][0]).toEqual('keyup');
-      let fn = input.addEventListener.args[0][1];
-
-      return fn(args);
+      let event = new Event('keyup', args);
+      Object.defineProperty(event, 'keyCode', {get: () => args.keyCode});
+      input.dispatchEvent(event);
     }
 
     context('instant search', () => {
@@ -283,7 +279,6 @@ describe('searchBox()', () => {
 
       it('do not perform the search on keyup event (should be done by input event)', () => {
         simulateKeyUpEvent({});
-        expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.called).toBe(false);
       });
     });
@@ -296,13 +291,11 @@ describe('searchBox()', () => {
 
       it('performs the search on keyup if <ENTER>', () => {
         simulateKeyUpEvent({keyCode: 13});
-        expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.calledOnce).toBe(true);
       });
 
       it('doesn\'t perform the search on keyup if not <ENTER>', () => {
         simulateKeyUpEvent({});
-        expect(helper.setQuery.calledOnce).toBe(true);
         expect(helper.search.calledOnce).toBe(false);
       });
     });
