@@ -22,6 +22,12 @@ class Slider extends React.Component {
   }
 
   render() {
+    if (this.props.range.min === this.props.range.max) {
+      // There's no need to try to render the Slider, it will not be usable
+      // and will throw
+      return null;
+    }
+
     // setup pips
     let pips;
     if (this.props.pips === false) {

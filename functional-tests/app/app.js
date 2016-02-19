@@ -82,6 +82,7 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.currentRefinedValues({
+    autoHideContainer: false,
     container: '#current-refined-values',
     cssClasses: {
       header: 'facet-title',
