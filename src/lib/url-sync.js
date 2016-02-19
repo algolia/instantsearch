@@ -3,25 +3,13 @@ let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 let majorVersionNumber = require('../lib/version.js').split('.')[0];
 import urlHelper from 'algoliasearch-helper/src/url';
 
-import isEqual from 'lodash/lang/isEqual';
-import merge from 'lodash/object/merge';
-
-function timerMaker(t0) {
-  let t = t0;
-  return function timer() {
-    let now = Date.now();
-    let delta = now - t;
-    t = now;
-    return delta;
-  };
-}
+import {isEqual, merge, debounce} from 'lodash';
 
 /**
  * @typedef {object} UrlUtil
  * @property {string} character the character used in the url
  * @property {function} onpopstate add an event listener for the URL change
  * @property {function} pushState creates a new entry in the browser history
- * @property {function} replaceState update the current entry of the browser history
  * @property {function} readUrl reads the query string of the parameters
  */
 
@@ -36,9 +24,6 @@ let hashUrlUtils = {
   },
   pushState: function(qs) {
     window.location.assign(this.createURL(qs));
-  },
-  replaceState: function(qs) {
-    window.location.replace(this.createURL(qs));
   },
   createURL: function(qs) {
     return document.location.search + this.character + qs;
@@ -59,9 +44,6 @@ let modernUrlUtils = {
   },
   pushState: function(qs) {
     window.history.pushState(null, '', this.createURL(qs));
-  },
-  replaceState: function(qs) {
-    window.history.replaceState(null, '', this.createURL(qs));
   },
   createURL: function(qs) {
     return this.character + qs + document.location.hash;
@@ -93,9 +75,15 @@ class URLSync {
   constructor(urlUtils, options) {
     this.urlUtils = urlUtils;
     this.originalConfig = null;
-    this.timer = timerMaker(Date.now());
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+    this.renderURLFromState = debounce(
+      this.renderURLFromState,
+      this.threshold, {
+        leading: true,
+        trailing: true
+      }
+    );
   }
 
   getConfiguration(currentConfiguration) {
@@ -106,9 +94,7 @@ class URLSync {
   }
 
   init({helper}) {
-    helper.on('change', (state) => {
-      this.renderURLFromState(state);
-    });
+    helper.on('change', this.renderURLFromState.bind(this));
     this.onHistoryChange(this.onPopState.bind(this, helper));
   }
 
@@ -132,11 +118,7 @@ class URLSync {
       {moreAttributes: foreignConfig}
     );
 
-    if (this.timer() < this.threshold) {
-      this.urlUtils.replaceState(qs);
-    } else {
-      this.urlUtils.pushState(qs);
-    }
+    this.urlUtils.pushState(qs);
   }
 
   // External API's
