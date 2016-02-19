@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.9.0 - 2016-02-19
+  * feat(SearchParameters): Support for unknown parameters
+  * feat(url-tools): Support for remapping keys in URL methods
+  * fix(filters): Makes it possible to add then remove a string based numeric
+  filter
+  * docs(pagination): documents the page number reset behavior
+
 2.8.1 - 2016-02-01
   * feat: add snippetEllipsisText, disableExactOnAttributes, enableExactOnSingleWordQuery
   * docs(readme): fix wrong /doc links
