@@ -253,10 +253,10 @@ describe('toggle()', () => {
       let values;
 
       function toggleOn() {
-        widget.toggleRefinement(helper, false);
+        widget.toggleRefinement(helper, 'facetValueToRefine', false);
       }
       function toggleOff() {
-        widget.toggleRefinement(helper, true);
+        widget.toggleRefinement(helper, 'facetValueToRefine', true);
       }
 
       beforeEach(() => {

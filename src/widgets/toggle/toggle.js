@@ -113,7 +113,7 @@ function toggle({
         helper.addFacetRefinement(attributeName, userValues.off);
       }
     },
-    toggleRefinement: (helper, isRefined) => {
+    toggleRefinement: (helper, facetValue, isRefined) => {
       let on = userValues.on;
       let off = userValues.off;
 

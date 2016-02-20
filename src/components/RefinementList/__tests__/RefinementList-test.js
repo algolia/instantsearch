@@ -33,17 +33,22 @@ describe('RefinementList', () => {
     parentListProps = {className: 'list'};
     itemProps = [{
       ...commonItemProps,
-      facetValue: 'facet1',
+      itemClassName: 'item active',
+      facetValueToRefine: 'facet1',
+      isRefined: true,
       templateData: {
         ...templateData,
-        name: 'facet1'
+        name: 'facet1',
+        isRefined: true
       }
     }, {
       ...commonItemProps,
-      facetValue: 'facet2',
+      facetValueToRefine: 'facet2',
+      isRefined: false,
       templateData: {
         ...templateData,
-        name: 'facet2'
+        name: 'facet2',
+        isRefined: false
       }
     }];
     renderer = createRenderer();
@@ -63,8 +68,8 @@ describe('RefinementList', () => {
         />
       </div>
     );
-    expect(out.props.children[0][0].key).toEqual('facet1');
-    expect(out.props.children[0][1].key).toEqual('facet2');
+    expect(out.props.children[0][0].key).toEqual('facet1/true');
+    expect(out.props.children[0][1].key).toEqual('facet2/false');
   });
 
   it('should render default list highlighted', () => {
@@ -74,7 +79,6 @@ describe('RefinementList', () => {
       count: 42,
       isRefined: true
     };
-    itemProps[0].itemClassName += ' active';
     expect(out).toEqualJSX(
       <div {...parentListProps}>
         <RefinementListItem
@@ -110,11 +114,13 @@ describe('RefinementList', () => {
         cssClasses: {
           depth: 'depth',
           item: 'item',
-          list: 'list'
+          list: 'list',
+          active: 'active'
         },
         facetValues: [
           {
             name: 'facet1',
+            isRefined: true,
             data: [
               {name: 'subfacet1'},
               {name: 'subfacet2'}
@@ -164,8 +170,8 @@ describe('RefinementList', () => {
         active: 'active'
       },
       facetValues: [
-        {name: 'facet1'},
-        {name: 'facet2'}
+        {name: 'facet1', isRefined: true},
+        {name: 'facet2', isRefined: false}
       ],
       ...extraProps
     };
