@@ -1,9 +1,13 @@
 /* eslint-env mocha */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import Template from '../Template';
+
+import jsdom from 'jsdom-global';
+import sinon from 'sinon';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -226,6 +230,41 @@ describe('Template', () => {
         onClick: fn
       };
       expect(out).toEqualJSX(<div {...expectedProps}></div>);
+    });
+  });
+
+  context('shouldComponentUpdate', () => {
+    let props;
+    let component;
+    let container;
+
+    beforeEach(function() {this.jsdom = jsdom();});
+    afterEach(function() {this.jsdom();});
+    beforeEach(() => {
+      container = document.createElement('div');
+      props = getProps({
+        data: {hello: 'mom'}
+      });
+      component = ReactDOM.render(<Template {...props} />, container);
+      sinon.spy(component, 'render');
+    });
+
+    it('does not call render when no change in data', () => {
+      ReactDOM.render(<Template {...props} />, container);
+      expect(component.render.called).toBe(false);
+    });
+
+    it('calls render when data changes', () => {
+      props.data = {hello: 'dad'};
+      ReactDOM.render(<Template {...props} />, container);
+      expect(component.render.called).toBe(true);
+    });
+
+    it('calls render when templateKey changes', () => {
+      props.templateKey += '-rerender';
+      props.templates = {[props.templateKey]: ''};
+      ReactDOM.render(<Template {...props} />, container);
+      expect(component.render.called).toBe(true);
     });
   });
 
