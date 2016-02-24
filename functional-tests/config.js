@@ -1,4 +1,4 @@
-import server from './server';
+import startServer from './startServer';
 
 let conf = {
   specs: [
@@ -14,7 +14,7 @@ let conf = {
   baseUrl: 'http://localhost:9000',
   framework: 'mocha',
   onPrepare() {
-    return server();
+    return startServer();
   },
   before() {
     let init = browser
@@ -63,13 +63,6 @@ if (process.env.CI === 'true') {
     }, {
       browserName: 'safari',
       version: '9',
-      ...defaultCapabilities
-    }, {
-      browserName: 'iphone',
-      deviceName: 'iPhone 6 Plus',
-      platform: 'OS X 10.10',
-      version: '9.2',
-      deviceOrientation: 'portrait',
       ...defaultCapabilities
     }],
     ...conf

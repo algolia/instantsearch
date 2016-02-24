@@ -21,9 +21,9 @@ export default () => {
 
     app.use(express.static(path.join(__dirname, 'app')));
     app.use(express.static(path.join(__dirname, '..', 'dist')));
-    let server = app.listen(9000);
+    let server = app.listen(process.env.PORT || 9000);
 
-    server.once('listening', resolve);
+    server.once('listening', () => resolve(server));
     server.once('error', reject);
   });
 };
