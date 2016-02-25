@@ -39,6 +39,8 @@ import cx from 'classnames';
  * @param  {string|string[]} [options.cssClasses.separator] CSS class to add to the separator of the form
  * @param  {string|string[]} [options.cssClasses.button] CSS class to add to the submit button of the form
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -49,13 +51,15 @@ priceRanges({
   [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
   [ templates.{header,item,footer} ],
   [ labels.{currency,separator,button} ],
-  [ autoHideContainer=true ]
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 })`;
 function priceRanges({
     container,
     attributeName,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
+    collapsible = false,
     labels: userLabels = {},
     currency = '$',
     autoHideContainer = true
@@ -179,6 +183,7 @@ function priceRanges({
 
       ReactDOM.render(
         <PriceRanges
+          collapsible={collapsible}
           cssClasses={cssClasses}
           currency={currency}
           facetValues={facetValues}

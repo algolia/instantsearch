@@ -122,6 +122,9 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.refinementList({
+    collapsible: {
+      collapsed: true
+    },
     container: '#brands',
     attributeName: 'brand',
     operator: 'or',
@@ -133,7 +136,7 @@ search.addWidget(
       active: 'facet-active'
     },
     templates: {
-      header: 'Brands'
+      header: 'Brands with collapsible <span class="collapse-arrow"></span>'
     },
     showMore: {
       templates: {

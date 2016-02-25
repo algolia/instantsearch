@@ -80,6 +80,7 @@ describe('rangeSlider()', () => {
           body: 'ais-range-slider--body',
           footer: 'ais-range-slider--footer'
         },
+        collapsible: false,
         onChange: () => {},
         pips: true,
         range: {max: 0, min: 0},
@@ -131,6 +132,7 @@ describe('rangeSlider()', () => {
           body: 'ais-range-slider--body',
           footer: 'ais-range-slider--footer'
         },
+        collapsible: false,
         onChange: () => {},
         pips: true,
         range: {max: 65, min: 65},
@@ -203,6 +205,7 @@ describe('rangeSlider()', () => {
           body: 'ais-range-slider--body',
           footer: 'ais-range-slider--footer'
         },
+        collapsible: false,
         onChange: () => {},
         pips: true,
         range: {max: 5000, min: 1},

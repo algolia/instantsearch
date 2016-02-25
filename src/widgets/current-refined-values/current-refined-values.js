@@ -60,6 +60,8 @@ let bem = bemHelper('ais-current-refined-values');
  * @param  {string}            [options.cssClasses.link] CSS classes added to the link element
  * @param  {string}            [options.cssClasses.count] CSS classes added to the count element
  * @param  {string}            [options.cssClasses.footer] CSS classes added to the footer element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -71,7 +73,8 @@ currentRefinedValues({
   [ templates.{header = '', item, clearAll, footer = ''} ],
   [ transformData ],
   [ autoHideContainer = true ],
-  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ]
+  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
+  [ collapsible=false ]
 })`;
 function currentRefinedValues({
     container,
@@ -79,6 +82,7 @@ function currentRefinedValues({
     onlyListedAttributes = false,
     clearAll = 'before',
     templates = defaultTemplates,
+    collapsible = false,
     transformData,
     autoHideContainer = true,
     cssClasses: userCssClasses = {}
@@ -179,6 +183,7 @@ function currentRefinedValues({
           clearAllURL={clearAllURL}
           clearRefinementClicks={clearRefinementClicks}
           clearRefinementURLs={clearRefinementURLs}
+          collapsible={collapsible}
           cssClasses={cssClasses}
           refinements={refinements}
           shouldAutoHideContainer={shouldAutoHideContainer}

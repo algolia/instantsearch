@@ -57,6 +57,7 @@ describe('clearAll()', () => {
         footer: 'ais-clear-all--footer',
         link: 'ais-clear-all--link'
       },
+      collapsible: false,
       hasRefinements: false,
       shouldAutoHideContainer: true,
       templateProps: {

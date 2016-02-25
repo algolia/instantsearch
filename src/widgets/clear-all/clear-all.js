@@ -33,19 +33,23 @@ let bem = bemHelper('ais-clear-all');
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to the link element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
 clearAll({
   container,
-  [cssClasses.{root,header,body,footer,link}={}],
-  [templates.{header,link,footer}={header: '', link: 'Clear all', footer: ''}],
-  [autoHideContainer=true]
+  [ cssClasses.{root,header,body,footer,link}={} ],
+  [ templates.{header,link,footer}={header: '', link: 'Clear all', footer: ''} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 })`;
 function clearAll({
     container,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
+    collapsible = false,
     autoHideContainer = true
   } = {}) {
   if (!container) {
@@ -79,6 +83,7 @@ function clearAll({
       ReactDOM.render(
         <ClearAll
           clearAll={this._clearRefinementsAndSearch}
+          collapsible={collapsible}
           cssClasses={cssClasses}
           hasRefinements={hasRefinements}
           shouldAutoHideContainer={!hasRefinements}

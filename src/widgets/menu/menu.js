@@ -38,19 +38,22 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
 menu({
   container,
   attributeName,
-  [sortBy],
-  [limit=10],
-  [cssClasses.{root,list,item}],
-  [templates.{header,item,footer}],
-  [transformData],
-  [autoHideContainer]
-  [showMore.{templates: {active, inactive}, limit}]
+  [ sortBy ],
+  [ limit=10 ],
+  [ cssClasses.{root,list,item} ],
+  [ templates.{header,item,footer} ],
+  [ transformData ],
+  [ autoHideContainer ],
+  [ showMore.{templates: {active, inactive}, limit} ],
+  [ collapsible=false ]
 })`;
 function menu({
     container,
@@ -59,6 +62,7 @@ function menu({
     limit = 10,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
+    collapsible = false,
     transformData,
     autoHideContainer = true,
     showMore = false
@@ -140,6 +144,7 @@ function menu({
 
       ReactDOM.render(
         <RefinementList
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={facetValues}
           limitMax={widgetMaxValuesPerFacet}

@@ -41,6 +41,8 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each label element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each checkbox element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -54,7 +56,9 @@ refinementList({
   [ templates.{header,item,footer} ],
   [ transformData ],
   [ autoHideContainer=true ],
-  [ showMore.{templates: {active, inactive}, limit} ]
+  [ collapsible=false ],
+  [ showMore.{templates: {active, inactive}, limit} ],
+  [ collapsible=false ]
 })`;
 function refinementList({
     container,
@@ -64,6 +68,7 @@ function refinementList({
     limit = 10,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
+    collapsible = false,
     transformData,
     autoHideContainer = true,
     showMore = false
@@ -145,6 +150,7 @@ function refinementList({
 
       ReactDOM.render(
         <RefinementList
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={facetValues}
           limitMax={widgetMaxValuesPerFacet}

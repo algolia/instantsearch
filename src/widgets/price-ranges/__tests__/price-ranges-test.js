@@ -103,6 +103,7 @@ describe('priceRanges()', () => {
           root: 'ais-price-ranges root cx',
           separator: 'ais-price-ranges--separator'
         },
+        collapsible: false,
         shouldAutoHideContainer: false,
         facetValues: generateRanges(results.getFacetStats()).map(facetValue => {
           facetValue.url = '#createURL';

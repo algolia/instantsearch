@@ -34,6 +34,8 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
  * @param  {string|string[]} [options.cssClasses.radio] CSS class to add to each radio element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -46,16 +48,18 @@ numericRefinementList({
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
   [ transformData ],
-  [ autoHideContainer ]
+  [ autoHideContainer ],
+  [ collapsible=false ]
 })`;
 function numericRefinementList({
-  container,
-  attributeName,
-  options,
-  cssClasses: userCssClasses = {},
-  templates = defaultTemplates,
-  transformData,
-  autoHideContainer = true
+    container,
+    attributeName,
+    options,
+    cssClasses: userCssClasses = {},
+    templates = defaultTemplates,
+    collapsible = false,
+    transformData,
+    autoHideContainer = true
   }) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
@@ -102,6 +106,7 @@ function numericRefinementList({
 
       ReactDOM.render(
         <RefinementList
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={results.nbHits === 0}

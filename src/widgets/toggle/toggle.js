@@ -42,6 +42,8 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|string[]} [options.cssClasses.checkbox] CSS class to add to each
  * checkbox element (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -53,7 +55,8 @@ toggle({
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
   [ transformData ],
-  [ autoHideContainer=true ]
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 })`;
 function toggle({
     container,
@@ -61,6 +64,7 @@ function toggle({
     label,
     values: userValues = {on: true, off: undefined},
     templates = defaultTemplates,
+    collapsible = false,
     cssClasses: userCssClasses = {},
     transformData,
     autoHideContainer = true
@@ -146,6 +150,7 @@ function toggle({
 
       ReactDOM.render(
         <RefinementList
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
           shouldAutoHideContainer={results.nbHits === 0}

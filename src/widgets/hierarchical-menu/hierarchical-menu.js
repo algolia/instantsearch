@@ -37,6 +37,8 @@ import defaultTemplates from './defaultTemplates.js';
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
+ * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
 const usage = `Usage:
@@ -51,7 +53,8 @@ hierarchicalMenu({
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
   [ templates.{header, item, footer} ],
   [ transformData ],
-  [ autoHideContainer=true ]
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
 })`;
 function hierarchicalMenu({
     container,
@@ -64,6 +67,7 @@ function hierarchicalMenu({
     cssClasses: userCssClasses = {},
     autoHideContainer = true,
     templates = defaultTemplates,
+    collapsible = false,
     transformData
   } = {}) {
   if (!container || !attributes || !attributes.length) {
@@ -139,6 +143,7 @@ function hierarchicalMenu({
       ReactDOM.render(
         <RefinementList
           attributeNameKey="path"
+          collapsible={collapsible}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={facetValues.length === 0}

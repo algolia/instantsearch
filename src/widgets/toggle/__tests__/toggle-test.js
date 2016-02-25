@@ -115,6 +115,7 @@ describe('toggle()', () => {
             checkbox: 'ais-toggle--checkbox',
             count: 'ais-toggle--count'
           },
+          collapsible: false,
           templateProps,
           toggleRefinement: function() {}
         };
