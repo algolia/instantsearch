@@ -129,8 +129,6 @@ describe('PriceRanges', () => {
         // Then
         expect(mockEvent.preventDefault.called).toBe(true);
         expect(props.refine.calledWith(1, 10)).toBe(true);
-        expect(component.state.formFromValue).toBe(null);
-        expect(component.state.formToValue).toBe(null);
       });
     });
 

@@ -1,3 +1,5 @@
+import cheerio from 'cheerio';
+
 export function getNumberOfResults() {
   return browser
     .getText('#stats')
@@ -6,12 +8,8 @@ export function getNumberOfResults() {
 
 export function getCurrentRefinements() {
   return browser
-    .element('#current-refined-values .item')
-    .then(() => browser
-      .getText('#current-refined-values .item')
-      .then(res => Array.isArray(res) ? res : [res])
-      .then(res => res.map(formatTextRefinement))
-    )
+    .getHTML('#current-refined-values .facet-value > div')
+    .then(formatRefinements)
     .catch(() => Promise.resolve([]));
 }
 
@@ -21,6 +19,7 @@ export function clearAll() {
 }
 
 export const searchBox = {
+  selector: '#search-box',
   set(query) {
     return browser.setValue('#search-box', query);
   },
@@ -33,30 +32,32 @@ export const searchBox = {
 };
 
 // export function getRefinementFromSelector(selector) {
-//  return browser.getText(selector).then(formatTextRefinement);
+//  return browser.getText(selector).then(formatRefinements);
 // }
 
-function formatTextRefinement(textRefinement) {
-  let data = textRefinement.split('\n');
-
-  // some browsers like IE will send a slighty different html
-  // they send "Appliances 1543" instead of "Appliances \n1543"
-  if (data.length === 1) {
-    let countPosition = textRefinement.lastIndexOf(' ');
-    data = [
-      textRefinement.slice(0, countPosition),
-      textRefinement.slice(-(textRefinement.length - countPosition))
-    ];
+function formatRefinements(refinementsAsHTML) {
+  if (!Array.isArray(refinementsAsHTML)) {
+    refinementsAsHTML = [refinementsAsHTML];
   }
 
-  const refinement = {
-    name: data[0].trim()
-  };
+  return refinementsAsHTML.map(refinementAsHTML => {
+    // element is (simplified) <div>facetName <span>facetCount</span></div>
+    const element = cheerio.parseHTML(refinementAsHTML)[0];
 
-  if (data[1] !== undefined) {
-    refinement.count = parseInt(data[1], 10);
-  }
+    // <div>**facetName** <span>facetCount</span></div>
+    const name = element.firstChild.nodeValue.trim();
 
-  return refinement;
+    // some widgets have no counts (pricesRanges)
+    // <div>facetName <span>**facetCount**</span></div>
+    const maybeCount = element.firstChild.nextSibling.children;
+
+    return {
+      name,
+
+      count: maybeCount && maybeCount[0] && maybeCount[0].nodeValue !== undefined ?
+        parseInt(maybeCount[0].nodeValue, 10) :
+        'n/a'
+    };
+  });
 }
 

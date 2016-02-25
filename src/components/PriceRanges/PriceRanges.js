@@ -7,8 +7,8 @@ import {isEqual} from 'lodash';
 
 class PriceRanges extends React.Component {
   componentWillMount() {
-    this.form = this.getForm();
     this.refine = this.refine.bind(this);
+    this.form = this.getForm();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -56,10 +56,6 @@ class PriceRanges extends React.Component {
 
   refine(from, to, event) {
     event.preventDefault();
-    this.setState({
-      formFromValue: null,
-      formToValue: null
-    });
     this.props.refine(from, to);
   }
 

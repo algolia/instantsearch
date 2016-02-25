@@ -1,5 +1,5 @@
-import server from '../functional-tests/server';
+import startServer from '../functional-tests/startServer.js';
 
-server()
-  .then(() => console.log('http://localhost:9000'))
+startServer()
+  .then(serverInstance => console.log('http://localhost:' + serverInstance.address().port))
   .catch((e) => setTimeout(function() {throw e;}, 0));
