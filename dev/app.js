@@ -302,10 +302,6 @@ search.addWidget(
   })
 );
 
-search.once('render', function() {
-  document.querySelector('.search').className = 'row search search--visible';
-});
-
 search.addWidget(
   instantsearch.widgets.priceRanges({
     container: '#price-ranges',
@@ -337,6 +333,11 @@ search.addWidget(
     ]
   })
 );
+
+search.once('render', function() {
+  [...document.querySelectorAll('.smooth-search--hidden')]
+    .forEach(element => element.classList.remove('smooth-search--hidden'));
+});
 
 search.start();
 

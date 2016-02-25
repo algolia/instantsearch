@@ -19,8 +19,8 @@
       <h1><a href="./">Instant search demo</a> <small>using instantsearch.js</small></h1>
     </div>
 
-    <div class="row search search--hidden">
-      <div class="col-md-3">
+    <div class="row">
+      <div class="col-md-3 smooth-search smooth-search--hidden">
         <div class="facet" id="current-refined-values"></div>
         <div class="facet" id="hierarchical-categories"></div>
         <div class="facet" id="brands"></div>
@@ -38,40 +38,42 @@
         <div class="form-group">
           <input id="search-box" class="form-control" />
         </div>
-        <div class="row">
-          <div class="col-md-3">
-            <div id="stats"></div>
-          </div>
-          <div class="col-md-3 text-right">
-            <div class="form-inline">
-              <div class="form-group">
-                <label for="hits-per-page-select">Show:</label>
-                <span id="hits-per-page-selector"></span>
+        <div class="smooth-search smooth-search--hidden">
+          <div class="row">
+            <div class="col-md-3">
+              <div id="stats"></div>
+            </div>
+            <div class="col-md-3 text-right">
+              <div class="form-inline">
+                <div class="form-group">
+                  <label for="hits-per-page-select">Show:</label>
+                  <span id="hits-per-page-selector"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 text-right">
+              <div class="form-inline">
+                <div class="form-group">
+                  <label for="sort-by-selector-select">Popularity:</label>
+                  <span id="popularity-selector"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 text-right">
+              <div class="form-inline">
+                <div class="form-group">
+                  <label for="sort-by-selector-select">Sort by:</label>
+                  <span id="sort-by-selector"></span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-3 text-right">
-            <div class="form-inline">
-              <div class="form-group">
-                <label for="sort-by-selector-select">Popularity:</label>
-                <span id="popularity-selector"></span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 text-right">
-            <div class="form-inline">
-              <div class="form-group">
-                <label for="sort-by-selector-select">Sort by:</label>
-                <span id="sort-by-selector"></span>
-              </div>
-            </div>
-          </div>
+          <h3>Results overview</h3>
+          <div id="hits-table"></div>
+          <h3>Results</h3>
+          <div id="hits"></div>
+          <div id="pagination" class="text-center"></div>
         </div>
-        <h3>Results overview</h3>
-        <div id="hits-table"></div>
-        <h3>Results</h3>
-        <div id="hits"></div>
-        <div id="pagination" class="text-center"></div>
       </div>
     </div>
   </div>

@@ -22,12 +22,16 @@ describe('InstantSearch lifecycle', () => {
   let indexName;
   let searchParameters;
   let search;
+  let helperSearchSpy;
 
   beforeEach(() => {
     client = {algolia: 'client', addAlgoliaAgent: () => {}};
     helper = new EventEmitter();
 
-    helper.search = sinon.spy();
+    // when using searchFunction, we lose the reference to
+    // the original helper.search
+    helperSearchSpy = sinon.spy();
+    helper.search = helperSearchSpy;
     helper.getState = sinon.stub().returns({});
     helper.state = {
       setQueryParameters: function(params) { return new SearchParameters(params); }
@@ -88,6 +92,19 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
+  it('calls the provided searchFunction when used', () => {
+    let searchSpy = sinon.spy();
+    search = new InstantSearch({
+      appId: appId,
+      apiKey: apiKey,
+      indexName: indexName,
+      searchFunction: searchSpy
+    });
+    search.start();
+    expect(searchSpy.calledOnce).toBe(true);
+    expect(helperSearchSpy.calledOnce).toBe(false);
+  });
+
   context('when adding a widget', () => {
     let widget;
 
@@ -129,7 +146,7 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls helper.search()', () => {
-        expect(helper.search.calledOnce).toBe(true);
+        expect(helperSearchSpy.calledOnce).toBe(true);
       });
 
       it('calls widget.init(helper.state, helper, templatesConfig)', () => {

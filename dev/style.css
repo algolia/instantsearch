@@ -8,16 +8,12 @@ body {
   padding: 2em 0;
 }
 
-.search {
+.smooth-search {
   transition: opacity 200ms;
 }
 
-.search--hidden {
+.smooth-search--hidden {
   opacity: 0;
-}
-
-.search--visible {
-
 }
 
 /* Hits widget */

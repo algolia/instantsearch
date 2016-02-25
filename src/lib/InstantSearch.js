@@ -4,11 +4,13 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
 import union from 'lodash/array/union';
+import clone from 'lodash/lang/clone';
 
 import {EventEmitter} from 'events';
 
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
+import helpers from './helpers.js';
 
 function defaultCreateURL() { return '#'; }
 
@@ -33,6 +35,9 @@ function defaultCreateURL() { return '#'; }
  * history API.
  * @param  {number} [options.urlSync.threshold] Time in ms after which a new
  * state is created in the browser history. The default value is 700.
+ * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
+ * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
+ * searches at page load for example.
  * @return {Object} the instantsearch instance
  */
 class InstantSearch extends EventEmitter {
@@ -42,7 +47,8 @@ class InstantSearch extends EventEmitter {
     indexName = null,
     numberLocale,
     searchParameters = {},
-    urlSync = null
+    urlSync = null,
+    searchFunction
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
@@ -64,9 +70,14 @@ Usage: instantsearch({
     this.searchParameters = {...searchParameters, index: indexName};
     this.widgets = [];
     this.templatesConfig = {
-      helpers: require('./helpers.js')({numberLocale}),
+      helpers: helpers({numberLocale}),
       compileOptions: {}
     };
+
+    if (searchFunction) {
+      this._searchFunction = searchFunction;
+    }
+
     this.urlSync = urlSync === true ? {} : urlSync;
   }
 
@@ -109,12 +120,23 @@ Usage: instantsearch({
       this.searchParameters
     );
 
+    if (this._searchFunction) {
+      this._originalHelperSearch = helper.search.bind(helper);
+      helper.search = this._wrappedSearch.bind(this);
+    }
+
     this.helper = helper;
 
     this._init(helper.state, helper);
     helper.on('result', this._render.bind(this, helper));
-
     helper.search();
+  }
+
+  _wrappedSearch() {
+    let helper = clone(this.helper);
+    helper.search = this._originalHelperSearch;
+    this._searchFunction(helper);
+    return;
   }
 
   createURL(params) {
