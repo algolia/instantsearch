@@ -126,7 +126,9 @@ function searchBox({
 
       // Keep keyup to handle searchOnEnterKeyPressOnly
       input.addEventListener('keyup', (e) => {
-        helper.setQuery(input.value);
+        if (!searchOnEnterKeyPressOnly || e.keyCode === KEY_ENTER) {
+          helper.setQuery(input.value);
+        }
         if (searchOnEnterKeyPressOnly && e.keyCode === KEY_ENTER) {
           helper.search();
         }
@@ -139,8 +141,8 @@ function searchBox({
 
       function inputCallback(e) {
         let target = (e.currentTarget) ? e.currentTarget : e.srcElement;
-        helper.setQuery(target.value);
         if (!searchOnEnterKeyPressOnly) {
+          helper.setQuery(target.value);
           helper.search();
         }
       }

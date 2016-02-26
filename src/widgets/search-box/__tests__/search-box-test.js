@@ -245,9 +245,9 @@ describe('searchBox()', () => {
         widget.getInput = sinon.stub().returns(input);
       });
 
-      it('does not performs (will be handle by keyup event)', () => {
+      it('does not perform (will be handle by keyup event)', () => {
         simulateInputEvent();
-        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.setQuery.calledOnce).toBe(false);
         expect(helper.search.called).toBe(false);
       });
     });
@@ -302,7 +302,7 @@ describe('searchBox()', () => {
 
       it('doesn\'t perform the search on keyup if not <ENTER>', () => {
         simulateKeyUpEvent({});
-        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.setQuery.calledOnce).toBe(false);
         expect(helper.search.calledOnce).toBe(false);
       });
     });
