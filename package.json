@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "main": "dist-es5-module/index.js",
   "author": "Algolia <support@algolia.com>",
@@ -96,7 +96,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.11.0",
-    "algoliasearch-helper": "^2.8.1",
+    "algoliasearch-helper": "^2.9.0",
     "classnames": "^2.2.3",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",

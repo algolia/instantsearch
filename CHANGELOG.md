@@ -1,3 +1,9 @@
+<a name="1.2.4"></a>
+## [1.2.4](https://github.com/algolia/instantsearch.js/compare/v1.2.3...v1.2.4) (2016-02-29)
+
+Upgraded the helper to 2.9.0 to support undocumented parameters from the API.
+
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/algolia/instantsearch.js/compare/v1.2.2...v1.2.3) (2016-02-18)
 
