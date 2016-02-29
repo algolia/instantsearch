@@ -2,17 +2,12 @@
 
 import expect from 'expect';
 import jsdom from 'jsdom-global';
+import instantsearch from '../main.js';
+import {forEach} from 'lodash';
 
 describe('instantsearch()', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();}); // to ensure the global.window is set
-
-  let instantsearch;
-
-  beforeEach(() => {
-    // depends on global.window/navigator
-    instantsearch = require('../main.js');
-  });
 
   it('includes a version', () => {
     expect(instantsearch.version).toBeA('string');
@@ -28,7 +23,6 @@ describe('instantsearch()', () => {
   });
 
   it('includes the widget functions', () => {
-    let forEach = require('lodash/collection/forEach');
     forEach(instantsearch.widgets, function(widget) {
       expect(typeof widget).toEqual('function', 'A widget must be a function');
     });

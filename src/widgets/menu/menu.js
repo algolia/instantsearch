@@ -1,14 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-menu');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+  prefixKeys
+} from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+
+let bem = bemHelper('ais-menu');
 
 /**
  * Create a menu out of a facet
@@ -77,8 +82,8 @@ function menu({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let containerNode = getContainerNode(container);
+  let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -87,7 +92,7 @@ function menu({
   // of hierarchicalFacet: a flat menu
   let hierarchicalFacetName = attributeName;
 
-  const showMoreTemplates = showMoreConfig && utils.prefixKeys('show-more-', showMoreConfig.templates);
+  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates =
     showMoreTemplates ?
       {...templates, ...showMoreTemplates} :
@@ -120,7 +125,7 @@ function menu({
       return widgetConfiguration;
     },
     init({templatesConfig, helper, createURL}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

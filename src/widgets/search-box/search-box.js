@@ -1,10 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import utils from '../../lib/utils.js';
+import {
+  bemHelper,
+  getContainerNode
+} from '../../lib/utils.js';
 import forEach from 'lodash/collection/forEach';
-let bem = require('../../lib/utils.js').bemHelper('ais-search-box');
 import cx from 'classnames';
+import PoweredBy from '../../components/PoweredBy/PoweredBy.js';
 
+let bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
 
@@ -56,7 +60,7 @@ function searchBox({
     throw new Error(usage);
   }
 
-  container = utils.getContainerNode(container);
+  container = getContainerNode(container);
 
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
@@ -104,7 +108,6 @@ function searchBox({
       input.classList.add.apply(input.classList, CSSClassesToAdd);
     },
     addPoweredBy: function(input) {
-      let PoweredBy = require('../../components/PoweredBy/PoweredBy.js');
       let poweredByContainer = document.createElement('div');
       input.parentNode.insertBefore(poweredByContainer, input.nextSibling);
       let poweredByCssClasses = {

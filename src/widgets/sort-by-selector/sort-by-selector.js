@@ -1,13 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import findIndex from 'lodash/array/findIndex';
 import map from 'lodash/collection/map';
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-sort-by-selector');
+import {
+  bemHelper,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import SelectorComponent from '../../components/Selector.js';
 
+let bem = bemHelper('ais-sort-by-selector');
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @function sortBySelector
@@ -38,8 +41,8 @@ function sortBySelector({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let Selector = require('../../components/Selector.js');
+  let containerNode = getContainerNode(container);
+  let Selector = SelectorComponent;
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }

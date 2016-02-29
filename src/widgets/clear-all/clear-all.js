@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import {
   bemHelper,
   getContainerNode,
@@ -10,11 +9,10 @@ import {
   clearRefinementsAndSearch
 } from '../../lib/utils.js';
 import cx from 'classnames';
-
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import ClearAllComponent from '../../components/ClearAll/ClearAll.js';
 
 let bem = bemHelper('ais-clear-all');
 
@@ -57,7 +55,7 @@ function clearAll({
   }
 
   let containerNode = getContainerNode(container);
-  let ClearAll = headerFooterHOC(require('../../components/ClearAll/ClearAll.js'));
+  let ClearAll = headerFooterHOC(ClearAllComponent);
   if (autoHideContainer === true) {
     ClearAll = autoHideContainerHOC(ClearAll);
   }

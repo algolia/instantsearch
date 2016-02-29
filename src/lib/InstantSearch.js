@@ -1,16 +1,13 @@
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
-
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
 import union from 'lodash/array/union';
 import clone from 'lodash/lang/clone';
-
 import {EventEmitter} from 'events';
-
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
-import helpers from './helpers.js';
+import createHelpers from './createHelpers.js';
 
 function defaultCreateURL() { return '#'; }
 
@@ -70,7 +67,7 @@ Usage: instantsearch({
     this.searchParameters = {...searchParameters, index: indexName};
     this.widgets = [];
     this.templatesConfig = {
-      helpers: helpers({numberLocale}),
+      helpers: createHelpers({numberLocale}),
       compileOptions: {}
     };
 

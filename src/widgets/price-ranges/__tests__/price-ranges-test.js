@@ -8,9 +8,10 @@ import jsdom from 'jsdom-global';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-import priceRanges from '../price-ranges';
-import generateRanges from '../generate-ranges';
-import PriceRanges from '../../../components/PriceRanges/PriceRanges';
+import priceRanges from '../price-ranges.js';
+import generateRanges from '../generate-ranges.js';
+import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('priceRanges call', () => {
   beforeEach(function() {this.jsdom = jsdom();});
@@ -116,7 +117,7 @@ describe('priceRanges()', () => {
         },
         refine() {},
         templateProps: {
-          templates: require('../defaultTemplates.js'),
+          templates: defaultTemplates,
           templatesConfig: undefined,
           transformData: undefined,
           useCustomCompileOptions: {header: false, footer: false, item: false}

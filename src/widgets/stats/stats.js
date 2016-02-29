@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-let bem = require('../../lib/utils.js').bemHelper('ais-stats');
+import StatsComponent from '../../components/Stats/Stats.js';
 import cx from 'classnames';
-
 import defaultTemplates from './defaultTemplates.js';
+
+let bem = bemHelper('ais-stats');
 
 /**
  * Display various stats about the current search state
@@ -43,9 +47,9 @@ function stats({
     transformData
   } = {}) {
   if (!container) throw new Error(usage);
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
 
-  let Stats = headerFooterHOC(require('../../components/Stats/Stats.js'));
+  let Stats = headerFooterHOC(StatsComponent);
   if (autoHideContainer === true) {
     Stats = autoHideContainerHOC(Stats);
   }
@@ -64,7 +68,7 @@ function stats({
 
   return {
     init({templatesConfig}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

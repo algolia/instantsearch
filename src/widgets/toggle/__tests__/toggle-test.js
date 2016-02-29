@@ -7,18 +7,19 @@ import jsdom from 'jsdom-global';
 import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
+import defaultTemplates from '../defaultTemplates.js';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 import Template from '../../../components/Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
-const helpers = require('../../../lib/helpers.js')('en-US');
+import createHelpers from '../../../lib/createHelpers.js';
 
 describe('toggle()', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
 
+  const helpers = createHelpers('en-US');
   let renderer = createRenderer();
 
   context('bad usage', () => {
@@ -62,15 +63,14 @@ describe('toggle()', () => {
       container = document.createElement('div');
       label = 'Hello, ';
       attributeName = 'world!';
+      widget = toggle({container, attributeName, label});
     });
 
     it('configures hitsPerPage', () => {
-      widget = toggle({container, attributeName, label});
       expect(widget.getConfiguration()).toEqual({facets: ['world!']});
     });
 
     it('uses autoHideContainer() and headerFooter()', () => {
-      widget = toggle({container, attributeName, label});
       expect(autoHideContainer.calledOnce).toBe(true);
       expect(headerFooter.calledOnce).toBe(true);
       expect(headerFooter.calledBefore(autoHideContainer)).toBe(true);
@@ -87,7 +87,7 @@ describe('toggle()', () => {
       beforeEach(() => {
         templateProps = {
           templatesConfig: undefined,
-          templates: require('../defaultTemplates.js'),
+          templates: defaultTemplates,
           useCustomCompileOptions: {header: false, item: false, footer: false},
           transformData: undefined
         };

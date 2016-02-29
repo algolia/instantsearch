@@ -1,15 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-star-rating');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
-
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
 import defaultTemplates from './defaultTemplates.js';
 import defaultLabels from './defaultLabels.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+
+let bem = bemHelper('ais-star-rating');
 
 const usage = `Usage:
 starRating({
@@ -66,8 +69,8 @@ function starRating({
     transformData,
     autoHideContainer = true
   }) {
-  let containerNode = utils.getContainerNode(container);
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let containerNode = getContainerNode(container);
+  let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -99,7 +102,7 @@ function starRating({
     },
 
     init({templatesConfig, helper}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

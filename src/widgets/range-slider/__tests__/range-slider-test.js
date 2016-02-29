@@ -4,16 +4,16 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
+import rangeSlider from '../range-slider.js';
+import Slider from '../../../components/Slider/Slider.js';
 import AlgoliasearchHelper from 'algoliasearch-helper';
+
+expect.extend(expectJSX);
 
 describe('rangeSlider call', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
-  const rangeSlider = require('../range-slider.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -38,12 +38,8 @@ describe('rangeSlider()', () => {
 
   let autoHideContainer;
   let headerFooter;
-  let Slider;
-  let rangeSlider;
 
   beforeEach(() => {
-    rangeSlider = require('../range-slider.js');
-    Slider = require('../../../components/Slider/Slider.js');
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(Slider);
