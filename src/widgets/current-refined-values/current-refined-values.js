@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import {
   bemHelper,
   isDomElement,
@@ -10,9 +9,7 @@ import {
   clearRefinementsFromState,
   clearRefinementsAndSearch
 } from '../../lib/utils.js';
-
 import cx from 'classnames';
-
 import isUndefined from 'lodash/lang/isUndefined';
 import isBoolean from 'lodash/lang/isBoolean';
 import isString from 'lodash/lang/isString';
@@ -20,15 +17,13 @@ import isArray from 'lodash/lang/isArray';
 import isPlainObject from 'lodash/lang/isPlainObject';
 import isFunction from 'lodash/lang/isFunction';
 import isEmpty from 'lodash/lang/isEmpty';
-
 import map from 'lodash/collection/map';
 import reduce from 'lodash/collection/reduce';
 import filter from 'lodash/collection/filter';
-
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer';
-
 import defaultTemplates from './defaultTemplates';
+import CurrentRefinedValuesComponent from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
 
 let bem = bemHelper('ais-current-refined-values');
 
@@ -130,7 +125,7 @@ function currentRefinedValues({
   }
 
   let containerNode = getContainerNode(container);
-  let CurrentRefinedValues = headerFooterHOC(require('../../components/CurrentRefinedValues/CurrentRefinedValues.js'));
+  let CurrentRefinedValues = headerFooterHOC(CurrentRefinedValuesComponent);
   if (autoHideContainer === true) {
     CurrentRefinedValues = autoHideContainerHOC(CurrentRefinedValues);
   }

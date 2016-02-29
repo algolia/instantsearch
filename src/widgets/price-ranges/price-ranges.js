@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
-
 import defaultTemplates from './defaultTemplates.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
-let bem = utils.bemHelper('ais-price-ranges');
 import cx from 'classnames';
+import PriceRangesComponent from '../../components/PriceRanges/PriceRanges.js';
+
+let bem = bemHelper('ais-price-ranges');
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -68,8 +70,8 @@ function priceRanges({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let PriceRanges = headerFooterHOC(require('../../components/PriceRanges/PriceRanges.js'));
+  let containerNode = getContainerNode(container);
+  let PriceRanges = headerFooterHOC(PriceRangesComponent);
   if (autoHideContainer === true) {
     PriceRanges = autoHideContainerHOC(PriceRanges);
   }
@@ -147,7 +149,7 @@ function priceRanges({
 
     init({helper, templatesConfig}) {
       this._refine = this._refine.bind(this, helper);
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates

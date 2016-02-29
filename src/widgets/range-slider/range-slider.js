@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import find from 'lodash/collection/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';
-let bem = require('../../lib/utils.js').bemHelper('ais-range-slider');
+import SliderComponent from '../../components/Slider/Slider.js';
 
+let bem = bemHelper('ais-range-slider');
 let defaultTemplates = {
   header: '',
   footer: ''
@@ -64,8 +68,8 @@ function rangeSlider({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let Slider = headerFooterHOC(require('../../components/Slider/Slider.js'));
+  let containerNode = getContainerNode(container);
+  let Slider = headerFooterHOC(SliderComponent);
   if (autoHideContainer === true) {
     Slider = autoHideContainerHOC(Slider);
   }
@@ -113,7 +117,7 @@ function rangeSlider({
       helper.search();
     },
     init({templatesConfig}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
         templates

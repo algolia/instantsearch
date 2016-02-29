@@ -1,15 +1,18 @@
 import find from 'lodash/collection/find';
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-toggle');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
-
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+
+let bem = bemHelper('ais-toggle');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -69,9 +72,9 @@ function toggle({
     transformData,
     autoHideContainer = true
   } = {}) {
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -100,7 +103,7 @@ function toggle({
       facets: [attributeName]
     }),
     init({state, helper, templatesConfig}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

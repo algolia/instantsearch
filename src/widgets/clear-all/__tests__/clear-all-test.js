@@ -11,6 +11,7 @@ expect.extend(expectJSX);
 
 import clearAll from '../clear-all';
 import ClearAll from '../../../components/ClearAll/ClearAll';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('clearAll()', () => {
   beforeEach(function() {this.jsdom = jsdom();});
@@ -61,7 +62,7 @@ describe('clearAll()', () => {
       hasRefinements: false,
       shouldAutoHideContainer: true,
       templateProps: {
-        templates: require('../defaultTemplates.js'),
+        templates: defaultTemplates,
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {header: false, footer: false, link: false}

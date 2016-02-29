@@ -9,10 +9,10 @@ import {createRenderer} from 'react-addons-test-utils';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-import refinementList from '../refinement-list';
-import Template from '../../../components/Template';
-
-const helpers = require('../../../lib/helpers.js')('en-US');
+import refinementList from '../refinement-list.js';
+import Template from '../../../components/Template.js';
+import createHelpers from '../../../lib/createHelpers.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -22,6 +22,7 @@ describe('refinementList()', () => {
   let widget;
   let ReactDOM;
   let renderer = createRenderer();
+  const helpers = createHelpers('en-US');
 
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
@@ -192,7 +193,7 @@ describe('refinementList()', () => {
     it('formats counts', () => {
       const props = {
         templatesConfig: {helpers},
-        templates: require('../defaultTemplates.js')
+        templates: defaultTemplates
       };
       renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
       let out = renderer.getRenderOutput();

@@ -6,12 +6,13 @@ import sinon from 'sinon';
 import jsdom from 'jsdom-global';
 
 import expectJSX from 'expect-jsx';
+import numericRefinementList from '../numeric-refinement-list.js';
+import RefinementList from '../../../components/RefinementList/RefinementList.js';
 expect.extend(expectJSX);
 
 describe('numericRefinementList call', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
-  const numericRefinementList = require('../numeric-refinement-list.js');
 
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -43,16 +44,12 @@ describe('numericRefinementList()', () => {
 
   let autoHideContainer;
   let headerFooter;
-  let RefinementList;
-  let numericRefinementList;
   let options;
   let results;
   let createURL;
   let state;
 
   beforeEach(() => {
-    numericRefinementList = require('../numeric-refinement-list.js');
-    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);

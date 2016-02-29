@@ -1,10 +1,11 @@
 import algoliasearchHelper from 'algoliasearch-helper';
-let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
-let majorVersionNumber = require('../lib/version.js').split('.')[0];
+import version from '../lib/version.js';
 import urlHelper from 'algoliasearch-helper/src/url';
-
 import isEqual from 'lodash/lang/isEqual';
-import merge from 'lodash/object/merge';
+import merge from 'lodash/object/merge';/**/
+
+let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
+let majorVersionNumber = version.split('.')[0];
 
 function timerMaker(t0) {
   let t = t0;

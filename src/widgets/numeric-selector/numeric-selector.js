@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
+import {
+  bemHelper,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
 import find from 'lodash/collection/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import SelectorComponent from '../../components/Selector.js';
 
-let bem = utils.bemHelper('ais-numeric-selector');
+let bem = bemHelper('ais-numeric-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -32,10 +35,10 @@ function numericSelector({
     cssClasses: userCssClasses = {},
     autoHideContainer = false
   }) {
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
   let usage = 'Usage: numericSelector({container, attributeName, options[, cssClasses.{root,item}, autoHideContainer]})';
 
-  let Selector = require('../../components/Selector.js');
+  let Selector = SelectorComponent;
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }

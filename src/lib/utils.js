@@ -7,7 +7,7 @@ import keys from 'lodash/object/keys';
 import uniq from 'lodash/array/uniq';
 import mapKeys from 'lodash/object/mapKeys';
 
-let utils = {
+export {
   getContainerNode,
   bemHelper,
   prepareTemplateProps,
@@ -232,5 +232,3 @@ function prefixKeys(prefix, obj) {
     });
   }
 }
-
-export default utils;

@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-hierarchical-menu');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
+let bem = bemHelper('ais-hierarchical-menu');
 /**
  * Create a hierarchical menu using multiple attributes
  * @function hierarchicalMenu
@@ -74,9 +77,9 @@ function hierarchicalMenu({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
 
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -116,7 +119,7 @@ function hierarchicalMenu({
 
       this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
 
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

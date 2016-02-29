@@ -2,17 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import defaults from 'lodash/object/defaults';
 import cx from 'classnames';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-pagination');
-
+import {
+  bemHelper,
+  getContainerNode
+} from '../../lib/utils.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import PaginationComponent from '../../components/Pagination/Pagination.js';
+
 let defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
   last: '»'
 };
+let bem = bemHelper('ais-pagination');
 
 /**
  * Add a pagination menu to navigate through the results
@@ -70,9 +73,9 @@ function pagination({
     scrollTo = 'body';
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let scrollToNode = scrollTo !== false ? utils.getContainerNode(scrollTo) : false;
-  let Pagination = require('../../components/Pagination/Pagination.js');
+  let containerNode = getContainerNode(container);
+  let scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
+  let Pagination = PaginationComponent;
   if (autoHideContainer === true) {
     Pagination = autoHideContainerHOC(Pagination);
   }

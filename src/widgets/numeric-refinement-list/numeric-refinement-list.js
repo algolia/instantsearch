@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-refinement-list');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
 import find from 'lodash/collection/find';
 import includes from 'lodash/collection/includes';
-
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+
+let bem = bemHelper('ais-refinement-list');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -65,8 +68,8 @@ function numericRefinementList({
     throw new Error(usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
-  let RefinementList = headerFooterHOC(require('../../components/RefinementList/RefinementList.js'));
+  let containerNode = getContainerNode(container);
+  let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
   }
@@ -85,7 +88,7 @@ function numericRefinementList({
 
   return {
     init({templatesConfig, helper}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

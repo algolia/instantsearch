@@ -10,6 +10,8 @@ expect.extend(expectJSX);
 
 import defaultTemplates from '../defaultTemplates.js';
 import defaultLabels from '../defaultLabels.js';
+import starRating from '../star-rating.js';
+import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 describe('starRating()', () => {
   beforeEach(function() {this.jsdom = jsdom();});
@@ -24,13 +26,9 @@ describe('starRating()', () => {
 
   let autoHideContainer;
   let headerFooter;
-  let RefinementList;
-  let starRating;
   let results;
 
   beforeEach(() => {
-    starRating = require('../star-rating.js');
-    RefinementList = require('../../../components/RefinementList/RefinementList.js');
     ReactDOM = {render: sinon.spy()};
     starRating.__Rewire__('ReactDOM', ReactDOM);
     autoHideContainer = sinon.stub().returns(RefinementList);

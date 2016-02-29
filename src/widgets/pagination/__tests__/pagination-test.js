@@ -83,12 +83,10 @@ describe('pagination()', () => {
 
     beforeEach(() => {
       scrollIntoView = sinon.spy();
-      let utils = {
-        getContainerNode: sinon.stub().returns({
-          scrollIntoView: scrollIntoView
-        })
-      };
-      pagination.__Rewire__('utils', utils);
+      const getContainerNode = sinon.stub().returns({
+        scrollIntoView: scrollIntoView
+      });
+      pagination.__Rewire__('getContainerNode', getContainerNode);
     });
 
     it('should not scroll', () => {

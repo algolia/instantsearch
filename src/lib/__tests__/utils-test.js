@@ -3,10 +3,10 @@
 import expect from 'expect';
 import jsdom from 'jsdom-global';
 import algoliasearchHelper from 'algoliasearch-helper';
-import utils from '../utils';
+import * as utils from '../utils';
 import isEmpty from 'lodash/lang/isEmpty';
 
-describe('getContainerNode', () => {
+describe('utils.getContainerNode', () => {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
 
@@ -36,7 +36,7 @@ describe('getContainerNode', () => {
   });
 });
 
-describe('isDomElement', function() {
+describe('utils.isDomElement', function() {
   beforeEach(function() {this.jsdom = jsdom();});
   afterEach(function() {this.jsdom();});
 
@@ -55,7 +55,7 @@ describe('isDomElement', function() {
   });
 });
 
-describe('bemHelper', function() {
+describe('utils.bemHelper', function() {
   it('should return a function', function() {
     expect(utils.bemHelper('block')).toBeA('function');
   });
@@ -85,7 +85,7 @@ describe('bemHelper', function() {
   });
 });
 
-describe('prepareTemplateProps', function() {
+describe('utils.prepareTemplateProps', function() {
   let defaultTemplates = {
     foo: 'toto',
     bar: 'tata'
@@ -147,7 +147,7 @@ describe('prepareTemplateProps', function() {
   });
 });
 
-describe('getRefinements', function() {
+describe('utils.getRefinements', function() {
   let helper;
   let results;
 
@@ -464,7 +464,7 @@ describe('getRefinements', function() {
   });
 });
 
-describe('clearRefinementsFromState', () => {
+describe('utils.clearRefinementsFromState', () => {
   let helper;
   let state;
 

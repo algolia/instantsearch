@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-hits');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode
+} from '../../lib/utils.js';
 import cx from 'classnames';
-
 import Hits from '../../components/Hits.js';
 import defaultTemplates from './defaultTemplates.js';
+
+let bem = bemHelper('ais-hits');
 
 /**
  * Display the list of results (hits) from the current search
@@ -51,7 +54,7 @@ function hits({
     throw new Error('Must contain only allItems OR item template.' + usage);
   }
 
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
@@ -61,7 +64,7 @@ function hits({
   return {
     getConfiguration: () => ({hitsPerPage}),
     init({templatesConfig}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,

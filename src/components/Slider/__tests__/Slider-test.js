@@ -6,6 +6,8 @@ import jsdom from 'jsdom-global';
 import TestUtils from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
+import Slider from '../Slider';
+import Nouislider from 'react-nouislider';
 expect.extend(expectJSX);
 
 describe('Slider', () => {
@@ -13,17 +15,12 @@ describe('Slider', () => {
   afterEach(function() {this.jsdom();}); // to ensure the global.window is set
 
   let renderer;
-  let Slider;
-  let Nouislider;
   let props;
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
     renderer = createRenderer();
 
-    // need to be required AFTER jsdom has initialized global.window/navigator
-    Slider = require('../Slider.js');
-    Nouislider = require('react-nouislider');
     props = {
       range: {min: 0, max: 5000}
     };

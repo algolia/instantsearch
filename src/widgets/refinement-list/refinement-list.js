@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import utils from '../../lib/utils.js';
-let bem = utils.bemHelper('ais-refinement-list');
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+  prefixKeys
+} from '../../lib/utils.js';
 import cx from 'classnames';
-
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-
 import defaultTemplates from './defaultTemplates.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
+let bem = bemHelper('ais-refinement-list');
 /**
  * Instantiate a list of refinements based on a facet
  * @function refinementList
@@ -79,7 +82,7 @@ function refinementList({
   }
   let widgetMaxValuesPerFacet = (showMoreConfig && showMoreConfig.limit) || limit;
 
-  let RefinementList = require('../../components/RefinementList/RefinementList.js'); // eslint-disable-line
+  let RefinementList = RefinementListComponent;
   if (!container || !attributeName) {
     throw new Error(usage);
   }
@@ -89,7 +92,7 @@ function refinementList({
     RefinementList = autoHideContainerHOC(RefinementList);
   }
 
-  let containerNode = utils.getContainerNode(container);
+  let containerNode = getContainerNode(container);
 
   if (operator) {
     operator = operator.toLowerCase();
@@ -98,7 +101,7 @@ function refinementList({
     }
   }
 
-  const showMoreTemplates = showMoreConfig && utils.prefixKeys('show-more-', showMoreConfig.templates);
+  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates =
     showMoreTemplates ?
       {...templates, ...showMoreTemplates} :
@@ -129,7 +132,7 @@ function refinementList({
       return widgetConfiguration;
     },
     init({templatesConfig, helper, createURL}) {
-      this._templateProps = utils.prepareTemplateProps({
+      this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
