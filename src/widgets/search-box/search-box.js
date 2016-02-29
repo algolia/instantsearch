@@ -135,21 +135,21 @@ function searchBox({
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // always set the query on every change
-      addListener(input, INPUT_EVENT, setQuery);
-
-      // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
-      // can be removed as soon as we remove support for it
-      if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, setQuery));
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, search));
-      }
-
-      // only search on enter
+      // only update query and search on enter
       if (searchOnEnterKeyPressOnly) {
+        addListener(input, 'keyup', ifKey(KEY_ENTER, setQuery));
         addListener(input, 'keyup', ifKey(KEY_ENTER, search));
       } else {
+        // always set the query and search on every keystrokes
+        addListener(input, INPUT_EVENT, setQuery);
         addListener(input, INPUT_EVENT, search);
+
+        // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
+        // can be removed as soon as we remove support for it
+        if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
+          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, setQuery));
+          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, search));
+        }
       }
 
       function setQuery(e) {
