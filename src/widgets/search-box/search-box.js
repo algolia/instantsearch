@@ -135,7 +135,7 @@ function searchBox({
     },
     init: function({state, helper, onHistoryChange}) {
       let isInputTargeted = container.tagName === 'INPUT';
-      let input = this.getInput();
+      let input = this._input = this.getInput();
 
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
@@ -192,6 +192,13 @@ function searchBox({
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
         input.focus();
+      }
+    },
+    render({helper}) {
+      // updating the query from the outside using the helper
+      // will fall in this case
+      if (helper.state.query !== this._input.value) {
+        this._input.value = helper.state.query;
       }
     }
   };
