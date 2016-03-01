@@ -27,6 +27,9 @@ const KEY_SUPPRESS = 8;
  * wrapping div (if `wrapInput` set to `true`)
  * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
  * @param  {string|string[]} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
+ * @param  {function} [queryHook] A function that will be called everytime a new search would be done. You
+ * will get the query as first parameter and a search(query) function to call as the second parameter.
+ * This queryHook can be used to debounce the number of searches done from the searchBox.
  * @return {Object}
  */
 const usage = `Usage:
@@ -37,7 +40,8 @@ searchBox({
   [ poweredBy ],
   [ wrapInput ],
   [ autofocus ],
-  [ searchOnEnterKeyPressOnly ]
+  [ searchOnEnterKeyPressOnly ],
+  [ queryHook ]
 })`;
 function searchBox({
   container,
@@ -46,7 +50,8 @@ function searchBox({
   poweredBy = false,
   wrapInput = true,
   autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false
+  searchOnEnterKeyPressOnly = false,
+  queryHook
 }) {
   // the 'input' event is triggered when the input value changes
   // in any case: typing, copy pasting with mouse..
@@ -137,35 +142,30 @@ function searchBox({
 
       // only update query and search on enter
       if (searchOnEnterKeyPressOnly) {
-        addListener(input, 'keyup', ifKey(KEY_ENTER, setQuery));
-        addListener(input, 'keyup', ifKey(KEY_ENTER, search));
+        addListener(input, 'keyup', ifKey(KEY_ENTER, getInputValueAndCall(maybeSearch)));
       } else {
         // always set the query and search on every keystrokes
-        addListener(input, INPUT_EVENT, setQuery);
-        addListener(input, INPUT_EVENT, search);
+        addListener(input, INPUT_EVENT, getInputValueAndCall(maybeSearch));
 
         // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
         // can be removed as soon as we remove support for it
         if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, setQuery));
-          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, search));
+          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(maybeSearch)));
         }
       }
 
-      function setQuery(e) {
-        helper.setQuery(getValue(e));
+      function maybeSearch(query) {
+        if (queryHook) {
+          queryHook(query, search);
+          return;
+        }
+
+        search(query);
       }
 
-      function search() {
+      function search(query) {
+        helper.setQuery(query);
         helper.search();
-      }
-
-      function getValue(e) {
-        return ((e.currentTarget) ? e.currentTarget : e.srcElement).value;
-      }
-
-      function ifKey(expectedKeyCode, fnToExecute) {
-        return actualEvent => actualEvent.keyCode === expectedKeyCode && fnToExecute(actualEvent);
       }
 
       if (isInputTargeted) {
@@ -203,6 +203,18 @@ function addListener(el, type, fn) {
   } else {
     el.attachEvent('on' + type, fn);
   }
+}
+
+function getValue(e) {
+  return (e.currentTarget ? e.currentTarget : e.srcElement).value;
+}
+
+function ifKey(expectedKeyCode, func) {
+  return actualEvent => actualEvent.keyCode === expectedKeyCode && func(actualEvent);
+}
+
+function getInputValueAndCall(func) {
+  return actualEvent => func(getValue(actualEvent));
 }
 
 export default searchBox;
