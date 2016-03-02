@@ -1,12 +1,8 @@
-import webpack from 'webpack';
-import config from './webpack.config.jsdelivr.babel.js';
 import debounce from 'lodash/function/debounce';
-import watch from 'watch';
-import {join} from 'path';
+import watch from './dev-functional-tests-compile-watch.js';
 
 import {spawn} from 'child_process';
 
-const compiler = webpack(config);
 let wdio;
 const launch = debounce(() => {
   if (wdio) {
@@ -20,29 +16,4 @@ const launch = debounce(() => {
   trailing: true
 });
 
-// watch webpack
-compiler.watch({
-  aggregateTimeout: 300,
-  usePolling: true
-}, compilationDone);
-
-// watch test files
-// first call triggers a watch, but we already have webpack watch triggering
-// so we ignore first call
-watch.watchTree(join(__dirname, '..', 'functional-tests'), (f, curr, prev) => {
-  if (typeof f === 'object' && prev === null && curr === null) {
-    return;
-  }
-
-  console.log('Got test file change');
-  launch();
-});
-
-function compilationDone(err) {
-  if (err) {
-    throw err;
-  }
-
-  console.log('Got webpack compilation event');
-  launch();
-}
+watch(launch);
