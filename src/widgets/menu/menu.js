@@ -20,7 +20,7 @@ let bem = bemHelper('ais-menu');
  * @function menu
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
- * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=10] How many facets values to retrieve
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
@@ -51,7 +51,7 @@ const usage = `Usage:
 menu({
   container,
   attributeName,
-  [ sortBy ],
+  [ sortBy=['count:desc', 'name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root,list,item} ],
   [ templates.{header,item,footer} ],
@@ -63,7 +63,7 @@ menu({
 function menu({
     container,
     attributeName,
-    sortBy = ['count:desc'],
+    sortBy = ['count:desc', 'name:asc'],
     limit = 10,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
