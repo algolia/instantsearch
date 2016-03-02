@@ -16,8 +16,6 @@ let bem = bemHelper('ais-toggle');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
- * Note that it will not toggle between `true` and `false, but between `true`
- * and `undefined`.
  * @function toggle
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting (eg. "free_shipping")
