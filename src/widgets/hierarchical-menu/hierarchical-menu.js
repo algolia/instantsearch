@@ -83,14 +83,17 @@ function hierarchicalMenu({
   let hierarchicalFacetName = attributes[0];
 
   return {
-    getConfiguration: () => ({
+    getConfiguration: (currentConfiguration) => ({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
         attributes,
         separator,
         rootPath,
         showParentLevel
-      }]
+      }],
+      maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
+        Math.max(currentConfiguration.maxValuesPerFacet, limit) :
+        limit
     }),
     render: function({results, helper, templatesConfig, createURL, state}) {
       let facetValues = getFacetValues(results, hierarchicalFacetName, sortBy, limit);
