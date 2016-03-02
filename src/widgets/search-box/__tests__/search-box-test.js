@@ -351,6 +351,16 @@ describe('searchBox()', () => {
     expect(container.value).toBe('iphone');
   });
 
+
+  it('handles external updates', () => {
+    container = document.body.appendChild(document.createElement('input'));
+    container.value = 'initial';
+    widget = searchBox({container});
+    widget.init({state, helper, onHistoryChange});
+    widget.render({helper: {state: {query: 'new value'}}});
+    expect(container.value).toBe('new value');
+  });
+
   context('autofocus', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
