@@ -1,3 +1,13 @@
+<a name="1.2.5"></a>
+## [1.2.5](https://github.com/algolia/instantsearch.js/compare/v1.2.4...v1.2.5) (2016-03-02)
+
+
+### Bug Fixes
+
+* **hierarchicalMenu:** configure maxValuesPerFacet using the limit option ([4868717](https://github.com/algolia/instantsearch.js/commit/4868717)), closes [#66](https://github.com/algolia/instantsearch.js/issues/66)
+
+
+
 <a name="1.2.4"></a>
 ## [1.2.4](https://github.com/algolia/instantsearch.js/compare/v1.2.3...v1.2.4) (2016-02-29)
 

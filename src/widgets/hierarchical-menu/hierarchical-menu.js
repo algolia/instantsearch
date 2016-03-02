@@ -103,14 +103,17 @@ function hierarchicalMenu({
   };
 
   return {
-    getConfiguration: () => ({
+    getConfiguration: (currentConfiguration) => ({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
         attributes,
         separator,
         rootPath,
         showParentLevel
-      }]
+      }],
+      maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
+        Math.max(currentConfiguration.maxValuesPerFacet, limit) :
+        limit
     }),
     init({helper, templatesConfig, createURL}) {
       this._toggleRefinement = facetValue => helper
