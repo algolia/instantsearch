@@ -1227,11 +1227,15 @@ Or you can wrap an existing React component, see our [<i class='fa fa-github'></
 
 ### Custom themes
 
-All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme, but its source code utilizes [Sass](http://sass-lang.com/), a popular CSS preprocessor.
+All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme that only includes the necessary CSS classes.
 
-We're using [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
+You can see all the existing customizable CSS classes in the [non minified CSS](https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css).
 
-If you want to build you own theme, we recommend you start from our default stylesheet: [instantsearch.css](https://github.com/algolia/instantsearch.js/blob/master/src/css/instantsearch.scss).
+We use [Sass](http://sass-lang.com/) to build the CSS.
+
+We're also following [BEM](http://getbem.com/introduction/), a methodology that helps you achieve reusable components and code sharing in the front-end.
+
+If you want to build you own theme, we recommend you to start from our default stylesheet: [instantsearch.scss](https://github.com/algolia/instantsearch.js/blob/master/src/css/instantsearch.scss).
 
 #### BEM modifiers
 {:.no-toc}
