@@ -673,6 +673,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <img class="widget-icon pull-left" src="../img/icon-widget-toggle.svg">
 This widget provides an on/off filtering feature based on an attribute value.
+Note that if you provide an "off" option, it will be refined at initialization.
 {:.description}
 
 <div class="code-box">
