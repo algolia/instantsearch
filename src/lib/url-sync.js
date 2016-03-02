@@ -36,13 +36,13 @@ let hashUrlUtils = {
     window.addEventListener('hashchange', cb);
   },
   pushState: function(qs) {
-    window.location.assign(this.createURL(qs));
+    window.location.assign(getFullURL(this.createURL(qs)));
   },
   replaceState: function(qs) {
-    window.location.replace(this.createURL(qs));
+    window.location.replace(getFullURL(this.createURL(qs)));
   },
   createURL: function(qs) {
-    return document.location.search + this.character + qs;
+    return window.location.search + this.character + qs;
   },
   readUrl: function() {
     return window.location.hash.slice(1);
@@ -59,10 +59,10 @@ let modernUrlUtils = {
     window.addEventListener('popstate', cb);
   },
   pushState: function(qs) {
-    window.history.pushState(null, '', this.createURL(qs));
+    window.history.pushState(null, '', getFullURL(this.createURL(qs)));
   },
   replaceState: function(qs) {
-    window.history.replaceState(null, '', this.createURL(qs));
+    window.history.replaceState(null, '', getFullURL(this.createURL(qs)));
   },
   createURL: function(qs) {
     return this.character + qs + document.location.hash;
@@ -71,6 +71,18 @@ let modernUrlUtils = {
     return window.location.search.slice(1);
   }
 };
+
+// we always push the full url to the url bar. Not a relative one.
+// So that we handle cases like using a <base href>, see
+// https://github.com/algolia/instantsearch.js/issues/790 for the original issue
+function getFullURL(relative) {
+  return getLocationOrigin() + window.location.pathname + relative;
+}
+
+// IE <= 11 has no location.origin
+function getLocationOrigin() {
+  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
+}
 
 /**
  * Instanciate a url sync widget. This widget let you synchronize the search
