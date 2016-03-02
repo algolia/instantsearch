@@ -45,7 +45,7 @@ let hashUrlUtils = {
     return window.location.search + this.character + qs;
   },
   readUrl: function() {
-    return window.location.hash.slice(1);
+    return decodeURIComponent(window.location.hash.slice(1));
   }
 };
 
@@ -68,7 +68,7 @@ let modernUrlUtils = {
     return this.character + qs + document.location.hash;
   },
   readUrl: function() {
-    return window.location.search.slice(1);
+    return decodeURIComponent(window.location.search.slice(1));
   }
 };
 
