@@ -20,7 +20,7 @@ let bem = bemHelper('ais-refinement-list');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
- * @param  {string[]|Function} [options.sortBy=['count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
+ * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|desc`
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
@@ -53,7 +53,7 @@ refinementList({
   container,
   attributeName,
   [ operator='or' ],
-  [ sortBy=['count:desc'] ],
+  [ sortBy=['count:desc', 'name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],
   [ templates.{header,item,footer} ],
@@ -67,7 +67,7 @@ function refinementList({
     container,
     attributeName,
     operator = 'or',
-    sortBy = ['count:desc'],
+    sortBy = ['count:desc', 'name:asc'],
     limit = 10,
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
