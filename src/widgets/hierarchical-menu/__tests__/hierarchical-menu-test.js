@@ -77,7 +77,7 @@ describe('hierarchicalMenu()', () => {
 
     it('has defaults', () => {
       expect(
-        hierarchicalMenu(options).getConfiguration()
+        hierarchicalMenu(options).getConfiguration({})
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
@@ -85,13 +85,14 @@ describe('hierarchicalMenu()', () => {
           attributes: ['hello', 'world'],
           separator: ' > ',
           showParentLevel: true
-        }]
+        }],
+        maxValuesPerFacet: 10
       });
     });
 
     it('understand the separator option', () => {
       expect(
-        hierarchicalMenu({separator: ' ? ', ...options}).getConfiguration()
+        hierarchicalMenu({separator: ' ? ', ...options}).getConfiguration({})
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
@@ -99,13 +100,14 @@ describe('hierarchicalMenu()', () => {
           attributes: ['hello', 'world'],
           separator: ' ? ',
           showParentLevel: true
-        }]
+        }],
+        maxValuesPerFacet: 10
       });
     });
 
     it('understand the showParentLevel option', () => {
       expect(
-        hierarchicalMenu({showParentLevel: false, ...options}).getConfiguration()
+        hierarchicalMenu({showParentLevel: false, ...options}).getConfiguration({})
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
@@ -113,13 +115,14 @@ describe('hierarchicalMenu()', () => {
           attributes: ['hello', 'world'],
           separator: ' > ',
           showParentLevel: false
-        }]
+        }],
+        maxValuesPerFacet: 10
       });
     });
 
     it('understand the rootPath option', () => {
       expect(
-        hierarchicalMenu({rootPath: 'Beer', ...options}).getConfiguration()
+        hierarchicalMenu({rootPath: 'Beer', ...options}).getConfiguration({})
       ).toEqual({
         hierarchicalFacets: [{
           name: 'hello',
@@ -127,8 +130,35 @@ describe('hierarchicalMenu()', () => {
           attributes: ['hello', 'world'],
           separator: ' > ',
           showParentLevel: true
-        }]
+        }],
+        maxValuesPerFacet: 10
       });
+    });
+
+    context('limit option', () => {
+      it('configures maxValuesPerFacet', () =>
+        expect(
+          hierarchicalMenu({limit: 20, ...options})
+          .getConfiguration({})
+          .maxValuesPerFacet
+        ).toBe(20)
+      );
+
+      it('uses provided maxValuesPerFacet when higher', () =>
+        expect(
+          hierarchicalMenu({limit: 20, ...options})
+          .getConfiguration({maxValuesPerFacet: 30})
+          .maxValuesPerFacet
+        ).toBe(30)
+      );
+
+      it('ignores provided maxValuesPerFacet when lower', () =>
+        expect(
+          hierarchicalMenu({limit: 10, ...options})
+          .getConfiguration({maxValuesPerFacet: 3})
+          .maxValuesPerFacet
+        ).toBe(10)
+      );
     });
   });
 
