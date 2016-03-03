@@ -171,7 +171,10 @@
   // re-scroll on the right anchor on load
   function scrollToRightAnchor() {
     $(window).load(function() {
-      $(window.location.hash)[0].scrollIntoView(true);
+      var anchor = $(window.location.hash)[0];
+      if (anchor) {
+        anchor.scrollIntoView(true);
+      }
     });
   }
 

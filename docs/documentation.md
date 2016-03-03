@@ -10,7 +10,7 @@ noFooter: true
 ## Introduction
 
 <div class="shameless-marketing text-center hidden-xs">
-<img src="../img/logo-instantsearch.svg" height="40" alt="logo instantsearch.js"/>
+<img src="{% asset_path logo-instantsearch.svg %}" height="40" alt="logo instantsearch.js"/>
 <div class="lead">
   <p>Build the perfect UI with instantsearch.js,<br> a library of widgets designed to help you create a high-performance instant-search experience.</p>
   <p class="version">Version: <strong>{{ site.version }}</strong></p>
@@ -19,19 +19,19 @@ noFooter: true
 <div class="row">
 <div class="col-md-4 m-b">
 <div class="sticker sticker-algolia">
-<img src="{{site.baseurl}}/img/logo-algolia-notext.svg" width="26"/>
+<img src="{% asset_path logo-algolia-notext.svg %}" width="26"/>
 </div>
 Built on top of the <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage">Algolia Search API</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-open-source">
-<img src="{{site.baseurl}}/img/logo-open-source.svg" width="30"/>
+<img src="{% asset_path logo-open-source.svg %}" width="30"/>
 </div>
 Community driven and available on <a href="https://github.com/algolia/instantsearch.js">Github</a>
 </div>
 <div class="col-md-4 m-b">
 <div class="sticker sticker-ux">
-<img src="{{site.baseurl}}/img/logo-UX.svg" width="30"/>
+<img src="{% asset_path logo-UX.svg %}" width="30"/>
 </div>
 UI/UX best practices
 </div>
@@ -263,7 +263,7 @@ This example shows you how to create a very simple search results page that incl
 
 <div class="spacer100"></div>
 
-<img class="img-responsive" src="../img/add-widgets.jpg" alt="Add widgets">
+<img class="img-responsive" src="{% asset_path add-widgets.jpg %}" alt="Add widgets">
 
 ### Events
 
@@ -306,7 +306,7 @@ class. See the example for a quick overview of the API or go to the
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-searchbox.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-searchbox.svg %}">
 The search box widget is where you users type their search queries.
 {:.description}
 
@@ -347,7 +347,7 @@ index.
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-results.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-results.svg %}">
 The hits widget is the main component that displays results from Algolia. It accepts a [Mustache]() template string or a function returning a string. See the [templates](#templates) section.
 {:.description}
 
@@ -395,7 +395,7 @@ and
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-hitperpage.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-hitperpage.svg %}">
 The hitsPerPageSelector widget lets you select the number of results you want
 displayed at once.
 {:.description}
@@ -443,7 +443,7 @@ displayed. This value must be defined in the `options` parameter.
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-pagination.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-pagination.svg %}">
 The pagination widget provides the ability to navigate through results
 pages.
 {:.description}
@@ -478,7 +478,7 @@ instantsearch.widgets.pagination(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-menu.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-menu.svg %}">
 The menu widget provides a way to navigate through results based on a single attribute.
 Only one value can be selected at a time. This can be used for navigating through the categories
 of an e-commerce website.
@@ -521,7 +521,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-hierarchical.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-hierarchical.svg %}">
 The hierarchical menu is a widget that lets the user explore a tree-like structure.
 This is commonly used for multi-level categorization of products on e-commerce websites.
 From a UX point of view, we suggest not displaying more than two levels deep.
@@ -582,7 +582,7 @@ Each level must repeat the parent breadcrumb.
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-refinement.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-refinement.svg %}">
 This filtering widget lets the user refine the search results. You can specify if you want filters to be ORed or ANDed. For example, if you filter on `a` and `b` with `OR`,
 results with either the value `a` or `b` will match.
 {:.description}
@@ -624,7 +624,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-numerical.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-numerical.svg %}">
 This widget lets the user refine search results based on a numerical attribute. You can specify a specific number or a range.
 {:.description}
 
@@ -671,7 +671,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-toggle.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-toggle.svg %}">
 This widget provides an on/off filtering feature based on an attribute value.
 Note that if you provide an "off" option, it will be refined at initialization.
 {:.description}
@@ -715,7 +715,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-slider.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-slider.svg %}">
 The rangeSlider widget lets users filter results within a numerical range, based on an attribute.
 The min and max values are automatically computed by Algolia using the data in the index.
 
@@ -758,7 +758,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-pricerange.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-pricerange.svg %}">
 This filtering widget lets the user choose a price range. The ranges are dynamically computed based on the returned results.
 
 <div class="code-box">
@@ -801,7 +801,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-index.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-index.svg %}">
 This filtering widget lets the user choose between numerical refinements from a dropdown menu.
 {:.description}
 
@@ -843,7 +843,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-star-rating.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-star-rating.svg %}">
 This widget lets the user refine search results by clicking on stars. The stars are based on the selected `attributeName`. The underlying rating attribute needs to have from 0 to `max` stars.
 {:.description}
 
@@ -883,7 +883,7 @@ The attribute defined in `attributeName` must be defined as an
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-clearall.svg %}">
 This widget clears all the refinements that are currently applied.
 
 <div class="code-box">
@@ -917,7 +917,7 @@ instantsearch.widgets.clearAll(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-clearall.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-clearall.svg %}">
 This widget list all the refinements currently applied. It also lets
 the user clear them one by one. This widget can also contain a
 `clear all` link to remove all filters.
@@ -953,7 +953,7 @@ instantsearch.widgets.currentRefinedValues(options);
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-index.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-index.svg %}">
 This widget lets you reorder your results. You need multiple indices for this to work. See requirements.
 {:.description}
 
@@ -997,7 +997,7 @@ page](https://www.algolia.com/doc/faq/index-configuration/how-to-sort-the-result
 
 <div class="codebox-combo">
 
-<img class="widget-icon pull-left" src="../img/icon-widget-stats.svg">
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-stats.svg %}">
 This widget lets you display how many results matched the query and how fast the search was.
 {:.description}
 
@@ -1037,7 +1037,7 @@ If you want your widget to be listed here, [open an issue](https://github.com/al
 The [googleMaps](https://github.com/instantsearch/instantsearch-googlemaps) widget can display your [Algolia geo hits](https://www.algolia.com/doc/rest#geo-search-parameters) on a map using [Google Maps APIs](https://developers.google.com/maps/).
 
 **Widget demo**:
-<img src="{{site.baseurl}}/img/googleMaps.gif" width="100%" />
+<img src="{% asset_path googleMaps.gif %}" width="100%" />
 
 See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
 
@@ -1046,7 +1046,7 @@ See the [full documentation](https://github.com/instantsearch/instantsearch-goog
 Provides [Ion.RangeSlider](https://github.com/IonDen/ion.rangeSlider) as a widget. This is a jQuery plugin so you will need to use jQuery in your page.
 
 **Widget demo**:
-<img src="{{site.baseurl}}/img/ionRangeSlider.gif" width="100%" />
+<img src="{% asset_path ionRangeSlider.gif %}" width="100%" />
 
 See the [full documentation](https://github.com/instantsearch/instantsearch-ion.rangeSlider#readme).
 

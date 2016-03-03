@@ -9,6 +9,9 @@ files:
     - 'docs/css/examples/*/main.scss' # Jekyll files requiring front-matter
     - 'docs/css/bootstrap/**/*' # Vendor
     - 'docs/css/_syntax-highlighting.scss' # Vendor
+    # Contains asset_path() call to jekyll-assets. sass-lint cannot disable rules inline
+    # https://github.com/sasstools/sass-lint/issues/544
+    - 'docs/css/_home.scss'
 rules:
   # Extends
   extends-before-mixins: 1

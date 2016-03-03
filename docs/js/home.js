@@ -1,9 +1,10 @@
+//= require ./PRNG.js
+
 /* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE*/
 'use strict';
 
 
 $(function () {
-
   // init scroll magic
   var controller = new ScrollMagic.Controller({
     globalSceneOptions:{

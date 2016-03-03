@@ -209,7 +209,7 @@ Local example and docs:
 
 ```sh
 npm run dev:docs
-# open http://localhost:4000/instantsearch.js/
+# open http://localhost:4000/
 ```
 
 ## Test

@@ -22,7 +22,7 @@ printf "\nPublish website to gh-pages\n"
 cd docs
 bundle install
 rm -rf _site
-JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build
+JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build --config _config.yml,_production.yml
 for example in _site/examples/*; do
   if [ -d "$example" ]; then
     name=`basename "$example"`
