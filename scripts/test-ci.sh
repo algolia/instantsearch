@@ -12,6 +12,11 @@ npm prune
 npm run shrinkwrap --dev
 ./scripts/validate-commit-msgs.sh
 
+# test the website can be built without errors
+cd docs
+bundle install
+JEKYLL_ENV=production VERSION=${VERSION} bundle exec jekyll build --config _config.yml,_production.yml
+
 if [ $TRAVIS_PULL_REQUEST == 'false' ] && [ $TRAVIS_BRANCH == 'master' ]; then
   npm run finish-release
 fi

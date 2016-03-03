@@ -45,7 +45,7 @@ h2 {
     bottom: 24px;
     left: 50%;
     margin-left: -32px;
-    background: transparent url("../img/arrow.svg") no-repeat center bottom;
+    background: transparent url(asset_path("arrow.svg")) no-repeat center bottom;
     background-size: contain;
     animation: arrow 1s ease-in-out infinite alternate;
   }

@@ -10,20 +10,17 @@ layout: default
         .spacer100
         .presented-by
           %a{href: "https://www.algolia.com", title: "Instant Search as a Service"}
-            %img{src:"img/algolia-logo.svg", width: 100, alt:"Logo Algolia"}
+            %img{src:"{% asset_path algolia-logo.svg %}", width: 100, alt:"Logo Algolia"}
           presents:
         .spacer40
         %h1.logo
-          %img.img-responsive.m-r{src:"img/logo-instantsearch.svg", alt:"Logo instantsearch.js", width:500}
+          %img.img-responsive.m-r{src:"{% asset_path logo-instantsearch.svg %}", alt:"Logo instantsearch.js", width:500}
         %p.vp
           A library of UI widgets to help you build the best instant-search experience with
           %a{href:"https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage"} Algolia's Hosted Search API.
         %p
           <iframe src="https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
         .spacer80
-        -# %a{href:"https://twitter.com/algolia", class:"twitter-follow-button", "data-show-count"=>"false"} Follow @algolia
-        -# %span &nbsp;
-        -# %iframe{src:"https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true", frameborder:0, scrolling:0, width:170, height:20}
         %h2 There’s a widget for that
         %p.lead
           Pick from an extensive library of widgets to power your search
@@ -34,25 +31,25 @@ layout: default
   .container
     .row
       .col-sm-6
-        %img{src:"img/icon-theme.svg", width:70, alt:"Widgets"}
+        %img{src:"{% asset_path icon-theme.svg %}", width:70, alt:"Widgets"}
         %h2 More than widgets
         %p.lead Your code is easy to write and maintain. instantsearch.js provides the glue between the different parts of your search page. Everything is packaged in one library.
 %section#widget-customization-2.window
   .container
     .row
       .col-sm-6
-        %img{src:"img/icon-infinite.svg", width:70, alt:"Infinite"}
+        %img{src:"{% asset_path icon-infinite.svg %}", width:70, alt:"Infinite"}
         %h2 Infinite possibilities
         %p.lead Every website is different. The modular design of instantsearch.js allows you to configure, rearrange and combine the widgets to build your own experience.
 %section#widget-customization-3.window
   .container
     .row
       .col-sm-6
-        %img{src:"img/icon-community.svg", width:70, alt:"Community"}
+        %img{src:"{% asset_path icon-community.svg %}", width:70, alt:"Community"}
         %h2 Bring your own widget
         %p.lead Sometimes you want to build a custom feature. You can do that by forking a pre-built widget or coding your own.
         .w-1
-          %img.m-r.m-t{src:"img/icon-widget-custom.svg", width:50}
+          %img.m-r.m-t{src:"{% asset_path icon-widget-custom.svg %}", width:50}
           %h4 Custom widgets
           %p Create and customize your own widgets.
         .spacer30
@@ -63,7 +60,7 @@ layout: default
         .col-xs-6
         .col-xs-6.pos-rel
           #anim
-            %img#screenshot-website{src:"img/drone-search.jpg", width:420, alt:"Drone Shop Layout"}
+            %img#screenshot-website{src:"{% asset_path drone-search.jpg %}", width:420, alt:"Drone Shop Layout"}
             .widget.widget-1
             .widget.widget-2
             .widget.widget-3
@@ -89,19 +86,19 @@ layout: default
               .widget.widget-5
           #anim-overlay
             .widget-intro.w-1
-              %img.m-r.m-t{src:"img/icon-widget-searchbox.svg", width:50, alt:"searchBox widget"}
+              %img.m-r.m-t{src:"{% asset_path icon-widget-searchbox.svg %}", width:50, alt:"searchBox widget"}
               %h4 searchBox
               %p Refine results at each keystroke
             .widget-intro.w-2
-              %img.m-r.m-t{src:"img/icon-widget-filter.svg", width:50, alt:"Widget Filters"}
+              %img.m-r.m-t{src:"{% asset_path icon-widget-filter.svg %}", width:50, alt:"Widget Filters"}
               %h4 filters
               %p List of links or checkboxes
             .widget-intro.w-3
-              %img.m-r.m-t{src:"img/icon-widget-slider.svg", width:50, alt:"rangeSlider widget"}
+              %img.m-r.m-t{src:"{% asset_path icon-widget-slider.svg %}", width:50, alt:"rangeSlider widget"}
               %h4 rangeSlider
               %p Filter on numerical values
             .widget-intro.w-4
-              %img.m-r.m-t{src:"img/icon-widget-results.svg", width:50, alt:"hits widget"}
+              %img.m-r.m-t{src:"{% asset_path icon-widget-results.svg %}", width:50, alt:"hits widget"}
               %h4 hits
               %p Grid of search results
             .illus-sync
@@ -121,14 +118,14 @@ layout: default
         %section#instantsearch-vp-1
           .text-center
             .illus-wrapper
-              %img{src:"img/icon-ux.svg", alt:"UX", width:40}
+              %img{src:"{% asset_path icon-ux.svg %}", alt:"UX", width:40}
             %h2 Search UX done right
           %p Algolia strives to build the best search experience for the end users. All of the best practices we learned while implementing search on hundreds of websites are now packed into our widgets.
       .col-md-4.col-md-offset-0.col-sm-offset-2.col-sm-8
         %section#instantsearch-vp-2
           .text-center
             .illus-wrapper
-              %img{src:"img/icon-update.svg", alt:"Update", width:40}
+              %img{src:"{% asset_path icon-update.svg %}", alt:"Update", width:40}
             %h2 Always improving
           %p The instant-search experience is already deployed on hundreds of websites. We inject all the feedback we get and our collective experience back into the widgets.
     .spacer100
@@ -143,5 +140,6 @@ layout: default
           %a.btn.btn-primary{href: "{{ '/examples/' | prepend: site.baseurl }}"} See it in action!
 
 {% contentfor site-footer %}
-<script type="text/javascript" src="{{ "/js/home.js" | prepend: site.baseurl }}"></script>
+<script src="//cdn.jsdelivr.net/g/gsap@1.11.8(TweenMax.min.js+TimelineMax.min.js),scrollmagic@2.0.5(ScrollMagic.min.js+plugins/animation.gsap.min.js)"></script>
+{% js home.js %}
 {% endcontentfor %}
