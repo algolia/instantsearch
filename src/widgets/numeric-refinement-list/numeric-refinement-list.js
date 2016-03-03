@@ -46,8 +46,6 @@ numericRefinementList({
   container,
   attributeName,
   options,
-  [ sortBy ],
-  [ limit ],
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
   [ transformData ],
