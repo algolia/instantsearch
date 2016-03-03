@@ -38,6 +38,8 @@ let defaultTemplates = {
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @param  {number} [options.min] Minimal slider value, default to automatically computed from the result set
+ * @param  {number} [options.max] Maximal slider value, defaults to automatically computed from the result set
  * @return {Object}
  */
 const usage = `Usage:
@@ -50,7 +52,9 @@ rangeSlider({
   [ step=1 ],
   [ pips=true ],
   [ autoHideContainer=true ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ min ],
+  [ max ]
 });
 `;
 function rangeSlider({
@@ -62,7 +66,9 @@ function rangeSlider({
     cssClasses: userCssClasses = {},
     step = 1,
     pips = true,
-    autoHideContainer = true
+    autoHideContainer = true,
+    min: userMin,
+    max: userMax
   } = {}) {
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -82,9 +88,31 @@ function rangeSlider({
   };
 
   return {
-    getConfiguration: () => ({
-      disjunctiveFacets: [attributeName]
-    }),
+    getConfiguration: (originalConf) => {
+      const conf = {
+        disjunctiveFacets: [attributeName]
+      };
+
+      if (
+          (userMin !== undefined || userMax !== undefined)
+          &&
+          (!originalConf ||
+          originalConf.numericRefinements &&
+          originalConf.numericRefinements[attributeName] === undefined)
+        ) {
+        conf.numericRefinements = {[attributeName]: {}};
+
+        if (userMin !== undefined) {
+          conf.numericRefinements[attributeName]['>='] = [userMin];
+        }
+
+        if (userMax !== undefined) {
+          conf.numericRefinements[attributeName]['<='] = [userMax];
+        }
+      }
+
+      return conf;
+    },
     _getCurrentRefinement(helper) {
       let min = helper.state.getNumericRefinement(attributeName, '>=');
       let max = helper.state.getNumericRefinement(attributeName, '<=');
@@ -125,15 +153,26 @@ function rangeSlider({
     },
     render({results, helper}) {
       let facet = find(results.disjunctiveFacets, {name: attributeName});
-      let stats = facet !== undefined ? facet.stats : undefined;
-      let currentRefinement = this._getCurrentRefinement(helper);
+      let stats;
 
-      if (stats === undefined) {
-        stats = {
+      if (userMin !== undefined || userMax !== undefined) {
+        stats = {};
+
+        if (userMin !== undefined) {
+          stats.min = userMin;
+        }
+
+        if (userMax !== undefined) {
+          stats.max = userMax;
+        }
+      } else {
+        stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
           min: null,
           max: null
         };
       }
+
+      let currentRefinement = this._getCurrentRefinement(helper);
 
       if (tooltips.format !== undefined) {
         tooltips = [{to: tooltips.format}, {to: tooltips.format}];

@@ -48,7 +48,6 @@ describe('rangeSlider()', () => {
     rangeSlider.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
-    widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
 
     helper = new AlgoliasearchHelper(
       {search: function() {}},
@@ -58,12 +57,90 @@ describe('rangeSlider()', () => {
     sinon.spy(helper, 'addNumericRefinement');
     sinon.spy(helper, 'clearRefinements');
     sinon.spy(helper, 'search');
-    widget.init({helper});
+  });
+
+  context('min option', () => {
+    it('refines when no previous configuration', () => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['aNumAttr'],
+        numericRefinements: {aNumAttr: {'>=': [100]}}
+      });
+    });
+
+    it('does not refine when previous configuration', () => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
+      expect(widget.getConfiguration({numericRefinements: {aNumAttr: {}}})).toEqual({
+        disjunctiveFacets: ['aNumAttr']
+      });
+    });
+
+    it('works along with max option', () => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['aNumAttr'],
+        numericRefinements: {aNumAttr: {'>=': [100], '<=': [200]}}
+      });
+    });
+
+    it('sets the right ranges', () => {
+      results = {};
+      widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
+      helper.setState(widget.getConfiguration());
+      widget.init({helper});
+      widget.render({results, helper});
+      let props = {
+        cssClasses: {
+          root: 'ais-range-slider',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
+        collapsible: false,
+        onChange: () => {},
+        pips: true,
+        range: {max: 200, min: 100},
+        shouldAutoHideContainer: false,
+        start: [100, 200],
+        step: 1,
+        templateProps: {
+          templates: {footer: '', header: ''},
+          templatesConfig: undefined,
+          transformData: undefined,
+          useCustomCompileOptions: {footer: false, header: false}
+        },
+        tooltips: true
+      };
+
+      expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+      expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+      expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
+    });
+  });
+
+  context('max option', () => {
+    it('refines when no previous configuration', () => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
+      expect(widget.getConfiguration()).toEqual({
+        disjunctiveFacets: ['aNumAttr'],
+        numericRefinements: {aNumAttr: {'<=': [100]}}
+      });
+    });
+
+    it('does not refine when previous configuration', () => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
+      expect(widget.getConfiguration({numericRefinements: {aNumAttr: {}}})).toEqual({
+        disjunctiveFacets: ['aNumAttr']
+      });
+    });
   });
 
   context('without result', () => {
     beforeEach(() => {
       results = {};
+      widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
+      widget.init({helper});
     });
 
     it('calls ReactDOM.render(<Slider props />, container)', () => {
@@ -101,6 +178,8 @@ describe('rangeSlider()', () => {
 
   context('when rangestats min === stats max', () => {
     beforeEach(() => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
+      widget.init({helper});
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
@@ -150,6 +229,8 @@ describe('rangeSlider()', () => {
 
   context('with results', () => {
     beforeEach(() => {
+      widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
+      widget.init({helper});
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
