@@ -26,7 +26,7 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/][in
 
 
 - [Setup](#setup)
-  - [From a CDN](#from-a-cdn)
+  - [With the jsDelivr CDN](#with-the-jsdelivr-cdn)
   - [With npm, browserify, webpack](#with-npm-browserify-webpack)
 - [Quick Start](#quick-start)
 - [Browser support](#browser-support)
@@ -45,25 +45,25 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/][in
 
 ## Setup
 
-### From a CDN
+### With the jsDelivr CDN
 
-instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/) and [cdnjs](https://cdnjs.com):
+instantsearch.js is available on [jsDelivr](https://www.jsdelivr.com/):
 
-Using jsDelivr:
 ```html
 <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
 <script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 ```
 
+#### Other CDNS
+
+We recommend using jsDelivr, but algoliasearch is also available at:
+
+- CDNJS: https://cdnjs.com/libraries/instantsearch.js
+- npmcdn:
+  - https://npmcdn.com/instantsearch.js@1/dist/instantsearch.min.js
+  - https://npmcdn.com/instantsearch.js@1/dist/instantsearch.min.css
+
 Using jsDelivr you will get auto updates for all the 1.x.x versions without any breaking change.
-
-Using cdnjs:
-```html
-<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.1.0/instantsearch.min.css" />
-<script src="//cdnjs.cloudflare.com/ajax/libs/instantsearch.js/1.1.0/instantsearch.min.js"></script>
-```
-
-Using cdnjs you must manually update if you need it.
 
 ### With npm, browserify, webpack
 
