@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="31px" height="33px" viewBox="0 0 31 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.4 (15575) - http://www.bohemiancoding.com/sketch -->
+    <title>icon-community</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="instansearch-website" sketch:type="MSArtboardGroup" transform="translate(-267.000000, -276.000000)">
+            <g id="icon-community" sketch:type="MSLayerGroup" transform="translate(251.387237, 260.664529)">
+                <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="0" y="0" width="64" height="64"></rect>
+                <g id="Icons/Search-Copy-+-Icons/Search-Copy-2" transform="translate(16.000000, 16.000000)" fill="#FFFFFF" sketch:type="MSShapeGroup">
+                    <path d="M30.1261436,32 C29.8021322,28.5459722 28.3381395,25.1812702 25.7341654,22.53445 C19.7861022,16.4885167 10.1529922,16.4885167 4.20492898,22.53445 C2.03365656,24.7414488 0.55046343,27.5856796 0,30.6630441 L1.60649212e-15,32 L2.88775009,32 C3.24441624,29.3237108 4.4071206,26.7429885 6.37586317,24.6897806 C11.1845028,19.674835 19.0107099,19.674835 23.8193496,24.6897806 C25.7880921,26.7429885 26.9507965,29.3237108 27.3074627,32 L30.1261436,32 Z" id="Icons/Search-Copy"></path>
+                    <path d="M19.2629491,20.2992611 C13.8477823,22.3777499 7.77949382,19.6762324 5.70080603,14.2615839 C3.62211823,8.84693538 6.32389433,2.77922777 11.7390612,0.700738947 C17.154228,-1.37774988 23.2225165,1.3237676 25.3012043,6.73841611 C26.0600055,8.71497161 26.2095276,10.8934441 25.7071573,12.9548104 L24.1547082,16.4413344 C22.9588192,18.1939558 21.2396938,19.5405325 19.2629491,20.2992611 Z M18.221058,17.4123825 C21.999272,15.9494505 23.8936307,11.657653 22.4433102,7.84658498 C20.9929897,4.03551697 16.7381905,2.1246856 12.9599765,3.58761754 C9.18176251,5.05054948 7.28740382,9.34234701 8.73772429,13.153415 C10.1880447,16.964483 14.442844,18.8753144 18.221058,17.4123825 L18.221058,17.4123825 Z" id="Icons/Search-Copy-2"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

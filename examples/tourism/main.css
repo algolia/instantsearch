@@ -129,11 +129,9 @@ body {
   border-color: #FF585B; }
 .aisdemo-filters #price .ais-range-slider--handle-lower {
   -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
           transform: translateX(-50%); }
 .aisdemo-filters #price .ais-range-slider--handle-upper {
   -webkit-transform: translateX(50%);
-      -ms-transform: translateX(50%);
           transform: translateX(50%); }
 .aisdemo-filters #price .ais-range-slider--tooltip:last-child {
   right: 0; }
