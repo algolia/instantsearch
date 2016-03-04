@@ -24,5 +24,7 @@
 | <span class='attr-optional'>`options.cssClasses.active`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each active element |
 | <span class='attr-optional'>`options.cssClasses.link`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each link (when using the default template) |
 | <span class='attr-optional'>`options.cssClasses.count`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each count element (when using the default template) |
+| <span class='attr-optional'>`options.collapsible`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> &#124; <code>boolean</code></span> | Hide the widget body and footer when clicking on header |
+| <span class='attr-optional'>`options.collapsible.collapsed`</span><span class="attr-infos">Type: <code>boolean</code></span> | Initial collapsed state of a collapsible widget |
 
 <p class="attr-legend">* <span>Required</span></p>

@@ -24,5 +24,7 @@
 | <span class='attr-optional'>`options.cssClasses.separator`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the separator of the form |
 | <span class='attr-optional'>`options.cssClasses.button`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the submit button of the form |
 | <span class='attr-optional'>`options.cssClasses.footer`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the footer element |
+| <span class='attr-optional'>`options.collapsible`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> &#124; <code>boolean</code></span> | Hide the widget body and footer when clicking on header |
+| <span class='attr-optional'>`options.collapsible.collapsed`</span><span class="attr-infos">Type: <code>boolean</code></span> | Initial collapsed state of a collapsible widget |
 
 <p class="attr-legend">* <span>Required</span></p>

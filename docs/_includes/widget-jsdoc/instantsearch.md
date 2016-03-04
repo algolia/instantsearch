@@ -9,5 +9,6 @@
 | <span class='attr-optional'>`options.urlSync.trackedParameters`</span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span> | Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) |
 | <span class='attr-optional'>`options.urlSync.useHash`</span><span class="attr-infos">Type: <code>boolean</code></span> | If set to true, the url will be hash based. Otherwise, it'll use the query parameters using the modern history API. |
 | <span class='attr-optional'>`options.urlSync.threshold`</span><span class="attr-infos">Type: <code>number</code></span> | Time in ms after which a new state is created in the browser history. The default value is 700. |
+| <span class='attr-optional'>`options.searchFunction`</span><span class="attr-infos">Type: <code>function</code></span> | A hook that will be called each time a search needs to be done, with the helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing searches at page load for example. |
 
 <p class="attr-legend">* <span>Required</span></p>

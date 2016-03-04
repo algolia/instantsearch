@@ -12,5 +12,9 @@
 | <span class='attr-optional'>`options.cssClasses.header`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the header element |
 | <span class='attr-optional'>`options.cssClasses.body`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the body element |
 | <span class='attr-optional'>`options.cssClasses.footer`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the footer element |
+| <span class='attr-optional'>`options.collapsible`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> &#124; <code>boolean</code></span> | Hide the widget body and footer when clicking on header |
+| <span class='attr-optional'>`options.collapsible.collapsed`</span><span class="attr-infos">Type: <code>boolean</code></span> | Initial collapsed state of a collapsible widget |
+| <span class='attr-optional'>`options.min`</span><span class="attr-infos">Type: <code>number</code></span> | Minimal slider value, default to automatically computed from the result set |
+| <span class='attr-optional'>`options.max`</span><span class="attr-infos">Type: <code>number</code></span> | Maximal slider value, defaults to automatically computed from the result set |
 
 <p class="attr-legend">* <span>Required</span></p>

@@ -3,7 +3,7 @@
 | <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | CSS Selector or DOMElement to insert the widget |
 | <span class='attr-required'>`options.attributeName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting |
 | <span class='attr-optional'>`options.operator`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code><br />Type: <code>string</code></span> | How to apply refinements. Possible values: `or`, `and` |
-| <span class='attr-optional'>`options.sortBy`</span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code> &#124; <code>function</code></span> | How to sort refinements. Possible values: `count|isRefined|name:asc|desc` |
+| <span class='attr-optional'>`options.sortBy`</span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;, &#x27;name:asc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code> &#124; <code>function</code></span> | How to sort refinements. Possible values: `count|isRefined|name:asc|desc` |
 | <span class='attr-optional'>`options.limit`</span><span class="attr-infos">Default:<code class="attr-default">10</code><br />Type: <code>string</code></span> | How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state). |
 | <span class='attr-optional'>`options.showMore`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> &#124; <code>boolean</code></span> | Limit the number of results and display a showMore button |
 | <span class='attr-optional'>`options.showMore.templates`</span><span class="attr-infos">Type: <code>object</code></span> | Templates to use for showMore |
@@ -27,5 +27,7 @@
 | <span class='attr-optional'>`options.cssClasses.label`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each label element (when using the default template) |
 | <span class='attr-optional'>`options.cssClasses.checkbox`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each checkbox element (when using the default template) |
 | <span class='attr-optional'>`options.cssClasses.count`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to each count element (when using the default template) |
+| <span class='attr-optional'>`options.collapsible`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>object</code> &#124; <code>boolean</code></span> | Hide the widget body and footer when clicking on header |
+| <span class='attr-optional'>`options.collapsible.collapsed`</span><span class="attr-infos">Type: <code>boolean</code></span> | Initial collapsed state of a collapsible widget |
 
 <p class="attr-legend">* <span>Required</span></p>

@@ -1,3 +1,40 @@
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/algolia/instantsearch.js/compare/v1.2.5...v1.3.0) (2016-03-04)
+
+
+### Bug Fixes
+
+* **browser support:** make IE lte 10 work by fixing Object.getPrototypeOf ([bbb264b](https://github.com/algolia/instantsearch.js/commit/bbb264b))
+* **menu,refinementList:** sort by count AND name to avoid reorders on refine ([02fe7bf](https://github.com/algolia/instantsearch.js/commit/02fe7bf)), closes [#65](https://github.com/algolia/instantsearch.js/issues/65)
+* **priceRanges:** pass the bound refine to the form ([ce2b956](https://github.com/algolia/instantsearch.js/commit/ce2b956))
+* **searchBox:** handle external updates of the query ([6a0af14](https://github.com/algolia/instantsearch.js/commit/6a0af14)), closes [#803](https://github.com/algolia/instantsearch.js/issues/803)
+* **searchBox:** stop setting the query twice ([91270b2](https://github.com/algolia/instantsearch.js/commit/91270b2))
+* **searchBox:** stop updating query at eachkeystroke with searchOnEnterKeyPressOnly ([28dc4d2](https://github.com/algolia/instantsearch.js/commit/28dc4d2)), closes [#875](https://github.com/algolia/instantsearch.js/issues/875)
+* **Slider:** do not render Slider when range.min === range.max ([f20274e](https://github.com/algolia/instantsearch.js/commit/f20274e))
+* **Template:** now render() when templateKey changes ([8906224](https://github.com/algolia/instantsearch.js/commit/8906224))
+* **toggle:** pass isRefined to toggleRefinement ([8ac494e](https://github.com/algolia/instantsearch.js/commit/8ac494e))
+* **url-sync:** always decode incoming query string ([bea38e3](https://github.com/algolia/instantsearch.js/commit/bea38e3)), closes [#848](https://github.com/algolia/instantsearch.js/issues/848)
+* **url-sync:** handle <base> href pages ([e58aadc](https://github.com/algolia/instantsearch.js/commit/e58aadc)), closes [#790](https://github.com/algolia/instantsearch.js/issues/790)
+
+### Features
+
+* **collapsable widgets:** add collapsable and collapsed option ([c4df7c5](https://github.com/algolia/instantsearch.js/commit/c4df7c5))
+* **instantsearch:** allow overriding the helper.search function ([9a930e7](https://github.com/algolia/instantsearch.js/commit/9a930e7))
+* **rangeSlider:** allow passing min and max values ([409295c](https://github.com/algolia/instantsearch.js/commit/409295c)), closes [#858](https://github.com/algolia/instantsearch.js/issues/858)
+* **searchBox:** allow to pass a queryHook ([5786a64](https://github.com/algolia/instantsearch.js/commit/5786a64))
+* **Template:** allow template functions to return a React element ([748077d](https://github.com/algolia/instantsearch.js/commit/748077d))
+* **Template:** allow template functions to return a React element ([0f9296d](https://github.com/algolia/instantsearch.js/commit/0f9296d))
+
+### Performance Improvements
+
+* **autoHideContainer:** stop re-creating React components ([8c89862](https://github.com/algolia/instantsearch.js/commit/8c89862))
+* **formatting numbers:** stop using a default locale, use the system one ([b056554](https://github.com/algolia/instantsearch.js/commit/b056554))
+* **nouislider:** upgrade nouislider, shaves some more ms ([fefbe65](https://github.com/algolia/instantsearch.js/commit/fefbe65))
+* **React:** use babel `optimisation` option for React ([95f940c](https://github.com/algolia/instantsearch.js/commit/95f940c))
+* **React, widgets:** implement shouldComponentUpdate, reduce bind ([5efaac1](https://github.com/algolia/instantsearch.js/commit/5efaac1))
+
+
+
 <a name="1.2.5"></a>
 ## [1.2.5](https://github.com/algolia/instantsearch.js/compare/v1.2.4...v1.2.5) (2016-03-02)
 
