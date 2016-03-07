@@ -8,7 +8,7 @@ import mapValues from 'lodash/object/mapValues';
 
 import hogan from 'hogan.js';
 
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class Template extends React.Component {
   constructor(props) {

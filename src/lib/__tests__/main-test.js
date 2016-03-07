@@ -3,7 +3,7 @@
 import expect from 'expect';
 import jsdom from 'jsdom-global';
 import instantsearch from '../main.js';
-import {forEach} from 'lodash';
+import forEach from 'lodash/collection/forEach';
 
 describe('instantsearch()', () => {
   beforeEach(function() {this.jsdom = jsdom();});

@@ -5,7 +5,7 @@ import Template from '../Template.js';
 import {isSpecialClick} from '../../lib/utils.js';
 import map from 'lodash/collection/map';
 import cloneDeep from 'lodash/lang/cloneDeep';
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class CurrentRefinedValues extends React.Component {
   shouldComponentUpdate(nextProps) {
