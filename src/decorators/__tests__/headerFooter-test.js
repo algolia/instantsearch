@@ -57,7 +57,7 @@ describe('headerFooter', () => {
     };
     expect(out).toEqualJSX(
       <div className="ais-root root">
-        <Template rootProps={{className: 'ais-header'}} {...templateProps} onClick={null} />
+        <Template rootProps={{className: 'ais-header', onClick: null}} {...templateProps} />
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
@@ -86,9 +86,66 @@ describe('headerFooter', () => {
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
-        <Template rootProps={{className: 'ais-footer'}} {...templateProps} onClick={null} />
+        <Template rootProps={{className: 'ais-footer', onClick: null}} {...templateProps} />
       </div>
     );
+  });
+
+  describe('collapsible', () => {
+    let templateProps;
+    let headerTemplateProps;
+    let footerTemplateProps;
+
+    beforeEach(() => {
+      defaultProps.templateProps.templates = {
+        header: 'yo header',
+        footer: 'yo footer'
+      };
+      templateProps = {
+        data: {},
+        transformData: null,
+        templates: {
+          header: 'yo header',
+          footer: 'yo footer'
+        }
+      };
+      headerTemplateProps = {
+        templateKey: 'header',
+        ...templateProps
+      };
+      footerTemplateProps = {
+        templateKey: 'footer',
+        ...templateProps
+      };
+    });
+
+    it('when true', () => {
+      defaultProps.collapsible = true;
+      let out = render(defaultProps);
+      expect(out).toEqualJSX(
+        <div className="ais-root root ais-root__collapsible">
+          <Template rootProps={{className: 'ais-header', onClick: function() {}}} {...headerTemplateProps} />
+          <div className="ais-body body">
+            <TestComponent {...defaultProps} />
+          </div>
+          <Template rootProps={{className: 'ais-footer', onClick: null}} {...footerTemplateProps} />
+        </div>
+      );
+    });
+
+    it('when collapsed', () => {
+      defaultProps.collapsible = {collapsed: true};
+      let out = render(defaultProps);
+      expect(out).toEqualJSX(
+        <div className="ais-root root ais-root__collapsible ais-root__collapsed">
+          <Template rootProps={{className: 'ais-header', onClick: function() {}}} {...headerTemplateProps} />
+          <div className="ais-body body">
+            <TestComponent {...defaultProps} />
+          </div>
+          <Template rootProps={{className: 'ais-footer', onClick: null}} {...footerTemplateProps} />
+        </div>
+      );
+    });
   });
 
   function render(props = {}) {
