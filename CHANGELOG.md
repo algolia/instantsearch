@@ -1,3 +1,17 @@
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/algolia/instantsearch.js/compare/v1.3.2...v1.3.3) (2016-03-07)
+
+
+### Bug Fixes
+
+* **headerFooter:** make collapsible click handler work ([add0d50](https://github.com/algolia/instantsearch.js/commit/add0d50))
+
+### Performance Improvements
+
+* **linters:** Greatly improve the `npm run lint` task speed ([1ba53b0](https://github.com/algolia/instantsearch.js/commit/1ba53b0))
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/algolia/instantsearch.js/compare/v1.3.1...v1.3.2) (2016-03-07)
 
