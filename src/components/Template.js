@@ -2,8 +2,6 @@ import React from 'react';
 
 import curry from 'lodash/function/curry';
 import cloneDeep from 'lodash/lang/cloneDeep';
-import keys from 'lodash/object/keys';
-import omit from 'lodash/object/omit';
 import mapValues from 'lodash/object/mapValues';
 
 import hogan from 'hogan.js';
@@ -37,12 +35,10 @@ class Template extends React.Component {
       return null;
     }
 
-    const otherProps = omit(this.props, keys(Template.propTypes));
-
     if (React.isValidElement(content)) {
       return (
         <div
-          {...otherProps}
+          {...this.props.rootProps}
           className={this.props.cssClass}
         >{content}</div>
       );
@@ -50,7 +46,7 @@ class Template extends React.Component {
 
     return (
       <div
-        {...otherProps}
+        {...this.props.rootProps}
         className={this.props.cssClass}
         dangerouslySetInnerHTML={{__html: content}}
       />

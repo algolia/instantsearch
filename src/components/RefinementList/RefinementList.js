@@ -13,6 +13,7 @@ class RefinementList extends React.Component {
       isShowMoreOpen: false
     };
     this.handleItemClick = this.handleItemClick.bind(this);
+    this.handleClickShowMore = this.handleClickShowMore.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -129,7 +130,7 @@ class RefinementList extends React.Component {
     const showMoreBtn =
       this.props.showMore ?
         <Template
-          onClick={() => this.handleClickShowMore()}
+          rootProps={{onClick: this.handleClickShowMore}}
           templateKey={'show-more-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}
           {...this.props.templateProps}
         /> :
