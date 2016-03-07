@@ -40,8 +40,8 @@ function headerFooter(ComposedComponent) {
       let className = cx(this.props.cssClasses[type], `ais-${type}`);
       return (
         <Template {...this.props.templateProps}
-          cssClass={className}
           onClick={handleClick}
+          rootProps={{className}}
           templateKey={type}
           transformData={null}
         />
