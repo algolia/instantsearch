@@ -1,3 +1,17 @@
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/algolia/instantsearch.js/compare/v1.3.1...v1.3.2) (2016-03-07)
+
+
+### Bug Fixes
+
+* **Template:** stop leaking `data="[object Object]"` attributes in production builds ([7ec0431](https://github.com/algolia/instantsearch.js/commit/7ec0431)), closes [#899](https://github.com/algolia/instantsearch.js/issues/899)
+
+### Features
+
+* **validate-pr:** Allow `docs()` commits to be merged in master ([0abc689](https://github.com/algolia/instantsearch.js/commit/0abc689))
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/algolia/instantsearch.js/compare/v1.3.0...v1.3.1) (2016-03-07)
 

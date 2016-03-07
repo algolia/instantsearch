@@ -10,6 +10,6 @@
 | <span class='attr-optional'>`options.cssClasses.root`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the wrapping div (if `wrapInput` set to `true`) |
 | <span class='attr-optional'>`options.cssClasses.input`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the input |
 | <span class='attr-optional'>`options.cssClasses.poweredBy`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the poweredBy element |
-| <span class='attr-optional'>`queryHook`</span><span class="attr-infos">Type: <code>function</code></span> | A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox. |
+| <span class='attr-optional'>`options.queryHook`</span><span class="attr-infos">Type: <code>function</code></span> | A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox. |
 
 <p class="attr-legend">* <span>Required</span></p>
