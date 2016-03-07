@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Template from '../Template.js';
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class RefinementListItem extends React.Component {
   componentWillMount() {

@@ -3,7 +3,7 @@ import map from 'lodash/collection/map';
 
 import Template from './Template.js';
 
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class Hits extends React.Component {
   shouldComponentUpdate(nextProps) {

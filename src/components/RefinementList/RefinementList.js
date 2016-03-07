@@ -4,7 +4,7 @@ import {isSpecialClick} from '../../lib/utils.js';
 
 import Template from '../Template.js';
 import RefinementListItem from './RefinementListItem.js';
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class RefinementList extends React.Component {
   constructor(props) {

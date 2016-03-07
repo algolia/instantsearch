@@ -4,7 +4,7 @@ import Nouislider from 'react-nouislider';
 
 let cssPrefix = 'ais-range-slider--';
 
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/lang/isEqual';
 
 class Slider extends React.Component {
   componentWillMount() {
