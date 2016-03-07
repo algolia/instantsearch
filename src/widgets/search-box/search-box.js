@@ -27,7 +27,7 @@ const KEY_SUPPRESS = 8;
  * wrapping div (if `wrapInput` set to `true`)
  * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
  * @param  {string|string[]} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
- * @param  {function} [queryHook] A function that will be called everytime a new search would be done. You
+ * @param  {function} [options.queryHook] A function that will be called everytime a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  * @return {Object}
