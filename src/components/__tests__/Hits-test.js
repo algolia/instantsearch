@@ -43,15 +43,15 @@ describe('Hits', () => {
     expect(out).toEqualJSX(
       <div className="custom-root">
         <Template
-          cssClass="custom-item"
           data={results.hits[0]}
           key={results.hits[0].objectID}
+          rootProps={{className: 'custom-item'}}
           templateKey="item"
         />
         <Template
-          cssClass="custom-item"
           data={results.hits[1]}
           key={results.hits[1].objectID}
+          rootProps={{className: 'custom-item'}}
           templateKey="item"
         />
       </div>
@@ -86,8 +86,8 @@ describe('Hits', () => {
 
     expect(out).toEqualJSX(
       <Template
-        cssClass="custom-item"
         data={results}
+        rootProps={{className: 'custom-item'}}
         templateKey="allItems"
         {...templateProps2}
       />
@@ -111,8 +111,8 @@ describe('Hits', () => {
 
     expect(out).toEqualJSX(
       <Template
-        cssClass="custom-root custom-empty"
         data={results}
+        rootProps={{className: 'custom-root custom-empty'}}
         templateKey="empty"
       />
     );

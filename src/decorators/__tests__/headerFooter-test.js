@@ -57,7 +57,7 @@ describe('headerFooter', () => {
     };
     expect(out).toEqualJSX(
       <div className="ais-root root">
-        <Template cssClass="ais-header" {...templateProps} onClick={null} />
+        <Template rootProps={{className: 'ais-header'}} {...templateProps} onClick={null} />
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
@@ -86,7 +86,7 @@ describe('headerFooter', () => {
         <div className="ais-body body">
           <TestComponent {...defaultProps} />
         </div>
-        <Template cssClass="ais-footer" {...templateProps} onClick={null} />
+        <Template rootProps={{className: 'ais-footer'}} {...templateProps} onClick={null} />
       </div>
     );
   });

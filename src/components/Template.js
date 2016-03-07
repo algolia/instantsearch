@@ -2,8 +2,6 @@ import React from 'react';
 
 import curry from 'lodash/function/curry';
 import cloneDeep from 'lodash/lang/cloneDeep';
-import keys from 'lodash/object/keys';
-import omit from 'lodash/object/omit';
 import mapValues from 'lodash/object/mapValues';
 
 import hogan from 'hogan.js';
@@ -37,30 +35,17 @@ class Template extends React.Component {
       return null;
     }
 
-    const otherProps = omit(this.props, keys(Template.propTypes));
-
     if (React.isValidElement(content)) {
-      return (
-        <div
-          {...otherProps}
-          className={this.props.cssClass}
-        >{content}</div>
-      );
+      return <div {...this.props.rootProps}>{content}</div>;
     }
 
-    return (
-      <div
-        {...otherProps}
-        className={this.props.cssClass}
-        dangerouslySetInnerHTML={{__html: content}}
-      />
-    );
+    return <div {...this.props.rootProps} dangerouslySetInnerHTML={{__html: content}} />;
   }
 }
 
 Template.propTypes = {
-  cssClass: React.PropTypes.string,
   data: React.PropTypes.object,
+  rootProps: React.PropTypes.object,
   templateKey: React.PropTypes.string,
   templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
     React.PropTypes.string,

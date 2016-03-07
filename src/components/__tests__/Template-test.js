@@ -32,7 +32,7 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it works with strings';
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
     });
 
     it('supports templates as functions returning a string', () => {
@@ -45,7 +45,7 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it also works with functions';
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
     });
 
     it('supports templates as functions returning a React element', () => {
@@ -58,7 +58,7 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it also works with functions';
-      expect(out).toEqualJSX(<div className={undefined}><p>{content}</p></div>);
+      expect(out).toEqualJSX(<div><p>{content}</p></div>);
     });
 
     it('can configure compilation options', () => {
@@ -73,14 +73,11 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it configures compilation delimiters';
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
     });
   });
 
   describe('using helpers', () => {
-    beforeEach(() => {
-    });
-
     it('call the relevant function', () => {
       const props = getProps({
         templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
@@ -92,7 +89,7 @@ describe('Template', () => {
       const out = renderer.getRenderOutput();
 
       const content = 'it supports <em>helpers</em>';
-      expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>);
+      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
     });
 
     it('sets the function context (`this`) to the template `data`', done => {
@@ -130,7 +127,7 @@ describe('Template', () => {
 
       const out = renderer.getRenderOutput();
       const content = 'it supports transformData';
-      const expectedJSX = <div className={undefined} dangerouslySetInnerHTML={{__html: content}}></div>;
+      const expectedJSX = <div dangerouslySetInnerHTML={{__html: content}}></div>;
 
       expect(out).toEqualJSX(expectedJSX);
     });
@@ -216,21 +213,19 @@ describe('Template', () => {
     });
   });
 
-  describe('misc feature', () => {
-    it('accepts props that are not defined in the proptypes', () => {
-      function fn() {}
+  it('forward rootProps to the first node', () => {
+    function fn() {}
 
-      const props = getProps({});
-      renderer.render(<Template onClick={fn} {...props}/>);
+    const props = getProps({});
+    renderer.render(<Template rootProps={{className: 'hey', onClick: fn}} {...props}/>);
 
-      const out = renderer.getRenderOutput();
-      const expectedProps = {
-        className: undefined,
-        dangerouslySetInnerHTML: {__html: ''},
-        onClick: fn
-      };
-      expect(out).toEqualJSX(<div {...expectedProps}></div>);
-    });
+    const out = renderer.getRenderOutput();
+    const expectedProps = {
+      className: 'hey',
+      dangerouslySetInnerHTML: {__html: ''},
+      onClick: fn
+    };
+    expect(out).toEqualJSX(<div {...expectedProps}></div>);
   });
 
   context('shouldComponentUpdate', () => {
