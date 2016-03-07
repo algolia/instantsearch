@@ -141,7 +141,7 @@ describe('toggle()', () => {
         templateProps.templatesConfig = {helpers};
         renderer.render(<Template data={{count: 1000}} {...templateProps} templateKey="item" />);
         let out = renderer.getRenderOutput();
-        expect(out).toEqualJSX(<div className={undefined} dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
+        expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
       });
 
       it('understands cssClasses', () => {
