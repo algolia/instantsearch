@@ -1,3 +1,14 @@
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/algolia/instantsearch.js/compare/v1.3.0...v1.3.1) (2016-03-07)
+
+
+### Bug Fixes
+
+* **collapsible:** stop duplicating collapsible styling ([7362901](https://github.com/algolia/instantsearch.js/commit/7362901))
+* **lodash:** stop leaking lodash in the global scope ([91f71dc](https://github.com/algolia/instantsearch.js/commit/91f71dc)), closes [#900](https://github.com/algolia/instantsearch.js/issues/900)
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/algolia/instantsearch.js/compare/v1.2.5...v1.3.0) (2016-03-04)
 
