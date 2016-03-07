@@ -4,6 +4,7 @@ import map from 'lodash/collection/map';
 import Template from './Template.js';
 
 import isEqual from 'lodash/lang/isEqual';
+import cx from 'classnames';
 
 class Hits extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -16,9 +17,9 @@ class Hits extends React.Component {
     let renderedHits = map(this.props.results.hits, hit => {
       return (
         <Template
-          cssClass={this.props.cssClasses.item}
           data={hit}
           key={hit.objectID}
+          rootProps={{className: this.props.cssClasses.item}}
           templateKey="item"
           {...this.props.templateProps}
         />
@@ -31,8 +32,8 @@ class Hits extends React.Component {
   renderAllResults() {
     return (
       <Template
-        cssClass={this.props.cssClasses.allItems}
         data={this.props.results}
+        rootProps={{className: this.props.cssClasses.allItems}}
         templateKey="allItems"
         {...this.props.templateProps}
       />
@@ -40,11 +41,10 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
-    let className = this.props.cssClasses.root + ' ' + this.props.cssClasses.empty;
     return (
       <Template
-        cssClass={className}
         data={this.props.results}
+        rootProps={{className: cx(this.props.cssClasses.root, this.props.cssClasses.empty)}}
         templateKey="empty"
         {...this.props.templateProps}
       />
