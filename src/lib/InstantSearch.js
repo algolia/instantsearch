@@ -18,11 +18,19 @@ function defaultCreateURL() { return '#'; }
  * @param  {string} options.indexName The name of the main index
  * @param  {string} [options.numberLocale] The locale used to display numbers. This will be passed
  * to Number.prototype.toLocaleString()
+ * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
+ * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
+ * searches at page load for example.
  * @param  {Object} [options.searchParameters] Additional parameters to pass to
  * the Algolia API.
  * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
+ * @param  {Object} [options.urlSync.mapping] Object used to define replacement query
+ * parameter to use in place of another. Keys are current query parameters
+ * and value the new value, e.g. `{ q: 'query' }`.
+ * @param  {number} [options.urlSync.threshold] Time in ms after which a new
+ * state is created in the browser history. The default value is 700.
  * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
  * be synchronized in the URL. By default, it will track the query, all the
  * refinable attribute (facets and numeric filters), the index and the page.
@@ -30,11 +38,6 @@ function defaultCreateURL() { return '#'; }
  * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
- * @param  {number} [options.urlSync.threshold] Time in ms after which a new
- * state is created in the browser history. The default value is 700.
- * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
- * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
- * searches at page load for example.
  * @return {Object} the instantsearch instance
  */
 class InstantSearch extends EventEmitter {

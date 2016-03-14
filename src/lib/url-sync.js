@@ -107,6 +107,7 @@ class URLSync {
     this.urlUtils = urlUtils;
     this.originalConfig = null;
     this.timer = timerMaker(Date.now());
+    this.mapping = options.mapping || {};
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
   }
@@ -114,7 +115,7 @@ class URLSync {
   getConfiguration(currentConfiguration) {
     this.originalConfig = currentConfiguration;
     let queryString = this.urlUtils.readUrl();
-    let config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString);
+    let config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
     return config;
   }
 
@@ -137,12 +138,15 @@ class URLSync {
 
   renderURLFromState(state) {
     let currentQueryString = this.urlUtils.readUrl();
-    let foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString);
+    let foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, {mapping: this.mapping});
     foreignConfig.is_v = majorVersionNumber;
 
     let qs = urlHelper.getQueryStringFromState(
       state.filter(this.trackedParameters),
-      {moreAttributes: foreignConfig}
+      {
+        moreAttributes: foreignConfig,
+        mapping: this.mapping
+      }
     );
 
     if (this.timer() < this.threshold) {
@@ -157,17 +161,17 @@ class URLSync {
   createURL(state) {
     let currentQueryString = this.urlUtils.readUrl();
     let filteredState = state.filter(this.trackedParameters);
-    let foreignConfig = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(currentQueryString);
+    let foreignConfig = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(currentQueryString, {mapping: this.mapping});
     // Add instantsearch version to reconciliate old url with newer versions
     foreignConfig.is_v = majorVersionNumber;
 
-    return this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState));
+    return this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
   }
 
   onHistoryChange(fn) {
     this.urlUtils.onpopstate(() => {
       let qs = this.urlUtils.readUrl();
-      let partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs);
+      let partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
       let fullState = merge({}, this.originalConfig, partialState);
       fn(fullState);
     });
