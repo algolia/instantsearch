@@ -7,7 +7,7 @@ COMMIT_MSG=$(git log --format=%B --no-merges -n 1)
 [[ "$COMMIT_MSG" =~ /^docs/ ]] && is_doc=1 || is_doc=0
 [[ "$TRAVIS_PULL_REQUEST" == false ]] && is_travis=1 || is_travis=0
 [[ "$TRAVIS_BRANCH" == master ]] && is_master=1 || is_master=0
-[[ "$TRAVIS_BRANCH" != develop ]] && is_develop=1 || is_develop=0
+[[ "$TRAVIS_BRANCH" == develop ]] && is_develop=1 || is_develop=0
 
 if [[ $is_travis == 0 ]]; then
   echo "No need to check pull request done on develop branch when not in a pull request"
