@@ -637,13 +637,12 @@ search.addWidget(
     attributeName: 'popularity',
     options: [
       {name: 'All'},
-      {end: 4, name: 'less than 4'},
-      {start: 4, end: 4, name: '4'},
-      {start: 5, end: 10, name: 'between 5 and 10'},
-      {start: 10, name: 'more than 10'}
+      {end: 500, name: 'less than 500'},
+      {start: 500, end: 2000, name: 'between 500 and 2000'},
+      {start: 2000, name: 'more than 2000'}
     ],
     templates: {
-      header: 'Price'
+      header: 'Popularity'
     }
   })
 );

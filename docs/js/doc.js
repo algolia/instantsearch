@@ -17,11 +17,7 @@
       indexName: 'instant_search'
     };
     var initialSearchState = {
-      hitsPerPage: 6,
-      disjunctiveFacets: ['brand'],
-      disjunctiveFacetsRefinements: {
-        brand:['Samsung']
-      }
+      hitsPerPage: 6
     };
     var codeSnippets = q('.code-sample-snippet:not(.start):not(.config):not(.ignore)');
     var configSnippet = "var search = instantsearch({appId: '$appId', apiKey: '$apiKey'," +
@@ -36,6 +32,7 @@
     });
 
     source = t(source.join('\n'), constants);
+
     eval(source);
   }
 
