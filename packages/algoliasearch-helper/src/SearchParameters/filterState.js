@@ -23,6 +23,11 @@ function filterState(state, filters) {
         partialState.disjunctiveFacetsRefinements[attr] = state.disjunctiveFacetsRefinements[attr];
       }
 
+      if (state.isHierarchicalFacet(attr) && state.isHierarchicalFacetRefined(attr)) {
+        if (!partialState.hierarchicalFacetsRefinements) partialState.hierarchicalFacetsRefinements = {};
+        partialState.hierarchicalFacetsRefinements[attr] = state.hierarchicalFacetsRefinements[attr];
+      }
+
       var numericRefinements = state.getNumericRefinements(attr);
       if (!isEmpty(numericRefinements)) {
         if (!partialState.numericRefinements) partialState.numericRefinements = {};
