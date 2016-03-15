@@ -58,7 +58,7 @@
     "eslint-config-airbnb": "^0.1.0",
     "eslint-config-algolia": "^4.5.0",
     "eslint-plugin-algolia": "^1.5.0",
-    "eslint-plugin-react": "^3.15.0",
+    "eslint-plugin-react": "^4.2.3",
     "expect": "^1.13.4",
     "expect-jsx": "^2.2.2",
     "expose-loader": "^0.7.1",
