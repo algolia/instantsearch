@@ -52,6 +52,10 @@ test('getState should return an object according to the specified filters', func
     query: 'a query',
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB'],
+    hierarchicalFacets: [{
+      name: 'facetC',
+      attributes: ['facetC']
+    }],
     minWordSizefor1Typo: 1
   };
   var index = 'indexNameInTheHelper';
@@ -60,6 +64,7 @@ test('getState should return an object according to the specified filters', func
   helper.toggleRefine('facetA', 'a');
   helper.toggleRefine('facetWeDontCareAbout', 'v');
   helper.toggleRefine('facetB', 'd');
+  helper.toggleRefine('facetC', 'menu');
   helper.addNumericRefinement('numerical', '=', 3);
   helper.addNumericRefinement('numerical2', '<=', 3);
 
@@ -76,7 +81,12 @@ test('getState should return an object according to the specified filters', func
     query: initialState.query,
     facetsRefinements: {facetA: ['a'], facetWeDontCareAbout: ['v']},
     disjunctiveFacetsRefinements: {facetB: ['d']},
+    hierarchicalFacetsRefinements: {facetC: ['menu']},
     numericRefinements: {numerical2: {'<=': [3]}, numerical: {'=': [3]}}
+  };
+
+  var stateWithHierarchicalAttribute = {
+    hierarchicalFacetsRefinements: {facetC: ['menu']}
   };
 
   t.deepEquals(helper.getState([]), {}, 'if an empty array is passed then we should get an empty object');
@@ -84,6 +94,11 @@ test('getState should return an object according to the specified filters', func
     helper.getState(['index', 'query', 'attribute:facetA', 'attribute:facetB', 'attribute:numerical']),
     stateFinalWithSpecificAttribute,
     '(getState) getState returned value should contain all the required elements');
+
+  t.deepEquals(
+    helper.getState(['attribute:facetC']),
+    stateWithHierarchicalAttribute,
+    '(getState) getState returned value should contain the hierarchical facet');
 
   t.deepEquals(
     helper.getState(['index', 'query', 'attribute:*']),
