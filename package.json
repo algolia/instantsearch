@@ -30,6 +30,7 @@
   },
   "repository": "algolia/instantsearch.js",
   "devDependencies": {
+    "algoliasearch-helper": "^2.9.1",
     "autoprefixer": "^6.3.1",
     "babel-cli": "^6.6.0",
     "babel-core": "^6.6.0",
