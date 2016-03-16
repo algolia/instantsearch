@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.9.1 - 2016-03-16
+  * fix(filterState): handle hierarchical facet attributes
+
 2.9.0 - 2016-02-19
   * feat(SearchParameters): Support for unknown parameters
   * feat(url-tools): Support for remapping keys in URL methods

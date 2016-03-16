@@ -7520,6 +7520,11 @@ function filterState(state, filters) {
         partialState.disjunctiveFacetsRefinements[attr] = state.disjunctiveFacetsRefinements[attr];
       }
 
+      if (state.isHierarchicalFacet(attr) && state.isHierarchicalFacetRefined(attr)) {
+        if (!partialState.hierarchicalFacetsRefinements) partialState.hierarchicalFacetsRefinements = {};
+        partialState.hierarchicalFacetsRefinements[attr] = state.hierarchicalFacetsRefinements[attr];
+      }
+
       var numericRefinements = state.getNumericRefinements(attr);
       if (!isEmpty(numericRefinements)) {
         if (!partialState.numericRefinements) partialState.numericRefinements = {};
@@ -11242,7 +11247,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":172,"./SearchParameters/shortener":173,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isArray":133,"lodash/lang/isPlainObject":140,"lodash/lang/isString":141,"lodash/object/invert":149,"lodash/object/mapKeys":152,"lodash/object/mapValues":153,"lodash/object/pick":157,"qs":163,"qs/lib/utils":166}],183:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.9.0';
+module.exports = '2.9.1';
 
 },{}]},{},[1])(1)
 });
