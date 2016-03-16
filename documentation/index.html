@@ -103,7 +103,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-c7ff370449aa516a66e1a3cff0e88248b94a1251b01dcd9182236e6b146e3f04.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.3.3</strong></p>
+    <p class="version">Version: <strong>1.4.0</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -246,6 +246,10 @@
             <td>The locale used to display numbers. This will be passed to Number.prototype.toLocaleString()</td>
           </tr>
           <tr>
+            <td><span class="attr-optional"><code class="highlighter-rouge">options.searchFunction</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>A hook that will be called each time a search needs to be done, with the helper as a parameter. It’s your responsibility to call helper.search(). This option allows you to avoid doing searches at page load for example.</td>
+          </tr>
+          <tr>
             <td><span class="attr-optional"><code class="highlighter-rouge">options.searchParameters</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
             <td>Additional parameters to pass to the Algolia API. <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Full documentation</a></td>
           </tr>
@@ -254,20 +258,20 @@
             <td>Url synchronization configuration. Setting to <code class="highlighter-rouge">true</code> will synchronize the needed search parameters with the browser url.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span></td>
-            <td>Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Full documentation</a></td>
-          </tr>
-          <tr>
-            <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>boolean</code></span></td>
-            <td>If set to true, the url will be hash based. Otherwise, it’ll use the query parameters using the modern history API.</td>
+            <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.mapping</code></span><span class="attr-infos">Type: <code>Object</code></span></td>
+            <td>Object used to define replacement query parameter to use in place of another. Keys are current query parameters and value the new value, e.g. <code class="highlighter-rouge"><span class="p">{</span><span class="w"> </span><span class="err">q:</span><span class="w"> </span><span class="err">'query'</span><span class="w"> </span><span class="p">}</span></code>.</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.threshold</code></span><span class="attr-infos">Type: <code>number</code></span></td>
             <td>Time in ms after which a new state is created in the browser history. The default value is 700.</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code class="highlighter-rouge">options.searchFunction</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>A hook that will be called each time a search needs to be done, with the helper as a parameter. It’s your responsibility to call helper.search(). This option allows you to avoid doing searches at page load for example.</td>
+            <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span></td>
+            <td>Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Full documentation</a></td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code class="highlighter-rouge">options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>boolean</code></span></td>
+            <td>If set to true, the url will be hash based. Otherwise, it’ll use the query parameters using the modern history API.</td>
           </tr>
         </tbody>
       </table>
@@ -1511,7 +1515,7 @@ This widget lets the user refine search results based on a numerical attribute. 
           </tr>
           <tr>
             <td><span class="attr-optional"><code class="highlighter-rouge">options.templates.item</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
-            <td>Item template, provided with <code class="highlighter-rouge">name</code>, <code class="highlighter-rouge">count</code>, <code class="highlighter-rouge">isRefined</code>, <code class="highlighter-rouge">url</code> data properties</td>
+            <td>Item template, provided with <code class="highlighter-rouge">name</code>, <code class="highlighter-rouge">isRefined</code>, <code class="highlighter-rouge">url</code> data properties</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code class="highlighter-rouge">options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
