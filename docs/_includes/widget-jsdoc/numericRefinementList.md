@@ -5,7 +5,7 @@
 | <span class='attr-required'>`options.options`</span><span class="attr-infos">Type: <code>Array.&lt;Object&gt;</code></span> | List of all the options |
 | <span class='attr-optional'>`options.templates`</span><span class="attr-infos">Type: <code>Object</code></span> | Templates to use for the widget |
 | <span class='attr-optional'>`options.templates.header`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Header template |
-| <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Item template, provided with `name`, `count`, `isRefined`, `url` data properties |
+| <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Item template, provided with `name`, `isRefined`, `url` data properties |
 | <span class='attr-optional'>`options.templates.footer`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Footer template |
 | <span class='attr-optional'>`options.transformData`</span><span class="attr-infos">Type: <code>function</code></span> | Function to change the object passed to the item template |
 | <span class='attr-optional'>`options.autoHideContainer`</span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span> | Hide the container when no results match |

@@ -1,3 +1,17 @@
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/algolia/instantsearch.js/compare/v1.3.3...v1.4.0) (2016-03-16)
+
+
+### Bug Fixes
+
+* **url:** allow hierarchical facets in trackedParameters ([36b4011](https://github.com/algolia/instantsearch.js/commit/36b4011))
+
+### Features
+
+* **url-sync:** use the new mapping option ([f869885](https://github.com/algolia/instantsearch.js/commit/f869885)), closes [#838](https://github.com/algolia/instantsearch.js/issues/838)
+
+
+
 <a name="1.3.3"></a>
 ## [1.3.3](https://github.com/algolia/instantsearch.js/compare/v1.3.2...v1.3.3) (2016-03-07)
 
