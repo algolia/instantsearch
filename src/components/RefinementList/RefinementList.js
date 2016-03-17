@@ -37,7 +37,8 @@ class RefinementList extends React.Component {
       );
     }
 
-    let templateData = {...facetValue, cssClasses: this.props.cssClasses};
+    let url = this.props.createURL(facetValue.name);
+    let templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
     let cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined
@@ -127,6 +128,8 @@ class RefinementList extends React.Component {
     }
 
     const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
+    let displayedFacetValues = this.props.facetValues.slice(0, limit);
+
     const showMoreBtn =
       this.props.showMore ?
         <Template
@@ -138,7 +141,7 @@ class RefinementList extends React.Component {
 
     return (
       <div className={cx(cssClassList)}>
-        {this.props.facetValues.map(this._generateFacetItem, this).slice(0, limit)}
+        {displayedFacetValues.map(this._generateFacetItem, this)}
         {showMoreBtn}
       </div>
     );
@@ -148,6 +151,7 @@ class RefinementList extends React.Component {
 RefinementList.propTypes = {
   Template: React.PropTypes.func,
   attributeNameKey: React.PropTypes.string,
+  createURL: React.PropTypes.func,
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
     depth: React.PropTypes.string,
