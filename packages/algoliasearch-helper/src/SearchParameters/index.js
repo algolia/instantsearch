@@ -20,7 +20,6 @@ var pluck = require('lodash/collection/pluck');
 
 var defaults = require('lodash/object/defaults');
 var merge = require('lodash/object/merge');
-var deepFreeze = require('../functions/deepFreeze');
 var warnOnce = require('../functions/warnOnce');
 var valToNumber = require('../functions/valToNumber');
 
@@ -516,7 +515,7 @@ SearchParameters.make = function makeSearchParameters(newParameters) {
     }
   });
 
-  return deepFreeze(instance);
+  return instance;
 };
 
 /**
@@ -1428,7 +1427,7 @@ SearchParameters.prototype = {
     var newState = new this.constructor(this);
 
     fn(newState, this);
-    return deepFreeze(newState);
+    return newState;
   },
 
   /**
