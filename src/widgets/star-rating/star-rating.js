@@ -29,7 +29,8 @@ starRating({
 
 /**
  * Instantiate a list of refinements based on a rating attribute
- * The underlying attribute needs to have values from 0 to N
+ * The ratings must be integer values. You can still keep the precise float value in another attribute
+ * to be used in the custom ranking configuration. So that the actual hits ranking is precise.
  * @function starRating
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for filtering
