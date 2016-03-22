@@ -197,6 +197,11 @@ function searchBox({
     render({helper}) {
       // updating the query from the outside using the helper
       // will fall in this case
+      // If the input is focused, we do not update it.
+      if (document.activeElement === this._input) {
+        return;
+      }
+
       if (helper.state.query !== this._input.value) {
         this._input.value = helper.state.query;
       }

@@ -357,8 +357,19 @@ describe('searchBox()', () => {
     container.value = 'initial';
     widget = searchBox({container});
     widget.init({state, helper, onHistoryChange});
+    container.blur();
     widget.render({helper: {state: {query: 'new value'}}});
     expect(container.value).toBe('new value');
+  });
+
+  it('does not update the input value when focused', () => {
+    container = document.body.appendChild(document.createElement('input'));
+    container.value = 'initial';
+    container.focus();
+    widget = searchBox({container});
+    widget.init({state, helper, onHistoryChange});
+    widget.render({helper: {state: {query: 'new value'}}});
+    expect(container.value).toBe('initial');
   });
 
   context('autofocus', () => {
@@ -440,4 +451,3 @@ describe('searchBox()', () => {
     });
   });
 });
-
