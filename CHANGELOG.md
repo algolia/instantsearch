@@ -1,3 +1,13 @@
+<a name="1.4.1"></a>
+## [1.4.1](https://github.com/algolia/instantsearch.js/compare/v1.4.0...v1.4.1) (2016-03-22)
+
+
+### Bug Fixes
+
+* **searchBox:** do not update the input when focused ([61cf9be](https://github.com/algolia/instantsearch.js/commit/61cf9be)), closes [#944](https://github.com/algolia/instantsearch.js/issues/944)
+
+
+
 <a name="1.4.0"></a>
 # [1.4.0](https://github.com/algolia/instantsearch.js/compare/v1.3.3...v1.4.0) (2016-03-16)
 
