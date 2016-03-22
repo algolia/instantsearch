@@ -54,6 +54,7 @@
     "conventional-changelog": "^0.5.3",
     "dmd": "^1.3.11",
     "doctoc": "^1.0.0",
+    "enzyme": "2.2.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-config-algolia": "^4.5.0",
