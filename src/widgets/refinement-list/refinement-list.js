@@ -131,29 +131,31 @@ function refinementList({
 
       return widgetConfiguration;
     },
-    init({templatesConfig, helper, createURL}) {
+    init({templatesConfig, helper}) {
       this._templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
         templates: allTemplates
       });
-      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(attributeName, facetValue));
+
       this.toggleRefinement = facetValue => helper
         .toggleRefinement(attributeName, facetValue)
         .search();
     },
-    render: function({results, state}) {
+    render: function({results, state, createURL}) {
       let facetValues = results
-        .getFacetValues(attributeName, {sortBy: sortBy})
-        .map(facetValue => {
-          facetValue.url = this._createURL(state, facetValue);
-          return facetValue;
-        });
+        .getFacetValues(attributeName, {sortBy: sortBy});
+
+      // Bind createURL to this specific attribute
+      function _createURL(facetValue) {
+        return createURL(state.toggleRefinement(attributeName, facetValue));
+      }
 
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
+          createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
           limitMax={widgetMaxValuesPerFacet}

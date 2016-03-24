@@ -21,7 +21,10 @@ describe('RefinementList', () => {
       item: 'item',
       active: 'active'
     };
-    let templateData = {cssClasses};
+    let templateData = {
+      cssClasses,
+      url: 'url'
+    };
     let commonItemProps = {
       handleClick: () => {},
       itemClassName: 'item',
@@ -139,6 +142,7 @@ describe('RefinementList', () => {
       itemProps[0].subItems = (
         <RefinementList
           attributeNameKey="name"
+          createURL={() => {}}
           cssClasses={customProps.cssClasses}
           depth={1}
           facetValues={customProps.facetValues[0].data}
@@ -173,6 +177,7 @@ describe('RefinementList', () => {
         {name: 'facet1', isRefined: true},
         {name: 'facet2', isRefined: false}
       ],
+      createURL: () => 'url',
       ...extraProps
     };
   }

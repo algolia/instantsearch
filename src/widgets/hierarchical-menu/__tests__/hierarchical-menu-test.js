@@ -249,8 +249,9 @@ describe('hierarchicalMenu()', () => {
         <RefinementList
           attributeNameKey="path"
           collapsible={false}
+          createURL={() => {}}
           cssClasses={cssClasses}
-          facetValues={[{name: 'foo', url: '#'}, {name: 'bar', url: '#'}]}
+          facetValues={[{name: 'foo'}, {name: 'bar'}]}
           shouldAutoHideContainer={false}
           templateProps={templateProps}
           toggleRefinement={() => {}}
@@ -349,13 +350,13 @@ describe('hierarchicalMenu()', () => {
 
       data = {data: firstLevel};
       let expectedFacetValues = [
-        {name: 'one', url: '#'},
-        {name: 'two', url: '#', data: [
-          {name: 'six', url: '#'},
-          {name: 'seven', url: '#'},
-          {name: 'eight', url: '#'}
+        {name: 'one'},
+        {name: 'two', data: [
+          {name: 'six'},
+          {name: 'seven'},
+          {name: 'eight'}
         ]},
-        {name: 'three', url: '#'}
+        {name: 'three'}
       ];
       widget = hierarchicalMenu({...options, limit: 3});
       widget.init({helper, createURL});

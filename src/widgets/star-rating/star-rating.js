@@ -143,14 +143,19 @@ function starRating({
           name: '' + star,
           count: count,
           isRefined: refinedStar === star,
-          url: createURL(state.toggleRefinement(attributeName, stars)),
           labels
         });
+      }
+
+      // Bind createURL to this specific attribute
+      function _createURL(facetValue) {
+        return createURL(state.toggleRefinement(attributeName, facetValue));
       }
 
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
+          createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={results.nbHits === 0}

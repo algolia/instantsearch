@@ -115,12 +115,10 @@ function hierarchicalMenu({
         Math.max(currentConfiguration.maxValuesPerFacet, limit) :
         limit
     }),
-    init({helper, templatesConfig, createURL}) {
+    init({helper, templatesConfig}) {
       this._toggleRefinement = facetValue => helper
         .toggleRefinement(hierarchicalFacetName, facetValue)
         .search();
-
-      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
 
       this._templateProps = prepareTemplateProps({
         transformData,
@@ -137,19 +135,23 @@ function hierarchicalMenu({
             subValue.data = this._prepareFacetValues(subValue.data, state);
           }
 
-          subValue.url = this._createURL(state, subValue);
-
           return subValue;
         });
     },
-    render: function({results, state}) {
+    render: function({results, state, createURL}) {
       let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
       facetValues = this._prepareFacetValues(facetValues, state);
+
+      // Bind createURL to this specific attribute
+      function _createURL(facetValue) {
+        return createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+      }
 
       ReactDOM.render(
         <RefinementList
           attributeNameKey="path"
           collapsible={collapsible}
+          createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={facetValues.length === 0}

@@ -117,6 +117,7 @@ describe('toggle()', () => {
           },
           collapsible: false,
           templateProps,
+          createURL: function() {},
           toggleRefinement: function() {}
         };
         createURL = () => '#';
@@ -148,11 +149,11 @@ describe('toggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2, url: '#'}, {name: 'false', count: 1, url: '#'}])
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
         };
         props.cssClasses.root += ' root cx';
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label, url: '#'}],
+          facetValues: [{count: 1, isRefined: false, name: label}],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -175,7 +176,7 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label, url: '#'}],
+          facetValues: [{count: 1, isRefined: false, name: label}],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -196,7 +197,7 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{name: label, isRefined: false, count: null, url: '#'}],
+          facetValues: [{name: label, isRefined: false, count: null}],
           shouldAutoHideContainer: true,
           ...props
         };
@@ -222,7 +223,7 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 2, isRefined: true, name: label, url: '#'}],
+          facetValues: [{count: 2, isRefined: true, name: label}],
           shouldAutoHideContainer: false,
           ...props
         };

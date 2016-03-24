@@ -112,12 +112,13 @@ describe('numericRefinementList()', () => {
         root: 'ais-refinement-list root cx'
       },
       collapsible: false,
+      createURL: function() {},
       facetValues: [
-        {attributeName: 'price', isRefined: true, name: 'All', url: '#'},
-        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4', url: '#'},
-        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4, url: '#'},
-        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5, url: '#'},
-        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10, url: '#'}
+        {attributeName: 'price', isRefined: true, name: 'All'},
+        {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
+        {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
+        {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
+        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10}
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,

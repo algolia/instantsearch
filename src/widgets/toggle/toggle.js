@@ -145,13 +145,18 @@ function toggle({
       let facetValue = {
         name: label,
         isRefined: isRefined,
-        count: values && values.count || null,
-        url: createURL(state.toggleRefinement(attributeName, isRefined))
+        count: values && values.count || null
       };
+
+      // Bind createURL to this specific attribute
+      function _createURL() {
+        return createURL(state.toggleRefinement(attributeName, isRefined));
+      }
 
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
+          createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
           shouldAutoHideContainer={results.nbHits === 0}

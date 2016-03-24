@@ -101,13 +101,18 @@ function numericRefinementList({
       let facetValues = options.map(facetValue => {
         facetValue.isRefined = isRefined(state, attributeName, facetValue);
         facetValue.attributeName = attributeName;
-        facetValue.url = createURL(refine(state, attributeName, options, facetValue.name));
         return facetValue;
       });
+
+      // Bind createURL to this specific attribute
+      function _createURL(facetValue) {
+        return createURL(refine(state, attributeName, options, facetValue));
+      }
 
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
+          createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
           shouldAutoHideContainer={results.nbHits === 0}
