@@ -1,3 +1,13 @@
+<a name="1.4.2"></a>
+## [1.4.2](https://github.com/algolia/instantsearch.js/compare/v1.4.1...v1.4.2) (2016-03-24)
+
+
+### Performance Improvements
+
+* **refinementList:** Stop creating URL for hidden refinements. ([2cdd17d](https://github.com/algolia/instantsearch.js/commit/2cdd17d))
+
+
+
 <a name="1.4.1"></a>
 ## [1.4.1](https://github.com/algolia/instantsearch.js/compare/v1.4.0...v1.4.1) (2016-03-22)
 
