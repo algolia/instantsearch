@@ -4,7 +4,7 @@ set -e # exit when error
 
 COMMIT_MSG=$(git log --format=%B --no-merges -n 1)
 [[ "$COMMIT_MSG" =~ hotfix ]] && is_hotfix=1 || is_hotfix=0
-[[ "$COMMIT_MSG" =~ /^docs/ ]] && is_doc=1 || is_doc=0
+[[ "$COMMIT_MSG" =~ ^docs? ]] && is_doc=1 || is_doc=0
 [[ "$TRAVIS_PULL_REQUEST" == false ]] && is_pr=0 || is_pr=1
 [[ "$TRAVIS_BRANCH" == master ]] && is_master=1 || is_master=0
 [[ "$TRAVIS_BRANCH" == develop ]] && is_develop=1 || is_develop=0
