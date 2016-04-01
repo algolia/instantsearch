@@ -317,7 +317,7 @@ describe('rangeSlider()', () => {
 
     it('calls the refinement functions if refined with min+1', () => {
       let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = Math.floor(stats.min) + 1;
+      let targetValue = stats.min + 1;
 
       let state0 = helper.state;
       widget._refine(helper, stats, [targetValue, stats.max]);
@@ -329,7 +329,7 @@ describe('rangeSlider()', () => {
 
     it('calls the refinement functions if refined with max-1', () => {
       let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = Math.ceil(stats.max) - 1;
+      let targetValue = stats.max - 1;
 
       let state0 = helper.state;
       widget._refine(helper, stats, [stats.min, targetValue]);
@@ -341,7 +341,7 @@ describe('rangeSlider()', () => {
 
     it('calls the refinement functions if refined with min+1 and max-1', () => {
       let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = [Math.floor(stats.min) + 1, Math.ceil(stats.max) - 1];
+      let targetValue = [stats.min + 1, stats.max - 1];
 
       let state0 = helper.state;
       widget._refine(helper, stats, targetValue);

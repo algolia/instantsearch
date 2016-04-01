@@ -137,10 +137,10 @@ function rangeSlider({
     _refine(helper, oldValues, newValues) {
       helper.clearRefinements(attributeName);
       if (newValues[0] > oldValues.min) {
-        helper.addNumericRefinement(attributeName, '>=', Math.round(newValues[0]));
+        helper.addNumericRefinement(attributeName, '>=', newValues[0]);
       }
       if (newValues[1] < oldValues.max) {
-        helper.addNumericRefinement(attributeName, '<=', Math.round(newValues[1]));
+        helper.addNumericRefinement(attributeName, '<=', newValues[1]);
       }
       helper.search();
     },
