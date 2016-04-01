@@ -7270,6 +7270,84 @@
           "version": "1.0.0",
           "resolved": "https://registry.npmjs.org/collapse-white-space/-/collapse-white-space-1.0.0.tgz"
         },
+        "react": {
+          "version": "0.14.8",
+          "resolved": "https://registry.npmjs.org/react/-/react-0.14.8.tgz",
+          "dependencies": {
+            "envify": {
+              "version": "3.4.0",
+              "resolved": "https://registry.npmjs.org/envify/-/envify-3.4.0.tgz",
+              "dependencies": {
+                "jstransform": {
+                  "version": "10.1.0",
+                  "resolved": "https://registry.npmjs.org/jstransform/-/jstransform-10.1.0.tgz",
+                  "dependencies": {
+                    "base62": {
+                      "version": "0.1.1",
+                      "resolved": "https://registry.npmjs.org/base62/-/base62-0.1.1.tgz"
+                    },
+                    "esprima-fb": {
+                      "version": "13001.1001.0-dev-harmony-fb",
+                      "resolved": "https://registry.npmjs.org/esprima-fb/-/esprima-fb-13001.1001.0-dev-harmony-fb.tgz"
+                    },
+                    "source-map": {
+                      "version": "0.1.31",
+                      "resolved": "https://registry.npmjs.org/source-map/-/source-map-0.1.31.tgz",
+                      "dependencies": {
+                        "amdefine": {
+                          "version": "1.0.0",
+                          "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-1.0.0.tgz"
+                        }
+                      }
+                    }
+                  }
+                },
+                "through": {
+                  "version": "2.3.8",
+                  "resolved": "https://registry.npmjs.org/through/-/through-2.3.8.tgz"
+                }
+              }
+            },
+            "fbjs": {
+              "version": "0.6.1",
+              "resolved": "https://registry.npmjs.org/fbjs/-/fbjs-0.6.1.tgz",
+              "dependencies": {
+                "core-js": {
+                  "version": "1.2.6",
+                  "resolved": "https://registry.npmjs.org/core-js/-/core-js-1.2.6.tgz"
+                },
+                "loose-envify": {
+                  "version": "1.1.0",
+                  "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.1.0.tgz",
+                  "dependencies": {
+                    "js-tokens": {
+                      "version": "1.0.3",
+                      "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-1.0.3.tgz"
+                    }
+                  }
+                },
+                "promise": {
+                  "version": "7.1.1",
+                  "resolved": "https://registry.npmjs.org/promise/-/promise-7.1.1.tgz",
+                  "dependencies": {
+                    "asap": {
+                      "version": "2.0.3",
+                      "resolved": "https://registry.npmjs.org/asap/-/asap-2.0.3.tgz"
+                    }
+                  }
+                },
+                "ua-parser-js": {
+                  "version": "0.7.10",
+                  "resolved": "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.10.tgz"
+                },
+                "whatwg-fetch": {
+                  "version": "0.9.0",
+                  "resolved": "https://registry.npmjs.org/whatwg-fetch/-/whatwg-fetch-0.9.0.tgz"
+                }
+              }
+            }
+          }
+        },
         "react-element-to-jsx-string": {
           "version": "2.5.0",
           "resolved": "https://registry.npmjs.org/react-element-to-jsx-string/-/react-element-to-jsx-string-2.5.0.tgz",
@@ -14351,8 +14429,8 @@
       "resolved": "https://registry.npmjs.org/raw-loader/-/raw-loader-0.5.1.tgz"
     },
     "react": {
-      "version": "0.14.7",
-      "resolved": "https://registry.npmjs.org/react/-/react-0.14.7.tgz",
+      "version": "0.14.8",
+      "resolved": "https://registry.npmjs.org/react/-/react-0.14.8.tgz",
       "dependencies": {
         "envify": {
           "version": "3.4.0",
@@ -14401,8 +14479,8 @@
               "resolved": "https://registry.npmjs.org/loose-envify/-/loose-envify-1.1.0.tgz",
               "dependencies": {
                 "js-tokens": {
-                  "version": "1.0.2",
-                  "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-1.0.2.tgz"
+                  "version": "1.0.3",
+                  "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-1.0.3.tgz"
                 }
               }
             },
@@ -14429,12 +14507,12 @@
       }
     },
     "react-addons-test-utils": {
-      "version": "0.14.7",
-      "resolved": "https://registry.npmjs.org/react-addons-test-utils/-/react-addons-test-utils-0.14.7.tgz"
+      "version": "0.14.8",
+      "resolved": "https://registry.npmjs.org/react-addons-test-utils/-/react-addons-test-utils-0.14.8.tgz"
     },
     "react-dom": {
-      "version": "0.14.7",
-      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.7.tgz"
+      "version": "0.14.8",
+      "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-0.14.8.tgz"
     },
     "react-nouislider": {
       "version": "1.9.1",
