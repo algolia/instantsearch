@@ -1,3 +1,13 @@
+<a name="1.4.3"></a>
+## [1.4.3](https://github.com/algolia/instantsearch.js/compare/v1.4.2...v1.4.3) (2016-04-01)
+
+
+### Bug Fixes
+
+* **rangeSlider:** step accepts a float value ([6ecc925](https://github.com/algolia/instantsearch.js/commit/6ecc925))
+
+
+
 <a name="1.4.2"></a>
 ## [1.4.2](https://github.com/algolia/instantsearch.js/compare/v1.4.1...v1.4.2) (2016-03-24)
 
