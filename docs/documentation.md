@@ -117,7 +117,7 @@ var search = instantsearch({
 });
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style="display: none">
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch(options);
 {% endhighlight %}
@@ -171,7 +171,7 @@ To build your search results page, you need to combine several widgets. Start by
 </script>
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style="display: none">
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 search.addWidget(widget)
 {% endhighlight %}
@@ -323,7 +323,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style="display: none">
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.searchBox(options)
 {% endhighlight %}
@@ -368,7 +368,7 @@ search.addWidget(
 {% endraw %}
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 {% raw %}
 instantsearch.widgets.hits(options);
@@ -417,7 +417,7 @@ search.addWidget(
 {% endraw %}
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 {% raw %}
 instantsearch.widgets.hitsPerPageSelector(options);
@@ -461,7 +461,7 @@ search.addWidget(
 );
     {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.pagination(options);
 {% endhighlight %}
@@ -500,7 +500,7 @@ search.addWidget(
 {% endhighlight %}
   </div>
 
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.menu(options);
 {% endhighlight %}
@@ -542,7 +542,7 @@ search.addWidget(
 {% endhighlight %}
   </div>
 
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.hierarchicalMenu(options);
 {% endhighlight %}
@@ -603,7 +603,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.refinementList(options);
 {% endhighlight %}
@@ -648,7 +648,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.numericRefinementList(options);
 {% endhighlight %}
@@ -694,7 +694,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.toggle(options);
 {% endhighlight %}
@@ -737,7 +737,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.rangeSlider(options);
 {% endhighlight %}
@@ -779,7 +779,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.priceRanges(options);
 {% endhighlight %}
@@ -821,7 +821,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.numericSelector(options);
 {% endhighlight %}
@@ -861,7 +861,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.starRating(options);
 {% endhighlight %}
@@ -899,7 +899,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.clearAll(options);
 {% endhighlight %}
@@ -932,7 +932,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.currentRefinedValues(options);
 {% endhighlight %}
@@ -971,7 +971,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.sortBySelector(options);
 {% endhighlight %}
@@ -1010,7 +1010,7 @@ search.addWidget(
 );
 {% endhighlight %}
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
 instantsearch.widgets.stats(options);
 {% endhighlight %}
@@ -1169,7 +1169,7 @@ search.addWidget(customWidget);
 {% endhighlight %}
 
   </div>
-  <div class="jsdoc js-toggle-jsdoc" style='display:none'>
+  <div class="jsdoc js-toggle-jsdoc">
 
 {% highlight javascript %}
 search.addWidget(widget)

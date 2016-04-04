@@ -57,15 +57,21 @@
         return $button;
       }
       var $btnGroup = $('<div class="btn-group js-doc-toggle"></div>');
-      $btnGroup.append(getButton('Snippet', 'snippet').addClass('active'));
+      var $snippetButton = getButton('Example', 'snippet');
       if (hasJsdoc) {
-        $btnGroup.append(getButton('All options', 'jsdoc'));
+        $btnGroup.append(getButton('Usage', 'jsdoc').addClass('active'));
+      } else {
+        $snippetButton.addClass('active');
       }
       if (hasRequirements) {
         $btnGroup.append(getButton('Requirements', 'requirements'));
       }
+      $btnGroup.append($snippetButton);
 
       $this.prepend($btnGroup);
+      setTimeout(function() {
+        $btnGroup.find('button:first-child').click();
+      }, 1);
     });
     $(document).on('click', '.toggle-doc-button', function() {
       var $this = $(this);
