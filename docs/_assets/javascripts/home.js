@@ -1,6 +1,4 @@
-//= require ./PRNG.js
-
-/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE*/
+/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE */
 'use strict';
 
 // Park-Miller-Carta Pseudo-Random Number Generator
@@ -140,7 +138,7 @@ $(function () {
 
 document.addEventListener('DOMContentLoaded', function(){
   var threeScript = document.createElement('script');
-  threeScript.src = 'js/three.min.js';
+  threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js';
   threeScript.addEventListener('load', function(){
     var $space = document.querySelector('#space');
     var rand = new PRNG();

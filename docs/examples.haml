@@ -14,17 +14,17 @@ permalink: /examples/
     .spacer40
     .demo-item.clearfix
       %a.pull-left.link-thumbnail{href: '{{ "/examples/media/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.m-r{src: '{% asset_path "media/capture.png" %}', width: 270}
+        %img.m-b.img-thumbnail.m-r{src: '{{ "/examples/media/capture.png" | prepend: site.baseurl }}', width: 270}
       %a{href: '{{ "/examples/media/" | prepend: site.baseurl }}'}
         %h3 Media
       %p Browsing video, music and other media becomes much more intuitive with instant search.
       .built-with.m-b
-        {% img 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
-        {% img 'icon-widget-results.svg' title:'hits' width:30 %}
-        {% img 'icon-widget-stats.svg' title:'stats' width:30 %}
-        {% img 'icon-widget-pagination.svg' title:'pagination' width:30 %}
-        {% img 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
-        {% img 'icon-widget-slider.svg' title:'rangeSlider' width:30 %}
+        {% image 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
+        {% image 'icon-widget-results.svg' title:'hits' width:30 %}
+        {% image 'icon-widget-stats.svg' title:'stats' width:30 %}
+        {% image 'icon-widget-pagination.svg' title:'pagination' width:30 %}
+        {% image 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
+        {% image 'icon-widget-slider.svg' title:'rangeSlider' width:30 %}
       %a{href: '{{ "https://github.com/algolia/instantsearch.js/tree/master/docs/examples/media" }}'} View code <i class="fa fa-github"></i>
       %span or
       %a{href: '{{ "/examples/media.zip" | prepend: site.baseurl }}'} download
@@ -32,21 +32,21 @@ permalink: /examples/
     .spacer40
     .demo-item.clearfix
       %a.pull-left.link-thumbnail{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.m-r{src: '{% asset_path "e-commerce/capture.png" %}', width: 270}
+        %img.m-b.img-thumbnail.m-r{src: '{{ "/examples/e-commerce/capture.png" | prepend: site.baseurl }}', width: 270}
       %a{href: '{{ "/examples/e-commerce/" | prepend: site.baseurl }}'}
         %h3 E-commerce
       %p An instant-search experience helps shoppers more easily find and buy what they want.
       .built-with.m-b
-        {% img 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
-        {% img 'icon-widget-results.svg' title:'hits' width:30 %}
-        {% img 'icon-widget-stats.svg' title:'stats' width:30 %}
-        {% img 'icon-widget-clearall.svg' title:'clearAll' width:30 %}
-        {% img 'icon-widget-index.svg' title:'sortBySelector' width:30 %}
-        {% img 'icon-widget-pagination.svg' title:'pagination' width:30 %}
-        {% img 'icon-widget-hierarchical.svg' title:'hierarchicalMenu' width:30 %}
-        {% img 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
-        {% img 'icon-widget-pricerange.svg' title:'priceRanges' width:30 %}
-        {% img 'icon-widget-star-rating.svg' title:'starRating' width:30 %}
+        {% image 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
+        {% image 'icon-widget-results.svg' title:'hits' width:30 %}
+        {% image 'icon-widget-stats.svg' title:'stats' width:30 %}
+        {% image 'icon-widget-clearall.svg' title:'clearAll' width:30 %}
+        {% image 'icon-widget-index.svg' title:'sortBySelector' width:30 %}
+        {% image 'icon-widget-pagination.svg' title:'pagination' width:30 %}
+        {% image 'icon-widget-hierarchical.svg' title:'hierarchicalMenu' width:30 %}
+        {% image 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
+        {% image 'icon-widget-pricerange.svg' title:'priceRanges' width:30 %}
+        {% image 'icon-widget-star-rating.svg' title:'starRating' width:30 %}
       %a{href: '{{ "https://github.com/algolia/instantsearch.js/tree/master/docs/examples/e-commerce" }}'} View code <i class="fa fa-github"></i>
       %span or
       %a{href: '{{ "/examples/e-commerce.zip" | prepend: site.baseurl }}'} download
@@ -54,19 +54,19 @@ permalink: /examples/
     .spacer40
     .demo-item.clearfix
       %a.pull-left.link-thumbnail{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
-        %img.m-b.img-thumbnail.m-r{src: '{% asset_path "tourism/capture.png" %}', width: 270}
+        %img.m-b.img-thumbnail.m-r{src: '{{ "/examples/tourism/capture.png" | prepend: site.baseurl }}', width: 270}
       %a{href: '{{ "/examples/tourism/" | prepend: site.baseurl }}'}
         %h3 Tourism
       %p Travel the world at the speed of search with instant results.
       .built-with.m-b
-        {% img 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
-        {% img 'icon-widget-stats.svg' title:'stats' width:30 %}
-        {% img 'icon-widget-pagination.svg' title:'pagination' width:30 %}
-        {% img 'icon-widget-results.svg' title:'hits' width:30 %}
-        {% img 'icon-widget-slider.svg' title:'rangeSlider' width:30 %}
-        {% img 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
-        {% img 'icon-widget-numerical.svg' title:'numericRefinementList' width:30 %}
-        {% img 'icon-widget-custom.svg' title:'custom' width:30 %}
+        {% image 'icon-widget-searchbox.svg' title:'searchBox' width:30 %}
+        {% image 'icon-widget-stats.svg' title:'stats' width:30 %}
+        {% image 'icon-widget-pagination.svg' title:'pagination' width:30 %}
+        {% image 'icon-widget-results.svg' title:'hits' width:30 %}
+        {% image 'icon-widget-slider.svg' title:'rangeSlider' width:30 %}
+        {% image 'icon-widget-refinement.svg' title:'refinementList' width:30 %}
+        {% image 'icon-widget-numerical.svg' title:'numericRefinementList' width:30 %}
+        {% image 'icon-widget-custom.svg' title:'custom' width:30 %}
       %a{href: '{{ "https://github.com/algolia/instantsearch.js/tree/master/docs/examples/tourism" }}'} View code <i class="fa fa-github"></i>
       %span or
       %a{href: '{{ "/examples/tourism.zip" | prepend: site.baseurl }}'} download
