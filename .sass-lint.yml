@@ -1,15 +1,15 @@
 options:
   formatter: stylish
 files:
-  include: 
+  include:
     '+(docs|src)/**/*.scss'
   ignore:
-    - 'docs/css/bootstrap/**/*.scss' # Vendor
-    - 'docs/css/_syntax-highlighting.scss' # Vendor
+    - 'docs/_assets/stylesheets/bootstrap/**/*.scss' # Vendor
+    - 'docs/_assets/stylesheets/_syntax-highlighting.scss' # Vendor
     - 'docs/examples/**/main.scss' # Files with front-matter
     # Contains asset_path() call to jekyll-assets. sass-lint cannot disable rules inline
-    # https://github.com/sasstools/sass-lint/issues/544
-    - 'docs/css/_home.scss'
+    # https://github.com/sasstools/sass-lint/issues/70
+    - 'docs/_assets/stylesheets/_home.scss'
 rules:
   # Extends
   extends-before-mixins: 1
