@@ -2,13 +2,8 @@ require 'json'
 
 ENV['VERSION'] = JSON.parse(File.read(File.join(File.dirname(__FILE__), '..', 'package.json')))['version']
 
-guard 'jekyll-plus', :serve => true do
-  watch /.*/
-  ignore /^_site/
-end
-
 guard 'livereload', port: '35730' do
-  watch /^.*/
+  watch /^_site/
 end
 
 guard :bundler do

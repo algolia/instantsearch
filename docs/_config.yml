@@ -4,6 +4,8 @@ twitter_username: algolia
 github_username: algolia
 host: 0.0.0.0
 
+incremental: true
+
 # Navigation
 navigation:
  - text: Documentation
@@ -24,13 +26,6 @@ gems:
   - algoliasearch-jekyll
   - jekyll-assets
   - jekyll-contentblocks
-
-assets:
-  sources:
-    - js
-    - css
-    - img
-    - examples
 
 # search
 algolia:
