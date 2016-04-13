@@ -32,6 +32,7 @@ class Pagination extends React.Component {
         ariaLabel={ariaLabel}
         cssClasses={cssClasses}
         handleClick={this.handleClick}
+        isDisabled={isDisabled}
         key={label + pageNumber}
         label={label}
         pageNumber={pageNumber}

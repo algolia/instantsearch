@@ -16,17 +16,32 @@ class PaginationLink extends React.Component {
   }
 
   render() {
-    let {cssClasses, label, ariaLabel, url} = this.props;
+    let {cssClasses, label, ariaLabel, url, isDisabled} = this.props;
+
+    let tagName = 'span';
+    let attributes = {
+      className: cssClasses.link,
+      dangerouslySetInnerHTML: {
+        __html: label
+      }
+    };
+
+    // "Enable" the element, by making it a link
+    if (!isDisabled) {
+      tagName = 'a';
+      attributes = {
+        ...attributes,
+        ariaLabel,
+        href: url,
+        onClick: this.handleClick
+      };
+    }
+
+    let element = React.createElement(tagName, attributes);
 
     return (
       <li className={cssClasses.item}>
-        <a
-          ariaLabel={ariaLabel}
-          className={cssClasses.link}
-          dangerouslySetInnerHTML={{__html: label}}
-          href={url}
-          onClick={this.handleClick}
-        ></a>
+        {element}
       </li>
     );
   }
@@ -42,6 +57,7 @@ PaginationLink.propTypes = {
     link: React.PropTypes.string
   }),
   handleClick: React.PropTypes.func.isRequired,
+  isDisabled: React.PropTypes.bool,
   label: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number

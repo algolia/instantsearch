@@ -71,6 +71,7 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
+        isDisabled={false}
         key="test8"
         label="test"
         pageNumber={8}
@@ -93,6 +94,7 @@ describe('Pagination', () => {
         ariaLabel={undefined}
         cssClasses={{item: '', link: ''}}
         handleClick={() => {}}
+        isDisabled
         key="test8"
         label="test"
         pageNumber={8}
