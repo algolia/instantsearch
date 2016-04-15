@@ -291,7 +291,7 @@ search.once('render', function(){  });
 
 instantsearch emits events during its lifecylce. The currently supported events are:
 
- - `render` : fired when a rendering of all the widgets has been completed
+ - `render`: fired when a rendering of all the widgets has been completed
 
 instantsearch events are based on the [Node EventEmitter](https://nodejs.org/api/events.html)
 class. See the example for a quick overview of the API or go to the

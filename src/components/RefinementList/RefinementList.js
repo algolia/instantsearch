@@ -129,9 +129,11 @@ class RefinementList extends React.Component {
 
     const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
     let displayedFacetValues = this.props.facetValues.slice(0, limit);
+    const displayShowMore = this.props.showMore === true &&
+      this.props.facetValues.length > displayedFacetValues.length ||
+      this.state.isShowMoreOpen === true;
 
-    const showMoreBtn =
-      this.props.showMore ?
+    const showMoreBtn = displayShowMore ?
         <Template
           rootProps={{onClick: this.handleClickShowMore}}
           templateKey={'show-more-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}

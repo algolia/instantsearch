@@ -82,7 +82,7 @@ var search = instantsearch({
   apiKey: apiKey, // Mandatory
   indexName: indexName, // Mandatory
   numberLocale: 'fr-FR', // Optional, defaults to 'en-EN',
-  urlSync: { // optionnal, activate url sync if defined
+  urlSync: { // optional, activate url sync if defined
     useHash: false
   }
 });
@@ -127,7 +127,7 @@ We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
 Also see our [documentation website][instantsearch-website-docs].
 
 The main configuration of instantsearch.js is done through a configuration object.
-The minimal configuration is made a of three attributes :
+The minimal configuration is made a of three attributes:
 
 ```js
 instantsearch({
@@ -137,12 +137,12 @@ instantsearch({
 });
 ```
 
-It can also contain other optionnal attributes to enable other features.
+It can also contain other optional attributes to enable other features.
 
 ### Number locale
 
 For the display of numbers, the locale will be determined by
-the browsers or forced in the configuration :
+the browsers or forced in the configuration:
 
 ```js
 instantsearch({
@@ -156,7 +156,7 @@ instantsearch({
 ### Initial search parameters
 
 At the start of instantsearch, the search configuration is based on the input
-of each widget and the URL. It is also possible to change the defaults of 
+of each widget and the URL. It is also possible to change the defaults of
 the configuration through an object that can contain any parameters understood
 by the Algolia API.
 
@@ -175,7 +175,7 @@ instantsearch({
 
 Instantsearch let you synchronize the url with the current search parameters.
 In order to activate this feature, you need to add the urlSync object. It accepts
-3 parameters : 
+3 parameters:
    - trackedParameters:string[] parameters that will be synchronized in the
       URL. By default, it will track the query, all the refinable attribute (facets and numeric
       filters), the index and the page.
@@ -184,7 +184,7 @@ In order to activate this feature, you need to add the urlSync object. It accept
    - threshold:number time in ms after which a new state is created in the browser
       history. The default value is 700.
 
-All those parameters are optional and a minimal configuration looks like :
+All those parameters are optional and a minimal configuration looks like:
 
 ```js
 instantsearch({
