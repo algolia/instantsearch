@@ -19,7 +19,8 @@ let bem = bemHelper('ais-stats');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template
- * @param  {string|Function} [options.templates.body] Body template
+ * @param  {string|Function} [options.templates.body] Body template, provided with `hasManyResults`,
+ * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`
  * @param  {string|Function} [options.templates.footer=''] Footer template
  * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
