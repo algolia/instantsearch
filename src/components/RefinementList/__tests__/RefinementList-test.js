@@ -240,6 +240,27 @@ describe('RefinementList', () => {
       expect(actual.length).toEqual(0);
     });
 
+    it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
+      // Given
+      let props = {
+        facetValues: [
+          {name: 'foo'},
+          {name: 'bar'},
+          {name: 'baz'}
+        ],
+        showMore: true,
+        limitMin: 3,
+        limitMax: 4
+      };
+
+      // When
+      let root = shallowRender(props);
+      let actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+
+      // Then
+      expect(actual.length).toEqual(0);
+    });
+
     it('changing the state will toggle the number of items displayed', () => {
       // Given
       let props = {
@@ -324,4 +345,3 @@ describe('RefinementList', () => {
     });
   });
 });
-
