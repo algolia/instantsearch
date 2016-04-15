@@ -1,3 +1,14 @@
+<a name="1.4.4"></a>
+## [1.4.4](https://github.com/algolia/instantsearch.js/compare/v1.4.3...v1.4.4) (2016-04-15)
+
+
+### Bug Fixes
+
+* **pagination:** Disabled pagination link can no longer be clicked ([88b567f](https://github.com/algolia/instantsearch.js/commit/88b567f)), closes [#974](https://github.com/algolia/instantsearch.js/issues/974)
+* **showMore:** hide showMore when no more facet values to show ([cc31b1a](https://github.com/algolia/instantsearch.js/commit/cc31b1a))
+
+
+
 <a name="1.4.3"></a>
 ## [1.4.3](https://github.com/algolia/instantsearch.js/compare/v1.4.2...v1.4.3) (2016-04-01)
 
