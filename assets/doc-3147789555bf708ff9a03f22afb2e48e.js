@@ -1,4 +1,5 @@
 /* global Clipboard */
+
 'use strict';
 
 (function($) {

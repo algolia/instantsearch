@@ -1,8 +1,21 @@
-//= require ./PRNG.js
+/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE */
 
-/* global $, TweenMax, TimelineMax, ScrollMagic, Power2, Bounce, THREE*/
 'use strict';
 
+// Park-Miller-Carta Pseudo-Random Number Generator
+// https://github.com/pnitsch/BitmapData.js/blob/master/js/BitmapData.js
+var PRNG = function () {
+  this.seed = 1;
+  this.next = function() {
+    return ( this.gen() / 2147483647 );
+  };
+  this.nextRange = function( min, max ) {
+    return min + ( ( max - min ) * this.next() )
+  };
+  this.gen = function() {
+    return this.seed = ( this.seed * 16807 ) % 2147483647;
+  };
+};
 
 $(function () {
   // init scroll magic
@@ -126,7 +139,7 @@ $(function () {
 
 document.addEventListener('DOMContentLoaded', function(){
   var threeScript = document.createElement('script');
-  threeScript.src = 'js/three.min.js';
+  threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r75/three.min.js';
   threeScript.addEventListener('load', function(){
     var $space = document.querySelector('#space');
     var rand = new PRNG();
