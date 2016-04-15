@@ -14,6 +14,7 @@ Hi (future) collaborator!
 - [New API proposal](#new-api-proposal)
 - [How to write issues](#how-to-write-issues)
 - [Development workflow](#development-workflow)
+- [Serving the build](#serving-the-build)
 - [Adding/Updating a package](#addingupdating-a-package)
 - [Removing a package](#removing-a-package)
 - [Commit message guidelines](#commit-message-guidelines)
@@ -82,6 +83,19 @@ Launch the website docs dev tool:
 npm run dev:docs
 ```
 
+# Serving the build
+
+For some use cases like building a demo, you may want to serve the current build
+on an http endpoint.
+
+To do so:
+
+```sh
+npm run serve
+```
+
+Will build, watch for changes and serve instantsearch.css and instantsearch.js on http://localhost:8080.
+
 # Adding/Updating a package
 
 We use a [specific shrinkwrapping tool](https://github.com/uber/npm-shrinkwrap) and npm@2.
@@ -96,6 +110,7 @@ npm run shrinkwrap
 
 ```sh
 npm install
+npm prune
 npm remove package --save[-dev]
 npm run shrinkwrap
 ```

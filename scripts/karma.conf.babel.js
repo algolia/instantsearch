@@ -15,11 +15,10 @@ let baseConfig = {
     // enzyme does not work well with webpack:
     // https://github.com/airbnb/enzyme/issues/47#issuecomment-165430136
     externals: {
-      jsdom: 'window',
       cheerio: 'window',
+      'react/addons': true,
       'react/lib/ExecutionEnvironment': true,
-      'react/lib/ReactContext': 'window',
-      'text-encoding': 'window'
+      'react/lib/ReactContext': true
     }
   },
   webpackMiddleware: {noInfo: true}
