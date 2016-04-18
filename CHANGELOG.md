@@ -1,3 +1,13 @@
+<a name="1.4.5"></a>
+## [1.4.5](https://github.com/algolia/instantsearch.js/compare/v1.4.4...v1.4.5) (2016-04-18)
+
+
+### Bug Fixes
+
+* **showMore:** hide "show less" when nothing to hide ([5ac2bb6](https://github.com/algolia/instantsearch.js/commit/5ac2bb6))
+
+
+
 <a name="1.4.4"></a>
 ## [1.4.4](https://github.com/algolia/instantsearch.js/compare/v1.4.3...v1.4.4) (2016-04-15)
 
