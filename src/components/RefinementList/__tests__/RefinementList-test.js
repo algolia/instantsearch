@@ -240,6 +240,28 @@ describe('RefinementList', () => {
       expect(actual.length).toEqual(0);
     });
 
+    it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
+      // Given
+      let props = {
+        facetValues: [
+          {name: 'foo'},
+          {name: 'bar'},
+          {name: 'baz'}
+        ],
+        showMore: true,
+        limitMin: 2,
+        limitMax: 5
+      };
+
+      // When
+      let root = shallowRender(props);
+      root.instance().handleClickShowMore();
+      root.setProps({facetValues: props.facetValues.slice(2)});
+
+      // Then
+      expect(root.find({templateKey: 'show-more-active'}).length).toEqual(0);
+    });
+
     it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
       // Given
       let props = {
