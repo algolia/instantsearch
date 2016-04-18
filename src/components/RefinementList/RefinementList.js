@@ -130,8 +130,10 @@ class RefinementList extends React.Component {
     const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
     let displayedFacetValues = this.props.facetValues.slice(0, limit);
     const displayShowMore = this.props.showMore === true &&
+      // "Show more"
       this.props.facetValues.length > displayedFacetValues.length ||
-      this.state.isShowMoreOpen === true;
+      // "Show less", but hide it if the result set changed
+      this.state.isShowMoreOpen && displayedFacetValues.length > this.props.limitMin;
 
     const showMoreBtn = displayShowMore ?
         <Template
