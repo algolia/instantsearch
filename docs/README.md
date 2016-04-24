@@ -7,6 +7,7 @@ You need [ruby](https://www.ruby-lang.org/en/), [bundler](http://bundler.io/).
 
 ```sh
 npm run dev:docs
+# open http://localhost:4000/
 ```
 
 # MacOS

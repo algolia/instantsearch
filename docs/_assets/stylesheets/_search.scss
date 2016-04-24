@@ -1,14 +1,14 @@
 // Search input in the navbar
 .search-form {
-  margin-top: 12px;
   position: relative;
+  top: -2px;
   input {
     position: relative;
     width: 36px;
     height: 36px;
     top: -5px;
     line-height: 2.3em;
-    padding: 0 5px 0 30px;
+    padding: 0 5px 0 28px;
     background-color: transparent;
     border: solid 2px rgba($brand-primary, .5s);
     border-radius: 40px;
@@ -28,7 +28,7 @@
     height: 20px;
     position: absolute;
     top: 2px;
-    left: 10px;
+    left: 8px;
     text-align: center;
     color: $brand-primary;
     pointer-events: none;
@@ -99,4 +99,3 @@
     color: lighten($gray, 20%);
   }
 }
-

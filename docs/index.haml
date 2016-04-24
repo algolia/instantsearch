@@ -18,8 +18,9 @@ layout: default
         %p.vp
           A library of UI widgets to help you build the best instant-search experience with
           %a{href:"https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage"} Algolia's Hosted Search API.
-        %p
-          <iframe src="https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px"></iframe>
+        .spacer20
+        %p.github-button
+          <iframe src="https://ghbtns.com/github-btn.html?user=algolia&repo=instantsearch.js&type=star&count=true&size=large" width="160" height="30"></iframe>
         .spacer80
         %h2 There’s a widget for that
         %p.lead
@@ -49,7 +50,7 @@ layout: default
         %h2 Bring your own widget
         %p.lead Sometimes you want to build a custom feature. You can do that by forking a pre-built widget or coding your own.
         .w-1
-          %img.m-r.m-t{src:"{% asset_path icon-widget-custom.svg %}", width:50}
+          %img.m-r.m-t{src:"{% asset_path icon-widget-custom.svg %}", width:50, alt:"Custom Widget"}
           %h4 Custom widgets
           %p Create and customize your own widgets.
         .spacer30

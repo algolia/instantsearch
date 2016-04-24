@@ -89,10 +89,19 @@ h2 {
     margin-right: 4px;
   }
 }
+.github-button iframe {
+  border: none;
+  overflow: hidden;
+}
 
 #curveUpColor {
   z-index: 99;
   display: block;
+  width: 100%;
+  overflow: hidden;
+  @media (max-width: 800px){
+    height: 40px;
+  }
   path {
     fill: #FFFFFF;
   }
