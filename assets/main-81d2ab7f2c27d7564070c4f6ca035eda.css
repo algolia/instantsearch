@@ -3724,6 +3724,12 @@ sub {
     .site-header .project-title:hover, .site-header .project-title:active, .site-header .project-title:focus {
       color: white; }
 
+.url_documentation_ .navbar {
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  width: 100%; }
+
 html, body {
   position: relative;
   width: 100%;
