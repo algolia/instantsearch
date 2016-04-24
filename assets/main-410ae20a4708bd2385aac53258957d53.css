@@ -3669,60 +3669,60 @@ sub {
 .bg-white {
   background-color: #FFFFFF; }
 
+/* HEADER
+// ------------------------- */
 .site-header {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 99;
-  background: linear-gradient(to right, rgba(10, 23, 36, 0.8) -50%, rgba(23, 44, 79, 0.5) 100%);
-  transition: background 2s ease; }
+  width: 100%; }
   .site-header .navbar {
-    margin-bottom: 0;
-    background-color: #0B1724;
     border-radius: 0;
-    border: 0; }
-    .site-header .navbar .navbar-collapse.in {
-      background-color: #0B1724;
-      animation: fadeInUp .2s ease-in-out;
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      padding: 20%;
-      font-size: 1.2em; }
-      .site-header .navbar .navbar-collapse.in li {
-        padding-bottom: 1em; }
-    .site-header .navbar .navbar-brand {
-      font-weight: 600;
-      color: #FFFFFF;
-      z-index: 1; }
+    border: none;
+    background-color: #0B1724;
+    height: 50px; }
     .site-header .navbar .navbar-header {
       position: relative;
-      z-index: 2; }
-    .site-header .navbar .navbar-toggle {
-      background-color: #1D96C7;
-      border: solid 1px #1D96C7;
-      color: #FFFFFF; }
-      .site-header .navbar .navbar-toggle.collapsed {
-        background-color: transparent;
-        border: solid 1px rgba(255, 255, 255, 0.4);
-        color: #FFFFFF; }
+      height: 50px;
+      font-size: 14px;
+      line-height: 50px;
+      color: #C7C4C3; }
+      .site-header .navbar .navbar-header a:hover {
+        text-decoration: none; }
+    .site-header .navbar .navbar-nav > li {
+      padding: 14px;
+      font-size: 14px;
+      font-family: Open Sans; }
+      .site-header .navbar .navbar-nav > li:last-child {
+        padding-right: 40px; }
     .site-header .navbar .navbar-nav > li > a {
-      padding-bottom: 0; }
-    .site-header .navbar .navbar-nav > .active > a {
-      color: #1D96C7;
-      background-color: transparent; }
+      padding: 0 0 4px 0; }
+    .site-header .navbar .navbar-nav > li.active > a {
+      background-color: transparent;
+      border-bottom: 2px solid #FF2E6C; }
     .site-header .navbar .fa-github {
-      font-size: 2em;
-      width: 30px;
-      display: inline-block;
-      text-align: center;
+      font-size: 1.6em;
       position: relative;
-      top: -4px; }
-
-.main-content {
-  margin-top: 50px; }
+      top: -2px; }
+  .site-header .logo-community {
+    color: white;
+    font-size: 26px;
+    font-weight: 100 !important;
+    margin-right: 12px;
+    border-right: #FF2E6C 2px solid;
+    padding-left: 8px; }
+    .site-header .logo-community img {
+      position: relative;
+      top: -3px;
+      width: 200px;
+      margin-right: 6px; }
+    .site-header .logo-community:hover, .site-header .logo-community:active, .site-header .logo-community:focus {
+      color: white; }
+  .site-header .project-title {
+    color: white;
+    font-size: 1.2em;
+    font-weight: bold;
+    position: relative;
+    top: -4px; }
+    .site-header .project-title:hover, .site-header .project-title:active, .site-header .project-title:focus {
+      color: white; }
 
 html, body {
   position: relative;
@@ -3802,9 +3802,18 @@ h2 {
     top: -5px;
     margin-right: 4px; }
 
+.github-button iframe {
+  border: none;
+  overflow: hidden; }
+
 #curveUpColor {
   z-index: 99;
-  display: block; }
+  display: block;
+  width: 100%;
+  overflow: hidden; }
+  @media (max-width: 800px) {
+    #curveUpColor {
+      height: 40px; } }
   #curveUpColor path {
     fill: #FFFFFF; }
 
@@ -4460,15 +4469,15 @@ code {
       display: block; }
 
 .search-form {
-  margin-top: 12px;
-  position: relative; }
+  position: relative;
+  top: -2px; }
   .search-form input {
     position: relative;
     width: 36px;
     height: 36px;
     top: -5px;
     line-height: 2.3em;
-    padding: 0 5px 0 30px;
+    padding: 0 5px 0 28px;
     background-color: transparent;
     border: solid 2px rgba(29, 150, 199, 0.5);
     border-radius: 40px;
@@ -4486,7 +4495,7 @@ code {
     height: 20px;
     position: absolute;
     top: 2px;
-    left: 10px;
+    left: 8px;
     text-align: center;
     color: #1D96C7;
     pointer-events: none; }
