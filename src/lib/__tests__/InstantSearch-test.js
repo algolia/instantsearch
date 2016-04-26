@@ -23,6 +23,7 @@ describe('InstantSearch lifecycle', () => {
   let searchParameters;
   let search;
   let helperSearchSpy;
+  let urlSync;
 
   beforeEach(() => {
     client = {algolia: 'client', addAlgoliaAgent: () => {}};
@@ -33,8 +34,16 @@ describe('InstantSearch lifecycle', () => {
     helperSearchSpy = sinon.spy();
     helper.search = helperSearchSpy;
     helper.getState = sinon.stub().returns({});
+    helper.setState = sinon.spy();
     helper.state = {
       setQueryParameters: function(params) { return new SearchParameters(params); }
+    };
+
+    urlSync = {
+      createURL: sinon.spy(),
+      onHistoryChange: () => {},
+      getConfiguration: sinon.spy(),
+      init: () => {}
     };
 
     algoliasearch = sinon.stub().returns(client);
@@ -51,6 +60,7 @@ describe('InstantSearch lifecycle', () => {
       another: {config: 'parameter'}
     };
 
+    InstantSearch.__Rewire__('urlSyncWidget', () => urlSync);
     InstantSearch.__Rewire__('algoliasearch', algoliasearch);
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
 
@@ -64,6 +74,7 @@ describe('InstantSearch lifecycle', () => {
   });
 
   afterEach(() => {
+    InstantSearch.__ResetDependency__('urlSyncWidget');
     InstantSearch.__ResetDependency__('algoliasearch');
     InstantSearch.__ResetDependency__('algoliasearchHelper');
   });
@@ -111,7 +122,9 @@ describe('InstantSearch lifecycle', () => {
     beforeEach(() => {
       widget = {
         getConfiguration: sinon.stub().returns({some: 'modified', another: {different: 'parameter'}}),
-        init: sinon.spy(),
+        init: sinon.spy(() => {
+          helper.state.sendMeToUrlSync = true;
+        }),
         render: sinon.spy()
       };
       search.addWidget(widget);
@@ -158,6 +171,14 @@ describe('InstantSearch lifecycle', () => {
         expect(args.helper).toBe(helper);
         expect(args.templatesConfig).toBe(search.templatesConfig);
         expect(args.onHistoryChange).toBe(search._onHistoryChange);
+      });
+
+      it('calls urlSync.getConfiguration after every widget', () => {
+        expect(urlSync.getConfiguration.calledOnce).toBe(true, 'urlSync.getConfiguration called once');
+        expect(widget.init.calledAfter(widget.getConfiguration))
+          .toBe(true, 'urlSync.getConfiguration was called after widget.init');
+        expect(urlSync.getConfiguration.getCall(0).args[0].sendMeToUrlSync)
+          .toBe(true, 'state modifications done in widget.init should be sent to urlSync.getConfiguration');
       });
 
       it('does not call widget.render', () => {
@@ -235,8 +256,10 @@ describe('InstantSearch lifecycle', () => {
       search.start();
     });
 
-    it('creates a URL', () => {
-      expect(search.createURL({hitsPerPage: 42})).toEqual('?q=&hPP=42&idx=&p=0');
+    it('has a createURL method', () => {
+      search.createURL({hitsPerPage: 542});
+      expect(urlSync.createURL.calledOnce).toBe(true);
+      expect(urlSync.createURL.getCall(0).args[0].hitsPerPage).toBe(542);
     });
 
     it('emits render when all render are done (using on)', () => {
