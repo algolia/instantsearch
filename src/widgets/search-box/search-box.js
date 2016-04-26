@@ -84,7 +84,7 @@ function searchBox({
       // Wrap input in a .ais-search-box div
       let wrapper = document.createElement('div');
       let CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
-      wrapper.classList.add.apply(wrapper.classList, CSSClassesToAdd);
+      CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
       wrapper.appendChild(input);
       return wrapper;
     },
@@ -110,7 +110,7 @@ function searchBox({
 
       // Add classes
       let CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
-      input.classList.add.apply(input.classList, CSSClassesToAdd);
+      CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
     },
     addPoweredBy: function(input) {
       let poweredByContainer = document.createElement('div');
