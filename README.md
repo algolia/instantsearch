@@ -183,6 +183,9 @@ In order to activate this feature, you need to add the urlSync object. It accept
       it'll use the query parameters using the modern history API.
    - threshold:number time in ms after which a new state is created in the browser
       history. The default value is 700.
+   - pushStateObject:object allows you to give a custom state object to `pushState`
+      (for example, to make this library compatible with Turbolinks, you will
+      need to set your state object to `{ turbolinks: true }`)
 
 All those parameters are optional and a minimal configuration looks like:
 
