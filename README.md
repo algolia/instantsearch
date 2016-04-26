@@ -30,10 +30,6 @@ Have a look at the website: [https://community.algolia.com/instantsearch.js/][in
   - [With npm, browserify, webpack](#with-npm-browserify-webpack)
 - [Quick Start](#quick-start)
 - [Browser support](#browser-support)
-- [Instant search configuration](#instant-search-configuration)
-  - [Number locale](#number-locale)
-  - [Initial search parameters](#initial-search-parameters)
-  - [URL synchronisation](#url-synchronisation)
 - [Development workflow](#development-workflow)
 - [Test](#test)
 - [Functional tests](#functional-tests)
@@ -73,18 +69,16 @@ npm install instantsearch.js --save
 
 ## Quick Start
 
+See our [documentation website][instantsearch-website-docs] for complete docs.
+
 ```js
 var instantsearch = require('instantsearch.js');
-// or use the 'instantsearch' global variable when using the jsDelivr build
+// or use the 'instantsearch' global (window) variable when using the jsDelivr build
 
 var search = instantsearch({
-  appId: appId, // Mandatory
-  apiKey: apiKey, // Mandatory
-  indexName: indexName, // Mandatory
-  numberLocale: 'fr-FR', // Optional, defaults to 'en-EN',
-  urlSync: { // optional, activate url sync if defined
-    useHash: false
-  }
+  appId: appId
+  apiKey: apiKey
+  indexName: indexName
 });
 
 // add a searchBox widget
@@ -121,82 +115,6 @@ To get < IE10 support, please insert this code in the `<head>`:
 ```
 
 We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
-
-## Instant search configuration
-
-Also see our [documentation website][instantsearch-website-docs].
-
-The main configuration of instantsearch.js is done through a configuration object.
-The minimal configuration is made a of three attributes:
-
-```js
-instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name'
-});
-```
-
-It can also contain other optional attributes to enable other features.
-
-### Number locale
-
-For the display of numbers, the locale will be determined by
-the browsers or forced in the configuration:
-
-```js
-instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name',
-  numberLocale: 'en-US'
-});
-```
-
-### Initial search parameters
-
-At the start of instantsearch, the search configuration is based on the input
-of each widget and the URL. It is also possible to change the defaults of
-the configuration through an object that can contain any parameters understood
-by the Algolia API.
-
-```js
-instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name',
-  searchParameters: {
-    typoTolerance: 'strict'
-  }
-});
-```
-
-### URL synchronisation
-
-Instantsearch let you synchronize the url with the current search parameters.
-In order to activate this feature, you need to add the urlSync object. It accepts
-3 parameters:
-   - trackedParameters:string[] parameters that will be synchronized in the
-      URL. By default, it will track the query, all the refinable attribute (facets and numeric
-      filters), the index and the page.
-   - useHash:boolean if set to true, the url will be hash based. Otherwise,
-      it'll use the query parameters using the modern history API.
-   - threshold:number time in ms after which a new state is created in the browser
-      history. The default value is 700.
-   - pushStateObject:object allows you to give a custom state object to `pushState`
-      (for example, to make this library compatible with Turbolinks, you will
-      need to set your state object to `{ turbolinks: true }`)
-
-All those parameters are optional and a minimal configuration looks like:
-
-```js
-instantsearch({
-  appId: 'my_application_id',
-  apiKey: 'my_search_api_key',
-  indexName: 'my_index_name',
-  urlSync: {}
-});
-```
 
 ## Development workflow
 
