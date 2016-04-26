@@ -58,11 +58,11 @@ let modernUrlUtils = {
   onpopstate: function(cb) {
     window.addEventListener('popstate', cb);
   },
-  pushState: function(qs) {
-    window.history.pushState(null, '', getFullURL(this.createURL(qs)));
+  pushState: function(qs, options = {}) {
+    window.history.pushState(options.pushStateObject, '', getFullURL(this.createURL(qs)));
   },
-  replaceState: function(qs) {
-    window.history.replaceState(null, '', getFullURL(this.createURL(qs)));
+  replaceState: function(qs, options = {}) {
+    window.history.replaceState(options.pushStateObject, '', getFullURL(this.createURL(qs)));
   },
   createURL: function(qs) {
     return this.character + qs + document.location.hash;
@@ -101,6 +101,9 @@ function getLocationOrigin() {
  * filters), the index and the page.
  *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
  * it'll use the query parameters using the modern history API.
+ *  - pushStateObject:object allows you to give a custom state object to `pushState`
+ *    (for example, to make this library compatible with Turbolinks, you will
+ *    need to set your state object to `{ turbolinks: true }`)
  */
 class URLSync {
   constructor(urlUtils, options) {
@@ -108,6 +111,7 @@ class URLSync {
     this.originalConfig = null;
     this.timer = timerMaker(Date.now());
     this.mapping = options.mapping || {};
+    this.pushStateObject = options.pushStateObject || null;
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
   }
@@ -150,9 +154,9 @@ class URLSync {
     );
 
     if (this.timer() < this.threshold) {
-      this.urlUtils.replaceState(qs);
+      this.urlUtils.replaceState(qs, {pushStateObject: this.pushStateObject});
     } else {
-      this.urlUtils.pushState(qs);
+      this.urlUtils.pushState(qs, {pushStateObject: this.pushStateObject});
     }
   }
 

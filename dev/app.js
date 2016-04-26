@@ -305,6 +305,7 @@ search.addWidget(
       link: 'facet-value',
       count: 'facet-count pull-right'
     },
+    rootPath: 'Cameras & Camcorders > Digital Camera Accessories',
     templates: {
       header: 'Hierarchical categories'
     }
