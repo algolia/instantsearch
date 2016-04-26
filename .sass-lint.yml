@@ -4,6 +4,7 @@ files:
   include:
     '+(docs|src)/**/*.scss'
   ignore:
+    - 'docs/_site/**'
     - 'docs/_assets/stylesheets/bootstrap/**/*.scss' # Vendor
     - 'docs/_assets/stylesheets/_syntax-highlighting.scss' # Vendor
     - 'docs/examples/**/main.scss' # Files with front-matter

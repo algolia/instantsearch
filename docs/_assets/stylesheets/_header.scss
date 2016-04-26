@@ -6,7 +6,7 @@
 
   .navbar {
     border-radius: 0;
-    border: none;
+    border: 0;
     background-color: #0B1724;
     height: 50px;
 
@@ -17,8 +17,10 @@
       line-height: 50px;
       color: #C7C4C3;
 
-      a:hover {
-        text-decoration: none;
+      a {
+        &:hover {
+          text-decoration: none;
+        }
       }
     }
 
@@ -33,10 +35,10 @@
     }
 
     .navbar-nav > li > a {
-      padding: 0 0 4px 0;
+      padding: 0 0 4px;
     }
 
-    .navbar-nav > li.active > a {
+    .navbar-nav > .active > a {
       background-color: transparent;
       border-bottom: 2px solid #FF2E6C;
     }
@@ -49,7 +51,7 @@
   }
 
   .logo-community {
-    color: white;
+    color: #FFFFFF;
     font-size: 26px;
     font-weight: 100 !important;
     margin-right: 12px;
@@ -64,27 +66,19 @@
     }
 
     &:hover, &:active, &:focus {
-      color: white;
+      color: #FFFFFF;
     }
   }
 
   .project-title {
-    color: white;
+    color: #FFFFFF;
     font-size: 1.2em;
     font-weight: bold;
     position: relative;
     top: -4px;
 
     &:hover, &:active, &:focus {
-      color: white;
+      color: #FFFFFF;
     }
   }
-}
-
-// fixed navbar in documentation
-.url_documentation_ .navbar {
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  width: 100%;
 }
