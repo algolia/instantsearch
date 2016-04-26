@@ -58,11 +58,11 @@ let modernUrlUtils = {
   onpopstate: function(cb) {
     window.addEventListener('popstate', cb);
   },
-  pushState: function(qs, options = {}) {
-    window.history.pushState(options.pushStateObject, '', getFullURL(this.createURL(qs)));
+  pushState: function(qs, {getHistoryState}) {
+    window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
-  replaceState: function(qs, options = {}) {
-    window.history.replaceState(options.pushStateObject, '', getFullURL(this.createURL(qs)));
+  replaceState: function(qs, {getHistoryState}) {
+    window.history.replaceState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
   createURL: function(qs) {
     return this.character + qs + document.location.hash;
@@ -84,34 +84,14 @@ function getLocationOrigin() {
   return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
 }
 
-/**
- * Instanciate a url sync widget. This widget let you synchronize the search
- * parameters with the URL. It can operate with legacy API and hash or it can use
- * the modern history API. By default, it will use the modern API, but if you are
- * looking for compatibility with IE8 and IE9, then you should set 'useHash' to
- * true.
- * @class
- * @param {UrlUtil} urlUtils an object containing the function to read, watch the changes
- * and update the URL.
- * @param {object} options may contain the following keys :
- *  - threshold:number time in ms after which a new state is created in the browser
- * history. The default value is 700.
- *  - trackedParameters:string[] parameters that will be synchronized in the
- * URL. By default, it will track the query, all the refinable attribute (facets and numeric
- * filters), the index and the page.
- *  - useHash:boolean if set to true, the url will be hash based. Otherwise,
- * it'll use the query parameters using the modern history API.
- *  - pushStateObject:object allows you to give a custom state object to `pushState`
- *    (for example, to make this library compatible with Turbolinks, you will
- *    need to set your state object to `{ turbolinks: true }`)
- */
+// see InstantSearch.js file for urlSync options
 class URLSync {
   constructor(urlUtils, options) {
     this.urlUtils = urlUtils;
     this.originalConfig = null;
     this.timer = timerMaker(Date.now());
     this.mapping = options.mapping || {};
-    this.pushStateObject = options.pushStateObject || null;
+    this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
   }
@@ -154,9 +134,9 @@ class URLSync {
     );
 
     if (this.timer() < this.threshold) {
-      this.urlUtils.replaceState(qs, {pushStateObject: this.pushStateObject});
+      this.urlUtils.replaceState(qs, {getHistoryState: this.getHistoryState});
     } else {
-      this.urlUtils.pushState(qs, {pushStateObject: this.pushStateObject});
+      this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
     }
   }
 
