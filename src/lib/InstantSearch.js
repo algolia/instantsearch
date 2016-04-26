@@ -38,6 +38,9 @@ function defaultCreateURL() { return '#'; }
  * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
+ * @param  {function} [options.urlSync.getHistoryState] Pass this function to override the
+ * default history API state we set to `null`. For example this could be used to force passing
+ * {turbolinks: true} to the history API every time we update it.
  * @return {Object} the instantsearch instance
  */
 class InstantSearch extends EventEmitter {
