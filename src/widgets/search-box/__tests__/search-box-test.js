@@ -209,12 +209,18 @@ describe('searchBox()', () => {
       container = document.body.appendChild(document.createElement('input'));
     });
 
-    function simulateInputEvent(query) {
+    function simulateInputEvent(query, stateQuery) {
       if (query === undefined) {
         query = 'test';
       }
+
       // Given
-      helper.state.query = 'tes';
+      if (stateQuery !== undefined) {
+        helper.state.query = stateQuery;
+      } else {
+        helper.state.query = 'tes';
+      }
+
       // When
       widget.init({state, helper, onHistoryChange});
       // Then
@@ -236,6 +242,12 @@ describe('searchBox()', () => {
       it('sets the query on any change', () => {
         simulateInputEvent();
         expect(helper.setQuery.calledOnce).toBe(true);
+      });
+
+      it('does nothing when query is the same as state', () => {
+        simulateInputEvent('test', 'test');
+        expect(helper.setQuery.calledOnce).toBe(false);
+        expect(helper.search.called).toBe(false);
       });
     });
 
