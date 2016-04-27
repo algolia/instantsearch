@@ -135,7 +135,7 @@ Usage: instantsearch({
 
     if (this.urlSync) {
       helper.setState(enhanceConfiguration(helper.state, syncWidget));
-      syncWidget.init({helper});
+      this.widgets.push(syncWidget);
     }
 
     helper.on('result', this._render.bind(this, helper));

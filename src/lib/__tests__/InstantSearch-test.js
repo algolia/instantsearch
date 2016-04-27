@@ -43,7 +43,7 @@ describe('InstantSearch lifecycle', () => {
       createURL: sinon.spy(),
       onHistoryChange: () => {},
       getConfiguration: sinon.spy(),
-      init: () => {}
+      render: () => {}
     };
 
     algoliasearch = sinon.stub().returns(client);
