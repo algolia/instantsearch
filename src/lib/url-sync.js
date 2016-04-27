@@ -6,6 +6,7 @@ import merge from 'lodash/object/merge';/**/
 
 let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 let majorVersionNumber = version.split('.')[0];
+let firstRender = true;
 
 function timerMaker(t0) {
   let t = t0;
@@ -103,11 +104,12 @@ class URLSync {
     return config;
   }
 
-  init({helper}) {
-    helper.on('change', (state) => {
-      this.renderURLFromState(state);
-    });
-    this.onHistoryChange(this.onPopState.bind(this, helper));
+  render({helper}) {
+    if (firstRender) {
+      firstRender = false;
+      this.onHistoryChange(this.onPopState.bind(this, helper));
+      helper.on('change', state => this.renderURLFromState(state));
+    }
   }
 
   onPopState(helper, fullState) {

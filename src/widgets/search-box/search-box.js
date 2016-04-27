@@ -155,6 +155,10 @@ function searchBox({
       }
 
       function maybeSearch(query) {
+        if (query === helper.state.query) {
+          return;
+        }
+
         if (queryHook) {
           queryHook(query, search);
           return;
