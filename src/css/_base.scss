@@ -1,18 +1,18 @@
 @mixin block($block) {
   .ais-#{$block} {
-    @content
+    @content;
   }
 }
 
 @mixin element($element) {
   &--#{$element} {
-    @content
+    @content;
   }
 }
 
 @mixin modifier($modifier) {
   &__#{$modifier} {
-    @content
+    @content;
   }
 }
 

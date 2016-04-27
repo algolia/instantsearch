@@ -160,7 +160,7 @@ code {
   li {
     padding-bottom: 6px;
   }
-  > .highlight, > .row .highlight {
+  .highlight, .row .highlight {
     pre {
       border: 0;
       .o {
@@ -497,4 +497,3 @@ code {
     border-radius: 0;
   }
 }
-
