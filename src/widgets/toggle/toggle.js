@@ -21,8 +21,8 @@ let bem = bemHelper('ais-toggle');
  * @param  {string} options.attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {Object} [options.values] Lets you define the values to filter on when toggling
- * @param  {*} [options.values.on] Value to filter on when checked
- * @param  {*} [options.values.off] Value to filter on when unchecked
+ * @param  {string|number|boolean} [options.values.on] Value to filter on when checked
+ * @param  {string|number|boolean} [options.values.off] Value to filter on when unchecked
  * element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template

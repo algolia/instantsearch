@@ -746,6 +746,8 @@ instantsearch.widgets.rangeSlider(options);
   <div class="requirements js-toggle-requirements">
 The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+
+The values inside this attribute must be JavaScript numbers and not strings.
   </div>
 </div>
 
@@ -789,6 +791,8 @@ instantsearch.widgets.priceRanges(options);
   <div class="requirements js-toggle-requirements">
 The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+
+The values inside this attribute must be JavaScript numbers and not strings.
   </div>
 </div>
 
@@ -831,6 +835,8 @@ instantsearch.widgets.numericSelector(options);
   <div class="requirements js-toggle-requirements">
 The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+
+The values inside this attribute must be JavaScript numbers and not strings.
   </div>
 </div>
 
@@ -871,6 +877,8 @@ instantsearch.widgets.starRating(options);
   <div class="requirements js-toggle-requirements">
 The attribute defined in `attributeName` must be defined as an
 [attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+
+The values inside this attribute must be JavaScript numbers and not strings.
   </div>
 </div>
 
