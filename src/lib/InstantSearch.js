@@ -108,10 +108,12 @@ Usage: instantsearch({
     if (this.urlSync) {
       let syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
+      this._createAbsoluteURL = relative => this._createURL(relative, {absolute: true});
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
     } else {
       this._createURL = defaultCreateURL;
+      this._createAbsoluteURL = defaultCreateURL;
       this._onHistoryChange = function() {};
     }
 
@@ -160,7 +162,7 @@ Usage: instantsearch({
         results,
         state,
         helper,
-        createURL: this._createURL
+        createURL: this._createAbsoluteURL
       });
     }, this);
     this.emit('render');
@@ -174,7 +176,7 @@ Usage: instantsearch({
           state,
           helper,
           templatesConfig,
-          createURL: this._createURL,
+          createURL: this._createAbsoluteURL,
           onHistoryChange: _onHistoryChange
         });
       }
