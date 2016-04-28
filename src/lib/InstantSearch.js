@@ -105,15 +105,14 @@ Usage: instantsearch({
   start() {
     if (!this.widgets) throw new Error('No widgets were added to instantsearch.js');
 
-    let syncWidget;
-
     if (this.urlSync) {
-      syncWidget = urlSyncWidget(this.urlSync);
+      let syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
+      this.widgets.push(syncWidget);
     } else {
       this._createURL = defaultCreateURL;
-      this._onHistoryChange = () => {};
+      this._onHistoryChange = function() {};
     }
 
     this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
@@ -132,11 +131,6 @@ Usage: instantsearch({
     this.helper = helper;
 
     this._init(helper.state, helper);
-
-    if (this.urlSync) {
-      helper.setState(enhanceConfiguration(helper.state, syncWidget));
-      this.widgets.push(syncWidget);
-    }
 
     helper.on('result', this._render.bind(this, helper));
     helper.search();

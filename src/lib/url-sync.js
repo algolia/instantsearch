@@ -98,7 +98,10 @@ class URLSync {
   }
 
   getConfiguration(currentConfiguration) {
-    this.originalConfig = currentConfiguration;
+    // we need to create a REAL helper to then get its state. Because some parameters
+    // like hierarchicalFacet.rootPath are then triggering a default refinement that would
+    // be not present if it was not going trough the SearchParameters constructor
+    this.originalConfig = algoliasearchHelper({}, currentConfiguration.index, currentConfiguration).state;
     let queryString = this.urlUtils.readUrl();
     let config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
     return config;
