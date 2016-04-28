@@ -29,8 +29,9 @@ function defaultCreateURL() { return '#'; }
  * @param  {Object} [options.urlSync.mapping] Object used to define replacement query
  * parameter to use in place of another. Keys are current query parameters
  * and value the new value, e.g. `{ q: 'query' }`.
- * @param  {number} [options.urlSync.threshold] Time in ms after which a new
- * state is created in the browser history. The default value is 700.
+ * @param  {number} [options.urlSync.threshold] Idle time in ms after which a new
+ * state is created in the browser history. The default value is 700. The url is always updated at each keystroke
+ * but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.
  * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
  * be synchronized in the URL. By default, it will track the query, all the
  * refinable attribute (facets and numeric filters), the index and the page.
