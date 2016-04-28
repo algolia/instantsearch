@@ -80,7 +80,7 @@ function getFullURL(relative) {
   return getLocationOrigin() + window.location.pathname + relative;
 }
 
-// IE <= 11 has no location.origin
+// IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
   return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
 }
@@ -147,14 +147,15 @@ class URLSync {
 
   // External API's
 
-  createURL(state) {
+  createURL(state, {absolute}) {
     let currentQueryString = this.urlUtils.readUrl();
     let filteredState = state.filter(this.trackedParameters);
     let foreignConfig = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(currentQueryString, {mapping: this.mapping});
     // Add instantsearch version to reconciliate old url with newer versions
     foreignConfig.is_v = majorVersionNumber;
+    const relative = this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
 
-    return this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
+    return absolute ? getFullURL(relative) : relative;
   }
 
   onHistoryChange(fn) {

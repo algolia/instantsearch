@@ -195,7 +195,7 @@ describe('InstantSearch lifecycle', () => {
           expect(widget.render.calledOnce).toBe(true, 'widget.render called once');
           expect(widget.render.args[0])
             .toEqual([{
-              createURL: search._createURL,
+              createURL: search._createAbsoluteURL,
               results,
               state: helper.state,
               helper,
