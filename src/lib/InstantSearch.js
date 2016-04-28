@@ -134,7 +134,15 @@ Usage: instantsearch({
     this._init(helper.state, helper);
 
     if (this.urlSync) {
-      helper.setState(enhanceConfiguration(helper.state, syncWidget));
+      var newstate = enhanceConfiguration(helper.state, syncWidget);
+
+      for (var key in newstate.hierarchicalFacetsRefinements) {
+          if (newstate.hierarchicalFacetsRefinements[key].length > 1) {
+            newstate.hierarchicalFacetsRefinements[key] = [newstate.hierarchicalFacetsRefinements[key][newstate.hierarchicalFacetsRefinements[key].length - 1]];
+          }
+      }
+
+      helper.setState(newstate);
       this.widgets.push(syncWidget);
     }
 
