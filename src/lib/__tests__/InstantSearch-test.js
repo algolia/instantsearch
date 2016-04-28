@@ -175,10 +175,8 @@ describe('InstantSearch lifecycle', () => {
 
       it('calls urlSync.getConfiguration after every widget', () => {
         expect(urlSync.getConfiguration.calledOnce).toBe(true, 'urlSync.getConfiguration called once');
-        expect(widget.init.calledAfter(widget.getConfiguration))
+        expect(urlSync.getConfiguration.calledAfter(widget.getConfiguration))
           .toBe(true, 'urlSync.getConfiguration was called after widget.init');
-        expect(urlSync.getConfiguration.getCall(0).args[0].sendMeToUrlSync)
-          .toBe(true, 'state modifications done in widget.init should be sent to urlSync.getConfiguration');
       });
 
       it('does not call widget.render', () => {
