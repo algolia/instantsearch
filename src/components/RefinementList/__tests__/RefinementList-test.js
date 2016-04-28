@@ -3,6 +3,8 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import expect from 'expect';
+import sinon from 'sinon';
+
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
@@ -10,9 +12,12 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('RefinementList', () => {
+  let createURL;
+
   function shallowRender(extraProps: {}) {
+    createURL = sinon.spy();
     let props = {
-      createURL: () => 'url',
+      createURL,
       facetValues: [],
       ...extraProps
     };
@@ -93,6 +98,23 @@ describe('RefinementList', () => {
       // Then
       expect(firstItem.props().facetValueToRefine).toEqual('foo');
       expect(secondItem.props().facetValueToRefine).toEqual('bar');
+    });
+
+    it('understands attributeNameKey', () => {
+      // Given
+      let props = {
+        facetValues: [{name: 'no', youpiName: 'hello'}],
+        attributeNameKey: 'youpiName'
+      };
+
+      // When
+      let items = shallowRender(props).find(RefinementListItem);
+      let item = items.at(0);
+
+      // Then
+      expect(item.props().facetValueToRefine).toEqual('hello');
+      expect(createURL.calledOnce).toBe(true);
+      expect(createURL.args[0][0]).toBe('hello');
     });
 
     it('should correctly set if refined or not', () => {
