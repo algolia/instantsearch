@@ -1,3 +1,23 @@
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/algolia/instantsearch.js/compare/v1.4.5...v1.5.0) (2016-04-29)
+
+
+### Bug Fixes
+
+* **base href:** always create absolute URLS in widgets ([ae6dbf6](https://github.com/algolia/instantsearch.js/commit/ae6dbf6)), closes [#970](https://github.com/algolia/instantsearch.js/issues/970)
+* **IE11:** classList do not supports .add(class, class) ([ab10347](https://github.com/algolia/instantsearch.js/commit/ab10347)), closes [#989](https://github.com/algolia/instantsearch.js/issues/989)
+* **lifecycle:** save configuration done in widget.init ([07d1fea](https://github.com/algolia/instantsearch.js/commit/07d1fea))
+* **RefinementList:** use attributeNameKey when calling createURL ([253ec28](https://github.com/algolia/instantsearch.js/commit/253ec28))
+* **rootpath:** remember rootpath option on 'back' button ([01ecdaa](https://github.com/algolia/instantsearch.js/commit/01ecdaa))
+* **searchBox:** do not trigger a search when input value is the same ([81c2e80](https://github.com/algolia/instantsearch.js/commit/81c2e80))
+* **urlSync:** only start watching for changes at first render ([4a672ae](https://github.com/algolia/instantsearch.js/commit/4a672ae))
+
+### Features
+
+* **urlSync:** allow overriding replaceState(state)/pushState(state) ([989856c](https://github.com/algolia/instantsearch.js/commit/989856c))
+
+
+
 <a name="1.4.5"></a>
 ## [1.4.5](https://github.com/algolia/instantsearch.js/compare/v1.4.4...v1.4.5) (2016-04-18)
 

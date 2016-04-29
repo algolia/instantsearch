@@ -4,8 +4,8 @@
 | <span class='attr-required'>`options.attributeName`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the attribute for faceting (eg. "free_shipping") |
 | <span class='attr-required'>`options.label`</span><span class="attr-infos">Type: <code>string</code></span> | Human-readable name of the filter (eg. "Free Shipping") |
 | <span class='attr-optional'>`options.values`</span><span class="attr-infos">Type: <code>Object</code></span> | Lets you define the values to filter on when toggling |
-| <span class='attr-optional'>`options.values.on`</span><span class="attr-infos">Type: <code>\*</code></span> | Value to filter on when checked |
-| <span class='attr-optional'>`options.values.off`</span><span class="attr-infos">Type: <code>\*</code></span> | Value to filter on when unchecked element (when using the default template) |
+| <span class='attr-optional'>`options.values.on`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>number</code> &#124; <code>boolean</code></span> | Value to filter on when checked |
+| <span class='attr-optional'>`options.values.off`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>number</code> &#124; <code>boolean</code></span> | Value to filter on when unchecked element (when using the default template) |
 | <span class='attr-optional'>`options.templates`</span><span class="attr-infos">Type: <code>Object</code></span> | Templates to use for the widget |
 | <span class='attr-optional'>`options.templates.header`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> &#124; <code>function</code></span> | Header template |
 | <span class='attr-optional'>`options.templates.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>function</code></span> | Item template |
