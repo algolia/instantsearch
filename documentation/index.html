@@ -24,7 +24,7 @@
     <meta content="1200" property="og:image:width">
     <meta content="500" property="og:image:height">
 
-    <link rel="stylesheet" href="/instantsearch.js/assets/main-81d2ab7f2c27d7564070c4f6ca035eda.css">
+    <link rel="stylesheet" href="/instantsearch.js/assets/main-10cb593d61197ed5f30176e690bcddfa.css">
     
       <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     
@@ -105,7 +105,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-beb3afc90aeba0e2d13a6a721c19f14a.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.4.5</strong></p>
+    <p class="version">Version: <strong>1.5.0</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -265,7 +265,7 @@
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.urlSync.threshold</code></span><span class="attr-infos">Type: <code>number</code></span></td>
-            <td>Time in ms after which a new state is created in the browser history. The default value is 700.</td>
+            <td>Idle time in ms after which a new state is created in the browser history. The default value is 700. The url is always updated at each keystroke but we only create a “previous search state” (activated when click on back button) every 700ms of idle time.</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.urlSync.trackedParameters</code></span><span class="attr-infos">Type: <code>Array.&lt;string&gt;</code></span></td>
@@ -274,6 +274,10 @@
           <tr>
             <td><span class="attr-optional"><code>options.urlSync.useHash</code></span><span class="attr-infos">Type: <code>boolean</code></span></td>
             <td>If set to true, the url will be hash based. Otherwise, it’ll use the query parameters using the modern history API.</td>
+          </tr>
+          <tr>
+            <td><span class="attr-optional"><code>options.urlSync.getHistoryState</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Pass this function to override the default history API state we set to <code>null</code>. For example this could be used to force passing {turbolinks: true} to the history API every time we update it.</td>
           </tr>
         </tbody>
       </table>
@@ -1654,11 +1658,11 @@ Note that if you provide an “off” option, it will be refined at initializati
             <td>Lets you define the values to filter on when toggling</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.values.on</code></span><span class="attr-infos">Type: <code>\*</code></span></td>
+            <td><span class="attr-optional"><code>options.values.on</code></span><span class="attr-infos">Type: <code>string</code> | <code>number</code> | <code>boolean</code></span></td>
             <td>Value to filter on when checked</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.values.off</code></span><span class="attr-infos">Type: <code>\*</code></span></td>
+            <td><span class="attr-optional"><code>options.values.off</code></span><span class="attr-infos">Type: <code>string</code> | <code>number</code> | <code>boolean</code></span></td>
             <td>Value to filter on when unchecked element (when using the default template)</td>
           </tr>
           <tr>
@@ -1869,6 +1873,8 @@ The min and max values are automatically computed by Algolia using the data in t
     <div class="requirements js-toggle-requirements">
       <p>The attribute defined in <code>attributeName</code> must be defined as an
 <a href="https://www.algolia.com/doc/rest#param-attributesForFaceting">attributesForFaceting</a> in your index configuration.</p>
+
+      <p>The values inside this attribute must be JavaScript numbers and not strings.</p>
     </div>
   </div>
 
@@ -2031,6 +2037,8 @@ This filtering widget lets the user choose a price range. The ranges are dynamic
     <div class="requirements js-toggle-requirements">
       <p>The attribute defined in <code>attributeName</code> must be defined as an
 <a href="https://www.algolia.com/doc/rest#param-attributesForFaceting">attributesForFaceting</a> in your index configuration.</p>
+
+      <p>The values inside this attribute must be JavaScript numbers and not strings.</p>
     </div>
   </div>
 
@@ -2127,6 +2135,8 @@ This filtering widget lets the user choose between numerical refinements from a 
     <div class="requirements js-toggle-requirements">
       <p>The attribute defined in <code>attributeName</code> must be defined as an
 <a href="https://www.algolia.com/doc/rest#param-attributesForFaceting">attributesForFaceting</a> in your index configuration.</p>
+
+      <p>The values inside this attribute must be JavaScript numbers and not strings.</p>
     </div>
   </div>
 
@@ -2281,6 +2291,8 @@ This widget lets the user refine search results by clicking on stars. The stars 
     <div class="requirements js-toggle-requirements">
       <p>The attribute defined in <code>attributeName</code> must be defined as an
 <a href="https://www.algolia.com/doc/rest#param-attributesForFaceting">attributesForFaceting</a> in your index configuration.</p>
+
+      <p>The values inside this attribute must be JavaScript numbers and not strings.</p>
     </div>
   </div>
 

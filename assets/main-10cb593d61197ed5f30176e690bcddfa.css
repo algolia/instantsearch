@@ -3675,7 +3675,7 @@ sub {
   width: 100%; }
   .site-header .navbar {
     border-radius: 0;
-    border: none;
+    border: 0;
     background-color: #0B1724;
     height: 50px; }
     .site-header .navbar .navbar-header {
@@ -3693,8 +3693,8 @@ sub {
       .site-header .navbar .navbar-nav > li:last-child {
         padding-right: 40px; }
     .site-header .navbar .navbar-nav > li > a {
-      padding: 0 0 4px 0; }
-    .site-header .navbar .navbar-nav > li.active > a {
+      padding: 0 0 4px; }
+    .site-header .navbar .navbar-nav > .active > a {
       background-color: transparent;
       border-bottom: 2px solid #FF2E6C; }
     .site-header .navbar .fa-github {
@@ -3702,7 +3702,7 @@ sub {
       position: relative;
       top: -2px; }
   .site-header .logo-community {
-    color: white;
+    color: #FFFFFF;
     font-size: 26px;
     font-weight: 100 !important;
     margin-right: 12px;
@@ -3714,21 +3714,15 @@ sub {
       width: 200px;
       margin-right: 6px; }
     .site-header .logo-community:hover, .site-header .logo-community:active, .site-header .logo-community:focus {
-      color: white; }
+      color: #FFFFFF; }
   .site-header .project-title {
-    color: white;
+    color: #FFFFFF;
     font-size: 1.2em;
     font-weight: bold;
     position: relative;
     top: -4px; }
     .site-header .project-title:hover, .site-header .project-title:active, .site-header .project-title:focus {
-      color: white; }
-
-.url_documentation_ .navbar {
-  position: fixed;
-  top: 0;
-  z-index: 1;
-  width: 100%; }
+      color: #FFFFFF; }
 
 html, body {
   position: relative;
@@ -4155,9 +4149,9 @@ code {
     padding: 0 10px 0 30px; }
   .documentation-content li {
     padding-bottom: 6px; }
-  .documentation-content > .highlight pre, .documentation-content > .row .highlight pre {
+  .documentation-content .highlight pre, .documentation-content .row .highlight pre {
     border: 0; }
-    .documentation-content > .highlight pre .o, .documentation-content > .row .highlight pre .o {
+    .documentation-content .highlight pre .o, .documentation-content .row .highlight pre .o {
       color: inherit; }
   .documentation-content h2, .documentation-content .h2 {
     margin-top: 3em;
