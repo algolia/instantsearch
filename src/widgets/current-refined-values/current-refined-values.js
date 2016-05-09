@@ -39,11 +39,11 @@ let bem = bemHelper('ais-current-refined-values');
  * @param  {boolean|string}    [option.clearAll='before'] Clear all position (one of ('before', 'after', false))
  * @param  {boolean}           [options.onlyListedAttributes=false] Only use declared attributes
  * @param  {Object}            [options.templates] Templates to use for the widget
- * @param  {string|Function}   [options.templates.header=''] Header template
+ * @param  {string|Function}   [options.templates.header] Header template
  * @param  {string|Function}   [options.templates.item] Item template
  * @param  {string|Function}   [options.templates.clearAll] Clear all template
- * @param  {string|Function}   [options.templates.footer=''] Footer template
- * @param  {Function}          [options.transformData] Function to change the object passed to the `body` template
+ * @param  {string|Function}   [options.templates.footer] Footer template
+ * @param  {Function}          [options.transformData.item] Function to change the object passed to the `item` template
  * @param  {boolean}           [options.autoHideContainer=true] Hide the container when no current refinements
  * @param  {Object}            [options.cssClasses] CSS classes to be added
  * @param  {string}            [options.cssClasses.root] CSS classes added to the root element
@@ -65,8 +65,8 @@ currentRefinedValues({
   [ attributes: [{name[, label, template, transformData]}] ],
   [ onlyListedAttributes = false ],
   [ clearAll = 'before' ] // One of ['before', 'after', false]
-  [ templates.{header = '', item, clearAll, footer = ''} ],
-  [ transformData ],
+  [ templates.{header,item,clearAll,footer} ],
+  [ transformData.{item} ],
   [ autoHideContainer = true ],
   [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
   [ collapsible=false ]
@@ -108,6 +108,10 @@ function currentRefinedValues({
        isString(val) || isArray(val);
     }, true);
 
+  const transformDataOK = isUndefined(transformData) ||
+    isFunction(transformData) ||
+    (isPlainObject(transformData) && isFunction(transformData.item));
+
   const showUsage = false ||
     !(isString(container) || isDomElement(container)) ||
     !isArray(attributes) ||
@@ -116,7 +120,7 @@ function currentRefinedValues({
     [false, 'before', 'after'].indexOf(clearAll) === -1 ||
     !isPlainObject(templates) ||
     !templatesOK ||
-    !(isUndefined(transformData) || isFunction(transformData)) ||
+    !transformDataOK ||
     !isBoolean(autoHideContainer) ||
     !userCssClassesOK;
 
@@ -157,6 +161,7 @@ function currentRefinedValues({
       };
 
       let templateProps = prepareTemplateProps({
+        transformData,
         defaultTemplates,
         templatesConfig,
         templates

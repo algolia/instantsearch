@@ -27,7 +27,7 @@ let bem = bemHelper('ais-hierarchical-menu');
  * @param  {string|Function} [options.templates.header=''] Header template (root level only)
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer=''] Footer template (root level only)
- * @param  {Function} [options.transformData] Method to change the object passed to the item template
+ * @param  {Function} [options.transformData.item] Method to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -55,7 +55,7 @@ hierarchicalMenu({
   [ sortBy=['name:asc'] ],
   [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
   [ templates.{header, item, footer} ],
-  [ transformData ],
+  [ transformData.{item} ],
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
