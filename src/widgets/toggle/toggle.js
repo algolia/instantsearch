@@ -25,10 +25,10 @@ let bem = bemHelper('ais-toggle');
  * @param  {string|number|boolean} [options.values.off] Value to filter on when unchecked
  * element (when using the default template)
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template
- * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {string|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -55,7 +55,7 @@ toggle({
   [ userValues={on: true, off: undefined} ],
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
-  [ transformData ],
+  [ transformData.{item} ],
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;

@@ -22,7 +22,7 @@ let bem = bemHelper('ais-stats');
  * @param  {string|Function} [options.templates.body] Body template, provided with `hasManyResults`,
  * `hasNoResults`, `hasOneResult`, `hitsPerPage`, `nbHits`, `nbPages`, `page`, `processingTimeMS`, `query`
  * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the `body` template
+ * @param  {Function} [options.transformData.body] Function to change the object passed to the `body` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -35,8 +35,8 @@ let bem = bemHelper('ais-stats');
 const usage = `Usage:
 stats({
   container,
-  [ template ],
-  [ transformData ],
+  [ templates.{header,body,footer} ],
+  [ transformData.{body} ],
   [ autoHideContainer]
 })`;
 function stats({

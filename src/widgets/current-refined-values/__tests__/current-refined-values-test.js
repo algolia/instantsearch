@@ -35,7 +35,9 @@ describe('currentRefinedValues()', () => {
         onlyListedAttributes: false,
         clearAll: 'after',
         templates: {},
-        transformData: (data) => data,
+        transformData: {
+          item: (data) => data
+        },
         autoHideContainer: false,
         cssClasses: {}
       };
@@ -250,6 +252,13 @@ describe('currentRefinedValues()', () => {
 
       it('doesn\'t throw usage with a function', () => {
         parameters.transformData = (data) => data;
+        expect(boundWidget).toNotThrow();
+      });
+
+      it('doesn\'t throw usage with an object of functions', () => {
+        parameters.transformData = {
+          item: (data) => data
+        };
         expect(boundWidget).toNotThrow();
       });
 

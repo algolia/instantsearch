@@ -14,19 +14,6 @@ import RefinementListComponent from '../../components/RefinementList/RefinementL
 
 let bem = bemHelper('ais-star-rating');
 
-const usage = `Usage:
-starRating({
-  container,
-  attributeName,
-  [ max=5 ],
-  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
-  [ templates.{header,item,footer} ],
-  [ labels.{andUp} ],
-  [ transformData ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-
 /**
  * Instantiate a list of refinements based on a rating attribute
  * The ratings must be integer values. You can still keep the precise float value in another attribute
@@ -41,7 +28,7 @@ starRating({
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -59,6 +46,18 @@ starRating({
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
+const usage = `Usage:
+starRating({
+  container,
+  attributeName,
+  [ max=5 ],
+  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ labels.{andUp} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
+})`;
 function starRating({
     container,
     attributeName,

@@ -25,7 +25,7 @@ let bem = bemHelper('ais-refinement-list');
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData] Function to change the object passed to the item template
+ * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -48,7 +48,7 @@ numericRefinementList({
   options,
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
-  [ transformData ],
+  [ transformData.{item} ],
   [ autoHideContainer ],
   [ collapsible=false ]
 })`;
