@@ -175,6 +175,3 @@ DEPENDENCIES
   sass
   thin
   uglifier
-
-BUNDLED WITH
-   1.11.2
