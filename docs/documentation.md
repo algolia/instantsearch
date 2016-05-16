@@ -1159,17 +1159,17 @@ Theses options will be passed to the `Hogan.compile` calls when you pass a custo
 var customWidget = {
   getConfiguration: function(searchParams) {
     return {
-      // see "All options" for more details on the API
+      // see "Usage" tab for more details on the API
     };
   },
 
   init: function(options) {
-    // see "All options" for more details on the API
+    // see "Usage" tab for more details on the API
   },
 
   // Called every time there is new data
   render: function(options) {
-    // see "All options" for more details on the API
+    // see "Usage" tab for more details on the API
   }
 };
 
