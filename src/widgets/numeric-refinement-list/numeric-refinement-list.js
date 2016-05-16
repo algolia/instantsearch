@@ -93,15 +93,18 @@ function numericRefinementList({
         templates
       });
 
-      this._toggleRefinement = facetValue => helper
-        .setState(refine(helper.state, attributeName, options, facetValue))
-        .search();
+      this._toggleRefinement = (facetValue) => {
+        let refinedState = refine(helper.state, attributeName, options, facetValue);
+        helper.setState(refinedState).search();
+      };
     },
     render: function({results, state, createURL}) {
-      let facetValues = options.map(facetValue => {
-        facetValue.isRefined = isRefined(state, attributeName, facetValue);
-        facetValue.attributeName = attributeName;
-        return facetValue;
+      let facetValues = options.map((facetValue) => {
+        return {
+          ...facetValue,
+          isRefined: isRefined(state, attributeName, facetValue),
+          attributeName: attributeName
+        };
       });
 
       // Bind createURL to this specific attribute
