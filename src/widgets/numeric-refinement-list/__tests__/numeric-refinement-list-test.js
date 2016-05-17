@@ -4,6 +4,7 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import jsdom from 'jsdom-global';
+import cloneDeep from 'lodash/lang/cloneDeep';
 
 import expectJSX from 'expect-jsx';
 import numericRefinementList from '../numeric-refinement-list.js';
@@ -182,6 +183,28 @@ describe('numericRefinementList()', () => {
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 10]);
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
+
+  it('does not alter the initial options when rendering', () => {
+    // Note: https://github.com/algolia/instantsearch.js/issues/1010
+    // Make sure we work on a copy of the initial facetValues when rendering,
+    // not directly editing it
+
+    // Given
+    let initialOptions = [{start: 0, end: 5, name: '1-5'}];
+    let initialOptionsClone = cloneDeep(initialOptions);
+    let testWidget = numericRefinementList({
+      container,
+      attributeName: 'price',
+      options: initialOptions
+    });
+
+    // When
+    testWidget.render({state, results, createURL});
+
+    // Then
+    expect(initialOptions).toEqual(initialOptionsClone);
+  });
+
 
   afterEach(() => {
     numericRefinementList.__ResetDependency__('ReactDOM');

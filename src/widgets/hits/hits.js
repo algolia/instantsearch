@@ -20,9 +20,9 @@ let bem = bemHelper('ais-hits');
  * @param  {string|Function} [options.templates.item=''] Template to use for each result. This template will receive an object containing a single record.
  * @param  {string|Function} [options.templates.allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
- * @param  {Function} [options.transformData.empty=identity] Method used to change the object passed to the `empty` template
- * @param  {Function} [options.transformData.item=identity] Method used to change the object passed to the `item` template
- * @param  {Function} [options.transformData.allItems=identity] Method used to change the object passed to the `allItems` template
+ * @param  {Function} [options.transformData.empty] Method used to change the object passed to the `empty` template
+ * @param  {Function} [options.transformData.item] Method used to change the object passed to the `item` template
+ * @param  {Function} [options.transformData.allItems] Method used to change the object passed to the `allItems` template
  * @param  {number} [hitsPerPage=20] The number of hits to display per page
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the wrapping element
@@ -36,7 +36,7 @@ hits({
   container,
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty, allItems} ],
-  [ transformData.{empty=identity,item=identity} | transformData.{empty, allItems} ],
+  [ transformData.{empty,item} | transformData.{empty, allItems} ],
   [ hitsPerPage=20 ]
 })`;
 function hits({

@@ -28,10 +28,10 @@ let bem = bemHelper('ais-menu');
  * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
  * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {Function} [options.transformData] Method to change the object passed to the item template
+ * @param  {string|Function} [options.templates.footer] Footer template
+ * @param  {Function} [options.transformData.item] Method to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no items in the menu
  * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -55,7 +55,7 @@ menu({
   [ limit=10 ],
   [ cssClasses.{root,list,item} ],
   [ templates.{header,item,footer} ],
-  [ transformData ],
+  [ transformData.{item} ],
   [ autoHideContainer ],
   [ showMore.{templates: {active, inactive}, limit} ],
   [ collapsible=false ]

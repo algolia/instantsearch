@@ -21,9 +21,9 @@ let bem = bemHelper('ais-clear-all');
  * @function clearAll
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
+ * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.link] Link template
- * @param  {string|Function} [options.templates.footer=''] Footer template
+ * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no refinement to clear
  * @param  {Object} [options.cssClasses] CSS classes to be added
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
@@ -39,7 +39,7 @@ const usage = `Usage:
 clearAll({
   container,
   [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={header: '', link: 'Clear all', footer: ''} ],
+  [ templates.{header,link,footer}={link: 'Clear all'} ],
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;

@@ -292,13 +292,14 @@ code {
       background-color: #0A1724;
       border: 0;
       transition: color .2s, background-color .2s;
-      &:hover {
+      &:hover,
+      &:active,
+      &:focus {
         color: #FFFFFF;
-      }
-      &:active, &:focus {
         outline: 0;
       }
       &.active {
+        color: #FFFFFF;
         background: #163350;
       }
     }
