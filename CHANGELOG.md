@@ -1,3 +1,13 @@
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/algolia/instantsearch.js/compare/v1.5.0...v1.5.1) (2016-05-17)
+
+
+### Bug Fixes
+
+* **numericRefinementList:** Correctly apply active class ([7cca9a4](https://github.com/algolia/instantsearch.js/commit/7cca9a4)), closes [#1010](https://github.com/algolia/instantsearch.js/issues/1010)
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/algolia/instantsearch.js/compare/v1.4.5...v1.5.0) (2016-04-29)
 
