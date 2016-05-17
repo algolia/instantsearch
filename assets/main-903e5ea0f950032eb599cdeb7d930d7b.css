@@ -3673,6 +3673,9 @@ sub {
 // ------------------------- */
 .site-header {
   width: 100%; }
+  .url_documentation_ .site-header {
+    position: fixed;
+    z-index: 999; }
   .site-header .navbar {
     border-radius: 0;
     border: 0;
@@ -4257,11 +4260,11 @@ code {
       background-color: #0A1724;
       border: 0;
       transition: color .2s, background-color .2s; }
-      .code-box .btn-group .toggle-doc-button:hover {
-        color: #FFFFFF; }
-      .code-box .btn-group .toggle-doc-button:active, .code-box .btn-group .toggle-doc-button:focus {
+      .code-box .btn-group .toggle-doc-button:hover, .code-box .btn-group .toggle-doc-button:active, .code-box .btn-group .toggle-doc-button:focus {
+        color: #FFFFFF;
         outline: 0; }
       .code-box .btn-group .toggle-doc-button.active {
+        color: #FFFFFF;
         background: #163350; }
   .code-box .copy-btn {
     display: block;

@@ -24,7 +24,7 @@
     <meta content="1200" property="og:image:width">
     <meta content="500" property="og:image:height">
 
-    <link rel="stylesheet" href="/instantsearch.js/assets/main-10cb593d61197ed5f30176e690bcddfa.css">
+    <link rel="stylesheet" href="/instantsearch.js/assets/main-903e5ea0f950032eb599cdeb7d930d7b.css">
     
       <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     
@@ -105,7 +105,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-beb3afc90aeba0e2d13a6a721c19f14a.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.5.0</strong></p>
+    <p class="version">Version: <strong>1.5.1</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -663,15 +663,15 @@ The hits widget is the main component that displays results from Algolia. It acc
             <td>Method to change the object passed to the templates</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData.empty</code></span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.empty</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Method used to change the object passed to the <code>empty</code> template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Method used to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData.allItems</code></span><span class="attr-infos">Default:<code class="attr-default">identity</code><br />Type: <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.allItems</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Method used to change the object passed to the <code>allItems</code> template</td>
           </tr>
           <tr>
@@ -1020,7 +1020,7 @@ of an e-commerce website.</p>
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template</td>
           </tr>
           <tr>
@@ -1028,12 +1028,12 @@ of an e-commerce website.</p>
             <td>Item template, provided with <code>name</code>, <code>count</code>, <code>isRefined</code>, <code>url</code> data properties</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Method to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Method to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -1188,8 +1188,8 @@ From a UX point of view, we suggest not displaying more than two levels deep.</p
             <td>Footer template (root level only)</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Method to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Method to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -1337,7 +1337,7 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.sortBy</code></span><span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;, &#x27;name:asc&#x27;]</code><br />Type: <code>Array.&lt;string&gt;</code> | <code>function</code></span></td>
-            <td>How to sort refinements. Possible values: <code>count|isRefined|name:asc|desc</code></td>
+            <td>How to sort refinements. Possible values: <code>count:asc|count:desc|name:asc|name:desc|isRefined</code></td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.limit</code></span><span class="attr-infos">Default:<code class="attr-default">10</code><br />Type: <code>string</code></span></td>
@@ -1380,8 +1380,8 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -1527,8 +1527,8 @@ This widget lets the user refine search results based on a numerical attribute. 
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -1670,7 +1670,7 @@ Note that if you provide an “off” option, it will be refined at initializati
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template</td>
           </tr>
           <tr>
@@ -1678,12 +1678,12 @@ Note that if you provide an “off” option, it will be refined at initializati
             <td>Item template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -2219,8 +2219,8 @@ This widget lets the user refine search results by clicking on stars. The stars 
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the item template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -2346,7 +2346,7 @@ This widget clears all the refinements that are currently applied.</p>
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template</td>
           </tr>
           <tr>
@@ -2354,7 +2354,7 @@ This widget clears all the refinements that are currently applied.</p>
             <td>Link template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template</td>
           </tr>
           <tr>
@@ -2478,7 +2478,7 @@ the user clear them one by one. This widget can also contain a
             <td>Templates to use for the widget</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.header</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Header template</td>
           </tr>
           <tr>
@@ -2490,12 +2490,12 @@ the user clear them one by one. This widget can also contain a
             <td>Clear all template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Default:<code class="attr-default">&#x27;&#x27;</code><br />Type: <code>string</code> | <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.templates.footer</code></span><span class="attr-infos">Type: <code>string</code> | <code>function</code></span></td>
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
-            <td>Function to change the object passed to the <code>body</code> template</td>
+            <td><span class="attr-optional"><code>options.transformData.item</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td>Function to change the object passed to the <code>item</code> template</td>
           </tr>
           <tr>
             <td><span class="attr-optional"><code>options.autoHideContainer</code></span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span></td>
@@ -2708,7 +2708,7 @@ This widget lets you display how many results matched the query and how fast the
             <td>Footer template</td>
           </tr>
           <tr>
-            <td><span class="attr-optional"><code>options.transformData</code></span><span class="attr-infos">Type: <code>function</code></span></td>
+            <td><span class="attr-optional"><code>options.transformData.body</code></span><span class="attr-infos">Type: <code>function</code></span></td>
             <td>Function to change the object passed to the <code>body</code> template</td>
           </tr>
           <tr>
@@ -2887,17 +2887,17 @@ This widget lets you display how many results matched the query and how fast the
         <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">customWidget</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">getConfiguration</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">searchParams</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
-      <span class="c1">// see &quot;All options&quot; for more details on the API</span>
+      <span class="c1">// see &quot;Usage&quot; tab for more details on the API</span>
     <span class="p">};</span>
   <span class="p">},</span>
 
   <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// see &quot;All options&quot; for more details on the API</span>
+    <span class="c1">// see &quot;Usage&quot; tab for more details on the API</span>
   <span class="p">},</span>
 
   <span class="c1">// Called every time there is new data</span>
   <span class="nx">render</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="c1">// see &quot;All options&quot; for more details on the API</span>
+    <span class="c1">// see &quot;Usage&quot; tab for more details on the API</span>
   <span class="p">}</span>
 <span class="p">};</span>
 
