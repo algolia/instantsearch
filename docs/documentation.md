@@ -1031,6 +1031,72 @@ instantsearch.widgets.stats(options);
 
 <div id="stats-container" class="widget-container"></div>
 
+## FAQ
+
+### Default filters
+
+<div class="codebox-combo">
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
+{% highlight javascript %}
+var search = instantsearch({
+  [...],
+  searchParameters: {
+    facetsRefinements: {
+      categories: ['Cell Phones'],
+      isPremium: [true]
+    },
+    disjunctiveFacetsRefinements: {
+      brand: ['Samsung', 'Apple']
+    },
+    // Add to "facets" all attributes for which you
+    // do NOT have a widget defined
+    facets: ['isPremium']
+  },
+});
+// Below is just a common widget configuration, to show
+// how it interacts with the above searchParameters
+search.addWidget(
+  instantsearch.widgets.menu({
+    [...],
+    attributeName: 'categories'
+  })
+);
+search.addWidget(
+  instantsearch.widgets.refinementList({
+    attributeName: 'brand',
+    operator: 'or'
+  })
+);
+{% endhighlight %}
+  </div>
+</div>
+
+Sometimes you might want to automatically add some filters on the first page
+load. Maybe automatically filter on `Cell Phones` made by either `Samsung` or
+`Apple`, or only display items that are somehow "premium".
+
+If you are already using a widget to perform a filter on that attribute (like
+the `menu` or `refinementList` widgets), you can just use the
+`searchParameters.facetsRefinements` attribute option when instanciating instantsearch.
+
+Pass it an object where each key is the attribute you want to filter and each
+value is an array of the filtered values.  If you are using `OR` filters instead
+of `AND`, then just use `disjunctiveFacetsRefinements` in place of
+`facetsRefinements`.
+
+If you want to filter on an attribute for which you're not using a widget, you
+will have to also pass the `facets` key to the `searchParameters` with an array
+containing the name of your attribute. Use `disjunctiveFacets` instead of
+`facets` if you'd like to do an `OR` instead of an `AND`. Note that you still
+need to add the attribute to the
+[attributesForFacetting](https://www.algolia.com/doc/rest#param-attributesForFaceting)
+in your index configuration.
+
+</div>
+
+
+
 ## Community widgets
 
 Community widgets are solving specific use cases and so cannot make it into the core instantsearch.js library.
