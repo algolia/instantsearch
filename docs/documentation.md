@@ -1095,7 +1095,44 @@ in your index configuration.
 
 </div>
 
+### Hide results on init
 
+<div class="codebox-combo">
+<div class="code-box">
+  <div class="code-sample-snippet ignore">
+{% highlight javascript %}
+var search = instantsearch({
+  [...],
+  searchFunction: function(helper) {
+    var searchResults = $('.search-results');
+    if (helper.state.query === '') {
+      searchResults.hide();
+      return;
+    }
+    helper.search();
+    searchResults.show();
+  }
+}
+{% endhighlight %}
+  </div>
+</div>
+
+By default, the library will do an empty query (`''`) on startup and display the
+results for this query. If you'd like to display results only when users
+actually start typing, you can use the `searchFunction` hook.
+
+This method takes only one argument, `helper`, on which you can call `.search()`
+to actually start the search.  `helper.state` also contains informations about
+the current state of your search.
+
+You can for example check for `helper.state.query` to see if the query is empty
+or not, and act accordingly. You might also have to handle the case when users
+start typing, then delete their query and hide the results when that happens.
+
+Note that for the sake of brevity, we use a jQuery-like syntax in the example,
+but any other method to show/hide the results would work.
+
+</div>
 
 ## Community widgets
 
