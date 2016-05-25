@@ -35,8 +35,8 @@ let bem = bemHelper('ais-hierarchical-menu');
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.depth] CSS class to add to the depth element
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [options.cssClasses.depth] CSS class to add to each item element to denote its depth. The actual level will be appended to the given class name (ie. if `depth` is given, the widget will add `depth0`, `depth1`, ... according to the level of each item).
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link (when using the default template)
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
