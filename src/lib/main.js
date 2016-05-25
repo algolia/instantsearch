@@ -8,6 +8,7 @@ import toFactory from 'to-factory';
 import InstantSearch from './InstantSearch.js';
 import algoliasearchHelper from 'algoliasearch-helper';
 import clearAll from '../widgets/clear-all/clear-all.js';
+import configurator from '../widgets/configurator/configurator.js';
 import currentRefinedValues from '../widgets/current-refined-values/current-refined-values.js';
 import hierarchicalMenu from '../widgets/hierarchical-menu/hierarchical-menu.js';
 import hits from '../widgets/hits/hits.js';
@@ -29,6 +30,7 @@ import version from './version.js';
 const instantsearch = toFactory(InstantSearch);
 instantsearch.widgets = {
   clearAll,
+  configurator,
   currentRefinedValues,
   hierarchicalMenu,
   hits,

@@ -16,6 +16,18 @@ var search = instantsearch({
 });
 
 search.addWidget(
+  instantsearch.widgets.configurator(function(state) {
+    // Add to "facets" all attributes for which you
+    // do NOT have a widget defined
+    return state.setFacets(state.facets.concat('type'))
+                .toggleHierarchicalFacetRefinement('categories', 'Cell Phones')
+                .addFacetRefinement('type', 'At&t smartphone')
+                .addDisjunctiveFacetRefinement('brand', 'Samsung')
+                .addDisjunctiveFacetRefinement('brand', 'Apple')
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
@@ -305,7 +317,7 @@ search.addWidget(
       link: 'facet-value',
       count: 'facet-count pull-right'
     },
-    rootPath: 'Cameras & Camcorders',
+    rootPath: 'Cell Phones',
     templates: {
       header: 'Hierarchical categories'
     }

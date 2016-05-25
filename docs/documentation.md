@@ -1037,23 +1037,36 @@ instantsearch.widgets.stats(options);
 
 <div class="codebox-combo">
 <div class="code-box">
-  <div class="code-sample-snippet ignore">
+  <div class="jsdoc js-toggle-jsdoc">
 {% highlight javascript %}
-var search = instantsearch({
-  [...],
-  searchParameters: {
-    facetsRefinements: {
-      categories: ['Cell Phones'],
-      isPremium: [true]
-    },
-    disjunctiveFacetsRefinements: {
-      brand: ['Samsung', 'Apple']
-    },
+instantsearch.widgets.configurator(fn)
+{% endhighlight %}
+
+{% include widget-jsdoc/configurator.md %}
+
+  </div>
+  <div class="code-sample-snippet js-toggle-snippet ignore">
+{% highlight javascript %}
+var search = instantsearch({ [...] });
+
+search.addWidget(
+  instantsearch.widgets.configurator(function(state) {
     // Add to "facets" all attributes for which you
     // do NOT have a widget defined
-    facets: ['isPremium']
-  },
-});
+    return state
+      .setFacets(state.facets.concat('type')) 
+      // type facet is not defined by any widgets
+      .addFacetRefinement('type', 'At&t smartphone')
+      // categories is already set up by our menu widget
+      // as a hierarchical facet
+      .toggleHierarchicalFacetRefinement('categories', 'Cell Phones')
+      // Same for brand that is used in a refinement list
+      // configured as disjunctive / or
+      .addDisjunctiveFacetRefinement('brand', 'Samsung')
+      .addDisjunctiveFacetRefinement('brand', 'Apple');
+  })
+);
+
 // Below is just a common widget configuration, to show
 // how it interacts with the above searchParameters
 search.addWidget(
@@ -1062,6 +1075,7 @@ search.addWidget(
     attributeName: 'categories'
   })
 );
+
 search.addWidget(
   instantsearch.widgets.refinementList({
     attributeName: 'brand',
@@ -1072,26 +1086,16 @@ search.addWidget(
   </div>
 </div>
 
-Sometimes you might want to automatically add some filters on the first page
-load. Maybe automatically filter on `Cell Phones` made by either `Samsung` or
-`Apple`, or only display items that are somehow "premium".
+For the case where you either need to provide a default filter value for widget
+or you want the search to be filtered on hidden attribute value, we provide
+a specific widget called `configurator`. The sole purpose of this widget is
+to let you set the search configuration, it doesn't have any visual UI.
 
-If you are already using a widget to perform a filter on that attribute (like
-the `menu` or `refinementList` widgets), you can just use the
-`searchParameters.facetsRefinements` attribute option when instanciating instantsearch.
+To sum up, you should use this widget, if you want:
+ - to set a specific value to an existing widget
+ - to set an hidden parameter
 
-Pass it an object where each key is the attribute you want to filter and each
-value is an array of the filtered values.  If you are using `OR` filters instead
-of `AND`, then just use `disjunctiveFacetsRefinements` in place of
-`facetsRefinements`.
-
-If you want to filter on an attribute for which you're not using a widget, you
-will have to also pass the `facets` key to the `searchParameters` with an array
-containing the name of your attribute. Use `disjunctiveFacets` instead of
-`facets` if you'd like to do an `OR` instead of an `AND`. Note that you still
-need to add the attribute to the
-[attributesForFacetting](https://www.algolia.com/doc/rest#param-attributesForFaceting)
-in your index configuration.
+See the example, on the right, to see the `configurator` in action.
 
 </div>
 
