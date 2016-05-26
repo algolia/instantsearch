@@ -5,8 +5,8 @@
   "node-version": "v5.11.0",
   "dependencies": {
     "algoliasearch": {
-      "version": "3.14.4",
-      "resolved": "https://registry.npmjs.org/algoliasearch/-/algoliasearch-3.14.4.tgz",
+      "version": "3.14.5",
+      "resolved": "https://registry.npmjs.org/algoliasearch/-/algoliasearch-3.14.5.tgz",
       "dependencies": {
         "agentkeepalive": {
           "version": "2.1.1",
@@ -73,6 +73,26 @@
         "foreach": {
           "version": "2.0.5",
           "resolved": "https://registry.npmjs.org/foreach/-/foreach-2.0.5.tgz"
+        },
+        "global": {
+          "version": "4.3.0",
+          "resolved": "https://registry.npmjs.org/global/-/global-4.3.0.tgz",
+          "dependencies": {
+            "min-document": {
+              "version": "2.18.0",
+              "resolved": "https://registry.npmjs.org/min-document/-/min-document-2.18.0.tgz",
+              "dependencies": {
+                "dom-walk": {
+                  "version": "0.1.1",
+                  "resolved": "https://registry.npmjs.org/dom-walk/-/dom-walk-0.1.1.tgz"
+                }
+              }
+            },
+            "process": {
+              "version": "0.5.2",
+              "resolved": "https://registry.npmjs.org/process/-/process-0.5.2.tgz"
+            }
+          }
         },
         "inherits": {
           "version": "2.0.1",
