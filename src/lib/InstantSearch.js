@@ -1,4 +1,4 @@
-import algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
 import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
