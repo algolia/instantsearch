@@ -181,6 +181,15 @@
     });
   }
 
+  function foldableDetails() {
+    $('.attr-name').on('click', function() {
+      var $descriptionParagraph = $(this).next('.attr-description')
+      var isVisible = $descriptionParagraph.is(':visible');
+      $('.attr-description').hide();
+      if(!isVisible) $descriptionParagraph.show();
+    });
+  }
+
   search();
   codeTabs();
   htmlTabs();
@@ -188,4 +197,5 @@
   copyButtons();
   tocMenu();
   scrollToRightAnchor();
+  foldableDetails();
 })(window.jQuery);

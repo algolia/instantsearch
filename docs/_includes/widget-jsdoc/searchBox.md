@@ -1,15 +1,58 @@
-| Param | Description |
-| --- | --- |
-| <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | CSS Selector or DOMElement to insert the widget |
-| <span class='attr-optional'>`options.placeholder`</span><span class="attr-infos">Type: <code>string</code></span> | Input's placeholder |
-| <span class='attr-optional'>`options.poweredBy`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span> | Show a powered by Algolia link below the input |
-| <span class='attr-optional'>`options.wrapInput`</span><span class="attr-infos">Default:<code class="attr-default">true</code><br />Type: <code>boolean</code></span> | Wrap the input in a `div.ais-search-box` |
-| <span class='attr-optional'>`autofocus`</span><span class="attr-infos">Default:<code class="attr-default">&#x27;auto&#x27;</code><br />Type: <code>boolean</code> &#124; <code>string</code></span> | autofocus on the input |
-| <span class='attr-optional'>`options.searchOnEnterKeyPressOnly`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span> | If set, trigger the search once `<Enter>` is pressed only |
-| <span class='attr-optional'>`options.cssClasses`</span><span class="attr-infos">Type: <code>Object</code></span> | CSS classes to add |
-| <span class='attr-optional'>`options.cssClasses.root`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the wrapping div (if `wrapInput` set to `true`) |
-| <span class='attr-optional'>`options.cssClasses.input`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the input |
-| <span class='attr-optional'>`options.cssClasses.poweredBy`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS class to add to the poweredBy element |
-| <span class='attr-optional'>`options.queryHook`</span><span class="attr-infos">Type: <code>function</code></span> | A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox. |
+<h4>Parameters</h4>
+<p class="attr-name">
+<span class='attr-required'>`options.container`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span> 
+</p>
+<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.placeholder`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span> 
+</p>
+<p class="attr-description">Input's placeholder</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.poweredBy`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span> 
+</p>
+<p class="attr-description">Show a powered by Algolia link below the input</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.wrapInput`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code>)</span> 
+</p>
+<p class="attr-description">Wrap the input in a `div.ais-search-box`</p>
+<p class="attr-name">
+<span class='attr-optional'>`autofocus`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">&#x27;auto&#x27;</code>(<code>boolean</code> &#124; <code>string</code>)</span> 
+</p>
+<p class="attr-description">autofocus on the input</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.searchOnEnterKeyPressOnly`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span> 
+</p>
+<p class="attr-description">If set, trigger the search once `<Enter>` is pressed only</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>Object</code>)</span> 
+</p>
+<p class="attr-description">CSS classes to add</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses.root`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS class to add to the wrapping div (if `wrapInput` set to `true`)</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses.input`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS class to add to the input</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses.poweredBy`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS class to add to the poweredBy element</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.queryHook`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>function</code>)</span> 
+</p>
+<p class="attr-description">A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox.</p>
 
 <p class="attr-legend">* <span>Required</span></p>
