@@ -1,12 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
 import {
   bemHelper,
   getContainerNode
 } from '../../lib/utils.js';
 import forEach from 'lodash/collection/forEach';
+import isString from 'lodash/lang/isString';
+import isFunction from 'lodash/lang/isFunction';
 import cx from 'classnames';
-import PoweredBy from '../../components/PoweredBy/PoweredBy.js';
+import Hogan from 'hogan.js';
+import defaultTemplates from './defaultTemplates.js';
 
 let bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
@@ -17,7 +18,11 @@ const KEY_SUPPRESS = 8;
  * @function searchBox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} [options.placeholder] Input's placeholder
- * @param  {boolean} [options.poweredBy=false] Show a powered by Algolia link below the input
+ * @param  {boolean|Object} [options.poweredBy=false] Define if a "powered by Algolia" link should be added near the input
+ * @param  {function|string} [options.poweredBy.template] Template used for displaying the link. Can accept a function or a Hogan string.
+ * @param  {number} [options.poweredBy.cssClasses] CSS classes to add
+ * @param  {string|string[]} [options.poweredBy.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [options.poweredBy.cssClasses.link] CSS class to add to the link element
  * @param  {boolean} [options.wrapInput=true] Wrap the input in a `div.ais-search-box`
  * @param  {boolean|string} [autofocus='auto'] autofocus on the input
  * @param  {boolean} [options.searchOnEnterKeyPressOnly=false] If set, trigger the search
@@ -26,18 +31,18 @@ const KEY_SUPPRESS = 8;
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the
  * wrapping div (if `wrapInput` set to `true`)
  * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
- * @param  {string|string[]} [options.cssClasses.poweredBy] CSS class to add to the poweredBy element
  * @param  {function} [options.queryHook] A function that will be called everytime a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
  * @return {Object}
  */
+
 const usage = `Usage:
 searchBox({
   container,
   [ placeholder ],
   [ cssClasses.{input,poweredBy} ],
-  [ poweredBy ],
+  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],
   [ wrapInput ],
   [ autofocus ],
   [ searchOnEnterKeyPressOnly ],
@@ -70,6 +75,11 @@ function searchBox({
   // Only possible values are 'auto', true and false
   if (typeof autofocus !== 'boolean') {
     autofocus = 'auto';
+  }
+
+  // Convert to object if only set to true
+  if (poweredBy === true) {
+    poweredBy = {};
   }
 
   return {
@@ -113,25 +123,46 @@ function searchBox({
       CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
     },
     addPoweredBy: function(input) {
-      let poweredByContainer = document.createElement('div');
-      input.parentNode.insertBefore(poweredByContainer, input.nextSibling);
-      let poweredByCssClasses = {
-        root: cx(bem('powered-by'), cssClasses.poweredBy),
-        link: bem('powered-by-link')
+      // Default values
+      poweredBy = {
+        cssClasses: {},
+        template: defaultTemplates.poweredBy,
+        ...poweredBy
       };
-      let link = 'https://www.algolia.com/?' +
+
+      let poweredByCSSClasses = {
+        root: cx(bem('powered-by'), poweredBy.cssClasses.root),
+        link: cx(bem('powered-by-link'), poweredBy.cssClasses.link)
+      };
+
+      let url = 'https://www.algolia.com/?' +
         'utm_source=instantsearch.js&' +
         'utm_medium=website&' +
         `utm_content=${location.hostname}&` +
         'utm_campaign=poweredby';
 
-      ReactDOM.render(
-        <PoweredBy
-          cssClasses={poweredByCssClasses}
-          link={link}
-        />,
-        poweredByContainer
-      );
+      let templateData = {
+        cssClasses: poweredByCSSClasses,
+        url
+      };
+
+      let template = poweredBy.template;
+      let stringNode;
+
+      if (isString(template)) {
+        stringNode = Hogan.compile(template).render(templateData);
+      }
+      if (isFunction(template)) {
+        stringNode = template(templateData);
+      }
+
+      // Crossbrowser way to create a DOM node from a string. We wrap in
+      // a `span` to make sure we have one and only one node.
+      let tmpNode = document.createElement('div');
+      tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
+      let htmlNode = tmpNode.firstChild;
+
+      input.parentNode.insertBefore(htmlNode, input.nextSibling);
     },
     init: function({state, helper, onHistoryChange}) {
       let isInputTargeted = container.tagName === 'INPUT';
