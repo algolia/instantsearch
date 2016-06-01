@@ -1,12 +1,16 @@
 import React from 'react';
 import forEach from 'lodash/collection/forEach';
 import defaultsDeep from 'lodash/object/defaultsDeep';
-import {isSpecialClick} from '../../lib/utils.js';
-
+import {
+  bemHelper,
+  isSpecialClick
+} from '../../lib/utils.js';
 import Paginator from './Paginator.js';
 import PaginationLink from './PaginationLink.js';
 
 import cx from 'classnames';
+
+let bem = bemHelper('ais-pagination');
 
 class Pagination extends React.Component {
   constructor(props) {
@@ -123,8 +127,14 @@ class Pagination extends React.Component {
 
     let createURL = this.props.createURL;
 
+    // Mark the wrapper with a class denoting the number of pages
+    let cssClassRoot = cx(
+      this.props.cssClasses.root,
+      bem(null, `pagecount-${this.props.nbPages}`)
+    );
+
     return (
-      <ul className={this.props.cssClasses.root}>
+      <ul className={cssClassRoot}>
         {this.props.showFirstLast ? this.firstPageLink(pager, createURL) : null}
         {this.previousPageLink(pager, createURL)}
         {this.pages(pager, createURL)}
