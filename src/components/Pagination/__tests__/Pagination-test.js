@@ -2,6 +2,7 @@
 
 import React from 'react';
 import expect from 'expect';
+import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import TestUtils from 'react-addons-test-utils';
 import Pagination from '../Pagination';
@@ -12,6 +13,41 @@ expect.extend(expectJSX);
 
 describe('Pagination', () => {
   let renderer;
+
+  function render(extraProps = {}) {
+    let props = {
+      cssClasses: {
+        root: 'root',
+        item: 'item',
+        page: 'page',
+        previous: 'previous',
+        next: 'next',
+        first: 'first',
+        last: 'last',
+        active: 'active',
+        disabled: 'disabled'
+      },
+      labels: {first: '', last: '', next: '', previous: ''},
+      currentPage: 0,
+      nbHits: 200,
+      nbPages: 20,
+      padding: 3,
+      setCurrentPage: () => {},
+      ...extraProps
+    };
+
+    renderer.render(<Pagination {...props} />);
+    return renderer.getRenderOutput();
+  }
+
+  function shallowRender(extraProps: {}) {
+    let props = {
+      cssClasses: {},
+      labels: {},
+      ...extraProps
+    };
+    return shallow(React.createElement(Pagination, props));
+  }
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -127,29 +163,16 @@ describe('Pagination', () => {
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
 
-  function render(extraProps = {}) {
+  it('should add a CSS class denoting the number of pages', () => {
+    // Given
     let props = {
-      cssClasses: {
-        root: 'root',
-        item: 'item',
-        page: 'page',
-        previous: 'previous',
-        next: 'next',
-        first: 'first',
-        last: 'last',
-        active: 'active',
-        disabled: 'disabled'
-      },
-      labels: {first: '', last: '', next: '', previous: ''},
-      currentPage: 0,
-      nbHits: 200,
-      nbPages: 20,
-      padding: 3,
-      setCurrentPage: () => {},
-      ...extraProps
+      nbPages: 42
     };
 
-    renderer.render(<Pagination {...props} />);
-    return renderer.getRenderOutput();
-  }
+    // When
+    let actual = shallowRender(props);
+
+    // Then
+    expect(actual.hasClass('ais-pagination__pagecount-42')).toEqual(true);
+  });
 });

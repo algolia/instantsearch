@@ -8,9 +8,6 @@ import sinon from 'sinon';
 import RefinementList from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
 describe('RefinementList', () => {
   let createURL;
 
