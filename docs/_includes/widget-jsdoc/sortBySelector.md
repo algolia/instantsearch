@@ -1,12 +1,43 @@
-| Param | Description |
-| --- | --- |
-| <span class='attr-required'>`options.container`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>DOMElement</code></span> | CSS Selector or DOMElement to insert the widget |
-| <span class='attr-required'>`options.indices`</span><span class="attr-infos">Type: <code>Array</code></span> | Array of objects defining the different indices to choose from. |
-| <span class='attr-required'>`options.indices[0].name`</span><span class="attr-infos">Type: <code>string</code></span> | Name of the index to target |
-| <span class='attr-required'>`options.indices[0].label`</span><span class="attr-infos">Type: <code>string</code></span> | Label displayed in the dropdown |
-| <span class='attr-optional'>`options.autoHideContainer`</span><span class="attr-infos">Default:<code class="attr-default">false</code><br />Type: <code>boolean</code></span> | Hide the container when no results match |
-| <span class='attr-optional'>`options.cssClasses`</span><span class="attr-infos">Type: <code>Object</code></span> | CSS classes to be added |
-| <span class='attr-optional'>`options.cssClasses.root`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS classes added to the parent <select> |
-| <span class='attr-optional'>`options.cssClasses.item`</span><span class="attr-infos">Type: <code>string</code> &#124; <code>Array.&lt;string&gt;</code></span> | CSS classes added to each <option> |
+<h4>Parameters</h4>
+<p class="attr-name">
+<span class='attr-required'>`options.container`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span> 
+</p>
+<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-name">
+<span class='attr-required'>`options.indices`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>Array</code>)</span> 
+</p>
+<p class="attr-description">Array of objects defining the different indices to choose from.</p>
+<p class="attr-name">
+<span class='attr-required'>`options.indices[0].name`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span> 
+</p>
+<p class="attr-description">Name of the index to target</p>
+<p class="attr-name">
+<span class='attr-required'>`options.indices[0].label`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span> 
+</p>
+<p class="attr-description">Label displayed in the dropdown</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.autoHideContainer`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span> 
+</p>
+<p class="attr-description">Hide the container when no results match</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>Object</code>)</span> 
+</p>
+<p class="attr-description">CSS classes to be added</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses.root`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS classes added to the parent <select></p>
+<p class="attr-name">
+<span class='attr-optional'>`options.cssClasses.item`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS classes added to each <option></p>
 
 <p class="attr-legend">* <span>Required</span></p>
