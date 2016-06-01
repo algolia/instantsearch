@@ -182,25 +182,205 @@ describe('searchBox()', () => {
     });
   });
 
-  context('adds a PoweredBy', () => {
+  context('poweredBy', () => {
+    let defaultInitOptions;
+    let defaultWidgetOptions;
+    let $;
+
     beforeEach(() => {
       container = document.createElement('div');
+      $ = container.querySelectorAll.bind(container);
+      defaultWidgetOptions = {container};
+      defaultInitOptions = {state, helper, onHistoryChange};
     });
 
-    it('do not add the poweredBy if not specified', () => {
-      widget = searchBox({container});
-      widget.init({state, helper, onHistoryChange});
-      expect(container.querySelector('.ais-search-box--powered-by')).toBe(null);
+    it('should not add the element with default options', () => {
+      // Given
+      widget = searchBox(defaultWidgetOptions);
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect($('.ais-search-box--powered-by').length).toEqual(0);
     });
 
-    it('adds the poweredBy if specified', () => {
-      widget = searchBox({container, poweredBy: true});
-      widget.init({state, helper, onHistoryChange});
-      const poweredBy = container.querySelector('.ais-search-box--powered-by');
-      const poweredByLink = poweredBy.querySelector('a');
-      const expectedLink = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
-      expect(poweredBy).toNotBe(null);
-      expect(poweredByLink.getAttribute('href')).toBe(expectedLink);
+    it('should not add the element with poweredBy: false', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: false
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect($('.ais-search-box--powered-by').length).toEqual(0);
+    });
+
+    it('should add the element with poweredBy: true', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: true
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect($('.ais-search-box--powered-by').length).toEqual(1);
+    });
+
+    it('should contain a link to Algolia with poweredBy: true', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: true
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      let actual = $('.ais-search-box--powered-by-link');
+      let url = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
+      expect(actual.length).toEqual(1);
+      expect(actual[0].tagName).toEqual('A');
+      expect(actual[0].innerHTML).toEqual('Algolia');
+      expect(actual[0].getAttribute('href')).toEqual(url);
+    });
+
+    it('should let user add its own CSS classes with poweredBy.cssClasses', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          cssClasses: {
+            root: 'myroot',
+            link: 'mylink'
+          }
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      let root = $('.myroot');
+      let link = $('.mylink');
+      expect(root.length).toEqual(1);
+      expect(link.length).toEqual(1);
+      expect(link[0].tagName).toEqual('A');
+      expect(link[0].innerHTML).toEqual('Algolia');
+    });
+
+    it('should still apply default CSS classes even if user provides its own', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          cssClasses: {
+            root: 'myroot',
+            link: 'mylink'
+          }
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      let root = $('.ais-search-box--powered-by');
+      let link = $('.ais-search-box--powered-by-link');
+      expect(root.length).toEqual(1);
+      expect(link.length).toEqual(1);
+    });
+
+    it('should let the user define its own string template', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          template: '<div>Foobar</div>'
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar');
+    });
+
+    it('should let the user define its own Hogan template', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          template: '<div>Foobar--{{url}}</div>'
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar--https://www.algolia.com/');
+    });
+
+    it('should let the user define its own function template', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          template: (data) => {
+            return `<div>Foobar--${data.url}</div>`;
+          }
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar--https://www.algolia.com/');
+    });
+
+    it('should gracefully handle templates with leading spaces', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          template: `
+
+          <div>Foobar</div>`
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar');
+    });
+
+    it('should handle templates not wrapped in a node', () => {
+      // Given
+      widget = searchBox({
+        ...defaultWidgetOptions,
+        poweredBy: {
+          template: 'Foobar <img src="./test.gif" class="should-be-found"/>'
+        }
+      });
+
+      // When
+      widget.init(defaultInitOptions);
+
+      // Then
+      expect(container.innerHTML).toContain('Foobar');
+      expect($('.should-be-found').length).toEqual(1);
     });
   });
 
@@ -362,7 +542,6 @@ describe('searchBox()', () => {
     cb({query: 'iphone'});
     expect(container.value).toBe('iphone');
   });
-
 
   it('handles external updates', () => {
     container = document.body.appendChild(document.createElement('input'));
