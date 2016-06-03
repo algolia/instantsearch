@@ -258,6 +258,62 @@ describe('refinementList()', () => {
         expect(actual).toBe(true);
       });
     });
+
+    describe('header', () => {
+      it('should pass the refined count to the header data', () => {
+        // Given
+        let facetValues = [{
+          name: 'foo',
+          isRefined: true
+        }, {
+          name: 'bar',
+          isRefined: true
+        }, {
+          name: 'baz',
+          isRefined: false
+        }];
+        results.getFacetValues = sinon.stub().returns(facetValues);
+
+        // When
+        renderWidget();
+        let props = ReactDOM.render.firstCall.args[0].props;
+
+        // Then
+        expect(props.headerFooterData.header.count).toEqual(2);
+      });
+
+      it('should dynamically update the header template on subsequent renders', () => {
+        // Given
+        let widgetOptions = {container, attributeName: 'type'};
+        let initOptions = {helper, createURL};
+        let facetValues = [{
+          name: 'foo',
+          isRefined: true
+        }, {
+          name: 'bar',
+          isRefined: false
+        }];
+        results.getFacetValues = sinon.stub().returns(facetValues);
+        let renderOptions = {results, helper, templatesConfig, state};
+
+        // When
+        widget = refinementList(widgetOptions);
+        widget.init(initOptions);
+        widget.render(renderOptions);
+
+        // Then
+        let props = ReactDOM.render.firstCall.args[0].props;
+        expect(props.headerFooterData.header.count).toEqual(1);
+
+        // When... second render call
+        facetValues[1].isRefined = true;
+        widget.render(renderOptions);
+
+        // Then
+        props = ReactDOM.render.secondCall.args[0].props;
+        expect(props.headerFooterData.header.count).toEqual(2);
+      });
+    });
   });
 
   context('toggleRefinement', () => {
@@ -280,8 +336,6 @@ describe('refinementList()', () => {
 
       // Then
       expect(helper.toggleRefinement.calledWith('attributeName', 'facetValue'));
-
-      // Then
     });
     it('should start a search on refinement', () => {
       // Given
@@ -293,8 +347,6 @@ describe('refinementList()', () => {
 
       // Then
       expect(helper.search.called);
-
-      // Then
     });
   });
 
