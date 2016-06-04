@@ -3,6 +3,7 @@ import map from 'lodash/collection/map';
 
 import Template from './Template.js';
 
+import hasKey from 'lodash/object/has';
 import isEqual from 'lodash/lang/isEqual';
 import cx from 'classnames';
 
@@ -14,11 +15,15 @@ class Hits extends React.Component {
   }
 
   renderWithResults() {
-    let renderedHits = map(this.props.results.hits, hit => {
+    let renderedHits = map(this.props.results.hits, (hit, position) => {
+      let data = {
+        ...hit,
+        __position: position
+      };
       return (
         <Template
-          data={hit}
-          key={hit.objectID}
+          data={data}
+          key={data.objectID}
           rootProps={{className: this.props.cssClasses.item}}
           templateKey="item"
           {...this.props.templateProps}
@@ -30,10 +35,15 @@ class Hits extends React.Component {
   }
 
   renderAllResults() {
+    let className = cx(
+      this.props.cssClasses.root,
+      this.props.cssClasses.allItems
+    );
+
     return (
       <Template
         data={this.props.results}
-        rootProps={{className: this.props.cssClasses.allItems}}
+        rootProps={{className}}
         templateKey="allItems"
         {...this.props.templateProps}
       />
@@ -41,10 +51,14 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
+    let className = cx(
+      this.props.cssClasses.root,
+      this.props.cssClasses.empty
+    );
     return (
       <Template
         data={this.props.results}
-        rootProps={{className: cx(this.props.cssClasses.root, this.props.cssClasses.empty)}}
+        rootProps={{className}}
         templateKey="empty"
         {...this.props.templateProps}
       />
@@ -52,17 +66,20 @@ class Hits extends React.Component {
   }
 
   render() {
-    if (this.props.results.hits.length > 0) {
-      const useAllItemsTemplate =
-        this.props.templateProps &&
-        this.props.templateProps.templates &&
-        this.props.templateProps.templates.allItems;
-      if (useAllItemsTemplate) {
-        return this.renderAllResults();
-      }
-      return this.renderWithResults();
+    let hasResults = this.props.results.hits.length > 0;
+    let hasAllItemsTemplate = hasKey(this.props, 'templateProps.templates.allItems');
+
+    if (!hasResults) {
+      return this.renderNoResults();
     }
-    return this.renderNoResults();
+
+    // If a allItems template is defined, it takes precedence over our looping
+    // through hits
+    if (hasAllItemsTemplate) {
+      return this.renderAllResults();
+    }
+
+    return this.renderWithResults();
   }
 }
 
