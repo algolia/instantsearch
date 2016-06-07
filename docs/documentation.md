@@ -57,7 +57,7 @@ The library is open-source, based on [React.js](https://facebook.github.io/react
 
 <div class="codebox-combo">
 
-Use a builded version of **instantsearch.js** from the [jsDelivr](https://www.jsdelivr.com/) CDN:
+Use a built version of **instantsearch.js** from the [jsDelivr](https://www.jsdelivr.com/) CDN:
 
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -125,7 +125,7 @@ instantsearch(options);
 {% include widget-jsdoc/instantsearch.md %}
   </div>
   <div class="requirements js-toggle-requirements">
-Use your **search-only API key**. You index should also contain data.
+Use your **search-only API key**. Your index should also contain data.
   </div>
 </div>
 
@@ -289,7 +289,7 @@ search.once('render', function(){  });
   </div>
 </div>
 
-instantsearch emits events during its lifecylce. The currently supported events are:
+instantsearch emits events during its lifecycle. The currently supported events are:
 
  - `render`: fired when a rendering of all the widgets has been completed
 
@@ -1188,12 +1188,12 @@ The widget may implement some of the following methods (depending on the need of
   - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameter](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) and should return the properties needed as an object.
   - <span class="attr-optional">`widget.init`</span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
     - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create new search query
     - templatesConfig: the template configuration
   - <span class="attr-optional">`widget.render`</span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
     - results: the [results](https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html) of the query
     - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) user to create new search query
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create new search query
     - createURL: function provided to create urls
 
   </div>
@@ -1235,7 +1235,7 @@ Or you can wrap an existing React component, see our [<i class='fa fa-github'></
 
 ### Custom themes
 
-All widgets have been designed to be heavily stylizable with CSS rules. **instantsearch.js** ships with a default CSS theme that only includes the necessary CSS classes.
+All widgets have been designed to be heavily stylable with CSS rules. **instantsearch.js** ships with a default CSS theme that only includes the necessary CSS classes.
 
 You can see all the existing customizable CSS classes in the [non minified CSS](https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css).
 
