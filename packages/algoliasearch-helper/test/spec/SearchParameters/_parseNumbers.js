@@ -3,7 +3,7 @@
 var test = require('tape');
 var SearchParameters = require('../../../src/SearchParameters');
 
-test('_parseNumbers should convert to number all specified root keys', function(t) {
+test('_parseNumbers should convert to number all specified root keys (that are parseable)', function(t) {
   var partialState = {
     aroundPrecision: '42',
     aroundRadius: '42',
@@ -41,6 +41,17 @@ test('_parseNumbers should not convert undefined to NaN', function(t) {
   var actual = SearchParameters._parseNumbers(partialState);
 
   t.equal(actual.aroundPrecision, undefined);
+
+  t.end();
+});
+
+test('_parseNumbers should not convert unparseable strings', function(t) {
+  var partialState = {
+    aroundRadius: 'all'
+  };
+  var actual = SearchParameters._parseNumbers(partialState);
+
+  t.equal(actual.aroundRadius, 'all');
 
   t.end();
 });
