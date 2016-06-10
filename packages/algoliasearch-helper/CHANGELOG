@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.10.0 - 2016-06-10
+  * fix(_parseNumbers): let the user store values that are not parseable
+  numbers for root parameters of the state (eg. aroundRadius='all')
+  * fix(perf): remove deepFreeze
+  * test(_parseNumbers): moar tests
+  * doc(misc): fix typos
+
 2.9.1 - 2016-03-16
   * fix(filterState): handle hierarchical facet attributes
 
