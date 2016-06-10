@@ -48,11 +48,11 @@
     "lodash": "lodash-compat"
   },
   "devDependencies": {
-    "algoliasearch": "^3.13.0",
-    "browserify": "^12.0.1",
+    "algoliasearch": "^3.15.0",
+    "browserify": "^13.0.1",
     "browzers": "^1.3.0",
     "bulk-require": "^0.2.1",
-    "bulkify": "^1.1.1",
+    "bulkify": "^1.2.0",
     "doctoc": "^0.15.0",
     "envify": "^3.4.0",
     "eslint": "^1.7.3",
@@ -63,18 +63,18 @@
     "jsdoc": "bobylito/jsdoc#aecd558f1cd2640bea5348322839b7730165f530",
     "minami": "algolia/minami#81c8243b73ed5224dc3ce9fd79aab8bbf8da0488",
     "mversion": "^1.10.1",
-    "npm-shrinkwrap": "^200.4.0",
-    "onchange": "^2.1.2",
+    "npm-shrinkwrap": "^200.5.1",
+    "onchange": "^2.5.0",
     "opn-cli": "^1.0.0",
-    "phantomjs-prebuilt": "^2.1.5",
+    "phantomjs-prebuilt": "^2.1.7",
     "pretty-bytes": "^2.0.1",
     "semver": "^5.1.0",
-    "sinon": "^1.17.3",
+    "sinon": "^1.17.4",
     "tape": "^4.5.1",
     "uglify-js": "^2.6.2",
     "watchify": "^3.7.0",
     "zuul": "^3.10.1",
-    "zuul-ngrok": "3.0.0"
+    "zuul-ngrok": "^4.0.0"
   },
   "dependencies": {
     "events": "^1.1.0",
