@@ -21,14 +21,14 @@
 <p class="attr-description">Lets you define the values to filter on when toggling</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.values.on`<span class="show-description">…</span></span>
-  <span class="attr-infos">(<code>string</code> &#124; <code>number</code> &#124; <code>boolean</code>)</span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>string</code> &#124; <code>number</code> &#124; <code>boolean</code>)</span>
 </p>
 <p class="attr-description">Value to filter on when checked</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.values.off`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>number</code> &#124; <code>boolean</code>)</span>
 </p>
-<p class="attr-description">Value to filter on when unchecked element (when using the default template)</p>
+<p class="attr-description">Value to filter on when unchecked element (when using the default template). By default when switching to `off`, no refinement will be asked. So you will get both `true` and `false` results. If you set the off value to `false` then you will get only objects having `false` has a value for the selected attribute.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>

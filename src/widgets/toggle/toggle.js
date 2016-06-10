@@ -21,9 +21,11 @@ let bem = bemHelper('ais-toggle');
  * @param  {string} options.attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @param  {string} options.label Human-readable name of the filter (eg. "Free Shipping")
  * @param  {Object} [options.values] Lets you define the values to filter on when toggling
- * @param  {string|number|boolean} [options.values.on] Value to filter on when checked
- * @param  {string|number|boolean} [options.values.off] Value to filter on when unchecked
- * element (when using the default template)
+ * @param  {string|number|boolean} [options.values.on=true] Value to filter on when checked
+ * @param  {string|number|boolean} [options.values.off=undefined] Value to filter on when unchecked
+ * element (when using the default template). By default when switching to `off`, no refinement will be asked. So you
+ * will get both `true` and `false` results. If you set the off value to `false` then you will get only objects
+ * having `false` has a value for the selected attribute.
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template
