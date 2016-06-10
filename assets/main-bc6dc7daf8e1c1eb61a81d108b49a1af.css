@@ -3672,10 +3672,9 @@ sub {
 /* HEADER
 // ------------------------- */
 .site-header {
-  width: 100%; }
-  .url_documentation_ .site-header {
-    position: fixed;
-    z-index: 999; }
+  width: 100%;
+  position: fixed;
+  z-index: 999; }
   .site-header .navbar {
     border-radius: 0;
     border: 0;
@@ -3782,7 +3781,7 @@ h2 {
   color: #FFFFFF; }
 
 .hero {
-  padding-top: 100px;
+  padding-top: 170px;
   opacity: 1; }
 
 .logo svg {
@@ -4025,6 +4024,9 @@ h2 {
 @media (max-width: 450px) {
   .link-thumbnail {
     text-align: center; } }
+.main-content {
+  padding-top: 70px; }
+
 .page-content {
   font-size: 1.1em;
   line-height: 1.5em; }
@@ -4295,14 +4297,28 @@ code {
     background-color: #0A1724; }
     .code-box .jsdoc code {
       background-color: #0A1724; }
+    .code-box .jsdoc .attr-name {
+      margin: 10px 0 0;
+      cursor: help; }
+      .code-box .jsdoc .attr-name .show-description {
+        padding: 0 6px;
+        background: #132F49;
+        margin-left: 3px;
+        font-weight: bold; }
+      .code-box .jsdoc .attr-name:hover .show-description {
+        color: #FFF; }
     .code-box .jsdoc .attr-optional code {
       color: #46AEDA; }
     .code-box .jsdoc .attr-required code {
       color: #58D158; }
     .code-box .jsdoc .attr-infos {
-      display: block;
       font-size: .8em;
-      margin-left: 10px; }
+      margin-left: 10px;
+      float: right; }
+    .code-box .jsdoc .attr-description {
+      margin: -5px 0 0;
+      display: none;
+      clear: both; }
     .code-box .jsdoc h5 {
       text-decoration: underline;
       color: #DDDDDD; }
