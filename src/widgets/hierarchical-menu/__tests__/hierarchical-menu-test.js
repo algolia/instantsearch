@@ -35,7 +35,7 @@ describe('hierarchicalMenu()', () => {
     hierarchicalMenu.__Rewire__('headerFooterHOC', headerFooter);
   });
 
-  context('instanciated with wrong parameters', () => {
+  context('instantiated with wrong parameters', () => {
     it('should fail if no attributes', () => {
       options = {container, attributes: undefined};
       expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);

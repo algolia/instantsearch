@@ -29,7 +29,7 @@ let bem = bemHelper('ais-toggle');
  * @param  {string|Function} [options.templates.item] Item template
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no results
+ * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no results
  * @param  {Object} [options.cssClasses] CSS classes to add
  * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
  * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element

@@ -38,7 +38,7 @@ describe('refinementList()', () => {
     refinementList.__Rewire__('headerFooterHOC', headerFooter);
   });
 
-  context('instanciated with wrong parameters', () => {
+  context('instantiated with wrong parameters', () => {
     it('should fail if no attributeName', () => {
       // Given
       options = {container, attributeName: undefined};

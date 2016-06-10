@@ -68,6 +68,6 @@
 <span class='attr-optional'>`options.queryHook`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>function</code>)</span>
 </p>
-<p class="attr-description">A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox.</p>
+<p class="attr-description">A function that will be called every time a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox.</p>
 
 <p class="attr-legend">* <span>Required</span></p>

@@ -23,7 +23,7 @@
 <span class='attr-optional'>`options.limit`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>string</code>)</span>
 </p>
-<p class="attr-description">How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).</p>
+<p class="attr-description">How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.showMore`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> &#124; <code>boolean</code>)</span>
