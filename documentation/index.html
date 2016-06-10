@@ -1755,14 +1755,14 @@ Note that if you provide an “off” option, it will be refined at initializati
       <p class="attr-description">Lets you define the values to filter on when toggling</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.values.on</code><span class="show-description">…</span></span>
-  <span class="attr-infos">(<code>string</code> | <code>number</code> | <code>boolean</code>)</span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>string</code> | <code>number</code> | <code>boolean</code>)</span>
 </p>
       <p class="attr-description">Value to filter on when checked</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.values.off</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>number</code> | <code>boolean</code>)</span>
 </p>
-      <p class="attr-description">Value to filter on when unchecked element (when using the default template)</p>
+      <p class="attr-description">Value to filter on when unchecked element (when using the default template). By default when switching to <code>off</code>, no refinement will be asked. So you will get both <code>true</code> and <code>false</code> results. If you set the off value to <code>false</code> then you will get only objects having <code>false</code> has a value for the selected attribute.</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
