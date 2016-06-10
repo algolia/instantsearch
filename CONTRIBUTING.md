@@ -81,6 +81,7 @@ npm test
 Launch the website docs dev tool:
 ```
 npm run dev:docs
+# open http://localhost:4000/
 ```
 
 # Serving the build
