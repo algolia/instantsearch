@@ -11,9 +11,29 @@
 <p class="attr-description">Input's placeholder</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.poweredBy`<span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span> 
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code> &#124; <code>Object</code>)</span> 
 </p>
-<p class="attr-description">Show a powered by Algolia link below the input</p>
+<p class="attr-description">Define if a "powered by Algolia" link should be added near the input</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.poweredBy.template`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>function</code> &#124; <code>string</code>)</span> 
+</p>
+<p class="attr-description">Template used for displaying the link. Can accept a function or a Hogan string.</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.poweredBy.cssClasses`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>number</code>)</span> 
+</p>
+<p class="attr-description">CSS classes to add</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.poweredBy.cssClasses.root`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS class to add to the root element</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.poweredBy.cssClasses.link`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
+</p>
+<p class="attr-description">CSS class to add to the link element</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.wrapInput`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code>)</span> 
@@ -44,11 +64,6 @@
   <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
 </p>
 <p class="attr-description">CSS class to add to the input</p>
-<p class="attr-name">
-<span class='attr-optional'>`options.cssClasses.poweredBy`<span class="show-description">…</span></span>
-  <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span> 
-</p>
-<p class="attr-description">CSS class to add to the poweredBy element</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.queryHook`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>function</code>)</span> 

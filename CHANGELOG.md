@@ -1,3 +1,14 @@
+<a name="1.5.2"></a>
+## [1.5.2](https://github.com/algolia/instantsearch.js/compare/v1.5.1...v1.5.2) (2016-06-10)
+
+
+### Bug Fixes
+
+* **lite:** use lite algoliasearch build (js client) ([219fa9f](https://github.com/algolia/instantsearch.js/commit/219fa9f)), closes [#1024](https://github.com/algolia/instantsearch.js/issues/1024)
+* **poweredBy:** Let users define their own poweredBy template ([f1a96d8](https://github.com/algolia/instantsearch.js/commit/f1a96d8))
+
+
+
 <a name="1.5.1"></a>
 ## [1.5.1](https://github.com/algolia/instantsearch.js/compare/v1.5.0...v1.5.1) (2016-05-17)
 
