@@ -340,6 +340,19 @@ code {
     code {
       background-color: #0A1724;
     }
+    .attr-name {
+      margin: 10px 0 0;
+      cursor: help;
+      .show-description {
+        padding: 0 6px;
+        background: #132F49;
+        margin-left: 3px;
+        font-weight: bold;
+      }
+      &:hover .show-description {
+        color: #FFF;
+      }
+    }
     .attr-optional code {
       color: #46AEDA;
     }
@@ -347,9 +360,14 @@ code {
       color: $success-color;
     }
     .attr-infos {
-      display: block;
       font-size: .8em;
       margin-left: 10px;
+      float: right;
+    }
+    .attr-description {
+      margin: -5px 0 0;
+      display: none;
+      clear: both;
     }
     h5 {
       text-decoration: underline;
