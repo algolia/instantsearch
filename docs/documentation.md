@@ -1078,7 +1078,7 @@ load. Maybe automatically filter on `Cell Phones` made by either `Samsung` or
 
 If you are already using a widget to perform a filter on that attribute (like
 the `menu` or `refinementList` widgets), you can just use the
-`searchParameters.facetsRefinements` attribute option when instanciating instantsearch.
+`searchParameters.facetsRefinements` attribute option when instantiating instantsearch.
 
 Pass it an object where each key is the attribute you want to filter and each
 value is an array of the filtered values.  If you are using `OR` filters instead
@@ -1122,7 +1122,7 @@ results for this query. If you'd like to display results only when users
 actually start typing, you can use the `searchFunction` hook.
 
 This method takes only one argument, `helper`, on which you can call `.search()`
-to actually start the search.  `helper.state` also contains informations about
+to actually start the search.  `helper.state` also contains information about
 the current state of your search.
 
 You can for example check for `helper.state.query` to see if the query is empty
@@ -1291,12 +1291,12 @@ The widget may implement some of the following methods (depending on the need of
   - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameter](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) and should return the properties needed as an object.
   - <span class="attr-optional">`widget.init`</span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
     - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create new search query
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create a new search query
     - templatesConfig: the template configuration
   - <span class="attr-optional">`widget.render`</span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
     - results: the [results](https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html) of the query
     - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create new search query
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create a new search query
     - createURL: function provided to create urls
 
   </div>

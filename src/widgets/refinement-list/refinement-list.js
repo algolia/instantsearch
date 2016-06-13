@@ -7,6 +7,7 @@ import {
   prefixKeys
 } from '../../lib/utils.js';
 import cx from 'classnames';
+import filter from 'lodash/collection/filter';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
@@ -21,14 +22,14 @@ let bem = bemHelper('ais-refinement-list');
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
  * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count:asc|count:desc|name:asc|name:desc|isRefined`
- * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).
+ * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
  * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked
  * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
  * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
+ * @param  {string|Function} [options.templates.header] Header template, provided with `refinedFacetsCount` data property
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
@@ -152,12 +153,19 @@ function refinementList({
         return createURL(state.toggleRefinement(attributeName, facetValue));
       }
 
+      // Pass count of currently selected items to the header template
+      let refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
+      let headerFooterData = {
+        header: {refinedFacetsCount}
+      };
+
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
           createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
+          headerFooterData={headerFooterData}
           limitMax={widgetMaxValuesPerFacet}
           limitMin={limit}
           shouldAutoHideContainer={facetValues.length === 0}

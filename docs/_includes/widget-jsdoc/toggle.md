@@ -58,7 +58,7 @@
 <span class='attr-optional'>`options.autoHideContainer`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code>)</span>
 </p>
-<p class="attr-description">Hide the container when there's no results</p>
+<p class="attr-description">Hide the container when there are no results</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.cssClasses`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>

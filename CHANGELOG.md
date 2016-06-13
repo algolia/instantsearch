@@ -629,7 +629,7 @@ was internally named PriceRange (without the final __s__).
 
 I factorize some logic form the render in individual methods and
 manage to individually test them. This was not an easy task. I had to
-mock the default `render` (so it does nothing) before instanciating
+mock the default `render` (so it does nothing) before instantiating
 the component. Then, I was able to call each inner method
 individually. This requires to stub prototype methods in beforeEach,
 then restore them in afterEach. I've added a few helper methods, this
@@ -898,7 +898,7 @@ widget.
 * **hideIfEmpty:** should be hideWhenNoResults ([21877a0](https://github.com/algolia/instantsearch.js/commit/21877a0))
 * **Hits:** handle the display when there is no result ([544ff5c](https://github.com/algolia/instantsearch.js/commit/544ff5c))
 * **menu:** send an empty array values when no values ([12cd7dc](https://github.com/algolia/instantsearch.js/commit/12cd7dc)), closes [#107](https://github.com/algolia/instantsearch.js/issues/107)
-* **pagination:** missing showFirstLast attribute when instanciating ([28fa0ae](https://github.com/algolia/instantsearch.js/commit/28fa0ae))
+* **pagination:** missing showFirstLast attribute when instantiating ([28fa0ae](https://github.com/algolia/instantsearch.js/commit/28fa0ae))
 * **SearchBox:** Missing poweredBy in the not focused SearchBox ([ef695ff](https://github.com/algolia/instantsearch.js/commit/ef695ff))
 * **slider:** hide slider if when no hits/matches ([31e4a80](https://github.com/algolia/instantsearch.js/commit/31e4a80)), closes [#107](https://github.com/algolia/instantsearch.js/issues/107)
 
