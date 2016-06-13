@@ -29,7 +29,7 @@ let bem = bemHelper('ais-refinement-list');
  * @param  {object} [options.showMore.templates.inactive] Template used when showMore not clicked
  * @param  {object} [options.showMore.limit] Max number of facets values to display when showMore is clicked
  * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
+ * @param  {string|Function} [options.templates.header] Header template, provided with `refinedFacetsCount` data property
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
@@ -154,9 +154,9 @@ function refinementList({
       }
 
       // Pass count of currently selected items to the header template
-      let refinedCount = filter(facetValues, {isRefined: true}).length;
+      let refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
       let headerFooterData = {
-        header: {count: refinedCount}
+        header: {refinedFacetsCount}
       };
 
       ReactDOM.render(

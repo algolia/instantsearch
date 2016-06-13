@@ -279,7 +279,7 @@ describe('refinementList()', () => {
         let props = ReactDOM.render.firstCall.args[0].props;
 
         // Then
-        expect(props.headerFooterData.header.count).toEqual(2);
+        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
       });
 
       it('should dynamically update the header template on subsequent renders', () => {
@@ -303,7 +303,7 @@ describe('refinementList()', () => {
 
         // Then
         let props = ReactDOM.render.firstCall.args[0].props;
-        expect(props.headerFooterData.header.count).toEqual(1);
+        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(1);
 
         // When... second render call
         facetValues[1].isRefined = true;
@@ -311,7 +311,7 @@ describe('refinementList()', () => {
 
         // Then
         props = ReactDOM.render.secondCall.args[0].props;
-        expect(props.headerFooterData.header.count).toEqual(2);
+        expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
       });
     });
   });
