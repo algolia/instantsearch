@@ -1,21 +1,32 @@
-<div class="spacer100 bg-white"></div>
-<footer class="site-footer">
-  <p>
-    Designed and built with <i class="fa fa-heart"></i> by <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage">
-    <img src="{% asset_path logo-algolia-dark.png %}" height="20" alt="Algolia" width="62" />
-    </a>
-  </p>
-  <div class="spacer20"></div>
-  <p>Currently v{{ site.version }}</p>
-  <div class="spacer20"></div>
-  <p><a href="https://github.com/algolia/instantsearch.js">GitHub</a></p>
-  <div class="spacer20"></div>
-  <p>Updated {{ site.time | date: '%c' }}</p>
-  <div class="spacer20"></div>
-  <p>Code licensed under <a href="https://github.com/algolia/instantsearch.js/blob/master/LICENSE">MIT</a></p>
-  <div class="spacer50"></div>
-  <div class="m400 m-l-r-auto">
-    {% include newsletter-mc.html %}
+<section class='ac-footer'>
+  <div class='ac-footer-container'>
+    <p class='ac-footer-links'>
+      Code licensed under
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js/blob/master/LICENSE'>MIT</a>
+      <br>
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js'>Github</a>
+      <a class='ac-footer-link-item' href='https://github.com/algolia/instantsearch.js/issues'>issues</a>
+    </p>
   </div>
-  <div class="spacer80"></div>
-</footer>
+  <div class='ac-footer-container ac-footer-brand'>
+    <p>This project is part of</p>
+    <img class='ac-footer-brand-icon' src='http://res.cloudinary.com/hilnmyskv/image/upload/logo-community.svg'>
+    <figure>
+      <img class='ac-footer-brand-logo' src='http://res.cloudinary.com/hilnmyskv/image/upload/v1463417234/algolia-community_n6tixd.svg'>
+      <figcaption>Algolia Community</figcaption>
+    </figure>
+    <a class='ac-footer-btn ac-footer-btn-cta' href='https://community.algolia.com/'>See More</a>
+    <span class='ac-icon ac-icon-love-dark'></span>
+  </div>
+  <p class='ac-footer-version'>Latest version: v{{ site.version }}</p>
+  <div class='ac-footer-actions'>
+    <div class='footer-container'>
+      <p>Build unique search experience with Algolia</p>
+      <a class='ac-footer-btn ac-footer-btn-ghost-grey' href='https://www.algolia.com/why?utm_medium=social-owned&amp;utm_source=places%20website&amp;utm_campaign=homepage&amp;utm_term=why'>
+        See Why
+        <span class='ac-icon-triangle'></span>
+      </a>
+      <a class='ac-footer-btn ac-footer-btn-ghost-pink' href='https://www.algolia.com/users/sign_up?utm_medium=social-owned&amp;utm_source=places%20website&amp;utm_campaign=homepage&amp;utm_term=get_started'>Get Started For Free</a>
+    </div>
+  </div>
+</section>

@@ -18,5 +18,25 @@ $light-blue: lighten($dark-blue, 70%);
 
 $secondary-color: #008000;
 
-$navbar-height: 50px;
 
+// Breakpoints
+$bp-huge: 2000px;
+$bp-big: 1440px;
+$bp-medium: 960px;
+$bp-small: 768px;
+
+// Dimensions
+$max-container-width: 940px;
+$navigation-height: 50px;
+$margin: 16px;
+
+// Colors
+$red-pink: #FB366E;
+$steel: #788795;
+$black: #0A1724;
+$white-75: rgba(#FFFFFF, .75);
+
+// Fonts
+$font-name: "Raleway";
+$font-fallback: Helvetica Neue, helvetica;
+$font-settings:  $font-name, $font-fallback;
