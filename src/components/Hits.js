@@ -18,7 +18,7 @@ class Hits extends React.Component {
     let renderedHits = map(this.props.results.hits, (hit, position) => {
       let data = {
         ...hit,
-        __position: position
+        __hitIndex: position
       };
       return (
         <Template
