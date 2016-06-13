@@ -2,6 +2,7 @@
 
 import React from 'react';
 import expect from 'expect';
+import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
 import TestComponent from './TestComponent';
 import headerFooter from '../headerFooter';
@@ -13,6 +14,21 @@ expect.extend(expectJSX);
 describe('headerFooter', () => {
   let renderer;
   let defaultProps;
+
+  function render(props = {}) {
+    let HeaderFooter = headerFooter(TestComponent);
+    renderer.render(<HeaderFooter {...props} />);
+    return renderer.getRenderOutput();
+  }
+
+  function shallowRender(extraProps: {}) {
+    let props = {
+      templateProps: {},
+      ...extraProps
+    };
+    let componentWrappedInHeaderFooter = headerFooter(TestComponent);
+    return shallow(React.createElement(componentWrappedInHeaderFooter, props));
+  }
 
   beforeEach(() => {
     let {createRenderer} = TestUtils;
@@ -148,10 +164,34 @@ describe('headerFooter', () => {
     });
   });
 
-  function render(props = {}) {
-    let HeaderFooter = headerFooter(TestComponent);
-    renderer.render(<HeaderFooter {...props} />);
-    return renderer.getRenderOutput();
-  }
-});
+  describe('headerFooterData', () => {
+    it('should call the header and footer template with the given data', () => {
+      // Given
+      let props = {
+        headerFooterData: {
+          header: {
+            foo: 'bar'
+          },
+          footer: {
+            foo: 'baz'
+          }
+        },
+        templateProps: {
+          templates: {
+            header: 'header',
+            footer: 'footer'
+          }
+        }
+      };
 
+      // When
+      let actual = shallowRender(props);
+      let header = actual.find({templateKey: 'header'});
+      let footer = actual.find({templateKey: 'footer'});
+
+      // Then
+      expect(header.props().data.foo).toEqual('bar');
+      expect(footer.props().data.foo).toEqual('baz');
+    });
+  });
+});

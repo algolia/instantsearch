@@ -7,6 +7,7 @@ import {
   prefixKeys
 } from '../../lib/utils.js';
 import cx from 'classnames';
+import filter from 'lodash/collection/filter';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
@@ -152,12 +153,19 @@ function refinementList({
         return createURL(state.toggleRefinement(attributeName, facetValue));
       }
 
+      // Pass count of currently selected items to the header template
+      let refinedCount = filter(facetValues, {isRefined: true}).length;
+      let headerFooterData = {
+        header: {count: refinedCount}
+      };
+
       ReactDOM.render(
         <RefinementList
           collapsible={collapsible}
           createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={facetValues}
+          headerFooterData={headerFooterData}
           limitMax={widgetMaxValuesPerFacet}
           limitMin={limit}
           shouldAutoHideContainer={facetValues.length === 0}
