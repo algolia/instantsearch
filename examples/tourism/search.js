@@ -71,7 +71,7 @@ search.addWidget(
     container: '#price',
     attributeName: 'price',
     pips: false,
-    tooltips: {format: function(formattedValue, rawValue) {return '$' + parseInt(formattedValue)}}
+    tooltips: {format: function(rawValue) {return '$' + parseInt(rawValue)}}
   })
   );
 

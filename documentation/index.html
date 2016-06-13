@@ -1892,8 +1892,8 @@ The min and max values are automatically computed by Algolia using the data in t
       <span class="nx">header</span><span class="o">:</span> <span class="s1">&#39;Price&#39;</span>
     <span class="p">},</span>
     <span class="nx">tooltips</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">format</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">formattedValue</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">&#39;$&#39;</span> <span class="o">+</span> <span class="nx">formattedValue</span><span class="p">;</span>
+      <span class="nx">format</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">rawValue</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">&#39;$&#39;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">round</span><span class="p">(</span><span class="nx">rawValue</span><span class="p">).</span><span class="nx">toLocaleString</span><span class="p">();</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">})</span>
