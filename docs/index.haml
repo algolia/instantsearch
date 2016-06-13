@@ -14,7 +14,7 @@ layout: default
           presents:
         .spacer40
         %h1.logo
-          %img.img-responsive.m-r{src:"{% asset_path logo-instantsearch.svg %}", alt:"Logo instantsearch.js", width:500}
+          %img.img-responsive.m-r{src:"{% asset_path logo-instantsearch.svg %}", alt:"Logo instantsearch.js"}
         %p.vp
           A library of UI widgets to help you build the best instant-search experience with
           %a{href:"https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage"} Algolia's Hosted Search API.
@@ -139,6 +139,7 @@ layout: default
             We created multiple examples using instantsearch.js
         .col-sm-4
           %a.btn.btn-primary{href: "{{ '/examples/' | prepend: site.baseurl }}"} See it in action!
+    .spacer80
 
 {% contentfor site-footer %}
 <script src="//cdn.jsdelivr.net/g/gsap@1.11.8(TweenMax.min.js+TimelineMax.min.js),scrollmagic@2.0.5(ScrollMagic.min.js+plugins/animation.gsap.min.js)"></script>

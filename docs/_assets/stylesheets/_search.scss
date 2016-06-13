@@ -1,38 +1,22 @@
+// Import Searchbox Settings  //
+///////////////////////////////
+@import 'docsearch/docsearch';
+@import 'docsearch/searchbox';
+
+@include searchbox($searchbox-config...);
+
+
 // Search input in the navbar
 .search-form {
   position: relative;
   top: -2px;
+
   input {
     position: relative;
     width: 36px;
     height: 36px;
-    top: -5px;
-    line-height: 2.3em;
-    padding: 0 5px 0 28px;
-    background-color: transparent;
-    border: solid 2px rgba($brand-primary, .5s);
-    border-radius: 40px;
-    color: #FFFFFF;
-    overflow: hidden;
-    &:focus, &:active, &.search-active {
-      outline: none;
-      box-shadow: none;
-      width: 300px;
-      border: solid 2px $brand-primary;
-      transition: width .2s, border .2s;
-    }
   }
-  .search-icon {
-    display: block;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 2px;
-    left: 8px;
-    text-align: center;
-    color: $brand-primary;
-    pointer-events: none;
-  }
+
   // Main autocomplete wrapper
   .aa-dropdown-menu {
     background-color: #FFFFFF;

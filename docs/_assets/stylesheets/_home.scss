@@ -45,7 +45,6 @@ h2 {
     bottom: 24px;
     left: 50%;
     margin-left: -32px;
-    //background: transparent url(asset_path("img/arrow.svg")) no-repeat center bottom;
     background-size: contain;
     animation: arrow 1s ease-in-out infinite alternate;
   }
@@ -64,6 +63,10 @@ h2 {
 }
 
 .logo {
+
+  @media (max-width: $bp-medium) {
+    max-width: 345px;
+  }
   svg {
     height: 70px;
   }
