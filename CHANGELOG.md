@@ -1,3 +1,19 @@
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/algolia/instantsearch.js/compare/v1.5.2...v1.6.0) (2016-06-13)
+
+
+### Bug Fixes
+
+* **hits:** rename __position to hitIndex ([d051a54](https://github.com/algolia/instantsearch.js/commit/d051a54))
+* **refinementList/header:** rename count to refinedFacetCount ([89ad602](https://github.com/algolia/instantsearch.js/commit/89ad602))
+
+### Features
+
+* **header:** Pass count of current refined filters in header ([d9e8582](https://github.com/algolia/instantsearch.js/commit/d9e8582)), closes [#1013](https://github.com/algolia/instantsearch.js/issues/1013) [#1041](https://github.com/algolia/instantsearch.js/issues/1041)
+* **hits:** Add a `__position` attribute to data passed to items ([43ce1c7](https://github.com/algolia/instantsearch.js/commit/43ce1c7)), closes [#903](https://github.com/algolia/instantsearch.js/issues/903)
+
+
+
 <a name="1.5.2"></a>
 ## [1.5.2](https://github.com/algolia/instantsearch.js/compare/v1.5.1...v1.5.2) (2016-06-10)
 

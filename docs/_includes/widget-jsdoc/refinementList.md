@@ -58,7 +58,7 @@
 <span class='attr-optional'>`options.templates.header`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>function</code>)</span>
 </p>
-<p class="attr-description">Header template</p>
+<p class="attr-description">Header template, provided with `refinedFacetsCount` data property</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates.item`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>function</code>)</span>
