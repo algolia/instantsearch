@@ -1935,7 +1935,7 @@ The min and max values are automatically computed by Algolia using the data in t
 <span class="attr-optional"><code>options.tooltips</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code> | <code>Object</code>)</span>
 </p>
-      <p class="attr-description">Should we show tooltips or not. The default tooltip will show the formatted corresponding value without any other token. You can also provide <code>tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}</code> So that you can format the tooltip display value as you want</p>
+      <p class="attr-description">Should we show tooltips or not. The default tooltip will show the raw value. You can also provide <code>tooltips: {format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}}</code> So that you can format the tooltip display value as you want</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -1981,6 +1981,16 @@ The min and max values are automatically computed by Algolia using the data in t
   <span class="attr-infos">(<code>string</code> | <code>Array.&lt;string&gt;</code>)</span>
 </p>
       <p class="attr-description">CSS class to add to the footer element</p>
+      <p class="attr-name">
+<span class="attr-optional"><code>options.pips</code><span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code> | <code>object</code>)</span>
+</p>
+      <p class="attr-description">Show slider pips.</p>
+      <p class="attr-name">
+<span class="attr-optional"><code>options.step</code><span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">1</code>(<code>boolean</code> | <code>object</code>)</span>
+</p>
+      <p class="attr-description">Every handle move will jump that number of steps.</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.collapsible</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> | <code>boolean</code>)</span>
