@@ -105,7 +105,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-beb3afc90aeba0e2d13a6a721c19f14a.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.5.2</strong></p>
+    <p class="version">Version: <strong>1.6.0</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -598,7 +598,7 @@ The search box widget is where you users type their search queries.</p>
 <span class="attr-optional"><code>options.queryHook</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>function</code>)</span>
 </p>
-      <p class="attr-description">A function that will be called everytime a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox.</p>
+      <p class="attr-description">A function that will be called every time a new search would be done. You will get the query as first parameter and a search(query) function to call as the second parameter. This queryHook can be used to debounce the number of searches done from the searchBox.</p>
 
       <p class="attr-legend">* <span>Required</span></p>
 
@@ -1407,7 +1407,7 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
 <span class="attr-optional"><code>options.limit</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>string</code>)</span>
 </p>
-      <p class="attr-description">How much facet values to get. When the show more feature is activated this is the minimun number of facets requested (the show more button is not in active state).</p>
+      <p class="attr-description">How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.showMore</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> | <code>boolean</code>)</span>
@@ -1442,7 +1442,7 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
 <span class="attr-optional"><code>options.templates.header</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>function</code>)</span>
 </p>
-      <p class="attr-description">Header template</p>
+      <p class="attr-description">Header template, provided with <code>refinedFacetsCount</code> data property</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates.item</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>function</code>)</span>
@@ -1792,7 +1792,7 @@ Note that if you provide an “off” option, it will be refined at initializati
 <span class="attr-optional"><code>options.autoHideContainer</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code>)</span>
 </p>
-      <p class="attr-description">Hide the container when there’s no results</p>
+      <p class="attr-description">Hide the container when there are no results</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.cssClasses</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -2982,7 +2982,7 @@ load. Maybe automatically filter on <code>Cell Phones</code> made by either <cod
 
   <p>If you are already using a widget to perform a filter on that attribute (like
 the <code>menu</code> or <code>refinementList</code> widgets), you can just use the
-<code>searchParameters.facetsRefinements</code> attribute option when instanciating instantsearch.</p>
+<code>searchParameters.facetsRefinements</code> attribute option when instantiating instantsearch.</p>
 
   <p>Pass it an object where each key is the attribute you want to filter and each
 value is an array of the filtered values.  If you are using <code>OR</code> filters instead
@@ -3028,7 +3028,7 @@ results for this query. If you’d like to display results only when users
 actually start typing, you can use the <code>searchFunction</code> hook.</p>
 
   <p>This method takes only one argument, <code>helper</code>, on which you can call <code>.search()</code>
-to actually start the search.  <code>helper.state</code> also contains informations about
+to actually start the search.  <code>helper.state</code> also contains information about
 the current state of your search.</p>
 
   <p>You can for example check for <code>helper.state.query</code> to see if the query is empty
@@ -3207,7 +3207,7 @@ but any other method to show/hide the results would work.</p>
         <li><span class="attr-optional"><code>widget.init</code></span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
           <ul>
             <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create new search query</li>
+            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create a new search query</li>
             <li>templatesConfig: the template configuration</li>
           </ul>
         </li>
@@ -3215,7 +3215,7 @@ but any other method to show/hide the results would work.</p>
           <ul>
             <li>results: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html">results</a> of the query</li>
             <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create new search query</li>
+            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create a new search query</li>
             <li>createURL: function provided to create urls</li>
           </ul>
         </li>
