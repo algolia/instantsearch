@@ -13,7 +13,7 @@
 <span class='attr-optional'>`options.tooltips`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code> &#124; <code>Object</code>)</span>
 </p>
-<p class="attr-description">Should we show tooltips or not. The default tooltip will show the formatted corresponding value without any other token. You can also provide `tooltips: {format: function(formattedValue, rawValue) {return '$' + formattedValue}}` So that you can format the tooltip display value as you want</p>
+<p class="attr-description">Should we show tooltips or not. The default tooltip will show the raw value. You can also provide `tooltips: {format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}}` So that you can format the tooltip display value as you want</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -59,6 +59,16 @@
   <span class="attr-infos">(<code>string</code> &#124; <code>Array.&lt;string&gt;</code>)</span>
 </p>
 <p class="attr-description">CSS class to add to the footer element</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.pips`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code> &#124; <code>object</code>)</span>
+</p>
+<p class="attr-description">Show slider pips.</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.step`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">1</code>(<code>boolean</code> &#124; <code>object</code>)</span>
+</p>
+<p class="attr-description">Every handle move will jump that number of steps.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.collapsible`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> &#124; <code>boolean</code>)</span>
