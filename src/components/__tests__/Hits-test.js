@@ -230,7 +230,7 @@ describe('Hits', () => {
       expect(actual.at(1).props().data.foo).toEqual('baz');
     });
 
-    it('should add the __position in the list to each item', () => {
+    it('should add the __hitIndex in the list to each item', () => {
       // Given
       let props = {
         results: {
@@ -251,8 +251,8 @@ describe('Hits', () => {
       let actual = shallowRender(props).find({templateKey: 'item'});
 
       // Then
-      expect(actual.at(0).props().data.__position).toEqual(0);
-      expect(actual.at(1).props().data.__position).toEqual(1);
+      expect(actual.at(0).props().data.__hitIndex).toEqual(0);
+      expect(actual.at(1).props().data.__hitIndex).toEqual(1);
     });
 
     it('should use the objectID as the DOM key', () => {
