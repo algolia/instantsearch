@@ -729,8 +729,8 @@ search.addWidget(
       header: 'Price'
     },
     tooltips: {
-      format: function(formattedValue) {
-        return '$' + formattedValue;
+      format: function(rawValue) {
+        return '$' + Math.round(rawValue).toLocaleString();
       }
     }
   })

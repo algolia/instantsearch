@@ -223,8 +223,8 @@ search.addWidget(
     },
     step: 10,
     tooltips: {
-      format: function(formattedValue) {
-        return '$' + Math.round(formattedValue).toLocaleString();
+      format: function(rawValue) {
+        return '$' + Math.round(rawValue).toLocaleString();
       }
     }
   })
