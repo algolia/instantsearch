@@ -1,3 +1,15 @@
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/algolia/instantsearch.js/compare/v1.6.0...v1.6.1) (2016-06-20)
+
+
+### Bug Fixes
+
+* **meteorjs:** lite build must point to the browser lite (#1097) ([265ace3](https://github.com/algolia/instantsearch.js/commit/265ace3))
+* **toggle:** read numerical facet results stats for toggle count (#1098) ([1feb539](https://github.com/algolia/instantsearch.js/commit/1feb539)), closes [#1096](https://github.com/algolia/instantsearch.js/issues/1096)
+* **website:** footer wording ([8355460](https://github.com/algolia/instantsearch.js/commit/8355460))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/algolia/instantsearch.js/compare/v1.5.2...v1.6.0) (2016-06-13)
 
