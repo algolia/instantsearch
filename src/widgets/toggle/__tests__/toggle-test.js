@@ -100,7 +100,8 @@ describe('toggle()', () => {
           search: sinon.spy()
         };
         state = {
-          toggleRefinement: sinon.spy()
+          toggleRefinement: sinon.spy(),
+          isFacetRefined: sinon.stub().returns(false)
         };
         props = {
           cssClasses: {
@@ -183,6 +184,25 @@ describe('toggle()', () => {
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+      });
+
+      it('understands numerical facets results', () => {
+        results = {
+          nbHits: 2,
+          getFacetStats: sinon.stub().returns({sum: 200})
+        };
+        widget = toggle({container, values: {on: 1, off: 2}, attributeName, label});
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
+
+        props = {
+          facetValues: [{count: 200, isRefined: false, name: label}],
+          shouldAutoHideContainer: false,
+          ...props
+        };
+
+        expect(results.getFacetStats.args[0][0]).toEqual(attributeName);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('without facet values', () => {

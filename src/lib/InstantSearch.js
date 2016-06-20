@@ -1,4 +1,6 @@
-import algoliasearch from 'algoliasearch/lite';
+// we use the fullpath to the lite build to solve a meteor.js issue:
+// https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
+import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
 import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';

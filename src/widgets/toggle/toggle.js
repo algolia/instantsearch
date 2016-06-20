@@ -54,7 +54,7 @@ toggle({
   container,
   attributeName,
   label,
-  [ userValues={on: true, off: undefined} ],
+  [ values={on: true, off: undefined} ],
   [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
@@ -83,7 +83,7 @@ function toggle({
     throw new Error(usage);
   }
 
-  let hasAnOffValue = (userValues.off !== undefined);
+  let hasAnOffValue = userValues.off !== undefined;
 
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -111,7 +111,8 @@ function toggle({
       });
       this.toggleRefinement = this.toggleRefinement.bind(this, helper);
 
-      if (userValues.off === undefined) {
+      // no need to refine anything at init if no custom off values
+      if (!hasAnOffValue) {
         return;
       }
       // Add filtering on the 'off' value if set
@@ -142,12 +143,19 @@ function toggle({
     },
     render: function({helper, results, state, createURL}) {
       let isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
-      let values = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
+      let currentRefinement = isRefined ? userValues.on : userValues.off;
+      let count;
+      if (typeof currentRefinement === 'number') {
+        count = results.getFacetStats(attributeName).sum;
+      } else {
+        let facetData = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
+        count = facetData !== undefined ? facetData.count : null;
+      }
 
       let facetValue = {
         name: label,
-        isRefined: isRefined,
-        count: values && values.count || null
+        isRefined,
+        count
       };
 
       // Bind createURL to this specific attribute
