@@ -48,7 +48,7 @@
 <span class='attr-optional'>`options.urlSync.trackedParameters`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-<p class="attr-description">Parameters that will be synchronized in the URL. By default, it will track the query, all the refinable attribute (facets and numeric filters), the index and the page. [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)</p>
+<p class="attr-description">Parameters that will be synchronized in the URL. Default value is `['query', 'attribute:*', 'index', 'page', 'hitsPerPage']`. Refer to the [full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) for more details.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.urlSync.useHash`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>boolean</code>)</span>
