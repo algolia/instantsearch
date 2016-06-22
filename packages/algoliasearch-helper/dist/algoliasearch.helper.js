@@ -82,6 +82,9 @@ var currentQueue;
 var queueIndex = -1;
 
 function cleanUpNextTick() {
+    if (!draining || !currentQueue) {
+        return;
+    }
     draining = false;
     if (currentQueue.length) {
         queue = currentQueue.concat(queue);
@@ -11228,17 +11231,22 @@ exports.getUnrecognizedParametersInQueryString = function(queryString, options) 
  *  - mapping : map short attributes to another value e.g. {q: 'query'}
  *  - moreAttributes : more values to be added in the query string. Those values
  *    won't be prefixed.
+ *  - safe : get safe urls for use in emails, chat apps or any application auto linking urls.
+ *  All parameters and values will be encoded in a way that it's safe to share them.
+ *  Default to false for legacy reasons ()
  * @return {string} the query string
  */
 exports.getQueryStringFromState = function(state, options) {
   var moreAttributes = options && options.moreAttributes;
   var prefixForParameters = options && options.prefix || '';
   var mapping = options && options.mapping || {};
+  var safe = options && options.safe || false;
   var invertedMapping = invert(mapping);
-  var partialStateWithEncodedValues = recursiveEncode(state);
+
+  var stateForUrl = safe ? state : recursiveEncode(state);
 
   var encodedState = mapKeys(
-    partialStateWithEncodedValues,
+    stateForUrl,
     function(v, k) {
       var shortK = shortener.encode(k);
       return prefixForParameters + (mapping[shortK] || shortK);
@@ -11248,19 +11256,19 @@ exports.getQueryStringFromState = function(state, options) {
   var prefixRegexp = prefixForParameters === '' ? null : new RegExp('^' + prefixForParameters);
   var sort = bind(sortQueryStringValues, null, prefixRegexp, invertedMapping);
   if (moreAttributes) {
-    var stateQs = qs.stringify(encodedState, {encode: false, sort: sort});
-    var moreQs = qs.stringify(moreAttributes, {encode: false});
+    var stateQs = qs.stringify(encodedState, {encode: safe, sort: sort});
+    var moreQs = qs.stringify(moreAttributes, {encode: safe});
     if (!stateQs) return moreQs;
     return stateQs + '&' + moreQs;
   }
 
-  return qs.stringify(encodedState, {encode: false, sort: sort});
+  return qs.stringify(encodedState, {encode: safe, sort: sort});
 };
 
 },{"./SearchParameters":173,"./SearchParameters/shortener":174,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isArray":133,"lodash/lang/isPlainObject":141,"lodash/lang/isString":142,"lodash/object/invert":150,"lodash/object/mapKeys":153,"lodash/object/mapValues":154,"lodash/object/pick":158,"qs":164,"qs/lib/utils":167}],183:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.10.0';
+module.exports = '2.11.0';
 
 },{}]},{},[1])(1)
 });

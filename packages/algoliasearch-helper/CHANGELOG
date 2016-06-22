@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.11.0 - 2016-06-22
+  * feat(getStateAsQueryString): add safe option to encode the whole url instead of "smart" (but failing)
+  encoding
+
 2.10.0 - 2016-06-10
   * fix(_parseNumbers): let the user store values that are not parseable
   numbers for root parameters of the state (eg. aroundRadius='all')
