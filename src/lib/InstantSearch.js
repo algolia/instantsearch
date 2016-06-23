@@ -35,9 +35,13 @@ function defaultCreateURL() { return '#'; }
  * state is created in the browser history. The default value is 700. The url is always updated at each keystroke
  * but we only create a "previous search state" (activated when click on back button) every 700ms of idle time.
  * @param  {string[]} [options.urlSync.trackedParameters] Parameters that will
- * be synchronized in the URL. By default, it will track the query, all the
- * refinable attribute (facets and numeric filters), the index and the page.
- * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
+ * be synchronized in the URL. Default value is `['query', 'attribute:*',
+ * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
+ * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
+ * values are all the [Algolia REST API parameters](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
+ *
+ * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
+ * linked to the url.
  * @param  {boolean} [options.urlSync.useHash] If set to true, the url will be
  * hash based. Otherwise, it'll use the query parameters using the modern
  * history API.
