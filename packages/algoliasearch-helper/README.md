@@ -368,6 +368,9 @@ var helper = algoliasearchHelper(client, indexName, {
 });
 ```
 
+**Requirements:** All the specified `attributes` must be defined in your Algolia settings
+as attributes for faceting.
+
 Given your objects looks like this:
 
 ```json
