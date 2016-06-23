@@ -8,7 +8,7 @@
 <span class='attr-required'>`options.attributes`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-<p class="attr-description">Array of attributes to use to generate the hierarchy of the menu. Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow.</p>
+<p class="attr-description">Array of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.separator`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">&#x27; &gt; &#x27;</code>(<code>string</code>)</span>
