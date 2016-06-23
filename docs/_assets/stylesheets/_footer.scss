@@ -100,7 +100,7 @@
     margin-left: $margin;
     text-decoration: none;
 
-    &:not(:first-of-type):before {
+    &:not(:first-of-type):not(:nth-child(3)):before {
       content: '•';
       position: relative;
       margin-right: $margin;
