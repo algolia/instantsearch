@@ -287,7 +287,7 @@
 <span class="attr-optional"><code>options.urlSync.trackedParameters</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-      <p class="attr-description">Parameters that will be synchronized in the URL. Default value is <code>['query', 'attribute:*', 'index', 'page', 'hitsPerPage']</code>. Refer to the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">full documentation</a> for more details.</p>
+      <p class="attr-description">Parameters that will be synchronized in the URL. Default value is <code>['query', 'attribute:*', 'index', 'page', 'hitsPerPage']</code>. <code>attribute:*</code> means all the faceting attributes will be tracked. You can track only some of them by using […, ‘attribute:color’, ‘attribute:categories’]. All other possible values are all the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Algolia REST API parameters</a>. There’s a special <code>is_v</code> parameter that will get added everytime, it tracks the version of instantsearch.js linked to the url.</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.urlSync.useHash</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>boolean</code>)</span>
