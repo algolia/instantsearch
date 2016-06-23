@@ -32,7 +32,9 @@ This is the library you will need to easily build a good search UX like our [ins
 
 
   - [Features](#features)
-  - [Example](#example)
+  - [Examples](#examples)
+    - [Vanilla JavaScript](#vanilla-javascript)
+    - [AngularJS Module](#angularjs-module)
   - [Helper cheatsheet](#helper-cheatsheet)
     - [Add the helper in your project](#add-the-helper-in-your-project)
     - [Regular `<script>` tag](#regular-script-tag)
@@ -63,8 +65,9 @@ This is the library you will need to easily build a good search UX like our [ins
  - Pagination
  - Disjunctive faceting (search on two or more values of the same facet)
 
-## Example
+## Examples
 
+### Vanilla JavaScript
 A small example that uses Browserify to manage modules.
 
 ```js
@@ -90,6 +93,42 @@ helper.addNumericRefinement('year', '=', 2003);
 // Search for any movie filmed in 2003 and directed by either C. Eastwood or S. Coppola
 helper.search();
 ```
+See more examples in the [examples folder](examples/)
+
+### AngularJS module
+
+```js
+<script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.angular.js"></script>
+<script src="dist/algoliasearch.helper.min.js"></script>
+
+<script type="text/javascript">
+angular.module('searchApp', ['ngSanitize', 'algoliasearch'])
+.controller('searchController', ['$scope', '$sce', 'algolia', function($scope, $sce, algolia) {
+  var algolia = algolia.Client('applicationId', 'apiKey');
+  $scope.q = '';
+  $scope.content = null;
+  $scope.helper = algoliasearchHelper(algolia, 'indexName', {
+    facets: ['type', 'shipping'],
+    disjunctiveFacets: ['category', 'manufacturer'],
+    hitsPerPage: 5,
+  });
+  $scope.helper.on('result', function(content) {
+    $scope.$apply(function() {
+      $scope.content = content;
+    });
+  });
+  $scope.toggleRefine = function($event, facet, value) {
+    $event.preventDefault();
+    $scope.helper.toggleRefine(facet, value).search();
+  };
+  $scope.$watch('q', function(q) {
+    $scope.helper.setQuery(q).search();
+  });
+  $scope.helper.search();
+}]);
+</script>
+```
+You can see the full [Angular example here](examples/instantsearch%2Bhelper%2Bangular.html)
 
 ## Helper cheatsheet
 
