@@ -17,7 +17,7 @@ let bem = bemHelper('ais-hierarchical-menu');
  * @function hierarchicalMenu
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]} options.attributes Array of attributes to use to generate the hierarchy of the menu.
- * Refer to [the readme](https://github.com/algolia/algoliasearch-helper-js#hierarchical-facets) for the convention to follow.
+ * See the example for the convention to follow.
  * @param  {string} [options.separator=' > '] Separator used in the attributes to separate level values.
  * @param  {string} [options.rootPath] Prefix path to use if the first level is not the root level.
  * @param  {string} [options.showParentLevel=false] Show the parent level of the current refined value
