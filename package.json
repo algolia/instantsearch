@@ -26,8 +26,7 @@
     "test:functional": "wdio functional-tests/wdio.conf.js",
     "test:functional:dev": "babel-node scripts/dev-functional-tests",
     "test:functional:dev:debug-server": "PORT=9090 babel-node scripts/dev-functional-tests-debug-server",
-    "serve": "./scripts/serve.sh",
-    "shrinkwrap": "npm-shrinkwrap --dev"
+    "serve": "./scripts/serve.sh"
   },
   "repository": "algolia/instantsearch.js",
   "devDependencies": {
@@ -71,7 +70,7 @@
     "jsdom": "^9.2.1",
     "jsdom-global": "^2.0.0",
     "json": "^9.0.4",
-    "karma": "^0.13.22",
+    "karma": "^1.1.0",
     "karma-chrome-launcher": "^1.0.1",
     "karma-mocha": "^1.0.1",
     "karma-mocha-reporter": "^2.0.4",
@@ -82,7 +81,6 @@
     "mocha": "^2.5.3",
     "mversion": "^1.10.1",
     "node-sass": "^3.8.0",
-    "npm-shrinkwrap": "^200.5.1",
     "postcss-cli": "^2.5.2",
     "pretty-bytes": "^2.0.1",
     "raw-loader": "^0.5.1",
