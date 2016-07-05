@@ -1,6 +1,5 @@
 # we do not want to lock down dependencies when used as an npm dependency,
 # only when we build
-npm-shrinkwrap.json
 docs/
 dev/
 scripts/
