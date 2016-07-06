@@ -1,21 +1,22 @@
 import cheerio from 'cheerio';
 
 export function getNumberOfResults() {
-  return browser
-    .getText('#stats')
-    .then(text => parseInt(text.match(/(\d+) results/)[1], 10));
+  const textStats = browser.getText('#stats');
+  return parseInt(textStats.match(/(\d+) results/)[1], 10);
 }
 
 export function getCurrentRefinements() {
-  return browser
-    .getHTML('#current-refined-values .facet-value > div')
-    .then(formatRefinements)
-    .catch(() => Promise.resolve([]));
+  try {
+    return formatRefinements(browser.getHTML('#current-refined-values .facet-value > div'));
+  } catch (_) {
+    return [];
+  }
 }
 
 export function clearAll() {
   // clear-all click seems tricky in some browsers
-  return browser.click('#clear-all a').pause(500);
+  browser.click('#clear-all a');
+  browser.pause(500);
 }
 
 export const searchBox = {
@@ -60,4 +61,3 @@ function formatRefinements(refinementsAsHTML) {
     };
   });
 }
-

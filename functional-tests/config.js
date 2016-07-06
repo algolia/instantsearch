@@ -1,75 +1,65 @@
-import startServer from './startServer';
+import testServer from './testServer.js';
+import {clearAll, searchBox} from './utils.js';
 
 let conf = {
   specs: [
-    'functional-tests/boot.js',
     'functional-tests/specs/**'
   ],
+  reporters: ['dot'],
+  framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
     timeout: 50000,
     compilers: ['js:babel-core/register']
   },
-  coloredLogs: false,
   baseUrl: 'http://localhost:9000',
-  framework: 'mocha',
   onPrepare() {
-    return startServer();
+    return testServer.start();
   },
   before() {
-    let init = browser
-      .timeoutsImplicitWait(500)
-      .url('/')
-      .waitForText('#hits', 30000);
+    browser.timeoutsImplicitWait(500);
+    browser.url('/');
+    browser.waitForText('#hits', 30000);
 
     if (!browser.isMobile) {
-      init = init.windowHandle(handle => browser.windowHandleMaximize(handle));
+      browser.windowHandle(handle => browser.windowHandleMaximize(handle));
     }
-
-    return init;
+  },
+  beforeTest() {
+    clearAll();
+    searchBox.clear();
   },
   onComplete() {
-    console.log('that\'s it');
+    testServer.stop();
   }
 };
 
 if (process.env.CI === 'true') {
-  const defaultCapabilities = {
-    build: process.env.TRAVIS_BUILD_NUMBER,
-    'tunnel-identifier': process.env.TRAVIS_JOB_NUMBER,
-    name: 'instantsearch.js functional tests'
-  };
-
   conf = {
+    services: ['sauce'],
     user: process.env.SAUCE_USERNAME,
     key: process.env.SAUCE_ACCESS_KEY,
+    maxInstances: 5,
+    sauceConnect: true,
     // we are not currently testing android nor microsoft edge
     // their selenium support is completely broken, nothing much to do here
     capabilities: [{
       browserName: 'chrome',
       platform: 'Windows 10',
-      version: '',
-      ...defaultCapabilities
-    }, {
-      browserName: 'firefox',
-      platform: 'Windows 10',
-      version: '',
-      ...defaultCapabilities
+      version: ''
     }, {
       browserName: 'internet explorer',
       platform: 'Windows 10',
-      version: '',
-      ...defaultCapabilities
+      version: ''
     }, {
       browserName: 'safari',
-      version: '9',
-      ...defaultCapabilities
+      version: '9'
     }],
     ...conf
   };
 } else {
   conf = {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 24444,
     path: '/wd/hub',
     capabilities: [{browserName: 'firefox'}],

@@ -53,7 +53,7 @@ function getContainerNode(selectorOrHTMLElement) {
  * @return {boolean} true if o is a DOMElement
  */
 function isDomElement(o) {
-  return o instanceof HTMLElement || !!o && o.nodeType > 0;
+  return o instanceof window.HTMLElement || !!o && o.nodeType > 0;
 }
 
 function isSpecialClick(event) {

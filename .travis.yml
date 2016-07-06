@@ -6,7 +6,6 @@ before_install:
   - npm prune
   - rvm install 2.2.0
   - rvm use 2.2.0
-  - npm install -g npm@2
 before_cache: npm prune
 install: npm install
 script: ./scripts/test-ci.sh
@@ -20,8 +19,6 @@ sudo: false
 cache:
   directories:
     - node_modules
-addons:
-  sauce_connect: true
 env:
   global:
     - SAUCE_USERNAME=instantsearchjs

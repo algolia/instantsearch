@@ -62,7 +62,6 @@ Since instantsearch.js is a UI library, if your issue is UI related then adding 
 
 Requirements:
 - [Node.js](https://nodejs.org/en/)
-- npm@2
 - [Ruby](https://www.ruby-lang.org/en/)
 - [Bundler](http://bundler.io/)
 
@@ -96,25 +95,6 @@ npm run serve
 ```
 
 Will build, watch for changes and serve instantsearch.css and instantsearch.js on http://localhost:8080.
-
-# Adding/Updating a package
-
-We use a [specific shrinkwrapping tool](https://github.com/uber/npm-shrinkwrap) and npm@2.
-
-```sh
-npm install
-npm install package --save[-dev]
-npm run shrinkwrap
-```
-
-# Removing a package
-
-```sh
-npm install
-npm prune
-npm remove package --save[-dev]
-npm run shrinkwrap
-```
 
 # Commit message guidelines
 
