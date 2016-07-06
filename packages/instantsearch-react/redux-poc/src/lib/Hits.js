@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-import connect from './connect';
+import connect from 'algoliasearch-helper-provider/src/connect';
 
 class Hits extends Component {
   render() {

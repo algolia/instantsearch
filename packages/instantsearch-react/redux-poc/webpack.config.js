@@ -23,7 +23,7 @@ export default {
       {
         test: /\.js$/,
         loaders: ['react-hot', 'babel'],
-        include: r('src'),
+        include: [r('src'), r('node_modules/algoliasearch-helper-provider/src')],
       },
     ],
   },
