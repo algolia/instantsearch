@@ -83,13 +83,8 @@ describe('rangeSlider()', () => {
       });
     });
 
-    it('sets the right ranges', () => {
-      results = {};
-      widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
-      helper.setState(widget.getConfiguration());
-      widget.init({helper});
-      widget.render({results, helper});
-      let props = {
+    context('render', () => {
+      const defaultProps = {
         cssClasses: {
           root: 'ais-range-slider',
           header: 'ais-range-slider--header',
@@ -112,10 +107,45 @@ describe('rangeSlider()', () => {
         tooltips: true
       };
 
-      expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-      expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-      expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
+      it('sets the right ranges', () => {
+        results = {};
+        widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
+        helper.setState(widget.getConfiguration());
+        widget.init({helper});
+        widget.render({results, helper});
+        let props = defaultProps;
+
+        expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
+      });
+
+      it('will use the results max when only min passed', () => {
+        results = {
+          disjunctiveFacets: [{
+            name: 'aNumAttr',
+            stats: {
+              min: 1.99,
+              max: 4999.98
+            }
+          }]
+        };
+        widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
+        helper.setState(widget.getConfiguration());
+        widget.init({helper});
+        widget.render({results, helper});
+        let props = {
+          ...defaultProps,
+          range: {min: 100, max: 5000},
+          start: [100, Infinity]
+        };
+
+        expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
+      });
     });
   });
 
@@ -132,6 +162,57 @@ describe('rangeSlider()', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
       expect(widget.getConfiguration({numericRefinements: {aNumAttr: {}}})).toEqual({
         disjunctiveFacets: ['aNumAttr']
+      });
+    });
+
+    context('render', () => {
+      const defaultProps = {
+        cssClasses: {
+          root: 'ais-range-slider',
+          header: 'ais-range-slider--header',
+          body: 'ais-range-slider--body',
+          footer: 'ais-range-slider--footer'
+        },
+        collapsible: false,
+        onChange: () => {},
+        pips: true,
+        range: {max: 200, min: 100},
+        shouldAutoHideContainer: false,
+        start: [100, 200],
+        step: 1,
+        templateProps: {
+          templates: {footer: '', header: ''},
+          templatesConfig: undefined,
+          transformData: undefined,
+          useCustomCompileOptions: {footer: false, header: false}
+        },
+        tooltips: true
+      };
+
+      it('will use the results min when only max passed', () => {
+        results = {
+          disjunctiveFacets: [{
+            name: 'aNumAttr',
+            stats: {
+              min: 1.99,
+              max: 4999.98
+            }
+          }]
+        };
+        widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
+        helper.setState(widget.getConfiguration());
+        widget.init({helper});
+        widget.render({results, helper});
+        let props = {
+          ...defaultProps,
+          range: {min: 1, max: 100},
+          start: [-Infinity, 100]
+        };
+
+        expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
+        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
       });
     });
   });
@@ -183,15 +264,9 @@ describe('rangeSlider()', () => {
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
-          data: {
-            65: 1
-          },
-          exhaustive: true,
           stats: {
             min: 65,
-            max: 65,
-            avg: 65,
-            sum: 65
+            max: 65
           }
         }]
       };
@@ -234,34 +309,9 @@ describe('rangeSlider()', () => {
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
-          data: {
-            19.99: 610,
-            39.99: 593,
-            29.99: 488,
-            49.99: 486,
-            99.99: 430,
-            14.99: 376,
-            59.99: 323,
-            34.99: 286,
-            79.99: 282,
-            9.99: 277,
-            599.99: 105,
-            999.99: 104,
-            799.99: 96,
-            899.99: 88,
-            699.99: 84,
-            1099.99: 53,
-            1199.99: 49,
-            649.99: 48,
-            1299.99: 46,
-            749.99: 34
-          },
-          exhaustive: true,
           stats: {
             min: 1.99,
-            max: 4999.98,
-            avg: 243.349,
-            sum: 2433490
+            max: 4999.98
           }
         }]
       };
