@@ -31,7 +31,7 @@ class PaginationLink extends React.Component {
       tagName = 'a';
       attributes = {
         ...attributes,
-        ariaLabel,
+        'aria-label': ariaLabel,
         href: url,
         onClick: this.handleClick
       };
