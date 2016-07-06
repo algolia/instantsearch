@@ -5,22 +5,21 @@ describe('currentRefinedValues', () => {
   const firstRefinement = '#hierarchical-categories .item:nth-child(6)';
   const secondRefinement = '#brands .item:nth-child(8)';
 
-  it('is empty', () => getCurrentRefinements()
-    .then(refinements => expect(refinements.length).toBe(0))
-  );
+  it('is empty', () => expect(getCurrentRefinements().length).toBe(0));
 
   context('when we have some refinements', () => {
-    beforeEach(() => browser.click(firstRefinement).pause(500).click(secondRefinement).pause(500));
+    beforeEach(() => {
+      browser.click(firstRefinement);
+      browser.pause(1000);
+      browser.click(secondRefinement);
+      browser.pause(1000);
+    });
 
-    it('shows refinements', () =>
-      getCurrentRefinements().then(refinements => expect(refinements.length).toBe(2))
-    );
+    it('shows refinements', () => expect(getCurrentRefinements().length).toBe(2), 2);
 
-    it('has a "Clear all" button', () =>
-      browser
-        .click('#current-refined-values .clear-all')
-        .then(getCurrentRefinements)
-        .then(refinements => expect(refinements.length).toBe(0))
-    );
+    it('has a "Clear all" button', () => {
+      browser.click('#current-refined-values .clear-all');
+      expect(getCurrentRefinements().length).toBe(0);
+    });
   });
 });

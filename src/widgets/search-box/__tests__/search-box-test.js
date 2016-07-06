@@ -405,7 +405,7 @@ describe('searchBox()', () => {
       widget.init({state, helper, onHistoryChange});
       // Then
       container.value = query;
-      let event = new Event('input');
+      let event = new window.Event('input');
       container.dispatchEvent(event);
     }
 
@@ -490,7 +490,7 @@ describe('searchBox()', () => {
       // When
       widget.init({state, helper, onHistoryChange});
       // Then
-      let event = new Event('keyup', args);
+      let event = new window.Event('keyup', args);
       Object.defineProperty(event, 'keyCode', {get: () => args.keyCode});
       container.dispatchEvent(event);
     }

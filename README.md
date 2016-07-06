@@ -163,8 +163,11 @@ You need [docker](https://docs.docker.com/engine/installation/).
 Run it like so:
 
 ```sh
-docker pull elgalu/selenium:2.50.1a
-docker run --net="host" --privileged --name=grid -e VNC_PASSWORD=fun -e NOVNC=true elgalu/selenium:2.50.1a
+docker pull elgalu/selenium
+docker run --name=grid --net=host --pid=host --privileged=true \
+    -e VNC_PASSWORD=realtime \
+    -e NOVNC=true \
+    -v /dev/shm:/dev/shm elgalu/selenium
 ```
 
 Then run functional tests dev command with auto reload:
