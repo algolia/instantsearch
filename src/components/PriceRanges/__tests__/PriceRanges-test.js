@@ -139,7 +139,8 @@ describe('PriceRanges', () => {
           cssClasses: 'cssClasses',
           labels: {button: 'hello'},
           currency: '$',
-          refine: 'refine'
+          refine: 'refine',
+          facetValues: [{from: 0, to: 10}, {from: 10, to: 20}]
         };
         let component = getComponentWithMockRendering(props);
 
@@ -150,6 +151,7 @@ describe('PriceRanges', () => {
         expect(form).toEqualJSX(
           <PriceRangesForm
             cssClasses={props.cssClasses}
+            currentRefinement={{from: '', to: ''}}
             labels={{button: 'hello', currency: '$'}}
             refine={() => {}}
           />
