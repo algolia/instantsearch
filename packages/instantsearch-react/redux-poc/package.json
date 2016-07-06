@@ -20,6 +20,7 @@
     "algoliasearch": "^3.16.0",
     "algoliasearch-helper": "^2.11.0",
     "react": "^15.2.0",
+    "react-addons-shallow-compare": "^15.2.0",
     "react-dom": "^15.2.0",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
-import { setQuery } from './actions';
+import connect from './connect';
 
 class SearchBox extends Component {
   onChange = e => {
-    this.props.dispatch(setQuery(e.target.value));
+    this.props.helper.setQuery(e.target.value).search();
   };
 
   render() {
