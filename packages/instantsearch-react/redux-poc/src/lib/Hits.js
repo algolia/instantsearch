@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
-
-import connect from './connect';
+import { connect } from 'react-redux';
 
 class Hits extends Component {
   render() {
     return (
       <div>
-        {this.props.state.result && this.props.state.result.hits.map(hit =>
+        {this.props.searchResults && this.props.searchResults.hits.map(hit =>
           <div key={hit.objectID}>
             {hit.title}
           </div>
         )}
-        {!this.props.state.result && 'Loading...'}
+        {!this.props.searchResults && 'Loading...'}
       </div>
     );
   }
 }
 
-export default connect(Hits);
+export default connect(state => ({
+  searchResults: state.searchResults,
+}))(Hits);

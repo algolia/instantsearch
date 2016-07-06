@@ -12,8 +12,10 @@ class App extends Component {
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="movies"
       >
-        <SearchBox />
-        <Hits />
+        <div>
+          <SearchBox />
+          <Hits />
+        </div>
       </InstantSearch>
     );
   }

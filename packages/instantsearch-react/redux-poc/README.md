@@ -4,13 +4,16 @@ This is an attempt at implementing the [API proposal](https://github.com/algolia
 
 The idea is to use a Redux-like architecture under the hood, while leaving it up to the user whether they want to control the state of the InstantSearch component or let it manage its own state. The current implementation manages its own state, but having it be managed from the outside is (probably) just a matter of exposing `{ state, dispatch }` props.
 
-At this point I've basically re-implemented a very barebones Redux. We might end up using Redux itself, but it's very likely what we have now will suffice going forward.
+~~At this point I've basically re-implemented a very barebones Redux. We might end up using Redux itself, but it's very likely what we have now will suffice going forward.~~
+
+We're now using Redux itself for practical purposes.
 
 ## Things to figure out
 
 * The helper already implements all our actions and keeps the state immutable, so we could probably create them automatically. Maybe make this easier/supported on the helper side?
 * Routing.
 * Styling.
+* How to connect to a scoped redux state directly. Might have to create a stub Redux store/connect for that purpose. See https://github.com/reactjs/redux/issues/159#issuecomment-141284738
 * A bunch of other things.
 
 ## Setting it up

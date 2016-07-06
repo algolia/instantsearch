@@ -1,75 +1,65 @@
 import React, { Component, PropTypes } from 'react';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 
-import createStore from './createStore';
-import reducer from './reducer';
-import { retrieveResultSuccess } from './actions';
+import createReducer from './createReducer';
+import { retrieveResultSuccess, search } from './actions';
 
 import Hits from './Hits';
 
 class InstantSearch extends Component {
   static childContextTypes = {
-    store: PropTypes.object.isRequired,
+    // @TODO: better classification
+    algoliasearchClient: PropTypes.any.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    // @TODO: accept an algoliasearch object instead?
-    this.algoliasearch = algoliasearch(props.appId, props.apiKey);
-    this.store = createStore(reducer, {
-      helperState: this.createHelper().getState(),
-      result: null,
-    });
+    this.store = createStore(
+      createReducer(props.indexName),
+      applyMiddleware(thunk, createLogger())
+    );
     this.unsubscribe = this.store.subscribe(this.search);
-    this.prevHelperState = null;
+    this.prevSearchParameters = null;
+
+    this.client = algoliasearch(props.appId, props.apiKey);
 
     this.search();
   }
 
   componentWillUnmount() {
-    // Not really useful since the store gets deleted with the Component anyway
-    // since it is only defined inside of it (for now).
+    // Is this needed? The store should get deleted with the component anyway
+    // since its only reference is inside of it and its children.
     this.unsubscribe();
   }
 
   getChildContext() {
     return {
-      store: this.store,
+      algoliasearchClient: this.client,
     };
   }
 
-  createHelper() {
-    return algoliasearchHelper(
-      this.algoliasearch,
-      this.props.indexName
-    );
-  }
-
   search = () => {
-    const { helperState } = this.store.getState();
-
-    if (helperState === this.prevHelperState) {
+    const { searchParameters } = this.store.getState();
+    if (searchParameters === this.prevSearchParameters) {
       return;
     }
-    this.prevHelperState = helperState;
+    this.prevSearchParameters = searchParameters;
 
-    const helper = this.createHelper();
-    helper.setState(helperState);
-    helper.on('result', result => {
-      this.store.dispatch(retrieveResultSuccess(result));
-    });
-    helper.search();
+    this.store.dispatch(search(this.client));
   };
 
   render() {
+    const { appId, apiKey, indexName, ...otherProps } = this.props;
     return (
       // For now we support multiple children. If we were to act like a redux
       // provider, we'd only support a single child or none.
-      <div>
-        {this.props.children}
-      </div>
+      <Provider {...otherProps} store={this.store} />
     );
   }
 }

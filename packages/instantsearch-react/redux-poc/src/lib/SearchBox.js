@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import connect from './connect';
 import { setQuery } from './actions';
 
-class Hits extends Component {
+class SearchBox extends Component {
   onChange = e => {
     this.props.dispatch(setQuery(e.target.value));
   };
@@ -12,11 +12,13 @@ class Hits extends Component {
     return (
       <input
         type="text"
-        value={this.props.state.helperState.query}
+        value={this.props.query}
         onChange={this.onChange}
       />
     );
   }
 }
 
-export default connect(Hits);
+export default connect(state => ({
+  query: state.searchParameters.query,
+}))(SearchBox);
