@@ -9,7 +9,9 @@ class InstantSearch extends Component {
 
     this.client = props.client || algoliasearch(props.appId, props.apiKey);
     this.helper = props.helper || algoliasearchHelper(this.client, props.indexName);
+  }
 
+  componentDidMount() {
     this.helper.search();
   }
 
