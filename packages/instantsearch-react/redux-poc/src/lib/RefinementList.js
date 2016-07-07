@@ -20,6 +20,7 @@ class RefinementList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.attributeName !== this.props.attributeName) {
       this.addFacet(nextProps.helper, nextProps.attributeName);
+      nextProps.helper.search();
     }
   }
 
@@ -33,13 +34,14 @@ class RefinementList extends Component {
   }
 
   render() {
-    const { facets, attributeName, results } = this.props;
-    if (!results || facets.indexOf(attributeName) === -1) {
-      return <div />
+    const { facetValues } = this.props;
+    if (!facetValues) {
+      return null;
     }
+
     return (
       <ul>
-        {results.getFacetValues(attributeName).map(v =>
+        {facetValues.map(v =>
           <li
             key={v.name}
             onClick={this.onFacetClick.bind(null, v.name)}
@@ -55,7 +57,17 @@ class RefinementList extends Component {
   }
 }
 
-export default connect(state => ({
-  facets: state.searchParameters.facets,
-  results: state.searchResults,
-}))(RefinementList);
+export default connect((state, props) => {
+  const isFacetPresent = (
+    state.searchResults &&
+    state.searchResults.facets.some(f => f.name === props.attributeName)
+  );
+
+  return {
+    facetValues: (
+      isFacetPresent ?
+        state.searchResults.getFacetValues(props.attributeName) :
+        null
+    ),
+  };
+})(RefinementList);
