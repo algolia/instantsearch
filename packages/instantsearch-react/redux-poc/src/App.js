@@ -6,6 +6,20 @@ import SearchBox from './lib/SearchBox';
 import RefinementList from './lib/RefinementList';
 
 class App extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      facet: 'genre',
+    };
+  }
+
+  onSwitchClick = () => {
+    this.setState(state => ({
+      facet: state.facet === 'genre' ? 'year' : 'genre',
+    }));
+  };
+
   render() {
     return (
       <InstantSearch
@@ -14,7 +28,8 @@ class App extends Component {
         indexName="movies"
       >
         <div>
-          <RefinementList attributeName="genre" />
+          <button onClick={this.onSwitchClick}>Switch facet</button>
+          <RefinementList attributeName={this.state.facet} />
           <SearchBox />
           <Hits />
         </div>
