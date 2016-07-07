@@ -31,7 +31,6 @@
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
     "babel-eslint": "^5.0.0",
-    "babel-istanbul": "^0.6.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-rewire": "^1.0.0-beta-5",
     "babel-plugin-syntax-jsx": "^6.8.0",
