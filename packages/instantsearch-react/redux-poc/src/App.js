@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import InstantSearch from './lib/InstantSearch';
 import Hits from './lib/Hits';
 import SearchBox from './lib/SearchBox';
+import RefinementList from './lib/RefinementList';
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
         indexName="movies"
       >
         <div>
+          <RefinementList attributeName="genre" />
           <SearchBox />
           <Hits />
         </div>
