@@ -26,60 +26,56 @@ by providing a set of reusable React components to people willing to use React a
 
 We will sometime reuse ideas from [searchkit/searchkit](https://github.com/searchkit/searchkit).
 
-## API proposal
-
-### Concept
+## Concept
 
 We have an `<InstantSearch>` provider, just wrap your application with it then use any widget.
 
-Widgets are UI elements with predefined behavior that you can change.
+Widgets are UI elements with predefined behaviors that you can change.
 
-To enhance a widget, you can provide either `renderer` options or your very own renderer that will access
-the widget data along with being able to call widget methods.
+We have higher order components like createSearBox(Component) that allows you to create your
+own SearchBox while reusing logical pieces from instantsearch.js.
 
-All widgets are using the BEM notation making it easy to build themes or
-style them.
-
-### instantiation
+## instantiation
 
 Wrap your application with:
 
 ```jsx
 <InstantSearch
-  appId="algolia application ID"
-  apiKey="algolia API key"
+  appId="appId"
+  apiKey="apiKey"
 >
   <SearchBox/>
   <Hits/>
 </InstantSearch>
 ```
 
-### SearchBox
+### Widgets
+
+### `<SearchBox/>`
+
+Default props:
 
 ```jsx
 <SearchBox
   queryHook={(query, search) => search(query)} // allows to implement debouncing
-  renderer={{
-    searchAsYouType: true // otherwise only search when submit called
-    focusShortcuts: ['s', '/'] // `s` is github, `/` is all google products
-    translations: {placeholder: "Search here"}
-    placeholder: true
-    autofocus: true
-  }}
-  // or renderer={CustomSearchBox}
+  searchAsYouType // otherwise only search when submit called
+  focusShortcuts={['s', '/']} // `s` is github, `/` is all google products
+  translations={{placeholder: 'Search here'}}
+  placeholder
+  autofocus
 />
 ```
 
-The default renderer rendering should include:
+The default rendering should include:
 - submit icon
 - clear icon (reset)
 
-Custom renderer props:
+`createSearchBox` HOC props:
 - query: `string` current query
 - setQuery(query: `string`): `function`
 - search(): `function`
 
-See http://shipow.github.io/searchbox/ for good examples like the amazon one.
+See http://shipow.github.io/searchbox/ for good examples like the google or amazon one.
 
 ### Hits
 
@@ -87,46 +83,36 @@ Display hits
 
 ```jsx
 <Hits
-  limit={20}
-  renderer={{itemComponent: hit => <div>{JSON.stringify(hit)}</div>}}
-  // or
-  // renderer={CustomHitsRenderer}
+  hitsPerPage={20}
+  itemComponent: {hit => <div>{JSON.stringify(hit)}</div>}
 />
 ```
 
-Custom renderer props:
-- hits: `object`
-
-### No hits
-
-Define me
+`createHits` HOC props:
+- hits: `object[]`
 
 ### Pagination
 
 ```jsx
 <Pagination
-  renderer={{
-    showFirst: true,
-    showLast: false,
-    showPrevious: true,
-    showNext: true,
-    scrollTo: 'body',
-    maxPages: undefined, // automatically computed from the Algolia answer
-    padding: 3,
-    translations: {
-      previous: 'Previous page',
-      next: 'Next page',
-      first: 'First page',
-      last: 'Last page'
-    }
+  showFirst,
+  showLast={false},
+  showPrevious,
+  showNext,
+  scrollTo="body", // maybe not the best API for a react lib
+  maxPages={null}, // automatically computed from the Algolia answer, but can be overriden
+  pagesPadding={3}, // how many pages to show before and after
+  translations= {{
+    previous: 'Previous page',
+    next: 'Next page',
+    first: 'First page',
+    last: 'Last page'
   }}
-  // or
-  // renderer={CustomPagination}
 />
 ```
 
-Custom renderer props:
-- options: `object`
+`createPagination` HOC props:
+- data: `object[]`
 - refine(page: `number`): `function`
 
 SearchKit has some default renderers that may be interesting: http://docs.searchkit.co/stable/docs/components/ui/list-components.html
@@ -134,24 +120,36 @@ SearchKit has some default renderers that may be interesting: http://docs.search
 ### HitsPerPageSelector
 
 ```jsx
-<HitsPerPageSelector
+<HitsPerPage
   options={[10, 20, 30]}
-  renderer={{
-    selectLabel: 'Hits per page:', // added as a <label>Hits per page: <select></label>
-    optionLabel: value => value, // allows to show 'Only ten results', 'At least 20 results' in the select
-  }} // will add a <label></label>
-  // or
-  // renderer={CustomHitsPerPageSelector}
+  translations={{
+    selectLabel: 'Hits per page',
+    optionLabel: value => value
+  }}
 />
 ```
 
 Default renderer: Select.
 
-Custom renderer props:
-- options: `object`
+`createHitsPerPage` props:
+- data: `object[]`
 - refine(hitsPerPage: `number`): `function`
 
 SearchKit has some default renderers that may be interesting: http://docs.searchkit.co/stable/docs/components/ui/list-components.html
+
+** EVERYTHING BELOW IS NOT SPEC'D **
+
+** REAL WORLD STOPS HERE **
+
+### LoadMore
+
+Simple "load more" button to display more hits and scroll automatically,
+see http://codepen.io/vvo/pen/jAwXoo.
+
+### PreviousNext
+
+Simple Previous / Next paginator.
+see https://www.npmjs.com/search?q=algolia
 
 ### Menu
 
@@ -185,8 +183,44 @@ Custom renderer props:
 
 ### HierarchicalMenu
 
+### Nohits
+
+### Loading
+
 ### Creating your own widget
+
+## higher order components
+
+They allow to create your own full rendering without having to know much about Algolia
+internals like the REST API or the helper.
+
+For most widgets, we have some `data` items with names and possible  count.
+Using this data, we can `refine(a value)`.
+
+We can make the public HOC API simple and reuse a lot of code internally if we
+keep the same structure of props in our HOC (`data`, `refine`).
+
+## Default renderers
+
+const selectMenu = createMenu(Select);
+const hitsPerPageLinks = createHitsPerPage(ItemList);
+
+see http://docs.searchkit.co/stable/docs/components/ui/list-components.html
+
+## Url synchronisation
+
+## Translations
+
+## Styling
+
+## Initial parameters
+- use filters
 
 ## Repository organization
 
 ## Website organization
+
+## Examples
+
+- react router
+- redux
