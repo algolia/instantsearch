@@ -156,24 +156,13 @@ function rangeSlider({
     },
     render({results, helper}) {
       let facet = find(results.disjunctiveFacets, {name: attributeName});
-      let stats;
+      let stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
+        min: null,
+        max: null
+      };
 
-      if (userMin !== undefined || userMax !== undefined) {
-        stats = {};
-
-        if (userMin !== undefined) {
-          stats.min = userMin;
-        }
-
-        if (userMax !== undefined) {
-          stats.max = userMax;
-        }
-      } else {
-        stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
-          min: null,
-          max: null
-        };
-      }
+      if (userMin !== undefined) stats.min = userMin;
+      if (userMax !== undefined) stats.max = userMax;
 
       let currentRefinement = this._getCurrentRefinement(helper);
 
