@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import InstantSearch from './lib/InstantSearch';
 import Hits from './lib/Hits';
-import SearchBox from './lib/SearchBox';
+import SearchBox from './impl/SearchBox';
 import RefinementList from './lib/RefinementList';
 
 class Movie extends Component {
