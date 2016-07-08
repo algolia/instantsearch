@@ -18,7 +18,7 @@ export default createSearchBox(class SearchBox extends Component {
 
   static defaultProps = {
     query: '',
-    placeholder: '',
+    placeholder: 'Search your website',
     poweredBy: false,
     autoFocus: false,
     searchAsYouType: true,
