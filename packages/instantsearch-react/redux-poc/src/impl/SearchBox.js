@@ -40,6 +40,12 @@ export default createSearchBox(class SearchBox extends Component {
   onSubmit = e => {
     e.preventDefault();
     e.stopPropagation();
+
+    const { queryHook, searchAsYouType } = this.props;
+    const { query } = this.state;
+    if (!searchAsYouType) {
+      queryHook(query, this.search);
+    }
     return false;
   };
 
@@ -52,14 +58,7 @@ export default createSearchBox(class SearchBox extends Component {
     }
   };
 
-  onSubmitClick = e => {
-    const { queryHook, searchAsYouType } = this.props;
-    if (!searchAsYouType) {
-      queryHook(query, this.search);
-    }
-  };
-
-  onClearClick = e => {
+  onReset = () => {
     const { queryHook } = this.props;
     this.setState({
       query: '',
@@ -80,7 +79,7 @@ export default createSearchBox(class SearchBox extends Component {
     const { query } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit}>
+      <form onSubmit={this.onSubmit} onReset={this.onReset}>
         <div role="search">
           <input
             ref={this.onInputMount}
@@ -95,14 +94,12 @@ export default createSearchBox(class SearchBox extends Component {
           <button
             type="submit"
             title="Submit your search query."
-            onSubmit={this.onSubmitClick}
           >
             Submit
           </button>
           <button
             type="reset"
             title="Clear the search query."
-            onClick={this.onClearClick}
           >
             Clear
           </button>
