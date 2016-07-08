@@ -72,7 +72,7 @@ npm run docs:jsdoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js npm-shrinkwrap.json package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
+git add src/lib/version.js package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 

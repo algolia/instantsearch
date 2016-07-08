@@ -134,7 +134,8 @@ class URLSync {
       state.filter(this.trackedParameters),
       {
         moreAttributes: foreignConfig,
-        mapping: this.mapping
+        mapping: this.mapping,
+        safe: true
       }
     );
 

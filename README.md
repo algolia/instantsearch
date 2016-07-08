@@ -148,10 +148,6 @@ npm run dev:docs
 ```sh
 npm test # unit tests, jsdom + lint
 npm run test:watch # unit tests, jsdom, watch
-
-npm run test:browser # unit tests, chrome
-npm run test:browser:watch # unit tests, chrome, watch
-npm run test:browser -- --browsers ChromeCanary # force Chrome Canary
 ```
 
 Most of the time `npm run test:watch` is sufficient.
@@ -163,8 +159,11 @@ You need [docker](https://docs.docker.com/engine/installation/).
 Run it like so:
 
 ```sh
-docker pull elgalu/selenium:2.50.1a
-docker run --net="host" --privileged --name=grid -e VNC_PASSWORD=fun -e NOVNC=true elgalu/selenium:2.50.1a
+docker pull elgalu/selenium
+docker run --name=grid --net=host --pid=host --privileged=true \
+    -e VNC_PASSWORD=realtime \
+    -e NOVNC=true \
+    -v /dev/shm:/dev/shm elgalu/selenium
 ```
 
 Then run functional tests dev command with auto reload:

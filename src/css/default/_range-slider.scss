@@ -117,4 +117,7 @@ $range-slider-handle-bg: $white;
     }
   }
 
+  .ais-range-slider--stacking .ais-range-slider--handle {
+    z-index: 20;
+  }
 }

@@ -45,18 +45,22 @@ describe('PriceRangesForm', () => {
           currency: 'currency',
           separator: 'separator',
           button: 'button'
+        },
+        currentRefinement: {
+          from: 10,
+          to: 20
         }
       });
       expect(out).toEqualJSX(
         <form className="form" onSubmit={() => {}} ref="form">
           <label className="label">
             <span className="currency">$ </span>
-            <input className="input" ref="from" type="number" />
+            <input className="input" onChange={() => {}} ref="from" type="number" value={10} />
           </label>
           <span className="separator"> to </span>
           <label className="label">
             <span className="currency">$ </span>
-            <input className="input" ref="to" type="number" />
+            <input className="input" onChange={() => {}} ref="to" type="number" value={20} />
           </label>
           <button className="button" type="submit">Go</button>
         </form>
@@ -69,7 +73,15 @@ describe('PriceRangesForm', () => {
       // Given
       let refine = sinon.spy();
       let handleSubmitMock = sinon.spy(PriceRangesForm.prototype, 'handleSubmit');
-      let component = TestUtils.renderIntoDocument(<PriceRangesForm refine={refine} />);
+      let component = TestUtils.renderIntoDocument(
+        <PriceRangesForm
+          currentRefinement={{
+            from: 10,
+            to: 20
+          }}
+          refine={refine}
+        />
+      );
 
       // When
       component.refs.from.value = 10;

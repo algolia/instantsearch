@@ -167,15 +167,20 @@ function searchBox({
     init: function({state, helper, onHistoryChange}) {
       let isInputTargeted = container.tagName === 'INPUT';
       let input = this._input = this.getInput();
+      let previousQuery;
 
       // Add all the needed attributes and listeners to the input
       this.addDefaultAttributesToInput(input, state.query);
 
-      // only update query and search on enter
+      // always set the query every keystrokes when there's no queryHook
+      if (!queryHook) {
+        addListener(input, INPUT_EVENT, getInputValueAndCall(setQuery));
+      }
+
+      // search on enter
       if (searchOnEnterKeyPressOnly) {
         addListener(input, 'keyup', ifKey(KEY_ENTER, getInputValueAndCall(maybeSearch)));
       } else {
-        // always set the query and search on every keystrokes
         addListener(input, INPUT_EVENT, getInputValueAndCall(maybeSearch));
 
         // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
@@ -186,21 +191,28 @@ function searchBox({
       }
 
       function maybeSearch(query) {
-        if (query === helper.state.query) {
-          return;
-        }
-
         if (queryHook) {
-          queryHook(query, search);
+          queryHook(query, setQueryAndSearch);
           return;
         }
 
         search(query);
       }
 
+      function setQuery(query) {
+        if (query !== helper.state.query) {
+          previousQuery = helper.state.query;
+          helper.setQuery(query);
+        }
+      }
+
       function search(query) {
-        helper.setQuery(query);
-        helper.search();
+        if (previousQuery !== undefined && previousQuery !== query) helper.search();
+      }
+
+      function setQueryAndSearch(query) {
+        setQuery(query);
+        search(query);
       }
 
       if (isInputTargeted) {
@@ -227,6 +239,7 @@ function searchBox({
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
         input.focus();
+        input.setSelectionRange(helper.state.query.length, helper.state.query.length);
       }
     },
     render({helper}) {

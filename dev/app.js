@@ -284,7 +284,6 @@ search.addWidget(
     templates: {
       header: 'Price'
     },
-    min: 100,
     max: 500,
     step: 10,
     tooltips: {
