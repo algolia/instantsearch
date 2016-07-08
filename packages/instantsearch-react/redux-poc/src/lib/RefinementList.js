@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
 import connect from 'algoliasearch-helper-provider/src/connect';
 
-class RefinementList extends Component {
-  componentWillMount() {
-    this.addFacet(this.props.helper, this.props.attributeName);
-  }
+import config from './config';
 
-  addFacet(helper, facetName) {
-    const state = helper.getState();
-    const facetPresent = state.facets.indexOf(facetName) !== -1;
-    if (!facetPresent) {
-      helper.setState({
-        ...state,
-        facets: state.facets.concat([facetName]),
+function getKey(operator = 'or') {
+  return operator === 'and' ? 'facets' : 'disjunctiveFacets';
+}
+
+class RefinementList extends Component {
+  onFacetClick = value => {
+    const state = this.props.helper.getState();
+    const key = getKey(this.props.operator);
+    if (state[key].indexOf(this.props.attributeName) === -1) {
+      // While the facet will already be present in the search results thanks
+      // to the configManager, refining it should persist it in the helper's
+      // state.
+      this.props.helper.setState({
+        ...this.props.helper.getState(),
+        [key]: state[key].concat([this.props.attributeName]),
       });
     }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.attributeName !== this.props.attributeName) {
-      this.addFacet(nextProps.helper, nextProps.attributeName);
-      nextProps.helper.search();
-    }
-  }
-
-  componentWillUnmount() {
-    // @TODO: remove facet if nothing else uses it
-  }
-
-  onFacetClick = value => {
     this.props.helper.toggleRefinement(this.props.attributeName, value);
     this.props.helper.search();
   }
@@ -57,10 +48,12 @@ class RefinementList extends Component {
   }
 }
 
-export default connect((state, props) => {
+export default config(props => ({
+  [getKey(props.operator)]: [props.attributeName],
+}))(connect((state, props) => {
   const isFacetPresent = (
     state.searchResults &&
-    state.searchResults.facets.some(f => f.name === props.attributeName)
+    state.searchResults[getKey(props.operator)].some(f => f.name === props.attributeName)
   );
 
   return {
@@ -70,4 +63,4 @@ export default connect((state, props) => {
         null
     ),
   };
-})(RefinementList);
+})(RefinementList));
