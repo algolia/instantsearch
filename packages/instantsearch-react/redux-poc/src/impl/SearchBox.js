@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 
 import createSearchBox from '../lib/createSearchBox';
 
+import ClearIcon from './svg/ClearIcon.svg';
+import SearchIcon from './svg/SearchIcon.svg';
+
 export default createSearchBox(class SearchBox extends Component {
   static propTypes = {
     // Provided by `createSearchBox`
@@ -95,13 +98,13 @@ export default createSearchBox(class SearchBox extends Component {
             type="submit"
             title="Submit your search query."
           >
-            Submit
+            <SearchIcon />
           </button>
           <button
             type="reset"
             title="Clear the search query."
           >
-            Clear
+            <ClearIcon />
           </button>
         </div>
       </form>
