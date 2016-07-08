@@ -82,7 +82,11 @@ export default createSearchBox(class SearchBox extends Component {
     const { query } = this.state;
 
     return (
-      <form onSubmit={this.onSubmit} onReset={this.onReset}>
+      <form
+        noValidate
+        onSubmit={this.onSubmit}
+        onReset={this.onReset}
+      >
         <div role="search">
           <input
             ref={this.onInputMount}
