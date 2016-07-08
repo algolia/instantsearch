@@ -1,26 +1,45 @@
 import React from 'react';
 
 class PriceRangesForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      from: props.currentRefinement.from,
+      to: props.currentRefinement.to
+    };
+  }
+
   componentWillMount() {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  shouldComponentUpdate() {
-    return false;
+  componentWillReceiveProps(props) {
+    this.setState({
+      from: props.currentRefinement.from,
+      to: props.currentRefinement.to
+    });
   }
 
   getInput(type) {
     return (
       <label className={this.props.cssClasses.label}>
         <span className={this.props.cssClasses.currency}>{this.props.labels.currency} </span>
-        <input className={this.props.cssClasses.input} ref={type} type="number" />
+        <input
+          className={this.props.cssClasses.input}
+          onChange={e => this.setState({[type]: e.target.value})}
+          ref={type}
+          type="number"
+          value={this.state[type]}
+        />
       </label>
     );
   }
 
   handleSubmit(event) {
-    let from = +this.refs.from.value || undefined;
-    let to = +this.refs.to.value || undefined;
+    let from = this.refs.from.value !== '' ?
+      parseInt(this.refs.from.value, 10) : undefined;
+    let to = this.refs.to.value !== '' ?
+      parseInt(this.refs.to.value, 10) : undefined;
     this.props.refine(from, to, event);
   }
 
@@ -48,6 +67,10 @@ PriceRangesForm.propTypes = {
     label: React.PropTypes.string,
     separator: React.PropTypes.string
   }),
+  currentRefinement: React.PropTypes.shape({
+    from: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
+    to: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+  }),
   labels: React.PropTypes.shape({
     button: React.PropTypes.string,
     currency: React.PropTypes.string,
@@ -64,4 +87,3 @@ PriceRangesForm.defaultProps = {
 
 
 export default PriceRangesForm;
-

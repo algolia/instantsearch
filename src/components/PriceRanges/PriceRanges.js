@@ -8,7 +8,6 @@ import isEqual from 'lodash/lang/isEqual';
 class PriceRanges extends React.Component {
   componentWillMount() {
     this.refine = this.refine.bind(this);
-    this.form = this.getForm();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -21,9 +20,20 @@ class PriceRanges extends React.Component {
       ...this.props.labels
     };
 
+    let currentRefinement;
+    if (this.props.facetValues.length === 1) {
+      currentRefinement = {
+        from: this.props.facetValues[0].from !== undefined ? this.props.facetValues[0].from : '',
+        to: this.props.facetValues[0].to !== undefined ? this.props.facetValues[0].to : ''
+      };
+    } else {
+      currentRefinement = {from: '', to: ''};
+    }
+
     return (
       <PriceRangesForm
         cssClasses={this.props.cssClasses}
+        currentRefinement={currentRefinement}
         labels={labels}
         refine={this.refine}
       />
@@ -67,7 +77,7 @@ class PriceRanges extends React.Component {
             return this.getItemFromFacetValue(facetValue);
           })}
         </div>
-        {this.form}
+        {this.getForm()}
       </div>
     );
   }
