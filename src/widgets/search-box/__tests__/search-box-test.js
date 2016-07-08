@@ -567,6 +567,7 @@ describe('searchBox()', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
       container.focus = sinon.spy();
+      container.setSelectionRange = sinon.spy();
     });
 
     context('when auto', () => {
@@ -614,6 +615,15 @@ describe('searchBox()', () => {
         widget.init({state, helper, onHistoryChange});
         // Then
         expect(container.focus.called).toEqual(true);
+      });
+
+      it('forces cursor to be at the end of the query', () => {
+        // Given
+        helper.state.query = 'foo';
+        // When
+        widget.init({state, helper, onHistoryChange});
+        // Then
+        expect(container.setSelectionRange.calledWith(3, 3)).toEqual(true);
       });
     });
 

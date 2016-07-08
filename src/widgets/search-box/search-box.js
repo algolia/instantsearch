@@ -227,6 +227,7 @@ function searchBox({
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
         input.focus();
+        input.setSelectionRange(helper.state.query.length, helper.state.query.length);
       }
     },
     render({helper}) {
