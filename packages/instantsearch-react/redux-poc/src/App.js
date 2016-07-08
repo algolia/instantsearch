@@ -5,6 +5,17 @@ import Hits from './lib/Hits';
 import SearchBox from './lib/SearchBox';
 import RefinementList from './lib/RefinementList';
 
+class Movie extends Component {
+  render() {
+    return (
+      <div>
+        <img src={this.props.hit.image} />
+        {this.props.hit.title}
+      </div>
+    );
+  }
+}
+
 class App extends Component {
   constructor() {
     super();
@@ -31,7 +42,9 @@ class App extends Component {
           <button onClick={this.onSwitchClick}>Switch facet</button>
           <RefinementList attributeName={this.state.facet} />
           <SearchBox />
-          <Hits />
+          <Hits
+            itemComponent={Movie}
+          />
         </div>
       </InstantSearch>
     );
