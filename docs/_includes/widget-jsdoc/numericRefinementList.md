@@ -15,6 +15,21 @@
 </p>
 <p class="attr-description">List of all the options</p>
 <p class="attr-name">
+<span class='attr-required'>`options.options[].name`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span>
+</p>
+<p class="attr-description">Name of the option</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.options[].start`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>number</code>)</span>
+</p>
+<p class="attr-description">Low bound of the option (>=)</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.options[].end`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>number</code>)</span>
+</p>
+<p class="attr-description">High bound of the option (<=)</p>
+<p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
 </p>

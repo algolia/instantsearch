@@ -1,3 +1,13 @@
+<a name="1.6.3"></a>
+## [1.6.3](https://github.com/algolia/instantsearch.js/compare/v1.6.2...v1.6.3) (2016-07-11)
+
+
+### Bug Fixes
+
+* **Hits:** always render hits ([2e7bf8a](https://github.com/algolia/instantsearch.js/commit/2e7bf8a)), closes [#1100](https://github.com/algolia/instantsearch.js/issues/1100)
+
+
+
 <a name="1.6.2"></a>
 ## [1.6.2](https://github.com/algolia/instantsearch.js/compare/v1.6.1...v1.6.2) (2016-07-11)
 
