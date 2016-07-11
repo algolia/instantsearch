@@ -186,6 +186,7 @@ function searchBox({
         // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
         // can be removed as soon as we remove support for it
         if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
+          addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(setQuery)));
           addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(maybeSearch)));
         }
       }
