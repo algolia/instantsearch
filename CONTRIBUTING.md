@@ -15,8 +15,6 @@ Hi (future) collaborator!
 - [How to write issues](#how-to-write-issues)
 - [Development workflow](#development-workflow)
 - [Serving the build](#serving-the-build)
-- [Adding/Updating a package](#addingupdating-a-package)
-- [Removing a package](#removing-a-package)
 - [Commit message guidelines](#commit-message-guidelines)
   - [Revert](#revert)
   - [Type](#type)
