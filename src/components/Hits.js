@@ -1,19 +1,10 @@
 import React from 'react';
 import map from 'lodash/collection/map';
-
 import Template from './Template.js';
-
 import hasKey from 'lodash/object/has';
-import isEqual from 'lodash/lang/isEqual';
 import cx from 'classnames';
 
 class Hits extends React.Component {
-  shouldComponentUpdate(nextProps) {
-    return this.props.results.hits.length === 0 ||
-      this.props.results.hits.length !== nextProps.results.hits.length ||
-      !isEqual(this.props.results.hits, nextProps.results.hits);
-  }
-
   renderWithResults() {
     let renderedHits = map(this.props.results.hits, (hit, position) => {
       let data = {

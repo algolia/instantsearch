@@ -21,6 +21,9 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for filtering
  * @param  {Object[]} options.options List of all the options
+ * @param  {string} options.options[].name Name of the option
+ * @param  {number} [options.options[].start] Low bound of the option (>=)
+ * @param  {number} [options.options[].end] High bound of the option (<=)
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `isRefined`, `url` data properties
