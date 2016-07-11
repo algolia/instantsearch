@@ -62,13 +62,15 @@ export default createSearchBox(class SearchBox extends Component {
   };
 
   onReset = () => {
-    const { queryHook } = this.props;
+    const { queryHook, searchAsYouType } = this.props;
     this.setState({
       query: '',
     }, () => {
       this.input.focus();
     });
-    queryHook('', this.search);
+    if (searchAsYouType) {
+      queryHook('', this.search);
+    }
   };
 
   search = query => {
