@@ -82,10 +82,10 @@ npm install instantsearch.js --save
 See our [documentation website][instantsearch-website-docs] for complete docs.
 
 ```js
-var instantsearch = require('instantsearch.js');
+let instantsearch = require('instantsearch.js');
 // or use the 'instantsearch' global (window) variable when using the jsDelivr build
 
-var search = instantsearch({
+let search = instantsearch({
   appId: appId,
   apiKey: apiKey,
   indexName: indexName

@@ -1,1 +1,3 @@
+--compilers js:babel-register
+--require jsdom-global/register
 @(src)/**/__tests__/**/*-test.js

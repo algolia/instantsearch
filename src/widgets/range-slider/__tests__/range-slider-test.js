@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 import expectJSX from 'expect-jsx';
 import rangeSlider from '../range-slider.js';
 import Slider from '../../../components/Slider/Slider.js';
@@ -12,9 +12,6 @@ import AlgoliasearchHelper from 'algoliasearch-helper';
 expect.extend(expectJSX);
 
 describe('rangeSlider call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('throws an exception when no container', () => {
     const attributeName = '';
     expect(rangeSlider.bind(null, {attributeName})).toThrow(/^Usage:/);
@@ -27,9 +24,6 @@ describe('rangeSlider call', () => {
 });
 
 describe('rangeSlider()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;
@@ -50,7 +44,7 @@ describe('rangeSlider()', () => {
     container = document.createElement('div');
 
     helper = new AlgoliasearchHelper(
-      {search: function() {}},
+      {search() {}},
       'indexName',
       {disjunctiveFacets: ['aNumAttr']}
     );
@@ -113,7 +107,7 @@ describe('rangeSlider()', () => {
         helper.setState(widget.getConfiguration());
         widget.init({helper});
         widget.render({results, helper});
-        let props = defaultProps;
+        const props = defaultProps;
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
         expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
@@ -135,7 +129,7 @@ describe('rangeSlider()', () => {
         helper.setState(widget.getConfiguration());
         widget.init({helper});
         widget.render({results, helper});
-        let props = {
+        const props = {
           ...defaultProps,
           range: {min: 100, max: 5000},
           start: [100, Infinity]
@@ -203,7 +197,7 @@ describe('rangeSlider()', () => {
         helper.setState(widget.getConfiguration());
         widget.init({helper});
         widget.render({results, helper});
-        let props = {
+        const props = {
           ...defaultProps,
           range: {min: 1, max: 100},
           start: [-Infinity, 100]
@@ -227,7 +221,7 @@ describe('rangeSlider()', () => {
     it('calls ReactDOM.render(<Slider props />, container)', () => {
       widget.render({results, helper});
 
-      let props = {
+      const props = {
         cssClasses: {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
@@ -275,7 +269,7 @@ describe('rangeSlider()', () => {
     it('should shouldAutoHideContainer', () => {
       widget.render({results, helper});
 
-      let props = {
+      const props = {
         cssClasses: {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
@@ -325,7 +319,7 @@ describe('rangeSlider()', () => {
       widget.render({results, helper});
       widget.render({results, helper});
 
-      let props = {
+      const props = {
         cssClasses: {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
@@ -358,46 +352,46 @@ describe('rangeSlider()', () => {
     });
 
     it('doesn\'t call the refinement functions if not refined', () => {
-      let state0 = helper.state;
+      const state0 = helper.state;
       widget.render({results, helper});
-      let state1 = helper.state;
+      const state1 = helper.state;
       expect(state1).toEqual(state0);
       expect(helper.search.called).toBe(false, 'search never called');
     });
 
     it('calls the refinement functions if refined with min+1', () => {
-      let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = stats.min + 1;
+      const stats = results.disjunctiveFacets[0].stats;
+      const targetValue = stats.min + 1;
 
-      let state0 = helper.state;
+      const state0 = helper.state;
       widget._refine(helper, stats, [targetValue, stats.max]);
-      let state1 = helper.state;
+      const state1 = helper.state;
 
       expect(helper.search.calledOnce).toBe(true, 'search called once');
       expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '>=', targetValue));
     });
 
     it('calls the refinement functions if refined with max-1', () => {
-      let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = stats.max - 1;
+      const stats = results.disjunctiveFacets[0].stats;
+      const targetValue = stats.max - 1;
 
-      let state0 = helper.state;
+      const state0 = helper.state;
       widget._refine(helper, stats, [stats.min, targetValue]);
-      let state1 = helper.state;
+      const state1 = helper.state;
 
       expect(helper.search.calledOnce).toBe(true, 'search called once');
       expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '<=', targetValue));
     });
 
     it('calls the refinement functions if refined with min+1 and max-1', () => {
-      let stats = results.disjunctiveFacets[0].stats;
-      let targetValue = [stats.min + 1, stats.max - 1];
+      const stats = results.disjunctiveFacets[0].stats;
+      const targetValue = [stats.min + 1, stats.max - 1];
 
-      let state0 = helper.state;
+      const state0 = helper.state;
       widget._refine(helper, stats, targetValue);
-      let state1 = helper.state;
+      const state1 = helper.state;
 
-      let expectedState = state0.
+      const expectedState = state0.
       addNumericRefinement('aNumAttr', '>=', targetValue[0]).
       addNumericRefinement('aNumAttr', '<=', targetValue[1]);
 

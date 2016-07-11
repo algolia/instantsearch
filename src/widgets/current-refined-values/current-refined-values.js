@@ -25,7 +25,7 @@ import autoHideContainerHOC from '../../decorators/autoHideContainer';
 import defaultTemplates from './defaultTemplates';
 import CurrentRefinedValuesComponent from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
 
-let bem = bemHelper('ais-current-refined-values');
+const bem = bemHelper('ais-current-refined-values');
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them
@@ -83,34 +83,41 @@ function currentRefinedValues({
     cssClasses: userCssClasses = {}
   }) {
   const attributesOK = isArray(attributes) &&
-    reduce(attributes, (res, val) => {
-      return res &&
-        isPlainObject(val) &&
-        isString(val.name) &&
-        (isUndefined(val.label) || isString(val.label)) &&
-        (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
-        (isUndefined(val.transformData) || isFunction(val.transformData));
-    }, true);
+    reduce(
+      attributes,
+      (res, val) =>
+        res &&
+          isPlainObject(val) &&
+          isString(val.name) &&
+          (isUndefined(val.label) || isString(val.label)) &&
+          (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
+          (isUndefined(val.transformData) || isFunction(val.transformData)),
+      true);
 
   const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
   const templatesOK = isPlainObject(templates) &&
-    reduce(templates, (res, val, key) => {
-      return res &&
-        templatesKeys.indexOf(key) !== -1 &&
-        (isString(val) || isFunction(val));
-    }, true);
+    reduce(
+      templates,
+      (res, val, key) =>
+        res &&
+          templatesKeys.indexOf(key) !== -1 &&
+          (isString(val) || isFunction(val)),
+      true
+    );
 
   const userCssClassesKeys = ['root', 'header', 'body', 'clearAll', 'list', 'item', 'link', 'count', 'footer'];
   const userCssClassesOK = isPlainObject(userCssClasses) &&
-    reduce(userCssClasses, (res, val, key) => {
-      return res &&
-       userCssClassesKeys.indexOf(key) !== -1 &&
-       isString(val) || isArray(val);
-    }, true);
+    reduce(
+      userCssClasses,
+      (res, val, key) =>
+        res &&
+         userCssClassesKeys.indexOf(key) !== -1 &&
+         isString(val) || isArray(val),
+      true);
 
   const transformDataOK = isUndefined(transformData) ||
     isFunction(transformData) ||
-    (isPlainObject(transformData) && isFunction(transformData.item));
+    isPlainObject(transformData) && isFunction(transformData.item);
 
   const showUsage = false ||
     !(isString(container) || isDomElement(container)) ||
@@ -128,14 +135,14 @@ function currentRefinedValues({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let CurrentRefinedValues = headerFooterHOC(CurrentRefinedValuesComponent);
   if (autoHideContainer === true) {
     CurrentRefinedValues = autoHideContainerHOC(CurrentRefinedValues);
   }
 
-  let attributeNames = map(attributes, (attribute) => attribute.name);
-  let restrictedTo = onlyListedAttributes ? attributeNames : [];
+  const attributeNames = map(attributes, attribute => attribute.name);
+  const restrictedTo = onlyListedAttributes ? attributeNames : [];
 
   let attributesObj = reduce(attributes, (res, attribute) => {
     res[attribute.name] = attribute;
@@ -147,7 +154,7 @@ function currentRefinedValues({
       this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
     },
 
-    render: function({results, helper, state, templatesConfig, createURL}) {
+    render({results, helper, state, templatesConfig, createURL}) {
       let cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
@@ -170,8 +177,8 @@ function currentRefinedValues({
       const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
 
       const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-      let clearRefinementURLs = refinements.map((refinement) => createURL(clearRefinementFromState(state, refinement)));
-      let clearRefinementClicks = refinements.map((refinement) => clearRefinement.bind(null, helper, refinement));
+      let clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
+      let clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
 
       const shouldAutoHideContainer = refinements.length === 0;
 
@@ -196,7 +203,7 @@ function currentRefinedValues({
 }
 
 function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attributeName) {
-  let idx = attributeNames.indexOf(attributeName);
+  const idx = attributeNames.indexOf(attributeName);
   if (idx !== -1) {
     return idx;
   }
@@ -210,14 +217,14 @@ function compareRefinements(attributeNames, otherAttributeNames, a, b) {
     if (a.name === b.name) {
       return 0;
     }
-    return (a.name < b.name) ? -1 : 1;
+    return a.name < b.name ? -1 : 1;
   }
-  return (idxa < idxb) ? -1 : 1;
+  return idxa < idxb ? -1 : 1;
 }
 
 function getFilteredRefinements(results, state, attributeNames, onlyListedAttributes) {
   let refinements = getRefinements(results, state);
-  let otherAttributeNames = reduce(refinements, (res, refinement) => {
+  const otherAttributeNames = reduce(refinements, (res, refinement) => {
     if (attributeNames.indexOf(refinement.attributeName) === -1 && res.indexOf(refinement.attributeName === -1)) {
       res.push(refinement.attributeName);
     }
@@ -245,7 +252,7 @@ function clearRefinementFromState(state, refinement) {
   case 'tag':
     return state.removeTagRefinement(refinement.name);
   default:
-    throw new Error('clearRefinement: type ' + refinement.type + 'isn\'t handled');
+    throw new Error(`clearRefinement: type ${refinement.type} is not handled`);
   }
 }
 

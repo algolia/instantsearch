@@ -6,25 +6,22 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import TestComponent from './TestComponent';
 import autoHideContainer from '../autoHideContainer';
-import jsdom from 'jsdom-global';
+
 import sinon from 'sinon';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('autoHideContainer', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let props = {};
 
   it('should render autoHideContainer(<TestComponent />)', () => {
-    let {createRenderer} = TestUtils;
-    let renderer = createRenderer();
+    const {createRenderer} = TestUtils;
+    const renderer = createRenderer();
     props.hello = 'son';
     let AutoHide = autoHideContainer(TestComponent);
     renderer.render(<AutoHide {...props} />);
-    let out = renderer.getRenderOutput();
+    const out = renderer.getRenderOutput();
     expect(out).toEqualJSX(<TestComponent hello="son" />);
   });
 

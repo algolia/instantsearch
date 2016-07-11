@@ -3,26 +3,17 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
 
 describe('pagination call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('throws an exception when no container', () => {
     expect(pagination.bind(null)).toThrow(/^Usage/);
   });
 });
 describe('pagination()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;
@@ -78,13 +69,13 @@ describe('pagination()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  context('mocking getContainerNode', function() {
+  context('mocking getContainerNode', () => {
     let scrollIntoView;
 
     beforeEach(() => {
       scrollIntoView = sinon.spy();
       const getContainerNode = sinon.stub().returns({
-        scrollIntoView: scrollIntoView
+        scrollIntoView
       });
       pagination.__Rewire__('getContainerNode', getContainerNode);
     });
@@ -141,9 +132,6 @@ describe('pagination()', () => {
 });
 
 describe('pagination MaxPage', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;

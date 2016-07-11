@@ -24,11 +24,11 @@ export {
  * css selector and retrieves the first matching element. Otherwise
  * test if it validates that it's a correct DOMElement.
  * @param {string|DOMElement} selectorOrHTMLElement a selector or a node
- * @return {DOMElement}
+ * @return {DOMElement} The resolved DOMElement
  * @throws Error when the type is not correct
  */
 function getContainerNode(selectorOrHTMLElement) {
-  let isFromString = (typeof selectorOrHTMLElement === 'string');
+  const isFromString = typeof selectorOrHTMLElement === 'string';
   let domElement;
   if (isFromString) {
     domElement = document.querySelector(selectorOrHTMLElement);
@@ -39,7 +39,7 @@ function getContainerNode(selectorOrHTMLElement) {
   if (!isDomElement(domElement)) {
     let errorMessage = 'Container must be `string` or `HTMLElement`.';
     if (isFromString) {
-      errorMessage += ' Unable to find ' + selectorOrHTMLElement;
+      errorMessage += ` Unable to find ${selectorOrHTMLElement}`;
     }
     throw new Error(errorMessage);
   }
@@ -53,11 +53,11 @@ function getContainerNode(selectorOrHTMLElement) {
  * @return {boolean} true if o is a DOMElement
  */
 function isDomElement(o) {
-  return o instanceof window.HTMLElement || !!o && o.nodeType > 0;
+  return o instanceof window.HTMLElement || Boolean(o) && o.nodeType > 0;
 }
 
 function isSpecialClick(event) {
-  let isMiddleClick = (event.button === 1);
+  const isMiddleClick = event.button === 1;
   return isMiddleClick || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey;
 }
 
@@ -69,10 +69,6 @@ function isSpecialClick(event) {
  */
 function bemHelper(block) {
   return function(element, modifier) {
-    // block
-    if (!element && !modifier) {
-      return block;
-    }
     // block--element
     if (element && !modifier) {
       return `${block}--${element}`;
@@ -85,6 +81,8 @@ function bemHelper(block) {
     if (!element && modifier) {
       return `${block}__${modifier}`;
     }
+
+    return block;
   };
 }
 
@@ -107,7 +105,7 @@ function prepareTemplateProps({
   templates,
   templatesConfig
 }) {
-  let preparedTemplates = prepareTemplates(defaultTemplates, templates);
+  const preparedTemplates = prepareTemplates(defaultTemplates, templates);
 
   return {
     transformData,
@@ -122,7 +120,7 @@ function prepareTemplates(defaultTemplates = {}, templates = {}) {
   return reduce(allKeys, (config, key) => {
     const defaultTemplate = defaultTemplates[key];
     const customTemplate = templates[key];
-    const isCustomTemplate = customTemplate !== undefined && (customTemplate !== defaultTemplate);
+    const isCustomTemplate = customTemplate !== undefined && customTemplate !== defaultTemplate;
 
     config.templates[key] = isCustomTemplate ? customTemplate : defaultTemplate;
     config.useCustomCompileOptions[key] = isCustomTemplate;
@@ -132,19 +130,19 @@ function prepareTemplates(defaultTemplates = {}, templates = {}) {
 }
 
 function getRefinement(state, type, attributeName, name, resultsFacets) {
-  let res = {type, attributeName, name};
+  const res = {type, attributeName, name};
   let facet = find(resultsFacets, {name: attributeName});
   let count;
   if (type === 'hierarchical') {
-    let facetDeclaration = state.getHierarchicalFacetByName(attributeName);
-    let splitted = name.split(facetDeclaration.separator);
+    const facetDeclaration = state.getHierarchicalFacetByName(attributeName);
+    const splitted = name.split(facetDeclaration.separator);
     res.name = splitted[splitted.length - 1];
     for (let i = 0; facet !== undefined && i < splitted.length; ++i) {
       facet = find(facet.data, {name: splitted[i]});
     }
     count = get(facet, 'count');
   } else {
-    count = get(facet, 'data["' + res.name + '"]');
+    count = get(facet, `data["${res.name}"]`);
   }
   const exhaustive = get(facet, 'exhaustive');
   if (count !== undefined) {
@@ -157,39 +155,39 @@ function getRefinement(state, type, attributeName, name, resultsFacets) {
 }
 
 function getRefinements(results, state) {
-  let res = [];
+  const res = [];
 
   forEach(state.facetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, (name) => {
+    forEach(refinements, name => {
       res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
     });
   });
 
   forEach(state.facetsExcludes, (refinements, attributeName) => {
-    forEach(refinements, (name) => {
+    forEach(refinements, name => {
       res.push({type: 'exclude', attributeName, name, exclude: true});
     });
   });
 
   forEach(state.disjunctiveFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, (name) => {
+    forEach(refinements, name => {
       res.push(getRefinement(state, 'disjunctive', attributeName, name, results.disjunctiveFacets));
     });
   });
 
   forEach(state.hierarchicalFacetsRefinements, (refinements, attributeName) => {
-    forEach(refinements, (name) => {
+    forEach(refinements, name => {
       res.push(getRefinement(state, 'hierarchical', attributeName, name, results.hierarchicalFacets));
     });
   });
 
   forEach(state.numericRefinements, (operators, attributeName) => {
     forEach(operators, (values, operator) => {
-      forEach(values, (value) => {
+      forEach(values, value => {
         res.push({
           type: 'numeric',
           attributeName,
-          name: value + '',
+          name: `${value}`,
           numericValue: value,
           operator
         });
@@ -197,27 +195,30 @@ function getRefinements(results, state) {
     });
   });
 
-  forEach(state.tagRefinements, (name) => {
+  forEach(state.tagRefinements, name => {
     res.push({type: 'tag', attributeName: '_tags', name});
   });
 
   return res;
 }
 
-function clearRefinementsFromState(state, attributeNames) {
+function clearRefinementsFromState(inputState, attributeNames) {
+  let state = inputState;
+
   if (isEmpty(attributeNames)) {
     state = state.clearTags();
     state = state.clearRefinements();
     return state;
   }
 
-  forEach(attributeNames, (attributeName) => {
+  forEach(attributeNames, attributeName => {
     if (attributeName === '_tags') {
       state = state.clearTags();
     } else {
       state = state.clearRefinements(attributeName);
     }
   });
+
   return state;
 }
 
@@ -227,8 +228,8 @@ function clearRefinementsAndSearch(helper, attributeNames) {
 
 function prefixKeys(prefix, obj) {
   if (obj) {
-    return mapKeys(obj, function(v, k) {
-      return prefix + k;
-    });
+    return mapKeys(obj, (v, k) => prefix + k);
   }
+
+  return undefined;
 }

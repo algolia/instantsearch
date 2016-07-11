@@ -14,7 +14,7 @@ import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 import defaultTemplates from './defaultTemplates.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-refinement-list');
+const bem = bemHelper('ais-refinement-list');
 /**
  * Instantiate a list of refinements based on a facet
  * @function refinementList
@@ -77,11 +77,11 @@ function refinementList({
     autoHideContainer = true,
     showMore = false
   }) {
-  let showMoreConfig = getShowMoreConfig(showMore);
+  const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
-  let widgetMaxValuesPerFacet = (showMoreConfig && showMoreConfig.limit) || limit;
+  let widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
 
   let RefinementList = RefinementListComponent;
   if (!container || !attributeName) {
@@ -93,7 +93,7 @@ function refinementList({
     RefinementList = autoHideContainerHOC(RefinementList);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
 
   if (operator) {
     operator = operator.toLowerCase();
@@ -122,12 +122,12 @@ function refinementList({
   };
 
   return {
-    getConfiguration: (configuration) => {
-      let widgetConfiguration = {
+    getConfiguration: configuration => {
+      const widgetConfiguration = {
         [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName]
       };
 
-      let currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
       widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, widgetMaxValuesPerFacet);
 
       return widgetConfiguration;
@@ -144,9 +144,9 @@ function refinementList({
         .toggleRefinement(attributeName, facetValue)
         .search();
     },
-    render: function({results, state, createURL}) {
+    render({results, state, createURL}) {
       let facetValues = results
-        .getFacetValues(attributeName, {sortBy: sortBy});
+        .getFacetValues(attributeName, {sortBy});
 
       // Bind createURL to this specific attribute
       function _createURL(facetValue) {
@@ -154,7 +154,7 @@ function refinementList({
       }
 
       // Pass count of currently selected items to the header template
-      let refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
+      const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
       let headerFooterData = {
         header: {refinedFacetsCount}
       };

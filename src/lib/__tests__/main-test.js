@@ -1,13 +1,12 @@
 /* eslint-env mocha */
 
 import expect from 'expect';
-import jsdom from 'jsdom-global';
+
 import instantsearch from '../main.js';
 import forEach from 'lodash/collection/forEach';
 
 describe('instantsearch()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();}); // to ensure the global.window is set
+   // to ensure the global.window is set
 
   it('includes a version', () => {
     expect(instantsearch.version).toBeA('string');
@@ -23,7 +22,7 @@ describe('instantsearch()', () => {
   });
 
   it('includes the widget functions', () => {
-    forEach(instantsearch.widgets, function(widget) {
+    forEach(instantsearch.widgets, widget => {
       expect(typeof widget).toEqual('function', 'A widget must be a function');
     });
   });

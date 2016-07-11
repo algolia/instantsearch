@@ -62,7 +62,7 @@ class InstantSearch extends EventEmitter {
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
-      let usage = `
+      const usage = `
 Usage: instantsearch({
   appId: 'my_application_id',
   apiKey: 'my_search_api_key',
@@ -71,8 +71,8 @@ Usage: instantsearch({
       throw new Error(usage);
     }
 
-    let client = algoliasearch(appId, apiKey);
-    client.addAlgoliaAgent('instantsearch.js ' + version);
+    const client = algoliasearch(appId, apiKey);
+    client.addAlgoliaAgent(`instantsearch.js ${version}`);
 
     this.client = client;
     this.helper = null;
@@ -113,7 +113,7 @@ Usage: instantsearch({
     if (!this.widgets) throw new Error('No widgets were added to instantsearch.js');
 
     if (this.urlSync) {
-      let syncWidget = urlSyncWidget(this.urlSync);
+      const syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
       this._createAbsoluteURL = relative => this._createURL(relative, {absolute: true});
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
@@ -126,7 +126,7 @@ Usage: instantsearch({
 
     this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
 
-    let helper = algoliasearchHelper(
+    const helper = algoliasearchHelper(
       this.client,
       this.searchParameters.index || this.indexName,
       this.searchParameters
@@ -146,7 +146,7 @@ Usage: instantsearch({
   }
 
   _wrappedSearch() {
-    let helper = clone(this.helper);
+    const helper = clone(this.helper);
     helper.search = this._originalHelperSearch;
     this._searchFunction(helper);
     return;
@@ -195,7 +195,7 @@ function enhanceConfiguration(configuration, widgetDefinition) {
   if (!widgetDefinition.getConfiguration) return configuration;
 
   // Update searchParameters with the configuration from the widgets
-  let partialConfiguration = widgetDefinition.getConfiguration(configuration);
+  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
   return merge(
     {},
     configuration,
@@ -204,6 +204,8 @@ function enhanceConfiguration(configuration, widgetDefinition) {
       if (Array.isArray(a)) {
         return union(a, b);
       }
+
+      return undefined;
     }
   );
 }

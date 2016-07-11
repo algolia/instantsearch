@@ -12,13 +12,13 @@ describe('Selector', () => {
   let renderer;
 
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 
 
   it('should render <Selector/> with strings', () => {
-    let out = render({
+    const out = render({
       currentValue: 'index-a',
       cssClasses: {
         root: 'custom-root',
@@ -39,7 +39,7 @@ describe('Selector', () => {
   });
 
   it('should render <Selector/> with numbers', () => {
-    let out = render({
+    const out = render({
       currentValue: 10,
       cssClasses: {
         root: 'custom-root',

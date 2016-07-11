@@ -14,7 +14,15 @@ class Pagination extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  pageLink({label, ariaLabel, pageNumber, additionalClassName = null, isDisabled = false, isActive = false, createURL}) {
+  pageLink({
+    label,
+    ariaLabel,
+    pageNumber,
+    additionalClassName = null,
+    isDisabled = false,
+    isActive = false,
+    createURL
+  }) {
     let cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
       link: cx(this.props.cssClasses.link)
@@ -86,17 +94,17 @@ class Pagination extends React.Component {
   }
 
   pages(pager, createURL) {
-    let pages = [];
+    const pages = [];
 
-    forEach(pager.pages(), (pageNumber) => {
-      let isActive = (pageNumber === pager.currentPage);
+    forEach(pager.pages(), pageNumber => {
+      const isActive = pageNumber === pager.currentPage;
 
       pages.push(this.pageLink({
         ariaLabel: pageNumber + 1,
         additionalClassName: this.props.cssClasses.page,
-        isActive: isActive,
+        isActive,
         label: pageNumber + 1,
-        pageNumber: pageNumber,
+        pageNumber,
         createURL
       }));
     });
@@ -115,13 +123,13 @@ class Pagination extends React.Component {
   }
 
   render() {
-    let pager = new Paginator({
+    const pager = new Paginator({
       currentPage: this.props.currentPage,
       total: this.props.nbPages,
       padding: this.props.padding
     });
 
-    let createURL = this.props.createURL;
+    const createURL = this.props.createURL;
 
     return (
       <ul className={this.props.cssClasses.root}>

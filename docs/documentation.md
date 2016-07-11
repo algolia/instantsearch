@@ -1192,7 +1192,7 @@ search.addWidget(
   </div>
 </div>
 
-  Most of the widgets accept a template or templates option that let you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data and returning either a string or a React element.
+  Most of the widgets accept a template or templates option that var you change the default rendering. Templates can be defined either as a [Mustache](https://mustache.github.io/) string or as a function receiving the widget data and returning either a string or a React element.
 
   See the documentation of each widget to see which data is passed to the template.
 </div>

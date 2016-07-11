@@ -11,8 +11,8 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';
 import SliderComponent from '../../components/Slider/Slider.js';
 
-let bem = bemHelper('ais-range-slider');
-let defaultTemplates = {
+const bem = bemHelper('ais-range-slider');
+const defaultTemplates = {
   header: '',
   footer: ''
 };
@@ -77,7 +77,7 @@ function rangeSlider({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let Slider = headerFooterHOC(SliderComponent);
   if (autoHideContainer === true) {
     Slider = autoHideContainerHOC(Slider);
@@ -91,7 +91,7 @@ function rangeSlider({
   };
 
   return {
-    getConfiguration: (originalConf) => {
+    getConfiguration: originalConf => {
       const conf = {
         disjunctiveFacets: [attributeName]
       };
@@ -155,8 +155,8 @@ function rangeSlider({
       });
     },
     render({results, helper}) {
-      let facet = find(results.disjunctiveFacets, {name: attributeName});
-      let stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
+      const facet = find(results.disjunctiveFacets, {name: attributeName});
+      const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
         min: null,
         max: null
       };
@@ -164,7 +164,7 @@ function rangeSlider({
       if (userMin !== undefined) stats.min = userMin;
       if (userMax !== undefined) stats.max = userMax;
 
-      let currentRefinement = this._getCurrentRefinement(helper);
+      const currentRefinement = this._getCurrentRefinement(helper);
 
       if (tooltips.format !== undefined) {
         tooltips = [{to: tooltips.format}, {to: tooltips.format}];

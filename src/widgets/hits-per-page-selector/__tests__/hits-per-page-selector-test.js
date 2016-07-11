@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,9 +12,6 @@ import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
 
 describe('hitsPerPageSelector call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('throws an exception when no options', () => {
     const container = document.createElement('div');
     expect(hitsPerPageSelector.bind(null, {container})).toThrow(/^Usage:/);
@@ -27,9 +24,6 @@ describe('hitsPerPageSelector call', () => {
 });
 
 describe('hitsPerPageSelector()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let options;
@@ -117,7 +111,10 @@ describe('hitsPerPageSelector()', () => {
     widget.init({state: helper.state, helper});
     expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
     expect(consoleLog.firstCall.args[0]).
-      toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: 20\)/);
+      toEqual(
+`[Warning][hitsPerPageSelector] No option in \`options\`
+with \`value: hitsPerPage\` (hitsPerPage: 20)`
+      );
   });
 
   it('must include the current hitsPerPage at initialization time', () => {
@@ -125,7 +122,10 @@ describe('hitsPerPageSelector()', () => {
     widget.init({state: helper.state, helper});
     expect(consoleLog.calledOnce).toBe(true, 'console.log called once');
     expect(consoleLog.firstCall.args[0]).
-      toMatch(/No option in `options` with `value: hitsPerPage` \(hitsPerPage: -1\)/);
+      toEqual(
+`[Warning][hitsPerPageSelector] No option in \`options\`
+with \`value: hitsPerPage\` (hitsPerPage: -1)`
+      );
   });
 
   it('should not throw an error if state does not have a `hitsPerPage`', () => {
