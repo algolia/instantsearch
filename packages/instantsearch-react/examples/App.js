@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 
 import InstantSearch from '../src/InstantSearch';
 import SearchBox from '../src/impl/SearchBox';
+import Hits from '../src/impl/Hits';
 
-import Hits from './Hits';
 import RefinementList from './RefinementList';
 
 class Movie extends Component {
@@ -45,6 +45,7 @@ class App extends Component {
           <SearchBox />
           <Hits
             itemComponent={Movie}
+            hitsPerPage={5}
           />
         </div>
       </InstantSearch>

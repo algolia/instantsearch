@@ -17,8 +17,14 @@ function makeConfig(res, config) {
     maxValuesPerFacet:
       typeof config.valuesPerFacet !== 'undefined' ?
         Math.max(res.maxValuesPerFacet, config.valuesPerFacet) :
-        res.maxValuesPerFacet
-    ,
+        res.maxValuesPerFacet,
+    hitsPerPage:
+      // @TODO: Provide some sort of warning when two or more components try to
+      // set the `hitsPerPage` option to different values.
+      typeof res.hitsPerPage !== 'undefined' &&
+      typeof config.hitsPerPage !== 'undefined' ?
+        Math.max(res.hitsPerPage, config.hitsPerPage) :
+        config.hitsPerPage,
   };
 }
 
