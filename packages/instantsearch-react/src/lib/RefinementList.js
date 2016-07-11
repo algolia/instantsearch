@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import connect from 'algoliasearch-helper-provider/src/connect';
 
 import config from './config';
@@ -25,7 +25,7 @@ class RefinementList extends Component {
   }
 
   render() {
-    const { facetValues } = this.props;
+    const {facetValues} = this.props;
     if (!facetValues) {
       return null;
     }
@@ -37,7 +37,7 @@ class RefinementList extends Component {
             key={v.name}
             onClick={this.onFacetClick.bind(null, v.name)}
             style={{
-              fontWeight: v.isRefined ? 'bold' : null
+              fontWeight: v.isRefined ? 'bold' : null,
             }}
           >
             {v.name} {v.count}

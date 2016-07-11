@@ -1,12 +1,21 @@
-import React, { Component, PropTypes, Children } from 'react';
+import React, {PropTypes, Component} from 'react';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import Provider from 'algoliasearch-helper-provider/src/Provider';
+import omit from 'lodash/object/omit';
 
 import createConfigManager from './createConfigManager';
 import configManagerShape from './configManagerShape';
 
 class InstantSearch extends Component {
+  static propTypes = {
+    appId: PropTypes.string,
+    apiKey: PropTypes.string,
+    indexName: PropTypes.string,
+    client: PropTypes.object,
+    helper: PropTypes.instanceOf(algoliasearchHelper.AlgoliaSearchHelper),
+  };
+
   static childContextTypes = {
     algoliaConfigManager: configManagerShape.isRequired,
   };
@@ -31,8 +40,12 @@ class InstantSearch extends Component {
   }
 
   render() {
-    const { client, helper, ...otherProps } = this.props;
-    return <Provider {...otherProps} helper={this.helper} />;
+    return (
+      <Provider
+        {...omit(this.props, Object.keys(InstantSearch.proptypes))}
+        helper={this.helper}
+      />
+    );
   }
 }
 

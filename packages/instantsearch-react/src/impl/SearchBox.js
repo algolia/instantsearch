@@ -1,10 +1,10 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 import themeable from 'react-themeable';
 
 import createSearchBox from '../lib/createSearchBox';
 
-import ClearIcon from './svg/ClearIcon.svg';
-import SearchIcon from './svg/SearchIcon.svg';
+import ClearIcon from './icons/ClearIcon.js';
+import SearchIcon from './icons/SearchIcon.js';
 
 export default createSearchBox(class SearchBox extends Component {
   static propTypes = {
@@ -58,8 +58,8 @@ export default createSearchBox(class SearchBox extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const { queryHook, searchAsYouType } = this.props;
-    const { query } = this.state;
+    const {queryHook, searchAsYouType} = this.props;
+    const {query} = this.state;
     if (!searchAsYouType) {
       queryHook(query, this.search);
     }
@@ -67,16 +67,16 @@ export default createSearchBox(class SearchBox extends Component {
   };
 
   onChange = e => {
-    const { queryHook, searchAsYouType } = this.props;
+    const {queryHook, searchAsYouType} = this.props;
     const query = e.target.value;
-    this.setState({ query });
+    this.setState({query});
     if (searchAsYouType) {
       queryHook(query, this.search);
     }
   };
 
   onReset = () => {
-    const { queryHook, searchAsYouType } = this.props;
+    const {queryHook, searchAsYouType} = this.props;
     this.setState({
       query: '',
     }, () => {
@@ -88,7 +88,7 @@ export default createSearchBox(class SearchBox extends Component {
   };
 
   search = query => {
-    const { setQuery, search } = this.props;
+    const {setQuery, search} = this.props;
     setQuery(query);
     search();
   };
@@ -101,7 +101,7 @@ export default createSearchBox(class SearchBox extends Component {
       searchLabel,
       clearLabel,
     } = this.props;
-    const { query } = this.state;
+    const {query} = this.state;
     const th = themeable(theme);
 
     return (

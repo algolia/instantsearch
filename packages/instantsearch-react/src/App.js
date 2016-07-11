@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import InstantSearch from './lib/InstantSearch';
 import Hits from './lib/Hits';

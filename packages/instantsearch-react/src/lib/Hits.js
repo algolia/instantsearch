@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import connect from 'algoliasearch-helper-provider/src/connect';
 
 class DefaultHitComponent extends Component {
@@ -17,7 +17,7 @@ class Hits extends Component {
   };
 
   render() {
-    const { itemComponent: ItemComponent } = this.props;
+    const {itemComponent: ItemComponent} = this.props;
 
     return (
       <div>

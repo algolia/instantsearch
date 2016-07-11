@@ -1,5 +1,4 @@
-import { resolve as r } from 'path';
-import webpack from 'webpack';
+import {resolve as r} from 'path';
 
 const publicPath = 'http://localhost:8080/';
 
@@ -24,19 +23,6 @@ export default {
         test: /\.js$/,
         loaders: ['react-hot', 'babel'],
         include: [r('src'), r('node_modules/algoliasearch-helper-provider/src')],
-      },
-      {
-        test: /\.svg$/,
-        loaders: [
-          'babel',
-          // https://github.com/boopathi/react-svg-loader/issues/44
-          'react-svg?' + JSON.stringify({
-            svgo: {
-              plugins: [{ removeAttrs: { attrs: 'xmlns.*' } }],
-            },
-          })
-        ],
-        include: [r('src/impl/svg')],
       },
     ],
   },

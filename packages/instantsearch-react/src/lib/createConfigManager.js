@@ -14,11 +14,11 @@ function makeConfig(res, config) {
       ...config.numericRefinements,
       ...res.numericRefinements,
     },
-    maxValuesPerFacet: (
+    maxValuesPerFacet:
       typeof config.valuesPerFacet !== 'undefined' ?
         Math.max(res.maxValuesPerFacet, config.valuesPerFacet) :
         res.maxValuesPerFacet
-    ),
+    ,
   };
 }
 
@@ -33,11 +33,11 @@ export default function createConfigManager(helper) {
   // helper should only ever be changed from a user action.
   const masterHelper = algoliasearchHelper(helper.client, helper.index);
 
-  const { search, searchOnce } = helper;
+  const {search, searchOnce} = helper;
 
   helper.search = function(...args) {
     const state = configs.reduce(makeConfig, helper.getState());
-    masterHelper.setState(state).search();
+    masterHelper.setState(state).search(...args);
     return helper;
   };
 
