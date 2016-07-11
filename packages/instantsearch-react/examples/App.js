@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import InstantSearch from '../src/InstantSearch';
 import SearchBox from '../src/impl/SearchBox';
 import Hits from '../src/impl/Hits';
+import Pagination from '../src/impl/Pagination';
 
 import RefinementList from './RefinementList';
 
@@ -43,6 +44,7 @@ class App extends Component {
           <button onClick={this.onSwitchClick}>Switch facet</button>
           <RefinementList attributeName={this.state.facet} />
           <SearchBox />
+          <Pagination />
           <Hits
             itemComponent={Movie}
             hitsPerPage={5}
