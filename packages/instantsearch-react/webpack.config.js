@@ -25,6 +25,19 @@ export default {
         loaders: ['react-hot', 'babel'],
         include: [r('src'), r('node_modules/algoliasearch-helper-provider/src')],
       },
+      {
+        test: /\.svg$/,
+        loaders: [
+          'babel',
+          // https://github.com/boopathi/react-svg-loader/issues/44
+          'react-svg?' + JSON.stringify({
+            svgo: {
+              plugins: [{ removeAttrs: { attrs: 'xmlns.*' } }],
+            },
+          })
+        ],
+        include: [r('src/impl/svg')],
+      },
     ],
   },
 

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import themeable from 'react-themeable';
 
 import createSearchBox from '../lib/createSearchBox';
 
@@ -12,20 +13,33 @@ export default createSearchBox(class SearchBox extends Component {
     setQuery: PropTypes.func.isRequired,
     search: PropTypes.func.isRequired,
 
+    theme: PropTypes.object,
     placeholder: PropTypes.string,
     poweredBy: PropTypes.bool,
     autoFocus: PropTypes.bool,
     searchAsYouType: PropTypes.bool,
     queryHook: PropTypes.func,
+    searchLabel: PropTypes.node,
+    clearLabel: PropTypes.node,
   };
 
   static defaultProps = {
     query: '',
+
+    theme: {
+      form: 'SearchBox',
+      wrapper: 'SearchBox__wrapper',
+      input: 'SearchBox__input',
+      submit: 'SearchBox__submit',
+      reset: 'SearchBox__reset',
+    },
     placeholder: 'Search your website',
     poweredBy: false,
     autoFocus: false,
     searchAsYouType: true,
     queryHook: (query, search) => search(query),
+    searchLabel: <SearchIcon />,
+    clearLabel: <ClearIcon />,
   };
 
   constructor(props) {
@@ -80,16 +94,27 @@ export default createSearchBox(class SearchBox extends Component {
   };
 
   render() {
-    const { placeholder, autoFocus } = this.props;
+    const {
+      theme,
+      placeholder,
+      autoFocus,
+      searchLabel,
+      clearLabel,
+    } = this.props;
     const { query } = this.state;
+    const th = themeable(theme);
 
     return (
       <form
         noValidate
         onSubmit={this.onSubmit}
         onReset={this.onReset}
+        {...th('form', 'form')}
       >
-        <div role="search">
+        <div
+          role="search"
+          {...th('wrapper', 'wrapper')}
+        >
           <input
             ref={this.onInputMount}
             type="search"
@@ -99,18 +124,21 @@ export default createSearchBox(class SearchBox extends Component {
             required
             value={query}
             onChange={this.onChange}
+            {...th('input', 'input')}
           />
           <button
             type="submit"
             title="Submit your search query."
+            {...th('submit', 'submit')}
           >
-            <SearchIcon />
+            {searchLabel}
           </button>
           <button
             type="reset"
             title="Clear the search query."
+            {...th('reset', 'reset')}
           >
-            <ClearIcon />
+            {clearLabel}
           </button>
         </div>
       </form>
