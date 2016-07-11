@@ -61,13 +61,13 @@ class Pagination extends Component {
   static defaultProps = {
     theme: {
       root: 'Pagination',
-      first: 'Pagination--first',
-      last: 'Pagination--last',
-      previous: 'Pagination--previous',
-      next: 'Pagination--next',
-      page: 'Pagination--page',
-      item: 'Pagination--item',
-      link: 'Pagination--link',
+      first: 'Pagination__first',
+      last: 'Pagination__last',
+      previous: 'Pagination__previous',
+      next: 'Pagination__next',
+      page: 'Pagination__page',
+      item: 'Pagination__item',
+      link: 'Pagination__link',
     },
     labels: {
       previous: () => '‹',

@@ -27,7 +27,7 @@ export default createSearchBox(class SearchBox extends Component {
     query: '',
 
     theme: {
-      form: 'SearchBox',
+      root: 'SearchBox',
       wrapper: 'SearchBox__wrapper',
       input: 'SearchBox__input',
       submit: 'SearchBox__submit',
@@ -109,7 +109,7 @@ export default createSearchBox(class SearchBox extends Component {
         noValidate
         onSubmit={this.onSubmit}
         onReset={this.onReset}
-        {...th('form', 'form')}
+        {...th('root', 'root')}
       >
         <div
           role="search"
