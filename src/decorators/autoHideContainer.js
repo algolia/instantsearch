@@ -23,8 +23,8 @@ function autoHideContainer(ComposedComponent) {
     }
 
     _hideOrShowContainer(props) {
-      let container = ReactDOM.findDOMNode(this).parentNode;
-      container.style.display = (props.shouldAutoHideContainer === true) ? 'none' : '';
+      const container = ReactDOM.findDOMNode(this).parentNode;
+      container.style.display = props.shouldAutoHideContainer === true ? 'none' : '';
     }
 
     render() {
@@ -37,7 +37,7 @@ function autoHideContainer(ComposedComponent) {
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)
-  AutoHide.displayName = ComposedComponent.name + '-AutoHide';
+  AutoHide.displayName = `${ComposedComponent.name}-AutoHide`;
 
   return AutoHide;
 }

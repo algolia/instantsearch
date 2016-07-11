@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 import {createRenderer} from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
@@ -21,11 +21,9 @@ describe('refinementList()', () => {
   let options;
   let widget;
   let ReactDOM;
-  let renderer = createRenderer();
+  const renderer = createRenderer();
   const helpers = createHelpers('en-US');
 
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -127,7 +125,7 @@ describe('refinementList()', () => {
       configuration = {};
 
       // When
-      let actual = widget.getConfiguration(configuration);
+      const actual = widget.getConfiguration(configuration);
 
       // Then
       expect(actual.facets).toInclude('attributeName');
@@ -139,7 +137,7 @@ describe('refinementList()', () => {
       configuration = {};
 
       // When
-      let actual = widget.getConfiguration(configuration);
+      const actual = widget.getConfiguration(configuration);
 
       // Then
       expect(actual.disjunctiveFacets).toInclude('attributeName');
@@ -151,7 +149,7 @@ describe('refinementList()', () => {
       configuration = {maxValuesPerFacet: 100};
 
       // When
-      let actual = widget.getConfiguration(configuration);
+      const actual = widget.getConfiguration(configuration);
 
       // Then
       expect(actual.maxValuesPerFacet).toBe(1000);
@@ -163,7 +161,7 @@ describe('refinementList()', () => {
       configuration = {maxValuesPerFacet: 1000};
 
       // When
-      let actual = widget.getConfiguration(configuration);
+      const actual = widget.getConfiguration(configuration);
 
       // Then
       expect(actual.maxValuesPerFacet).toBe(1000);
@@ -196,14 +194,15 @@ describe('refinementList()', () => {
         templates: defaultTemplates
       };
       renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
-      let out = renderer.getRenderOutput();
+      const out = renderer.getRenderOutput();
+      // eslint-disable-next-line max-len
       expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
     });
 
     context('cssClasses', () => {
       it('should call the component with the correct classes', () => {
         // Given
-        let cssClasses = {
+        const cssClasses = {
           root: ['root', 'cx'],
           header: 'header',
           body: 'body',
@@ -218,7 +217,7 @@ describe('refinementList()', () => {
 
         // When
         renderWidget({cssClasses});
-        let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
+        const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
 
         // Then
         expect(actual.root).toBe('ais-refinement-list root cx');
@@ -241,7 +240,7 @@ describe('refinementList()', () => {
 
         // When
         renderWidget();
-        let actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        const actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(false);
@@ -252,7 +251,7 @@ describe('refinementList()', () => {
 
         // When
         renderWidget();
-        let actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
+        const actual = ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer;
 
         // Then
         expect(actual).toBe(true);
@@ -262,7 +261,7 @@ describe('refinementList()', () => {
     describe('header', () => {
       it('should pass the refined count to the header data', () => {
         // Given
-        let facetValues = [{
+        const facetValues = [{
           name: 'foo',
           isRefined: true
         }, {
@@ -276,7 +275,7 @@ describe('refinementList()', () => {
 
         // When
         renderWidget();
-        let props = ReactDOM.render.firstCall.args[0].props;
+        const props = ReactDOM.render.firstCall.args[0].props;
 
         // Then
         expect(props.headerFooterData.header.refinedFacetsCount).toEqual(2);
@@ -284,9 +283,9 @@ describe('refinementList()', () => {
 
       it('should dynamically update the header template on subsequent renders', () => {
         // Given
-        let widgetOptions = {container, attributeName: 'type'};
-        let initOptions = {helper, createURL};
-        let facetValues = [{
+        const widgetOptions = {container, attributeName: 'type'};
+        const initOptions = {helper, createURL};
+        const facetValues = [{
           name: 'foo',
           isRefined: true
         }, {
@@ -294,7 +293,7 @@ describe('refinementList()', () => {
           isRefined: false
         }];
         results.getFacetValues = sinon.stub().returns(facetValues);
-        let renderOptions = {results, helper, templatesConfig, state};
+        const renderOptions = {results, helper, templatesConfig, state};
 
         // When
         widget = refinementList(widgetOptions);

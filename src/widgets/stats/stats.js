@@ -11,7 +11,7 @@ import StatsComponent from '../../components/Stats/Stats.js';
 import cx from 'classnames';
 import defaultTemplates from './defaultTemplates.js';
 
-let bem = bemHelper('ais-stats');
+const bem = bemHelper('ais-stats');
 
 /**
  * Display various stats about the current search state
@@ -48,7 +48,7 @@ function stats({
     transformData
   } = {}) {
   if (!container) throw new Error(usage);
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
 
   let Stats = headerFooterHOC(StatsComponent);
   if (autoHideContainer === true) {
@@ -77,7 +77,7 @@ function stats({
       });
     },
 
-    render: function({results}) {
+    render({results}) {
       ReactDOM.render(
         <Stats
           collapsible={collapsible}

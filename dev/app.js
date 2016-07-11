@@ -1,7 +1,7 @@
 // force using index because package 'main' is dist-es5-module/
-var instantsearch = require('../index.js');
+let instantsearch = require('../index.js');
 
-var search = instantsearch({
+let search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',

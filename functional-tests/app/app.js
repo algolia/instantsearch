@@ -1,4 +1,5 @@
 /* global instantsearch */
+/* eslint-disable object-shorthand, prefer-template, prefer-arrow-callback */
 
 var search = instantsearch({ // eslint-disable-line
   appId: 'latency',

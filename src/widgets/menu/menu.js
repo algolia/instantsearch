@@ -13,7 +13,7 @@ import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 import defaultTemplates from './defaultTemplates.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-menu');
+const bem = bemHelper('ais-menu');
 
 /**
  * Create a menu out of a facet
@@ -72,17 +72,17 @@ function menu({
     autoHideContainer = true,
     showMore = false
   } = {}) {
-  let showMoreConfig = getShowMoreConfig(showMore);
+  const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
-  let widgetMaxValuesPerFacet = (showMoreConfig && showMoreConfig.limit) || limit;
+  let widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
 
   if (!container || !attributeName) {
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
@@ -90,7 +90,7 @@ function menu({
 
   // we use a hierarchicalFacet for the menu because that's one of the use cases
   // of hierarchicalFacet: a flat menu
-  let hierarchicalFacetName = attributeName;
+  const hierarchicalFacetName = attributeName;
 
   const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates =
@@ -112,14 +112,14 @@ function menu({
 
   return {
     getConfiguration: configuration => {
-      let widgetConfiguration = {
+      const widgetConfiguration = {
         hierarchicalFacets: [{
           name: hierarchicalFacetName,
           attributes: [attributeName]
         }]
       };
 
-      let currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
       widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, widgetMaxValuesPerFacet);
 
       return widgetConfiguration;
@@ -143,8 +143,8 @@ function menu({
           return facetValue;
         });
     },
-    render: function({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
+    render({results, state, createURL}) {
+      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
       facetValues = this._prepareFacetValues(facetValues, state);
 
       // Bind createURL to this specific attribute

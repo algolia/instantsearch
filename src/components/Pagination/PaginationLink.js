@@ -16,7 +16,7 @@ class PaginationLink extends React.Component {
   }
 
   render() {
-    let {cssClasses, label, ariaLabel, url, isDisabled} = this.props;
+    const {cssClasses, label, ariaLabel, url, isDisabled} = this.props;
 
     let tagName = 'span';
     let attributes = {
@@ -32,8 +32,8 @@ class PaginationLink extends React.Component {
       attributes = {
         ...attributes,
         'aria-label': ariaLabel,
-        href: url,
-        onClick: this.handleClick
+        'href': url,
+        'onClick': this.handleClick
       };
     }
 

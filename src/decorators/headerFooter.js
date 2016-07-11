@@ -25,11 +25,11 @@ function headerFooter(ComposedComponent) {
       this._footerElement = this._getElement({type: 'footer'});
     }
     _getElement({type, handleClick = null}) {
-      let templates = this.props.templateProps.templates;
+      const templates = this.props.templateProps.templates;
       if (!templates || !templates[type]) {
         return null;
       }
-      let className = cx(this.props.cssClasses[type], `ais-${type}`);
+      const className = cx(this.props.cssClasses[type], `ais-${type}`);
 
       let templateData = getKey(this.props, `headerFooterData.${type}`);
 
@@ -48,7 +48,7 @@ function headerFooter(ComposedComponent) {
       });
     }
     render() {
-      let rootCssClasses = [this._cssClasses.root];
+      const rootCssClasses = [this._cssClasses.root];
 
       if (this.props.collapsible) {
         rootCssClasses.push('ais-root__collapsible');
@@ -104,7 +104,7 @@ function headerFooter(ComposedComponent) {
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)
-  HeaderFooter.displayName = ComposedComponent.name + '-HeaderFooter';
+  HeaderFooter.displayName = `${ComposedComponent.name}-HeaderFooter`;
 
   return HeaderFooter;
 }

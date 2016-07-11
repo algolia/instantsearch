@@ -1,3 +1,5 @@
+/* eslint-disable no-console, no-magic-numbers */
+
 import debounce from 'lodash/function/debounce';
 import watch from './dev-functional-tests-compile-watch.js';
 

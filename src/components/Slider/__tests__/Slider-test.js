@@ -2,7 +2,7 @@
 
 import React from 'react';
 import expect from 'expect';
-import jsdom from 'jsdom-global';
+
 import TestUtils from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
@@ -11,14 +11,13 @@ import Nouislider from 'react-nouislider';
 expect.extend(expectJSX);
 
 describe('Slider', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();}); // to ensure the global.window is set
+   // to ensure the global.window is set
 
   let renderer;
   let props;
 
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
 
     props = {
@@ -28,7 +27,7 @@ describe('Slider', () => {
 
 
   it('should render <NouiSlider {...props} />', () => {
-    let out = render();
+    const out = render();
     expect(out).toEqualJSX(
       <Nouislider
         animate={false}
@@ -36,7 +35,13 @@ describe('Slider', () => {
         connect
         cssPrefix="ais-range-slider--"
         onChange={() => {}}
-        pips={{density: 3, format: {to: function noRefCheck() {}}, mode: 'positions', stepped: true, values: [0, 50, 100]}}
+        pips={{
+          density: 3,
+          format: {to: function noRefCheck() {}},
+          mode: 'positions',
+          stepped: true,
+          values: [0, 50, 100]
+        }}
         range={props.range}
       />
     );
@@ -44,7 +49,7 @@ describe('Slider', () => {
 
   it('should not render anything when ranges are equal', () => {
     props.range.min = props.range.max = 8;
-    let out = render();
+    const out = render();
     expect(out).toEqual(null);
   });
 

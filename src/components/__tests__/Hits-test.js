@@ -7,8 +7,8 @@ import Hits from '../Hits';
 import Template from '../Template';
 
 describe('Hits', () => {
-  function shallowRender(extraProps: {}) {
-    let props = {
+  function shallowRender(extraProps = {}) {
+    const props = {
       cssClasses: {},
       ...extraProps
     };
@@ -18,14 +18,14 @@ describe('Hits', () => {
   describe('no results', () => {
     it('should use the empty template if no results', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: []
         }
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.props().templateKey).toEqual('empty');
@@ -33,7 +33,7 @@ describe('Hits', () => {
 
     it('should set the empty CSS class when no results', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: []
         },
@@ -44,7 +44,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.props().rootProps.className).toContain('my_empty');
@@ -55,7 +55,7 @@ describe('Hits', () => {
   describe('allItems template', () => {
     it('should use the allItems template if defined', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -69,7 +69,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.props().templateKey).toEqual('allItems');
@@ -77,7 +77,7 @@ describe('Hits', () => {
 
     it('should set the allItems CSS class to the template', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -95,7 +95,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.props().rootProps.className).toContain('my_all_items');
@@ -104,12 +104,12 @@ describe('Hits', () => {
 
     it('should pass the list of all results to the template', () => {
       // Given
-      let results = {
+      const results = {
         hits: [{
           foo: 'bar'
         }]
       };
-      let props = {
+      const props = {
         results,
         templateProps: {
           templates: {
@@ -119,7 +119,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.props().data).toEqual(results);
@@ -129,7 +129,7 @@ describe('Hits', () => {
   describe('individual item templates', () => {
     it('should add an item template for each hit', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -145,7 +145,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props).find(Template);
+      const actual = shallowRender(props).find(Template);
 
       // Then
       expect(actual.length).toEqual(2);
@@ -154,7 +154,7 @@ describe('Hits', () => {
 
     it('should set the item class to each item', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -171,7 +171,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props).find(Template);
+      const actual = shallowRender(props).find(Template);
 
       // Then
       expect(actual.props().rootProps.className).toContain('my_item');
@@ -179,7 +179,7 @@ describe('Hits', () => {
 
     it('should wrap the items in a root div element', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -198,7 +198,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.name()).toEqual('div');
@@ -207,7 +207,7 @@ describe('Hits', () => {
 
     it('should pass each result data to each item template', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -223,7 +223,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({templateKey: 'item'});
 
       // Then
       expect(actual.at(0).props().data.foo).toEqual('bar');
@@ -232,7 +232,7 @@ describe('Hits', () => {
 
     it('should add the __hitIndex in the list to each item', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             foo: 'bar'
@@ -248,7 +248,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({templateKey: 'item'});
 
       // Then
       expect(actual.at(0).props().data.__hitIndex).toEqual(0);
@@ -257,7 +257,7 @@ describe('Hits', () => {
 
     it('should use the objectID as the DOM key', () => {
       // Given
-      let props = {
+      const props = {
         results: {
           hits: [{
             objectID: 'BAR',
@@ -275,7 +275,7 @@ describe('Hits', () => {
       };
 
       // When
-      let actual = shallowRender(props).find({templateKey: 'item'});
+      const actual = shallowRender(props).find({templateKey: 'item'});
 
       // Then
       expect(actual.at(0).key()).toEqual('BAR');

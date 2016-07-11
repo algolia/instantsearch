@@ -3,11 +3,8 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import hierarchicalMenu from '../hierarchical-menu';
 import RefinementList from '../../../components/RefinementList/RefinementList';
 
@@ -19,9 +16,6 @@ describe('hierarchicalMenu()', () => {
   let options;
   let widget;
   let ReactDOM;
-
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -53,7 +47,7 @@ describe('hierarchicalMenu()', () => {
   });
 
   context('autoHideContainer', () => {
-    beforeEach(() => options = {container, attributes});
+    beforeEach(() => { options = {container, attributes}; });
 
     it('should be called if autoHideContainer set to true', () => {
       hierarchicalMenu({...options, autoHideContainer: true});
@@ -73,7 +67,7 @@ describe('hierarchicalMenu()', () => {
   });
 
   context('getConfiguration', () => {
-    beforeEach(() => options = {container, attributes});
+    beforeEach(() => { options = {container, attributes}; });
 
     it('has defaults', () => {
       expect(
@@ -166,7 +160,7 @@ describe('hierarchicalMenu()', () => {
     let results;
     let data;
     let cssClasses;
-    let defaultTemplates = {
+    const defaultTemplates = {
       header: 'header',
       item: 'item',
       footer: 'footer'
@@ -210,7 +204,7 @@ describe('hierarchicalMenu()', () => {
     });
 
     it('understand provided cssClasses', () => {
-      let userCssClasses = {
+      const userCssClasses = {
         root: ['root', 'cx'],
         header: 'header',
         body: 'body',
@@ -225,7 +219,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({...options, cssClasses: userCssClasses});
       widget.init({helper, createURL});
       widget.render({results, state});
-      let actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
+      const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
       expect(actual).toEqual({
         root: 'ais-hierarchical-menu root cx',
         header: 'ais-hierarchical-menu--header header',
@@ -323,7 +317,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({helper, createURL});
       widget.render({results, state});
-      let elementToggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+      const elementToggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
       elementToggleRefinement('mom');
       expect(helper.toggleRefinement.calledOnce).toBe(true);
       expect(helper.toggleRefinement.getCall(0).args)
@@ -333,14 +327,14 @@ describe('hierarchicalMenu()', () => {
     });
 
     it('has a limit option', () => {
-      let secondLevel = [
+      const secondLevel = [
         {name: 'six'},
         {name: 'seven'},
         {name: 'eight'},
         {name: 'nine'}
       ];
 
-      let firstLevel = [
+      const firstLevel = [
         {name: 'one'},
         {name: 'two', data: secondLevel},
         {name: 'three'},
@@ -349,7 +343,7 @@ describe('hierarchicalMenu()', () => {
       ];
 
       data = {data: firstLevel};
-      let expectedFacetValues = [
+      const expectedFacetValues = [
         {name: 'one'},
         {name: 'two', data: [
           {name: 'six'},
@@ -361,7 +355,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({...options, limit: 3});
       widget.init({helper, createURL});
       widget.render({results, state});
-      let actualFacetValues = ReactDOM.render.firstCall.args[0].props.facetValues;
+      const actualFacetValues = ReactDOM.render.firstCall.args[0].props.facetValues;
       expect(actualFacetValues)
         .toEqual(expectedFacetValues);
     });

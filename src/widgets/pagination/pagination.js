@@ -9,13 +9,13 @@ import {
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import PaginationComponent from '../../components/Pagination/Pagination.js';
 
-let defaultLabels = {
+const defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
   last: '»'
 };
-let bem = bemHelper('ais-pagination');
+const bem = bemHelper('ais-pagination');
 
 /**
  * Add a pagination menu to navigate through the results
@@ -58,13 +58,15 @@ pagination({
 function pagination({
     container,
     cssClasses: userCssClasses = {},
-    labels = {},
+    labels: userLabels = {},
     maxPages,
     padding = 3,
     showFirstLast = true,
     autoHideContainer = true,
-    scrollTo = 'body'
+    scrollTo: userScrollTo = 'body'
   } = {}) {
+  let scrollTo = userScrollTo;
+
   if (!container) {
     throw new Error(usage);
   }
@@ -73,8 +75,8 @@ function pagination({
     scrollTo = 'body';
   }
 
-  let containerNode = getContainerNode(container);
-  let scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
+  const containerNode = getContainerNode(container);
+  const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
   let Pagination = PaginationComponent;
   if (autoHideContainer === true) {
     Pagination = autoHideContainerHOC(Pagination);
@@ -93,7 +95,7 @@ function pagination({
     disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
   };
 
-  labels = defaults(labels, defaultLabels);
+  let labels = defaults(userLabels, defaultLabels);
 
   return {
     init({helper}) {
@@ -106,17 +108,17 @@ function pagination({
       };
     },
 
-    getMaxPage: function(results) {
+    getMaxPage(results) {
       if (maxPages !== undefined) {
         return Math.min(maxPages, results.nbPages);
       }
       return results.nbPages;
     },
 
-    render: function({results, state, createURL}) {
+    render({results, state, createURL}) {
       ReactDOM.render(
         <Pagination
-          createURL={(page) => createURL(state.setPage(page))}
+          createURL={page => createURL(state.setPage(page))}
           cssClasses={cssClasses}
           currentPage={results.page}
           labels={labels}

@@ -37,11 +37,9 @@ export const searchBox = {
 // }
 
 function formatRefinements(refinementsAsHTML) {
-  if (!Array.isArray(refinementsAsHTML)) {
-    refinementsAsHTML = [refinementsAsHTML];
-  }
+  const refinementsArray = Array.isArray(refinementsAsHTML) ? refinementsAsHTML : [refinementsAsHTML];
 
-  return refinementsAsHTML.map(refinementAsHTML => {
+  return refinementsArray.map(refinementAsHTML => {
     // element is (simplified) <div>facetName <span>facetCount</span></div>
     const element = cheerio.parseHTML(refinementAsHTML)[0];
 

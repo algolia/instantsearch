@@ -4,8 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -13,17 +11,13 @@ import PriceRangesForm from '../PriceRangesForm';
 
 describe('PriceRangesForm', () => {
   let renderer;
-
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 
   function render(extraProps = {}) {
-    let props = {
+    const props = {
       ...extraProps
     };
     renderer.render(<PriceRangesForm {...props} />);
@@ -32,7 +26,7 @@ describe('PriceRangesForm', () => {
 
   context('display', () => {
     it('should pass all css classes and labels', () => {
-      let out = render({
+      const out = render({
         labels: {
           currency: '$',
           separator: 'to',
@@ -72,8 +66,8 @@ describe('PriceRangesForm', () => {
     it('starts a refine on submit', () => {
       // Given
       let refine = sinon.spy();
-      let handleSubmitMock = sinon.spy(PriceRangesForm.prototype, 'handleSubmit');
-      let component = TestUtils.renderIntoDocument(
+      const handleSubmitMock = sinon.spy(PriceRangesForm.prototype, 'handleSubmit');
+      const component = TestUtils.renderIntoDocument(
         <PriceRangesForm
           currentRefinement={{
             from: 10,

@@ -3,20 +3,14 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import priceRanges from '../price-ranges.js';
 import generateRanges from '../generate-ranges.js';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
 import defaultTemplates from '../defaultTemplates.js';
 
 describe('priceRanges call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('throws an exception when no container', () => {
     const attributeName = '';
     expect(priceRanges.bind(null, {attributeName})).toThrow(/^Usage:/);
@@ -39,8 +33,6 @@ describe('priceRanges()', () => {
   let headerFooter;
   let createURL;
 
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
@@ -69,7 +61,7 @@ describe('priceRanges()', () => {
     expect(widget.getConfiguration()).toEqual({facets: ['aNumAttr']});
   });
 
-  context('without refinements', function() {
+  context('without refinements', () => {
     let props;
 
     beforeEach(() => {

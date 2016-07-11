@@ -10,7 +10,7 @@ import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
 
-let bem = bemHelper('ais-sort-by-selector');
+const bem = bemHelper('ais-sort-by-selector');
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @function sortBySelector
@@ -41,15 +41,16 @@ function sortBySelector({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let Selector = SelectorComponent;
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
   }
 
-  let selectorOptions = map(indices, function(index) {
-    return {label: index.label, value: index.name};
-  });
+  let selectorOptions = map(
+    indices,
+    index => ({label: index.label, value: index.name})
+  );
 
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -57,18 +58,18 @@ function sortBySelector({
   };
 
   return {
-    init: function({helper}) {
-      let currentIndex = helper.getIndex();
-      let isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
+    init({helper}) {
+      const currentIndex = helper.getIndex();
+      const isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
       if (!isIndexInList) {
-        throw new Error('[sortBySelector]: Index ' + currentIndex + ' not present in `indices`');
+        throw new Error(`[sortBySelector]: Index ${currentIndex} not present in \`indices\``);
       }
       this.setIndex = indexName => helper
         .setIndex(indexName)
         .search();
     },
 
-    render: function({helper, results}) {
+    render({helper, results}) {
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}

@@ -9,10 +9,6 @@ import hogan from 'hogan.js';
 import isEqual from 'lodash/lang/isEqual';
 
 class Template extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey;
   }
@@ -24,7 +20,7 @@ class Template extends React.Component {
     const content = renderTemplate({
       templates: this.props.templates,
       templateKey: this.props.templateKey,
-      compileOptions: compileOptions,
+      compileOptions,
       helpers: this.props.templatesConfig.helpers,
       data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
     });
@@ -83,7 +79,7 @@ function transformData(fn, templateKey, originalData) {
     return originalData;
   }
 
-  let clonedData = cloneDeep(originalData);
+  const clonedData = cloneDeep(originalData);
 
   let data;
   const typeFn = typeof fn;
@@ -102,8 +98,8 @@ function transformData(fn, templateKey, originalData) {
     throw new Error(`transformData must be a function or an object, was ${typeFn} (key : ${templateKey})`);
   }
 
-  let dataType = typeof data;
-  let expectedType = typeof originalData;
+  const dataType = typeof data;
+  const expectedType = typeof originalData;
   if (dataType !== expectedType) {
     throw new Error(`\`transformData\` must return a \`${expectedType}\`, got \`${dataType}\`.`);
   }
@@ -121,8 +117,8 @@ function renderTemplate({templates, templateKey, compileOptions, helpers, data})
   } else if (isTemplateFunction) {
     return template(data);
   } else {
-    let transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
-    let preparedData = {...data, helpers: transformedHelpers};
+    const transformedHelpers = transformHelpersToHogan(helpers, compileOptions, data);
+    const preparedData = {...data, helpers: transformedHelpers};
     return hogan.compile(template, compileOptions).render(preparedData);
   }
 }
@@ -133,12 +129,12 @@ function renderTemplate({templates, templateKey, compileOptions, helpers, data})
 // this is currently broken (see
 // https://github.com/twitter/hogan.js/issues/222).
 function transformHelpersToHogan(helpers, compileOptions, data) {
-  return mapValues(helpers, (method) => {
-    return curry(function(text) {
-      let render = (value) => hogan.compile(value, compileOptions).render(this);
+  return mapValues(helpers, method =>
+    curry(function(text) {
+      const render = value => hogan.compile(value, compileOptions).render(this);
       return method.call(data, text, render);
-    });
-  });
+    })
+  );
 }
 
 export default Template;

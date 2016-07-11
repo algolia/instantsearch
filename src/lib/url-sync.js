@@ -4,15 +4,15 @@ import urlHelper from 'algoliasearch-helper/src/url';
 import isEqual from 'lodash/lang/isEqual';
 import merge from 'lodash/object/merge';/**/
 
-let AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
-let majorVersionNumber = version.split('.')[0];
+const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
+const majorVersionNumber = version.split('.')[0];
 let firstRender = true;
 
 function timerMaker(t0) {
   let t = t0;
   return function timer() {
-    let now = Date.now();
-    let delta = now - t;
+    const now = Date.now();
+    const delta = now - t;
     t = now;
     return delta;
   };
@@ -31,21 +31,21 @@ function timerMaker(t0) {
  * Handles the legacy browsers
  * @type {UrlUtil}
  */
-let hashUrlUtils = {
+const hashUrlUtils = {
   character: '#',
-  onpopstate: function(cb) {
+  onpopstate(cb) {
     window.addEventListener('hashchange', cb);
   },
-  pushState: function(qs) {
+  pushState(qs) {
     window.location.assign(getFullURL(this.createURL(qs)));
   },
-  replaceState: function(qs) {
+  replaceState(qs) {
     window.location.replace(getFullURL(this.createURL(qs)));
   },
-  createURL: function(qs) {
+  createURL(qs) {
     return window.location.search + this.character + qs;
   },
-  readUrl: function() {
+  readUrl() {
     return window.location.hash.slice(1);
   }
 };
@@ -54,21 +54,21 @@ let hashUrlUtils = {
  * Handles the modern API
  * @type {UrlUtil}
  */
-let modernUrlUtils = {
+const modernUrlUtils = {
   character: '?',
-  onpopstate: function(cb) {
+  onpopstate(cb) {
     window.addEventListener('popstate', cb);
   },
-  pushState: function(qs, {getHistoryState}) {
+  pushState(qs, {getHistoryState}) {
     window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
-  replaceState: function(qs, {getHistoryState}) {
+  replaceState(qs, {getHistoryState}) {
     window.history.replaceState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
-  createURL: function(qs) {
+  createURL(qs) {
     return this.character + qs + document.location.hash;
   },
-  readUrl: function() {
+  readUrl() {
     return window.location.search.slice(1);
   }
 };
@@ -82,7 +82,8 @@ function getFullURL(relative) {
 
 // IE <= 11 has no location.origin or buggy
 function getLocationOrigin() {
-  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? ':' + window.location.port : ''}`;
+  // eslint-disable-next-line max-len
+  return `${window.location.protocol}//${window.location.hostname}${window.location.port ? `:${window.location.port}` : ''}`;
 }
 
 // see InstantSearch.js file for urlSync options
@@ -102,8 +103,8 @@ class URLSync {
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
     this.originalConfig = algoliasearchHelper({}, currentConfiguration.index, currentConfiguration).state;
-    let queryString = this.urlUtils.readUrl();
-    let config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
+    const queryString = this.urlUtils.readUrl();
+    const config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
     return config;
   }
 
@@ -117,8 +118,8 @@ class URLSync {
 
   onPopState(helper, fullState) {
     // compare with helper.state
-    let partialHelperState = helper.getState(this.trackedParameters);
-    let fullHelperState = merge({}, this.originalConfig, partialHelperState);
+    const partialHelperState = helper.getState(this.trackedParameters);
+    const fullHelperState = merge({}, this.originalConfig, partialHelperState);
 
     if (isEqual(fullHelperState, fullState)) return;
 
@@ -126,11 +127,13 @@ class URLSync {
   }
 
   renderURLFromState(state) {
-    let currentQueryString = this.urlUtils.readUrl();
-    let foreignConfig = AlgoliaSearchHelper.getForeignConfigurationInQueryString(currentQueryString, {mapping: this.mapping});
+    const currentQueryString = this.urlUtils.readUrl();
+    const foreignConfig = AlgoliaSearchHelper
+      .getForeignConfigurationInQueryString(currentQueryString, {mapping: this.mapping});
+    // eslint-disable-next-line camelcase
     foreignConfig.is_v = majorVersionNumber;
 
-    let qs = urlHelper.getQueryStringFromState(
+    const qs = urlHelper.getQueryStringFromState(
       state.filter(this.trackedParameters),
       {
         moreAttributes: foreignConfig,
@@ -149,21 +152,26 @@ class URLSync {
   // External API's
 
   createURL(state, {absolute}) {
-    let currentQueryString = this.urlUtils.readUrl();
-    let filteredState = state.filter(this.trackedParameters);
-    let foreignConfig = algoliasearchHelper.url.getUnrecognizedParametersInQueryString(currentQueryString, {mapping: this.mapping});
+    const currentQueryString = this.urlUtils.readUrl();
+    const filteredState = state.filter(this.trackedParameters);
+    const foreignConfig = algoliasearchHelper
+      .url
+      .getUnrecognizedParametersInQueryString(currentQueryString, {mapping: this.mapping});
     // Add instantsearch version to reconciliate old url with newer versions
+    // eslint-disable-next-line camelcase
     foreignConfig.is_v = majorVersionNumber;
-    const relative = this.urlUtils.createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
+    const relative = this
+      .urlUtils
+      .createURL(algoliasearchHelper.url.getQueryStringFromState(filteredState, {mapping: this.mapping}));
 
     return absolute ? getFullURL(relative) : relative;
   }
 
   onHistoryChange(fn) {
     this.urlUtils.onpopstate(() => {
-      let qs = this.urlUtils.readUrl();
-      let partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
-      let fullState = merge({}, this.originalConfig, partialState);
+      const qs = this.urlUtils.readUrl();
+      const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
+      const fullState = merge({}, this.originalConfig, partialState);
       fn(fullState);
     });
   }
@@ -187,9 +195,9 @@ class URLSync {
  * @return {object} the widget instance
  */
 function urlSync(options = {}) {
-  let useHash = options.useHash || false;
+  const useHash = options.useHash || false;
 
-  let urlUtils = useHash ? hashUrlUtils : modernUrlUtils;
+  const urlUtils = useHash ? hashUrlUtils : modernUrlUtils;
 
   return new URLSync(urlUtils, options);
 }
