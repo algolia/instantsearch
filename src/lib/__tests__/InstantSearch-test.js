@@ -4,15 +4,12 @@ import EventEmitter from 'events';
 import expect from 'expect';
 import range from 'lodash/utility/range';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import SearchParameters from 'algoliasearch-helper/src/SearchParameters';
 import InstantSearch from '../InstantSearch';
 
 describe('InstantSearch lifecycle', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let algoliasearch;
   let algoliasearchHelper;
   let client;
@@ -36,7 +33,7 @@ describe('InstantSearch lifecycle', () => {
     helper.getState = sinon.stub().returns({});
     helper.setState = sinon.spy();
     helper.state = {
-      setQueryParameters: function(params) { return new SearchParameters(params); }
+      setQueryParameters(params) { return new SearchParameters(params); }
     };
 
     urlSync = {
@@ -65,10 +62,10 @@ describe('InstantSearch lifecycle', () => {
     InstantSearch.__Rewire__('algoliasearchHelper', algoliasearchHelper);
 
     search = new InstantSearch({
-      appId: appId,
-      apiKey: apiKey,
-      indexName: indexName,
-      searchParameters: searchParameters,
+      appId,
+      apiKey,
+      indexName,
+      searchParameters,
       urlSync: {}
     });
   });
@@ -96,7 +93,7 @@ describe('InstantSearch lifecycle', () => {
       widget = {};
     });
 
-    it('throw an error', function() {
+    it('throw an error', () => {
       expect(() => {
         search.addWidget(widget);
       }).toThrow('Widget definition missing render or init method');
@@ -104,11 +101,11 @@ describe('InstantSearch lifecycle', () => {
   });
 
   it('calls the provided searchFunction when used', () => {
-    let searchSpy = sinon.spy();
+    const searchSpy = sinon.spy();
     search = new InstantSearch({
-      appId: appId,
-      apiKey: apiKey,
-      indexName: indexName,
+      appId,
+      apiKey,
+      indexName,
       searchFunction: searchSpy
     });
     search.start();
@@ -211,26 +208,24 @@ describe('InstantSearch lifecycle', () => {
 
     beforeEach(() => {
       widgets = range(5);
-      widgets = widgets.map((widget, widgetIndex) => {
-        widget = {
-          init: function() {},
+      widgets = widgets.map((widget, widgetIndex) =>
+        ({
+          init() {},
           getConfiguration: sinon.stub().returns({values: [widgetIndex]})
-        };
-
-        return widget;
-      });
+        })
+      );
       widgets.forEach(search.addWidget, search);
       search.start();
     });
 
     it('calls widget[x].getConfiguration in the orders the widgets were added', () => {
-      let order = widgets
+      const order = widgets
         .every((widget, widgetIndex, filteredWidgets) => {
           if (widgetIndex === 0) {
             return widget.getConfiguration.calledOnce &&
               widget.getConfiguration.calledBefore(filteredWidgets[1].getConfiguration);
           }
-          let previousWidget = filteredWidgets[widgetIndex - 1];
+          const previousWidget = filteredWidgets[widgetIndex - 1];
           return widget.getConfiguration.calledOnce &&
             widget.getConfiguration.calledAfter(previousWidget.getConfiguration);
         });
@@ -244,10 +239,10 @@ describe('InstantSearch lifecycle', () => {
   });
 
   context('when render happens', () => {
-    let render = sinon.spy();
+    const render = sinon.spy();
     beforeEach(() => {
       render.reset();
-      let widgets = range(5).map(() => { return {render}; });
+      const widgets = range(5).map(() => ({render}));
 
       widgets.forEach(search.addWidget, search);
 
@@ -261,7 +256,7 @@ describe('InstantSearch lifecycle', () => {
     });
 
     it('emits render when all render are done (using on)', () => {
-      let onRender = sinon.spy();
+      const onRender = sinon.spy();
       search.on('render', onRender);
 
       expect(render.callCount).toEqual(0);
@@ -280,7 +275,7 @@ describe('InstantSearch lifecycle', () => {
     });
 
     it('emits render when all render are done (using once)', () => {
-      let onRender = sinon.spy();
+      const onRender = sinon.spy();
       search.once('render', onRender);
 
       expect(render.callCount).toEqual(0);

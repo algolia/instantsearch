@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -14,9 +14,6 @@ import starRating from '../star-rating.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
 describe('starRating()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;
@@ -64,7 +61,7 @@ describe('starRating()', () => {
     widget.render({state, helper, results, createURL});
     widget.render({state, helper, results, createURL});
 
-    let props = {
+    const props = {
       cssClasses: {
         active: 'ais-star-rating--item__active',
         body: 'ais-star-rating--body body cx',

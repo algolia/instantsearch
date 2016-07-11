@@ -14,9 +14,9 @@ expect.extend(expectJSX);
 describe('RefinementList', () => {
   let createURL;
 
-  function shallowRender(extraProps: {}) {
+  function shallowRender(extraProps = {}) {
     createURL = sinon.spy();
-    let props = {
+    const props = {
       createURL,
       facetValues: [],
       ...extraProps
@@ -27,14 +27,14 @@ describe('RefinementList', () => {
   describe('cssClasses', () => {
     it('should add the `list` class to the root element', () => {
       // Given
-      let props = {
+      const props = {
         cssClasses: {
           list: 'list'
         }
       };
 
       // When
-      let actual = shallowRender(props);
+      const actual = shallowRender(props);
 
       // Then
       expect(actual.hasClass('list')).toEqual(true);
@@ -42,7 +42,7 @@ describe('RefinementList', () => {
 
     it('should set item classes to the refinements', () => {
       // Given
-      let props = {
+      const props = {
         cssClasses: {
           item: 'item'
         },
@@ -52,7 +52,7 @@ describe('RefinementList', () => {
       };
 
       // When
-      let actual = shallowRender(props).find(RefinementListItem);
+      const actual = shallowRender(props).find(RefinementListItem);
 
       // Then
       expect(actual.props().itemClassName).toContain('item');
@@ -60,7 +60,7 @@ describe('RefinementList', () => {
 
     it('should set active classes to the active refinements', () => {
       // Given
-      let props = {
+      const props = {
         cssClasses: {
           active: 'active'
         },
@@ -71,8 +71,8 @@ describe('RefinementList', () => {
       };
 
       // When
-      let activeItem = shallowRender(props).find({isRefined: true});
-      let inactiveItem = shallowRender(props).find({isRefined: false});
+      const activeItem = shallowRender(props).find({isRefined: true});
+      const inactiveItem = shallowRender(props).find({isRefined: false});
 
       // Then
       expect(activeItem.props().itemClassName).toContain('active');
@@ -83,7 +83,7 @@ describe('RefinementList', () => {
   describe('items', () => {
     it('should have the correct names', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo', isRefined: false},
           {name: 'bar', isRefined: false}
@@ -91,9 +91,9 @@ describe('RefinementList', () => {
       };
 
       // When
-      let items = shallowRender(props).find(RefinementListItem);
-      let firstItem = items.at(0);
-      let secondItem = items.at(1);
+      const items = shallowRender(props).find(RefinementListItem);
+      const firstItem = items.at(0);
+      const secondItem = items.at(1);
 
       // Then
       expect(firstItem.props().facetValueToRefine).toEqual('foo');
@@ -102,14 +102,14 @@ describe('RefinementList', () => {
 
     it('understands attributeNameKey', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [{name: 'no', youpiName: 'hello'}],
         attributeNameKey: 'youpiName'
       };
 
       // When
-      let items = shallowRender(props).find(RefinementListItem);
-      let item = items.at(0);
+      const items = shallowRender(props).find(RefinementListItem);
+      const item = items.at(0);
 
       // Then
       expect(item.props().facetValueToRefine).toEqual('hello');
@@ -119,7 +119,7 @@ describe('RefinementList', () => {
 
     it('should correctly set if refined or not', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo', isRefined: false},
           {name: 'bar', isRefined: true}
@@ -127,9 +127,9 @@ describe('RefinementList', () => {
       };
 
       // When
-      let items = shallowRender(props).find(RefinementListItem);
-      let firstItem = items.at(0);
-      let secondItem = items.at(1);
+      const items = shallowRender(props).find(RefinementListItem);
+      const firstItem = items.at(0);
+      const secondItem = items.at(1);
 
       // Then
       expect(firstItem.props().isRefined).toEqual(false);
@@ -140,7 +140,7 @@ describe('RefinementList', () => {
   describe('count', () => {
     it('should pass the count to the templateData', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo', count: 42},
           {name: 'bar', count: 16}
@@ -148,9 +148,9 @@ describe('RefinementList', () => {
       };
 
       // When
-      let items = shallowRender(props).find(RefinementListItem);
-      let firstItem = items.at(0);
-      let secondItem = items.at(1);
+      const items = shallowRender(props).find(RefinementListItem);
+      const firstItem = items.at(0);
+      const secondItem = items.at(1);
 
       // Then
       expect(firstItem.props().templateData.count).toEqual(42);
@@ -161,7 +161,7 @@ describe('RefinementList', () => {
   describe('showMore', () => {
     it('displays a number of items equal to the limit when showMore: false', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -172,7 +172,7 @@ describe('RefinementList', () => {
       };
 
       // When
-      let actual = shallowRender(props).find(RefinementListItem);
+      const actual = shallowRender(props).find(RefinementListItem);
 
       // Then
       expect(actual.length).toEqual(2);
@@ -180,7 +180,7 @@ describe('RefinementList', () => {
 
     it('displays a number of items equal to the limit when showMore: true but not enabled', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -192,7 +192,7 @@ describe('RefinementList', () => {
       };
 
       // When
-      let actual = shallowRender(props).find(RefinementListItem);
+      const actual = shallowRender(props).find(RefinementListItem);
 
       // Then
       expect(actual.length).toEqual(2);
@@ -200,7 +200,7 @@ describe('RefinementList', () => {
 
     it('displays a number of items equal to the showMore limit when showMore: true and enabled', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -212,9 +212,9 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
+      const root = shallowRender(props);
       root.setState({isShowMoreOpen: true});
-      let actual = root.find(RefinementListItem);
+      const actual = root.find(RefinementListItem);
 
       // Then
       expect(actual.length).toEqual(3);
@@ -222,7 +222,7 @@ describe('RefinementList', () => {
 
     it('adds a showMore link when the feature is enabled', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -234,8 +234,8 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
-      let actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+      const root = shallowRender(props);
+      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
 
       // Then
       expect(actual.length).toEqual(1);
@@ -243,7 +243,7 @@ describe('RefinementList', () => {
 
     it('does not add a showMore link when the feature is disabled', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -255,8 +255,8 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
-      let actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+      const root = shallowRender(props);
+      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
 
       // Then
       expect(actual.length).toEqual(0);
@@ -264,7 +264,7 @@ describe('RefinementList', () => {
 
     it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -276,7 +276,7 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
+      const root = shallowRender(props);
       root.instance().handleClickShowMore();
       root.setProps({facetValues: props.facetValues.slice(2)});
 
@@ -286,7 +286,7 @@ describe('RefinementList', () => {
 
     it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -298,8 +298,8 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
-      let actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
+      const root = shallowRender(props);
+      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
 
       // Then
       expect(actual.length).toEqual(0);
@@ -307,7 +307,7 @@ describe('RefinementList', () => {
 
     it('changing the state will toggle the number of items displayed', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
@@ -319,7 +319,7 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
+      const root = shallowRender(props);
 
       // Then: Not opened, initial number displayed
       expect(root.find(RefinementListItem).length).toEqual(2);
@@ -337,7 +337,7 @@ describe('RefinementList', () => {
   describe('sublist', () => {
     it('should create a subList with the sub values', () => {
       // Given
-      let props = {
+      const props = {
         facetValues: [
           {
             name: 'foo',
@@ -350,10 +350,10 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
-      let mainItem = root.find(RefinementListItem).at(0);
-      let subList = shallow(mainItem.props().subItems);
-      let subItems = subList.find(RefinementListItem);
+      const root = shallowRender(props);
+      const mainItem = root.find(RefinementListItem).at(0);
+      const subList = shallow(mainItem.props().subItems);
+      const subItems = subList.find(RefinementListItem);
 
       // Then
       expect(mainItem.props().facetValueToRefine).toEqual('foo');
@@ -363,7 +363,7 @@ describe('RefinementList', () => {
 
     it('should add depth class for each depth', () => {
       // Given
-      let props = {
+      const props = {
         cssClasses: {
           depth: 'depth-'
         },
@@ -379,9 +379,9 @@ describe('RefinementList', () => {
       };
 
       // When
-      let root = shallowRender(props);
-      let mainItem = root.find(RefinementListItem).at(0);
-      let subList = shallow(mainItem.props().subItems);
+      const root = shallowRender(props);
+      const mainItem = root.find(RefinementListItem).at(0);
+      const subList = shallow(mainItem.props().subItems);
 
       // Then
       expect(root.props().className).toContain('depth-0');

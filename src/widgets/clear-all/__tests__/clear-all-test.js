@@ -4,7 +4,7 @@ import React from 'react';
 
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -14,9 +14,6 @@ import ClearAll from '../../../components/ClearAll/ClearAll';
 import defaultTemplates from '../defaultTemplates.js';
 
 describe('clearAll()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;

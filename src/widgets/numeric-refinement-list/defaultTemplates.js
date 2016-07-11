@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export default {
   header: '',
   item: `<label class="{{cssClasses.label}}">

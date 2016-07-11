@@ -14,7 +14,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import defaultTemplates from './defaultTemplates.js';
 import ClearAllComponent from '../../components/ClearAll/ClearAll.js';
 
-let bem = bemHelper('ais-clear-all');
+const bem = bemHelper('ais-clear-all');
 
 /**
  * Allows to clear all refinements at once
@@ -54,7 +54,7 @@ function clearAll({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let ClearAll = headerFooterHOC(ClearAllComponent);
   if (autoHideContainer === true) {
     ClearAll = autoHideContainerHOC(ClearAll);
@@ -74,7 +74,7 @@ function clearAll({
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
     },
 
-    render: function({results, state, createURL}) {
+    render({results, state, createURL}) {
       let hasRefinements = getRefinements(results, state).length !== 0;
       let url = createURL(clearRefinementsFromState(state));
 

@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -12,9 +12,6 @@ import numericSelector from '../numeric-selector';
 import Selector from '../../../components/Selector';
 
 describe('numericSelector()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let options;

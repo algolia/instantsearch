@@ -10,11 +10,11 @@ import Template from '../../Template';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-let {createRenderer} = TestUtils;
+const {createRenderer} = TestUtils;
 
 describe('ClearAll', () => {
   let renderer;
-  let defaultProps = {
+  const defaultProps = {
     clearAll: () => {},
     cssClasses: {
       link: 'custom-link'
@@ -29,7 +29,7 @@ describe('ClearAll', () => {
   });
 
   it('should render <ClearAll />', () => {
-    let out = render();
+    const out = render();
     expect(out).toEqualJSX(
       <a
         className="custom-link"
@@ -44,13 +44,13 @@ describe('ClearAll', () => {
   });
 
   it('should handle clicks (and special clicks)', () => {
-    let props = {
+    const props = {
       clearAll: sinon.spy()
     };
-    let preventDefault = sinon.spy();
-    let component = new ClearAll(props);
-    ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach((e) => {
-      let event = {preventDefault};
+    const preventDefault = sinon.spy();
+    const component = new ClearAll(props);
+    ['ctrlKey', 'shiftKey', 'altKey', 'metaKey'].forEach(e => {
+      const event = {preventDefault};
       event[e] = true;
       component.handleClick(event);
       expect(props.clearAll.called).toBe(false, 'clearAll never called');
@@ -63,7 +63,7 @@ describe('ClearAll', () => {
 
 
   function render(extraProps = {}) {
-    let props = {
+    const props = {
       ...defaultProps,
       ...extraProps
     };

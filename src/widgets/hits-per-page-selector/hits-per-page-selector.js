@@ -9,7 +9,7 @@ import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
 
-let bem = bemHelper('ais-hits-per-page-selector');
+const bem = bemHelper('ais-hits-per-page-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -34,15 +34,17 @@ hitsPerPageSelector({
 })`;
 function hitsPerPageSelector({
     container,
-    options,
+    options: userOptions,
     cssClasses: userCssClasses = {},
     autoHideContainer = false
   } = {}) {
+  let options = userOptions;
+
   if (!container || !options) {
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let Selector = SelectorComponent;
   if (autoHideContainer === true) {
     Selector = autoHideContainerHOC(Selector);
@@ -54,34 +56,37 @@ function hitsPerPageSelector({
   };
 
   return {
-    init: function({helper, state}) {
-      let isCurrentInOptions = any(options, function(option) {
-        return +state.hitsPerPage === +option.value;
-      });
+    init({helper, state}) {
+      const isCurrentInOptions = any(
+        options,
+        option => Number(state.hitsPerPage) === Number(option.value)
+      );
 
       if (!isCurrentInOptions) {
         if (state.hitsPerPage === undefined) {
           if (window.console) {
             window.console.log(
-              '[Warning][hitsPerPageSelector] hitsPerPage not defined. ' +
-              'You should probably used a `hits` widget or set the value `hitsPerPage` ' +
-              'using the searchParameters attribute of the instantsearch constructor.');
+`[Warning][hitsPerPageSelector] hitsPerPage not defined.
+You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
+using the searchParameters attribute of the instantsearch constructor.`
+            );
           }
         } else if (window.console) {
           window.console.log(
-            '[Warning][hitsPerPageSelector] No option in `options` ' +
-            'with `value: hitsPerPage` (hitsPerPage: ' + state.hitsPerPage + ')');
+`[Warning][hitsPerPageSelector] No option in \`options\`
+with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
+          );
         }
 
         options = [{value: undefined, label: ''}].concat(options);
       }
 
       this.setHitsPerPage = value => helper
-        .setQueryParameter('hitsPerPage', +value)
+        .setQueryParameter('hitsPerPage', Number(value))
         .search();
     },
 
-    render: function({state, results}) {
+    render({state, results}) {
       let currentValue = state.hitsPerPage;
       let hasNoResults = results.nbHits === 0;
 

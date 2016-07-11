@@ -39,7 +39,7 @@ class Slider extends React.Component {
         values: [0, 50, 100],
         stepped: true,
         format: {
-          to: (v) => { return Number(v).toLocaleString(); }
+          to: v => Number(v).toLocaleString()
         }
       };
     } else {

@@ -5,9 +5,9 @@ import path from 'path';
 let server;
 
 export default {
-  start: () => {
-    return new Promise((resolve, reject) => {
-      let app = express();
+  start: () =>
+    new Promise((resolve, reject) => {
+      const app = express();
       app.use(compression());
 
       // in npm run test:functional:dev mode we only watch and compile instantsearch.js
@@ -28,8 +28,8 @@ export default {
 
       server.once('listening', () => resolve(server));
       server.once('error', reject);
-    });
-  },
+    }
+  ),
   stop: () => {
     server.close();
   }

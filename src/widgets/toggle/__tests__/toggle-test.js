@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 import {createRenderer} from 'react-addons-test-utils';
 
 import toggle from '../toggle';
@@ -16,11 +16,8 @@ expect.extend(expectJSX);
 import createHelpers from '../../../lib/createHelpers.js';
 
 describe('toggle()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   const helpers = createHelpers('en-US');
-  let renderer = createRenderer();
+  const renderer = createRenderer();
 
   context('bad usage', () => {
     it('throws when no container', () => {
@@ -118,8 +115,8 @@ describe('toggle()', () => {
           },
           collapsible: false,
           templateProps,
-          createURL: function() {},
-          toggleRefinement: function() {}
+          createURL() {},
+          toggleRefinement() {}
         };
         createURL = () => '#';
         widget.init({state});
@@ -142,7 +139,8 @@ describe('toggle()', () => {
       it('formats counts', () => {
         templateProps.templatesConfig = {helpers};
         renderer.render(<Template data={{count: 1000}} {...templateProps} templateKey="item" />);
-        let out = renderer.getRenderOutput();
+        const out = renderer.getRenderOutput();
+        // eslint-disable-next-line max-len
         expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
       });
 
@@ -158,7 +156,7 @@ describe('toggle()', () => {
           shouldAutoHideContainer: false,
           ...props
         };
-        let cssClasses = {root: ['root', 'cx']};
+        const cssClasses = {root: ['root', 'cx']};
         widget = toggle({container, attributeName, label, cssClasses});
         widget.init({state, helper});
         widget.render({results, helper, state, createURL});
@@ -261,7 +259,7 @@ describe('toggle()', () => {
         widget = toggle({container, attributeName, label});
         widget.init({state, helper});
         widget.render({results, helper, state, createURL});
-        let toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        const toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();
         expect(helper.addFacetRefinement.calledOnce).toBe(true);
@@ -344,12 +342,12 @@ describe('toggle()', () => {
     context('custom off value', () => {
       it('should add a refinement for custom off value on init', () => {
         // Given
-        let values = {on: 'on', off: 'off'};
+        const values = {on: 'on', off: 'off'};
         widget = toggle({container, attributeName, label, values});
-        let state = {
+        const state = {
           isFacetRefined: sinon.stub().returns(false)
         };
-        let helper = {
+        const helper = {
           addFacetRefinement: sinon.spy()
         };
 
@@ -361,12 +359,12 @@ describe('toggle()', () => {
       });
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
-        let values = {on: 'on', off: 'off'};
+        const values = {on: 'on', off: 'off'};
         widget = toggle({container, attributeName, label, values});
-        let state = {
+        const state = {
           isFacetRefined: sinon.stub().returns(true)
         };
-        let helper = {
+        const helper = {
           addFacetRefinement: sinon.spy()
         };
 
@@ -379,8 +377,8 @@ describe('toggle()', () => {
       it('should not add a refinement for no custom off value on init', () => {
         // Given
         widget = toggle({container, attributeName, label});
-        let state = {};
-        let helper = {
+        const state = {};
+        const helper = {
           addFacetRefinement: sinon.spy()
         };
 

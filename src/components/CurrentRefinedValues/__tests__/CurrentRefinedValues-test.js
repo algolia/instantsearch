@@ -44,20 +44,18 @@ describe('CurrentRefinedValues', () => {
   function buildList() {
     return (
       <div {...listProps}>
-        {map(refinements, (refinement, i) => {
-          return (
-            <div key={refinementKeys[i]} {...itemProps}>
-              <a href={clearRefinementURLs[i]} {...itemLinkProps}>
-                <Template
-                  data={refinementTemplateData[i]}
-                  {...itemTemplateProps}
-                  {...templateProps}
-                  {...refinementTemplateProps[i]}
-                />
-              </a>
-            </div>
-          );
-        })}
+        {map(refinements, (refinement, i) =>
+          <div key={refinementKeys[i]} {...itemProps}>
+            <a href={clearRefinementURLs[i]} {...itemLinkProps}>
+              <Template
+                data={refinementTemplateData[i]}
+                {...itemTemplateProps}
+                {...templateProps}
+                {...refinementTemplateProps[i]}
+              />
+            </a>
+          </div>
+        )}
       </div>
     );
   }
@@ -91,7 +89,7 @@ describe('CurrentRefinedValues', () => {
   }
 
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
 
     defaultTemplates = {
@@ -207,7 +205,7 @@ describe('CurrentRefinedValues', () => {
     const out1 = render();
     const out2 = render();
 
-    let expected = build();
+    const expected = build();
 
     expect(out1).toEqualJSX(expected);
     expect(out2).toEqualJSX(expected);
@@ -219,7 +217,7 @@ describe('CurrentRefinedValues', () => {
 
       const out = render();
 
-      forEach(refinementTemplateData, (data) => {
+      forEach(refinementTemplateData, data => {
         if (data.attributeName === 'facet') {
           data.label = 'label';
         }
@@ -245,7 +243,7 @@ describe('CurrentRefinedValues', () => {
     });
 
     it('uses transformData', () => {
-      const transformData = () => { return {transform: 'data'}; };
+      const transformData = () => ({transform: 'data'});
       parameters.attributes.facet = {name: 'facet', transformData};
       forEach(refinements, (refinement, i) => {
         if (refinement.attributeName === 'facet') {
@@ -273,7 +271,7 @@ describe('CurrentRefinedValues', () => {
   context('options.clearAllClick', () => {
     beforeEach(() => {
       // Not perfect since we depend on an internal
-      CurrentRefinedValues.__Rewire__('handleClick', (cb) => cb);
+      CurrentRefinedValues.__Rewire__('handleClick', cb => cb);
     });
 
     it('is used in the clearAll element before', () => {
@@ -304,12 +302,12 @@ describe('CurrentRefinedValues', () => {
   });
 
   context('options.clearAllPosition', () => {
-    it("'before'", () => {
+    it('\'before\'', () => {
       parameters.clearAllPosition = 'before';
       expect(render()).toEqualJSX(build('before'));
     });
 
-    it("'after'", () => {
+    it('\'after\'', () => {
       parameters.clearAllPosition = 'after';
       expect(render()).toEqualJSX(build('after'));
     });
@@ -348,7 +346,7 @@ describe('CurrentRefinedValues', () => {
   context('options.clearRefinementClicks', () => {
     beforeEach(() => {
       // Not perfect since we depend on an internal
-      CurrentRefinedValues.__Rewire__('handleClick', (cb) => cb);
+      CurrentRefinedValues.__Rewire__('handleClick', cb => cb);
     });
 
     it('is used in an item element', () => {

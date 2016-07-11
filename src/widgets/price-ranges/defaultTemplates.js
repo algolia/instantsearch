@@ -1,5 +1,5 @@
 export default {
-  header: ``,
+  header: '',
   item: `
     {{#from}}
       {{^to}}
@@ -17,5 +17,5 @@ export default {
       {{to}}
     {{/to}}
   `,
-  footer: ``
+  footer: ''
 };

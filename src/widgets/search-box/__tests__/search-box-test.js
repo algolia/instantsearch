@@ -2,7 +2,7 @@
 
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 
 import searchBox from '../search-box';
 import EventEmitter from 'events';
@@ -11,7 +11,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 function createHTMLNodeFromString(string) {
-  let parent = document.createElement('div');
+  const parent = document.createElement('div');
   parent.innerHTML = string;
   return parent.firstChild;
 }
@@ -19,9 +19,6 @@ function createHTMLNodeFromString(string) {
 const onHistoryChange = () => {};
 
 describe('searchBox()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let container;
   let state;
   let helper;
@@ -60,14 +57,14 @@ describe('searchBox()', () => {
     it('adds an input inside the div', () => {
       widget = searchBox(opts);
       widget.init({state, helper, onHistoryChange});
-      let inputs = container.getElementsByTagName('input');
+      const inputs = container.getElementsByTagName('input');
       expect(inputs.length).toEqual(1);
     });
 
     it('sets default HTML attribute to the input', () => {
       widget = searchBox(opts);
       widget.init({state, helper, onHistoryChange});
-      let input = container.getElementsByTagName('input')[0];
+      const input = container.getElementsByTagName('input')[0];
       expect(input.getAttribute('autocapitalize')).toEqual('off');
       expect(input.getAttribute('autocomplete')).toEqual('off');
       expect(input.getAttribute('autocorrect')).toEqual('off');
@@ -86,10 +83,10 @@ describe('searchBox()', () => {
 
       widget = searchBox(opts);
       widget.init({state, helper, onHistoryChange});
-      let actualRootClasses = container.querySelector('input').parentNode.getAttribute('class');
-      let actualInputClasses = container.querySelector('input').getAttribute('class');
-      let expectedRootClasses = 'ais-search-box root-class cx';
-      let expectedInputClasses = 'ais-search-box--input input-class';
+      const actualRootClasses = container.querySelector('input').parentNode.getAttribute('class');
+      const actualInputClasses = container.querySelector('input').getAttribute('class');
+      const expectedRootClasses = 'ais-search-box root-class cx';
+      const expectedInputClasses = 'ais-search-box--input input-class';
 
       expect(actualRootClasses).toEqual(expectedRootClasses);
       expect(actualInputClasses).toEqual(expectedInputClasses);
@@ -126,10 +123,10 @@ describe('searchBox()', () => {
       widget = searchBox({container, cssClasses: {root: 'root-class', input: 'input-class'}});
       widget.init({state, helper, onHistoryChange});
 
-      let actualRootClasses = container.parentNode.getAttribute('class');
-      let actualInputClasses = container.getAttribute('class');
-      let expectedRootClasses = 'ais-search-box root-class';
-      let expectedInputClasses = 'my-class ais-search-box--input input-class';
+      const actualRootClasses = container.parentNode.getAttribute('class');
+      const actualInputClasses = container.getAttribute('class');
+      const expectedRootClasses = 'ais-search-box root-class';
+      const expectedInputClasses = 'my-class ais-search-box--input input-class';
 
       expect(actualRootClasses).toEqual(expectedRootClasses);
       expect(actualInputClasses).toEqual(expectedInputClasses);
@@ -146,8 +143,8 @@ describe('searchBox()', () => {
       widget.init({state, helper, onHistoryChange});
 
       // Then
-      let wrapper = container.querySelectorAll('div.ais-search-box')[0];
-      let input = container.querySelectorAll('input')[0];
+      const wrapper = container.querySelectorAll('div.ais-search-box')[0];
+      const input = container.querySelectorAll('input')[0];
 
       expect(wrapper.contains(input)).toEqual(true);
       expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
@@ -162,7 +159,7 @@ describe('searchBox()', () => {
       widget.init({state, helper, onHistoryChange});
 
       // Then
-      let wrapper = container.parentNode;
+      const wrapper = container.parentNode;
       expect(wrapper.getAttribute('class')).toEqual('ais-search-box');
     });
 
@@ -175,8 +172,8 @@ describe('searchBox()', () => {
       widget.init({state, helper, onHistoryChange});
 
       // Then
-      let wrapper = container.querySelectorAll('div.ais-search-box');
-      let input = container.querySelectorAll('input')[0];
+      const wrapper = container.querySelectorAll('div.ais-search-box');
+      const input = container.querySelectorAll('input')[0];
       expect(wrapper.length).toEqual(0);
       expect(container.firstChild).toEqual(input);
     });
@@ -244,8 +241,8 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      let actual = $('.ais-search-box--powered-by-link');
-      let url = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
+      const actual = $('.ais-search-box--powered-by-link');
+      const url = `https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=${location.hostname}&utm_campaign=poweredby`;
       expect(actual.length).toEqual(1);
       expect(actual[0].tagName).toEqual('A');
       expect(actual[0].innerHTML).toEqual('Algolia');
@@ -268,8 +265,8 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      let root = $('.myroot');
-      let link = $('.mylink');
+      const root = $('.myroot');
+      const link = $('.mylink');
       expect(root.length).toEqual(1);
       expect(link.length).toEqual(1);
       expect(link[0].tagName).toEqual('A');
@@ -292,8 +289,8 @@ describe('searchBox()', () => {
       widget.init(defaultInitOptions);
 
       // Then
-      let root = $('.ais-search-box--powered-by');
-      let link = $('.ais-search-box--powered-by-link');
+      const root = $('.ais-search-box--powered-by');
+      const link = $('.ais-search-box--powered-by-link');
       expect(root.length).toEqual(1);
       expect(link.length).toEqual(1);
     });
@@ -335,9 +332,7 @@ describe('searchBox()', () => {
       widget = searchBox({
         ...defaultWidgetOptions,
         poweredBy: {
-          template: (data) => {
-            return `<div>Foobar--${data.url}</div>`;
-          }
+          template: data => `<div>Foobar--${data.url}</div>`
         }
       });
 
@@ -428,7 +423,7 @@ describe('searchBox()', () => {
 
     context('using a queryHook', () => {
       it('calls the queryHook', () => {
-        let queryHook = sinon.spy();
+        const queryHook = sinon.spy();
         widget = searchBox({container, queryHook});
         simulateInputEvent('queryhook input', 'tes', widget, helper, state, container);
         expect(queryHook.calledOnce).toBe(true);
@@ -437,7 +432,7 @@ describe('searchBox()', () => {
       });
 
       it('does not perform a search by default', () => {
-        let queryHook = sinon.spy();
+        const queryHook = sinon.spy();
         widget = searchBox({container, queryHook});
         simulateInputEvent('test', 'tes', widget, helper, state, container);
         expect(helper.setQuery.calledOnce).toBe(false);
@@ -445,7 +440,7 @@ describe('searchBox()', () => {
       });
 
       it('when calling the provided search function', () => {
-        let queryHook = sinon.spy((query, search) => search(query));
+        const queryHook = sinon.spy((query, search) => search(query));
         widget = searchBox({container, queryHook});
         simulateInputEvent('oh rly?', 'tes', widget, helper, state, container);
         expect(helper.setQuery.calledOnce).toBe(true);
@@ -454,7 +449,7 @@ describe('searchBox()', () => {
       });
 
       it('can override the query', () => {
-        let queryHook = sinon.spy((originalQuery, search) => search('hi mom!'));
+        const queryHook = sinon.spy((originalQuery, search) => search('hi mom!'));
         widget = searchBox({container, queryHook});
         simulateInputEvent('come.on.', 'tes', widget, helper, state, container);
         expect(helper.setQuery.firstCall.args[0]).toBe('hi mom!');
@@ -501,7 +496,7 @@ describe('searchBox()', () => {
     let cb;
     container = document.body.appendChild(document.createElement('input'));
     widget = searchBox({container});
-    widget.init({state, helper, onHistoryChange: fn => cb = fn});
+    widget.init({state, helper, onHistoryChange: fn => { cb = fn; }});
     expect(container.value).toBe('');
     container.blur();
     cb({query: 'iphone'});
@@ -624,11 +619,12 @@ function simulateKeyUpEvent(args, widget, helper, state, container) {
   // When
   widget.init({state, helper, onHistoryChange});
   // Then
-  let event = new window.Event('keyup', args);
+  const event = new window.Event('keyup', args);
   Object.defineProperty(event, 'keyCode', {get: () => args.keyCode});
   container.dispatchEvent(event);
 }
 
+// eslint-disable-next-line max-params
 function simulateInputEvent(query, stateQuery, widget, helper, state, container) {
   if (query === undefined) {
     query = 'test';
@@ -645,6 +641,6 @@ function simulateInputEvent(query, stateQuery, widget, helper, state, container)
   widget.init({state, helper, onHistoryChange});
   // Then
   container.value = query;
-  let event = new window.Event('input');
+  const event = new window.Event('input');
   container.dispatchEvent(event);
 }
