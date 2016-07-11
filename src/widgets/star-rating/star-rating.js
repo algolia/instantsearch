@@ -12,7 +12,7 @@ import defaultTemplates from './defaultTemplates.js';
 import defaultLabels from './defaultLabels.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-star-rating');
+const bem = bemHelper('ais-star-rating');
 
 /**
  * Instantiate a list of refinements based on a rating attribute
@@ -69,7 +69,7 @@ function starRating({
     transformData,
     autoHideContainer = true
   }) {
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
@@ -95,11 +95,7 @@ function starRating({
   };
 
   return {
-    getConfiguration: () => {
-      return {
-        disjunctiveFacets: [attributeName]
-      };
-    },
+    getConfiguration: () => ({disjunctiveFacets: [attributeName]}),
 
     init({templatesConfig, helper}) {
       this._templateProps = prepareTemplateProps({
@@ -111,14 +107,14 @@ function starRating({
       this._toggleRefinement = this._toggleRefinement.bind(this, helper);
     },
 
-    render: function({helper, results, state, createURL}) {
+    render({helper, results, state, createURL}) {
       let facetValues = [];
-      let allValues = {};
+      const allValues = {};
       for (let v = max - 1; v >= 0; --v) {
         allValues[v] = 0;
       }
       results.getFacetValues(attributeName).forEach(facet => {
-        let val = Math.round(facet.name);
+        const val = Math.round(facet.name);
         if (!val || val > max - 1) {
           return;
         }
@@ -126,21 +122,22 @@ function starRating({
           allValues[v] += facet.count;
         }
       });
-      let refinedStar = this._getRefinedStar(helper);
+      const refinedStar = this._getRefinedStar(helper);
       for (let star = max - 1; star >= 1; --star) {
-        let count = allValues[star];
+        const count = allValues[star];
         if (refinedStar && star !== refinedStar && count === 0) {
           // skip count==0 when at least 1 refinement is enabled
+          // eslint-disable-next-line no-continue
           continue;
         }
-        let stars = [];
+        const stars = [];
         for (let i = 1; i <= max; ++i) {
           stars.push(i <= star);
         }
         facetValues.push({
-          stars: stars,
-          name: '' + star,
-          count: count,
+          stars,
+          name: String(star),
+          count,
           isRefined: refinedStar === star,
           labels
         });
@@ -165,23 +162,23 @@ function starRating({
       );
     },
 
-    _toggleRefinement: function(helper, facetValue) {
-      let isRefined = this._getRefinedStar(helper) === +facetValue;
+    _toggleRefinement(helper, facetValue) {
+      const isRefined = this._getRefinedStar(helper) === Number(facetValue);
       helper.clearRefinements(attributeName);
       if (!isRefined) {
-        for (let val = +facetValue; val <= max; ++val) {
+        for (let val = Number(facetValue); val <= max; ++val) {
           helper.addDisjunctiveFacetRefinement(attributeName, val);
         }
       }
       helper.search();
     },
 
-    _getRefinedStar: function(helper) {
+    _getRefinedStar(helper) {
       let refinedStar = undefined;
-      let refinements = helper.getRefinements(attributeName);
-      refinements.forEach((r) => {
-        if (!refinedStar || +r.value < refinedStar) {
-          refinedStar = +r.value;
+      const refinements = helper.getRefinements(attributeName);
+      refinements.forEach(r => {
+        if (!refinedStar || Number(r.value) < refinedStar) {
+          refinedStar = Number(r.value);
         }
       });
       return refinedStar;

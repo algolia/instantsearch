@@ -6,13 +6,13 @@ import generateRanges from '../generate-ranges';
 
 describe('generateRanges()', () => {
   it('should generate ranges', () => {
-    let stats = {
+    const stats = {
       min: 1.01,
       max: 4999.98,
       avg: 243.349,
       sum: 2433490.0
     };
-    let expected = [
+    const expected = [
       {to: 2},
       {from: 2, to: 80},
       {from: 80, to: 160},
@@ -26,8 +26,8 @@ describe('generateRanges()', () => {
   });
 
   it('should generate small ranges', () => {
-    let stats = {min: 20, max: 50, avg: 35, sum: 70};
-    let expected = [
+    const stats = {min: 20, max: 50, avg: 35, sum: 70};
+    const expected = [
       {to: 20},
       {from: 20, to: 25},
       {from: 25, to: 30},
@@ -40,8 +40,8 @@ describe('generateRanges()', () => {
   });
 
   it('should not do an infinite loop', () => {
-    let stats = {min: 99.99, max: 149.99, avg: 124.99, sum: 249.98};
-    let expected = [
+    const stats = {min: 99.99, max: 149.99, avg: 124.99, sum: 249.98};
+    const expected = [
       {to: 100},
       {from: 100, to: 110},
       {from: 110, to: 120},
@@ -54,7 +54,7 @@ describe('generateRanges()', () => {
   });
 
   it('should not generate ranges', () => {
-    let stats = {min: 20, max: 20, avg: 20, sum: 20};
+    const stats = {min: 20, max: 20, avg: 20, sum: 20};
     expect(generateRanges(stats)).toEqual([]);
   });
 });

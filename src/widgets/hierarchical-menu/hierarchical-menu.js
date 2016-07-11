@@ -11,7 +11,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import defaultTemplates from './defaultTemplates.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-hierarchical-menu');
+const bem = bemHelper('ais-hierarchical-menu');
 /**
  * Create a hierarchical menu using multiple attributes
  * @function hierarchicalMenu
@@ -77,7 +77,7 @@ function hierarchicalMenu({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
 
   let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
@@ -87,7 +87,7 @@ function hierarchicalMenu({
   // we need to provide a hierarchicalFacet name for the search state
   // so that we can always map $hierarchicalFacetName => real attributes
   // we use the first attribute name
-  let hierarchicalFacetName = attributes[0];
+  const hierarchicalFacetName = attributes[0];
 
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -103,7 +103,7 @@ function hierarchicalMenu({
   };
 
   return {
-    getConfiguration: (currentConfiguration) => ({
+    getConfiguration: currentConfiguration => ({
       hierarchicalFacets: [{
         name: hierarchicalFacetName,
         attributes,
@@ -138,8 +138,8 @@ function hierarchicalMenu({
           return subValue;
         });
     },
-    render: function({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy: sortBy}).data || [];
+    render({results, state, createURL}) {
+      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
       facetValues = this._prepareFacetValues(facetValues, state);
 
       // Bind createURL to this specific attribute

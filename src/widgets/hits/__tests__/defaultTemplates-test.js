@@ -10,14 +10,14 @@ describe('hits defaultTemplates', () => {
   });
 
   it('has a `item` default template', () => {
-    let item = {
+    const item = {
       hello: 'there,',
       how: {
         are: 'you?'
       }
     };
 
-    let expected =
+    const expected =
 `{
   "hello": "there,",
   "how": {

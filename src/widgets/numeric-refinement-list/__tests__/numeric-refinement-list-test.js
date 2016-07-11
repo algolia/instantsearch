@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
+
 import cloneDeep from 'lodash/lang/cloneDeep';
 
 import expectJSX from 'expect-jsx';
@@ -12,9 +12,6 @@ import RefinementList from '../../../components/RefinementList/RefinementList.js
 expect.extend(expectJSX);
 
 describe('numericRefinementList call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('throws an exception when no container', () => {
     const attributeName = '';
     const options = [];
@@ -35,9 +32,6 @@ describe('numericRefinementList call', () => {
 });
 
 describe('numericRefinementList()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;
@@ -100,7 +94,7 @@ describe('numericRefinementList()', () => {
     widget.render({state, results, createURL});
     widget.render({state, results, createURL});
 
-    let props = {
+    const props = {
       cssClasses: {
         active: 'ais-refinement-list--item__active',
         body: 'ais-refinement-list--body',
@@ -113,7 +107,7 @@ describe('numericRefinementList()', () => {
         root: 'ais-refinement-list root cx'
       },
       collapsible: false,
-      createURL: function() {},
+      createURL() {},
       facetValues: [
         {attributeName: 'price', isRefined: true, name: 'All'},
         {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
@@ -124,7 +118,12 @@ describe('numericRefinementList()', () => {
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
       templateProps: {
-        templates: {footer: '', header: '', item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.checkbox}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>'},
+        templates: {
+          footer: '',
+          header: '',
+          // eslint-disable-next-line max-len
+          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.checkbox}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>'
+        },
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {
@@ -190,9 +189,9 @@ describe('numericRefinementList()', () => {
     // not directly editing it
 
     // Given
-    let initialOptions = [{start: 0, end: 5, name: '1-5'}];
-    let initialOptionsClone = cloneDeep(initialOptions);
-    let testWidget = numericRefinementList({
+    const initialOptions = [{start: 0, end: 5, name: '1-5'}];
+    const initialOptionsClone = cloneDeep(initialOptions);
+    const testWidget = numericRefinementList({
       container,
       attributeName: 'price',
       options: initialOptions

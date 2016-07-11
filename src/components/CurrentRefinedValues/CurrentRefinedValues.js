@@ -65,7 +65,7 @@ class CurrentRefinedValues extends React.Component {
 }
 
 function getCustomTemplateProps(attribute) {
-  let customTemplateProps = {};
+  const customTemplateProps = {};
   if (attribute.template !== undefined) {
     customTemplateProps.templates = {
       item: attribute.template
@@ -78,7 +78,7 @@ function getCustomTemplateProps(attribute) {
 }
 
 function getTemplateData(attribute, _refinement, cssClasses) {
-  let templateData = cloneDeep(_refinement);
+  const templateData = cloneDeep(_refinement);
 
   templateData.cssClasses = cssClasses;
   if (attribute.label !== undefined) {
@@ -98,7 +98,7 @@ function getTemplateData(attribute, _refinement, cssClasses) {
 }
 
 function handleClick(cb) {
-  return (e) => {
+  return e => {
     if (isSpecialClick(e)) {
       // do not alter the default browser behavior
       // if one special key is down

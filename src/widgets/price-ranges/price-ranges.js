@@ -12,7 +12,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';
 import PriceRangesComponent from '../../components/PriceRanges/PriceRanges.js';
 
-let bem = bemHelper('ais-price-ranges');
+const bem = bemHelper('ais-price-ranges');
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -63,14 +63,16 @@ function priceRanges({
     templates = defaultTemplates,
     collapsible = false,
     labels: userLabels = {},
-    currency = '$',
+    currency: userCurrency = '$',
     autoHideContainer = true
   } = {}) {
+  let currency = userCurrency;
+
   if (!container || !attributeName) {
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let PriceRanges = headerFooterHOC(PriceRangesComponent);
   if (autoHideContainer === true) {
     PriceRanges = autoHideContainerHOC(PriceRanges);
@@ -107,13 +109,13 @@ function priceRanges({
       facets: [attributeName]
     }),
 
-    _generateRanges: function(results) {
-      let stats = results.getFacetStats(attributeName);
+    _generateRanges(results) {
+      const stats = results.getFacetStats(attributeName);
       return generateRanges(stats);
     },
 
-    _extractRefinedRange: function(helper) {
-      let refinements = helper.getRefinements(attributeName);
+    _extractRefinedRange(helper) {
+      const refinements = helper.getRefinements(attributeName);
       let from;
       let to;
 
@@ -131,8 +133,8 @@ function priceRanges({
       return [{from, to, isRefined: true}];
     },
 
-    _refine: function(helper, from, to) {
-      let facetValues = this._extractRefinedRange(helper);
+    _refine(helper, from, to) {
+      const facetValues = this._extractRefinedRange(helper);
 
       helper.clearRefinements(attributeName);
       if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
@@ -156,7 +158,7 @@ function priceRanges({
       });
     },
 
-    render: function({results, helper, state, createURL}) {
+    render({results, helper, state, createURL}) {
       let facetValues;
 
       if (results.hits.length > 0) {

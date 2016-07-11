@@ -9,7 +9,7 @@ import find from 'lodash/collection/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
 
-let bem = bemHelper('ais-numeric-selector');
+const bem = bemHelper('ais-numeric-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -35,8 +35,14 @@ function numericSelector({
     cssClasses: userCssClasses = {},
     autoHideContainer = false
   }) {
-  let containerNode = getContainerNode(container);
-  let usage = 'Usage: numericSelector({container, attributeName, options[, cssClasses.{root,item}, autoHideContainer]})';
+  const containerNode = getContainerNode(container);
+  const usage = `Usage: numericSelector({
+    container,
+    attributeName,
+    options,
+    cssClasses.{root,item},
+    autoHideContainer
+  })`;
 
   let Selector = SelectorComponent;
   if (autoHideContainer === true) {
@@ -53,7 +59,7 @@ function numericSelector({
   };
 
   return {
-    init: function({helper}) {
+    init({helper}) {
       const currentValue = this._getRefinedValue(helper) || options[0].value;
       if (currentValue !== undefined) {
         helper.addNumericRefinement(attributeName, operator, currentValue);
@@ -68,7 +74,7 @@ function numericSelector({
       };
     },
 
-    render: function({helper, results}) {
+    render({helper, results}) {
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
@@ -81,7 +87,7 @@ function numericSelector({
       );
     },
 
-    _getRefinedValue: function(helper) {
+    _getRefinedValue(helper) {
       const refinements = helper.getRefinements(attributeName);
       const refinedValue = find(refinements, {operator});
       return refinedValue &&

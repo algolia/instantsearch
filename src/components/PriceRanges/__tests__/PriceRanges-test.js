@@ -4,11 +4,8 @@ import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import Template from '../../Template';
 import PriceRanges from '../PriceRanges';
 import PriceRangesForm from '../PriceRangesForm';
@@ -17,24 +14,21 @@ describe('PriceRanges', () => {
   let renderer;
   let stubbedMethods;
 
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   beforeEach(() => {
     stubbedMethods = [];
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 
   afterEach(() => {
     // Restore all stubbed methods
-    stubbedMethods.forEach((name) => {
+    stubbedMethods.forEach(name => {
       PriceRanges.prototype[name].restore();
     });
   });
 
   function render(extraProps = {}) {
-    let props = {
+    const props = {
       ...extraProps
     };
     renderer.render(<PriceRanges {...props} />);
@@ -42,7 +36,7 @@ describe('PriceRanges', () => {
   }
 
   function getComponentWithMockRendering(extraProps) {
-    let props = {
+    const props = {
       ...extraProps
     };
     return TestUtils.renderIntoDocument(<PriceRanges {...props} />);
@@ -81,10 +75,10 @@ describe('PriceRanges', () => {
 
       it('should display one range item correctly', () => {
         // Given
-        let component = getComponentWithMockRendering(props);
+        const component = getComponentWithMockRendering(props);
 
         // When
-        let item = component.getItemFromFacetValue(facetValue);
+        const item = component.getItemFromFacetValue(facetValue);
 
         // Then
         expect(item).toEqualJSX(
@@ -97,11 +91,11 @@ describe('PriceRanges', () => {
       });
       it('should display one active range item correctly', () => {
         // Given
-        let component = getComponentWithMockRendering(props);
+        const component = getComponentWithMockRendering(props);
         facetValue.isRefined = true;
 
         // When
-        let item = component.getItemFromFacetValue(facetValue);
+        const item = component.getItemFromFacetValue(facetValue);
 
         // Then
         expect(item).toEqualJSX(
@@ -117,11 +111,11 @@ describe('PriceRanges', () => {
     context('refine', () => {
       it('should call refine from props', () => {
         // Given
-        let mockEvent = {preventDefault: sinon.spy()};
-        let props = {
+        const mockEvent = {preventDefault: sinon.spy()};
+        const props = {
           refine: sinon.spy()
         };
-        let component = getComponentWithMockRendering(props);
+        const component = getComponentWithMockRendering(props);
 
         // When
         component.refine(1, 10, mockEvent);
@@ -135,17 +129,17 @@ describe('PriceRanges', () => {
     context('getForm', () => {
       it('should call the PriceRangesForm', () => {
         // Given
-        let props = {
+        const props = {
           cssClasses: 'cssClasses',
           labels: {button: 'hello'},
           currency: '$',
           refine: 'refine',
           facetValues: [{from: 0, to: 10}, {from: 10, to: 20}]
         };
-        let component = getComponentWithMockRendering(props);
+        const component = getComponentWithMockRendering(props);
 
         // When
-        let form = component.getForm();
+        const form = component.getForm();
 
         // Then
         expect(form).toEqualJSX(
@@ -163,8 +157,8 @@ describe('PriceRanges', () => {
   context('render', () => {
     it('should have the right number of items', () => {
       // Given
-      let mockedGetItem = stubMethod('getItemFromFacetValue');
-      let props = {
+      const mockedGetItem = stubMethod('getItemFromFacetValue');
+      const props = {
         facetValues: [{}, {}, {}, {}]
       };
 
@@ -179,7 +173,7 @@ describe('PriceRanges', () => {
       // Given
       stubMethod('getItemFromFacetValue', <span />);
       stubMethod('getForm', <form />);
-      let props = {
+      const props = {
         cssClasses: {
           list: 'list'
         },
@@ -187,7 +181,7 @@ describe('PriceRanges', () => {
       };
 
       // When
-      let out = render(props);
+      const out = render(props);
 
       // Then
       expect(out).toEqualJSX(
@@ -204,8 +198,8 @@ describe('PriceRanges', () => {
     });
     it('starts a refine on click', () => {
       // Given
-      let mockRefined = stubMethod('refine');
-      let props = {
+      const mockRefined = stubMethod('refine');
+      const props = {
         facetValues: [{from: 1, to: 10, isRefined: false}],
         templateProps: {
           templates: {
@@ -213,8 +207,8 @@ describe('PriceRanges', () => {
           }
         }
       };
-      let component = TestUtils.renderIntoDocument(<PriceRanges {...props} />);
-      let link = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
+      const component = TestUtils.renderIntoDocument(<PriceRanges {...props} />);
+      const link = TestUtils.findRenderedDOMComponentWithTag(component, 'a');
 
       // When
       TestUtils.Simulate.click(link);

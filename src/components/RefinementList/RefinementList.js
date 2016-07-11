@@ -17,9 +17,9 @@ class RefinementList extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    let isStateDifferent = nextState !== this.state;
-    let isFacetValuesDifferent = !isEqual(this.props.facetValues, nextProps.facetValues);
-    let shouldUpdate = isStateDifferent || isFacetValuesDifferent;
+    const isStateDifferent = nextState !== this.state;
+    const isFacetValuesDifferent = !isEqual(this.props.facetValues, nextProps.facetValues);
+    const shouldUpdate = isStateDifferent || isFacetValuesDifferent;
     return shouldUpdate;
   }
 
@@ -29,18 +29,16 @@ class RefinementList extends React.Component {
 
   _generateFacetItem(facetValue) {
     let subItems;
-    let hasChildren = facetValue.data && facetValue.data.length > 0;
+    const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subItems = (
-        <RefinementList
-          {...this.props}
-          depth={this.props.depth + 1}
-          facetValues={facetValue.data}
-        />
-      );
+      subItems = <RefinementList
+                  {...this.props}
+                  depth={this.props.depth + 1}
+                  facetValues={facetValue.data}
+                />;
     }
 
-    let url = this.props.createURL(facetValue[this.props.attributeNameKey]);
+    const url = this.props.createURL(facetValue[this.props.attributeNameKey]);
     let templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
     let cssClassItem = cx(this.props.cssClasses.item, {
@@ -49,11 +47,11 @@ class RefinementList extends React.Component {
 
     let key = facetValue[this.props.attributeNameKey];
     if (facetValue.isRefined !== undefined) {
-      key += '/' + facetValue.isRefined;
+      key += `/${facetValue.isRefined}`;
     }
 
     if (facetValue.count !== undefined) {
-      key += '/' + facetValue.count;
+      key += `/${facetValue.count}`;
     }
 
     return (
@@ -125,13 +123,13 @@ class RefinementList extends React.Component {
 
   render() {
     // Adding `-lvl0` classes
-    let cssClassList = [this.props.cssClasses.list];
+    const cssClassList = [this.props.cssClasses.list];
     if (this.props.cssClasses.depth) {
       cssClassList.push(`${this.props.cssClasses.depth}${this.props.depth}`);
     }
 
     const limit = this.state.isShowMoreOpen ? this.props.limitMax : this.props.limitMin;
-    let displayedFacetValues = this.props.facetValues.slice(0, limit);
+    const displayedFacetValues = this.props.facetValues.slice(0, limit);
     const displayShowMore = this.props.showMore === true &&
       // "Show more"
       this.props.facetValues.length > displayedFacetValues.length ||
@@ -141,7 +139,7 @@ class RefinementList extends React.Component {
     const showMoreBtn = displayShowMore ?
         <Template
           rootProps={{onClick: this.handleClickShowMore}}
-          templateKey={'show-more-' + (this.state.isShowMoreOpen ? 'active' : 'inactive')}
+          templateKey={`show-more-${this.state.isShowMoreOpen ? 'active' : 'inactive'}`}
           {...this.props.templateProps}
         /> :
         undefined;

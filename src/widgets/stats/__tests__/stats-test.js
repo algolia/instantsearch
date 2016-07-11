@@ -3,27 +3,18 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import stats from '../stats';
 import Stats from '../../../components/Stats/Stats';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('stats call', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   it('should throw when called without container', () => {
     expect(() => stats()).toThrow(/^Usage:/);
   });
 });
 
 describe('stats()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   let ReactDOM;
   let container;
   let widget;
@@ -60,7 +51,7 @@ describe('stats()', () => {
   it('calls twice ReactDOM.render(<Stats props />, container)', () => {
     widget.render({results});
     widget.render({results});
-    let props = {
+    const props = {
       cssClasses: {
         body: 'ais-stats--body body cx',
         header: 'ais-stats--header',

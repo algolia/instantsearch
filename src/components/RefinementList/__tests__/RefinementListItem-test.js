@@ -27,7 +27,7 @@ describe('RefinementListItem', () => {
   });
 
   it('renders an item', () => {
-    let out = render(props);
+    const out = render(props);
 
     expect(out).toEqualJSX(
       <div
@@ -45,7 +45,7 @@ describe('RefinementListItem', () => {
   });
 
   it('calls the right function', () => {
-    let out = render(props);
+    const out = render(props);
     out.props.onClick();
     expect(props.handleClick.calledOnce).toBe(true);
   });

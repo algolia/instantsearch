@@ -13,14 +13,14 @@ describe('Stats', () => {
   let renderer;
 
   beforeEach(() => {
-    let {createRenderer} = TestUtils;
+    const {createRenderer} = TestUtils;
     renderer = createRenderer();
   });
 
 
   it('should render <Template data= />', () => {
-    let out = render();
-    let defaultProps = {
+    const out = render();
+    const defaultProps = {
       cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
@@ -35,7 +35,7 @@ describe('Stats', () => {
   });
 
   function render(extraProps = {}) {
-    let props = getProps(extraProps);
+    const props = getProps(extraProps);
     renderer.render(<Stats {...props} templateProps={{}} />);
     return renderer.getRenderOutput();
   }

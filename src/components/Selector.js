@@ -14,7 +14,7 @@ class Selector extends React.Component {
   }
 
   render() {
-    let {currentValue, options} = this.props;
+    const {currentValue, options} = this.props;
 
     return (
       <select
@@ -22,9 +22,14 @@ class Selector extends React.Component {
         defaultValue={currentValue}
         onChange={this.handleChange}
       >
-        {options.map((option) => {
-          return <option className={this.props.cssClasses.item} key={option.value} value={option.value}>{option.label}</option>;
-        })}
+        {options.map(option =>
+          <option
+            className={this.props.cssClasses.item}
+            key={option.value}
+            value={option.value}>
+              {option.label}
+          </option>
+        )}
       </select>
     );
   }

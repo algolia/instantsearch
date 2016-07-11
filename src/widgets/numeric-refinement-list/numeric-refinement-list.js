@@ -13,7 +13,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import defaultTemplates from './defaultTemplates.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-refinement-list');
+const bem = bemHelper('ais-refinement-list');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -66,7 +66,7 @@ function numericRefinementList({
     throw new Error(usage);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
     RefinementList = autoHideContainerHOC(RefinementList);
@@ -93,19 +93,19 @@ function numericRefinementList({
         templates
       });
 
-      this._toggleRefinement = (facetValue) => {
-        let refinedState = refine(helper.state, attributeName, options, facetValue);
+      this._toggleRefinement = facetValue => {
+        const refinedState = refine(helper.state, attributeName, options, facetValue);
         helper.setState(refinedState).search();
       };
     },
-    render: function({results, state, createURL}) {
-      let facetValues = options.map((facetValue) => {
-        return {
+    render({results, state, createURL}) {
+      let facetValues = options.map(facetValue =>
+        ({
           ...facetValue,
           isRefined: isRefined(state, attributeName, facetValue),
-          attributeName: attributeName
-        };
-      });
+          attributeName
+        })
+      );
 
       // Bind createURL to this specific attribute
       function _createURL(facetValue) {
@@ -129,7 +129,7 @@ function numericRefinementList({
 }
 
 function isRefined(state, attributeName, option) {
-  let currentRefinements = state.getNumericRefinements(attributeName);
+  const currentRefinements = state.getNumericRefinements(attributeName);
 
   if (option.start !== undefined && option.end !== undefined) {
     if (option.start === option.end) {
@@ -148,19 +148,23 @@ function isRefined(state, attributeName, option) {
   if (option.start === undefined && option.end === undefined) {
     return Object.keys(currentRefinements).length === 0;
   }
+
+  return undefined;
 }
 
 function refine(state, attributeName, options, facetValue) {
-  let refinedOption = find(options, {name: facetValue});
+  let resolvedState = state;
 
-  let currentRefinements = state.getNumericRefinements(attributeName);
+  const refinedOption = find(options, {name: facetValue});
+
+  const currentRefinements = resolvedState.getNumericRefinements(attributeName);
 
   if (refinedOption.start === undefined && refinedOption.end === undefined) {
-    return state.clearRefinements(attributeName);
+    return resolvedState.clearRefinements(attributeName);
   }
 
-  if (!isRefined(state, attributeName, refinedOption)) {
-    state = state.clearRefinements(attributeName);
+  if (!isRefined(resolvedState, attributeName, refinedOption)) {
+    resolvedState = resolvedState.clearRefinements(attributeName);
   }
 
   if (refinedOption.start !== undefined && refinedOption.end !== undefined) {
@@ -170,36 +174,36 @@ function refine(state, attributeName, options, facetValue) {
 
     if (refinedOption.start === refinedOption.end) {
       if (hasNumericRefinement(currentRefinements, '=', refinedOption.start)) {
-        state = state.removeNumericRefinement(attributeName, '=', refinedOption.start);
+        resolvedState = resolvedState.removeNumericRefinement(attributeName, '=', refinedOption.start);
       } else {
-        state = state.addNumericRefinement(attributeName, '=', refinedOption.start);
+        resolvedState = resolvedState.addNumericRefinement(attributeName, '=', refinedOption.start);
       }
-      return state;
+      return resolvedState;
     }
   }
 
   if (refinedOption.start !== undefined) {
     if (hasNumericRefinement(currentRefinements, '>=', refinedOption.start)) {
-      state = state.removeNumericRefinement(attributeName, '>=', refinedOption.start);
+      resolvedState = resolvedState.removeNumericRefinement(attributeName, '>=', refinedOption.start);
     } else {
-      state = state.addNumericRefinement(attributeName, '>=', refinedOption.start);
+      resolvedState = resolvedState.addNumericRefinement(attributeName, '>=', refinedOption.start);
     }
   }
 
   if (refinedOption.end !== undefined) {
     if (hasNumericRefinement(currentRefinements, '<=', refinedOption.end)) {
-      state = state.removeNumericRefinement(attributeName, '<=', refinedOption.end);
+      resolvedState = resolvedState.removeNumericRefinement(attributeName, '<=', refinedOption.end);
     } else {
-      state = state.addNumericRefinement(attributeName, '<=', refinedOption.end);
+      resolvedState = resolvedState.addNumericRefinement(attributeName, '<=', refinedOption.end);
     }
   }
 
-  return state;
+  return resolvedState;
 }
 
 function hasNumericRefinement(currentRefinements, operator, value) {
-  let hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  let includesValue = includes(currentRefinements[operator], value);
+  const hasOperatorRefinements = currentRefinements[operator] !== undefined;
+  const includesValue = includes(currentRefinements[operator], value);
 
   return hasOperatorRefinements && includesValue;
 }

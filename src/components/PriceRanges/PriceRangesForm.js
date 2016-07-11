@@ -36,9 +36,9 @@ class PriceRangesForm extends React.Component {
   }
 
   handleSubmit(event) {
-    let from = this.refs.from.value !== '' ?
+    const from = this.refs.from.value !== '' ?
       parseInt(this.refs.from.value, 10) : undefined;
-    let to = this.refs.to.value !== '' ?
+    const to = this.refs.to.value !== '' ?
       parseInt(this.refs.to.value, 10) : undefined;
     this.props.refine(from, to, event);
   }

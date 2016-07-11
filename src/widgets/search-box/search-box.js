@@ -9,7 +9,7 @@ import cx from 'classnames';
 import Hogan from 'hogan.js';
 import defaultTemplates from './defaultTemplates.js';
 
-let bem = bemHelper('ais-search-box');
+const bem = bemHelper('ais-search-box');
 const KEY_ENTER = 13;
 const KEY_SUPPRESS = 8;
 
@@ -83,27 +83,27 @@ function searchBox({
   }
 
   return {
-    getInput: function() {
+    getInput() {
       // Returns reference to targeted input if present, or create a new one
       if (container.tagName === 'INPUT') {
         return container;
       }
       return document.createElement('input');
     },
-    wrapInput: function(input) {
+    wrapInput(input) {
       // Wrap input in a .ais-search-box div
-      let wrapper = document.createElement('div');
-      let CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
+      const wrapper = document.createElement('div');
+      const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
       CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
       wrapper.appendChild(input);
       return wrapper;
     },
-    addDefaultAttributesToInput: function(input, query) {
-      let defaultAttributes = {
+    addDefaultAttributesToInput(input, query) {
+      const defaultAttributes = {
         autocapitalize: 'off',
         autocomplete: 'off',
         autocorrect: 'off',
-        placeholder: placeholder,
+        placeholder,
         role: 'textbox',
         spellcheck: 'false',
         type: 'text',
@@ -119,10 +119,10 @@ function searchBox({
       });
 
       // Add classes
-      let CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
+      const CSSClassesToAdd = cx(bem('input'), cssClasses.input).split(' ');
       CSSClassesToAdd.forEach(cssClass => input.classList.add(cssClass));
     },
-    addPoweredBy: function(input) {
+    addPoweredBy(input) {
       // Default values
       poweredBy = {
         cssClasses: {},
@@ -130,23 +130,23 @@ function searchBox({
         ...poweredBy
       };
 
-      let poweredByCSSClasses = {
+      const poweredByCSSClasses = {
         root: cx(bem('powered-by'), poweredBy.cssClasses.root),
         link: cx(bem('powered-by-link'), poweredBy.cssClasses.link)
       };
 
-      let url = 'https://www.algolia.com/?' +
+      const url = 'https://www.algolia.com/?' +
         'utm_source=instantsearch.js&' +
         'utm_medium=website&' +
         `utm_content=${location.hostname}&` +
         'utm_campaign=poweredby';
 
-      let templateData = {
+      const templateData = {
         cssClasses: poweredByCSSClasses,
         url
       };
 
-      let template = poweredBy.template;
+      const template = poweredBy.template;
       let stringNode;
 
       if (isString(template)) {
@@ -158,15 +158,15 @@ function searchBox({
 
       // Crossbrowser way to create a DOM node from a string. We wrap in
       // a `span` to make sure we have one and only one node.
-      let tmpNode = document.createElement('div');
+      const tmpNode = document.createElement('div');
       tmpNode.innerHTML = `<span>${stringNode.trim()}</span>`;
-      let htmlNode = tmpNode.firstChild;
+      const htmlNode = tmpNode.firstChild;
 
       input.parentNode.insertBefore(htmlNode, input.nextSibling);
     },
-    init: function({state, helper, onHistoryChange}) {
-      let isInputTargeted = container.tagName === 'INPUT';
-      let input = this._input = this.getInput();
+    init({state, helper, onHistoryChange}) {
+      const isInputTargeted = container.tagName === 'INPUT';
+      const input = this._input = this.getInput();
       let previousQuery;
 
       // Add all the needed attributes and listeners to the input
@@ -217,13 +217,13 @@ function searchBox({
 
       if (isInputTargeted) {
         // To replace the node, we need to create an intermediate node
-        let placeholderNode = document.createElement('div');
+        const placeholderNode = document.createElement('div');
         input.parentNode.insertBefore(placeholderNode, input);
-        let parentNode = input.parentNode;
-        let wrappedInput = wrapInput ? this.wrapInput(input) : input;
+        const parentNode = input.parentNode;
+        const wrappedInput = wrapInput ? this.wrapInput(input) : input;
         parentNode.replaceChild(wrappedInput, placeholderNode);
       } else {
-        let wrappedInput = wrapInput ? this.wrapInput(input) : input;
+        const wrappedInput = wrapInput ? this.wrapInput(input) : input;
         container.appendChild(wrappedInput);
       }
 
@@ -233,7 +233,7 @@ function searchBox({
       }
 
       // Update value when query change outside of the input
-      onHistoryChange(function(fullState) {
+      onHistoryChange(fullState => {
         input.value = fullState.query || '';
       });
 
@@ -261,7 +261,7 @@ function addListener(el, type, fn) {
   if (el.addEventListener) {
     el.addEventListener(type, fn);
   } else {
-    el.attachEvent('on' + type, fn);
+    el.attachEvent(`on${type}`, fn);
   }
 }
 

@@ -15,8 +15,8 @@ function generateRanges(stats) {
   } else {
     precision = 100;
   }
-  let avg = round(Math.round(stats.avg), precision);
-  let min = Math.ceil(stats.min);
+  const avg = round(Math.round(stats.avg), precision);
+  const min = Math.ceil(stats.min);
   let max = round(Math.floor(stats.max), precision);
   while (max > stats.max) {
     max -= precision;
@@ -24,7 +24,7 @@ function generateRanges(stats) {
 
   let next;
   let from;
-  let facetValues = [];
+  const facetValues = [];
   if (min !== max) {
     next = min;
 
@@ -39,7 +39,7 @@ function generateRanges(stats) {
         next = from + 1;
       }
       facetValues.push({
-        from: from,
+        from,
         to: next
       });
     }
@@ -50,7 +50,7 @@ function generateRanges(stats) {
         next = from + 1;
       }
       facetValues.push({
-        from: from,
+        from,
         to: next
       });
     }

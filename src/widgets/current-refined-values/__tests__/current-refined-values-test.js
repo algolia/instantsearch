@@ -3,27 +3,18 @@
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-import jsdom from 'jsdom-global';
-
 import map from 'lodash/collection/map';
 import filter from 'lodash/collection/filter';
-
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
-
 import {prepareTemplateProps} from '../../../lib/utils';
-
 import currentRefinedValues from '../current-refined-values';
 import CurrentRefinedValues from '../../../components/CurrentRefinedValues/CurrentRefinedValues';
 import defaultTemplates from '../defaultTemplates';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('currentRefinedValues()', () => {
-  beforeEach(function() {this.jsdom = jsdom();});
-  afterEach(function() {this.jsdom();});
-
   context('types checking', () => {
     let boundWidget;
     let parameters;
@@ -36,7 +27,7 @@ describe('currentRefinedValues()', () => {
         clearAll: 'after',
         templates: {},
         transformData: {
-          item: (data) => data
+          item: data => data
         },
         autoHideContainer: false,
         cssClasses: {}
@@ -46,7 +37,7 @@ describe('currentRefinedValues()', () => {
 
     context('options.container', () => {
       it('doesn\'t throw usage with a string', () => {
-        let element = document.createElement('div');
+        const element = document.createElement('div');
         element.id = 'testid2';
         document.body.appendChild(element);
         parameters.container = '#testid2';
@@ -92,7 +83,7 @@ describe('currentRefinedValues()', () => {
             template: 'SPECIFIC TEMPLATE'
           }, {
             name: 'attr4',
-            transformData: (data) => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; }
           }
         ];
         expect(boundWidget).toNotThrow();
@@ -231,7 +222,7 @@ describe('currentRefinedValues()', () => {
       it('throws usage if one of the template keys doesn\'t exist', () => {
         parameters.templates = {
           header: 'HEADER TEMPLATE',
-          not_existing_key: 'NOT EXISTING KEY TEMPLATE'
+          notExistingKey: 'NOT EXISTING KEY TEMPLATE'
         };
         expect(boundWidget).toThrow(/Usage/);
       });
@@ -251,13 +242,13 @@ describe('currentRefinedValues()', () => {
       });
 
       it('doesn\'t throw usage with a function', () => {
-        parameters.transformData = (data) => data;
+        parameters.transformData = data => data;
         expect(boundWidget).toNotThrow();
       });
 
       it('doesn\'t throw usage with an object of functions', () => {
         parameters.transformData = {
-          item: (data) => data
+          item: data => data
         };
         expect(boundWidget).toNotThrow();
       });
@@ -330,7 +321,7 @@ describe('currentRefinedValues()', () => {
 
       it('throws usage if one of the cssClasses keys doesn\'t exist', () => {
         parameters.cssClasses = {
-          not_existing_key: 'not-existing-class'
+          notExistingKey: 'not-existing-class'
         };
         expect(boundWidget).toThrow(/Usage/);
       });
@@ -343,7 +334,6 @@ describe('currentRefinedValues()', () => {
       });
     });
   });
-
 
   context('getConfiguration()', () => {
     it('configures nothing', () => {
@@ -495,8 +485,11 @@ describe('currentRefinedValues()', () => {
         {type: 'facet', attributeName: 'facet', name: 'facet-val2', count: 2, exhaustive: true},
         {type: 'exclude', attributeName: 'facetExclude', name: 'facetExclude-val1', exclude: true},
         {type: 'exclude', attributeName: 'facetExclude', name: 'facetExclude-val2', exclude: true},
+        // eslint-disable-next-line max-len
         {type: 'disjunctive', attributeName: 'disjunctiveFacet', name: 'disjunctiveFacet-val1', count: 3, exhaustive: true},
+        // eslint-disable-next-line max-len
         {type: 'disjunctive', attributeName: 'disjunctiveFacet', name: 'disjunctiveFacet-val2', count: 4, exhaustive: true},
+        // eslint-disable-next-line max-len
         {type: 'hierarchical', attributeName: 'hierarchicalFacet', name: 'hierarchicalFacet-val2', count: 6, exhaustive: true},
         {type: 'numeric', attributeName: 'numericFacet', name: '1', numericValue: 1, operator: '>='},
         {type: 'numeric', attributeName: 'numericFacet', name: '2', numericValue: 2, operator: '<='},
@@ -561,7 +554,7 @@ describe('currentRefinedValues()', () => {
 
     context('options.container', () => {
       it('should render with a string container', () => {
-        let element = document.createElement('div');
+        const element = document.createElement('div');
         element.id = 'testid';
         document.body.appendChild(element);
 
@@ -576,7 +569,7 @@ describe('currentRefinedValues()', () => {
       });
 
       it('should render with a DOMElement container', () => {
-        let element = document.createElement('div');
+        const element = document.createElement('div');
 
         parameters.container = element;
 
@@ -598,7 +591,14 @@ describe('currentRefinedValues()', () => {
         it('should render all attributes with not defined attributes', () => {
           delete parameters.attributes;
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
+          refinements
+            .splice(0, 0, {
+              type: 'facet',
+              attributeName: 'extraFacet',
+              name: 'extraFacet-val1',
+              count: 42,
+              exhaustive: true}
+            );
 
           const widget = currentRefinedValues(parameters);
           widget.init({helper});
@@ -614,7 +614,13 @@ describe('currentRefinedValues()', () => {
         it('should render all attributes with an empty array', () => {
           parameters.attributes = [];
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
+          refinements.splice(0, 0, {
+            type: 'facet',
+            attributeName: 'extraFacet',
+            name: 'extraFacet-val1',
+            count: 42,
+            exhaustive: true
+          });
 
           const widget = currentRefinedValues(parameters);
           widget.init({helper});
@@ -635,12 +641,12 @@ describe('currentRefinedValues()', () => {
             label: 'Facet exclude'
           }, {
             name: 'disjunctiveFacet',
-            transformData: (data) => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; }
           }];
 
-          refinements = filter(refinements, (refinement) => {
-            return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1;
-          });
+          refinements = filter(refinements, refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1
+          );
 
           const widget = currentRefinedValues(parameters);
           widget.init({helper});
@@ -657,7 +663,7 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: (data) => { data.name = 'newname'; return data; }
+              transformData: data => { data.name = 'newname'; return data; }
             }
           };
 
@@ -674,7 +680,13 @@ describe('currentRefinedValues()', () => {
         it('should render all attributes with not defined attributes', () => {
           delete parameters.attributes;
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
+          refinements.splice(0, 0, {
+            type: 'facet',
+            attributeName: 'extraFacet',
+            name: 'extraFacet-val1',
+            count: 42,
+            exhaustive: true
+          });
 
           const widget = currentRefinedValues(parameters);
           widget.init({helper});
@@ -690,7 +702,13 @@ describe('currentRefinedValues()', () => {
         it('should render all attributes with an empty array', () => {
           parameters.attributes = [];
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
+          refinements.splice(0, 0, {
+            type: 'facet',
+            attributeName: 'extraFacet',
+            name: 'extraFacet-val1',
+            count: 42,
+            exhaustive: true
+          });
 
           const widget = currentRefinedValues(parameters);
           widget.init({helper});
@@ -711,16 +729,22 @@ describe('currentRefinedValues()', () => {
             label: 'Facet exclude'
           }, {
             name: 'disjunctiveFacet',
-            transformData: (data) => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; }
           }];
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
-          const firstRefinements = filter(refinements, (refinement) => {
-            return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1;
+          refinements.splice(0, 0, {
+            type: 'facet',
+            attributeName: 'extraFacet',
+            name: 'extraFacet-val1',
+            count: 42,
+            exhaustive: true
           });
-          const otherRefinements = filter(refinements, (refinement) => {
-            return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) === -1;
-          });
+          const firstRefinements = filter(refinements, refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1
+          );
+          const otherRefinements = filter(refinements, refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) === -1
+          );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
@@ -738,7 +762,7 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: (data) => { data.name = 'newname'; return data; }
+              transformData: data => { data.name = 'newname'; return data; }
             }
           };
 
@@ -760,16 +784,22 @@ describe('currentRefinedValues()', () => {
             label: 'Facet exclude'
           }, {
             name: 'disjunctiveFacet',
-            transformData: (data) => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; }
           }];
 
-          refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
-          const firstRefinements = filter(refinements, (refinement) => {
-            return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1;
+          refinements.splice(0, 0, {
+            type: 'facet',
+            attributeName: 'extraFacet',
+            name: 'extraFacet-val1',
+            count: 42,
+            exhaustive: true
           });
-          const otherRefinements = filter(refinements, (refinement) => {
-            return ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) === -1;
-          });
+          const firstRefinements = filter(refinements, refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1
+          );
+          const otherRefinements = filter(refinements, refinement =>
+            ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) === -1
+          );
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
@@ -787,7 +817,7 @@ describe('currentRefinedValues()', () => {
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: (data) => { data.name = 'newname'; return data; }
+              transformData: data => { data.name = 'newname'; return data; }
             }
           };
 
@@ -854,7 +884,8 @@ describe('currentRefinedValues()', () => {
           parameters.autoHideContainer = false;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init({helper});        // eslint-disable-next-line max-len
+
           widget.render(renderParameters);
 
           expect(ReactDOM.render.calledOnce).toBe(true);
@@ -924,12 +955,18 @@ describe('currentRefinedValues()', () => {
         parameters.attributes = [{name: 'disjunctiveFacet'}, {name: 'facetExclude'}];
         parameters.onlyListedAttributes = false;
 
-        refinements.splice(0, 0, {type: 'facet', attributeName: 'extraFacet', name: 'extraFacet-val1', count: 42, exhaustive: true});
+        refinements.splice(0, 0, {
+          type: 'facet',
+          attributeName: 'extraFacet',
+          name: 'extraFacet-val1',
+          count: 42,
+          exhaustive: true
+        });
         const firstRefinements = filter(refinements, {attributeName: 'disjunctiveFacet'});
         const secondRefinements = filter(refinements, {attributeName: 'facetExclude'});
-        const otherRefinements = filter(refinements, (refinement) => {
-          return ['disjunctiveFacet', 'facetExclude'].indexOf(refinement.attributeName) === -1;
-        });
+        const otherRefinements = filter(refinements, refinement =>
+          ['disjunctiveFacet', 'facetExclude'].indexOf(refinement.attributeName) === -1
+        );
         refinements = [].concat(firstRefinements).concat(secondRefinements).concat(otherRefinements);
 
         const widget = currentRefinedValues(parameters);

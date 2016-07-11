@@ -9,7 +9,7 @@ import cx from 'classnames';
 import Hits from '../../components/Hits.js';
 import defaultTemplates from './defaultTemplates.js';
 
-let bem = bemHelper('ais-hits');
+const bem = bemHelper('ais-hits');
 
 /**
  * Display the list of results (hits) from the current search
@@ -47,14 +47,14 @@ function hits({
     hitsPerPage = 20
   } = {}) {
   if (!container) {
-    throw new Error('Must provide a container.' + usage);
+    throw new Error(`Must provide a container.${usage}`);
   }
 
   if (templates.item && templates.allItems) {
-    throw new Error('Must contain only allItems OR item template.' + usage);
+    throw new Error(`Must contain only allItems OR item template.${usage}`);
   }
 
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
@@ -71,7 +71,7 @@ function hits({
         templates
       });
     },
-    render: function({results}) {
+    render({results}) {
       ReactDOM.render(
         <Hits
           cssClasses={cssClasses}

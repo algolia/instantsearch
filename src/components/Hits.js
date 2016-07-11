@@ -35,7 +35,7 @@ class Hits extends React.Component {
   }
 
   renderAllResults() {
-    let className = cx(
+    const className = cx(
       this.props.cssClasses.root,
       this.props.cssClasses.allItems
     );
@@ -51,7 +51,7 @@ class Hits extends React.Component {
   }
 
   renderNoResults() {
-    let className = cx(
+    const className = cx(
       this.props.cssClasses.root,
       this.props.cssClasses.empty
     );
@@ -66,8 +66,8 @@ class Hits extends React.Component {
   }
 
   render() {
-    let hasResults = this.props.results.hits.length > 0;
-    let hasAllItemsTemplate = hasKey(this.props, 'templateProps.templates.allItems');
+    const hasResults = this.props.results.hits.length > 0;
+    const hasAllItemsTemplate = hasKey(this.props, 'templateProps.templates.allItems');
 
     if (!hasResults) {
       return this.renderNoResults();

@@ -5,14 +5,11 @@ import ReactDOM from 'react-dom';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 import Template from '../Template';
-
-import jsdom from 'jsdom-global';
 import sinon from 'sinon';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-let {createRenderer} = TestUtils;
+const {createRenderer} = TestUtils;
 
 describe('Template', () => {
   let renderer;
@@ -37,7 +34,7 @@ describe('Template', () => {
 
     it('supports templates as functions returning a string', () => {
       const props = getProps({
-        templates: {test: templateData => 'it also works with ' + templateData.type},
+        templates: {test: templateData => `it also works with ${templateData.type}`},
         data: {type: 'functions'}
       });
 
@@ -82,7 +79,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
         data: {feature: 'helpers'},
-        templatesConfig: {helpers: {emphasis: (text, render) => '<em>' + render(text) + '</em>'}}
+        templatesConfig: {helpers: {emphasis: (text, render) => `<em>${render(text)}</em>`}}
       });
 
       renderer.render(<Template {...props} />);
@@ -96,10 +93,10 @@ describe('Template', () => {
       const data = {feature: 'helpers'};
       const props = getProps({
         templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
-        data: data,
+        data,
         templatesConfig: {
           helpers: {
-            emphasis: function() {
+            emphasis() {
               // context will be different when using arrow function (lexical scope used)
               expect(this).toBe(data);
               done();
@@ -117,7 +114,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
-        transformData: (originalData) => {
+        transformData: originalData => {
           originalData.feature = 'transformData';
           return originalData;
         }
@@ -137,7 +134,7 @@ describe('Template', () => {
       const data = {a: {}};
       const props = getProps({
         templates: {test: ''},
-        data: data,
+        data,
         transformData: clonedData => {
           called = true;
           expect(clonedData).toNotBe(data);
@@ -156,7 +153,7 @@ describe('Template', () => {
       const data = {a: {}};
       const props = getProps({
         templates: {test: ''},
-        data: data,
+        data,
         transformData: {
           test: clonedData => {
             called = true;
@@ -189,7 +186,7 @@ describe('Template', () => {
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
         transformData: {
-          anotherKey: (d) => { return d; }
+          anotherKey: d => d
         }
       });
 
@@ -202,9 +199,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
-        transformData: () => {
-          return true;
-        }
+        transformData: () => true
       });
 
       expect(() => {
@@ -233,8 +228,7 @@ describe('Template', () => {
     let component;
     let container;
 
-    beforeEach(function() {this.jsdom = jsdom();});
-    afterEach(function() {this.jsdom();});
+
     beforeEach(() => {
       container = document.createElement('div');
       props = getProps({

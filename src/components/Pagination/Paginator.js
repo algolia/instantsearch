@@ -31,7 +31,7 @@ class Paginator {
       return current;
     }
 
-    if (current >= (total - padding)) {
+    if (current >= total - padding) {
       return totalDisplayedPages - (total - current);
     }
 

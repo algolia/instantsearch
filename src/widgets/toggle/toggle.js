@@ -12,7 +12,7 @@ import headerFooterHOC from '../../decorators/headerFooter.js';
 import defaultTemplates from './defaultTemplates.js';
 import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-let bem = bemHelper('ais-toggle');
+const bem = bemHelper('ais-toggle');
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -72,7 +72,7 @@ function toggle({
     transformData,
     autoHideContainer = true
   } = {}) {
-  let containerNode = getContainerNode(container);
+  const containerNode = getContainerNode(container);
 
   let RefinementList = headerFooterHOC(RefinementListComponent);
   if (autoHideContainer === true) {
@@ -83,7 +83,7 @@ function toggle({
     throw new Error(usage);
   }
 
-  let hasAnOffValue = userValues.off !== undefined;
+  const hasAnOffValue = userValues.off !== undefined;
 
   let cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -116,14 +116,14 @@ function toggle({
         return;
       }
       // Add filtering on the 'off' value if set
-      let isRefined = state.isFacetRefined(attributeName, userValues.on);
+      const isRefined = state.isFacetRefined(attributeName, userValues.on);
       if (!isRefined) {
         helper.addFacetRefinement(attributeName, userValues.off);
       }
     },
     toggleRefinement: (helper, facetValue, isRefined) => {
-      let on = userValues.on;
-      let off = userValues.off;
+      const on = userValues.on;
+      const off = userValues.off;
 
       // Checking
       if (!isRefined) {
@@ -141,18 +141,18 @@ function toggle({
 
       helper.search();
     },
-    render: function({helper, results, state, createURL}) {
-      let isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
-      let currentRefinement = isRefined ? userValues.on : userValues.off;
+    render({helper, results, state, createURL}) {
+      const isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
+      const currentRefinement = isRefined ? userValues.on : userValues.off;
       let count;
       if (typeof currentRefinement === 'number') {
         count = results.getFacetStats(attributeName).sum;
       } else {
-        let facetData = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
+        const facetData = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
         count = facetData !== undefined ? facetData.count : null;
       }
 
-      let facetValue = {
+      const facetValue = {
         name: label,
         isRefined,
         count
