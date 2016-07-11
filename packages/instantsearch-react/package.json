@@ -2,7 +2,7 @@
   "name": "instantsearch-react",
   "private": true,
   "scripts": {
-    "start": "babel-node $(which webpack-dev-server) --hot --content-base static",
+    "examples": "babel-node $(which webpack-dev-server) --config webpack.examples.config.js --hot --content-base examples/static",
     "eslint": "eslint \"**/*.js\""
   },
   "devDependencies": {

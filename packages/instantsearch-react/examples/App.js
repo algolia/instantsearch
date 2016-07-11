@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 
-import InstantSearch from './lib/InstantSearch';
-import Hits from './lib/Hits';
-import SearchBox from './impl/SearchBox';
-import RefinementList from './lib/RefinementList';
+import InstantSearch from '../src/InstantSearch';
+import SearchBox from '../src/impl/SearchBox';
+
+import Hits from './Hits';
+import RefinementList from './RefinementList';
 
 class Movie extends Component {
   render() {

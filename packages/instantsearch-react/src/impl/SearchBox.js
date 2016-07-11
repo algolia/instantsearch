@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import themeable from 'react-themeable';
 
-import createSearchBox from '../lib/createSearchBox';
+import createSearchBox from '../createSearchBox';
 
 import ClearIcon from './icons/ClearIcon.js';
 import SearchIcon from './icons/SearchIcon.js';

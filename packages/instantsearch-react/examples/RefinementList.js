@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import connect from 'algoliasearch-helper-provider/src/connect';
 
-import config from './config';
+import config from '../src/config';
 
 function getKey(operator = 'or') {
   return operator === 'and' ? 'facets' : 'disjunctiveFacets';

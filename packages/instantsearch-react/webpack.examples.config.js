@@ -6,7 +6,7 @@ export default {
   entry: [
     `webpack-dev-server/client?${publicPath}`,
     'webpack/hot/only-dev-server',
-    r('src/index.js'),
+    r('examples/index.js'),
   ],
 
   devtool: 'cheap-module-eval-source-map',
@@ -22,7 +22,7 @@ export default {
       {
         test: /\.js$/,
         loaders: ['react-hot', 'babel'],
-        include: [r('src'), r('node_modules/algoliasearch-helper-provider/src')],
+        include: [r('src'), r('examples'), r('node_modules/algoliasearch-helper-provider/src')],
       },
     ],
   },

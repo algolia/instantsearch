@@ -42,7 +42,7 @@ class InstantSearch extends Component {
   render() {
     return (
       <Provider
-        {...omit(this.props, Object.keys(InstantSearch.proptypes))}
+        {...omit(this.props, Object.keys(InstantSearch.propTypes))}
         helper={this.helper}
       />
     );
