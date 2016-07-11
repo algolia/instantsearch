@@ -4,6 +4,7 @@ import InstantSearch from '../src/InstantSearch';
 import SearchBox from '../src/impl/SearchBox';
 import Hits from '../src/impl/Hits';
 import Pagination from '../src/impl/Pagination';
+import HitsPerPage from '../src/impl/HitsPerPage';
 
 import RefinementList from './RefinementList';
 
@@ -43,11 +44,18 @@ class App extends Component {
         <div>
           <button onClick={this.onSwitchClick}>Switch facet</button>
           <RefinementList attributeName={this.state.facet} />
+          <HitsPerPage
+            defaultValue={5}
+            options={[
+              {label: '5', value: 5},
+              {label: '10', value: 10},
+            ]}
+          />
           <SearchBox />
           <Pagination />
           <Hits
             itemComponent={Movie}
-            hitsPerPage={5}
+            // hitsPerPage={5}
           />
         </div>
       </InstantSearch>
