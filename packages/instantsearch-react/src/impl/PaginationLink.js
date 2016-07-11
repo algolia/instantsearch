@@ -67,7 +67,4 @@ class PaginationLink extends Component {
   }
 }
 
-PaginationLink.propTypes = {
-};
-
 export default PaginationLink;

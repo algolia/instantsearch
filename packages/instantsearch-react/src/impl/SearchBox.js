@@ -6,7 +6,7 @@ import createSearchBox from '../createSearchBox';
 import ClearIcon from './icons/ClearIcon.js';
 import SearchIcon from './icons/SearchIcon.js';
 
-export default createSearchBox(class SearchBox extends Component {
+class SearchBox extends Component {
   static propTypes = {
     // Provided by `createSearchBox`
     query: PropTypes.string,
@@ -144,4 +144,6 @@ export default createSearchBox(class SearchBox extends Component {
       </form>
     );
   }
-});
+}
+
+export default createSearchBox(SearchBox);
