@@ -67,6 +67,8 @@ class Pagination extends Component {
       next: 'Pagination__next',
       page: 'Pagination__page',
       item: 'Pagination__item',
+      itemActive: 'Pagination__item--active',
+      itemDisabled: 'Pagination__item--disabled',
       link: 'Pagination__link',
     },
     labels: {
@@ -114,6 +116,8 @@ class Pagination extends Component {
         url={url}
         theme={{
           item: theme.item,
+          itemActive: theme.itemActive,
+          itemDisabled: theme.itemDisabled,
           link: theme.link,
         }}
       />

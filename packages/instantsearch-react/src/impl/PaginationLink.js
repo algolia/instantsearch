@@ -24,7 +24,7 @@ class PaginationLink extends Component {
         href={url}
         aria-label={ariaLabel}
         onClick={this.onClick}
-        {...th('link', 'link', isActive && 'active')}
+        {...th('link', 'link')}
       >
         {label}
       </a>
@@ -38,7 +38,7 @@ class PaginationLink extends Component {
     return (
       <span
         aria-label={ariaLabel}
-        {...th('link', 'link', 'disabled')}
+        {...th('link', 'link')}
       >
         {label}
       </span>
@@ -46,14 +46,21 @@ class PaginationLink extends Component {
   }
 
   render() {
-    const {isDisabled, theme} = this.props;
+    const {isActive, isDisabled, theme} = this.props;
     const th = themeable(theme);
 
     // "Enable" the element, by making it a link
     const element = isDisabled ? this.renderDisabled() : this.renderLink();
 
     return (
-      <li {...th('item', 'item')}>
+      <li
+        {...th(
+          'item',
+          'item',
+          isActive && 'itemActive',
+          isDisabled && 'itemDisabled'
+        )}
+      >
         {element}
       </li>
     );
