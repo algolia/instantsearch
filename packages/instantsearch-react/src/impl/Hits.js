@@ -3,19 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import config from '../config';
 import createHits from '../createHits';
 
-class DefaultHitComponent extends Component {
-  static propTypes = {
-    hit: PropTypes.object.isRequired,
-  };
-
-  render() {
-    return (
-      <div>
-        {JSON.stringify(this.props.hit)}
-      </div>
-    );
-  }
-}
+import DefaultHitComponent from './DefaultHitComponent';
 
 class Hits extends Component {
   static propTypes = {
