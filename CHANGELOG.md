@@ -1,3 +1,20 @@
+<a name="1.6.2"></a>
+## [1.6.2](https://github.com/algolia/instantsearch.js/compare/v1.6.1...v1.6.2) (2016-07-11)
+
+
+### Bug Fixes
+
+* **paginationLink:** it's aria-label not ariaLabel (#1125) ([70a190c](https://github.com/algolia/instantsearch.js/commit/70a190c))
+* **pricesRange:** fill the form according to the current refinement (#1126) ([12ebde7](https://github.com/algolia/instantsearch.js/commit/12ebde7)), closes [#1009](https://github.com/algolia/instantsearch.js/issues/1009)
+* **rangeSlider:** handles now support stacking (#1129) ([ad394d3](https://github.com/algolia/instantsearch.js/commit/ad394d3))
+* **rangeSlider:** use stats min/max when only user min or max is provided (#1124) ([4348463](https://github.com/algolia/instantsearch.js/commit/4348463)), closes [#1004](https://github.com/algolia/instantsearch.js/issues/1004)
+* **searchBox:** force cursor position to be at the end of the query (#1123) ([8a27769](https://github.com/algolia/instantsearch.js/commit/8a27769)), closes [#946](https://github.com/algolia/instantsearch.js/issues/946)
+* **searchBox:** IE8, IE9 needs to listen for setQuery ([97c166a](https://github.com/algolia/instantsearch.js/commit/97c166a))
+* **searchBox:** update helper query on every keystroke (#1127) ([997c0c2](https://github.com/algolia/instantsearch.js/commit/997c0c2)), closes [#1015](https://github.com/algolia/instantsearch.js/issues/1015)
+* **urlSync:** urls should be safe by default (#1104) ([db833c6](https://github.com/algolia/instantsearch.js/commit/db833c6)), closes [#982](https://github.com/algolia/instantsearch.js/issues/982)
+
+
+
 <a name="1.6.1"></a>
 ## [1.6.1](https://github.com/algolia/instantsearch.js/compare/v1.6.0...v1.6.1) (2016-06-20)
 
