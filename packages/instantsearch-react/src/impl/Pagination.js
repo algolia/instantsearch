@@ -4,7 +4,7 @@ import themeable from 'react-themeable';
 
 import createPagination from '../createPagination';
 
-import {isSpecialClick} from './utils';
+import {getLabel, isSpecialClick} from './utils';
 import PaginationLink from './PaginationLink';
 
 function getPagesDisplayedCount(padding, total) {
@@ -72,17 +72,17 @@ class Pagination extends Component {
       link: 'Pagination__link',
     },
     labels: {
-      previous: () => '‹',
-      next: () => '›',
-      first: () => '«',
-      last: () => '»',
+      previous: '‹',
+      next: '›',
+      first: '«',
+      last: '»',
       page: page => (page + 1).toString(),
     },
     ariaLabels: {
-      previous: () => 'Previous page',
-      next: () => 'Next page',
-      first: () => 'First page',
-      last: () => 'Last page',
+      previous: 'Previous page',
+      next: 'Next page',
+      first: 'First page',
+      last: 'Last page',
       page: page => `Page ${(page + 1).toString()}`,
     },
     showFirst: true,
@@ -107,8 +107,8 @@ class Pagination extends Component {
     return (
       <PaginationLink
         key={key}
-        ariaLabel={ariaLabels[type](pageNumber)}
-        label={labels[type](pageNumber)}
+        ariaLabel={getLabel(ariaLabels[type], pageNumber)}
+        label={getLabel(labels[type], pageNumber)}
         onClick={this.onClick}
         isDisabled={isDisabled}
         isActive={isActive}
