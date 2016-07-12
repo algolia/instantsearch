@@ -16,7 +16,7 @@ class PaginationLink extends Component {
   onClick = this.props.onClick.bind(null, this.props.pageNumber);
 
   renderLink() {
-    const {label, ariaLabel, url, isActive, theme} = this.props;
+    const {label, ariaLabel, url, theme} = this.props;
     const th = themeable(theme);
 
     return (
