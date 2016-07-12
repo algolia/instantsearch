@@ -1,7 +1,12 @@
-// force using index because package 'main' is dist-es5-module/
-let instantsearch = require('../index.js');
+/* eslint-disable import/default */
 
-let search = instantsearch({
+// force using index because package 'main' is dist-es5-module/
+import instantsearch from '../index.js';
+import allItems from './templates/all-items.html';
+import empty from './templates/no-results.html';
+import item from './templates/item.html';
+
+const search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
   indexName: 'instant_search',
@@ -61,8 +66,8 @@ search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits-table',
     templates: {
-      empty: require('./templates/no-results.html'),
-      allItems: require('./templates/all-items.html')
+      empty,
+      allItems
     },
     hitsPerPage: 24
   })
@@ -72,8 +77,8 @@ search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     templates: {
-      empty: require('./templates/no-results.html'),
-      item: require('./templates/item.html')
+      empty,
+      item
     },
     hitsPerPage: 24
   })
@@ -112,16 +117,16 @@ search.addWidget(
       {
         name: 'price',
         label: 'Price',
-        transformData: (data) => { data.name = `$${data.name}`; return data; }
+        transformData: data => { data.name = `$${data.name}`; return data; }
       },
       {
         name: 'price_range',
         label: 'Price range',
-        transformData: (data) => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
+        transformData: data => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
       },
       {
         name: 'free_shipping',
-        transformData: (data) => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
+        transformData: data => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
       }
     ]
   })
@@ -226,7 +231,7 @@ search.addWidget(
     templates: {
       header: 'Price ranges'
     },
-    transformData: function(data) {
+    transformData(data) {
       data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
       return data;
     }
@@ -287,8 +292,8 @@ search.addWidget(
     max: 500,
     step: 10,
     tooltips: {
-      format: function(rawValue) {
-        return '$' + Math.round(rawValue).toLocaleString();
+      format(rawValue) {
+        return `$${Math.round(rawValue).toLocaleString()}`;
       }
     }
   })
@@ -335,15 +340,15 @@ search.addWidget(
     operator: '>=',
     attributeName: 'popularity',
     options: [
-      { label: 'Default', value: 0 },
-      { label: 'Top 10', value: 9991 },
-      { label: 'Top 100', value: 9901 },
-      { label: 'Top 500', value: 9501 }
+      {label: 'Default', value: 0},
+      {label: 'Top 10', value: 9991},
+      {label: 'Top 100', value: 9901},
+      {label: 'Top 500', value: 9501}
     ]
   })
 );
 
-search.once('render', function() {
+search.once('render', () => {
   [...document.querySelectorAll('.smooth-search--hidden')]
     .forEach(element => element.classList.remove('smooth-search--hidden'));
 });

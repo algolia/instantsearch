@@ -1,5 +1,3 @@
 dist/
 dist-es5-module/
 docs/
-dev/app.js
-node_modules/
