@@ -5,6 +5,7 @@ import createHitsPerPage from '../createHitsPerPage';
 
 class HitsPerPage extends Component {
   static propTypes = {
+    // Provided by `createHitsPerPage`
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
 
