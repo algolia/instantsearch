@@ -9,9 +9,17 @@ export function isSpecialClick(event) {
   );
 }
 
-export function getTranslation(translation, ...params) {
+export function getTranslation(key, defaults, custom, ...params) {
+  const translation =
+    {}.hasOwnProperty.call(custom, key) ?
+      custom[key] :
+      defaults[key];
   if (typeof translation === 'function') {
     return translation(...params);
   }
   return translation;
+}
+
+export function capitalize(key) {
+  return key.length === 0 ? '' : `${key[0].toUpperCase()}${key.slice(1)}`;
 }

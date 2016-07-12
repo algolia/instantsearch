@@ -5,6 +5,11 @@ import createHitsPerPage from '../createHitsPerPage';
 
 import {getTranslation} from './utils';
 
+const defaultTranslations = {
+  label: 'Hits per page',
+  value: v => v.toString(),
+};
+
 class HitsPerPage extends Component {
   static propTypes = {
     // Provided by `createHitsPerPage`
@@ -35,14 +40,11 @@ class HitsPerPage extends Component {
 
     return (
       <label>
-        {getTranslation(translations.label)}
+        {getTranslation('label', defaultTranslations, translations)}
         <select value={hitsPerPage} onChange={this.onChange}>
           {values.map(v =>
-            <option
-              key={v}
-              value={v}
-            >
-              {getTranslation(translations.value, v)}
+            <option key={v} value={v}>
+              {getTranslation('value', defaultTranslations, translations, v)}
             </option>
           )}
         </select>

@@ -5,6 +5,14 @@ import createSearchBox from '../createSearchBox';
 
 import {getTranslation} from './utils';
 
+const defaultTranslations = {
+  submit: null,
+  reset: null,
+  submitTitle: 'Submit your search query.',
+  resetTitle: 'Clear the search query.',
+  placeholder: 'Search your website',
+};
+
 class SearchBox extends Component {
   static propTypes = {
     // Provided by `createSearchBox`
@@ -31,13 +39,7 @@ class SearchBox extends Component {
       submit: 'SearchBox__submit',
       reset: 'SearchBox__reset',
     },
-    translations: {
-      submit: null,
-      reset: null,
-      submitTitle: 'Submit your search query.',
-      resetTitle: 'Clear the search query.',
-      placeholder: 'Search your website',
-    },
+    translations: defaultTranslations,
     poweredBy: false,
     autoFocus: false,
     searchAsYouType: true,
@@ -118,7 +120,11 @@ class SearchBox extends Component {
           <input
             ref={this.onInputMount}
             type="search"
-            placeholder={getTranslation(translations.placeholder)}
+            placeholder={getTranslation(
+              'placeholder',
+              defaultTranslations,
+              translations
+            )}
             autoFocus={autoFocus}
             autoComplete={false}
             required
@@ -128,17 +134,25 @@ class SearchBox extends Component {
           />
           <button
             type="submit"
-            title={getTranslation(translations.submitTitle)}
+            title={getTranslation(
+              'submitTitle',
+              defaultTranslations,
+              translations
+            )}
             {...th('submit', 'submit')}
           >
-            {getTranslation(translations.submit)}
+            {getTranslation('submit', defaultTranslations, translations)}
           </button>
           <button
             type="reset"
-            title={getTranslation(translations.resetTitle)}
+            title={getTranslation(
+              'resetTitle',
+              defaultTranslations,
+              translations
+            )}
             {...th('reset', 'reset')}
           >
-            {getTranslation(translations.reset)}
+            {getTranslation('reset', defaultTranslations, translations)}
           </button>
         </div>
       </form>
