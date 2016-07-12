@@ -9,9 +9,9 @@ export function isSpecialClick(event) {
   );
 }
 
-export function getLabel(label, ...params) {
-  if (typeof label === 'function') {
-    return label(...params);
+export function getTranslation(translation, ...params) {
+  if (typeof translation === 'function') {
+    return translation(...params);
   }
-  return label;
+  return translation;
 }

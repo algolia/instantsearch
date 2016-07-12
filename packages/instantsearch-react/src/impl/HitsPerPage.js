@@ -3,7 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import config from '../config';
 import createHitsPerPage from '../createHitsPerPage';
 
-import {getLabel} from './utils';
+import {getTranslation} from './utils';
 
 class HitsPerPage extends Component {
   static propTypes = {
@@ -11,17 +11,15 @@ class HitsPerPage extends Component {
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
 
-    labels: PropTypes.object,
+    translations: PropTypes.object,
     defaultValue: PropTypes.number,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.number,
-    })).isRequired,
+    values: PropTypes.arrayOf(PropTypes.number).isRequired,
   };
 
   static defaultProps = {
-    labels: {
+    translations: {
       label: 'Hits per page',
+      value: v => v.toString(),
     },
   };
 
@@ -30,21 +28,21 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const {labels, hitsPerPage, options} = this.props;
+    const {translations, hitsPerPage, values} = this.props;
     if (typeof hitsPerPage === 'undefined') {
       return null;
     }
 
     return (
       <label>
-        {getLabel(labels.label)}
+        {getTranslation(translations.label)}
         <select value={hitsPerPage} onChange={this.onChange}>
-          {options.map(option =>
+          {values.map(v =>
             <option
-              key={option.value}
-              value={option.value}
+              key={v}
+              value={v}
             >
-              {option.label}
+              {getTranslation(translations.value, v)}
             </option>
           )}
         </select>

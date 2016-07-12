@@ -3,7 +3,7 @@ import themeable from 'react-themeable';
 
 import createSearchBox from '../createSearchBox';
 
-import {getLabel} from './utils';
+import {getTranslation} from './utils';
 
 class SearchBox extends Component {
   static propTypes = {
@@ -13,7 +13,7 @@ class SearchBox extends Component {
     search: PropTypes.func.isRequired,
 
     theme: PropTypes.object,
-    labels: PropTypes.object,
+    translations: PropTypes.object,
     placeholder: PropTypes.string,
     poweredBy: PropTypes.bool,
     autoFocus: PropTypes.bool,
@@ -31,11 +31,13 @@ class SearchBox extends Component {
       submit: 'SearchBox__submit',
       reset: 'SearchBox__reset',
     },
-    labels: {
-      search: null,
-      clear: null,
+    translations: {
+      submit: null,
+      reset: null,
+      submitTitle: 'Submit your search query.',
+      resetTitle: 'Clear the search query.',
+      placeholder: 'Search your website',
     },
-    placeholder: 'Search your website',
     poweredBy: false,
     autoFocus: false,
     searchAsYouType: true,
@@ -96,8 +98,7 @@ class SearchBox extends Component {
   render() {
     const {
       theme,
-      labels,
-      placeholder,
+      translations,
       autoFocus,
     } = this.props;
     const {query} = this.state;
@@ -117,7 +118,7 @@ class SearchBox extends Component {
           <input
             ref={this.onInputMount}
             type="search"
-            placeholder={placeholder}
+            placeholder={getTranslation(translations.placeholder)}
             autoFocus={autoFocus}
             autoComplete={false}
             required
@@ -127,17 +128,17 @@ class SearchBox extends Component {
           />
           <button
             type="submit"
-            title="Submit your search query."
+            title={getTranslation(translations.submitTitle)}
             {...th('submit', 'submit')}
           >
-            {getLabel(labels.search)}
+            {getTranslation(translations.submit)}
           </button>
           <button
             type="reset"
-            title="Clear the search query."
+            title={getTranslation(translations.resetTitle)}
             {...th('reset', 'reset')}
           >
-            {getLabel(labels.clear)}
+            {getTranslation(translations.reset)}
           </button>
         </div>
       </form>

@@ -4,7 +4,7 @@ import themeable from 'react-themeable';
 
 import createPagination from '../createPagination';
 
-import {getLabel, isSpecialClick} from './utils';
+import {getTranslation, isSpecialClick} from './utils';
 import PaginationLink from './PaginationLink';
 
 function getPagesDisplayedCount(padding, total) {
@@ -48,8 +48,7 @@ class Pagination extends Component {
     page: PropTypes.number,
     refine: PropTypes.func.isRequired,
 
-    labels: PropTypes.object,
-    ariaLabels: PropTypes.object,
+    translations: PropTypes.object,
     theme: PropTypes.object,
     createURL: PropTypes.func,
     showFirst: PropTypes.bool,
@@ -71,19 +70,17 @@ class Pagination extends Component {
       itemDisabled: 'Pagination__item--disabled',
       link: 'Pagination__link',
     },
-    labels: {
+    translations: {
       previous: '‹',
       next: '›',
       first: '«',
       last: '»',
       page: page => (page + 1).toString(),
-    },
-    ariaLabels: {
-      previous: 'Previous page',
-      next: 'Next page',
-      first: 'First page',
-      last: 'Last page',
-      page: page => `Page ${(page + 1).toString()}`,
+      ariaPrevious: 'Previous page',
+      ariaNext: 'Next page',
+      ariaFirst: 'First page',
+      ariaLast: 'Last page',
+      ariaPage: page => `Page ${(page + 1).toString()}`,
     },
     showFirst: true,
     showLast: false,
@@ -91,24 +88,26 @@ class Pagination extends Component {
   };
 
   renderPageLink({
-    type,
+    translation,
     pageNumber,
     isActive = false,
   }) {
-    const {createURL, theme, nbPages, page, labels, ariaLabels} = this.props;
+    const {createURL, theme, nbPages, page, translations} = this.props;
     const isDisabled =
       !isActive && page === pageNumber ||
       pageNumber < 0 ||
       pageNumber >= nbPages;
     // @TODO: Default createURL that works with URL sync
     const url = createURL && !isDisabled ? createURL(pageNumber) : '#';
-    const key = type + pageNumber;
+    const key = translation + pageNumber;
+    const ariaTranslation =
+      `aria${translation[0].toUpperCase()}${translation.slice(1)}`;
 
     return (
       <PaginationLink
         key={key}
-        ariaLabel={getLabel(ariaLabels[type], pageNumber)}
-        label={getLabel(labels[type], pageNumber)}
+        label={getTranslation(translations[translation], pageNumber)}
+        ariaLabel={getTranslation(translations[ariaTranslation], pageNumber)}
         onClick={this.onClick}
         isDisabled={isDisabled}
         isActive={isActive}
@@ -126,28 +125,28 @@ class Pagination extends Component {
 
   renderPreviousPageLink() {
     return this.renderPageLink({
-      type: 'previous',
+      translation: 'previous',
       pageNumber: this.props.page - 1,
     });
   }
 
   renderNextPageLink() {
     return this.renderPageLink({
-      type: 'next',
+      translation: 'next',
       pageNumber: this.props.page + 1,
     });
   }
 
   renderFirstPageLink() {
     return this.renderPageLink({
-      type: 'first',
+      translation: 'first',
       pageNumber: 0,
     });
   }
 
   renderLastPageLink() {
     return this.renderPageLink({
-      type: 'last',
+      translation: 'last',
       pageNumber: this.props.nbPages - 1,
     });
   }
@@ -156,7 +155,7 @@ class Pagination extends Component {
     const {page, nbPages, padding} = this.props;
     return getPages(page, nbPages, padding).map(pageNumber =>
       this.renderPageLink({
-        type: 'page',
+        translation: 'page',
         isActive: pageNumber === this.props.page,
         pageNumber,
       })
