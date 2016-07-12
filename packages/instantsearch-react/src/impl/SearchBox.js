@@ -3,8 +3,7 @@ import themeable from 'react-themeable';
 
 import createSearchBox from '../createSearchBox';
 
-import ClearIcon from './icons/ClearIcon.js';
-import SearchIcon from './icons/SearchIcon.js';
+import {getLabel} from './utils';
 
 class SearchBox extends Component {
   static propTypes = {
@@ -14,13 +13,12 @@ class SearchBox extends Component {
     search: PropTypes.func.isRequired,
 
     theme: PropTypes.object,
+    labels: PropTypes.object,
     placeholder: PropTypes.string,
     poweredBy: PropTypes.bool,
     autoFocus: PropTypes.bool,
     searchAsYouType: PropTypes.bool,
     queryHook: PropTypes.func,
-    searchLabel: PropTypes.node,
-    clearLabel: PropTypes.node,
   };
 
   static defaultProps = {
@@ -33,13 +31,15 @@ class SearchBox extends Component {
       submit: 'SearchBox__submit',
       reset: 'SearchBox__reset',
     },
+    labels: {
+      search: null,
+      clear: null,
+    },
     placeholder: 'Search your website',
     poweredBy: false,
     autoFocus: false,
     searchAsYouType: true,
     queryHook: (query, search) => search(query),
-    searchLabel: <SearchIcon />,
-    clearLabel: <ClearIcon />,
   };
 
   constructor(props) {
@@ -96,10 +96,9 @@ class SearchBox extends Component {
   render() {
     const {
       theme,
+      labels,
       placeholder,
       autoFocus,
-      searchLabel,
-      clearLabel,
     } = this.props;
     const {query} = this.state;
     const th = themeable(theme);
@@ -131,14 +130,14 @@ class SearchBox extends Component {
             title="Submit your search query."
             {...th('submit', 'submit')}
           >
-            {searchLabel}
+            {getLabel(labels.search)}
           </button>
           <button
             type="reset"
             title="Clear the search query."
             {...th('reset', 'reset')}
           >
-            {clearLabel}
+            {getLabel(labels.clear)}
           </button>
         </div>
       </form>

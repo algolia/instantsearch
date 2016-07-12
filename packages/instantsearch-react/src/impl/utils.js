@@ -8,3 +8,10 @@ export function isSpecialClick(event) {
     event.shiftKey
   );
 }
+
+export function getLabel(label, ...params) {
+  if (typeof label === 'function') {
+    return label(...params);
+  }
+  return label;
+}
