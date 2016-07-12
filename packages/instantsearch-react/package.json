@@ -2,11 +2,10 @@
   "name": "instantsearch-react",
   "private": true,
   "scripts": {
-    "examples": "babel-node $(which webpack-dev-server) --config webpack.examples.config.js --hot --content-base examples/static",
+    "examples": "webpack-dev-server --config webpack.examples.config.babel.js --hot --content-base examples/static",
     "eslint": "eslint \"**/*.js\""
   },
   "devDependencies": {
-    "babel-cli": "^6.10.1",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.10.2",
