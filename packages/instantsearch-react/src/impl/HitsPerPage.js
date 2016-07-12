@@ -3,12 +3,15 @@ import React, {PropTypes, Component} from 'react';
 import config from '../config';
 import createHitsPerPage from '../createHitsPerPage';
 
+import {getLabel} from './utils';
+
 class HitsPerPage extends Component {
   static propTypes = {
     // Provided by `createHitsPerPage`
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
 
+    labels: PropTypes.object,
     defaultValue: PropTypes.number,
     options: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string,
@@ -16,27 +19,36 @@ class HitsPerPage extends Component {
     })).isRequired,
   };
 
+  static defaultProps = {
+    labels: {
+      label: 'Hits per page',
+    },
+  };
+
   onChange = e => {
     this.props.refine(e.target.value);
   };
 
   render() {
-    const {hitsPerPage, options} = this.props;
+    const {labels, hitsPerPage, options} = this.props;
     if (typeof hitsPerPage === 'undefined') {
       return null;
     }
 
     return (
-      <select value={hitsPerPage} onChange={this.onChange}>
-        {options.map(option =>
-          <option
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </option>
-        )}
-      </select>
+      <label>
+        {getLabel(labels.label)}
+        <select value={hitsPerPage} onChange={this.onChange}>
+          {options.map(option =>
+            <option
+              key={option.value}
+              value={option.value}
+            >
+              {option.label}
+            </option>
+          )}
+        </select>
+      </label>
     );
   }
 }
