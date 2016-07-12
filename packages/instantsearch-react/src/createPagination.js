@@ -23,6 +23,6 @@ export default function createPagination(Composed) {
 
   return connect(state => ({
     nbPages: state.searchResults && state.searchResults.nbPages,
-    page: state.searchResults && state.searchResults.page,
+    page: state.searchParameters.page,
   }))(PaginationWrapper);
 }
