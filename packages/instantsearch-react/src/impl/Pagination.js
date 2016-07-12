@@ -56,7 +56,8 @@ class Pagination extends Component {
     showNext: PropTypes.bool,
     showLast: PropTypes.bool,
     scrollTo: PropTypes.oneOf(PropTypes.string, PropTypes.instanceOf(Node)),
-    padding: PropTypes.number,
+    pagesPadding: PropTypes.number,
+    maxPages: PropTypes.number,
   };
 
   static defaultProps = {
@@ -88,7 +89,8 @@ class Pagination extends Component {
     showPrevious: true,
     showNext: true,
     showLast: false,
-    padding: 3,
+    pagesPadding: 3,
+    maxPages: Infinity,
   };
 
   renderPageLink({
@@ -96,11 +98,18 @@ class Pagination extends Component {
     pageNumber,
     isActive = false,
   }) {
-    const {createURL, theme, nbPages, page, translations} = this.props;
+    const {
+      createURL,
+      theme,
+      nbPages,
+      maxPages,
+      page,
+      translations,
+    } = this.props;
     const isDisabled =
       !isActive && page === pageNumber ||
       pageNumber < 0 ||
-      pageNumber >= nbPages;
+      pageNumber >= Math.min(maxPages, nbPages);
     // @TODO: Default createURL that works with URL sync
     const url = createURL && !isDisabled ? createURL(pageNumber) : '#';
     const key = translation + pageNumber;
@@ -149,15 +158,17 @@ class Pagination extends Component {
   }
 
   renderLastPageLink() {
+    const {nbPages, maxPages} = this.props;
     return this.renderPageLink({
       translation: 'last',
-      pageNumber: this.props.nbPages - 1,
+      pageNumber: Math.min(nbPages, maxPages) - 1,
     });
   }
 
   renderPageLinks() {
-    const {page, nbPages, padding} = this.props;
-    return getPages(page, nbPages, padding).map(pageNumber =>
+    const {page, nbPages, maxPages, pagesPadding} = this.props;
+    const total = Math.min(nbPages, maxPages);
+    return getPages(page, total, pagesPadding).map(pageNumber =>
       this.renderPageLink({
         translation: 'page',
         isActive: pageNumber === this.props.page,
