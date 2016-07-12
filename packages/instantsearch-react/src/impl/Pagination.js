@@ -52,6 +52,8 @@ class Pagination extends Component {
     theme: PropTypes.object,
     createURL: PropTypes.func,
     showFirst: PropTypes.bool,
+    showPrevious: PropTypes.bool,
+    showNext: PropTypes.bool,
     showLast: PropTypes.bool,
     scrollTo: PropTypes.oneOf(PropTypes.string, PropTypes.instanceOf(Node)),
     padding: PropTypes.number,
@@ -83,6 +85,8 @@ class Pagination extends Component {
       ariaPage: page => `Page ${(page + 1).toString()}`,
     },
     showFirst: true,
+    showPrevious: true,
+    showNext: true,
     showLast: false,
     padding: 3,
   };
@@ -176,6 +180,8 @@ class Pagination extends Component {
     const {
       nbPages,
       showFirst,
+      showPrevious,
+      showNext,
       showLast,
       theme,
     } = this.props;
@@ -188,9 +194,9 @@ class Pagination extends Component {
     return (
       <ul {...th('root', 'root')}>
         {showFirst && this.renderFirstPageLink()}
-        {this.renderPreviousPageLink()}
+        {showPrevious && this.renderPreviousPageLink()}
         {this.renderPageLinks()}
-        {this.renderNextPageLink()}
+        {showNext && this.renderNextPageLink()}
         {showLast && this.renderLastPageLink()}
       </ul>
     );
