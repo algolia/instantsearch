@@ -24,6 +24,9 @@ class SearchBox extends Component {
     translations: PropTypes.object,
     placeholder: PropTypes.string,
     poweredBy: PropTypes.bool,
+    focusShortcuts: PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    ),
     autoFocus: PropTypes.bool,
     searchAsYouType: PropTypes.bool,
     queryHook: PropTypes.func,
@@ -41,6 +44,7 @@ class SearchBox extends Component {
     },
     translations: defaultTranslations,
     poweredBy: false,
+    focusShortcuts: [],
     autoFocus: false,
     searchAsYouType: true,
     queryHook: (query, search) => search(query),
@@ -54,8 +58,49 @@ class SearchBox extends Component {
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+  }
+
   onInputMount = input => {
     this.input = input;
+  };
+
+  // From https://github.com/algolia/autocomplete.js/pull/86
+  onKeyDown = e => {
+    if (!this.props.focusShortcuts) {
+      return;
+    }
+
+    const shortcuts = this.props.focusShortcuts.map(key =>
+      typeof key === 'string' ? key.toUpperCase().charCodeAt(0) : key
+    );
+
+    const elt = e.target || e.srcElement;
+    const tagName = elt.tagName;
+    if (
+      elt.isContentEditable ||
+      tagName === 'INPUT' ||
+      tagName === 'SELECT' ||
+      tagName === 'TEXTAREA'
+    ) {
+      // already in an input
+      return;
+    }
+
+    const which = e.which || e.keyCode;
+    if (shortcuts.indexOf(which) === -1) {
+      // not the right shortcut
+      return;
+    }
+
+    this.input.focus();
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   onSubmit = e => {
