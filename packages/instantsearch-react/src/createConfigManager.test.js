@@ -2,7 +2,6 @@
 
 import createConfigManager from './createConfigManager';
 jest.unmock('./createConfigManager');
-jest.unmock('lodash/array/union');
 
 function testConcats(key) {
   const configManager = createConfigManager();

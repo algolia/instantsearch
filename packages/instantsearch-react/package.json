@@ -40,7 +40,8 @@
     "testRegex": "\\.test\\.js$",
     "unmockedModulePathPatterns": [
       "node_modules/react/",
-      "node_modules/enzyme/"
+      "node_modules/enzyme/",
+      "node_modules/lodash/"
     ]
   }
 }
