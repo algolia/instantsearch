@@ -5,7 +5,6 @@ import {shallow, mount} from 'enzyme';
 
 import config from './config';
 jest.unmock('./config');
-jest.unmock('./configManagerShape');
 
 function mockConfigManager() {
   return {
