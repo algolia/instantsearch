@@ -1,5 +1,7 @@
+import union from 'lodash/array/union';
+
 function maybeConcat(dst, src) {
-  return src ? dst.concat(src) : dst;
+  return src ? union(src, dst) : dst;
 }
 
 function makeConfig(res, config) {
