@@ -1,5 +1,3 @@
-import algoliasearchHelper from 'algoliasearch-helper';
-
 function maybeConcat(dst, src) {
   return src ? dst.concat(src) : dst;
 }
