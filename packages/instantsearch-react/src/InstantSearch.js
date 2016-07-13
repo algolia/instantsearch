@@ -12,8 +12,6 @@ class InstantSearch extends Component {
     appId: PropTypes.string,
     apiKey: PropTypes.string,
     indexName: PropTypes.string,
-    client: PropTypes.object,
-    helper: PropTypes.instanceOf(algoliasearchHelper.AlgoliaSearchHelper),
   };
 
   static childContextTypes = {
@@ -23,8 +21,8 @@ class InstantSearch extends Component {
   constructor(props) {
     super(props);
 
-    this.client = props.client || algoliasearch(props.appId, props.apiKey);
-    this.helper = props.helper || algoliasearchHelper(this.client, props.indexName);
+    const client = algoliasearch(props.appId, props.apiKey);
+    const helper = this.helper = algoliasearchHelper(client, props.indexName);
 
     this.configManager = createConfigManager(this.helper);
   }
