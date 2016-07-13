@@ -62,8 +62,8 @@ Use a built version of **instantsearch.js** from the [jsDelivr](https://www.jsde
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight html %}
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
-<script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 {% endhighlight %}
   </div>
 </div>
@@ -213,7 +213,7 @@ This example shows you how to create a very simple search results page that incl
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     <title>instantsearch.js basics</title>
   </head>
   <body>
@@ -221,7 +221,7 @@ This example shows you how to create a very simple search results page that incl
     <div id="hits-container"></div>
     <div id="pagination-container"></div>
 
-    <script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
     <script>
       var search = instantsearch({
         appId: 'YourApplicationID',
