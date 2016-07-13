@@ -31,16 +31,45 @@ function makeConfig(res, config) {
   };
 }
 
+const reasonMessage =
+  'This usually means that you have rendered both a `<Hits>` component ' +
+  'with a `hitsPerPage` prop and a `<HitsPerPage>` component. In this ' +
+  'case, you should remove the  `hitsPerPage` prop from the `<Hits>` ' +
+  'component.';
+
+function testConflict(configs, config, ignore = null) {
+  if (
+    typeof config.hitsPerPage !== 'undefined' &&
+    configs.some(c =>
+      c !== ignore && typeof c.defaultHitsPerPage !== 'undefined'
+    ) ||
+    typeof config.defaultHitsPerPage !== 'undefined' &&
+    configs.some(c =>
+      c !== ignore && typeof c.hitsPerPage !== 'undefined'
+    )
+  ) {
+    throw new Error(
+      /* eslint-disable prefer-template */
+      'Config conflict: a component is defining a `hitsPerPage` in its ' +
+      'config, but a `defaultHitsPerPage` is already set.\n' +
+      reasonMessage
+      /* eslint-enable prefer-template */
+    );
+  }
+}
+
 export default function createConfigManager(onApply) {
   const configs = [];
   let updateQueued = false;
 
   return {
     register(config) {
+      testConflict(configs, config);
       configs.push(config);
       updateQueued = true;
     },
     swap(config, nextConfig) {
+      testConflict(configs, nextConfig, config);
       configs.splice(configs.indexOf(config), 1, nextConfig);
       updateQueued = true;
     },
@@ -61,12 +90,11 @@ export default function createConfigManager(onApply) {
         configs.some(c => typeof c.hitsPerPage !== 'undefined')
       ) {
         throw new Error(
+          /* eslint-disable prefer-template */
           'Config conflict: a component is defining `hitsPerPage` in its ' +
           'config, but the `AlgoliaSearchHelper` already has one.\n' +
-          'This usually means that you have rendered both a `<Hits>` component ' +
-          'with a `hitsPerPage` prop and a `<HitsPerPage>` component. In this ' +
-          'case, you should remove the  `hitsPerPage` prop from the `<Hits>` ' +
-          'component.'
+          reasonMessage
+          /* eslint-enable prefer-template */
         );
       }
       return configs.reduce(makeConfig, initialState);
