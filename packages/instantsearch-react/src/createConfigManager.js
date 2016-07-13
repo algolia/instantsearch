@@ -8,7 +8,7 @@ function makeConfig(res, config) {
   let hitsPerPage;
   if (typeof config.hitsPerPage !== 'undefined') {
     hitsPerPage = config.hitsPerPage;
-  } else if (typeof config.hitsPerPage === 'undefined') {
+  } else if (typeof res.hitsPerPage === 'undefined') {
     hitsPerPage = config.defaultHitsPerPage;
   } else {
     hitsPerPage = res.hitsPerPage;
