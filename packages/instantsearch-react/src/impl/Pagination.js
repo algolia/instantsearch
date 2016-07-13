@@ -98,7 +98,6 @@ class Pagination extends Component {
   componentDidUpdate(prevProps) {
     const {scrollTo, page} = this.props;
     if (scrollTo && page !== prevProps.page) {
-      console.log(scrollTo, page);
       const el =
         scrollTo instanceof Node ?
           scrollTo :
