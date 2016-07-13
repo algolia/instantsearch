@@ -3,6 +3,15 @@ function maybeConcat(dst, src) {
 }
 
 function makeConfig(res, config) {
+  let hitsPerPage;
+  if (typeof config.hitsPerPage !== 'undefined') {
+    hitsPerPage = config.hitsPerPage;
+  } else if (typeof config.hitsPerPage === 'undefined') {
+    hitsPerPage = config.defaultHitsPerPage;
+  } else {
+    hitsPerPage = res.hitsPerPage;
+  }
+
   return {
     ...res,
     facets: maybeConcat(res.facets, config.facets),
@@ -16,12 +25,7 @@ function makeConfig(res, config) {
       typeof config.valuesPerFacet !== 'undefined' ?
         Math.max(res.maxValuesPerFacet, config.valuesPerFacet) :
         res.maxValuesPerFacet,
-    hitsPerPage:
-      typeof config.hitsPerPage !== 'undefined' ?
-        config.hitsPerPage :
-      typeof res.hitsPerPage === 'undefined' ?
-        config.defaultHitsPerPage :
-        res.hitsPerPage,
+    hitsPerPage,
   };
 }
 
