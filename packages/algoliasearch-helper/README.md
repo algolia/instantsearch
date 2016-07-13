@@ -98,7 +98,7 @@ See more examples in the [examples folder](examples/)
 ### AngularJS module
 
 ```js
-<script src="//cdn.jsdelivr.net/algoliasearch/3/algoliasearch.angular.js"></script>
+<script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.angular.js"></script>
 <script src="dist/algoliasearch.helper.min.js"></script>
 
 <script type="text/javascript">
@@ -140,7 +140,7 @@ You can see the full [Angular example here](examples/instantsearch%2Bhelper%2Ban
 
 Use our [jsDelivr](http://www.jsdelivr.com/) build:
 
-`<script src="//cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
+`<script src="https://cdn.jsdelivr.net/algoliasearch.helper/2/algoliasearch.helper.min.js"></script>`
 
 ### With NPM
 
@@ -1375,7 +1375,7 @@ To get IE8 support you will have to include this script before the helper:
 
 ```html
 <!--[if lte IE 8]>
-  <script src="//cdn.jsdelivr.net/core-js/2/shim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/core-js/2/shim.min.js"></script>
 <![endif]-->
 ```
 
