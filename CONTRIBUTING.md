@@ -60,6 +60,7 @@ Since instantsearch.js is a UI library, if your issue is UI related then adding 
 
 Requirements:
 - [Node.js](https://nodejs.org/en/)
+- npm@3 (comes with latest Node.js)
 - [Ruby](https://www.ruby-lang.org/en/)
 - [Bundler](http://bundler.io/)
 
