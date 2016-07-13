@@ -5,6 +5,7 @@ import SearchBox from '../src/impl/SearchBox';
 import Hits from '../src/impl/Hits';
 import Pagination from '../src/impl/Pagination';
 import HitsPerPage from '../src/impl/HitsPerPage';
+import ScrollTo from '../src/impl/ScrollTo';
 
 import RefinementList from './RefinementList';
 
@@ -44,15 +45,14 @@ class App extends Component {
         <div>
           <button onClick={this.onSwitchClick}>Switch facet</button>
           <RefinementList attributeName={this.state.facet} />
-          <HitsPerPage
-            defaultValue={5}
-            options={[
-              {label: '5', value: 5},
-              {label: '10', value: 10},
-            ]}
-          />
-          <SearchBox />
-          <Pagination />
+          <ScrollTo>
+            <HitsPerPage
+              defaultValue={5}
+              values={[5, 10]}
+            />
+          </ScrollTo>
+          <SearchBox focusShortcuts={['s']} />
+          <Pagination showLast maxPages={10} translations={{ next: 'Next' }} />
           <Hits
             itemComponent={Movie}
             // hitsPerPage={5}
