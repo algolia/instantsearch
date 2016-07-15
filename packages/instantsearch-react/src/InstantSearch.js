@@ -31,7 +31,10 @@ class InstantSearch extends Component {
     // This is important because we do not want to persist the default config
     // in the provided helper's state, which controls the URL sync. The provided
     // helper should only ever be changed from a user action.
-    const masterHelper = algoliasearchHelper(helper.client, helper.index);
+    const masterHelper = algoliasearchHelper(
+      helper.client,
+      helper.getState().index
+    );
 
     this.originalSearch = helper.search;
 
