@@ -5,7 +5,8 @@
     "examples": "webpack-dev-server --config webpack.examples.config.babel.js --hot --content-base examples/static",
     "lint": "eslint \"**/*.js\"",
     "test": "jest --bail --no-cache",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test:update-snapshots": "jest -u"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
