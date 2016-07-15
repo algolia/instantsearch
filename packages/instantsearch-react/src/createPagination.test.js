@@ -1,5 +1,8 @@
 /* eslint-env jest, jasmine */
 
+import React from 'react';
+import {mount, shallow} from 'enzyme';
+
 jest.mock('algoliasearch-helper-provider/src/connect', () =>
   require.requireActual(
     '../__mocks__/algoliasearch-helper-provider/src/connect'
@@ -14,36 +17,52 @@ jest.unmock('./createPagination');
 
 describe('createPagination', () => {
   it('provides the correct props to the component', () => {
-    createPagination(props => {
+    const Pagination = createPagination(props => {
       expect(Object.keys(props).length).toBe(4);
       expect(props.page).toBe(666);
       expect(props.nbPages).toBe(null);
       expect(typeof props.refine).toBe('function');
       expect(props.helper).toEqual(jasmine.any(AlgoliaSearchHelper));
       return null;
-    })({
-      searchParameters: {page: 666},
-      searchResults: null,
     });
+    shallow(
+      <Pagination
+        __state={{
+          searchParameters: {page: 666},
+          searchResults: null,
+        }}
+      />
+    );
 
-    createPagination(props => {
+    const PaginationWithSearchResults = createPagination(props => {
       expect(Object.keys(props).length).toBe(4);
       expect(props.page).toBe(666);
       expect(props.nbPages).toBe(999);
       expect(typeof props.refine).toBe('function');
       expect(props.helper).toEqual(jasmine.any(AlgoliaSearchHelper));
       return null;
-    })({
-      searchParameters: {page: 666},
-      searchResults: {nbPages: 999},
     });
+
+    shallow(
+      <PaginationWithSearchResults
+        __state={{
+          searchParameters: {page: 666},
+          searchResults: {nbPages: 999},
+        }}
+      />
+    );
   });
 
   it('refines the page parameter', () => {
     const Dummy = () => null;
-    const wrapper = createPagination(Dummy)({
-      searchParameters: {page: 666},
-    });
+    const Pagination = createPagination(Dummy);
+    const wrapper = mount(
+      <Pagination
+        __state={{
+          searchParameters: {page: 666},
+        }}
+      />
+    );
     const {helper, refine} = wrapper.find(Dummy).props();
     refine(667);
     expect(helper.getState().page).toBe(667);

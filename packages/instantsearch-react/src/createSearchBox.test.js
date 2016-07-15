@@ -1,5 +1,8 @@
 /* eslint-env jest, jasmine */
 
+import React from 'react';
+import {mount, shallow} from 'enzyme';
+
 jest.mock('algoliasearch-helper-provider/src/connect', () =>
   require.requireActual(
     '../__mocks__/algoliasearch-helper-provider/src/connect'
@@ -14,21 +17,27 @@ jest.unmock('./createSearchBox');
 
 describe('createSearchBox', () => {
   it('provides the correct props to the component', () => {
-    createSearchBox(props => {
+    const SearchBox = createSearchBox(props => {
       expect(Object.keys(props).length).toBe(4);
       expect(props.query).toBe('foo');
       expect(typeof props.setQuery).toBe('function');
       expect(typeof props.setQuery).toBe('function');
       expect(props.helper).toEqual(jasmine.any(AlgoliaSearchHelper));
       return null;
-    })({searchParameters: {query: 'foo'}});
+    });
+    shallow(<SearchBox __state={{searchParameters: {query: 'foo'}}} />);
   });
 
   it('can set the query parameter', () => {
     const Dummy = () => null;
-    const wrapper = createSearchBox(Dummy)({
-      searchParameters: {query: 'foo'},
-    });
+    const SearchBox = createSearchBox(Dummy);
+    const wrapper = mount(
+      <SearchBox
+        __state={{
+          searchParameters: {query: 'foo'},
+        }}
+      />
+    );
     const {helper, setQuery} = wrapper.find(Dummy).props();
     setQuery('bar');
     expect(helper.getState().query).toBe('bar');
@@ -37,9 +46,14 @@ describe('createSearchBox', () => {
 
   it('can execute a search', () => {
     const Dummy = () => null;
-    const wrapper = createSearchBox(Dummy)({
-      searchParameters: {query: 'foo'},
-    });
+    const SearchBox = createSearchBox(Dummy);
+    const wrapper = mount(
+      <SearchBox
+        __state={{
+          searchParameters: {query: 'foo'},
+        }}
+      />
+    );
     const {helper, search} = wrapper.find(Dummy).props();
     search();
     expect(helper.search.mock.calls.length).toBe(1);

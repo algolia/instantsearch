@@ -1,18 +1,20 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import {mount} from 'enzyme';
 import algoliasearchHelper from 'algoliasearch-helper';
+import omit from 'lodash/object/omit';
 jest.unmock('algoliasearch-helper');
 
-export default mapStateToProps => Composed => state => {
+export default mapStateToProps => Composed => {
   const helper = algoliasearchHelper();
   helper.search = jest.fn();
-  const wrapper = mount(
-    <Composed
-      {...mapStateToProps(state)}
-      helper={helper}
-    />
-  );
-  return wrapper;
+  return function(props) {
+    return (
+      <Composed
+        {...omit(props, '__state')}
+        {...mapStateToProps(props.__state)}
+        helper={helper}
+      />
+    );
+  };
 };
