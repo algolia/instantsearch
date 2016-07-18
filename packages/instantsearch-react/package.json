@@ -46,6 +46,7 @@
     ],
     "preprocessorIgnorePatterns": [
       "node_modules/(?!algoliasearch-helper-provider)"
-    ]
+    ],
+    "setupFiles": ["src/silentWarnings.js"]
   }
 }
