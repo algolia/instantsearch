@@ -1,6 +1,6 @@
 export function isSpecialClick(event) {
   const isMiddleClick = event.button === 1;
-  return (
+  return Boolean(
     isMiddleClick ||
     event.altKey ||
     event.ctrlKey ||
