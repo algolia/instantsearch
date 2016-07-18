@@ -41,6 +41,7 @@
     "testRegex": "\\.test\\.js$",
     "unmockedModulePathPatterns": [
       "node_modules/react/",
+      "node_modules/react-dom/",
       "node_modules/enzyme/",
       "node_modules/lodash/"
     ],
