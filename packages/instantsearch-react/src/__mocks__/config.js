@@ -1,4 +1,5 @@
 /* eslint-env jest, jasmine */
+/* eslint-disable react/prop-types */
 
 import React from 'react';
 import omit from 'lodash/object/omit';

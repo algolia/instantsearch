@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {shallow, mount} from 'enzyme';
+import {mount} from 'enzyme';
 
 import ScrollTo from './ScrollTo';
 jest.unmock('./ScrollTo');

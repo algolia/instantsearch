@@ -1,4 +1,5 @@
 /* eslint-env jest, jasmine */
+/* eslint-disable react/prop-types */
 
 import React, {Children} from 'react';
 import algoliasearchHelper from 'algoliasearch-helper';
