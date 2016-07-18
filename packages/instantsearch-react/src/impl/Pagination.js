@@ -68,7 +68,6 @@ class Pagination extends Component {
     showPrevious: PropTypes.bool,
     showNext: PropTypes.bool,
     showLast: PropTypes.bool,
-    scrollTo: PropTypes.oneOf(PropTypes.string, PropTypes.instanceOf(Node)),
     pagesPadding: PropTypes.number,
     maxPages: PropTypes.number,
   };
@@ -94,17 +93,6 @@ class Pagination extends Component {
     pagesPadding: 3,
     maxPages: Infinity,
   };
-
-  componentDidUpdate(prevProps) {
-    const {scrollTo, page} = this.props;
-    if (scrollTo && page !== prevProps.page) {
-      const el =
-        scrollTo instanceof Node ?
-          scrollTo :
-          document.querySelector(scrollTo);
-      el.scrollIntoView();
-    }
-  }
 
   renderPageLink({
     translationKey,
