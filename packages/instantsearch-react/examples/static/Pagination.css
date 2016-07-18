@@ -47,17 +47,17 @@
   border-right-width: 1px;
 }
 
-.Pagination__link {
+.Pagination__item__link {
   text-align: center;
   padding: 0.6em 0;
   width: 3em;
 }
 
-.Pagination__item--active .Pagination__link {
+.Pagination__item--active .Pagination__item__link {
   font-weight: bold;
 }
 
-a.Pagination__link {
+a.Pagination__item__link {
   text-decoration: inherit;
   color: inherit;
 }
