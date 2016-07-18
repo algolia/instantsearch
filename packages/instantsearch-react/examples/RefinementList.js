@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import connect from 'algoliasearch-helper-provider/src/connect';
+import {connect} from 'react-algoliasearch-helper';
 
 import config from '../src/config';
 

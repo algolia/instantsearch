@@ -27,10 +27,10 @@
   "dependencies": {
     "algoliasearch": "^3.16.0",
     "algoliasearch-helper": "^2.11.0",
-    "algoliasearch-helper-provider": "algolia/algoliasearch-helper-provider#redux-like",
     "babel-jest": "^13.2.2",
     "react": "^15.2.0",
     "react-addons-shallow-compare": "^15.2.0",
+    "react-algoliasearch-helper": "^1.0.0",
     "react-dom": "^15.2.0",
     "react-redux": "^4.4.5",
     "react-themeable": "^1.1.0",
@@ -45,9 +45,8 @@
       "node_modules/enzyme/",
       "node_modules/lodash/"
     ],
-    "preprocessorIgnorePatterns": [
-      "node_modules/(?!algoliasearch-helper-provider)"
-    ],
-    "setupFiles": ["src/silentWarnings.js"]
+    "setupFiles": [
+      "src/silentWarnings.js"
+    ]
   }
 }

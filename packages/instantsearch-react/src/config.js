@@ -10,7 +10,7 @@ export default function config(mapPropsToConfig) {
 
     constructor(props, context) {
       super();
-
+      
       this.config = mapPropsToConfig(props);
       context.algoliaConfigManager.register(this.config);
     }

@@ -7,7 +7,6 @@ import {AlgoliaSearchHelper} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 jest.unmock('algoliasearch');
 jest.unmock('debug');
-jest.unmock('algoliasearch-helper-provider/src/Provider');
 
 import InstantSearch from './InstantSearch';
 import config from './config';

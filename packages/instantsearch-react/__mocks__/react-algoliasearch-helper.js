@@ -1,11 +1,11 @@
 /* eslint-env jest, jasmine */
 
-import React from 'react';
+import React, {Children} from 'react';
 import algoliasearchHelper from 'algoliasearch-helper';
 import omit from 'lodash/object/omit';
 jest.unmock('algoliasearch-helper');
 
-export default mapStateToProps => Composed => {
+export const connect = mapStateToProps => Composed => {
   const helper = algoliasearchHelper();
   helper.search = jest.fn();
   return function(props) {
@@ -18,3 +18,7 @@ export default mapStateToProps => Composed => {
     );
   };
 };
+
+// For some reason, using jest.unmock('react-algoliasearch-helper') will
+// return the automocked version of the module. Probably a bug.
+export const Provider = props => Children.only(props.children);

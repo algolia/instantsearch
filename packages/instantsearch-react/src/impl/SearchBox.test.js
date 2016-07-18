@@ -5,12 +5,6 @@ import {findDOMNode} from 'react-dom';
 import {mount} from 'enzyme';
 import renderer from 'react/lib/ReactTestRenderer';
 
-jest.mock('algoliasearch-helper-provider/src/connect', () =>
-  require.requireActual(
-    '../../__mocks__/algoliasearch-helper-provider/src/connect'
-  )
-);
-
 import SearchBox from './SearchBox';
 jest.unmock('./SearchBox');
 jest.unmock('react-themeable');

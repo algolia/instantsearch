@@ -4,12 +4,6 @@ import React from 'react';
 import {mount} from 'enzyme';
 import renderer from 'react/lib/ReactTestRenderer';
 
-jest.mock('algoliasearch-helper-provider/src/connect', () =>
-  require.requireActual(
-    '../../__mocks__/algoliasearch-helper-provider/src/connect'
-  )
-);
-
 import Pagination from './Pagination';
 import PaginationLink from './PaginationLink';
 jest.unmock('./Pagination');

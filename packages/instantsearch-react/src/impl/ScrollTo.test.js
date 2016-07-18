@@ -4,12 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {shallow, mount} from 'enzyme';
 
-jest.mock('algoliasearch-helper-provider/src/connect', () =>
-  require.requireActual(
-    '../../__mocks__/algoliasearch-helper-provider/src/connect'
-  )
-);
-
 import ScrollTo from './ScrollTo';
 jest.unmock('./ScrollTo');
 

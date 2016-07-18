@@ -3,12 +3,6 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
 
-jest.mock('algoliasearch-helper-provider/src/connect', () =>
-  require.requireActual(
-    '../__mocks__/algoliasearch-helper-provider/src/connect'
-  )
-);
-
 import {AlgoliaSearchHelper} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 

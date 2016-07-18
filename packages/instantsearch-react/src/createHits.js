@@ -1,4 +1,4 @@
-import connect from 'algoliasearch-helper-provider/src/connect';
+import {connect} from 'react-algoliasearch-helper';
 
 export default connect(state => ({
   hits: state.searchResults && state.searchResults.hits,

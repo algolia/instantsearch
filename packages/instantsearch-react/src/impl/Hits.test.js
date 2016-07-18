@@ -3,12 +3,6 @@
 import React from 'react';
 import {mount} from 'enzyme';
 
-jest.mock('algoliasearch-helper-provider/src/connect', () =>
-  require.requireActual(
-    '../../__mocks__/algoliasearch-helper-provider/src/connect'
-  )
-);
-
 import Hits from './Hits';
 import DefaultHitComponent from './DefaultHitComponent';
 jest.unmock('../createHits');

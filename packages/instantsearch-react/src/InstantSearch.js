@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
-import Provider from 'algoliasearch-helper-provider/src/Provider';
+import {Provider} from 'react-algoliasearch-helper';
 import omit from 'lodash/object/omit';
 
 import createConfigManager from './createConfigManager';

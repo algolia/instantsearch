@@ -1,6 +1,6 @@
 import {PropTypes, Component, Children} from 'react';
 import {findDOMNode} from 'react-dom';
-import connect from 'algoliasearch-helper-provider/src/connect';
+import {connect} from 'react-algoliasearch-helper';
 
 class ScrollTo extends Component {
   static propTypes = {

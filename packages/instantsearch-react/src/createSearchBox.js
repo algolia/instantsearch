@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import connect from 'algoliasearch-helper-provider/src/connect';
+import {connect} from 'react-algoliasearch-helper';
 
 export default function createSearchBox(Composed) {
   class SearchBoxWrapper extends Component {
