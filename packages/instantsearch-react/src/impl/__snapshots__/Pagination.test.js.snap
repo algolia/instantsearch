@@ -1,0 +1,1887 @@
+exports[`Pagination allows toggling display of the first page button on and off 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the first page button on and off 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the last page button on and off 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--last">
+    <a
+      aria-label="Last page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      »
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the last page button on and off 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the next page button on and off 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the next page button on and off 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the previous page button on and off 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination allows toggling display of the previous page button on and off 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination applies its default props 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination displays the correct padding of links 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--first">
+    <span
+      aria-label="First page"
+      className="Pagination__item__link">
+      «
+    </span>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--previous">
+    <span
+      aria-label="Previous page"
+      className="Pagination__item__link">
+      ‹
+    </span>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 1"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      1
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 2"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      2
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 3"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      3
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 4"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      4
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 5"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      5
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 6"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      6
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination displays the correct padding of links 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 6"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      6
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 11"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      11
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 12"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      12
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 13"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      13
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 14"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      14
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination displays the correct padding of links 2`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 14"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      14
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 15"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      15
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 16"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      16
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 17"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      17
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 18"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      18
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 19"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      19
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 20"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      20
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    <span
+      aria-label="Next page"
+      className="Pagination__item__link">
+      ›
+    </span>
+  </li>
+</ul>
+`;
+
+exports[`Pagination displays the correct padding of links 3`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 1"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      1
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 2"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      2
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 3"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      3
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 4"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      4
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 5"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      5
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="Next page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination lets you customize its theme 0`] = `
+<ul
+  className="ROOT">
+  <li
+    className="ITEM FIRST">
+    <a
+      aria-label="First page"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="ITEM PREVIOUS">
+    <a
+      aria-label="Previous page"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 2"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      2
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 3"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      3
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 4"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      4
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 5"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      5
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 6"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      6
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 7"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 8"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="ITEM ACTIVE PAGE">
+    <a
+      aria-label="Page 9"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="ITEM PAGE">
+    <a
+      aria-label="Page 10"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="ITEM NEXT">
+    <a
+      aria-label="Next page"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      ›
+    </a>
+  </li>
+  <li
+    className="ITEM LAST">
+    <a
+      aria-label="Last page"
+      className="LINK"
+      href="#"
+      onClick={[Function bound ]}>
+      »
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination lets you customize its translations 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="ARIA_FIRST"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      FIRST
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="ARIA_PREVIOUS"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PREVIOUS
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_2"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_2
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_3"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_3
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_4"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_4
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_5"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_5
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_6"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_6
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="ARIA_PAGE_10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      PAGE_10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--next">
+    <a
+      aria-label="ARIA_NEXT"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      NEXT
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--last">
+    <a
+      aria-label="ARIA_LAST"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      LAST
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination lets you force a maximum of pages 0`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 4"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      4
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 5"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      5
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 6"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      6
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 10"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      10
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    <span
+      aria-label="Next page"
+      className="Pagination__item__link">
+      ›
+    </span>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--last">
+    <span
+      aria-label="Last page"
+      className="Pagination__item__link">
+      »
+    </span>
+  </li>
+</ul>
+`;
+
+exports[`Pagination lets you force a maximum of pages 1`] = `
+<ul
+  className="Pagination">
+  <li
+    className="Pagination__item Pagination__item--first">
+    <a
+      aria-label="First page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      «
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--previous">
+    <a
+      aria-label="Previous page"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 3"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      3
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 4"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      4
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 5"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      5
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 6"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      6
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 7"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      7
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--page">
+    <a
+      aria-label="Page 8"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      8
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--active Pagination__item--page">
+    <a
+      aria-label="Page 9"
+      className="Pagination__item__link"
+      href="#"
+      onClick={[Function bound ]}>
+      9
+    </a>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    <span
+      aria-label="Next page"
+      className="Pagination__item__link">
+      ›
+    </span>
+  </li>
+  <li
+    className="Pagination__item Pagination__item--disabled Pagination__item--last">
+    <span
+      aria-label="Last page"
+      className="Pagination__item__link">
+      »
+    </span>
+  </li>
+</ul>
+`;
