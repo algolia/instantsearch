@@ -13,6 +13,14 @@ const defaultTranslations = {
   placeholder: 'Search your website',
 };
 
+const defaultTheme = {
+  root: 'SearchBox',
+  wrapper: 'SearchBox__wrapper',
+  input: 'SearchBox__input',
+  submit: 'SearchBox__submit',
+  reset: 'SearchBox__reset',
+};
+
 class SearchBox extends Component {
   static propTypes = {
     // Provided by `createSearchBox`
@@ -22,8 +30,8 @@ class SearchBox extends Component {
 
     theme: PropTypes.object,
     translations: PropTypes.object,
-    placeholder: PropTypes.string,
-    poweredBy: PropTypes.bool,
+    // @TODO: implement
+    // poweredBy: PropTypes.bool,
     focusShortcuts: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
@@ -35,13 +43,7 @@ class SearchBox extends Component {
   static defaultProps = {
     query: '',
 
-    theme: {
-      root: 'SearchBox',
-      wrapper: 'SearchBox__wrapper',
-      input: 'SearchBox__input',
-      submit: 'SearchBox__submit',
-      reset: 'SearchBox__reset',
-    },
+    theme: defaultTheme,
     translations: defaultTranslations,
     poweredBy: false,
     focusShortcuts: [],
