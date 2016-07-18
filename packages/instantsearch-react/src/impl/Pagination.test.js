@@ -80,6 +80,26 @@ describe('Pagination', () => {
     expect(refine.mock.calls[5][0]).toEqual(19);
   });
 
+  it('ignores special clicks', () => {
+    const refine = jest.fn();
+    const wrapper = mount(
+      <Pagination
+        refine={refine}
+        __state={DEFAULT_STATE}
+      />
+    );
+    const el = wrapper
+      .find(PaginationLink)
+      .filterWhere(e => e.props().pageNumber === 7)
+      .find('.Pagination__item__link');
+    el.simulate('click', {button: 1});
+    el.simulate('click', {altKey: true});
+    el.simulate('click', {ctrlKey: true});
+    el.simulate('click', {metaKey: true});
+    el.simulate('click', {shiftKey: true});
+    expect(refine.mock.calls.length).toBe(0);
+  });
+
   it('applies its default props', () => {
     tree = renderer.create(
       <Pagination
