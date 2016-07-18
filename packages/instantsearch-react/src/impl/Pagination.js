@@ -54,6 +54,19 @@ const defaultTranslations = {
   ariaPage: page => `Page ${(page + 1).toString()}`,
 };
 
+const defaultTheme = {
+  root: 'Pagination',
+  item: 'Pagination__item',
+  first: 'Pagination__item--first',
+  last: 'Pagination__item--last',
+  previous: 'Pagination__item--previous',
+  next: 'Pagination__item--next',
+  page: 'Pagination__item--page',
+  active: 'Pagination__item--active',
+  disabled: 'Pagination__item--disabled',
+  link: 'Pagination__item__link',
+};
+
 class Pagination extends Component {
   static propTypes = {
     // Provided by `createPagination`
@@ -73,18 +86,7 @@ class Pagination extends Component {
   };
 
   static defaultProps = {
-    theme: {
-      root: 'Pagination',
-      first: 'Pagination__first',
-      last: 'Pagination__last',
-      previous: 'Pagination__previous',
-      next: 'Pagination__next',
-      page: 'Pagination__page',
-      item: 'Pagination__item',
-      itemActive: 'Pagination__item--active',
-      itemDisabled: 'Pagination__item--disabled',
-      link: 'Pagination__link',
-    },
+    theme: defaultTheme,
     translations: defaultTranslations,
     showFirst: true,
     showPrevious: true,
@@ -136,12 +138,8 @@ class Pagination extends Component {
         isActive={isActive}
         pageNumber={pageNumber}
         url={url}
-        theme={{
-          item: theme.item,
-          itemActive: theme.itemActive,
-          itemDisabled: theme.itemDisabled,
-          link: theme.link,
-        }}
+        modifier={translationKey}
+        theme={theme}
       />
     );
   }

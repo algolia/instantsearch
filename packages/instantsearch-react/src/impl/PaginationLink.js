@@ -11,6 +11,7 @@ class PaginationLink extends Component {
     label: PropTypes.string.isRequired,
     pageNumber: PropTypes.number.isRequired,
     url: PropTypes.string.isRequired,
+    modifier: PropTypes.string.isRequired,
   };
 
   onClick = this.props.onClick.bind(null, this.props.pageNumber);
@@ -46,7 +47,7 @@ class PaginationLink extends Component {
   }
 
   render() {
-    const {isActive, isDisabled, theme} = this.props;
+    const {isActive, isDisabled, theme, modifier} = this.props;
     const th = themeable(theme);
 
     // "Enable" the element, by making it a link
@@ -57,8 +58,9 @@ class PaginationLink extends Component {
         {...th(
           'item',
           'item',
-          isActive && 'itemActive',
-          isDisabled && 'itemDisabled'
+          isActive && 'active',
+          isDisabled && 'disabled',
+          modifier
         )}
       >
         {element}
