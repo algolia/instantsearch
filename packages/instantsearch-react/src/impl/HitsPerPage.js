@@ -22,10 +22,7 @@ class HitsPerPage extends Component {
   };
 
   static defaultProps = {
-    translations: {
-      label: 'Hits per page',
-      value: v => v.toString(),
-    },
+    translations: defaultTranslations,
   };
 
   onChange = e => {
