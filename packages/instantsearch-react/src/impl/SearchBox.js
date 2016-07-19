@@ -25,8 +25,7 @@ class SearchBox extends Component {
   static propTypes = {
     // Provided by `createSearchBox`
     query: PropTypes.string,
-    setQuery: PropTypes.func.isRequired,
-    search: PropTypes.func.isRequired,
+    refine: PropTypes.func.isRequired,
 
     theme: PropTypes.object,
     translations: PropTypes.object,
@@ -46,7 +45,7 @@ class SearchBox extends Component {
     theme: defaultTheme,
     translations: defaultTranslations,
     poweredBy: false,
-    focusShortcuts: [],
+    focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
     queryHook: (query, search) => search(query),
@@ -109,39 +108,33 @@ class SearchBox extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const {queryHook, searchAsYouType} = this.props;
+    const {refine, queryHook, searchAsYouType} = this.props;
     const {query} = this.state;
     if (!searchAsYouType) {
-      queryHook(query, this.search);
+      queryHook(query, refine);
     }
     return false;
   };
 
   onChange = e => {
-    const {queryHook, searchAsYouType} = this.props;
+    const {refine, queryHook, searchAsYouType} = this.props;
     const query = e.target.value;
     this.setState({query});
     if (searchAsYouType) {
-      queryHook(query, this.search);
+      queryHook(query, refine);
     }
   };
 
   onReset = () => {
-    const {queryHook, searchAsYouType} = this.props;
+    const {refine, queryHook, searchAsYouType} = this.props;
     this.setState({
       query: '',
     }, () => {
       this.input.focus();
     });
     if (searchAsYouType) {
-      queryHook('', this.search);
+      queryHook('', refine);
     }
-  };
-
-  search = query => {
-    const {setQuery, search} = this.props;
-    setQuery(query);
-    search();
   };
 
   render() {

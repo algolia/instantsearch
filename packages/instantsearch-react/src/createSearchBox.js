@@ -7,18 +7,14 @@ export default function createSearchBox(Composed) {
       helper: PropTypes.object.isRequired,
     };
 
-    constructor(props) {
-      super();
-
-      this.setQuery = props.helper.setQuery.bind(props.helper);
-      this.search = props.helper.search.bind(props.helper);
+    refine = query => {
+      this.props.helper.setQuery(query).search();
     }
 
     render() {
       return (
         <Composed
-          setQuery={this.setQuery}
-          search={this.search}
+          refine={this.refine}
           {...this.props}
         />
       );

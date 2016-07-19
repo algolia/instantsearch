@@ -102,71 +102,59 @@ describe('SearchBox', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('updates the query and searches on change when searchAsYouType=true', () => {
-    const setQuery = jest.fn();
-    const search = jest.fn();
+  it('updates refines its query on change when searchAsYouType=true', () => {
+    const refine = jest.fn();
     const wrapper = mount(
       <SearchBox
         searchAsYouType
-        setQuery={setQuery}
-        search={search}
+        refine={refine}
         __state={DEFAULT_STATE}
       />
     );
     wrapper.find('input').simulate('change', {target: {value: 'hello'}});
-    expect(setQuery.mock.calls.length).toBe(1);
-    expect(setQuery.mock.calls[0][0]).toBe('hello');
-    expect(search.mock.calls.length).toBe(1);
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toBe('hello');
     wrapper.unmount();
   });
 
-  it('only updates the query and searches on submit when searchAsYouType=false', () => {
-    const setQuery = jest.fn();
-    const search = jest.fn();
+  it('only refines its query on submit when searchAsYouType=false', () => {
+    const refine = jest.fn();
     const wrapper = mount(
       <SearchBox
         searchAsYouType={false}
-        setQuery={setQuery}
-        search={search}
+        refine={refine}
         __state={DEFAULT_STATE}
       />
     );
     wrapper.find('input').simulate('change', {target: {value: 'hello'}});
-    expect(setQuery.mock.calls.length).toBe(0);
-    expect(search.mock.calls.length).toBe(0);
+    expect(refine.mock.calls.length).toBe(0);
     wrapper.find('form').simulate('submit');
-    expect(setQuery.mock.calls.length).toBe(1);
-    expect(setQuery.mock.calls[0][0]).toBe('hello');
-    expect(search.mock.calls.length).toBe(1);
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toBe('hello');
     wrapper.unmount();
   });
 
   it('delegates the actual search call to the queryHook prop', () => {
-    const setQuery = jest.fn();
-    const search = jest.fn();
+    const refine = jest.fn();
     const queryHook = jest.fn();
     const wrapper = mount(
       <SearchBox
-        setQuery={setQuery}
-        search={search}
+        refine={refine}
         queryHook={queryHook}
         __state={DEFAULT_STATE}
       />
     );
     wrapper.find('input').simulate('change', {target: {value: 'hello'}});
-    expect(setQuery.mock.calls.length).toBe(0);
-    expect(search.mock.calls.length).toBe(0);
+    expect(refine.mock.calls.length).toBe(0);
     expect(queryHook.mock.calls.length).toBe(1);
     expect(queryHook.mock.calls[0][0]).toBe('hello');
     expect(typeof queryHook.mock.calls[0][1]).toBe('function');
     queryHook.mock.calls[0][1](queryHook.mock.calls[0][0]);
-    expect(setQuery.mock.calls.length).toBe(1);
-    expect(setQuery.mock.calls[0][0]).toBe('hello');
-    expect(search.mock.calls.length).toBe(1);
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toBe('hello');
     queryHook.mock.calls[0][1]('waddup');
-    expect(setQuery.mock.calls.length).toBe(2);
-    expect(setQuery.mock.calls[1][0]).toBe('waddup');
-    expect(search.mock.calls.length).toBe(2);
+    expect(refine.mock.calls.length).toBe(2);
+    expect(refine.mock.calls[1][0]).toBe('waddup');
     wrapper.unmount();
   });
 
