@@ -43,6 +43,7 @@ Wrap your application with:
 <InstantSearch
   appId="appId"
   apiKey="apiKey"
+  indexName="indexName"
 >
   <SearchBox/>
   <Hits/>
@@ -60,9 +61,22 @@ Default props:
   queryHook={(query, search) => search(query)} // allows to implement debouncing
   searchAsYouType // otherwise only search when submit called
   focusShortcuts={['s', '/']} // `s` is github, `/` is all google products
-  translations={{placeholder: 'Search here'}}
-  placeholder
-  autofocus
+  autoFocus
+  poweredBy={false} // renders the "Powered by Algolia" element
+  translations={{
+    submit: null,
+    reset: null,
+    submitTitle: 'Submit your search query.',
+    resetTitle: 'Clear the search query.',
+    placeholder: 'Search your website',
+  }}
+  theme={{
+    root: 'SearchBox',
+    wrapper: 'SearchBox__wrapper',
+    input: 'SearchBox__input',
+    submit: 'SearchBox__submit',
+    reset: 'SearchBox__reset',
+  }}
 />
 ```
 
@@ -72,8 +86,7 @@ The default rendering should include:
 
 `createSearchBox` HOC props:
 - query: `string` current query
-- setQuery(query: `string`): `function`
-- search(): `function`
+- refine(query: `string`): `function` update the query and search
 
 See http://shipow.github.io/searchbox/ for good examples like the google or amazon one.
 
@@ -84,36 +97,54 @@ Display hits
 ```jsx
 <Hits
   hitsPerPage={20}
-  itemComponent: {hit => <div>{JSON.stringify(hit)}</div>}
+  itemComponent={hit => <div>{JSON.stringify(hit)}</div>}
 />
 ```
 
 `createHits` HOC props:
-- hits: `object[]`
+- hits: `object[]` list of hits
 
 ### Pagination
 
 ```jsx
 <Pagination
-  showFirst,
-  showLast={false},
-  showPrevious,
-  showNext,
-  scrollTo="body", // maybe not the best API for a react lib
-  maxPages={null}, // automatically computed from the Algolia answer, but can be overriden
-  pagesPadding={3}, // how many pages to show before and after
-  translations= {{
-    previous: 'Previous page',
-    next: 'Next page',
-    first: 'First page',
-    last: 'Last page'
+  showFirst
+  showLast={false}
+  showPrevious
+  showNext
+  maxPages={Infinity} // automatically computed from the Algolia answer, but can be overriden
+  pagesPadding={3} // how many pages to show before and after
+  translations={{
+    previous: '‹',
+    next: '›',
+    first: '«',
+    last: '»',
+    page: page => (page + 1).toString(),
+    ariaPrevious: 'Previous page',
+    ariaNext: 'Next page',
+    ariaFirst: 'First page',
+    ariaLast: 'Last page',
+    ariaPage: page => `Page ${(page + 1).toString()}`,
+  }}
+  theme={{
+    root: 'Pagination',
+    item: 'Pagination__item',
+    first: 'Pagination__item--first',
+    last: 'Pagination__item--last',
+    previous: 'Pagination__item--previous',
+    next: 'Pagination__item--next',
+    page: 'Pagination__item--page',
+    active: 'Pagination__item--active',
+    disabled: 'Pagination__item--disabled',
+    link: 'Pagination__item__link',
   }}
 />
 ```
 
 `createPagination` HOC props:
-- data: `object[]`
-- refine(page: `number`): `function`
+- nbPages: `number` number of pages
+- page: `number` current page
+- refine(page: `number`): `function` update the current page
 
 SearchKit has some default renderers that may be interesting: http://docs.searchkit.co/stable/docs/components/ui/list-components.html
 
@@ -121,10 +152,11 @@ SearchKit has some default renderers that may be interesting: http://docs.search
 
 ```jsx
 <HitsPerPage
-  options={[10, 20, 30]}
+  defaultValue={null}
+  values={[10, 20, 30]}
   translations={{
-    selectLabel: 'Hits per page',
-    optionLabel: value => value
+    label: 'Hits per page',
+    value: v => v.toString(),
   }}
 />
 ```
@@ -132,8 +164,8 @@ SearchKit has some default renderers that may be interesting: http://docs.search
 Default renderer: Select.
 
 `createHitsPerPage` props:
-- data: `object[]`
-- refine(hitsPerPage: `number`): `function`
+- hitsPerPage: `number` hits per page
+- refine(hitsPerPage: `number`): `function` update the hits per page count
 
 SearchKit has some default renderers that may be interesting: http://docs.searchkit.co/stable/docs/components/ui/list-components.html
 
