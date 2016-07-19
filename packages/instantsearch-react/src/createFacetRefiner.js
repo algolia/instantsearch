@@ -74,12 +74,26 @@ export default function createFacetRefiner(Composed) {
   return config(props => ({
     [getKey(props.operator)]: [props.attributeName],
   }))(connect((state, props) => {
-    const isFacetPresent =
-      state.searchResults &&
-      state.searchResults[getKey(props.operator)].some(f =>
-        f.name === props.attributeName
-      );
-
+    let isFacetPresent = false;
+    if (state.searchResults) {
+      // @TODO: Use state.searchResultsSearchParameters instead of _state
+      // See https://github.com/algolia/react-algoliasearch-helper/pull/7
+      const wasRequested =
+        state.searchResults._state[getKey(props.operator)]
+          .indexOf(props.attributeName) !== -1;
+      const wasReceived =
+        Boolean(state.searchResults.getFacetByName(props.attributeName));
+      if (wasRequested && !wasReceived) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `A component requested values for facet "${props.attributeName}", ` +
+          'but no facet values were retrieved from the API. This means that ' +
+          `you should add the attribute "${props.attributeName}" to the list ` +
+          'of attributes for faceting in your index settings.'
+        );
+      }
+      isFacetPresent = wasReceived;
+    }
     return {
       facetValues: isFacetPresent ?
         state.searchResults.getFacetValues(props.attributeName) :
