@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 
-import configManagerShape from './configManagerShape';
+import {configManagerPropType} from './propTypes';
 
 export default function config(mapPropsToConfig) {
   return Composed => class Configured extends Component {
     static contextTypes = {
-      algoliaConfigManager: configManagerShape.isRequired,
+      algoliaConfigManager: configManagerPropType.isRequired,
     };
 
     constructor(props, context) {

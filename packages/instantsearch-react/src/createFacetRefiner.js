@@ -10,9 +10,11 @@ function getKey(operator = 'or') {
 export default function createFacetRefiner(Composed) {
   class FacetRefiner extends Component {
     static propTypes = {
+      // From `connect`
       helper: PropTypes.object.isRequired,
-      attributeName: PropTypes.string.isRequired,
       facetValues: PropTypes.array,
+
+      attributeName: PropTypes.string.isRequired,
       operator: PropTypes.oneOf(['or', 'and']),
     };
 
@@ -50,10 +52,20 @@ export default function createFacetRefiner(Composed) {
     }
 
     render() {
+      const {facetValues, ...otherProps} = this.props;
       return (
         <Composed
           refine={this.refine}
-          {...this.props}
+          items={facetValues &&
+            facetValues.map(v => ({
+              value: v.name,
+              count: v.count,
+            }))
+          }
+          selectedItems={facetValues &&
+            facetValues.filter(v => v.isRefined).map(v => v.name)
+          }
+          {...otherProps}
         />
       );
     }

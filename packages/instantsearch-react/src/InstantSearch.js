@@ -5,7 +5,7 @@ import {Provider} from 'react-algoliasearch-helper';
 import omit from 'lodash/object/omit';
 
 import createConfigManager from './createConfigManager';
-import configManagerShape from './configManagerShape';
+import {configManagerPropType} from './propTypes';
 
 class InstantSearch extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ class InstantSearch extends Component {
   };
 
   static childContextTypes = {
-    algoliaConfigManager: configManagerShape.isRequired,
+    algoliaConfigManager: configManagerPropType.isRequired,
   };
 
   constructor(props) {

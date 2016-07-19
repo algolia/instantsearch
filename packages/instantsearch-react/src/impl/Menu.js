@@ -1,32 +1,42 @@
 import React, {PropTypes, Component} from 'react';
 
 import createFacetRefiner from '../createFacetRefiner';
+import {itemsPropType, selectedItemsPropType} from '../propTypes';
 
 class Menu extends Component {
   static propTypes = {
-    facetValues: PropTypes.array,
     refine: PropTypes.func.isRequired,
+    items: itemsPropType,
+    selectedItems: selectedItemsPropType,
   };
 
   render() {
-    const {facetValues, refine} = this.props;
-    if (!facetValues) {
+    const {items, selectedItems, refine} = this.props;
+    if (!items) {
       return null;
     }
 
     return (
       <ul>
-        {facetValues.map(v =>
-          <li
-            key={v.name}
-            onClick={refine.bind(null, [v.name])}
-            style={{
-              fontWeight: v.isRefined ? 'bold' : null,
-            }}
-          >
-            {v.name} {v.count}
-          </li>
-        )}
+        {items.map(item => {
+          const selected = selectedItems.indexOf(item.value) !== -1;
+          return (
+            <li
+              key={item.value}
+              onClick={
+                refine.bind(
+                  null,
+                  selected ? [] : [item.value]
+                )
+              }
+              style={{
+                fontWeight: selected ? 'bold' : null,
+              }}
+            >
+              {item.value} {item.count}
+            </li>
+          );
+        })}
       </ul>
     );
   }

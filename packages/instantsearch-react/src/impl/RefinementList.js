@@ -1,44 +1,49 @@
 import React, {PropTypes, Component} from 'react';
 
 import createFacetRefiner from '../createFacetRefiner';
+import {itemsPropType, selectedItemsPropType} from '../propTypes';
 
 class RefinementList extends Component {
   static propTypes = {
-    facetValues: PropTypes.array,
     refine: PropTypes.func.isRequired,
+    items: itemsPropType,
+    selectedItems: selectedItemsPropType,
   };
 
   onValueClick = value => {
-    const {facetValues} = this.props;
-    const nextValues = facetValues.filter(v => v.isRefined).map(v => v.name);
-    const idx = nextValues.indexOf(value);
+    const {selectedItems} = this.props;
+    const nextSelectedItems = selectedItems.slice();
+    const idx = nextSelectedItems.indexOf(value);
     if (idx === -1) {
-      nextValues.push(value);
+      nextSelectedItems.push(value);
     } else {
-      nextValues.splice(idx, 1);
+      nextSelectedItems.splice(idx, 1);
     }
-    this.props.refine(nextValues);
+    this.props.refine(nextSelectedItems);
   }
 
   render() {
-    const {facetValues} = this.props;
-    if (!facetValues) {
+    const {items, selectedItems} = this.props;
+    if (!items) {
       return null;
     }
 
     return (
       <ul>
-        {facetValues.map(v =>
-          <li
-            key={v.name}
-            onClick={this.onValueClick.bind(null, v.name)}
-            style={{
-              fontWeight: v.isRefined ? 'bold' : null,
-            }}
-          >
-            {v.name} {v.count}
-          </li>
-        )}
+        {items.map(item => {
+          const selected = selectedItems.indexOf(item.value) !== -1;
+          return (
+            <li
+              key={item.value}
+              onClick={this.onValueClick.bind(null, item.value)}
+              style={{
+                fontWeight: selected ? 'bold' : null,
+              }}
+            >
+              {item.value} {item.count}
+            </li>
+          );
+        })}
       </ul>
     );
   }
