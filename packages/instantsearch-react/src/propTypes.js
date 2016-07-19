@@ -1,15 +1,25 @@
 import {PropTypes} from 'react';
 
-const valuePropTypes = PropTypes.any;
+const valuePropTypes = PropTypes.oneOfType([
+  PropTypes.number,
+  PropTypes.string,
+]);
+
+const metadataItemPropType = PropTypes.shape({
+  value: valuePropTypes.isRequired,
+  count: PropTypes.number.isRequired,
+});
+
+const valueItemPropType = valuePropTypes;
+
+export const itemPropType = PropTypes.oneOfType([
+  metadataItemPropType,
+  valueItemPropType,
+]);
 
 export const itemsPropType = PropTypes.oneOfType([
-  PropTypes.arrayOf(
-    PropTypes.shape({
-      value: valuePropTypes.isRequired,
-      count: PropTypes.number.isRequired,
-    })
-  ),
-  PropTypes.arrayOf(valuePropTypes),
+  PropTypes.arrayOf(metadataItemPropType),
+  PropTypes.arrayOf(valueItemPropType),
 ]);
 
 export const selectedItemsPropType = PropTypes.arrayOf(valuePropTypes);

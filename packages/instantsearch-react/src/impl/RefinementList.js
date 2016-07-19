@@ -3,6 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import createFacetRefiner from '../createFacetRefiner';
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
 
+import RefinementListCheckboxItem from './RefinementListCheckboxItem';
+
 class RefinementList extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
@@ -10,12 +12,12 @@ class RefinementList extends Component {
     selectedItems: selectedItemsPropType,
   };
 
-  onValueClick = value => {
+  onItemClick = item => {
     const {selectedItems} = this.props;
     const nextSelectedItems = selectedItems.slice();
-    const idx = nextSelectedItems.indexOf(value);
+    const idx = nextSelectedItems.indexOf(item.value);
     if (idx === -1) {
-      nextSelectedItems.push(value);
+      nextSelectedItems.push(item.value);
     } else {
       nextSelectedItems.splice(idx, 1);
     }
@@ -30,20 +32,15 @@ class RefinementList extends Component {
 
     return (
       <ul>
-        {items.map(item => {
-          const selected = selectedItems.indexOf(item.value) !== -1;
-          return (
-            <li
-              key={item.value}
-              onClick={this.onValueClick.bind(null, item.value)}
-              style={{
-                fontWeight: selected ? 'bold' : null,
-              }}
-            >
-              {item.value} {item.count}
-            </li>
-          );
-        })}
+        {items.map(item =>
+          <li key={item.value}>
+            <RefinementListCheckboxItem
+              onClick={this.onItemClick}
+              item={item}
+              selected={selectedItems.indexOf(item.value) !== -1}
+            />
+          </li>
+        )}
       </ul>
     );
   }

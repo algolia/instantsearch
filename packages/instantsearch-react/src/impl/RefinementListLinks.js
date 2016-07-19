@@ -5,7 +5,7 @@ import {itemsPropType, selectedItemsPropType} from '../propTypes';
 
 import MenuLink from './MenuLink';
 
-class Menu extends Component {
+class RefinementList extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     items: itemsPropType,
@@ -13,10 +13,16 @@ class Menu extends Component {
   };
 
   onItemClick = item => {
-    const {selectedItems, refine} = this.props;
-    const selected = selectedItems.indexOf(item.value) !== -1;
-    refine(selected ? [] : [item.value]);
-  };
+    const {selectedItems} = this.props;
+    const nextSelectedItems = selectedItems.slice();
+    const idx = nextSelectedItems.indexOf(item.value);
+    if (idx === -1) {
+      nextSelectedItems.push(item.value);
+    } else {
+      nextSelectedItems.splice(idx, 1);
+    }
+    this.props.refine(nextSelectedItems);
+  }
 
   render() {
     const {items, selectedItems} = this.props;
@@ -40,4 +46,4 @@ class Menu extends Component {
   }
 }
 
-export default createFacetRefiner(Menu);
+export default createFacetRefiner(RefinementList);
