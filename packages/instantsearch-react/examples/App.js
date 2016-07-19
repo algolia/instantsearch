@@ -5,9 +5,8 @@ import SearchBox from '../src/impl/SearchBox';
 import Hits from '../src/impl/Hits';
 import Pagination from '../src/impl/Pagination';
 import HitsPerPage from '../src/impl/HitsPerPage';
-import ScrollTo from '../src/impl/ScrollTo';
-
-import RefinementList from './RefinementList';
+import RefinementList from '../src/impl/RefinementList';
+import Menu from '../src/impl/Menu';
 
 class Movie extends Component {
   render() {
@@ -45,12 +44,11 @@ class App extends Component {
         <div>
           <button onClick={this.onSwitchClick}>Switch facet</button>
           <RefinementList attributeName={this.state.facet} />
-          <ScrollTo>
-            <HitsPerPage
-              defaultValue={5}
-              values={[5, 10]}
-            />
-          </ScrollTo>
+          <Menu attributeName="year" />
+          <HitsPerPage
+            defaultValue={5}
+            values={[5, 10]}
+          />
           <SearchBox focusShortcuts={['s']} />
           <Pagination showLast maxPages={10} translations={{ next: 'Next' }} />
           <Hits
