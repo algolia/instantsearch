@@ -8,9 +8,7 @@ export default function createHitsPerPage(Composed) {
     };
 
     refine = hitsPerPage => {
-      this.props.helper.setState(
-        this.props.helper.getState().setHitsPerPage(hitsPerPage)
-      ).search();
+      this.props.helper.setQueryParameter('hitsPerPage', hitsPerPage).search();
     };
 
     render() {
