@@ -34,7 +34,7 @@ This is the library you will need to easily build a good search UX like our [ins
   - [Features](#features)
   - [Examples](#examples)
     - [Vanilla JavaScript](#vanilla-javascript)
-    - [AngularJS Module](#angularjs-module)
+    - [AngularJS module](#angularjs-module)
   - [Helper cheatsheet](#helper-cheatsheet)
     - [Add the helper in your project](#add-the-helper-in-your-project)
     - [Regular `<script>` tag](#regular-script-tag)

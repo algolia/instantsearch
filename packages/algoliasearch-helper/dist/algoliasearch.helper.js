@@ -11268,7 +11268,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":173,"./SearchParameters/shortener":174,"lodash/collection/forEach":12,"lodash/collection/map":14,"lodash/function/bind":20,"lodash/lang/isArray":133,"lodash/lang/isPlainObject":141,"lodash/lang/isString":142,"lodash/object/invert":150,"lodash/object/mapKeys":153,"lodash/object/mapValues":154,"lodash/object/pick":158,"qs":164,"qs/lib/utils":167}],183:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.11.0';
+module.exports = '2.11.1';
 
 },{}]},{},[1])(1)
 });
