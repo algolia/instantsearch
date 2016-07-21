@@ -2,8 +2,6 @@ import React, {PropTypes, Component} from 'react';
 import range from 'lodash/utility/range';
 import themeable from 'react-themeable';
 
-import createPagination from '../createPagination';
-
 import {getTranslation, capitalize, isSpecialClick} from './utils';
 import PaginationLink from './PaginationLink';
 
@@ -193,6 +191,7 @@ class Pagination extends Component {
     }
     event.preventDefault();
     this.props.refine(pageNumber);
+    return false;
   }
 
   render() {
@@ -222,4 +221,4 @@ class Pagination extends Component {
   }
 }
 
-export default createPagination(Pagination);
+export default Pagination;

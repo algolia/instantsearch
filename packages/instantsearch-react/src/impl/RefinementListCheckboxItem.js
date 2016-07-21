@@ -6,20 +6,20 @@ export default class RefinementListCheckboxItem extends Component {
   static propTypes = {
     item: itemPropType.isRequired,
     selected: PropTypes.bool.isRequired,
-    onClick: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
   };
 
-  onClick = () => {
-    this.props.onClick(this.props.item);
+  onChange = e => {
+    this.props.onChange(this.props.item, e.target.checked);
   };
 
   render() {
     const {item, selected} = this.props;
     return (
-      <div onClick={this.onClick}>
-        <input type="checkbox" checked={selected} />
+      <label>
+        <input type="checkbox" checked={selected} onChange={this.onChange} />
         {item.value} {item.count}
-      </div>
+      </label>
     );
   }
 }

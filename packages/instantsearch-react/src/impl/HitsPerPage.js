@@ -1,8 +1,5 @@
 import React, {PropTypes, Component} from 'react';
 
-import config from '../config';
-import createHitsPerPage from '../createHitsPerPage';
-
 import {getTranslation} from './utils';
 
 const defaultTranslations = {
@@ -10,12 +7,10 @@ const defaultTranslations = {
   value: v => v.toString(),
 };
 
-class HitsPerPage extends Component {
+export default class HitsPerPage extends Component {
   static propTypes = {
-    // Provided by `createHitsPerPage`
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
-
     translations: PropTypes.object,
     defaultValue: PropTypes.number,
     values: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -30,15 +25,12 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const {translations, hitsPerPage, values} = this.props;
-    if (typeof hitsPerPage === 'undefined') {
-      return null;
-    }
+    const {translations, hitsPerPage, values, defaultValue} = this.props;
 
     return (
       <label>
         {getTranslation('label', defaultTranslations, translations)}
-        <select value={hitsPerPage} onChange={this.onChange}>
+        <select value={hitsPerPage || defaultValue} onChange={this.onChange}>
           {values.map(v =>
             <option key={v} value={v}>
               {getTranslation('value', defaultTranslations, translations, v)}
@@ -49,7 +41,3 @@ class HitsPerPage extends Component {
     );
   }
 }
-
-export default config(props => ({
-  defaultHitsPerPage: props.defaultValue,
-}))(createHitsPerPage(HitsPerPage));

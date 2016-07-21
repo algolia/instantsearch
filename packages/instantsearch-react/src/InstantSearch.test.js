@@ -9,10 +9,11 @@ jest.unmock('algoliasearch');
 jest.unmock('debug');
 
 import InstantSearch from './InstantSearch';
-import config from './config';
+jest.unmock('history');
+
 jest.unmock('./InstantSearch');
 jest.unmock('./createConfigManager');
-jest.unmock('./config');
+jest.unmock('./createStateManager');
 
 describe('InstantSearch', () => {
   it('correctly instantiates the API client and helper', () => {
@@ -27,15 +28,7 @@ describe('InstantSearch', () => {
     expect(helper.client.apiKey).toBe('bar');
   });
 
-  it('correctly applies config', () => {
-    const search = AlgoliaSearchHelper.prototype.search = jest.fn();
-    const Configured = config(() => ({hitsPerPage: 666}))(() => null);
-    mount(
-      <InstantSearch appId="foo" apiKey="bar" indexName="foobar">
-        <Configured />
-      </InstantSearch>
-    );
-    expect(search.mock.calls.length).toBe(1);
-    expect(search.mock.instances[0].getState().hitsPerPage).toBe(666);
+  it('exposes a configManager', () => {
+
   });
 });

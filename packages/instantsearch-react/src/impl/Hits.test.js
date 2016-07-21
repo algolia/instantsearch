@@ -5,7 +5,6 @@ import {mount} from 'enzyme';
 
 import Hits from './Hits';
 import DefaultHitComponent from './DefaultHitComponent';
-jest.unmock('../createHits');
 jest.unmock('./Hits');
 jest.unmock('./DefaultHitComponent');
 
@@ -16,7 +15,7 @@ describe('Hits', () => {
     const hits = [{objectID: 0}, {objectID: 1}, {objectID: 2}];
     const wrapper = mount(
       <Hits
-        __state={{searchResults: {hits}}}
+        hits={hits}
       />
     );
     expect(wrapper.find(DefaultHitComponent).length).toBe(3);
@@ -31,24 +30,12 @@ describe('Hits', () => {
     const wrapper = mount(
       <Hits
         itemComponent={Hit}
-        __state={{searchResults: {hits}}}
+        hits={hits}
       />
     );
     expect(wrapper.find(Hit).length).toBe(3);
     expect(wrapper.find(Hit).everyWhere((c, i) =>
       c.props().hit === hits[i]
     )).toBe(true);
-  });
-
-  it('registers its config', () => {
-    mount(
-      <Hits
-        hitsPerPage={666}
-        __state={{searchResults: {hits: []}}}
-        __testConfig={config => {
-          expect(config.hitsPerPage).toBe(666);
-        }}
-      />
-    );
   });
 });

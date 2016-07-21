@@ -6,6 +6,10 @@ import {mount} from 'enzyme';
 
 import ScrollTo from './ScrollTo';
 jest.unmock('./ScrollTo');
+jest.mock('react-algoliasearch-helper', () => ({
+  connect: mapStateToProps => Composed => props =>
+    <Composed {...props} {...mapStateToProps(props.__state)} />,
+}));
 
 const DEFAULT_STATE = {searchParameters: {page: 0}};
 

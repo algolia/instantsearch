@@ -7,19 +7,10 @@ import renderer from 'react/lib/ReactTestRenderer';
 import Pagination from './Pagination';
 import PaginationLink from './PaginationLink';
 jest.unmock('./Pagination');
-jest.unmock('react-themeable');
 jest.unmock('./utils');
-jest.unmock('../createPagination');
 jest.unmock('./PaginationLink');
 
-const DEFAULT_STATE = {
-  searchResults: {
-    nbPages: 20,
-  },
-  searchParameters: {
-    page: 9,
-  },
-};
+const DEFAULT_PROPS = {nbPages: 20, page: 9};
 
 let tree;
 
@@ -30,7 +21,7 @@ describe('Pagination', () => {
       <Pagination
         refine={refine}
         showLast
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     );
     wrapper
@@ -79,7 +70,7 @@ describe('Pagination', () => {
     const wrapper = mount(
       <Pagination
         refine={refine}
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     );
     const el = wrapper
@@ -97,7 +88,7 @@ describe('Pagination', () => {
   it('applies its default props', () => {
     tree = renderer.create(
       <Pagination
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -107,10 +98,8 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         pagesPadding={5}
-        __state={{
-          searchResults: {nbPages: 20},
-          searchParameters: {page: 0},
-        }}
+        nbPages={20}
+        page={0}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -119,10 +108,8 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         pagesPadding={4}
-        __state={{
-          searchResults: {nbPages: 20},
-          searchParameters: {page: 9},
-        }}
+        nbPages={20}
+        page={9}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -130,10 +117,8 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         pagesPadding={3}
-        __state={{
-          searchResults: {nbPages: 20},
-          searchParameters: {page: 19},
-        }}
+        nbPages={20}
+        page={19}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -141,10 +126,8 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         pagesPadding={2}
-        __state={{
-          searchResults: {nbPages: 5},
-          searchParameters: {page: 3},
-        }}
+        nbPages={5}
+        page={3}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -154,7 +137,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showFirst
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -162,7 +145,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showFirst={false}
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -172,7 +155,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showLast
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -180,7 +163,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showLast={false}
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -190,7 +173,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showPrevious
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -198,7 +181,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showPrevious={false}
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -208,7 +191,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showNext
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -216,7 +199,7 @@ describe('Pagination', () => {
     tree = renderer.create(
       <Pagination
         showNext={false}
-        __state={DEFAULT_STATE}
+        {...DEFAULT_PROPS}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -227,10 +210,8 @@ describe('Pagination', () => {
       <Pagination
         maxPages={10}
         showLast
-        __state={{
-          searchResults: {nbPages: 15},
-          searchParameters: {page: 9},
-        }}
+        nbPages={15}
+        page={9}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -239,10 +220,8 @@ describe('Pagination', () => {
       <Pagination
         maxPages={10}
         showLast
-        __state={{
-          searchResults: {nbPages: 9},
-          searchParameters: {page: 8},
-        }}
+        nbPages={9}
+        page={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -265,10 +244,8 @@ describe('Pagination', () => {
         }}
         showLast
         pagesPadding={4}
-        __state={{
-          searchResults: {nbPages: 10},
-          searchParameters: {page: 8},
-        }}
+        nbPages={10}
+        page={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -291,10 +268,8 @@ describe('Pagination', () => {
         }}
         showLast
         pagesPadding={4}
-        __state={{
-          searchResults: {nbPages: 10},
-          searchParameters: {page: 8},
-        }}
+        nbPages={10}
+        page={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();

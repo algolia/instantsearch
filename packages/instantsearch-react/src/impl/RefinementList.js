@@ -1,6 +1,5 @@
 import React, {PropTypes, Component} from 'react';
 
-import createFacetRefiner from '../createFacetRefiner';
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
 
 import RefinementListCheckboxItem from './RefinementListCheckboxItem';
@@ -12,14 +11,13 @@ class RefinementList extends Component {
     selectedItems: selectedItemsPropType,
   };
 
-  onItemClick = item => {
+  onItemChange = (item, selected) => {
     const {selectedItems} = this.props;
     const nextSelectedItems = selectedItems.slice();
-    const idx = nextSelectedItems.indexOf(item.value);
-    if (idx === -1) {
+    if (selected) {
       nextSelectedItems.push(item.value);
     } else {
-      nextSelectedItems.splice(idx, 1);
+      nextSelectedItems.splice(nextSelectedItems.indexOf(item.value), 1);
     }
     this.props.refine(nextSelectedItems);
   }
@@ -35,7 +33,7 @@ class RefinementList extends Component {
         {items.map(item =>
           <li key={item.value}>
             <RefinementListCheckboxItem
-              onClick={this.onItemClick}
+              onChange={this.onItemChange}
               item={item}
               selected={selectedItems.indexOf(item.value) !== -1}
             />
@@ -46,4 +44,4 @@ class RefinementList extends Component {
   }
 }
 
-export default createFacetRefiner(RefinementList);
+export default RefinementList;

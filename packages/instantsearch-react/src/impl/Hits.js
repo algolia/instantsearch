@@ -1,17 +1,12 @@
 import React, {PropTypes, Component} from 'react';
 
-import config from '../config';
-import createHits from '../createHits';
-
 import DefaultHitComponent from './DefaultHitComponent';
 
 // @TODO: Figure out if this component needs a `theme` prop or if we can just
 // transfer props directly onto the container div.
-class Hits extends Component {
+export default class Hits extends Component {
   static propTypes = {
-    // Provided by `createHits`
     hits: PropTypes.array,
-
     itemComponent: PropTypes.func,
   };
 
@@ -35,7 +30,3 @@ class Hits extends Component {
     );
   }
 }
-
-export default config(props => ({
-  hitsPerPage: props.hitsPerPage,
-}))(createHits(Hits));

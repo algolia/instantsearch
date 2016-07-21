@@ -7,33 +7,15 @@ import renderer from 'react/lib/ReactTestRenderer';
 import HitsPerPage from './HitsPerPage';
 jest.unmock('./HitsPerPage');
 jest.unmock('./utils');
-jest.unmock('../createHitsPerPage');
 
 describe('HitsPerPage', () => {
-  it('registers its config', () => {
-    mount(
-      <HitsPerPage
-        defaultValue={666}
-        values={[111, 333, 666]}
-        __state={{
-          searchParameters: {hitsPerPage: 111},
-        }}
-        __testConfig={config => {
-          expect(config.defaultHitsPerPage).toBe(666);
-        }}
-      />
-    );
-  });
-
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(
       <HitsPerPage
         values={[111, 333, 666]}
         refine={refine}
-        __state={{
-          searchParameters: {hitsPerPage: 111},
-        }}
+        hitsPerPage={111}
       />
     );
     wrapper.find('select').simulate('change', {target: {value: 333}});
@@ -48,9 +30,7 @@ describe('HitsPerPage', () => {
     const tree = renderer.create(
       <HitsPerPage
         values={[111, 333, 666]}
-        __state={{
-          searchParameters: {hitsPerPage: 111},
-        }}
+        hitsPerPage={111}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -64,9 +44,7 @@ describe('HitsPerPage', () => {
           label: 'HITS_LABEL',
           value: v => `HITS_VALUE_${v}`,
         }}
-        __state={{
-          searchParameters: {hitsPerPage: 111},
-        }}
+        hitsPerPage={111}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();

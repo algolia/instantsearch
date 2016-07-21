@@ -15,7 +15,7 @@ exports[`SearchBox applies its default props 0`] = `
       placeholder="Search your website"
       required={true}
       type="search"
-      value="QUERY" />
+      value="" />
     <button
       className="SearchBox__submit"
       title="Submit your search query."
@@ -45,7 +45,7 @@ exports[`SearchBox lets you customize its theme 0`] = `
       placeholder="Search your website"
       required={true}
       type="search"
-      value="QUERY" />
+      value="" />
     <button
       className="SUBMIT"
       title="Submit your search query."
@@ -75,7 +75,7 @@ exports[`SearchBox lets you customize its translations 0`] = `
       placeholder="PLACEHOLDER"
       required={true}
       type="search"
-      value="QUERY" />
+      value="" />
     <button
       className="SearchBox__submit"
       title="SUBMIT_TITLE"
@@ -109,7 +109,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       placeholder="Search your website"
       required={true}
       type="search"
-      value="QUERY" />
+      value="" />
     <button
       className="SearchBox__submit"
       title="Submit your search query."

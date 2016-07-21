@@ -1,8 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import themeable from 'react-themeable';
 
-import createSearchBox from '../createSearchBox';
-
 import {getTranslation} from './utils';
 
 const defaultTranslations = {
@@ -23,10 +21,8 @@ const defaultTheme = {
 
 class SearchBox extends Component {
   static propTypes = {
-    // Provided by `createSearchBox`
     query: PropTypes.string,
     refine: PropTypes.func.isRequired,
-
     theme: PropTypes.object,
     translations: PropTypes.object,
     // @TODO: implement
@@ -36,26 +32,23 @@ class SearchBox extends Component {
     ),
     autoFocus: PropTypes.bool,
     searchAsYouType: PropTypes.bool,
-    queryHook: PropTypes.func,
   };
 
   static defaultProps = {
     query: '',
-
     theme: defaultTheme,
     translations: defaultTranslations,
     poweredBy: false,
     focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
-    queryHook: (query, search) => search(query),
   };
 
   constructor(props) {
     super();
 
     this.state = {
-      query: props.query,
+      query: props.searchAsYouType ? null : props.query,
     };
   }
 
@@ -65,6 +58,37 @@ class SearchBox extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeyDown);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Reset query when the searchParameters query has changed.
+    // This is kind of an anti-pattern (props in state), but it works here
+    // since we know for sure that searchParameters having changed means a
+    // new search has been triggered.
+    if (
+      !nextProps.searchAsYouType &&
+      nextProps.query !== this.props.query
+    ) {
+      this.setState({
+        query: nextProps.query,
+      });
+    }
+  }
+
+  getQuery = () =>
+    this.props.searchAsYouType ?
+      this.props.query :
+      this.state.query;
+
+  setQuery = val => {
+    const {refine, searchAsYouType} = this.props;
+    if (searchAsYouType) {
+      refine(val);
+    } else {
+      this.setState({
+        query: val,
+      });
+    }
   }
 
   onInputMount = input => {
@@ -108,33 +132,20 @@ class SearchBox extends Component {
     e.preventDefault();
     e.stopPropagation();
 
-    const {refine, queryHook, searchAsYouType} = this.props;
-    const {query} = this.state;
+    const {refine, searchAsYouType} = this.props;
     if (!searchAsYouType) {
-      queryHook(query, refine);
+      refine(this.getQuery());
     }
     return false;
   };
 
   onChange = e => {
-    const {refine, queryHook, searchAsYouType} = this.props;
-    const query = e.target.value;
-    this.setState({query});
-    if (searchAsYouType) {
-      queryHook(query, refine);
-    }
+    this.setQuery(e.target.value);
   };
 
   onReset = () => {
-    const {refine, queryHook, searchAsYouType} = this.props;
-    this.setState({
-      query: '',
-    }, () => {
-      this.input.focus();
-    });
-    if (searchAsYouType) {
-      queryHook('', refine);
-    }
+    this.setQuery('');
+    this.input.focus();
   };
 
   render() {
@@ -143,7 +154,7 @@ class SearchBox extends Component {
       translations,
       autoFocus,
     } = this.props;
-    const {query} = this.state;
+    const query = this.getQuery();
     const th = themeable(theme);
 
     return (
@@ -200,4 +211,4 @@ class SearchBox extends Component {
   }
 }
 
-export default createSearchBox(SearchBox);
+export default SearchBox;

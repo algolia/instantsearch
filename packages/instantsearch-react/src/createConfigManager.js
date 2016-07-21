@@ -1,80 +1,80 @@
-import union from 'lodash/array/union';
-
-function maybeConcat(dst, src) {
-  return src ? union(src, dst) : dst;
-}
-
-function makeConfig(res, config) {
-  let hitsPerPage;
-  if (typeof config.hitsPerPage !== 'undefined') {
-    hitsPerPage = config.hitsPerPage;
-  } else if (typeof res.hitsPerPage === 'undefined') {
-    hitsPerPage = config.defaultHitsPerPage;
-  } else {
-    hitsPerPage = res.hitsPerPage;
-  }
-
-  return {
-    ...res,
-    facets: maybeConcat(res.facets, config.facets),
-    disjunctiveFacets: maybeConcat(res.disjunctiveFacets, config.disjunctiveFacets),
-    hierarchicalFacets: maybeConcat(res.hierarchicalFacets, config.hierarchicalFacets),
-    numericRefinements: {
-      ...config.numericRefinements,
-      ...res.numericRefinements,
-    },
-    maxValuesPerFacet:
-      typeof config.valuesPerFacet !== 'undefined' ?
-        Math.max(res.maxValuesPerFacet, config.valuesPerFacet) :
-        res.maxValuesPerFacet,
-    hitsPerPage,
-  };
-}
-
-const reasonMessage =
-  'This usually means that you have rendered both a `<Hits>` component ' +
-  'with a `hitsPerPage` prop and a `<HitsPerPage>` component. In this ' +
-  'case, you should remove the  `hitsPerPage` prop from the `<Hits>` ' +
-  'component.';
-
-function testConflict(configs, config, ignore = null) {
-  if (
-    typeof config.hitsPerPage !== 'undefined' &&
-    configs.some(c =>
-      c !== ignore && typeof c.defaultHitsPerPage !== 'undefined'
-    ) ||
-    typeof config.defaultHitsPerPage !== 'undefined' &&
-    configs.some(c =>
-      c !== ignore && typeof c.hitsPerPage !== 'undefined'
-    )
-  ) {
-    throw new Error(
-      /* eslint-disable prefer-template */
-      'Config conflict: a component is defining a `hitsPerPage` in its ' +
-      'config, but a `defaultHitsPerPage` is already set.\n' +
-      reasonMessage
-      /* eslint-enable prefer-template */
-    );
-  }
-}
+// import {SearchParameters} from 'algoliasearch-helper';
+// import union from 'lodash/array/union';
+// import merge from 'lodash/object/merge';
+//
+// function mergeConfigs(final, partial) {
+//   // The final configuration should override the partial configuration.
+//   return merge(
+//     {},
+//     partial,
+//     final,
+//     (a, b) => {
+//       if (Array.isArray(a)) {
+//         return union(a, b);
+//       }
+//
+//       return undefined;
+//     }
+//   );
+// }
+//
+// function testConflict(config1, config2) {
+//   if (
+//     typeof res.hitsPerPage !== 'undefined' &&
+//     typeof config.hitsPerPage !== 'undefined'
+//   ) {
+//     throw new Error(
+//       /* eslint-disable prefer-template */
+//       'Config conflict: two or more components are defining a `hitsPerPage`' +
+//       'in their configure method.\n' +
+//       'This usually means that you have rendered multiple <Hits /> with a ' +
+//       '`hitsPerPage` prop, or multiple <HitsPerPage /> with a ' +
+//       '`defaultValue` prop, or a single one of each.\n' +
+//       'Only one component can control the `hitsPerPage` parameter.\n'
+//       /* eslint-enable prefer-template */
+//     );
+//   }
+// }
+//
+// const reasonMessage =
+//
+//
+// function testConflict(configs, config, ignore = null) {
+//   if (
+//     typeof config.hitsPerPage !== 'undefined' &&
+//     configs.some(c =>
+//       c !== ignore && typeof c.defaultHitsPerPage !== 'undefined'
+//     ) ||
+//     typeof config.defaultHitsPerPage !== 'undefined' &&
+//     configs.some(c =>
+//       c !== ignore && typeof c.hitsPerPage !== 'undefined'
+//     )
+//   ) {
+//     throw new Error(
+//       /* eslint-disable prefer-template */
+//       'Config conflict: a component is defining a `hitsPerPage` in its ' +
+//       'config, but a `defaultHitsPerPage` is already set.\n' +
+//       reasonMessage
+//       /* eslint-enable prefer-template */
+//     );
+//   }
+// }
 
 export default function createConfigManager(onApply) {
-  const configs = [];
+  const configures = [];
   let updateQueued = false;
 
   return {
-    register(config) {
-      testConflict(configs, config);
-      configs.push(config);
+    register(configure) {
+      configures.push(configure);
       updateQueued = true;
     },
-    swap(config, nextConfig) {
-      testConflict(configs, nextConfig, config);
-      configs.splice(configs.indexOf(config), 1, nextConfig);
+    swap(configure, nextConfigure) {
+      configures.splice(configures.indexOf(configure), 1, nextConfigure);
       updateQueued = true;
     },
-    unregister(config) {
-      configs.splice(configs.indexOf(config), 1);
+    unregister(configure) {
+      configures.splice(configures.indexOf(configure), 1);
       updateQueued = true;
     },
     apply() {
@@ -85,19 +85,10 @@ export default function createConfigManager(onApply) {
       onApply();
     },
     getState(initialState) {
-      if (
-        typeof initialState.hitsPerPage !== 'undefined' &&
-        configs.some(c => typeof c.hitsPerPage !== 'undefined')
-      ) {
-        throw new Error(
-          /* eslint-disable prefer-template */
-          'Config conflict: a component is defining `hitsPerPage` in its ' +
-          'config, but the `AlgoliaSearchHelper` already has one.\n' +
-          reasonMessage
-          /* eslint-enable prefer-template */
-        );
-      }
-      return configs.reduce(makeConfig, initialState);
+      return configures.reduce(
+        (state, conf) => conf(state),
+        initialState
+      );
     },
   };
 }

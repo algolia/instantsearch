@@ -7,11 +7,7 @@ import renderer from 'react/lib/ReactTestRenderer';
 
 import SearchBox from './SearchBox';
 jest.unmock('./SearchBox');
-jest.unmock('react-themeable');
-jest.unmock('../createSearchBox');
 jest.unmock('./utils');
-
-const DEFAULT_STATE = {searchParameters: {query: 'QUERY'}};
 
 let tree;
 
@@ -27,46 +23,29 @@ dummy.constructor.prototype.getPublicInstance = () => null;
 describe('SearchBox', () => {
   it('applies its default props', () => {
     tree = renderer.create(
-      <SearchBox
-        __state={DEFAULT_STATE}
-      />
+      <SearchBox />
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('transfers the autoFocus prop to the underlying input element', () => {
     tree = renderer.create(
-      <SearchBox
-        autoFocus
-        __state={DEFAULT_STATE}
-      />
+      <SearchBox autoFocus />
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it('transfers the autoFocus prop to the underlying input element', () => {
-    tree = renderer.create(
-      <SearchBox
-        autoFocus
-        __state={DEFAULT_STATE}
-      />
-    ).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  it('treats searchParameters.query as a default value', () => {
+  it('treats its query prop as its input value', () => {
     // @TODO: Once ReactTestRenderer supports updating components, we'll be
     // able to use snapshots for this.
     const wrapper = mount(
-      <SearchBox
-        __state={{searchParameters: {query: 'QUERY1'}}}
-      />
+      <SearchBox query="QUERY1" />
     );
     expect(wrapper.find('input').props().value).toBe('QUERY1');
     wrapper.setProps({
-      __state: {searchParameters: {query: 'QUERY2'}},
+      query: 'QUERY2',
     });
-    expect(wrapper.find('input').props().value).toBe('QUERY1');
+    expect(wrapper.find('input').props().value).toBe('QUERY2');
     wrapper.unmount();
   });
 
@@ -80,7 +59,6 @@ describe('SearchBox', () => {
           submit: 'SUBMIT',
           reset: 'RESET',
         }}
-        __state={DEFAULT_STATE}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -96,19 +74,39 @@ describe('SearchBox', () => {
           resetTitle: 'RESET_TITLE',
           placeholder: 'PLACEHOLDER',
         }}
-        __state={DEFAULT_STATE}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  it('updates refines its query on change when searchAsYouType=true', () => {
+  it('treats query as a default value when searchAsYouType=false', () => {
+    const wrapper = mount(
+      <SearchBox query="QUERY1" searchAsYouType={false} />
+    );
+    expect(wrapper.find('input').props().value).toBe('QUERY1');
+    wrapper.find('input').simulate('change', {target: {value: 'QUERY2'}});
+    expect(wrapper.find('input').props().value).toBe('QUERY2');
+    wrapper.unmount();
+  });
+
+  it('overrides its value on query changes when searchAsYouType=false', () => {
+    const wrapper = mount(
+      <SearchBox query="QUERY1" searchAsYouType={false} />
+    );
+    expect(wrapper.find('input').props().value).toBe('QUERY1');
+    wrapper.setProps({
+      query: 'QUERY2',
+    });
+    expect(wrapper.find('input').props().value).toBe('QUERY2');
+    wrapper.unmount();
+  });
+
+  it('refines its value on change when searchAsYouType=true', () => {
     const refine = jest.fn();
     const wrapper = mount(
       <SearchBox
         searchAsYouType
         refine={refine}
-        __state={DEFAULT_STATE}
       />
     );
     wrapper.find('input').simulate('change', {target: {value: 'hello'}});
@@ -123,7 +121,6 @@ describe('SearchBox', () => {
       <SearchBox
         searchAsYouType={false}
         refine={refine}
-        __state={DEFAULT_STATE}
       />
     );
     wrapper.find('input').simulate('change', {target: {value: 'hello'}});
@@ -134,35 +131,10 @@ describe('SearchBox', () => {
     wrapper.unmount();
   });
 
-  it('delegates the actual search call to the queryHook prop', () => {
-    const refine = jest.fn();
-    const queryHook = jest.fn();
-    const wrapper = mount(
-      <SearchBox
-        refine={refine}
-        queryHook={queryHook}
-        __state={DEFAULT_STATE}
-      />
-    );
-    wrapper.find('input').simulate('change', {target: {value: 'hello'}});
-    expect(refine.mock.calls.length).toBe(0);
-    expect(queryHook.mock.calls.length).toBe(1);
-    expect(queryHook.mock.calls[0][0]).toBe('hello');
-    expect(typeof queryHook.mock.calls[0][1]).toBe('function');
-    queryHook.mock.calls[0][1](queryHook.mock.calls[0][0]);
-    expect(refine.mock.calls.length).toBe(1);
-    expect(refine.mock.calls[0][0]).toBe('hello');
-    queryHook.mock.calls[0][1]('waddup');
-    expect(refine.mock.calls.length).toBe(2);
-    expect(refine.mock.calls[1][0]).toBe('waddup');
-    wrapper.unmount();
-  });
-
   it('focuses the input when one of the keys in focusShortcuts is pressed', () => {
     const wrapper = mount(
       <SearchBox
         focusShortcuts={['s', 84]}
-        __state={DEFAULT_STATE}
       />
     );
     const input = findDOMNode(wrapper.instance()).querySelector('input');
