@@ -4,8 +4,7 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import {Provider} from 'react-algoliasearch-helper';
 import omit from 'lodash/object/omit';
 import isEqual from 'lodash/lang/isEqual';
-import {createHistory, useQueries} from 'history';
-import qs from 'qs';
+import {createHistory} from 'history';
 
 import createConfigManager from './createConfigManager';
 import createStateManager from './createStateManager';
@@ -39,10 +38,7 @@ class InstantSearch extends Component {
     const client = algoliasearch(props.appId, props.apiKey);
     const helper = this.helper = algoliasearchHelper(client, props.indexName);
 
-    const history = props.history || useQueries(createHistory)({
-      parseQueryString: qs.parse,
-      stringifyQuery: qs.stringify,
-    });
+    const history = props.history || createHistory();
 
     // The helper that is passed down to our components is not the actual helper
     // we use for searching. The reasoning behind that is that:
