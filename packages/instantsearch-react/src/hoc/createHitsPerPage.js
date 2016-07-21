@@ -26,35 +26,3 @@ export default createHOC({
     return state.setQueryParameter('hitsPerPage', hitsPerPage);
   },
 });
-
-//
-// export default function createHitsPerPage(Composed) {
-//   class HitsPerPageWrapper extends Component {
-//     static propTypes = {
-//       helper: PropTypes.object.isRequired,
-//       // items: itemPropTypes,
-//     };
-//
-//     refine = hitsPerPage => {
-//       this.props.helper.setQueryParameter('hitsPerPage', hitsPerPage).search();
-//     };
-//
-//     render() {
-//       return (
-//         <Composed
-//           refine={this.refine}
-//           // items={this.props.items.map(item => ({
-//           //   ...item,
-//           //   isRefined: item.value === this.props.hitsPerPage,
-//           // }))}
-//           // {...omit(this.props, 'hitsPerPage')}
-//           {...this.props}
-//         />
-//       );
-//     }
-//   }
-//
-//   return connect(state => ({
-//     hitsPerPage: state.searchParameters.hitsPerPage,
-//   }))(HitsPerPageWrapper);
-// }
