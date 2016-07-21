@@ -12,15 +12,15 @@
  * @typedef {Object.<string, SearchParameters.refinementList.Refinements>} SearchParameters.refinementList.RefinementList
  */
 
-var isUndefined = require('lodash/lang/isUndefined');
-var isString = require('lodash/lang/isString');
-var isFunction = require('lodash/lang/isFunction');
-var isEmpty = require('lodash/lang/isEmpty');
-var defaults = require('lodash/object/defaults');
+var isUndefined = require('lodash/isUndefined');
+var isString = require('lodash/isString');
+var isFunction = require('lodash/isFunction');
+var isEmpty = require('lodash/isEmpty');
+var defaults = require('lodash/defaults');
 
-var reduce = require('lodash/collection/reduce');
-var filter = require('lodash/collection/filter');
-var omit = require('lodash/object/omit');
+var reduce = require('lodash/reduce');
+var filter = require('lodash/filter');
+var omit = require('lodash/omit');
 
 var lib = {
   /**
@@ -117,11 +117,11 @@ var lib = {
    * given attribute.
    * @param {RefinementList} refinementList the list of refinement
    * @param {string} attribute name of the attribute
-   * @param {string} refinementValue value of the filter/refinement
+   * @param {string} [refinementValue] value of the filter/refinement
    * @return {boolean}
    */
   isRefined: function isRefined(refinementList, attribute, refinementValue) {
-    var indexOf = require('lodash/array/indexOf');
+    var indexOf = require('lodash/indexOf');
 
     var containsRefinements = !!refinementList[attribute] &&
       refinementList[attribute].length > 0;

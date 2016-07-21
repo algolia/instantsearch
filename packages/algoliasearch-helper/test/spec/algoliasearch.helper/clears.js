@@ -2,10 +2,10 @@
 
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
-var forEach = require('lodash/collection/forEach');
-var keys = require('lodash/object/keys');
-var isEmpty = require('lodash/lang/isEmpty');
-var isUndefined = require('lodash/lang/isUndefined');
+var forEach = require('lodash/forEach');
+var keys = require('lodash/keys');
+var isEmpty = require('lodash/isEmpty');
+var isUndefined = require('lodash/isUndefined');
 
 var fixture = function fixture() {
   var helper = algoliasearchHelper(undefined, 'Index', {

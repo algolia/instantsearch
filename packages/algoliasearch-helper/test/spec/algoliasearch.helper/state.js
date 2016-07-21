@@ -6,7 +6,7 @@ var algoliasearchHelper = require('../../../index');
 var SearchParameters = algoliasearchHelper.SearchParameters;
 var shortener = require('../../../src/SearchParameters/shortener');
 
-var mapKeys = require('lodash/object/mapKeys');
+var mapKeys = require('lodash/mapKeys');
 
 var qs = require('qs');
 

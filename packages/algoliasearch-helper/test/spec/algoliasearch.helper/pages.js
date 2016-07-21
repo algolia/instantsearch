@@ -35,39 +35,36 @@ test('previousPage should decrement the current page by one', function(t) {
 });
 
 test('pages should be reset if the mutation might change the number of pages', function(t) {
-  var bindAll = require('lodash/function/bindAll');
-  var partial = require('lodash/function/partial');
+  var bind = require('lodash/bind');
 
   var helper = algoliasearchHelper('', '', {
     facets: ['facet1', 'f2'],
     disjunctiveFacets: ['f1']
   });
 
-  bindAll(helper);
-
-  var testMutation = function(tester, text, testFn) {
+  function testMutation(tester, text, testFn) {
     helper.setCurrentPage(10);
     t.equal(helper.getCurrentPage(), 10, 'set the current page to 10' + text);
     testFn();
     t.equal(helper.getCurrentPage(), 0, 'page resetted' + text);
-  };
+  }
 
-  testMutation(t, ' clearRefinements', helper.clearRefinements);
-  testMutation(t, ' setQuery', partial(helper.setQuery, 'query'));
-  testMutation(t, ' addNumericRefinement', partial(helper.addNumericRefinement, 'facet', '>', '2'));
-  testMutation(t, ' removeNumericRefinement', partial(helper.removeNumericRefinement, 'facet', '>'));
+  testMutation(t, ' clearRefinements', bind(helper.clearRefinements, helper));
+  testMutation(t, ' setQuery', bind(helper.setQuery, helper, 'query'));
+  testMutation(t, ' addNumericRefinement', bind(helper.addNumericRefinement, helper, 'facet', '>', '2'));
+  testMutation(t, ' removeNumericRefinement', bind(helper.removeNumericRefinement, helper, 'facet', '>'));
 
-  testMutation(t, ' addExclude', partial(helper.addExclude, 'facet1', 'val2'));
-  testMutation(t, ' removeExclude', partial(helper.removeExclude, 'facet1', 'val2'));
+  testMutation(t, ' addExclude', bind(helper.addExclude, helper, 'facet1', 'val2'));
+  testMutation(t, ' removeExclude', bind(helper.removeExclude, helper, 'facet1', 'val2'));
 
-  testMutation(t, ' addRefine', partial(helper.addRefine, 'f2', 'val'));
-  testMutation(t, ' removeRefine', partial(helper.removeRefine, 'f2', 'val'));
+  testMutation(t, ' addRefine', bind(helper.addRefine, helper, 'f2', 'val'));
+  testMutation(t, ' removeRefine', bind(helper.removeRefine, helper, 'f2', 'val'));
 
-  testMutation(t, ' addDisjunctiveRefine', partial(helper.addDisjunctiveRefine, 'f1', 'val'));
-  testMutation(t, ' removeDisjunctiveRefine', partial(helper.removeDisjunctiveRefine, 'f1', 'val'));
+  testMutation(t, ' addDisjunctiveRefine', bind(helper.addDisjunctiveRefine, helper, 'f1', 'val'));
+  testMutation(t, ' removeDisjunctiveRefine', bind(helper.removeDisjunctiveRefine, helper, 'f1', 'val'));
 
-  testMutation(t, ' toggleRefine', partial(helper.toggleRefine, 'f1', 'v1'));
-  testMutation(t, ' toggleExclude', partial(helper.toggleExclude, 'facet1', '55'));
+  testMutation(t, ' toggleRefine', bind(helper.toggleRefine, helper, 'f1', 'v1'));
+  testMutation(t, ' toggleExclude', bind(helper.toggleExclude, helper, 'facet1', '55'));
 
   t.end();
 });

@@ -1,10 +1,10 @@
 'use strict';
 
-var forEach = require('lodash/collection/forEach');
-var map = require('lodash/collection/map');
-var reduce = require('lodash/collection/reduce');
-var merge = require('lodash/object/merge');
-var isArray = require('lodash/lang/isArray');
+var forEach = require('lodash/forEach');
+var map = require('lodash/map');
+var reduce = require('lodash/reduce');
+var merge = require('lodash/merge');
+var isArray = require('lodash/isArray');
 
 var requestBuilder = {
   /**
@@ -19,16 +19,16 @@ var requestBuilder = {
     // One query for the hits
     queries.push({
       indexName: index,
-      params: this._getHitsSearchParams(state)
+      params: requestBuilder._getHitsSearchParams(state)
     });
 
     // One for each disjunctive facets
     forEach(state.getRefinedDisjunctiveFacets(), function(refinedFacet) {
       queries.push({
         indexName: index,
-        params: this._getDisjunctiveFacetSearchParams(state, refinedFacet)
+        params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet)
       });
-    }, this);
+    });
 
     // maybe more to get the root level of hierarchical facets when activated
     forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
@@ -37,13 +37,14 @@ var requestBuilder = {
       var currentRefinement = state.getHierarchicalRefinement(refinedFacet);
       // if we are deeper than level 0 (starting from `beer > IPA`)
       // we want to get the root values
-      if (currentRefinement.length > 0 && currentRefinement[0].split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length > 1) {
+      var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+      if (currentRefinement.length > 0 && currentRefinement[0].split(separator).length > 1) {
         queries.push({
           indexName: index,
-          params: this._getDisjunctiveFacetSearchParams(state, refinedFacet, true)
+          params: requestBuilder._getDisjunctiveFacetSearchParams(state, refinedFacet, true)
         });
       }
-    }, this);
+    });
 
     return queries;
   },
@@ -56,12 +57,12 @@ var requestBuilder = {
   _getHitsSearchParams: function(state) {
     var facets = state.facets
       .concat(state.disjunctiveFacets)
-      .concat(this._getHitsHierarchicalFacetsAttributes(state));
+      .concat(requestBuilder._getHitsHierarchicalFacetsAttributes(state));
 
 
-    var facetFilters = this._getFacetFilters(state);
-    var numericFilters = this._getNumericFilters(state);
-    var tagFilters = this._getTagFilters(state);
+    var facetFilters = requestBuilder._getFacetFilters(state);
+    var numericFilters = requestBuilder._getNumericFilters(state);
+    var tagFilters = requestBuilder._getTagFilters(state);
     var additionalParams = {
       facets: facets,
       tagFilters: tagFilters
@@ -86,9 +87,9 @@ var requestBuilder = {
    * @return {object}
    */
   _getDisjunctiveFacetSearchParams: function(state, facet, hierarchicalRootLevel) {
-    var facetFilters = this._getFacetFilters(state, facet, hierarchicalRootLevel);
-    var numericFilters = this._getNumericFilters(state, facet);
-    var tagFilters = this._getTagFilters(state);
+    var facetFilters = requestBuilder._getFacetFilters(state, facet, hierarchicalRootLevel);
+    var numericFilters = requestBuilder._getNumericFilters(state, facet);
+    var tagFilters = requestBuilder._getTagFilters(state);
     var additionalParams = {
       hitsPerPage: 1,
       page: 0,
@@ -101,7 +102,11 @@ var requestBuilder = {
     var hierarchicalFacet = state.getHierarchicalFacetByName(facet);
 
     if (hierarchicalFacet) {
-      additionalParams.facets = this._getDisjunctiveHierarchicalFacetAttribute(state, hierarchicalFacet, hierarchicalRootLevel);
+      additionalParams.facets = requestBuilder._getDisjunctiveHierarchicalFacetAttribute(
+        state,
+        hierarchicalFacet,
+        hierarchicalRootLevel
+      );
     } else {
       additionalParams.facets = facet;
     }
@@ -257,7 +262,8 @@ var requestBuilder = {
           return allAttributes;
         }
 
-        var level = hierarchicalRefinement.split(state._getHierarchicalFacetSeparator(hierarchicalFacet)).length;
+        var separator = state._getHierarchicalFacetSeparator(hierarchicalFacet);
+        var level = hierarchicalRefinement.split(separator).length;
         var newAttributes = hierarchicalFacet.attributes.slice(0, level + 1);
 
         return allAttributes.concat(newAttributes);

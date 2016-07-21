@@ -1,10 +1,9 @@
 'use strict';
 
-var map = require('lodash/collection/map');
-var isArray = require('lodash/lang/isArray');
-var isNumber = require('lodash/lang/isNumber');
-var isString = require('lodash/lang/isString');
-
+var map = require('lodash/map');
+var isArray = require('lodash/isArray');
+var isNumber = require('lodash/isNumber');
+var isString = require('lodash/isString');
 function valToNumber(v) {
   if (isNumber(v)) {
     return v;

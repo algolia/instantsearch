@@ -1,0 +1,35 @@
+doctype html
+html
+  head
+    meta(content='IE=edge', http-equiv='X-UA-Compatible')
+    meta(charset='utf-8')
+    meta(content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no', name='viewport')
+    link(href='#', rel='icon', type='image/x-icon')
+    include ./common/metas.jade
+    // Use title if it's in the page YAML frontmatter
+    title= title
+    link(href='https://fonts.googleapis.com/css?family=Raleway:400,500,600', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='css/index.css')
+    link(rel='stylesheet', href='http://yandex.st/highlightjs/8.0/styles/github.min.css')
+    script(async, src='//assets.codepen.io/assets/embed/ei.js')
+  body(class=page_classes)
+    include ./common/header.jade
+    section.hero-section.shrink
+      .container
+        .hero-container
+          .fl-left
+            a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
+              span#icon-algolia.icon.icon-algolia-small.no-mobile
+            span.display-on-small.small-illustration
+              img(src='images/svg/places-illustration-65745839.svg')
+            h1= title
+    section.documentation-section
+      .container
+        nav.sidebar
+          ul
+            each item in headings 
+              li(class='level-' + item.tag)
+                a(href='#' + item.id)= item.text
+        .documentation-container
+          | !{contents}
+    include ./common/footer.jade

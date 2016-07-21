@@ -2,13 +2,13 @@
 
 module.exports = generateTrees;
 
-var last = require('lodash/array/last');
-var map = require('lodash/collection/map');
-var reduce = require('lodash/collection/reduce');
-var sortByOrder = require('lodash/collection/sortByOrder');
-var trim = require('lodash/string/trim');
-var find = require('lodash/collection/find');
-var pick = require('lodash/object/pick');
+var last = require('lodash/last');
+var map = require('lodash/map');
+var reduce = require('lodash/reduce');
+var orderBy = require('lodash/orderBy');
+var trim = require('lodash/trim');
+var find = require('lodash/find');
+var pickBy = require('lodash/pickBy');
 
 var prepareHierarchicalFacetSortBy = require('../functions/formatSort');
 
@@ -73,9 +73,9 @@ function generateHierarchicalTree(sortBy, hierarchicalSeparator, hierarchicalRoo
       var onlyMatchingValuesFn = filterFacetValues(parent.path || hierarchicalRootPath,
         currentRefinement, hierarchicalSeparator, hierarchicalRootPath, hierarchicalShowParentLevel);
 
-      parent.data = sortByOrder(
+      parent.data = orderBy(
         map(
-          pick(hierarchicalFacetResult.data, onlyMatchingValuesFn),
+          pickBy(hierarchicalFacetResult.data, onlyMatchingValuesFn),
           formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement)
         ),
         sortBy[0], sortBy[1]

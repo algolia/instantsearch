@@ -1,5 +1,5 @@
 'use strict';
-var bind = require('lodash/function/bind');
+var bind = require('lodash/bind');
 
 try {
   var warn;

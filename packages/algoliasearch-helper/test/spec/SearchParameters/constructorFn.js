@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var forOwn = require('lodash/object/forOwn');
+var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
 test('Constructor should accept an object with known keys', function(t) {

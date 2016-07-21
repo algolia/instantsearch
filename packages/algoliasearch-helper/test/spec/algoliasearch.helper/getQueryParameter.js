@@ -4,7 +4,7 @@ var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
 test('getQueryParameter', function(t) {
-  var bind = require('lodash/function/bind');
+  var bind = require('lodash/bind');
 
   var helper = algoliaSearchHelper(null, null, {
     facets: ['facet1'],
