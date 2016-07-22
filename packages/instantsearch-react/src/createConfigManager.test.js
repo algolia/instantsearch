@@ -62,22 +62,32 @@ describe('createConfigManager', () => {
   });
 
   it('batches updates', () => {
-    const onApply = jest.fn();
-    const configManager = createConfigManager(onApply);
+    const onUpdate = jest.fn();
+    const configManager = createConfigManager(onUpdate);
+
     configManager.register(conf1);
     configManager.register(conf2);
-    configManager.apply();
-    configManager.apply();
-    expect(onApply.mock.calls.length).toBe(1);
+    expect(onUpdate.mock.calls.length).toBe(0);
+    jest.runAllTicks();
+    expect(onUpdate.mock.calls.length).toBe(1);
+
     configManager.swap(conf1, conf2);
     configManager.swap(conf2, conf1);
-    configManager.apply();
-    configManager.apply();
-    expect(onApply.mock.calls.length).toBe(2);
+    expect(onUpdate.mock.calls.length).toBe(1);
+    jest.runAllTicks();
+    expect(onUpdate.mock.calls.length).toBe(2);
+
+    configManager.unregister(conf1);
+    configManager.unregister(conf2);
+    expect(onUpdate.mock.calls.length).toBe(2);
+    jest.runAllTicks();
+    expect(onUpdate.mock.calls.length).toBe(3);
+
     configManager.register(conf1);
     configManager.swap(conf1, conf2);
-    configManager.apply();
-    configManager.apply();
-    expect(onApply.mock.calls.length).toBe(3);
+    configManager.unregister(conf2);
+    expect(onUpdate.mock.calls.length).toBe(3);
+    jest.runAllTicks();
+    expect(onUpdate.mock.calls.length).toBe(4);
   });
 });

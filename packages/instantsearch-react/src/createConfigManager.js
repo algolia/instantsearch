@@ -19,15 +19,21 @@ export default function createConfigManager(onUpdate) {
   return {
     register(configure) {
       configures.push(configure);
-      batchUpdate();
+      if (onUpdate) {
+        batchUpdate();
+      }
     },
     swap(configure, nextConfigure) {
       configures.splice(configures.indexOf(configure), 1, nextConfigure);
-      batchUpdate();
+      if (onUpdate) {
+        batchUpdate();
+      }
     },
     unregister(configure) {
       configures.splice(configures.indexOf(configure), 1);
-      batchUpdate();
+      if (onUpdate) {
+        batchUpdate();
+      }
     },
     getState(initialState) {
       return configures.reduce(
