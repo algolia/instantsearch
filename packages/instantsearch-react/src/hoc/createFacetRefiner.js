@@ -37,33 +37,46 @@ export default createHOC({
   },
 
   mapStateToProps(state, props) {
+    const {searchResults, searchParameters} = state;
+    const {operator, attributeName} = props;
+
     let isFacetPresent = false;
-    if (state.searchResults) {
+    if (searchResults) {
       // @TODO: Use state.searchResultsSearchParameters instead of _state.
       // See https://github.com/algolia/react-algoliasearch-helper/pull/7
       const wasRequested =
-        state.searchResults._state[getKey(props.operator)]
-          .indexOf(props.attributeName) !== -1;
+        searchResults._state[getKey(operator)]
+          .indexOf(attributeName) !== -1;
       const wasReceived =
-        Boolean(state.searchResults.getFacetByName(props.attributeName));
-      if (state.searchResults.nbHits > 0 && wasRequested && !wasReceived) {
+        Boolean(searchResults.getFacetByName(attributeName));
+      if (searchResults.nbHits > 0 && wasRequested && !wasReceived) {
         // eslint-disable-next-line no-console
         console.warn(
-          `A component requested values for facet "${props.attributeName}", ` +
+          `A component requested values for facet "${attributeName}", ` +
           'but no facet values were retrieved from the API. This means that ' +
-          `you should add the attribute "${props.attributeName}" to the list ` +
+          `you should add the attribute "${attributeName}" to the list ` +
           'of attributes for faceting in your index settings.'
         );
       }
       isFacetPresent = wasReceived;
     }
 
+    let selectedItems = null;
+    if (isFacetPresent) {
+      if (!operator || operator === 'or') {
+        selectedItems = searchParameters.getDisjunctiveRefinements(attributeName);
+      } else {
+        selectedItems = searchParameters.getConjunctiveRefinements(attributeName);
+      }
+    }
+
     return {
       facetValues: isFacetPresent ?
-        state.searchResults.getFacetValues(props.attributeName, {
+        state.searchResults.getFacetValues(attributeName, {
           sortBy: props.sortBy,
         }) :
         null,
+      selectedItems,
     };
   },
 
@@ -80,7 +93,6 @@ export default createHOC({
         value: v.name,
         count: v.count,
       })),
-      selectedItems: facetVals.filter(v => v.isRefined).map(v => v.name),
     };
   },
 
