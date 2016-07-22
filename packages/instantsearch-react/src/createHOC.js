@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {connect} from 'react-algoliasearch-helper';
-import {SearchParameters} from 'algoliasearch-helper';
 
 import {stateManagerPropType, configManagerPropType} from './propTypes';
 
