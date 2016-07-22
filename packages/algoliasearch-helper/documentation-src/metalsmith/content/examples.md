@@ -43,9 +43,7 @@ the conjunctive facets are.
 
 {{{codepen "AXVLmy"}}}
 
-### React
+### Vue.js
 
-### Angular
-
-### Ember
+{{{codepen "bZvvvx"}}}
 
