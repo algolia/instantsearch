@@ -48,17 +48,13 @@ export default function createHOC(desc) {
       }
 
       refine = (...args) => {
-        const prevState = new SearchParameters(
-          this.context.algoliaStateManager.getState()
-        );
+        const prevState = this.context.algoliaStateManager.getState();
         const nextState = desc.refine(prevState, this.props, ...args);
         this.context.algoliaStateManager.setState(nextState);
       };
 
       createURL = (...args) => {
-        const prevState = new SearchParameters(
-          this.context.algoliaStateManager.getState()
-        );
+        const prevState = this.context.algoliaStateManager.getState();
         const nextState = desc.refine(prevState, this.props, ...args);
         return this.context.algoliaStateManager.createURL(nextState);
       };

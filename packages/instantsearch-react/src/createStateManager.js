@@ -1,3 +1,4 @@
+import {SearchParameters} from 'algoliasearch-helper';
 import {
   getQueryStringFromState,
   getStateFromQueryString,
@@ -40,14 +41,18 @@ export default function createStateManager(history, onStateChange, options) {
     currentLocation = location;
     if (!state && !history.getCurrentLocation) {
       // Initial location. Called synchronously by listen.
-      state = getStateFromQueryString(location.search.slice(1));
+      state = new SearchParameters(
+        getStateFromQueryString(location.search.slice(1))
+      );
       return;
     }
     if (ignoreThatOne) {
       ignoreThatOne = false;
       return;
     }
-    state = getStateFromQueryString(location.search.slice(1));
+    state = new SearchParameters(
+      getStateFromQueryString(location.search.slice(1))
+    );
     onStateChange();
   });
 
