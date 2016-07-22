@@ -4,7 +4,7 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import {Provider} from 'react-algoliasearch-helper';
 import omit from 'lodash/object/omit';
 import isEqual from 'lodash/lang/isEqual';
-import {createHistory} from 'history';
+import {createHistory, createMemoryHistory} from 'history';
 
 import createConfigManager from './createConfigManager';
 import createStateManager from './createStateManager';
@@ -21,10 +21,12 @@ class InstantSearch extends Component {
     createURL: PropTypes.func,
     treshold: PropTypes.number,
     configureState: PropTypes.func,
+    urlSync: PropTypes.bool,
   };
 
   static defaultProps = {
     treshold: 700,
+    urlSync: true,
   };
 
   static childContextTypes = {
@@ -38,7 +40,11 @@ class InstantSearch extends Component {
     const client = algoliasearch(props.appId, props.apiKey);
     const helper = this.helper = algoliasearchHelper(client, props.indexName);
 
-    const history = props.history || createHistory();
+    const history =
+      props.history ||
+      // Easiest way, but probably not the best. We could also add code to
+      // createStateManager to support no history at all.
+      props.urlSync ? createHistory() : createMemoryHistory();
 
     const getState = () => {
       // Retrieve the state from the state manager.
