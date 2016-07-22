@@ -46,6 +46,14 @@ class Search extends Component {
     }));
   };
 
+  createURL = (state, getQuery) => history.createHref(
+    `${state.page + 1}?${getQuery(state.setPage(undefined))}`
+  );
+
+  configureState = state => state.setPage(
+    parseInt(this.props.params.page - 1, 10)
+  );
+
   render() {
     return (
       <InstantSearch
@@ -53,18 +61,12 @@ class Search extends Component {
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="movies"
         history={history}
-        createURL={(state, getQuery) =>
-          history.createHref(
-            `${state.page + 1}?${getQuery(state.setPage(undefined))}`
-          )
-        }
-        configureState={state =>
-          state.setPage(
-            parseInt(this.props.params.page - 1, 10)
-          )
-        }
+        createURL={this.createURL}
+        configureState={this.configureState}
       >
         <div>
+          <button onClick={this.onSwitchClick}>Switch facet</button>
+
           <SearchBox focusShortcuts={['s']} searchAsYouType={true} />
           <HitsPerPage
             defaultValue={5}
@@ -75,16 +77,7 @@ class Search extends Component {
             itemComponent={Movie}
             // hitsPerPage={5}
           />
-          <Pagination showLast maxPages={10} translations={{ next: 'Next' }} />
-
-          {/*<button onClick={this.onSwitchClick}>Switch facet</button>
-          <Menu attributeName="genre" showMore sortBy={['count:desc']} />
-          <MenuSelect attributeName="genre" />
-          <HitsPerPage
-            defaultValue={5}
-            values={[5, 10]}
-          />
-          */}
+          <Pagination showLast maxPages={10} translations={{next: 'Next'}} />
         </div>
       </InstantSearch>
     );
