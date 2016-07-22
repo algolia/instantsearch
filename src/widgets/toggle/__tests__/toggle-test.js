@@ -64,7 +64,7 @@ describe('toggle()', () => {
     });
 
     it('configures hitsPerPage', () => {
-      expect(widget.getConfiguration()).toEqual({facets: ['world!']});
+      expect(widget.getConfiguration()).toEqual({disjunctiveFacets: ['world!']});
     });
 
     it('uses autoHideContainer() and headerFooter()', () => {
@@ -90,15 +90,16 @@ describe('toggle()', () => {
         };
         helper = {
           state: {
-            isFacetRefined: sinon.stub().returns(false)
+            isDisjunctiveFacetRefined: sinon.stub().returns(false)
           },
-          removeFacetRefinement: sinon.spy(),
-          addFacetRefinement: sinon.spy(),
+          removeDisjunctiveFacetRefinement: sinon.spy(),
+          addDisjunctiveFacetRefinement: sinon.spy(),
           search: sinon.spy()
         };
         state = {
-          toggleRefinement: sinon.spy(),
-          isFacetRefined: sinon.stub().returns(false)
+          removeDisjunctiveFacetRefinement: sinon.spy(),
+          addDisjunctiveFacetRefinement: sinon.spy(),
+          isDisjunctiveFacetRefined: sinon.stub().returns(false)
         };
         props = {
           cssClasses: {
@@ -148,11 +149,20 @@ describe('toggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([
+            {name: 'true', count: 2, isRefined: false},
+            {name: 'false', count: 1, isRefined: true}
+          ])
         };
         props.cssClasses.root += ' root cx';
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label}],
+          facetValues: [{
+            count: 2,
+            isRefined: false,
+            name: label,
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: true},
+            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
+          }],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -167,7 +177,10 @@ describe('toggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([
+            {name: 'true', count: 2, isRefined: false},
+            {name: 'false', count: 1, isRefined: true}
+          ])
         };
         widget = toggle({container, attributeName, label});
         widget.init({state, helper});
@@ -175,32 +188,20 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 1, isRefined: false, name: label}],
+          facetValues: [{
+            count: 2,
+            isRefined:
+            false,
+            name: label,
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: true},
+            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
+          }],
           shouldAutoHideContainer: false,
           ...props
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
-      });
-
-      it('understands numerical facets results', () => {
-        results = {
-          nbHits: 2,
-          getFacetStats: sinon.stub().returns({sum: 200})
-        };
-        widget = toggle({container, values: {on: 1, off: 2}, attributeName, label});
-        widget.init({state, helper});
-        widget.render({results, helper, state, createURL});
-
-        props = {
-          facetValues: [{count: 200, isRefined: false, name: label}],
-          shouldAutoHideContainer: false,
-          ...props
-        };
-
-        expect(results.getFacetStats.args[0][0]).toEqual(attributeName);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
       it('without facet values', () => {
@@ -215,7 +216,13 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{name: label, isRefined: false, count: null}],
+          facetValues: [{
+            name: label,
+            isRefined: false,
+            count: null,
+            onFacetValue: {name: label, isRefined: false, count: null},
+            offFacetValue: {name: label, isRefined: false, count: null}
+          }],
           shouldAutoHideContainer: true,
           ...props
         };
@@ -227,13 +234,16 @@ describe('toggle()', () => {
       it('when refined', () => {
         helper = {
           state: {
-            isFacetRefined: sinon.stub().returns(true)
+            isDisjunctiveFacetRefined: sinon.stub().returns(true)
           }
         };
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([
+            {name: 'true', count: 2, isRefined: true},
+            {name: 'false', count: 1, isRefined: false}
+          ])
         };
         widget = toggle({container, attributeName, label});
         widget.init({state, helper});
@@ -241,7 +251,13 @@ describe('toggle()', () => {
         widget.render({results, helper, state, createURL});
 
         props = {
-          facetValues: [{count: 2, isRefined: true, name: label}],
+          facetValues: [{
+            count: 1,
+            isRefined: true,
+            name: label,
+            onFacetValue: {name: label, isRefined: true, count: 2},
+            offFacetValue: {name: label, isRefined: false, count: 1}
+          }],
           shouldAutoHideContainer: false,
           ...props
         };
@@ -262,8 +278,8 @@ describe('toggle()', () => {
         const toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();
-        expect(helper.addFacetRefinement.calledOnce).toBe(true);
-        expect(helper.addFacetRefinement.calledWithExactly(attributeName, true));
+        expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
+        expect(helper.addDisjunctiveFacetRefinement.calledWithExactly(attributeName, true));
         helper.hasRefinements = sinon.stub().returns(true);
       });
     });
@@ -281,8 +297,8 @@ describe('toggle()', () => {
 
       beforeEach(() => {
         helper = {
-          removeFacetRefinement: sinon.spy(),
-          addFacetRefinement: sinon.spy(),
+          removeDisjunctiveFacetRefinement: sinon.spy(),
+          addDisjunctiveFacetRefinement: sinon.spy(),
           search: sinon.spy()
         };
       });
@@ -296,8 +312,8 @@ describe('toggle()', () => {
           toggleOn();
 
           // Then
-          expect(helper.addFacetRefinement.calledWith(attributeName, true)).toBe(true);
-          expect(helper.removeFacetRefinement.called).toBe(false);
+          expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, true)).toBe(true);
+          expect(helper.removeDisjunctiveFacetRefinement.called).toBe(false);
         });
         it('toggle off should remove all filters', () => {
           // Given
@@ -307,8 +323,8 @@ describe('toggle()', () => {
           toggleOff();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(attributeName, true)).toBe(true);
-          expect(helper.addFacetRefinement.called).toBe(false);
+          expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, true)).toBe(true);
+          expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
         });
       });
       context('specific values', () => {
@@ -321,8 +337,8 @@ describe('toggle()', () => {
           toggleOn();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
-          expect(helper.addFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
+          expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
+          expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
         });
         it('toggle off should change the refined value', () => {
           // Given
@@ -333,8 +349,8 @@ describe('toggle()', () => {
           toggleOff();
 
           // Then
-          expect(helper.removeFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
-          expect(helper.addFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
+          expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
+          expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
         });
       });
     });
@@ -345,48 +361,48 @@ describe('toggle()', () => {
         const values = {on: 'on', off: 'off'};
         widget = toggle({container, attributeName, label, values});
         const state = {
-          isFacetRefined: sinon.stub().returns(false)
+          isDisjunctiveFacetRefined: sinon.stub().returns(false)
         };
         const helper = {
-          addFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy()
         };
 
         // When
         widget.init({state, helper});
 
         // Then
-        expect(helper.addFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
+        expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
       });
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
         const values = {on: 'on', off: 'off'};
         widget = toggle({container, attributeName, label, values});
         const state = {
-          isFacetRefined: sinon.stub().returns(true)
+          isDisjunctiveFacetRefined: sinon.stub().returns(true)
         };
         const helper = {
-          addFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy()
         };
 
         // When
         widget.init({state, helper});
 
         // Then
-        expect(helper.addFacetRefinement.called).toBe(false);
+        expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
       });
       it('should not add a refinement for no custom off value on init', () => {
         // Given
         widget = toggle({container, attributeName, label});
         const state = {};
         const helper = {
-          addFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy()
         };
 
         // When
         widget.init({state, helper});
 
         // Then
-        expect(helper.addFacetRefinement.called).toBe(false);
+        expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
       });
     });
 
