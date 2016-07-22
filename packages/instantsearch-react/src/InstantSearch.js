@@ -103,9 +103,6 @@ class InstantSearch extends Component {
       }
       // We trigger a state update in our components, and we wait for them to
       // update their configs before actually triggering the search.
-      // This is different from the config manager onUpdate since a state change
-      // will trigger a re-render instantly, while a config change will only
-      // trigger a re-render once new search results have been fetched.
       helper.setState(state);
       debouncedSearch();
     }, {
