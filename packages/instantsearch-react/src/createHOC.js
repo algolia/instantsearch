@@ -33,23 +33,11 @@ export default function createHOC(desc) {
         }
       }
 
-      componentDidMount() {
-        if (hasConfigure) {
-          this.context.algoliaConfigManager.apply();
-        }
-      }
-
       componentWillUpdate(nextProps) {
         if (hasConfigure) {
           const nextConfigure = state => desc.configure(state, nextProps);
           this.context.algoliaConfigManager.swap(this.configure, nextConfigure);
           this.configure = nextConfigure;
-        }
-      }
-
-      componentDidUpdate() {
-        if (hasConfigure) {
-          this.context.algoliaConfigManager.apply();
         }
       }
 
@@ -60,15 +48,17 @@ export default function createHOC(desc) {
       }
 
       refine = (...args) => {
-        const {helper} = this.props;
-        const prevState = helper.getState();
+        const prevState = new SearchParameters(
+          this.context.algoliaStateManager.getState()
+        );
         const nextState = desc.refine(prevState, this.props, ...args);
         this.context.algoliaStateManager.setState(nextState);
       };
 
       createURL = (...args) => {
-        const {helper} = this.props;
-        const prevState = helper.getState();
+        const prevState = new SearchParameters(
+          this.context.algoliaStateManager.getState()
+        );
         const nextState = desc.refine(prevState, this.props, ...args);
         return this.context.algoliaStateManager.createURL(nextState);
       };
