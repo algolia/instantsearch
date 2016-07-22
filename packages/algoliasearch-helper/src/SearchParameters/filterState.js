@@ -1,10 +1,10 @@
 'use strict';
 
-var forEach = require('lodash/collection/forEach');
-var filter = require('lodash/collection/filter');
-var map = require('lodash/collection/map');
-var isEmpty = require('lodash/lang/isEmpty');
-var indexOf = require('lodash/array/indexOf');
+var forEach = require('lodash/forEach');
+var filter = require('lodash/filter');
+var map = require('lodash/map');
+var isEmpty = require('lodash/isEmpty');
+var indexOf = require('lodash/indexOf');
 
 function filterState(state, filters) {
   var partialState = {};

@@ -3,7 +3,7 @@
 var test = require('tape');
 
 test('hierarchical facets: throw on unknown facet', function(t) {
-  var bind = require('lodash/function/bind');
+  var bind = require('lodash/bind');
   var algoliasearch = require('algoliasearch');
 
   var algoliasearchHelper = require('../../../');

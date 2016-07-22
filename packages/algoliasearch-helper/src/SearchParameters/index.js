@@ -1,26 +1,26 @@
 'use strict';
 
-var keys = require('lodash/object/keys');
-var intersection = require('lodash/array/intersection');
-var forOwn = require('lodash/object/forOwn');
-var forEach = require('lodash/collection/forEach');
-var filter = require('lodash/collection/filter');
-var map = require('lodash/collection/map');
-var reduce = require('lodash/collection/reduce');
-var omit = require('lodash/object/omit');
-var indexOf = require('lodash/array/indexOf');
-var isNaN = require('lodash/lang/isNaN');
-var isArray = require('lodash/lang/isArray');
-var isEmpty = require('lodash/lang/isEmpty');
-var isEqual = require('lodash/lang/isEqual');
-var isUndefined = require('lodash/lang/isUndefined');
-var isString = require('lodash/lang/isString');
-var isFunction = require('lodash/lang/isFunction');
-var find = require('lodash/collection/find');
-var pluck = require('lodash/collection/pluck');
+var keys = require('lodash/keys');
+var intersection = require('lodash/intersection');
+var forOwn = require('lodash/forOwn');
+var forEach = require('lodash/forEach');
+var filter = require('lodash/filter');
+var map = require('lodash/map');
+var reduce = require('lodash/reduce');
+var omit = require('lodash/omit');
+var indexOf = require('lodash/indexOf');
+var isNaN = require('lodash/isNaN');
+var isArray = require('lodash/isArray');
+var isEmpty = require('lodash/isEmpty');
+var isEqual = require('lodash/isEqual');
+var isUndefined = require('lodash/isUndefined');
+var isString = require('lodash/isString');
+var isFunction = require('lodash/isFunction');
+var find = require('lodash/find');
 
-var defaults = require('lodash/object/defaults');
-var merge = require('lodash/object/merge');
+var defaults = require('lodash/defaults');
+var merge = require('lodash/merge');
+
 var warnOnce = require('../functions/warnOnce');
 var valToNumber = require('../functions/valToNumber');
 
@@ -43,12 +43,15 @@ function findArray(array, searchedValue) {
 }
 
 /**
+ * The facet list is the structure used to store the list of values used to
+ * filter a single attribute.
  * @typedef {string[]} SearchParameters.FacetList
  */
 
 /**
- * Structure to store numeric filters with the operator as the key
- * @typedef {Object.<string, array.<number|number[]>>} SearchParameters.OperatorList
+ * Structure to store numeric filters with the operator as the key. The supported operators
+ * are `=`, `>`, `<`, `>=`, `<=` and `!=`.
+ * @typedef {Object.<string, Array.<number|number[]>>} SearchParameters.OperatorList
  */
 
 /**
@@ -417,9 +420,10 @@ function SearchParameters(newParameters) {
   this.offset = params.offset;
   this.length = params.length;
 
+  var self = this;
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
-      this[paramName] = paramValue;
+      self[paramName] = paramValue;
 
       var message =
         'Unknown SearchParameter: `' +
@@ -428,7 +432,7 @@ function SearchParameters(newParameters) {
 
       warnOnce(message);
     }
-  }, this);
+  });
 }
 
 /**
@@ -443,6 +447,9 @@ SearchParameters.PARAMETERS = keys(new SearchParameters());
  * @return {object} a new object with the number keys as number
  */
 SearchParameters._parseNumbers = function(partialState) {
+  // Do not reparse numbers in SearchParameters, they ought to be parsed already
+  if (partialState instanceof SearchParameters) return partialState;
+
   var numbers = {};
 
   var numberKeys = [
@@ -581,7 +588,7 @@ SearchParameters.prototype = {
   /**
    * Remove all refinements (disjunctive + conjunctive + excludes + numeric filters)
    * @method
-   * @param {string|SearchParameters.clearCallback} [attribute] optionnal string or function
+   * @param {undefined|string|SearchParameters.clearCallback} [attribute] optionnal string or function
    * - If not given, means to clear all the filters.
    * - If `string`, means to clear all refinements for the `attribute` named filter.
    * - If `function`, means to clear all the refinements that return truthy values.
@@ -612,6 +619,12 @@ SearchParameters.prototype = {
       tagRefinements: []
     });
   },
+  /**
+   * Set the index.
+   * @method
+   * @param {string} index the index name
+   * @return {SearchParameters}
+   */
   setIndex: function setIndex(index) {
     if (index === this.index) return this;
 
@@ -791,7 +804,8 @@ SearchParameters.prototype = {
    * Remove all the numeric filter for a given (attribute, operator)
    * @method
    * @param {string} attribute attribute to set the filter on
-   * @param {string} operator operator of the filter (possible values: =, >, >=, <, <=, !=)
+   * @param {string} [operator] operator of the filter (possible values: =, >, >=, <, <=, !=)
+   * @param {number} [number] the value to be removed
    * @return {SearchParameters}
    */
   removeNumericRefinement: function(attribute, operator, paramValue) {
@@ -951,7 +965,7 @@ SearchParameters.prototype = {
    * values for the facetted attribute.
    * @method
    * @param {string} facet name of the attribute used for facetting
-   * @param {string} value value used to filter
+   * @param {string} [value] value used to filter
    * @return {SearchParameters}
    */
   removeFacetRefinement: function removeFacetRefinement(facet, value) {
@@ -1194,10 +1208,11 @@ SearchParameters.prototype = {
   },
   /**
    * Returns true if the facet contains exclusions or if a specific value is
-   * excluded
+   * excluded.
+   *
    * @method
    * @param {string} facet name of the attribute for used for facetting
-   * @param {string} value, optionnal value. If passed will test that this value
+   * @param {string} [value] optionnal value. If passed will test that this value
    * is filtering the given facet.
    * @return {boolean} returns true if refined
    */
@@ -1313,7 +1328,7 @@ SearchParameters.prototype = {
     return intersection(
       // enforce the order between the two arrays,
       // so that refinement name index === hierarchical facet index
-      pluck(this.hierarchicalFacets, 'name'),
+      map(this.hierarchicalFacets, 'name'),
       keys(this.hierarchicalFacetsRefinements)
     );
   },
@@ -1445,6 +1460,7 @@ SearchParameters.prototype = {
 
   /**
    * Helper function to get the hierarchicalFacet separator or the default one (`>`)
+   * @private
    * @param  {object} hierarchicalFacet
    * @return {string} returns the hierarchicalFacet.separator or `>` as default
    */
@@ -1454,6 +1470,7 @@ SearchParameters.prototype = {
 
   /**
    * Helper function to get the hierarchicalFacet prefix path or null
+   * @private
    * @param  {object} hierarchicalFacet
    * @return {string} returns the hierarchicalFacet.rootPath or null as default
    */
@@ -1463,6 +1480,7 @@ SearchParameters.prototype = {
 
   /**
    * Helper function to check if we show the parent level of the hierarchicalFacet
+   * @private
    * @param  {object} hierarchicalFacet
    * @return {string} returns the hierarchicalFacet.showParentLevel or true as default
    */
@@ -1489,10 +1507,10 @@ SearchParameters.prototype = {
 /**
  * Callback used for clearRefinement method
  * @callback SearchParameters.clearCallback
- * @param {OperatorList|FacetList} value
- * @param {string} key
- * @param {string} type numeric, disjunctiveFacet, conjunctiveFacet or exclude
+ * @param {OperatorList|FacetList} value the value of the filter
+ * @param {string} key the current attribute name
+ * @param {string} type `numeric`, `disjunctiveFacet`, `conjunctiveFacet`, `hierarchicalFacet` or `exclude`
  * depending on the type of facet
- * @return {boolean}
+ * @return {boolean} `true` if the element should be removed. `false` otherwise.
  */
 module.exports = SearchParameters;

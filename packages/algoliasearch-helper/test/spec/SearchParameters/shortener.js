@@ -2,9 +2,9 @@
 
 var test = require('tape');
 var SearchParameters = require('../../../src/SearchParameters');
-var keys = require('lodash/object/keys');
-var map = require('lodash/collection/map');
-var uniq = require('lodash/array/uniq');
+var keys = require('lodash/keys');
+var map = require('lodash/map');
+var uniq = require('lodash/uniq');
 var shortener = require('../../../src/SearchParameters/shortener');
 
 test('Should encode all the properties of AlgoliaSearchHelper properly', function(t) {

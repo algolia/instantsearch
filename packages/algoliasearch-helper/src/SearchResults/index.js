@@ -1,24 +1,24 @@
 'use strict';
 
-var forEach = require('lodash/collection/forEach');
-var compact = require('lodash/array/compact');
-var indexOf = require('lodash/array/indexOf');
-var findIndex = require('lodash/array/findIndex');
+var forEach = require('lodash/forEach');
+var compact = require('lodash/compact');
+var indexOf = require('lodash/indexOf');
+var findIndex = require('lodash/findIndex');
 
-var sum = require('lodash/collection/sum');
-var find = require('lodash/collection/find');
-var includes = require('lodash/collection/includes');
-var map = require('lodash/collection/map');
-var sortByOrder = require('lodash/collection/sortByOrder');
+var sumBy = require('lodash/sumBy');
+var find = require('lodash/find');
+var includes = require('lodash/includes');
+var map = require('lodash/map');
+var orderBy = require('lodash/orderBy');
 
-var defaults = require('lodash/object/defaults');
-var merge = require('lodash/object/merge');
+var defaults = require('lodash/defaults');
+var merge = require('lodash/merge');
 
-var isArray = require('lodash/lang/isArray');
-var isFunction = require('lodash/lang/isFunction');
+var isArray = require('lodash/isArray');
+var isFunction = require('lodash/isFunction');
 
-var partial = require('lodash/function/partial');
-var partialRight = require('lodash/function/partialRight');
+var partial = require('lodash/partial');
+var partialRight = require('lodash/partialRight');
 
 var formatSort = require('../functions/formatSort');
 
@@ -28,7 +28,7 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @typedef SearchResults.Facet
  * @type {object}
  * @property {string} name name of the attribute in the record
- * @property {object.<string, number>} data the facetting data: value, number of entries
+ * @property {object} data the facetting data: value, number of entries
  * @property {object} stats undefined unless facet_stats is retrieved from algolia
  */
 
@@ -36,11 +36,11 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @typedef SearchResults.HierarchicalFacet
  * @type {object}
  * @property {string} name name of the current value given the hierarchical level, trimmed.
- *                         If root node, you get the facet name
- * @property {number} count number (integer) of objets matching this hierarchical value
+ * If root node, you get the facet name
+ * @property {number} count number of objets matching this hierarchical value
  * @property {string} path the current hierarchical value full path
- * @property {boolean} isRefined true if the current value was refined, false otherwise
- * @property {SearchResults.HierarchicalFacet[]} data sub values for the current level
+ * @property {boolean} isRefined `true` if the current value was refined, `false` otherwise
+ * @property {HierarchicalFacet[]} data sub values for the current level
  */
 
 /**
@@ -220,8 +220,11 @@ function SearchResults(state, algoliaResponse) {
    */
   this.parsedQuery = mainSubResponse.parsedQuery;
   /**
-   * all the records that match the search parameters. It also contains _highlightResult,
-   * which describe which and how the attributes are matched.
+   * all the records that match the search parameters. Each record is
+   * augmented with a new attribute `_highlightResult`
+   * which is an object keyed by attribute and with the following properties:
+   *  - `value` : the value of the facet highlighted (html)
+   *  - `matchLevel`: full, partial or none depending on how the query terms match
    * @member {object[]}
    */
   this.hits = mainSubResponse.hits;
@@ -254,7 +257,7 @@ function SearchResults(state, algoliaResponse) {
    * sum of the processing time of all the queries
    * @member {number}
    */
-  this.processingTimeMS = sum(algoliaResponse.results, 'processingTimeMS');
+  this.processingTimeMS = sumBy(algoliaResponse.results, 'processingTimeMS');
   /**
    * The position if the position was guessed by IP.
    * @member {string}
@@ -308,6 +311,7 @@ function SearchResults(state, algoliaResponse) {
   var disjunctiveFacetsIndices = getIndices(state.disjunctiveFacets);
   var nextDisjunctiveResult = 1;
 
+  var self = this;
   // Since we send request only for disjunctive facets that have been refined,
   // we get the facets informations from the first, general, response.
   forEach(mainSubResponse.facets, function(facetValueObject, facetKey) {
@@ -317,10 +321,11 @@ function SearchResults(state, algoliaResponse) {
     );
 
     if (hierarchicalFacet) {
-      // Place the hierarchicalFacet data at the correct index depending on the attributes order that was defined at the
-      // helper initialization
+      // Place the hierarchicalFacet data at the correct index depending on
+      // the attributes order that was defined at the helper initialization
       var facetIndex = hierarchicalFacet.attributes.indexOf(facetKey);
-      this.hierarchicalFacets[findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name})][facetIndex] = {
+      var idxAttributeName = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
+      self.hierarchicalFacets[idxAttributeName][facetIndex] = {
         attribute: facetKey,
         data: facetValueObject,
         exhaustive: mainSubResponse.exhaustiveFacetsCount
@@ -332,26 +337,26 @@ function SearchResults(state, algoliaResponse) {
 
       if (isFacetDisjunctive) {
         position = disjunctiveFacetsIndices[facetKey];
-        this.disjunctiveFacets[position] = {
+        self.disjunctiveFacets[position] = {
           name: facetKey,
           data: facetValueObject,
           exhaustive: mainSubResponse.exhaustiveFacetsCount
         };
-        assignFacetStats(this.disjunctiveFacets[position], mainSubResponse.facets_stats, facetKey);
+        assignFacetStats(self.disjunctiveFacets[position], mainSubResponse.facets_stats, facetKey);
       }
       if (isFacetConjunctive) {
         position = facetsIndices[facetKey];
-        this.facets[position] = {
+        self.facets[position] = {
           name: facetKey,
           data: facetValueObject,
           exhaustive: mainSubResponse.exhaustiveFacetsCount
         };
-        assignFacetStats(this.facets[position], mainSubResponse.facets_stats, facetKey);
+        assignFacetStats(self.facets[position], mainSubResponse.facets_stats, facetKey);
       }
     }
-  }, this);
+  });
 
-  // Make sure we do not keep wholes within the hierarchical facets
+  // Make sure we do not keep holes within the hierarchical facets
   this.hierarchicalFacets = compact(this.hierarchicalFacets);
 
   // aggregate the refined disjunctive facets
@@ -365,16 +370,16 @@ function SearchResults(state, algoliaResponse) {
 
       if (hierarchicalFacet) {
         position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
-        var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
+        var attributeIndex = findIndex(self.hierarchicalFacets[position], {attribute: dfacet});
 
         // previous refinements and no results so not able to find it
         if (attributeIndex === -1) {
           return;
         }
 
-        this.hierarchicalFacets[position][attributeIndex].data = merge(
+        self.hierarchicalFacets[position][attributeIndex].data = merge(
           {},
-          this.hierarchicalFacets[position][attributeIndex].data,
+          self.hierarchicalFacets[position][attributeIndex].data,
           facetResults
         );
       } else {
@@ -382,26 +387,26 @@ function SearchResults(state, algoliaResponse) {
 
         var dataFromMainRequest = mainSubResponse.facets && mainSubResponse.facets[dfacet] || {};
 
-        this.disjunctiveFacets[position] = {
+        self.disjunctiveFacets[position] = {
           name: dfacet,
           data: defaults({}, facetResults, dataFromMainRequest),
           exhaustive: result.exhaustiveFacetsCount
         };
-        assignFacetStats(this.disjunctiveFacets[position], result.facets_stats, dfacet);
+        assignFacetStats(self.disjunctiveFacets[position], result.facets_stats, dfacet);
 
         if (state.disjunctiveFacetsRefinements[dfacet]) {
           forEach(state.disjunctiveFacetsRefinements[dfacet], function(refinementValue) {
             // add the disjunctive refinements if it is no more retrieved
-            if (!this.disjunctiveFacets[position].data[refinementValue] &&
+            if (!self.disjunctiveFacets[position].data[refinementValue] &&
               indexOf(state.disjunctiveFacetsRefinements[dfacet], refinementValue) > -1) {
-              this.disjunctiveFacets[position].data[refinementValue] = 0;
+              self.disjunctiveFacets[position].data[refinementValue] = 0;
             }
-          }, this);
+          });
         }
       }
-    }, this);
+    });
     nextDisjunctiveResult++;
-  }, this);
+  });
 
   // if we have some root level values for hierarchical facets, merge them
   forEach(state.getRefinedHierarchicalFacets(), function(refinedFacet) {
@@ -419,7 +424,7 @@ function SearchResults(state, algoliaResponse) {
 
     forEach(result.facets, function(facetResults, dfacet) {
       var position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
-      var attributeIndex = findIndex(this.hierarchicalFacets[position], {attribute: dfacet});
+      var attributeIndex = findIndex(self.hierarchicalFacets[position], {attribute: dfacet});
 
       // previous refinements and no results so not able to find it
       if (attributeIndex === -1) {
@@ -438,34 +443,34 @@ function SearchResults(state, algoliaResponse) {
 
       if (currentRefinement.length > 0) {
         var root = currentRefinement[0].split(separator)[0];
-        defaultData[root] = this.hierarchicalFacets[position][attributeIndex].data[root];
+        defaultData[root] = self.hierarchicalFacets[position][attributeIndex].data[root];
       }
 
-      this.hierarchicalFacets[position][attributeIndex].data = defaults(
+      self.hierarchicalFacets[position][attributeIndex].data = defaults(
         defaultData,
         facetResults,
-        this.hierarchicalFacets[position][attributeIndex].data
+        self.hierarchicalFacets[position][attributeIndex].data
       );
-    }, this);
+    });
 
     nextDisjunctiveResult++;
-  }, this);
+  });
 
   // add the excludes
   forEach(state.facetsExcludes, function(excludes, facetName) {
     var position = facetsIndices[facetName];
 
-    this.facets[position] = {
+    self.facets[position] = {
       name: facetName,
       data: mainSubResponse.facets[facetName],
       exhaustive: mainSubResponse.exhaustiveFacetsCount
     };
     forEach(excludes, function(facetValue) {
-      this.facets[position] = this.facets[position] || {name: facetName};
-      this.facets[position].data = this.facets[position].data || {};
-      this.facets[position].data[facetValue] = 0;
-    }, this);
-  }, this);
+      self.facets[position] = self.facets[position] || {name: facetName};
+      self.facets[position].data = self.facets[position].data || {};
+      self.facets[position].data[facetValue] = 0;
+    });
+  });
 
   this.hierarchicalFacets = map(this.hierarchicalFacets, generateHierarchicalTree(state));
 
@@ -527,6 +532,7 @@ function extractNormalizedFacetValues(results, attribute) {
 
 /**
  * Sort nodes of a hierarchical facet results
+ * @private
  * @param {HierarchicalFacet} node node to upon which we want to apply the sort
  */
 function recSort(sortFn, node) {
@@ -551,8 +557,8 @@ function vanillaSortFn(order, data) {
  * (alphabetical order). The sort formula can overriden using either string based
  * predicates or a function.
  * @param {string} attribute attribute name
- * @param {object} options configuration options
- *                          - sortBy : function or array of string
+ * @param {object} opts configuration options. One attribute can be set
+ * `sortBy` which can be either a comparison function or an array of string
  * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
  * the attribute requested (hierarchical, disjunctive or conjunctive)
  * @example
@@ -576,10 +582,10 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
   if (isArray(options.sortBy)) {
     var order = formatSort(options.sortBy);
     if (isArray(facetValues)) {
-      return sortByOrder(facetValues, order[0], order[1]);
+      return orderBy(facetValues, order[0], order[1]);
     }
     // If facetValues is not an array, it's an object thus a hierarchical facet object
-    return recSort(partialRight(sortByOrder, order[0], order[1]), facetValues);
+    return recSort(partialRight(orderBy, order[0], order[1]), facetValues);
   } else if (isFunction(options.sortBy)) {
     if (isArray(facetValues)) {
       return facetValues.sort(options.sortBy);

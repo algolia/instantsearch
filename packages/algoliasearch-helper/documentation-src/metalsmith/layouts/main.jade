@@ -1,0 +1,56 @@
+doctype html
+html
+  head
+    meta(content='IE=edge', http-equiv='X-UA-Compatible')
+    meta(charset='utf-8')
+    meta(content='width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no', name='viewport')
+    link(href='#', rel='icon', type='image/x-icon')
+    include ./common/metas.jade
+    // Use title if it's in the page YAML frontmatter
+    title= title
+    link(href='https://fonts.googleapis.com/css?family=Raleway:400,500,600', rel='stylesheet', type='text/css')
+    link(rel='stylesheet', href='css/index.css')
+  body(class=page_classes)
+    include ./common/header.jade
+    section.hero-section.shrink
+      .container
+        .hero-container
+          .fl-left
+            a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
+              span#icon-algolia.icon.icon-algolia-small.no-mobile
+            span.display-on-small.small-illustration
+              img(src='images/svg/places-illustration-65745839.svg')
+            h1= title
+            h3= subtitle
+    section
+      .container
+        div
+          h2.title Made for building your next advanced search experience with Algolia
+          p
+            | The helper is built on top of the Algolia JS Client. It provides all the necessary
+            | tools to make your next search experience. With advanced faceting features, your
+            | users will find what they’re looking for even faster and precisely than ever before.
+          a.btn.btn-cta(href='gettingstarted.html') Get Started
+    hr
+    section.oddbg
+      .container
+        div
+          h2.title Rock solid foundation
+          p
+            | The Helper is opinionated on the structure of the search logic but not about
+            | the context on which it is used. The Helper defines:
+          ul
+            li An immutable model that is the source of truth for the search parameters
+            li Events to dispatch the steps of the search flow
+          a.btn.btn-cta(href='concepts.html') Learn more
+    hr
+    section
+      .container
+        div
+          h2.title Any framework friendly
+          p
+            | The Helper is all the frameworks best friend. Its architecture doesn’t have
+            | any ties with a specific framework nor it leaks abstractions that are foreign
+            | to your tools. We even used it for creating our own widget library 
+            a(href='https://community.algolia.com/instantsearch.js/') instantsearch.js
+    include ./common/footer.jade

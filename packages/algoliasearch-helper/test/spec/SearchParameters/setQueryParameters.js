@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var forOwn = require('lodash/object/forOwn');
+var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
 test('setQueryParameters should be able to mix an actual state with a new set of parameters', function(t) {

@@ -6,9 +6,9 @@ var setup = utils.setup;
 var algoliasearchHelper = utils.isCIBrowser ? window.algoliasearchHelper : require('../../');
 
 var test = require('tape');
-var find = require('lodash/collection/find');
-var bind = require('lodash/function/bind');
-var random = require('lodash/number/random');
+var find = require('lodash/find');
+var bind = require('lodash/bind');
+var random = require('lodash/random');
 
 if (!utils.shouldRun) {
   test = test.skip;

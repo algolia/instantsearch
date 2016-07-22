@@ -1,0 +1,9 @@
+(<span class="params">
+  {{#each this as |v k|}}
+  {{#if optional}}
+    <span class="param param-{{k}} optional">{{name}}</span>
+  {{else}}
+    <span class="param param-{{k}}">{{name}}</span>
+  {{/if}}
+  {{/each}}
+</span>)

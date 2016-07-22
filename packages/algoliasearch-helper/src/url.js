@@ -11,16 +11,17 @@ var SearchParameters = require('./SearchParameters');
 
 var qs = require('qs');
 
-var bind = require('lodash/function/bind');
-var forEach = require('lodash/collection/forEach');
-var pick = require('lodash/object/pick');
-var map = require('lodash/collection/map');
-var mapKeys = require('lodash/object/mapKeys');
-var mapValues = require('lodash/object/mapValues');
-var isString = require('lodash/lang/isString');
-var isPlainObject = require('lodash/lang/isPlainObject');
-var isArray = require('lodash/lang/isArray');
-var invert = require('lodash/object/invert');
+var bind = require('lodash/bind');
+var forEach = require('lodash/forEach');
+var pick = require('lodash/pick');
+var map = require('lodash/map');
+var mapKeys = require('lodash/mapKeys');
+var mapValues = require('lodash/mapValues');
+var isString = require('lodash/isString');
+var isPlainObject = require('lodash/isPlainObject');
+var isArray = require('lodash/isArray');
+var invert = require('lodash/invert');
+
 var encode = require('qs/lib/utils').encode;
 
 function recursiveEncode(input) {

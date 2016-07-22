@@ -1,6 +1,6 @@
 'use strict';
 
-var reduce = require('lodash/collection/reduce');
+var reduce = require('lodash/reduce');
 
 /**
  * Transform sort format from user friendly notation to lodash format

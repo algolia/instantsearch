@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var forEach = require('lodash/collection/forEach');
+var forEach = require('lodash/forEach');
 
 var algoliasearchHelper = require('../../../index.js');
 var requestBuilder = require('../../../src/requestBuilder');

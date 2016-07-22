@@ -1,0 +1,21 @@
+.ac-nav
+  .ac-nav-container
+    .ac-nav-brand
+      a.ac-logo(href='https://community.algolia.com/', title='Algolia Community')
+        img.ac-logo__lg(alt='Algolia Community', src='https://res.cloudinary.com/hilnmyskv/image/upload/logo-community-inline-dark.svg', width='150')
+        img.ac-logo__sm(alt='Algolia Community', src='https://res.cloudinary.com/hilnmyskv/image/upload/v1461180081/logo-community-sm.svg')
+      span.ac-nav-brand-breadcrumb
+      a.ac-nav-brand-title(href='./', title='Home')=pkg.name
+    .ac-nav-menu
+      ul.ac-nav-menu-list
+        li.ac-nav-menu-list-item
+          a(data-path='gettingstarted.html', href='gettingstarted.html', title='Getting started') Getting started
+        li.ac-nav-menu-list-item
+          a(data-path='concepts.html', href='concepts.html', title='Concepts') Concepts
+        li.ac-nav-menu-list-item
+          a(data-path='reference.html', href='reference.html', title='Reference documentation') Reference
+        li.ac-nav-menu-list-item
+          a(data-path='examples.html', href='examples.html', title='Examples') Examples
+        li.ac-nav-menu-list-icon
+          a.ac-icon(href='https://github.com/algolia/algoliasearch-helper-js', title='GitHub repository')
+            span.ac-icon.ac-icon-github

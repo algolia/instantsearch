@@ -1,7 +1,7 @@
 'use strict';
 
-var invert = require('lodash/object/invert');
-var keys = require('lodash/object/keys');
+var invert = require('lodash/invert');
+var keys = require('lodash/keys');
 
 var keys2Short = {
   advancedSyntax: 'aS',

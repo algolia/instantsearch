@@ -5,7 +5,7 @@ var test = require('tape');
 test('hierarchical facets: pagination', function(t) {
   var algoliasearch = require('algoliasearch');
   var sinon = require('sinon');
-  var isArray = require('lodash/lang/isArray');
+  var isArray = require('lodash/isArray');
 
   var algoliasearchHelper = require('../../../');
 
