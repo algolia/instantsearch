@@ -1,5 +1,9 @@
 CHANGELOG
 
+2.12.0 - 2016-07-22
+  * feat(docs): new landing page + doc
+  * chore(dependencies): upgrade dependencies, especially move to lodash 4
+
 2.11.1 - 2016-07-20
   * chore(build): add build in npm for npmcdn.com usage
 
