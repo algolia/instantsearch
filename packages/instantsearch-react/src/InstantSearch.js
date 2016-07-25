@@ -66,10 +66,10 @@ class InstantSearch extends Component {
       return state;
     };
 
-    const search = () => {
+    const search = this.search = force => {
       const state = getState();
 
-      if (isEqual(state, helper.getState())) {
+      if (!force && isEqual(state, helper.getState())) {
         // Avoid updating the state and calling search if it hasn't changed.
         // Otherwise we end up in an infinite loop of
         // setState -> config update -> setState
@@ -94,6 +94,15 @@ class InstantSearch extends Component {
     // This setState won't trigger any updates anywhere. At this point we
     // haven't passed it to the Provider yet.
     helper.setState(getState());
+  }
+
+  componentDidMount() {
+    // In the case where no components with a custom configure method were
+    // rendered, we still need to perform a search in order to display initial
+    // results.
+    // Note that on initial render, this will be called before any configManager
+    // onUpdate callback, as they are batched and scheduled for the next tick.
+    this.search(true);
   }
 
   componentWillUnmount() {
