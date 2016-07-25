@@ -24,7 +24,13 @@ class Movie extends Component {
   render() {
     return (
       <div>
-        <img src={this.props.hit.image} />
+        <img
+          src={this.props.hit.image}
+          style={{
+            width: 154,
+            height: 231,
+          }}
+        />
         {this.props.hit.title}
       </div>
     );
