@@ -6,6 +6,7 @@ import forEach from 'lodash/collection/forEach';
 import merge from 'lodash/object/merge';
 import union from 'lodash/array/union';
 import clone from 'lodash/lang/clone';
+import isObject from 'lodash/lang/isObject';
 import {EventEmitter} from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -194,19 +195,28 @@ Usage: instantsearch({
 function enhanceConfiguration(configuration, widgetDefinition) {
   if (!widgetDefinition.getConfiguration) return configuration;
 
-  // Update searchParameters with the configuration from the widgets
+  // Get the relevant partial configuration asked by the widget
   const partialConfiguration = widgetDefinition.getConfiguration(configuration);
+
+  const customizer = (a, b) => {
+    // always create a unified array for facets refinements
+    if (Array.isArray(a)) {
+      return union(a, b);
+    }
+
+    // avoid mutating objects
+    if (isObject(a)) {
+      return merge({}, a, b, customizer);
+    }
+
+    return undefined;
+  };
+
   return merge(
     {},
     configuration,
     partialConfiguration,
-    (a, b) => {
-      if (Array.isArray(a)) {
-        return union(a, b);
-      }
-
-      return undefined;
-    }
+    customizer
   );
 }
 
