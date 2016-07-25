@@ -18,7 +18,11 @@ function createLocation(location, state) {
   };
 }
 
-export default function createStateManager(history, onStateChange, options) {
+export default function createStateManager(
+  history,
+  onStateChange,
+  options = {}
+) {
   // Making location changes ourselves will still trigger the history listener
   // so we need a flag to know when to ignore those events.
   let ignoreThatOne = false;
@@ -34,7 +38,9 @@ export default function createStateManager(history, onStateChange, options) {
     currentLocation = history.getCurrentLocation();
     // We could also use location.query with the useQueries enhancer, but that
     // would require a bit more configuration from the user.
-    state = getStateFromQueryString(location.search.slice(1));
+    state = new SearchParameters(
+      getStateFromQueryString(location.search.slice(1))
+    );
   }
 
   const unlisten = history.listen(location => {
