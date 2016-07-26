@@ -17,3 +17,7 @@ export const Pagination = createPagination(PaginationImpl);
 import createFacetRefiner from '../hoc/createFacetRefiner';
 import RefinementListImpl from './RefinementList';
 export const RefinementList = createFacetRefiner(RefinementListImpl);
+
+import createHierarchicalFacetRefiner from '../hoc/createHierarchicalFacetRefiner';
+import HierarchicalMenuImpl from './HierarchicalMenu';
+export const HierarchicalMenu = createHierarchicalFacetRefiner(HierarchicalMenuImpl);

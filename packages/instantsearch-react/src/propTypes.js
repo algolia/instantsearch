@@ -10,6 +10,13 @@ const metadataItemPropType = PropTypes.shape({
   count: PropTypes.number.isRequired,
 });
 
+export const hierarchicalItemPropType = (...args) => PropTypes.shape({
+  label: PropTypes.node,
+  value: valuePropTypes.isRequired,
+  count: PropTypes.number.isRequired,
+  children: PropTypes.arrayOf(hierarchicalItemPropType),
+})(...args);
+
 const valueItemPropType = valuePropTypes;
 
 export const itemPropType = PropTypes.oneOfType([
@@ -21,6 +28,9 @@ export const itemsPropType = PropTypes.oneOfType([
   PropTypes.arrayOf(metadataItemPropType),
   PropTypes.arrayOf(valueItemPropType),
 ]);
+
+export const hierarchicalItemsPropType =
+  PropTypes.arrayOf(hierarchicalItemPropType);
 
 export const selectedItemsPropType = PropTypes.arrayOf(valuePropTypes);
 
