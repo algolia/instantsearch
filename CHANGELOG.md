@@ -1,3 +1,18 @@
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/algolia/instantsearch.js/compare/v1.6.4...v1.7.0) (2016-07-26)
+
+
+### Bug Fixes
+
+* **searchParameters:** avoid mutating provided objects (#1148) ([0ea3bef](https://github.com/algolia/instantsearch.js/commit/0ea3bef)), closes [#1130](https://github.com/algolia/instantsearch.js/issues/1130)
+
+
+### Features
+
+* **toggle:** Provide a better default widget (#1146) ([d54107e](https://github.com/algolia/instantsearch.js/commit/d54107e)), closes [#1096](https://github.com/algolia/instantsearch.js/issues/1096) [#919](https://github.com/algolia/instantsearch.js/issues/919)
+
+
+
 <a name="1.6.4"></a>
 ## [1.6.4](https://github.com/algolia/instantsearch.js/compare/v1.6.3...v1.6.4) (2016-07-12)
 

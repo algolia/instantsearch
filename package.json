@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "1.6.4",
+  "version": "1.7.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "main": "dist-es5-module/index.js",
   "author": "Algolia <support@algolia.com>",

@@ -43,7 +43,7 @@
 <span class='attr-optional'>`options.templates.item`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>function</code>)</span>
 </p>
-<p class="attr-description">Item template</p>
+<p class="attr-description">Item template, provided with `name`, `count`, `isRefined`, `url` data properties count is always the number of hits that would be shown if you toggle the widget. We also provide `onFacetValue` and `offFacetValue` objects with according counts.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates.footer`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>function</code>)</span>
