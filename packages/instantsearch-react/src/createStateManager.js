@@ -1,9 +1,10 @@
-import {SearchParameters} from 'algoliasearch-helper';
-import {
+import {SearchParameters, url} from 'algoliasearch-helper';
+
+const {
   getQueryStringFromState,
   getStateFromQueryString,
   getUnrecognizedParametersInQueryString,
-} from 'algoliasearch-helper/src/url';
+} = url;
 
 function createLocation(location, state) {
   const foreignParams = getUnrecognizedParametersInQueryString(
