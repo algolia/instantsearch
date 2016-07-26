@@ -398,7 +398,6 @@ Algolia.
 {{> jsdoc jsdoc/helper/getState}}
 {{> jsdoc jsdoc/helper/setState}}
 {{> jsdoc jsdoc/helper/overrideStateWithoutTriggeringChangeEvent}}
-{{> jsdoc jsdoc/helper/getStateAsQueryString}}
 
 ### Events
 
@@ -525,3 +524,14 @@ instance contain the change implied by the method call.
 {{> jsdoc jsdoc/state/getHierarchicalFacetByName}}
 {{> jsdoc jsdoc/state/make}}
 {{> jsdoc jsdoc/state/validate}}
+
+## URL
+
+The helper exposes some URL utility methods for serializing and deserializing
+state to and from a URL query string.
+
+The following methods are available under the `algoliasearchHelper.url` namespace.
+
+{{> jsdoc jsdoc/url/getStateFromQueryString}}
+{{> jsdoc jsdoc/url/getUnrecognizedParametersInQueryString}}
+{{> jsdoc jsdoc/url/getQueryStringFromState}}

@@ -649,8 +649,9 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
 };
 
 /**
- * Get part of the state as a query string. By default, the output keys will not
+ * DEPRECATED Get part of the state as a query string. By default, the output keys will not
  * be prefixed and will only take the applied refinements and the query.
+ * @deprecated
  * @param {object} [options] May contain the following parameters :
  *
  * **filters** : possible values are all the keys of the [SearchParameters](#searchparameters), `index` for
@@ -699,8 +700,9 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = url.getStateFromQueryStrin
 AlgoliaSearchHelper.getForeignConfigurationInQueryString = url.getUnrecognizedParametersInQueryString;
 
 /**
- * Overrides part of the state with the properties stored in the provided query
+ * DEPRECATED Overrides part of the state with the properties stored in the provided query
  * string.
+ * @deprecated
  * @param {string} queryString the query string containing the informations to url the state
  * @param {object} options optionnal parameters :
  *  - prefix : prefix used for the algolia parameters

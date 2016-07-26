@@ -67,7 +67,7 @@ function sortQueryStringValues(prefixRegexp, invertedMapping, a, b) {
 /**
  * Read a query string and return an object containing the state
  * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options :
+ * @param {object} [options] accepted options :
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
  *   - mapping : map short attributes to another value e.g. {q: 'query'}
@@ -100,7 +100,7 @@ exports.getStateFromQueryString = function(queryString, options) {
  * Retrieve an object of all the properties that are not understandable as helper
  * parameters.
  * @param {string} queryString the query string to read
- * @param {object} options the options
+ * @param {object} [options] the options
  *   - prefixForParameters : prefix used for the helper configuration keys
  *   - mapping : map short attributes to another value e.g. {q: 'query'}
  * @return {object} the object containing the parsed configuration that doesn't

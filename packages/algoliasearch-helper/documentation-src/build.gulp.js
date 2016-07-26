@@ -56,6 +56,10 @@ function makeMetalsmithBuilder() {
                   namespace: 'state'
                 }))
                 .use(jsdoc({
+                  src: 'src/url.js',
+                  namespace: 'url'
+                }))
+                .use(jsdoc({
                   src: 'index.js',
                   namespace: 'main'
                 }))
