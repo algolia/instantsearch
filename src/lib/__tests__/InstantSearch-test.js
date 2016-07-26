@@ -113,6 +113,26 @@ describe('InstantSearch lifecycle', () => {
     expect(helperSearchSpy.calledOnce).toBe(false);
   });
 
+  it('does not fail when passing same references inside multiple searchParameters props', () => {
+    const disjunctiveFacetsRefinements = {fruits: ['apple']};
+    const facetsRefinements = disjunctiveFacetsRefinements;
+    search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+      searchParameters: {
+        disjunctiveFacetsRefinements,
+        facetsRefinements
+      }
+    });
+    search.addWidget({
+      getConfiguration: () => ({disjunctiveFacetsRefinements: {fruits: ['orange']}}),
+      init: () => {}
+    });
+    search.start();
+    expect(search.searchParameters.facetsRefinements).toEqual({fruits: ['apple']});
+  });
+
   context('when adding a widget', () => {
     let widget;
 
