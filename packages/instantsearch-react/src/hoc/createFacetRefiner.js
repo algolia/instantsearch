@@ -37,15 +37,17 @@ export default createHOC({
   },
 
   mapStateToProps(state, props) {
-    const {searchResults, searchParameters} = state;
-    const {operator, attributeName} = props;
+    const {
+      searchResults,
+      searchParameters,
+      searchResultsSearchParameters,
+    } = state;
+    const {operator = 'or', attributeName} = props;
 
     let isFacetPresent = false;
     if (searchResults) {
-      // @TODO: Use state.searchResultsSearchParameters instead of _state.
-      // See https://github.com/algolia/react-algoliasearch-helper/pull/7
       const wasRequested =
-        searchResults._state[getKey(operator)]
+        searchResultsSearchParameters[getKey(operator)]
           .indexOf(attributeName) !== -1;
       const wasReceived =
         Boolean(searchResults.getFacetByName(attributeName));
@@ -61,9 +63,12 @@ export default createHOC({
       isFacetPresent = wasReceived;
     }
 
-    let selectedItems = null;
-    if (isFacetPresent) {
-      if (!operator || operator === 'or') {
+    let selectedItems = [];
+    if (
+      operator === 'or' && searchParameters.isDisjunctiveFacet(attributeName) ||
+      searchParameters.isConjunctiveFacet(attributeName)
+    ) {
+      if (operator === 'or') {
         selectedItems = searchParameters.getDisjunctiveRefinements(attributeName);
       } else {
         selectedItems = searchParameters.getConjunctiveRefinements(attributeName);
@@ -107,7 +112,9 @@ export default createHOC({
     if (state[key].indexOf(attributeName) === -1) {
       // While the facet will already be present in the search results thanks to
       // the configManager, refining it should persist it in the helper's state.
-      // @TODO: Figure out if this is really needed?
+      // @TODO: Or should it? We could also temporarily set it so that the
+      // helper doesn't complain, but it should theoretically always be present
+      // in the final configured state.
       state = state.setQueryParameters({
         [key]: union(state[key], [attributeName]),
       });
