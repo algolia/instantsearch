@@ -107,8 +107,9 @@ export default createHOC({
     if (state[key].indexOf(attributeName) === -1) {
       // While the facet will already be present in the search results thanks to
       // the configManager, refining it should persist it in the helper's state.
+      // @TODO: Figure out if this is really needed?
       state = state.setQueryParameters({
-        [key]: state[key].concat([attributeName]),
+        [key]: union(state[key], [attributeName]),
       });
     }
 

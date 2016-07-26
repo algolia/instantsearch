@@ -9,10 +9,13 @@ function createLocation(location, state) {
   const foreignParams = getUnrecognizedParametersInQueryString(
     location.search.slice(1)
   );
+  // Setting the moreAttributes option to an empty object will append an
+  // unnecessary & at the end of the query string.
+  const moreAttributes = Object.keys(foreignParams) > 0 ? foreignParams : null;
   return {
     ...location,
     search: `?${getQueryStringFromState(state, {
-      moreAttributes: foreignParams,
+      moreAttributes,
       safe: true,
     })}`,
   };
@@ -29,7 +32,7 @@ export default function createStateManager(
   let state;
   let currentLocation;
   // Timestamp of the last push. Useful for debouncing history pushes.
-  let lastPush = 0;
+  let lastPush = -1;
   const treshold = options.treshold || 0;
 
   // In history V2, .listen is called with the initial location.
@@ -39,7 +42,7 @@ export default function createStateManager(
     // We could also use location.query with the useQueries enhancer, but that
     // would require a bit more configuration from the user.
     state = new SearchParameters(
-      getStateFromQueryString(location.search.slice(1))
+      getStateFromQueryString(currentLocation.search.slice(1))
     );
   }
 
@@ -62,26 +65,29 @@ export default function createStateManager(
     onStateChange();
   });
 
+  const stateToQueryString = (urlState, moreAttributes) =>
+    getQueryStringFromState(urlState, {
+      moreAttributes,
+      safe: true,
+    });
+
+  const createURL = newState => {
+    if (options.createURL) {
+      return options.createURL(newState, stateToQueryString);
+    }
+    return history.createHref(createLocation(
+      currentLocation,
+      newState
+    ));
+  };
+
   return {
     setState(nextState) {
       ignoreThatOne = true;
       state = nextState;
-      let nextHref;
-      if (options.createURL) {
-        nextHref = options.createURL(nextState, (urlState, moreAttributes) =>
-          getQueryStringFromState(urlState, {
-            moreAttributes,
-            safe: true,
-          })
-        );
-      } else {
-        nextHref = history.createHref(createLocation(
-          currentLocation,
-          nextState
-        ));
-      }
+      const nextHref = createURL(nextState);
       const newPush = Date.now();
-      if (newPush - lastPush <= treshold) {
+      if (lastPush !== -1 && newPush - lastPush <= treshold) {
         history.replace(nextHref);
       } else {
         history.push(nextHref);
@@ -92,15 +98,7 @@ export default function createStateManager(
     getState() {
       return state;
     },
-    createURL(newState) {
-      if (options.createURL) {
-        return options.createURL(newState, getQueryStringFromState);
-      }
-      return history.createHref(createLocation(
-        currentLocation,
-        newState
-      ));
-    },
+    createURL,
     unlisten,
   };
 }

@@ -44,7 +44,7 @@ class InstantSearch extends Component {
       props.history ||
       // Easiest way, but probably not the best. We could also add code to
       // createStateManager to support no history at all.
-      props.urlSync ? createHistory() : createMemoryHistory();
+      (props.urlSync ? createHistory() : createMemoryHistory());
 
     const getState = () => {
       // Retrieve the state from the state manager.
