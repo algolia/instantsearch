@@ -28,7 +28,9 @@ const bem = bemHelper('ais-toggle');
  * having `false` has a value for the selected attribute.
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template
+ * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * count is always the number of hits that would be shown if you toggle the widget. We also provide
+ * `onFacetValue` and `offFacetValue` objects with according counts.
  * @param  {string|Function} [options.templates.footer] Footer template
  * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
  * @param  {boolean} [options.autoHideContainer=true] Hide the container when there are no results
@@ -100,7 +102,7 @@ function toggle({
 
   return {
     getConfiguration: () => ({
-      facets: [attributeName]
+      disjunctiveFacets: [attributeName]
     }),
     init({state, helper, templatesConfig}) {
       this._templateProps = prepareTemplateProps({
@@ -116,9 +118,9 @@ function toggle({
         return;
       }
       // Add filtering on the 'off' value if set
-      const isRefined = state.isFacetRefined(attributeName, userValues.on);
+      const isRefined = state.isDisjunctiveFacetRefined(attributeName, userValues.on);
       if (!isRefined) {
-        helper.addFacetRefinement(attributeName, userValues.off);
+        helper.addDisjunctiveFacetRefinement(attributeName, userValues.off);
       }
     },
     toggleRefinement: (helper, facetValue, isRefined) => {
@@ -128,39 +130,57 @@ function toggle({
       // Checking
       if (!isRefined) {
         if (hasAnOffValue) {
-          helper.removeFacetRefinement(attributeName, off);
+          helper.removeDisjunctiveFacetRefinement(attributeName, off);
         }
-        helper.addFacetRefinement(attributeName, on);
+        helper.addDisjunctiveFacetRefinement(attributeName, on);
       } else {
         // Unchecking
-        helper.removeFacetRefinement(attributeName, on);
+        helper.removeDisjunctiveFacetRefinement(attributeName, on);
         if (hasAnOffValue) {
-          helper.addFacetRefinement(attributeName, off);
+          helper.addDisjunctiveFacetRefinement(attributeName, off);
         }
       }
 
       helper.search();
     },
     render({helper, results, state, createURL}) {
-      const isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
-      const currentRefinement = isRefined ? userValues.on : userValues.off;
-      let count;
-      if (typeof currentRefinement === 'number') {
-        count = results.getFacetStats(attributeName).sum;
-      } else {
-        const facetData = find(results.getFacetValues(attributeName), {name: isRefined.toString()});
-        count = facetData !== undefined ? facetData.count : null;
-      }
+      const isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, userValues.on);
+      const onValue = userValues.on;
+      const offValue = userValues.off === undefined ? false : userValues.off;
+      const allFacetValues = results.getFacetValues(attributeName);
+      const onData = find(allFacetValues, {name: onValue.toString()});
+      const onFacetValue = {
+        name: label,
+        isRefined: onData !== undefined ? onData.isRefined : false,
+        count: onData === undefined ? null : onData.count
+      };
+      const offData = find(allFacetValues, {name: offValue.toString()});
+      const offFacetValue = {
+        name: label,
+        isRefined: offData !== undefined ? offData.isRefined : false,
+        count: offData === undefined ? null : offData.count
+      };
+
+      // what will we show by default,
+      // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
+      // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
+      const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
       const facetValue = {
         name: label,
         isRefined,
-        count
+        count: nextRefinement === undefined ? null : nextRefinement.count,
+        onFacetValue,
+        offFacetValue
       };
 
       // Bind createURL to this specific attribute
       function _createURL() {
-        return createURL(state.toggleRefinement(attributeName, isRefined));
+        return createURL(
+          state
+            .removeDisjunctiveFacetRefinement(attributeName, isRefined ? onValue : userValues.off)
+            .addDisjunctiveFacetRefinement(attributeName, isRefined ? userValues.off : onValue)
+        );
       }
 
       ReactDOM.render(
