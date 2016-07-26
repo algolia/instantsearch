@@ -51,7 +51,11 @@ module.exports = function(requires) {
 
   Handlebars.registerHelper('codepen', function(hash, height) {
     var h = typeof height === 'number' ? height : 790;
-    var copedenContent = '<p data-height="' + h + '" style="height:' + h + 'px" data-theme-id="light" data-slug-hash="' + hash + '" data-default-tab="result" data-user="Algolia" data-embed-version="2" class="codepen">See the Pen <a href="http://codepen.io/Algolia/pen/JKyQxx/">Results with highlighting and no results message.</a> by Algolia (<a href="http://codepen.io/Algolia">@Algolia</a>) on <a href="http://codepen.io">CodePen</a>.</p>';
+    var url = '//codepen.io/Algolia/embed/' + hash +
+      '?height=' + h +
+      '&amp;theme-id=light&amp;slug-hash=' + hash +
+      '&amp;default-tab=result&amp;user=Algolia&amp;embed-version=2';
+    var copedenContent = '<iframe id="cp_embed_' + hash + '" src="' + url + '" scrolling="no" frameborder="0" height="790" allowtransparency="true" allowfullscreen="true" name="CodePen Embed" title="CodePen Embed" class="cp_embed_iframe " style="width: 100%; overflow: hidden;"></iframe>';
     var downloadLink = '<a href="http://codepen.io/Algolia/share/zip/' + hash + '/">Download this example.</a>';
     return new Handlebars.SafeString(downloadLink + copedenContent);
   });

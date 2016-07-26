@@ -1399,7 +1399,6 @@ SearchParameters.prototype = {
   },
   /**
    * Let the user set any of the parameters with a plain object.
-   * It won't let the user define custom properties.
    * @method
    * @param {object} params all the keys and the values to be updated
    * @return {SearchParameters} a new updated instance

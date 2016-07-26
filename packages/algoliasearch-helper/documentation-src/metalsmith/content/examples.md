@@ -39,6 +39,14 @@ the conjunctive facets are.
 
 ## Use with frameworks
 
+### React
+
+{{{codepen "EyLdYb"}}}
+
+### Angular 2
+
+{{{codepen "ZOxdgG"}}}
+
 ### Backbone
 
 {{{codepen "AXVLmy"}}}
@@ -46,4 +54,3 @@ the conjunctive facets are.
 ### Vue.js
 
 {{{codepen "bZvvvx"}}}
-
