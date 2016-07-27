@@ -44,6 +44,54 @@ test('[No changes] setQuery', function(t) {
   t.end();
 });
 
+test('[No changes] addFacet', function(t) {
+  var state = SearchParameters.make({}).addFacet('facet');
+
+  t.equal(state.addFacet('facet'), state, 'addFacet should return the same instance');
+
+  t.end();
+});
+
+test('[No changes] removeFacet', function(t) {
+  var state = SearchParameters.make({});
+
+  t.equal(state.removeFacet('facet'), state, 'removeFacet should return the same instance');
+
+  t.end();
+});
+
+test('[No changes] addDisjunctiveFacet', function(t) {
+  var state = SearchParameters.make({}).addDisjunctiveFacet('facet');
+
+  t.equal(state.addDisjunctiveFacet('facet'), state, 'addDisjunctiveFacet should return the same instance');
+
+  t.end();
+});
+
+test('[No changes] removeDisjunctiveFacet', function(t) {
+  var state = SearchParameters.make({});
+
+  t.equal(state.removeDisjunctiveFacet('facet'), state, 'removeDisjunctiveFacet should return the same instance');
+
+  t.end();
+});
+
+test('[No changes] addHierarchicalFacet', function(t) {
+  var state = SearchParameters.make({}).addHierarchicalFacet({name: 'facet'});
+
+  t.equal(state.addHierarchicalFacet({name: 'facet'}), state, 'addHierarchicalFacet should return the same instance');
+
+  t.end();
+});
+
+test('[No changes] removeHierarchicalFacet', function(t) {
+  var state = SearchParameters.make({});
+
+  t.equal(state.removeHierarchicalFacet('facet'), state, 'removeHierarchicalFacet should return the same instance');
+
+  t.end();
+});
+
 test('[No changes] addTagRefinement', function(t) {
   var state = SearchParameters.make({}).addTagRefinement('tag');
 

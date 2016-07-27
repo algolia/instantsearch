@@ -888,6 +888,54 @@ SearchParameters.prototype = {
     }
   },
   /**
+   * Add a facet to the facets attribute of the helper configuration, if it
+   * isn't already present.
+   * @method
+   * @param {string} facet facet name to add
+   * @return {SearchParameters}
+   */
+  addFacet: function addFacet(facet) {
+    if (this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      facets: this.facets.concat([facet])
+    });
+  },
+  /**
+   * Add a disjunctive facet to the disjunctiveFacets attribute of the helper
+   * configuration, if it isn't already present.
+   * @method
+   * @param {string} facet disjunctive facet name to add
+   * @return {SearchParameters}
+   */
+  addDisjunctiveFacet: function addDisjunctiveFacet(facet) {
+    if (this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      disjunctiveFacets: this.disjunctiveFacets.concat([facet])
+    });
+  },
+  /**
+   * Add a hierarchical facet to the hierarchicalFacets attribute of the helper
+   * configuration, if it isn't already present.
+   * @method
+   * @param {object} hierarchicalFacet hierarchical facet to add
+   * @return {SearchParameters}
+   */
+  addHierarchicalFacet: function addHierarchicalFacet(hierarchicalFacet) {
+    if (this.isHierarchicalFacet(hierarchicalFacet.name)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      hierarchicalFacets: this.hierarchicalFacets.concat([hierarchicalFacet])
+    });
+  },
+  /**
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
@@ -958,6 +1006,60 @@ SearchParameters.prototype = {
     };
 
     return this.setQueryParameters(modification);
+  },
+  /**
+   * Remove a facet from the facets attribute of the helper configuration, if it
+   * is present.
+   * @method
+   * @param {string} facet facet name to remove
+   * @return {SearchParameters}
+   */
+  removeFacet: function removeFacet(facet) {
+    if (!this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      facets: filter(this.facets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Remove a disjunctive facet from the disjunctiveFacets attribute of the
+   * helper configuration, if it is present.
+   * @method
+   * @param {string} facet disjunctive facet name to remove
+   * @return {SearchParameters}
+   */
+  removeDisjunctiveFacet: function removeDisjunctiveFacet(facet) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      disjunctiveFacets: filter(this.disjunctiveFacets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Add a hierarchical facet to the hierarchicalFacets attribute of the helper
+   * configuration, if it isn't already present.
+   * @method
+   * @param {string} facet hierarchical facet name to remove
+   * @return {SearchParameters}
+   */
+  removeHierarchicalFacet: function removeHierarchicalFacet(facet) {
+    if (!this.isHierarchicalFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      hierarchicalFacets: filter(this.hierarchicalFacets, function(f) {
+        return f.name !== facet;
+      })
+    });
   },
   /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
