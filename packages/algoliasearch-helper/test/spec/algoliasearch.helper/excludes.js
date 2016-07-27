@@ -45,7 +45,7 @@ test('removeExclude should remove an exclusion', function(t) {
   t.end();
 });
 
-test('isExcluded should allow to omit the value', function(t) {
+test.only('isExcluded should allow to omit the value', function(t) {
   var facetName = 'foo';
   var facetValueToExclude = 'brand';
   var facetValueNotExcluded = 'bar';
