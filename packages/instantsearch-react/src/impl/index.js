@@ -14,10 +14,10 @@ import createPagination from '../hoc/createPagination';
 import PaginationImpl from './Pagination';
 export const Pagination = createPagination(PaginationImpl);
 
-import createFacetRefiner from '../hoc/createFacetRefiner';
+import createRefinementList from '../hoc/createRefinementList';
 import RefinementListImpl from './RefinementList';
-export const RefinementList = createFacetRefiner(RefinementListImpl);
+export const RefinementList = createRefinementList(RefinementListImpl);
 
-import createHierarchicalFacetRefiner from '../hoc/createHierarchicalFacetRefiner';
+import createHierarchicalMenu from '../hoc/createHierarchicalMenu';
 import HierarchicalMenuImpl from './HierarchicalMenu';
-export const HierarchicalMenu = createHierarchicalFacetRefiner(HierarchicalMenuImpl);
+export const HierarchicalMenu = createHierarchicalMenu(HierarchicalMenuImpl);

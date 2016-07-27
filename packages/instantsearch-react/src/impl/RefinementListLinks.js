@@ -8,6 +8,7 @@ import MenuLink from './MenuLink';
 class RefinementList extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
   };
@@ -25,7 +26,7 @@ class RefinementList extends Component {
   }
 
   render() {
-    const {items, selectedItems} = this.props;
+    const {items, selectedItems, createURL} = this.props;
     if (!items) {
       return null;
     }
@@ -36,6 +37,7 @@ class RefinementList extends Component {
           <li key={item.value}>
             <MenuLink
               onClick={this.onItemClick}
+              createURL={createURL}
               item={item}
               selected={selectedItems.indexOf(item.value) !== -1}
             />

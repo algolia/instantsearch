@@ -4,8 +4,8 @@ import MockDate from 'mockdate';
 
 import createStateManager from './createStateManager';
 jest.unmock('./createStateManager');
+import {SearchParameters} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
-jest.unmock('algoliasearch-helper/src/url');
 
 const location = {
   search: '?q=hellooo',
@@ -46,7 +46,7 @@ describe('createStateManager', () => {
       () => null
     );
 
-    stateManager.setState({query: 'goodbye'});
+    stateManager.setState(new SearchParameters({query: 'goodbye'}));
     expect(stateManager.getState().query).toBe('goodbye');
   });
 
@@ -58,7 +58,7 @@ describe('createStateManager', () => {
     );
 
     expect(onChange.mock.calls.length).toBe(0);
-    stateManager.setState({query: 'goodbye'});
+    stateManager.setState(new SearchParameters({query: 'goodbye'}));
     expect(onChange.mock.calls.length).toBe(1);
   });
 
@@ -72,7 +72,7 @@ describe('createStateManager', () => {
     );
 
     expect(history.push.mock.calls.length).toBe(0);
-    stateManager.setState({query: 'goodbye'});
+    stateManager.setState(new SearchParameters({query: 'goodbye'}));
     expect(history.push.mock.calls.length).toBe(1);
     expect(history.push.mock.calls[0][0].search).toBe('?q=goodbye');
   });
@@ -91,19 +91,19 @@ describe('createStateManager', () => {
 
       MockDate.set(0);
       expect(history.push.mock.calls.length).toBe(0);
-      stateManager.setState({query: 'goodbye'});
+      stateManager.setState(new SearchParameters({query: 'goodbye'}));
       expect(history.push.mock.calls.length).toBe(1);
       expect(history.push.mock.calls[0][0].search).toBe('?q=goodbye');
-      stateManager.setState({query: 'au revoir'});
+      stateManager.setState(new SearchParameters({query: 'au revoir'}));
       expect(history.push.mock.calls.length).toBe(1);
       expect(history.replace.mock.calls.length).toBe(1);
       expect(history.replace.mock.calls[0][0].search).toBe('?q=au%20revoir');
       MockDate.set(treshold + 1);
-      stateManager.setState({query: 'goodbye'});
+      stateManager.setState(new SearchParameters({query: 'goodbye'}));
       expect(history.replace.mock.calls.length).toBe(1);
       expect(history.push.mock.calls.length).toBe(2);
       expect(history.push.mock.calls[1][0].search).toBe('?q=goodbye');
-      stateManager.setState({query: 'au revoir'});
+      stateManager.setState(new SearchParameters({query: 'au revoir'}));
       expect(history.push.mock.calls.length).toBe(2);
       expect(history.replace.mock.calls.length).toBe(2);
       expect(history.replace.mock.calls[1][0].search).toBe('?q=au%20revoir');
@@ -126,7 +126,7 @@ describe('createStateManager', () => {
       {createURL}
     );
 
-    const state = {query: 'goodbye'};
+    const state = new SearchParameters({query: 'goodbye'});
     stateManager.setState(state);
     expect(history.push.mock.calls.length).toBe(1);
     expect(history.push.mock.calls[0][0]).toBe(state);

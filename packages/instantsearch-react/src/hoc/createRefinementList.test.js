@@ -4,31 +4,39 @@
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createFacetRefiner from './createFacetRefiner';
-jest.unmock('./createFacetRefiner');
+import createRefinementList from './createRefinementList';
+jest.unmock('./createRefinementList');
+jest.unmock('./facetRefiner');
 
 const {
   configure,
   mapStateToProps,
   transformProps,
   refine,
-} = createFacetRefiner;
+} = createRefinementList;
 
-describe('createFacetRefiner', () => {
+describe('createRefinementList', () => {
   it('increases maxValuesPerFacet when it isn\'t big enough', () => {
     let state;
     let configuredState;
 
     state = new SearchParameters({maxValuesPerFacet: 100});
-    configuredState = configure(state, {limitMin: 101});
+    configuredState = configure(state, {
+      limitMin: 101,
+      operator: 'or',
+    });
     expect(configuredState.maxValuesPerFacet).toBe(101);
 
     state = new SearchParameters({maxValuesPerFacet: 101});
-    configuredState = configure(state, {limitMin: 100});
+    configuredState = configure(state, {
+      operator: 'or',
+      limitMin: 100,
+    });
     expect(configuredState.maxValuesPerFacet).toBe(101);
 
     state = new SearchParameters({maxValuesPerFacet: 100});
     configuredState = configure(state, {
+      operator: 'or',
       showMore: true,
       limitMax: 102,
       limitMin: 101,
@@ -37,6 +45,7 @@ describe('createFacetRefiner', () => {
 
     state = new SearchParameters({maxValuesPerFacet: 103});
     configuredState = configure(state, {
+      operator: 'or',
       showMore: true,
       limitMax: 102,
       limitMin: 101,
@@ -49,19 +58,31 @@ describe('createFacetRefiner', () => {
     let configuredState;
 
     state = new SearchParameters();
-    configuredState = configure(state, {attributeName: 'foo'});
+    configuredState = configure(state, {
+      operator: 'or',
+      attributeName: 'foo',
+    });
     expect(configuredState.disjunctiveFacets).toEqual(['foo']);
 
     state = new SearchParameters({disjunctiveFacets: ['foo']});
-    configuredState = configure(state, {attributeName: 'foo'});
+    configuredState = configure(state, {
+      operator: 'or',
+      attributeName: 'foo',
+    });
     expect(configuredState.disjunctiveFacets).toEqual(['foo']);
 
     state = new SearchParameters();
-    configuredState = configure(state, {attributeName: 'foo', operator: 'and'});
+    configuredState = configure(state, {
+      operator: 'and',
+      attributeName: 'foo',
+    });
     expect(configuredState.facets).toEqual(['foo']);
 
     state = new SearchParameters({facets: ['foo']});
-    configuredState = configure(state, {attributeName: 'foo', operator: 'and'});
+    configuredState = configure(state, {
+      operator: 'and',
+      attributeName: 'foo',
+    });
     expect(configuredState.facets).toEqual(['foo']);
   });
 
@@ -214,6 +235,7 @@ describe('createFacetRefiner', () => {
         results: [result, result],
       }),
     }, {
+      operator: 'or',
       attributeName: 'foo',
     });
     expect(console.warn.mock.calls.length).toBe(1);

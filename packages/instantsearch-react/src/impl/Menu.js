@@ -50,9 +50,7 @@ class Menu extends Component {
   }
 
   onItemClick = item => {
-    const {selectedItems, refine} = this.props;
-    const selected = selectedItems.indexOf(item.value) !== -1;
-    refine(selected ? [] : [item.value]);
+    this.props.refine(item.value);
   };
 
   onShowMoreClick = () => {
@@ -96,6 +94,7 @@ class Menu extends Component {
                   count: theme.itemCount,
                 }}
                 onClick={this.onItemClick}
+                createURL={createURL}
                 item={item}
               />
             </li>

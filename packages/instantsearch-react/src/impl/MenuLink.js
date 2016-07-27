@@ -9,6 +9,7 @@ export default class MenuLink extends Component {
   static propTypes = {
     theme: PropTypes.object,
     item: itemPropType.isRequired,
+    href: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
   };
 
@@ -21,16 +22,16 @@ export default class MenuLink extends Component {
   };
 
   render() {
-    const {item, theme} = this.props;
+    const {item, href, theme} = this.props;
     const th = themeable(theme);
 
     return (
       <a
-        href="#"
+        href={href}
         onClick={this.onClick}
         {...th('root', 'root')}
       >
-        <span {...th('value', 'value')}>{item.value}</span>
+        <span {...th('value', 'value')}>{item.label || item.value}</span>
         <span {...th('count', 'count')}>{item.count}</span>
       </a>
     );

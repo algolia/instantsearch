@@ -9,6 +9,7 @@ import {
   HitsPerPage,
   Pagination,
   RefinementList,
+  HierarchicalMenu,
 } from '../src/impl';
 
 import history from './history';
@@ -26,12 +27,8 @@ class Movie extends Component {
       <div>
         <img
           src={this.props.hit.image}
-          style={{
-            width: 154,
-            height: 231,
-          }}
         />
-        {this.props.hit.title}
+        {this.props.hit.name}
       </div>
     );
   }
@@ -65,7 +62,7 @@ class Search extends Component {
       <InstantSearch
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-        indexName="movies"
+        indexName="instant_search"
         history={history}
         createURL={this.createURL}
         configureState={this.configureState}
@@ -78,7 +75,18 @@ class Search extends Component {
             defaultValue={5}
             values={[5, 10]}
           />
-          <RefinementList attributeName={this.state.facet} sortBy={['count']} />
+          <HierarchicalMenu
+            name="wat"
+            attributes={[
+              'hierarchicalCategories.lvl0',
+              'hierarchicalCategories.lvl1',
+              'hierarchicalCategories.lvl2',
+            ]}
+          />
+          <RefinementList
+            attributeName="brand"
+            sortBy={['count']}
+          />
           <Hits
             itemComponent={Movie}
             // hitsPerPage={5}
