@@ -39,7 +39,32 @@ describe('createHOC', () => {
     const Dummy = () => null;
     const mapStateToProps = jest.fn();
     const HOC = createHOC({mapStateToProps})(Dummy);
-    expect(HOC.__mapStateToProps).toBe(mapStateToProps);
+    const state = {};
+    const props = {foo: 'bar'};
+    HOC.__mapStateToProps(state, props);
+    expect(mapStateToProps.mock.calls.length).toBe(1);
+    expect(mapStateToProps.mock.calls[0][0]).toBe(state);
+    expect(mapStateToProps.mock.calls[0][1]).toEqual(props);
+  });
+
+  it('applies defaultProps to the mapStateToProps props argument', () => {
+    const Dummy = () => null;
+    const mapStateToProps = jest.fn();
+    const defaultProps = {
+      foo: 'bar',
+      bar: 'foo',
+      foobar: 'barfoo',
+    };
+    const HOC = createHOC({
+      defaultProps,
+      mapStateToProps,
+    })(Dummy);
+    HOC.__mapStateToProps({}, {foo: 'foo', bar: undefined});
+    expect(mapStateToProps.mock.calls[0][1]).toEqual({
+      foo: 'foo',
+      bar: 'foo',
+      foobar: 'barfoo',
+    });
   });
 
   it('registers its configure method', () => {
