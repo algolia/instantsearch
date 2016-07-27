@@ -6,6 +6,17 @@ const {
   getUnrecognizedParametersInQueryString,
 } = url;
 
+function stateToQueryString(state, moreAttributes) {
+  const filters = ['attribute:*'];
+  if (state.query) {
+    filters.push('query');
+  }
+  return getQueryStringFromState(state.filter(filters), {
+    moreAttributes,
+    safe: true,
+  });
+}
+
 function createLocation(location, state) {
   const foreignParams = getUnrecognizedParametersInQueryString(
     location.search.slice(1)
@@ -15,10 +26,7 @@ function createLocation(location, state) {
   const moreAttributes = Object.keys(foreignParams) > 0 ? foreignParams : null;
   return {
     ...location,
-    search: `?${getQueryStringFromState(state, {
-      moreAttributes,
-      safe: true,
-    })}`,
+    search: `?${stateToQueryString(state, moreAttributes)}`,
   };
 }
 
@@ -65,12 +73,6 @@ export default function createStateManager(
     );
     onStateChange();
   });
-
-  const stateToQueryString = (urlState, moreAttributes) =>
-    getQueryStringFromState(urlState, {
-      moreAttributes,
-      safe: true,
-    });
 
   const createURL = newState => {
     if (options.createURL) {
