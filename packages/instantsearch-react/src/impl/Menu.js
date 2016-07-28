@@ -8,6 +8,7 @@ import LinkItem from './LinkItem';
 
 const defaultTranslations = {
   showMore: extended => extended ? 'Show less' : 'Show more',
+  count: count => count.toString(),
 };
 
 const defaultTheme = {
@@ -100,7 +101,12 @@ class Menu extends Component {
                   </span>
                   {' '}
                   <span {...th('itemCount', 'itemCount')}>
-                    {getTranslation('count', {}, translations, item.count)}
+                    {getTranslation(
+                      'count',
+                      defaultTranslations,
+                      translations,
+                      item.count
+                    )}
                   </span>
                 </LinkItem>
               </li>
