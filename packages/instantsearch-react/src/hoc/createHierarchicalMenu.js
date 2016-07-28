@@ -12,8 +12,6 @@ function transformValue(value, limit) {
   }));
 }
 
-const FACET_TYPE = 'hierarchical';
-
 const maybeAddHierarchicalFacet = (state, props) => {
   if (state.isHierarchicalFacet(props.name)) {
     return state;
@@ -57,23 +55,38 @@ export default createHOC({
   },
 
   mapStateToProps(state, props) {
-    return facetRefiner.mapStateToProps(state, {
-      facetType: FACET_TYPE,
-      facetName: props.name,
-      sortBy: props.sortBy,
-    });
+    const {
+      searchResults,
+      searchParameters,
+      searchResultsSearchParameters,
+    } = state;
+    const {name, attributes, sortBy} = props;
+
+    // @TODO: warn when one of the requested facets isn't set as an
+    // attribute for faceting.
+    let selectedItems = [];
+    if (searchParameters.isHierarchicalFacet(name)) {
+      selectedItems = searchParameters.getHierarchicalRefinement(name);
+    }
+
+    return {
+      facetValue:
+        state.searchResults &&
+        state.searchResults.getFacetValues(name, {sortBy}),
+      selectedItems,
+    };
   },
 
   transformProps(props) {
-    const {facetValues, ...otherProps} = props;
-    if (!facetValues) {
+    const {facetValue, ...otherProps} = props;
+    if (!facetValue) {
       return otherProps;
     }
 
     return {
       ...otherProps,
-      items: facetValues.data ?
-        transformValue(facetValues.data, props.limit) :
+      items: facetValue.data ?
+        transformValue(facetValue.data, props.limit) :
         // In the case the hierachical facet value has no items
         [],
     };

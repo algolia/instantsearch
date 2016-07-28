@@ -3,7 +3,6 @@ import union from 'lodash/array/union';
 const facetTypeToKey = {
   conjunctive: 'facets',
   disjunctive: 'disjunctiveFacets',
-  hierarchical: 'hierarchicalFacets',
 };
 
 const isFacetType = (state, type, name) => {
@@ -12,8 +11,6 @@ const isFacetType = (state, type, name) => {
     return state.isConjunctiveFacet(name);
   case 'disjunctive':
     return state.isDisjunctiveFacet(name);
-  case 'hierarchical':
-    return state.isHierarchicalFacet(name);
   default:
     throw new Error(`Unknown facet type: ${type}`);
   }
@@ -25,8 +22,6 @@ const getRefinements = (state, type, name) => {
     return state.getConjunctiveRefinements(name);
   case 'disjunctive':
     return state.getDisjunctiveRefinements(name);
-  case 'hierarchical':
-    return state.getHierarchicalRefinement(name);
   default:
     throw new Error(`Unknown facet type: ${type}`);
   }
