@@ -1,23 +1,22 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 
-import createRefinementList from './createRefinementList';
+import createMenu from './createMenu';
 import facetRefiner from './facetRefiner';
-jest.unmock('./createRefinementList');
+jest.unmock('./createMenu');
 
 const {
   configure,
   mapStateToProps,
   transformProps,
   refine,
-} = createRefinementList;
+} = createMenu;
 
-describe('createRefinementList', () => {
+describe('createMenu', () => {
   it('derives the right configure options from props', () => {
     const state = {};
     configure(state, {
       attributeName: 'foo',
-      operator: 'or',
       showMore: false,
       limitMin: 10,
       limitMax: 20,
@@ -31,14 +30,13 @@ describe('createRefinementList', () => {
 
     configure(state, {
       attributeName: 'foo',
-      operator: 'and',
       showMore: true,
       limitMin: 10,
       limitMax: 20,
     });
     expect(facetRefiner.configure.mock.calls[1][1]).toEqual({
       facetName: 'foo',
-      facetType: 'conjunctive',
+      facetType: 'disjunctive',
       valuesPerFacet: 20,
     });
   });
@@ -47,24 +45,12 @@ describe('createRefinementList', () => {
     const state = {};
     mapStateToProps(state, {
       attributeName: 'foo',
-      operator: 'or',
       sortBy: ['something'],
     });
     expect(facetRefiner.mapStateToProps.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.mapStateToProps.mock.calls[0][1]).toEqual({
       facetName: 'foo',
       facetType: 'disjunctive',
-      sortBy: ['something'],
-    });
-
-    mapStateToProps(state, {
-      attributeName: 'foo',
-      operator: 'and',
-      sortBy: ['something'],
-    });
-    expect(facetRefiner.mapStateToProps.mock.calls[1][1]).toEqual({
-      facetName: 'foo',
-      facetType: 'conjunctive',
       sortBy: ['something'],
     });
   });
@@ -93,25 +79,20 @@ describe('createRefinementList', () => {
 
   it('derives the right refine options from props', () => {
     const state = {};
-    const values = [];
     refine(state, {
       attributeName: 'foo',
-      operator: 'or',
-    }, values);
+      selectedItems: [],
+    }, 'wat');
     expect(facetRefiner.refine.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.refine.mock.calls[0][1]).toEqual({
       facetName: 'foo',
       facetType: 'disjunctive',
     });
-    expect(facetRefiner.refine.mock.calls[0][2]).toBe(values);
-
+    expect(facetRefiner.refine.mock.calls[0][2]).toEqual(['wat']);
     refine(state, {
       attributeName: 'foo',
-      operator: 'and',
-    }, values);
-    expect(facetRefiner.refine.mock.calls[1][1]).toEqual({
-      facetName: 'foo',
-      facetType: 'conjunctive',
-    });
+      selectedItems: ['wat'],
+    }, 'wat');
+    expect(facetRefiner.refine.mock.calls[1][2]).toEqual([]);
   });
 });

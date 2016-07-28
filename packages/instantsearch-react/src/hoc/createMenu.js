@@ -39,6 +39,7 @@ export default createHOC({
     return facetRefiner.mapStateToProps(state, {
       facetType: FACET_TYPE,
       facetName: props.attributeName,
+      sortBy: props.sortBy,
     });
   },
 
