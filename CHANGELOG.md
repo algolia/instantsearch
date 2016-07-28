@@ -1,3 +1,13 @@
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/algolia/instantsearch.js/compare/v1.7.0...v1.7.1) (2016-07-28)
+
+
+### Bug Fixes
+
+* **toggle:** add backward compatibility for previous toggle implem (#1154) ([a1973a0](https://github.com/algolia/instantsearch.js/commit/a1973a0))
+
+
+
 <a name="1.7.0"></a>
 # [1.7.0](https://github.com/algolia/instantsearch.js/compare/v1.6.4...v1.7.0) (2016-07-26)
 
