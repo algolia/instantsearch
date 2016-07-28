@@ -27,11 +27,14 @@ class RefinementListLinks extends Component {
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
+    showEmpty: PropTypes.bool,
   };
 
   static defaultProps = {
     theme: defaultTheme,
     translations: defaultTranslations,
+    showEmpty: true,
+    items: [],
   };
 
   onItemChange = (item, selected) => {
@@ -52,17 +55,26 @@ class RefinementListLinks extends Component {
       theme,
       items,
       selectedItems,
+      showEmpty,
     } = this.props;
-    if (!items) {
+    if (items.length === 0 && !(showEmpty && selectedItems.length > 0)) {
       return null;
     }
 
     const th = themeable(theme);
 
+    const allItems = showEmpty ? items.concat(
+      selectedItems
+        .filter(value =>
+          !items.some(item => item.value === value)
+        )
+        .map(value => ({value, count: 0}))
+    ) : items;
+
     return (
       <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
-          {items.map(item =>
+          {allItems.map(item =>
             <li
               {...th(
                 item.value,
