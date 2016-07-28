@@ -26,7 +26,7 @@ function defaultCreateURL() { return '#'; }
  * searches at page load for example.
  * @param  {Object} [options.searchParameters] Additional parameters to pass to
  * the Algolia API.
- * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
+ * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @param  {Object} [options.urlSync.mapping] Object used to define replacement query
@@ -39,7 +39,7 @@ function defaultCreateURL() { return '#'; }
  * be synchronized in the URL. Default value is `['query', 'attribute:*',
  * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
  * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
- * values are all the [Algolia REST API parameters](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
+ * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
  *
  * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
  * linked to the url.
