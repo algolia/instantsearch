@@ -491,10 +491,16 @@ instance contain the change implied by the method call.
 {{> jsdoc jsdoc/state/removeNumericRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}
 {{> jsdoc jsdoc/state/getNumericRefinement}}
+{{> jsdoc jsdoc/state/addFacet}}
+{{> jsdoc jsdoc/state/addDisjunctiveFacet}}
+{{> jsdoc jsdoc/state/addHierarchicalFacet}}
 {{> jsdoc jsdoc/state/addFacetRefinement}}
 {{> jsdoc jsdoc/state/addExcludeRefinement}}
 {{> jsdoc jsdoc/state/addDisjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/addTagRefinement}}
+{{> jsdoc jsdoc/state/removeFacet}}
+{{> jsdoc jsdoc/state/removeDisjunctiveFacet}}
+{{> jsdoc jsdoc/state/removeHierarchicalFacet}}
 {{> jsdoc jsdoc/state/removeFacetRefinement}}
 {{> jsdoc jsdoc/state/removeExcludeRefinement}}
 {{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
