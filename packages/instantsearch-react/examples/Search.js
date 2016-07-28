@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import {SearchParameters} from 'algoliasearch-helper';
 
 import InstantSearch from '../src/InstantSearch';
 import {
@@ -9,17 +8,12 @@ import {
   HitsPerPage,
   Pagination,
   RefinementList,
+  RefinementListLinks,
+  Menu,
   HierarchicalMenu,
 } from '../src/impl';
 
 import history from './history';
-
-// import Hits from '../src/impl/Hits';
-// import Pagination from '../src/impl/Pagination';
-// import HitsPerPage from '../src/impl/HitsPerPage';
-// import RefinementList from '../src/impl/RefinementList';
-// import Menu from '../src/impl/Menu';
-// import MenuSelect from '../src/impl/MenuSelect';
 
 class Movie extends Component {
   render() {
@@ -83,9 +77,15 @@ class Search extends Component {
               'hierarchicalCategories.lvl2',
             ]}
           />
+          <Menu
+            attributeName="brand"
+          />
           <RefinementList
             attributeName="brand"
             sortBy={['count']}
+          />
+          <RefinementListLinks
+            attributeName="brand"
           />
           <Hits
             itemComponent={Movie}

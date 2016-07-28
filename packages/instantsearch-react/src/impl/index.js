@@ -17,6 +17,12 @@ export const Pagination = createPagination(PaginationImpl);
 import createRefinementList from '../hoc/createRefinementList';
 import RefinementListImpl from './RefinementList';
 export const RefinementList = createRefinementList(RefinementListImpl);
+import RefinementListLinksImpl from './RefinementListLinks';
+export const RefinementListLinks = createRefinementList(RefinementListLinksImpl);
+
+import createMenu from '../hoc/createMenu';
+import MenuImpl from './Menu';
+export const Menu = createMenu(MenuImpl);
 
 import createHierarchicalMenu from '../hoc/createHierarchicalMenu';
 import HierarchicalMenuImpl from './HierarchicalMenu';

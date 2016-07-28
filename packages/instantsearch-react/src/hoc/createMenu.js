@@ -3,7 +3,10 @@ import {PropTypes} from 'react';
 import createHOC from '../createHOC';
 import facetRefiner from './facetRefiner';
 
-const FACET_TYPE = 'conjunctive';
+// While it makes little difference since we only ever have either zero or one
+// facet value, using disjunctive ensures that the API always sends all the
+// facet values we need.
+const FACET_TYPE = 'disjunctive';
 
 export default createHOC({
   displayName: 'AlgoliaMenu',
@@ -49,6 +52,6 @@ export default createHOC({
     return facetRefiner.refine(state, {
       facetName: props.attributeName,
       facetType: FACET_TYPE,
-    }, value ? [value] : []);
+    }, props.selectedItems.indexOf(value) === -1 ? [value] : []);
   },
 });

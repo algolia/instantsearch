@@ -1,12 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 import themeable from 'react-themeable';
 
-import createFacetRefiner from '../createFacetRefiner';
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import config from '../config';
 
 import {getTranslation} from './utils';
-import MenuLink from './MenuLink';
+import LinkItem from './LinkItem';
 
 const defaultTranslations = {
   showMore: extended => extended ? 'Show less' : 'Show more',
@@ -27,6 +25,7 @@ const defaultTheme = {
 class Menu extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
     translations: PropTypes.object,
@@ -49,14 +48,14 @@ class Menu extends Component {
     };
   }
 
-  onItemClick = item => {
-    this.props.refine(item.value);
-  };
-
   onShowMoreClick = () => {
     this.setState(state => ({
       extended: !state.extended,
     }));
+  };
+
+  onItemClick = item => {
+    this.props.refine(item.value);
   };
 
   render() {
@@ -68,6 +67,7 @@ class Menu extends Component {
       showMore,
       limitMax,
       limitMin,
+      createURL,
     } = this.props;
     const {extended} = this.state;
     if (!items) {
@@ -77,33 +77,40 @@ class Menu extends Component {
     const th = themeable(theme);
 
     return (
-      <div {...th('root', 'root', extended && 'extended')}>
+      <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
-          {items.slice(0, extended ? limitMax : limitMin).map(item =>
-            <li
-              {...th(
-                item.value,
-                'item',
-                selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-              )}
-            >
-              <MenuLink
-                theme={{
-                  root: theme.itemLink,
-                  value: theme.itemValue,
-                  count: theme.itemCount,
-                }}
-                onClick={this.onItemClick}
-                createURL={createURL}
-                item={item}
-              />
-            </li>
-          )}
+          {items
+            .slice(0, !showMore || extended ? limitMax : limitMin)
+            .map(item =>
+              <li
+                {...th(
+                  item.value,
+                  'item',
+                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
+                )}
+              >
+                <LinkItem
+                  {...th('itemLink', 'itemLink')}
+                  onClick={this.onItemClick}
+                  item={item}
+                  href={createURL(item.value)}
+                >
+                  <span {...th('itemLabel', 'itemLabel')}>
+                    {item.value}
+                  </span>
+                  {' '}
+                  <span {...th('itemCount', 'itemCount')}>
+                    {getTranslation('count', {}, translations, item.count)}
+                  </span>
+                </LinkItem>
+              </li>
+            )
+          }
         </ul>
         {showMore &&
           <button
-            onClick={this.onShowMoreClick}
             {...th('showMore', 'showMore')}
+            onClick={this.onShowMoreClick}
           >
             {getTranslation(
               'showMore',

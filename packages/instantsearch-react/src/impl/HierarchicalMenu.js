@@ -6,7 +6,8 @@ import {
   hierarchicalItemsPropType,
   selectedItemsPropType,
 } from '../propTypes';
-import MenuLink from './MenuLink';
+import LinkItem from './LinkItem';
+import {getTranslation} from './utils';
 
 function hasSelectedChild(item, selectedItems) {
   return item.children && item.children.some(child =>
@@ -27,7 +28,7 @@ const defaultTheme = {
   itemParent: 'HierarchicalMenu__item--parent',
   itemSelectedParent: 'HierarchicalMenu__item--selectedParent',
   itemLink: 'HierarchicalMenu__item__link',
-  itemValue: 'HierarchicalMenu__item__value',
+  itemLabel: 'HierarchicalMenu__item__label',
   itemCount: 'HierarchicalMenu__item__count',
   showMore: 'HierarchicalMenu__showMore',
 };
@@ -42,7 +43,7 @@ class HierarchicalMenuItem extends Component {
     createURL: PropTypes.func.isRequired,
   };
 
-  // We could have only one onClick method since MenuLink passes its onClick
+  // We could have only one onClick method since LinkItem passes its onClick
   // handler the item that was provided as props, but having it here might make
   // more sense since we also use createURL the same way in the same component.
   onClick = item => {
@@ -71,17 +72,25 @@ class HierarchicalMenuItem extends Component {
           hasSelectedChild(item, selectedItems) && 'itemSelectedParent'
         )}
       >
-        <MenuLink
-          theme={{
-            root: theme.itemLink,
-            value: theme.itemValue,
-            count: theme.itemCount,
-          }}
-          translations={translations}
+        <LinkItem
+          {...th('itemLink', 'itemLink')}
+          onClick={this.onClick}
           item={item}
           href={createURL(item.value)}
-          onClick={this.onClick}
-        />
+        >
+          <span {...th('itemLabel', 'itemLabel')}>
+            {item.label}
+          </span>
+          {' '}
+          <span {...th('itemCount', 'itemCount')}>
+            {getTranslation(
+              'count',
+              defaultTranslations,
+              translations,
+              item.count
+            )}
+          </span>
+        </LinkItem>
 
         {item.children &&
           <HierarchicalMenuList

@@ -1,19 +1,41 @@
 import React, {PropTypes, Component} from 'react';
 
-import createFacetRefiner from '../createFacetRefiner';
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
+import themeable from 'react-themeable';
 
-import MenuLink from './MenuLink';
+import LinkItem from './LinkItem';
+import {getTranslation} from './utils';
 
-class RefinementList extends Component {
+const defaultTranslations = {
+  count: count => count.toString(),
+};
+
+const defaultTheme = {
+  root: 'RefinementListLinks',
+  list: 'RefinementListLinks__list',
+  item: 'RefinementListLinks__item',
+  itemSelected: 'RefinementListLinks__item--selected',
+  itemLink: 'RefinementListLinks__item__link',
+  itemValue: 'RefinementListLinks__item__value',
+  itemCount: 'RefinementListLinks__item__count',
+};
+
+class RefinementListLinks extends Component {
   static propTypes = {
+    theme: PropTypes.object,
+    translations: PropTypes.object,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
   };
 
-  onItemClick = item => {
+  static defaultProps = {
+    theme: defaultTheme,
+    translations: defaultTranslations,
+  };
+
+  getSelectedItems = item => {
     const {selectedItems} = this.props;
     const nextSelectedItems = selectedItems.slice();
     const idx = nextSelectedItems.indexOf(item.value);
@@ -22,30 +44,63 @@ class RefinementList extends Component {
     } else {
       nextSelectedItems.splice(idx, 1);
     }
-    this.props.refine(nextSelectedItems);
+    return nextSelectedItems;
+  };
+
+  onItemClick = item => {
+    this.props.refine(this.getSelectedItems(item));
   }
 
   render() {
-    const {items, selectedItems, createURL} = this.props;
+    const {
+      translations,
+      theme,
+      items,
+      selectedItems,
+      createURL,
+    } = this.props;
     if (!items) {
       return null;
     }
 
+    const th = themeable(theme);
+
     return (
-      <ul>
-        {items.map(item =>
-          <li key={item.value}>
-            <MenuLink
-              onClick={this.onItemClick}
-              createURL={createURL}
-              item={item}
-              selected={selectedItems.indexOf(item.value) !== -1}
-            />
-          </li>
-        )}
-      </ul>
+      <div {...th('root', 'root')}>
+        <ul {...th('list', 'list')}>
+          {items.map(item =>
+            <li
+              {...th(
+                item.value,
+                'item',
+                selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
+              )}
+            >
+              <LinkItem
+                {...th('itemLink', 'itemLink')}
+                onClick={this.onItemClick}
+                item={item}
+                href={createURL(this.getSelectedItems(item))}
+              >
+                <span {...th('itemLabel', 'itemLabel')}>
+                  {item.value}
+                </span>
+                {' '}
+                <span {...th('itemCount', 'itemCount')}>
+                  {getTranslation(
+                    'count',
+                    defaultTranslations,
+                    translations,
+                    item.count
+                  )}
+                </span>
+              </LinkItem>
+            </li>
+          )}
+        </ul>
+      </div>
     );
   }
 }
 
-export default createFacetRefiner(RefinementList);
+export default RefinementListLinks;
