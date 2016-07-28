@@ -3242,19 +3242,19 @@ but any other method to show/hide the results would work.</p>
       <p>The widget may implement some of the following methods (depending on the need of the widget):</p>
 
       <ul>
-        <li><span class="attr-optional"><code>widget.getConfiguration</code></span>: Configures the underlying AlgoliaSearch JS helper. Takes a <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">SearchParameter</a> and should return the properties needed as an object.</li>
+        <li><span class="attr-optional"><code>widget.getConfiguration</code></span>: Configures the underlying AlgoliaSearch JS helper. Takes a <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">SearchParameters</a> and should return the properties needed as an object.</li>
         <li><span class="attr-optional"><code>widget.init</code></span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
           <ul>
-            <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create a new search query</li>
+            <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">search state</a>.</li>
+            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper">helper</a> used to create a new search query</li>
             <li>templatesConfig: the template configuration</li>
           </ul>
         </li>
         <li><span class="attr-optional"><code>widget.render</code></span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
           <ul>
-            <li>results: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html">results</a> of the query</li>
-            <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">search state</a>.</li>
-            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html">helper</a> used to create a new search query</li>
+            <li>results: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults">results</a> of the query</li>
+            <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">search state</a>.</li>
+            <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper">helper</a> used to create a new search query</li>
             <li>createURL: function provided to create urls</li>
           </ul>
         </li>
@@ -3267,7 +3267,7 @@ but any other method to show/hide the results would work.</p>
 <p><strong>instantsearch.js</strong> was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:</p>
 
 <ul>
-  <li><code>getConfiguration()</code>: configures the underlying <a href="https://community.algolia.com/algoliasearch-helper-js/docs/">AlgoliaSearch JS Helper</a></li>
+  <li><code>getConfiguration()</code>: configures the underlying <a href="https://community.algolia.com/algoliasearch-helper-js/">AlgoliaSearch JS Helper</a></li>
   <li><code>init()</code>: called once after the initialization</li>
   <li><code>render()</code>: called every time we have new search data</li>
 </ul>
