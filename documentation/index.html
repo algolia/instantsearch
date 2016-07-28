@@ -119,7 +119,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-beb3afc90aeba0e2d13a6a721c19f14a.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.7.0</strong></p>
+    <p class="version">Version: <strong>1.7.1</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -267,7 +267,7 @@
 <span class="attr-optional"><code>options.searchParameters</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
 </p>
-      <p class="attr-description">Additional parameters to pass to the Algolia API. <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Full documentation</a></p>
+      <p class="attr-description">Additional parameters to pass to the Algolia API. <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">Full documentation</a></p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.urlSync</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code> | <code>boolean</code>)</span>
@@ -287,7 +287,7 @@
 <span class="attr-optional"><code>options.urlSync.trackedParameters</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-      <p class="attr-description">Parameters that will be synchronized in the URL. Default value is <code>['query', 'attribute:*', 'index', 'page', 'hitsPerPage']</code>. <code>attribute:*</code> means all the faceting attributes will be tracked. You can track only some of them by using […, ‘attribute:color’, ‘attribute:categories’]. All other possible values are all the <a href="https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html">Algolia REST API parameters</a>. There’s a special <code>is_v</code> parameter that will get added everytime, it tracks the version of instantsearch.js linked to the url.</p>
+      <p class="attr-description">Parameters that will be synchronized in the URL. Default value is <code>['query', 'attribute:*', 'index', 'page', 'hitsPerPage']</code>. <code>attribute:*</code> means all the faceting attributes will be tracked. You can track only some of them by using […, ‘attribute:color’, ‘attribute:categories’]. All other possible values are all the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">attributes of the Helper SearchParameters</a>. There’s a special <code>is_v</code> parameter that will get added everytime, it tracks the version of instantsearch.js linked to the url.</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.urlSync.useHash</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>boolean</code>)</span>
