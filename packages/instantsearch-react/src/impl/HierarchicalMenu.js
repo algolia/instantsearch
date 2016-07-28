@@ -8,16 +8,23 @@ import {
 } from '../propTypes';
 import MenuLink from './MenuLink';
 
-//
-// const defaultTranslations = {
-//   showMore: extended => extended ? 'Show less' : 'Show more',
-// };
+function hasSelectedChild(item, selectedItems) {
+  return item.children && item.children.some(child =>
+    selectedItems.indexOf(child.value) !== -1 ||
+    hasSelectedChild(child, selectedItems)
+  );
+}
+
+const defaultTranslations = {
+  count: count => count.toString(),
+};
 
 const defaultTheme = {
   root: 'HierarchicalMenu',
   list: 'HierarchicalMenu__list',
   item: 'HierarchicalMenu__item',
   itemSelected: 'HierarchicalMenu__item--selected',
+  itemParent: 'HierarchicalMenu__item--parent',
   itemSelectedParent: 'HierarchicalMenu__item--selectedParent',
   itemLink: 'HierarchicalMenu__item__link',
   itemValue: 'HierarchicalMenu__item__value',
@@ -28,7 +35,7 @@ const defaultTheme = {
 class HierarchicalMenuItem extends Component {
   static propTypes = {
     theme: PropTypes.object.isRequired,
-    // translations: PropTypes.object,
+    translations: PropTypes.object.isRequired,
     item: hierarchicalItemPropType.isRequired,
     selectedItems: selectedItemsPropType.isRequired,
     refine: PropTypes.func.isRequired,
@@ -49,6 +56,7 @@ class HierarchicalMenuItem extends Component {
       refine,
       createURL,
       theme,
+      translations,
     } = this.props;
 
     const th = themeable(theme);
@@ -59,7 +67,8 @@ class HierarchicalMenuItem extends Component {
           'item',
           'item',
           selectedItems.indexOf(item.value) !== -1 && 'itemSelected',
-          item.children && 'itemSelectedParent'
+          item.children && 'itemParent',
+          hasSelectedChild(item, selectedItems) && 'itemSelectedParent'
         )}
       >
         <MenuLink
@@ -68,6 +77,7 @@ class HierarchicalMenuItem extends Component {
             value: theme.itemValue,
             count: theme.itemCount,
           }}
+          translations={translations}
           item={item}
           href={createURL(item.value)}
           onClick={this.onClick}
@@ -76,6 +86,7 @@ class HierarchicalMenuItem extends Component {
         {item.children &&
           <HierarchicalMenuList
             theme={theme}
+            translations={translations}
             refine={refine}
             createURL={createURL}
             items={item.children}
@@ -90,7 +101,7 @@ class HierarchicalMenuItem extends Component {
 class HierarchicalMenuList extends Component {
   static propTypes = {
     theme: PropTypes.object.isRequired,
-    // translations: PropTypes.object,
+    translations: PropTypes.object.isRequired,
     items: hierarchicalItemsPropType.isRequired,
     selectedItems: selectedItemsPropType.isRequired,
     refine: PropTypes.func.isRequired,
@@ -104,6 +115,7 @@ class HierarchicalMenuList extends Component {
       refine,
       createURL,
       theme,
+      translations,
     } = this.props;
 
     const th = themeable(theme);
@@ -114,6 +126,7 @@ class HierarchicalMenuList extends Component {
           <HierarchicalMenuItem
             key={item.value}
             theme={theme}
+            translations={translations}
             refine={refine}
             createURL={createURL}
             item={item}
@@ -128,6 +141,7 @@ class HierarchicalMenuList extends Component {
 class HierarchicalMenu extends Component {
   static propTypes = {
     theme: PropTypes.object,
+    translations: PropTypes.object,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: hierarchicalItemsPropType,
@@ -136,10 +150,18 @@ class HierarchicalMenu extends Component {
 
   static defaultProps = {
     theme: defaultTheme,
+    translations: defaultTranslations,
   };
 
   render() {
-    const {items, selectedItems, createURL, refine, theme} = this.props;
+    const {
+      items,
+      selectedItems,
+      createURL,
+      refine,
+      theme,
+      translations,
+    } = this.props;
     if (!items) {
       return null;
     }
@@ -150,6 +172,7 @@ class HierarchicalMenu extends Component {
       <div {...th('root', 'root')}>
         <HierarchicalMenuList
           theme={theme}
+          translations={translations}
           items={items}
           selectedItems={selectedItems}
           refine={refine}

@@ -3,11 +3,12 @@ import themeable from 'react-themeable';
 
 import {itemPropType} from '../propTypes';
 
-import {isSpecialClick} from './utils';
+import {isSpecialClick, getTranslation} from './utils';
 
 export default class MenuLink extends Component {
   static propTypes = {
     theme: PropTypes.object,
+    translations: PropTypes.object,
     item: itemPropType.isRequired,
     href: PropTypes.string.isRequired,
     onClick: PropTypes.func.isRequired,
@@ -22,7 +23,7 @@ export default class MenuLink extends Component {
   };
 
   render() {
-    const {item, href, theme} = this.props;
+    const {item, href, theme, translations} = this.props;
     const th = themeable(theme);
 
     return (
@@ -32,7 +33,10 @@ export default class MenuLink extends Component {
         {...th('root', 'root')}
       >
         <span {...th('value', 'value')}>{item.label || item.value}</span>
-        <span {...th('count', 'count')}>{item.count}</span>
+        {' '}
+        <span {...th('count', 'count')}>
+          {getTranslation('count', {}, translations, item.count)}
+        </span>
       </a>
     );
   }

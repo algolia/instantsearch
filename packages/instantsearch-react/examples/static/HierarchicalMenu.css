@@ -1,0 +1,25 @@
+.HierarchicalMenu__item > .HierarchicalMenu__item__link {
+  color: #1D96C7;
+  text-decoration: none;
+}
+.HierarchicalMenu__item > .HierarchicalMenu__item__link:hover {
+  text-decoration: underline;
+}
+
+.HierarchicalMenu__item--selected > .HierarchicalMenu__item__link,
+.HierarchicalMenu__item--selectedParent > .HierarchicalMenu__item__link {
+  font-weight: bold;
+  color: #0A1724;
+}
+
+.HierarchicalMenu__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.HierarchicalMenu__item > .HierarchicalMenu__list {
+  margin-left: 20px;
+}
+
+    /*margin-left: 10px;*/
