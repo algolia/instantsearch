@@ -96,6 +96,12 @@ class URLSync {
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+
+    this.searchParametersFromUrl = AlgoliaSearchHelper
+      .getConfigurationFromQueryString(
+        this.urlUtils.readUrl(),
+        {mapping: this.mapping}
+      );
   }
 
   getConfiguration(currentConfiguration) {
@@ -103,9 +109,7 @@ class URLSync {
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
     this.originalConfig = algoliasearchHelper({}, currentConfiguration.index, currentConfiguration).state;
-    const queryString = this.urlUtils.readUrl();
-    const config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
-    return config;
+    return this.searchParametersFromUrl;
   }
 
   render({helper}) {

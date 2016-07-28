@@ -113,19 +113,22 @@ Usage: instantsearch({
   start() {
     if (!this.widgets) throw new Error('No widgets were added to instantsearch.js');
 
+    let searchParametersFromUrl;
+
     if (this.urlSync) {
       const syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
       this._createAbsoluteURL = relative => this._createURL(relative, {absolute: true});
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
+      searchParametersFromUrl = syncWidget.searchParametersFromUrl;
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
       this._onHistoryChange = function() {};
     }
 
-    this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
+    this.searchParameters = this.widgets.reduce(enhanceConfiguration(searchParametersFromUrl), this.searchParameters);
 
     const helper = algoliasearchHelper(
       this.client,
@@ -192,32 +195,34 @@ Usage: instantsearch({
   }
 }
 
-function enhanceConfiguration(configuration, widgetDefinition) {
-  if (!widgetDefinition.getConfiguration) return configuration;
+function enhanceConfiguration(searchParametersFromUrl) {
+  return (configuration, widgetDefinition) => {
+    if (!widgetDefinition.getConfiguration) return configuration;
 
-  // Get the relevant partial configuration asked by the widget
-  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
+    // Get the relevant partial configuration asked by the widget
+    const partialConfiguration = widgetDefinition.getConfiguration(configuration, searchParametersFromUrl);
 
-  const customizer = (a, b) => {
-    // always create a unified array for facets refinements
-    if (Array.isArray(a)) {
-      return union(a, b);
-    }
+    const customizer = (a, b) => {
+      // always create a unified array for facets refinements
+      if (Array.isArray(a)) {
+        return union(a, b);
+      }
 
-    // avoid mutating objects
-    if (isObject(a)) {
-      return merge({}, a, b, customizer);
-    }
+      // avoid mutating objects
+      if (isObject(a)) {
+        return merge({}, a, b, customizer);
+      }
 
-    return undefined;
+      return undefined;
+    };
+
+    return merge(
+      {},
+      configuration,
+      partialConfiguration,
+      customizer
+    );
   };
-
-  return merge(
-    {},
-    configuration,
-    partialConfiguration,
-    customizer
-  );
 }
 
 export default InstantSearch;
