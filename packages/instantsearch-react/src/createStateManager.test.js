@@ -68,7 +68,10 @@ describe('createStateManager', () => {
     });
     const stateManager = createStateManager(
       history,
-      () => null
+      () => null,
+      {
+        trackedParameters: ['query'],
+      }
     );
 
     expect(history.push.mock.calls.length).toBe(0);
@@ -86,7 +89,10 @@ describe('createStateManager', () => {
       const stateManager = createStateManager(
         history,
         () => null,
-        {treshold}
+        {
+          treshold,
+          trackedParameters: ['query'],
+        }
       );
 
       MockDate.set(0);
@@ -123,7 +129,10 @@ describe('createStateManager', () => {
     const stateManager = createStateManager(
       history,
       () => null,
-      {createURL}
+      {
+        createURL,
+        trackedParameters: ['query'],
+      }
     );
 
     const state = new SearchParameters({query: 'goodbye'});
@@ -141,6 +150,69 @@ describe('createStateManager', () => {
     expect(stateManager.createURL(state)).toBe(state);
     expect(createURL.mock.calls[1][0]).toBe(state);
     expect(typeof createURL.mock.calls[1][1]).toBe('function');
+  });
+
+  it('only tracks the provided trackedParameters', () => {
+    const history = createMockHistory(location, {
+      createHref: a => a,
+    });
+    let stateManager;
+
+    const state = new SearchParameters({
+      query: 'goodbye',
+      page: 3,
+      hitsPerPage: 100,
+    });
+
+    stateManager = createStateManager(
+      history,
+      () => null,
+      {
+        trackedParameters: ['query'],
+      }
+    );
+    stateManager.setState(state);
+    expect(history.push.mock.calls.length).toBe(1);
+    expect(history.push.mock.calls[0][0]).toEqual({search: '?q=goodbye'});
+
+    stateManager = createStateManager(
+      history,
+      () => null,
+      {
+        trackedParameters: ['hitsPerPage'],
+      }
+    );
+    stateManager.setState(state);
+    expect(history.push.mock.calls.length).toBe(2);
+    expect(history.push.mock.calls[1][0]).toEqual({search: '?hPP=100'});
+
+    stateManager = createStateManager(
+      history,
+      () => null,
+      {
+        trackedParameters: ['query', 'page'],
+      }
+    );
+    stateManager.setState(state);
+    expect(history.push.mock.calls.length).toBe(3);
+    expect(history.push.mock.calls[2][0]).toEqual({search: '?q=goodbye&p=3'});
+  });
+
+  it('doesn\'t track empty queries', () => {
+    const history = createMockHistory(location, {
+      createHref: a => a,
+    });
+
+    const stateManager = createStateManager(
+      history,
+      () => null,
+      {
+        trackedParameters: ['query'],
+      }
+    );
+    stateManager.setState(new SearchParameters({query: ''}));
+    expect(history.push.mock.calls.length).toBe(1);
+    expect(history.push.mock.calls[0][0]).toEqual({search: '?'});
   });
 
   it('correctly cleans up after itself when calling unlisten', () => {

@@ -44,7 +44,7 @@ class Search extends Component {
   };
 
   createURL = (state, getQuery) => history.createHref(
-    `${state.page + 1}?${getQuery(state.setPage(undefined))}`
+    `${state.page + 1}?${getQuery(state)}`
   );
 
   configureState = state => state.setPage(
@@ -60,6 +60,12 @@ class Search extends Component {
         history={history}
         createURL={this.createURL}
         configureState={this.configureState}
+        trackedParameters={[
+          // Don't track page since we control it
+          'query',
+          'attribute:*',
+          'hitsPerPage',
+        ]}
       >
         <div>
           <button onClick={this.onSwitchClick}>Switch facet</button>

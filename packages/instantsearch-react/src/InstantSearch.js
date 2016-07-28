@@ -22,11 +22,18 @@ class InstantSearch extends Component {
     treshold: PropTypes.number,
     configureState: PropTypes.func,
     urlSync: PropTypes.bool,
+    trackedParameters: PropTypes.arrayOf(PropTypes.string),
   };
 
   static defaultProps = {
     treshold: 700,
     urlSync: true,
+    trackedParameters: [
+      'query',
+      'attribute:*',
+      'page',
+      'hitsPerPage',
+    ],
   };
 
   static childContextTypes = {
@@ -88,6 +95,7 @@ class InstantSearch extends Component {
     this.stateManager = createStateManager(history, search, {
       createURL: props.createURL,
       treshold: props.treshold,
+      trackedParameters: props.trackedParameters,
     });
 
     // Apply the initial state from the history.
