@@ -1,1 +1,13 @@
-TODO
+{
+  "name": "examples",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --config webpack.config.babel.js --hot --content-base static --history-api-fallback"
+  },
+  "dependencies": {
+    "history": "^2.1.2",
+    "react-dom": "^15.2.0",
+    "react-router": "^2.6.0",
+    "webpack-dev-server": "^1.14.1"
+  }
+}

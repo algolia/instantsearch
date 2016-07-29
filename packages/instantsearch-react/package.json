@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "start": "./scripts/start.sh",
-    "examples": "webpack-dev-server --config webpack.examples.config.babel.js --hot --content-base examples/static --history-api-fallback",
+    "examples": "(cd examples && webpack-dev-server --config webpack.config.babel.js --hot --content-base examples/static --history-api-fallback)",
     "lint": "eslint \"**/*.js\"",
     "test": "jest --bail --no-cache",
     "test:watch": "jest --watch",

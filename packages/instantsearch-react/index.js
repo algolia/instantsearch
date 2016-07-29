@@ -1,11 +1,27 @@
-export {default as Hits} from './src/widgets/Hits';
-export {default as HitsPerPage} from './src/widgets/HitsPerPage';
-export {default as SearchBox} from './src/widgets/SearchBox';
-export {default as Pagination} from './src/widgets/Pagination';
-export {default as RefinementList} from './src/widgets/RefinementList';
-export {default as RefinementListLinks} from './src/widgets/RefinementListLinks';
-export {default as Menu} from './src/widgets/Menu';
-export {default as MenuSelect} from './src/widgets/MenuSelect';
-export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu';
-export {default as ScrollTo} from './src/widgets/ScrollTo';
-export {default as InstantSearch} from './src/InstantSearch';
+import Hits from './src/widgets/Hits';
+import HitsPerPage from './src/widgets/HitsPerPage';
+import SearchBox from './src/widgets/SearchBox';
+import Pagination from './src/widgets/Pagination';
+import RefinementList from './src/widgets/RefinementList';
+import RefinementListLinks from './src/widgets/RefinementListLinks';
+import Menu from './src/widgets/Menu';
+import MenuSelect from './src/widgets/MenuSelect';
+import HierarchicalMenu from './src/widgets/HierarchicalMenu';
+import ScrollTo from './src/widgets/ScrollTo';
+import InstantSearch from './src/InstantSearch';
+
+// Doing `export {default as Thing} from 'thing'` causes warnings with
+// react-hot-loader.
+export {
+  Hits,
+  HitsPerPage,
+  SearchBox,
+  Pagination,
+  RefinementList,
+  RefinementListLinks,
+  Menu,
+  MenuSelect,
+  HierarchicalMenu,
+  ScrollTo,
+  InstantSearch,
+};
