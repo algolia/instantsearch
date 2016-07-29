@@ -1,30 +1,5 @@
-# instantsearch-react
+THIS DOCUMENT MUST BE PROGRESSIVELY MOVED TO docs/API
 
-Set of React components to build instantsearch interfaces using Algolia API.
-
-This document is an API proposal. It aims at kickstarting the
-discussion and actual coding of instantsearch-react.
-
-## Context
-
-[instantsearch.js](https://github.com/algolia/instantsearch.js/) is a library of widgets designed for high
-performance instant search experiences.
-
-instantsearch.js is great for people not using any big framework. But as soon as you are using React,
-AngularJS, Ember.js or vue.js then it starts to be really tricky to get it working for you.
-
-Not only you may have bugs but also since instantsearch.js is already a heavy filesize library, you might be
-relunctant to integrate.
-
-tl;dr; Your favorite framework idioms may not map to anything inside instantsearch.js.
-
-Internally, instantsearch.js widgets are already built using React but that's an implementation detail and not
-an API feature.
-
-To solve this situation, we want to provide the right tools for the right situation. This starts
-by providing a set of reusable React components to people willing to use React and Algolia.
-
-We will sometime reuse ideas from [searchkit/searchkit](https://github.com/searchkit/searchkit).
 
 ## Concept
 
@@ -252,7 +227,7 @@ see http://docs.searchkit.co/stable/docs/components/ui/list-components.html
 
 ## Website organization
 
-## Examples
+## Exampless
 
 - react router
 - redux
