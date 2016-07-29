@@ -11,7 +11,7 @@ import {
   RefinementListLinks,
   Menu,
   HierarchicalMenu,
-} from '../src/impl';
+} from '..';
 
 import history from './history';
 
