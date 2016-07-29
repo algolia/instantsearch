@@ -14,45 +14,37 @@ export default createHOC({
   propTypes: {
     attributeName: PropTypes.string.isRequired,
     sortBy: PropTypes.arrayOf(PropTypes.string),
-    showMore: PropTypes.bool,
-    limitMax: PropTypes.number,
-    limitMin: PropTypes.number,
+    limit: PropTypes.number.isRequired,
   },
 
   defaultProps: {
-    sortBy: ['isRefined'],
-    showMore: false,
-    limitMax: 20,
-    limitMin: 10,
-  },
-
-  configure(state, props) {
-    const valuesPerFacet = props.showMore ? props.limitMax : props.limitMin;
-    return facetRefiner.configure(state, {
-      facetType: FACET_TYPE,
-      facetName: props.attributeName,
-      valuesPerFacet,
-    });
+    sortBy: ['count:desc', 'name:asc'],
   },
 
   mapStateToProps(state, props) {
     return facetRefiner.mapStateToProps(state, {
       facetType: FACET_TYPE,
-      facetName: props.attributeName,
+      attributeName: props.attributeName,
       sortBy: props.sortBy,
     });
   },
 
-  transformProps(props) {
-    return facetRefiner.transformProps(props, {
-      valuesPerFacet: props.showMore ? props.limitMax : props.limitMin,
+  configure(state, props) {
+    return facetRefiner.configure(state, {
+      facetType: FACET_TYPE,
+      attributeName: props.attributeName,
+      limit: props.limit,
     });
+  },
+
+  transformProps(props) {
+    return facetRefiner.transformProps(props);
   },
 
   refine(state, props, value) {
     return facetRefiner.refine(state, {
-      facetName: props.attributeName,
       facetType: FACET_TYPE,
+      attributeName: props.attributeName,
     }, props.selectedItems.indexOf(value) === -1 ? [value] : []);
   },
 });

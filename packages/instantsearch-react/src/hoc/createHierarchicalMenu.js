@@ -1,7 +1,6 @@
 import {PropTypes} from 'react';
 
 import createHOC from '../createHOC';
-import facetRefiner from './facetRefiner';
 
 function transformValue(value, limit) {
   return value.slice(0, limit).map(v => ({
@@ -37,7 +36,7 @@ export default createHOC({
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
     sortBy: PropTypes.arrayOf(PropTypes.string),
-    limit: PropTypes.number,
+    limit: PropTypes.number.isRequired,
   },
 
   defaultProps: {
@@ -45,22 +44,14 @@ export default createHOC({
     separator: ' > ',
     rootPath: null,
     showParentLevel: true,
-    limit: 10,
-  },
-
-  configure(state, props) {
-    return maybeAddHierarchicalFacet(state, props).setQueryParameters({
-      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, props.limit),
-    });
   },
 
   mapStateToProps(state, props) {
     const {
       searchResults,
       searchParameters,
-      searchResultsSearchParameters,
     } = state;
-    const {name, attributes, sortBy} = props;
+    const {name, sortBy} = props;
 
     // @TODO: warn when one of the requested facets isn't set as an
     // attribute for faceting.
@@ -70,23 +61,27 @@ export default createHOC({
     }
 
     return {
-      facetValue:
-        state.searchResults &&
-        state.searchResults.getFacetValues(name, {sortBy}),
+      facetValue: searchResults && searchResults.getFacetValues(name, {sortBy}),
       selectedItems,
     };
   },
 
+  configure(state, props) {
+    return maybeAddHierarchicalFacet(state, props).setQueryParameters({
+      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, props.limit),
+    });
+  },
+
   transformProps(props) {
-    const {facetValue, ...otherProps} = props;
+    const {facetValue, selectedItems, limit} = props;
     if (!facetValue) {
-      return otherProps;
+      return {selectedItems};
     }
 
     return {
-      ...otherProps,
+      selectedItems,
       items: facetValue.data ?
-        transformValue(facetValue.data, props.limit) :
+        transformValue(facetValue.data, limit) :
         // In the case the hierachical facet value has no items
         [],
     };

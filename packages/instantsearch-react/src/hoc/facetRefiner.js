@@ -28,36 +28,27 @@ const getRefinements = (state, type, name) => {
 };
 
 export default {
-  configure: (state, opts) => {
-    const {facetType, facetName, valuesPerFacet} = opts;
-    const facetKey = facetTypeToKey[facetType];
-    return state.setQueryParameters({
-      [facetKey]: union(state[facetKey], [facetName]),
-      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, valuesPerFacet),
-    });
-  },
-
-  mapStateToProps(state, opts) {
+  mapStateToProps(state, props) {
     const {
       searchResults,
       searchParameters,
       searchResultsSearchParameters,
     } = state;
-    const {facetType, facetName, sortBy} = opts;
+    const {facetType, attributeName, sortBy} = props;
 
     let isFacetPresent = false;
     if (searchResults) {
       const wasRequested =
         searchResultsSearchParameters[facetTypeToKey[facetType]]
-          .indexOf(facetName) !== -1;
+          .indexOf(attributeName) !== -1;
       const wasReceived =
-        Boolean(searchResults.getFacetByName(facetName));
+        Boolean(searchResults.getFacetByName(attributeName));
       if (searchResults.nbHits > 0 && wasRequested && !wasReceived) {
         // eslint-disable-next-line no-console
         console.warn(
-          `A component requested values for facet "${facetName}", ` +
+          `A component requested values for facet "${attributeName}", ` +
           'but no facet values were retrieved from the API. This means that ' +
-          `you should add the attribute "${facetName}" to the list ` +
+          `you should add the attribute "${attributeName}" to the list ` +
           'of attributes for faceting in your index settings.'
         );
       }
@@ -65,27 +56,47 @@ export default {
     }
 
     let selectedItems = [];
-    if (isFacetType(searchParameters, facetType, facetName)) {
-      selectedItems = getRefinements(searchParameters, facetType, facetName);
+    if (isFacetType(searchParameters, facetType, attributeName)) {
+      selectedItems = getRefinements(
+        searchParameters,
+        facetType,
+        attributeName
+      );
     }
 
     return {
       facetValues: isFacetPresent ?
-        state.searchResults.getFacetValues(facetName, {sortBy}) :
+        state.searchResults.getFacetValues(attributeName, {sortBy}) :
         null,
+        // We need to keep track of the "configuration" limit ourselves since it
+        // might get overriden by a prop on the component itself.
+        // In our case, the `createShowMore` HOC sets its own `limit` prop,
+        // which conflicts with the `limit` configuration option provided to
+        // the `createMenu` `mapProps` argument.
+        // Technically, we should do this for all
+        // limit,
+      // },
       selectedItems,
     };
   },
 
-  transformProps(props, opts) {
-    const {facetValues, ...otherProps} = props;
-    const {valuesPerFacet} = opts;
+  configure(state, props) {
+    const {facetType, attributeName, limit} = props;
+    const facetKey = facetTypeToKey[facetType];
+    return state.setQueryParameters({
+      [facetKey]: union(state[facetKey], [attributeName]),
+      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, limit),
+    });
+  },
+
+  transformProps(props) {
+    const {facetValues, selectedItems, limit} = props;
     if (!facetValues) {
-      return otherProps;
+      return {selectedItems};
     }
-    const facetVals = facetValues.slice(0, valuesPerFacet);
+    const facetVals = facetValues.slice(0, limit);
     return {
-      ...otherProps,
+      selectedItems,
       items: facetVals.map(v => ({
         value: v.name,
         count: v.count,
@@ -93,10 +104,10 @@ export default {
     };
   },
 
-  refine(state, opts, values) {
-    const {facetType, facetName} = opts;
+  refine(state, props, values) {
+    const {facetType, attributeName} = props;
 
-    if (!isFacetType(state, facetType, facetName)) {
+    if (!isFacetType(state, facetType, attributeName)) {
       // While the facet will already be present in the search results thanks to
       // the configManager, refining it will persist it in the helper's state.
       // Note that facets list do not appear in the URL by default, but depend
@@ -104,13 +115,13 @@ export default {
       // createStageManager.js).
       const key = facetTypeToKey[facetType];
       state = state.setQueryParameters({
-        [key]: union(state[key], [facetName]),
+        [key]: union(state[key], [attributeName]),
       });
     }
 
-    state = state.clearRefinements(facetName);
+    state = state.clearRefinements(attributeName);
     state = values.reduce((s, val) =>
-      s.toggleRefinement(facetName, val)
+      s.toggleRefinement(attributeName, val)
     , state);
 
     return state;

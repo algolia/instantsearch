@@ -9,6 +9,12 @@ export default createHOC({
     hitsPerPage: PropTypes.number,
   },
 
+  mapStateToProps(state) {
+    return {
+      hits: state.searchResults && state.searchResults.hits,
+    };
+  },
+
   configure(state, props) {
     if (typeof props.hitsPerPage === 'undefined') {
       return state;
@@ -16,11 +22,5 @@ export default createHOC({
     return state.setQueryParameters({
       hitsPerPage: props.hitsPerPage,
     });
-  },
-
-  mapStateToProps(state) {
-    return {
-      hits: state.searchResults && state.searchResults.hits,
-    };
   },
 });

@@ -31,28 +31,27 @@ class Menu extends Component {
     selectedItems: selectedItemsPropType,
     translations: PropTypes.object,
     theme: PropTypes.object,
-    showMore: PropTypes.bool.isRequired,
-    limitMin: PropTypes.number.isRequired,
-    limitMax: PropTypes.number.isRequired,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
+    limit: PropTypes.number.isRequired,
+    show: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     translations: defaultTranslations,
     theme: defaultTheme,
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
   };
 
-  constructor() {
-    super();
-
-    this.state = {
-      extended: false,
-    };
-  }
-
   onShowMoreClick = () => {
-    this.setState(state => ({
-      extended: !state.extended,
-    }));
+    this.props.show(
+      this.props.limit === this.props.limitMax ?
+        this.props.limitMin :
+        this.props.limitMax
+    );
   };
 
   onItemClick = item => {
@@ -66,11 +65,10 @@ class Menu extends Component {
       items,
       selectedItems,
       showMore,
-      limitMax,
-      limitMin,
       createURL,
+      limit,
+      limitMax,
     } = this.props;
-    const {extended} = this.state;
     if (!items) {
       return null;
     }
@@ -81,7 +79,7 @@ class Menu extends Component {
       <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
           {items
-            .slice(0, !showMore || extended ? limitMax : limitMin)
+            .slice(0, limit)
             .map(item =>
               <li
                 {...th(
@@ -122,7 +120,7 @@ class Menu extends Component {
               'showMore',
               defaultTranslations,
               translations,
-              extended
+              limit === limitMax
             )}
           </button>
         }

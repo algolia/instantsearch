@@ -1,25 +1,27 @@
 import React, {PropTypes, Component} from 'react';
+import themeable from 'react-themeable';
 
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import themeable from 'react-themeable';
+import {getTranslation} from '../utils';
 
 import RefinementListCheckboxItem from './RefinementListCheckboxItem';
 
 const defaultTranslations = {
+  showMore: extended => extended ? 'Show less' : 'Show more',
   count: count => count.toString(),
 };
 
 const defaultTheme = {
-  root: 'RefinementListLinks',
-  list: 'RefinementListLinks__list',
-  item: 'RefinementListLinks__item',
-  itemSelected: 'RefinementListLinks__item--selected',
-  itemLink: 'RefinementListLinks__item__link',
-  itemValue: 'RefinementListLinks__item__value',
-  itemCount: 'RefinementListLinks__item__count',
+  root: 'RefinementList',
+  list: 'RefinementList__list',
+  item: 'RefinementList__item',
+  itemSelected: 'RefinementList__item--selected',
+  itemLink: 'RefinementList__item__link',
+  itemValue: 'RefinementList__item__value',
+  itemCount: 'RefinementList__item__count',
 };
 
-class RefinementListLinks extends Component {
+class RefinementList extends Component {
   static propTypes = {
     theme: PropTypes.object,
     translations: PropTypes.object,
@@ -28,6 +30,11 @@ class RefinementListLinks extends Component {
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
     showEmpty: PropTypes.bool,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
+    limit: PropTypes.number.isRequired,
+    show: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -35,6 +42,9 @@ class RefinementListLinks extends Component {
     translations: defaultTranslations,
     showEmpty: true,
     items: [],
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
   };
 
   onItemChange = (item, selected) => {
@@ -49,6 +59,14 @@ class RefinementListLinks extends Component {
     this.props.refine(nextSelectedItems);
   }
 
+  onShowMoreClick = () => {
+    this.props.show(
+      this.props.limit === this.props.limitMax ?
+        this.props.limitMin :
+        this.props.limitMax
+    );
+  };
+
   render() {
     const {
       translations,
@@ -56,6 +74,9 @@ class RefinementListLinks extends Component {
       items,
       selectedItems,
       showEmpty,
+      showMore,
+      limit,
+      limitMax,
     } = this.props;
     if (items.length === 0 && !(showEmpty && selectedItems.length > 0)) {
       return null;
@@ -74,32 +95,48 @@ class RefinementListLinks extends Component {
     return (
       <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
-          {allItems.map(item =>
-            <li
-              {...th(
-                item.value,
-                'item',
-                selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-              )}
-            >
-              <RefinementListCheckboxItem
-                translations={translations}
-                theme={{
-                  root: theme.itemContainer,
-                  checkbox: theme.itemCheckbox,
-                  label: theme.itemLabel,
-                  count: theme.itemCount,
-                }}
-                selected={selectedItems.indexOf(item.value) !== -1}
-                onChange={this.onItemChange}
-                item={item}
-              />
-            </li>
-          )}
+          {allItems
+            .slice(0, limit)
+            .map(item =>
+              <li
+                {...th(
+                  item.value,
+                  'item',
+                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
+                )}
+              >
+                <RefinementListCheckboxItem
+                  translations={translations}
+                  theme={{
+                    root: theme.itemContainer,
+                    checkbox: theme.itemCheckbox,
+                    label: theme.itemLabel,
+                    count: theme.itemCount,
+                  }}
+                  selected={selectedItems.indexOf(item.value) !== -1}
+                  onChange={this.onItemChange}
+                  item={item}
+                />
+              </li>
+            )
+          }
         </ul>
+        {showMore &&
+          <button
+            {...th('showMore', 'showMore')}
+            onClick={this.onShowMoreClick}
+          >
+            {getTranslation(
+              'showMore',
+              defaultTranslations,
+              translations,
+              limit === limitMax
+            )}
+          </button>
+        }
       </div>
     );
   }
 }
 
-export default RefinementListLinks;
+export default RefinementList;

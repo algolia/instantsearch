@@ -14,21 +14,21 @@ const {
   refine,
 } = facetRefiner;
 
-describe('createRefinementList', () => {
+describe('facetRefiner', () => {
   it('increases maxValuesPerFacet when it isn\'t big enough', () => {
     let state;
     let configuredState;
 
     state = new SearchParameters({maxValuesPerFacet: 100});
     configuredState = configure(state, {
-      valuesPerFacet: 101,
+      limit: 101,
       facetType: 'conjunctive',
     });
     expect(configuredState.maxValuesPerFacet).toBe(101);
 
     state = new SearchParameters({maxValuesPerFacet: 101});
     configuredState = configure(state, {
-      valuesPerFacet: 100,
+      limit: 100,
       facetType: 'conjunctive',
     });
     expect(configuredState.maxValuesPerFacet).toBe(101);
@@ -41,28 +41,28 @@ describe('createRefinementList', () => {
     state = new SearchParameters();
     configuredState = configure(state, {
       facetType: 'disjunctive',
-      facetName: 'foo',
+      attributeName: 'foo',
     });
     expect(configuredState.disjunctiveFacets).toEqual(['foo']);
 
     state = new SearchParameters({disjunctiveFacets: ['foo']});
     configuredState = configure(state, {
       facetType: 'disjunctive',
-      facetName: 'foo',
+      attributeName: 'foo',
     });
     expect(configuredState.disjunctiveFacets).toEqual(['foo']);
 
     state = new SearchParameters();
     configuredState = configure(state, {
       facetType: 'conjunctive',
-      facetName: 'foo',
+      attributeName: 'foo',
     });
     expect(configuredState.facets).toEqual(['foo']);
 
     state = new SearchParameters({facets: ['foo']});
     configuredState = configure(state, {
       facetType: 'conjunctive',
-      facetName: 'foo',
+      attributeName: 'foo',
     });
     expect(configuredState.facets).toEqual(['foo']);
   });
@@ -84,7 +84,7 @@ describe('createRefinementList', () => {
         }),
         searchResults: null,
       }, {
-        facetName: 'foo',
+        attributeName: 'foo',
         facetType,
       });
       expect(props).toEqual({facetValues: null, selectedItems: []});
@@ -95,7 +95,7 @@ describe('createRefinementList', () => {
         })[addMethodKey]('foo', 'bar'),
         searchResults: null,
       }, {
-        facetName: 'foo',
+        attributeName: 'foo',
         facetType,
       });
       expect(props).toEqual({facetValues: null, selectedItems: ['bar']});
@@ -117,7 +117,7 @@ describe('createRefinementList', () => {
           results: [result, result],
         }),
       }, {
-        facetName: 'foo',
+        attributeName: 'foo',
         facetType,
       });
       expect(props).toEqual({
@@ -147,7 +147,7 @@ describe('createRefinementList', () => {
           results: [result, result],
         }),
       }, {
-        facetName: 'foo',
+        attributeName: 'foo',
         facetType,
       });
       expect(props).toEqual({
@@ -173,7 +173,7 @@ describe('createRefinementList', () => {
           results: [result, result],
         }),
       }, {
-        facetName: 'foo',
+        attributeName: 'foo',
         sortBy: ['count:desc'],
         facetType,
       });
@@ -217,7 +217,7 @@ describe('createRefinementList', () => {
       }),
     }, {
       facetType: 'disjunctive',
-      facetName: 'foo',
+      attributeName: 'foo',
     });
     expect(console.warn.mock.calls.length).toBe(1);
     expect(console.warn.mock.calls[0][0]).toBe(
@@ -232,7 +232,8 @@ describe('createRefinementList', () => {
   it('transform its props', () => {
     expect(transformProps({
       facetValues: null,
-    }, {valuesPerFacet: 1})).toEqual({});
+      limit: 1,
+    })).toEqual({});
 
     expect(transformProps({
       facetValues: [{
@@ -240,7 +241,8 @@ describe('createRefinementList', () => {
         count: 100,
         isRefined: false,
       }],
-    }, {valuesPerFacet: 1})).toEqual({
+      limit: 1,
+    })).toEqual({
       items: [{
         value: 'foo',
         count: 100,
@@ -260,7 +262,8 @@ describe('createRefinementList', () => {
           isRefined: false,
         },
       ],
-    }, {valuesPerFacet: 1})).toEqual({
+      limit: 1,
+    })).toEqual({
       items: [{
         value: 'foo',
         count: 100,
@@ -280,7 +283,8 @@ describe('createRefinementList', () => {
           isRefined: false,
         },
       ],
-    }, {valuesPerFacet: 2})).toEqual({
+      limit: 2,
+    })).toEqual({
       items: [
         {
           value: 'foo',
@@ -312,7 +316,7 @@ describe('createRefinementList', () => {
           {name: 'bar'},
         ],
         facetType,
-        facetName: 'foo',
+        attributeName: 'foo',
       }, ['foo']);
       expect(state[key]).toEqual(['foo']);
       expect(state[isRefinedMethodKey]('foo', 'foo')).toBe(true);
@@ -326,7 +330,7 @@ describe('createRefinementList', () => {
             {name: 'bar'},
           ],
           facetType,
-          facetName: 'foo',
+          attributeName: 'foo',
         },
         ['foo']
       );

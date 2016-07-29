@@ -18,6 +18,7 @@ function hasSelectedChild(item, selectedItems) {
 }
 
 const defaultTranslations = {
+  showMore: extended => extended ? 'Show less' : 'Show more',
   count: count => count.toString(),
 };
 
@@ -42,6 +43,7 @@ class HierarchicalMenuItem extends Component {
     selectedItems: selectedItemsPropType.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
+    limit: PropTypes.number.isRequired,
   };
 
   // We could have only one onClick method since LinkItem passes its onClick
@@ -59,6 +61,7 @@ class HierarchicalMenuItem extends Component {
       createURL,
       theme,
       translations,
+      limit,
     } = this.props;
 
     const th = themeable(theme);
@@ -101,6 +104,7 @@ class HierarchicalMenuItem extends Component {
             createURL={createURL}
             items={item.children}
             selectedItems={selectedItems}
+            limit={limit}
           />
         }
       </li>
@@ -116,6 +120,7 @@ class HierarchicalMenuList extends Component {
     selectedItems: selectedItemsPropType.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
+    limit: PropTypes.number.isRequired,
   };
 
   render() {
@@ -126,23 +131,28 @@ class HierarchicalMenuList extends Component {
       createURL,
       theme,
       translations,
+      limit,
     } = this.props;
 
     const th = themeable(theme);
 
     return (
       <ul {...th('list', 'list')}>
-        {items.map(item =>
-          <HierarchicalMenuItem
-            key={item.value}
-            theme={theme}
-            translations={translations}
-            refine={refine}
-            createURL={createURL}
-            item={item}
-            selectedItems={selectedItems}
-          />
-        )}
+        {items
+          .slice(0, limit)
+          .map(item =>
+            <HierarchicalMenuItem
+              key={item.value}
+              theme={theme}
+              translations={translations}
+              refine={refine}
+              createURL={createURL}
+              item={item}
+              selectedItems={selectedItems}
+              limit={limit}
+            />
+          )
+        }
       </ul>
     );
   }
@@ -156,11 +166,27 @@ class HierarchicalMenu extends Component {
     createURL: PropTypes.func.isRequired,
     items: hierarchicalItemsPropType,
     selectedItems: selectedItemsPropType,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
+    limit: PropTypes.number.isRequired,
+    show: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     theme: defaultTheme,
     translations: defaultTranslations,
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
+  };
+
+  onShowMoreClick = () => {
+    this.props.show(
+      this.props.limit === this.props.limitMax ?
+        this.props.limitMin :
+        this.props.limitMax
+    );
   };
 
   render() {
@@ -171,6 +197,9 @@ class HierarchicalMenu extends Component {
       refine,
       theme,
       translations,
+      showMore,
+      limit,
+      limitMax,
     } = this.props;
     if (!items) {
       return null;
@@ -187,7 +216,21 @@ class HierarchicalMenu extends Component {
           selectedItems={selectedItems}
           refine={refine}
           createURL={createURL}
+          limit={limit}
         />
+        {showMore &&
+          <button
+            {...th('showMore', 'showMore')}
+            onClick={this.onShowMoreClick}
+          >
+            {getTranslation(
+              'showMore',
+              defaultTranslations,
+              translations,
+              limit === limitMax
+            )}
+          </button>
+        }
       </div>
     );
   }

@@ -18,28 +18,24 @@ describe('createRefinementList', () => {
     configure(state, {
       attributeName: 'foo',
       operator: 'or',
-      showMore: false,
-      limitMin: 10,
-      limitMax: 20,
+      limit: 10,
     });
     expect(facetRefiner.configure.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.configure.mock.calls[0][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'disjunctive',
-      valuesPerFacet: 10,
+      limit: 10,
     });
 
     configure(state, {
       attributeName: 'foo',
       operator: 'and',
-      showMore: true,
-      limitMin: 10,
-      limitMax: 20,
+      limit: 20,
     });
     expect(facetRefiner.configure.mock.calls[1][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'conjunctive',
-      valuesPerFacet: 20,
+      limit: 20,
     });
   });
 
@@ -52,7 +48,7 @@ describe('createRefinementList', () => {
     });
     expect(facetRefiner.mapStateToProps.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.mapStateToProps.mock.calls[0][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'disjunctive',
       sortBy: ['something'],
     });
@@ -63,32 +59,18 @@ describe('createRefinementList', () => {
       sortBy: ['something'],
     });
     expect(facetRefiner.mapStateToProps.mock.calls[1][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'conjunctive',
       sortBy: ['something'],
     });
   });
 
-  it('derives the right transformProps options from props', () => {
+  it('proxies transformProps', () => {
     const props1 = {
-      showMore: false,
-      limitMin: 10,
-      limitMax: 20,
+      limit: 10,
     };
     transformProps(props1);
     expect(facetRefiner.transformProps.mock.calls[0][0]).toBe(props1);
-    expect(facetRefiner.transformProps.mock.calls[0][1]).toEqual({
-      valuesPerFacet: 10,
-    });
-    const props2 = {
-      showMore: true,
-      limitMin: 10,
-      limitMax: 20,
-    };
-    transformProps(props2);
-    expect(facetRefiner.transformProps.mock.calls[1][1]).toEqual({
-      valuesPerFacet: 20,
-    });
   });
 
   it('derives the right refine options from props', () => {
@@ -100,7 +82,7 @@ describe('createRefinementList', () => {
     }, values);
     expect(facetRefiner.refine.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.refine.mock.calls[0][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'disjunctive',
     });
     expect(facetRefiner.refine.mock.calls[0][2]).toBe(values);
@@ -110,7 +92,7 @@ describe('createRefinementList', () => {
       operator: 'and',
     }, values);
     expect(facetRefiner.refine.mock.calls[1][1]).toEqual({
-      facetName: 'foo',
+      attributeName: 'foo',
       facetType: 'conjunctive',
     });
   });
