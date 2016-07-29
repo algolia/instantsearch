@@ -7,6 +7,7 @@ import LinkItem from './LinkItem';
 import {getTranslation} from '../utils';
 
 const defaultTranslations = {
+  showMore: extended => extended ? 'Show less' : 'Show more',
   count: count => count.toString(),
 };
 
@@ -28,11 +29,19 @@ class RefinementListLinks extends Component {
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
     selectedItems: selectedItemsPropType,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
+    limit: PropTypes.number.isRequired,
+    show: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     theme: defaultTheme,
     translations: defaultTranslations,
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
   };
 
   getSelectedItems = item => {
@@ -51,6 +60,14 @@ class RefinementListLinks extends Component {
     this.props.refine(this.getSelectedItems(item));
   }
 
+  onShowMoreClick = () => {
+    this.props.show(
+      this.props.limit === this.props.limitMax ?
+        this.props.limitMin :
+        this.props.limitMax
+    );
+  };
+
   render() {
     const {
       translations,
@@ -58,6 +75,9 @@ class RefinementListLinks extends Component {
       items,
       selectedItems,
       createURL,
+      showMore,
+      limit,
+      limitMax,
     } = this.props;
     if (!items) {
       return null;
@@ -68,36 +88,52 @@ class RefinementListLinks extends Component {
     return (
       <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
-          {items.map(item =>
-            <li
-              {...th(
-                item.value,
-                'item',
-                selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-              )}
-            >
-              <LinkItem
-                {...th('itemLink', 'itemLink')}
-                onClick={this.onItemClick}
-                item={item}
-                href={createURL(this.getSelectedItems(item))}
+          {items
+            .slice(0, limit)
+            .map(item =>
+              <li
+                {...th(
+                  item.value,
+                  'item',
+                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
+                )}
               >
-                <span {...th('itemLabel', 'itemLabel')}>
-                  {item.value}
-                </span>
-                {' '}
-                <span {...th('itemCount', 'itemCount')}>
-                  {getTranslation(
-                    'count',
-                    defaultTranslations,
-                    translations,
-                    item.count
-                  )}
-                </span>
-              </LinkItem>
-            </li>
-          )}
+                <LinkItem
+                  {...th('itemLink', 'itemLink')}
+                  onClick={this.onItemClick}
+                  item={item}
+                  href={createURL(this.getSelectedItems(item))}
+                >
+                  <span {...th('itemLabel', 'itemLabel')}>
+                    {item.value}
+                  </span>
+                  {' '}
+                  <span {...th('itemCount', 'itemCount')}>
+                    {getTranslation(
+                      'count',
+                      defaultTranslations,
+                      translations,
+                      item.count
+                    )}
+                  </span>
+                </LinkItem>
+              </li>
+            )
+          }
         </ul>
+        {showMore &&
+          <button
+            {...th('showMore', 'showMore')}
+            onClick={this.onShowMoreClick}
+          >
+            {getTranslation(
+              'showMore',
+              defaultTranslations,
+              translations,
+              limit === limitMax
+            )}
+          </button>
+        }
       </div>
     );
   }

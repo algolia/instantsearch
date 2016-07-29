@@ -31,7 +31,7 @@ function createMockContext(getState) {
 describe('createHOC', () => {
   it('creates a higher order component that renders a component', () => {
     const Dummy = () => null;
-    const HOC = createHOC({})(Dummy);
+    const HOC = createHOC({})()(Dummy);
     const wrapper = shallow(<HOC />);
     expect(wrapper.find(Dummy).length).toBe(1);
   });
@@ -39,7 +39,7 @@ describe('createHOC', () => {
   it('connects the provided component to the algolia store', () => {
     const Dummy = () => null;
     const mapStateToProps = jest.fn();
-    const HOC = createHOC({mapStateToProps})(Dummy);
+    const HOC = createHOC({mapStateToProps})()(Dummy);
     const state = {};
     const props = {foo: 'bar'};
     HOC.__mapStateToProps(state, props);
@@ -59,7 +59,7 @@ describe('createHOC', () => {
     const HOC = createHOC({
       defaultProps,
       mapStateToProps,
-    })(Dummy);
+    })()(Dummy);
     HOC.__mapStateToProps({}, {foo: 'foo', bar: undefined});
     expect(mapStateToProps.mock.calls[0][1]).toEqual({
       foo: 'foo',
@@ -72,7 +72,7 @@ describe('createHOC', () => {
     const Dummy = () => null;
     const configure = jest.fn();
     const context = createMockContext();
-    const HOC = createHOC({configure})(Dummy);
+    const HOC = createHOC({configure})()(Dummy);
     const prop = {};
     const state = {};
     shallow(<HOC prop={prop} />, {context});
@@ -87,7 +87,7 @@ describe('createHOC', () => {
     const Dummy = () => null;
     const configure = jest.fn();
     const context = createMockContext();
-    const HOC = createHOC({configure})(Dummy);
+    const HOC = createHOC({configure})()(Dummy);
     const prop1 = {};
     const prop2 = {};
     const state = {};
@@ -109,7 +109,7 @@ describe('createHOC', () => {
     const Dummy = () => null;
     const configure = jest.fn();
     const context = createMockContext();
-    const HOC = createHOC({configure})(Dummy);
+    const HOC = createHOC({configure})()(Dummy);
 
     let wrapper = mount(<HOC />, {context});
     wrapper.unmount();
@@ -133,7 +133,7 @@ describe('createHOC', () => {
     const prop = {};
     const state = {};
     const context = createMockContext(() => state);
-    const HOC = createHOC({refine})(Dummy);
+    const HOC = createHOC({refine})()(Dummy);
     const wrapper = shallow(<HOC prop={prop} />, {context});
     const props = wrapper.find(Dummy).props();
     const val1 = {};
@@ -154,7 +154,7 @@ describe('createHOC', () => {
     const state2 = {};
     const refine = jest.fn(() => state2);
     const context = createMockContext(() => state1);
-    const HOC = createHOC({refine})(Dummy);
+    const HOC = createHOC({refine})()(Dummy);
     const wrapper = shallow(<HOC prop={prop} />, {context});
     const props = wrapper.find(Dummy).props();
     const val1 = {};
@@ -174,10 +174,9 @@ describe('createHOC', () => {
     const Dummy = () => null;
     const prop1 = {};
     const prop2 = {};
-    const transformedProps = {prop: prop2};
-    const transformProps = jest.fn(() => transformedProps);
+    const transformProps = jest.fn(() => ({prop: prop2}));
 
-    const HOC1 = createHOC({transformProps})(Dummy);
+    const HOC1 = createHOC({transformProps})()(Dummy);
     const wrapper1 = shallow(<HOC1 prop={prop1} />);
     const props1 = wrapper1.find(Dummy).props();
     expect(transformProps.mock.calls[0][0].prop).toBe(prop1);
@@ -185,7 +184,7 @@ describe('createHOC', () => {
 
     // Props from mapStateToProps must be passed to transformProps as well
     const mapStateToProps = jest.fn(() => ({prop: prop1}));
-    const HOC2 = createHOC({mapStateToProps, transformProps})(Dummy);
+    const HOC2 = createHOC({mapStateToProps, transformProps})()(Dummy);
     const wrapper2 = shallow(<HOC2 />);
     const props2 = wrapper2.find(Dummy).props();
     expect(transformProps.mock.calls[0][0].prop).toBe(prop1);
