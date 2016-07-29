@@ -1,6 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 
-import {getTranslation} from './utils';
+import {getTranslation} from '../utils';
 
 const defaultTranslations = {
   label: 'Hits per page',

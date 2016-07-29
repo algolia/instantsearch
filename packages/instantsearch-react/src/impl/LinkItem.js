@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
-
-import {isSpecialClick} from './utils';
 import omit from 'lodash/object/omit';
+
+import {isSpecialClick} from '../utils';
 
 export default class ItemLink extends Component {
   static propTypes = {

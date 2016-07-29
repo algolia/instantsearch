@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-algoliasearch-helper';
 
+import {applyDefaultProps} from './utils';
 import {stateManagerPropType, configManagerPropType} from './propTypes';
 
 const hasOwnProperty = (...args) => ({}.hasOwnProperty.call(...args));
@@ -10,26 +11,15 @@ export default function createHOC(desc) {
   const hasTransform = hasOwnProperty(desc, 'transformProps');
   const hasRefine = hasOwnProperty(desc, 'refine');
 
-  const connector = connect((state, props) => {
-    const defaultedProps = {};
-
-    // This is the React default props behavior. While react-redux does not
-    // apply default props to the props passed to the mapStateToProps method,
-    // we often find ourselves depending on default props being set in the
-    // mapStateToProps.
-    // A better way to do this might just be to create another component on top
-    // of the connected one.
-    for (const propName in desc.defaultProps) {
-      if (props[propName] === undefined) {
-        defaultedProps[propName] = desc.defaultProps[propName];
-      }
-    }
-
-    return desc.mapStateToProps(state, {
-      ...props,
-      ...defaultedProps,
-    });
-  });
+  // While react-redux does not  apply default props to the props passed to the
+  // mapStateToProps method, we often find ourselves depending on default props
+  // being set in the mapStateToProps.
+  // A better way to do this might just be to create another component on top
+  // of the connected one.
+  const connector = connect((state, props) => desc.mapStateToProps(
+    state,
+    applyDefaultProps(props, desc.defaultProps)
+  ));
 
   return Composed => {
     class HOC extends Component {

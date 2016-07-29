@@ -7,7 +7,7 @@ import renderer from 'react/lib/ReactTestRenderer';
 
 import SearchBox from './SearchBox';
 jest.unmock('./SearchBox');
-jest.unmock('./utils');
+jest.unmock('../utils');
 
 let tree;
 

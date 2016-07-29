@@ -1,9 +1,37 @@
 /* eslint-env jest, jasmine */
 
-import {isSpecialClick, getTranslation, capitalize} from './utils';
+import {
+  applyDefaultProps,
+  isSpecialClick,
+  getTranslation,
+  capitalize,
+} from './utils';
 jest.unmock('./utils');
 
 describe('utils', () => {
+  describe('applyDefaultProps', () => {
+    it('applies defaults for all undefined values', () => {
+      expect(applyDefaultProps({
+        definedProp: 'waddup',
+        undefinedProp: undefined,
+        nullProp: null,
+        falsyProp: false,
+      }, {
+        definedProp: 'oy',
+        undefinedProp: 'hello',
+        nonExistentProp: 'hey',
+        nullProp: 'greetings',
+        falsyProp: 'well met',
+      })).toEqual({
+        definedProp: 'waddup',
+        undefinedProp: 'hello',
+        nonExistentProp: 'hey',
+        nullProp: null,
+        falsyProp: false,
+      });
+    });
+  });
+
   describe('isSpecialClick', () => {
     it('returns true if a modifier key is pressed', () => {
       expect(isSpecialClick({altKey: true})).toBe(true);
