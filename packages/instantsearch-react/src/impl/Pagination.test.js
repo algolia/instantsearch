@@ -7,7 +7,7 @@ import renderer from 'react/lib/ReactTestRenderer';
 import Pagination from './Pagination';
 import PaginationLink from './PaginationLink';
 jest.unmock('./Pagination');
-jest.unmock('./utils');
+jest.unmock('../utils');
 jest.unmock('./PaginationLink');
 
 const DEFAULT_PROPS = {nbPages: 20, page: 9};

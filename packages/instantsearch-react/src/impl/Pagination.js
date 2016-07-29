@@ -2,7 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import range from 'lodash/utility/range';
 import themeable from 'react-themeable';
 
-import {getTranslation, capitalize, isSpecialClick} from './utils';
+import {getTranslation, capitalize, isSpecialClick} from '../utils';
+
 import PaginationLink from './PaginationLink';
 
 function getPagesDisplayedCount(padding, total) {

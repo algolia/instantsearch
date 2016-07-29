@@ -2,8 +2,8 @@ import React, {PropTypes, Component} from 'react';
 import themeable from 'react-themeable';
 
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
+import {getTranslation} from '../utils';
 
-import {getTranslation} from './utils';
 import LinkItem from './LinkItem';
 
 const defaultTranslations = {

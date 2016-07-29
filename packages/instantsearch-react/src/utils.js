@@ -1,3 +1,14 @@
+export const applyDefaultProps = (props, defaultProps) => {
+  // This is the React default props behavior.
+  const defaultedProps = {...props};
+  for (const propName in defaultProps) {
+    if (props[propName] === undefined) {
+      defaultedProps[propName] = defaultProps[propName];
+    }
+  }
+  return defaultedProps;
+};
+
 export function isSpecialClick(event) {
   const isMiddleClick = event.button === 1;
   return Boolean(

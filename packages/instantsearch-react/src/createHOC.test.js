@@ -11,6 +11,7 @@ jest.mock('react-algoliasearch-helper', () => ({
 
 import createHOC from './createHOC';
 jest.unmock('./createHOC');
+jest.unmock('./utils');
 
 function createMockContext(getState) {
   return {

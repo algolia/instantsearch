@@ -6,8 +6,9 @@ import {
   hierarchicalItemsPropType,
   selectedItemsPropType,
 } from '../propTypes';
+import {getTranslation} from '../utils';
+
 import LinkItem from './LinkItem';
-import {getTranslation} from './utils';
 
 function hasSelectedChild(item, selectedItems) {
   return item.children && item.children.some(child =>

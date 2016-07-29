@@ -6,7 +6,7 @@ import renderer from 'react/lib/ReactTestRenderer';
 
 import HitsPerPage from './HitsPerPage';
 jest.unmock('./HitsPerPage');
-jest.unmock('./utils');
+jest.unmock('../utils');
 
 describe('HitsPerPage', () => {
   it('refines its value on change', () => {

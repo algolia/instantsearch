@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import themeable from 'react-themeable';
 
-import {getTranslation} from './utils';
+import {getTranslation} from '../utils';
 
 const defaultTranslations = {
   submit: null,

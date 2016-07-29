@@ -2,7 +2,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from 'react-themeable';
 
 import {itemPropType} from '../propTypes';
-import {getTranslation} from './utils';
+import {getTranslation} from '../utils';
 
 export default class RefinementListCheckboxItem extends Component {
   static propTypes = {

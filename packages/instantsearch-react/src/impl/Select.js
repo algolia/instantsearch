@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import {getTranslation} from './utils';
+import {getTranslation} from '../utils';
 
 const defaultTranslations = {
   none: 'None',

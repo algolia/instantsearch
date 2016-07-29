@@ -4,7 +4,7 @@ import {itemsPropType, selectedItemsPropType} from '../propTypes';
 import themeable from 'react-themeable';
 
 import LinkItem from './LinkItem';
-import {getTranslation} from './utils';
+import {getTranslation} from '../utils';
 
 const defaultTranslations = {
   count: count => count.toString(),
