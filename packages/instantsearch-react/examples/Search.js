@@ -82,16 +82,22 @@ class Search extends Component {
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ]}
+            showMore
           />
           <Menu
             attributeName="brand"
+            showMore
+            limitMin={10}
+            limitMax={20}
           />
           <RefinementList
             attributeName="brand"
             sortBy={['count']}
+            showMore
           />
           <RefinementListLinks
             attributeName="brand"
+            showMore
           />
           <Hits
             itemComponent={Movie}
