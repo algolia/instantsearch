@@ -24,6 +24,9 @@ import createMenu from '../hoc/createMenu';
 import MenuImpl from './Menu';
 export const Menu = createMenu(MenuImpl);
 
+import Select from './Select';
+export const MenuSelect = createMenu(Select);
+
 import createHierarchicalMenu from '../hoc/createHierarchicalMenu';
 import HierarchicalMenuImpl from './HierarchicalMenu';
 export const HierarchicalMenu = createHierarchicalMenu(HierarchicalMenuImpl);
