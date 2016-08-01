@@ -37,6 +37,10 @@ the conjunctive facets are.
 
 {{{codepen "bZoVKZ"}}}
 
+### Hierarchical facet list
+
+{{{codepen "QEBRoN"}}}
+
 ## Use with frameworks
 
 ### React
