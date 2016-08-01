@@ -4,8 +4,6 @@ import themeable from 'react-themeable';
 import {itemsPropType, selectedItemsPropType} from '../propTypes';
 import {getTranslation} from '../utils';
 
-import RefinementListCheckboxItem from './RefinementListCheckboxItem';
-
 const defaultTranslations = {
   showMore: extended => extended ? 'Show less' : 'Show more',
   count: count => count.toString(),
@@ -47,13 +45,13 @@ class RefinementList extends Component {
     limitMax: 20,
   };
 
-  onItemChange = (item, selected) => {
+  onItemChange = (item, e) => {
     const {selectedItems} = this.props;
     const nextSelectedItems = selectedItems.slice();
     const idx = nextSelectedItems.indexOf(item.value);
-    if (selected && idx === -1) {
+    if (e.target.checked && idx === -1) {
       nextSelectedItems.push(item.value);
-    } else if (!selected && idx !== -1){
+    } else if (!e.target.checked && idx !== -1){
       nextSelectedItems.splice(idx, 1);
     }
     this.props.refine(nextSelectedItems);
@@ -67,16 +65,75 @@ class RefinementList extends Component {
     );
   };
 
+  renderItem = item => {
+    const {selectedItems, translations, theme} = this.props;
+    const selected = selectedItems.indexOf(item.value) !== -1;
+
+    const th = themeable(theme);
+
+    return (
+      <li
+        {...th(
+          item.value,
+          'item',
+          selected && 'itemSelected'
+        )}
+      >
+        <label>
+          <input
+            {...th('itemCheckbox', 'itemCheckbox')}
+            type="checkbox"
+            checked={selected}
+            onChange={this.onItemChange.bind(null, item)}
+          />
+          <span {...th('itemLabel', 'itemLabel')}>
+            {item.value}
+          </span>
+          {' '}
+          <span {...th('itemCount', 'itemCount')}>
+            {getTranslation(
+              'count',
+              {},
+              translations,
+              item.count
+            )}
+          </span>
+        </label>
+      </li>
+    );
+  };
+
+  renderShowMore() {
+    const {translations, limit, limitMax, showMore, theme} = this.props;
+
+    if (!showMore) {
+      return null;
+    }
+
+    const th = themeable(theme);
+
+    return (
+      <button
+        {...th('showMore', 'showMore')}
+        onClick={this.onShowMoreClick}
+      >
+        {getTranslation(
+          'showMore',
+          defaultTranslations,
+          translations,
+          limit === limitMax
+        )}
+      </button>
+    );
+  }
+
   render() {
     const {
-      translations,
       theme,
       items,
       selectedItems,
       showEmpty,
-      showMore,
       limit,
-      limitMax,
     } = this.props;
     if (items.length === 0 && !(showEmpty && selectedItems.length > 0)) {
       return null;
@@ -95,45 +152,9 @@ class RefinementList extends Component {
     return (
       <div {...th('root', 'root')}>
         <ul {...th('list', 'list')}>
-          {allItems
-            .slice(0, limit)
-            .map(item =>
-              <li
-                {...th(
-                  item.value,
-                  'item',
-                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-                )}
-              >
-                <RefinementListCheckboxItem
-                  translations={translations}
-                  theme={{
-                    root: theme.itemContainer,
-                    checkbox: theme.itemCheckbox,
-                    label: theme.itemLabel,
-                    count: theme.itemCount,
-                  }}
-                  selected={selectedItems.indexOf(item.value) !== -1}
-                  onChange={this.onItemChange}
-                  item={item}
-                />
-              </li>
-            )
-          }
+          {allItems.slice(0, limit).map(this.renderItem)}
         </ul>
-        {showMore &&
-          <button
-            {...th('showMore', 'showMore')}
-            onClick={this.onShowMoreClick}
-          >
-            {getTranslation(
-              'showMore',
-              defaultTranslations,
-              translations,
-              limit === limitMax
-            )}
-          </button>
-        }
+        {this.renderShowMore()}
       </div>
     );
   }

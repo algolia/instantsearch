@@ -23,8 +23,8 @@ export default createHOC({
     sortBy: ['isRefined'],
   },
 
-  mapStateToProps(state, config) {
-    const {attributeName, operator, sortBy} = config;
+  mapStateToProps(state, props) {
+    const {attributeName, operator, sortBy} = props;
     const facetType = operatorToFacetType[operator];
     return facetRefiner.mapStateToProps(state, {
       facetType,
