@@ -55,7 +55,9 @@ module.exports = function(requires) {
       '?height=' + h +
       '&amp;theme-id=light&amp;slug-hash=' + hash +
       '&amp;default-tab=result&amp;user=Algolia&amp;embed-version=2';
-    var copedenContent = '<iframe id="cp_embed_' + hash + '" src="' + url + '" scrolling="no" frameborder="0" height="790" allowtransparency="true" allowfullscreen="true" name="CodePen Embed" title="CodePen Embed" class="cp_embed_iframe " style="width: 100%; overflow: hidden;"></iframe>';
+    var copedenContent = '<iframe id="cp_embed_' + hash +
+      '" src="' + url + '" scrolling="no" frameborder="0" height="' + h +
+      '" allowtransparency="true" allowfullscreen="true" name="CodePen Embed" title="CodePen Embed" class="cp_embed_iframe " style="width: 100%; overflow: hidden;"></iframe>';
     var downloadLink = '<a href="http://codepen.io/Algolia/share/zip/' + hash + '/">Download this example.</a>';
     return new Handlebars.SafeString(downloadLink + copedenContent);
   });
