@@ -40,15 +40,14 @@ Most of the searches will be done using the first method.
 {{> jsdoc jsdoc/helper/search}}
 {{> jsdoc jsdoc/helper/searchOnce}}
 
-### Query parameters shortcuts
-
-Some query parameters are more used than others. That's why some of them have
-their dedicated methods. The other parameters can still be set and get
-with the [generic query parameters methods](#query-parameters).
+### Query and index
 
 {{> jsdoc jsdoc/helper/setQuery}}
 {{> jsdoc jsdoc/helper/setIndex}}
 {{> jsdoc jsdoc/helper/getIndex}}
+
+### Pagination 
+
 {{> jsdoc jsdoc/helper/setPage}}
 {{> jsdoc jsdoc/helper/nextPage}}
 {{> jsdoc jsdoc/helper/previousPage}}
@@ -464,65 +463,92 @@ that you might encounter in the documentation.
 
 ## SearchParameters
 
-The SearchParameters is the class that structure all the parameters
-that are needed to build a query to Algolia. It is usually reffered
-as the state of the search. This state is available when receiving 
-`change` and `search` events, and with `result` as a secondary
-parameter.
+The SearchParameters is the class that structures all the parameters
+that are needed to build a query to Algolia. 
 
-SearchParameter is an immutable class. Each method that implies a
-change of the value is actually returning a new instance, and the
-previous is still the same as before the method call. The new
-instance contain the change implied by the method call.
+The SearchParameters instances are usually refered to as the state of
+the search. This state is available when receiving `change` and `search`
+events, and with `result` as a secondary parameter. Alternatively,
+it can be retrieved using the [getState](#AlgoliaSearchHelper#getState) method on the Helper.
 
+SearchParameter is an immutable class. Each setter method returns a new
+instance with the modification, and does not modify the object it is
+called on.
+
+### Attributes
+
+The SearchParameters stores all the parameters to make the queries to Algolia.
+They can be of two types:
+ 
+ - raw parameters. Those parameters are sent directly to Algolia
+without any transformation. Like the query or any configuration that
+you can find in the [Rest API documentation](https://www.algolia.com/doc/rest-api/search#list-indexes).
+ - managed parameters. Those parameters are structured inside the
+SearchParameters in a way that makes them easy to use with a programmatic
+API. But those are not native to Algolia.
+
+All the attributes specific to the helper are described below:
+
+{{> jsdoc jsdoc/state/disjunctiveFacets}}
+{{> jsdoc jsdoc/state/disjunctiveFacetsRefinements}}
+{{> jsdoc jsdoc/state/facets}}
+{{> jsdoc jsdoc/state/facetsExcludes}}
+{{> jsdoc jsdoc/state/facetsRefinements}}
+{{> jsdoc jsdoc/state/hierarchicalFacets}}
+{{> jsdoc jsdoc/state/hierarchicalFacetsRefinements}}
+{{> jsdoc jsdoc/state/numericRefinements}}
+{{> jsdoc jsdoc/state/tagRefinements}}
+
+### Methods
+
+{{> jsdoc jsdoc/state/addDisjunctiveFacetRefinement}}
+{{> jsdoc jsdoc/state/addExcludeRefinement}}
+{{> jsdoc jsdoc/state/addFacetRefinement}}
+{{> jsdoc jsdoc/state/addNumericRefinement}}
+{{> jsdoc jsdoc/state/addTagRefinement}}
 {{> jsdoc jsdoc/state/clearRefinements}}
 {{> jsdoc jsdoc/state/clearTags}}
-{{> jsdoc jsdoc/state/setQuery}}
-{{> jsdoc jsdoc/state/setPage}}
-{{> jsdoc jsdoc/state/setFacets}}
-{{> jsdoc jsdoc/state/setDisjunctiveFacets}}
-{{> jsdoc jsdoc/state/setHitsPerPage}}
-{{> jsdoc jsdoc/state/setTypoTolerance}}
-{{> jsdoc jsdoc/state/addNumericRefinement}}
+{{> jsdoc jsdoc/state/filter}}
 {{> jsdoc jsdoc/state/getConjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getDisjunctiveRefinements}}
-{{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getExcludeRefinements}}
-{{> jsdoc jsdoc/state/removeNumericRefinement}}
+{{> jsdoc jsdoc/state/getHierarchicalFacetByName}}
+{{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}
 {{> jsdoc jsdoc/state/getNumericRefinement}}
-{{> jsdoc jsdoc/state/addFacetRefinement}}
-{{> jsdoc jsdoc/state/addExcludeRefinement}}
-{{> jsdoc jsdoc/state/addDisjunctiveFacetRefinement}}
-{{> jsdoc jsdoc/state/addTagRefinement}}
-{{> jsdoc jsdoc/state/removeFacetRefinement}}
-{{> jsdoc jsdoc/state/removeExcludeRefinement}}
-{{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
-{{> jsdoc jsdoc/state/removeTagRefinement}}
-{{> jsdoc jsdoc/state/toggleRefinement}}
-{{> jsdoc jsdoc/state/toggleFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleExcludeFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleDisjunctiveFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleHierarchicalFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleTagRefinement}}
-{{> jsdoc jsdoc/state/isDisjunctiveFacet}}
-{{> jsdoc jsdoc/state/isHierarchicalFacet}}
-{{> jsdoc jsdoc/state/isConjunctiveFacet}}
-{{> jsdoc jsdoc/state/isFacetRefined}}
-{{> jsdoc jsdoc/state/isExcludeRefined}}
-{{> jsdoc jsdoc/state/isDisjunctiveFacetRefined}}
-{{> jsdoc jsdoc/state/isHierarchicalFacetRefined}}
-{{> jsdoc jsdoc/state/isNumericRefined}}
-{{> jsdoc jsdoc/state/isTagRefined}}
+{{> jsdoc jsdoc/state/getQueryParameter}}
 {{> jsdoc jsdoc/state/getRefinedDisjunctiveFacets}}
 {{> jsdoc jsdoc/state/getRefinedHierarchicalFacets}}
 {{> jsdoc jsdoc/state/getUnrefinedDisjunctiveFacets}}
-{{> jsdoc jsdoc/state/getQueryParameter}}
-{{> jsdoc jsdoc/state/setQueryParameter}}
-{{> jsdoc jsdoc/state/setQueryParameters}}
-{{> jsdoc jsdoc/state/filter}}
-{{> jsdoc jsdoc/state/getHierarchicalFacetByName}}
+{{> jsdoc jsdoc/state/isConjunctiveFacet}}
+{{> jsdoc jsdoc/state/isDisjunctiveFacetRefined}}
+{{> jsdoc jsdoc/state/isDisjunctiveFacet}}
+{{> jsdoc jsdoc/state/isExcludeRefined}}
+{{> jsdoc jsdoc/state/isFacetRefined}}
+{{> jsdoc jsdoc/state/isHierarchicalFacetRefined}}
+{{> jsdoc jsdoc/state/isHierarchicalFacet}}
+{{> jsdoc jsdoc/state/isNumericRefined}}
+{{> jsdoc jsdoc/state/isTagRefined}}
 {{> jsdoc jsdoc/state/make}}
+{{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
+{{> jsdoc jsdoc/state/removeExcludeRefinement}}
+{{> jsdoc jsdoc/state/removeFacetRefinement}}
+{{> jsdoc jsdoc/state/removeNumericRefinement}}
+{{> jsdoc jsdoc/state/removeTagRefinement}}
+{{> jsdoc jsdoc/state/setDisjunctiveFacets}}
+{{> jsdoc jsdoc/state/setFacets}}
+{{> jsdoc jsdoc/state/setHitsPerPage}}
+{{> jsdoc jsdoc/state/setPage}}
+{{> jsdoc jsdoc/state/setQueryParameters}}
+{{> jsdoc jsdoc/state/setQueryParameter}}
+{{> jsdoc jsdoc/state/setQuery}}
+{{> jsdoc jsdoc/state/setTypoTolerance}}
+{{> jsdoc jsdoc/state/toggleDisjunctiveFacetRefinement}}
+{{> jsdoc jsdoc/state/toggleExcludeFacetRefinement}}
+{{> jsdoc jsdoc/state/toggleFacetRefinement}}
+{{> jsdoc jsdoc/state/toggleHierarchicalFacetRefinement}}
+{{> jsdoc jsdoc/state/toggleRefinement}}
+{{> jsdoc jsdoc/state/toggleTagRefinement}}
 {{> jsdoc jsdoc/state/validate}}
 
 ## URL

@@ -108,52 +108,101 @@ function SearchParameters(newParameters) {
 
   // Facets
   /**
-   * All the facets that will be requested to the server
+   * This attribute contains the list of all the conjunctive facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
    * @member {string[]}
    */
   this.facets = params.facets || [];
   /**
-   * All the declared disjunctive facets
+   * This attribute contains the list of all the disjunctive facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
    * @member {string[]}
    */
   this.disjunctiveFacets = params.disjunctiveFacets || [];
   /**
-   * All the declared hierarchical facets,
-   * a hierarchical facet is a disjunctive facet with some specific behavior
+   * This attribute contains the list of all the hierarchical facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
+   * Hierarchical facets are a sub type of disjunctive facets that
+   * let you filter faceted attributes hierarchically.
    * @member {string[]|object[]}
    */
   this.hierarchicalFacets = params.hierarchicalFacets || [];
 
   // Refinements
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the conjunctive facets. Each facet must be properly
+   * defined in the `facets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsRefinements = params.facetsRefinements || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * excluded from the conjunctive facets. Each facet must be properly
+   * defined in the `facets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters excluded for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsExcludes = params.facetsExcludes || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the disjunctive facets. Each facet must be properly
+   * defined in the `disjunctiveFacets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the numeric attributes.
+   *
+   * The key is the name of the attribute, and the value is the
+   * filters to apply to this attribute.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `numericFilters` attribute.
    * @member {Object.<string, SearchParameters.OperatorList>}
    */
   this.numericRefinements = params.numericRefinements || {};
   /**
-   * Contains the tags used to refine the query
-   * Associated property in the query: tagFilters
-   * @private
+   * This attribute contains all the tags used to refine the query.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `tagFilters` attribute.
    * @member {string[]}
    */
   this.tagRefinements = params.tagRefinements || [];
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the hierarchical facets. Each facet must be properly
+   * defined in the `hierarchicalFacets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name. The FacetList values
+   * are structured as a string that contain the values for each level
+   * seperated by the configured separator.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
@@ -161,7 +210,6 @@ function SearchParameters(newParameters) {
   /**
    * Contains the numeric filters in the raw format of the Algolia API. Setting
    * this parameter is not compatible with the usage of numeric filters methods.
-   * @private
    * @see https://www.algolia.com/doc/javascript#numericFilters
    * @member {string}
    */
@@ -171,15 +219,13 @@ function SearchParameters(newParameters) {
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
-   * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
 
   /**
-   * Contains the  optional tag filters in the raw format of the Algolia API.
-   * @private
+   * Contains the optional tag filters in the raw format of the Algolia API.
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
@@ -187,7 +233,6 @@ function SearchParameters(newParameters) {
 
   /**
    * Contains the optional facet filters in the raw format of the Algolia API.
-   * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
@@ -436,8 +481,9 @@ function SearchParameters(newParameters) {
 }
 
 /**
- * List all the properties in SearchParameters and therefore all the know Algolia properties
+ * List all the properties in SearchParameters and therefore all the known Algolia properties
  * This doesn't contain any beta/hidden features.
+ * @private
  */
 SearchParameters.PARAMETERS = keys(new SearchParameters());
 

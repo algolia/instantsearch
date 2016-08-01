@@ -18,6 +18,3 @@ echo "CI test: phantom"
 
 echo "CI test: lint"
 ./scripts/lint.sh
-
-echo "CI test: shrinkwrap"
-npm run shrinkwrap

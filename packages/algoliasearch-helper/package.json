@@ -87,7 +87,6 @@
     "metalsmith-webpack": "^1.0.3",
     "mkdirp": "^0.5.1",
     "mversion": "^1.10.1",
-    "npm-shrinkwrap": "^200.5.1",
     "onchange": "^2.5.0",
     "opn-cli": "^1.0.0",
     "phantomjs-prebuilt": "^2.1.7",
