@@ -1,10 +1,14 @@
 /* eslint-env jest, jasmine */
+/* eslint-disable no-console */
 
 import {
   isSpecialClick,
   capitalize,
+  assertFacetDefined,
 } from './utils';
 jest.unmock('./utils');
+import {SearchParameters, SearchResults} from 'algoliasearch-helper';
+jest.unmock('algoliasearch-helper');
 
 describe('utils', () => {
   describe('isSpecialClick', () => {
@@ -31,6 +35,31 @@ describe('utils', () => {
 
     it('works with empty strings', () => {
       expect(capitalize('')).toBe('');
+    });
+  });
+
+  describe('assertFacetDefined', () => {
+    it('warns when a requested facet wasn\'t returned from the API', () => {
+      const warn = console.warn;
+      console.warn = jest.fn();
+      const searchParameters = new SearchParameters({
+        disjunctiveFacets: ['facet'],
+      });
+      const searchResults = new SearchResults(searchParameters, {
+        results: [{
+          nbHits: 100,
+          facets: {},
+        }],
+      });
+      assertFacetDefined(searchParameters, searchResults, 'facet');
+      expect(console.warn.mock.calls.length).toBe(1);
+      expect(console.warn.mock.calls[0][0]).toBe(
+        'A component requested values for facet "facet", but no facet values ' +
+        'were retrieved from the API. This means that you should add the ' +
+        'attribute "facet" to the list of attributes for faceting in your ' +
+        'index settings.'
+      );
+      console.warn = warn;
     });
   });
 });

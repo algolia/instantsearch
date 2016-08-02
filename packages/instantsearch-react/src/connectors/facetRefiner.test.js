@@ -1,12 +1,11 @@
 /* eslint-env jest, jasmine */
-/* eslint-disable no-console */
 
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
 import facetRefiner from './facetRefiner';
 jest.unmock('./facetRefiner');
-jest.unmock('../utils');
+import {assertFacetDefined} from '../utils';
 
 const {
   configure,
@@ -199,38 +198,29 @@ describe('facetRefiner', () => {
     testFacetType('conjunctive');
   });
 
-  it('asserts a requested facet wasn\'t returned from the API', () => {
-    const warn = console.warn;
-    console.warn = jest.fn();
+  it('asserts the facet is defined', () => {
+    assertFacetDefined.mockClear();
     const searchParameters = new SearchParameters({
-      disjunctiveFacets: ['foo'],
+      disjunctiveFacets: ['facet'],
     });
-    const result = {
-      nbHits: 100,
-      facets: {},
-    };
-    expect(console.warn.mock.calls.length).toBe(0);
+    const searchResults = new SearchResults(searchParameters, {
+      results: [{}],
+    });
     mapStateToProps({
       searchParameters,
       searchResultsSearchParameters: searchParameters,
-      searchResults: new SearchResults(searchParameters, {
-        results: [result, result],
-      }),
+      searchResults,
     }, {
       facetType: 'disjunctive',
-      attributeName: 'foo',
+      attributeName: 'facet',
     });
-    expect(console.warn.mock.calls.length).toBe(1);
-    expect(console.warn.mock.calls[0][0]).toBe(
-      'A component requested values for facet "foo", but no facet values ' +
-      'were retrieved from the API. This means that you should add the ' +
-      'attribute "foo" to the list of attributes for faceting in your index ' +
-      'settings.'
-    );
-    console.warn = warn;
+    expect(assertFacetDefined.mock.calls.length).toBe(1);
+    expect(assertFacetDefined.mock.calls[0][0]).toBe(searchParameters);
+    expect(assertFacetDefined.mock.calls[0][1]).toBe(searchResults);
+    expect(assertFacetDefined.mock.calls[0][2]).toBe('facet');
   });
 
-  it('transform its props', () => {
+  it('transforms its props', () => {
     expect(transformProps({
       facetValues: null,
       limit: 1,
