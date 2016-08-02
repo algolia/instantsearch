@@ -1,14 +1,3 @@
-export const applyDefaultProps = (props, defaultProps) => {
-  // This is the React default props behavior.
-  const defaultedProps = {...props};
-  for (const propName in defaultProps) {
-    if (props[propName] === undefined) {
-      defaultedProps[propName] = defaultProps[propName];
-    }
-  }
-  return defaultedProps;
-};
-
 export function isSpecialClick(event) {
   const isMiddleClick = event.button === 1;
   return Boolean(
@@ -18,17 +7,6 @@ export function isSpecialClick(event) {
     event.metaKey ||
     event.shiftKey
   );
-}
-
-export function getTranslation(key, defaults, custom, ...params) {
-  const translation =
-    {}.hasOwnProperty.call(custom, key) ?
-      custom[key] :
-      defaults[key];
-  if (typeof translation === 'function') {
-    return translation(...params);
-  }
-  return translation;
 }
 
 export function capitalize(key) {

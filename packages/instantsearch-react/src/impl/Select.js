@@ -1,60 +1,42 @@
 import React, {PropTypes, Component} from 'react';
 
-import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import {getTranslation} from '../utils';
-
-const defaultTranslations = {
-  none: 'None',
-  count: count => count.toString(),
-};
+import translatable from '../translatable';
 
 class Select extends Component {
   static propTypes = {
-    translations: PropTypes.object,
+    translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
-    items: itemsPropType,
-    selectedItems: selectedItemsPropType,
-  };
-
-  static defaultProps = {
-    translations: defaultTranslations,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string,
+      count: PropTypes.number,
+    })),
+    selectedItem: PropTypes.string,
   };
 
   onChange = e => {
     if (e.target.value === '') {
-      this.props.refine(this.props.selectedItems[0]);
+      this.props.refine(null);
     } else {
       this.props.refine(e.target.value);
     }
   }
 
   render() {
-    const {items, selectedItems, translations} = this.props;
+    const {items, selectedItem, translate} = this.props;
     if (!items) {
       return null;
     }
 
-    const selectedItem = selectedItems[0];
-
     return (
       <select value={selectedItem || ''} onChange={this.onChange}>
         <option value="">
-          {getTranslation(
-            'none',
-            defaultTranslations,
-            translations
-          )}
+          {translate('none')}
         </option>
         {items.map(item =>
           <option key={item.value} value={item.value}>
             {item.value}
             {' '}
-            {getTranslation(
-              'count',
-              defaultTranslations,
-              translations,
-              item.count
-            )}
+            {translate('count', item.count)}
           </option>
         )}
       </select>
@@ -62,4 +44,7 @@ class Select extends Component {
   }
 }
 
-export default Select;
+export default translatable({
+  none: 'None',
+  count: count => count.toString(),
+})(Select);

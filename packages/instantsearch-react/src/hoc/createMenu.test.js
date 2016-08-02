@@ -55,8 +55,16 @@ describe('createMenu', () => {
     const props1 = {
       limit: 10,
     };
-    transformProps(props1);
+    const transformedOriginal = {
+      items: ['foo', 'bar'],
+      selectedItems: ['foo'],
+    };
+    facetRefiner.transformProps.mockReturnValueOnce(transformedOriginal);
+    const transformed = transformProps(props1);
+
     expect(facetRefiner.transformProps.mock.calls[0][0]).toBe(props1);
+    expect(transformed.selectedItem).toBe('foo');
+    expect(transformed.items).toBe(transformedOriginal.items);
   });
 
   it('derives the right refine options from props', () => {

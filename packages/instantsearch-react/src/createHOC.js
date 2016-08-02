@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-algoliasearch-helper';
 
-import {applyDefaultProps} from './utils';
 import {stateManagerPropType, configManagerPropType} from './propTypes';
 
 const hasOwnProperty = (...args) => ({}.hasOwnProperty.call(...args));
@@ -9,10 +8,11 @@ const hasOwnProperty = (...args) => ({}.hasOwnProperty.call(...args));
 const ORIGINAL_PROPS_KEY = '__original';
 
 export default function createHOC(desc) {
-  return (mapPropsToConfig = a => a) => {
+  return (desc2 = {}) => {
     const hasConfigure = hasOwnProperty(desc, 'configure');
     const hasTransform = hasOwnProperty(desc, 'transformProps');
     const hasRefine = hasOwnProperty(desc, 'refine');
+    const hasMapProps = hasOwnProperty(desc2, 'mapPropsToConfig');
 
     // While react-redux does not  apply default props to the props passed to
     // the mapStateToProps method, we often find ourselves depending on default
@@ -20,8 +20,7 @@ export default function createHOC(desc) {
     // A better way to do this might just be to create another component on top
     // of the connected one.
     const connector = connect((state, props) => {
-      const defaultedProps = applyDefaultProps(props, desc.defaultProps);
-      const customProps = mapPropsToConfig(defaultedProps);
+      const customProps = hasMapProps ? desc2.mapPropsToConfig(props) : props;
       return {
         // Keep track of the original props.
         // The HOC's props are more of a configuration/state store, which we
@@ -36,10 +35,6 @@ export default function createHOC(desc) {
       class HOC extends Component {
         static displayName = desc.displayName || 'AlgoliaHOC';
         static propTypes = desc.propTypes;
-        // While we've already applied default props to the props passed to
-        // connect, they haven't replaced the actual props object, so we need to
-        // apply them a second time.
-        static defaultProps = desc.defaultProps;
 
         static contextTypes = {
           algoliaConfigManager: configManagerPropType.isRequired,
@@ -102,7 +97,15 @@ export default function createHOC(desc) {
           );
         }
       }
-      return connector(HOC);
+
+      const Connected = connector(HOC);
+
+      Connected.defaultProps = {
+        ...desc.defaultProps,
+        ...desc2.defaultProps,
+      };
+
+      return Connected;
     };
   };
 }

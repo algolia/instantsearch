@@ -265,7 +265,7 @@ describe('createHierarchicalMenu', () => {
     });
   });
 
-  it('transform its props', () => {
+  it('transforms its props', () => {
     expect(transformProps({
       facetValue: null,
     })).toEqual({});
@@ -355,7 +355,6 @@ describe('createHierarchicalMenu', () => {
         ],
       },
     })).toEqual({
-      limit: 1,
       items: [
         {
           label: 'bar',

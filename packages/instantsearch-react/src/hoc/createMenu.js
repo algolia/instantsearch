@@ -38,7 +38,11 @@ export default createHOC({
   },
 
   transformProps(props) {
-    return facetRefiner.transformProps(props);
+    const {selectedItems, items} = facetRefiner.transformProps(props);
+    return {
+      selectedItem: selectedItems.length > 0 ? selectedItems[0] : null,
+      items,
+    };
   },
 
   refine(state, props, value) {
