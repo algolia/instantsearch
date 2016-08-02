@@ -22,8 +22,7 @@
     "eslint": "^3.0.1",
     "jest-cli": "^13.2.3",
     "mockdate": "^1.0.4",
-    "webpack": "^1.13.1",
-    "babel-jest": "^13.2.2"
+    "webpack": "^1.13.1"
   },
   "dependencies": {
     "algoliasearch": "^3.16.0",
