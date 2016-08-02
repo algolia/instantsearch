@@ -13,7 +13,7 @@ function responsiveNavigation() {
     var option = document.createElement('option');
     option.text = links[i].title;
     option.value = links[i].href;
-    option.selected = true;
+    option.selected = links[i].getAttribute('data-current') === 'true';
     navigationAsSelect.appendChild(option);
   }
 
