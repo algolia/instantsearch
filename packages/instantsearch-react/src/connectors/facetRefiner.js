@@ -68,14 +68,6 @@ export default {
       facetValues: isFacetPresent ?
         state.searchResults.getFacetValues(attributeName, {sortBy}) :
         null,
-        // We need to keep track of the "configuration" limit ourselves since it
-        // might get overriden by a prop on the component itself.
-        // In our case, the `createShowMore` HOC sets its own `limit` prop,
-        // which conflicts with the `limit` configuration option provided to
-        // the `createMenu` `mapProps` argument.
-        // Technically, we should do this for all
-        // limit,
-      // },
       selectedItems,
     };
   },
