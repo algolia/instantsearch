@@ -1,5 +1,7 @@
 import union from 'lodash/array/union';
 
+import {assertFacetDefined} from '../utils';
+
 const facetTypeToKey = {
   conjunctive: 'facets',
   disjunctive: 'disjunctiveFacets',
@@ -38,21 +40,14 @@ export default {
 
     let isFacetPresent = false;
     if (searchResults) {
-      const wasRequested =
-        searchResultsSearchParameters[facetTypeToKey[facetType]]
-          .indexOf(attributeName) !== -1;
-      const wasReceived =
-        Boolean(searchResults.getFacetByName(attributeName));
-      if (searchResults.nbHits > 0 && wasRequested && !wasReceived) {
-        // eslint-disable-next-line no-console
-        console.warn(
-          `A component requested values for facet "${attributeName}", ` +
-          'but no facet values were retrieved from the API. This means that ' +
-          `you should add the attribute "${attributeName}" to the list ` +
-          'of attributes for faceting in your index settings.'
-        );
-      }
-      isFacetPresent = wasReceived;
+      assertFacetDefined(
+        searchResultsSearchParameters,
+        searchResults,
+        attributeName
+      );
+      isFacetPresent = Boolean(searchResults.getFacetByName(attributeName));
+    } else {
+      isFacetPresent = false;
     }
 
     let selectedItems = [];

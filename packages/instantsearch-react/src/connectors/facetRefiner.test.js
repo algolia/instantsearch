@@ -6,6 +6,7 @@ jest.unmock('algoliasearch-helper');
 
 import facetRefiner from './facetRefiner';
 jest.unmock('./facetRefiner');
+jest.unmock('../utils');
 
 const {
   configure,
@@ -198,7 +199,7 @@ describe('facetRefiner', () => {
     testFacetType('conjunctive');
   });
 
-  it('warns when a requested facet wasn\'t returned from the API', () => {
+  it('asserts a requested facet wasn\'t returned from the API', () => {
     const warn = console.warn;
     console.warn = jest.fn();
     const searchParameters = new SearchParameters({
