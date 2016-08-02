@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react';
 import pick from 'lodash/object/pick';
 
-import {itemsPropType, selectedItemsPropType} from '../propTypes';
 import themeable from '../themeable';
 import translatable from '../translatable';
 
@@ -14,8 +13,11 @@ class RefinementListLinks extends Component {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
-    items: itemsPropType,
-    selectedItems: selectedItemsPropType,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })),
+    selectedItems: PropTypes.arrayOf(PropTypes.string),
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
