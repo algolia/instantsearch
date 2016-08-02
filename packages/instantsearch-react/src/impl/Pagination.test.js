@@ -5,10 +5,10 @@ import {mount} from 'enzyme';
 import renderer from 'react/lib/ReactTestRenderer';
 
 import Pagination from './Pagination';
-import PaginationLink from './PaginationLink';
 jest.unmock('./Pagination');
 jest.unmock('../utils');
-jest.unmock('./PaginationLink');
+jest.unmock('../translatable');
+jest.unmock('../themeable');
 
 const DEFAULT_PROPS = {nbPages: 20, page: 9};
 
@@ -25,17 +25,14 @@ describe('Pagination', () => {
       />
     );
     wrapper
-      .find(PaginationLink)
-      // .filter({pageNumber: 7}) doesn't work for some reason
-      .filterWhere(e => e.props().pageNumber === 7)
       .find('.Pagination__item__link')
+      .filterWhere(e => e.text() === '8')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual(7);
     wrapper
-      .find(PaginationLink)
-      .filterWhere(e => e.props().pageNumber === 9)
       .find('.Pagination__item__link')
+      .filterWhere(e => e.text() === '10')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
     expect(refine.mock.calls[1][0]).toEqual(9);
@@ -74,9 +71,8 @@ describe('Pagination', () => {
       />
     );
     const el = wrapper
-      .find(PaginationLink)
-      .filterWhere(e => e.props().pageNumber === 7)
-      .find('.Pagination__item__link');
+      .find('.Pagination__item__link')
+      .filterWhere(e => e.text() === '8');
     el.simulate('click', {button: 1});
     el.simulate('click', {altKey: true});
     el.simulate('click', {ctrlKey: true});

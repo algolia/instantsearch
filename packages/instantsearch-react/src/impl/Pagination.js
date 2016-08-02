@@ -1,10 +1,9 @@
 import React, {PropTypes, Component} from 'react';
 import range from 'lodash/utility/range';
-import themeable from 'react-themeable';
 
-import {getTranslation, capitalize, isSpecialClick} from '../utils';
-
-import PaginationLink from './PaginationLink';
+import {capitalize, isSpecialClick} from '../utils';
+import themeable from '../themeable';
+import translatable from '../translatable';
 
 function getPagesDisplayedCount(padding, total) {
   return Math.min(2 * padding + 1, total);
@@ -40,32 +39,6 @@ function getPages(page, total, padding) {
   return range(first, last);
 }
 
-const defaultTranslations = {
-  previous: '‹',
-  next: '›',
-  first: '«',
-  last: '»',
-  page: page => (page + 1).toString(),
-  ariaPrevious: 'Previous page',
-  ariaNext: 'Next page',
-  ariaFirst: 'First page',
-  ariaLast: 'Last page',
-  ariaPage: page => `Page ${(page + 1).toString()}`,
-};
-
-const defaultTheme = {
-  root: 'Pagination',
-  item: 'Pagination__item',
-  first: 'Pagination__item--first',
-  last: 'Pagination__item--last',
-  previous: 'Pagination__item--previous',
-  next: 'Pagination__item--next',
-  page: 'Pagination__item--page',
-  active: 'Pagination__item--active',
-  disabled: 'Pagination__item--disabled',
-  link: 'Pagination__item__link',
-};
-
 class Pagination extends Component {
   static propTypes = {
     // Provided by `createPagination`
@@ -73,8 +46,8 @@ class Pagination extends Component {
     page: PropTypes.number,
     refine: PropTypes.func.isRequired,
 
-    translations: PropTypes.object,
-    theme: PropTypes.object,
+    translate: PropTypes.func.isRequired,
+    applyTheme: PropTypes.func.isRequired,
     createURL: PropTypes.func,
     showFirst: PropTypes.bool,
     showPrevious: PropTypes.bool,
@@ -85,8 +58,6 @@ class Pagination extends Component {
   };
 
   static defaultProps = {
-    theme: defaultTheme,
-    translations: defaultTranslations,
     showFirst: true,
     showPrevious: true,
     showNext: true,
@@ -95,6 +66,17 @@ class Pagination extends Component {
     maxPages: Infinity,
   };
 
+  onClick = (pageNumber, event) => {
+    if (isSpecialClick(event)) {
+      // do not alter the default browser behavior
+      // if one special key is down
+      return undefined;
+    }
+    event.preventDefault();
+    this.props.refine(pageNumber);
+    return false;
+  }
+
   renderPageLink({
     translationKey,
     pageNumber,
@@ -102,44 +84,45 @@ class Pagination extends Component {
   }) {
     const {
       createURL,
-      theme,
+      applyTheme,
       nbPages,
       maxPages,
       page,
-      translations,
+      translate,
     } = this.props;
     const isDisabled =
       !isActive && page === pageNumber ||
       pageNumber < 0 ||
       pageNumber >= Math.min(maxPages, nbPages);
     // @TODO: Default createURL that works with URL sync
-    const url = createURL && !isDisabled ? createURL(pageNumber) : '#';
     const key = translationKey + pageNumber;
     const ariaTranslationKey = `aria${capitalize(translationKey)}`;
 
+    // "Enable" the element, by making it a link
+    const tag = isDisabled ? 'span' : 'a';
+    const props = {
+      'aria-label': translate(ariaTranslationKey, pageNumber),
+      ...applyTheme('link', 'link'),
+      ...(isDisabled ? {} : {
+        href: createURL ? createURL(pageNumber) : '#',
+        onClick: this.onClick.bind(null, pageNumber),
+      }),
+    };
+    const label = translate(translationKey, pageNumber);
+    const element = React.createElement(tag, props, label);
+
     return (
-      <PaginationLink
-        key={key}
-        label={getTranslation(
-          translationKey,
-          defaultTranslations,
-          translations,
-          pageNumber
+      <li
+        {...applyTheme(
+          key,
+          'item',
+          isActive && 'active',
+          isDisabled && 'disabled',
+          translationKey
         )}
-        ariaLabel={getTranslation(
-          ariaTranslationKey,
-          defaultTranslations,
-          translations,
-          pageNumber
-        )}
-        onClick={this.onClick}
-        isDisabled={isDisabled}
-        isActive={isActive}
-        pageNumber={pageNumber}
-        url={url}
-        modifier={translationKey}
-        theme={theme}
-      />
+      >
+        {element}
+      </li>
     );
   }
 
@@ -184,17 +167,6 @@ class Pagination extends Component {
     );
   }
 
-  onClick = (pageNumber, event) => {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return;
-    }
-    event.preventDefault();
-    this.props.refine(pageNumber);
-    return false;
-  }
-
   render() {
     const {
       nbPages,
@@ -202,16 +174,15 @@ class Pagination extends Component {
       showPrevious,
       showNext,
       showLast,
-      theme,
+      applyTheme,
     } = this.props;
-    const th = themeable(theme);
 
     if (!nbPages) {
       return null;
     }
 
     return (
-      <ul {...th('root', 'root')}>
+      <ul {...applyTheme('root', 'root')}>
         {showFirst && this.renderFirstPageLink()}
         {showPrevious && this.renderPreviousPageLink()}
         {this.renderPageLinks()}
@@ -222,4 +193,28 @@ class Pagination extends Component {
   }
 }
 
-export default Pagination;
+export default themeable({
+  root: 'Pagination',
+  item: 'Pagination__item',
+  first: 'Pagination__item--first',
+  last: 'Pagination__item--last',
+  previous: 'Pagination__item--previous',
+  next: 'Pagination__item--next',
+  page: 'Pagination__item--page',
+  active: 'Pagination__item--active',
+  disabled: 'Pagination__item--disabled',
+  link: 'Pagination__item__link',
+})(
+  translatable({
+    previous: '‹',
+    next: '›',
+    first: '«',
+    last: '»',
+    page: page => (page + 1).toString(),
+    ariaPrevious: 'Previous page',
+    ariaNext: 'Next page',
+    ariaFirst: 'First page',
+    ariaLast: 'Last page',
+    ariaPage: page => `Page ${(page + 1).toString()}`,
+  })(Pagination)
+);

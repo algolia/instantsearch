@@ -1,20 +1,18 @@
 import createMenu from '../hoc/createMenu';
-import createShowMore from '../hoc/createShowMore';
 import Menu from '../impl/Menu';
-import {applyDefaultProps} from '../utils';
-export default createShowMore(props => ({
-  // Start with the menu collapsed.
-  initialLimit: props.limitMin || Menu.defaultProps.limitMin,
-}))(createMenu(props => {
-  const defaultedProps = applyDefaultProps(props, Menu.defaultProps);
-  return {
+
+export default createMenu({
+  defaultProps: {
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
+  },
+  mapPropsToConfig: props => ({
     attributeName: props.attributeName,
     // Always load `limitMax` facet values. This prevents UI incoherences where
     // loading more facet values changes the display of seemingly unrelated
     // components.
-    limit: defaultedProps.showMore ?
-      defaultedProps.limitMax :
-      defaultedProps.limitMin,
+    limit: props.showMore ? props.limitMax : props.limitMin,
     sortBy: props.sortBy,
-  };
-})(Menu));
+  }),
+})(Menu);
