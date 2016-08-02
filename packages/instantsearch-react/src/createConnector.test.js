@@ -170,4 +170,12 @@ describe('createConnector', () => {
     expect(transformProps.mock.calls[0][0].prop).toBe(prop1);
     expect(props2.prop).toBe(prop2);
   });
+
+  it('renders null if shouldRender returns false', () => {
+    const Dummy = () => null;
+    const HOC = createHOC({shouldRender: () => false})()(Dummy);
+    const wrapper = shallow(<HOC />);
+    expect(wrapper.find(Dummy).length).toBe(0);
+    expect(wrapper.type()).toBe(null);
+  });
 });
