@@ -1,4 +1,5 @@
 import React from 'react';
+import has from 'lodash/object/has';
 
 import {withKeysPropType} from './propTypes';
 
@@ -8,7 +9,7 @@ export default function translatable(defaultTranslations) {
       const {translations, ...otherProps} = props;
       const translate = (key, ...params) => {
         const translation =
-          translations && {}.hasOwnProperty.call(translations, key) ?
+          translations && has(translations, key) ?
             translations[key] :
             defaultTranslations[key];
         if (typeof translation === 'function') {
