@@ -1,18 +1,18 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 
-import createMenu from './createMenu';
+import connectMenu from './connectMenu';
 import facetRefiner from './facetRefiner';
-jest.unmock('./createMenu');
+jest.unmock('./connectMenu');
 
 const {
   configure,
   mapStateToProps,
   transformProps,
   refine,
-} = createMenu;
+} = connectMenu;
 
-describe('createMenu', () => {
+describe('connectMenu', () => {
   it('derives the right configure options from props', () => {
     const state = {};
     configure(state, {
@@ -55,8 +55,16 @@ describe('createMenu', () => {
     const props1 = {
       limit: 10,
     };
-    transformProps(props1);
+    const transformedOriginal = {
+      items: ['foo', 'bar'],
+      selectedItems: ['foo'],
+    };
+    facetRefiner.transformProps.mockReturnValueOnce(transformedOriginal);
+    const transformed = transformProps(props1);
+
     expect(facetRefiner.transformProps.mock.calls[0][0]).toBe(props1);
+    expect(transformed.selectedItem).toBe('foo');
+    expect(transformed.items).toBe(transformedOriginal.items);
   });
 
   it('derives the right refine options from props', () => {

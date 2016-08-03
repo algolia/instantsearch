@@ -1,3 +1,3 @@
-import createSearchBox from '../hoc/createSearchBox';
+import connectSearchBox from '../connectors/connectSearchBox';
 import SearchBoxImpl from '../impl/SearchBox';
-export default createSearchBox()(SearchBoxImpl);
+export default connectSearchBox()(SearchBoxImpl);

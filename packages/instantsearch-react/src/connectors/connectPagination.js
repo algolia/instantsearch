@@ -1,6 +1,6 @@
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaPagination',
 
   mapStateToProps(state) {

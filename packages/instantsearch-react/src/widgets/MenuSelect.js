@@ -1,3 +1,3 @@
-import createMenu from '../hoc/createMenu';
+import connectMenu from '../connectors/connectMenu';
 import Select from '../impl/Select';
-export default createMenu()(Select);
+export default connectMenu()(Select);

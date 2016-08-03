@@ -1,132 +1,78 @@
 import React, {PropTypes, Component} from 'react';
-import themeable from 'react-themeable';
+import pick from 'lodash/object/pick';
 
-import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import {getTranslation} from '../utils';
+import themeable from '../themeable';
+import translatable from '../translatable';
 
+import List from './List';
 import LinkItem from './LinkItem';
 
-const defaultTranslations = {
-  showMore: extended => extended ? 'Show less' : 'Show more',
-  count: count => count.toString(),
-};
+class Menu extends Component {
+  static propTypes = {
+    translate: PropTypes.func.isRequired,
+    applyTheme: PropTypes.func.isRequired,
+    refine: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })),
+    selectedItem: PropTypes.string,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
+  };
 
-const defaultTheme = {
+  renderItem = item => {
+    const {refine, createURL, applyTheme, translate} = this.props;
+    return (
+      <LinkItem
+        {...applyTheme('itemLink', 'itemLink')}
+        onClick={refine}
+        item={item.value}
+        href={createURL(item.value)}
+      >
+        <span {...applyTheme('itemLabel', 'itemLabel')}>
+          {item.value}
+        </span>
+        {' '}
+        <span {...applyTheme('itemCount', 'itemCount')}>
+          {translate('count', item.count)}
+        </span>
+      </LinkItem>
+    );
+  };
+
+  render() {
+    return (
+      <List
+        renderItem={this.renderItem}
+        selectedItems={[this.props.selectedItem]}
+        {...pick(this.props, [
+          'applyTheme',
+          'translate',
+          'items',
+          'showMore',
+          'limitMin',
+          'limitMax',
+        ])}
+      />
+    );
+  }
+}
+
+export default themeable({
   root: 'Menu',
-  extended: 'Menu--extended',
-  list: 'Menu__list',
+  items: 'Menu__items',
   item: 'Menu__item',
   itemSelected: 'Menu__item--selected',
   itemLink: 'Menu__item__link',
   itemValue: 'Menu__item__value',
   itemCount: 'Menu__item__count',
   showMore: 'Menu__showMore',
-};
-
-class Menu extends Component {
-  static propTypes = {
-    refine: PropTypes.func.isRequired,
-    createURL: PropTypes.func.isRequired,
-    items: itemsPropType,
-    selectedItems: selectedItemsPropType,
-    translations: PropTypes.object,
-    theme: PropTypes.object,
-    showMore: PropTypes.bool,
-    limitMin: PropTypes.number,
-    limitMax: PropTypes.number,
-    limit: PropTypes.number.isRequired,
-    show: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    translations: defaultTranslations,
-    theme: defaultTheme,
-    showMore: false,
-    limitMin: 10,
-    limitMax: 20,
-  };
-
-  onShowMoreClick = () => {
-    this.props.show(
-      this.props.limit === this.props.limitMax ?
-        this.props.limitMin :
-        this.props.limitMax
-    );
-  };
-
-  onItemClick = item => {
-    this.props.refine(item.value);
-  };
-
-  render() {
-    const {
-      translations,
-      theme,
-      items,
-      selectedItems,
-      showMore,
-      createURL,
-      limit,
-      limitMax,
-    } = this.props;
-    if (!items) {
-      return null;
-    }
-
-    const th = themeable(theme);
-
-    return (
-      <div {...th('root', 'root')}>
-        <ul {...th('list', 'list')}>
-          {items
-            .slice(0, limit)
-            .map(item =>
-              <li
-                {...th(
-                  item.value,
-                  'item',
-                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-                )}
-              >
-                <LinkItem
-                  {...th('itemLink', 'itemLink')}
-                  onClick={this.onItemClick}
-                  item={item}
-                  href={createURL(item.value)}
-                >
-                  <span {...th('itemLabel', 'itemLabel')}>
-                    {item.value}
-                  </span>
-                  {' '}
-                  <span {...th('itemCount', 'itemCount')}>
-                    {getTranslation(
-                      'count',
-                      defaultTranslations,
-                      translations,
-                      item.count
-                    )}
-                  </span>
-                </LinkItem>
-              </li>
-            )
-          }
-        </ul>
-        {showMore &&
-          <button
-            {...th('showMore', 'showMore')}
-            onClick={this.onShowMoreClick}
-          >
-            {getTranslation(
-              'showMore',
-              defaultTranslations,
-              translations,
-              limit === limitMax
-            )}
-          </button>
-        }
-      </div>
-    );
-  }
-}
-
-export default Menu;
+})(
+  translatable({
+    showMore: extended => extended ? 'Show less' : 'Show more',
+    count: count => count.toString(),
+  })(Menu)
+);

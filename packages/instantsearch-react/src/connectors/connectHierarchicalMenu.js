@@ -1,6 +1,6 @@
 import {PropTypes} from 'react';
 
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 
 function transformValue(value, limit) {
   return value.slice(0, limit).map(v => ({
@@ -26,7 +26,7 @@ const maybeAddHierarchicalFacet = (state, props) => {
   });
 };
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',
 
   propTypes: {

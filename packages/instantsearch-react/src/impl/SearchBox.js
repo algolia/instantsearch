@@ -1,30 +1,14 @@
 import React, {Component, PropTypes} from 'react';
-import themeable from 'react-themeable';
 
-import {getTranslation} from '../utils';
-
-const defaultTranslations = {
-  submit: null,
-  reset: null,
-  submitTitle: 'Submit your search query.',
-  resetTitle: 'Clear the search query.',
-  placeholder: 'Search your website',
-};
-
-const defaultTheme = {
-  root: 'SearchBox',
-  wrapper: 'SearchBox__wrapper',
-  input: 'SearchBox__input',
-  submit: 'SearchBox__submit',
-  reset: 'SearchBox__reset',
-};
+import themeable from '../themeable';
+import translatable from '../translatable';
 
 class SearchBox extends Component {
   static propTypes = {
     query: PropTypes.string,
     refine: PropTypes.func.isRequired,
-    theme: PropTypes.object,
-    translations: PropTypes.object,
+    applyTheme: PropTypes.func.isRequired,
+    translate: PropTypes.func.isRequired,
     // @TODO: implement
     // poweredBy: PropTypes.bool,
     focusShortcuts: PropTypes.arrayOf(
@@ -36,8 +20,6 @@ class SearchBox extends Component {
 
   static defaultProps = {
     query: '',
-    theme: defaultTheme,
-    translations: defaultTranslations,
     poweredBy: false,
     focusShortcuts: ['s', '/'],
     autoFocus: false,
@@ -150,60 +132,47 @@ class SearchBox extends Component {
 
   render() {
     const {
-      theme,
-      translations,
+      applyTheme,
+      translate,
       autoFocus,
     } = this.props;
     const query = this.getQuery();
-    const th = themeable(theme);
 
     return (
       <form
         noValidate
         onSubmit={this.onSubmit}
         onReset={this.onReset}
-        {...th('root', 'root')}
+        {...applyTheme('root', 'root')}
       >
         <div
           role="search"
-          {...th('wrapper', 'wrapper')}
+          {...applyTheme('wrapper', 'wrapper')}
         >
           <input
             ref={this.onInputMount}
             type="search"
-            placeholder={getTranslation(
-              'placeholder',
-              defaultTranslations,
-              translations
-            )}
+            placeholder={translate('placeholder')}
             autoFocus={autoFocus}
             autoComplete={false}
             required
             value={query}
             onChange={this.onChange}
-            {...th('input', 'input')}
+            {...applyTheme('input', 'input')}
           />
           <button
             type="submit"
-            title={getTranslation(
-              'submitTitle',
-              defaultTranslations,
-              translations
-            )}
-            {...th('submit', 'submit')}
+            title={translate('submitTitle')}
+            {...applyTheme('submit', 'submit')}
           >
-            {getTranslation('submit', defaultTranslations, translations)}
+            {translate('submit')}
           </button>
           <button
             type="reset"
-            title={getTranslation(
-              'resetTitle',
-              defaultTranslations,
-              translations
-            )}
-            {...th('reset', 'reset')}
+            title={translate('resetTitle')}
+            {...applyTheme('reset', 'reset')}
           >
-            {getTranslation('reset', defaultTranslations, translations)}
+            {translate('reset')}
           </button>
         </div>
       </form>
@@ -211,4 +180,18 @@ class SearchBox extends Component {
   }
 }
 
-export default SearchBox;
+export default themeable({
+  root: 'SearchBox',
+  wrapper: 'SearchBox__wrapper',
+  input: 'SearchBox__input',
+  submit: 'SearchBox__submit',
+  reset: 'SearchBox__reset',
+})(
+  translatable({
+    submit: null,
+    reset: null,
+    submitTitle: 'Submit your search query.',
+    resetTitle: 'Clear the search query.',
+    placeholder: 'Search your website',
+  })(SearchBox)
+);

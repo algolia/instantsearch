@@ -1,8 +1,8 @@
 import {PropTypes} from 'react';
 
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaHitsPerPage',
 
   propTypes: {

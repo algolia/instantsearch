@@ -1,13 +1,13 @@
-import createHierarchicalMenu from '../hoc/createHierarchicalMenu';
-import createShowMore from '../hoc/createShowMore';
-import HM from '../impl/HierarchicalMenu';
-import {applyDefaultProps} from '../utils';
-export default createShowMore(props => ({
-  // Start with the menu collapsed.
-  initialLimit: props.limitMin || HM.defaultProps.limitMin,
-}))(createHierarchicalMenu(props => {
-  const defaultedProps = applyDefaultProps(props, HM.defaultProps);
-  return {
+import connectHierarchicalMenu from '../connectors/connectHierarchicalMenu';
+import HierarchicalMenu from '../impl/HierarchicalMenu';
+
+export default connectHierarchicalMenu({
+  defaultProps: {
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
+  },
+  mapPropsToConfig: props => ({
     name: props.name,
     attributes: props.attributes,
     separator: props.separator,
@@ -17,8 +17,6 @@ export default createShowMore(props => ({
     // Always load `limitMax` facet values. This prevents UI incoherences where
     // loading more facet values changes the display of seemingly unrelated
     // components.
-    limit: defaultedProps.showMore ?
-      defaultedProps.limitMax :
-      defaultedProps.limitMin,
-  };
-})(HM));
+    limit: props.showMore ? props.limitMax : props.limitMin,
+  }),
+})(HierarchicalMenu);

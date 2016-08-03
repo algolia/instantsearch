@@ -1,18 +1,18 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 
-import createRefinementList from './createRefinementList';
+import connectRefinementList from './connectRefinementList';
 import facetRefiner from './facetRefiner';
-jest.unmock('./createRefinementList');
+jest.unmock('./connectRefinementList');
 
 const {
   configure,
   mapStateToProps,
   transformProps,
   refine,
-} = createRefinementList;
+} = connectRefinementList;
 
-describe('createRefinementList', () => {
+describe('connectRefinementList', () => {
   it('derives the right configure options from props', () => {
     const state = {};
     configure(state, {
