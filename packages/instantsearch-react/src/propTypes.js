@@ -12,3 +12,18 @@ export const stateManagerPropType = PropTypes.shape({
   getState: PropTypes.func.isRequired,
   unlisten: PropTypes.func.isRequired,
 });
+
+export const withKeysPropType = keys => (props, propName, componentName) => {
+  const prop = props[propName];
+  if (prop) {
+    for (const key of Object.keys(prop)) {
+      if (!keys.indexOf(key)) {
+        return new Error(
+          `Unknown \`${propName}\` key \`${key}\`. Check the render method ` +
+          `of \`${componentName}\`.`
+        );
+      }
+    }
+  }
+  return undefined;
+};

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import {withKeysPropType} from './propTypes';
+
 export default function translatable(defaultTranslations) {
   return Composed => {
     function Translatable(props) {
@@ -19,20 +21,7 @@ export default function translatable(defaultTranslations) {
     }
 
     Translatable.propTypes = {
-      translations(props, propName, componentName) {
-        const translations = props[propName];
-        if (translations) {
-          for (const key of Object.keys(translations)) {
-            if (!{}.hasOwnProperty.call(defaultTranslations, key)) {
-              return new Error(
-                `Unknown translation key \`${key}\`. Check the render method ` +
-                `of \`${componentName}\`.`
-              );
-            }
-          }
-        }
-        return undefined;
-      },
+      translations: withKeysPropType(Object.keys(defaultTranslations)),
     };
 
     return Translatable;
