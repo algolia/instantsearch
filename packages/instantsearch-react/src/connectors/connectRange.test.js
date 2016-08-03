@@ -3,8 +3,8 @@
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createRange from './createRange';
-jest.unmock('./createRange');
+import connectRange from './connectRange';
+jest.unmock('./connectRange');
 import {assertFacetDefined} from '../utils';
 
 const {
@@ -13,9 +13,9 @@ const {
   transformProps,
   refine,
   shouldRender,
-} = createRange;
+} = connectRange;
 
-describe('createRange', () => {
+describe('connectRange', () => {
   it('adds the required disjunctiveFacet', () => {
     let state;
     let configuredState;

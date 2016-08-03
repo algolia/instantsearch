@@ -2,9 +2,9 @@ import {PropTypes} from 'react';
 import union from 'lodash/array/union';
 
 import {assertFacetDefined} from '../utils';
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaRange',
 
   propTypes: {
