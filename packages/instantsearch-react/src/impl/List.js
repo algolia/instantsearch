@@ -51,7 +51,14 @@ class List extends Component {
     const {selectedItems, applyTheme} = this.props;
     const selected = selectedItems.indexOf(item.value) !== -1;
     const limit = this.getLimit();
-    const children = item.children && item.children.slice(0, limit);
+
+    let children = null;
+    if (item.children) {
+      children =
+        <div {...applyTheme('itemChildren', 'itemChildren')}>
+          {item.children.slice(0, limit).map(this.renderItem)}
+        </div>;
+    }
 
     return (
       <div
@@ -64,11 +71,7 @@ class List extends Component {
         )}
       >
         {this.props.renderItem(item, selected)}
-        {children &&
-          <div {...applyTheme('itemChildren', 'itemChildren')}>
-            {children.map(this.renderItem)}
-          </div>
-        }
+        {children}
       </div>
     );
   };
