@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import {connect} from 'react-algoliasearch-helper';
+import has from 'lodash/object/has';
 
 import {stateManagerPropType, configManagerPropType} from './propTypes';
-
-const hasOwnProperty = (...args) => ({}.hasOwnProperty.call(...args));
 
 const ORIGINAL_PROPS_KEY = '__original';
 
 export default function createHOC(desc) {
   return (desc2 = {}) => {
-    const hasConfigure = hasOwnProperty(desc, 'configure');
-    const hasTransform = hasOwnProperty(desc, 'transformProps');
-    const hasRefine = hasOwnProperty(desc, 'refine');
-    const hasMapProps = hasOwnProperty(desc2, 'mapPropsToConfig');
+    const hasConfigure = has(desc, 'configure');
+    const hasTransform = has(desc, 'transformProps');
+    const hasRefine = has(desc, 'refine');
+    const hasMapProps = has(desc2, 'mapPropsToConfig');
 
     // While react-redux does not  apply default props to the props passed to
     // the mapStateToProps method, we often find ourselves depending on default
