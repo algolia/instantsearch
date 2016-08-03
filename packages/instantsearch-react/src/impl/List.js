@@ -52,13 +52,10 @@ class List extends Component {
     const selected = selectedItems.indexOf(item.value) !== -1;
     const limit = this.getLimit();
 
-    let children = null;
-    if (item.children) {
-      children =
-        <div {...applyTheme('itemChildren', 'itemChildren')}>
-          {item.children.slice(0, limit).map(this.renderItem)}
-        </div>;
-    }
+    const children = item.children &&
+      <div {...applyTheme('itemChildren', 'itemChildren')}>
+        {item.children.slice(0, limit).map(this.renderItem)}
+      </div>;
 
     return (
       <div
