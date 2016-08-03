@@ -12,12 +12,6 @@
   color: #0A1724;
 }
 
-.HierarchicalMenu__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.HierarchicalMenu__item > .HierarchicalMenu__list {
+.HierarchicalMenu__item__children {
   margin-left: 20px;
 }

@@ -1,3 +1,3 @@
-import createPagination from '../hoc/createPagination';
+import connectPagination from '../connectors/connectPagination';
 import PaginationImpl from '../impl/Pagination';
-export default createPagination()(PaginationImpl);
+export default connectPagination()(PaginationImpl);

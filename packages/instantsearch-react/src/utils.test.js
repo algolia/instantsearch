@@ -1,37 +1,12 @@
 /* eslint-env jest, jasmine */
 
 import {
-  applyDefaultProps,
   isSpecialClick,
-  getTranslation,
   capitalize,
 } from './utils';
 jest.unmock('./utils');
 
 describe('utils', () => {
-  describe('applyDefaultProps', () => {
-    it('applies defaults for all undefined values', () => {
-      expect(applyDefaultProps({
-        definedProp: 'waddup',
-        undefinedProp: undefined,
-        nullProp: null,
-        falsyProp: false,
-      }, {
-        definedProp: 'oy',
-        undefinedProp: 'hello',
-        nonExistentProp: 'hey',
-        nullProp: 'greetings',
-        falsyProp: 'well met',
-      })).toEqual({
-        definedProp: 'waddup',
-        undefinedProp: 'hello',
-        nonExistentProp: 'hey',
-        nullProp: null,
-        falsyProp: false,
-      });
-    });
-  });
-
   describe('isSpecialClick', () => {
     it('returns true if a modifier key is pressed', () => {
       expect(isSpecialClick({altKey: true})).toBe(true);
@@ -46,45 +21,6 @@ describe('utils', () => {
 
     it('returns false otherwise', () => {
       expect(isSpecialClick({})).toBe(false);
-    });
-  });
-
-  describe('getTranslation', () => {
-    it('accepts functions', () => {
-      expect(getTranslation(
-        'hello',
-        {hello: name => `Hi ${name}`},
-        {hello: name => `Hello ${name}!`},
-        'fellow human'
-      )).toBe('Hello fellow human!');
-    });
-
-    it('accepts strings', () => {
-      expect(getTranslation(
-        'hello',
-        {hello: 'Hi'},
-        {hello: 'Hello'},
-        'fellow human'
-      )).toBe('Hello');
-    });
-
-    it('uses the default translation if none is found', () => {
-      expect(getTranslation(
-        'hello',
-        {hello: name => `Greetings, ${name}`},
-        {},
-        'traveler'
-      )).toBe('Greetings, traveler');
-    });
-
-    it('accepts many parameters', () => {
-      expect(getTranslation(
-        'thing',
-        {},
-        {thing: (param1, param2) => `${param1} ${param2}`},
-        'wat',
-        'wut'
-      )).toBe('wat wut');
     });
   });
 

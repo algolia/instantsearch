@@ -1,47 +1,26 @@
 import React, {PropTypes, Component} from 'react';
+import pick from 'lodash/object/pick';
 
-import {itemsPropType, selectedItemsPropType} from '../propTypes';
-import themeable from 'react-themeable';
+import themeable from '../themeable';
+import translatable from '../translatable';
 
+import List from './List';
 import LinkItem from './LinkItem';
-import {getTranslation} from '../utils';
-
-const defaultTranslations = {
-  showMore: extended => extended ? 'Show less' : 'Show more',
-  count: count => count.toString(),
-};
-
-const defaultTheme = {
-  root: 'RefinementListLinks',
-  list: 'RefinementListLinks__list',
-  item: 'RefinementListLinks__item',
-  itemSelected: 'RefinementListLinks__item--selected',
-  itemLink: 'RefinementListLinks__item__link',
-  itemValue: 'RefinementListLinks__item__value',
-  itemCount: 'RefinementListLinks__item__count',
-};
 
 class RefinementListLinks extends Component {
   static propTypes = {
-    theme: PropTypes.object,
-    translations: PropTypes.object,
+    applyTheme: PropTypes.func.isRequired,
+    translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
-    items: itemsPropType,
-    selectedItems: selectedItemsPropType,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })),
+    selectedItems: PropTypes.arrayOf(PropTypes.string),
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
-    limit: PropTypes.number.isRequired,
-    show: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    theme: defaultTheme,
-    translations: defaultTranslations,
-    showMore: false,
-    limitMin: 10,
-    limitMax: 20,
   };
 
   getSelectedItems = item => {
@@ -60,83 +39,56 @@ class RefinementListLinks extends Component {
     this.props.refine(this.getSelectedItems(item));
   }
 
-  onShowMoreClick = () => {
-    this.props.show(
-      this.props.limit === this.props.limitMax ?
-        this.props.limitMin :
-        this.props.limitMax
-    );
-  };
-
-  render() {
-    const {
-      translations,
-      theme,
-      items,
-      selectedItems,
-      createURL,
-      showMore,
-      limit,
-      limitMax,
-    } = this.props;
-    if (!items) {
-      return null;
-    }
-
-    const th = themeable(theme);
+  renderItem = item => {
+    const {createURL, applyTheme, translate} = this.props;
 
     return (
-      <div {...th('root', 'root')}>
-        <ul {...th('list', 'list')}>
-          {items
-            .slice(0, limit)
-            .map(item =>
-              <li
-                {...th(
-                  item.value,
-                  'item',
-                  selectedItems.indexOf(item.value) !== -1 && 'itemSelected'
-                )}
-              >
-                <LinkItem
-                  {...th('itemLink', 'itemLink')}
-                  onClick={this.onItemClick}
-                  item={item}
-                  href={createURL(this.getSelectedItems(item))}
-                >
-                  <span {...th('itemLabel', 'itemLabel')}>
-                    {item.value}
-                  </span>
-                  {' '}
-                  <span {...th('itemCount', 'itemCount')}>
-                    {getTranslation(
-                      'count',
-                      defaultTranslations,
-                      translations,
-                      item.count
-                    )}
-                  </span>
-                </LinkItem>
-              </li>
-            )
-          }
-        </ul>
-        {showMore &&
-          <button
-            {...th('showMore', 'showMore')}
-            onClick={this.onShowMoreClick}
-          >
-            {getTranslation(
-              'showMore',
-              defaultTranslations,
-              translations,
-              limit === limitMax
-            )}
-          </button>
-        }
-      </div>
+      <LinkItem
+        {...applyTheme('itemLink', 'itemLink')}
+        onClick={this.onItemClick}
+        item={item}
+        href={createURL(this.getSelectedItems(item))}
+      >
+        <span {...applyTheme('itemLabel', 'itemLabel')}>
+          {item.value}
+        </span>
+        {' '}
+        <span {...applyTheme('itemCount', 'itemCount')}>
+          {translate('count', item.count)}
+        </span>
+      </LinkItem>
+    );
+  }
+
+  render() {
+    return (
+      <List
+        renderItem={this.renderItem}
+        {...pick(this.props, [
+          'applyTheme',
+          'translate',
+          'items',
+          'selectedItems',
+          'showMore',
+          'limitMin',
+          'limitMax',
+        ])}
+      />
     );
   }
 }
 
-export default RefinementListLinks;
+export default themeable({
+  root: 'RefinementListLinks',
+  items: 'RefinementListLinks__items',
+  item: 'RefinementListLinks__item',
+  itemSelected: 'RefinementListLinks__item--selected',
+  itemLink: 'RefinementListLinks__item__link',
+  itemLabel: 'RefinementListLinks__item__label',
+  itemCount: 'RefinementListLinks__item__count',
+})(
+  translatable({
+    showMore: extended => extended ? 'Show less' : 'Show more',
+    count: count => count.toString(),
+  })(RefinementListLinks)
+);

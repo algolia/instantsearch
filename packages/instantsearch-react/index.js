@@ -7,6 +7,7 @@ import RefinementListLinks from './src/widgets/RefinementListLinks';
 import Menu from './src/widgets/Menu';
 import MenuSelect from './src/widgets/MenuSelect';
 import HierarchicalMenu from './src/widgets/HierarchicalMenu';
+import NumericRefinementList from './src/widgets/NumericRefinementList';
 import ScrollTo from './src/widgets/ScrollTo';
 import InstantSearch from './src/InstantSearch';
 
@@ -22,6 +23,7 @@ export {
   Menu,
   MenuSelect,
   HierarchicalMenu,
+  NumericRefinementList,
   ScrollTo,
   InstantSearch,
 };

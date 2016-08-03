@@ -1,23 +1,14 @@
 import React, {PropTypes, Component} from 'react';
 
-import {getTranslation} from '../utils';
+import translatable from '../translatable';
 
-const defaultTranslations = {
-  label: 'Hits per page',
-  value: v => v.toString(),
-};
-
-export default class HitsPerPage extends Component {
+class HitsPerPage extends Component {
   static propTypes = {
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
-    translations: PropTypes.object,
+    translate: PropTypes.func.isRequired,
     defaultValue: PropTypes.number,
     values: PropTypes.arrayOf(PropTypes.number).isRequired,
-  };
-
-  static defaultProps = {
-    translations: defaultTranslations,
   };
 
   onChange = e => {
@@ -25,15 +16,15 @@ export default class HitsPerPage extends Component {
   };
 
   render() {
-    const {translations, hitsPerPage, values, defaultValue} = this.props;
+    const {translate, hitsPerPage, values, defaultValue} = this.props;
 
     return (
       <label>
-        {getTranslation('label', defaultTranslations, translations)}
+        {translate('label')}
         <select value={hitsPerPage || defaultValue} onChange={this.onChange}>
           {values.map(v =>
             <option key={v} value={v}>
-              {getTranslation('value', defaultTranslations, translations, v)}
+              {translate('value', v)}
             </option>
           )}
         </select>
@@ -41,3 +32,8 @@ export default class HitsPerPage extends Component {
     );
   }
 }
+
+export default translatable({
+  label: 'Hits per page',
+  value: v => v.toString(),
+})(HitsPerPage);

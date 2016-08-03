@@ -1,39 +1,5 @@
 import {PropTypes} from 'react';
 
-const valuePropTypes = PropTypes.oneOfType([
-  PropTypes.number,
-  PropTypes.string,
-]);
-
-const metadataItemPropType = PropTypes.shape({
-  value: valuePropTypes.isRequired,
-  count: PropTypes.number.isRequired,
-});
-
-export const hierarchicalItemPropType = PropTypes.shape({
-  label: PropTypes.node,
-  value: valuePropTypes.isRequired,
-  count: PropTypes.number.isRequired,
-  children: (...args) => PropTypes.arrayOf(hierarchicalItemPropType)(...args),
-});
-
-const valueItemPropType = valuePropTypes;
-
-export const itemPropType = PropTypes.oneOfType([
-  metadataItemPropType,
-  valueItemPropType,
-]);
-
-export const itemsPropType = PropTypes.oneOfType([
-  PropTypes.arrayOf(metadataItemPropType),
-  PropTypes.arrayOf(valueItemPropType),
-]);
-
-export const hierarchicalItemsPropType =
-  PropTypes.arrayOf(hierarchicalItemPropType);
-
-export const selectedItemsPropType = PropTypes.arrayOf(valuePropTypes);
-
 export const configManagerPropType = PropTypes.shape({
   register: PropTypes.func.isRequired,
   swap: PropTypes.func.isRequired,
@@ -46,3 +12,18 @@ export const stateManagerPropType = PropTypes.shape({
   getState: PropTypes.func.isRequired,
   unlisten: PropTypes.func.isRequired,
 });
+
+export const withKeysPropType = keys => (props, propName, componentName) => {
+  const prop = props[propName];
+  if (prop) {
+    for (const key of Object.keys(prop)) {
+      if (!keys.indexOf(key)) {
+        return new Error(
+          `Unknown \`${propName}\` key \`${key}\`. Check the render method ` +
+          `of \`${componentName}\`.`
+        );
+      }
+    }
+  }
+  return undefined;
+};
