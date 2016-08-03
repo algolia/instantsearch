@@ -1,6 +1,8 @@
 import React from 'react';
 import reactThemeable from 'react-themeable';
 
+import {withKeysPropType} from './propTypes';
+
 export default function themeable(defaultTheme) {
   return Composed => {
     function Themeable(props) {
@@ -11,20 +13,7 @@ export default function themeable(defaultTheme) {
     }
 
     Themeable.propTypes = {
-      theme(props, propName, componentName) {
-        const prop = props[propName];
-        if (prop) {
-          for (const key of Object.keys(prop)) {
-            if (!{}.hasOwnProperty.call(defaultTheme, key)) {
-              return new Error(
-                `Unknown theme key \`${key}\`. Check the render method of ` +
-                `\`${componentName}\`.`
-              );
-            }
-          }
-        }
-        return undefined;
-      },
+      theme: withKeysPropType(Object.keys(defaultTheme)),
     };
 
     return Themeable;
