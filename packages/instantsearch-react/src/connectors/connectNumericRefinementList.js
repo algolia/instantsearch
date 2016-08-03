@@ -2,7 +2,7 @@ import {PropTypes} from 'react';
 import find from 'lodash/collection/find';
 import includes from 'lodash/collection/includes';
 
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 
 function stringifyItem(item) {
   return `${item.start ? item.start : ''}:${item.end ? item.end : ''}`;
@@ -16,7 +16,7 @@ function parseItem(value) {
   };
 }
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaNumericRefinementList',
 
   propTypes: {

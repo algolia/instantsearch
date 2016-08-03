@@ -1,3 +1,3 @@
-import createHits from '../hoc/createHitsPerPage';
+import connectHitsPerPage from '../connectors/connectHitsPerPage';
 import HitsPerPageImpl from '../impl/HitsPerPage';
-export default createHits()(HitsPerPageImpl);
+export default connectHitsPerPage()(HitsPerPageImpl);

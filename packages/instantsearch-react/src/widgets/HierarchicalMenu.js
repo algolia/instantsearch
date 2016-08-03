@@ -1,7 +1,7 @@
-import createHierarchicalMenu from '../hoc/createHierarchicalMenu';
+import connectHierarchicalMenu from '../connectors/connectHierarchicalMenu';
 import HierarchicalMenu from '../impl/HierarchicalMenu';
 
-export default createHierarchicalMenu({
+export default connectHierarchicalMenu({
   defaultProps: {
     showMore: false,
     limitMin: 10,

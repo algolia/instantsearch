@@ -3,12 +3,12 @@
 import {SearchParameters} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createHits from './createHits';
-jest.unmock('./createHits');
+import connectHits from './connectHits';
+jest.unmock('./connectHits');
 
-const {configure, mapStateToProps} = createHits;
+const {configure, mapStateToProps} = connectHits;
 
-describe('createHits', () => {
+describe('connectHits', () => {
   it('sets the configuration hitsPerPage to its hitsPerPage prop', () => {
     const state = new SearchParameters();
     const configuredState = configure(state, {hitsPerPage: 666});

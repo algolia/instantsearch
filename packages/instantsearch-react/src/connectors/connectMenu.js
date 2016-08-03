@@ -1,6 +1,6 @@
 import {PropTypes} from 'react';
 
-import createHOC from '../createHOC';
+import createConnector from '../createConnector';
 import facetRefiner from './facetRefiner';
 
 // While it makes little difference since we only ever have either zero or one
@@ -8,7 +8,7 @@ import facetRefiner from './facetRefiner';
 // facet values we need.
 const FACET_TYPE = 'disjunctive';
 
-export default createHOC({
+export default createConnector({
   displayName: 'AlgoliaMenu',
 
   propTypes: {

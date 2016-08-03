@@ -3,12 +3,12 @@
 import {SearchParameters} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createPagination from './createPagination';
-jest.unmock('./createPagination');
+import connectPagination from './connectPagination';
+jest.unmock('./connectPagination');
 
-const {mapStateToProps, refine} = createPagination;
+const {mapStateToProps, refine} = connectPagination;
 
-describe('createPagination', () => {
+describe('connectPagination', () => {
   it('provides the correct props to the component', () => {
     const props1 = mapStateToProps({
       searchParameters: {page: 666},

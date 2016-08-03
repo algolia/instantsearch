@@ -4,8 +4,8 @@
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createHierarchicalMenu from './createHierarchicalMenu';
-jest.unmock('./createHierarchicalMenu');
+import connectHierarchicalMenu from './connectHierarchicalMenu';
+jest.unmock('./connectHierarchicalMenu');
 jest.unmock('./facetRefiner');
 
 const {
@@ -13,9 +13,9 @@ const {
   mapStateToProps,
   transformProps,
   refine,
-} = createHierarchicalMenu;
+} = connectHierarchicalMenu;
 
-describe('createHierarchicalMenu', () => {
+describe('connectHierarchicalMenu', () => {
   it('increases maxValuesPerFacet when it isn\'t big enough', () => {
     let state;
     let configuredState;
