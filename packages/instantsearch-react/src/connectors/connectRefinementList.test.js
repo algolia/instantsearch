@@ -1,22 +1,23 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 
-import createMenu from './createMenu';
+import connectRefinementList from './connectRefinementList';
 import facetRefiner from './facetRefiner';
-jest.unmock('./createMenu');
+jest.unmock('./connectRefinementList');
 
 const {
   configure,
   mapStateToProps,
   transformProps,
   refine,
-} = createMenu;
+} = connectRefinementList;
 
-describe('createMenu', () => {
+describe('connectRefinementList', () => {
   it('derives the right configure options from props', () => {
     const state = {};
     configure(state, {
       attributeName: 'foo',
+      operator: 'or',
       limit: 10,
     });
     expect(facetRefiner.configure.mock.calls[0][0]).toBe(state);
@@ -28,11 +29,12 @@ describe('createMenu', () => {
 
     configure(state, {
       attributeName: 'foo',
+      operator: 'and',
       limit: 20,
     });
     expect(facetRefiner.configure.mock.calls[1][1]).toEqual({
       attributeName: 'foo',
-      facetType: 'disjunctive',
+      facetType: 'conjunctive',
       limit: 20,
     });
   });
@@ -41,6 +43,7 @@ describe('createMenu', () => {
     const state = {};
     mapStateToProps(state, {
       attributeName: 'foo',
+      operator: 'or',
       sortBy: ['something'],
     });
     expect(facetRefiner.mapStateToProps.mock.calls[0][0]).toBe(state);
@@ -49,40 +52,48 @@ describe('createMenu', () => {
       facetType: 'disjunctive',
       sortBy: ['something'],
     });
+
+    mapStateToProps(state, {
+      attributeName: 'foo',
+      operator: 'and',
+      sortBy: ['something'],
+    });
+    expect(facetRefiner.mapStateToProps.mock.calls[1][1]).toEqual({
+      attributeName: 'foo',
+      facetType: 'conjunctive',
+      sortBy: ['something'],
+    });
   });
 
   it('proxies transformProps', () => {
     const props1 = {
       limit: 10,
     };
-    const transformedOriginal = {
-      items: ['foo', 'bar'],
-      selectedItems: ['foo'],
-    };
-    facetRefiner.transformProps.mockReturnValueOnce(transformedOriginal);
-    const transformed = transformProps(props1);
-
+    transformProps(props1);
     expect(facetRefiner.transformProps.mock.calls[0][0]).toBe(props1);
-    expect(transformed.selectedItem).toBe('foo');
-    expect(transformed.items).toBe(transformedOriginal.items);
   });
 
   it('derives the right refine options from props', () => {
     const state = {};
+    const values = [];
     refine(state, {
       attributeName: 'foo',
-      selectedItems: [],
-    }, 'wat');
+      operator: 'or',
+    }, values);
     expect(facetRefiner.refine.mock.calls[0][0]).toBe(state);
     expect(facetRefiner.refine.mock.calls[0][1]).toEqual({
       attributeName: 'foo',
       facetType: 'disjunctive',
     });
-    expect(facetRefiner.refine.mock.calls[0][2]).toEqual(['wat']);
+    expect(facetRefiner.refine.mock.calls[0][2]).toBe(values);
+
     refine(state, {
       attributeName: 'foo',
-      selectedItems: ['wat'],
-    }, 'wat');
-    expect(facetRefiner.refine.mock.calls[1][2]).toEqual([]);
+      operator: 'and',
+    }, values);
+    expect(facetRefiner.refine.mock.calls[1][1]).toEqual({
+      attributeName: 'foo',
+      facetType: 'conjunctive',
+    });
   });
 });

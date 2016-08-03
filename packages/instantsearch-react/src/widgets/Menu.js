@@ -1,7 +1,7 @@
-import createMenu from '../hoc/createMenu';
+import connectMenu from '../connectors/connectMenu';
 import Menu from '../impl/Menu';
 
-export default createMenu({
+export default connectMenu({
   defaultProps: {
     showMore: false,
     limitMin: 10,

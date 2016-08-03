@@ -1,3 +1,3 @@
-import createNumericRefinementList from '../hoc/createNumericRefinementList';
+import connectNumericRefinementList from '../connectors/connectNumericRefinementList';
 import NumericRefinementList from '../impl/NumericRefinementList';
-export default createNumericRefinementList()(NumericRefinementList);
+export default connectNumericRefinementList()(NumericRefinementList);

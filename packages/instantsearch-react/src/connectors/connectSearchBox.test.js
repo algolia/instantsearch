@@ -3,12 +3,12 @@
 import {SearchParameters} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
-import createSearchBox from './createSearchBox';
-jest.unmock('./createSearchBox');
+import connectSearchBox from './connectSearchBox';
+jest.unmock('./connectSearchBox');
 
-const {mapStateToProps, refine} = createSearchBox;
+const {mapStateToProps, refine} = connectSearchBox;
 
-describe('createSearchBox', () => {
+describe('connectSearchBox', () => {
   it('provides the correct props to the component', () => {
     const props = mapStateToProps({searchParameters: {query: 'foo'}});
     expect(props).toEqual({query: 'foo'});

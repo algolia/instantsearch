@@ -1,3 +1,3 @@
-import createHits from '../hoc/createHits';
+import connectHits from '../connectors/connectHits';
 import HitsImpl from '../impl/Hits';
-export default createHits()(HitsImpl);
+export default connectHits()(HitsImpl);

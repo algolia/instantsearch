@@ -1,7 +1,7 @@
-import createRefinementList from '../hoc/createRefinementList';
+import connectRefinementList from '../connectors/connectRefinementList';
 import RefinementListLinks from '../impl/RefinementListLinks';
 
-export default createRefinementList({
+export default connectRefinementList({
   defaultProps: {
     showMore: false,
     limitMin: 10,
