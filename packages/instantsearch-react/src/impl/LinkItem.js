@@ -5,7 +5,6 @@ import {isSpecialClick} from '../utils';
 
 export default class ItemLink extends Component {
   static propTypes = {
-    item: PropTypes.any.isRequired,
     onClick: PropTypes.func.isRequired,
   };
 
@@ -13,7 +12,7 @@ export default class ItemLink extends Component {
     if (isSpecialClick(e)) {
       return;
     }
-    this.props.onClick(this.props.item);
+    this.props.onClick();
     e.preventDefault();
   };
 

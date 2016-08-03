@@ -23,13 +23,12 @@ class Menu extends Component {
     limitMax: PropTypes.number,
   };
 
-  renderItem = item => {
+  renderItem = (item, selected) => {
     const {refine, createURL, applyTheme, translate} = this.props;
     return (
       <LinkItem
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={refine}
-        item={item.value}
+        onClick={refine.bind(null, selected ? null : item.value)}
         href={createURL(item.value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>

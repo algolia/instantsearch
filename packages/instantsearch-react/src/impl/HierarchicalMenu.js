@@ -21,19 +21,28 @@ class HierarchicalMenu extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
-    selectedItems: PropTypes.arrayOf(PropTypes.string),
+    selectedItem: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
-  renderItem = item => {
+  renderItem = (item, selected, parent) => {
     const {createURL, refine, translate, applyTheme} = this.props;
+    let refineValue;
+    if (selected) {
+      if (parent !== null) {
+        refineValue = parent.value;
+      } else {
+        refineValue = null;
+      }
+    } else {
+      refineValue = item.value;
+    }
     return (
       <LinkItem
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={refine.bind(null, item.value)}
-        item={item}
+        onClick={refine.bind(null, refineValue)}
         href={createURL(item.value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
@@ -51,11 +60,13 @@ class HierarchicalMenu extends Component {
     return (
       <List
         renderItem={this.renderItem}
+        selectedItems={
+          this.props.selectedItem === null ? [] : [this.props.selectedItem]
+        }
         {...pick(this.props, [
           'applyTheme',
           'translate',
           'items',
-          'selectedItems',
           'showMore',
           'limitMin',
           'limitMax',
