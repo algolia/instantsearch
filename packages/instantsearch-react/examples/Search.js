@@ -1,55 +1,42 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
+import {omit} from 'lodash';
+import qs from 'qs';
 
 import InstantSearch from '../src/InstantSearch';
+import connectCurrentFilters from '../src/connectors/connectCurrentFilters';
 import {
+  Pagination,
+  RefinementList,
+  Menu,
+  HierarchicalMenu,
   SearchBox,
   Hits,
   HitsPerPage,
-  Pagination,
-  RefinementList,
-  RefinementListLinks,
-  Menu,
-  HierarchicalMenu,
-} from '..';
-
+  NumericRefinementList,
+  Range,
+} from '../';
 import history from './history';
 
-class Movie extends Component {
-  render() {
-    return (
-      <div>
-        <img
-          src={this.props.hit.image}
-        />
-        {this.props.hit.name}
-      </div>
-    );
-  }
-}
+const CurrentFilters = connectCurrentFilters(props =>
+  <div>
+    {props.filters.map(filter =>
+      <span key={filter.key}>{filter.label}</span>
+    )}
+    <button onClick={() => props.refine(props.filters)}>
+      Clear all
+    </button>
+  </div>
+);
 
 class Search extends Component {
-  constructor() {
-    super();
+  createURL = state => history.createHref(
+    `${state.p ? state.p + 1 : 1}?${qs.stringify(omit(state, 'p'))}`
+  );
 
-    this.state = {
-      facet: 'genre',
-    };
-  }
-
-  onSwitchClick = () => {
-    this.setState(state => ({
-      facet: state.facet === 'genre' ? 'year' : 'genre',
-    }));
+  onStateChange = state => {
+    history.push(this.createURL(state));
   };
-
-  createURL = (state, getQuery) => history.createHref(
-    `${state.page + 1}?${getQuery(state)}`
-  );
-
-  configureState = state => state.setPage(
-    parseInt(this.props.params.page - 1, 10)
-  );
 
   render() {
     return (
@@ -59,51 +46,47 @@ class Search extends Component {
         indexName="instant_search"
         history={history}
         createURL={this.createURL}
-        configureState={this.configureState}
-        trackedParameters={[
-          // Don't track page since we control it
-          'query',
-          'attribute:*',
-          'hitsPerPage',
-        ]}
+        onStateChange={this.onStateChange}
+        state={{
+          ...this.props.location.query,
+          p: parseInt(this.props.params.page - 1, 10),
+        }}
       >
         <div>
-          <button onClick={this.onSwitchClick}>Switch facet</button>
-
-          <SearchBox focusShortcuts={['s']} searchAsYouType={true} />
-          <HitsPerPage
-            defaultValue={5}
-            values={[5, 10]}
+          <SearchBox />
+          <CurrentFilters />
+          <HitsPerPage values={[10, 20, 30]} defaultHitsPerPage={20} />
+          <Range attributeName="price" />
+          {/*<NumericRefinementList
+            attributeName="price"
+            items={[
+              {
+                label: 'All',
+              },
+              {
+                label: 'More than 60',
+                start: 60,
+              },
+            ]}
+            defaultSelectedItem="60:"
+          />*/}
+          <RefinementList
+            attributeName="categories"
+            defaultSelectedItems={['Audio']}
+          />
+          <Menu
+            attributeName="brand"
           />
           <HierarchicalMenu
-            name="wat"
+            name="ok"
             attributes={[
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ]}
-            showMore
           />
-          <Menu
-            attributeName="brand"
-            showMore
-            limitMin={10}
-            limitMax={20}
-          />
-          <RefinementList
-            attributeName="brand"
-            sortBy={['count']}
-            showMore
-          />
-          <RefinementListLinks
-            attributeName="brand"
-            showMore
-          />
-          <Hits
-            itemComponent={Movie}
-            // hitsPerPage={5}
-          />
-          <Pagination showLast maxPages={10} translations={{next: 'Next'}} />
+          <Hits />
+          <Pagination id="p" />
         </div>
       </InstantSearch>
     );

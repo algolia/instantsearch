@@ -2,27 +2,42 @@ import {PropTypes} from 'react';
 
 import createConnector from '../createConnector';
 
+function getHitsPerPage(props, state) {
+  if (typeof state[props.id] !== 'undefined') {
+    if (typeof state[props.id] === 'string') {
+      return parseInt(state[props.id], 10);
+    }
+    return state[props.id];
+  }
+  return props.defaultHitsPerPage;
+}
+
 export default createConnector({
   displayName: 'AlgoliaHitsPerPage',
 
   propTypes: {
-    defaultValue: PropTypes.number,
+    id: PropTypes.string,
+    defaultHitsPerPage: PropTypes.number.isRequired,
   },
 
-  mapStateToProps(state) {
+  defaultProps: {
+    id: 'hPP',
+  },
+
+  getProps(props, state) {
     return {
-      hitsPerPage: state.searchParameters.hitsPerPage,
+      hitsPerPage: getHitsPerPage(props, state),
     };
   },
 
-  configure(state, props) {
-    if (typeof state.hitsPerPage !== 'undefined') {
-      return state;
-    }
-    return state.setQueryParameter('hitsPerPage', props.defaultValue);
+  refine(props, state, nextHitsPerPage) {
+    return {
+      ...state,
+      [props.id]: nextHitsPerPage,
+    };
   },
 
-  refine(state, props, hitsPerPage) {
-    return state.setQueryParameter('hitsPerPage', hitsPerPage);
+  getSearchParameters(searchParameters, props, state) {
+    return searchParameters.setHitsPerPage(getHitsPerPage(props, state));
   },
 });

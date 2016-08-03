@@ -7,7 +7,10 @@ export default class Range extends Component {
   static propTypes = {
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
-    value: PropTypes.arrayOf(PropTypes.number).isRequired,
+    value: PropTypes.shape({
+      min: PropTypes.number,
+      max: PropTypes.number,
+    }).isRequired,
     refine: PropTypes.func.isRequired,
   };
 
@@ -23,7 +26,7 @@ export default class Range extends Component {
   onChange = value => {
     this.setState({
       controlled: true,
-      value,
+      value: {min: value[0], max: value[1]},
     });
   };
 
@@ -36,12 +39,13 @@ export default class Range extends Component {
   };
 
   render() {
+    const value = this.state.controlled ? this.state.value : this.props.value;
     return (
       <Slider
         min={this.props.min}
         max={this.props.max}
         range
-        value={this.state.controlled ? this.state.value : this.props.value}
+        value={[value.min, value.max]}
         onChange={this.onChange}
         onAfterChange={this.onAfterChange}
       />

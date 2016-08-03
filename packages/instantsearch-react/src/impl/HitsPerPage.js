@@ -7,7 +7,6 @@ class HitsPerPage extends Component {
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
-    defaultValue: PropTypes.number,
     values: PropTypes.arrayOf(PropTypes.number).isRequired,
   };
 
@@ -16,12 +15,12 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const {translate, hitsPerPage, values, defaultValue} = this.props;
+    const {translate, hitsPerPage, values} = this.props;
 
     return (
       <label>
         {translate('label')}
-        <select value={hitsPerPage || defaultValue} onChange={this.onChange}>
+        <select value={hitsPerPage} onChange={this.onChange}>
           {values.map(v =>
             <option key={v} value={v}>
               {translate('value', v)}
