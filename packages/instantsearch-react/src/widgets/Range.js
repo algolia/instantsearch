@@ -1,3 +1,3 @@
-import createRange from '../hoc/createRange';
+import connectRange from '../connectors/connectRange';
 import Range from '../impl/Range';
-export default createRange()(Range);
+export default connectRange()(Range);
