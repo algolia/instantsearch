@@ -1183,7 +1183,7 @@ search.addWidget(
     templates: {
       body: function(data) {
         return '<div>You have ' + data.nbHits + ' results, fetched in ' +
-          data.processingTimMS +'ms.</div>'
+          data.processingTimeMS +'ms.</div>'
       }
     }
   })
