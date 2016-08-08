@@ -1,9 +1,13 @@
 import React, {PropTypes, Component} from 'react';
 
+import themeable from '../themeable';
 import translatable from '../translatable';
+
+import Select from './Select';
 
 class MenuSelect extends Component {
   static propTypes = {
+    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
@@ -13,35 +17,32 @@ class MenuSelect extends Component {
     selectedItem: PropTypes.string.isRequired,
   };
 
-  onChange = e => {
-    if (e.target.value === '') {
-      this.props.refine(null);
-    } else {
-      this.props.refine(e.target.value);
-    }
-  }
-
   render() {
-    const {items, selectedItem, translate} = this.props;
+    const {applyTheme, refine, items, selectedItem, translate} = this.props;
 
     return (
-      <select value={selectedItem || ''} onChange={this.onChange}>
-        <option value="">
-          {translate('none')}
-        </option>
-        {items.map(item =>
-          <option key={item.value} value={item.value}>
-            {item.value}
-            {' '}
-            {translate('count', item.count)}
-          </option>
-        )}
-      </select>
+      <Select
+        {...applyTheme('root', 'root')}
+        selectedItem={selectedItem || ''}
+        onChange={refine}
+        items={[
+          {label: translate('none'), value: ''},
+        ].concat(items.map(item => ({
+          label: `${item.value} ${translate('count', item.count)}`,
+          value: item.value,
+        })))}
+      />
     );
   }
 }
 
-export default translatable({
-  none: 'None',
-  count: count => count.toString(),
-})(MenuSelect);
+export default themeable({
+  root: 'MenuSelect',
+})(
+  translatable({
+    none: 'None',
+    count: count => count.toString(),
+  })(
+    MenuSelect
+  )
+);
