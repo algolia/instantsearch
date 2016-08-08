@@ -1,0 +1,45 @@
+.CurrentFilters {
+  display: flex;
+  align-items: center;
+}
+
+.CurrentFilters__filters {
+  display: flex;
+  margin-right: 0.6em;
+}
+
+.CurrentFilters__filter {
+  display: flex;
+  align-items: stretch;
+  margin-right: 0.4em;
+  border: 1px solid #CCC;
+  border-radius: 4px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.CurrentFilters__filter__label {
+  padding: 0.6em 0 0.6em 0.8em;
+}
+
+.CurrentFilters__filter__clear {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1em;
+  padding: 0 0.8em;
+  color: #3e82f7;
+}
+
+.CurrentFilters__filter__clear:hover {
+  color: red;
+}
+
+
+.CurrentFilters__clearAll {
+  color: #3e82f7;
+  background: transparent;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  padding: 0;
+}

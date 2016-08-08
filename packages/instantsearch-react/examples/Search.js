@@ -15,19 +15,9 @@ import {
   HitsPerPage,
   NumericRefinementList,
   Range,
+  CurrentFilters,
 } from '../';
 import history from './history';
-
-const CurrentFilters = connectCurrentFilters(props =>
-  <div>
-    {props.filters.map(filter =>
-      <span key={filter.key}>{filter.label}</span>
-    )}
-    <button onClick={() => props.refine(props.filters)}>
-      Clear all
-    </button>
-  </div>
-);
 
 class Search extends Component {
   createURL = state => history.createHref(
