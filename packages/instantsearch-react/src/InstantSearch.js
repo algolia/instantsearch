@@ -17,6 +17,16 @@ function getStateFromLocation(location) {
   return qs.parse(location.search.slice(1));
 }
 
+function alphabeticalSort(a, b) {
+  if (a > b) {
+    return 1;
+  }
+  if (a === b) {
+    return 0;
+  }
+  return 1;
+}
+
 function applyStateToLocation(location, state, knownKeys) {
   const urlState = getStateFromLocation(location);
   const unknownParameters = omit(urlState, knownKeys);
@@ -32,7 +42,7 @@ function applyStateToLocation(location, state, knownKeys) {
   }
   return {
     ...location,
-    search: query ? `?${qs.stringify(query)}` : '',
+    search: query ? `?${qs.stringify(query, {sort: alphabeticalSort})}` : '',
   };
 }
 
