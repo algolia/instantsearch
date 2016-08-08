@@ -3,7 +3,7 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import {omit, isEqual, includes} from 'lodash';
 import qs from 'qs';
-import {createHistory, createMemoryHistory} from 'history';
+import {createHistory} from 'history';
 
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
@@ -109,21 +109,21 @@ class InstantSearch extends Component {
     validateProps(props);
 
     if (!props.onStateChange) {
-      this.history =
-        props.history ||
-        (props.urlSync ? createHistory() : createMemoryHistory());
+      this.history = props.history || props.urlSync && createHistory();
 
-      this.currentLocation = null;
-      // In history V2, .listen is called with the initial location.
-      // In V3, you need to use .getCurrentLocation()
-      if (this.history.getCurrentLocation) {
-        this.currentLocation = this.history.getCurrentLocation();
+      if (this.history) {
+        this.currentLocation = null;
+        // In history V2, .listen is called with the initial location.
+        // In V3, you need to use .getCurrentLocation()
+        if (this.history.getCurrentLocation) {
+          this.currentLocation = this.history.getCurrentLocation();
+        }
+
+        this.lastPush = -1;
+        this.skipNextLocationUpdate = false;
+        this.skipNextStateUpdate = false;
+        this.unlisten = this.history.listen(this.onLocationChange);
       }
-
-      this.lastPush = -1;
-      this.skipNextLocationUpdate = false;
-      this.skipNextStateUpdate = false;
-      this.unlisten = this.history.listen(this.onLocationChange);
     }
 
     this.widgetsManager = createWidgetsManager(
@@ -132,10 +132,17 @@ class InstantSearch extends Component {
       this.createHrefForState
     );
 
+    let initialState;
+    if (props.state) {
+      initialState = props.state;
+    } else if (this.history) {
+      initialState = getStateFromLocation(this.currentLocation);
+    } else {
+      initialState = {};
+    }
+
     this.store = createStore({
-      widgets: props.state ?
-        props.state :
-        getStateFromLocation(this.currentLocation),
+      widgets: initialState,
       metadata: [],
       results: null,
       error: null,
@@ -158,11 +165,6 @@ class InstantSearch extends Component {
   }
 
   onLocationChange = location => {
-    if (this.onStateChange) {
-      // The component's state is controlled. Ignore location update.
-      return;
-    }
-
     if (this.currentLocation === null && !this.history.getCurrentLocation) {
       // Initial location. Called synchronously by listen.
       this.currentLocation = location;
@@ -192,23 +194,25 @@ class InstantSearch extends Component {
 
     this.onNewState(widgetsState);
 
-    if (!this.skipNextStateUpdate) {
-      // This must be after `onNewState`/`store.setState` since
-      // `createHrefForState` depends on the new metadata.
-      const href = this.createHrefForState(widgetsState);
-      this.skipNextLocationUpdate = true;
-      const newPush = Date.now();
-      if (
-        this.lastPush !== -1 &&
-        newPush - this.lastPush <= this.props.treshold
-      ) {
-        this.history.replace(href);
+    if (this.history) {
+      if (!this.skipNextStateUpdate) {
+        // This must be after `onNewState`/`store.setState` since
+        // `createHrefForState` depends on the new metadata.
+        const href = this.createHrefForState(widgetsState);
+        this.skipNextLocationUpdate = true;
+        const newPush = Date.now();
+        if (
+          this.lastPush !== -1 &&
+          newPush - this.lastPush <= this.props.treshold
+        ) {
+          this.history.replace(href);
+        } else {
+          this.history.push(href);
+        }
+        this.lastPush = newPush;
       } else {
-        this.history.push(href);
+        this.skipNextStateUpdate = false;
       }
-      this.lastPush = newPush;
-    } else {
-      this.skipNextStateUpdate = false;
     }
   };
 
@@ -270,13 +274,16 @@ class InstantSearch extends Component {
     if (this.props.createURL) {
       return this.props.createURL(state);
     }
-    return this.history.createHref(
-      applyStateToLocation(
-        this.currentLocation,
-        state,
-        this.getWidgetsIds(this.store.getState().metadata)
-      )
-    );
+    if (this.history) {
+      return this.history.createHref(
+        applyStateToLocation(
+          this.currentLocation,
+          state,
+          this.getWidgetsIds(this.store.getState().metadata)
+        )
+      );
+    }
+    return '#';
   };
 
   getWidgetsIds = metadata => metadata.reduce((res, meta) =>
