@@ -16,6 +16,7 @@ import {
   Range,
   CurrentFilters,
   Toggle,
+  SortBy,
 } from '../';
 import history from './history';
 
@@ -51,7 +52,24 @@ class Search extends Component {
             value={true}
             label="Free shipping"
           />
-          <HitsPerPage values={[10, 20, 30]} defaultHitsPerPage={20} />
+          <SortBy
+            items={[
+              {
+                label: 'Popularity',
+                index: 'instant_search',
+              },
+              {
+                label: 'Price (asc)',
+                index: 'instant_search_price_asc',
+              },
+              {
+                label: 'Price (desc)',
+                index: 'instant_search_price_desc',
+              },
+            ]}
+            defaultSelectedIndex="instant_search"
+          />
+          <HitsPerPage items={[10, 20, 30]} defaultHitsPerPage={20} />
           <Range attributeName="price" />
           <NumericRefinementList
             attributeName="rating"

@@ -11,6 +11,7 @@ import NumericRefinementList from './src/widgets/NumericRefinementList';
 import Range from './src/widgets/Range';
 import CurrentFilters from './src/widgets/CurrentFilters';
 import Toggle from './src/widgets/Toggle';
+import SortBy from './src/widgets/SortBy';
 import ScrollTo from './src/widgets/ScrollTo';
 import InstantSearch from './src/InstantSearch';
 
@@ -30,6 +31,7 @@ export {
   Range,
   CurrentFilters,
   Toggle,
+  SortBy,
   ScrollTo,
   InstantSearch,
 };
