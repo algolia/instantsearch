@@ -2,11 +2,9 @@
 
 import React from 'react';
 import {shallow, mount} from 'enzyme';
+import {connect} from 'react-algoliasearch-helper';
 jest.mock('react-algoliasearch-helper', () => ({
-  connect: jest.fn(mapStateToProps => Composed => {
-    Composed.__mapStateToProps = mapStateToProps;
-    return Composed;
-  }),
+  connect: jest.fn(() => Composed => Composed),
 }));
 
 import createConnector from './createConnector';
@@ -39,10 +37,11 @@ describe('createConnector', () => {
   it('connects the provided component to the algolia store', () => {
     const Dummy = () => null;
     const mapStateToProps = jest.fn();
-    const HOC = createConnector({mapStateToProps})()(Dummy);
+    connect.mockImplementationOnce(a => () => a);
+    const internalMapStateToProps = createConnector({mapStateToProps})()(Dummy);
     const state = {};
     const props = {foo: 'bar'};
-    HOC.__mapStateToProps(state, props);
+    internalMapStateToProps(state, props);
     expect(mapStateToProps.mock.calls.length).toBe(1);
     expect(mapStateToProps.mock.calls[0][0]).toBe(state);
     expect(mapStateToProps.mock.calls[0][1]).toEqual(props);
@@ -169,5 +168,77 @@ describe('createConnector', () => {
     const props2 = wrapper2.find(Dummy).props();
     expect(transformProps.mock.calls[0][0].prop).toBe(prop1);
     expect(props2.prop).toBe(prop2);
+  });
+
+  it('renders null if shouldRender returns false', () => {
+    const Dummy = () => null;
+    const HOC = createConnector({shouldRender: () => false})()(Dummy);
+    const wrapper = shallow(<HOC />);
+    expect(wrapper.find(Dummy).length).toBe(0);
+    expect(wrapper.type()).toBe(null);
+  });
+
+  it('accepts a displayName option', () => {
+    connect.mockImplementationOnce(() => a => a);
+    const HOC = createConnector({
+      displayName: 'CoolHOC',
+    })()();
+    expect(HOC.displayName).toBe('CoolHOC');
+  });
+
+  it('defaults its displayName', () => {
+    connect.mockImplementationOnce(() => a => a);
+    const HOC = createConnector({})()();
+    expect(HOC.displayName).toBe('AlgoliaHOC');
+  });
+
+  it('accepts a defaultProps option', () => {
+    const defaultProps = {
+      prop1: 'foo',
+      prop2: 'bar',
+    };
+    const HOC = createConnector({defaultProps})()();
+    expect(HOC.defaultProps).toEqual(defaultProps);
+  });
+
+  it('accepts an additional defaultProps option', () => {
+    const defaultProps = {
+      prop1: 'foo',
+      prop2: 'bar',
+    };
+    const HOC = createConnector({})({defaultProps})();
+    expect(HOC.defaultProps).toEqual(defaultProps);
+  });
+
+  it('merges both defaultProps options', () => {
+    const defaultProps1 = {
+      prop1: 'foo',
+      prop2: 'foo',
+    };
+    const defaultProps2 = {
+      prop2: 'bar',
+    };
+    const HOC = createConnector({
+      defaultProps: defaultProps1,
+    })({
+      defaultProps: defaultProps2,
+    })();
+    expect(HOC.defaultProps).toEqual({
+      ...defaultProps1,
+      ...defaultProps2,
+    });
+  });
+
+  it('accepts an optional mapPropsToConfig function', () => {
+    connect.mockImplementationOnce(a => () => a);
+    const internalMapStateToProps = createConnector({
+      mapStateToProps: () => ({}),
+    })({
+      mapPropsToConfig: props => ({
+        foo: props.bar,
+      }),
+    })();
+    const result = internalMapStateToProps({}, {bar: 'hello'});
+    expect(result.foo).toEqual('hello');
   });
 });

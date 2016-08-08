@@ -11,6 +11,7 @@ export default function createConnector(connectorDesc) {
     const hasConfigure = has(connectorDesc, 'configure');
     const hasTransform = has(connectorDesc, 'transformProps');
     const hasRefine = has(connectorDesc, 'refine');
+    const hasShouldRender = has(connectorDesc, 'shouldRender');
     const hasMapProps = has(adapterDesc, 'mapPropsToConfig');
 
     // While react-redux does not  apply default props to the props passed to
@@ -88,6 +89,10 @@ export default function createConnector(connectorDesc) {
         };
 
         render() {
+          if (hasShouldRender && !connectorDesc.shouldRender(this.props)) {
+            return null;
+          }
+
           // The `transformProps` methods allows for passing new props to the
           // composed component that are derived from the HOC's own props.
           const transformedProps = hasTransform ?
