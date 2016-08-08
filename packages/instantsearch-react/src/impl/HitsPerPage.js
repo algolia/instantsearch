@@ -1,8 +1,14 @@
 import React, {PropTypes, Component} from 'react';
 
+import themeable from '../themeable';
+
+import LinkList from './LinkList';
+
 class HitsPerPage extends Component {
   static propTypes = {
-    hitsPerPage: PropTypes.number,
+    applyTheme: PropTypes.func.isRequired,
+    hitsPerPage: PropTypes.number.isRequired,
+    createURL: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     items: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.shape({
@@ -13,34 +19,34 @@ class HitsPerPage extends Component {
     ]).isRequired,
   };
 
-  onChange = e => {
-    this.props.refine(e.target.value);
-  };
-
   render() {
-    const {hitsPerPage, items} = this.props;
+    const {applyTheme, createURL, refine, hitsPerPage, items} = this.props;
 
     return (
-      <select value={hitsPerPage} onChange={this.onChange}>
-        {items.map(item => {
-          let value;
-          let label;
-          if (typeof item === 'number') {
-            value = item;
-            label = item;
-          } else {
-            value = item.value;
-            label = item.label;
-          }
-          return (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          );
-        })}
-      </select>
+      <LinkList
+        applyTheme={applyTheme}
+        onItemClick={refine}
+        selectedItem={hitsPerPage}
+        items={items.map(item =>
+          typeof item === 'number' ?
+            {
+              value: item,
+              label: item,
+              href: createURL(item),
+            } :
+            {
+              value: item.value,
+              label: item.label,
+              href: createURL(item.value),
+            }
+        )}
+      />
     );
   }
 }
 
-export default HitsPerPage;
+export default themeable({
+  root: 'HitsPerPage',
+  item: 'HitsPerPage__item',
+  itemSelected: 'HitsPerPage__item--selected',
+})(HitsPerPage);
