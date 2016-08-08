@@ -10,6 +10,7 @@ import HierarchicalMenu from './src/widgets/HierarchicalMenu';
 import NumericRefinementList from './src/widgets/NumericRefinementList';
 import Range from './src/widgets/Range';
 import CurrentFilters from './src/widgets/CurrentFilters';
+import Toggle from './src/widgets/Toggle';
 import ScrollTo from './src/widgets/ScrollTo';
 import InstantSearch from './src/InstantSearch';
 
@@ -28,6 +29,7 @@ export {
   NumericRefinementList,
   Range,
   CurrentFilters,
+  Toggle,
   ScrollTo,
   InstantSearch,
 };
