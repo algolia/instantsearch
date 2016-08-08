@@ -28,6 +28,7 @@
     "algoliasearch": "^3.16.0",
     "algoliasearch-helper": "^2.11.1",
     "history": "^2.1.2",
+    "rc-slider": "^3.8.2",
     "react": "^15.2.0",
     "react-addons-shallow-compare": "^15.2.0",
     "react-algoliasearch-helper": "^1.2.1",
