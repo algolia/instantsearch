@@ -34,7 +34,7 @@ section {
 
   &.hero-section {
     background: $hero-color;
-    color: #fff;
+    color: $hero-color-accent;
     padding-top: $navigation-height*1.5;
 
     .container {
@@ -64,7 +64,7 @@ section {
         content: '';
         width: 16px;
         height: 2px;
-        background: #D8D8D8;
+        background: $hero-color-accent;
         top: 30px;
         left: 0;
         right: 0;
@@ -81,7 +81,7 @@ section {
 
     h3 {
       font-size: 20px;
-      color: $bg-pale-accent;
+      color: $hero-color-accent;
       font-weight: 400;
       padding: 8px 0;
     }
