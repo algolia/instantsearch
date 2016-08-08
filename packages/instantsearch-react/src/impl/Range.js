@@ -17,13 +17,29 @@ export default class Range extends Component {
   constructor() {
     super();
 
+    // rc-slider calls its `onChange` prop when the provided value is outside
+    // its bounds. We don't care for the corrected value.
+    this.ignoreNextOnChange = false;
+
     this.state = {
       controlled: false,
       value: null,
     };
   }
 
+  componentWillReceiveProps() {
+    this.ignoreNextOnChange = true;
+  }
+
+  componentDidUpdate() {
+    this.ignoreNextOnChange = false;
+  }
+
   onChange = value => {
+    if (this.ignoreNextOnChange) {
+      this.ignoreNextOnChange = false;
+      return;
+    }
     this.setState({
       controlled: true,
       value: {min: value[0], max: value[1]},
@@ -45,7 +61,10 @@ export default class Range extends Component {
         min={this.props.min}
         max={this.props.max}
         range
-        value={[value.min, value.max]}
+        value={[
+          Math.max(this.props.min, value.min),
+          Math.min(this.props.max, value.max),
+        ]}
         onChange={this.onChange}
         onAfterChange={this.onAfterChange}
       />
