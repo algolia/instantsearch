@@ -1,7 +1,7 @@
 import {PropTypes, Component, Children} from 'react';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {omit} from 'lodash';
+import {omit, includes} from 'lodash';
 import qs from 'qs';
 import {createHistory, createMemoryHistory} from 'history';
 
@@ -9,6 +9,9 @@ import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 
 function getStateFromLocation(location) {
+  if (location.query) {
+    return location.query;
+  }
   // We could also use location.query with the useQueries enhancer, but that
   // would require a bit more configuration from the user.
   return qs.parse(location.search.slice(1));
@@ -17,12 +20,19 @@ function getStateFromLocation(location) {
 function applyStateToLocation(location, state, knownKeys) {
   const urlState = getStateFromLocation(location);
   const unknownParameters = omit(urlState, knownKeys);
+  const query = {
+    ...unknownParameters,
+    ...state,
+  };
+  if (location.query) {
+    return {
+      ...location,
+      query,
+    };
+  }
   return {
     ...location,
-    search: `?${qs.stringify({
-      ...unknownParameters,
-      ...state,
-    })}`,
+    search: query ? `?${qs.stringify(query)}` : '',
   };
 }
 
