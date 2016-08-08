@@ -1,13 +1,16 @@
 import React, {PropTypes, Component} from 'react';
 
-import translatable from '../translatable';
-
 class HitsPerPage extends Component {
   static propTypes = {
     hitsPerPage: PropTypes.number,
     refine: PropTypes.func.isRequired,
-    translate: PropTypes.func.isRequired,
-    values: PropTypes.arrayOf(PropTypes.number).isRequired,
+    items: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        value: PropTypes.number.isRequired,
+      })),
+      PropTypes.arrayOf(PropTypes.number),
+    ]).isRequired,
   };
 
   onChange = e => {
@@ -15,24 +18,29 @@ class HitsPerPage extends Component {
   };
 
   render() {
-    const {translate, hitsPerPage, values} = this.props;
+    const {hitsPerPage, items} = this.props;
 
     return (
-      <label>
-        {translate('label')}
-        <select value={hitsPerPage} onChange={this.onChange}>
-          {values.map(v =>
-            <option key={v} value={v}>
-              {translate('value', v)}
+      <select value={hitsPerPage} onChange={this.onChange}>
+        {items.map(item => {
+          let value;
+          let label;
+          if (typeof item === 'number') {
+            value = item;
+            label = item;
+          } else {
+            value = item.value;
+            label = item.label;
+          }
+          return (
+            <option key={value} value={value}>
+              {label}
             </option>
-          )}
-        </select>
-      </label>
+          );
+        })}
+      </select>
     );
   }
 }
 
-export default translatable({
-  label: 'Hits per page',
-  value: v => v.toString(),
-})(HitsPerPage);
+export default HitsPerPage;

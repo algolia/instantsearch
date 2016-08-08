@@ -1,3 +1,3 @@
 import connectMenu from '../connectors/connectMenu';
-import Select from '../impl/Select';
-export default connectMenu(Select);
+import MenuSelect from '../impl/MenuSelect';
+export default connectMenu(MenuSelect);

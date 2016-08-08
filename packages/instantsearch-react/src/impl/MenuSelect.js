@@ -2,15 +2,15 @@ import React, {PropTypes, Component} from 'react';
 
 import translatable from '../translatable';
 
-class Select extends Component {
+class MenuSelect extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-      count: PropTypes.number,
-    })),
-    selectedItem: PropTypes.string,
+      value: PropTypes.string.isRequired,
+      count: PropTypes.number.isRequired,
+    })).isRequired,
+    selectedItem: PropTypes.string.isRequired,
   };
 
   onChange = e => {
@@ -23,9 +23,6 @@ class Select extends Component {
 
   render() {
     const {items, selectedItem, translate} = this.props;
-    if (!items) {
-      return null;
-    }
 
     return (
       <select value={selectedItem || ''} onChange={this.onChange}>
@@ -47,4 +44,4 @@ class Select extends Component {
 export default translatable({
   none: 'None',
   count: count => count.toString(),
-})(Select);
+})(MenuSelect);
