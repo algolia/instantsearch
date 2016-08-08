@@ -1,7 +1,7 @@
 import {PropTypes, Component, Children} from 'react';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {omit, includes} from 'lodash';
+import {omit, isEqual, includes} from 'lodash';
 import qs from 'qs';
 import {createHistory, createMemoryHistory} from 'history';
 
@@ -287,10 +287,13 @@ class InstantSearch extends Component {
     const clearIds = this.store.getState().metadata.reduce((res, meta) =>
       meta.clearOnChange ? res.concat(meta.id) : res
     , []);
+    const changedKeys = Object.keys(nextState).filter(key =>
+      !isEqual(state[key], nextState[key])
+    );
     nextState = clearIds.reduce((res, clearId) =>
-      typeof state[clearId] !== 'undefined' &&
-      state[clearId] === nextState[clearId] ?
-        omit(res, clearId) : res
+      changedKeys.length > 0 && !includes(changedKeys, clearId) ?
+        omit(res, clearId) :
+        res
     , nextState);
     return nextState;
   };
