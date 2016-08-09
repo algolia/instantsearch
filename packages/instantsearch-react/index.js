@@ -14,6 +14,9 @@ import CurrentFilters from './src/widgets/CurrentFilters';
 import Toggle from './src/widgets/Toggle';
 import SortBy from './src/widgets/SortBy';
 import SortByLinks from './src/widgets/SortByLinks';
+import Loading from './src/widgets/Loading';
+import EmptyQuery from './src/widgets/EmptyQuery';
+import NoResults from './src/widgets/NoResults';
 import ScrollTo from './src/widgets/ScrollTo';
 import InstantSearch from './src/InstantSearch';
 
@@ -36,6 +39,9 @@ export {
   Toggle,
   SortBy,
   SortByLinks,
+  Loading,
+  EmptyQuery,
+  NoResults,
   ScrollTo,
   InstantSearch,
 };
