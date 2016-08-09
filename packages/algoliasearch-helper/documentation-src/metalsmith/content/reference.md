@@ -16,7 +16,7 @@ during the search cycle with events:
 You can also read the current parameters of the search using the AlgoliaSearchHelper
 but it might not be the one you expect according to the last results received.
 
-### Instanciate
+### Instantiate
 
 {{> jsdoc jsdoc/main/algoliasearchHelper}}
 
