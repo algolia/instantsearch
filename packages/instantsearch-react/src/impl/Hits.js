@@ -1,11 +1,30 @@
 import React, {PropTypes, Component} from 'react';
 
-import DefaultHitComponent from './DefaultHitComponent';
+import themeable from '../themeable';
 
-// @TODO: Figure out if this component needs a `theme` prop or if we can just
-// transfer props directly onto the container div.
-export default class Hits extends Component {
+class DefaultHitComponent extends Component {
   static propTypes = {
+    hit: PropTypes.object.isRequired,
+  };
+
+  render() {
+    return (
+      <div>
+        {Object.keys(this.props.hit).map(key =>
+          <div key={key}>
+            <strong>{key}:</strong>
+            {' '}
+            {JSON.stringify(this.props.hit[key])}
+          </div>
+        )}
+      </div>
+    );
+  }
+}
+
+class Hits extends Component {
+  static propTypes = {
+    applyTheme: PropTypes.func.isRequired,
     hits: PropTypes.array,
     itemComponent: PropTypes.func,
   };
@@ -15,9 +34,9 @@ export default class Hits extends Component {
   };
 
   render() {
-    const {itemComponent: ItemComponent, hits} = this.props;
+    const {applyTheme, itemComponent: ItemComponent, hits} = this.props;
     return (
-      <div>
+      <div {...applyTheme('root', 'root')}>
         {hits.map(hit =>
           <ItemComponent key={hit.objectID} hit={hit} />
         )}
@@ -25,3 +44,7 @@ export default class Hits extends Component {
     );
   }
 }
+
+export default themeable({
+  root: 'Hits',
+})(Hits);
