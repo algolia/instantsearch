@@ -18,6 +18,7 @@ import {
   Toggle,
   SortByLinks,
   Stats,
+  ScrollTo,
 } from '../';
 import history from './history';
 
@@ -46,7 +47,9 @@ class Search extends Component {
         //}}
       >
         <div>
-          <SearchBox />
+          <ScrollTo>
+            <SearchBox />
+          </ScrollTo>
           <Stats />
           <CurrentFilters />
           <Toggle
