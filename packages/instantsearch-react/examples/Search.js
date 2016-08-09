@@ -57,7 +57,7 @@ class Search extends Component {
             value={true}
             label="Free shipping"
           />
-          <SortBy
+          <SortByLinks
             items={[
               {
                 label: 'Popularity',
