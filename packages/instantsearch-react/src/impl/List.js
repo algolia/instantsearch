@@ -59,6 +59,8 @@ class List extends Component {
         )}
       </div>;
 
+    const selectedParent = hasSelectedChild(item, selectedItems);
+
     return (
       <div
         {...applyTheme(
@@ -66,10 +68,10 @@ class List extends Component {
           'item',
           selected && 'itemSelected',
           children && 'itemParent',
-          hasSelectedChild(item, selectedItems) && 'itemSelectedParent'
+          selectedParent && 'itemSelectedParent'
         )}
       >
-        {this.props.renderItem(item, selected, parent)}
+        {this.props.renderItem(item, selected, parent, selectedParent)}
         {children}
       </div>
     );
