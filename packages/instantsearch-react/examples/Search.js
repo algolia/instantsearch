@@ -75,7 +75,12 @@ class Search extends Component {
             defaultSelectedIndex="instant_search"
           />
           <HitsPerPage items={[10, 20, 30]} defaultHitsPerPage={20} />
-          <Range attributeName="price" />
+          <Range
+            attributeName="price"
+            translations={{
+              value: v => `$${v.toLocaleString()}`,
+            }}
+          />
           <NumericRefinementList
             attributeName="rating"
             items={[
