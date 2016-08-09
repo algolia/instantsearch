@@ -89,6 +89,6 @@ export default themeable({
 })(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
-    count: count => count.toString(),
+    count: count => count.toLocaleString(),
   })(RefinementListLinks)
 );
