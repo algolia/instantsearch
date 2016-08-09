@@ -16,7 +16,8 @@ import {
   Range,
   CurrentFilters,
   Toggle,
-  SortBy,
+  SortByLinks,
+  Stats,
 } from '../';
 import history from './history';
 
@@ -46,6 +47,7 @@ class Search extends Component {
       >
         <div>
           <SearchBox />
+          <Stats />
           <CurrentFilters />
           <Toggle
             attributeName="free_shipping"
