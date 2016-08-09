@@ -262,21 +262,31 @@ class InstantSearch extends Component {
     const searchParameters = this.widgetsManager.getSearchParameters(
       baseSearchParameters
     );
-    this.helper.searchOnce(searchParameters)
-      .then(({content}) => {
-        this.store.setState({
-          ...this.store.getState(),
-          results: content,
-          searching: false,
-        });
-      })
-      .catch(error => {
-        this.store.setState({
-          ...this.store.getState(),
-          error,
-          searching: false,
-        });
+    const promise = this.helper.searchOnce(searchParameters);
+
+    promise.then(({content}) => {
+      this.store.setState({
+        ...this.store.getState(),
+        results: content,
+        searching: false,
       });
+    }).catch(error => {
+      // Since setState is synchronous, any error that occurs in the render of a
+      // component will be swallowed by this promise.
+      // This is a trick to make the error show up correctly in the console.
+      // See http://stackoverflow.com/a/30741722/969302
+      setTimeout(() => {
+        throw error;
+      });
+    });
+
+    promise.catch(error => {
+      this.store.setState({
+        ...this.store.getState(),
+        error,
+        searching: false,
+      });
+    });
   };
 
   createHrefForState = state => {
