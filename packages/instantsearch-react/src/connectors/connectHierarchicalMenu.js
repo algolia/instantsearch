@@ -116,7 +116,7 @@ export default createConnector({
     const selectedItem = getSelectedItem(props, state);
     return {
       id,
-      filters: selectedItem === null ? [] : [{
+      filters: !selectedItem ? [] : [{
         key: `${id}.${selectedItem}`,
         label: `${props.name}: ${selectedItem}`,
         clear: nextState => ({

@@ -37,9 +37,16 @@ export default createConnector({
     return searchParameters.setQuery(getQuery(props, state));
   },
 
-  getMetadata(props) {
+  getMetadata(props, state) {
+    const query = getQuery(props, state);
     return {
       id: props.id,
+      filters: !query ? [] : [{
+        key: props.id,
+        label: query,
+        hide: true,
+        clear: nextState => ({...nextState, [props.id]: ''}),
+      }],
     };
   },
 });
