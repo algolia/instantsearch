@@ -35,19 +35,14 @@ class RefinementListLinks extends Component {
     return nextSelectedItems;
   };
 
-  onItemClick = item => {
-    this.props.refine(this.getSelectedItems(item));
-  }
-
   renderItem = item => {
     const {createURL, applyTheme, translate} = this.props;
-
+    const value = this.getSelectedItems(item);
     return (
       <Link
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={this.onItemClick}
-        item={item}
-        href={createURL(this.getSelectedItems(item))}
+        onClick={this.props.refine.bind(null, value)}
+        href={createURL(value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
           {item.value}

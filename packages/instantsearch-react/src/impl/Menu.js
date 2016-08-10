@@ -25,11 +25,12 @@ class Menu extends Component {
 
   renderItem = (item, selected) => {
     const {refine, createURL, applyTheme, translate} = this.props;
+    const value = selected ? null : item.value;
     return (
       <Link
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={refine.bind(null, selected ? null : item.value)}
-        href={createURL(item.value)}
+        onClick={refine.bind(null, value)}
+        href={createURL(value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
           {item.value}
