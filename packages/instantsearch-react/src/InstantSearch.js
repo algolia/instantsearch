@@ -62,13 +62,16 @@ function validateProps(props) {
     }
   }
   if (presentProps.length !== 0 && missingProps.length !== 0) {
-    const plural = missingProps.length > 1;
+    const missingPlural = missingProps.length > 1;
+    const presentPlural = presentProps.length > 1;
     const missingPropsStr = formatProps(missingProps);
     const presentPropsStr = formatProps(presentProps);
-    const propName = `prop${plural ? 's' : ''}`;
+    const missingPropName = `prop${missingPlural ? 's' : ''}`;
+    const presentPropName = `prop${presentPlural ? 's' : ''}`;
     throw new Error(
-      `You must provide ${plural ? '' : 'a '} ${missingPropsStr} ${propName} ` +
-      `alongside the ${presentPropsStr} ${propName} on <InstantSearch>`
+      `You must provide ${missingPlural ? '' : 'a '}${missingPropsStr} ` +
+      `${missingPropName} alongside the ${presentPropsStr} ` +
+      `${presentPropName} on <InstantSearch>`
     );
   }
 }
