@@ -1,48 +1,65 @@
 import React, {PropTypes, Component} from 'react';
+import {has} from 'lodash';
 
-import LinkItem from './LinkItem';
+import Link from './Link';
 
 export default class LinkList extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
-    onItemClick: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
+
     items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.node.isRequired,
       value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
       ]).isRequired,
-      href: PropTypes.string.isRequired,
-    })).isRequired,
+
+      key: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      label: PropTypes.node,
+      modifier: PropTypes.string,
+      ariaLabel: PropTypes.string,
+      disabled: PropTypes.bool,
+    })),
     selectedItem: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
-    ]).isRequired,
+    ]),
+    onSelect: PropTypes.func.isRequired,
   };
 
-  onItemClick = value => {
-    this.props.onItemClick(value);
-  }
-
   render() {
-    const {applyTheme, items, selectedItem} = this.props;
-
+    const {applyTheme, createURL, items, selectedItem, onSelect} = this.props;
     return (
-      <div {...applyTheme('root', 'root')}>
+      <ul {...applyTheme('root', 'root')}>
         {items.map(item =>
-          <LinkItem
+          <li
             {...applyTheme(
-              item.value,
+              has(item, 'key') ? item.key : item.value,
               'item',
-              item.value === selectedItem && 'itemSelected'
+              item.value === selectedItem && 'itemSelected',
+              item.disabled && 'itemDisabled',
+              item.modifier
             )}
-            href={item.href}
-            onClick={this.onItemClick.bind(null, item.value)}
           >
-            {item.label}
-          </LinkItem>
+            {item.disabled ?
+              <span {...applyTheme('itemLink', 'itemLink')}>
+                {has(item, 'label') ? item.label : item.value}
+              </span> :
+              <Link
+                {...applyTheme('itemLink', 'itemLink')}
+                aria-label={item.ariaLabel}
+                href={createURL(item.value)}
+                onClick={onSelect.bind(null, item.value)}
+              >
+                {has(item, 'label') ? item.label : item.value}
+              </Link>
+            }
+          </li>
         )}
-      </div>
+      </ul>
     );
   }
 }

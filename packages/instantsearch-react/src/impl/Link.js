@@ -3,7 +3,7 @@ import omit from 'lodash/object/omit';
 
 import {isSpecialClick} from '../utils';
 
-export default class LinkItem extends Component {
+export default class Link extends Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
   };

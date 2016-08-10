@@ -22,9 +22,9 @@ class MenuSelect extends Component {
 
     return (
       <Select
-        {...applyTheme('root', 'root')}
+        applyTheme={applyTheme}
         selectedItem={selectedItem || ''}
-        onChange={refine}
+        onSelect={refine}
         items={[
           {label: translate('none'), value: ''},
         ].concat(items.map(item => ({
