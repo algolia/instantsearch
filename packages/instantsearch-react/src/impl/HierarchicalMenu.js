@@ -5,7 +5,7 @@ import themeable from '../themeable';
 import translatable from '../translatable';
 
 import List from './List';
-import LinkItem from './LinkItem';
+import Link from './Link';
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   label: PropTypes.node,
@@ -40,7 +40,7 @@ class HierarchicalMenu extends Component {
       refineValue = item.value;
     }
     return (
-      <LinkItem
+      <Link
         {...applyTheme('itemLink', 'itemLink')}
         onClick={refine.bind(null, refineValue)}
         href={createURL(item.value)}
@@ -52,7 +52,7 @@ class HierarchicalMenu extends Component {
         <span {...applyTheme('itemCount', 'itemCount')}>
           {translate('count', item.count)}
         </span>
-      </LinkItem>
+      </Link>
     );
   };
 

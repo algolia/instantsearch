@@ -5,7 +5,7 @@ import themeable from '../themeable';
 import translatable from '../translatable';
 
 import List from './List';
-import LinkItem from './LinkItem';
+import Link from './Link';
 
 class Menu extends Component {
   static propTypes = {
@@ -26,7 +26,7 @@ class Menu extends Component {
   renderItem = (item, selected) => {
     const {refine, createURL, applyTheme, translate} = this.props;
     return (
-      <LinkItem
+      <Link
         {...applyTheme('itemLink', 'itemLink')}
         onClick={refine.bind(null, selected ? null : item.value)}
         href={createURL(item.value)}
@@ -38,7 +38,7 @@ class Menu extends Component {
         <span {...applyTheme('itemCount', 'itemCount')}>
           {translate('count', item.count)}
         </span>
-      </LinkItem>
+      </Link>
     );
   };
 

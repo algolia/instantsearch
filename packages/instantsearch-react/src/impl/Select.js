@@ -1,14 +1,22 @@
 import React, {PropTypes, Component} from 'react';
+import {has} from 'lodash';
 
 export default class Select extends Component {
   static propTypes = {
-    onChange: PropTypes.func.isRequired,
+    applyTheme: PropTypes.func.isRequired,
+    onSelect: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
       value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number,
       ]).isRequired,
+
+      key: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]),
+      label: PropTypes.string,
+      disabled: PropTypes.bool,
     })).isRequired,
     selectedItem: PropTypes.oneOfType([
       PropTypes.string,
@@ -17,21 +25,25 @@ export default class Select extends Component {
   };
 
   onChange = e => {
-    this.props.onChange(e.target.value);
+    this.props.onSelect(e.target.value);
   }
 
   render() {
-    const {items, selectedItem, ...otherProps} = this.props;
+    const {applyTheme, items, selectedItem} = this.props;
 
     return (
       <select
-        {...otherProps}
+        {...applyTheme('root', 'root')}
         value={selectedItem}
         onChange={this.onChange}
       >
         {items.map(item =>
-          <option key={item.value} value={item.value}>
-            {item.label}
+          <option
+            key={has(item, 'key') ? item.key : item.value}
+            disabled={item.disabled}
+            value={item.value}
+          >
+            {has(item, 'label') ? item.label : item.value}
           </option>
         )}
       </select>

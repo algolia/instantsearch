@@ -23,8 +23,8 @@ class HitsPerPageSelect extends Component {
 
     return (
       <Select
-        {...applyTheme('root')}
-        onChange={refine}
+        applyTheme={applyTheme}
+        onSelect={refine}
         selectedItem={hitsPerPage}
         items={items.map(item => ({
           value: typeof item === 'number' ? item : item.value,
