@@ -154,23 +154,23 @@ describe('InstantSearch', () => {
     expect(createStateManager.mock.calls[0][0].__isHistory).toBe(true);
   });
 
-  it('passes its treshold and createURL props to its stateManager', () => {
+  it('passes its threshold and createURL props to its stateManager', () => {
     const createURL = jest.fn();
-    const treshold = 666;
+    const threshold = 666;
     mount(
       <InstantSearch
         appId="foo"
         apiKey="bar"
         indexName="foobar"
         createURL={createURL}
-        treshold={treshold}
+        threshold={threshold}
       >
         <div />
       </InstantSearch>
     );
 
     expect(createStateManager.mock.calls[0][2].createURL).toBe(createURL);
-    expect(createStateManager.mock.calls[0][2].treshold).toBe(treshold);
+    expect(createStateManager.mock.calls[0][2].threshold).toBe(threshold);
   });
 
   it('calls search on didMount and not on willMount', () => {
