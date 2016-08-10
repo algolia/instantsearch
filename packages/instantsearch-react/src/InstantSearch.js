@@ -93,7 +93,7 @@ class InstantSearch extends Component {
 
     history: PropTypes.object,
     urlSync: PropTypes.bool,
-    treshold: PropTypes.number,
+    threshold: PropTypes.number,
     createURL: PropTypes.func,
 
     state: PropTypes.object,
@@ -104,7 +104,7 @@ class InstantSearch extends Component {
 
   static defaultProps = {
     urlSync: true,
-    treshold: 700,
+    threshold: 700,
   };
 
   static childContextTypes = {
@@ -216,7 +216,7 @@ class InstantSearch extends Component {
         const newPush = Date.now();
         if (
           this.lastPush !== -1 &&
-          newPush - this.lastPush <= this.props.treshold
+          newPush - this.lastPush <= this.props.threshold
         ) {
           this.history.replace(href);
         } else {

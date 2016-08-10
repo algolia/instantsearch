@@ -36,7 +36,7 @@ class Search extends Component {
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="instant_search"
         history={history}
-        treshold={700}
+        threshold={700}
         //createURL={this.createURL}
         //onStateChange={this.onStateChange}
         //state={{
