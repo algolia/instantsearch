@@ -1,8 +1,28 @@
 import {PropTypes} from 'react';
-import union from 'lodash/array/union';
 
-import {assertFacetDefined} from '../utils';
 import createConnector from '../createConnector';
+
+function getId(props) {
+  return props.id || props.attributeName;
+}
+
+function getValue(props, state) {
+  const id = getId(props);
+  if (typeof state[id] !== 'undefined') {
+    let {min, max} = state[id];
+    if (typeof min === 'string') {
+      min = parseInt(min, 10);
+    }
+    if (typeof max === 'string') {
+      max = parseInt(max, 10);
+    }
+    return {min, max};
+  }
+  if (typeof props.defaultValue !== 'undefined') {
+    return props.defaultValue;
+  }
+  return {};
+}
 
 export default createConnector({
   displayName: 'AlgoliaRange',
@@ -14,12 +34,7 @@ export default createConnector({
     max: PropTypes.number,
   },
 
-  mapStateToProps(state, props) {
-    const {
-      searchParameters,
-      searchResults,
-      searchResultsSearchParameters,
-    } = state;
+  getProps(props, state, search) {
     const {attributeName} = props;
     let {min, max} = props;
 
@@ -27,22 +42,15 @@ export default createConnector({
     const hasMax = typeof max !== 'undefined';
 
     if (!hasMin || !hasMax) {
-      if (!searchResults) {
-        return {
-          shouldRender: false,
-        };
+      if (!search.results) {
+        return null;
       }
-      assertFacetDefined(
-        searchResultsSearchParameters,
-        searchResults,
-        attributeName
-      );
-      const stats = searchResults.getFacetStats(attributeName);
+
+      const stats = search.results.getFacetStats(attributeName);
       if (!stats) {
-        return {
-          shouldRender: false,
-        };
+        return null;
       }
+
       if (!hasMin) {
         min = stats.min;
       }
@@ -51,49 +59,69 @@ export default createConnector({
       }
     }
 
-    const lte = searchParameters.getNumericRefinement(attributeName, '<=');
-    const gte = searchParameters.getNumericRefinement(attributeName, '>=');
-
-    const valueMin = gte ? gte[0] : min;
-    const valueMax = lte ? lte[0] : max;
+    const {
+      min: valueMin = min,
+      max: valueMax = max,
+    } = getValue(props, state);
 
     return {
-      shouldRender: true,
       min,
       max,
-      value: [valueMin, valueMax],
+      value: {min: valueMin, max: valueMax},
     };
   },
 
-  configure(state, props) {
-    const {attributeName} = props;
-    return state.setQueryParameters({
-      disjunctiveFacets: union(state.disjunctiveFacets, [attributeName]),
-    });
-  },
-
-  shouldRender(props) {
-    return props.shouldRender;
-  },
-
-  transformProps(props) {
+  refine(props, state, nextValue) {
     return {
-      min: props.min,
-      max: props.max,
-      value: props.value,
+      ...state,
+      [getId(props)]: nextValue,
     };
   },
 
-  refine(state, props, value) {
+  getSearchParameters(params, props, state) {
     const {attributeName} = props;
-    const [start, end] = value;
-    state = state.clearRefinements(attributeName);
-    if (start) {
-      state = state.addNumericRefinement(attributeName, '>=', start);
+    const value = getValue(props, state);
+    params = params.addDisjunctiveFacet(attributeName);
+
+    const {min, max} = value;
+    if (typeof min !== 'undefined') {
+      params = params.addNumericRefinement(attributeName, '>=', min);
     }
-    if (end) {
-      state = state.addNumericRefinement(attributeName, '<=', end);
+    if (typeof max !== 'undefined') {
+      params = params.addNumericRefinement(attributeName, '<=', max);
     }
-    return state;
+
+    return params;
+  },
+
+  getMetadata(props, state) {
+    const id = getId(props);
+    const value = getValue(props, state);
+    let filter;
+    const hasMin = typeof value.min !== 'undefined';
+    const hasMax = typeof value.max !== 'undefined';
+    if (hasMin || hasMax) {
+      let filterLabel = '';
+      if (hasMin) {
+        filterLabel += `${value.min} <= `;
+      }
+      filterLabel += props.attributeName;
+      if (hasMax) {
+        filterLabel += ` <= ${value.max}`;
+      }
+      filter = {
+        key: `${id}.${filterLabel}`,
+        label: filterLabel,
+        clear: nextState => ({
+          ...nextState,
+          [id]: {},
+        }),
+      };
+    }
+
+    return {
+      id,
+      filters: filter ? [filter] : [],
+    };
   },
 });

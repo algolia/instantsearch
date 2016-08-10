@@ -1,55 +1,33 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
+import {omit} from 'lodash';
+import qs from 'qs';
 
 import InstantSearch from '../src/InstantSearch';
 import {
+  Pagination,
+  RefinementList,
+  Menu,
+  HierarchicalMenu,
   SearchBox,
   Hits,
   HitsPerPage,
-  Pagination,
-  RefinementList,
-  RefinementListLinks,
-  Menu,
-  HierarchicalMenu,
-} from '..';
-
+  NumericRefinementList,
+  Range,
+  CurrentFilters,
+  Toggle,
+  SortBy,
+} from '../';
 import history from './history';
 
-class Movie extends Component {
-  render() {
-    return (
-      <div>
-        <img
-          src={this.props.hit.image}
-        />
-        {this.props.hit.name}
-      </div>
-    );
-  }
-}
-
 class Search extends Component {
-  constructor() {
-    super();
+  createURL = state => history.createHref(
+    `${state.p ? state.p + 1 : 1}?${qs.stringify(omit(state, 'p'))}`
+  );
 
-    this.state = {
-      facet: 'genre',
-    };
-  }
-
-  onSwitchClick = () => {
-    this.setState(state => ({
-      facet: state.facet === 'genre' ? 'year' : 'genre',
-    }));
+  onStateChange = state => {
+    history.push(this.createURL(state));
   };
-
-  createURL = (state, getQuery) => history.createHref(
-    `${state.page + 1}?${getQuery(state)}`
-  );
-
-  configureState = state => state.setPage(
-    parseInt(this.props.params.page - 1, 10)
-  );
 
   render() {
     return (
@@ -58,52 +36,79 @@ class Search extends Component {
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="instant_search"
         history={history}
-        createURL={this.createURL}
-        configureState={this.configureState}
-        trackedParameters={[
-          // Don't track page since we control it
-          'query',
-          'attribute:*',
-          'hitsPerPage',
-        ]}
+        threshold={700}
+        //createURL={this.createURL}
+        //onStateChange={this.onStateChange}
+        //state={{
+        //  ...this.props.location.query,
+        //  p: parseInt(this.props.params.page - 1, 10),
+        //}}
       >
         <div>
-          <button onClick={this.onSwitchClick}>Switch facet</button>
-
-          <SearchBox focusShortcuts={['s']} searchAsYouType={true} />
-          <HitsPerPage
-            defaultValue={5}
-            values={[5, 10]}
+          <SearchBox />
+          <CurrentFilters />
+          <Toggle
+            attributeName="free_shipping"
+            value={true}
+            label="Free shipping"
+          />
+          <SortBy
+            items={[
+              {
+                label: 'Popularity',
+                index: 'instant_search',
+              },
+              {
+                label: 'Price (asc)',
+                index: 'instant_search_price_asc',
+              },
+              {
+                label: 'Price (desc)',
+                index: 'instant_search_price_desc',
+              },
+            ]}
+            defaultSelectedIndex="instant_search"
+          />
+          <HitsPerPage items={[10, 20, 30]} defaultHitsPerPage={20} />
+          <Range attributeName="price" />
+          <NumericRefinementList
+            attributeName="rating"
+            items={[
+              {
+                label: 'All',
+              },
+              {
+                label: 'More than 5',
+                start: 5,
+              },
+              {
+                label: 'More than 3',
+                start: 3,
+              },
+              {
+                label: 'Between 1 and 4',
+                start: 1,
+                end: 4,
+              },
+            ]}
+          />
+          <RefinementList
+            attributeName="categories"
+            defaultSelectedItems={['Audio']}
+          />
+          <Menu
+            attributeName="brand"
           />
           <HierarchicalMenu
-            name="wat"
+            name="ok"
             attributes={[
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ]}
-            showMore
           />
-          <Menu
-            attributeName="brand"
-            showMore
-            limitMin={10}
-            limitMax={20}
-          />
-          <RefinementList
-            attributeName="brand"
-            sortBy={['count']}
-            showMore
-          />
-          <RefinementListLinks
-            attributeName="brand"
-            showMore
-          />
-          <Hits
-            itemComponent={Movie}
-            // hitsPerPage={5}
-          />
-          <Pagination showLast maxPages={10} translations={{next: 'Next'}} />
+          <Hits />
+          <Pagination id="p" />
         </div>
       </InstantSearch>
     );
