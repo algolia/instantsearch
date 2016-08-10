@@ -1,141 +1,332 @@
-import React, {PropTypes, Component} from 'react';
+import {PropTypes, Component, Children} from 'react';
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {Provider} from 'react-algoliasearch-helper';
-import omit from 'lodash/object/omit';
-import isEqual from 'lodash/lang/isEqual';
-import {createHistory, createMemoryHistory} from 'history';
+import {omit, isEqual, includes} from 'lodash';
+import qs from 'qs';
+import {createHistory} from 'history';
 
-import createConfigManager from './createConfigManager';
-import createStateManager from './createStateManager';
-import {configManagerPropType, stateManagerPropType} from './propTypes';
+import createWidgetsManager from './createWidgetsManager';
+import createStore from './createStore';
+
+function getStateFromLocation(location) {
+  if (location.query) {
+    return location.query;
+  }
+  // We could also use location.query with the useQueries enhancer, but that
+  // would require a bit more configuration from the user.
+  return qs.parse(location.search.slice(1));
+}
+
+function alphabeticalSort(a, b) {
+  if (a > b) {
+    return 1;
+  }
+  if (a === b) {
+    return 0;
+  }
+  return 1;
+}
+
+function applyStateToLocation(location, state, knownKeys) {
+  const urlState = getStateFromLocation(location);
+  const unknownParameters = omit(urlState, knownKeys);
+  const query = {
+    ...unknownParameters,
+    ...state,
+  };
+  if (location.query) {
+    return {
+      ...location,
+      query,
+    };
+  }
+  return {
+    ...location,
+    search: query ? `?${qs.stringify(query, {sort: alphabeticalSort})}` : '',
+  };
+}
+
+function formatProps(props) {
+  return props.map(prop => `\`${prop}\``).join(', ');
+}
+
+const neededProps = ['state', 'onStateChange', 'createURL'];
+function validateProps(props) {
+  const presentProps = [];
+  const missingProps = [];
+  for (const prop of neededProps) {
+    if (props[prop]) {
+      presentProps.push(prop);
+    } else {
+      missingProps.push(prop);
+    }
+  }
+  if (presentProps.length !== 0 && missingProps.length !== 0) {
+    const missingPlural = missingProps.length > 1;
+    const presentPlural = presentProps.length > 1;
+    const missingPropsStr = formatProps(missingProps);
+    const presentPropsStr = formatProps(presentProps);
+    const missingPropName = `prop${missingPlural ? 's' : ''}`;
+    const presentPropName = `prop${presentPlural ? 's' : ''}`;
+    throw new Error(
+      `You must provide ${missingPlural ? '' : 'a '}${missingPropsStr} ` +
+      `${missingPropName} alongside the ${presentPropsStr} ` +
+      `${presentPropName} on <InstantSearch>`
+    );
+  }
+}
+
+function validateNextProps(props, nextProps) {
+  if (!props.onStateChange && nextProps.onStateChange) {
+    throw new Error(
+      'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
+    );
+  }
+}
 
 class InstantSearch extends Component {
   static propTypes = {
-    // @FIX: a few of these props are only applied on component initialization
-    // and can't be updated afterwards. appId, apiKey, history, treshold...
-    appId: PropTypes.string,
-    apiKey: PropTypes.string,
-    indexName: PropTypes.string,
+    // @TODO: These props are currently constant.
+    appId: PropTypes.string.isRequired,
+    apiKey: PropTypes.string.isRequired,
+    indexName: PropTypes.string.isRequired,
+
     history: PropTypes.object,
-    createURL: PropTypes.func,
-    treshold: PropTypes.number,
-    configureState: PropTypes.func,
     urlSync: PropTypes.bool,
-    trackedParameters: PropTypes.arrayOf(PropTypes.string),
+    threshold: PropTypes.number,
+    createURL: PropTypes.func,
+
+    state: PropTypes.object,
+    onStateChange: PropTypes.func,
+
+    children: PropTypes.node,
   };
 
   static defaultProps = {
-    treshold: 700,
     urlSync: true,
-    trackedParameters: [
-      'query',
-      'attribute:*',
-      'page',
-      'hitsPerPage',
-    ],
+    threshold: 700,
   };
 
   static childContextTypes = {
-    algoliaConfigManager: configManagerPropType.isRequired,
-    algoliaStateManager: stateManagerPropType.isRequired,
+    // @TODO: more precise widgets manager propType
+    aisStore: PropTypes.object.isRequired,
+    aisWidgetsManager: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     const client = algoliasearch(props.appId, props.apiKey);
-    const helper = this.helper = algoliasearchHelper(client, props.indexName);
+    this.helper = algoliasearchHelper(client);
 
-    const history =
-      props.history ||
-      // Easiest way, but probably not the best. We could also add code to
-      // createStateManager to support no history at all.
-      (props.urlSync ? createHistory() : createMemoryHistory());
+    validateProps(props);
 
-    const getState = () => {
-      // Retrieve the state from the state manager.
-      // This state is the result of all user actions on the page, starting from
-      // an empty state.
-      let state = new SearchParameters({
-        ...this.stateManager.getState(),
-        index: props.indexName,
-      });
-      if (this.props.configureState) {
-        // Apply the user configuration to the state. This is notably useful for
-        // applying URL parameters that are not controlled by the state manager.
-        state = this.props.configureState(state);
+    if (!props.onStateChange) {
+      this.history = props.history || props.urlSync && createHistory();
+
+      if (this.history) {
+        this.currentLocation = null;
+        // In history V2, .listen is called with the initial location.
+        // In V3, you need to use .getCurrentLocation()
+        if (this.history.getCurrentLocation) {
+          this.currentLocation = this.history.getCurrentLocation();
+        }
+
+        this.lastPush = -1;
+        this.skipNextLocationUpdate = false;
+        this.skipNextStateUpdate = false;
+        this.unlisten = this.history.listen(this.onLocationChange);
       }
+    }
 
-      // Apply the components configurations to the state.
-      state = this.configManager.getState(state);
+    this.widgetsManager = createWidgetsManager(
+      this.onStateUpdate,
+      this.onWidgetsUpdate,
+      this.createHrefForState
+    );
 
-      return state;
-    };
+    let initialState;
+    if (props.state) {
+      initialState = props.state;
+    } else if (this.history) {
+      initialState = getStateFromLocation(this.currentLocation);
+    } else {
+      initialState = {};
+    }
 
-    const search = this.search = force => {
-      const state = getState();
-
-      if (!force && isEqual(state, helper.getState())) {
-        // Avoid updating the state and calling search if it hasn't changed.
-        // Otherwise we end up in an infinite loop of
-        // setState -> config update -> setState
-        // There might be a better way to avoid this than deep equality check.
-        // This is kinda sad: since our helper states are immutable, deep
-        // equality check could be free.
-        return;
-      }
-
-      helper.setState(state);
-      helper.search();
-    };
-
-    this.configManager = createConfigManager(search);
-
-    this.stateManager = createStateManager(history, search, {
-      createURL: props.createURL,
-      treshold: props.treshold,
-      trackedParameters: props.trackedParameters,
+    this.store = createStore({
+      widgets: initialState,
+      metadata: [],
+      results: null,
+      error: null,
+      searching: false,
     });
-
-    // Apply the initial state from the history.
-    // This setState won't trigger any updates anywhere. At this point we
-    // haven't passed it to the Provider yet.
-    helper.setState(getState());
   }
 
-  componentDidMount() {
-    // In the case where no components with a custom configure method were
-    // rendered, we still need to perform a search in order to display initial
-    // results.
-    // Note that on initial render, this will be called before any configManager
-    // onUpdate callback, as they are batched and scheduled for the next tick.
-    this.search(true);
+  componentWillReceiveProps(nextProps) {
+    validateProps(nextProps);
+    validateNextProps(this.props, nextProps);
+    if (nextProps.state) {
+      this.onNewState(nextProps.state);
+    }
   }
 
   componentWillUnmount() {
-    // `stateManager` listens to the history, which can outlast this component
-    // in the case where it was passed in from props. This means we need to
-    // remove all listeners we added to it before unmounting. Otherwise, we'll
-    // still get search calls after the component has unmounted.
-    // This is also necessary for this component to be garbage collected.
-    this.stateManager.unlisten();
+    if (this.history) {
+      this.unlisten();
+    }
   }
+
+  onLocationChange = location => {
+    if (this.currentLocation === null && !this.history.getCurrentLocation) {
+      // Initial location. Called synchronously by listen.
+      this.currentLocation = location;
+      return;
+    }
+    this.currentLocation = location;
+    if (this.skipNextLocationUpdate) {
+      this.skipNextLocationUpdate = false;
+      return;
+    }
+    const state = getStateFromLocation(this.currentLocation);
+    this.skipNextStateUpdate = true;
+    this.widgetsManager.setState(state);
+  };
+
+  onStateUpdate = widgetsState => {
+    widgetsState = this.transitionState(
+      this.store.getState().widgets,
+      widgetsState
+    );
+
+    if (this.props.onStateChange) {
+      // The component is controlled.
+      this.props.onStateChange(widgetsState);
+      return;
+    }
+
+    this.onNewState(widgetsState);
+
+    if (this.history) {
+      if (!this.skipNextStateUpdate) {
+        // This must be after `onNewState`/`store.setState` since
+        // `createHrefForState` depends on the new metadata.
+        const href = this.createHrefForState(widgetsState);
+        this.skipNextLocationUpdate = true;
+        const newPush = Date.now();
+        if (
+          this.lastPush !== -1 &&
+          newPush - this.lastPush <= this.props.threshold
+        ) {
+          this.history.replace(href);
+        } else {
+          this.history.push(href);
+        }
+        this.lastPush = newPush;
+      } else {
+        this.skipNextStateUpdate = false;
+      }
+    }
+  };
+
+  onNewState = newState => {
+    const metadata = this.widgetsManager.getMetadata(newState);
+
+    this.store.setState({
+      ...this.store.getState(),
+      widgets: newState,
+      metadata,
+      searching: true,
+    });
+
+    this.search();
+  };
+
+  onWidgetsUpdate = () => {
+    const widgetsState = this.store.getState().widgets;
+    const metadata = this.widgetsManager.getMetadata(widgetsState);
+
+    this.store.setState({
+      ...this.store.getState(),
+      metadata,
+      searching: true,
+    });
+
+    this.search();
+  };
+
+  search = () => {
+    const baseSearchParameters = new SearchParameters({
+      index: this.props.indexName,
+    });
+    const searchParameters = this.widgetsManager.getSearchParameters(
+      baseSearchParameters
+    );
+    this.helper.searchOnce(searchParameters)
+      .then(({content}) => {
+        this.store.setState({
+          ...this.store.getState(),
+          results: content,
+          searching: false,
+        });
+      })
+      .catch(error => {
+        this.store.setState({
+          ...this.store.getState(),
+          error,
+          searching: false,
+        });
+      });
+  };
+
+  createHrefForState = state => {
+    state = this.transitionState(
+      this.store.getState().widgets,
+      state
+    );
+    if (this.props.createURL) {
+      return this.props.createURL(state);
+    }
+    if (this.history) {
+      return this.history.createHref(
+        applyStateToLocation(
+          this.currentLocation,
+          state,
+          this.getWidgetsIds(this.store.getState().metadata)
+        )
+      );
+    }
+    return '#';
+  };
+
+  getWidgetsIds = metadata => metadata.reduce((res, meta) =>
+    typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
+  , []);
+
+  transitionState = (state, nextState) => {
+    const clearIds = this.store.getState().metadata.reduce((res, meta) =>
+      meta.clearOnChange ? res.concat(meta.id) : res
+    , []);
+    const changedKeys = Object.keys(nextState).filter(key =>
+      !isEqual(state[key], nextState[key])
+    );
+    nextState = clearIds.reduce((res, clearId) =>
+      changedKeys.length > 0 && !includes(changedKeys, clearId) ?
+        omit(res, clearId) :
+        res
+    , nextState);
+    return nextState;
+  };
 
   getChildContext() {
     return {
-      algoliaConfigManager: this.configManager,
-      algoliaStateManager: this.stateManager,
+      aisStore: this.store,
+      aisWidgetsManager: this.widgetsManager,
     };
   }
 
   render() {
-    return (
-      <Provider
-        {...omit(this.props, Object.keys(InstantSearch.propTypes))}
-        helper={this.helper}
-      />
-    );
+    return Children.only(this.props.children);
   }
 }
 

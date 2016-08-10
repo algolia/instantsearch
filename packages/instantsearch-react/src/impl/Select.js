@@ -1,50 +1,40 @@
 import React, {PropTypes, Component} from 'react';
 
-import translatable from '../translatable';
-
-class Select extends Component {
+export default class Select extends Component {
   static propTypes = {
-    translate: PropTypes.func.isRequired,
-    refine: PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string,
-      count: PropTypes.number,
-    })),
-    selectedItem: PropTypes.string,
+      label: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number,
+      ]).isRequired,
+    })).isRequired,
+    selectedItem: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
   };
 
   onChange = e => {
-    if (e.target.value === '') {
-      this.props.refine(null);
-    } else {
-      this.props.refine(e.target.value);
-    }
+    this.props.onChange(e.target.value);
   }
 
   render() {
-    const {items, selectedItem, translate} = this.props;
-    if (!items) {
-      return null;
-    }
+    const {items, selectedItem, ...otherProps} = this.props;
 
     return (
-      <select value={selectedItem || ''} onChange={this.onChange}>
-        <option value="">
-          {translate('none')}
-        </option>
+      <select
+        {...otherProps}
+        value={selectedItem}
+        onChange={this.onChange}
+      >
         {items.map(item =>
           <option key={item.value} value={item.value}>
-            {item.value}
-            {' '}
-            {translate('count', item.count)}
+            {item.label}
           </option>
         )}
       </select>
     );
   }
 }
-
-export default translatable({
-  none: 'None',
-  count: count => count.toString(),
-})(Select);

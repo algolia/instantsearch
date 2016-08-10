@@ -9,18 +9,20 @@ export default createConnector({
     hitsPerPage: PropTypes.number,
   },
 
-  mapStateToProps(state) {
+  getProps(props, state, search) {
+    if (!search.results) {
+      return null;
+    }
+
     return {
-      hits: state.searchResults && state.searchResults.hits,
+      hits: search.results.hits,
     };
   },
 
-  configure(state, props) {
-    if (typeof props.hitsPerPage === 'undefined') {
-      return state;
+  getSearchParameters(searchParameters, props) {
+    if (typeof props.hitsPerPage !== 'undefined') {
+      return searchParameters.setHitsPerPage(props.hitsPerPage);
     }
-    return state.setQueryParameters({
-      hitsPerPage: props.hitsPerPage,
-    });
+    return searchParameters;
   },
 });

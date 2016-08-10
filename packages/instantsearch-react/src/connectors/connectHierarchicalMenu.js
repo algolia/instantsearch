@@ -2,6 +2,21 @@ import {PropTypes} from 'react';
 
 import createConnector from '../createConnector';
 
+function getId(props) {
+  return props.id || props.name;
+}
+
+function getSelectedItem(props, state) {
+  const id = getId(props);
+  if (typeof state[id] !== 'undefined') {
+    return state[id];
+  }
+  if (props.defaultSelectedItem) {
+    return props.defaultSelectedItem;
+  }
+  return null;
+}
+
 function transformValue(value, limit) {
   return value.slice(0, limit).map(v => ({
     label: v.name,
@@ -10,21 +25,6 @@ function transformValue(value, limit) {
     children: v.data && transformValue(v.data, limit),
   }));
 }
-
-const maybeAddHierarchicalFacet = (state, props) => {
-  if (state.isHierarchicalFacet(props.name)) {
-    return state;
-  }
-  return state.setQueryParameters({
-    hierarchicalFacets: state.hierarchicalFacets.concat([{
-      name: props.name,
-      attributes: props.attributes,
-      separator: props.separator,
-      rootPath: props.rootPath,
-      showParentLevel: props.showParentLevel,
-    }]),
-  });
-};
 
 export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',
@@ -36,63 +36,94 @@ export default createConnector({
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
     sortBy: PropTypes.arrayOf(PropTypes.string),
-    limit: PropTypes.number.isRequired,
+    showMore: PropTypes.bool,
+    limitMin: PropTypes.number,
+    limitMax: PropTypes.number,
   },
 
   defaultProps: {
+    showMore: false,
+    limitMin: 10,
+    limitMax: 20,
     sortBy: ['name:asc'],
     separator: ' > ',
     rootPath: null,
     showParentLevel: true,
   },
 
-  mapStateToProps(state, props) {
+  getProps(props, state, search) {
+    if (!search.results) {
+      return null;
+    }
+    const {name, sortBy, showMore, limitMin, limitMax} = props;
+    const limit = showMore ? limitMax : limitMin;
+    const value = search.results.getFacetValues(name, {sortBy});
+    return {
+      items: value.data ? transformValue(value.data, limit) : [],
+      selectedItem: getSelectedItem(props, state),
+    };
+  },
+
+  refine(props, state, nextSelectedItem) {
+    const id = getId(props);
+    return {
+      ...state,
+      [id]: nextSelectedItem,
+    };
+  },
+
+  getSearchParameters(searchParameters, props, state) {
     const {
-      searchResults,
-      searchParameters,
-    } = state;
-    const {name, sortBy} = props;
+      name,
+      attributes,
+      separator,
+      rootPath,
+      showParentLevel,
+      showMore,
+      limitMin,
+      limitMax,
+    } = props;
+    const limit = showMore ? limitMax : limitMin;
 
-    // @TODO: warn when one of the requested facets isn't set as an
-    // attribute for faceting.
-    let selectedItems = [];
-    if (searchParameters.isHierarchicalFacet(name)) {
-      selectedItems = searchParameters.getHierarchicalRefinement(name);
+    searchParameters = searchParameters
+      .addHierarchicalFacet({
+        name,
+        attributes,
+        separator,
+        rootPath,
+        showParentLevel,
+      })
+      .setQueryParameters({
+        maxValuesPerFacet: Math.max(
+          searchParameters.maxValuesPerFacet || 0,
+          limit
+        ),
+      });
+
+    const selectedItem = getSelectedItem(props, state);
+    if (selectedItem !== null) {
+      searchParameters = searchParameters.toggleHierarchicalFacetRefinement(
+        props.name,
+        selectedItem
+      );
     }
 
+    return searchParameters;
+  },
+
+  getMetadata(props, state) {
+    const id = getId(props);
+    const selectedItem = getSelectedItem(props, state);
     return {
-      facetValue: searchResults && searchResults.getFacetValues(name, {sortBy}),
-      selectedItems,
+      id,
+      filters: selectedItem === null ? [] : [{
+        key: `${id}.${selectedItem}`,
+        label: `${props.name}: ${selectedItem}`,
+        clear: nextState => ({
+          ...nextState,
+          [id]: null,
+        }),
+      }],
     };
-  },
-
-  configure(state, props) {
-    return maybeAddHierarchicalFacet(state, props).setQueryParameters({
-      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, props.limit),
-    });
-  },
-
-  transformProps(props) {
-    const {facetValue, selectedItems, limit} = props;
-    if (!facetValue) {
-      return {selectedItems};
-    }
-
-    return {
-      selectedItems,
-      items: facetValue.data ?
-        transformValue(facetValue.data, limit) :
-        // In the case the hierachical facet value has no items
-        [],
-    };
-  },
-
-  refine(state, props, value) {
-    const {name} = props;
-
-    state = maybeAddHierarchicalFacet(state, props);
-    state = state.toggleHierarchicalFacetRefinement(name, value);
-
-    return state;
   },
 });

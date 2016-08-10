@@ -16,11 +16,6 @@ export default class Hits extends Component {
 
   render() {
     const {itemComponent: ItemComponent, hits} = this.props;
-
-    if (!hits) {
-      return null;
-    }
-
     return (
       <div>
         {hits.map(hit =>

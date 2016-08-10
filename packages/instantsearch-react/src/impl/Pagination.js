@@ -42,8 +42,8 @@ function getPages(page, total, padding) {
 class Pagination extends Component {
   static propTypes = {
     // Provided by `createPagination`
-    nbPages: PropTypes.number,
-    page: PropTypes.number,
+    nbPages: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
     refine: PropTypes.func.isRequired,
 
     translate: PropTypes.func.isRequired,
@@ -77,6 +77,10 @@ class Pagination extends Component {
     return false;
   }
 
+  getPage = () => typeof this.props.page === 'string' ?
+    parseInt(this.props.page, 10) :
+    this.props.page;
+
   renderPageLink({
     translationKey,
     pageNumber,
@@ -87,11 +91,10 @@ class Pagination extends Component {
       applyTheme,
       nbPages,
       maxPages,
-      page,
       translate,
     } = this.props;
     const isDisabled =
-      !isActive && page === pageNumber ||
+      !isActive && this.getPage() === pageNumber ||
       pageNumber < 0 ||
       pageNumber >= Math.min(maxPages, nbPages);
     // @TODO: Default createURL that works with URL sync
@@ -129,14 +132,14 @@ class Pagination extends Component {
   renderPreviousPageLink() {
     return this.renderPageLink({
       translationKey: 'previous',
-      pageNumber: this.props.page - 1,
+      pageNumber: this.getPage() - 1,
     });
   }
 
   renderNextPageLink() {
     return this.renderPageLink({
       translationKey: 'next',
-      pageNumber: this.props.page + 1,
+      pageNumber: this.getPage() + 1,
     });
   }
 
@@ -156,12 +159,12 @@ class Pagination extends Component {
   }
 
   renderPageLinks() {
-    const {page, nbPages, maxPages, pagesPadding} = this.props;
+    const {nbPages, maxPages, pagesPadding} = this.props;
     const total = Math.min(nbPages, maxPages);
-    return getPages(page, total, pagesPadding).map(pageNumber =>
+    return getPages(this.getPage(), total, pagesPadding).map(pageNumber =>
       this.renderPageLink({
         translationKey: 'page',
-        isActive: pageNumber === this.props.page,
+        isActive: pageNumber === this.getPage(),
         pageNumber,
       })
     );
