@@ -43,7 +43,7 @@ class HierarchicalMenu extends Component {
       <Link
         {...applyTheme('itemLink', 'itemLink')}
         onClick={refine.bind(null, refineValue)}
-        href={createURL(item.value)}
+        href={createURL(refineValue)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
           {item.label}
