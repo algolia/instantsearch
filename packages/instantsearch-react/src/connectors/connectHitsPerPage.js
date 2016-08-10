@@ -40,4 +40,8 @@ export default createConnector({
   getSearchParameters(searchParameters, props, state) {
     return searchParameters.setHitsPerPage(getHitsPerPage(props, state));
   },
+
+  getMetadata(props) {
+    return {id: props.id};
+  },
 });
