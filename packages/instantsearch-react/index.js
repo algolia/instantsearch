@@ -20,6 +20,7 @@ import EmptyQuery from './src/widgets/EmptyQuery';
 import NoResults from './src/widgets/NoResults';
 import Stats from './src/widgets/Stats';
 import Reset from './src/widgets/Reset';
+import Error from './src/widgets/Error';
 import ScrollTo from './src/widgets/ScrollTo';
 import InstantSearch from './src/InstantSearch';
 
@@ -48,6 +49,7 @@ export {
   NoResults,
   Stats,
   Reset,
+  Error,
   ScrollTo,
   InstantSearch,
 };

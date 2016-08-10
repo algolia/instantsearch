@@ -21,6 +21,7 @@ import {
   Stats,
   ScrollTo,
   Reset,
+  Error,
 } from '../';
 import history from './history';
 
@@ -49,6 +50,7 @@ class Search extends Component {
         //}}
       >
         <div>
+          <Error />
           <ScrollTo>
             <SearchBox />
           </ScrollTo>
