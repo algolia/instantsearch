@@ -5,7 +5,7 @@ import themeable from '../themeable';
 import translatable from '../translatable';
 
 import List from './List';
-import LinkItem from './LinkItem';
+import Link from './Link';
 
 class RefinementListLinks extends Component {
   static propTypes = {
@@ -43,7 +43,7 @@ class RefinementListLinks extends Component {
     const {createURL, applyTheme, translate} = this.props;
 
     return (
-      <LinkItem
+      <Link
         {...applyTheme('itemLink', 'itemLink')}
         onClick={this.onItemClick}
         item={item}
@@ -56,7 +56,7 @@ class RefinementListLinks extends Component {
         <span {...applyTheme('itemCount', 'itemCount')}>
           {translate('count', item.count)}
         </span>
-      </LinkItem>
+      </Link>
     );
   }
 

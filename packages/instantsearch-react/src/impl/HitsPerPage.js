@@ -25,19 +25,18 @@ class HitsPerPage extends Component {
     return (
       <LinkList
         applyTheme={applyTheme}
-        onItemClick={refine}
+        onSelect={refine}
         selectedItem={hitsPerPage}
+        createURL={createURL}
         items={items.map(item =>
           typeof item === 'number' ?
             {
               value: item,
               label: item,
-              href: createURL(item),
             } :
             {
               value: item.value,
               label: item.label,
-              href: createURL(item.value),
             }
         )}
       />

@@ -3,6 +3,7 @@ import HitsPerPage from './src/widgets/HitsPerPage';
 import HitsPerPageSelect from './src/widgets/HitsPerPageSelect';
 import SearchBox from './src/widgets/SearchBox';
 import Pagination from './src/widgets/Pagination';
+import PaginationSelect from './src/widgets/PaginationSelect';
 import RefinementList from './src/widgets/RefinementList';
 import RefinementListLinks from './src/widgets/RefinementListLinks';
 import Menu from './src/widgets/Menu';
@@ -29,6 +30,7 @@ export {
   HitsPerPageSelect,
   SearchBox,
   Pagination,
+  PaginationSelect,
   RefinementList,
   RefinementListLinks,
   Menu,
