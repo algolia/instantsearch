@@ -1,38 +1,17 @@
-import React, {PropTypes, Component} from 'react';
+import React from 'react';
 
 import themeable from '../themeable';
 
+import HitsPerPage from './HitsPerPage';
 import Select from './Select';
 
-class HitsPerPageSelect extends Component {
-  static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
-    hitsPerPage: PropTypes.number.isRequired,
-    refine: PropTypes.func.isRequired,
-    items: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        value: PropTypes.number.isRequired,
-      })),
-      PropTypes.arrayOf(PropTypes.number),
-    ]).isRequired,
-  };
-
-  render() {
-    const {applyTheme, refine, hitsPerPage, items} = this.props;
-
-    return (
-      <Select
-        applyTheme={applyTheme}
-        onSelect={refine}
-        selectedItem={hitsPerPage}
-        items={items.map(item => ({
-          value: typeof item === 'number' ? item : item.value,
-          label: typeof item === 'number' ? item : item.label,
-        }))}
-      />
-    );
-  }
+function HitsPerPageSelect(props) {
+  return (
+    <HitsPerPage
+      {...props}
+      listComponent={Select}
+    />
+  );
 }
 
 export default themeable({
