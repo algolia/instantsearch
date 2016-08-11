@@ -1,0 +1,16 @@
+.cm-s-onelight.CodeMirror {
+  color: #383a42;
+  background: #fafafa;
+}
+.cm-s-onelight .cm-def { color: #e45649; }
+.cm-s-onelight .cm-tag { color: #C1842E; }
+.cm-s-onelight .cm-attribute { color: #986801; font-style: italic; }
+.cm-s-onelight .cm-property { color: #4078F2; }
+.cm-s-onelight .cm-comment { color: #a0a1a7; font-style: italic; }
+.cm-s-onelight .cm-string { color: #50a14f; }
+.cm-s-onelight .cm-number { color: #986801; }
+.cm-s-onelight .cm-atom { color: #986801; }
+.cm-s-onelight .cm-operator { color: #0184BC; }
+.cm-s-onelight .cm-meta { color: #0184BC; }
+.cm-s-onelight .cm-keyword { color: #a626a4; }
+.cm-s-onelight .cm-variable { color: #E45649; }
