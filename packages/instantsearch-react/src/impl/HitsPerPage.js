@@ -4,48 +4,43 @@ import themeable from '../themeable';
 
 import LinkList from './LinkList';
 
-class HitsPerPage extends Component {
+const ThemedLinkList = themeable({
+  root: 'HitsPerPage',
+  item: 'HitsPerPage__item',
+  itemSelected: 'HitsPerPage__item--selected',
+})(LinkList);
+
+export default class HitsPerPage extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     hitsPerPage: PropTypes.number.isRequired,
-    createURL: PropTypes.func.isRequired,
-    refine: PropTypes.func.isRequired,
     items: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.shape({
-        label: PropTypes.string.isRequired,
-        value: PropTypes.number.isRequired,
-      })),
+      PropTypes.arrayOf(PropTypes.object),
       PropTypes.arrayOf(PropTypes.number),
     ]).isRequired,
+
+    listComponent: PropTypes.func,
+  };
+
+  static defaultProps = {
+    listComponent: ThemedLinkList,
   };
 
   render() {
-    const {applyTheme, createURL, refine, hitsPerPage, items} = this.props;
+    const {
+      hitsPerPage,
+      items,
+      listComponent: ListComponent,
+      ...otherProps,
+    } = this.props;
 
     return (
-      <LinkList
-        applyTheme={applyTheme}
-        onSelect={refine}
+      <ListComponent
+        {...otherProps}
         selectedItem={hitsPerPage}
-        createURL={createURL}
         items={items.map(item =>
-          typeof item === 'number' ?
-            {
-              value: item,
-              label: item,
-            } :
-            {
-              value: item.value,
-              label: item.label,
-            }
+          typeof item === 'number' ? {value: item, label: item} : item
         )}
       />
     );
   }
 }
-
-export default themeable({
-  root: 'HitsPerPage',
-  item: 'HitsPerPage__item',
-  itemSelected: 'HitsPerPage__item--selected',
-})(HitsPerPage);
