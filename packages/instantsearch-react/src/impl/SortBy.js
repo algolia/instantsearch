@@ -4,6 +4,8 @@ import themeable from '../themeable';
 
 import Select from './Select';
 
+const ThemedSelect = themeable({root: 'SortBy'})(Select);
+
 class SortBy extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -13,6 +15,10 @@ class SortBy extends Component {
       index: PropTypes.string.isRequired,
     })).isRequired,
     selectedIndex: PropTypes.string.isRequired,
+  };
+
+  static defaultProps = {
+    listComponent: ThemedSelect,
   };
 
   onChange = e => {
