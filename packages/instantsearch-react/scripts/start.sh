@@ -6,7 +6,6 @@ printf "
 Launching dev environment
 "
 
-npm install
 cd docs/
-bundle install
-bundle exec middleman
+npm install
+npm start

@@ -1,0 +1,19 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "start": "babel-node index"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "codemirror": "^5.17.0",
+    "escape-html": "^1.0.3",
+    "marked": "^0.3.6",
+    "metalsmith": "^2.1.0",
+    "metalsmith-assets": "^0.1.0",
+    "metalsmith-layouts": "^1.6.5",
+    "metalsmith-markdown": "^0.2.1",
+    "metalsmith-serve": "0.0.7",
+    "metalsmith-watch": "^1.0.3"
+  }
+}
