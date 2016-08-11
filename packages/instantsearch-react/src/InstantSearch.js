@@ -177,6 +177,7 @@ class InstantSearch extends Component {
     }
   }
 
+  // Called whenever a location is pushed/popped/replaced.
   onLocationChange = location => {
     if (this.currentLocation === null && !this.history.getCurrentLocation) {
       // Initial location. Called synchronously by listen.
@@ -193,6 +194,7 @@ class InstantSearch extends Component {
     this.widgetsManager.setState(state);
   };
 
+  // Called whenever a widget updates its state via its `refine` method.
   onStateUpdate = widgetsState => {
     widgetsState = this.transitionState(
       this.store.getState().widgets,
@@ -208,6 +210,8 @@ class InstantSearch extends Component {
     this.onNewState(widgetsState);
 
     if (this.history) {
+      // Since there's a two way binding between url and state, we need to
+      // ignore some location and state updates.
       if (!this.skipNextStateUpdate) {
         // This must be after `onNewState`/`store.setState` since
         // `createHrefForState` depends on the new metadata.
@@ -242,6 +246,7 @@ class InstantSearch extends Component {
     this.search();
   };
 
+  // Called whenever a widget has been rendered with new props.
   onWidgetsUpdate = () => {
     const widgetsState = this.store.getState().widgets;
     const metadata = this.widgetsManager.getMetadata(widgetsState);
@@ -259,24 +264,33 @@ class InstantSearch extends Component {
     const baseSearchParameters = new SearchParameters({
       index: this.props.indexName,
     });
+    // @TODO: Provide a way to either configure base SearchParameters.
     const searchParameters = this.widgetsManager.getSearchParameters(
       baseSearchParameters
     );
-    this.helper.searchOnce(searchParameters)
-      .then(({content}) => {
-        this.store.setState({
-          ...this.store.getState(),
-          results: content,
-          searching: false,
-        });
-      })
-      .catch(error => {
-        this.store.setState({
-          ...this.store.getState(),
-          error,
-          searching: false,
-        });
+    const promise = this.helper.searchOnce(searchParameters);
+
+    promise.then(({content}) => {
+      this.store.setState({
+        ...this.store.getState(),
+        results: content,
+        searching: false,
       });
+    }, error => {
+      this.store.setState({
+        ...this.store.getState(),
+        error,
+        searching: false,
+      });
+    }).catch(error => {
+      // Since setState is synchronous, any error that occurs in the render of a
+      // component will be swallowed by this promise.
+      // This is a trick to make the error show up correctly in the console.
+      // See http://stackoverflow.com/a/30741722/969302
+      setTimeout(() => {
+        throw error;
+      });
+    });
   };
 
   createHrefForState = state => {

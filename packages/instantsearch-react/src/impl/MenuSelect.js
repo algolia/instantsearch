@@ -41,7 +41,7 @@ export default themeable({
 })(
   translatable({
     none: 'None',
-    count: count => count.toString(),
+    count: count => count.toLocaleString(),
   })(
     MenuSelect
   )

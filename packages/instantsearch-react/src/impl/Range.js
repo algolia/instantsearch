@@ -46,8 +46,8 @@ export default class Range extends Component {
     });
   };
 
-  onAfterChange = () => {
-    this.props.refine(this.state.value);
+  onAfterChange = value => {
+    this.props.refine({min: value[0], max: value[1]});
     this.setState({
       controlled: false,
       value: null,

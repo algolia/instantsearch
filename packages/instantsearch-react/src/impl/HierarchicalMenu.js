@@ -27,10 +27,10 @@ class HierarchicalMenu extends Component {
     limitMax: PropTypes.number,
   };
 
-  renderItem = (item, selected, parent) => {
+  renderItem = (item, selected, parent, selectedParent) => {
     const {createURL, refine, translate, applyTheme} = this.props;
     let refineValue;
-    if (selected) {
+    if (selected || selectedParent) {
       if (parent !== null) {
         refineValue = parent.value;
       } else {
@@ -91,6 +91,6 @@ export default themeable({
 })(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
-    count: count => count.toString(),
+    count: count => count.toLocaleString(),
   })(HierarchicalMenu)
 );
