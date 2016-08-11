@@ -276,6 +276,12 @@ class InstantSearch extends Component {
         results: content,
         searching: false,
       });
+    }, error => {
+      this.store.setState({
+        ...this.store.getState(),
+        error,
+        searching: false,
+      });
     }).catch(error => {
       // Since setState is synchronous, any error that occurs in the render of a
       // component will be swallowed by this promise.
@@ -283,14 +289,6 @@ class InstantSearch extends Component {
       // See http://stackoverflow.com/a/30741722/969302
       setTimeout(() => {
         throw error;
-      });
-    });
-
-    promise.catch(error => {
-      this.store.setState({
-        ...this.store.getState(),
-        error,
-        searching: false,
       });
     });
   };
