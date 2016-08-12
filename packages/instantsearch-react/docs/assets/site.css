@@ -1,44 +1,115 @@
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+* {
+  box-sizing: border-box;
 }
 
-/* Adapted from base16-tomorrow.light.css */
-code,
-pre {
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  margin: 0;
+}
+
+.navigation {
+  width: 300px;
+  flex-shrink: 0;
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.15);
+}
+
+.navigation > .main {
+  padding: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.navigation > .headings {
+  padding: 2rem;
+}
+
+.navigation ul {
+  margin: -0.3em 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navigation ul ul {
+  margin: 0.3em 0 -0.3em 1em;
+}
+
+.navigation ul li {
+  padding: 0.3em 0;
+}
+
+.navigation ul li a {
+  text-decoration: none;
+}
+
+.content {
+  overflow-y: scroll;
+}
+
+.content h1 {
+  margin: 3rem 4rem 2rem;
+  font-weight: normal;
+}
+
+.content h2 {
+  margin: 2rem 4rem 1.5rem;
+  font-weight: normal;
+}
+
+.content h3 {
+  margin: 1.5rem 4rem 1rem;
+  font-weight: normal;
+}
+
+.content h4 {
+  margin: 1.25rem 4rem 1rem;
+  font-weight: normal;
+}
+
+.content p {
+  margin: 1rem 4rem;
+  line-height: 1.5;
+}
+
+.content table {
+  margin: 0 4rem;
+}
+
+.content th {
+  font-weight: 600;
+}
+
+.content code,
+.content pre {
   font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
   font-size: 14px;
   line-height: 1.375;
-  direction: ltr;
-  text-align: left;
-  word-spacing: normal;
-
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
-
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
-  white-space: pre;
-  white-space: pre-wrap;
-  word-break: break-all;
-  word-wrap: break-word;
 }
 
 /* Code blocks */
-pre {
-  padding: 1em;
-  margin: .5em 0;
+.content pre {
+  padding: 1rem 4rem;
+  margin: 1rem 0;
   overflow: auto;
 }
 
 /* Inline code */
-:not(pre) > code {
-  padding: .1em;
+.content :not(pre) > code {
+  padding: .3em .5em;
+  white-space: nowrap;
 }
 
-pre, :not(pre) > code {
+.content pre, .content :not(pre) > code {
   border-radius: .2em;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.055);
+}
+
+.content td,
+.content th {
+  padding: 1em;
 }

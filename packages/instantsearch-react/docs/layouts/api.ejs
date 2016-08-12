@@ -11,14 +11,30 @@
 
     <title>instantsearch-react <%= `| ${title}` %></title>
 
-    <link rel="stylesheet" href="assets/theme.css">
-    <link rel="stylesheet" href="assets/site.css">
+    <link rel="stylesheet" href="/assets/theme.css">
+    <link rel="stylesheet" href="/assets/site.css">
   </head>
 
   <body>
-    <section class="content">
+    <div class="navigation">
+      <div class="main">
+        <%- include('nav', {currentPath: nav_path, nav: navs.main}) %>
+      </div>
+
+      <div class="headings">
+        <ul>
+          <% for (const heading of headings) { %>
+            <li class="<%= heading.type === 'h2' ? 'title' : 'subtitle' %>">
+              <a href="#<%- heading.id %>"><%- heading.text %></a>
+            </li>
+          <% } %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
       <%- contents %>
-    </section>
+    </div>
 
     <script type="text/javascript" src="assets/entry.js"></script>
     <% if (env !== 'production') { %>
