@@ -1,6 +1,9 @@
 ---
 title: InstantSearch
 layout: api.ejs
+nav_groups:
+  - main
+nav_sort: 1
 ---
 
 # InstantSearch

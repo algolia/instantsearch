@@ -1,6 +1,9 @@
 ---
 title: Internationalization
 layout: api.ejs
+nav_groups:
+  - main
+nav_sort: 3
 ---
 
 # Internationalization

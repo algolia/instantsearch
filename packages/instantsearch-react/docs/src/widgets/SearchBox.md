@@ -1,6 +1,8 @@
 ---
 title: SearchBox
 layout: api.ejs
+nav_groups:
+  - main
 ---
 
 # SearchBox

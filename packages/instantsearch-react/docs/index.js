@@ -3,6 +3,8 @@
 import metalsmith from 'metalsmith';
 import assets from 'metalsmith-assets';
 import layouts from 'metalsmith-layouts';
+import headings from 'metalsmith-headings';
+import navigation from 'metalsmith-navigation';
 import markdown from 'metalsmith-markdown';
 import watch from 'metalsmith-watch';
 import serve from 'metalsmith-serve';
@@ -26,29 +28,27 @@ const highlight = text => {
   return output;
 };
 
-const blockTheme = 'cm-s-onelight';
-const spanTheme = 'cm-s-onelight';
+const blockTheme = 'cm-s-default';
+const spanTheme = 'cm-s-default';
 const renderer = new marked.Renderer();
 renderer.code = (code, lang) => {
   return `<pre class="CodeMirror ${blockTheme}"><code>${highlight(code, lang)}</code></pre>`;
 };
 renderer.codespan = code => {
-  return `<code class="CodeMirror ${spanTheme}">${highlight(code)}</code>`;
+  return `<code class="CodeMirror ${spanTheme}">${code}</code>`;
 };
 
 metalsmith(__dirname)
-  .use(files => {
-    Object.keys(files).forEach(key => {
-      // If env is undefined, it won't get passed to the templates.
-      files[key].env = process.env.NODE_ENV || '';
-    });
-    return files;
+  .metadata({
+    // If env is undefined, it won't get passed to the templates.
+    env: process.env.NODE_ENV || '',
   })
   .use(watch({
     livereload: true,
     paths: {
       '${source}/**/*': true,
       'assets/**/*': true,
+      'layouts/**/*': true,
     },
   }))
   .use(assets({
@@ -58,9 +58,18 @@ metalsmith(__dirname)
   .use(markdown({
     renderer,
   }))
-  .use(layouts({
-    engine: 'ejs',
+  // After markdown, so that paths point to the correct HTML file
+  .use(navigation({
+    main: {
+      sortBy: 'nav_sort',
+      filterProperty: 'nav_groups',
+    },
+  }, {
+    navListProperty: 'navs',
   }))
+  // Consider h2 and h3 elements (##, ###) as headers
+  .use(headings('h2, h3'))
+  .use(layouts('ejs'))
   .use(serve())
   .build(err => {
     if (err) {
