@@ -41,14 +41,16 @@ clearAll({
   [ cssClasses.{root,header,body,footer,link}={} ],
   [ templates.{header,link,footer}={link: 'Clear all'} ],
   [ autoHideContainer=true ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ excludeAttributes=[] ]
 })`;
 function clearAll({
     container,
     templates = defaultTemplates,
     cssClasses: userCssClasses = {},
     collapsible = false,
-    autoHideContainer = true
+    autoHideContainer = true,
+    excludeAttributes = []
   } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -70,17 +72,20 @@ function clearAll({
 
   return {
     init({helper, templatesConfig}) {
-      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper);
+      this.clearAll = this.clearAll.bind(this, helper);
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
     },
 
     render({results, state, createURL}) {
-      let hasRefinements = getRefinements(results, state).length !== 0;
+      this.clearAttributes = getRefinements(results, state)
+        .map(one => one.attributeName)
+        .filter(one => excludeAttributes.indexOf(one) === -1);
+      let hasRefinements = this.clearAttributes.length !== 0;
       let url = createURL(clearRefinementsFromState(state));
 
       ReactDOM.render(
         <ClearAll
-          clearAll={this._clearRefinementsAndSearch}
+          clearAll={this.clearAll}
           collapsible={collapsible}
           cssClasses={cssClasses}
           hasRefinements={hasRefinements}
@@ -90,6 +95,12 @@ function clearAll({
         />,
         containerNode
       );
+    },
+
+    clearAll(helper) {
+      if (this.clearAttributes.length > 0) {
+        clearRefinementsAndSearch(helper, this.clearAttributes);
+      }
     }
   };
 }
