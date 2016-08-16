@@ -77,7 +77,10 @@ export default createConnector({
     const limit = showMore ? limitMax : limitMin;
 
     searchParameters = searchParameters.setQueryParameters({
-      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, limit),
+      maxValuesPerFacet: Math.max(
+        searchParameters.maxValuesPerFacet || 0,
+        limit
+      ),
     });
 
     searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
