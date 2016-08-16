@@ -20,7 +20,10 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props) {
-    if (typeof props.hitsPerPage !== 'undefined') {
+    if (
+      typeof props.hitsPerPage !== 'undefined' &&
+      typeof searchParameters.hitsPerPage === 'undefined'
+    ) {
       return searchParameters.setHitsPerPage(props.hitsPerPage);
     }
     return searchParameters;
