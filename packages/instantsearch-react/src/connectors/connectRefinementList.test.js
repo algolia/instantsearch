@@ -175,7 +175,7 @@ describe('connectRefinementList', () => {
           key: 'ok.wut',
           label: 'wot: wut',
           clear: metadata.filters[1].clear,
-        }
+        },
       ],
     });
 
