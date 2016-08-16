@@ -23,7 +23,7 @@ export default createConnector({
   propTypes: {
     id: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.node.isRequired,
       index: PropTypes.string.isRequired,
     })).isRequired,
     defaultSelectedIndex: PropTypes.string,

@@ -36,6 +36,7 @@ export default createConnector({
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
     sortBy: PropTypes.arrayOf(PropTypes.string),
+    defaultSelectedItem: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
