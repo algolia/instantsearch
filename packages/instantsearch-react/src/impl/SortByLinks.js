@@ -37,5 +37,6 @@ class SortByLinks extends Component {
 export default themeable({
   root: 'SortByLinks',
   item: 'SortByLinks__item',
+  itemLink: 'SortByLinks__item__link',
   itemSelected: 'SortByLinks__item--selected',
 })(SortByLinks);

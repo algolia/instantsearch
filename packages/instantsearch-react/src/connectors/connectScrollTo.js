@@ -6,15 +6,15 @@ export default createConnector({
   displayName: 'AlgoliaScrollTo',
 
   propTypes: {
-    listenTo: PropTypes.string,
+    scrollOn: PropTypes.string,
   },
 
   defaultProps: {
-    listenTo: 'p',
+    scrollOn: 'p',
   },
 
-  getProps(props, state, search) {
-    const value = state[props.listenTo];
+  getProps(props, state) {
+    const value = state[props.scrollOn];
     return {value};
   },
 });

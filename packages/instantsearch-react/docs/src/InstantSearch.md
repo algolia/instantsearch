@@ -34,15 +34,15 @@ export default function Search() {
 
 Name | Type | Default |Description
 :- | :- | :- | :-
-`appId` | `String` | | The Algolia application id.
-`apiKey` | `String` | | Your Algolia Search-Only API key.
-`indexName` | `String` | | The index in which to search.
-`urlSync` | `Boolean?` | `true` | Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
-`history` | `Object?` | | A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over `urlSync`. See [Custom History](#custom-history).
-`threshold` | `Number?` | `700` | Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
-`onStateChange` | `Function?` | | See [Controlled State](#controlled-state).
-`state` | `Object?` | | See [Controlled State](#controlled-state).
-`createURL` | `Function?` | | See [Controlled State](#controlled-state).
+`appId` | `string` | | The Algolia application id.
+`apiKey` | `string` | | Your Algolia Search-Only API key.
+`indexName` | `string` | | The index in which to search.
+`urlSync` | `?bool` | `true` | Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
+`history` | `?object` | | A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over `urlSync`. See [Custom History](#custom-history).
+`threshold` | `?number` | `700` | Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
+`onStateChange` | `?func` | | See [Controlled State](#controlled-state).
+`state` | `?object` | | See [Controlled State](#controlled-state).
+`createURL` | `?func` | | See [Controlled State](#controlled-state).
 
 ## URL Synchronization
 
@@ -112,4 +112,4 @@ As such, this component behaves just like a React `input`. By providing `state` 
 
 Note that controlling the state from outside of the component disables [URL Synchronization](#url-synchronization). If you need this feature, you will need to reimplement it yourself. In this case, as there is no way for widgets that contain hyperlinks to guess how a state change will affect the URL, you should provide a `createURL` prop to the component.
 
-The `createURL` function takes in a widgets `state` object and returns a `String` to be used as a `href` attribute.
+The `createURL` function takes in a widgets `state` object and returns a `string` to be used as a `href` attribute.
