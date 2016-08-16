@@ -18,6 +18,7 @@ body {
   width: 300px;
   flex-shrink: 0;
   box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
 }
 
 .navigation > .main {
@@ -48,7 +49,8 @@ body {
 }
 
 .content {
-  overflow-y: scroll;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .content h1 {
@@ -57,22 +59,34 @@ body {
 }
 
 .content h2 {
-  margin: 2rem 4rem 1.5rem;
+  margin: 2.5rem 4rem 1rem;
   font-weight: normal;
 }
 
 .content h3 {
-  margin: 1.5rem 4rem 1rem;
-  font-weight: normal;
+  margin: 2rem 4rem 1rem;
+  font-weight: 500;
 }
 
 .content h4 {
-  margin: 1.25rem 4rem 1rem;
-  font-weight: normal;
+  margin: 2rem 4rem 1rem;
+  font-weight: 500;
 }
 
 .content p {
   margin: 1rem 4rem;
+  line-height: 1.5;
+}
+
+.content ul {
+  margin: 1rem 4rem;
+}
+
+.content ul ul {
+  margin-left: 1rem;
+}
+
+.content li {
   line-height: 1.5;
 }
 
@@ -93,8 +107,8 @@ body {
 
 /* Code blocks */
 .content pre {
-  padding: 1rem 4rem;
-  margin: 1rem 0;
+  padding: 2rem 4rem;
+  margin: 1.5rem 0;
   overflow: auto;
 }
 
