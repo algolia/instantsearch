@@ -11,16 +11,17 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "babel-jest": "^13.2.2",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.10.2",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-0": "^6.5.0",
-    "babel-jest": "^13.2.2",
     "enzyme": "^2.4.1",
     "eslint": "^3.0.1",
     "jest-cli": "^13.2.3",
+    "metalsmith-headings": "^0.1.0",
     "mockdate": "^1.0.4",
     "webpack": "^1.13.1"
   },
