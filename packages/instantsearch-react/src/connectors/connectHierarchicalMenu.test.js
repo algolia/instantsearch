@@ -21,6 +21,7 @@ describe('connectHierarchicalMenu', () => {
   it('provides the correct props to the component', () => {
     const results = {
       getFacetValues: jest.fn(),
+      getFacetByName: () => true,
     };
 
     results.getFacetValues.mockImplementationOnce(() => ({}));

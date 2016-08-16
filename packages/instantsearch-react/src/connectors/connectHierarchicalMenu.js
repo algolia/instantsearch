@@ -52,12 +52,19 @@ export default createConnector({
   },
 
   getProps(props, state, search) {
-    if (!search.results) {
+    const {id, sortBy, showMore, limitMin, limitMax} = props;
+    const {results} = search;
+
+    const isFacetPresent =
+      Boolean(results) &&
+      Boolean(results.getFacetByName(id));
+
+    if (!isFacetPresent) {
       return null;
     }
-    const {id, sortBy, showMore, limitMin, limitMax} = props;
+
     const limit = showMore ? limitMax : limitMin;
-    const value = search.results.getFacetValues(id, {sortBy});
+    const value = results.getFacetValues(id, {sortBy});
     return {
       items: value.data ? transformValue(value.data, limit) : [],
       selectedItem: getSelectedItem(props, state),
