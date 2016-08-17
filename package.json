@@ -78,7 +78,7 @@
     "wdio-dot-reporter": "0.0.6",
     "wdio-mocha-framework": "^0.4.0",
     "wdio-sauce-service": "^0.2.4",
-    "webdriverio": "^4.2.1",
+    "webdriverio": "^4.2.6",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },
