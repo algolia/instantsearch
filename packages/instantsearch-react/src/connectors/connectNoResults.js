@@ -8,7 +8,7 @@ export default createConnector({
       return null;
     }
     return {
-      noResults: search.results.length === 0,
+      noResults: search.results.nbHits === 0,
     };
   },
 });
