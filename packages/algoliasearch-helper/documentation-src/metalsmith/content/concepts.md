@@ -239,8 +239,9 @@ helper.toggleTag(tag)
       .search();
 ```
 
-To avoid this kind of repetition, all the write methods will set the page to 0 with
-the exception of `setPage`.
+To avoid this kind of repetition, all the write methods on the helper will set
+the page to 0 with the exception of `setPage`. This is not the case for write
+methods on the immutable search parameters.
 
 ## Final words and where to go next
 

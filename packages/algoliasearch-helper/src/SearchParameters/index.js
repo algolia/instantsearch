@@ -643,7 +643,6 @@ SearchParameters.prototype = {
   clearRefinements: function clearRefinements(attribute) {
     var clear = RefinementList.clearRefinement;
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: this._clearNumericRefinements(attribute),
       facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
       facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
@@ -660,7 +659,6 @@ SearchParameters.prototype = {
     if (this.tagFilters === undefined && this.tagRefinements.length === 0) return this;
 
     return this.setQueryParameters({
-      page: 0,
       tagFilters: undefined,
       tagRefinements: []
     });
@@ -675,8 +673,7 @@ SearchParameters.prototype = {
     if (index === this.index) return this;
 
     return this.setQueryParameters({
-      index: index,
-      page: 0
+      index: index
     });
   },
   /**
@@ -689,8 +686,7 @@ SearchParameters.prototype = {
     if (newQuery === this.query) return this;
 
     return this.setQueryParameters({
-      query: newQuery,
-      page: 0
+      query: newQuery
     });
   },
   /**
@@ -741,8 +737,7 @@ SearchParameters.prototype = {
     if (this.hitsPerPage === n) return this;
 
     return this.setQueryParameters({
-      hitsPerPage: n,
-      page: 0
+      hitsPerPage: n
     });
   },
   /**
@@ -756,8 +751,7 @@ SearchParameters.prototype = {
     if (this.typoTolerance === typoTolerance) return this;
 
     return this.setQueryParameters({
-      typoTolerance: typoTolerance,
-      page: 0
+      typoTolerance: typoTolerance
     });
   },
   /**
@@ -796,7 +790,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: mod
     });
   },
@@ -859,7 +852,6 @@ SearchParameters.prototype = {
       var paramValueAsNumber = valToNumber(paramValue);
       if (!this.isNumericRefined(attribute, operator, paramValueAsNumber)) return this;
       return this.setQueryParameters({
-        page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator && isEqual(value.val, paramValueAsNumber);
         })
@@ -867,7 +859,6 @@ SearchParameters.prototype = {
     } else if (operator !== undefined) {
       if (!this.isNumericRefined(attribute, operator)) return this;
       return this.setQueryParameters({
-        page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator;
         })
@@ -876,7 +867,6 @@ SearchParameters.prototype = {
 
     if (!this.isNumericRefined(attribute)) return this;
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
         return key === attribute;
       })
@@ -996,7 +986,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.addRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -1014,7 +1003,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.addRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -1034,7 +1022,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.addRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -1048,7 +1035,6 @@ SearchParameters.prototype = {
     if (this.isTagRefined(tag)) return this;
 
     var modification = {
-      page: 0,
       tagRefinements: this.tagRefinements.concat(tag)
     };
 
@@ -1124,7 +1110,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.removeRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -1142,7 +1127,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.removeRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -1161,7 +1145,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.removeRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -1176,7 +1159,6 @@ SearchParameters.prototype = {
     if (!this.isTagRefined(tag)) return this;
 
     var modification = {
-      page: 0,
       tagRefinements: filter(this.tagRefinements, function(t) { return t !== tag; })
     };
 
@@ -1215,7 +1197,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.toggleRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -1232,7 +1213,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.toggleRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -1250,7 +1230,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.toggleRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -1296,7 +1275,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
