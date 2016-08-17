@@ -6,17 +6,60 @@ jest.unmock('algoliasearch-helper');
 import connectSearchBox from './connectSearchBox';
 jest.unmock('./connectSearchBox');
 
-const {mapStateToProps, refine} = connectSearchBox;
+const {
+  getProps,
+  refine,
+  getSearchParameters: getSP,
+  getMetadata,
+} = connectSearchBox;
+
+let props;
+let params;
 
 describe('connectSearchBox', () => {
   it('provides the correct props to the component', () => {
-    const props = mapStateToProps({searchParameters: {query: 'foo'}});
-    expect(props).toEqual({query: 'foo'});
+    props = getProps({id: 'q'}, {});
+    expect(props).toEqual({query: ''});
+
+    props = getProps({id: 'q'}, {q: 'yep'});
+    expect(props).toEqual({query: 'yep'});
+  });
+
+  it('calling refine updates the widget\'s state', () => {
+    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    expect(nextState).toEqual({
+      otherKey: 'val',
+      ok: 'yep',
+    });
   });
 
   it('refines the query parameter', () => {
-    const state = new SearchParameters();
-    const refinedState = refine(state, {}, 'bar');
-    expect(refinedState.query).toBe('bar');
+    params = getSP(new SearchParameters(), {id: 'q'}, {q: 'bar'});
+    expect(params.query).toBe('bar');
+  });
+
+  it('registers its filter in metadata', () => {
+    let metadata = getMetadata({id: 'q'}, {});
+    expect(metadata).toEqual({
+      id: 'q',
+      filters: [],
+    });
+
+    metadata = getMetadata({id: 'q'}, {q: 'wat'});
+    expect(metadata).toEqual({
+      id: 'q',
+      filters: [
+        {
+          key: 'q',
+          label: 'wat',
+          hide: true,
+          // Ignore clear, we test it later
+          clear: metadata.filters[0].clear,
+        },
+      ],
+    });
+
+    const state = metadata.filters[0].clear({q: 'wat'});
+    expect(state).toEqual({q: ''});
   });
 });
