@@ -1,162 +1,144 @@
 /* eslint-env jest, jasmine */
 
-import {SearchParameters, SearchResults} from 'algoliasearch-helper';
+import {SearchParameters} from 'algoliasearch-helper';
 jest.unmock('algoliasearch-helper');
 
 import connectRange from './connectRange';
 jest.unmock('./connectRange');
-import {assertFacetDefined} from '../utils';
 
 const {
-  configure,
-  mapStateToProps,
-  transformProps,
+  getProps,
   refine,
-  shouldRender,
+  getSearchParameters: getSP,
+  getMetadata,
 } = connectRange;
 
+let props;
+let params;
+
 describe('connectRange', () => {
-  it('adds the required disjunctiveFacet', () => {
-    let state;
-    let configuredState;
-
-    state = new SearchParameters();
-    configuredState = configure(state, {
-      attributeName: 'facet',
-    });
-    expect(configuredState.disjunctiveFacets).toEqual(['facet']);
-
-    state = new SearchParameters({disjunctiveFacets: ['facet']});
-    configuredState = configure(state, {
-      attributeName: 'facet',
-    });
-    expect(configuredState.disjunctiveFacets).toEqual(['facet']);
-  });
-
   it('provides the correct props to the component', () => {
-    let searchParameters;
-    let props;
-
-    searchParameters = new SearchParameters();
-    props = mapStateToProps({searchParameters}, {
-      attributeName: 'facet',
-    });
+    props = getProps({attributeName: 'ok', min: 5, max: 10}, {}, {});
     expect(props).toEqual({
-      shouldRender: false,
-    });
-
-    props = mapStateToProps({searchParameters}, {
-      attributeName: 'facet',
-      min: 10,
-    });
-    expect(props).toEqual({
-      shouldRender: false,
-    });
-
-    props = mapStateToProps({searchParameters}, {
-      attributeName: 'facet',
+      min: 5,
       max: 10,
-    });
-    expect(props).toEqual({
-      shouldRender: false,
+      value: {min: 5, max: 10},
     });
 
-    searchParameters = new SearchParameters({
-      disjunctiveFacets: ['facet'],
-    });
-    const searchResults = new SearchResults(searchParameters, {
-      results: [
-        {
-          facets: {
-            facet: {},
-          },
-          // eslint-disable-next-line camelcase
-          facets_stats: {
-            facet: {
-              min: 10,
-              max: 30,
-            },
-          },
-        },
-      ],
-    });
-    props = mapStateToProps({
-      searchParameters,
-      searchResults,
-      searchResultsSearchParameters: searchParameters,
-    }, {
-      attributeName: 'facet',
-    });
+    const results = {
+      getFacetStats: () => ({min: 5, max: 10}),
+    };
+    props = getProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({
-      shouldRender: true,
-      min: 10,
-      max: 30,
-      value: [10, 30],
+      min: 5,
+      max: 10,
+      value: {min: 5, max: 10},
     });
 
-    searchParameters = new SearchParameters()
-      .addNumericRefinement('facet', '>=', '15')
-      .addNumericRefinement('facet', '<=', '25');
-    props = mapStateToProps({
-      searchParameters,
-      searchResults,
-      searchResultsSearchParameters: searchParameters,
+    props = getProps({attributeName: 'ok'}, {ok: {min: 6, max: 9}}, {});
+    expect(props).toBe(null);
+
+    props = getProps({
+      attributeName: 'ok',
+      min: 5,
+      max: 10,
     }, {
-      attributeName: 'facet',
-    });
+      ok: {min: 6, max: 9},
+    }, {});
     expect(props).toEqual({
-      shouldRender: true,
-      min: 10,
-      max: 30,
-      value: [15, 25],
+      min: 5,
+      max: 10,
+      value: {min: 6, max: 9},
+    });
+
+    props = getProps({
+      attributeName: 'ok',
+      min: 5,
+      max: 10,
+    }, {
+      ok: {min: '6', max: '9'},
+    }, {});
+    expect(props).toEqual({
+      min: 5,
+      max: 10,
+      value: {min: 6, max: 9},
+    });
+
+    props = getProps({
+      attributeName: 'ok',
+      min: 5,
+      max: 10,
+      defaultValue: {min: 6, max: 9},
+    }, {}, {});
+    expect(props).toEqual({
+      min: 5,
+      max: 10,
+      value: {min: 6, max: 9},
     });
   });
 
-  it('asserts the facet is defined', () => {
-    assertFacetDefined.mockClear();
-    const searchParameters = new SearchParameters({
-      disjunctiveFacets: ['facet'],
-    });
-    const searchResults = new SearchResults(searchParameters, {
-      results: [{}],
-    });
-    mapStateToProps({
-      searchParameters,
-      searchResultsSearchParameters: searchParameters,
-      searchResults,
-    }, {
-      attributeName: 'facet',
-    });
-    expect(assertFacetDefined.mock.calls.length).toBe(1);
-    expect(assertFacetDefined.mock.calls[0][0]).toBe(searchParameters);
-    expect(assertFacetDefined.mock.calls[0][1]).toBe(searchResults);
-    expect(assertFacetDefined.mock.calls[0][2]).toBe('facet');
-  });
-
-  it('only renders when shouldRender=true', () => {
-    expect(shouldRender({shouldRender: false})).toBe(false);
-    expect(shouldRender({shouldRender: true})).toBe(true);
-  });
-
-  it('transforms its props', () => {
-    expect(transformProps({
-      min: 10,
-      max: 30,
-      value: [10, 30],
-      hello: 'you',
-    })).toEqual({
-      min: 10,
-      max: 30,
-      value: [10, 30],
+  it('calling refine updates the widget\'s state', () => {
+    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    expect(nextState).toEqual({
+      otherKey: 'val',
+      ok: 'yep',
     });
   });
 
   it('refines the corresponding numeric facet', () => {
-    const state = new SearchParameters();
-    const refinedState = refine(state, {attributeName: 'facet'}, [10, 30]);
-    expect(refinedState.getNumericRefinements('facet')).toEqual({
+    params = getSP(
+      new SearchParameters(),
+      {attributeName: 'facet'},
+      {facet: {min: 10, max: 30}}
+    );
+    expect(params.getNumericRefinements('facet')).toEqual({
       '>=': [10],
       '<=': [30],
+    });
+  });
+
+  it('registers its filter in metadata', () => {
+    let metadata = getMetadata(
+      {attributeName: 'wot'},
+      {wot: {min: 5}}
+    );
+    expect(metadata).toEqual({
+      id: 'wot',
+      filters: [{
+        key: 'wot.5 <= wot',
+        label: '5 <= wot',
+        // Ignore clear, we test it later
+        clear: metadata.filters[0].clear,
+      }],
+    });
+
+    const state = metadata.filters[0].clear({wot: {min: 5}});
+    expect(state).toEqual({wot: {}});
+
+    metadata = getMetadata(
+      {attributeName: 'wot'},
+      {wot: {max: 10}}
+    );
+    expect(metadata).toEqual({
+      id: 'wot',
+      filters: [{
+        key: 'wot.wot <= 10',
+        label: 'wot <= 10',
+        clear: metadata.filters[0].clear,
+      }],
+    });
+
+    metadata = getMetadata(
+      {attributeName: 'wot'},
+      {wot: {min: 5, max: 10}}
+    );
+    expect(metadata).toEqual({
+      id: 'wot',
+      filters: [{
+        key: 'wot.5 <= wot <= 10',
+        label: '5 <= wot <= 10',
+        clear: metadata.filters[0].clear,
+      }],
     });
   });
 });
