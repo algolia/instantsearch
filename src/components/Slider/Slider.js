@@ -1,4 +1,5 @@
 import React from 'react';
+import omit from 'lodash/object/omit';
 
 import Nouislider from 'react-nouislider';
 
@@ -48,7 +49,9 @@ class Slider extends React.Component {
 
     return (
       <Nouislider
-        {...this.props}
+        // NoUiSlider also accepts a cssClasses prop, but we don't want to
+        // provide one.
+        {...omit(this.props, 'cssClasses')}
         animate={false}
         behaviour={'snap'}
         connect
