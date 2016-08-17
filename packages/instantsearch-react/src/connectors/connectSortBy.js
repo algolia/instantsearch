@@ -2,12 +2,8 @@ import {PropTypes} from 'react';
 
 import createConnector from '../createConnector';
 
-function getId(props) {
-  return props.id || props.attributeName;
-}
-
 function getSelectedIndex(props, state) {
-  const id = getId(props);
+  const {id} = props;
   if (state[id]) {
     return state[id];
   }
@@ -41,7 +37,7 @@ export default createConnector({
   refine(props, state, nextSelectedIndex) {
     return {
       ...state,
-      [getId(props, state)]: nextSelectedIndex,
+      [props.id]: nextSelectedIndex,
     };
   },
 
@@ -51,7 +47,6 @@ export default createConnector({
   },
 
   getMetadata(props) {
-    const id = getId(props);
-    return {id};
+    return {id: props.id};
   },
 });
