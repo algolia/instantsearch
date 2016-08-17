@@ -416,10 +416,11 @@ are implemented on top of Algolia API such as faceting.
 
 {{> jsdoc jsdoc/results/hits}}
 
-### Facets methods
+### Facets and filters methods
 
 {{> jsdoc jsdoc/results/getFacetValues}}
 {{> jsdoc jsdoc/results/getFacetStats}}
+{{> jsdoc jsdoc/results/getRefinements}}
 
 ### Geolocation data
 
@@ -455,11 +456,12 @@ that you might encounter in the documentation.
 {{> jsdoc jsdoc/helper/FacetRefinement}}
 {{> jsdoc jsdoc/helper/NumericRefinement}}
 {{> jsdoc jsdoc/results/Facet}}
-{{> jsdoc jsdoc/results/HierarchicalFacet}}
 {{> jsdoc jsdoc/results/FacetValue}}
+{{> jsdoc jsdoc/results/HierarchicalFacet}}
+{{> jsdoc jsdoc/results/Refinement}}
+{{> jsdoc jsdoc/state/clearCallback}}
 {{> jsdoc jsdoc/state/FacetList}}
 {{> jsdoc jsdoc/state/OperatorList}}
-{{> jsdoc jsdoc/state/clearCallback}}
 
 ## SearchParameters
 

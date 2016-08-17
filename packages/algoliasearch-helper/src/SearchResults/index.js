@@ -4,6 +4,7 @@ var forEach = require('lodash/forEach');
 var compact = require('lodash/compact');
 var indexOf = require('lodash/indexOf');
 var findIndex = require('lodash/findIndex');
+var get = require('lodash/get');
 
 var sumBy = require('lodash/sumBy');
 var find = require('lodash/find');
@@ -46,9 +47,21 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
 /**
  * @typedef SearchResults.FacetValue
  * @type {object}
- * @property {value} string the facet value itself
- * @property {count} number times this facet appears in the results
- * @property {isRefined} boolean is the facet currently selected
+ * @property {string} value the facet value itself
+ * @property {number} count times this facet appears in the results
+ * @property {boolean} isRefined is the facet currently selected
+ */
+
+/**
+ * @typedef Refinement
+ * @type {object}
+ * @property {string} type the type of filter used: `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical` 
+ * @property {string} attributeName name of the attribute used for filtering
+ * @property {string} name the value of the filter
+ * @property {number} numericValue the value as a number. Only for numeric fitlers.
+ * @property {string} operator the operator used. Only for numeric filters.
+ * @property {number} count the number of computed hits for this filter. Only on facets.
+ * @property {boolean} exhaustive if the count is exhaustive
  */
 
 function getIndices(obj) {
@@ -618,6 +631,97 @@ SearchResults.prototype.getFacetStats = function(attribute) {
 function getFacetStatsIfAvailable(facetList, facetName) {
   var data = find(facetList, {name: facetName});
   return data && data.stats;
+}
+
+/**
+ * Returns all refinements for all filters + tags. It also provides
+ * additional information: count and exhausistivity for each filter.
+ *
+ * See the [refinement type](#Refinement) for an exhaustive view of the available
+ * data.
+ *
+ * @return {Array.<Refinement>} all the refinements
+ */
+SearchResults.prototype.getRefinements = function() {
+  var state = this._state;
+  var results = this;
+  var res = [];
+
+  forEach(state.facetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
+    });
+  });
+
+  forEach(state.facetsExcludes, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push({type: 'exclude', attributeName, name, exclude: true});
+    });
+  });
+
+  forEach(state.disjunctiveFacetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getRefinement(state, 'disjunctive', attributeName, name, results.disjunctiveFacets));
+    });
+  });
+
+  forEach(state.hierarchicalFacetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getHierarchicalRefinement(state, attributeName, name, results.hierarchicalFacets));
+    });
+  });
+
+  forEach(state.numericRefinements, function(operators, attributeName) {
+    forEach(operators, function(values, operator) {
+      forEach(values, function(value) {
+        res.push({
+          type: 'numeric',
+          attributeName,
+          name: value,
+          numericValue: value,
+          operator
+        });
+      });
+    });
+  });
+
+  forEach(state.tagRefinements, function(name) {
+    res.push({type: 'tag', attributeName: '_tags', name});
+  });
+
+  return res;
+};
+
+function getRefinement(state, type, attributeName, name, resultsFacets) {
+  var facet = find(resultsFacets, {name: attributeName});
+  var count = get(facet, 'data[' + name + ']');
+  var exhaustive = get(facet, 'exhaustive');
+  return {
+    type: type,
+    attributeName: attributeName,
+    name: name,
+    count: count || 0,
+    exhaustive: exhaustive || false
+  };
+}
+
+function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
+  var facet = find(resultsFacets, {name: attributeName});
+  var facetDeclaration = state.getHierarchicalFacetByName(attributeName);
+  var splitted = name.split(facetDeclaration.separator);
+  var configuredName = splitted[splitted.length - 1];
+  for (var i = 0; facet !== undefined && i < splitted.length; ++i) {
+    facet = find(facet.data, {name: splitted[i]});
+  }
+  var count = get(facet, 'count');
+  var exhaustive = get(facet, 'exhaustive');
+  return {
+    type: 'hierarchical',
+    attributeName: attributeName,
+    name: configuredName,
+    count: count || 0,
+    exhaustive: exhaustive || false
+  };
 }
 
 module.exports = SearchResults;
