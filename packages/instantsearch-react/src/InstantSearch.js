@@ -37,6 +37,10 @@ function validateProps(props) {
 function validateNextProps(props, nextProps) {
   if (!props.onStateChange && nextProps.onStateChange) {
     throw new Error(
+      'You can\'t switch <InstantSearch> from being uncontrolled to controlled'
+    );
+  } else if (props.onStateChange && !nextProps.onStateChange) {
+    throw new Error(
       'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
     );
   }
