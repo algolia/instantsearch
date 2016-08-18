@@ -61,6 +61,11 @@ if (require.main === module) {
     return helper.searchOnce(otherState);
   }).then(function() {
     helper.__saveLastToFile('dummy-tags.json');
+
+    var otherState = initialState.addExcludeRefinement('brand', 'Apple');
+    return helper.searchOnce(otherState);
+  }).then(function() {
+    helper.__saveLastToFile('exclude-apple.json');
   }).catch(function(e) {
     console.error(e);
   }).then(function() {

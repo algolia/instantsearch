@@ -51,6 +51,27 @@ test('getRefinements(facetName) returns a refinement(facet) when a facet refinem
   t.end();
 });
 
+test('getRefinements(facetName) returns a refinement(exlude) when a facet exclusion is set', function(t) {
+  var data = require('./getRefinements/exclude-apple.json');
+  var searchParams = new SearchParameters(data.state);
+  var result = new SearchResults(searchParams, data.content);
+
+  var refinements = result.getRefinements();
+  var facetValues = result.getFacetValues('brand');
+  var refinedFacetValues = filter(facetValues, function(f) {
+    return f.isExcluded === true;
+  });
+
+  var expected = [{
+    attributeName: 'brand', count: 0, exhaustive: true, name: 'Apple', type: 'exclude'
+  }];
+
+  t.deepEqual(refinements, expected);
+  t.equal(refinements.length, refinedFacetValues.length);
+  t.ok(hasSameNames(refinements, refinedFacetValues));
+
+  t.end();
+});
 
 test(
   'getRefinements(facetName) returns a refinement(disjunctive) when a disjunctive refinement is set',

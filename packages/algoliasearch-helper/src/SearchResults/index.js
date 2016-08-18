@@ -50,12 +50,13 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
  * @property {string} value the facet value itself
  * @property {number} count times this facet appears in the results
  * @property {boolean} isRefined is the facet currently selected
+ * @property {boolean} isExcluded is the facet currently excluded (only for conjunctive facets)
  */
 
 /**
  * @typedef Refinement
  * @type {object}
- * @property {string} type the type of filter used: `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical` 
+ * @property {string} type the type of filter used: `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
  * @property {string} attributeName name of the attribute used for filtering
  * @property {string} name the value of the filter
  * @property {number} numericValue the value as a number. Only for numeric fitlers.
@@ -524,7 +525,8 @@ function extractNormalizedFacetValues(results, attribute) {
       return {
         name: k,
         count: v,
-        isRefined: results._state.isFacetRefined(attribute, k)
+        isRefined: results._state.isFacetRefined(attribute, k),
+        isExcluded: results._state.isExcludeRefined(attribute, k)
       };
     });
   } else if (results._state.isDisjunctiveFacet(attribute)) {
@@ -655,7 +657,7 @@ SearchResults.prototype.getRefinements = function() {
 
   forEach(state.facetsExcludes, function(refinements, attributeName) {
     forEach(refinements, function(name) {
-      res.push({type: 'exclude', attributeName, name, exclude: true});
+      res.push(getRefinement(state, 'exclude', attributeName, name, results.facets));
     });
   });
 
@@ -676,17 +678,17 @@ SearchResults.prototype.getRefinements = function() {
       forEach(values, function(value) {
         res.push({
           type: 'numeric',
-          attributeName,
+          attributeName: attributeName,
           name: value,
           numericValue: value,
-          operator
+          operator: operator
         });
       });
     });
   });
 
   forEach(state.tagRefinements, function(name) {
-    res.push({type: 'tag', attributeName: '_tags', name});
+    res.push({type: 'tag', attributeName: '_tags', name: name});
   });
 
   return res;

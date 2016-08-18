@@ -20,12 +20,12 @@ var zuulConfig = module.exports = {
 
   // if browser does not sends output in 120s since last output:
   // stop testing, something is wrong
-  browser_output_timeout: 60 * 2 * 1000,
+  browser_output_timeout: 60 * 4 * 1000,
   // if browser does not starts after 4 minutes, give up
-  browser_open_timeout: 60 * 4 * 1000,
+  browser_open_timeout: 60 * 8 * 1000,
 
   // we want to be notified something is wrong asap, so no retry
-  browser_retries: 1
+  browser_retries: 2
 };
 
 if (process.env.TRAVIS_BUILD_NUMBER !== undefined) {
