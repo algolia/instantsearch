@@ -21,20 +21,19 @@ export default function createConnector(connectorDesc) {
 
     static contextTypes = {
       // @TODO: more precise state manager propType
-      aisStore: PropTypes.object.isRequired,
-      aisWidgetsManager: PropTypes.object.isRequired,
+      ais: PropTypes.object.isRequired,
     };
 
     constructor(props, context) {
       super(props, context);
 
-      const {aisStore, aisWidgetsManager} = context;
+      const {ais: {store, widgetsManager}} = context;
 
       this.state = {
         props: this.getProps(props),
       };
 
-      this.unsubscribe = aisStore.subscribe(() => {
+      this.unsubscribe = store.subscribe(() => {
         this.setState({
           props: this.getProps(this.props),
         });
@@ -45,7 +44,7 @@ export default function createConnector(connectorDesc) {
           connectorDesc.getSearchParameters(
             searchParameters,
             this.props,
-            aisStore.getState().widgets
+            store.getState().widgets
           ) :
         null;
       const getMetadata = hasMetadata ?
@@ -55,7 +54,7 @@ export default function createConnector(connectorDesc) {
         ) :
         null;
       if (hasMetadata || hasSearchParameters) {
-        this.unregisterWidget = aisWidgetsManager.registerWidget({
+        this.unregisterWidget = widgetsManager.registerWidget({
           getSearchParameters, getMetadata,
         });
       }
@@ -69,7 +68,7 @@ export default function createConnector(connectorDesc) {
       if (hasMetadata || hasSearchParameters) {
         // Since props might have changed, we need to re-run getSearchParameters
         // and getMetadata with the new props.
-        this.context.aisWidgetsManager.update();
+        this.context.ais.widgetsManager.update();
       }
     }
 
@@ -92,33 +91,33 @@ export default function createConnector(connectorDesc) {
     }
 
     getProps = props => {
-      const {aisStore} = this.context;
+      const {ais: {store}} = this.context;
       const {
         results,
         searching,
         error,
         widgets,
         metadata,
-      } = aisStore.getState();
+      } = store.getState();
       const searchState = {results, searching, error};
       return connectorDesc.getProps(props, widgets, searchState, metadata);
     };
 
     refine = (...args) => {
-      this.context.aisWidgetsManager.setState(
+      this.context.ais.onInternalStateUpdate(
         connectorDesc.refine(
           this.props,
-          this.context.aisStore.getState().widgets,
+          this.context.ais.store.getState().widgets,
           ...args
         )
       );
     };
 
     createURL = (...args) =>
-      this.context.aisWidgetsManager.getURLForState(
+      this.context.ais.createHrefForState(
         connectorDesc.refine(
           this.props,
-          this.context.aisStore.getState().widgets,
+          this.context.ais.store.getState().widgets,
           ...args
         )
       );
