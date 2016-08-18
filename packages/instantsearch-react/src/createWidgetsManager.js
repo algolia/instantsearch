@@ -1,8 +1,4 @@
-export default function createWidgetsManager(
-  onStateUpdate,
-  onWidgetsUpdate,
-  getURLForState
-) {
+export default function createWidgetsManager(onWidgetsUpdate) {
   const widgets = [];
   // Is an update scheduled?
   let scheduled = false;
@@ -57,8 +53,5 @@ export default function createWidgetsManager(
           searchParameters
         );
     },
-
-    getURLForState,
-    setState: onStateUpdate,
   };
 }
