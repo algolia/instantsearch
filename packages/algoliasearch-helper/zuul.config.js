@@ -16,7 +16,7 @@ var zuulConfig = module.exports = {
 
   // only used when run with saucelabs
   // not activated when dev or phantom
-  concurrency: 2,
+  concurrency: 1,
 
   // if browser does not sends output in 120s since last output:
   // stop testing, something is wrong

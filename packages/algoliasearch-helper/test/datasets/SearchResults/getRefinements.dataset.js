@@ -10,7 +10,9 @@ if (require.main === module) {
 
   var replayTools = require('../../replayTools.js');
   var Helper = require('../../../src/algoliasearch.helper.js');
-  var HelperSaver = replayTools.toSaver(Helper, path.join(__dirname, 'getRefinements'));
+  var HelperSaver = replayTools.toSaver(
+    Helper,
+    path.join(__dirname.replace('datasets', 'spec'), 'getRefinements'));
   var algoliasearch = require('algoliasearch');
 
   var client = algoliasearch('latency', '6be0576ff61c053d5f9a3225e2a90f76');
@@ -66,9 +68,9 @@ if (require.main === module) {
     return helper.searchOnce(otherState);
   }).then(function() {
     helper.__saveLastToFile('exclude-apple.json');
-  }).catch(function(e) {
-    console.error(e);
   }).then(function() {
     console.log('Dataset sucessfully generated');
+  }, function(e) {
+    console.error(e);
   });
 }
