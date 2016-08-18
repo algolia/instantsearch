@@ -31,10 +31,12 @@ function wrapHelperToSave(Helper, folderName) {
 
     Helper.prototype._handleResponse.apply(this, Array.prototype.slice.call(arguments));
   };
-  WrappedHelper.prototype.searchOnce = function() {
-    return Helper.prototype.searchOnce.apply(
+  WrappedHelper.prototype.searchOnce = function(options) {
+    var state = this.state.setQueryParameters(options);
+
+    return Helper.prototype.searchOnce.call(
       this,
-      Array.prototype.slice.call(arguments)
+      state
     ).then(function(contentAndState) {
       savedParameters.content = contentAndState._originalResponse;
       savedParameters.state = contentAndState.state;
@@ -42,7 +44,7 @@ function wrapHelperToSave(Helper, folderName) {
       return contentAndState;
     }, function(error) {
       savedParameters.content = null;
-      savedParameters.state = null; // FIXME can't access the actual state without reimplementation
+      savedParameters.state = state;
       savedParameters.error = error;
       throw error;
     });
