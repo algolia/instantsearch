@@ -25,6 +25,15 @@ import {
 } from '../';
 import history from './history';
 
+function ProductHit(props) {
+  return (
+    <div>
+      <img src={props.hit.image} />
+      {props.hit.title}
+    </div>
+  );
+}
+
 class Search extends Component {
   createURL = state => history.createHref(
     `${state.p ? state.p + 1 : 1}?${qs.stringify(omit(state, 'p'))}`
@@ -115,14 +124,14 @@ class Search extends Component {
             attributeName="brand"
           />
           <HierarchicalMenu
-            name="ok"
+            id="ok"
             attributes={[
               'hierarchicalCategories.lvl0',
               'hierarchicalCategories.lvl1',
               'hierarchicalCategories.lvl2',
             ]}
           />
-          <Hits />
+          <Hits itemComponent={ProductHit} />
           <PaginationSelect />
           <Pagination />
         </div>
