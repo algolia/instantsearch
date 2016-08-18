@@ -84,13 +84,13 @@ class InstantSearch extends Component {
       initialState = props.state;
     } else if (this.isHSControlled) {
       const hs = props.history || createHistory();
-      this.historyStateManager = createHistoryStateManager({
+      this.hsManager = createHistoryStateManager({
         history: hs,
         threshold: props.threshold,
         onInternalStateUpdate: this.onHistoryInternalStateUpdate,
         getIgnoredKeys: this.getIgnoredKeys,
       });
-      initialState = this.historyStateManager.getStateFromCurrentLocation();
+      initialState = this.hsManager.getStateFromCurrentLocation();
     } else {
       initialState = {};
     }
@@ -116,7 +116,7 @@ class InstantSearch extends Component {
 
   componentWillUnmount() {
     if (this.history) {
-      this.historyStateManager.unlisten();
+      this.hsManager.unlisten();
     }
   }
 
@@ -126,9 +126,17 @@ class InstantSearch extends Component {
     };
   }
 
-  createHrefForState = state => this.historyStateManager.createHrefForState(
-    state, this.aisManager.getWidgetsIds()
-  );
+  createHrefForState = state => {
+    if (this.props.createURL) {
+      return this.props.createURL(state, this.aisManager.getWidgetsIds());
+    } else if (this.isHSControlled) {
+      return this.hsManager.createHrefForState(
+        state, this.aisManager.getWidgetsIds()
+      );
+    } else {
+      return '#';
+    }
+  };
 
   onHistoryInternalStateUpdate = state => {
     this.aisManager.onExternalStateUpdate(state);
@@ -141,7 +149,7 @@ class InstantSearch extends Component {
       this.aisManager.onExternalStateUpdate(state);
       // This needs to go after the aisManager's update, since it depends on new
       // metadata.
-      this.historyStateManager.onExternalStateUpdate(state);
+      this.hsManager.onExternalStateUpdate(state);
     }
   };
 
