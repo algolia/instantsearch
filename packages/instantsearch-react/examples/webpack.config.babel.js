@@ -21,8 +21,15 @@ export default {
     loaders: [
       {
         test: /\.js$/,
-        loaders: ['react-hot', 'babel'],
+        loaders: [
+          // This is necessary since most of the files we're bundling are above
+          // this one in the module tree, so them requiring `react-hot-loader`
+          // might resolve to another module or none at all.
+          require.resolve('react-hot-loader'),
+          require.resolve('babel-loader'),
+        ],
         include: [r('../src'), r('.'), r('../index.js')],
+        exclude: /node_modules/
       },
     ],
   },
