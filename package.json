@@ -1,6 +1,6 @@
 {
   "name": "instantsearch.js",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
   "main": "dist-es5-module/index.js",
   "author": "Algolia <support@algolia.com>",
@@ -91,7 +91,7 @@
     "lodash": "^3.10.1",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
-    "react-nouislider": "^1.11.0",
+    "react-nouislider": "^1.13.0",
     "to-factory": "^1.0.0"
   },
   "license": "MIT"

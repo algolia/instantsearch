@@ -1,3 +1,20 @@
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/algolia/instantsearch.js/compare/v1.7.1...v1.8.0) (2016-08-18)
+
+
+### Bug Fixes
+
+* **documentation:** Change instantsearch.widgets.stats typo data.processingTimMS to data.processingTimeMS ([034703e](https://github.com/algolia/instantsearch.js/commit/034703e))
+* **documentation:** Change responsiveNavigation.js & header.html to fix #1090 ([bf3a808](https://github.com/algolia/instantsearch.js/commit/bf3a808)), closes [#1090](https://github.com/algolia/instantsearch.js/issues/1090)
+* **nouislider:** fix the slider for nouislider 8.5.1 ([af8f56b](https://github.com/algolia/instantsearch.js/commit/af8f56b))
+
+
+### Features
+
+* **clearAll:** Add optional excludeAttributes to list protected filters ([fe6d19c](https://github.com/algolia/instantsearch.js/commit/fe6d19c))
+
+
+
 <a name="1.7.1"></a>
 ## [1.7.1](https://github.com/algolia/instantsearch.js/compare/v1.7.0...v1.7.1) (2016-07-28)
 
