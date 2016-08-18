@@ -62,7 +62,6 @@ class Pagination extends Component {
     createURL: PropTypes.func.isRequired,
 
     translate: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     listComponent: PropTypes.func,
     showFirst: PropTypes.bool,
     showPrevious: PropTypes.bool,
@@ -112,7 +111,6 @@ class Pagination extends Component {
       showLast,
       refine,
       createURL,
-      applyTheme,
       translate,
       listComponent: ListComponent,
     } = this.props;
@@ -173,7 +171,6 @@ class Pagination extends Component {
 
     return (
       <ListComponent
-        applyTheme={applyTheme}
         items={items}
         selectedItem={page}
         onSelect={refine}
