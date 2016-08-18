@@ -16,6 +16,9 @@ class SearchBox extends Component {
     ),
     autoFocus: PropTypes.bool,
     searchAsYouType: PropTypes.bool,
+
+    // For testing purposes
+    __inputRef: PropTypes.func,
   };
 
   static defaultProps = {
@@ -75,6 +78,9 @@ class SearchBox extends Component {
 
   onInputMount = input => {
     this.input = input;
+    if (this.props.__inputRef) {
+      this.props.__inputRef(input);
+    }
   };
 
   // From https://github.com/algolia/autocomplete.js/pull/86

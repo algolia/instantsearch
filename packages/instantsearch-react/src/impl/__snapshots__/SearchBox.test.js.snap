@@ -1,4 +1,4 @@
-exports[`SearchBox applies its default props 0`] = `
+exports[`SearchBox applies its default props 1`] = `
 <form
   className="SearchBox"
   noValidate={true}
@@ -28,7 +28,7 @@ exports[`SearchBox applies its default props 0`] = `
 </form>
 `;
 
-exports[`SearchBox lets you customize its theme 0`] = `
+exports[`SearchBox lets you customize its theme 1`] = `
 <form
   className="ROOT"
   noValidate={true}
@@ -58,7 +58,7 @@ exports[`SearchBox lets you customize its theme 0`] = `
 </form>
 `;
 
-exports[`SearchBox lets you customize its translations 0`] = `
+exports[`SearchBox lets you customize its translations 1`] = `
 <form
   className="SearchBox"
   noValidate={true}
@@ -92,7 +92,7 @@ exports[`SearchBox lets you customize its translations 0`] = `
 </form>
 `;
 
-exports[`SearchBox transfers the autoFocus prop to the underlying input element 0`] = `
+exports[`SearchBox transfers the autoFocus prop to the underlying input element 1`] = `
 <form
   className="SearchBox"
   noValidate={true}
@@ -110,6 +110,66 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       required={true}
       type="search"
       value="" />
+    <button
+      className="SearchBox__submit"
+      title="Submit your search query."
+      type="submit" />
+    <button
+      className="SearchBox__reset"
+      title="Clear the search query."
+      type="reset" />
+  </div>
+</form>
+`;
+
+exports[`SearchBox treats its query prop as its input value 1`] = `
+<form
+  className="SearchBox"
+  noValidate={true}
+  onReset={[Function anonymous]}
+  onSubmit={[Function anonymous]}>
+  <div
+    className="SearchBox__wrapper"
+    role="search">
+    <input
+      autoComplete={false}
+      autoFocus={false}
+      className="SearchBox__input"
+      onChange={[Function anonymous]}
+      placeholder="Search your website"
+      required={true}
+      type="search"
+      value="QUERY1" />
+    <button
+      className="SearchBox__submit"
+      title="Submit your search query."
+      type="submit" />
+    <button
+      className="SearchBox__reset"
+      title="Clear the search query."
+      type="reset" />
+  </div>
+</form>
+`;
+
+exports[`SearchBox treats its query prop as its input value 2`] = `
+<form
+  className="SearchBox"
+  noValidate={true}
+  onReset={[Function anonymous]}
+  onSubmit={[Function anonymous]}>
+  <div
+    className="SearchBox__wrapper"
+    role="search">
+    <input
+      autoComplete={false}
+      autoFocus={false}
+      className="SearchBox__input"
+      onChange={[Function anonymous]}
+      placeholder="Search your website"
+      required={true}
+      type="search"
+      value="QUERY2" />
     <button
       className="SearchBox__submit"
       title="Submit your search query."

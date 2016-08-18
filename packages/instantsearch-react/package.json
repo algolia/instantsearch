@@ -42,6 +42,7 @@
     "unmockedModulePathPatterns": [
       "node_modules/react/",
       "node_modules/react-dom/",
+      "node_modules/react-test-renderer/",
       "node_modules/enzyme/",
       "node_modules/lodash/",
       "node_modules/react-themeable/",
