@@ -76,11 +76,11 @@ const currentToggle = ({
       isRefined: onData !== undefined ? onData.isRefined : false,
       count: onData === undefined ? null : onData.count
     };
-    const offData = find(allFacetValues, {name: offValue.toString()});
+    const offData = hasAnOffValue ? find(allFacetValues, {name: offValue.toString()}) : undefined;
     const offFacetValue = {
       name: label,
       isRefined: offData !== undefined ? offData.isRefined : false,
-      count: offData === undefined ? null : offData.count
+      count: offData === undefined ? results.nbHits : offData.count
     };
 
         // what will we show by default,
