@@ -41,7 +41,7 @@ var browsers = {
     {name: 'firefox', version: '-1..latest', platform: 'Windows 10'},
     {name: 'internet explorer', version: '9..11'},
     {name: 'safari', version: '-3..latest'},
-    {name: 'iphone',version: '-3..latest'},
+    {name: 'iphone', version: '-3..latest'},
     {name: 'android', version: '-3..latest'},
     {name: 'ipad', version: '-3..latest'},
     {name: 'microsoftedge', version: 'latest'}
