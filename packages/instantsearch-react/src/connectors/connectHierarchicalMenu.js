@@ -9,6 +9,9 @@ function getId(props) {
 function getSelectedItem(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
+    if (state[id] === '') {
+      return null;
+    }
     return state[id];
   }
   if (props.defaultSelectedItem) {
@@ -68,7 +71,7 @@ export default createConnector({
     const id = getId(props);
     return {
       ...state,
-      [id]: nextSelectedItem,
+      [id]: nextSelectedItem || '',
     };
   },
 
@@ -116,12 +119,12 @@ export default createConnector({
     const selectedItem = getSelectedItem(props, state);
     return {
       id,
-      filters: !selectedItem ? [] : [{
+      filters: selectedItem === null ? [] : [{
         key: `${id}.${selectedItem}`,
         label: `${props.name}: ${selectedItem}`,
         clear: nextState => ({
           ...nextState,
-          [id]: null,
+          [id]: '',
         }),
       }],
     };
