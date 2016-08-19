@@ -1,13 +1,9 @@
-import {omit} from 'lodash';
+import {omit, pick} from 'lodash';
 import qs from 'qs';
 
-function getStateFromLocation(location) {
-  if (location.query) {
-    return location.query;
-  }
-  // We could also use location.query with the useQueries enhancer, but that
-  // would require a bit more configuration from the user.
-  return qs.parse(location.search.slice(1));
+function getStateFromLocation(location, knownKeys = null) {
+  const query = location.query || qs.parse(location.search.slice(1));
+  return knownKeys !== null ? pick(query, knownKeys) : query;
 }
 
 function alphabeticalSort(a, b) {
@@ -17,7 +13,7 @@ function alphabeticalSort(a, b) {
   if (a === b) {
     return 0;
   }
-  return 1;
+  return -1;
 }
 
 function applyStateToLocation(location, state, knownKeys) {
@@ -43,7 +39,7 @@ export default function createHistoryStateManager({
   history,
   threshold,
   onInternalStateUpdate,
-  getIgnoredKeys,
+  getKnownKeys,
 }) {
   let currentLocation = null;
   // In history V2, .listen is called with the initial location.
@@ -66,12 +62,12 @@ export default function createHistoryStateManager({
       skipNextLocationUpdate = false;
       return;
     }
-    const state = getStateFromLocation(currentLocation);
+    const state = getStateFromLocation(currentLocation, getKnownKeys());
     onInternalStateUpdate(state);
   };
 
   const createHrefForState = state => history.createHref(
-    applyStateToLocation(currentLocation, state, getIgnoredKeys())
+    applyStateToLocation(currentLocation, state, getKnownKeys())
   );
 
   const onExternalStateUpdate = state => {
@@ -89,7 +85,8 @@ export default function createHistoryStateManager({
   const unlisten = history.listen(onLocationChange);
 
   return {
-    getStateFromCurrentLocation: () => getStateFromLocation(currentLocation),
+    getStateFromCurrentLocation: () =>
+      getStateFromLocation(currentLocation, getKnownKeys()),
     onExternalStateUpdate,
     createHrefForState,
     unlisten,

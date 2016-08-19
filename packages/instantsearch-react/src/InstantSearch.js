@@ -92,7 +92,7 @@ class InstantSearch extends Component {
         history: hs,
         threshold: props.threshold,
         onInternalStateUpdate: this.onHistoryInternalStateUpdate,
-        getIgnoredKeys: this.getIgnoredKeys,
+        getKnownKeys: this.getKnownKeys,
       });
       initialState = this.hsManager.getStateFromCurrentLocation();
     } else {
@@ -157,7 +157,7 @@ class InstantSearch extends Component {
     }
   };
 
-  getIgnoredKeys = () => this.aisManager.getWidgetsIds();
+  getKnownKeys = () => this.aisManager.getWidgetsIds();
 
   render() {
     return Children.only(this.props.children);
