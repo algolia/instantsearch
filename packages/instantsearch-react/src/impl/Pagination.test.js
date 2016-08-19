@@ -181,14 +181,14 @@ describe('Pagination', () => {
         theme={{
           root: 'ROOT',
           item: 'ITEM',
-          first: 'FIRST',
-          last: 'LAST',
-          previous: 'PREVIOUS',
-          next: 'NEXT',
-          page: 'PAGE',
-          active: 'ACTIVE',
-          disabled: 'DISABLED',
-          link: 'LINK',
+          itemFirst: 'FIRST',
+          itemLast: 'LAST',
+          itemPrevious: 'PREVIOUS',
+          itemNext: 'NEXT',
+          itemPage: 'PAGE',
+          itemSelected: 'SELECTED',
+          itemDisabled: 'DISABLED',
+          itemLink: 'LINK',
         }}
         showLast
         pagesPadding={4}

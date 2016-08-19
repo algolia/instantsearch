@@ -17,7 +17,7 @@ let wrapper;
 describe('SearchBox', () => {
   it('treats query as a default value when searchAsYouType=false', () => {
     wrapper = mount(
-      <SearchBox query="QUERY1" searchAsYouType={false} />
+      <SearchBox refine={() => null} query="QUERY1" searchAsYouType={false} />
     );
     expect(wrapper.find('input').props().value).toBe('QUERY1');
     wrapper.find('input').simulate('change', {target: {value: 'QUERY2'}});
@@ -59,6 +59,7 @@ describe('SearchBox', () => {
     let input;
     wrapper = mount(
       <SearchBox
+        refine={() => null}
         focusShortcuts={['s', 84]}
         __inputRef={node => {
           input = node;

@@ -13,26 +13,26 @@ let tree;
 describe('SearchBox', () => {
   it('applies its default props', () => {
     tree = renderer.create(
-      <SearchBox />
+      <SearchBox refine={() => null} />
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('transfers the autoFocus prop to the underlying input element', () => {
     tree = renderer.create(
-      <SearchBox autoFocus />
+      <SearchBox refine={() => null} autoFocus />
     ).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('treats its query prop as its input value', () => {
     const inst = renderer.create(
-      <SearchBox query="QUERY1" />
+      <SearchBox refine={() => null} query="QUERY1" />
     );
     expect(inst.toJSON()).toMatchSnapshot();
 
     inst.update(
-      <SearchBox query="QUERY2" />
+      <SearchBox refine={() => null} query="QUERY2" />
     );
     expect(inst.toJSON()).toMatchSnapshot();
   });
@@ -40,6 +40,7 @@ describe('SearchBox', () => {
   it('lets you customize its theme', () => {
     tree = renderer.create(
       <SearchBox
+        refine={() => null}
         theme={{
           root: 'ROOT',
           wrapper: 'WRAPPER',
@@ -55,6 +56,7 @@ describe('SearchBox', () => {
   it('lets you customize its translations', () => {
     tree = renderer.create(
       <SearchBox
+        refine={() => null}
         translations={{
           submit: 'SUBMIT',
           reset: 'RESET',
