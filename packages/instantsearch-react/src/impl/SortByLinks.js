@@ -25,10 +25,10 @@ class SortByLinks extends Component {
         items={items.map(item => ({
           label: item.label,
           value: item.index,
-          href: createURL(item.index),
         }))}
         selectedItem={selectedIndex}
-        onItemClick={refine}
+        onSelect={refine}
+        createURL={createURL}
       />
     );
   }
