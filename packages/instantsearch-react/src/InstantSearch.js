@@ -132,11 +132,9 @@ class InstantSearch extends Component {
 
   createHrefForState = state => {
     if (this.props.createURL) {
-      return this.props.createURL(state, this.aisManager.getWidgetsIds());
+      return this.props.createURL(state, this.getKnownKeys());
     } else if (this.isHSControlled) {
-      return this.hsManager.createHrefForState(
-        state, this.aisManager.getWidgetsIds()
-      );
+      return this.hsManager.createHrefForState(state, this.getKnownKeys());
     } else {
       return '#';
     }

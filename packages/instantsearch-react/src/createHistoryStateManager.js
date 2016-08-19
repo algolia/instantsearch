@@ -85,8 +85,9 @@ export default function createHistoryStateManager({
   const unlisten = history.listen(onLocationChange);
 
   return {
-    getStateFromCurrentLocation: () =>
-      getStateFromLocation(currentLocation, getKnownKeys()),
+    // Since widgets aren't registered yet the first time we call this,
+    // we want it to return all keys.
+    getStateFromCurrentLocation: () => getStateFromLocation(currentLocation),
     onExternalStateUpdate,
     createHrefForState,
     unlisten,
