@@ -46,7 +46,8 @@
       "node_modules/enzyme/",
       "node_modules/lodash/",
       "node_modules/react-themeable/",
-      "node_modules/mockdate/"
+      "node_modules/mockdate/",
+      "src/propTypes"
     ],
     "setupFiles": [
       "src/silentWarnings.js"
