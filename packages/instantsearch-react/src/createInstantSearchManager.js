@@ -1,6 +1,6 @@
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {omit, isEqual, includes} from 'lodash';
+import {omit, isEqual, intersection} from 'lodash';
 
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
@@ -17,6 +17,8 @@ export default function createInstantSearchManager({
   const client = algoliasearch(appId, apiKey);
   const helper = algoliasearchHelper(client);
 
+  const widgetsManager = createWidgetsManager(onWidgetsUpdate);
+
   const store = createStore({
     widgets: initialState,
     metadata: [],
@@ -25,14 +27,38 @@ export default function createInstantSearchManager({
     searching: false,
   });
 
-  const widgetsManager = createWidgetsManager(onWidgetsUpdate);
+  function getMetadata(state) {
+    return widgetsManager.getWidgets()
+      .filter(widget => Boolean(widget.getMetadata))
+      .map(widget => widget.getMetadata(state));
+  }
+
+  function getSearchParameters(searchParameters) {
+    return widgetsManager.getWidgets()
+      .filter(widget => Boolean(widget.getSearchParameters))
+      .reduce(
+        (res, widget) => {
+          const prevPage = res.page;
+          res = widget.getSearchParameters(res);
+          // The helper's default behavior for most `set` methods is to reset
+          // the current page to 0. We don't want that to happen here, since a
+          // widget might have previously refined the `page` query parameter
+          // and that refinement would be overriden.
+          if (res.page === 0 && prevPage !== 0) {
+            res = res.setPage(prevPage);
+          }
+          return res;
+        },
+        searchParameters
+      );
+  }
 
   function search() {
     const baseSP = new SearchParameters({index: indexName});
     // @TODO: Provide a way to configure base SearchParameters.
     // We previously had a `configureSearchParameters : SP -> SP` option.
     // We could also just have a `baseSearchParameters : SP` option.
-    const searchParameters = widgetsManager.getSearchParameters(baseSP);
+    const searchParameters = getSearchParameters(baseSP);
 
     helper.searchOnce(searchParameters)
       .then(({content}) => {
@@ -61,8 +87,7 @@ export default function createInstantSearchManager({
 
   // Called whenever a widget has been rendered with new props.
   function onWidgetsUpdate() {
-    const widgetsState = store.getState().widgets;
-    const metadata = widgetsManager.getMetadata(widgetsState);
+    const metadata = getMetadata(store.getState().widgets);
 
     store.setState({
       ...store.getState(),
@@ -83,14 +108,10 @@ export default function createInstantSearchManager({
     const clearIds = store.getState().metadata.reduce((res, meta) =>
       meta.clearOnChange ? res.concat(meta.id) : res
     , []);
-    const changedKeys = Object.keys(nextState).filter(key =>
-      !isEqual(state[key], nextState[key])
+    const unchangedKeys = Object.keys(nextState).filter(key =>
+      isEqual(state[key], nextState[key])
     );
-    nextState = clearIds.reduce((res, clearId) =>
-      changedKeys.length > 0 && !includes(changedKeys, clearId) ?
-        omit(res, clearId) :
-        res
-    , nextState);
+    nextState = omit(nextState, intersection(unchangedKeys, clearIds));
     return nextState;
   }
 
@@ -110,7 +131,7 @@ export default function createInstantSearchManager({
   }
 
   function onExternalStateUpdate(nextState) {
-    const metadata = widgetsManager.getMetadata(nextState);
+    const metadata = getMetadata(nextState);
 
     store.setState({
       ...store.getState(),
