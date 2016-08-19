@@ -1531,6 +1531,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters} a new updated instance
    */
   setQueryParameters: function setQueryParameters(params) {
+    if (!params) return this;
+
     var error = SearchParameters.validate(this, params);
 
     if (error) {

@@ -145,7 +145,7 @@ AlgoliaSearchHelper.prototype.search = function() {
  * }
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
-  var tempState = this.state.setQueryParameters(options);
+  var tempState = !options ? this.state : this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(tempState.index, tempState);
   if (cb) {
     return this.client.search(
@@ -159,7 +159,8 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
     function(content) {
       return {
         content: new SearchResults(tempState, content),
-        state: tempState
+        state: tempState,
+        _originalResponse: content
       };
     });
 };
@@ -901,6 +902,8 @@ AlgoliaSearchHelper.prototype.getQueryParameter = function(parameterName) {
 /**
  * Get the list of refinements for a given attribute. This method works with
  * conjunctive, disjunctive, excluding and numerical filters.
+ *
+ * See also SearchResults#getRefinements
  *
  * @param {string} facetName attribute name used for facetting
  * @return {Array.<FacetRefinement|NumericRefinement>} All Refinement are objects that contain a value, and

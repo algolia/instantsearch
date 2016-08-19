@@ -4,6 +4,20 @@ var test = require('tape');
 var forOwn = require('lodash/forOwn');
 var SearchParameters = require('../../../src/SearchParameters');
 
+test('setQueryParameters should return the same instance if the options is falsey', function(t) {
+  var originalSP = new SearchParameters({
+    facets: ['a', 'b'],
+    ignorePlurals: false,
+    attributesToHighlight: ''
+  });
+
+  t.equal(originalSP, originalSP.setQueryParameters());
+  t.equal(originalSP, originalSP.setQueryParameters(null));
+  t.equal(originalSP, originalSP.setQueryParameters(undefined));
+
+  t.end();
+});
+
 test('setQueryParameters should be able to mix an actual state with a new set of parameters', function(t) {
   var originalSP = new SearchParameters({
     facets: ['a', 'b'],
