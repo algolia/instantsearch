@@ -9,6 +9,9 @@ function getId(props) {
 function getSelectedItem(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
+    if (state[id] === '') {
+      return null;
+    }
     return state[id];
   }
   if (props.defaultSelectedItem) {
@@ -65,9 +68,7 @@ export default createConnector({
     const id = getId(props);
     return {
       ...state,
-      [id]: getSelectedItem(props, state) === nextSelectedItem ?
-        null :
-        nextSelectedItem,
+      [id]: nextSelectedItem || '',
     };
   },
 
@@ -82,7 +83,7 @@ export default createConnector({
     searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
 
     const selectedItem = getSelectedItem(props, state);
-    if (selectedItem) {
+    if (selectedItem !== null) {
       searchParameters = searchParameters.addDisjunctiveFacetRefinement(
         attributeName,
         selectedItem
@@ -97,12 +98,12 @@ export default createConnector({
     const selectedItem = getSelectedItem(props, state);
     return {
       id,
-      filters: !selectedItem ? [] : [{
+      filters: selectedItem === null ? [] : [{
         key: `${id}.${selectedItem}`,
         label: `${props.attributeName}: ${selectedItem}`,
         clear: nextState => ({
           ...nextState,
-          [id]: null,
+          [id]: '',
         }),
       }],
     };
