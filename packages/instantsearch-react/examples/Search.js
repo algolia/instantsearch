@@ -6,6 +6,7 @@ import qs from 'qs';
 import InstantSearch from '../src/InstantSearch';
 import {
   Pagination,
+  PaginationSelect,
   RefinementList,
   Menu,
   HierarchicalMenu,
@@ -118,7 +119,8 @@ class Search extends Component {
             ]}
           />
           <Hits />
-          <Pagination id="p" />
+          <PaginationSelect />
+          <Pagination />
         </div>
       </InstantSearch>
     );

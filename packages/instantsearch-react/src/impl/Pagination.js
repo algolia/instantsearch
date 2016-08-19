@@ -1,9 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import range from 'lodash/utility/range';
 
-import {capitalize, isSpecialClick} from '../utils';
+import {capitalize} from '../utils';
 import themeable from '../themeable';
 import translatable from '../translatable';
+
+import LinkList from './LinkList';
 
 function getPagesDisplayedCount(padding, total) {
   return Math.min(2 * padding + 1, total);
@@ -41,14 +43,14 @@ function getPages(page, total, padding) {
 
 class Pagination extends Component {
   static propTypes = {
-    // Provided by `createPagination`
     nbPages: PropTypes.number.isRequired,
     page: PropTypes.number.isRequired,
     refine: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
 
     translate: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    createURL: PropTypes.func,
+    listComponent: PropTypes.func,
     showFirst: PropTypes.bool,
     showPrevious: PropTypes.bool,
     showNext: PropTypes.bool,
@@ -58,6 +60,7 @@ class Pagination extends Component {
   };
 
   static defaultProps = {
+    listComponent: LinkList,
     showFirst: true,
     showPrevious: true,
     showNext: true,
@@ -66,132 +69,103 @@ class Pagination extends Component {
     maxPages: Infinity,
   };
 
-  onClick = (pageNumber, event) => {
-    if (isSpecialClick(event)) {
-      // do not alter the default browser behavior
-      // if one special key is down
-      return undefined;
-    }
-    event.preventDefault();
-    this.props.refine(pageNumber);
-    return false;
-  }
-
-  getPage = () => typeof this.props.page === 'string' ?
-    parseInt(this.props.page, 10) :
-    this.props.page;
-
-  renderPageLink({
-    translationKey,
-    pageNumber,
-    isActive = false,
-  }) {
+  getItem(modifier, translationKey, value) {
     const {
-      createURL,
-      applyTheme,
       nbPages,
       maxPages,
       translate,
     } = this.props;
-    const isDisabled =
-      !isActive && this.getPage() === pageNumber ||
-      pageNumber < 0 ||
-      pageNumber >= Math.min(maxPages, nbPages);
-    // @TODO: Default createURL that works with URL sync
-    const key = translationKey + pageNumber;
-    const ariaTranslationKey = `aria${capitalize(translationKey)}`;
-
-    // "Enable" the element, by making it a link
-    const tag = isDisabled ? 'span' : 'a';
-    const props = {
-      'aria-label': translate(ariaTranslationKey, pageNumber),
-      ...applyTheme('link', 'link'),
-      ...(isDisabled ? {} : {
-        href: createURL ? createURL(pageNumber) : '#',
-        onClick: this.onClick.bind(null, pageNumber),
-      }),
+    return {
+      key: `${modifier}.${value}`,
+      modifier,
+      disabled:
+        value < 0 ||
+        value >= Math.min(maxPages, nbPages),
+      label: translate(translationKey, value),
+      value,
+      ariaLabel: translate(`aria${capitalize(translationKey)}`, value),
     };
-    const label = translate(translationKey, pageNumber);
-    const element = React.createElement(tag, props, label);
-
-    return (
-      <li
-        {...applyTheme(
-          key,
-          'item',
-          isActive && 'active',
-          isDisabled && 'disabled',
-          translationKey
-        )}
-      >
-        {element}
-      </li>
-    );
-  }
-
-  renderPreviousPageLink() {
-    return this.renderPageLink({
-      translationKey: 'previous',
-      pageNumber: this.getPage() - 1,
-    });
-  }
-
-  renderNextPageLink() {
-    return this.renderPageLink({
-      translationKey: 'next',
-      pageNumber: this.getPage() + 1,
-    });
-  }
-
-  renderFirstPageLink() {
-    return this.renderPageLink({
-      translationKey: 'first',
-      pageNumber: 0,
-    });
-  }
-
-  renderLastPageLink() {
-    const {nbPages, maxPages} = this.props;
-    return this.renderPageLink({
-      translationKey: 'last',
-      pageNumber: Math.min(nbPages, maxPages) - 1,
-    });
-  }
-
-  renderPageLinks() {
-    const {nbPages, maxPages, pagesPadding} = this.props;
-    const total = Math.min(nbPages, maxPages);
-    return getPages(this.getPage(), total, pagesPadding).map(pageNumber =>
-      this.renderPageLink({
-        translationKey: 'page',
-        isActive: pageNumber === this.getPage(),
-        pageNumber,
-      })
-    );
   }
 
   render() {
     const {
       nbPages,
+      maxPages,
+      page,
+      pagesPadding,
       showFirst,
       showPrevious,
       showNext,
       showLast,
+      refine,
+      createURL,
       applyTheme,
+      translate,
+      listComponent: ListComponent,
     } = this.props;
 
-    if (!nbPages) {
-      return null;
+    const totalPages = Math.min(nbPages, maxPages);
+    const lastPage = totalPages - 1;
+
+    let items = [];
+    if (showFirst) {
+      items.push({
+        key: 'first',
+        modifier: 'itemFirst',
+        disabled: page === 0,
+        label: translate('first'),
+        value: 0,
+        ariaLabel: translate('ariaFirst'),
+      });
+    }
+    if (showPrevious) {
+      items.push({
+        key: 'previous',
+        modifier: 'itemPrevious',
+        disabled: page === 0,
+        label: translate('previous'),
+        value: page - 1,
+        ariaLabel: translate('ariaPrevious'),
+      });
+    }
+    items = items.concat(
+      getPages(page, totalPages, pagesPadding).map(value => ({
+        key: value,
+        modifier: 'itemPage',
+        label: translate('page', value),
+        value,
+        ariaLabel: translate('ariaPage', value),
+      }))
+    );
+    if (showNext) {
+      items.push({
+        key: 'next',
+        modifier: 'itemNext',
+        disabled: page === lastPage,
+        label: translate('next'),
+        value: page + 1,
+        ariaLabel: translate('ariaNext'),
+      });
+    }
+    if (showLast) {
+      items.push({
+        key: 'last',
+        modifier: 'itemLast',
+        disabled: page === lastPage,
+        label: translate('last'),
+        value: lastPage,
+        ariaLabel: translate('ariaLast'),
+      });
     }
 
     return (
-      <ul {...applyTheme('root', 'root')}>
-        {showFirst && this.renderFirstPageLink()}
-        {showPrevious && this.renderPreviousPageLink()}
-        {this.renderPageLinks()}
-        {showNext && this.renderNextPageLink()}
-        {showLast && this.renderLastPageLink()}
-      </ul>
+      <ListComponent
+        applyTheme={applyTheme}
+        items={items}
+        selectedItem={page}
+        onSelect={refine}
+        createURL={createURL}
+      />
     );
   }
 }
@@ -199,14 +173,14 @@ class Pagination extends Component {
 export default themeable({
   root: 'Pagination',
   item: 'Pagination__item',
-  first: 'Pagination__item--first',
-  last: 'Pagination__item--last',
-  previous: 'Pagination__item--previous',
-  next: 'Pagination__item--next',
-  page: 'Pagination__item--page',
-  active: 'Pagination__item--active',
-  disabled: 'Pagination__item--disabled',
-  link: 'Pagination__item__link',
+  itemFirst: 'Pagination__item--first',
+  itemLast: 'Pagination__item--last',
+  itemPrevious: 'Pagination__item--previous',
+  itemNext: 'Pagination__item--next',
+  itemPage: 'Pagination__item--page',
+  itemSelected: 'Pagination__item--selected',
+  itemDisabled: 'Pagination__item--disabled',
+  itemLink: 'Pagination__item__link',
 })(
   translatable({
     previous: '‹',
@@ -219,5 +193,7 @@ export default themeable({
     ariaFirst: 'First page',
     ariaLast: 'Last page',
     ariaPage: page => `Page ${(page + 1).toString()}`,
-  })(Pagination)
+  })(
+    Pagination
+  )
 );

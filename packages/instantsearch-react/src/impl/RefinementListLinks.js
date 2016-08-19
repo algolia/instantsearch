@@ -5,7 +5,7 @@ import themeable from '../themeable';
 import translatable from '../translatable';
 
 import List from './List';
-import LinkItem from './LinkItem';
+import Link from './Link';
 
 class RefinementListLinks extends Component {
   static propTypes = {
@@ -35,19 +35,14 @@ class RefinementListLinks extends Component {
     return nextSelectedItems;
   };
 
-  onItemClick = item => {
-    this.props.refine(this.getSelectedItems(item));
-  }
-
   renderItem = item => {
     const {createURL, applyTheme, translate} = this.props;
-
+    const value = this.getSelectedItems(item);
     return (
-      <LinkItem
+      <Link
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={this.onItemClick}
-        item={item}
-        href={createURL(this.getSelectedItems(item))}
+        onClick={this.props.refine.bind(null, value)}
+        href={createURL(value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
           {item.value}
@@ -56,7 +51,7 @@ class RefinementListLinks extends Component {
         <span {...applyTheme('itemCount', 'itemCount')}>
           {translate('count', item.count)}
         </span>
-      </LinkItem>
+      </Link>
     );
   }
 
