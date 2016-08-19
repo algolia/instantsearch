@@ -1,12 +1,17 @@
 import React, {PropTypes, Component} from 'react';
-import Slider from 'rc-slider';
 
-// @TODO: rc-slider doesn't support our customization options relative to
-// theming. We'll need to implement our own slider down the road.
-export default class Range extends Component {
+import themeable from '../themeable';
+import translatable from '../translatable';
+
+import Slider from './Slider';
+
+class Range extends Component {
   static propTypes = {
+    translate: PropTypes.func.isRequired,
+    applyTheme: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
+    step: PropTypes.number,
     value: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
@@ -14,12 +19,12 @@ export default class Range extends Component {
     refine: PropTypes.func.isRequired,
   };
 
+  static defaultProps = {
+    step: 1,
+  };
+
   constructor() {
     super();
-
-    // rc-slider calls its `onChange` prop when the provided value is outside
-    // its bounds. We don't care for the corrected value.
-    this.ignoreNextOnChange = false;
 
     this.state = {
       controlled: false,
@@ -27,27 +32,24 @@ export default class Range extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    this.ignoreNextOnChange = true;
-  }
-
-  componentDidUpdate() {
-    this.ignoreNextOnChange = false;
-  }
+  processValue = v => {
+    const {min, max, step} = this.props;
+    if (v === min || v === max) {
+      return v;
+    }
+    return Math.round(v * step) / step;
+  };
 
   onChange = value => {
-    if (this.ignoreNextOnChange) {
-      this.ignoreNextOnChange = false;
-      return;
-    }
+    value = value.map(this.processValue);
     this.setState({
       controlled: true,
       value: {min: value[0], max: value[1]},
     });
   };
 
-  onAfterChange = value => {
-    this.props.refine({min: value[0], max: value[1]});
+  onEnd = () => {
+    this.props.refine(this.state.value);
     this.setState({
       controlled: false,
       value: null,
@@ -58,16 +60,38 @@ export default class Range extends Component {
     const value = this.state.controlled ? this.state.value : this.props.value;
     return (
       <Slider
+        applyTheme={this.props.applyTheme}
+        translate={this.props.translate}
         min={this.props.min}
         max={this.props.max}
-        range
         value={[
           Math.max(this.props.min, value.min),
           Math.min(this.props.max, value.max),
         ]}
         onChange={this.onChange}
-        onAfterChange={this.onAfterChange}
+        onEnd={this.onEnd}
       />
     );
   }
 }
+
+export default themeable({
+  root: 'Range',
+  handles: 'Range__handles',
+  handle: 'Range__handle',
+  handleActive: 'Range__handle--active',
+  handleDot: 'Range__handle__dot',
+  handleTooltip: 'Range__handle__tooltip',
+  tracks: 'Range__tracks',
+  track: 'Range__track',
+  bounds: 'Range__bounds',
+  bound: 'Range__bound',
+  boundMin: 'Range__bound--min',
+  boundMax: 'Range__bound--max',
+})(
+  translatable({
+    value: v => v.toLocaleString(),
+  })(
+    Range
+  )
+);
