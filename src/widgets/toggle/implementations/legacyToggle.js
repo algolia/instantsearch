@@ -91,7 +91,7 @@ export default function currentToggle({
           createURL={_createURL}
           cssClasses={cssClasses}
           facetValues={[facetValue]}
-          shouldAutoHideContainer={(facetValue.count === 0 || facetValue.count === null)}
+          shouldAutoHideContainer={results.nbHits === 0}
           templateProps={this._templateProps}
           toggleRefinement={this.toggleRefinement}
         />,
