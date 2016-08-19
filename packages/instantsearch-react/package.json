@@ -30,7 +30,6 @@
     "history": "^2.1.2",
     "lodash": "^4.14.1",
     "qs": "^6.2.1",
-    "rc-slider": "^3.8.2",
     "react": "^15.2.0",
     "react-addons-shallow-compare": "^15.2.0",
     "react-algoliasearch-helper": "^1.2.1",
