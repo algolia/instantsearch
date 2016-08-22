@@ -1,7 +1,12 @@
 import sidebar from './sidebar.js';
 
-sidebar({
-  headersContainer: document.querySelector('.documentation-container'),
-  sidebarContainer: document.querySelector('.sidebar'),
-  headerStartLevel: 2
-});
+var container = document.querySelector('.documentation-container')
+var sidebarContainer = document.querySelector('.sidebar');
+
+if(container && sidebar) {
+  sidebar({
+    headersContainer: container,
+    sidebarContainer: sidebarContainer,
+    headerStartLevel: 2
+  });
+}
