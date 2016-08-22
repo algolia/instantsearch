@@ -13,16 +13,12 @@ This is the library you will need to easily build a good search UX like our [ins
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
-[![Browser tests][browser-test-matrix]][browser-test-url]
-
 [travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: https://img.shields.io/npm/dm/algoliasearch-helper.svg?style=flat-square
 [downloads-url]: http://npm-stat.com/charts.html?package=algoliasearch-helper
-[browser-test-matrix]: https://saucelabs.com/browser-matrix/as-helper-js.svg
-[browser-test-url]: https://saucelabs.com/u/as-helper-js
 [version-svg]: https://img.shields.io/npm/v/algoliasearch-helper.svg?style=flat-square
 [package-url]: https://npmjs.org/package/algoliasearch-helper
 
