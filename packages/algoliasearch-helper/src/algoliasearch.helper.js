@@ -8,10 +8,8 @@ var util = require('util');
 var events = require('events');
 
 var forEach = require('lodash/forEach');
-var map = require('lodash/map');
 var bind = require('lodash/bind');
 var isEmpty = require('lodash/isEmpty');
-var trim = require('lodash/trim');
 
 var url = require('./url');
 
@@ -1001,17 +999,10 @@ AlgoliaSearchHelper.prototype.getNumericRefinement = function(attribute, operato
 /**
  * Get the current breadcrumb for a hierarchical facet, as an array
  * @param  {string} facetName Hierarchical facet name
- * @return {array}
+ * @return {array.<string>} the path as an array of string
  */
 AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetName) {
-  return map(
-    this
-      .state
-      .getHierarchicalRefinement(facetName)[0]
-      .split(this.state._getHierarchicalFacetSeparator(
-        this.state.getHierarchicalFacetByName(facetName)
-      )), function trimName(facetValue) { return trim(facetValue); }
-  );
+  return this.state.getHierarchicalFacetBreadcrumb(facetName);
 };
 
 // /////////// PRIVATE
