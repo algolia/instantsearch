@@ -10,10 +10,13 @@ const {
   getProps,
   refine,
   getSearchParameters: getSP,
+  transitionState,
+  getMetadata,
 } = connectPagination;
 
 let props;
 let params;
+let state;
 
 describe('connectPagination', () => {
   it('provides the correct props to the component', () => {
@@ -44,5 +47,21 @@ describe('connectPagination', () => {
     const initSP = new SearchParameters();
     params = getSP(initSP, {id: 'ok'}, {ok: 666});
     expect(params.page).toBe(666);
+  });
+
+  it('clears the state when an update occurs without change', () => {
+    state = transitionState({id: 'ok'}, {ok: 1}, {ok: 1});
+    expect(state).toEqual({
+      ok: undefined,
+    });
+    state = transitionState({id: 'ok'}, {ok: 1}, {ok: 2});
+    expect(state).toEqual({
+      ok: 2,
+    });
+  });
+
+  it('registers its id in metadata', () => {
+    const metadata = getMetadata({id: 'ok'}, {});
+    expect(metadata).toEqual({id: 'ok'});
   });
 });

@@ -97,38 +97,43 @@ describe('createInstantSearchManager', () => {
 
   describe('onInternalStateUpdate', () => {
     it('transitions state and calls opts.onInternalStateUpdate', () => {
+      createWidgetsManager.mockImplementationOnce(() => ({
+        getWidgets: () => [
+          {
+            transitionState: (state, nextState) => ({...nextState, prevState: state}),
+          },
+        ],
+      }));
       init();
       ism.context.store.setState({
         ...ism.context.store.getState(),
         metadata: [
           {id: 'q'},
-          {id: 'p', clearOnChange: true},
+          {id: 'p'},
         ],
       });
       ism.context.onInternalStateUpdate({q: 'no', p: 3});
       expect(onInternalStateUpdate.mock.calls.length).toBe(1);
-      expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({q: 'no', p: 3});
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
-        widgets: {q: 'no', p: 3},
+      expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({
+        q: 'no',
+        p: 3,
+        prevState: {
+          hello: 'yes',
+        },
       });
-      ism.context.onInternalStateUpdate({q: 'no', p: 4});
-      expect(onInternalStateUpdate.mock.calls.length).toBe(2);
-      expect(onInternalStateUpdate.mock.calls[1][0]).toEqual({q: 'no', p: 4});
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
-        widgets: {q: 'no', p: 4},
-      });
-      ism.context.onInternalStateUpdate({q: 'yes', p: 4});
-      expect(onInternalStateUpdate.mock.calls.length).toBe(3);
-      expect(onInternalStateUpdate.mock.calls[2][0]).toEqual({q: 'yes'});
     });
   });
 
   describe('createHrefForState', () => {
     it('transitions state and calls opts.createHrefForState', () => {
+      createWidgetsManager.mockImplementationOnce(() => ({
+        getWidgets: () => [
+          {
+            transitionState: (state, nextState) => ({...nextState, prevState: state}),
+          },
+        ],
+      }));
       init();
-      let href;
       ism.context.store.setState({
         ...ism.context.store.getState(),
         metadata: [
@@ -136,26 +141,22 @@ describe('createInstantSearchManager', () => {
           {id: 'p', clearOnChange: true},
         ],
       });
-      href = ism.context.createHrefForState({q: 'no', p: 3});
+      const href = ism.context.createHrefForState({q: 'no', p: 3});
       expect(createHrefForState.mock.calls.length).toBe(1);
-      expect(createHrefForState.mock.calls[0][0]).toEqual({q: 'no', p: 3});
-      expect(href).toEqual({q: 'no', p: 3});
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
-        widgets: {q: 'no', p: 3},
+      expect(createHrefForState.mock.calls[0][0]).toEqual({
+        q: 'no',
+        p: 3,
+        prevState: {
+          hello: 'yes',
+        },
       });
-      href = ism.context.createHrefForState({q: 'no', p: 4});
-      expect(createHrefForState.mock.calls.length).toBe(2);
-      expect(createHrefForState.mock.calls[1][0]).toEqual({q: 'no', p: 4});
-      expect(href).toEqual({q: 'no', p: 4});
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
-        widgets: {q: 'no', p: 4},
+      expect(href).toEqual({
+        q: 'no',
+        p: 3,
+        prevState: {
+          hello: 'yes',
+        },
       });
-      href = ism.context.createHrefForState({q: 'yes', p: 4});
-      expect(createHrefForState.mock.calls.length).toBe(3);
-      expect(createHrefForState.mock.calls[2][0]).toEqual({q: 'yes'});
-      expect(href).toEqual({q: 'yes'});
     });
   });
 
