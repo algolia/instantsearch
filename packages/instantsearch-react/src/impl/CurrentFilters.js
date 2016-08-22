@@ -16,14 +16,16 @@ class CurrentFilters extends Component {
 
   render() {
     const {applyTheme, translate, filters, refine} = this.props;
-    if (filters.length === 0) {
+    const displayedFilters = filters.filter(filter => !filter.hide);
+    if (displayedFilters.length === 0) {
       return null;
     }
+
 
     return (
       <div {...applyTheme('root', 'root')}>
         <div {...applyTheme('filters', 'filters')}>
-          {filters.map(filter =>
+          {displayedFilters.map(filter =>
             <div {...applyTheme(filter.key, 'filter')}>
               <span {...applyTheme('filterLabel', 'filterLabel')}>
                 {filter.label}
@@ -39,7 +41,7 @@ class CurrentFilters extends Component {
         </div>
         <button
           {...applyTheme('clearAll', 'clearAll')}
-          onClick={refine.bind(null, filters)}
+          onClick={refine.bind(null, displayedFilters)}
         >
           {translate('clearAll')}
         </button>

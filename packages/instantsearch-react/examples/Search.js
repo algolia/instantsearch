@@ -20,6 +20,7 @@ import {
   SortByLinks,
   Stats,
   ScrollTo,
+  Reset,
 } from '../';
 import history from './history';
 
@@ -53,6 +54,7 @@ class Search extends Component {
           </ScrollTo>
           <Stats />
           <CurrentFilters />
+          <Reset />
           <Toggle
             attributeName="free_shipping"
             value={true}
