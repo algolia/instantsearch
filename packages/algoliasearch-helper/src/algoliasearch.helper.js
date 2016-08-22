@@ -1087,6 +1087,13 @@ AlgoliaSearchHelper.prototype._change = function() {
 };
 
 /**
+ * Clears the cache of the underlying Algolia client.
+ */
+AlgoliaSearchHelper.prototype.clearCache = function() {
+  this.client.clearCache();
+};
+
+/**
  * @typedef AlgoliaSearchHelper.NumericRefinement
  * @type {object}
  * @property {number[]} value the numbers that are used for filtering this attribute with
