@@ -13,7 +13,7 @@ This is the library you will need to easily build a good search UX like our [ins
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
-[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/master.svg?style=flat-square
+[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/develop.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
