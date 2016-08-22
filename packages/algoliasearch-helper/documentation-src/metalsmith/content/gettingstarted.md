@@ -70,13 +70,13 @@ The following script tag will import both the client and the Helper with a singl
 
 In a bower compatible project, add the Helper with this command :
 
-`bower install -S algoliasearch-client algoliasearch-helper`
+`bower install -S algoliasearch algoliasearch-helper`
 
 ### NPM
 
 In an NPM project, include the project with this command:
 
-`npm install --save algoliasearch-client algoliasearch-helper`
+`npm install --save algoliasearch algoliasearch-helper`
 
 ## First search
 
