@@ -23,11 +23,11 @@
 
       <div class="headings">
         <ul>
-          <% for (const heading of headings) { %>
+          <% headings.forEach( heading => { %>
             <li class="<%= heading.type === 'h2' ? 'title' : 'subtitle' %>">
               <a href="#<%- heading.id %>"><%- heading.text %></a>
             </li>
-          <% } %>
+          <% }) %>
         </ul>
       </div>
     </div>

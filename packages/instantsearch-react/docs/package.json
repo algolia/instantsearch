@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "codemirror": "^5.17.0",
     "ejs": "^2.5.1",
     "escape-html": "^1.0.3",
