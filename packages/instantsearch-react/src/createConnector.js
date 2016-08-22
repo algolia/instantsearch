@@ -13,6 +13,7 @@ export default function createConnector(connectorDesc) {
   const hasRefine = has(connectorDesc, 'refine');
   const hasSearchParameters = has(connectorDesc, 'getSearchParameters');
   const hasMetadata = has(connectorDesc, 'getMetadata');
+  const hasTransitionState = has(connectorDesc, 'transitionState');
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
@@ -53,9 +54,16 @@ export default function createConnector(connectorDesc) {
           nextWidgetsState
         ) :
         null;
-      if (hasMetadata || hasSearchParameters) {
+      const transitionState = hasTransitionState ?
+        (prevWidgetsState, nextWidgetsState) => connectorDesc.transitionState(
+          this.props,
+          prevWidgetsState,
+          nextWidgetsState
+        ) :
+        null;
+      if (hasMetadata || hasSearchParameters || hasTransitionState) {
         this.unregisterWidget = widgetsManager.registerWidget({
-          getSearchParameters, getMetadata,
+          getSearchParameters, getMetadata, transitionState,
         });
       }
     }

@@ -101,18 +101,11 @@ export default function createInstantSearchManager({
   }
 
   function transitionState(state, nextState) {
-    // Reset all `clearOnChange` widget states that haven't changed between the
-    // previous state and the new one.
-    // The main (and only) use case is the state corresponding to the current
-    // page, which we need to reset whenever any other widget state changes.
-    const clearIds = store.getState().metadata.reduce((res, meta) =>
-      meta.clearOnChange ? res.concat(meta.id) : res
-    , []);
-    const unchangedKeys = Object.keys(nextState).filter(key =>
-      isEqual(state[key], nextState[key])
-    );
-    nextState = omit(nextState, intersection(unchangedKeys, clearIds));
-    return nextState;
+    return widgetsManager.getWidgets()
+      .filter(widget => Boolean(widget.transitionState))
+      .reduce((res, widget) =>
+        widget.transitionState(state, res)
+      , nextState);
   }
 
   function onInternalStateUpdate(nextState) {
