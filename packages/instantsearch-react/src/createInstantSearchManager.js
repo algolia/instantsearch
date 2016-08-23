@@ -33,18 +33,7 @@ export default function createInstantSearchManager({
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
       .reduce(
-        (res, widget) => {
-          const prevPage = res.page;
-          res = widget.getSearchParameters(res);
-          // The helper's default behavior for most `set` methods is to reset
-          // the current page to 0. We don't want that to happen here, since a
-          // widget might have previously refined the `page` query parameter
-          // and that refinement would be overriden.
-          if (res.page === 0 && prevPage !== 0) {
-            res = res.setPage(prevPage);
-          }
-          return res;
-        },
+        (res, widget) => widget.getSearchParameters(res),
         searchParameters
       );
   }
