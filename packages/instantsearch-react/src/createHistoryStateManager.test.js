@@ -81,34 +81,6 @@ describe('createHistoryStateManager', () => {
       });
       expect(hsm.getStateFromCurrentLocation()).toEqual({hello: 'yes'});
     });
-
-    it('ignores unknown keys', () => {
-      const initialLocation = {
-        query: {hello: 'yes', not: 'cool'},
-      };
-      const history = createMockHistory(initialLocation);
-      const hsm = createHistoryStateManager({
-        history,
-        threshold: 0,
-        onInternalStateUpdate: () => null,
-        getKnownKeys: () => ['hello'],
-      });
-      expect(hsm.getStateFromCurrentLocation()).toEqual({hello: 'yes'});
-    });
-  });
-
-  it('ignores unknown keys', () => {
-    const initialLocation = {
-      query: {hello: 'yes', not: 'cool'},
-    };
-    const history = createMockHistory(initialLocation);
-    const hsm = createHistoryStateManager({
-      history,
-      threshold: 0,
-      onInternalStateUpdate: () => null,
-      getKnownKeys: () => ['hello'],
-    });
-    expect(hsm.getStateFromCurrentLocation()).toEqual({hello: 'yes'});
   });
 
   describe('onExternalStateUpdate', () => {
