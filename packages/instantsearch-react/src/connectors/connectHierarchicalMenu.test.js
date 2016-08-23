@@ -214,6 +214,6 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const state = metadata.filters[0].clear({ok: 'wat'});
-    expect(state).toEqual({ok: null});
+    expect(state).toEqual({ok: ''});
   });
 });
