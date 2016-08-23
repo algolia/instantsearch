@@ -56,7 +56,8 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
 /**
  * @typedef Refinement
  * @type {object}
- * @property {string} type the type of filter used: `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
+ * @property {string} type the type of filter used:
+ * `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
  * @property {string} attributeName name of the attribute used for filtering
  * @property {string} name the value of the filter
  * @property {number} numericValue the value as a number. Only for numeric fitlers.
@@ -572,8 +573,23 @@ function vanillaSortFn(order, data) {
  * (alphabetical order). The sort formula can overriden using either string based
  * predicates or a function.
  * @param {string} attribute attribute name
- * @param {object} opts configuration options. One attribute can be set
- * `sortBy` which can be either a comparison function or an array of string
+ * @param {object} opts configuration options.
+ * @param {Array.<string> | function} opts.sortBy
+ * When using strings, it consists of
+ * the name of the [FacetValue](#SearchResults.FacetValue) or the
+ * [HierarchicalFacet](#SearchResults.HierarchicalFacet) attributes with the
+ * order (`asc` or `desc`). For example to order the value by count, the
+ * argument would be `['count:asc']`.
+ *
+ * If only the attribute name is specified, the ordering defaults to the one
+ * specified in the default value for this attribute.
+ *
+ * When not specified, the order is
+ * ascending.  This parameter can also be a function which takes two facet
+ * values and should return a number, 0 if equal, 1 if the first argument is
+ * bigger or -1 otherwise.
+ *
+ * The default value for this attribute `['isRefined:desc', 'count:desc', 'name:asc']`
  * @return {FacetValue[]|HierarchicalFacet} depending on the type of facet of
  * the attribute requested (hierarchical, disjunctive or conjunctive)
  * @example
@@ -582,8 +598,11 @@ function vanillaSortFn(order, data) {
  *   content.getFacetValues('city', {sortBy: ['name:asc']);
  *   //get values  ordered only by count ascending using a function
  *   content.getFacetValues('city', {
+ *     // this is equivalent to ['count:asc']
  *     sortBy: function(a, b) {
- *       return a.count - b.count;
+ *       if (a.count === b.count) return 0;
+ *       if (a.count > b.count)   return 1;
+ *       if (b.count > a.count)   return -1;
  *     }
  *   });
  * });
@@ -595,7 +614,7 @@ SearchResults.prototype.getFacetValues = function(attribute, opts) {
   var options = defaults({}, opts, {sortBy: SearchResults.DEFAULT_SORT});
 
   if (isArray(options.sortBy)) {
-    var order = formatSort(options.sortBy);
+    var order = formatSort(options.sortBy, SearchResults.DEFAULT_SORT);
     if (isArray(facetValues)) {
       return orderBy(facetValues, order[0], order[1]);
     }

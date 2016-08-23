@@ -7,4 +7,4 @@ if [ $CI == 'true' ]; then
   set -x # debug messages
 fi
 
-node test/run.js
+node test/run.js | tap-spec
