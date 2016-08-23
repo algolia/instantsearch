@@ -1,6 +1,5 @@
 import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {omit, isEqual, intersection} from 'lodash';
 
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
@@ -9,10 +8,7 @@ export default function createInstantSearchManager({
   appId,
   apiKey,
   indexName,
-
   initialState,
-  createHrefForState: optsCHFS,
-  onInternalStateUpdate: optsOISU,
 }) {
   const client = algoliasearch(appId, apiKey);
   const helper = algoliasearchHelper(client);
@@ -100,27 +96,13 @@ export default function createInstantSearchManager({
     search();
   }
 
-  function transitionState(state, nextState) {
+  function transitionState(nextState) {
+    const state = store.getState().widgets;
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.transitionState))
       .reduce((res, widget) =>
         widget.transitionState(state, res)
       , nextState);
-  }
-
-  function onInternalStateUpdate(nextState) {
-    nextState = transitionState(store.getState().widgets, nextState);
-
-    // We don't want to update the state in store just yet, but instead forward
-    // it to the creator of this instance. Which will in turn need to call
-    // `onExternalStateUpdate` in order to update the state in store.
-    optsOISU(nextState);
-  }
-
-  function createHrefForState(state) {
-    state = transitionState(store.getState().widgets, state);
-
-    return optsCHFS(state);
   }
 
   function onExternalStateUpdate(nextState) {
@@ -143,13 +125,10 @@ export default function createInstantSearchManager({
   }
 
   return {
-    context: {
-      store,
-      widgetsManager,
-      onInternalStateUpdate,
-      createHrefForState,
-    },
+    store,
+    widgetsManager,
     getWidgetsIds,
     onExternalStateUpdate,
+    transitionState,
   };
 }

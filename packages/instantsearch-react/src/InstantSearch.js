@@ -105,8 +105,6 @@ class InstantSearch extends Component {
       indexName: props.indexName,
 
       initialState,
-      createHrefForState: this.createHrefForState,
-      onInternalStateUpdate: this.onWidgetsInternalStateUpdate,
     });
   }
 
@@ -126,11 +124,18 @@ class InstantSearch extends Component {
 
   getChildContext() {
     return {
-      ais: this.aisManager.context,
+      ais: {
+        store: this.aisManager.store,
+        widgetsManager: this.aisManager.widgetsManager,
+        onInternalStateUpdate: this.onWidgetsInternalStateUpdate,
+        createHrefForState: this.createHrefForState,
+      },
     };
   }
 
   createHrefForState = state => {
+    state = this.aisManager.transitionState(state);
+
     if (this.props.createURL) {
       return this.props.createURL(state, this.getKnownKeys());
     } else if (this.isHSControlled) {
@@ -145,6 +150,8 @@ class InstantSearch extends Component {
   };
 
   onWidgetsInternalStateUpdate = state => {
+    state = this.aisManager.transitionState(state);
+
     if (this.isControlled) {
       this.props.onStateChange(state);
     } else if (this.isHSControlled) {
