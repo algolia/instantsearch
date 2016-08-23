@@ -23,7 +23,7 @@
     "eslint-config-algolia": "^5.3.1",
     "jest-cli": "^14.1.0",
     "mockdate": "^1.0.4",
-    "react-test-renderer": "^15.3.0",
+    "react-test-renderer": "^15.3.1",
     "webpack": "^1.13.1"
   },
   "dependencies": {
@@ -32,9 +32,9 @@
     "history": "^2.1.2",
     "lodash": "^4.14.1",
     "qs": "^6.2.1",
-    "react": "^15.3.0",
-    "react-addons-shallow-compare": "^15.3.0",
-    "react-dom": "^15.3.0",
+    "react": "^15.3.1",
+    "react-addons-shallow-compare": "^15.3.1",
+    "react-dom": "^15.3.1",
     "react-themeable": "^1.1.0"
   },
   "jest": {
@@ -48,9 +48,6 @@
       "node_modules/react-themeable/",
       "node_modules/mockdate/",
       "src/propTypes"
-    ],
-    "setupFiles": [
-      "src/silentWarnings.js"
     ]
   }
 }
