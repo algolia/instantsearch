@@ -16,7 +16,9 @@ export default function createConnector(connectorDesc) {
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
-    static propTypes = connectorDesc.propTypes;
+    static propTypes = __DOC__ ?
+      {...Composed.propTypes, ...connectorDesc.propTypes} :
+      connectorDesc.propTypes;
     static defaultProps = connectorDesc.defaultProps;
 
     static contextTypes = {

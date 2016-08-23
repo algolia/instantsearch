@@ -20,7 +20,7 @@ class SearchBox extends Component {
 
   static defaultProps = {
     query: '',
-    poweredBy: false,
+    // poweredBy: false,
     focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
