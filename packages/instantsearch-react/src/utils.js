@@ -54,3 +54,7 @@ export function assertFacetDefined(searchParameters, searchResults, facet) {
     );
   }
 }
+
+export function getDisplayName(Component) {
+  return Component.displayName || Component.name || 'UnknownComponent';
+}

@@ -1,6 +1,7 @@
 import React from 'react';
 import has from 'lodash/object/has';
 
+import {getDisplayName} from './utils';
 import {withKeysPropType} from './propTypes';
 
 export default function translatable(defaultTranslations) {
@@ -20,6 +21,8 @@ export default function translatable(defaultTranslations) {
 
       return <Composed {...otherProps} translate={translate} />;
     }
+
+    Translatable.displayName = `Translatable(${getDisplayName(Composed)})`;
 
     Translatable.propTypes = {
       translations: withKeysPropType(Object.keys(defaultTranslations)),
