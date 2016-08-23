@@ -9,12 +9,7 @@ jest.mock('algoliasearch', () => jest.fn());
 import algoliasearchHelper from 'algoliasearch-helper';
 jest.mock('algoliasearch-helper', () => {
   const output = jest.fn();
-  const {SearchParameters} = require.requireActual('algoliasearch-helper', {
-    // `requireActual` is bugged and returns a mocked version of the module
-    // Passing `isInternalModule` disables this behaviour.
-    // Note that this option isn't documented.
-    isInternalModule: true,
-  });
+  const SearchParameters = require.requireActual('algoliasearch-helper/src/SearchParameters');
   output.SearchParameters = SearchParameters;
   return output;
 });
@@ -87,75 +82,40 @@ describe('createInstantSearchManager', () => {
       });
     });
 
-    it('is exposed through context', () => {
+    it('is exposed on the instance', () => {
       const store = {};
       createStore.mockImplementationOnce(() => store);
       init();
-      expect(ism.context.store).toBe(store);
+      expect(ism.store).toBe(store);
     });
   });
 
-  describe('onInternalStateUpdate', () => {
-    it('transitions state and calls opts.onInternalStateUpdate', () => {
+  describe('transitionState', () => {
+    it('executes all widgets\'s transitionState hooks', () => {
       createWidgetsManager.mockImplementationOnce(() => ({
         getWidgets: () => [
           {
-            transitionState: (state, nextState) => ({...nextState, prevState: state}),
+            transitionState: (state, nextState) => ({...nextState, first: true}),
+          },
+          {
+            transitionState: (state, nextState) => ({...nextState, second: true}),
           },
         ],
       }));
       init();
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
+      ism.store.setState({
+        ...ism.store.getState(),
         metadata: [
           {id: 'q'},
           {id: 'p'},
         ],
       });
-      ism.context.onInternalStateUpdate({q: 'no', p: 3});
-      expect(onInternalStateUpdate.mock.calls.length).toBe(1);
-      expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({
+      const state = ism.transitionState({q: 'no', p: 3});
+      expect(state).toEqual({
         q: 'no',
         p: 3,
-        prevState: {
-          hello: 'yes',
-        },
-      });
-    });
-  });
-
-  describe('createHrefForState', () => {
-    it('transitions state and calls opts.createHrefForState', () => {
-      createWidgetsManager.mockImplementationOnce(() => ({
-        getWidgets: () => [
-          {
-            transitionState: (state, nextState) => ({...nextState, prevState: state}),
-          },
-        ],
-      }));
-      init();
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
-        metadata: [
-          {id: 'q'},
-          {id: 'p', clearOnChange: true},
-        ],
-      });
-      const href = ism.context.createHrefForState({q: 'no', p: 3});
-      expect(createHrefForState.mock.calls.length).toBe(1);
-      expect(createHrefForState.mock.calls[0][0]).toEqual({
-        q: 'no',
-        p: 3,
-        prevState: {
-          hello: 'yes',
-        },
-      });
-      expect(href).toEqual({
-        q: 'no',
-        p: 3,
-        prevState: {
-          hello: 'yes',
-        },
+        first: true,
+        second: true,
       });
     });
   });
@@ -163,8 +123,8 @@ describe('createInstantSearchManager', () => {
   describe('getWidgetsIds', () => {
     it('returns the list of ids of all registered widgets', () => {
       init();
-      ism.context.store.setState({
-        ...ism.context.store.getState(),
+      ism.store.setState({
+        ...ism.store.getState(),
         metadata: [
           {id: 'q'},
           {id: 'p'},
@@ -199,19 +159,19 @@ describe('createInstantSearchManager', () => {
   }
 
   describe('widgetsManager', () => {
-    it('is exposed through context', () => {
+    it('is exposed on the instance', () => {
       const widgetsManager = {};
       createWidgetsManager.mockImplementationOnce(() => widgetsManager);
       init();
-      expect(ism.context.widgetsManager).toBe(widgetsManager);
+      expect(ism.widgetsManager).toBe(widgetsManager);
     });
 
     it('updates the store and searches on update', () => {
       const searchOnce = testSearch(new Promise(() => null));
       const onUpdate = createWidgetsManager.mock.calls[0][0];
       onUpdate();
-      expect(ism.context.store.setState.mock.calls.length).toBe(1);
-      expect(ism.context.store.setState.mock.calls[0][0]).toEqual({
+      expect(ism.store.setState.mock.calls.length).toBe(1);
+      expect(ism.store.setState.mock.calls[0][0]).toEqual({
         widgets: initialState,
         metadata: [{id: 'q', hello: 'yes'}, {id: 'p'}],
         results: null,
@@ -230,8 +190,8 @@ describe('createInstantSearchManager', () => {
       const results = {};
       const searchOnce = testSearch(Promise.resolve({content: results}));
       ism.onExternalStateUpdate({hello: 'no'});
-      expect(ism.context.store.setState.mock.calls.length).toBe(1);
-      expect(ism.context.store.setState.mock.calls[0][0]).toEqual({
+      expect(ism.store.setState.mock.calls.length).toBe(1);
+      expect(ism.store.setState.mock.calls[0][0]).toEqual({
         widgets: {hello: 'no'},
         metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
         results: null,
@@ -246,8 +206,8 @@ describe('createInstantSearchManager', () => {
       // Since promises are always resolved asynchronously, we need to create
       // a new promise in order to hook into the next promise tick.
       return Promise.resolve().then(() => {
-        expect(ism.context.store.setState.mock.calls.length).toBe(2);
-        expect(ism.context.store.setState.mock.calls[1][0]).toEqual({
+        expect(ism.store.setState.mock.calls.length).toBe(2);
+        expect(ism.store.setState.mock.calls[1][0]).toEqual({
           widgets: {hello: 'no'},
           metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
           results,
@@ -263,8 +223,8 @@ describe('createInstantSearchManager', () => {
       ism.onExternalStateUpdate({hello: 'no'});
 
       return Promise.resolve().then(() => {
-        expect(ism.context.store.setState.mock.calls.length).toBe(2);
-        expect(ism.context.store.setState.mock.calls[1][0]).toEqual({
+        expect(ism.store.setState.mock.calls.length).toBe(2);
+        expect(ism.store.setState.mock.calls[1][0]).toEqual({
           widgets: {hello: 'no'},
           metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
           results: null,

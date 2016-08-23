@@ -14,6 +14,7 @@ export default function createConnector(connectorDesc) {
   const hasSearchParameters = has(connectorDesc, 'getSearchParameters');
   const hasMetadata = has(connectorDesc, 'getMetadata');
   const hasTransitionState = has(connectorDesc, 'transitionState');
+  const isWidget = hasSearchParameters || hasMetadata || hasTransitionState;
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
@@ -61,7 +62,7 @@ export default function createConnector(connectorDesc) {
           nextWidgetsState
         ) :
         null;
-      if (hasMetadata || hasSearchParameters || hasTransitionState) {
+      if (isWidget) {
         this.unregisterWidget = widgetsManager.registerWidget({
           getSearchParameters, getMetadata, transitionState,
         });
@@ -73,7 +74,7 @@ export default function createConnector(connectorDesc) {
         props: this.getProps(nextProps),
       });
 
-      if (hasMetadata || hasSearchParameters) {
+      if (isWidget) {
         // Since props might have changed, we need to re-run getSearchParameters
         // and getMetadata with the new props.
         this.context.ais.widgetsManager.update();
@@ -82,7 +83,8 @@ export default function createConnector(connectorDesc) {
 
     componentWillUnmount() {
       this.unsubscribe();
-      if (hasMetadata || hasSearchParameters) {
+
+      if (isWidget) {
         this.unregisterWidget();
       }
     }
