@@ -94,6 +94,13 @@ class InstantSearch extends Component {
         onInternalStateUpdate: this.onHistoryInternalStateUpdate,
         getKnownKeys: this.getKnownKeys,
       });
+      // @TODO: Since widgets haven't been registered yet, we have no way of
+      // knowing which URL query keys are known and which aren't. As such,
+      // `getStateFromCurrentLocation()` simply returns the current URL query
+      // deserialized.
+      // We might want to initialize to an empty state here and call
+      // `onHistoryInternalStateUpdate` on `componentDidMount`, once all widgets
+      // have been registered.
       initialState = this.hsManager.getStateFromCurrentLocation();
     } else {
       initialState = {};
@@ -111,13 +118,13 @@ class InstantSearch extends Component {
   componentWillReceiveProps(nextProps) {
     validateProps(nextProps);
     validateNextProps(this.props, nextProps);
-    if (nextProps.state) {
+    if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.state);
     }
   }
 
   componentWillUnmount() {
-    if (this.history) {
+    if (this.isHSControlled) {
       this.hsManager.unlisten();
     }
   }
@@ -136,7 +143,7 @@ class InstantSearch extends Component {
   createHrefForState = state => {
     state = this.aisManager.transitionState(state);
 
-    if (this.props.createURL) {
+    if (this.isControlled) {
       return this.props.createURL(state, this.getKnownKeys());
     } else if (this.isHSControlled) {
       return this.hsManager.createHrefForState(state, this.getKnownKeys());
@@ -154,11 +161,13 @@ class InstantSearch extends Component {
 
     if (this.isControlled) {
       this.props.onStateChange(state);
-    } else if (this.isHSControlled) {
+    } else {
       this.aisManager.onExternalStateUpdate(state);
-      // This needs to go after the aisManager's update, since it depends on new
-      // metadata.
-      this.hsManager.onExternalStateUpdate(state);
+      if (this.isHSControlled) {
+        // This needs to go after the aisManager's update, since it depends on new
+        // metadata.
+        this.hsManager.onExternalStateUpdate(state);
+      }
     }
   };
 
