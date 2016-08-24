@@ -238,6 +238,19 @@ function searchBox({
         input.value = fullState.query || '';
       });
 
+      // When the page is coming from BFCache
+      // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
+      // then we force the input value to be the current query
+      // Otherwise, this happens:
+      // - <input> autocomplete = off (default)
+      // - search $query
+      // - navigate away
+      // - use back button
+      // - input query is empty (because <input> autocomplete = off)
+      window.addEventListener('pageshow', () => {
+        input.value = helper.state.query;
+      });
+
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
         input.focus();
         input.setSelectionRange(helper.state.query.length, helper.state.query.length);
