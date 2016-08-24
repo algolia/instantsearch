@@ -70,7 +70,7 @@
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.2.1",
     "rimraf": "^2.5.0",
-    "sass-lint": "^1.8.0",
+    "sass-lint": "^1.9.0",
     "semver": "^5.1.0",
     "sinon": "^2.0.0-pre",
     "uglify-js": "^2.6.4",
