@@ -518,6 +518,7 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/getConjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getDisjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getExcludeRefinements}}
+{{> jsdoc jsdoc/state/getHierarchicalFacetBreadcrumb}}
 {{> jsdoc jsdoc/state/getHierarchicalFacetByName}}
 {{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}

@@ -17,6 +17,7 @@ var isUndefined = require('lodash/isUndefined');
 var isString = require('lodash/isString');
 var isFunction = require('lodash/isFunction');
 var find = require('lodash/find');
+var trim = require('lodash/trim');
 
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
@@ -965,7 +966,8 @@ SearchParameters.prototype = {
    */
   addHierarchicalFacet: function addHierarchicalFacet(hierarchicalFacet) {
     if (this.isHierarchicalFacet(hierarchicalFacet.name)) {
-      throw new Error('Cannot declare two hierarchical facets with the same name: `' + hierarchicalFacet.name + '`');
+      throw new Error(
+        'Cannot declare two hierarchical facets with the same name: `' + hierarchicalFacet.name + '`');
     }
 
     return this.setQueryParameters({
@@ -1629,6 +1631,27 @@ SearchParameters.prototype = {
       this.hierarchicalFacets,
       {name: hierarchicalFacetName}
     );
+  },
+
+  /**
+   * Get the current breadcrumb for a hierarchical facet, as an array
+   * @param  {string} facetName Hierarchical facet name
+   * @return {array.<string>} the path as an array of string
+   */
+  getHierarchicalFacetBreadcrumb: function(facetName) {
+    if (!this.isHierarchicalFacet(facetName)) {
+      throw new Error(
+        'Cannot get the breadcrumb of an unknown hierarchical facet: `' + facetName + '`');
+    }
+
+    var refinement = this.getHierarchicalRefinement(facetName)[0];
+    if (!refinement) return [];
+
+    var separator = this._getHierarchicalFacetSeparator(
+      this.getHierarchicalFacetByName(facetName)
+    );
+    var path = refinement.split(separator);
+    return map(path, trim);
   }
 };
 
