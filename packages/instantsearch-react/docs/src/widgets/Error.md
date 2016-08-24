@@ -24,6 +24,8 @@ Name | Type | Default |Description
 
 ## Implementing your own Error
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectError` HOC.
+
 ```
 import {connectError} from 'instantsearch-react';
 

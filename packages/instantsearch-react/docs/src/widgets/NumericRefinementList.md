@@ -24,6 +24,8 @@ Name | Type | Default |Description
 
 ## Implementing your own NumericRefinementList
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectNumericRefinementList` HOC.
+
 ```
 import {connectNumericRefinementList} from 'instantsearch-react';
 

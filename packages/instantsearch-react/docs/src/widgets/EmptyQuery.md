@@ -16,6 +16,8 @@ Name | Type | Default |Description
 
 ## Implementing your own EmptyQuery
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectEmptyQuery` HOC.
+
 ```
 import {connectEmptyQuery} from 'instantsearch-react';
 

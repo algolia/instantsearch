@@ -25,6 +25,8 @@ Name | Type | Default |Description
 
 ## Implementing your own CurrentFilters
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectCurrentFilters` HOC.
+
 ```
 import {connectCurrentFilters} from 'instantsearch-react';
 

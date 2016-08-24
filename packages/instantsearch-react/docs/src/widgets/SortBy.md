@@ -27,6 +27,8 @@ Only for `SortByLinks`: `item`, `itemLink`, `itemSelected`
 
 ## Implementing your own SortBy
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectSortBy` HOC.
+
 ```
 import {connectSortBy} from 'instantsearch-react';
 

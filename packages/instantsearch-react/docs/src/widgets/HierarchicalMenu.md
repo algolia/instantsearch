@@ -53,6 +53,8 @@ export default Menu() {
 
 ## Implementing your own HierarchicalMenu
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectHierarchicalMenu` HOC.
+
 ```
 import {connectHierarchicalMenu} from 'instantsearch-react';
 

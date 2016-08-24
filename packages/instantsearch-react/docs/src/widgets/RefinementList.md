@@ -36,6 +36,8 @@ Only for `RefinementListLinks`: `itemLink`
 
 ## Implementing your own RefinementList
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectRefinementList` HOC.
+
 ```
 import {connectRefinementList} from 'instantsearch-react';
 

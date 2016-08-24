@@ -26,6 +26,8 @@ Name | Type | Default |Description
 
 ## Implementing your own Toggle
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectToggle` HOC.
+
 ```
 import {connectToggle} from 'instantsearch-react';
 

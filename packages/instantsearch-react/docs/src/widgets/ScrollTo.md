@@ -17,6 +17,8 @@ Name | Type | Default |Description
 
 ## Implementing your own ScrollTo
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectScrollTo` HOC.
+
 ```
 import {Children, Component} from 'react';
 import {connectScrollTo} from 'instantsearch-react';

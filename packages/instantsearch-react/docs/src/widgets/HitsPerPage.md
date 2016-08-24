@@ -27,6 +27,8 @@ Only for `HitsPerPage`: `item`, `itemSelected`
 
 ## Implementing your own HitsPerPage
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectHitsPerPage` HOC.
+
 ```
 import {connectHitsPerPage} from 'instantsearch-react';
 

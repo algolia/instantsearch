@@ -16,6 +16,8 @@ Name | Type | Default |Description
 
 ## Implementing your own Loading
 
+See [Making your own widgets](../Customization.md) for more information on how to use the `connectLoading` HOC.
+
 ```
 import {connectLoading} from 'instantsearch-react';
 
