@@ -1,5 +1,15 @@
 CHANGELOG
 
+2.13.0 - 2016-08-24
+ * fix(getFacetValues): fix the ordering when not specified
+ * fix(hierarchicalFacets): do not throw if no refinements
+ * fix(excludes): conjunctive facets results report exclusions
+ * fix(setQueryParameters): falsey params returns the same instance
+ * feat(Helper): add / remove facets methods
+ * feat(Helper): add clearCache method
+ * feat(SearchParameters): do not update page when using setters
+ * feat(SearchResults): backport instantsearch.js getRefinement method
+
 2.12.0 - 2016-07-22
   * feat(docs): new landing page + doc
   * chore(dependencies): upgrade dependencies, especially move to lodash 4
