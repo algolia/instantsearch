@@ -16,7 +16,7 @@ There's also a `MenuSelect` which renders a select control.
 Name | Type | Default |Description
 :- | :- | :- | :-
 `attributeName` | `string` | | Name of the attribute for faceting
-`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`.
+`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`. The state of this widget takes the shape of a `string`, which corresponds to the value of the currently selected refinement.
 `showMore` | `?bool` | `false` | Display a show more button for increasing the number of refinement values from `limitMin` to `limitMax`.
 `limitMin` | `?number` | `10` | Minimum number of refinement values.
 `limitMax` | `?number` | `20` | Maximum number of refinement values. Ignored when `showMore` is `false`.

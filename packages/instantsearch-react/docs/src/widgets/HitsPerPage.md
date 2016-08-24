@@ -17,7 +17,7 @@ Name | Type | Default |Description
 :- | :- | :- | :-
 `defaultHitsPerPage` | `number` | | The default state of the widget.
 `items` | `oneOfType([number], [object])` | | The available list of options. Can be either a list of numbers, or a list of `{label: node, value: number}` items. Note that in the case of `HitsPerPageSelect`, the `label` property of an item must be a `string`.
-`id` | `?string` | `hPP` | URL state serialization key.
+`id` | `?string` | `hPP` | URL state serialization key. The state of this widget takes the shape of a `number`, which represents the value of the current selected item.
 
 ### Theme
 

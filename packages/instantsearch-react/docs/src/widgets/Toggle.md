@@ -13,7 +13,7 @@ The `Toggle` widget is where users type their search queries.
 
 Name | Type | Default |Description
 :- | :- | :- | :-
-`id` | `?string` | `q` | URL state serialization key.
+`id` | `?string` | `q` | URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`.
 `label` | `?string` | | Label for this toggle.
 `filter` | `?func` | | Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.
 `attributeName` | `?string` | | Name of the attribute on which to apply the `value` refinement. Required when `value` is present.

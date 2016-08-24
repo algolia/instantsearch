@@ -18,7 +18,7 @@ Name | Type | Default |Description
 `min` | `?number` | | Minimum value of the range. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
 `max` | `?number` | | Maximum value of the range. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
 `step` | `?number` | `1` | Every handle move will jump that number of steps.
-`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`.
+`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`. The state of this widget takes the shape of an object `{min: ?number, max: ?number}`.
 
 ### Theme
 

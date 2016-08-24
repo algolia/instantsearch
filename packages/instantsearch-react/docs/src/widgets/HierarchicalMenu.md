@@ -13,7 +13,7 @@ The hierarchical menu is a widget that lets the user explore a tree-like structu
 
 Name | Type | Default |Description
 :- | :- | :- | :-
-`name` | `string` | | URL state serialization key.
+`id` | `string` | | URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
 `attributes` | `[string]` | | List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
 `showMore` | `?bool` | `false` | Display a show more button for increasing the number of refinement values from `limitMin` to `limitMax`.
 `limitMin` | `?number` | `10` | Minimum number of refinement values.

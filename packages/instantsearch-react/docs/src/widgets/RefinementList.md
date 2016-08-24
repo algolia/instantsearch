@@ -16,7 +16,7 @@ There's also a `RefinementListLinks` which renders items as links.
 Name | Type | Default |Description
 :- | :- | :- | :-
 `attributeName` | `string` | | Name of the attribute for faceting
-`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`.
+`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`. The state of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the state is an empty string.
 `operator` | `?oneOf('and', 'or')` | `'or'` | How to apply the refinements.
 `showMore` | `?bool` | `false` | Display a show more button for increasing the number of refinement values from `limitMin` to `limitMax`.
 `limitMin` | `?number` | `10` | Minimum number of refinement values.

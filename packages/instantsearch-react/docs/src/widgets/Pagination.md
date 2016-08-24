@@ -15,7 +15,7 @@ There's also a `PaginationSelect` which renders a select control.
 
 Name | Type | Default |Description
 :- | :- | :- | :-
-`id` | `?string` | `p` | URL state serialization key.
+`id` | `?string` | `p` | URL state serialization key. The state of this widget takes the shape of a `number`.
 `pagesPadding` | `?number` | `3` | How many page links to display around the current page
 `maxPages` | `?number` | `Infinity` | Maximum number of pages to display
 
