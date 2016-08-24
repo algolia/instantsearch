@@ -116,7 +116,7 @@ describe('currentToggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([
             {name: 'true', count: 2, isRefined: false},
-            {name: 'false', count: 1, isRefined: true}
+            {name: 'false', count: 1, isRefined: false}
           ])
         };
         props.cssClasses.root = 'test';
@@ -125,7 +125,7 @@ describe('currentToggle()', () => {
             count: 2,
             isRefined: false,
             name: label,
-            offFacetValue: {count: 1, name: 'Hello, ', isRefined: true},
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
           }],
           shouldAutoHideContainer: false,
@@ -153,7 +153,7 @@ describe('currentToggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([
             {name: 'true', count: 2, isRefined: false},
-            {name: 'false', count: 1, isRefined: true}
+            {name: 'false', count: 1, isRefined: false}
           ])
         };
         widget = currentToggle({
@@ -176,7 +176,7 @@ describe('currentToggle()', () => {
             isRefined:
             false,
             name: label,
-            offFacetValue: {count: 1, name: 'Hello, ', isRefined: true},
+            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
           }],
           shouldAutoHideContainer: false,
@@ -213,7 +213,7 @@ describe('currentToggle()', () => {
             isRefined: false,
             count: null,
             onFacetValue: {name: label, isRefined: false, count: null},
-            offFacetValue: {name: label, isRefined: false, count: null}
+            offFacetValue: {name: label, isRefined: false, count: 0}
           }],
           shouldAutoHideContainer: true,
           ...props
