@@ -1,10 +1,12 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
+import React, {Component} from 'react';
 
 import {
   isSpecialClick,
   capitalize,
   assertFacetDefined,
+  getDisplayName,
 } from './utils';
 jest.unmock('./utils');
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
@@ -60,6 +62,42 @@ describe('utils', () => {
         'index settings.'
       );
       console.warn = warn;
+    });
+  });
+
+  describe('getDisplayName', () => {
+    it('gets the right displayName from classes', () => {
+      class SuperComponent extends Component {
+        render() {
+          return null;
+        }
+      }
+
+      expect(getDisplayName(SuperComponent)).toBe('SuperComponent');
+    });
+
+    // this works because babel turns arrows functions to named function expressions
+    it('gets the right displayName from stateless components', () => {
+      const SuperComponent = () => null; // => var SuperComponent = function SuperComponent() {}
+      expect(getDisplayName(SuperComponent)).toBe('SuperComponent');
+    });
+
+    it('gets the right displayName from React.createClass', () => {
+      const SuperComponent = React.createClass({
+        render() { return null; },
+        displayName: 'SuperComponent',
+      });
+
+      expect(getDisplayName(SuperComponent)).toBe('SuperComponent');
+    });
+
+    it('sets a default displayName when not able to find one', () => {
+      const SuperComponent = React.createClass({
+        render() { return null; },
+        displayName: undefined, // latest babel
+      });
+
+      expect(getDisplayName(SuperComponent)).toBe('UnknownComponent');
     });
   });
 });
