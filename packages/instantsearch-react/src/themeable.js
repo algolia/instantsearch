@@ -1,6 +1,8 @@
 import React from 'react';
 import reactThemeable from 'react-themeable';
+import {omit} from 'lodash';
 
+import {getDisplayName} from './utils';
 import {withKeysPropType} from './propTypes';
 
 export default function themeable(defaultTheme) {
@@ -12,9 +14,20 @@ export default function themeable(defaultTheme) {
       return <Composed {...otherProps} applyTheme={applyTheme} />;
     }
 
+    Themeable.displayName = `Themeable(${getDisplayName(Composed)})`;
+
     Themeable.propTypes = {
-      theme: withKeysPropType(Object.keys(defaultTheme)),
+      theme: __DOC__ ?
+        {type: {name: 'theme', value: defaultTheme}} :
+        withKeysPropType(Object.keys(defaultTheme)),
     };
+
+    if (__DOC__) {
+      Themeable.propTypes = {
+        ...omit(Composed.propTypes, 'applyTheme'),
+        ...Themeable.propTypes,
+      };
+    }
 
     return Themeable;
   };
