@@ -39,6 +39,7 @@ Most of the searches will be done using the first method.
 
 {{> jsdoc jsdoc/helper/search}}
 {{> jsdoc jsdoc/helper/searchOnce}}
+{{> jsdoc jsdoc/helper/clearCache}}
 
 ### Query and index
 
@@ -416,10 +417,11 @@ are implemented on top of Algolia API such as faceting.
 
 {{> jsdoc jsdoc/results/hits}}
 
-### Facets methods
+### Facets and filters methods
 
 {{> jsdoc jsdoc/results/getFacetValues}}
 {{> jsdoc jsdoc/results/getFacetStats}}
+{{> jsdoc jsdoc/results/getRefinements}}
 
 ### Geolocation data
 
@@ -455,11 +457,12 @@ that you might encounter in the documentation.
 {{> jsdoc jsdoc/helper/FacetRefinement}}
 {{> jsdoc jsdoc/helper/NumericRefinement}}
 {{> jsdoc jsdoc/results/Facet}}
-{{> jsdoc jsdoc/results/HierarchicalFacet}}
 {{> jsdoc jsdoc/results/FacetValue}}
+{{> jsdoc jsdoc/results/HierarchicalFacet}}
+{{> jsdoc jsdoc/results/Refinement}}
+{{> jsdoc jsdoc/state/clearCallback}}
 {{> jsdoc jsdoc/state/FacetList}}
 {{> jsdoc jsdoc/state/OperatorList}}
-{{> jsdoc jsdoc/state/clearCallback}}
 
 ## SearchParameters
 
@@ -501,9 +504,12 @@ All the attributes specific to the helper are described below:
 
 ### Methods
 
+{{> jsdoc jsdoc/state/addDisjunctiveFacet}}
 {{> jsdoc jsdoc/state/addDisjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/addExcludeRefinement}}
+{{> jsdoc jsdoc/state/addFacet}}
 {{> jsdoc jsdoc/state/addFacetRefinement}}
+{{> jsdoc jsdoc/state/addHierarchicalFacet}}
 {{> jsdoc jsdoc/state/addNumericRefinement}}
 {{> jsdoc jsdoc/state/addTagRefinement}}
 {{> jsdoc jsdoc/state/clearRefinements}}
@@ -512,6 +518,7 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/getConjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getDisjunctiveRefinements}}
 {{> jsdoc jsdoc/state/getExcludeRefinements}}
+{{> jsdoc jsdoc/state/getHierarchicalFacetBreadcrumb}}
 {{> jsdoc jsdoc/state/getHierarchicalFacetByName}}
 {{> jsdoc jsdoc/state/getHierarchicalRefinement}}
 {{> jsdoc jsdoc/state/getNumericRefinements}}
@@ -530,10 +537,12 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/isNumericRefined}}
 {{> jsdoc jsdoc/state/isTagRefined}}
 {{> jsdoc jsdoc/state/make}}
-{{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/removeExcludeRefinement}}
+{{> jsdoc jsdoc/state/removeFacet}}
 {{> jsdoc jsdoc/state/removeFacetRefinement}}
-{{> jsdoc jsdoc/state/removeNumericRefinement}}
+{{> jsdoc jsdoc/state/removeDisjunctiveFacet}}
+{{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
+{{> jsdoc jsdoc/state/removeHierarchicalFacet}}
 {{> jsdoc jsdoc/state/removeTagRefinement}}
 {{> jsdoc jsdoc/state/setDisjunctiveFacets}}
 {{> jsdoc jsdoc/state/setFacets}}

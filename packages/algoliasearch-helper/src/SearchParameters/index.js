@@ -17,6 +17,7 @@ var isUndefined = require('lodash/isUndefined');
 var isString = require('lodash/isString');
 var isFunction = require('lodash/isFunction');
 var find = require('lodash/find');
+var trim = require('lodash/trim');
 
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
@@ -643,7 +644,6 @@ SearchParameters.prototype = {
   clearRefinements: function clearRefinements(attribute) {
     var clear = RefinementList.clearRefinement;
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: this._clearNumericRefinements(attribute),
       facetsRefinements: clear(this.facetsRefinements, attribute, 'conjunctiveFacet'),
       facetsExcludes: clear(this.facetsExcludes, attribute, 'exclude'),
@@ -660,7 +660,6 @@ SearchParameters.prototype = {
     if (this.tagFilters === undefined && this.tagRefinements.length === 0) return this;
 
     return this.setQueryParameters({
-      page: 0,
       tagFilters: undefined,
       tagRefinements: []
     });
@@ -675,8 +674,7 @@ SearchParameters.prototype = {
     if (index === this.index) return this;
 
     return this.setQueryParameters({
-      index: index,
-      page: 0
+      index: index
     });
   },
   /**
@@ -689,8 +687,7 @@ SearchParameters.prototype = {
     if (newQuery === this.query) return this;
 
     return this.setQueryParameters({
-      query: newQuery,
-      page: 0
+      query: newQuery
     });
   },
   /**
@@ -741,8 +738,7 @@ SearchParameters.prototype = {
     if (this.hitsPerPage === n) return this;
 
     return this.setQueryParameters({
-      hitsPerPage: n,
-      page: 0
+      hitsPerPage: n
     });
   },
   /**
@@ -756,8 +752,7 @@ SearchParameters.prototype = {
     if (this.typoTolerance === typoTolerance) return this;
 
     return this.setQueryParameters({
-      typoTolerance: typoTolerance,
-      page: 0
+      typoTolerance: typoTolerance
     });
   },
   /**
@@ -796,7 +791,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: mod
     });
   },
@@ -859,7 +853,6 @@ SearchParameters.prototype = {
       var paramValueAsNumber = valToNumber(paramValue);
       if (!this.isNumericRefined(attribute, operator, paramValueAsNumber)) return this;
       return this.setQueryParameters({
-        page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator && isEqual(value.val, paramValueAsNumber);
         })
@@ -867,7 +860,6 @@ SearchParameters.prototype = {
     } else if (operator !== undefined) {
       if (!this.isNumericRefined(attribute, operator)) return this;
       return this.setQueryParameters({
-        page: 0,
         numericRefinements: this._clearNumericRefinements(function(value, key) {
           return key === attribute && value.op === operator;
         })
@@ -876,7 +868,6 @@ SearchParameters.prototype = {
 
     if (!this.isNumericRefined(attribute)) return this;
     return this.setQueryParameters({
-      page: 0,
       numericRefinements: this._clearNumericRefinements(function(value, key) {
         return key === attribute;
       })
@@ -934,6 +925,56 @@ SearchParameters.prototype = {
     }
   },
   /**
+   * Add a facet to the facets attribute of the helper configuration, if it
+   * isn't already present.
+   * @method
+   * @param {string} facet facet name to add
+   * @return {SearchParameters}
+   */
+  addFacet: function addFacet(facet) {
+    if (this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      facets: this.facets.concat([facet])
+    });
+  },
+  /**
+   * Add a disjunctive facet to the disjunctiveFacets attribute of the helper
+   * configuration, if it isn't already present.
+   * @method
+   * @param {string} facet disjunctive facet name to add
+   * @return {SearchParameters}
+   */
+  addDisjunctiveFacet: function addDisjunctiveFacet(facet) {
+    if (this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      disjunctiveFacets: this.disjunctiveFacets.concat([facet])
+    });
+  },
+  /**
+   * Add a hierarchical facet to the hierarchicalFacets attribute of the helper
+   * configuration.
+   * @method
+   * @param {object} hierarchicalFacet hierarchical facet to add
+   * @return {SearchParameters}
+   * @throws will throw an error if a hierarchical facet with the same name was already declared
+   */
+  addHierarchicalFacet: function addHierarchicalFacet(hierarchicalFacet) {
+    if (this.isHierarchicalFacet(hierarchicalFacet.name)) {
+      throw new Error(
+        'Cannot declare two hierarchical facets with the same name: `' + hierarchicalFacet.name + '`');
+    }
+
+    return this.setQueryParameters({
+      hierarchicalFacets: this.hierarchicalFacets.concat([hierarchicalFacet])
+    });
+  },
+  /**
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
@@ -947,7 +988,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.addRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -965,7 +1005,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.addRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -985,7 +1024,6 @@ SearchParameters.prototype = {
     if (RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.addRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -999,11 +1037,64 @@ SearchParameters.prototype = {
     if (this.isTagRefined(tag)) return this;
 
     var modification = {
-      page: 0,
       tagRefinements: this.tagRefinements.concat(tag)
     };
 
     return this.setQueryParameters(modification);
+  },
+  /**
+   * Remove a facet from the facets attribute of the helper configuration, if it
+   * is present.
+   * @method
+   * @param {string} facet facet name to remove
+   * @return {SearchParameters}
+   */
+  removeFacet: function removeFacet(facet) {
+    if (!this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      facets: filter(this.facets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Remove a disjunctive facet from the disjunctiveFacets attribute of the
+   * helper configuration, if it is present.
+   * @method
+   * @param {string} facet disjunctive facet name to remove
+   * @return {SearchParameters}
+   */
+  removeDisjunctiveFacet: function removeDisjunctiveFacet(facet) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      disjunctiveFacets: filter(this.disjunctiveFacets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Remove a hierarchical facet from the hierarchicalFacets attribute of the
+   * helper configuration, if it is present.
+   * @method
+   * @param {string} facet hierarchical facet name to remove
+   * @return {SearchParameters}
+   */
+  removeHierarchicalFacet: function removeHierarchicalFacet(facet) {
+    if (!this.isHierarchicalFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      hierarchicalFacets: filter(this.hierarchicalFacets, function(f) {
+        return f.name !== facet;
+      })
+    });
   },
   /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
@@ -1021,7 +1112,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.facetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.removeRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -1039,7 +1129,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.facetsExcludes, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.removeRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -1058,7 +1147,6 @@ SearchParameters.prototype = {
     if (!RefinementList.isRefined(this.disjunctiveFacetsRefinements, facet, value)) return this;
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.removeRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -1073,7 +1161,6 @@ SearchParameters.prototype = {
     if (!this.isTagRefined(tag)) return this;
 
     var modification = {
-      page: 0,
       tagRefinements: filter(this.tagRefinements, function(t) { return t !== tag; })
     };
 
@@ -1112,7 +1199,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       facetsRefinements: RefinementList.toggleRefinement(this.facetsRefinements, facet, value)
     });
   },
@@ -1129,7 +1215,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       facetsExcludes: RefinementList.toggleRefinement(this.facetsExcludes, facet, value)
     });
   },
@@ -1147,7 +1232,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       disjunctiveFacetsRefinements: RefinementList.toggleRefinement(
         this.disjunctiveFacetsRefinements, facet, value)
     });
@@ -1193,7 +1277,6 @@ SearchParameters.prototype = {
     }
 
     return this.setQueryParameters({
-      page: 0,
       hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
@@ -1450,6 +1533,8 @@ SearchParameters.prototype = {
    * @return {SearchParameters} a new updated instance
    */
   setQueryParameters: function setQueryParameters(params) {
+    if (!params) return this;
+
     var error = SearchParameters.validate(this, params);
 
     if (error) {
@@ -1546,6 +1631,27 @@ SearchParameters.prototype = {
       this.hierarchicalFacets,
       {name: hierarchicalFacetName}
     );
+  },
+
+  /**
+   * Get the current breadcrumb for a hierarchical facet, as an array
+   * @param  {string} facetName Hierarchical facet name
+   * @return {array.<string>} the path as an array of string
+   */
+  getHierarchicalFacetBreadcrumb: function(facetName) {
+    if (!this.isHierarchicalFacet(facetName)) {
+      throw new Error(
+        'Cannot get the breadcrumb of an unknown hierarchical facet: `' + facetName + '`');
+    }
+
+    var refinement = this.getHierarchicalRefinement(facetName)[0];
+    if (!refinement) return [];
+
+    var separator = this._getHierarchicalFacetSeparator(
+      this.getHierarchicalFacetByName(facetName)
+    );
+    var path = refinement.split(separator);
+    return map(path, trim);
   }
 };
 

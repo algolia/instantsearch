@@ -13,16 +13,12 @@ This is the library you will need to easily build a good search UX like our [ins
 
 [![Version][version-svg]][package-url] [![Build Status][travis-svg]][travis-url] [![License][license-image]][license-url] [![Downloads][downloads-image]][downloads-url]
 
-[![Browser tests][browser-test-matrix]][browser-test-url]
-
-[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/master.svg?style=flat-square
+[travis-svg]: https://img.shields.io/travis/algolia/algoliasearch-helper-js/develop.svg?style=flat-square
 [travis-url]: https://travis-ci.org/algolia/algoliasearch-helper-js
 [license-image]: http://img.shields.io/badge/license-MIT-green.svg?style=flat-square
 [license-url]: LICENSE
 [downloads-image]: https://img.shields.io/npm/dm/algoliasearch-helper.svg?style=flat-square
 [downloads-url]: http://npm-stat.com/charts.html?package=algoliasearch-helper
-[browser-test-matrix]: https://saucelabs.com/browser-matrix/as-helper-js.svg
-[browser-test-url]: https://saucelabs.com/u/as-helper-js
 [version-svg]: https://img.shields.io/npm/v/algoliasearch-helper.svg?style=flat-square
 [package-url]: https://npmjs.org/package/algoliasearch-helper
 
@@ -1360,14 +1356,4 @@ Here is an example of a result object you get with the `result` event.
 
 # Browser support
 
-This project works fine on any [ES5](https://en.wikipedia.org/wiki/ECMAScript#5th_Edition) browser, basically >= IE9+.
-
-To get IE8 support you will have to include this script before the helper:
-
-```html
-<!--[if lte IE 8]>
-  <script src="https://cdn.jsdelivr.net/core-js/2/shim.min.js"></script>
-<![endif]-->
-```
-
-Which will simulate most of the ES5 features in IE8.
+This project works on any [ES5](https://en.wikipedia.org/wiki/ECMAScript#5th_Edition) browser, basically >= IE9+.

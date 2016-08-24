@@ -10162,52 +10162,101 @@ function SearchParameters(newParameters) {
 
   // Facets
   /**
-   * All the facets that will be requested to the server
+   * This attribute contains the list of all the conjunctive facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
    * @member {string[]}
    */
   this.facets = params.facets || [];
   /**
-   * All the declared disjunctive facets
+   * This attribute contains the list of all the disjunctive facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
    * @member {string[]}
    */
   this.disjunctiveFacets = params.disjunctiveFacets || [];
   /**
-   * All the declared hierarchical facets,
-   * a hierarchical facet is a disjunctive facet with some specific behavior
+   * This attribute contains the list of all the hierarchical facets
+   * used. This list will be added to requested facets in the
+   * [facets attribute](https://www.algolia.com/doc/rest-api/search#param-facets) sent to algolia.
+   * Hierarchical facets are a sub type of disjunctive facets that
+   * let you filter faceted attributes hierarchically.
    * @member {string[]|object[]}
    */
   this.hierarchicalFacets = params.hierarchicalFacets || [];
 
   // Refinements
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the conjunctive facets. Each facet must be properly
+   * defined in the `facets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsRefinements = params.facetsRefinements || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * excluded from the conjunctive facets. Each facet must be properly
+   * defined in the `facets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters excluded for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.facetsExcludes = params.facetsExcludes || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the disjunctive facets. Each facet must be properly
+   * defined in the `disjunctiveFacets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.disjunctiveFacetsRefinements = params.disjunctiveFacetsRefinements || {};
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the numeric attributes.
+   *
+   * The key is the name of the attribute, and the value is the
+   * filters to apply to this attribute.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `numericFilters` attribute.
    * @member {Object.<string, SearchParameters.OperatorList>}
    */
   this.numericRefinements = params.numericRefinements || {};
   /**
-   * Contains the tags used to refine the query
-   * Associated property in the query: tagFilters
-   * @private
+   * This attribute contains all the tags used to refine the query.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `tagFilters` attribute.
    * @member {string[]}
    */
   this.tagRefinements = params.tagRefinements || [];
   /**
-   * @private
+   * This attribute contains all the filters that need to be
+   * applied on the hierarchical facets. Each facet must be properly
+   * defined in the `hierarchicalFacets` attribute.
+   *
+   * The key is the name of the facet, and the `FacetList` contains all
+   * filters selected for the associated facet name. The FacetList values
+   * are structured as a string that contain the values for each level
+   * seperated by the configured separator.
+   *
+   * When querying algolia, the values stored in this attribute will
+   * be translated into the `facetFiters` attribute.
    * @member {Object.<string, SearchParameters.FacetList>}
    */
   this.hierarchicalFacetsRefinements = params.hierarchicalFacetsRefinements || {};
@@ -10215,7 +10264,6 @@ function SearchParameters(newParameters) {
   /**
    * Contains the numeric filters in the raw format of the Algolia API. Setting
    * this parameter is not compatible with the usage of numeric filters methods.
-   * @private
    * @see https://www.algolia.com/doc/javascript#numericFilters
    * @member {string}
    */
@@ -10225,15 +10273,13 @@ function SearchParameters(newParameters) {
    * Contains the tag filters in the raw format of the Algolia API. Setting this
    * parameter is not compatible with the of the add/remove/toggle methods of the
    * tag api.
-   * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
   this.tagFilters = params.tagFilters;
 
   /**
-   * Contains the  optional tag filters in the raw format of the Algolia API.
-   * @private
+   * Contains the optional tag filters in the raw format of the Algolia API.
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
@@ -10241,7 +10287,6 @@ function SearchParameters(newParameters) {
 
   /**
    * Contains the optional facet filters in the raw format of the Algolia API.
-   * @private
    * @see https://www.algolia.com/doc/rest#param-tagFilters
    * @member {string}
    */
@@ -10490,8 +10535,9 @@ function SearchParameters(newParameters) {
 }
 
 /**
- * List all the properties in SearchParameters and therefore all the know Algolia properties
+ * List all the properties in SearchParameters and therefore all the known Algolia properties
  * This doesn't contain any beta/hidden features.
+ * @private
  */
 SearchParameters.PARAMETERS = keys(new SearchParameters());
 
@@ -10942,6 +10988,55 @@ SearchParameters.prototype = {
     }
   },
   /**
+   * Add a facet to the facets attribute of the helper configuration, if it
+   * isn't already present.
+   * @method
+   * @param {string} facet facet name to add
+   * @return {SearchParameters}
+   */
+  addFacet: function addFacet(facet) {
+    if (this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      facets: this.facets.concat([facet])
+    });
+  },
+  /**
+   * Add a disjunctive facet to the disjunctiveFacets attribute of the helper
+   * configuration, if it isn't already present.
+   * @method
+   * @param {string} facet disjunctive facet name to add
+   * @return {SearchParameters}
+   */
+  addDisjunctiveFacet: function addDisjunctiveFacet(facet) {
+    if (this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.setQueryParameters({
+      disjunctiveFacets: this.disjunctiveFacets.concat([facet])
+    });
+  },
+  /**
+   * Add a hierarchical facet to the hierarchicalFacets attribute of the helper
+   * configuration.
+   * @method
+   * @param {object} hierarchicalFacet hierarchical facet to add
+   * @return {SearchParameters}
+   * @throws will throw an error if a hierarchical facet with the same name was already declared
+   */
+  addHierarchicalFacet: function addHierarchicalFacet(hierarchicalFacet) {
+    if (this.isHierarchicalFacet(hierarchicalFacet.name)) {
+      throw new Error('Cannot declare two hierarchical facets with the same name: `' + hierarchicalFacet.name + '`');
+    }
+
+    return this.setQueryParameters({
+      hierarchicalFacets: this.hierarchicalFacets.concat([hierarchicalFacet])
+    });
+  },
+  /**
    * Add a refinement on a "normal" facet
    * @method
    * @param {string} facet attribute to apply the facetting on
@@ -11012,6 +11107,60 @@ SearchParameters.prototype = {
     };
 
     return this.setQueryParameters(modification);
+  },
+  /**
+   * Remove a facet from the facets attribute of the helper configuration, if it
+   * is present.
+   * @method
+   * @param {string} facet facet name to remove
+   * @return {SearchParameters}
+   */
+  removeFacet: function removeFacet(facet) {
+    if (!this.isConjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      facets: filter(this.facets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Remove a disjunctive facet from the disjunctiveFacets attribute of the
+   * helper configuration, if it is present.
+   * @method
+   * @param {string} facet disjunctive facet name to remove
+   * @return {SearchParameters}
+   */
+  removeDisjunctiveFacet: function removeDisjunctiveFacet(facet) {
+    if (!this.isDisjunctiveFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      disjunctiveFacets: filter(this.disjunctiveFacets, function(f) {
+        return f !== facet;
+      })
+    });
+  },
+  /**
+   * Remove a hierarchical facet from the hierarchicalFacets attribute of the
+   * helper configuration, if it is present.
+   * @method
+   * @param {string} facet hierarchical facet name to remove
+   * @return {SearchParameters}
+   */
+  removeHierarchicalFacet: function removeHierarchicalFacet(facet) {
+    if (!this.isHierarchicalFacet(facet)) {
+      return this;
+    }
+
+    return this.clearRefinements(facet).setQueryParameters({
+      hierarchicalFacets: filter(this.hierarchicalFacets, function(f) {
+        return f.name !== facet;
+      })
+    });
   },
   /**
    * Remove a refinement set on facet. If a value is provided, it will clear the
@@ -11453,12 +11602,13 @@ SearchParameters.prototype = {
   },
   /**
    * Let the user set any of the parameters with a plain object.
-   * It won't let the user define custom properties.
    * @method
    * @param {object} params all the keys and the values to be updated
    * @return {SearchParameters} a new updated instance
    */
   setQueryParameters: function setQueryParameters(params) {
+    if (!params) return this;
+
     var error = SearchParameters.validate(this, params);
 
     if (error) {
@@ -11790,6 +11940,7 @@ var forEach = require('lodash/forEach');
 var compact = require('lodash/compact');
 var indexOf = require('lodash/indexOf');
 var findIndex = require('lodash/findIndex');
+var get = require('lodash/get');
 
 var sumBy = require('lodash/sumBy');
 var find = require('lodash/find');
@@ -11832,9 +11983,22 @@ var generateHierarchicalTree = require('./generate-hierarchical-tree');
 /**
  * @typedef SearchResults.FacetValue
  * @type {object}
- * @property {value} string the facet value itself
- * @property {count} number times this facet appears in the results
- * @property {isRefined} boolean is the facet currently selected
+ * @property {string} value the facet value itself
+ * @property {number} count times this facet appears in the results
+ * @property {boolean} isRefined is the facet currently selected
+ * @property {boolean} isExcluded is the facet currently excluded (only for conjunctive facets)
+ */
+
+/**
+ * @typedef Refinement
+ * @type {object}
+ * @property {string} type the type of filter used: `numeric`, `facet`, `exclude`, `disjunctive`, `hierarchical`
+ * @property {string} attributeName name of the attribute used for filtering
+ * @property {string} name the value of the filter
+ * @property {number} numericValue the value as a number. Only for numeric fitlers.
+ * @property {string} operator the operator used. Only for numeric filters.
+ * @property {number} count the number of computed hits for this filter. Only on facets.
+ * @property {boolean} exhaustive if the count is exhaustive
  */
 
 function getIndices(obj) {
@@ -12297,7 +12461,8 @@ function extractNormalizedFacetValues(results, attribute) {
       return {
         name: k,
         count: v,
-        isRefined: results._state.isFacetRefined(attribute, k)
+        isRefined: results._state.isFacetRefined(attribute, k),
+        isExcluded: results._state.isExcludeRefined(attribute, k)
       };
     });
   } else if (results._state.isDisjunctiveFacet(attribute)) {
@@ -12406,9 +12571,100 @@ function getFacetStatsIfAvailable(facetList, facetName) {
   return data && data.stats;
 }
 
+/**
+ * Returns all refinements for all filters + tags. It also provides
+ * additional information: count and exhausistivity for each filter.
+ *
+ * See the [refinement type](#Refinement) for an exhaustive view of the available
+ * data.
+ *
+ * @return {Array.<Refinement>} all the refinements
+ */
+SearchResults.prototype.getRefinements = function() {
+  var state = this._state;
+  var results = this;
+  var res = [];
+
+  forEach(state.facetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getRefinement(state, 'facet', attributeName, name, results.facets));
+    });
+  });
+
+  forEach(state.facetsExcludes, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getRefinement(state, 'exclude', attributeName, name, results.facets));
+    });
+  });
+
+  forEach(state.disjunctiveFacetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getRefinement(state, 'disjunctive', attributeName, name, results.disjunctiveFacets));
+    });
+  });
+
+  forEach(state.hierarchicalFacetsRefinements, function(refinements, attributeName) {
+    forEach(refinements, function(name) {
+      res.push(getHierarchicalRefinement(state, attributeName, name, results.hierarchicalFacets));
+    });
+  });
+
+  forEach(state.numericRefinements, function(operators, attributeName) {
+    forEach(operators, function(values, operator) {
+      forEach(values, function(value) {
+        res.push({
+          type: 'numeric',
+          attributeName: attributeName,
+          name: value,
+          numericValue: value,
+          operator: operator
+        });
+      });
+    });
+  });
+
+  forEach(state.tagRefinements, function(name) {
+    res.push({type: 'tag', attributeName: '_tags', name: name});
+  });
+
+  return res;
+};
+
+function getRefinement(state, type, attributeName, name, resultsFacets) {
+  var facet = find(resultsFacets, {name: attributeName});
+  var count = get(facet, 'data[' + name + ']');
+  var exhaustive = get(facet, 'exhaustive');
+  return {
+    type: type,
+    attributeName: attributeName,
+    name: name,
+    count: count || 0,
+    exhaustive: exhaustive || false
+  };
+}
+
+function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
+  var facet = find(resultsFacets, {name: attributeName});
+  var facetDeclaration = state.getHierarchicalFacetByName(attributeName);
+  var splitted = name.split(facetDeclaration.separator);
+  var configuredName = splitted[splitted.length - 1];
+  for (var i = 0; facet !== undefined && i < splitted.length; ++i) {
+    facet = find(facet.data, {name: splitted[i]});
+  }
+  var count = get(facet, 'count');
+  var exhaustive = get(facet, 'exhaustive');
+  return {
+    type: 'hierarchical',
+    attributeName: attributeName,
+    name: configuredName,
+    count: count || 0,
+    exhaustive: exhaustive || false
+  };
+}
+
 module.exports = SearchResults;
 
-},{"../functions/formatSort":266,"./generate-hierarchical-tree":263,"lodash/compact":187,"lodash/defaults":189,"lodash/find":192,"lodash/findIndex":193,"lodash/forEach":194,"lodash/includes":199,"lodash/indexOf":200,"lodash/isArray":204,"lodash/isFunction":210,"lodash/map":224,"lodash/merge":228,"lodash/orderBy":232,"lodash/partial":233,"lodash/partialRight":234,"lodash/sumBy":242}],265:[function(require,module,exports){
+},{"../functions/formatSort":266,"./generate-hierarchical-tree":263,"lodash/compact":187,"lodash/defaults":189,"lodash/find":192,"lodash/findIndex":193,"lodash/forEach":194,"lodash/get":196,"lodash/includes":199,"lodash/indexOf":200,"lodash/isArray":204,"lodash/isFunction":210,"lodash/map":224,"lodash/merge":228,"lodash/orderBy":232,"lodash/partial":233,"lodash/partialRight":234,"lodash/sumBy":242}],265:[function(require,module,exports){
 'use strict';
 
 var SearchParameters = require('./SearchParameters');
@@ -12556,7 +12812,7 @@ AlgoliaSearchHelper.prototype.search = function() {
  * }
  */
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
-  var tempState = this.state.setQueryParameters(options);
+  var tempState = !options ? this.state : this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(tempState.index, tempState);
   if (cb) {
     return this.client.search(
@@ -12570,7 +12826,8 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
     function(content) {
       return {
         content: new SearchResults(tempState, content),
-        state: tempState
+        state: tempState,
+        _originalResponse: content
       };
     });
 };
@@ -13060,8 +13317,9 @@ AlgoliaSearchHelper.prototype.getState = function(filters) {
 };
 
 /**
- * Get part of the state as a query string. By default, the output keys will not
+ * DEPRECATED Get part of the state as a query string. By default, the output keys will not
  * be prefixed and will only take the applied refinements and the query.
+ * @deprecated
  * @param {object} [options] May contain the following parameters :
  *
  * **filters** : possible values are all the keys of the [SearchParameters](#searchparameters), `index` for
@@ -13110,8 +13368,9 @@ AlgoliaSearchHelper.getConfigurationFromQueryString = url.getStateFromQueryStrin
 AlgoliaSearchHelper.getForeignConfigurationInQueryString = url.getUnrecognizedParametersInQueryString;
 
 /**
- * Overrides part of the state with the properties stored in the provided query
+ * DEPRECATED Overrides part of the state with the properties stored in the provided query
  * string.
+ * @deprecated
  * @param {string} queryString the query string containing the informations to url the state
  * @param {object} options optionnal parameters :
  *  - prefix : prefix used for the algolia parameters
@@ -13310,6 +13569,8 @@ AlgoliaSearchHelper.prototype.getQueryParameter = function(parameterName) {
 /**
  * Get the list of refinements for a given attribute. This method works with
  * conjunctive, disjunctive, excluding and numerical filters.
+ *
+ * See also SearchResults#getRefinements
  *
  * @param {string} facetName attribute name used for facetting
  * @return {Array.<FacetRefinement|NumericRefinement>} All Refinement are objects that contain a value, and
@@ -13941,7 +14202,7 @@ function sortQueryStringValues(prefixRegexp, invertedMapping, a, b) {
 /**
  * Read a query string and return an object containing the state
  * @param {string} queryString the query string that will be decoded
- * @param {object} options accepted options :
+ * @param {object} [options] accepted options :
  *   - prefix : the prefix used for the saved attributes, you have to provide the
  *     same that was used for serialization
  *   - mapping : map short attributes to another value e.g. {q: 'query'}
@@ -13974,7 +14235,7 @@ exports.getStateFromQueryString = function(queryString, options) {
  * Retrieve an object of all the properties that are not understandable as helper
  * parameters.
  * @param {string} queryString the query string to read
- * @param {object} options the options
+ * @param {object} [options] the options
  *   - prefixForParameters : prefix used for the helper configuration keys
  *   - mapping : map short attributes to another value e.g. {q: 'query'}
  * @return {object} the object containing the parsed configuration that doesn't

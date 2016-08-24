@@ -13,8 +13,5 @@ echo "Test"
 echo "Test: node"
 ./scripts/test-node.sh
 
-echo "Test: phantom"
-./scripts/test-phantom.sh
-
 echo "Test: lint"
 ./scripts/lint.sh
