@@ -1,3 +1,14 @@
+<a name="1.8.1"></a>
+## [1.8.1](https://github.com/algolia/instantsearch.js/compare/v1.8.0...v1.8.1) (2016-08-24)
+
+
+### Bug Fixes
+
+* **searchBox:** handle BFCache browsers (#1212) ([7deb9c3](https://github.com/algolia/instantsearch.js/commit/7deb9c3))
+* **toggle:** make autoHide check facetValue.count (#1213) ([86872eb](https://github.com/algolia/instantsearch.js/commit/86872eb))
+
+
+
 <a name="1.8.0"></a>
 # [1.8.0](https://github.com/algolia/instantsearch.js/compare/v1.7.1...v1.8.0) (2016-08-18)
 
