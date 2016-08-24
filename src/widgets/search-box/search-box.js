@@ -2,9 +2,9 @@ import {
   bemHelper,
   getContainerNode
 } from '../../lib/utils.js';
-import forEach from 'lodash/collection/forEach';
-import isString from 'lodash/lang/isString';
-import isFunction from 'lodash/lang/isFunction';
+import forEach from 'lodash/forEach';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 import cx from 'classnames';
 import Hogan from 'hogan.js';
 import defaultTemplates from './defaultTemplates.js';

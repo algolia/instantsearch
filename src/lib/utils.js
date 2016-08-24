@@ -1,11 +1,11 @@
-import reduce from 'lodash/collection/reduce';
-import forEach from 'lodash/collection/forEach';
-import find from 'lodash/collection/find';
-import get from 'lodash/object/get';
-import isEmpty from 'lodash/lang/isEmpty';
-import keys from 'lodash/object/keys';
-import uniq from 'lodash/array/uniq';
-import mapKeys from 'lodash/object/mapKeys';
+import reduce from 'lodash/reduce';
+import forEach from 'lodash/forEach';
+import find from 'lodash/find';
+import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
+import keys from 'lodash/keys';
+import uniq from 'lodash/uniq';
+import mapKeys from 'lodash/mapKeys';
 
 export {
   getContainerNode,

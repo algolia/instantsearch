@@ -1,6 +1,6 @@
 /* eslint-disable no-console, no-magic-numbers */
 
-import debounce from 'lodash/function/debounce';
+import debounce from 'lodash/debounce';
 import watch from './dev-functional-tests-compile-watch.js';
 
 import {spawn} from 'child_process';

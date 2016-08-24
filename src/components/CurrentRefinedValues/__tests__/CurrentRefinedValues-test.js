@@ -5,8 +5,8 @@ import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 
-import forEach from 'lodash/collection/forEach';
-import map from 'lodash/collection/map';
+import forEach from 'lodash/forEach';
+import map from 'lodash/map';
 
 import CurrentRefinedValues from '../CurrentRefinedValues.js';
 import Template from '../../Template';

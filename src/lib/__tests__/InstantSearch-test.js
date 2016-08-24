@@ -2,7 +2,7 @@
 import EventEmitter from 'events';
 
 import expect from 'expect';
-import range from 'lodash/utility/range';
+import range from 'lodash/range';
 import sinon from 'sinon';
 
 
