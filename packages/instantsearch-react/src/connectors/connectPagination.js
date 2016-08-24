@@ -1,4 +1,5 @@
 import {PropTypes} from 'react';
+import {omit} from 'lodash';
 
 import createConnector from '../createConnector';
 
@@ -23,13 +24,6 @@ export default createConnector({
     id: 'p',
   },
 
-  getMetadata(props) {
-    return {
-      id: props.id,
-      clearOnChange: true,
-    };
-  },
-
   getProps(props, state, search) {
     if (!search.results) {
       return null;
@@ -49,5 +43,18 @@ export default createConnector({
 
   getSearchParameters(searchParameters, props, state) {
     return searchParameters.setPage(getPage(props, state));
+  },
+
+  transitionState(props, prevState, nextState) {
+    if (prevState[props.id] === nextState[props.id]) {
+      return omit(nextState, props.id);
+    }
+    return nextState;
+  },
+
+  getMetadata(props) {
+    return {
+      id: props.id,
+    };
   },
 });

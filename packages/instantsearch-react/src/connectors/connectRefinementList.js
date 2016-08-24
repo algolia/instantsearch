@@ -91,7 +91,10 @@ export default createConnector({
     const addRefinementKey = `${addKey}Refinement`;
 
     searchParameters = searchParameters.setQueryParameters({
-      maxValuesPerFacet: Math.max(state.maxValuesPerFacet || 0, limit),
+      maxValuesPerFacet: Math.max(
+        searchParameters.maxValuesPerFacet || 0,
+        limit
+      ),
     });
 
     searchParameters = searchParameters[addKey](attributeName);

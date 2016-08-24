@@ -2,12 +2,8 @@ import {PropTypes} from 'react';
 
 import createConnector from '../createConnector';
 
-function getId(props) {
-  return props.id || props.name;
-}
-
 function getSelectedItem(props, state) {
-  const id = getId(props);
+  const id = props.id;
   if (typeof state[id] !== 'undefined') {
     if (state[id] === '') {
       return null;
@@ -33,7 +29,7 @@ export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',
 
   propTypes: {
-    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
     attributes: PropTypes.arrayOf(PropTypes.string).isRequired,
     separator: PropTypes.string,
     rootPath: PropTypes.string,
@@ -56,12 +52,19 @@ export default createConnector({
   },
 
   getProps(props, state, search) {
-    if (!search.results) {
+    const {id, sortBy, showMore, limitMin, limitMax} = props;
+    const {results} = search;
+
+    const isFacetPresent =
+      Boolean(results) &&
+      Boolean(results.getFacetByName(id));
+
+    if (!isFacetPresent) {
       return null;
     }
-    const {name, sortBy, showMore, limitMin, limitMax} = props;
+
     const limit = showMore ? limitMax : limitMin;
-    const value = search.results.getFacetValues(name, {sortBy});
+    const value = results.getFacetValues(id, {sortBy});
     return {
       items: value.data ? transformValue(value.data, limit) : [],
       selectedItem: getSelectedItem(props, state),
@@ -69,16 +72,15 @@ export default createConnector({
   },
 
   refine(props, state, nextSelectedItem) {
-    const id = getId(props);
     return {
       ...state,
-      [id]: nextSelectedItem || '',
+      [props.id]: nextSelectedItem || '',
     };
   },
 
   getSearchParameters(searchParameters, props, state) {
     const {
-      name,
+      id,
       attributes,
       separator,
       rootPath,
@@ -91,7 +93,7 @@ export default createConnector({
 
     searchParameters = searchParameters
       .addHierarchicalFacet({
-        name,
+        name: id,
         attributes,
         separator,
         rootPath,
@@ -107,7 +109,7 @@ export default createConnector({
     const selectedItem = getSelectedItem(props, state);
     if (selectedItem !== null) {
       searchParameters = searchParameters.toggleHierarchicalFacetRefinement(
-        props.name,
+        id,
         selectedItem
       );
     }
@@ -116,13 +118,13 @@ export default createConnector({
   },
 
   getMetadata(props, state) {
-    const id = getId(props);
+    const {id} = props;
     const selectedItem = getSelectedItem(props, state);
     return {
       id,
       filters: !selectedItem ? [] : [{
         key: `${id}.${selectedItem}`,
-        label: `${props.name}: ${selectedItem}`,
+        label: `${id}: ${selectedItem}`,
         clear: nextState => ({
           ...nextState,
           [id]: '',

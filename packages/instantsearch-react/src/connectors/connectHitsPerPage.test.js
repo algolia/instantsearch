@@ -6,27 +6,51 @@ jest.unmock('algoliasearch-helper');
 import connectHitsPerPage from './connectHitsPerPage';
 jest.unmock('./connectHitsPerPage');
 
-const {configure, mapStateToProps, refine} = connectHitsPerPage;
+const {
+  getProps,
+  refine,
+  getSearchParameters: getSP,
+  getMetadata,
+} = connectHitsPerPage;
+
+let props;
+let params;
 
 describe('connectHitsPerPage', () => {
-  it('defaults the configuration hitsPerPage to its defaultValue prop', () => {
-    const state = new SearchParameters();
-    const configuredState1 = configure(state, {defaultValue: 666});
-    expect(configuredState1.hitsPerPage).toBe(666);
+  it('provides the correct props to the component', () => {
+    props = getProps({id: 'hPP'}, {hPP: 10});
+    expect(props).toEqual({hitsPerPage: 10});
 
-    const state2 = state.setQueryParameter('hitsPerPage', 777);
-    const configuredState2 = configure(state2, {defaultValue: 666});
-    expect(configuredState2.hitsPerPage).toBe(777);
+    props = getProps({id: 'hPP'}, {hPP: '10'});
+    expect(props).toEqual({hitsPerPage: 10});
+
+    props = getProps({id: 'hPP', defaultHitsPerPage: 20}, {});
+    expect(props).toEqual({hitsPerPage: 20});
   });
 
-  it('provides the correct props to the component', () => {
-    const props = mapStateToProps({searchParameters: {hitsPerPage: 666}});
-    expect(props).toEqual({hitsPerPage: 666});
+  it('calling refine updates the widget\'s state', () => {
+    const nextState = refine({id: 'hPP'}, {otherKey: 'val'}, 30);
+    expect(nextState).toEqual({
+      otherKey: 'val',
+      hPP: 30,
+    });
   });
 
   it('refines the hitsPerPage parameter', () => {
-    const state = new SearchParameters();
-    const refinedState = refine(state, {}, 666);
-    expect(refinedState.hitsPerPage).toBe(666);
+    const sp = new SearchParameters();
+
+    params = getSP(sp, {id: 'hPP'}, {hPP: 10});
+    expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 10));
+
+    params = getSP(sp, {id: 'hPP'}, {hPP: '10'});
+    expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 10));
+
+    params = getSP(sp, {id: 'hPP', defaultHitsPerPage: 20}, {});
+    expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 20));
+  });
+
+  it('registers its id in metadata', () => {
+    const metadata = getMetadata({id: 'hPP'});
+    expect(metadata).toEqual({id: 'hPP'});
   });
 });

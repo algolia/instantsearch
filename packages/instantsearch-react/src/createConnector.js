@@ -13,6 +13,8 @@ export default function createConnector(connectorDesc) {
   const hasRefine = has(connectorDesc, 'refine');
   const hasSearchParameters = has(connectorDesc, 'getSearchParameters');
   const hasMetadata = has(connectorDesc, 'getMetadata');
+  const hasTransitionState = has(connectorDesc, 'transitionState');
+  const isWidget = hasSearchParameters || hasMetadata || hasTransitionState;
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
@@ -21,20 +23,19 @@ export default function createConnector(connectorDesc) {
 
     static contextTypes = {
       // @TODO: more precise state manager propType
-      aisStore: PropTypes.object.isRequired,
-      aisWidgetsManager: PropTypes.object.isRequired,
+      ais: PropTypes.object.isRequired,
     };
 
     constructor(props, context) {
       super(props, context);
 
-      const {aisStore, aisWidgetsManager} = context;
+      const {ais: {store, widgetsManager}} = context;
 
       this.state = {
         props: this.getProps(props),
       };
 
-      this.unsubscribe = aisStore.subscribe(() => {
+      this.unsubscribe = store.subscribe(() => {
         this.setState({
           props: this.getProps(this.props),
         });
@@ -45,7 +46,7 @@ export default function createConnector(connectorDesc) {
           connectorDesc.getSearchParameters(
             searchParameters,
             this.props,
-            aisStore.getState().widgets
+            store.getState().widgets
           ) :
         null;
       const getMetadata = hasMetadata ?
@@ -54,9 +55,16 @@ export default function createConnector(connectorDesc) {
           nextWidgetsState
         ) :
         null;
-      if (hasMetadata || hasSearchParameters) {
-        this.unregisterWidget = aisWidgetsManager.registerWidget({
-          getSearchParameters, getMetadata,
+      const transitionState = hasTransitionState ?
+        (prevWidgetsState, nextWidgetsState) => connectorDesc.transitionState(
+          this.props,
+          prevWidgetsState,
+          nextWidgetsState
+        ) :
+        null;
+      if (isWidget) {
+        this.unregisterWidget = widgetsManager.registerWidget({
+          getSearchParameters, getMetadata, transitionState,
         });
       }
     }
@@ -66,16 +74,17 @@ export default function createConnector(connectorDesc) {
         props: this.getProps(nextProps),
       });
 
-      if (hasMetadata || hasSearchParameters) {
+      if (isWidget) {
         // Since props might have changed, we need to re-run getSearchParameters
         // and getMetadata with the new props.
-        this.context.aisWidgetsManager.update();
+        this.context.ais.widgetsManager.update();
       }
     }
 
     componentWillUnmount() {
       this.unsubscribe();
-      if (hasMetadata || hasSearchParameters) {
+
+      if (isWidget) {
         this.unregisterWidget();
       }
     }
@@ -92,33 +101,33 @@ export default function createConnector(connectorDesc) {
     }
 
     getProps = props => {
-      const {aisStore} = this.context;
+      const {ais: {store}} = this.context;
       const {
         results,
         searching,
         error,
         widgets,
         metadata,
-      } = aisStore.getState();
+      } = store.getState();
       const searchState = {results, searching, error};
       return connectorDesc.getProps(props, widgets, searchState, metadata);
     };
 
     refine = (...args) => {
-      this.context.aisWidgetsManager.setState(
+      this.context.ais.onInternalStateUpdate(
         connectorDesc.refine(
           this.props,
-          this.context.aisStore.getState().widgets,
+          this.context.ais.store.getState().widgets,
           ...args
         )
       );
     };
 
     createURL = (...args) =>
-      this.context.aisWidgetsManager.getURLForState(
+      this.context.ais.createHrefForState(
         connectorDesc.refine(
           this.props,
-          this.context.aisStore.getState().widgets,
+          this.context.ais.store.getState().widgets,
           ...args
         )
       );
