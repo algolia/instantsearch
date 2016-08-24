@@ -39,6 +39,7 @@ Most of the searches will be done using the first method.
 
 {{> jsdoc jsdoc/helper/search}}
 {{> jsdoc jsdoc/helper/searchOnce}}
+{{> jsdoc jsdoc/helper/clearCache}}
 
 ### Query and index
 
