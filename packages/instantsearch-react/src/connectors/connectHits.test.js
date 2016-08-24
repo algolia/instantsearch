@@ -6,18 +6,25 @@ jest.unmock('algoliasearch-helper');
 import connectHits from './connectHits';
 jest.unmock('./connectHits');
 
-const {configure, mapStateToProps} = connectHits;
+const {getSearchParameters, getProps} = connectHits;
 
 describe('connectHits', () => {
-  it('sets the configuration hitsPerPage to its hitsPerPage prop', () => {
-    const state = new SearchParameters();
-    const configuredState = configure(state, {hitsPerPage: 666});
-    expect(configuredState.hitsPerPage).toBe(666);
-  });
-
   it('provides the current hits to the component', () => {
     const hits = {};
-    const props = mapStateToProps({searchResults: {hits}});
+    const props = getProps(null, null, {results: {hits}});
     expect(props.hits).toBe(hits);
+  });
+
+  it('doesn\'t render when no hits are available', () => {
+    const props = getProps(null, null, {results: null});
+    expect(props).toBe(null);
+  });
+
+  it('defaults hitsPerPage to its hitsPerPage prop', () => {
+    const params = new SearchParameters();
+    const params2 = getSearchParameters(params, {hitsPerPage: 666});
+    expect(params2.hitsPerPage).toBe(666);
+    const params3 = getSearchParameters(params2, {hitsPerPage: 777});
+    expect(params3.hitsPerPage).toBe(666);
   });
 });

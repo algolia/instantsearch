@@ -62,7 +62,6 @@ class Pagination extends Component {
     createURL: PropTypes.func.isRequired,
 
     translate: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     listComponent: PropTypes.func,
     showFirst: PropTypes.bool,
     showPrevious: PropTypes.bool,
@@ -112,9 +111,9 @@ class Pagination extends Component {
       showLast,
       refine,
       createURL,
-      applyTheme,
       translate,
       listComponent: ListComponent,
+      ...otherProps,
     } = this.props;
 
     const totalPages = Math.min(nbPages, maxPages);
@@ -173,7 +172,7 @@ class Pagination extends Component {
 
     return (
       <ListComponent
-        applyTheme={applyTheme}
+        {...otherProps}
         items={items}
         selectedItem={page}
         onSelect={refine}

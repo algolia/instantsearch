@@ -1,86 +1,31 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import {mount} from 'enzyme';
-import renderer from 'react/lib/ReactTestRenderer';
+import renderer from 'react-test-renderer';
 
 import Pagination from './Pagination';
 jest.unmock('./Pagination');
+jest.unmock('./LinkList');
+jest.unmock('./Link');
+jest.unmock('../propTypes');
 jest.unmock('../utils');
 jest.unmock('../translatable');
 jest.unmock('../themeable');
 
-const DEFAULT_PROPS = {nbPages: 20, page: 9};
+const REQ_PROPS = {
+  createURL: () => '#',
+  refine: () => null,
+};
+
+const DEFAULT_PROPS = {
+  ...REQ_PROPS,
+  nbPages: 20,
+  page: 9,
+};
 
 let tree;
 
 describe('Pagination', () => {
-  it('refines its value when clicking on a page link', () => {
-    const refine = jest.fn();
-    const wrapper = mount(
-      <Pagination
-        refine={refine}
-        showLast
-        {...DEFAULT_PROPS}
-      />
-    );
-    wrapper
-      .find('.Pagination__item__link')
-      .filterWhere(e => e.text() === '8')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(1);
-    expect(refine.mock.calls[0][0]).toEqual(7);
-    wrapper
-      .find('.Pagination__item__link')
-      .filterWhere(e => e.text() === '10')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(2);
-    expect(refine.mock.calls[1][0]).toEqual(9);
-    wrapper
-      .find('.Pagination__item--previous')
-      .find('.Pagination__item__link')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(3);
-    expect(refine.mock.calls[2][0]).toEqual(8);
-    wrapper
-      .find('.Pagination__item--next')
-      .find('.Pagination__item__link')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(4);
-    expect(refine.mock.calls[3][0]).toEqual(10);
-    wrapper
-      .find('.Pagination__item--first')
-      .find('.Pagination__item__link')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(5);
-    expect(refine.mock.calls[4][0]).toEqual(0);
-    wrapper
-      .find('.Pagination__item--last')
-      .find('.Pagination__item__link')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(6);
-    expect(refine.mock.calls[5][0]).toEqual(19);
-  });
-
-  it('ignores special clicks', () => {
-    const refine = jest.fn();
-    const wrapper = mount(
-      <Pagination
-        refine={refine}
-        {...DEFAULT_PROPS}
-      />
-    );
-    const el = wrapper
-      .find('.Pagination__item__link')
-      .filterWhere(e => e.text() === '8');
-    el.simulate('click', {button: 1});
-    el.simulate('click', {altKey: true});
-    el.simulate('click', {ctrlKey: true});
-    el.simulate('click', {metaKey: true});
-    el.simulate('click', {shiftKey: true});
-    expect(refine.mock.calls.length).toBe(0);
-  });
-
   it('applies its default props', () => {
     tree = renderer.create(
       <Pagination
@@ -93,6 +38,7 @@ describe('Pagination', () => {
   it('displays the correct padding of links', () => {
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         pagesPadding={5}
         nbPages={20}
         page={0}
@@ -103,6 +49,7 @@ describe('Pagination', () => {
     // @TODO: use .update(nextElement) once it lands
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         pagesPadding={4}
         nbPages={20}
         page={9}
@@ -112,6 +59,7 @@ describe('Pagination', () => {
 
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         pagesPadding={3}
         nbPages={20}
         page={19}
@@ -121,6 +69,7 @@ describe('Pagination', () => {
 
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         pagesPadding={2}
         nbPages={5}
         page={3}
@@ -204,6 +153,7 @@ describe('Pagination', () => {
   it('lets you force a maximum of pages', () => {
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         maxPages={10}
         showLast
         nbPages={15}
@@ -214,6 +164,7 @@ describe('Pagination', () => {
 
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         maxPages={10}
         showLast
         nbPages={9}
@@ -226,17 +177,18 @@ describe('Pagination', () => {
   it('lets you customize its theme', () => {
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         theme={{
           root: 'ROOT',
           item: 'ITEM',
-          first: 'FIRST',
-          last: 'LAST',
-          previous: 'PREVIOUS',
-          next: 'NEXT',
-          page: 'PAGE',
-          active: 'ACTIVE',
-          disabled: 'DISABLED',
-          link: 'LINK',
+          itemFirst: 'FIRST',
+          itemLast: 'LAST',
+          itemPrevious: 'PREVIOUS',
+          itemNext: 'NEXT',
+          itemPage: 'PAGE',
+          itemSelected: 'SELECTED',
+          itemDisabled: 'DISABLED',
+          itemLink: 'LINK',
         }}
         showLast
         pagesPadding={4}
@@ -250,6 +202,7 @@ describe('Pagination', () => {
   it('lets you customize its translations', () => {
     tree = renderer.create(
       <Pagination
+        {...REQ_PROPS}
         translations={{
           previous: 'PREVIOUS',
           next: 'NEXT',

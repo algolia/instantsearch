@@ -13,6 +13,11 @@ export const stateManagerPropType = PropTypes.shape({
   unlisten: PropTypes.func.isRequired,
 });
 
+export const componentPropType = PropTypes.oneOfType([
+  PropTypes.string,
+  PropTypes.func,
+]);
+
 export const withKeysPropType = keys => (props, propName, componentName) => {
   const prop = props[propName];
   if (prop) {

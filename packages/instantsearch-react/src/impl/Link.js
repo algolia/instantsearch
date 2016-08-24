@@ -19,7 +19,7 @@ export default class Link extends Component {
   render() {
     return (
       <a
-        {...omit(this.props, 'onClick', 'item')}
+        {...omit(this.props, 'onClick')}
         onClick={this.onClick}
       />
     );

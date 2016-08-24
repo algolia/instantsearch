@@ -1,12 +1,13 @@
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../themeable';
+import {componentPropType} from '../propTypes';
 
 class Hits extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
     hits: PropTypes.array,
-    itemComponent: PropTypes.func.isRequired,
+    itemComponent: componentPropType.isRequired,
   };
 
   render() {

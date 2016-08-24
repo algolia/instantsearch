@@ -1,50 +1,8 @@
 import {PropTypes, Component, Children} from 'react';
-import algoliasearch from 'algoliasearch';
-import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
-import {omit, isEqual, includes} from 'lodash';
-import qs from 'qs';
 import {createHistory} from 'history';
 
-import createWidgetsManager from './createWidgetsManager';
-import createStore from './createStore';
-
-function getStateFromLocation(location) {
-  if (location.query) {
-    return location.query;
-  }
-  // We could also use location.query with the useQueries enhancer, but that
-  // would require a bit more configuration from the user.
-  return qs.parse(location.search.slice(1));
-}
-
-function alphabeticalSort(a, b) {
-  if (a > b) {
-    return 1;
-  }
-  if (a === b) {
-    return 0;
-  }
-  return 1;
-}
-
-function applyStateToLocation(location, state, knownKeys) {
-  const urlState = getStateFromLocation(location);
-  const unknownParameters = omit(urlState, knownKeys);
-  const query = {
-    ...unknownParameters,
-    ...state,
-  };
-  if (location.query) {
-    return {
-      ...location,
-      query,
-    };
-  }
-  return {
-    ...location,
-    search: query ? `?${qs.stringify(query, {sort: alphabeticalSort})}` : '',
-  };
-}
+import createHistoryStateManager from './createHistoryStateManager';
+import createInstantSearchManager from './createInstantSearchManager';
 
 function formatProps(props) {
   return props.map(prop => `\`${prop}\``).join(', ');
@@ -79,6 +37,10 @@ function validateProps(props) {
 function validateNextProps(props, nextProps) {
   if (!props.onStateChange && nextProps.onStateChange) {
     throw new Error(
+      'You can\'t switch <InstantSearch> from being uncontrolled to controlled'
+    );
+  } else if (props.onStateChange && !nextProps.onStateChange) {
+    throw new Error(
       'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
     );
   }
@@ -109,235 +71,107 @@ class InstantSearch extends Component {
 
   static childContextTypes = {
     // @TODO: more precise widgets manager propType
-    aisStore: PropTypes.object.isRequired,
-    aisWidgetsManager: PropTypes.object.isRequired,
+    ais: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
 
-    const client = algoliasearch(props.appId, props.apiKey);
-    this.helper = algoliasearchHelper(client);
-
     validateProps(props);
 
-    if (!props.onStateChange) {
-      this.history = props.history || props.urlSync && createHistory();
-
-      if (this.history) {
-        this.currentLocation = null;
-        // In history V2, .listen is called with the initial location.
-        // In V3, you need to use .getCurrentLocation()
-        if (this.history.getCurrentLocation) {
-          this.currentLocation = this.history.getCurrentLocation();
-        }
-
-        this.lastPush = -1;
-        this.skipNextLocationUpdate = false;
-        this.skipNextStateUpdate = false;
-        this.unlisten = this.history.listen(this.onLocationChange);
-      }
-    }
-
-    this.widgetsManager = createWidgetsManager(
-      this.onStateUpdate,
-      this.onWidgetsUpdate,
-      this.createHrefForState
-    );
+    this.isControlled = Boolean(props.onStateChange);
+    this.isHSControlled = !this.isControlled &&
+                          (props.history || props.urlSync);
 
     let initialState;
-    if (props.state) {
+    if (this.isControlled) {
       initialState = props.state;
-    } else if (this.history) {
-      initialState = getStateFromLocation(this.currentLocation);
+    } else if (this.isHSControlled) {
+      const hs = props.history || createHistory();
+      this.hsManager = createHistoryStateManager({
+        history: hs,
+        threshold: props.threshold,
+        onInternalStateUpdate: this.onHistoryInternalStateUpdate,
+        getKnownKeys: this.getKnownKeys,
+      });
+      // @TODO: Since widgets haven't been registered yet, we have no way of
+      // knowing which URL query keys are known and which aren't. As such,
+      // `getStateFromCurrentLocation()` simply returns the current URL query
+      // deserialized.
+      // We might want to initialize to an empty state here and call
+      // `onHistoryInternalStateUpdate` on `componentDidMount`, once all widgets
+      // have been registered.
+      initialState = this.hsManager.getStateFromCurrentLocation();
     } else {
       initialState = {};
     }
 
-    this.store = createStore({
-      widgets: initialState,
-      metadata: [],
-      results: null,
-      error: null,
-      searching: false,
+    this.aisManager = createInstantSearchManager({
+      appId: props.appId,
+      apiKey: props.apiKey,
+      indexName: props.indexName,
+
+      initialState,
     });
   }
 
   componentWillReceiveProps(nextProps) {
     validateProps(nextProps);
     validateNextProps(this.props, nextProps);
-    if (nextProps.state) {
-      this.onNewState(nextProps.state);
+    if (this.isControlled) {
+      this.aisManager.onExternalStateUpdate(nextProps.state);
     }
   }
 
   componentWillUnmount() {
-    if (this.history) {
-      this.unlisten();
+    if (this.isHSControlled) {
+      this.hsManager.unlisten();
     }
   }
 
-  // Called whenever a location is pushed/popped/replaced.
-  onLocationChange = location => {
-    if (this.currentLocation === null && !this.history.getCurrentLocation) {
-      // Initial location. Called synchronously by listen.
-      this.currentLocation = location;
-      return;
+  getChildContext() {
+    return {
+      ais: {
+        store: this.aisManager.store,
+        widgetsManager: this.aisManager.widgetsManager,
+        onInternalStateUpdate: this.onWidgetsInternalStateUpdate,
+        createHrefForState: this.createHrefForState,
+      },
+    };
+  }
+
+  createHrefForState = state => {
+    state = this.aisManager.transitionState(state);
+
+    if (this.isControlled) {
+      return this.props.createURL(state, this.getKnownKeys());
+    } else if (this.isHSControlled) {
+      return this.hsManager.createHrefForState(state, this.getKnownKeys());
+    } else {
+      return '#';
     }
-    this.currentLocation = location;
-    if (this.skipNextLocationUpdate) {
-      this.skipNextLocationUpdate = false;
-      return;
-    }
-    const state = getStateFromLocation(this.currentLocation);
-    this.skipNextStateUpdate = true;
-    this.widgetsManager.setState(state);
   };
 
-  // Called whenever a widget updates its state via its `refine` method.
-  onStateUpdate = widgetsState => {
-    widgetsState = this.transitionState(
-      this.store.getState().widgets,
-      widgetsState
-    );
+  onHistoryInternalStateUpdate = state => {
+    this.aisManager.onExternalStateUpdate(state);
+  };
 
-    if (this.props.onStateChange) {
-      // The component is controlled.
-      this.props.onStateChange(widgetsState);
-      return;
-    }
+  onWidgetsInternalStateUpdate = state => {
+    state = this.aisManager.transitionState(state);
 
-    this.onNewState(widgetsState);
-
-    if (this.history) {
-      // Since there's a two way binding between url and state, we need to
-      // ignore some location and state updates.
-      if (!this.skipNextStateUpdate) {
-        // This must be after `onNewState`/`store.setState` since
-        // `createHrefForState` depends on the new metadata.
-        const href = this.createHrefForState(widgetsState);
-        this.skipNextLocationUpdate = true;
-        const newPush = Date.now();
-        if (
-          this.lastPush !== -1 &&
-          newPush - this.lastPush <= this.props.threshold
-        ) {
-          this.history.replace(href);
-        } else {
-          this.history.push(href);
-        }
-        this.lastPush = newPush;
-      } else {
-        this.skipNextStateUpdate = false;
+    if (this.isControlled) {
+      this.props.onStateChange(state);
+    } else {
+      this.aisManager.onExternalStateUpdate(state);
+      if (this.isHSControlled) {
+        // This needs to go after the aisManager's update, since it depends on new
+        // metadata.
+        this.hsManager.onExternalStateUpdate(state);
       }
     }
   };
 
-  onNewState = newState => {
-    const metadata = this.widgetsManager.getMetadata(newState);
-
-    this.store.setState({
-      ...this.store.getState(),
-      widgets: newState,
-      metadata,
-      searching: true,
-    });
-
-    this.search();
-  };
-
-  // Called whenever a widget has been rendered with new props.
-  onWidgetsUpdate = () => {
-    const widgetsState = this.store.getState().widgets;
-    const metadata = this.widgetsManager.getMetadata(widgetsState);
-
-    this.store.setState({
-      ...this.store.getState(),
-      metadata,
-      searching: true,
-    });
-
-    this.search();
-  };
-
-  search = () => {
-    const baseSearchParameters = new SearchParameters({
-      index: this.props.indexName,
-    });
-    // @TODO: Provide a way to either configure base SearchParameters.
-    const searchParameters = this.widgetsManager.getSearchParameters(
-      baseSearchParameters
-    );
-    const promise = this.helper.searchOnce(searchParameters);
-
-    promise.then(({content}) => {
-      this.store.setState({
-        ...this.store.getState(),
-        results: content,
-        searching: false,
-      });
-    }, error => {
-      this.store.setState({
-        ...this.store.getState(),
-        error,
-        searching: false,
-      });
-    }).catch(error => {
-      // Since setState is synchronous, any error that occurs in the render of a
-      // component will be swallowed by this promise.
-      // This is a trick to make the error show up correctly in the console.
-      // See http://stackoverflow.com/a/30741722/969302
-      setTimeout(() => {
-        throw error;
-      });
-    });
-  };
-
-  createHrefForState = state => {
-    state = this.transitionState(
-      this.store.getState().widgets,
-      state
-    );
-    if (this.props.createURL) {
-      return this.props.createURL(state);
-    }
-    if (this.history) {
-      return this.history.createHref(
-        applyStateToLocation(
-          this.currentLocation,
-          state,
-          this.getWidgetsIds(this.store.getState().metadata)
-        )
-      );
-    }
-    return '#';
-  };
-
-  getWidgetsIds = metadata => metadata.reduce((res, meta) =>
-    typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
-  , []);
-
-  transitionState = (state, nextState) => {
-    const clearIds = this.store.getState().metadata.reduce((res, meta) =>
-      meta.clearOnChange ? res.concat(meta.id) : res
-    , []);
-    const changedKeys = Object.keys(nextState).filter(key =>
-      !isEqual(state[key], nextState[key])
-    );
-    nextState = clearIds.reduce((res, clearId) =>
-      changedKeys.length > 0 && !includes(changedKeys, clearId) ?
-        omit(res, clearId) :
-        res
-    , nextState);
-    return nextState;
-  };
-
-  getChildContext() {
-    return {
-      aisStore: this.store,
-      aisWidgetsManager: this.widgetsManager,
-    };
-  }
+  getKnownKeys = () => this.aisManager.getWidgetsIds();
 
   render() {
     return Children.only(this.props.children);

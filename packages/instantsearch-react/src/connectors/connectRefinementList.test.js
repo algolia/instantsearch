@@ -1,99 +1,187 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 
+import {SearchParameters} from 'algoliasearch-helper';
+jest.unmock('algoliasearch-helper');
+
 import connectRefinementList from './connectRefinementList';
-import facetRefiner from './facetRefiner';
 jest.unmock('./connectRefinementList');
 
 const {
-  configure,
-  mapStateToProps,
-  transformProps,
+  getProps,
   refine,
+  getSearchParameters: getSP,
+  getMetadata,
 } = connectRefinementList;
 
+let props;
+let params;
+
 describe('connectRefinementList', () => {
-  it('derives the right configure options from props', () => {
-    const state = {};
-    configure(state, {
-      attributeName: 'foo',
-      operator: 'or',
-      limit: 10,
-    });
-    expect(facetRefiner.configure.mock.calls[0][0]).toBe(state);
-    expect(facetRefiner.configure.mock.calls[0][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'disjunctive',
-      limit: 10,
-    });
-
-    configure(state, {
-      attributeName: 'foo',
-      operator: 'and',
-      limit: 20,
-    });
-    expect(facetRefiner.configure.mock.calls[1][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'conjunctive',
-      limit: 20,
-    });
-  });
-
-  it('derives the right mapStateToProps options from props', () => {
-    const state = {};
-    mapStateToProps(state, {
-      attributeName: 'foo',
-      operator: 'or',
-      sortBy: ['something'],
-    });
-    expect(facetRefiner.mapStateToProps.mock.calls[0][0]).toBe(state);
-    expect(facetRefiner.mapStateToProps.mock.calls[0][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'disjunctive',
-      sortBy: ['something'],
-    });
-
-    mapStateToProps(state, {
-      attributeName: 'foo',
-      operator: 'and',
-      sortBy: ['something'],
-    });
-    expect(facetRefiner.mapStateToProps.mock.calls[1][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'conjunctive',
-      sortBy: ['something'],
-    });
-  });
-
-  it('proxies transformProps', () => {
-    const props1 = {
-      limit: 10,
+  it('provides the correct props to the component', () => {
+    const results = {
+      getFacetValues: jest.fn(() => []),
+      getFacetByName: () => true,
     };
-    transformProps(props1);
-    expect(facetRefiner.transformProps.mock.calls[0][0]).toBe(props1);
+
+    props = getProps({id: 'ok'}, {ok: ['wat']}, {results});
+    expect(props).toEqual({items: [], selectedItems: ['wat']});
+
+    props = getProps({attributeName: 'ok'}, {ok: ['wat']}, {results});
+    expect(props).toEqual({items: [], selectedItems: ['wat']});
+
+    props = getProps({id: 'ok', defaultSelectedItems: ['wat']}, {}, {results});
+    expect(props).toEqual({items: [], selectedItems: ['wat']});
+
+    props = getProps({id: 'ok'}, {}, {results});
+    expect(props).toEqual({items: [], selectedItems: []});
+
+    results.getFacetValues.mockClear();
+    const sortBy = ['my:custom:sort'];
+    getProps({attributeName: 'ok', sortBy}, {}, {results});
+    expect(results.getFacetValues.mock.calls[0]).toEqual(['ok', {sortBy}]);
+
+    results.getFacetValues.mockClear();
+    results.getFacetValues.mockImplementation(() => [
+      {
+        name: 'wat',
+        count: 20,
+      },
+      {
+        name: 'oy',
+        count: 10,
+      },
+    ]);
+    props = getProps({id: 'ok'}, {}, {results});
+    expect(props.items).toEqual([
+      {
+        value: 'wat',
+        count: 20,
+      },
+      {
+        value: 'oy',
+        count: 10,
+      },
+    ]);
+
+    props = getProps({id: 'ok', limitMin: 1}, {}, {results});
+    expect(props.items).toEqual([
+      {
+        value: 'wat',
+        count: 20,
+      },
+    ]);
+
+    props = getProps(
+      {id: 'ok', showMore: true, limitMin: 0, limitMax: 1},
+      {},
+      {results}
+    );
+    expect(props.items).toEqual([
+      {
+        value: 'wat',
+        count: 20,
+      },
+    ]);
   });
 
-  it('derives the right refine options from props', () => {
-    const state = {};
-    const values = [];
-    refine(state, {
-      attributeName: 'foo',
-      operator: 'or',
-    }, values);
-    expect(facetRefiner.refine.mock.calls[0][0]).toBe(state);
-    expect(facetRefiner.refine.mock.calls[0][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'disjunctive',
-    });
-    expect(facetRefiner.refine.mock.calls[0][2]).toBe(values);
+  it('doesn\'t render when no results are available', () => {
+    props = getProps({id: 'ok'}, {}, {});
+    expect(props).toBe(null);
+  });
 
-    refine(state, {
-      attributeName: 'foo',
-      operator: 'and',
-    }, values);
-    expect(facetRefiner.refine.mock.calls[1][1]).toEqual({
-      attributeName: 'foo',
-      facetType: 'conjunctive',
+  it('calling refine updates the widget\'s state', () => {
+    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    expect(nextState).toEqual({
+      otherKey: 'val',
+      ok: 'yep',
     });
+  });
+
+  it('increases maxValuesPerFacet when it isn\'t big enough', () => {
+    const initSP = new SearchParameters({maxValuesPerFacet: 100});
+
+    params = getSP(initSP, {
+      limitMin: 101,
+    }, {});
+    expect(params.maxValuesPerFacet).toBe(101);
+
+    params = getSP(initSP, {
+      showMore: true,
+      limitMax: 101,
+    }, {});
+    expect(params.maxValuesPerFacet).toBe(101);
+
+    params = getSP(initSP, {
+      limitMin: 99,
+    }, {});
+    expect(params.maxValuesPerFacet).toBe(100);
+
+    params = getSP(initSP, {
+      showMore: true,
+      limitMax: 99,
+    }, {});
+    expect(params.maxValuesPerFacet).toBe(100);
+  });
+
+  it('correctly applies its state to search parameters', () => {
+    const initSP = new SearchParameters();
+
+    params = getSP(initSP, {
+      attributeName: 'ok',
+      operator: 'or',
+      limitMin: 1,
+    }, {ok: ['wat']});
+    expect(params).toEqual(
+      initSP
+      .addDisjunctiveFacet('ok')
+      .addDisjunctiveFacetRefinement('ok', 'wat')
+      .setQueryParameter('maxValuesPerFacet', 1)
+    );
+
+    params = getSP(initSP, {
+      attributeName: 'ok',
+      operator: 'and',
+      limitMin: 1,
+    }, {ok: ['wat']});
+    expect(params).toEqual(
+      initSP
+      .addFacet('ok')
+      .addFacetRefinement('ok', 'wat')
+      .setQueryParameter('maxValuesPerFacet', 1)
+    );
+  });
+
+  it('registers its id in metadata', () => {
+    const metadata = getMetadata({id: 'ok'}, {});
+    expect(metadata).toEqual({id: 'ok', filters: []});
+  });
+
+  it('registers its filter in metadata', () => {
+    const metadata = getMetadata(
+      {id: 'ok', attributeName: 'wot'},
+      {ok: ['wat', 'wut']}
+    );
+    expect(metadata).toEqual({
+      id: 'ok',
+      filters: [
+        {
+          key: 'ok.wat',
+          label: 'wot: wat',
+          // Ignore clear, we test it later
+          clear: metadata.filters[0].clear,
+        },
+        {
+          key: 'ok.wut',
+          label: 'wot: wut',
+          clear: metadata.filters[1].clear,
+        },
+      ],
+    });
+
+    let state = metadata.filters[0].clear({ok: ['wat', 'wut']});
+    expect(state).toEqual({ok: ['wut']});
+    state = metadata.filters[1].clear(state);
+    expect(state).toEqual({ok: ''});
   });
 });

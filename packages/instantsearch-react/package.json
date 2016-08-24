@@ -5,13 +5,13 @@
     "start": "./scripts/start.sh",
     "examples": "(cd examples && webpack-dev-server --config webpack.config.babel.js --hot --content-base static --history-api-fallback)",
     "lint": "eslint \"**/*.js\" --ignore-path ../../.gitignore",
-    "test": "jest --bail --no-cache",
+    "test": "jest --no-cache",
     "test:watch": "jest --watch",
     "test:update-snapshots": "jest -u"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
-    "babel-jest": "^13.2.2",
+    "babel-jest": "^14.1.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-transform-class-properties": "^6.10.2",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
@@ -20,9 +20,10 @@
     "babel-preset-stage-0": "^6.5.0",
     "enzyme": "^2.4.1",
     "eslint": "^3.0.1",
-    "jest-cli": "^13.2.3",
-    "metalsmith-headings": "^0.1.0",
+    "eslint-config-algolia": "^5.3.1",
+    "jest-cli": "^14.1.0",
     "mockdate": "^1.0.4",
+    "react-test-renderer": "^15.3.1",
     "webpack": "^1.13.1"
   },
   "dependencies": {
@@ -31,10 +32,9 @@
     "history": "^2.1.2",
     "lodash": "^4.14.1",
     "qs": "^6.2.1",
-    "react": "^15.2.0",
-    "react-addons-shallow-compare": "^15.2.0",
-    "react-algoliasearch-helper": "^1.2.1",
-    "react-dom": "^15.2.0",
+    "react": "^15.3.1",
+    "react-addons-shallow-compare": "^15.3.1",
+    "react-dom": "^15.3.1",
     "react-themeable": "^1.1.0"
   },
   "jest": {
@@ -42,13 +42,12 @@
     "unmockedModulePathPatterns": [
       "node_modules/react/",
       "node_modules/react-dom/",
+      "node_modules/react-test-renderer/",
       "node_modules/enzyme/",
       "node_modules/lodash/",
       "node_modules/react-themeable/",
-      "node_modules/mockdate/"
-    ],
-    "setupFiles": [
-      "src/silentWarnings.js"
+      "node_modules/mockdate/",
+      "src/propTypes"
     ]
   }
 }
