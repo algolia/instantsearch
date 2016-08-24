@@ -47,7 +47,7 @@
       "node_modules/lodash/",
       "node_modules/react-themeable/",
       "node_modules/mockdate/",
-      "src/propTypes"
+      "src/core/propTypes"
     ]
   }
 }

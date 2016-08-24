@@ -2,7 +2,7 @@
 title: Making your own widgets
 layout: api.ejs
 nav_groups:
-  - main
+  - core
 nav_sort: 5
 ---
 

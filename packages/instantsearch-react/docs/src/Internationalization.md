@@ -2,7 +2,7 @@
 title: Internationalization
 layout: api.ejs
 nav_groups:
-  - main
+  - core
 nav_sort: 3
 ---
 

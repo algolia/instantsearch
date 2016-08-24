@@ -17,11 +17,15 @@
 
   <body>
     <div class="navigation">
-      <div class="main">
-        <%- include('nav', {currentPath: nav_path, nav: navs.main}) %>
+      <div class="nav core">
+        <%- include('nav', {currentPath: nav_path, nav: navs.core}) %>
       </div>
 
-      <div class="headings">
+      <div class="nav widgets">
+        <%- include('nav', {currentPath: nav_path, nav: navs.widgets}) %>
+      </div>
+
+      <div class="nav headings">
         <ul>
           <% headings.forEach( heading => { %>
             <li class="<%= heading.type === 'h2' ? 'title' : 'subtitle' %>">
