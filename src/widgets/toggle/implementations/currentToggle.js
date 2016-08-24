@@ -55,11 +55,12 @@ const currentToggle = ({
 
     this.toggleRefinement = this.toggleRefinement.bind(this, helper);
 
-        // no need to refine anything at init if no custom off values
+    // no need to refine anything at init if no custom off values
     if (!hasAnOffValue) {
       return;
     }
-        // Add filtering on the 'off' value if set
+
+    // Add filtering on the 'off' value if set
     const isRefined = state.isDisjunctiveFacetRefined(attributeName, userValues.on);
     if (!isRefined) {
       helper.addDisjunctiveFacetRefinement(attributeName, userValues.off);
@@ -83,9 +84,9 @@ const currentToggle = ({
       count: offData === undefined ? results.nbHits : offData.count
     };
 
-        // what will we show by default,
-        // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
-        // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
+    // what will we show by default,
+    // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
+    // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
     const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
     const facetValue = {
@@ -96,27 +97,27 @@ const currentToggle = ({
       offFacetValue
     };
 
-        // Bind createURL to this specific attribute
+    // Bind createURL to this specific attribute
     function _createURL() {
       return createURL(
-            state
-              .removeDisjunctiveFacetRefinement(attributeName, isRefined ? onValue : userValues.off)
-              .addDisjunctiveFacetRefinement(attributeName, isRefined ? userValues.off : onValue)
-          );
+        state
+          .removeDisjunctiveFacetRefinement(attributeName, isRefined ? onValue : userValues.off)
+          .addDisjunctiveFacetRefinement(attributeName, isRefined ? userValues.off : onValue)
+      );
     }
 
     ReactDOM.render(
-          <RefinementList
-            collapsible={collapsible}
-            createURL={_createURL}
-            cssClasses={cssClasses}
-            facetValues={[facetValue]}
-            shouldAutoHideContainer={(facetValue.count === 0 || facetValue.count === null)}
-            templateProps={this._templateProps}
-            toggleRefinement={this.toggleRefinement}
-          />,
-          containerNode
-        );
+      <RefinementList
+        collapsible={collapsible}
+        createURL={_createURL}
+        cssClasses={cssClasses}
+        facetValues={[facetValue]}
+        shouldAutoHideContainer={(facetValue.count === 0 || facetValue.count === null)}
+        templateProps={this._templateProps}
+        toggleRefinement={this.toggleRefinement}
+      />,
+      containerNode
+    );
   }
 });
 
