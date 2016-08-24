@@ -1,0 +1,11 @@
+<ul>
+  <% nav.forEach( navItem => { %>
+    <li class="navItem<%= navItem.path === currentPath ? ' navItem--active' : '' %>">
+      <a href="/<%- navItem.path %>"><%- navItem.file.title %></a>
+
+      <% if (navItem.children.length > 0) { %>
+        <%- include('nav', {nav: navItem.children}) %>
+      <% } %>
+    </li>
+  <% }) %>
+</ul>

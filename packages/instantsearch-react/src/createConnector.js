@@ -54,9 +54,11 @@ export default function createConnector(connectorDesc) {
           nextWidgetsState
         ) :
         null;
-      this.unregisterWidget = aisWidgetsManager.registerWidget({
-        getSearchParameters, getMetadata,
-      });
+      if (hasMetadata || hasSearchParameters) {
+        this.unregisterWidget = aisWidgetsManager.registerWidget({
+          getSearchParameters, getMetadata,
+        });
+      }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,14 +66,18 @@ export default function createConnector(connectorDesc) {
         props: this.getProps(nextProps),
       });
 
-      // Since props might have changed, we need to re-run transformer and
-      // getMetadata with the new props.
-      this.context.aisWidgetsManager.update();
+      if (hasMetadata || hasSearchParameters) {
+        // Since props might have changed, we need to re-run getSearchParameters
+        // and getMetadata with the new props.
+        this.context.aisWidgetsManager.update();
+      }
     }
 
     componentWillUnmount() {
       this.unsubscribe();
-      this.unregisterWidget();
+      if (hasMetadata || hasSearchParameters) {
+        this.unregisterWidget();
+      }
     }
 
     shouldComponentUpdate(nextProps, nextState) {

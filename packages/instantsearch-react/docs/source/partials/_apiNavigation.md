@@ -1,4 +1,0 @@
-- [InstantSearch](/API/InstantSearch.html)
-- [widgets](/API/widgets/)
-  - [Hits](/API/widgets/Hits.html)
-- [hoc](/API/hoc/)

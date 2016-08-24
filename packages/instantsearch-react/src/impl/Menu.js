@@ -67,7 +67,7 @@ export default themeable({
   item: 'Menu__item',
   itemSelected: 'Menu__item--selected',
   itemLink: 'Menu__item__link',
-  itemValue: 'Menu__item__value',
+  itemLabel: 'Menu__item__value',
   itemCount: 'Menu__item__count',
   showMore: 'Menu__showMore',
 })(

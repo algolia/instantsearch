@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>instantsearch-react <%= `| ${title}` %></title>
+
+    <link rel="stylesheet" href="/assets/theme.css">
+    <link rel="stylesheet" href="/assets/site.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="main">
+        <%- include('nav', {currentPath: nav_path, nav: navs.main}) %>
+      </div>
+
+      <div class="headings">
+        <ul>
+          <% headings.forEach( heading => { %>
+            <li class="<%= heading.type === 'h2' ? 'title' : 'subtitle' %>">
+              <a href="#<%- heading.id %>"><%- heading.text %></a>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <%- contents %>
+    </div>
+
+    <script type="text/javascript" src="assets/entry.js"></script>
+    <% if (env !== 'production') { %>
+      <script src="http://localhost:35729/livereload.js"></script>
+    <% } %>
+  </body>
+</html>

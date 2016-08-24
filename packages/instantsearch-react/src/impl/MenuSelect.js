@@ -28,7 +28,7 @@ class MenuSelect extends Component {
         items={[
           {label: translate('none'), value: ''},
         ].concat(items.map(item => ({
-          label: `${item.value} ${translate('count', item.count)}`,
+          label: `${item.value} (${translate('count', item.count)})`,
           value: item.value,
         })))}
       />
