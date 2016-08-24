@@ -40,6 +40,7 @@ export default createConnector({
   displayName: 'AlgoliaNumericRefinementList',
 
   propTypes: {
+    id: PropTypes.string,
     attributeName: PropTypes.string.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.node,

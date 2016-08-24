@@ -28,8 +28,12 @@ export default createConnector({
   displayName: 'AlgoliaRange',
 
   propTypes: {
+    id: PropTypes.string,
     attributeName: PropTypes.string.isRequired,
-    defaultValue: PropTypes.number,
+    defaultValue: PropTypes.shape({
+      min: PropTypes.number.isRequired,
+      max: PropTypes.number.isRequired,
+    }),
     min: PropTypes.number,
     max: PropTypes.number,
   },

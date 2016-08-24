@@ -39,6 +39,7 @@ export default createConnector({
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
     sortBy: PropTypes.arrayOf(PropTypes.string),
+    defaultSelectedItem: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -119,7 +120,7 @@ export default createConnector({
     const selectedItem = getSelectedItem(props, state);
     return {
       id,
-      filters: selectedItem === null ? [] : [{
+      filters: !selectedItem ? [] : [{
         key: `${id}.${selectedItem}`,
         label: `${props.name}: ${selectedItem}`,
         clear: nextState => ({

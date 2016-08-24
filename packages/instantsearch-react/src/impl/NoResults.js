@@ -1,6 +1,6 @@
 import {PropTypes, Component, Children} from 'react';
 
-export default class Loading extends Component {
+export default class NoResults extends Component {
   static propTypes = {
     noResults: PropTypes.bool.isRequired,
     children: PropTypes.node,
