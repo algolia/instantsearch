@@ -13,6 +13,8 @@ There's also a `HitsPerPageSelect` which renders a select control.
 
 ## Props
 
+<!-- props default ./index.js -->
+
 Name | Type | Default |Description
 :- | :- | :- | :-
 `defaultHitsPerPage` | `number` | | The default state of the widget.

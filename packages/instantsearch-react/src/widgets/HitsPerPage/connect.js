@@ -16,7 +16,13 @@ export default createConnector({
   displayName: 'AlgoliaHitsPerPage',
 
   propTypes: {
+    /**
+     * URL State serialization key.
+     */
     id: PropTypes.string,
+    /**
+     * Default state of the widget.
+     */
     defaultHitsPerPage: PropTypes.number.isRequired,
   },
 

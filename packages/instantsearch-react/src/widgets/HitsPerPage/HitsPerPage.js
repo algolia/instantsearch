@@ -1,38 +1,53 @@
 import React, {PropTypes, Component} from 'react';
 
-export default class HitsPerPage extends Component {
+import themeable from '../../core/themeable';
+
+import LinkList from '../../components/LinkList';
+
+class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
-
     hitsPerPage: PropTypes.number.isRequired,
-    items: PropTypes.oneOfType([
-      PropTypes.arrayOf(PropTypes.object),
-      PropTypes.arrayOf(PropTypes.number),
-    ]).isRequired,
+    
+    /**
+     * List of hits per page options.
+     * @shape HitsPerPageItem
+     */
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        /**
+         * Number of hits to display.
+         */
+        value: PropTypes.number.isRequired,
 
-    listComponent: PropTypes.func.isRequired,
+        /**
+         * Node to render in place of the option item.
+         */
+        label: PropTypes.node,
+      })
+    ),
   };
 
   render() {
     const {
       hitsPerPage,
-      items,
-      listComponent: ListComponent,
       refine,
-      ...otherProps,
+      items,
     } = this.props;
 
     return (
-      <ListComponent
-        {...otherProps}
+      <LinkList
+        items={items}
         onSelect={refine}
         selectedItem={hitsPerPage}
-        items={items.map(item =>
-          typeof item === 'number' ?
-            {value: item, label: item.toString()} :
-            item
-        )}
       />
     );
   }
 }
+
+export default themeable({
+  root: 'HitsPerPage',
+  item: 'HitsPerPage__item',
+  itemLink: 'HitsPerPage__item__link',
+  itemSelected: 'HitsPerPage__item--selected',
+})(HitsPerPage);
