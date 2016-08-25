@@ -4,7 +4,9 @@ node_js:
 before_install: npm prune
 before_cache: npm prune
 install: npm install
-script: npm run test-ci
+script:
+  - npm run test-ci
+  - npm run doc
 branches:
   only:
     - master
