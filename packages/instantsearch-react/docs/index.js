@@ -12,6 +12,9 @@ import marked from 'marked';
 import {runMode} from 'codemirror/addon/runmode/runmode.node';
 import 'codemirror/mode/jsx/jsx';
 import escape from 'escape-html';
+import {resolve} from 'path';
+
+const r = (...args) => resolve(__dirname, ...args);
 
 const highlight = text => {
   let output = '';
@@ -38,7 +41,35 @@ renderer.codespan = code => {
   return `<code class="CodeMirror ${spanTheme}">${code}</code>`;
 };
 
+const source = (dir, only, processFiles) => (files, m, callback) =>
+  metalsmith(dir)
+    .source('.')
+    .ignore(`!${only}`)
+    .process((err, newFiles) => {
+      const processedFiles = Object.entries(newFiles).reduce((res, [name, file]) => {
+        const [newName, newFile] = processFiles(name, file);
+        return {
+          ...res,
+          [newName]: newFile,
+        };
+      }, {});
+      // Yep
+      Object.assign(files, processedFiles);
+      callback(err);
+    });
+
 metalsmith(__dirname)
+  .use(
+    source(r('../src'), r('../src/widgets/**/*.md'), (name, file) =>
+      [
+        name.replace(/widgets\/(.*)\/README\.md/, '$1.md'),
+        {
+          ...file,
+          path: r('../src', name),
+        },
+      ]
+    )
+  )
   .metadata({
     // If env is undefined, it won't get passed to the templates.
     env: process.env.NODE_ENV || '',
@@ -60,7 +91,11 @@ metalsmith(__dirname)
   }))
   // After markdown, so that paths point to the correct HTML file
   .use(navigation({
-    main: {
+    core: {
+      sortBy: 'nav_sort',
+      filterProperty: 'nav_groups',
+    },
+    widgets: {
       sortBy: 'nav_sort',
       filterProperty: 'nav_groups',
     },
