@@ -3,10 +3,10 @@ import {withRouter} from 'react-router';
 import {omit} from 'lodash';
 import qs from 'qs';
 
-import InstantSearch from '../src/InstantSearch';
 import {
+  InstantSearch,
+
   Pagination,
-  PaginationSelect,
   RefinementList,
   Menu,
   HierarchicalMenu,
@@ -17,12 +17,11 @@ import {
   Range,
   CurrentFilters,
   Toggle,
-  SortByLinks,
   Stats,
+  SortBy,
   ScrollTo,
-  Reset,
   Error,
-} from '../';
+} from '../src';
 import history from './history';
 
 function ProductHit(props) {
@@ -65,13 +64,13 @@ class Search extends Component {
           </ScrollTo>
           <Stats />
           <CurrentFilters />
-          <Reset />
+          <CurrentFilters.Reset />
           <Toggle
             attributeName="free_shipping"
             value={true}
             label="Free shipping"
           />
-          <SortByLinks
+          <SortBy.Links
             items={[
               {
                 label: 'Popularity',
@@ -132,7 +131,7 @@ class Search extends Component {
             ]}
           />
           <Hits itemComponent={ProductHit} />
-          <PaginationSelect />
+          <Pagination.Select />
           <Pagination />
         </div>
       </InstantSearch>

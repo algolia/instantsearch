@@ -21,13 +21,13 @@ body {
   overflow-y: auto;
 }
 
-.navigation > .main {
+.navigation > .nav {
   padding: 2rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-.navigation > .headings {
-  padding: 2rem;
+.navigation > .nav:last-child {
+  border-bottom-width: 0px;
 }
 
 .navigation ul {

@@ -2,7 +2,7 @@
 title: InstantSearch
 layout: api.ejs
 nav_groups:
-  - main
+  - core
 nav_sort: 1
 ---
 
