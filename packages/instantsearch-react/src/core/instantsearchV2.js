@@ -133,21 +133,15 @@ function customSearchBox(opts) {
     const input = document.createElement('input');
     container.appendChild(input);
 
-    let ignore = false;
     // Subscribe to store updates, so that updating the query from somewhere
     // else than this widget also updates this widget.
     context.store.subscribe(() => {
       if (getQuery() !== input.value) {
-        ignore = true;
         input.value = getQuery();
       }
     });
 
     input.addEventListener('input', e => {
-      if (ignore) {
-        ignore = false;
-        return;
-      }
       // Trigger a state update.
       context.onInternalStateUpdate({
         [id]: e.target.value,
