@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import defaults from 'lodash/object/defaults';
+import defaults from 'lodash/defaults';
 import cx from 'classnames';
 import {
   bemHelper,

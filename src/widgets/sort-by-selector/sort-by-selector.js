@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import findIndex from 'lodash/array/findIndex';
-import map from 'lodash/collection/map';
+import findIndex from 'lodash/findIndex';
+import map from 'lodash/map';
 import {
   bemHelper,
   getContainerNode

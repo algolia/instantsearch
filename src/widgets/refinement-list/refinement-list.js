@@ -7,7 +7,7 @@ import {
   prefixKeys
 } from '../../lib/utils.js';
 import cx from 'classnames';
-import filter from 'lodash/collection/filter';
+import filter from 'lodash/filter';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';

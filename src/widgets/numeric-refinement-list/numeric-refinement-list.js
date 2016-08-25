@@ -6,8 +6,8 @@ import {
   getContainerNode
 } from '../../lib/utils.js';
 import cx from 'classnames';
-import find from 'lodash/collection/find';
-import includes from 'lodash/collection/includes';
+import find from 'lodash/find';
+import includes from 'lodash/includes';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import defaultTemplates from './defaultTemplates.js';

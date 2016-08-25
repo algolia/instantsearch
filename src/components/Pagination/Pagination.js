@@ -1,6 +1,6 @@
 import React from 'react';
-import forEach from 'lodash/collection/forEach';
-import defaultsDeep from 'lodash/object/defaultsDeep';
+import forEach from 'lodash/forEach';
+import defaultsDeep from 'lodash/defaultsDeep';
 import {isSpecialClick} from '../../lib/utils.js';
 
 import Paginator from './Paginator.js';

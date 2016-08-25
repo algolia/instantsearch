@@ -1,4 +1,4 @@
-import find from 'lodash/collection/find';
+import find from 'lodash/find';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import defaultTemplates from '../defaultTemplates.js';

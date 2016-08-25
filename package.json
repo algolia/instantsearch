@@ -88,7 +88,7 @@
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.15.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
     "react-nouislider": "^1.13.0",

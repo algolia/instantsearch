@@ -2,11 +2,11 @@
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
-import forEach from 'lodash/collection/forEach';
-import merge from 'lodash/object/merge';
-import union from 'lodash/array/union';
-import clone from 'lodash/lang/clone';
-import isObject from 'lodash/lang/isObject';
+import forEach from 'lodash/forEach';
+import mergeWith from 'lodash/mergeWith';
+import union from 'lodash/union';
+import clone from 'lodash/clone';
+import isObject from 'lodash/isObject';
 import {EventEmitter} from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -164,7 +164,7 @@ Usage: instantsearch({
   }
 
   _render(helper, results, state) {
-    forEach(this.widgets, function(widget) {
+    forEach(this.widgets, widget => {
       if (!widget.render) {
         return;
       }
@@ -175,23 +175,22 @@ Usage: instantsearch({
         helper,
         createURL: this._createAbsoluteURL
       });
-    }, this);
+    });
     this.emit('render');
   }
 
   _init(state, helper) {
-    const {_onHistoryChange, templatesConfig} = this;
-    forEach(this.widgets, function(widget) {
+    forEach(this.widgets, widget => {
       if (widget.init) {
         widget.init({
           state,
           helper,
-          templatesConfig,
+          templatesConfig: this.templatesConfig,
           createURL: this._createAbsoluteURL,
-          onHistoryChange: _onHistoryChange
+          onHistoryChange: this._onHistoryChange
         });
       }
-    }, this);
+    });
   }
 }
 
@@ -210,13 +209,13 @@ function enhanceConfiguration(searchParametersFromUrl) {
 
       // avoid mutating objects
       if (isObject(a)) {
-        return merge({}, a, b, customizer);
+        return mergeWith({}, a, b, customizer);
       }
 
       return undefined;
     };
 
-    return merge(
+    return mergeWith(
       {},
       configuration,
       partialConfiguration,

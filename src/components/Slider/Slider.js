@@ -1,11 +1,11 @@
 import React from 'react';
-import omit from 'lodash/object/omit';
+import omit from 'lodash/omit';
 
 import Nouislider from 'react-nouislider';
 
 let cssPrefix = 'ais-range-slider--';
 
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 
 class Slider extends React.Component {
   componentWillMount() {

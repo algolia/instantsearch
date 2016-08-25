@@ -1,8 +1,8 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import version from '../lib/version.js';
 import urlHelper from 'algoliasearch-helper/src/url';
-import isEqual from 'lodash/lang/isEqual';
-import merge from 'lodash/object/merge';/**/
+import isEqual from 'lodash/isEqual';
+import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 const majorVersionNumber = version.split('.')[0];
@@ -123,7 +123,7 @@ class URLSync {
   onPopState(helper, fullState) {
     // compare with helper.state
     const partialHelperState = helper.getState(this.trackedParameters);
-    const fullHelperState = merge({}, this.originalConfig, partialHelperState);
+    const fullHelperState = assign({}, this.originalConfig, partialHelperState);
 
     if (isEqual(fullHelperState, fullState)) return;
 
@@ -175,7 +175,7 @@ class URLSync {
     this.urlUtils.onpopstate(() => {
       const qs = this.urlUtils.readUrl();
       const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
-      const fullState = merge({}, this.originalConfig, partialState);
+      const fullState = assign({}, this.originalConfig, partialState);
       fn(fullState);
     });
   }
