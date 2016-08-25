@@ -15,6 +15,12 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.customSearchBox({
+    container: '#custom-searchbox',
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.hits({
     container: '#hits',
     itemComponent: hit => <div>{JSON.stringify(hit)}</div>,
