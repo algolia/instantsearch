@@ -1,3 +1,13 @@
+<a name="1.8.2"></a>
+## [1.8.2](https://github.com/algolia/instantsearch.js/compare/v1.8.1...v1.8.2) (2016-08-25)
+
+
+### Bug Fixes
+
+* **lodash:** use lodash v4, reduce build size ([216d1e0](https://github.com/algolia/instantsearch.js/commit/216d1e0))
+
+
+
 <a name="1.8.1"></a>
 ## [1.8.1](https://github.com/algolia/instantsearch.js/compare/v1.8.0...v1.8.1) (2016-08-24)
 
