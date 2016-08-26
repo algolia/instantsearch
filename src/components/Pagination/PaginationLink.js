@@ -1,6 +1,6 @@
 import React from 'react';
 
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 
 class PaginationLink extends React.Component {
   componentWillMount() {

@@ -3,9 +3,9 @@ import React from 'react';
 import Template from '../Template.js';
 
 import {isSpecialClick} from '../../lib/utils.js';
-import map from 'lodash/collection/map';
-import cloneDeep from 'lodash/lang/cloneDeep';
-import isEqual from 'lodash/lang/isEqual';
+import map from 'lodash/map';
+import cloneDeep from 'lodash/cloneDeep';
+import isEqual from 'lodash/isEqual';
 
 class CurrentRefinedValues extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -56,7 +56,7 @@ class CurrentRefinedValues extends React.Component {
       <div>
         {this._clearAllElement('before', this.props.clearAllPosition)}
         <div className={this.props.cssClasses.list}>
-          {map(this.props.refinements, this._refinementElement, this)}
+          {map(this.props.refinements, this._refinementElement.bind(this))}
         </div>
         {this._clearAllElement('after', this.props.clearAllPosition)}
       </div>

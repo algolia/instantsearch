@@ -5,7 +5,7 @@ import {
   prepareTemplateProps,
   getContainerNode
 } from '../../lib/utils.js';
-import find from 'lodash/collection/find';
+import find from 'lodash/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';

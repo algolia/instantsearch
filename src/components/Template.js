@@ -1,12 +1,12 @@
 import React from 'react';
 
-import curry from 'lodash/function/curry';
-import cloneDeep from 'lodash/lang/cloneDeep';
-import mapValues from 'lodash/object/mapValues';
+import curry from 'lodash/curry';
+import cloneDeep from 'lodash/cloneDeep';
+import mapValues from 'lodash/mapValues';
 
 import hogan from 'hogan.js';
 
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 
 class Template extends React.Component {
   shouldComponentUpdate(nextProps) {

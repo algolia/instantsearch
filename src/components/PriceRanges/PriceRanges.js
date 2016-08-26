@@ -3,7 +3,7 @@ import React from 'react';
 import Template from '../Template.js';
 import PriceRangesForm from './PriceRangesForm.js';
 import cx from 'classnames';
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 
 class PriceRanges extends React.Component {
   componentWillMount() {

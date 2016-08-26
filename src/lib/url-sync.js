@@ -1,8 +1,8 @@
 import algoliasearchHelper from 'algoliasearch-helper';
 import version from '../lib/version.js';
 import urlHelper from 'algoliasearch-helper/src/url';
-import isEqual from 'lodash/lang/isEqual';
-import merge from 'lodash/object/merge';/**/
+import isEqual from 'lodash/isEqual';
+import assign from 'lodash/assign';
 
 const AlgoliaSearchHelper = algoliasearchHelper.AlgoliaSearchHelper;
 const majorVersionNumber = version.split('.')[0];
@@ -96,6 +96,12 @@ class URLSync {
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
+
+    this.searchParametersFromUrl = AlgoliaSearchHelper
+      .getConfigurationFromQueryString(
+        this.urlUtils.readUrl(),
+        {mapping: this.mapping}
+      );
   }
 
   getConfiguration(currentConfiguration) {
@@ -103,9 +109,7 @@ class URLSync {
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
     this.originalConfig = algoliasearchHelper({}, currentConfiguration.index, currentConfiguration).state;
-    const queryString = this.urlUtils.readUrl();
-    const config = AlgoliaSearchHelper.getConfigurationFromQueryString(queryString, {mapping: this.mapping});
-    return config;
+    return this.searchParametersFromUrl;
   }
 
   render({helper}) {
@@ -119,7 +123,7 @@ class URLSync {
   onPopState(helper, fullState) {
     // compare with helper.state
     const partialHelperState = helper.getState(this.trackedParameters);
-    const fullHelperState = merge({}, this.originalConfig, partialHelperState);
+    const fullHelperState = assign({}, this.originalConfig, partialHelperState);
 
     if (isEqual(fullHelperState, fullState)) return;
 
@@ -171,7 +175,7 @@ class URLSync {
     this.urlUtils.onpopstate(() => {
       const qs = this.urlUtils.readUrl();
       const partialState = AlgoliaSearchHelper.getConfigurationFromQueryString(qs, {mapping: this.mapping});
-      const fullState = merge({}, this.originalConfig, partialState);
+      const fullState = assign({}, this.originalConfig, partialState);
       fn(fullState);
     });
   }

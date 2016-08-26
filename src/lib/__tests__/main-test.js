@@ -3,7 +3,7 @@
 import expect from 'expect';
 
 import instantsearch from '../main.js';
-import forEach from 'lodash/collection/forEach';
+import forEach from 'lodash/forEach';
 
 describe('instantsearch()', () => {
    // to ensure the global.window is set

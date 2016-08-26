@@ -62,8 +62,8 @@ Use a built version of **instantsearch.js** from the [jsDelivr](https://www.jsde
 <div class="code-box">
   <div class="code-sample-snippet js-toggle-snippet ignore">
 {% highlight html %}
-<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
-<script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css">
+<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
 {% endhighlight %}
   </div>
 </div>
@@ -213,7 +213,7 @@ This example shows you how to create a very simple search results page that incl
 <!doctype html>
 <html>
   <head>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     <title>instantsearch.js basics</title>
   </head>
   <body>
@@ -221,7 +221,7 @@ This example shows you how to create a very simple search results page that incl
     <div id="hits-container"></div>
     <div id="pagination-container"></div>
 
-    <script src="//cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
     <script>
       var search = instantsearch({
         appId: 'YourApplicationID',
@@ -1183,7 +1183,7 @@ search.addWidget(
     templates: {
       body: function(data) {
         return '<div>You have ' + data.nbHits + ' results, fetched in ' +
-          data.processingTimMS +'ms.</div>'
+          data.processingTimeMS +'ms.</div>'
       }
     }
   })
@@ -1288,15 +1288,15 @@ search.addWidget(widget)
 
 The widget may implement some of the following methods (depending on the need of the widget):
 
-  - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameter](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html) and should return the properties needed as an object.
+  - <span class="attr-optional">`widget.getConfiguration`</span>: Configures the underlying AlgoliaSearch JS helper. Takes a [SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters) and should return the properties needed as an object.
   - <span class="attr-optional">`widget.init`</span> Initializes the widget (its DOM). Called before the first search. Takes an object with the following keys:
-    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create a new search query
+    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper) used to create a new search query
     - templatesConfig: the template configuration
   - <span class="attr-optional">`widget.render`</span>: Renders the widget after the search results come back from algolia. Takes an object with the following keys:
-    - results: the [results](https://community.algolia.com/algoliasearch-helper-js/docs/SearchResults.html) of the query
-    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
-    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/docs/AlgoliaSearchHelper.html) used to create a new search query
+    - results: the [results](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults) of the query
+    - state: the [search state](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
+    - helper: the [helper](https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper) used to create a new search query
     - createURL: function provided to create urls
 
   </div>
@@ -1305,7 +1305,7 @@ The widget may implement some of the following methods (depending on the need of
 
 **instantsearch.js** was designed with extensibility in mind. You can build your own widget by creating an object that exposes some of those methods:
 
- * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/docs/)
+ * `getConfiguration()`: configures the underlying [AlgoliaSearch JS Helper](https://community.algolia.com/algoliasearch-helper-js/)
  * `init()`: called once after the initialization
  * `render()`: called every time we have new search data
 
