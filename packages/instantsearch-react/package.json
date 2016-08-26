@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.16.0",
-    "algoliasearch-helper": "algolia/algoliasearch-helper-js#develop",
+    "algoliasearch-helper": "^2.13.0",
     "history": "^2.1.2",
     "lodash": "^4.14.1",
     "qs": "^6.2.1",
