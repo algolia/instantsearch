@@ -11,18 +11,7 @@ The hierarchical menu is a widget that lets the user explore a tree-like structu
 
 ## Props
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`id` | `string` | | URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
-`attributes` | `[string]` | | List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
-`showMore` | `?bool` | `false` | Display a show more button for increasing the number of refinement values from `limitMin` to `limitMax`.
-`limitMin` | `?number` | `10` | Minimum number of refinement values.
-`limitMax` | `?number` | `20` | Maximum number of refinement values. Ignored when `showMore` is `false`.
-`defaultSelectedItem` | `?string` | | Default state of this widget.
-`separator` | `?string` | ` > ` | Separator used in the attributes to separate level values.
-`rootPath` | `?string` | | Prefix path to use if the first level is not the root level.
-`showParentLevel` | `?bool` | `false` | Show the parent level of the current refined value
-`sortBy` | `?[string]` | `['name:asc']` | How to sort refinement values. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options.
+<!-- props default ./index.js -->
 
 ### Theme
 

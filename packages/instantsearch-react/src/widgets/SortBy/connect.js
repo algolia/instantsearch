@@ -17,11 +17,18 @@ export default createConnector({
   displayName: 'AlgoliaSortBy',
 
   propTypes: {
+    /**
+     * URL state serialization key.
+     * The state of this widget takes the form of a `string` (the current
+     * selected index).
+     * @public
+     */
     id: PropTypes.string,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.node.isRequired,
-      index: PropTypes.string.isRequired,
-    })).isRequired,
+
+    /**
+     * The default selected index.
+     * @public
+     */
     defaultSelectedIndex: PropTypes.string,
   },
 

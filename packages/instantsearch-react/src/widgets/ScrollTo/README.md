@@ -11,9 +11,7 @@ Scrolls the window to itself when the page changes. Note that if you've provided
 
 ## Props
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`scrollOn` | `?string` | `p` | Widget state key on which to listen for changes.
+<!-- props default ./index -->
 
 ## Implementing your own ScrollTo
 

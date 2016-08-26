@@ -63,11 +63,41 @@ class Pagination extends Component {
 
     translate: PropTypes.func.isRequired,
     listComponent: PropTypes.func,
+
+    /**
+     * Display the first page link
+     * @public
+     */
     showFirst: PropTypes.bool,
+
+    /**
+     * Display the previous page link
+     * @public
+     */
     showPrevious: PropTypes.bool,
+
+    /**
+     * Display the next page link
+     * @public
+     */
     showNext: PropTypes.bool,
+
+    /**
+     * Display the last page link
+     * @public
+     */
     showLast: PropTypes.bool,
+
+    /**
+     * How many page links to display around the current page
+     * @public
+     */
     pagesPadding: PropTypes.number,
+
+    /**
+     * Maximum number of pages to display
+     * @public
+     */
     maxPages: PropTypes.number,
   };
 

@@ -18,10 +18,12 @@ export default createConnector({
   propTypes: {
     /**
      * URL State serialization key.
+     * @public
      */
     id: PropTypes.string,
     /**
      * Default state of the widget.
+     * @public
      */
     defaultHitsPerPage: PropTypes.number.isRequired,
   },

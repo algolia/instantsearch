@@ -9,11 +9,6 @@ nav_groups:
 
 Displays an error when the Algolia Search client had an issue fetching the results set.
 
-## Props
-
-Name | Type | Default |Description
-:- | :- | :- | :-
-
 ### Theme
 
 `root`

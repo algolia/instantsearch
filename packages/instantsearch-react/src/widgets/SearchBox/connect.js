@@ -13,6 +13,11 @@ export default createConnector({
   displayName: 'AlgoliaSearchBox',
 
   propTypes: {
+    /**
+     * URL state serialization key.
+     * The state of this widget takes the form of a `string`.
+     * @public
+     */
     id: PropTypes.string,
   },
 

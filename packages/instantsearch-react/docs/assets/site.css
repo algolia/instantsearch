@@ -101,7 +101,7 @@ body {
 .content code,
 .content pre {
   font-family: Consolas, Menlo, Monaco, "Andale Mono WT", "Andale Mono", "Lucida Console", "Lucida Sans Typewriter", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Liberation Mono", "Nimbus Mono L", "Courier New", Courier, monospace;
-  font-size: 14px;
+  font-size: 0.875em;
   line-height: 1.375;
 }
 
@@ -126,4 +126,8 @@ body {
 .content td,
 .content th {
   padding: 1em;
+}
+
+.content .DocProps {
+  padding: 0 4rem;
 }

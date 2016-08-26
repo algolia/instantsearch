@@ -6,6 +6,11 @@ export default createConnector({
   displayName: 'AlgoliaHits',
 
   propTypes: {
+    /**
+     * How many hits should be displayed for every page.
+     * Ignored when a `HitsPerPage` component is also present.
+     * @public
+     */
     hitsPerPage: PropTypes.number,
   },
 

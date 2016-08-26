@@ -46,10 +46,8 @@
       "node_modules/mockdate/",
       "src/core/propTypes"
     ],
-    "jest": {
-      "globals": {
-        "__DOC__": false
-      }
+    "globals": {
+      "__DOC__": false
     }
   }
 }

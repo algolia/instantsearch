@@ -11,13 +11,13 @@ This widget lets you reorder your results. You'll need multiple indices for this
 
 There's also a `SortByLinks` that displays options in a list of links.
 
-## Props
+## SortBy Props
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`items` | `[{label: ?node, index: string}]` | | The different options, with the corresponding index. Note that `label` must be a string when using `SortBy`.
-`defaultSelectedIndex` | `?string` | | The default selected index.
-`id` | `?string` | `q` | URL state serialization key. The state of this widget takes the form of a `string` (the current selected index).
+<!-- props default ./index.js -->
+
+## SortBy.Links Props
+
+<!-- props default.Links ./index.js -->
 
 ### Theme
 

@@ -6,23 +6,49 @@ import Select from '../../components/Select';
 
 class HitsPerPageSelect extends Component {
   static propTypes = {
-    ...(__DOC__ ? Select.propTypes : {}),
     refine: PropTypes.func.isRequired,
+    applyTheme: PropTypes.func.isRequired,
     hitsPerPage: PropTypes.number.isRequired,
+
+    /**
+     * List of hits per page options.
+     * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
+     * Beware: Contrary to `HitsPerPage`, the `label` of `HitsPerPage` items must be either a string or a number.
+     * @public
+     * @defines HitsPerPageSelectItem
+     */
+    items: PropTypes.oneOfType([
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          /**
+           * Number of hits to display.
+           */
+          value: PropTypes.number.isRequired,
+
+          /**
+           * Label to display on the option.
+           */
+          label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        })
+      ),
+      PropTypes.arrayOf(PropTypes.number),
+    ]),
   };
 
   render() {
     const {
       hitsPerPage,
       refine,
-      ...otherProps,
+      items,
+      applyTheme,
     } = this.props;
 
     return (
       <Select
-        {...otherProps}
         onSelect={refine}
         selectedItem={hitsPerPage}
+        items={items}
+        applyTheme={applyTheme}
       />
     );
   }

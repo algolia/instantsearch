@@ -8,24 +8,31 @@ class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     hitsPerPage: PropTypes.number.isRequired,
-    
+    applyTheme: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
+
     /**
      * List of hits per page options.
-     * @shape HitsPerPageItem
+     * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
+     * @public
+     * @defines HitsPerPageItem
      */
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        /**
-         * Number of hits to display.
-         */
-        value: PropTypes.number.isRequired,
+    items: PropTypes.oneOfType([
+      PropTypes.arrayOf(
+        PropTypes.shape({
+          /**
+           * Number of hits to display.
+           */
+          value: PropTypes.number.isRequired,
 
-        /**
-         * Node to render in place of the option item.
-         */
-        label: PropTypes.node,
-      })
-    ),
+          /**
+           * Node to render in place of the option item.
+           */
+          label: PropTypes.node,
+        })
+      ),
+      PropTypes.arrayOf(PropTypes.number),
+    ]),
   };
 
   render() {
@@ -33,13 +40,19 @@ class HitsPerPage extends Component {
       hitsPerPage,
       refine,
       items,
+      applyTheme,
+      createURL,
     } = this.props;
 
     return (
       <LinkList
-        items={items}
+        items={items.map(item =>
+          typeof item === 'number' ? {value: item, label: item} : item
+        )}
         onSelect={refine}
         selectedItem={hitsPerPage}
+        applyTheme={applyTheme}
+        createURL={createURL}
       />
     );
   }
