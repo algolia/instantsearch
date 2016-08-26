@@ -4,7 +4,7 @@ import {
   bemHelper,
   getContainerNode
 } from '../../lib/utils.js';
-import any from 'lodash/collection/any';
+import some from 'lodash/some';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
@@ -57,7 +57,7 @@ function hitsPerPageSelector({
 
   return {
     init({helper, state}) {
-      const isCurrentInOptions = any(
+      const isCurrentInOptions = some(
         options,
         option => Number(state.hitsPerPage) === Number(option.value)
       );

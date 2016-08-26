@@ -1,3 +1,66 @@
+<a name="1.8.2"></a>
+## [1.8.2](https://github.com/algolia/instantsearch.js/compare/v1.8.1...v1.8.2) (2016-08-25)
+
+
+### Bug Fixes
+
+* **lodash:** use lodash v4, reduce build size ([216d1e0](https://github.com/algolia/instantsearch.js/commit/216d1e0))
+
+
+
+<a name="1.8.1"></a>
+## [1.8.1](https://github.com/algolia/instantsearch.js/compare/v1.8.0...v1.8.1) (2016-08-24)
+
+
+### Bug Fixes
+
+* **searchBox:** handle BFCache browsers (#1212) ([7deb9c3](https://github.com/algolia/instantsearch.js/commit/7deb9c3))
+* **toggle:** make autoHide check facetValue.count (#1213) ([86872eb](https://github.com/algolia/instantsearch.js/commit/86872eb))
+
+
+
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/algolia/instantsearch.js/compare/v1.7.1...v1.8.0) (2016-08-18)
+
+
+### Bug Fixes
+
+* **documentation:** Change instantsearch.widgets.stats typo data.processingTimMS to data.processingTimeMS ([034703e](https://github.com/algolia/instantsearch.js/commit/034703e))
+* **documentation:** Change responsiveNavigation.js & header.html to fix #1090 ([bf3a808](https://github.com/algolia/instantsearch.js/commit/bf3a808)), closes [#1090](https://github.com/algolia/instantsearch.js/issues/1090)
+* **nouislider:** fix the slider for nouislider 8.5.1 ([af8f56b](https://github.com/algolia/instantsearch.js/commit/af8f56b))
+
+
+### Features
+
+* **clearAll:** Add optional excludeAttributes to list protected filters ([fe6d19c](https://github.com/algolia/instantsearch.js/commit/fe6d19c))
+
+
+
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/algolia/instantsearch.js/compare/v1.7.0...v1.7.1) (2016-07-28)
+
+
+### Bug Fixes
+
+* **toggle:** add backward compatibility for previous toggle implem (#1154) ([a1973a0](https://github.com/algolia/instantsearch.js/commit/a1973a0))
+
+
+
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/algolia/instantsearch.js/compare/v1.6.4...v1.7.0) (2016-07-26)
+
+
+### Bug Fixes
+
+* **searchParameters:** avoid mutating provided objects (#1148) ([0ea3bef](https://github.com/algolia/instantsearch.js/commit/0ea3bef)), closes [#1130](https://github.com/algolia/instantsearch.js/issues/1130)
+
+
+### Features
+
+* **toggle:** Provide a better default widget (#1146) ([d54107e](https://github.com/algolia/instantsearch.js/commit/d54107e)), closes [#1096](https://github.com/algolia/instantsearch.js/issues/1096) [#919](https://github.com/algolia/instantsearch.js/issues/919)
+
+
+
 <a name="1.6.4"></a>
 ## [1.6.4](https://github.com/algolia/instantsearch.js/compare/v1.6.3...v1.6.4) (2016-07-12)
 

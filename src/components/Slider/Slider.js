@@ -1,10 +1,11 @@
 import React from 'react';
+import omit from 'lodash/omit';
 
 import Nouislider from 'react-nouislider';
 
 let cssPrefix = 'ais-range-slider--';
 
-import isEqual from 'lodash/lang/isEqual';
+import isEqual from 'lodash/isEqual';
 
 class Slider extends React.Component {
   componentWillMount() {
@@ -48,7 +49,9 @@ class Slider extends React.Component {
 
     return (
       <Nouislider
-        {...this.props}
+        // NoUiSlider also accepts a cssClasses prop, but we don't want to
+        // provide one.
+        {...omit(this.props, 'cssClasses')}
         animate={false}
         behaviour={'snap'}
         connect

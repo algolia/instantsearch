@@ -1,7 +1,7 @@
 import React from 'react';
-import map from 'lodash/collection/map';
+import map from 'lodash/map';
 import Template from './Template.js';
-import hasKey from 'lodash/object/has';
+import hasKey from 'lodash/has';
 import cx from 'classnames';
 
 class Hits extends React.Component {

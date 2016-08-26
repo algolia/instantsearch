@@ -4,7 +4,7 @@ import expect from 'expect';
 
 import algoliasearchHelper from 'algoliasearch-helper';
 import * as utils from '../utils';
-import isEmpty from 'lodash/lang/isEmpty';
+import isEmpty from 'lodash/isEmpty';
 
 describe('utils.getContainerNode', () => {
   it('should be able to get a node from a node', () => {

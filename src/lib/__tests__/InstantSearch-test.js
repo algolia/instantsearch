@@ -2,7 +2,7 @@
 import EventEmitter from 'events';
 
 import expect from 'expect';
-import range from 'lodash/utility/range';
+import range from 'lodash/range';
 import sinon from 'sinon';
 
 
@@ -113,6 +113,26 @@ describe('InstantSearch lifecycle', () => {
     expect(helperSearchSpy.calledOnce).toBe(false);
   });
 
+  it('does not fail when passing same references inside multiple searchParameters props', () => {
+    const disjunctiveFacetsRefinements = {fruits: ['apple']};
+    const facetsRefinements = disjunctiveFacetsRefinements;
+    search = new InstantSearch({
+      appId,
+      apiKey,
+      indexName,
+      searchParameters: {
+        disjunctiveFacetsRefinements,
+        facetsRefinements
+      }
+    });
+    search.addWidget({
+      getConfiguration: () => ({disjunctiveFacetsRefinements: {fruits: ['orange']}}),
+      init: () => {}
+    });
+    search.start();
+    expect(search.searchParameters.facetsRefinements).toEqual({fruits: ['apple']});
+  });
+
   context('when adding a widget', () => {
     let widget;
 
@@ -137,7 +157,7 @@ describe('InstantSearch lifecycle', () => {
       });
 
       it('calls widget.getConfiguration(searchParameters)', () => {
-        expect(widget.getConfiguration.args[0]).toEqual([searchParameters]);
+        expect(widget.getConfiguration.args[0]).toEqual([searchParameters, undefined]);
       });
 
       it('calls algoliasearchHelper(client, indexName, searchParameters)', () => {

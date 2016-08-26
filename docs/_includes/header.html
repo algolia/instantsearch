@@ -41,7 +41,7 @@
       {% assign url = page.url %}
       {% for link in site.navigation %}
         <li class='ac-nav-menu-list-item {% if url == link.url %}active{% endif %}'>
-          <a data-path='{{ link.url }}' href="{{ site.baseurl }}{{ link.url }}" title="{{ link.text }}">{{ link.text }}</a>
+          <a data-path='{{ site.baseurl }}{{ link.url }}' data-current="{% if url == link.url %}true{% endif %}"  href="{{ site.baseurl }}{{ link.url }}" title="{{ link.text }}">{{ link.text }}</a>
         </li>
       {% endfor %}
         <li class='ac-nav-menu-list-icon'>

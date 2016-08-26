@@ -2,10 +2,11 @@
 // https://github.com/algolia/instantsearch.js/issues/1024#issuecomment-221618284
 import algoliasearch from 'algoliasearch/src/browser/builds/algoliasearchLite.js';
 import algoliasearchHelper from 'algoliasearch-helper';
-import forEach from 'lodash/collection/forEach';
-import merge from 'lodash/object/merge';
-import union from 'lodash/array/union';
-import clone from 'lodash/lang/clone';
+import forEach from 'lodash/forEach';
+import mergeWith from 'lodash/mergeWith';
+import union from 'lodash/union';
+import clone from 'lodash/clone';
+import isObject from 'lodash/isObject';
 import {EventEmitter} from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -25,7 +26,7 @@ function defaultCreateURL() { return '#'; }
  * searches at page load for example.
  * @param  {Object} [options.searchParameters] Additional parameters to pass to
  * the Algolia API.
- * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html)
+ * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
  * @param  {Object|boolean} [options.urlSync] Url synchronization configuration.
  * Setting to `true` will synchronize the needed search parameters with the browser url.
  * @param  {Object} [options.urlSync.mapping] Object used to define replacement query
@@ -38,7 +39,7 @@ function defaultCreateURL() { return '#'; }
  * be synchronized in the URL. Default value is `['query', 'attribute:*',
  * 'index', 'page', 'hitsPerPage']`. `attribute:*` means all the faceting attributes will be tracked. You
  * can track only some of them by using [..., 'attribute:color', 'attribute:categories']. All other possible
- * values are all the [Algolia REST API parameters](https://community.algolia.com/algoliasearch-helper-js/docs/SearchParameters.html).
+ * values are all the [attributes of the Helper SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
  *
  * There's a special `is_v` parameter that will get added everytime, it tracks the version of instantsearch.js
  * linked to the url.
@@ -112,19 +113,22 @@ Usage: instantsearch({
   start() {
     if (!this.widgets) throw new Error('No widgets were added to instantsearch.js');
 
+    let searchParametersFromUrl;
+
     if (this.urlSync) {
       const syncWidget = urlSyncWidget(this.urlSync);
       this._createURL = syncWidget.createURL.bind(syncWidget);
       this._createAbsoluteURL = relative => this._createURL(relative, {absolute: true});
       this._onHistoryChange = syncWidget.onHistoryChange.bind(syncWidget);
       this.widgets.push(syncWidget);
+      searchParametersFromUrl = syncWidget.searchParametersFromUrl;
     } else {
       this._createURL = defaultCreateURL;
       this._createAbsoluteURL = defaultCreateURL;
       this._onHistoryChange = function() {};
     }
 
-    this.searchParameters = this.widgets.reduce(enhanceConfiguration, this.searchParameters);
+    this.searchParameters = this.widgets.reduce(enhanceConfiguration(searchParametersFromUrl), this.searchParameters);
 
     const helper = algoliasearchHelper(
       this.client,
@@ -160,7 +164,7 @@ Usage: instantsearch({
   }
 
   _render(helper, results, state) {
-    forEach(this.widgets, function(widget) {
+    forEach(this.widgets, widget => {
       if (!widget.render) {
         return;
       }
@@ -171,43 +175,53 @@ Usage: instantsearch({
         helper,
         createURL: this._createAbsoluteURL
       });
-    }, this);
+    });
     this.emit('render');
   }
 
   _init(state, helper) {
-    const {_onHistoryChange, templatesConfig} = this;
-    forEach(this.widgets, function(widget) {
+    forEach(this.widgets, widget => {
       if (widget.init) {
         widget.init({
           state,
           helper,
-          templatesConfig,
+          templatesConfig: this.templatesConfig,
           createURL: this._createAbsoluteURL,
-          onHistoryChange: _onHistoryChange
+          onHistoryChange: this._onHistoryChange
         });
       }
-    }, this);
+    });
   }
 }
 
-function enhanceConfiguration(configuration, widgetDefinition) {
-  if (!widgetDefinition.getConfiguration) return configuration;
+function enhanceConfiguration(searchParametersFromUrl) {
+  return (configuration, widgetDefinition) => {
+    if (!widgetDefinition.getConfiguration) return configuration;
 
-  // Update searchParameters with the configuration from the widgets
-  const partialConfiguration = widgetDefinition.getConfiguration(configuration);
-  return merge(
-    {},
-    configuration,
-    partialConfiguration,
-    (a, b) => {
+    // Get the relevant partial configuration asked by the widget
+    const partialConfiguration = widgetDefinition.getConfiguration(configuration, searchParametersFromUrl);
+
+    const customizer = (a, b) => {
+      // always create a unified array for facets refinements
       if (Array.isArray(a)) {
         return union(a, b);
       }
 
+      // avoid mutating objects
+      if (isObject(a)) {
+        return mergeWith({}, a, b, customizer);
+      }
+
       return undefined;
-    }
-  );
+    };
+
+    return mergeWith(
+      {},
+      configuration,
+      partialConfiguration,
+      customizer
+    );
+  };
 }
 
 export default InstantSearch;

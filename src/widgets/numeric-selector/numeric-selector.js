@@ -5,7 +5,7 @@ import {
   getContainerNode
 } from '../../lib/utils.js';
 import cx from 'classnames';
-import find from 'lodash/collection/find';
+import find from 'lodash/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
 

@@ -2,9 +2,9 @@ import {
   bemHelper,
   getContainerNode
 } from '../../lib/utils.js';
-import forEach from 'lodash/collection/forEach';
-import isString from 'lodash/lang/isString';
-import isFunction from 'lodash/lang/isFunction';
+import forEach from 'lodash/forEach';
+import isString from 'lodash/isString';
+import isFunction from 'lodash/isFunction';
 import cx from 'classnames';
 import Hogan from 'hogan.js';
 import defaultTemplates from './defaultTemplates.js';
@@ -236,6 +236,19 @@ function searchBox({
       // Update value when query change outside of the input
       onHistoryChange(fullState => {
         input.value = fullState.query || '';
+      });
+
+      // When the page is coming from BFCache
+      // (https://developer.mozilla.org/en-US/docs/Working_with_BFCache)
+      // then we force the input value to be the current query
+      // Otherwise, this happens:
+      // - <input> autocomplete = off (default)
+      // - search $query
+      // - navigate away
+      // - use back button
+      // - input query is empty (because <input> autocomplete = off)
+      window.addEventListener('pageshow', () => {
+        input.value = helper.state.query;
       });
 
       if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {

@@ -4,7 +4,7 @@
 import React from 'react';
 
 import cx from 'classnames';
-import getKey from 'lodash/object/get';
+import getKey from 'lodash/get';
 
 import Template from '../components/Template.js';
 
