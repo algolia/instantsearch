@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import range from 'lodash/utility/range';
+import range from 'lodash/range';
 
 import {capitalize} from '../../core/utils';
 import themeable from '../../core/themeable';
