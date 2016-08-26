@@ -14,6 +14,7 @@ var layouts = require('metalsmith-layouts');
 var headings = require('metalsmith-headings');
 var metallic = require('metalsmith-metallic');
 
+var marked = require('marked');
 var sass = require('gulp-sass');
 var livereload = require('gulp-livereload');
 var webpack = require('webpack-stream');
@@ -35,6 +36,15 @@ var documentationRoot = path.join(projectRoot, 'documentation');
 var jsRoot = path.join(documentationRoot, 'js');
 var cssRoot = path.join(documentationRoot, 'css');
 
+
+var customMarkedRenderer = new marked.Renderer();
+var oldHeadingRenderer = customMarkedRenderer.heading;
+customMarkedRenderer.heading = function(text, level) {
+  if(level > 3) {
+    return '<h' + level + '>' + text + '</h' + level + '>';
+  }
+  return oldHeadingRenderer.apply(this, arguments);
+};
 function makeMetalsmithBuilder() {
   var project = require('../package.json');
   var builder = metalsmith(projectRoot);
@@ -70,7 +80,8 @@ function makeMetalsmithBuilder() {
                 }))
                 .use(metallic())
                 .use(markdown({
-                  gfm: true
+                  gfm: true,
+                  renderer: customMarkedRenderer
                 }))
                 .use(headings('h2, h3'))
                 .use(layouts({
