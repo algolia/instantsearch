@@ -50,7 +50,8 @@ var url = require('./url');
  */
 
 /**
- * Event triggered when Algolia sends back an error
+ * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
+ * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
  * @property {Error} error the error returned by the Algolia.
  * @example
