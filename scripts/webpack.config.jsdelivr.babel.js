@@ -20,7 +20,11 @@ export default {
     }]
   },
   resolve: {
-    fallback: [join(__dirname, '..', 'node_modules')]
+    fallback: [join(__dirname, '..', 'node_modules')],
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
   },
   // same issue, for loaders like babel
   resolveLoader: {
