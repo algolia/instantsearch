@@ -16,7 +16,7 @@ describe('headerFooter', () => {
   let defaultProps;
 
   function render(props = {}) {
-    let HeaderFooter = headerFooter(TestComponent);
+    const HeaderFooter = headerFooter(TestComponent);
     renderer.render(<HeaderFooter {...props} />);
     return renderer.getRenderOutput();
   }

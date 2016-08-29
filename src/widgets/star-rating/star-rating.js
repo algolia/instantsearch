@@ -79,7 +79,7 @@ function starRating({
     throw new Error(usage);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
@@ -108,7 +108,7 @@ function starRating({
     },
 
     render({helper, results, state, createURL}) {
-      let facetValues = [];
+      const facetValues = [];
       const allValues = {};
       for (let v = max - 1; v >= 0; --v) {
         allValues[v] = 0;

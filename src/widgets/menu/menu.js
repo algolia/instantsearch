@@ -76,7 +76,7 @@ function menu({
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
-  let widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
+  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
 
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -98,7 +98,7 @@ function menu({
       {...templates, ...showMoreTemplates} :
       templates;
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),

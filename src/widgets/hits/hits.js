@@ -55,7 +55,7 @@ function hits({
   }
 
   const containerNode = getContainerNode(container);
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
     empty: cx(bem(null, 'empty'), userCssClasses.empty)

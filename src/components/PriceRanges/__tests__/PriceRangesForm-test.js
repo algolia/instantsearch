@@ -65,7 +65,7 @@ describe('PriceRangesForm', () => {
   context('submit', () => {
     it('starts a refine on submit', () => {
       // Given
-      let refine = sinon.spy();
+      const refine = sinon.spy();
       const handleSubmitMock = sinon.spy(PriceRangesForm.prototype, 'handleSubmit');
       const component = TestUtils.renderIntoDocument(
         <PriceRangesForm

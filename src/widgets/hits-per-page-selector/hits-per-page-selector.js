@@ -50,7 +50,7 @@ function hitsPerPageSelector({
     Selector = autoHideContainerHOC(Selector);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item)
   };
@@ -87,8 +87,8 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
     },
 
     render({state, results}) {
-      let currentValue = state.hitsPerPage;
-      let hasNoResults = results.nbHits === 0;
+      const currentValue = state.hitsPerPage;
+      const hasNoResults = results.nbHits === 0;
 
       ReactDOM.render(
         <Selector

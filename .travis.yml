@@ -1,5 +1,11 @@
 language: node_js
 node_js: 6
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 before_install:
   - git config --global user.email "algobot@users.noreply.github.com"
   - git config --global user.name "algobot"
@@ -21,6 +27,7 @@ cache:
     - node_modules
 env:
   global:
+    - CXX=g++-4.8
     - SAUCE_USERNAME=instantsearchjs
     # we make this public so that we can still run tests on PRS coming from forks
     - SAUCE_ACCESS_KEY=a3b366ec-c8d3-46af-8710-4d66992514ac

@@ -9,7 +9,7 @@ class Stats extends React.Component {
   }
 
   render() {
-    let data = {
+    const data = {
       hasManyResults: this.props.nbHits > 1,
       hasNoResults: this.props.nbHits === 0,
       hasOneResult: this.props.nbHits === 1,

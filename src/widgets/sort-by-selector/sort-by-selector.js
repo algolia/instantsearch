@@ -47,12 +47,12 @@ function sortBySelector({
     Selector = autoHideContainerHOC(Selector);
   }
 
-  let selectorOptions = map(
+  const selectorOptions = map(
     indices,
     index => ({label: index.label, value: index.name})
   );
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item)
   };

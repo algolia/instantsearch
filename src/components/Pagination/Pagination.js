@@ -23,7 +23,7 @@ class Pagination extends React.Component {
     isActive = false,
     createURL
   }) {
-    let cssClasses = {
+    const cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
       link: cx(this.props.cssClasses.link)
     };
@@ -33,7 +33,7 @@ class Pagination extends React.Component {
       cssClasses.item = cx(cssClasses.item, this.props.cssClasses.active);
     }
 
-    let url = createURL && !isDisabled ? createURL(pageNumber) : '#';
+    const url = createURL && !isDisabled ? createURL(pageNumber) : '#';
 
     return (
       <PaginationLink

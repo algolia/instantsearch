@@ -31,7 +31,7 @@ function headerFooter(ComposedComponent) {
       }
       const className = cx(this.props.cssClasses[type], `ais-${type}`);
 
-      let templateData = getKey(this.props, `headerFooterData.${type}`);
+      const templateData = getKey(this.props, `headerFooterData.${type}`);
 
       return (
         <Template {...this.props.templateProps}
@@ -63,7 +63,7 @@ function headerFooter(ComposedComponent) {
         root: cx(rootCssClasses)
       };
 
-      let headerElement = this._getElement({
+      const headerElement = this._getElement({
         type: 'header',
         handleClick: this.props.collapsible ? this.handleHeaderClick : null
       });

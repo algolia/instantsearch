@@ -12,10 +12,11 @@ ROOT=`dirname "$0"`/..
 
 license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */"
 
-bundle='instantsearch'
+bundles=( 'instantsearch' 'instantsearch-preact' )
 
 # build for jsdelivr, with everything inlined while exposing React + ReactDOM (for plugins)
 webpack --config scripts/webpack.config.jsdelivr.babel.js
+webpack --config scripts/webpack.config.preact.jsdelivr.babel.js
 
 # only transpile to ES5 for package.json main entry
 babel -q index.js -o dist-es5-module/index.js
@@ -33,9 +34,11 @@ for source in "$ROOT"/src/css/[^_]*.scss; do
   cleancss dist/$base.css > dist/$base.min.css
 done
 
-printf "$license" | cat - dist/${bundle}.js > /tmp/out && mv /tmp/out dist/${bundle}.js
-cd dist
-uglifyjs ${bundle}.js --in-source-map ${bundle}.js.map --source-map ${bundle}.min.js.map --preamble "$license" -c warnings=false -m -o ${bundle}.min.js
-cd ..
-
-printf "=> ${bundle}.min.js gzipped will weight `cat dist/${bundle}.min.js | gzip -9 | wc -c | pretty-bytes`\n"
+for bundle in "${bundles[@]}"
+do
+  printf "$license" | cat - dist/${bundle}.js > /tmp/out && mv /tmp/out dist/${bundle}.js
+  cd dist
+  uglifyjs ${bundle}.js --in-source-map ${bundle}.js.map --source-map ${bundle}.min.js.map --preamble "$license" -c warnings=false -m -o ${bundle}.min.js
+  cd ..
+  printf "=> ${bundle}.min.js gzipped will weight `cat dist/${bundle}.min.js | gzip -9 | wc -c | pretty-bytes`\n"
+done

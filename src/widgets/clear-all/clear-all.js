@@ -62,7 +62,7 @@ function clearAll({
     ClearAll = autoHideContainerHOC(ClearAll);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
@@ -80,8 +80,8 @@ function clearAll({
       this.clearAttributes = getRefinements(results, state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
-      let hasRefinements = this.clearAttributes.length !== 0;
-      let url = createURL(clearRefinementsFromState(state));
+      const hasRefinements = this.clearAttributes.length !== 0;
+      const url = createURL(clearRefinementsFromState(state));
 
       ReactDOM.render(
         <ClearAll
