@@ -17,6 +17,10 @@ export default createConnector({
   displayName: 'AlgoliaPagination',
 
   propTypes: {
+    /**
+     * URL state serialization key.
+     * The state of this widget takes the shape of a `number`.
+     */
     id: PropTypes.string,
   },
 

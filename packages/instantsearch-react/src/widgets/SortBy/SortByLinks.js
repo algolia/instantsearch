@@ -9,10 +9,23 @@ class SortByLinks extends Component {
     applyTheme: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
+
+    /**
+     * The different options, with the corresponding index.
+     * @public
+     * @defines SortByLinksItem
+     */
     items: PropTypes.arrayOf(PropTypes.shape({
+      /**
+       * Node to render in place of the option item.
+       */
       label: PropTypes.node.isRequired,
-      index: PropTypes.string.isRequired,
+      /**
+       * Index to use
+       */
+      value: PropTypes.string.isRequired,
     })).isRequired,
+
     selectedIndex: PropTypes.string.isRequired,
   };
 
@@ -22,10 +35,7 @@ class SortByLinks extends Component {
     return (
       <LinkList
         applyTheme={applyTheme}
-        items={items.map(item => ({
-          label: item.label,
-          value: item.index,
-        }))}
+        items={items}
         selectedItem={selectedIndex}
         onSelect={refine}
         createURL={createURL}

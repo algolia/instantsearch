@@ -21,11 +21,46 @@ export default createConnector({
   displayName: 'AlgoliaToggle',
 
   propTypes: {
+    /**
+     * URL state serialization key.
+     * The state of this widget takes the form of a `string` that can be either
+     * `'on'` or `'off'`.
+     * Required when `attributeName` isn't present.
+     * @public
+     */
     id: PropTypes.string,
+
+    /**
+     * Label for this toggle.
+     * @public
+     */
     label: PropTypes.string,
+
+    /**
+     * Custom filter.
+     * Takes in a `SearchParameters` and returns a new `SearchParameters` with
+     * the filter applied.
+     * @public
+     */
     filter: PropTypes.func,
+
+    /**
+     * Name of the attribute on which to apply the `value` refinement.
+     * Required when `value` is present.
+     * @public
+     */
     attributeName: PropTypes.string,
+
+    /**
+     * Value of the refinement to apply on `attributeName`.
+     * Required when `attributeName` is present.
+     * @public
+     */
     value: PropTypes.any,
+
+    /**
+     * Default state of the widget. Should the toggle be checked by default?
+     */
     defaultChecked: PropTypes.bool,
   },
 

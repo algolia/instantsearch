@@ -6,6 +6,10 @@ export default createConnector({
   displayName: 'AlgoliaScrollTo',
 
   propTypes: {
+    /**
+     * Widget state key on which to listen for changes.
+     * @public
+     */
     scrollOn: PropTypes.string,
   },
 

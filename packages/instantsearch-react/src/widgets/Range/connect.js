@@ -28,13 +28,48 @@ export default createConnector({
   displayName: 'AlgoliaRange',
 
   propTypes: {
+    /**
+     * URL state serialization key. Defaults to the value of `attributeName`.
+     * @public
+     */
     id: PropTypes.string,
+
+    /**
+     * Name of the attribute for faceting
+     * @public
+     */
     attributeName: PropTypes.string.isRequired,
+
+    /**
+     * Default state of the widget.
+     * @public
+     * @defines RangeState
+     */
     defaultValue: PropTypes.shape({
+      /**
+       * Start of the range
+       */
       min: PropTypes.number.isRequired,
+      /**
+       * End of the range
+       */
       max: PropTypes.number.isRequired,
     }),
+
+    /**
+     * Minimum value.
+     * When this isn't set, the minimum value will be automatically computed by
+     * Algolia using the data in the index.
+     * @public
+     */
     min: PropTypes.number,
+
+    /**
+     * Maximum value.
+     * When this isn't set, the maximum value will be automatically computed by
+     * Algolia using the data in the index.
+     * @public
+     */
     max: PropTypes.number,
   },
 

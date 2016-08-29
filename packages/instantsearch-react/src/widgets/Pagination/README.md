@@ -11,22 +11,13 @@ Displays a list of page links for navigating the results set.
 
 There's also a `PaginationSelect` which renders a select control.
 
-## Props
+## Pagination Props
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`id` | `?string` | `p` | URL state serialization key. The state of this widget takes the shape of a `number`.
-`pagesPadding` | `?number` | `3` | How many page links to display around the current page
-`maxPages` | `?number` | `Infinity` | Maximum number of pages to display
+<!-- props default ./index.js -->
 
-#### Only for `Pagination`:
+## Pagination.Select Props
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`showFirst` | `?bool` | `true` | Display the first page link
-`showPrevious` | `?bool` | `true` | Display the previous page link
-`showNext` | `?bool` | `true` | Display the next page link
-`showLast` | `?bool` | `false` | Display the last page link
+<!-- props default.Select ./index.js -->
 
 ### Theme
 

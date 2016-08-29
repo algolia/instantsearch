@@ -1,4 +1,5 @@
 import {resolve as r} from 'path';
+import webpack from 'webpack';
 
 const publicPath = 'http://localhost:8080/';
 
@@ -29,7 +30,7 @@ export default {
           require.resolve('babel-loader'),
         ],
         include: [r('../src'), r('.'), r('../index.js')],
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
     ],
   },
@@ -37,5 +38,8 @@ export default {
   plugins: [
     // Don't use --hot and this at the same time
     // new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      __DOC__: JSON.stringify(false),
+    }),
   ],
 };

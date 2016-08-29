@@ -14,10 +14,10 @@ While instantsearch-react already provides widgets out of the box, there are cas
 
 All default widgets have a corresponding higher-order component that acts as a connector, providing the required props to the widget.
 
-Those connectors are available as named imports. Their name are composed of the `connect` prefix followed by the name of the particular widget they connect. For instance, the `SearchBox` widgets uses the `connectSearchBox` higher-order component under the hood in order to retrieve and refine the current query.
+Those connectors are available as the `connect` property on the widgets they connect. For instance, the `SearchBox` widget uses the `SearchBox.connect` higher-order component under the hood in order to retrieve and refine the current query.
 
 ```js
-import {connectSearchBox} from 'instantsearch-react';
+import {SearchBox} from 'instantsearch-react';
 
 const MySearchBox = props =>
   <input
@@ -31,7 +31,7 @@ const MySearchBox = props =>
 // reading and manipulating the current query of the search.
 // Note that this `ConnectedSearchBox` component will only work when rendered
 // as a child or a descendant of the `InstantSearch` component.
-const ConnectedSearchBox = connectSearchBox(MySearchBox);
+const ConnectedSearchBox = SearchBox.connect(MySearchBox);
 ```
 
 ### Stateful widgets
@@ -43,13 +43,13 @@ When a widget is stateful, its state will get serialized and persisted to the UR
 Stateful widgets are also provided with `refine` and `createURL` methods. The `refine(nextState)` method allows the widget to edit its state, while the `createURL(nextState)` method allows the widget to generate a URL for the corresponding state.
 
 ```js
-// Here's a variation on the usage of `connectSearchBox`: a component that just
+// Here's a variation on the usage of `SearchBox.connect`: a component that just
 // renders a link to set the current query to "cute cats".
 // By adding an `onClick` handler on top of the `href`, and cancelling the
 // default behavior of the link, we avoid making a full-page reload when the
 // user clicks on the link, while ensuring that opening the link in a new tab
 // still works.
-const LookUpCuteCats = connectSearchBox(props =>
+const LookUpCuteCats = SearchBox.connect(props =>
   <a
     href={props.createURL('cute cats')}
     onClick={e => {

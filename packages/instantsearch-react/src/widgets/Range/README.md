@@ -11,6 +11,8 @@ Lets users filter results within a numerical range, based on an attribute.
 
 ## Props
 
+<!-- props default ./index.js -->
+
 Name | Type | Default |Description
 :- | :- | :- | :-
 `attributeName` | `string` | | Name of the attribute for faceting

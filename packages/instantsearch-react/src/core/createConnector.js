@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {has} from 'lodash';
+import {omit, has} from 'lodash';
 
 import {shallowEqual, getDisplayName} from './utils';
 
@@ -18,7 +18,12 @@ export default function createConnector(connectorDesc) {
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
-    static propTypes = connectorDesc.propTypes;
+    static propTypes = __DOC__ ?
+      {
+        ...omit(Composed.propTypes, 'refine', 'createURL'),
+        ...connectorDesc.propTypes,
+      } :
+      connectorDesc.propTypes;
     static defaultProps = connectorDesc.defaultProps;
 
     static contextTypes = {

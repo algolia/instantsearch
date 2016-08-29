@@ -9,11 +9,6 @@ nav_groups:
 
 Conditional component that only renders its single child when the current results set is empty.
 
-## Props
-
-Name | Type | Default |Description
-:- | :- | :- | :-
-
 ## Implementing your own NoResults
 
 See [Making your own widgets](../Customization.md) for more information on how to use the `NoResults.connect` HOC.

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>instantsearch-react | SearchBox</title>
+
+    <link rel="stylesheet" href="/assets/theme.css">
+    <link rel="stylesheet" href="/assets/site.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#props">Props</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#theme">Theme</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#translations">Translations</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#implementing-your-own-searchbox">Implementing your own SearchBox</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="searchbox">SearchBox</h1>
+<p>The <code class="CodeMirror cm-s-default">SearchBox</code> widget is where users type their search queries.</p>
+<h2 id="props">Props</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">id</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">?string</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">q</code></td>
+<td style="text-align:left">URL state serialization key. The state of this widget takes the form of a <code class="CodeMirror cm-s-default">string</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">focusShortcuts</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">?[oneOfType(string, number)]</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">[&#39;s&#39;, &#39;/&#39;]</code></td>
+<td style="text-align:left">List of keyboard shortcuts that focus the search box. Accepts key names and key codes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">autoFocus</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">?bool</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">false</code></td>
+<td style="text-align:left">Should the search box be focused on render?</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">searchAsYouType</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">?bool</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">true</code></td>
+<td style="text-align:left">Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="theme">Theme</h3>
+<p><code class="CodeMirror cm-s-default">root</code>, <code class="CodeMirror cm-s-default">wrapper</code>, <code class="CodeMirror cm-s-default">input</code>, <code class="CodeMirror cm-s-default">submit</code>, <code class="CodeMirror cm-s-default">reset</code></p>
+<h3 id="translations">Translations</h3>
+<p><code class="CodeMirror cm-s-default">submit</code>, <code class="CodeMirror cm-s-default">reset</code>, <code class="CodeMirror cm-s-default">submitTitle</code>, <code class="CodeMirror cm-s-default">resetTitle</code>, <code class="CodeMirror cm-s-default">placeholder</code></p>
+<h2 id="implementing-your-own-searchbox">Implementing your own SearchBox</h2>
+<p>See <a href="../Customization.md">Making your own widgets</a> for more information on how to use the <code class="CodeMirror cm-s-default">SearchBox.connect</code> HOC.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">SearchBox</span>.<span class="cm-variable">connect</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch-react&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">MySearchBox</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">input</span>
+      <span class="cm-attribute">value</span>={<span class="cm-variable">props</span>.<span class="cm-property">query</span>}
+      <span class="cm-attribute">onChange</span>={<span class="cm-variable">e</span> <span class="cm-operator">=&gt;</span> <span class="cm-variable">props</span>.<span class="cm-property">refine</span>(<span class="cm-variable">e</span>.<span class="cm-property">target</span>.<span class="cm-property">value</span>)}
+    <span class="cm-tag cm-bracket">/&gt;</span>
+  );
+}
+
+<span class="cm-comment">// `SearchBox.connect` accepts the same `id` prop as `SearchBox`.</span>
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">SearchBox</span>.<span class="cm-property">connect</span>(<span class="cm-variable">MySearchBox</span>);</code></pre>
+    </div>
+
+    <script type="text/javascript" src="assets/entry.js"></script>
+    
+      <script src="http://localhost:35729/livereload.js"></script>
+    
+  </body>
+</html>

@@ -4,12 +4,15 @@
   "scripts": {
     "start": "babel-node index"
   },
-  "devDependencies": {
+  "dependencies": {
+    "async": "^2.0.1",
     "babel-cli": "^6.11.4",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "codemirror": "^5.17.0",
+    "doctrine": "^1.3.0",
     "ejs": "^2.5.1",
     "escape-html": "^1.0.3",
+    "lodash": "^4.15.0",
     "marked": "^0.3.6",
     "metalsmith": "^2.1.0",
     "metalsmith-assets": "^0.1.0",
@@ -18,6 +21,11 @@
     "metalsmith-markdown": "^0.2.1",
     "metalsmith-navigation": "^0.2.9",
     "metalsmith-serve": "0.0.7",
-    "metalsmith-watch": "^1.0.3"
+    "metalsmith-watch": "^1.0.3",
+    "react": "^15.3.1",
+    "react-docgen": "^2.9.1",
+    "react-dom": "^15.3.1",
+    "recast": "^0.11.12",
+    "unescape-html": "^1.0.0"
   }
 }

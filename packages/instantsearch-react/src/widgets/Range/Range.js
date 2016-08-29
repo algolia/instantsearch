@@ -11,7 +11,13 @@ class Range extends Component {
     applyTheme: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
+
+    /**
+     * Every handle move will jump that number of steps.
+     * @public
+     */
     step: PropTypes.number,
+
     value: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
