@@ -24,12 +24,46 @@ export default createConnector({
   displayName: 'AlgoliaMenu',
 
   propTypes: {
+    /**
+     * URL State serialization key. Defaults to `attributeName`.
+     * @public
+     */
     id: PropTypes.string,
+
+    /**
+     * Name of the attribute for faceting
+     * @public
+     */
     attributeName: PropTypes.string.isRequired,
+
+    /**
+     * Display a show more button for increasing the number of refinement values from `limitMin` to `limitMax`.
+     * @public
+     */
     showMore: PropTypes.bool,
+
+    /**
+     * Minimum number of refinement values.
+     * @public
+     */
     limitMin: PropTypes.number,
+
+    /**
+     * Maximum number of refinement values. Ignored when `showMore` is `false`.
+     * @public
+     */
     limitMax: PropTypes.number,
+
+    /**
+     * How to sort refinement values. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options.
+     * @public
+     */
     sortBy: PropTypes.arrayOf(PropTypes.string),
+
+    /**
+     * The default state of this widget.
+     * @public
+     */
     defaultSelectedItem: PropTypes.string,
   },
 

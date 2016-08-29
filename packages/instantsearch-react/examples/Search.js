@@ -74,15 +74,15 @@ class Search extends Component {
             items={[
               {
                 label: 'Popularity',
-                index: 'instant_search',
+                value: 'instant_search',
               },
               {
                 label: 'Price (asc)',
-                index: 'instant_search_price_asc',
+                value: 'instant_search_price_asc',
               },
               {
                 label: 'Price (desc)',
-                index: 'instant_search_price_desc',
+                value: 'instant_search_price_desc',
               },
             ]}
             defaultSelectedIndex="instant_search"

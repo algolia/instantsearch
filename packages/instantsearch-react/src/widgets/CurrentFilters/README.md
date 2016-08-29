@@ -9,12 +9,6 @@ nav_groups:
 
 Displays the list of filters currently applied to the search parameters.
 
-## Props
-
-Name | Type | Default |Description
-:- | :- | :- | :-
-
-
 ### Theme
 
 `root`, `filters`, `filter`, `filterLabel`, `filterClear`, `clearAll`

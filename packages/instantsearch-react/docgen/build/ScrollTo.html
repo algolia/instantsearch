@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>instantsearch-react | ScrollTo</title>
+
+    <link rel="stylesheet" href="/assets/theme.css">
+    <link rel="stylesheet" href="/assets/site.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#props">Props</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#implementing-your-own-scrollto">Implementing your own ScrollTo</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="scrollto">ScrollTo</h1>
+<p>Scrolls the window to itself when the page changes. Note that if you&#39;ve provided a custom <code class="CodeMirror cm-s-default">id</code> prop to your <code class="CodeMirror cm-s-default">Pagination</code> component, you will need to provide it to this component as well as the <code class="CodeMirror cm-s-default">scrollOn</code> prop.</p>
+<h2 id="props">Props</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">scrollOn</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">?string</code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default">p</code></td>
+<td style="text-align:left">Widget state key on which to listen for changes.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="implementing-your-own-scrollto">Implementing your own ScrollTo</h2>
+<p>See <a href="../Customization.md">Making your own widgets</a> for more information on how to use the <code class="CodeMirror cm-s-default">ScrollTo.connect</code> HOC.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">Children</span>, <span class="cm-def">Component</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react&#39;</span>;
+<span class="cm-keyword">import</span> {<span class="cm-def">ScrollTo</span>.<span class="cm-variable">connect</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch-react&#39;</span>;
+
+<span class="cm-keyword">class</span> <span class="cm-def">MyScrollTo</span> <span class="cm-keyword">extends</span> <span class="cm-variable">Component</span> {
+  <span class="cm-property">componentDidUpdate</span>(<span class="cm-def">prevProps</span>) {
+    <span class="cm-keyword">const</span> {<span class="cm-def">value</span>} <span class="cm-operator">=</span> <span class="cm-keyword">this</span>.<span class="cm-property">props</span>;
+    <span class="cm-keyword">if</span> (<span class="cm-variable-2">value</span> <span class="cm-operator">!==</span> <span class="cm-variable-2">prevProps</span>.<span class="cm-property">value</span>) {
+      <span class="cm-keyword">const</span> <span class="cm-def">el</span> <span class="cm-operator">=</span> <span class="cm-variable">findDOMNode</span>(<span class="cm-keyword">this</span>);
+      <span class="cm-variable-2">el</span>.<span class="cm-property">scrollIntoView</span>();
+    }
+  }
+
+  <span class="cm-property">render</span>() {
+    <span class="cm-keyword">return</span> <span class="cm-variable">Children</span>.<span class="cm-property">only</span>(<span class="cm-keyword">this</span>.<span class="cm-property">props</span>.<span class="cm-property">children</span>);
+  }
+}
+
+<span class="cm-comment">// `ScrollTo.connect` accepts the same `scrollOn` prop as `ScrollTo`.</span>
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">ScrollTo</span>.<span class="cm-property">connect</span>(<span class="cm-variable">MyScrollTo</span>);</code></pre>
+    </div>
+
+    <script type="text/javascript" src="assets/entry.js"></script>
+    
+      <script src="http://localhost:35729/livereload.js"></script>
+    
+  </body>
+</html>

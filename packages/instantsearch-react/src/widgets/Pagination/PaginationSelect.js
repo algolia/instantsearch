@@ -1,4 +1,5 @@
 import React from 'react';
+import {omit} from 'lodash';
 
 import themeable from '../../core/themeable';
 
@@ -15,6 +16,16 @@ function PaginationSelect(props) {
       showNext={false}
       showLast={false}
     />
+  );
+}
+
+if (__DOC__) {
+  PaginationSelect.propTypes = omit(
+    Pagination.propTypes,
+    'showFirst',
+    'showPrevious',
+    'showNext',
+    'showLast'
   );
 }
 

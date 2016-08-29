@@ -1,8 +1,8 @@
 import connect from './connect';
-import HitsPerPageLinks from './HitsPerPageLinks';
+import HitsPerPage from './HitsPerPage';
 import HitsPerPageSelect from './HitsPerPageSelect';
 
-const Connected = connect(HitsPerPageLinks);
+const Connected = connect(HitsPerPage);
 Connected.Select = connect(HitsPerPageSelect);
 Connected.connect = connect;
 export default Connected;

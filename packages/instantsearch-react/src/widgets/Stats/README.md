@@ -9,11 +9,6 @@ nav_groups:
 
 The `Stats` widget is where users type their search queries.
 
-## Props
-
-Name | Type | Default |Description
-:- | :- | :- | :-
-
 ### Theme
 
 `root`

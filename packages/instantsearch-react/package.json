@@ -45,6 +45,9 @@
       "node_modules/react-themeable/",
       "node_modules/mockdate/",
       "src/core/propTypes"
-    ]
+    ],
+    "globals": {
+      "__DOC__": false
+    }
   }
 }

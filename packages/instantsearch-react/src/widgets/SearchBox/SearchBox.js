@@ -11,10 +11,29 @@ class SearchBox extends Component {
     translate: PropTypes.func.isRequired,
     // @TODO: implement
     // poweredBy: PropTypes.bool,
+
+    /**
+     * List of keyboard shortcuts that focus the search box.
+     * Accepts key names and key codes.
+     * @public
+     */
     focusShortcuts: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
+
+    /**
+     * Should the search box be focused on render?
+     * @public
+     */
     autoFocus: PropTypes.bool,
+
+    /**
+     * Should we search on every change to the query?
+     * If you disable this option, new searches will only be triggered by
+     * clicking the search button or by pressing the enter key while the search
+     * box is focused.
+     * @public
+     */
     searchAsYouType: PropTypes.bool,
 
     // For testing purposes
