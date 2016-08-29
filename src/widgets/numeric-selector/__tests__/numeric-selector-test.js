@@ -44,7 +44,7 @@ describe('numericSelector()', () => {
         root: 'ais-numeric-selector custom-root cx',
         item: 'ais-numeric-selector--item custom-item'
       },
-      currentValue: undefined,
+      currentValue: 1,
       shouldAutoHideContainer: true,
       options: [
         {value: 1, label: 'first'},

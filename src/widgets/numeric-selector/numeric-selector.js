@@ -60,7 +60,7 @@ function numericSelector({
 
   return {
     init({helper}) {
-      const currentValue = this._getRefinedValue(helper) || options[0].value;
+      const currentValue = this._getRefinedValue(helper);
       if (currentValue !== undefined) {
         helper.addNumericRefinement(attributeName, operator, currentValue);
       }
@@ -92,7 +92,7 @@ function numericSelector({
       const refinedValue = find(refinements, {operator});
       return refinedValue &&
         refinedValue.value !== undefined &&
-        refinedValue.value[0] !== undefined ? refinedValue.value[0] : undefined;
+        refinedValue.value[0] !== undefined ? refinedValue.value[0] : options[0].value;
     }
   };
 }
