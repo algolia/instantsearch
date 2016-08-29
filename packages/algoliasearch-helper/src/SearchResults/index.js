@@ -572,6 +572,11 @@ function vanillaSortFn(order, data) {
  * refinement first, descending count (bigger value on top), and name asending
  * (alphabetical order). The sort formula can overriden using either string based
  * predicates or a function.
+ *
+ * This method will return all the values returned by the Algolia engine plus all
+ * the values already refined. This means that it can happen that the
+ * `maxValuesPerFacet` [configuration](https://www.algolia.com/doc/rest-api/search#param-maxValuesPerFacet)
+ * might not be respected if you have facet values that are already refined.
  * @param {string} attribute attribute name
  * @param {object} opts configuration options.
  * @param {Array.<string> | function} opts.sortBy
