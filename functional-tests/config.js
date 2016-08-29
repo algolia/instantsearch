@@ -43,18 +43,46 @@ if (process.env.CI === 'true') {
     sauceConnect: true,
     // we are not currently testing android nor microsoft edge
     // their selenium support is completely broken, nothing much to do here
-    capabilities: [{
-      browserName: 'chrome',
-      platform: 'Windows 10',
-      version: ''
-    }, {
-      browserName: 'internet explorer',
-      platform: 'Windows 10',
-      version: ''
-    }, {
-      browserName: 'safari',
-      version: '9'
-    }],
+    capabilities: [
+      {
+        browserName: 'chrome',
+        platform: 'Windows 10',
+        version: '', // latest stable
+        screenResolution: '1280x1024'
+      },
+      {
+        browserName: 'internet explorer',
+        platform: 'Windows 10',
+        version: '11',
+        screenResolution: '1280x1024'
+      },
+      {
+        browserName: 'safari',
+        version: '9'
+      },
+      {
+        browserName: 'MicrosoftEdge',
+        platform: 'Windows 10',
+        version: '',
+        screenResolution: '1280x1024'
+      }
+      // Firefox disabled, Firefox selenium support is not yet good
+      // {
+      //   browserName: 'firefox',
+      //   platform: 'Windows 10',
+      //   version: '', // latest stable
+      //   screenResolution: '1280x1024'
+      // }
+      // iOS disabled, cannot start any mobile in a reliable way on SauceLabs
+      // {
+      //   browserName: 'Safari',
+      //   appiumVersion: '1.5.3',
+      //   deviceName: 'iPhone 6 Simulator',
+      //   deviceOrientation: 'portrait',
+      //   platformVersion: '9.3',
+      //   platformName: 'iOS'
+      // },
+    ],
     ...conf
   };
 } else {

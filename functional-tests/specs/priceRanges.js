@@ -5,6 +5,8 @@ describe('priceRanges', () => {
   const widget = '#price-ranges';
   const item = '.item';
   const priceRange = '*=$80';
+  const firstInput = 'label:nth-of-type(1) input';
+  const secondInput = 'label:nth-of-type(2) input';
 
   it('has some default ranges', () =>
     expect(browser
@@ -26,17 +28,25 @@ describe('priceRanges', () => {
   });
 
   context('the form', () => {
-    beforeEach(() =>
-      browser
-        .element(widget)
-        .setValue('label:nth-of-type(1) input', '94')
-        .setValue('label:nth-of-type(2) input', '113')
-    );
+    beforeEach(() => {
+      const element = browser.element(widget);
+
+      element.setValue(firstInput, '9');
+      // there should be no need to use setValue + addValue
+      // and just use .setValue(..., value)
+      // but it seems like there is a timing issue in preact
+      // https://github.com/developit/preact/issues/263
+      element.addValue(firstInput, '4');
+
+      element.setValue(secondInput, '1');
+      element.addValue(secondInput, '1');
+      element.addValue(secondInput, '3');
+    });
 
     it('can be submitted with ENTER key', () => {
       browser
         .element(widget)
-        .addValue('label:nth-of-type(2) input', 'Enter');
+        .addValue(secondInput, 'Enter');
 
       const refinements = getCurrentRefinements();
       expect(refinements.length).toBe(2);
