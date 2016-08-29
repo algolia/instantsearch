@@ -1,3 +1,20 @@
+<a name="1.8.3"></a>
+## [1.8.3](https://github.com/algolia/instantsearch.js/compare/v1.8.2...v1.8.3) (2016-08-29)
+
+
+### Bug Fixes
+
+* **numericSelector:** if no currentValue found, use the first option ([ef56dfa](https://github.com/algolia/instantsearch.js/commit/ef56dfa))
+* **poweredBy:** fixed Algolia logo version (#1223) ([aab3fc3](https://github.com/algolia/instantsearch.js/commit/aab3fc3)), closes [#1223](https://github.com/algolia/instantsearch.js/issues/1223) [#1222](https://github.com/algolia/instantsearch.js/issues/1222)
+* **Selector:** render a controlled component ([e9f6ff7](https://github.com/algolia/instantsearch.js/commit/e9f6ff7))
+
+
+### Performance Improvements
+
+* **filesize:** use preact in production build (#1224) ([5bb38f2](https://github.com/algolia/instantsearch.js/commit/5bb38f2)), closes [#1030](https://github.com/algolia/instantsearch.js/issues/1030)
+
+
+
 <a name="1.8.2"></a>
 ## [1.8.2](https://github.com/algolia/instantsearch.js/compare/v1.8.1...v1.8.2) (2016-08-25)
 
