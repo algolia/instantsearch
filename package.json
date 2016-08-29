@@ -71,7 +71,7 @@
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.3.1",
     "rimraf": "^2.5.4",
-    "sass-lint": "^1.9.0",
+    "sass-lint": "^1.9.1",
     "semver": "^5.3.0",
     "sinon": "^2.0.0-pre",
     "uglify-js": "^2.7.3",
