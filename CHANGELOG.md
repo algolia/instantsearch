@@ -1,3 +1,13 @@
+<a name="1.8.4"></a>
+## [1.8.4](https://github.com/algolia/instantsearch.js/compare/v1.8.3...v1.8.4) (2016-08-29)
+
+
+### Bug Fixes
+
+* **bundle:** switch back to React by default, create a preact build (#1228) ([4845868](https://github.com/algolia/instantsearch.js/commit/4845868))
+
+
+
 <a name="1.8.3"></a>
 ## [1.8.3](https://github.com/algolia/instantsearch.js/compare/v1.8.2...v1.8.3) (2016-08-29)
 
