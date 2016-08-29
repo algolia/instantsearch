@@ -59,7 +59,7 @@ function stats({
     throw new Error(usage);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     body: cx(bem('body'), userCssClasses.body),
     footer: cx(bem('footer'), userCssClasses.footer),
     header: cx(bem('header'), userCssClasses.header),

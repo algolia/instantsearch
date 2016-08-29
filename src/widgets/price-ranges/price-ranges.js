@@ -78,13 +78,13 @@ function priceRanges({
     PriceRanges = autoHideContainerHOC(PriceRanges);
   }
 
-  let labels = {
+  const labels = {
     button: 'Go',
     separator: 'to',
     ...userLabels
   };
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),

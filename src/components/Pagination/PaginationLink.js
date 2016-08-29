@@ -37,7 +37,7 @@ class PaginationLink extends React.Component {
       };
     }
 
-    let element = React.createElement(tagName, attributes);
+    const element = React.createElement(tagName, attributes);
 
     return (
       <li className={cssClasses.item}>

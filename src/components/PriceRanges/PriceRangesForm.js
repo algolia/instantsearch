@@ -44,9 +44,9 @@ class PriceRangesForm extends React.Component {
   }
 
   render() {
-    let fromInput = this.getInput('from');
-    let toInput = this.getInput('to');
-    let onSubmit = this.handleSubmit;
+    const fromInput = this.getInput('from');
+    const toInput = this.getInput('to');
+    const onSubmit = this.handleSubmit;
     return (
       <form className={this.props.cssClasses.form} onSubmit={onSubmit} ref="form">
         {fromInput}

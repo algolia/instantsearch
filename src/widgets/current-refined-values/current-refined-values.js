@@ -144,7 +144,7 @@ function currentRefinedValues({
   const attributeNames = map(attributes, attribute => attribute.name);
   const restrictedTo = onlyListedAttributes ? attributeNames : [];
 
-  let attributesObj = reduce(attributes, (res, attribute) => {
+  const attributesObj = reduce(attributes, (res, attribute) => {
     res[attribute.name] = attribute;
     return res;
   }, {});
@@ -155,7 +155,7 @@ function currentRefinedValues({
     },
 
     render({results, helper, state, templatesConfig, createURL}) {
-      let cssClasses = {
+      const cssClasses = {
         root: cx(bem(null), userCssClasses.root),
         header: cx(bem('header'), userCssClasses.header),
         body: cx(bem('body'), userCssClasses.body),
@@ -167,7 +167,7 @@ function currentRefinedValues({
         footer: cx(bem('footer'), userCssClasses.footer)
       };
 
-      let templateProps = prepareTemplateProps({
+      const templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
@@ -177,8 +177,8 @@ function currentRefinedValues({
       const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
 
       const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-      let clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
-      let clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
+      const clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
+      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
 
       const shouldAutoHideContainer = refinements.length === 0;
 

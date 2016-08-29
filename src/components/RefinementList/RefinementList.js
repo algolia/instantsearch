@@ -39,9 +39,9 @@ class RefinementList extends React.Component {
     }
 
     const url = this.props.createURL(facetValue[this.props.attributeNameKey]);
-    let templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
+    const templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
-    let cssClassItem = cx(this.props.cssClasses.item, {
+    const cssClassItem = cx(this.props.cssClasses.item, {
       [this.props.cssClasses.active]: facetValue.isRefined
     });
 

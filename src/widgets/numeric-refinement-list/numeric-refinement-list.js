@@ -75,7 +75,7 @@ function numericRefinementList({
     RefinementList = autoHideContainerHOC(RefinementList);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
@@ -102,7 +102,7 @@ function numericRefinementList({
       };
     },
     render({results, state, createURL}) {
-      let facetValues = options.map(facetValue =>
+      const facetValues = options.map(facetValue =>
         ({
           ...facetValue,
           isRefined: isRefined(state, attributeName, facetValue),

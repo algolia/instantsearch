@@ -19,7 +19,7 @@ describe('autoHideContainer', () => {
     const {createRenderer} = TestUtils;
     const renderer = createRenderer();
     props.hello = 'son';
-    let AutoHide = autoHideContainer(TestComponent);
+    const AutoHide = autoHideContainer(TestComponent);
     renderer.render(<AutoHide {...props} />);
     const out = renderer.getRenderOutput();
     expect(out).toEqualJSX(<TestComponent hello="son" />);

@@ -82,7 +82,7 @@ function pagination({
     Pagination = autoHideContainerHOC(Pagination);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
     link: cx(bem('link'), userCssClasses.link),
@@ -95,7 +95,7 @@ function pagination({
     disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
   };
 
-  let labels = defaults(userLabels, defaultLabels);
+  const labels = defaults(userLabels, defaultLabels);
 
   return {
     init({helper}) {

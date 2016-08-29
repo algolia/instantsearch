@@ -15,7 +15,7 @@ class PriceRanges extends React.Component {
   }
 
   getForm() {
-    let labels = {
+    const labels = {
       currency: this.props.currency,
       ...this.props.labels
     };
@@ -41,13 +41,13 @@ class PriceRanges extends React.Component {
   }
 
   getItemFromFacetValue(facetValue) {
-    let cssClassItem = cx(
+    const cssClassItem = cx(
       this.props.cssClasses.item,
       {[this.props.cssClasses.active]: facetValue.isRefined}
     );
-    let key = `${facetValue.from}_${facetValue.to}`;
-    let handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
-    let data = {
+    const key = `${facetValue.from}_${facetValue.to}`;
+    const handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
+    const data = {
       currency: this.props.currency,
       ...facetValue
     };

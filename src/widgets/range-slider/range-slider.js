@@ -83,7 +83,7 @@ function rangeSlider({
     Slider = autoHideContainerHOC(Slider);
   }
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),

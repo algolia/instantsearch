@@ -3,7 +3,7 @@ import omit from 'lodash/omit';
 
 import Nouislider from 'react-nouislider';
 
-let cssPrefix = 'ais-range-slider--';
+const cssPrefix = 'ais-range-slider--';
 
 import isEqual from 'lodash/isEqual';
 

@@ -81,7 +81,7 @@ function refinementList({
   if (showMoreConfig && showMoreConfig.limit < limit) {
     throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
   }
-  let widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
+  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
 
   let RefinementList = RefinementListComponent;
   if (!container || !attributeName) {
@@ -108,7 +108,7 @@ function refinementList({
       {...templates, ...showMoreTemplates} :
       templates;
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
@@ -145,7 +145,7 @@ function refinementList({
         .search();
     },
     render({results, state, createURL}) {
-      let facetValues = results
+      const facetValues = results
         .getFacetValues(attributeName, {sortBy});
 
       // Bind createURL to this specific attribute
@@ -155,7 +155,7 @@ function refinementList({
 
       // Pass count of currently selected items to the header template
       const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
-      let headerFooterData = {
+      const headerFooterData = {
         header: {refinedFacetsCount}
       };
 

@@ -89,7 +89,7 @@ function hierarchicalMenu({
   // we use the first attribute name
   const hierarchicalFacetName = attributes[0];
 
-  let cssClasses = {
+  const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
