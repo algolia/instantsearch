@@ -5,10 +5,6 @@ class Selector extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   handleChange(event) {
     this.props.setValue(event.target.value);
   }
