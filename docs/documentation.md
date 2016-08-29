@@ -100,6 +100,23 @@ You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/insta
 
 </div>
 
+### Light build
+
+We created a light build that uses [Preact](https://preactjs.com/) instead of [React](http://reactjs.org/) internally.
+
+We recommend using the light build for new users and switching to it for existing users if you are not using
+React on your side.
+
+To use it, require this file:
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet ignore">
+{% highlight html %}
+<script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch-preact.min.js"></script>
+{% endhighlight %}
+  </div>
+</div>
+
 ### Initialization
 
 <div class="codebox-combo">
