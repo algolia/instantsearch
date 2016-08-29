@@ -29,7 +29,7 @@ describe('Selector', () => {
     expect(out).toEqualJSX(
       <select
         className="custom-root"
-        defaultValue="index-a"
+        value="index-a"
         onChange={() => {}}
       >
         <option className="custom-item" value="index-a">Index A</option>
@@ -50,7 +50,7 @@ describe('Selector', () => {
     expect(out).toEqualJSX(
       <select
         className="custom-root"
-        defaultValue={10}
+        value={10}
         onChange={() => {}}
       >
         <option className="custom-item" value={10}>10 results per page</option>
