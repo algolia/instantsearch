@@ -22,7 +22,7 @@ The `Toggle` widget is where users type their search queries.
 See [Making your own widgets](../Customization.md) for more information on how to use the `Toggle.connect` HOC.
 
 ```
-import {Toggle} from 'instantsearch-react';
+import {Toggle} from 'react-instantsearch';
 
 function MyToggle(props) {
   return (

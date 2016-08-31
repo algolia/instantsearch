@@ -30,7 +30,7 @@ Only for `RefinementListLinks`: `itemLink`
 See [Making your own widgets](../Customization.md) for more information on how to use the `RefinementList.connect` HOC.
 
 ```
-import {RefinementList.connect} from 'instantsearch-react';
+import {RefinementList.connect} from 'react-instantsearch';
 
 function Item(props) {
   const selected = props.selectedItems.indexOf(props.item.value) !== -1;

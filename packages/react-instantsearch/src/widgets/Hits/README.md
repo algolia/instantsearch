@@ -22,7 +22,7 @@ Displays the list of hits for the current search parameters.
 See [Making your own widgets](../Customization.md) for more information on how to use the `Hits.connect` HOC.
 
 ```
-import {Hits} from 'instantsearch-react';
+import {Hits} from 'react-instantsearch';
 
 function MyHits(props) {
   return (

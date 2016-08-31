@@ -14,7 +14,7 @@ Conditional component that only renders its single child when the current result
 See [Making your own widgets](../Customization.md) for more information on how to use the `NoResults.connect` HOC.
 
 ```
-import {NoResults.connect} from 'instantsearch-react';
+import {NoResults.connect} from 'react-instantsearch';
 
 function MyNoResults(props) {
   if (props.noResults) {

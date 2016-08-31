@@ -22,7 +22,7 @@ The `Stats` widget is where users type their search queries.
 See [Making your own widgets](../Customization.md) for more information on how to use the `Stats.connect` HOC.
 
 ```
-import {Stats} from 'instantsearch-react';
+import {Stats} from 'react-instantsearch';
 
 function MyStats(props) {
   return (

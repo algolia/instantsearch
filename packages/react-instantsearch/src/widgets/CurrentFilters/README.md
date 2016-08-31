@@ -22,7 +22,7 @@ Displays the list of filters currently applied to the search parameters.
 See [Making your own widgets](../Customization.md) for more information on how to use the `CurrentFilters.connect` HOC.
 
 ```
-import {CurrentFilters.connect} from 'instantsearch-react';
+import {CurrentFilters.connect} from 'react-instantsearch';
 
 function MyCurrentFilters(props) {
   return (

@@ -30,7 +30,7 @@ Only for `HitsPerPage`: `item`, `itemSelected`
 See [Making your own widgets](../Customization.md) for more information on how to use the `HitsPerPage.connect` HOC.
 
 ```
-import {HitsPerPage} from 'instantsearch-react';
+import {HitsPerPage} from 'react-instantsearch';
 
 function Option(props) {
   return (

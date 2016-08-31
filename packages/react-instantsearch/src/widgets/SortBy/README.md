@@ -30,7 +30,7 @@ Only for `SortByLinks`: `item`, `itemLink`, `itemSelected`
 See [Making your own widgets](../Customization.md) for more information on how to use the `SortBy.connect` HOC.
 
 ```
-import {SortBy.connect} from 'instantsearch-react';
+import {SortBy.connect} from 'react-instantsearch';
 
 function Option(props) {
   return (

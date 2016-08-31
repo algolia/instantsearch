@@ -22,7 +22,7 @@ Displays an error when the Algolia Search client had an issue fetching the resul
 See [Making your own widgets](../Customization.md) for more information on how to use the `Error.connect` HOC.
 
 ```
-import {Error} from 'instantsearch-react';
+import {Error} from 'react-instantsearch';
 
 function MyError(props) {
   if (props.error) {

@@ -19,7 +19,7 @@ See [Making your own widgets](../Customization.md) for more information on how t
 
 ```
 import {Children, Component} from 'react';
-import {ScrollTo.connect} from 'instantsearch-react';
+import {ScrollTo.connect} from 'react-instantsearch';
 
 class MyScrollTo extends Component {
   componentDidUpdate(prevProps) {

@@ -22,7 +22,7 @@ Lets the user pick between a list of refinement ranges for a particular numeric 
 See [Making your own widgets](../Customization.md) for more information on how to use the `NumericRefinementList.connect` HOC.
 
 ```
-import {NumericRefinementList.connect} from 'instantsearch-react';
+import {NumericRefinementList.connect} from 'react-instantsearch';
 
 function Item(props) {
   const value = props.selected ? null : props.item.value;

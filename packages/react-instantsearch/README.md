@@ -1,10 +1,10 @@
-# instantsearch-react
+# react-instantsearch
 
 ## Development
 
 ### Documentation
 
-We use the documentation website as the main way to develop instantsearch-react.
+We use the documentation website as the main way to develop react-instantsearch.
 
 ```sh
 npm start
