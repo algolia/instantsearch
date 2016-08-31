@@ -2,7 +2,7 @@
   "name": "docs",
   "private": true,
   "scripts": {
-    "start": "babel-node index"
+    "start": "babel-node index.js"
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -26,6 +26,8 @@
     "react-docgen": "^2.9.1",
     "react-dom": "^15.3.1",
     "recast": "^0.11.12",
-    "unescape-html": "^1.0.0"
+    "require-from-string": "^1.2.0",
+    "unescape-html": "^1.0.0",
+    "webpack-externals-plugin": "^1.0.0"
   }
 }

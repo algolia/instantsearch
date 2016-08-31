@@ -2,7 +2,7 @@
   "name": "instantsearch-react",
   "private": true,
   "scripts": {
-    "start": "./scripts/start.sh",
+    "start": "cd docgen/ && npm install && npm start",
     "examples": "(cd examples && webpack-dev-server --config webpack.config.babel.js --hot --content-base static --history-api-fallback)",
     "lint": "eslint \"**/*.js\" --ignore-path ../../.gitignore",
     "test": "jest --no-cache",
