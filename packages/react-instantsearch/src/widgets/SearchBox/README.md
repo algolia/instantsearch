@@ -11,7 +11,7 @@ The `SearchBox` widget is where users type their search queries.
 
 ## Props
 
-<!-- props default ./index -->
+<!-- props default ./index.js -->
 
 ### Theme
 

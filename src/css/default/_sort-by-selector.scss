@@ -1,8 +1,0 @@
-@import "../base";
-@import "variables";
-
-@include block(sort-by-selector) {
-  @include element(item) {
-    /* selector item */
-  }
-}

@@ -1,19 +1,6 @@
 # react-instantsearch
 
-## Development
+This is the [React](https://facebook.github.io/react/) version of
+Algolia's `instantsearch` library.
 
-### Documentation
-
-We use the documentation website as the main way to develop react-instantsearch.
-
-```sh
-npm start
-```
-
-Go to http://localhost:8080/index.html
-
-### Examples
-
-```sh
-npm run examples
-```
+Go to the [instantsearch website](https://community.algolia.com/instantsearch.js/v2/react) for more information.
