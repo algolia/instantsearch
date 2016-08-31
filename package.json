@@ -44,8 +44,8 @@
     "webpack-externals-plugin": "1.0.0"
   },
   "engines": {
-    "node": "6.5.0",
-    "npm": "3.10.3"
+    "node": "^6.5.0",
+    "npm": "^3.10.3"
   },
   "license": "MIT"
 }
