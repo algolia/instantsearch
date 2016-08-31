@@ -24,7 +24,7 @@ The hierarchical menu is a widget that lets the user explore a tree-like structu
 ## Example
 
 ```
-import {HierarchicalMenu} from 'instantsearch-react';
+import {HierarchicalMenu} from 'react-instantsearch';
 
 export default Menu() {
   return (
@@ -45,7 +45,7 @@ export default Menu() {
 See [Making your own widgets](../Customization.md) for more information on how to use the `HierarchicalMenu.connect` HOC.
 
 ```
-import {HierarchicalMenu.connect} from 'instantsearch-react';
+import {HierarchicalMenu.connect} from 'react-instantsearch';
 
 function Item(props) {
   return (

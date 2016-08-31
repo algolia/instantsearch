@@ -32,7 +32,7 @@ Only for `Menu`: `count(n)`, `showMore(isExtended)`
 See [Making your own widgets](../Customization.md) for more information on how to use the `Menu.connect` HOC.
 
 ```
-import {Menu} from 'instantsearch-react';
+import {Menu} from 'react-instantsearch';
 
 function MyMenu(props) {
   return (

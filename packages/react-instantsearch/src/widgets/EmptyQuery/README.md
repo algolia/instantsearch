@@ -14,7 +14,7 @@ Conditional component that only renders its single child when the current query 
 See [Making your own widgets](../Customization.md) for more information on how to use the `EmptyQuery.connect` HOC.
 
 ```
-import {EmptyQuery.connect} from 'instantsearch-react';
+import {EmptyQuery.connect} from 'react-instantsearch';
 
 function MyEmptyQuery(props) {
   if (props.emptyQuery) {

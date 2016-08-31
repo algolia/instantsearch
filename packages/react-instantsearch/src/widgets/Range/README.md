@@ -35,7 +35,7 @@ Name | Type | Default |Description
 See [Making your own widgets](../Customization.md) for more information on how to use the `Range.connect` HOC.
 
 ```
-import {Range} from 'instantsearch-react';
+import {Range} from 'react-instantsearch';
 
 function MyRange(props) {
   return (

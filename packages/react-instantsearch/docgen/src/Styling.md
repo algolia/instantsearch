@@ -15,7 +15,7 @@ By default, the `theme` prop is initialized with `className`s that respect the [
 ### Example: Styling a SearchBox
 
 ```
-import {SearchBox} from 'instantsearch-react';
+import {SearchBox} from 'react-instantsearch';
 
 export default function ThemedSearchBox(props) {
   return (

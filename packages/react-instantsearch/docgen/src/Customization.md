@@ -8,7 +8,7 @@ nav_sort: 5
 
 # Making your own widgets
 
-While instantsearch-react already provides widgets out of the box, there are cases where you need to implement a custom feature that isn't covered by the default widget set.
+While react-instantsearch already provides widgets out of the box, there are cases where you need to implement a custom feature that isn't covered by the default widget set.
 
 ## Default widgets connectors
 
@@ -17,7 +17,7 @@ All default widgets have a corresponding higher-order component that acts as a c
 Those connectors are available as the `connect` property on the widgets they connect. For instance, the `SearchBox` widget uses the `SearchBox.connect` higher-order component under the hood in order to retrieve and refine the current query.
 
 ```js
-import {SearchBox} from 'instantsearch-react';
+import {SearchBox} from 'react-instantsearch';
 
 const MySearchBox = props =>
   <input

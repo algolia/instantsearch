@@ -26,7 +26,7 @@ The `SearchBox` widget is where users type their search queries.
 See [Making your own widgets](../Customization.md) for more information on how to use the `SearchBox.connect` HOC.
 
 ```
-import {SearchBox.connect} from 'instantsearch-react';
+import {SearchBox.connect} from 'react-instantsearch';
 
 function MySearchBox(props) {
   return (

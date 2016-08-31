@@ -1,5 +1,5 @@
 {
-  "name": "instantsearch-react",
+  "name": "react-instantsearch",
   "private": true,
   "scripts": {
     "start": "cd docgen/ && npm install && npm start",

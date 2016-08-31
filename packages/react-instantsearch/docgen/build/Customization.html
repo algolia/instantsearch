@@ -9,7 +9,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <title>instantsearch-react | Making your own widgets</title>
+    <title>react-instantsearch | Making your own widgets</title>
 
     <link rel="stylesheet" href="/assets/theme.css">
     <link rel="stylesheet" href="/assets/site.css">
@@ -210,11 +210,11 @@
 
     <div class="content">
       <h1 id="making-your-own-widgets">Making your own widgets</h1>
-<p>While instantsearch-react already provides widgets out of the box, there are cases where you need to implement a custom feature that isn&#39;t covered by the default widget set.</p>
+<p>While react-instantsearch already provides widgets out of the box, there are cases where you need to implement a custom feature that isn&#39;t covered by the default widget set.</p>
 <h2 id="default-widgets-connectors">Default widgets connectors</h2>
 <p>All default widgets have a corresponding higher-order component that acts as a connector, providing the required props to the widget.</p>
 <p>Those connectors are available as named imports. Their name are composed of the <code class="CodeMirror cm-s-default">connect</code> prefix followed by the name of the particular widget they connect. For instance, the <code class="CodeMirror cm-s-default">SearchBox</code> widgets uses the <code class="CodeMirror cm-s-default">connectSearchBox</code> higher-order component under the hood in order to retrieve and refine the current query.</p>
-<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">connectSearchBox</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;instantsearch-react&#39;</span>;
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">connectSearchBox</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
 
 <span class="cm-keyword">const</span> <span class="cm-def">MySearchBox</span> <span class="cm-operator">=</span> <span class="cm-def">props</span> <span class="cm-operator">=&gt;</span>
   <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">input</span>

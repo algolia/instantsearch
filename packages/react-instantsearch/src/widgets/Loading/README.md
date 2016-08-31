@@ -14,7 +14,7 @@ Conditional component that only renders its single child when results are being 
 See [Making your own widgets](../Customization.md) for more information on how to use the `Loading.connect` HOC.
 
 ```
-import {Loading} from 'instantsearch-react';
+import {Loading} from 'react-instantsearch';
 
 function MyLoading(props) {
   if (props.loading) {

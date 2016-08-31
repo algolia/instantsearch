@@ -13,7 +13,7 @@ All widgets rendering text that is not otherwise configurable via props accept a
 ### Example: Translating a Pagination
 
 ```
-import {Pagination} from 'instantsearch-react';
+import {Pagination} from 'react-instantsearch';
 
 function TranslatedPagination(props) {
   return (
