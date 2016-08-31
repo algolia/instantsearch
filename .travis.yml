@@ -6,3 +6,4 @@ before_cache: npm prune
 cache:
   directories:
   - node_modules
+  - packages/react-instantsearch/node_modules
