@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import createStore from './createStore';
-jest.unmock('./createStore');
+
 
 describe('createStore', () => {
   describe('getState', () => {

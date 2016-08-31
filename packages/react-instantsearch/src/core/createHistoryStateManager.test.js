@@ -2,11 +2,10 @@
 /* eslint-disable no-console */
 
 import createHistoryStateManager from './createHistoryStateManager';
-jest.unmock('./createHistoryStateManager');
-jest.unmock('qs');
+
 
 import MockDate from 'mockdate';
-jest.unmock('mockdate');
+
 
 const createMockHistory = (initialLocation, isV3) => {
   const listeners = [];

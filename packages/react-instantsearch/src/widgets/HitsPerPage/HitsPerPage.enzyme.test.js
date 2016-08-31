@@ -4,12 +4,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 
 import HitsPerPage from './HitsPerPage';
-jest.unmock('./HitsPerPage');
-jest.unmock('../../components/LinkList');
-jest.unmock('../../components/Link');
-jest.unmock('../../core/propTypes');
-jest.unmock('../../core/translatable');
-jest.unmock('../../core/themeable');
+
 
 describe('HitsPerPage', () => {
   it('refines its value on change', () => {

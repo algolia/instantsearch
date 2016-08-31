@@ -5,8 +5,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 
 import createConnector from './createConnector';
-jest.unmock('./createConnector');
-jest.unmock('./utils');
+
 
 function createState() {
   return {

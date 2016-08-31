@@ -6,8 +6,8 @@ import {mount} from 'enzyme';
 import {createHistory} from 'history';
 
 import InstantSearch from './InstantSearch';
-jest.unmock('./InstantSearch');
-jest.unmock('debug');
+
+
 import createHistoryStateManager from './createHistoryStateManager';
 jest.mock('./createHistoryStateManager', () => jest.fn(() => ({
   getStateFromCurrentLocation: jest.fn(),
@@ -16,6 +16,7 @@ import createInstantSearchManager from './createInstantSearchManager';
 jest.mock('./createInstantSearchManager', () => jest.fn(() => ({
   context: {},
 })));
+jest.mock('history');
 
 const DEFAULT_PROPS = {
   appId: 'foo',

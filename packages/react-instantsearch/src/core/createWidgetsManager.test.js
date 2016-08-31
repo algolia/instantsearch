@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import createWidgetsManager from './createWidgetsManager';
-jest.unmock('./createWidgetsManager');
+
 
 describe('createWidgetsManager', () => {
   describe('registerWidget', () => {
@@ -21,6 +21,7 @@ describe('createWidgetsManager', () => {
     });
 
     it('schedules an update', () => {
+      jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
       jest.runAllTicks();
@@ -28,11 +29,13 @@ describe('createWidgetsManager', () => {
       expect(onUpdate.mock.calls.length).toBe(0);
       jest.runAllTicks();
       expect(onUpdate.mock.calls.length).toBe(1);
+      jest.useRealTimers();
     });
   });
 
   describe('update', () => {
     it('schedules an update', () => {
+      jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
       jest.runAllTicks();
@@ -40,6 +43,7 @@ describe('createWidgetsManager', () => {
       expect(onUpdate.mock.calls.length).toBe(0);
       jest.runAllTicks();
       expect(onUpdate.mock.calls.length).toBe(1);
+      jest.useRealTimers();
     });
   });
 });
