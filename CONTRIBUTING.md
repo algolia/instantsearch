@@ -14,21 +14,9 @@ Hi (future) collaborator!
 - [New API proposal](#new-api-proposal)
 - [How to write issues](#how-to-write-issues)
 - [Development workflow](#development-workflow)
-- [Serving the build](#serving-the-build)
 - [Commit message guidelines](#commit-message-guidelines)
-  - [Revert](#revert)
-  - [Type](#type)
-  - [Scope](#scope)
-  - [Subject](#subject)
-  - [Body](#body)
-  - [Footer](#footer)
 - [Squash your commits](#squash-your-commits)
 - [When are issues closed?](#when-are-issues-closed)
-- [Milestones](#milestones)
-- [Releasing](#releasing)
-- [Hotfixes](#hotfixes)
-  - [Releasing hotfixes](#releasing-hotfixes)
-  - [Documentation updates](#documentation-updates)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -39,8 +27,6 @@ Have a fix or a new feature? [Search for corresponding issues](https://github.co
 Always check the status of the [develop branch](https://github.com/algolia/instantsearch.js/tree/develop) for the freshest code.
 
 Always submit pull requests to the develop branch.
-
-**Wanna help us?** All issues belonging to the [`next` milestone](https://github.com/algolia/instantsearch.js/milestones/next) can be worked on.
 
 # New API proposal
 
@@ -61,13 +47,11 @@ Since instantsearch.js is a UI library, if your issue is UI related then adding 
 Requirements:
 - [Node.js](https://nodejs.org/en/)
 - npm@3 (comes with latest Node.js)
-- [Ruby](https://www.ruby-lang.org/en/)
-- [Bundler](http://bundler.io/)
 
-Rapidly iterate with our example app:
+Rapidly iterate with our documentation:
 
 ```sh
-npm run dev
+npm start
 ```
 
 Run the tests and lint:
@@ -75,25 +59,6 @@ Run the tests and lint:
 ```sh
 npm test
 ```
-
-Launch the website docs dev tool:
-```
-npm run dev:docs
-# open http://localhost:4000/
-```
-
-# Serving the build
-
-For some use cases like building a demo, you may want to serve the current build
-on an http endpoint.
-
-To do so:
-
-```sh
-npm run serve
-```
-
-Will build, watch for changes and serve instantsearch.css and instantsearch.js on http://localhost:8080.
 
 # Commit message guidelines
 
@@ -178,41 +143,3 @@ Once the a fix is done, having the fix in the `develop` branch is not sufficient
 So that you never ask yourself "Is this released?".
 
 Instead of closing the issue, we will add a ` ✔ to be released` label.
-
-# Milestones
-
-- `next` => Ideas, questions, refactors, bugs that were discuseed, turned into clear actions by the maintainers. You can work on this.
-- `x.x.x` => selected `next` actions to be done in a release. You can work on this.
-- no milestone => Still need investigation / discussion
-
-# Releasing
-
-If you are a maintainer, you can release.
-
-We use [semver](http://semver-ftw.org/).
-
-This task will merge develop into master.
-
-# Hotfixes
-
-All our work is done on the develop branch but it could be necessary to push a hotfix to the master
-branch and do a patch release. To fix a very important bug.
-
-For this, you should:
-- add `HOTFIX` to the commit message **body**
-- submit your pull request to the master branch
-
-## Releasing hotfixes
-
-You must be on the master branch.
-
-```sh
-HOTFIX=1 npm run release
-```
-
-## Documentation updates
-
-If you have important documentation update to release without wanting to release
-a new version of instantsearch.js, you can do a documentation hotfix.
-
-Then once the hotfix is merged into master, the documentation will be updated automatically.
