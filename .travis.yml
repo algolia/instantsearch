@@ -1,4 +1,4 @@
 language: node_js
 node_js: stable
 before_install:
-  - cd packages/react-instantsearch && npm install
+  - (cd packages/react-instantsearch && npm install)
