@@ -1,2 +1,4 @@
+# eslint by default only ignores root node_modules/
 packages/*/node_modules
 packages/examples
+coverage/

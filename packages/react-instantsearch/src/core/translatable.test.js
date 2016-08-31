@@ -5,7 +5,7 @@ import React from 'react';
 import {shallow} from 'enzyme';
 
 import translatable from './translatable';
-jest.unmock('./translatable');
+
 
 describe('translatable', () => {
   it('provides a translate prop to the composed component', () => {

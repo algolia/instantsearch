@@ -4,9 +4,7 @@ import React from 'react';
 import {mount} from 'enzyme';
 
 import SearchBox from './SearchBox';
-jest.unmock('./SearchBox');
-jest.unmock('../../core/themeable');
-jest.unmock('../../core/translatable');
+
 
 let wrapper;
 

@@ -7,7 +7,7 @@ import reactThemeable from 'react-themeable';
 jest.mock('react-themeable');
 
 import themeable from './themeable';
-jest.unmock('./themeable');
+
 
 describe('themeable', () => {
   afterEach(() => {

@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 
 import createInstantSearchManager from './createInstantSearchManager';
-jest.unmock('./createInstantSearchManager');
+
 
 import algoliasearch from 'algoliasearch';
 jest.mock('algoliasearch', () => jest.fn());

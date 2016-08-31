@@ -2,10 +2,11 @@
 /* eslint-disable no-console */
 
 import {SearchParameters} from 'algoliasearch-helper';
-jest.unmock('algoliasearch-helper');
+
 
 import connect from './connect';
-jest.unmock('./connect');
+jest.mock('../../core/createConnector');
+
 
 const {
   getProps,

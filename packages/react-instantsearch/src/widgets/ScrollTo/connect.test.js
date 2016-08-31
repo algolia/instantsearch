@@ -1,7 +1,8 @@
 /* eslint-env jest, jasmine */
 
 import connect from './connect';
-jest.unmock('./connect');
+jest.mock('../../core/createConnector');
+
 
 const {getProps} = connect;
 

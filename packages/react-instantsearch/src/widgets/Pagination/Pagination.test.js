@@ -4,13 +4,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Pagination from './Pagination';
-jest.unmock('./Pagination');
-jest.unmock('../../components/LinkList');
-jest.unmock('../../components/Link');
-jest.unmock('../../core/propTypes');
-jest.unmock('../../core/utils');
-jest.unmock('../../core/translatable');
-jest.unmock('../../core/themeable');
+
 
 const REQ_PROPS = {
   createURL: () => '#',

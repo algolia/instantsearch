@@ -4,9 +4,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 
 import Hits from './Hits';
-jest.unmock('./Hits');
-jest.unmock('../../core/themeable');
-jest.unmock('../../core/propTypes');
+
 
 describe('Hits', () => {
   it('accepts a itemComponent prop', () => {

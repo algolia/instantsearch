@@ -4,12 +4,7 @@ import React from 'react';
 import renderer from 'react/lib/ReactTestRenderer';
 
 import HitsPerPage from './HitsPerPage';
-jest.unmock('./HitsPerPage');
-jest.unmock('../../components/LinkList');
-jest.unmock('../../components/Link');
-jest.unmock('../../core/propTypes');
-jest.unmock('../../core/translatable');
-jest.unmock('../../core/themeable');
+
 
 describe('HitsPerPage', () => {
   it('supports passing number items', () => {

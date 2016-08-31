@@ -8,9 +8,8 @@ import {
   assertFacetDefined,
   getDisplayName,
 } from './utils';
-jest.unmock('./utils');
+
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
-jest.unmock('algoliasearch-helper');
 
 describe('utils', () => {
   describe('isSpecialClick', () => {
@@ -92,12 +91,7 @@ describe('utils', () => {
     });
 
     it('sets a default displayName when not able to find one', () => {
-      const SuperComponent = React.createClass({
-        render() { return null; },
-        displayName: undefined, // latest babel
-      });
-
-      expect(getDisplayName(SuperComponent)).toBe('UnknownComponent');
+      expect(getDisplayName(() => null)).toBe('UnknownComponent');
     });
   });
 });
