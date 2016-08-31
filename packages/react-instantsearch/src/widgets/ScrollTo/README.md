@@ -11,7 +11,7 @@ Scrolls the window to itself when the page changes. Note that if you've provided
 
 ## Props
 
-<!-- props default ./index -->
+<!-- props default ./index.js -->
 
 ## Implementing your own ScrollTo
 

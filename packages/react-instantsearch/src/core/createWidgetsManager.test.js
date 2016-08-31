@@ -42,5 +42,4 @@ describe('createWidgetsManager', () => {
       expect(onUpdate.mock.calls.length).toBe(1);
     });
   });
-
 });
