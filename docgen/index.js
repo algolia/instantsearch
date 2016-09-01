@@ -38,6 +38,7 @@ metalsmith(__dirname)
   .use(watch({
     livereload: true,
     paths: {
+      // eslint-disable-next-line no-template-curly-in-string
       '${source}/**/*': true,
       'assets/**/*': true,
       'layouts/**/*': true,

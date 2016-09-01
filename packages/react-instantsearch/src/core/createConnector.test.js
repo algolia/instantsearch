@@ -6,7 +6,6 @@ import {mount} from 'enzyme';
 
 import createConnector from './createConnector';
 
-
 function createState() {
   return {
     widgets: {},

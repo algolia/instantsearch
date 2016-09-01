@@ -3,10 +3,8 @@
 
 import {SearchParameters} from 'algoliasearch-helper';
 
-
 import connect from './connect';
 jest.mock('../../core/createConnector');
-
 
 const {
   getProps,

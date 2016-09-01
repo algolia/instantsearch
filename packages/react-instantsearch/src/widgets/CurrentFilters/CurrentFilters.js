@@ -21,7 +21,6 @@ class CurrentFilters extends Component {
       return null;
     }
 
-
     return (
       <div {...applyTheme('root', 'root')}>
         <div {...applyTheme('filters', 'filters')}>

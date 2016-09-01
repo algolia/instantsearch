@@ -3,7 +3,6 @@
 import connect from './connect';
 jest.mock('../../core/createConnector');
 
-
 const {getProps} = connect;
 
 let props;

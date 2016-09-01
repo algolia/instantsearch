@@ -3,7 +3,6 @@
 
 import createInstantSearchManager from './createInstantSearchManager';
 
-
 import algoliasearch from 'algoliasearch';
 jest.mock('algoliasearch', () => jest.fn());
 import algoliasearchHelper from 'algoliasearch-helper';

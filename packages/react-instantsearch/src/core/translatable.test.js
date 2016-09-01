@@ -6,7 +6,6 @@ import {shallow} from 'enzyme';
 
 import translatable from './translatable';
 
-
 describe('translatable', () => {
   it('provides a translate prop to the composed component', () => {
     const Dummy = () => null;

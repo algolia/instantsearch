@@ -5,7 +5,6 @@ import renderer from 'react-test-renderer';
 
 import Pagination from './Pagination';
 
-
 const REQ_PROPS = {
   createURL: () => '#',
   refine: () => null,

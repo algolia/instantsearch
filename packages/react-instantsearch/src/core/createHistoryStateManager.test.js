@@ -3,9 +3,7 @@
 
 import createHistoryStateManager from './createHistoryStateManager';
 
-
 import MockDate from 'mockdate';
-
 
 const createMockHistory = (initialLocation, isV3) => {
   const listeners = [];

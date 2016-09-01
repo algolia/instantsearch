@@ -5,7 +5,6 @@ import {mount} from 'enzyme';
 
 import Pagination from './Pagination';
 
-
 const REQ_PROPS = {
   createURL: () => '#',
   refine: () => null,

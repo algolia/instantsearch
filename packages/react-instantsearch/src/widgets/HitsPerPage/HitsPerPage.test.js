@@ -5,7 +5,6 @@ import renderer from 'react/lib/ReactTestRenderer';
 
 import HitsPerPage from './HitsPerPage';
 
-
 describe('HitsPerPage', () => {
   it('supports passing number items', () => {
     const tree = renderer.create(

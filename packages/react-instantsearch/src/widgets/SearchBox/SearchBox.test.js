@@ -5,7 +5,6 @@ import renderer from 'react-test-renderer';
 
 import SearchBox from './SearchBox';
 
-
 let tree;
 
 describe('SearchBox', () => {

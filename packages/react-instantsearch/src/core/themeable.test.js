@@ -8,7 +8,6 @@ jest.mock('react-themeable');
 
 import themeable from './themeable';
 
-
 describe('themeable', () => {
   afterEach(() => {
     reactThemeable.mockClear();

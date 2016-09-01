@@ -5,7 +5,6 @@ import renderer from 'react-test-renderer';
 
 import Hits from './Hits';
 
-
 describe('Hits', () => {
   it('accepts a itemComponent prop', () => {
     const hits = [{objectID: 0}, {objectID: 1}, {objectID: 2}];
