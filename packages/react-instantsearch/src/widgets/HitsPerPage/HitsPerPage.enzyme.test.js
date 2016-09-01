@@ -1,5 +1,8 @@
 /* eslint-env jest, jasmine */
 
+// @TODO re-include this test in the normal .test.js
+// when React 15.4 is out: https://github.com/facebook/react/issues/7386
+
 import React from 'react';
 import {mount} from 'enzyme';
 
