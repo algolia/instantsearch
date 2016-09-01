@@ -14,7 +14,9 @@
     "enzyme": "2.4.1",
     "jest-cli": "15.0.0",
     "mockdate": "1.0.4",
+    "react": "15.3.1",
     "react-addons-test-utils": "15.3.1",
+    "react-dom": "15.3.1",
     "react-test-renderer": "15.3.1",
     "webpack": "1.13.1"
   },
@@ -24,10 +26,12 @@
     "history": "2.1.2",
     "lodash": "4.14.1",
     "qs": "6.2.1",
-    "react": "15.3.1",
     "react-addons-shallow-compare": "15.3.1",
-    "react-dom": "15.3.1",
     "react-themeable": "1.1.0"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0",
+    "react-dom": "^15.0.0"
   },
   "jest": {
     "globals": {
