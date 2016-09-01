@@ -3,7 +3,6 @@
 
 import createStore from './createStore';
 
-
 describe('createStore', () => {
   describe('getState', () => {
     it('retrieves the current state of the store', () => {

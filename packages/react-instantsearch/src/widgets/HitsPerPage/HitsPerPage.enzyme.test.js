@@ -5,7 +5,6 @@ import {mount} from 'enzyme';
 
 import HitsPerPage from './HitsPerPage';
 
-
 describe('HitsPerPage', () => {
   it('refines its value on change', () => {
     const refine = jest.fn();

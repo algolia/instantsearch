@@ -5,7 +5,6 @@ import {mount} from 'enzyme';
 
 import SearchBox from './SearchBox';
 
-
 let wrapper;
 
 // This is in a separate file as react-dom and react-test-renderer don't play

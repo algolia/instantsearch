@@ -3,7 +3,6 @@
 
 import createWidgetsManager from './createWidgetsManager';
 
-
 describe('createWidgetsManager', () => {
   describe('registerWidget', () => {
     it('adds the widget to the widgets list', () => {

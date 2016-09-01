@@ -1,7 +1,7 @@
 /* eslint-env jest, jasmine */
 
 import {SearchParameters} from 'algoliasearch-helper';
-import connect from './connect';
+import connect from './connect.js';
 jest.mock('../../core/createConnector');
 
 const {getSearchParameters, getProps} = connect;

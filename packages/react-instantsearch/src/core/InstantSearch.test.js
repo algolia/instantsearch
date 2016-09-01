@@ -7,7 +7,6 @@ import {createHistory} from 'history';
 
 import InstantSearch from './InstantSearch';
 
-
 import createHistoryStateManager from './createHistoryStateManager';
 jest.mock('./createHistoryStateManager', () => jest.fn(() => ({
   getStateFromCurrentLocation: jest.fn(),
@@ -78,7 +77,6 @@ describe('InstantSearch', () => {
         state: undefined,
       });
     }).toThrowError('You must provide a `state` prop alongside the `onStateChange`, `createURL` props on <InstantSearch>');
-
 
     expect(() => {
       const wrapper = mount(
