@@ -40,7 +40,7 @@ class Slider extends React.Component {
         values: [0, 50, 100],
         stepped: true,
         format: {
-          to: v => Number(v).toLocaleString()
+          to: this.props.pipsFormatter
         }
       };
     } else {
@@ -51,7 +51,7 @@ class Slider extends React.Component {
       <Nouislider
         // NoUiSlider also accepts a cssClasses prop, but we don't want to
         // provide one.
-        {...omit(this.props, 'cssClasses')}
+        {...omit(this.props, ['cssClasses', 'pipsFormatter'])}
         animate={false}
         behaviour={'snap'}
         connect
@@ -79,7 +79,8 @@ Slider.propTypes = {
         to: React.PropTypes.func
       })
     )
-  ])
+  ]),
+  pipsFormatter: React.PropTypes.func.isRequired
 };
 
 export default Slider;

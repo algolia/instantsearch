@@ -21,7 +21,8 @@ describe('Slider', () => {
     renderer = createRenderer();
 
     props = {
-      range: {min: 0, max: 5000}
+      range: {min: 0, max: 5000},
+      pipsFormatter: () => {}
     };
   });
 
