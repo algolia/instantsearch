@@ -10,6 +10,7 @@ import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';
 import SliderComponent from '../../components/Slider/Slider.js';
+import isInteger from 'is-integer';
 
 const bem = bemHelper('ais-range-slider');
 const defaultTemplates = {
@@ -161,6 +162,10 @@ function rangeSlider({
         max: null
       };
 
+      const pipsFormatter = isInteger(step) ?
+        v => Math.round(Number(v)).toLocaleString() :
+        v => Number(v).toLocaleString();
+
       if (userMin !== undefined) stats.min = userMin;
       if (userMax !== undefined) stats.max = userMax;
 
@@ -182,6 +187,7 @@ function rangeSlider({
           step={step}
           templateProps={this._templateProps}
           tooltips={tooltips}
+          pipsFormatter={pipsFormatter}
         />,
         containerNode
       );
