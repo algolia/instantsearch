@@ -6,7 +6,8 @@ set -ev # exit when error
 npm test
 # we need to build to run functional tests
 NODE_ENV=production npm run build
-npm run test:functional
+INDEX_PAGE=index npm run test:functional
+INDEX_PAGE=index-preact npm run test:functional
 ./scripts/validate-commit-msgs.sh
 
 # test the website can be built without errors
