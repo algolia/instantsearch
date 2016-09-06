@@ -12,6 +12,7 @@ We use our documentation as the main way to develop instantsearch.js.
 
 ```
 npm install
+(cd packages/react-instantsearch && npm install)
 npm start
 ```
 
