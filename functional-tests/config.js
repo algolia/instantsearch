@@ -1,5 +1,6 @@
 import testServer from './testServer.js';
 import {clearAll, searchBox} from './utils.js';
+const INDEX_PAGE = process.env.INDEX_PAGE || 'index.html';
 
 let conf = {
   specs: [
@@ -18,7 +19,7 @@ let conf = {
   },
   before() {
     browser.timeoutsImplicitWait(500);
-    browser.url('/');
+    browser.url(`/${INDEX_PAGE}.html`);
     browser.waitForText('#hits', 30000);
 
     if (!browser.isMobile) {
