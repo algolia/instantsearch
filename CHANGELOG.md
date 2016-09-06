@@ -1,3 +1,14 @@
+<a name="1.8.5"></a>
+## [1.8.5](https://github.com/algolia/instantsearch.js/compare/v1.8.4...v1.8.5) (2016-09-06)
+
+
+### Bug Fixes
+
+* **deps:** upgrade all deps 2016-09-05 (#1261) ([408d597](https://github.com/algolia/instantsearch.js/commit/408d597))
+* **rangeSlider:** round pips numbers when step is integer (#1255) ([b993033](https://github.com/algolia/instantsearch.js/commit/b993033)), closes [#1254](https://github.com/algolia/instantsearch.js/issues/1254)
+
+
+
 <a name="1.8.4"></a>
 ## [1.8.4](https://github.com/algolia/instantsearch.js/compare/v1.8.3...v1.8.4) (2016-08-29)
 
