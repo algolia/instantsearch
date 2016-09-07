@@ -9,6 +9,7 @@ export default createConnector({
     }
     return {
       noResults: search.results.nbHits === 0,
+      query: search.results.query,
     };
   },
 });
