@@ -15,6 +15,8 @@ export default function inlineProps(files, m, callback) {
     const contents = file.contents.toString();
     const propMatcher = /<!-- props ([A-Za-z\.]+) (.*) -->/g;
     let match;
+    // there can be multiple places in a single file
+    // where we try to inline props
     while ((match = propMatcher.exec(contents)) !== null) {
       const [full, exportName, path] = match;
       const fullPath = r(file.path, '..', path);
