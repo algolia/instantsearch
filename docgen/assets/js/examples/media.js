@@ -1,4 +1,3 @@
-import {InstantSearch} from 'react-instantsearch';
+/* eslint-disable no-console */
 
-console.log(InstantSearch);
-console.log('uhhh');
+console.log('media');

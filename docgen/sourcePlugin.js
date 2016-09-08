@@ -13,7 +13,9 @@ export default function source(dir, only, processFiles) {
             [newName]: newFile,
           };
         }, {});
-        // Yep
+        // We modify previous metalsmith files by reference, this
+        // is how metalsmith works
+        // https://github.com/metalsmith/metalsmith#useplugin
         Object.assign(files, processedFiles);
         callback(err);
       });

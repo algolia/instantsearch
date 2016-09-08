@@ -21,8 +21,7 @@
       <%- contents %>
     </div>
 
-    <script src="<%= webpack.assets[`${name}.js`] %>"></script>
-
+    <script src="http://localhost:8081/<%= name %>.js"></script>
     <% if (env !== 'production') { %>
       <script src="http://localhost:35729/livereload.js"></script>
     <% } %>

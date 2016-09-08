@@ -10,7 +10,6 @@ nav_sort: 1
 
 Connects to your Algolia index and provides data to all children widgets.
 
-
 ```js
 import {InstantSearch, SearchBox, Hits} from 'react-instantsearch';
 

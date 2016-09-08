@@ -1,1 +1,3 @@
-console.log('This is the API js file');
+/* eslint-disable no-console */
+
+console.log('api');

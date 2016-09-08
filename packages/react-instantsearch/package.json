@@ -1,30 +1,28 @@
 {
   "name": "react-instantsearch",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "cd docgen/ && npm install && npm start",
-    "examples": "(cd examples && webpack-dev-server --config webpack.config.babel.js --hot --content-base static --history-api-fallback)",
-    "lint": "eslint \"**/*.js\" --ignore-path ../../.gitignore",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "dev": "jest --watch",
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "babel-jest": "15.0.0",
     "enzyme": "2.4.1",
-    "jest-cli": "15.0.0",
+    "jest-cli": "15.1.1",
     "mockdate": "1.0.4",
     "react": "15.3.1",
     "react-addons-test-utils": "15.3.1",
     "react-dom": "15.3.1",
     "react-test-renderer": "15.3.1",
-    "webpack": "1.13.1"
+    "webpack": "1.13.2"
   },
   "dependencies": {
-    "algoliasearch": "3.16.0",
+    "algoliasearch": "3.18.1",
     "algoliasearch-helper": "2.13.0",
     "history": "2.1.2",
-    "lodash": "4.14.1",
+    "lodash": "4.15.0",
     "qs": "6.2.1",
     "react-addons-shallow-compare": "15.3.1",
     "react-themeable": "1.1.0"
