@@ -6,7 +6,8 @@
     "lint:fix": "npm run lin eslint . --fix",
     "postinstall": "cd packages/react-instantsearch && npm install",
     "doctoc": "doctoc --maxlevel 1 README.md CONTRIBUTING.md",
-    "test": "(cd packages/react-instantsearch && npm test) && npm run lint"
+    "test": "(cd packages/react-instantsearch && npm test) && npm run lint",
+    "dev": "cd packages/react-instantsearch && npm run dev"
   },
   "repository": "algolia/instantsearch.js",
   "dependencies": {
