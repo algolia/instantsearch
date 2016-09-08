@@ -38,10 +38,12 @@
     "react": "15.3.1",
     "react-docgen": "2.10.0",
     "react-dom": "15.3.1",
+    "react-instantsearch": "file:./packages/react-instantsearch/",
     "recast": "0.11.12",
     "require-from-string": "1.2.0",
     "unescape-html": "1.0.0",
     "webpack": "1.13.2",
+    "webpack-dev-server": "1.15.1",
     "webpack-externals-plugin": "1.0.0"
   },
   "engines": {

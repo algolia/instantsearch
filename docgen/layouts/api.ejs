@@ -41,8 +41,7 @@
       <%- contents %>
     </div>
 
-    <script src="<%= webpack.assets['api.js'] %>"></script>
-
+    <script src="http://localhost:8081/api.js"></script>
     <% if (env !== 'production') { %>
       <script src="http://localhost:35729/livereload.js"></script>
     <% } %>
