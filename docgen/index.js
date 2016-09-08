@@ -10,12 +10,11 @@ import watch from 'metalsmith-watch';
 import serve from 'metalsmith-serve';
 import {join} from 'path';
 
+import './webpackDevServer.js';
 import renderer from './renderer';
 import inlineProps from './inlinePropsPlugin';
 import source from './sourcePlugin';
-
-import webpackPlugin from 'ms-webpack';
-import webpackConfiguration from './webpack.config.babel.js';
+import onlyChanged from './onlyChangedPlugin.js';
 
 const root = (...args) => join(__dirname, '..', ...args);
 const reactPackage = (...args) => root('packages/react-instantsearch/', ...args);
@@ -23,8 +22,7 @@ const reactPackage = (...args) => root('packages/react-instantsearch/', ...args)
 // default source directory is join(__dirname, 'src');
 // https://github.com/metalsmith/metalsmith#sourcepath
 metalsmith(__dirname)
-  .ignore('assets')
-  .use(webpackPlugin(webpackConfiguration))
+  .ignore('assets/js/**/*')
   // let's add all the source files from packages/react-instantsearch/widgets/**/*.md
   .use(
     source(reactPackage('src'), reactPackage('src/widgets/**/*.md'), (name, file) =>
@@ -37,20 +35,12 @@ metalsmith(__dirname)
       ]
     )
   )
+  .use(onlyChanged)
   .use(inlineProps)
   .metadata({
     // If env is undefined, it won't get passed to the templates.
     env: process.env.NODE_ENV || '',
   })
-  .use(watch({
-    livereload: true,
-    paths: {
-      // eslint-disable-next-line no-template-curly-in-string
-      '${source}/**/*': true,
-      'assets/**/*': '**/*',
-      'layouts/**/*': '**/*',
-    },
-  }))
   .use(assets({
     source: './assets',
     destination: './assets',
@@ -79,6 +69,15 @@ metalsmith(__dirname)
     cache: false,
   }))
   .destination(root('docs/'))
+  .use(watch({
+    livereload: true,
+    paths: {
+      // eslint-disable-next-line no-template-curly-in-string
+      '${source}/**/*': true,
+      'assets/css/**/*': true,
+      'layouts/**/*': '**/*',
+    },
+  }))
   .build(err => {
     if (err) {
       throw err;

@@ -3,12 +3,13 @@ import MemoryFS from 'memory-fs';
 import ExternalsPlugin from 'webpack-externals-plugin';
 import requireFromString from 'require-from-string';
 import {join} from 'path';
+import {reduce as asyncReduce} from 'async';
 
-export default function extractMetadata(entries, callback) {
-  const entry = entries.reduce((res, e) => ({...res, [e]: e}), {});
+export default function extractMetadata(entriesArray, callback) {
+  const entriesMap = entriesArray.reduce((res, e) => ({...res, [e]: e}), {});
 
   const compiler = webpack({
-    entry,
+    entry: entriesMap,
 
     output: {
       filename: '[name]',
@@ -54,15 +55,18 @@ export default function extractMetadata(entries, callback) {
       return;
     }
 
-    const output = entries.reduce((res, e) => {
-      const str = mfs.readFileSync(e, 'utf8');
-      const Component = requireFromString(str, e);
-      return {
-        ...res,
-        [e]: Component,
-      };
-    }, {});
-
-    callback(null, output);
+    asyncReduce(
+      entriesArray,
+      {},
+      (res, e, cb) => {
+        const str = mfs.readFileSync(e, 'utf8');
+        const Component = requireFromString(str, e);
+        cb(null, {
+          ...res,
+          [e]: Component,
+        });
+      },
+      callback
+    );
   });
 }

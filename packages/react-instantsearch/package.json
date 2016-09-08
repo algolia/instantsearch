@@ -1,5 +1,6 @@
 {
   "name": "react-instantsearch",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "cd docgen/ && npm install && npm start",
