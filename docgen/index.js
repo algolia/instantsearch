@@ -1,28 +1,25 @@
 /* eslint-disable no-console */
 
 import metalsmith from 'metalsmith';
-import assets from 'metalsmith-assets';
 import layouts from 'metalsmith-layouts';
 import headings from 'metalsmith-headings';
 import navigation from 'metalsmith-navigation';
 import markdown from 'metalsmith-markdown';
-import watch from 'metalsmith-watch';
-import serve from 'metalsmith-serve';
-import {join} from 'path';
+import {watch} from 'chokidar';
 
-import './webpackDevServer.js';
-import renderer from './renderer';
-import inlineProps from './inlinePropsPlugin';
-import source from './sourcePlugin';
-import onlyChanged from './onlyChangedPlugin.js';
-
-const root = (...args) => join(__dirname, '..', ...args);
-const reactPackage = (...args) => root('packages/react-instantsearch/', ...args);
+import inlineProps from './plugins/inlineProps/index.js';
+import renderer from './mdRenderer.js';
+import source from './plugins/source.js';
+import onlyChanged from './plugins/onlyChanged.js';
+import assets from './plugins/assets.js';
+import ignore from './plugins/ignore.js';
+import devServer from './devServer.js';
+import {root, reactPackage} from './path.js';
 
 // default source directory is join(__dirname, 'src');
 // https://github.com/metalsmith/metalsmith#sourcepath
-metalsmith(__dirname)
-  .ignore('assets/js/**/*')
+const build = (clean, cb) => metalsmith(__dirname)
+  .clean(clean)
   // let's add all the source files from packages/react-instantsearch/widgets/**/*.md
   .use(
     source(reactPackage('src'), reactPackage('src/widgets/**/*.md'), (name, file) =>
@@ -35,16 +32,22 @@ metalsmith(__dirname)
       ]
     )
   )
+  .use(assets({
+    source: './assets/',
+    destination: './assets/',
+  }))
+  .use(ignore(/assets\/js\/(.*)?\.js$/))
   .use(onlyChanged)
+  // .use((files, m, done) => {
+  //   // debug
+  //   console.log(Object.keys(files));
+  //   done(null);
+  // })
   .use(inlineProps)
   .metadata({
     // If env is undefined, it won't get passed to the templates.
     env: process.env.NODE_ENV || '',
   })
-  .use(assets({
-    source: './assets',
-    destination: './assets',
-  }))
   .use(markdown({
     renderer,
   }))
@@ -64,22 +67,33 @@ metalsmith(__dirname)
   // Consider h2 and h3 elements (##, ###) as headers
   .use(headings('h2, h3'))
   .use(layouts('ejs'))
-  .use(serve({
-    gzip: true,
-    cache: false,
-  }))
   .destination(root('docs/'))
-  .use(watch({
-    livereload: true,
-    paths: {
-      // eslint-disable-next-line no-template-curly-in-string
-      '${source}/**/*': true,
-      'assets/css/**/*': true,
-      'layouts/**/*': '**/*',
-    },
-  }))
-  .build(err => {
+  .build(cb);
+
+// now let's watch for relevant file changes and rebuild files
+watch([
+  root('docgen/assets/'),
+  root('docgen/src/'),
+  root('docgen/layouts/'),
+  root('packages/react-instantsearch/src/**/*.md'),
+], {
+  ignoreInitial: true,
+  ignored: /assets\/js\/(.*)?\.js$/,
+})
+  .on('all', () => build(false, err => {
     if (err) {
       throw err;
     }
+  }))
+  .on('error', err => {
+    throw err;
   });
+
+// we build once at start
+build(true, err => {
+  if (err) {
+    throw err;
+  }
+
+  devServer();
+});
