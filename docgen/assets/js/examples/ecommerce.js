@@ -1,7 +1,9 @@
-import {InstantSearch} from 'react-instantsearch';
+/* eslint react/prop-types: 0 */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {
+  InstantSearch,
   SearchBox,
   HierarchicalMenu,
   RefinementList,
@@ -14,7 +16,7 @@ import {
   CurrentFilters,
 } from 'react-instantsearch';
 
-const ECommerceSample = React.createClass({
+const ECommerceExample = React.createClass({
 
   render () {
     return (
@@ -90,7 +92,7 @@ const Facets = () =>
           title="Price"
           key="Price"
           item={<Range attributeName="price"/>}
-        />,]}
+        />]}
     />
     <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
   </aside>;
@@ -115,7 +117,7 @@ const RefinementListWithTitle = props => {
   );
 };
 
-const MySearchBox = props =>
+const CustomCheckbox = props =>
   <div className="input-group">
     <input type="text"
            value={props.query}
@@ -149,7 +151,7 @@ const ColorItem = props => {
   );
 };
 
-const ColorRefinementList = props =>
+const CustomColorRefinementList = props =>
   <div>
     {props.items.map(item =>
       <ColorItem
@@ -162,7 +164,7 @@ const ColorRefinementList = props =>
     )}
   </div>;
 
-function MyHits(props) {
+function CustomHits(props) {
   return (
     <main id="hits">
       {props.hits.map((hit, idx) =>
@@ -182,7 +184,7 @@ function MyHits(props) {
   );
 }
 
-function MyResults(props) {
+function CustomResults(props) {
   if (props.noResults) {
     return (
       <div className="results-wrapper">
@@ -215,15 +217,15 @@ function MyResults(props) {
   }
 }
 
-const ConnectedSearchBox = SearchBox.connect(MySearchBox);
+const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
 
-const ConnectedColorRefinementList = RefinementList.connect(ColorRefinementList);
+const ConnectedColorRefinementList = RefinementList.connect(CustomColorRefinementList);
 
-const ConnectedResults = NoResults.connect(MyResults);
+const ConnectedResults = NoResults.connect(CustomResults);
 
-const ConnectedHits = Hits.connect(MyHits);
+const ConnectedHits = Hits.connect(CustomHits);
 
 ReactDOM.render(
-  <ECommerceSample />,
+  <ECommerceExample />,
   document.getElementById('e-commerce-example')
 );
