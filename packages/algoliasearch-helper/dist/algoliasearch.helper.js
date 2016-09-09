@@ -79,7 +79,7 @@ algoliasearchHelper.url = require('./src/url');
 
 module.exports = algoliasearchHelper;
 
-},{"./src/SearchParameters":273,"./src/SearchResults":276,"./src/algoliasearch.helper":277,"./src/url":282,"./src/version.js":283}],2:[function(require,module,exports){
+},{"./src/SearchParameters":273,"./src/SearchResults":276,"./src/algoliasearch.helper":277,"./src/url":281,"./src/version.js":282}],2:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -91,25 +91,40 @@ var process = module.exports = {};
 var cachedSetTimeout;
 var cachedClearTimeout;
 
+function defaultSetTimout() {
+    throw new Error('setTimeout has not been defined');
+}
+function defaultClearTimeout () {
+    throw new Error('clearTimeout has not been defined');
+}
 (function () {
     try {
-        cachedSetTimeout = setTimeout;
-    } catch (e) {
-        cachedSetTimeout = function () {
-            throw new Error('setTimeout is not defined');
+        if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+        } else {
+            cachedSetTimeout = defaultSetTimout;
         }
+    } catch (e) {
+        cachedSetTimeout = defaultSetTimout;
     }
     try {
-        cachedClearTimeout = clearTimeout;
-    } catch (e) {
-        cachedClearTimeout = function () {
-            throw new Error('clearTimeout is not defined');
+        if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+        } else {
+            cachedClearTimeout = defaultClearTimeout;
         }
+    } catch (e) {
+        cachedClearTimeout = defaultClearTimeout;
     }
 } ())
 function runTimeout(fun) {
     if (cachedSetTimeout === setTimeout) {
         //normal enviroments in sane situations
+        return setTimeout(fun, 0);
+    }
+    // if setTimeout wasn't available but was latter defined
+    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+        cachedSetTimeout = setTimeout;
         return setTimeout(fun, 0);
     }
     try {
@@ -130,6 +145,11 @@ function runTimeout(fun) {
 function runClearTimeout(marker) {
     if (cachedClearTimeout === clearTimeout) {
         //normal enviroments in sane situations
+        return clearTimeout(marker);
+    }
+    // if clearTimeout wasn't available but was latter defined
+    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+        cachedClearTimeout = clearTimeout;
         return clearTimeout(marker);
     }
     try {
@@ -10257,7 +10277,6 @@ var trim = require('lodash/trim');
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
-var warnOnce = require('../functions/warnOnce');
 var valToNumber = require('../functions/valToNumber');
 
 var filterState = require('./filterState');
@@ -10705,13 +10724,6 @@ function SearchParameters(newParameters) {
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
       self[paramName] = paramValue;
-
-      var message =
-        'Unknown SearchParameter: `' +
-        paramName +
-        '` (this might raise an error in the Algolia API)';
-
-      warnOnce(message);
     }
   });
 }
@@ -10819,21 +10831,6 @@ SearchParameters.make = function makeSearchParameters(newParameters) {
  */
 SearchParameters.validate = function(currentState, parameters) {
   var params = parameters || {};
-
-  var ks = keys(params);
-  var unknownKeys = filter(ks, function(k) {
-    return SearchParameters.PARAMETERS.indexOf(k) === -1;
-  });
-
-  if (unknownKeys.length === 1) {
-    warnOnce('Unknown parameter ' + unknownKeys[0] + ' (this might rise an error in the Algolia API)');
-  } else if (unknownKeys.length > 1) {
-    warnOnce(
-      'Unknown parameters ' +
-      unknownKeys.join(', ') +
-      ' (this might raise an error in the Algolia API)'
-    );
-  }
 
   if (currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0) {
     return new Error(
@@ -11515,6 +11512,41 @@ SearchParameters.prototype = {
       hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });
   },
+
+  /**
+   * Adds a refinement on a hierarchical facet.
+   * @param {string} facet the facet name
+   * @param {string} path the hierarchical facet path
+   * @return {SearchParameter} the new state
+   * @throws Error if the facet is not defined or if the facet is refined
+   */
+  addHierarchicalFacetRefinement: function(facet, path) {
+    if (this.isHierarchicalFacetRefined(facet)) {
+      throw new Error(facet + ' is already refined.');
+    }
+    var mod = {};
+    mod[facet] = [path];
+    return this.setQueryParameters({
+      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+    });
+  },
+
+  /**
+   * Removes the refinement set on a hierarchical facet.
+   * @param {string} facet the facet name
+   * @return {SearchParameter} the new state
+   * @throws Error if the facet is not defined or if the facet is not refined
+   */
+  removeHierarchicalFacetRefinement: function(facet) {
+    if (!this.isHierarchicalFacetRefined(facet)) {
+      throw new Error(facet + ' is not refined.');
+    }
+    var mod = {};
+    mod[facet] = [];
+    return this.setQueryParameters({
+      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+    });
+  },
   /**
    * Switch the tag refinement
    * @method
@@ -11901,7 +11933,7 @@ SearchParameters.prototype = {
  */
 module.exports = SearchParameters;
 
-},{"../functions/valToNumber":279,"../functions/warnOnce":280,"./RefinementList":271,"./filterState":272,"lodash/defaults":203,"lodash/filter":205,"lodash/find":206,"lodash/forEach":208,"lodash/forOwn":209,"lodash/indexOf":214,"lodash/intersection":215,"lodash/isArray":218,"lodash/isEmpty":222,"lodash/isEqual":223,"lodash/isFunction":224,"lodash/isNaN":226,"lodash/isString":231,"lodash/isUndefined":234,"lodash/keys":235,"lodash/map":238,"lodash/merge":242,"lodash/omit":245,"lodash/reduce":252,"lodash/trim":262}],274:[function(require,module,exports){
+},{"../functions/valToNumber":279,"./RefinementList":271,"./filterState":272,"lodash/defaults":203,"lodash/filter":205,"lodash/find":206,"lodash/forEach":208,"lodash/forOwn":209,"lodash/indexOf":214,"lodash/intersection":215,"lodash/isArray":218,"lodash/isEmpty":222,"lodash/isEqual":223,"lodash/isFunction":224,"lodash/isNaN":226,"lodash/isString":231,"lodash/isUndefined":234,"lodash/keys":235,"lodash/map":238,"lodash/merge":242,"lodash/omit":245,"lodash/reduce":252,"lodash/trim":262}],274:[function(require,module,exports){
 'use strict';
 
 var invert = require('lodash/invert');
@@ -12690,6 +12722,11 @@ function vanillaSortFn(order, data) {
  * refinement first, descending count (bigger value on top), and name asending
  * (alphabetical order). The sort formula can overriden using either string based
  * predicates or a function.
+ *
+ * This method will return all the values returned by the Algolia engine plus all
+ * the values already refined. This means that it can happen that the
+ * `maxValuesPerFacet` [configuration](https://www.algolia.com/doc/rest-api/search#param-maxValuesPerFacet)
+ * might not be respected if you have facet values that are already refined.
  * @param {string} attribute attribute name
  * @param {object} opts configuration options.
  * @param {Array.<string> | function} opts.sortBy
@@ -12918,7 +12955,8 @@ var url = require('./url');
  */
 
 /**
- * Event triggered when Algolia sends back an error
+ * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
+ * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
  * @property {Error} error the error returned by the Algolia.
  * @example
@@ -13114,6 +13152,25 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
 };
 
 /**
+ * Adds a refinement on a hierarchical facet. It will throw
+ * an exception if the facet is not defined or if the facet
+ * is already refined.
+ *
+ * This method resets the current page to 0.
+ * @param {string} facet the facet name
+ * @param {string} path the hierarchical facet path
+ * @return {AlgoliaSearchHelper}
+ * @throws Error if the facet is not defined or if the facet is refined
+ * @chainable
+ * @fires change
+ */
+AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, value) {
+  this.state = this.state.setPage(0).addHierarchicalFacetRefinement(facet, value);
+  this._change();
+  return this;
+};
+
+/**
  * Adds a an numeric filter to an attribute with the `operator` and `value` provided. If the
  * filter is already set, it doesn't change the filters.
  *
@@ -13245,6 +13302,21 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet,
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
   return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
+};
+
+/**
+ * Removes the refinement set on a hierarchical facet.
+ * @param {string} facet the facet name
+ * @return {AlgoliaSearchHelper}
+ * @throws Error if the facet is not defined or if the facet is not refined
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeHierarchicalFacetRefinement = function(facet) {
+  this.state = this.state.setPage(0).removeHierarchicalFacetRefinement(facet);
+  this._change();
+
+  return this;
 };
 
 /**
@@ -13970,7 +14042,7 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":273,"./SearchResults":276,"./requestBuilder":281,"./url":282,"events":3,"lodash/bind":200,"lodash/forEach":208,"lodash/isEmpty":222,"util":270}],278:[function(require,module,exports){
+},{"./SearchParameters":273,"./SearchResults":276,"./requestBuilder":280,"./url":281,"events":3,"lodash/bind":200,"lodash/forEach":208,"lodash/isEmpty":222,"util":270}],278:[function(require,module,exports){
 'use strict';
 
 var reduce = require('lodash/reduce');
@@ -14021,31 +14093,6 @@ function valToNumber(v) {
 module.exports = valToNumber;
 
 },{"lodash/isArray":218,"lodash/isNumber":227,"lodash/isString":231,"lodash/map":238}],280:[function(require,module,exports){
-'use strict';
-var bind = require('lodash/bind');
-
-try {
-  var warn;
-
-  if (typeof window !== 'undefined') warn = window.console && bind(window.console.warn, console);
-  else warn = bind(console.warn, console); // eslint-disable-line no-console
-
-  var warnOnce = (function(w) {
-    var previousMessages = [];
-    return function warnOnlyOnce(m) {
-      if (previousMessages.indexOf(m) === -1) {
-        w(m);
-        previousMessages.push(m);
-      }
-    };
-  })(warn);
-
-  module.exports = warnOnce;
-} catch (e) {
-  module.exports = function() {};
-}
-
-},{"lodash/bind":200}],281:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/forEach');
@@ -14341,7 +14388,7 @@ var requestBuilder = {
 
 module.exports = requestBuilder;
 
-},{"lodash/forEach":208,"lodash/isArray":218,"lodash/map":238,"lodash/merge":242,"lodash/reduce":252}],282:[function(require,module,exports){
+},{"lodash/forEach":208,"lodash/isArray":218,"lodash/map":238,"lodash/merge":242,"lodash/reduce":252}],281:[function(require,module,exports){
 'use strict';
 
 /**
@@ -14513,10 +14560,10 @@ exports.getQueryStringFromState = function(state, options) {
   return qs.stringify(encodedState, {encode: safe, sort: sort});
 };
 
-},{"./SearchParameters":273,"./SearchParameters/shortener":274,"lodash/bind":200,"lodash/forEach":208,"lodash/invert":216,"lodash/isArray":218,"lodash/isPlainObject":230,"lodash/isString":231,"lodash/map":238,"lodash/mapKeys":239,"lodash/mapValues":240,"lodash/pick":249,"qs":265,"qs/lib/utils":268}],283:[function(require,module,exports){
+},{"./SearchParameters":273,"./SearchParameters/shortener":274,"lodash/bind":200,"lodash/forEach":208,"lodash/invert":216,"lodash/isArray":218,"lodash/isPlainObject":230,"lodash/isString":231,"lodash/map":238,"lodash/mapKeys":239,"lodash/mapValues":240,"lodash/pick":249,"qs":265,"qs/lib/utils":268}],282:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.13.0';
+module.exports = '2.14.0';
 
 },{}]},{},[1])(1)
 });
