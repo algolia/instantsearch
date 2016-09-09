@@ -12,7 +12,6 @@ import {
   SortBy,
   Stats,
   Pagination,
-  NoResults,
   CurrentFilters,
   createConnector,
 } from 'react-instantsearch';
@@ -190,7 +189,7 @@ const CustomResults = createConnector({
 
   getProps(props, state, search) {
     const noResults = search.results ? search.results.nbHits === 0 : false;
-    return {query: state.q, noResults: noResults};
+    return {query: state.q, noResults};
   },
 })(props => {
   if (props.noResults) {
