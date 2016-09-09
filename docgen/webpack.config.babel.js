@@ -3,13 +3,13 @@ import {join} from 'path';
 
 export default {
   entry: {
-    api: join(__dirname, 'assets/js/api.js'),
-    media: join(__dirname, 'assets/js/examples/media.js'),
+    'assets/js/api': join(__dirname, 'assets/js/api.js'),
+    'assets/js/examples/media': join(__dirname, 'assets/js/examples/media.js'),
   },
   devtool: 'source-map',
   output: {
-    path: join(__dirname, '../docs/assets/js'),
-    publicPath: '/assets/js/',
+    path: join(__dirname, '../docs/'),
+    publicPath: '/',
     filename: '[name].js',
     // @TODO: in production this should be hashed
     // filename: '[name].[chunkhash].js',
