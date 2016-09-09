@@ -1,7 +1,7 @@
 import marked from 'marked';
 import unescape from 'unescape-html';
 
-import highlight from './highlight';
+import highlight from './syntaxHighlighting.js';
 
 const renderer = new marked.Renderer();
 renderer.code = (code, lang) => highlight(code, lang);
