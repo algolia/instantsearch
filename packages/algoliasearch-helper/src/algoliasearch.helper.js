@@ -50,7 +50,8 @@ var url = require('./url');
  */
 
 /**
- * Event triggered when Algolia sends back an error
+ * Event triggered when Algolia sends back an error. For example, if an unknown parameter is
+ * used, the error can be caught using this event.
  * @event AlgoliaSearchHelper#event:error
  * @property {Error} error the error returned by the Algolia.
  * @example
@@ -246,6 +247,25 @@ AlgoliaSearchHelper.prototype.addDisjunctiveRefine = function() {
 };
 
 /**
+ * Adds a refinement on a hierarchical facet. It will throw
+ * an exception if the facet is not defined or if the facet
+ * is already refined.
+ *
+ * This method resets the current page to 0.
+ * @param {string} facet the facet name
+ * @param {string} path the hierarchical facet path
+ * @return {AlgoliaSearchHelper}
+ * @throws Error if the facet is not defined or if the facet is refined
+ * @chainable
+ * @fires change
+ */
+AlgoliaSearchHelper.prototype.addHierarchicalFacetRefinement = function(facet, value) {
+  this.state = this.state.setPage(0).addHierarchicalFacetRefinement(facet, value);
+  this._change();
+  return this;
+};
+
+/**
  * Adds a an numeric filter to an attribute with the `operator` and `value` provided. If the
  * filter is already set, it doesn't change the filters.
  *
@@ -377,6 +397,21 @@ AlgoliaSearchHelper.prototype.removeDisjunctiveFacetRefinement = function(facet,
  */
 AlgoliaSearchHelper.prototype.removeDisjunctiveRefine = function() {
   return this.removeDisjunctiveFacetRefinement.apply(this, arguments);
+};
+
+/**
+ * Removes the refinement set on a hierarchical facet.
+ * @param {string} facet the facet name
+ * @return {AlgoliaSearchHelper}
+ * @throws Error if the facet is not defined or if the facet is not refined
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.removeHierarchicalFacetRefinement = function(facet) {
+  this.state = this.state.setPage(0).removeHierarchicalFacetRefinement(facet);
+  this._change();
+
+  return this;
 };
 
 /**

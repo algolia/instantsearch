@@ -22,7 +22,6 @@ var trim = require('lodash/trim');
 var defaults = require('lodash/defaults');
 var merge = require('lodash/merge');
 
-var warnOnce = require('../functions/warnOnce');
 var valToNumber = require('../functions/valToNumber');
 
 var filterState = require('./filterState');
@@ -470,13 +469,6 @@ function SearchParameters(newParameters) {
   forOwn(params, function checkForUnknownParameter(paramValue, paramName) {
     if (SearchParameters.PARAMETERS.indexOf(paramName) === -1) {
       self[paramName] = paramValue;
-
-      var message =
-        'Unknown SearchParameter: `' +
-        paramName +
-        '` (this might raise an error in the Algolia API)';
-
-      warnOnce(message);
     }
   });
 }
@@ -584,21 +576,6 @@ SearchParameters.make = function makeSearchParameters(newParameters) {
  */
 SearchParameters.validate = function(currentState, parameters) {
   var params = parameters || {};
-
-  var ks = keys(params);
-  var unknownKeys = filter(ks, function(k) {
-    return SearchParameters.PARAMETERS.indexOf(k) === -1;
-  });
-
-  if (unknownKeys.length === 1) {
-    warnOnce('Unknown parameter ' + unknownKeys[0] + ' (this might rise an error in the Algolia API)');
-  } else if (unknownKeys.length > 1) {
-    warnOnce(
-      'Unknown parameters ' +
-      unknownKeys.join(', ') +
-      ' (this might raise an error in the Algolia API)'
-    );
-  }
 
   if (currentState.tagFilters && params.tagRefinements && params.tagRefinements.length > 0) {
     return new Error(
@@ -1276,6 +1253,41 @@ SearchParameters.prototype = {
       mod[facet] = [value];
     }
 
+    return this.setQueryParameters({
+      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+    });
+  },
+
+  /**
+   * Adds a refinement on a hierarchical facet.
+   * @param {string} facet the facet name
+   * @param {string} path the hierarchical facet path
+   * @return {SearchParameter} the new state
+   * @throws Error if the facet is not defined or if the facet is refined
+   */
+  addHierarchicalFacetRefinement: function(facet, path) {
+    if (this.isHierarchicalFacetRefined(facet)) {
+      throw new Error(facet + ' is already refined.');
+    }
+    var mod = {};
+    mod[facet] = [path];
+    return this.setQueryParameters({
+      hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
+    });
+  },
+
+  /**
+   * Removes the refinement set on a hierarchical facet.
+   * @param {string} facet the facet name
+   * @return {SearchParameter} the new state
+   * @throws Error if the facet is not defined or if the facet is not refined
+   */
+  removeHierarchicalFacetRefinement: function(facet) {
+    if (!this.isHierarchicalFacetRefined(facet)) {
+      throw new Error(facet + ' is not refined.');
+    }
+    var mod = {};
+    mod[facet] = [];
     return this.setQueryParameters({
       hierarchicalFacetsRefinements: defaults({}, mod, this.hierarchicalFacetsRefinements)
     });

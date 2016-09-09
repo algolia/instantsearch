@@ -353,8 +353,10 @@ var helper = algoliasearchHelper(client, indexName, {
 
 #### Methods 
 
-{{> jsdoc jsdoc/helper/toggleRefinement}}
+{{> jsdoc jsdoc/helper/addHierarchicalFacetRefinement}}
 {{> jsdoc jsdoc/helper/getHierarchicalFacetBreadcrumb}}
+{{> jsdoc jsdoc/helper/removeHierarchicalFacetRefinement}}
+{{> jsdoc jsdoc/helper/toggleRefinement}}
 
 ### Facet exclusions
 
@@ -510,6 +512,7 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/addFacet}}
 {{> jsdoc jsdoc/state/addFacetRefinement}}
 {{> jsdoc jsdoc/state/addHierarchicalFacet}}
+{{> jsdoc jsdoc/state/addHierarchicalFacetRefinement}}
 {{> jsdoc jsdoc/state/addNumericRefinement}}
 {{> jsdoc jsdoc/state/addTagRefinement}}
 {{> jsdoc jsdoc/state/clearRefinements}}
@@ -543,6 +546,7 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/removeDisjunctiveFacet}}
 {{> jsdoc jsdoc/state/removeDisjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/removeHierarchicalFacet}}
+{{> jsdoc jsdoc/state/removeHierarchicalFacetRefinement}}
 {{> jsdoc jsdoc/state/removeTagRefinement}}
 {{> jsdoc jsdoc/state/setDisjunctiveFacets}}
 {{> jsdoc jsdoc/state/setFacets}}

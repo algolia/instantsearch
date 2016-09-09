@@ -128,7 +128,7 @@ You can see the full [Angular example here](examples/instantsearch%2Bhelper%2Ban
 
 ## Helper cheatsheet
 
-[There is also a complete JSDoc](http://algolia.github.io/algoliasearch-helper-js/docs)
+[There is also a complete JSDoc](https://community.algolia.com/algoliasearch-helper-js/reference.html)
 
 ### Add the helper in your project
 
