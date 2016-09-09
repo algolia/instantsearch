@@ -2,8 +2,8 @@ import React, {PropTypes} from 'react';
 import doctrine from 'doctrine';
 import marked from 'marked';
 
-import renderer from './renderer';
-import highlight from './highlight';
+import renderer from '../../mdRenderer.js';
+import highlight from '../../syntaxHighlighting.js';
 
 function intercalate(list, a) {
   const newList = [];
