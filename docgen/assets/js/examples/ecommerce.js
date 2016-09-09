@@ -14,6 +14,7 @@ import {
   Pagination,
   NoResults,
   CurrentFilters,
+  createConnector,
 } from 'react-instantsearch';
 
 const ECommerceExample = React.createClass({
@@ -29,7 +30,7 @@ const ECommerceExample = React.createClass({
           <Header />
           <div className="content-wrapper">
             <Facets />
-            <ConnectedResults />
+            <CustomResults />
           </div>
         </div>
       </InstantSearch>
@@ -184,7 +185,14 @@ function CustomHits(props) {
   );
 }
 
-function CustomResults(props) {
+const CustomResults = createConnector({
+  displayName: 'CustomResults',
+
+  getProps(props, state, search) {
+    const noResults = search.results ? search.results.nbHits === 0 : false;
+    return {query: state.q, noResults: noResults};
+  },
+})(props => {
   if (props.noResults) {
     return (
       <div className="results-wrapper">
@@ -215,13 +223,11 @@ function CustomResults(props) {
       </div>
     );
   }
-}
+});
 
 const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
 
 const ConnectedColorRefinementList = RefinementList.connect(CustomColorRefinementList);
-
-const ConnectedResults = NoResults.connect(CustomResults);
 
 const ConnectedHits = Hits.connect(CustomHits);
 
