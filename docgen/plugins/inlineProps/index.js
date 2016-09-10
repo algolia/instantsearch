@@ -33,6 +33,13 @@ export default function inlineProps(files, m, callback) {
     }
   });
 
+  // given the input files, we found none with some props to inline
+  // example: we updated any file that is not linked to inlining props
+  if (entries.length === 0) {
+    callback();
+    return;
+  }
+
   extractMetadata(entries, (err, output) => {
     if (err) {
       callback(err);

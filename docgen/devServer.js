@@ -3,6 +3,7 @@ import browserSync from 'browser-sync';
 import baseWebpackConfig from './webpack.config.babel.js';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
+import compression from 'compression';
 import {root} from './path.js';
 
 export default function() {
@@ -43,10 +44,11 @@ export default function() {
     files: `${root('docs/')}**/*`,
     watchOptions: {
       awaitWriteFinish: {
-        stabilityThreshold: 150,
+        stabilityThreshold: 150, // wait 150ms for the filesize to be stable (= write finished)
       },
     },
     middleware: [
+      compression(),
       webpackDevMiddleware(compiler, {
         noInfo: true,
         publicPath: webpackConfig.output.publicPath,
