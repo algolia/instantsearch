@@ -1,6 +1,9 @@
 /* eslint-disable import/no-commonjs */
 
-import transformProps from './transformProps';
+import memoize from 'memoizee';
+import rawTransformProps from './transformProps';
+
+const transformProps = memoize(rawTransformProps);
 
 module.exports = function transformPropsLoader(content) {
   try {
