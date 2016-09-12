@@ -12,7 +12,9 @@ body {
 
 .aisdemo--right-column {
   padding-right: 0;
-  padding-left: 0; }
+  padding-left: 0;
+  height: 400px;
+}
 
 /* HEADER
 // ------------------------- */
@@ -150,6 +152,7 @@ body {
   text-align: center;
   pointer-events: none;
   color: #82888A; }
+
 .aisdemo-filters #room_types .ais-refinement-list--count {
   display: none; }
 .aisdemo-filters #room_types .ais-refinement-list--item {
@@ -308,6 +311,10 @@ body {
 // ------------------------- */
 #map {
   height: 400px; }
+
+.marker {
+  transform: translate(-50%, -100%) scale(0.5, 0.5);
+}
 
 /* RESULTS
 // ------------------------- */
