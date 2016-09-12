@@ -9,6 +9,7 @@ import source from './plugins/source.js';
 import onlyChanged from './plugins/onlyChanged.js';
 import assets from './plugins/assets.js';
 import ignore from './plugins/ignore.js';
+import helpers from './plugins/helpers.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
 import webpackStartConfig from './webpack.config.start.babel.js';
 import webpackBuildConfig from './webpack.config.build.babel';
@@ -30,6 +31,7 @@ const reactReadmes = source(reactPackage('src'), reactPackage('src/widgets/**/*.
 );
 
 const common = [
+  helpers,
   reactReadmes,
   assets({
     source: './assets/',

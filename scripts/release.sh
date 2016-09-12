@@ -86,6 +86,9 @@ cd ..
 rm -rf dist/
 )
 
+DOCS_MOUNT_POINT=/react/ NODE_ENV=production DOCS_DIST=docs/react/ npm run docs:build
+npm run docs:publish
+
 printf "Release:
 Package was published to npm.
 A job on travis-ci will be automatically launched to finalize the release."

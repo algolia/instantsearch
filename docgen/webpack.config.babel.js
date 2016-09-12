@@ -10,8 +10,8 @@ export default {
   },
   devtool: 'source-map',
   output: {
-    path: rootPath(process.env.DOCS_DESTINATION || 'docs/'),
-    publicPath: '/',
+    path: rootPath(process.env.DOCS_DIST || 'docs/react/'),
+    publicPath: process.env.DOCS_MOUNT_POINT || '/',
     filename: '[name].js',
     // @TODO: in production this should be hashed
     // filename: '[name].[chunkhash].js',
