@@ -44,27 +44,28 @@ npm install
 # printf "\n=> Release: please type the new chosen version > "
 # read -e newVersion
 
-npm version patch
+npm version --no-git-tag-version prerelease
 
 # now build react-instantsearch
 (
 cd packages/react-instantsearch
-npm version patch
+npm version --no-git-tag-version prerelease
 )
 
 npm run build
 
-# update changelog
-printf "\n\nRelease: update changelog"
-changelog=`conventional-changelog -p angular`
-conventional-changelog --preset angular --infile CHANGELOG.md --same-file
+# update changelog, not yet because of prototyping
+# printf "\n\nRelease: update changelog"
+# changelog=`conventional-changelog -p angular`
+# conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
 # regenerate readme TOC
 printf "\n\nRelease: generate TOCS"
 npm run doctoc
 
 # git add and tag
-commitMessage="v$newVersion\n\n$changelog"
+# commitMessage="v$newVersion\n\n$changelog"
+commitMessage="v$newVersion"
 # git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
 printf "%s" $commitMessage | git commit --file -
 # not git tagging for now, still prototyping
@@ -75,7 +76,8 @@ read -p "=> Release: when ready, press [ENTER] to push to github and publish the
 
 printf "\n\nRelease: pushed to github, publish on npm"
 git push origin v2
-git push origin --tags
+# no git tagging for now
+# git push origin --tags
 
 (
 cd packages/react-instantsearch/dist
