@@ -3,6 +3,16 @@ import {omit, has} from 'lodash';
 
 import {shallowEqual, getDisplayName} from './utils';
 
+/**
+ * Connectors are the HOC used to transform React components
+ * into InstantSearch widgets.
+ * In order to simplify the construction of such connectors
+ * `createConnector` takes a description and transform it into
+ * a connector.
+ * @param {ConnectorDescription} connectorDesc the description of the connector
+ * @return {Connector} a function that wraps a component into
+ * an instantsearch connected one.
+ */
 export default function createConnector(connectorDesc) {
   if (!connectorDesc.displayName) {
     throw new Error(

@@ -73,7 +73,7 @@ metalsmith(__dirname)
   }))
   // Consider h2 and h3 elements (##, ###) as headers
   .use(headings('h2, h3'))
-  .use(layouts('ejs'))
+  .use(layouts('pug'))
   .use(serve({
     gzip: true,
     cache: false,

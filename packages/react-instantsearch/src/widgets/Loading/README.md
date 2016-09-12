@@ -1,6 +1,6 @@
 ---
 title: Loading
-layout: api.ejs
+layout: api.pug
 nav_groups:
   - widgets
 ---
