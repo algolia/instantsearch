@@ -10,7 +10,7 @@ export default {
   },
   devtool: 'source-map',
   output: {
-    path: rootPath('/docs/'),
+    path: rootPath(process.env.DOCS_DESTINATION || 'docs/'),
     publicPath: '/',
     filename: '[name].js',
     // @TODO: in production this should be hashed

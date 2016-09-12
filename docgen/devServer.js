@@ -14,9 +14,9 @@ export default function() {
   const compiler = webpack(webpackConfig);
   const bs = browserSync.create();
   bs.init({
-    server: rootPath('docs/'),
+    server: rootPath(process.env.DOCS_DESTINATION || 'docs/'),
     open: false,
-    files: `${rootPath('docs/')}**/*`,
+    files: `${rootPath(process.env.DOCS_DESTINATION || 'docs/')}**/*`,
     watchOptions: {
       awaitWriteFinish: {
         stabilityThreshold: 150, // wait 150ms for the filesize to be stable (= write finished)
