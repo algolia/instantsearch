@@ -65,7 +65,7 @@ npm run doctoc
 
 # git add and tag
 # commitMessage="v$newVersion\n\n$changelog"
-commitMessage="v$newVersion"
+commitMessage="$newVersion"
 git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
 printf "%s" $commitMessage | git commit --file -
 # not git tagging for now, still prototyping
@@ -82,6 +82,8 @@ git push origin v2
 (
 cd packages/react-instantsearch/dist
 npm publish
+cd ..
+rm -rf dist/
 )
 
 printf "Release:

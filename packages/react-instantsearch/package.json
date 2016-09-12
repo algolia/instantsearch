@@ -5,7 +5,6 @@
     "test": "jest",
     "dev": "jest --watch",
     "coverage": "jest --coverage",
-    "postpublish": "rm -rf dist/",
     "build": "./scripts/build.sh"
   },
   "devDependencies": {
