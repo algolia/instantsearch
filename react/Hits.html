@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>react-instantsearch | Hits</title>
+
+    <link rel="stylesheet" href="/assets/css/theme.css">
+    <link rel="stylesheet" href="/assets/css/site.css">
+    <link rel="stylesheet" href="/assets/css/DocProps.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/ecommerce.html">E-commerce example</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/media.html">Media example</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#props">Props</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#theme">Theme</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#implementing-your-own-hits">Implementing your own Hits</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="hits">Hits</h1>
+<p>Displays the list of hits for the current search parameters.</p>
+<h2 id="props">Props</h2>
+<div class="DocProps"><div class="Prop"><div id="default-props-entry-hitsPerPage" class="Entry"><div class="Entry__head"><span class="Entry__name">hitsPerPage</span><span class="Entry__type"><code>number</code></span><span class="Entry__link"><a href="#default-props-entry-hitsPerPage">#</a></span></div><div class="Entry__description"><p>How many hits should be displayed for every page.
+Ignored when a <code class="CodeMirror cm-s-default"><span class="cm-variable">HitsPerPage</span></code> component is also present.</p>
+</div></div></div></div>
+<h3 id="theme">Theme</h3>
+<p><code class="CodeMirror cm-s-default"><span class="cm-variable">root</span></code></p>
+<h2 id="implementing-your-own-hits">Implementing your own Hits</h2>
+<p>See <a href="../Customization.md">Making your own widgets</a> for more information on how to use the <code class="CodeMirror cm-s-default"><span class="cm-variable">Hits</span>.<span class="cm-property">connect</span></code> HOC.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">Hits</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">MyHits</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+      {<span class="cm-variable">props</span>.<span class="cm-property">hits</span>.<span class="cm-property">map</span>(<span class="cm-variable">hit</span> <span class="cm-operator">=&gt;</span>
+        <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">HitComponent</span> <span class="cm-attribute">key</span>={<span class="cm-variable">hit</span>.<span class="cm-property">objectID</span>} <span class="cm-attribute">hit</span>={<span class="cm-variable">hit</span>} <span class="cm-tag cm-bracket">/&gt;</span>
+      )}
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}
+
+<span class="cm-comment">// `Hits.connect` accepts the same `hitsPerPage` prop as `Hits`.</span>
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">Hits</span>.<span class="cm-property">connect</span>(<span class="cm-variable">MyHits</span>);</code></pre>
+    </div>
+
+    <script src="/assets/js/api.f5e38a4ec4f996fe5060-build.js"></script>
+  </body>
+</html>
