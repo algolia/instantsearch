@@ -86,7 +86,7 @@ cd ..
 rm -rf dist/
 )
 
-DOCS_MOUNT_POINT=/react/ NODE_ENV=production DOCS_DIST=docs/react/ npm run docs:build
+DOCS_MOUNT_POINT=/instantsearch.js/react/ NODE_ENV=production DOCS_DIST=docs/react/ npm run docs:build
 npm run docs:publish
 
 printf "Release:
