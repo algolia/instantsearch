@@ -44,7 +44,7 @@ npm install
 # printf "\n=> Release: please type the new chosen version > "
 # read -e newVersion
 
-npm version --no-git-tag-version prerelease
+newVersion=$(npm version --no-git-tag-version prerelease)
 
 # now build react-instantsearch
 (
@@ -65,8 +65,8 @@ npm run doctoc
 
 # git add and tag
 # commitMessage="v$newVersion\n\n$changelog"
-commitMessage="release"
-# git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
+commitMessage="v$newVersion"
+git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
 printf "%s" $commitMessage | git commit --file -
 # not git tagging for now, still prototyping
 # git tag "v$newVersion"
