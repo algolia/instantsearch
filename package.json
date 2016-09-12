@@ -5,7 +5,7 @@
     "start": "babel-node docgen/start.js",
     "build": "./scripts/build.sh",
     "build:docs": "babel-node docgen/build.js",
-    "release": "./scripts/release.sh",
+    "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
     "lint:fix": "npm run lin eslint . --fix",
     "postinstall": "cd packages/react-instantsearch && npm install",
