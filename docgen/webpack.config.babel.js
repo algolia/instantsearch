@@ -5,6 +5,7 @@ export default {
   entry: {
     api: join(__dirname, 'assets/js/api.js'),
     media: join(__dirname, 'assets/js/examples/media.js'),
+    tourism: join(__dirname, 'assets/js/examples/tourism.js'),
   },
   devtool: 'source-map',
   output: {
