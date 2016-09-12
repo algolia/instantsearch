@@ -121,9 +121,9 @@ defines the kind of tech used, we can then do the following:
 
 ```javascript
 // helper is already configured
-helper.addFacetRefinement('tech', 'crt');
-helper.addFacetRefinement('tech', 'led');
-helper.addFacetRefinement('tech', 'plasma');
+helper.addDisjunctiveFacetRefinement('tech', 'crt');
+helper.addDisjunctiveFacetRefinement('tech', 'led');
+helper.addDisjunctiveFacetRefinement('tech', 'plasma');
 
 // the filters are equals to
 // tech = crt OR tech = led OR tech = plasma
