@@ -6,7 +6,7 @@ import {start as middlewares} from './middlewares';
 import {rootPath} from './path.js';
 
 // we build once at start
-builder({clean: true, middlewares}, err => {
+builder({middlewares}, err => {
   if (err) {
     throw err;
   }
