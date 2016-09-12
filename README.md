@@ -4,7 +4,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Dev](#dev)
+- [Project structure](#project-structure)
+- [Development](#development)
+- [Test](#test)
+- [Lint](#lint)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

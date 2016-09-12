@@ -16,7 +16,6 @@ Hi (future) collaborator!
 - [Development workflow](#development-workflow)
 - [Commit message guidelines](#commit-message-guidelines)
 - [Squash your commits](#squash-your-commits)
-- [When are issues closed?](#when-are-issues-closed)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
