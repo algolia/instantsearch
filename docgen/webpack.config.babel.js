@@ -1,15 +1,16 @@
 import webpack from 'webpack';
 import {join} from 'path';
+import {rootPath} from './path';
 
 export default {
   entry: {
     'assets/js/api': join(__dirname, 'assets/js/api.js'),
-    'assets/js/examples/media': join(__dirname, 'assets/js/examples/media.js'),
-    'assets/js/examples/ecommerce': join(__dirname, 'assets/js/examples/ecommerce.js'),
+    'assets/js/examples/ecommerce/index': join(__dirname, 'assets/js/examples/ecommerce/index.js'),
+    'assets/js/examples/media/index': join(__dirname, 'assets/js/examples/media/index.js'),
   },
   devtool: 'source-map',
   output: {
-    path: join(__dirname, '../docs/'),
+    path: rootPath('/docs/'),
     publicPath: '/',
     filename: '[name].js',
     // @TODO: in production this should be hashed
@@ -33,10 +34,6 @@ export default {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-      // needed by react-instantsearch
-      // @TODO: we can't ask users to do so, the default production build
-      // will need to have this set to false
-      '__DOC__': JSON.stringify(false),
     }),
   ],
 };

@@ -25,12 +25,12 @@ export default function translatable(defaultTranslations) {
     Translatable.displayName = `Translatable(${getDisplayName(Composed)})`;
 
     Translatable.propTypes = {
-      translations: __DOC__ ?
+      translations: __DOC__ === 'yes' ?
         {type: {name: 'translations', value: defaultTranslations}} :
         withKeysPropType(Object.keys(defaultTranslations)),
     };
 
-    if (__DOC__) {
+    if (__DOC__ === 'yes') {
       Translatable.propTypes = {
         ...omit(Composed.propTypes, 'translate'),
         ...Translatable.propTypes,

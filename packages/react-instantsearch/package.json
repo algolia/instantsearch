@@ -1,11 +1,12 @@
 {
   "name": "react-instantsearch",
-  "version": "0.0.1",
-  "private": true,
+  "version": "2.0.0-beta.0",
   "scripts": {
     "test": "jest",
     "dev": "jest --watch",
-    "coverage": "jest --coverage"
+    "coverage": "jest --coverage",
+    "postpublish": "rm -rf dist/",
+    "build": "./scripts/build.sh"
   },
   "devDependencies": {
     "babel-jest": "15.0.0",
@@ -21,6 +22,7 @@
   "dependencies": {
     "algoliasearch": "3.18.1",
     "algoliasearch-helper": "2.13.0",
+    "babel-cli": "6.14.0",
     "history": "2.1.2",
     "lodash": "4.15.0",
     "qs": "6.2.1",
@@ -30,10 +32,5 @@
   "peerDependencies": {
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
-  },
-  "jest": {
-    "globals": {
-      "__DOC__": false
-    }
   }
 }
