@@ -34,12 +34,11 @@ class SortBy extends Component {
 
   render() {
     const {applyTheme, refine, items, selectedIndex} = this.props;
-
     return (
       <Select
-        {...applyTheme('root', 'root')}
+        applyTheme={applyTheme}
         selectedItem={selectedIndex}
-        onChange={refine}
+        onSelect={refine}
         items={items}
       />
     );
