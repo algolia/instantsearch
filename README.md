@@ -24,7 +24,7 @@ npm install
 npm start
 ```
 
-Go to <http://localhost:8080/index.html>.
+Go to <http://localhost:3000>.
 
 See the current issues in [GitHub](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3Av2) or [Waffle](https://waffle.io/algolia/instantsearch.js?label=v2).
 

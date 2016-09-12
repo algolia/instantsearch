@@ -17,12 +17,12 @@ export default function themeable(defaultTheme) {
     Themeable.displayName = `Themeable(${getDisplayName(Composed)})`;
 
     Themeable.propTypes = {
-      theme: __DOC__ ?
+      theme: __DOC__ === 'yes' ?
         {type: {name: 'theme', value: defaultTheme}} :
         withKeysPropType(Object.keys(defaultTheme)),
     };
 
-    if (__DOC__) {
+    if (__DOC__ === 'yes') {
       Themeable.propTypes = {
         ...omit(Composed.propTypes, 'applyTheme'),
         ...Themeable.propTypes,

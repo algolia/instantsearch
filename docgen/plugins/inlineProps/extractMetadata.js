@@ -37,7 +37,7 @@ const getCompiler = memoize(entriesArray => {
         test: /node_modules/,
       }),
       new webpack.DefinePlugin({
-        __DOC__: JSON.stringify(true),
+        __DOC__: JSON.stringify('yes'),
       }),
     ],
   });

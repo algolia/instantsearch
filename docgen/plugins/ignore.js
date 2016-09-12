@@ -1,9 +1,9 @@
-export default function ignore(regex) {
+export default function ignore(testFn) {
   return (files, metalsmith, cb) => {
     Object
       .keys(files)
       .forEach(fileName => {
-        if (regex.test(fileName)) delete files[fileName];
+        if (testFn(fileName) === true) delete files[fileName];
       });
 
     cb(null);

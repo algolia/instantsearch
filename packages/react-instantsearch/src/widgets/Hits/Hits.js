@@ -15,8 +15,19 @@ class Hits extends Component {
     itemComponent: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.func,
-    ]),
+    ]).isRequired,
   };
+
+  static defaultProps = {
+    itemComponent: hit =>
+      <div
+        style={{
+          borderBottom: '1px solid #bbb',
+          paddingBottom: '5px',
+          marginBottom: '5px',
+        }}
+      >{JSON.stringify(hit).slice(0, 100)}...</div>,
+  }
 
   render() {
     const {applyTheme, itemComponent: ItemComponent, hits} = this.props;
