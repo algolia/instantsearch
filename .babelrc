@@ -1,3 +1,13 @@
 {
-  "presets": ["latest", "react", "stage-2"]
+  "presets": ["latest", "react", "stage-2"],
+  "plugins": [
+    ["transform-define", {
+      "__DOC__": "no"
+    }]
+  ],
+  "env": {
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    }
+  }
 }

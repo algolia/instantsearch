@@ -19,7 +19,7 @@ function PaginationSelect(props) {
   );
 }
 
-if (__DOC__) {
+if (__DOC__ === 'yes') {
   PaginationSelect.propTypes = omit(
     Pagination.propTypes,
     'showFirst',

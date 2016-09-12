@@ -1,7 +1,6 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {
   InstantSearch,
   SearchBox,
@@ -16,27 +15,24 @@ import {
   createConnector,
 } from 'react-instantsearch';
 
-const ECommerceExample = React.createClass({
-
-  render () {
-    return (
-      <InstantSearch className="container-fluid"
-                     appId="latency"
-                     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-                     indexName="ikea"
-      >
-        <div>
-          <Header />
-          <div className="content-wrapper">
-            <Facets />
-            <CustomResults />
-          </div>
-        </div>
-      </InstantSearch>
-    )
-      ;
-  },
-});
+export default function App() {
+  return (
+<InstantSearch
+  className="container-fluid"
+  appId="latency"
+  apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+  indexName="ikea"
+>
+  <div>
+    <Header />
+    <div className="content-wrapper">
+      <Facets />
+      <CustomResults />
+    </div>
+  </div>
+</InstantSearch>
+  );
+}
 
 const Header = () =>
   <header className="content-wrapper">
@@ -229,8 +225,3 @@ const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
 const ConnectedColorRefinementList = RefinementList.connect(CustomColorRefinementList);
 
 const ConnectedHits = Hits.connect(CustomHits);
-
-ReactDOM.render(
-  <ECommerceExample />,
-  document.getElementById('e-commerce-example')
-);

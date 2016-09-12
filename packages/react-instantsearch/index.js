@@ -22,6 +22,7 @@ import ScrollTo from './src/widgets/ScrollTo/index.js';
 
 // Doing `export {default as Thing} from 'thing'` causes warnings with
 // react-hot-loader.
+// @TODO not sure this is still the case with new react-hot-loader, check
 export {
   InstantSearch,
   createConnector,
