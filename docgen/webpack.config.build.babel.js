@@ -1,4 +1,4 @@
-// this is the webpack config when running `npm run build:docs`
+// this is the webpack config when running `npm run docs:build`
 
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';

@@ -6,7 +6,7 @@ import {rootPath} from './path.js';
 export default function builder({
   clean = true,
   middlewares,
-  destination = 'docs/',
+  destination = 'docs/react/',
 }, cb) {
   console.time('metalsmith build');
   // default source directory is join(__dirname, 'src');
