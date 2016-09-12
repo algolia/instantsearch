@@ -2,7 +2,7 @@
 
 set -e # exit when error
 
-if [[ -n $("npm owner add `npm whoami`") ]]; then
+if [[ -n $(cd packages/react-instantsearch && npm owner add "$(npm whoami)") ]]; then
   printf "Release: Not an owner of the npm repo, ask for it\n"
   exit 1
 fi
@@ -65,7 +65,7 @@ npm run doctoc
 
 # git add and tag
 # commitMessage="v$newVersion\n\n$changelog"
-commitMessage="v$newVersion"
+commitMessage="release"
 # git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
 printf "%s" $commitMessage | git commit --file -
 # not git tagging for now, still prototyping
