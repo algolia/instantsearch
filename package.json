@@ -77,7 +77,7 @@
     "uglify-js": "2.7.3",
     "watch": "0.19.2",
     "wdio-dot-reporter": "0.0.6",
-    "wdio-mocha-framework": "0.4.2",
+    "wdio-mocha-framework": "0.4.3",
     "wdio-sauce-service": "0.2.5",
     "webdriverio": "4.2.11",
     "webpack": "1.13.2",
