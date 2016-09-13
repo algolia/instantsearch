@@ -5,7 +5,6 @@ import {
   getContainerNode
 } from '../../lib/utils.js';
 import cx from 'classnames';
-import find from 'lodash/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import SelectorComponent from '../../components/Selector.js';
 
@@ -59,12 +58,16 @@ function numericSelector({
   };
 
   return {
+    getConfiguration(currentSearchParameters, searchParametersFromUrl) {
+      return {
+        numericRefinements: {
+          [attributeName]: {
+            [operator]: [this._getRefinedValue(searchParametersFromUrl)]
+          }
+        }
+      };
+    },
     init({helper}) {
-      const currentValue = this._getRefinedValue(helper);
-      if (currentValue !== undefined) {
-        helper.addNumericRefinement(attributeName, operator, currentValue);
-      }
-
       this._refine = value => {
         helper.clearRefinements(attributeName);
         if (value !== undefined) {
@@ -78,7 +81,7 @@ function numericSelector({
       ReactDOM.render(
         <Selector
           cssClasses={cssClasses}
-          currentValue={this._getRefinedValue(helper)}
+          currentValue={this._getRefinedValue(helper.state)}
           options={options}
           setValue={this._refine}
           shouldAutoHideContainer={results.nbHits === 0}
@@ -87,12 +90,19 @@ function numericSelector({
       );
     },
 
-    _getRefinedValue(helper) {
-      const refinements = helper.getRefinements(attributeName);
-      const refinedValue = find(refinements, {operator});
-      return refinedValue &&
-        refinedValue.value !== undefined &&
-        refinedValue.value[0] !== undefined ? refinedValue.value[0] : options[0].value;
+    _getRefinedValue(state) {
+      // This is reimplementing state.getNumericRefinement
+      // But searchParametersFromUrl is not an actual SearchParameters object
+      // It's only the object structure without the methods, because getStateFromQueryString
+      // is not sending a SearchParameters. There's no way given how web built the helper
+      // to initialize a true partial state where only the refinements are present
+      return state &&
+        state.numericRefinements &&
+        state.numericRefinements[attributeName] !== undefined &&
+        state.numericRefinements[attributeName][operator] !== undefined &&
+        state.numericRefinements[attributeName][operator][0] !== undefined ? // could be 0
+        state.numericRefinements[attributeName][operator][0] :
+        options[0].value;
     }
   };
 }

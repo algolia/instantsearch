@@ -55,7 +55,6 @@ describe('numericSelector()', () => {
     helper = {
       addNumericRefinement: sinon.spy(),
       clearRefinements: sinon.spy(),
-      getRefinements: sinon.stub().returns([]),
       search: sinon.spy()
     };
     results = {
@@ -66,8 +65,31 @@ describe('numericSelector()', () => {
     helper.addNumericRefinement.reset();
   });
 
-  it('doesn\'t configure anything', () => {
-    expect(widget.getConfiguration).toEqual(undefined);
+  it('configures the right numericRefinement', () => {
+    expect(widget.getConfiguration({}, {})).toEqual({
+      numericRefinements: {
+        aNumAttr: {
+          '=': [1]
+        }
+      }
+    });
+  });
+
+  it('configures the right numericRefinement when present in the url', () => {
+    const urlState = {
+      numericRefinements: {
+        aNumAttr: {
+          '=': [2]
+        }
+      }
+    };
+    expect(widget.getConfiguration({}, urlState)).toEqual({
+      numericRefinements: {
+        aNumAttr: {
+          '=': [2]
+        }
+      }
+    });
   });
 
   it('calls twice ReactDOM.render(<Selector props />, container)', () => {
@@ -82,10 +104,13 @@ describe('numericSelector()', () => {
   });
 
   it('computes refined values and pass them to <Selector props />', () => {
-    helper.getRefinements = sinon.stub().returns([{
-      operator: '=',
-      value: [20]
-    }]);
+    helper.state = {
+      numericRefinements: {
+        aNumAttr: {
+          '=': [20]
+        }
+      }
+    };
     expectedProps.currentValue = 20;
     widget.render({helper, results, state: helper.state});
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...expectedProps} />);
