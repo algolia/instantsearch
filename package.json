@@ -89,7 +89,6 @@
     "classnames": "2.2.5",
     "events": "1.1.0",
     "hogan.js": "3.0.2",
-    "is-integer": "1.0.6",
     "lodash": "4.15.0",
     "react": "15.3.1",
     "react-dom": "15.3.1",

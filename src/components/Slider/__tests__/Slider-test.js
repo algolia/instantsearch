@@ -22,7 +22,7 @@ describe('Slider', () => {
 
     props = {
       range: {min: 0, max: 5000},
-      pipsFormatter: () => {}
+      format: {to: () => {}, from: () => {}}
     };
   });
 
@@ -35,10 +35,10 @@ describe('Slider', () => {
         behaviour="snap"
         connect
         cssPrefix="ais-range-slider--"
+        format={{to: () => {}, from: () => {}}}
         onChange={() => {}}
         pips={{
           density: 3,
-          format: {to: function noRefCheck() {}},
           mode: 'positions',
           stepped: true,
           values: [0, 50, 100]
