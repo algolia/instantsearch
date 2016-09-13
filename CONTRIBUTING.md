@@ -16,7 +16,6 @@ Hi (future) collaborator!
 - [Development workflow](#development-workflow)
 - [Commit message guidelines](#commit-message-guidelines)
 - [Squash your commits](#squash-your-commits)
-- [When are issues closed?](#when-are-issues-closed)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -135,11 +134,3 @@ Example:
     - `refactor new feature blablabla...`
     - `fix after review ...`
   - **both commits should be squashed* in a single commit: `feat(widget) ..`
-
-# When are issues closed?
-
-Once the a fix is done, having the fix in the `develop` branch is not sufficient, it needs to be part of a release for us to close the issue.
-
-So that you never ask yourself "Is this released?".
-
-Instead of closing the issue, we will add a ` ✔ to be released` label.

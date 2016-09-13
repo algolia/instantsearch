@@ -1,15 +1,17 @@
 import webpack from 'webpack';
 import MemoryFS from 'memory-fs';
 import ExternalsPlugin from 'webpack-externals-plugin';
-import requireFromString from 'require-from-string';
+import requireFromStringRaw from 'require-from-string';
 import {join} from 'path';
-
-export default function extractMetadata(entries, callback) {
-  const entry = entries.reduce((res, e) => ({...res, [e]: e}), {});
+import {reduce as asyncReduce} from 'async';
+import memoize from 'memoizee';
+const mfs = new MemoryFS();
+const getCompiler = memoize(entriesArray => {
+  const entriesMap = entriesArray.reduce((res, e) => ({...res, [e]: e}), {});
 
   const compiler = webpack({
-    entry,
-
+    entry: entriesMap,
+    cache: true,
     output: {
       filename: '[name]',
       path: '/',
@@ -35,15 +37,19 @@ export default function extractMetadata(entries, callback) {
         test: /node_modules/,
       }),
       new webpack.DefinePlugin({
-        __DOC__: JSON.stringify(true),
+        __DOC__: JSON.stringify('yes'),
       }),
     ],
   });
 
-  const mfs = new MemoryFS();
   compiler.outputFileSystem = mfs;
+  return compiler;
+});
 
-  compiler.run((err, stats) => {
+const requireFromString = memoize(requireFromStringRaw);
+
+export default function extractMetadata(entriesArray, callback) {
+  getCompiler(entriesArray).run((err, stats) => {
     if (err) {
       callback(err);
       return;
@@ -54,15 +60,18 @@ export default function extractMetadata(entries, callback) {
       return;
     }
 
-    const output = entries.reduce((res, e) => {
-      const str = mfs.readFileSync(e, 'utf8');
-      const Component = requireFromString(str, e);
-      return {
-        ...res,
-        [e]: Component,
-      };
-    }, {});
-
-    callback(null, output);
+    asyncReduce(
+      entriesArray,
+      {},
+      (res, e, cb) => {
+        const str = mfs.readFileSync(e, 'utf8');
+        const Component = requireFromString(str, e);
+        cb(null, {
+          ...res,
+          [e]: Component,
+        });
+      },
+      callback
+    );
   });
 }

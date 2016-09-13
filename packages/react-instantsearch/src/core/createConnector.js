@@ -28,7 +28,7 @@ export default function createConnector(connectorDesc) {
 
   return Composed => class Connector extends Component {
     static displayName = `${connectorDesc.displayName}(${getDisplayName(Composed)})`;
-    static propTypes = __DOC__ ?
+    static propTypes = __DOC__ === 'yes' ?
       {
         ...omit(Composed.propTypes, 'refine', 'createURL'),
         ...connectorDesc.propTypes,

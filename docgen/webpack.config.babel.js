@@ -1,16 +1,18 @@
 import webpack from 'webpack';
 import {join} from 'path';
+import {rootPath} from './path';
 
 export default {
   entry: {
-    api: join(__dirname, 'assets/js/api.js'),
-    media: join(__dirname, 'assets/js/examples/media.js'),
-    tourism: join(__dirname, 'assets/js/examples/tourism.js'),
+    'assets/js/api': join(__dirname, 'assets/js/api.js'),
+    'assets/js/examples/ecommerce/index': join(__dirname, 'assets/js/examples/ecommerce/index.js'),
+    'assets/js/examples/media/index': join(__dirname, 'assets/js/examples/media/index.js'),
+    'assets/js/examples/tourism/index': join(__dirname, 'assets/js/examples/tourism/index.js'),
   },
   devtool: 'source-map',
   output: {
-    path: join(__dirname, '../docs/assets/js'),
-    publicPath: '/assets/js/',
+    path: rootPath(process.env.DOCS_DIST || 'docs/react/'),
+    publicPath: process.env.DOCS_MOUNT_POINT || '/',
     filename: '[name].js',
     // @TODO: in production this should be hashed
     // filename: '[name].[chunkhash].js',
@@ -33,10 +35,6 @@ export default {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV),
       },
-      // needed by react-instantsearch
-      // @TODO: we can't ask users to do so, the default production build
-      // will need to have this set to false
-      '__DOC__': JSON.stringify(false),
     }),
   ],
 };

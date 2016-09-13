@@ -73,6 +73,7 @@ class Filters extends Component {
 }
 
 function CustomMarker() {
+  /*  eslint-disable max-len */
   return (
     <svg width="60" height="102" viewBox="0 0 102 60" className="marker">
       <g fill="none" fillRule="evenodd">
@@ -82,6 +83,7 @@ function CustomMarker() {
         </g>
       </g>
     </svg>);
+  /*  eslint-enable max-len */
 }
 
 function HitsMap({hits}) {
@@ -118,6 +120,10 @@ function HitsMap({hits}) {
     >{markers}</GoogleMap>
   );
 }
+
+HitsMap.propTypes = {
+  hits: PropTypes.object,
+};
 
 const ConnectedHitsMap = Hits.connect(HitsMap);
 
@@ -182,7 +188,6 @@ class Price extends Component {
     );
   }
 }
-
 
 const MyHits = Hits.connect(({hits}) => {
   const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);

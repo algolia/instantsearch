@@ -10,9 +10,7 @@ html
     if stylesheets
       for sheet in stylesheets
         link(rel="stylesheet" href=sheet)
-    link(rel="stylesheet" href=`/assets/css/examples/${name}.css`)
+    link(rel="stylesheet" href=h.publicPath(`assets/css/examples/${name}.css`))
   body
     .content!=contents
-    script(src=webpack.assets[`${name}.js`])
-    unless(env === 'production')
-      script(src="http://localhost:35729/livereload.js")
+    script(src=webpack.assets[`assets/js/examples/${name}/index.js`])
