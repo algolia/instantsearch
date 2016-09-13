@@ -194,7 +194,7 @@ body {
   display: flex;
   align-items: center;
   height: 4px;
-  margin: 40px 25px;
+  margin: 20px 25px;
 }
 
 .Range__handles {
@@ -314,6 +314,11 @@ body {
 
 .marker {
   transform: translate(-50%, -100%) scale(0.5, 0.5);
+}
+
+.capacity-filter {
+  padding: 9px 10px 7px;
+  background: #EDEFED;
 }
 
 /* RESULTS

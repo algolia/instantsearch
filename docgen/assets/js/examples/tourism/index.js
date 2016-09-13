@@ -1,4 +1,4 @@
-import {InstantSearch, Hits, SearchBox, Pagination, Range, RefinementList} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox, Pagination, Range, RefinementList, NumericRefinementList} from 'react-instantsearch';
 import React, {Component, PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
@@ -50,6 +50,7 @@ class Filters extends Component {
 
             <div className="aisdemo-filters">
               <DatesAndGuest />
+              <Capacity />
               <RoomType
                 attributeName="room_type"
                 operator="or"
@@ -122,10 +123,64 @@ function HitsMap({hits}) {
 }
 
 HitsMap.propTypes = {
-  hits: PropTypes.object,
+  hits: PropTypes.array,
 };
 
 const ConnectedHitsMap = Hits.connect(HitsMap);
+
+function Capacity() {
+  return (
+    <div className="row aisdemo-filter">
+      <div className="col-sm-2 aisdemo-filter-title">Capacity</div>
+      <div className="col-sm-3">
+        <CapacitySelector
+          attributeName="person_capacity"
+          items={[
+            {label: '1 guest', start: 1, end: 1},
+            {label: '2 guests', start: 2, end: 2},
+            {label: '3 guests', start: 3, end: 3},
+            {label: '4 guests', start: 4, end: 4},
+            {label: '5 guests', start: 5, end: 5},
+            {label: '6 guests', start: 6, end: 6},
+          ]}
+        />
+      </div>
+    </div>
+  );
+}
+
+function OptionCapacity({label, value, isSelected}) {
+  return isSelected ?
+    <option value={value} selected key={value}>{label}</option> :
+    <option value={value} key={value}>{label}</option>;
+}
+
+OptionCapacity.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  isSelected: PropTypes.bool,
+};
+
+const CapacitySelector = NumericRefinementList.connect(({items, selectedItem, refine}) => {
+  const selectValue = e => refine(e.target.value);
+
+  const allOption = <OptionCapacity label="" value="" isSelected={Boolean(selectedItem)} />;
+
+  const options = items.map(item => {
+    const isSelected = item.value === selectedItem;
+    const val = parseFloat(item.value.split(':')[0]);
+    const label = `${val} person${val > 1 ? 's' : ''}`;
+    return <OptionCapacity label={label} value={item.value} isSelected={isSelected} />;
+  });
+
+  options.unshift(allOption);
+
+  return (
+    <select onChange={selectValue}>
+      {options}
+    </select>
+  );
+});
 
 class DatesAndGuest extends Component {
   render() {
@@ -134,7 +189,7 @@ class DatesAndGuest extends Component {
         <div className="col-sm-2 aisdemo-filter-title">Dates</div>
         <div className="col-sm-3"><input className="date form-control" value="10/30/3015" disabled /></div>
         <div className="col-sm-3"><input className="date form-control" value="10/30/3015" disabled /></div>
-        <div className="col-sm-3"><div id="guests"></div></div>
+        <div className="col-sm-3"></div>
       </div>
     );
   }
@@ -171,7 +226,7 @@ const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
   return (
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Room Type</div>
-      <div id="room_types">
+      <div id="room_types col-sm-3">
         {itemComponents}
       </div>
     </div>
@@ -183,7 +238,9 @@ class Price extends Component {
     return (
       <div className="row aisdemo-filter">
         <div className="col-sm-2 aisdemo-filter-title">Price Range</div>
-        <Range attributeName="price" />
+        <div className="col-sm-10">
+          <Range attributeName="price"/>
+        </div>
       </div>
     );
   }
