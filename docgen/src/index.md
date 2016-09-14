@@ -6,6 +6,8 @@ nav_groups:
 nav_sort: 0
 ---
 
+# react-instantsearch
+
 This is the home of `react-instantsearch`, a set of [React](https://facebook.github.io/react/) components to create unique instant-search experiences using [Algolia](https://www.algolia.com/) search engine.
 
 **This is an alpha release, everything may be broken**.
