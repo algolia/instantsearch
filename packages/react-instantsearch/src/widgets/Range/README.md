@@ -1,6 +1,6 @@
 ---
 title: Range
-layout: api.ejs
+layout: api.pug
 nav_groups:
   - widgets
 ---

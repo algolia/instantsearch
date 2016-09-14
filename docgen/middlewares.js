@@ -72,7 +72,7 @@ const common = [
   inlineProps,
   // perfStop(),
   headings('h2, h3'),
-  layouts('ejs'),
+  layouts('pug'),
 ];
 
 // development mode
