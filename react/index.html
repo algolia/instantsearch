@@ -9,7 +9,7 @@
     <!-- Always force latest IE rendering engine or request Chrome Frame -->
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
 
-    <title>react-instantsearch | Index</title>
+    <title>react-instantsearch | Getting started</title>
 
     <link rel="stylesheet" href="/instantsearch.js/react/assets/css/theme.css">
     <link rel="stylesheet" href="/instantsearch.js/react/assets/css/site.css">
@@ -22,7 +22,7 @@
         <ul>
   
     <li class="navItem navItem--active">
-      <a href="/instantsearch.js/react/index.html">Index</a>
+      <a href="/instantsearch.js/react/index.html">Getting started</a>
 
       
     </li>
@@ -185,14 +185,50 @@
       <div class="nav headings">
         <ul>
           
+            <li class="subtitle">
+              <a href="#example">Example</a>
+            </li>
+          
         </ul>
       </div>
     </div>
 
     <div class="content">
-      
+      <p>This is the home of <code class="CodeMirror cm-s-default"><span class="cm-variable">react</span><span class="cm-operator">-</span><span class="cm-variable">instantsearch</span></code>, a set of <a href="https://facebook.github.io/react/">React</a> components to create unique instant-search experiences using <a href="https://www.algolia.com/">Algolia</a> search engine.</p>
+<p><strong>This is an alpha release, everything may be broken</strong>.</p>
+<p>Links:</p>
+<ul>
+<li><a href="https://gitter.im/react-instantsearch/Lobby">Chat with us</a> on gitter, we are active and waiting for feedback</li>
+<li>Code is at <a href="https://github.com/algolia/instantsearch.js/tree/v2">https://github.com/algolia/instantsearch.js/tree/v2</a>, jump in</li>
+</ul>
+<h2 id="example">Example</h2>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-variable">npm</span> <span class="cm-variable">install</span> <span class="cm-variable">react</span><span class="cm-operator">-</span><span class="cm-variable">instantsearch</span> <span class="cm-operator">--</span><span class="cm-variable">save</span></code></pre><p>app.js</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> <span class="cm-def">React</span> <span class="cm-keyword">from</span> <span class="cm-string">&#39;react&#39;</span>;
+<span class="cm-keyword">import</span> <span class="cm-def">ReactDOM</span> <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-dom&#39;</span>;
+
+<span class="cm-keyword">import</span> {
+  <span class="cm-def">InstantSearch</span>,
+  <span class="cm-def">SearchBox</span>,
+  <span class="cm-def">Hits</span>,
+} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">const</span> <span class="cm-def">App</span> <span class="cm-operator">=</span> () <span class="cm-operator">=&gt;</span>
+  <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">InstantSearch</span>
+    <span class="cm-attribute">appId</span>=<span class="cm-string">&quot;latency&quot;</span>
+    <span class="cm-attribute">apiKey</span>=<span class="cm-string">&quot;6be0576ff61c053d5f9a3225e2a90f76&quot;</span>
+    <span class="cm-attribute">indexName</span>=<span class="cm-string">&quot;movies&quot;</span>
+  <span class="cm-tag cm-bracket">&gt;</span>
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+      <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">SearchBox</span> <span class="cm-tag cm-bracket">/&gt;</span>
+      <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">Hits</span> <span class="cm-tag cm-bracket">/&gt;</span>
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+  <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">InstantSearch</span><span class="cm-tag cm-bracket">&gt;</span>;
+};
+
+<span class="cm-variable">ReactDOM</span>.<span class="cm-property">render</span>(<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">App</span><span class="cm-tag cm-bracket">/&gt;</span>, <span class="cm-variable">document</span>.<span class="cm-variable">querySelector</span>(<span class="cm-string">&#39;#app&#39;</span>));</code></pre><p>index.html</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">&quot;app&quot;</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></code></pre>
     </div>
 
-    <script src="/instantsearch.js/react/assets/js/api.7a67d2106c836360521e-build.js"></script>
+    <script src="/instantsearch.js/react/assets/js/api.72631a72806e6dc4a7ed-build.js"></script>
   </body>
 </html>
