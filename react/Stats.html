@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>react-instantsearch | Stats</title>
+
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/theme.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/site.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/DocProps.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ecommerce.html">E-commerce example</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/media.html">Media example</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/instantsearch.js/react/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#theme">Theme</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#translations">Translations</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#implementing-your-own-stats">Implementing your own Stats</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="stats">Stats</h1>
+<p>The <code class="CodeMirror cm-s-default"><span class="cm-variable">Stats</span></code> widget is where users type their search queries.</p>
+<h3 id="theme">Theme</h3>
+<p><code class="CodeMirror cm-s-default"><span class="cm-variable">root</span></code></p>
+<h3 id="translations">Translations</h3>
+<p><code class="CodeMirror cm-s-default"><span class="cm-variable">stats</span>(<span class="cm-variable">nbHits</span>, <span class="cm-variable">processingTimeMS</span>)</code></p>
+<h2 id="implementing-your-own-stats">Implementing your own Stats</h2>
+<p>See <a href="../Customization.md">Making your own widgets</a> for more information on how to use the <code class="CodeMirror cm-s-default"><span class="cm-variable">Stats</span>.<span class="cm-property">connect</span></code> HOC.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">Stats</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">MyStats</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+      Found {<span class="cm-variable">props</span>.<span class="cm-property">nbHits</span>} in {<span class="cm-variable">props</span>.<span class="cm-property">processingTimeMS</span>}ms.
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}
+
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">Stats</span>.<span class="cm-property">connect</span>(<span class="cm-variable">MyStats</span>);</code></pre>
+    </div>
+
+    <script src="/instantsearch.js/react/assets/js/api.7a67d2106c836360521e-build.js"></script>
+  </body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>react-instantsearch | InstantSearch</title>
+
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/theme.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/site.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/DocProps.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/instantsearch.js/react/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ecommerce.html">E-commerce example</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/media.html">Media example</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#props">Props</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#url-synchronization">URL Synchronization</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#location-debouncing">Location Debouncing</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#custom-history">Custom History</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#controlled-state">Controlled State</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="instantsearch">InstantSearch</h1>
+<p>Connects to your Algolia index and provides data to all children widgets.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">InstantSearch</span>, <span class="cm-def">SearchBox</span>, <span class="cm-def">Hits</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-keyword">function</span> <span class="cm-def">Search</span>() {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">InstantSearch</span>
+      <span class="cm-attribute">appId</span>=<span class="cm-string">&quot;appId&quot;</span>
+      <span class="cm-attribute">apiKey</span>=<span class="cm-string">&quot;apiKey&quot;</span>
+      <span class="cm-attribute">indexName</span>=<span class="cm-string">&quot;indexName&quot;</span>
+    <span class="cm-tag cm-bracket">&gt;</span>
+      <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+        <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">SearchBox</span> <span class="cm-tag cm-bracket">/&gt;</span>
+        <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">Hits</span> <span class="cm-tag cm-bracket">/&gt;</span>
+      <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">InstantSearch</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}</code></pre><h2 id="props">Props</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">appId</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">string</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">The Algolia application id.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">apiKey</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">string</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">Your Algolia Search-Only API key.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">indexName</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">string</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">The index in which to search.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">urlSync</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">bool</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-atom">true</span></code></td>
+<td style="text-align:left">Enables automatic synchronization of widgets state to the URL. See <a href="#url-synchronization">URL Synchronization</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">history</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">object</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">A custom <a href="https://github.com/ReactTraining/history">history</a> to push location to. Useful for quick integration with <a href="https://github.com/reactjs/react-router">React Router</a>. Takes precedence over <code class="CodeMirror cm-s-default"><span class="cm-variable">urlSync</span></code>. See <a href="#custom-history">Custom History</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">threshold</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">number</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-number">700</span></code></td>
+<td style="text-align:left">Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See <a href="#location-debouncing">Location Debouncing</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">onStateChange</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">func</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">See <a href="#controlled-state">Controlled State</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">state</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">object</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">See <a href="#controlled-state">Controlled State</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-variable">createURL</span></code></td>
+<td style="text-align:left"><code class="CodeMirror cm-s-default"><span class="cm-operator">?</span><span class="cm-variable">func</span></code></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">See <a href="#controlled-state">Controlled State</a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="url-synchronization">URL Synchronization</h2>
+<p>The <code class="CodeMirror cm-s-default"><span class="cm-variable">InstantSearch</span></code> component features a complete URL synchronization solution. Whenever a widget&#39;s state changes, the URL will be updated to reflect the new state of the search UI. This has two main benefits:</p>
+<ul>
+<li>the user can use the browser&#39;s back and forward buttons to navigate back and forth between the different states of the search.</li>
+<li>the user can bookmark, copy and share a custom search URL.</li>
+</ul>
+<h3 id="location-debouncing">Location Debouncing</h3>
+<p>Since UI updates can happen in quick succession, for instance when the user types in a query, the new locations are debounced. The <code class="CodeMirror cm-s-default"><span class="cm-variable">treshold</span></code> prop controls how long the component should wait between state changes before pushing a new location instead of replacing the old one.</p>
+<h3 id="custom-history">Custom History</h3>
+<p>If you&#39;re using <a href="https://github.com/reactjs/react-router">React Router</a> and/or the <a href="https://github.com/ReactTraining/history">history</a> library, you can pass a custom history object for the component to push locations to.</p>
+<h4 id="with-react-router">With React Router</h4>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">withRouter</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-router&#39;</span>;
+<span class="cm-keyword">import</span> {<span class="cm-def">InstantSearch</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">Search</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">InstantSearch</span>
+      <span class="cm-attribute">appId</span>=<span class="cm-string">&quot;appId&quot;</span>
+      <span class="cm-attribute">apiKey</span>=<span class="cm-string">&quot;apiKey&quot;</span>
+      <span class="cm-attribute">indexName</span>=<span class="cm-string">&quot;indexName&quot;</span>
+      <span class="cm-attribute">history</span>={<span class="cm-variable">props</span>.<span class="cm-property">router</span>}
+    <span class="cm-tag cm-bracket">&gt;</span>
+      {<span class="cm-comment">/* ... */</span>}
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">InstantSearch</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}
+
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">withRouter</span>(<span class="cm-variable">Search</span>);</code></pre><h4 id="with-a-custom-history">With a custom history</h4>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">InstantSearch</span>, <span class="cm-def">SearchBox</span>, <span class="cm-def">Hits</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">import</span> <span class="cm-def">myHistory</span> <span class="cm-keyword">from</span> <span class="cm-string">&#39;./path-to-my-history&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">Search</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">InstantSearch</span>
+      <span class="cm-attribute">appId</span>=<span class="cm-string">&quot;appId&quot;</span>
+      <span class="cm-attribute">apiKey</span>=<span class="cm-string">&quot;apiKey&quot;</span>
+      <span class="cm-attribute">indexName</span>=<span class="cm-string">&quot;indexName&quot;</span>
+      <span class="cm-attribute">history</span>={<span class="cm-variable">myHistory</span>}
+    <span class="cm-tag cm-bracket">&gt;</span>
+      {<span class="cm-comment">/* ... */</span>}
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">InstantSearch</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}
+
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">Search</span>;</code></pre><h2 id="controlled-state">Controlled State</h2>
+<p>The <code class="CodeMirror cm-s-default"><span class="cm-variable">InstantSearch</span></code> component defaults to an uncontrolled behavior, which means that the widgets state is kept and updated internally. This behavior allows for <a href="#url-synchronization">URL Synchronization</a>. However, in some cases, you might want to control this state from outside of this component. For instance, if you implement your own routing solution, or if you wish to customize your URLs.</p>
+<p>As such, this component behaves just like a React <code class="CodeMirror cm-s-default"><span class="cm-variable">input</span></code>. By providing <code class="CodeMirror cm-s-default"><span class="cm-variable">state</span></code> and <code class="CodeMirror cm-s-default"><span class="cm-variable">onStateChange</span>(<span class="cm-variable">nextState</span>)</code> props, you can store and update the widgets state from outside the component. For instance, in a parent component&#39;s state or in a Redux store.</p>
+<p>Note that controlling the state from outside of the component disables <a href="#url-synchronization">URL Synchronization</a>. If you need this feature, you will need to reimplement it yourself. In this case, as there is no way for widgets that contain hyperlinks to guess how a state change will affect the URL, you should provide a <code class="CodeMirror cm-s-default"><span class="cm-variable">createURL</span></code> prop to the component.</p>
+<p>The <code class="CodeMirror cm-s-default"><span class="cm-variable">createURL</span></code> function takes in a widgets <code class="CodeMirror cm-s-default"><span class="cm-variable">state</span></code> object and returns a <code class="CodeMirror cm-s-default"><span class="cm-variable">string</span></code> to be used as a <code class="CodeMirror cm-s-default"><span class="cm-variable">href</span></code> attribute.</p>
+
+    </div>
+
+    <script src="/instantsearch.js/react/assets/js/api.7a67d2106c836360521e-build.js"></script>
+  </body>
+</html>

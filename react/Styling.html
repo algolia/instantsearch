@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>react-instantsearch | Styling</title>
+
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/theme.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/site.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/DocProps.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/instantsearch.js/react/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ecommerce.html">E-commerce example</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/media.html">Media example</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#example-styling-a-searchbox">Example: Styling a SearchBox</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="styling">Styling</h1>
+<p>All widgets that render one or more DOM nodes accept a <code class="CodeMirror cm-s-default"><span class="cm-variable">theme</span></code> prop. This prop is a map of keys to corresponding <code class="CodeMirror cm-s-default"><span class="cm-variable">className</span></code> or <code class="CodeMirror cm-s-default"><span class="cm-variable">style</span></code> prop values. The different theme keys supported by components are described on their respective documentation page. See <a href="https://github.com/markdalgleish/react-themeable"><code class="CodeMirror cm-s-default"><span class="cm-variable">react</span><span class="cm-operator">-</span><span class="cm-variable">themeable</span></code></a> for the underlying implementation.</p>
+<p>By default, the <code class="CodeMirror cm-s-default"><span class="cm-variable">theme</span></code> prop is initialized with <code class="CodeMirror cm-s-default"><span class="cm-variable">className</span></code>s that respect the <a href="http://getbem.com/naming/">BEM</a> conventions: <code class="CodeMirror cm-s-default"><span class="cm-variable">Component</span>(<span class="cm-variable">__element</span>)<span class="cm-operator">*</span>(<span class="cm-operator">--</span><span class="cm-variable">modifier</span>)<span class="cm-operator">?</span></code>.</p>
+<h3 id="example-styling-a-searchbox">Example: Styling a SearchBox</h3>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">SearchBox</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-keyword">function</span> <span class="cm-def">ThemedSearchBox</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">SearchBox</span>
+      {<span class="cm-meta">...</span><span class="cm-variable">props</span>}
+      <span class="cm-attribute">theme</span>={{
+        <span class="cm-variable">root</span>: <span class="cm-string">&#39;MySearchBox&#39;</span>,
+        <span class="cm-variable">wrapper</span>: <span class="cm-string">&#39;MySearchBox__wrapper&#39;</span>,
+        <span class="cm-variable">input</span>: {
+          <span class="cm-variable">color</span>: <span class="cm-string">&#39;red&#39;</span>,
+        },
+        <span class="cm-variable">submit</span>: <span class="cm-string">&#39;MySearchBox__submit&#39;</span>,
+        <span class="cm-variable">reset</span>: {
+          <span class="cm-variable">display</span>: <span class="cm-string">&#39;none&#39;</span>,
+        },
+      }}
+    <span class="cm-tag cm-bracket">/&gt;</span>
+  );
+}</code></pre>
+    </div>
+
+    <script src="/instantsearch.js/react/assets/js/api.7a67d2106c836360521e-build.js"></script>
+  </body>
+</html>

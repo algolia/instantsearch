@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <link rel="icon" href="assets/favicon.png">
+
+    <!-- Always force latest IE rendering engine or request Chrome Frame -->
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+
+    <title>react-instantsearch | Menu</title>
+
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/theme.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/site.css">
+    <link rel="stylesheet" href="/instantsearch.js/react/assets/css/DocProps.css">
+  </head>
+
+  <body>
+    <div class="navigation">
+      <div class="nav core">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/index.html">Index</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/InstantSearch.html">InstantSearch</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Internationalization.html">Internationalization</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Styling.html">Styling</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Customization.html">Making your own widgets</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ecommerce.html">E-commerce example</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/media.html">Media example</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav widgets">
+        <ul>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/CurrentFilters.html">CurrentFilters</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/EmptyQuery.html">EmptyQuery</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Error.html">Error</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HierarchicalMenu.html">HierarchicalMenu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Hits.html">Hits</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/HitsPerPage.html">HitsPerPage</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Loading.html">Loading</a>
+
+      
+    </li>
+  
+    <li class="navItem navItem--active">
+      <a href="/instantsearch.js/react/Menu.html">Menu</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NoResults.html">NoResults</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/NumericRefinementList.html">NumericRefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Pagination.html">Pagination</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Range.html">Range</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/RefinementList.html">RefinementList</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/ScrollTo.html">ScrollTo</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SearchBox.html">SearchBox</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/SortBy.html">SortBy</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Stats.html">Stats</a>
+
+      
+    </li>
+  
+    <li class="navItem">
+      <a href="/instantsearch.js/react/Toggle.html">Toggle</a>
+
+      
+    </li>
+  
+</ul>
+
+      </div>
+
+      <div class="nav headings">
+        <ul>
+          
+            <li class="subtitle">
+              <a href="#menu-props">Menu Props</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#theme">Theme</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#translations">Translations</a>
+            </li>
+          
+            <li class="subtitle">
+              <a href="#implementing-your-own-menu">Implementing your own Menu</a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1 id="menu">Menu</h1>
+<p>Lets the user pick between a list of refinement values for a particular facet. Only one value can ever be selected at once.</p>
+<p>There&#39;s also a <code class="CodeMirror cm-s-default"><span class="cm-variable">MenuSelect</span></code> which renders a select control.</p>
+<h2 id="menu-props">Menu Props</h2>
+<div class="DocProps"><div class="Prop"><div id="default-props-entry-attributeName" class="Entry"><div class="Entry__head"><span class="Entry__badge">required</span><span class="Entry__name">attributeName</span><span class="Entry__type"><code>string</code></span><span class="Entry__link"><a href="#default-props-entry-attributeName">#</a></span></div><div class="Entry__description"><p>Name of the attribute for faceting</p>
+</div></div></div><div class="Prop"><div id="default-props-entry-defaultSelectedItem" class="Entry"><div class="Entry__head"><span class="Entry__name">defaultSelectedItem</span><span class="Entry__type"><code>string</code></span><span class="Entry__link"><a href="#default-props-entry-defaultSelectedItem">#</a></span></div><div class="Entry__description"><p>The default state of this widget.</p>
+</div></div></div><div class="Prop"><div id="default-props-entry-id" class="Entry"><div class="Entry__head"><span class="Entry__name">id</span><span class="Entry__type"><code>string</code></span><span class="Entry__link"><a href="#default-props-entry-id">#</a></span></div><div class="Entry__description"><p>URL State serialization key. Defaults to <code class="CodeMirror cm-s-default"><span class="cm-variable">attributeName</span></code>.</p>
+</div></div></div><div class="Prop"><div id="default-props-entry-limitMax" class="Entry"><div class="Entry__head"><span class="Entry__name">limitMax</span><span class="Entry__type"><code>number</code></span><span class="Entry__link"><a href="#default-props-entry-limitMax">#</a></span></div><div class="Entry__description"><p>Maximum number of refinement values. Ignored when <code class="CodeMirror cm-s-default"><span class="cm-variable">showMore</span></code> is <code class="CodeMirror cm-s-default"><span class="cm-atom">false</span></code>.</p>
+</div><div class="Entry__default">Defaults to <span><code class="CodeMirror cm-s-default"><span class="cm-number">20</span></code></span></div></div></div><div class="Prop"><div id="default-props-entry-limitMin" class="Entry"><div class="Entry__head"><span class="Entry__name">limitMin</span><span class="Entry__type"><code>number</code></span><span class="Entry__link"><a href="#default-props-entry-limitMin">#</a></span></div><div class="Entry__description"><p>Minimum number of refinement values.</p>
+</div><div class="Entry__default">Defaults to <span><code class="CodeMirror cm-s-default"><span class="cm-number">10</span></code></span></div></div></div><div class="Prop"><div id="default-props-entry-showMore" class="Entry"><div class="Entry__head"><span class="Entry__name">showMore</span><span class="Entry__type"><code>bool</code></span><span class="Entry__link"><a href="#default-props-entry-showMore">#</a></span></div><div class="Entry__description"><p>Display a show more button for increasing the number of refinement values from <code class="CodeMirror cm-s-default"><span class="cm-variable">limitMin</span></code> to <code class="CodeMirror cm-s-default"><span class="cm-variable">limitMax</span></code>.</p>
+</div><div class="Entry__default">Defaults to <span><code class="CodeMirror cm-s-default"><span class="cm-atom">false</span></code></span></div></div></div><div class="Prop"><div id="default-props-entry-sortBy" class="Entry"><div class="Entry__head"><span class="Entry__name">sortBy</span><span class="Entry__type"><code>[string]</code></span><span class="Entry__link"><a href="#default-props-entry-sortBy">#</a></span></div><div class="Entry__description"><p>How to sort refinement values. See <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values">the helper documentation</a> for the full list of options.</p>
+</div><div class="Entry__default">Defaults to <span><code class="CodeMirror cm-s-default">[<span class="cm-string">&#39;count:desc&#39;</span>, <span class="cm-string">&#39;name:asc&#39;</span>]</code></span></div></div></div></div>
+<h3 id="theme">Theme</h3>
+<p><code class="CodeMirror cm-s-default"><span class="cm-variable">root</span></code></p>
+<p>Only for <code class="CodeMirror cm-s-default"><span class="cm-variable">Menu</span></code>: <code class="CodeMirror cm-s-default"><span class="cm-variable">items</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">item</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">itemSelected</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">itemLink</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">itemLabel</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">itemCount</span></code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">showMore</span></code></p>
+<h3 id="translations">Translations</h3>
+<p>Only for <code class="CodeMirror cm-s-default"><span class="cm-variable">MenuSelect</span></code>: <code class="CodeMirror cm-s-default"><span class="cm-variable">count</span>(<span class="cm-variable">n</span>)</code> (should return a <code class="CodeMirror cm-s-default"><span class="cm-variable">string</span></code>)</p>
+<p>Only for <code class="CodeMirror cm-s-default"><span class="cm-variable">Menu</span></code>: <code class="CodeMirror cm-s-default"><span class="cm-variable">count</span>(<span class="cm-variable">n</span>)</code>, <code class="CodeMirror cm-s-default"><span class="cm-variable">showMore</span>(<span class="cm-variable">isExtended</span>)</code></p>
+<h2 id="implementing-your-own-menu">Implementing your own Menu</h2>
+<p>See <a href="../Customization.md">Making your own widgets</a> for more information on how to use the <code class="CodeMirror cm-s-default"><span class="cm-variable">Menu</span>.<span class="cm-property">connect</span></code> HOC.</p>
+<pre class="CodeMirror cm-s-default"><code><span class="cm-keyword">import</span> {<span class="cm-def">Menu</span>} <span class="cm-keyword">from</span> <span class="cm-string">&#39;react-instantsearch&#39;</span>;
+
+<span class="cm-keyword">function</span> <span class="cm-def">MyMenu</span>(<span class="cm-def">props</span>) {
+  <span class="cm-keyword">return</span> (
+    <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+      {<span class="cm-variable">props</span>.<span class="cm-property">items</span>.<span class="cm-property">map</span>(<span class="cm-variable">item</span> <span class="cm-operator">=&gt;</span>
+        <span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">a</span>
+          <span class="cm-attribute">key</span>={<span class="cm-variable">item</span>.<span class="cm-property">value</span>}
+          <span class="cm-attribute">className</span>={
+            <span class="cm-variable">props</span>.<span class="cm-property">selectedItem</span> <span class="cm-operator">===</span> <span class="cm-variable">item</span>.<span class="cm-property">value</span> <span class="cm-operator">?</span>
+              <span class="cm-string">&#39;selected&#39;</span> :
+              <span class="cm-string">&#39;not-selected&#39;</span>
+          }
+          <span class="cm-attribute">href</span>={<span class="cm-variable">props</span>.<span class="cm-property">createURL</span>(<span class="cm-variable">item</span>.<span class="cm-property">value</span>)}
+          <span class="cm-attribute">onClick</span>={<span class="cm-variable">e</span> <span class="cm-operator">=&gt;</span> {
+            <span class="cm-variable">e</span>.<span class="cm-property">preventDefault</span>();
+            <span class="cm-variable">props</span>.<span class="cm-property">refine</span>(<span class="cm-variable">item</span>.<span class="cm-property">value</span>);
+          }}
+        <span class="cm-tag cm-bracket">&gt;</span>
+          {<span class="cm-variable">item</span>.<span class="cm-property">value</span>} ({<span class="cm-variable">item</span>.<span class="cm-property">count</span>})
+        <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">a</span><span class="cm-tag cm-bracket">&gt;</span>
+      )}
+    <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span>
+  );
+}
+
+<span class="cm-comment">// `Menu.connect` accepts the same `id`, `attributeName`, `sortBy`,</span>
+<span class="cm-comment">// `defaultSelectedItems`, `showMore`, `limitMin` and `limitMax` props</span>
+<span class="cm-comment">// as `Menu`.</span>
+<span class="cm-comment">// When `showMore === true`, `limitMax` facet values will be retrieved.</span>
+<span class="cm-comment">// Otherwise, `limitMin` facet values will be retrieved.</span>
+<span class="cm-keyword">export</span> <span class="cm-keyword">default</span> <span class="cm-variable">Menu</span>.<span class="cm-property">connect</span>(<span class="cm-variable">MyMenu</span>);</code></pre>
+    </div>
+
+    <script src="/instantsearch.js/react/assets/js/api.7a67d2106c836360521e-build.js"></script>
+  </body>
+</html>
