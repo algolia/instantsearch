@@ -1,6 +1,6 @@
 ---
 title: Integration with other React UI Libraries
-layout: api.ejs
+layout: api.pug
 nav_groups:
   - core
 nav_sort: 1
@@ -10,10 +10,10 @@ nav_sort: 1
 
 Even if react-instantsearch provides widgets out of the box you are free to use it with
 any other React UI library (such as Material-UI, React Toolbox, React-Bootstrap and so
-on...). It also applies if you already have components of your own. 
+on...). It also applies if you already have components of your own.
 
 To integrate react-instantsearch with another component you can use the **default connector provided by each widget**.
-Once connected, react-instantsearch widgets will behave as High-Order Components. 
+Once connected, react-instantsearch widgets will behave as High-Order Components.
 More on that on the [making your own widgets](Customization.html#making-your-own-widgets) documentation.
 
 Let's take an example building a SearchBox using Material UI:
@@ -33,7 +33,7 @@ const MaterialUiSearchBox = props => {
 const ConnectedSearchBox = SearchBox.connect(MaterialUiSearchBox);
 ```
 
-Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearch` component: 
+Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearch` component:
 
 ```js
 <InstantSearch
@@ -44,10 +44,10 @@ Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearc
  </InstantSearch>
 ```
 
-Basically this strategy will work with any UI libraries. However, if you hit any limitation with the default connectors 
+Basically this strategy will work with any UI libraries. However, if you hit any limitation with the default connectors
 you can also [create your own connectors](Customization.html#creating-your-own-connectors).
 
-## Check out our Examples ! 
+## Check out our Examples !
 
 In this section you can find several examples based on popular React UI libraries
 

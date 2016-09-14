@@ -4,7 +4,7 @@ import {AppContainer} from 'react-hot-loader';
 
 import App from './App.js';
 
-ReactDOM.render(<AppContainer><App/></AppContainer>, document.querySelector('.content'));
+ReactDOM.render(<AppContainer><App/></AppContainer>, document.querySelector('#app'));
 
 // Hot Module Replacement API
 // this and AppContainer are react-hot-loader 3 API needs
