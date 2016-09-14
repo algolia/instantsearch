@@ -82,21 +82,16 @@ export const start = [
 ];
 
 export const build = [
-  msWebpack(webpackBuildConfig, {
-    stats: {colors: true,
-    hash: false,
-    version: false,
-    timings: false,
-    assets: false,
-    chunks: false,
-    modules: false,
-    reasons: false,
-    children: false,
-    source: false,
-    errors: false,
-    errorDetails: false,
-    warnings: false,
-    publicPath: false},
+  msWebpack({
+    ...webpackBuildConfig,
+    stats: {
+      chunks: false,
+      modules: false,
+      chunkModules: false,
+      reasons: false,
+      cached: false,
+      cachedAssets: false,
+    },
   }),
   ...common,
 ];
