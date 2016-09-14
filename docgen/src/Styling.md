@@ -1,6 +1,6 @@
 ---
 title: Styling
-layout: api.ejs
+layout: api.pug
 nav_groups:
   - core
 nav_sort: 4
