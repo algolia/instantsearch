@@ -8,6 +8,7 @@ export default {
     'assets/js/examples/ecommerce/index': join(__dirname, 'assets/js/examples/ecommerce/index.js'),
     'assets/js/examples/media/index': join(__dirname, 'assets/js/examples/media/index.js'),
     'assets/js/examples/tourism/index': join(__dirname, 'assets/js/examples/tourism/index.js'),
+    'assets/js/examples/material-ui/index': join(__dirname, 'assets/js/examples/material-ui/index.js'),
   },
   devtool: 'source-map',
   output: {

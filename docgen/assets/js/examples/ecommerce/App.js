@@ -17,129 +17,124 @@ import {
 
 export default function App() {
   return (
-<InstantSearch
-  className="container-fluid"
-  appId="latency"
-  apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-  indexName="ikea"
->
-  <div>
-    <Header />
-    <div className="content-wrapper">
-      <Facets />
-      <CustomResults />
-    </div>
-  </div>
-</InstantSearch>
+    <InstantSearch
+      className="container-fluid"
+      appId="latency"
+      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+      indexName="ikea"
+    >
+      <div>
+        <Header />
+        <div className="content-wrapper">
+          <Facets />
+          <CustomResults />
+        </div>
+      </div>
+    </InstantSearch>
   );
 }
 
 const Header = () =>
   <header className="content-wrapper">
+    <a href="https://community.algolia.com/instantsearch.js/" className="is-logo"><img
+      src="assets/img/examples/ecommerce.png" width={40}/></a>
     <a href="./" className="logo">amazing</a>
     <ConnectedSearchBox/>
   </header>;
 
 const Facets = () =>
-  <aside>
+    <aside>
 
-    <CurrentFilters
-      theme={{
-        root: 'CurrentFilters',
-        filters: {
-          display: 'none',
-        },
-        clearAll: 'CurrentFilters__clearAll btn',
-      }}
-      translations={{
-        clearAll: 'Clear all filters',
-      }}
-    />
+      <CurrentFilters
+        theme={{
+          root: 'CurrentFilters',
+          filters: {
+            display: 'none',
+          },
+          clearAll: 'CurrentFilters__clearAll btn',
+        }}
+        translations={{
+          clearAll: 'Clear all filters',
+        }}
+      />
 
-    <SideBarSection
-      title="Show results for"
-      items={[
-        <HierarchicalMenu
-          id="categories"
-          key="categories"
-          attributes={[
-            'category',
-            'sub_category',
-            'sub_sub_category',
-          ]}
-        />,
-      ]}
-    />
+      <SideBarSection
+        title="Show results for"
+        items={[
+          <HierarchicalMenu
+            id="categories"
+            key="categories"
+            attributes={[
+              'category',
+              'sub_category',
+              'sub_sub_category',
+            ]}
+          />,
+        ]}
+      />
 
-    <SideBarSection
-      title="Refine by"
-      items={[
-        <RefinementListWithTitle
-          title="Materials"
-          key="Materials"
-          item={<RefinementList attributeName="materials" operator="or" limitMin={10}/>}
-        />,
-        <RefinementListWithTitle
-          title="Color"
-          key="Color"
-          item={<ConnectedColorRefinementList attributeName="colors" operator="or"/>}
-        />,
-        <RefinementListWithTitle
-          title="Price"
-          key="Price"
-          item={<Range attributeName="price"/>}
-        />]}
-    />
-    <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
-  </aside>;
+      <SideBarSection
+        title="Refine by"
+        items={[
+          <RefinementListWithTitle
+            title="Materials"
+            key="Materials"
+            item={<RefinementList attributeName="materials" operator="or" limitMin={10}/>}
+          />,
+          <RefinementListWithTitle
+            title="Color"
+            key="Color"
+            item={<ConnectedColorRefinementList attributeName="colors" operator="or"/>}
+          />,
+          <RefinementListWithTitle
+            title="Price"
+            key="Price"
+            item={<Range attributeName="price"/>}
+          />]}
+      />
+      <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
+    </aside>
+  ;
 
-const SideBarSection = props => {
-  const {title, items} = props;
-  return (
-    <section className="facet-wrapper">
-      <div className="facet-category-title facet">{title}</div>
-      {items.map(i => i)}
-    </section>
-  );
-};
+const SideBarSection = ({title, items}) =>
+  <section className="facet-wrapper">
+    <div className="facet-category-title facet">{title}</div>
+    {items.map(i => i)}
+  </section>;
 
-const RefinementListWithTitle = props => {
-  const {title, item} = props;
-  return (
-    <div>
-      <div className="facet-title">{title}</div>
-      {item}
-    </div>
-  );
-};
-
-const CustomCheckbox = props =>
-  <div className="input-group">
-    <input type="text"
-           value={props.query}
-           onChange={e => props.refine(e.target.value)}
-           className="form-control"
-           id="q"/>
-    <span className="input-group-btn">
-      <button className="btn btn-default"><i className="fa fa-search"></i></button>
-    </span>
+const RefinementListWithTitle = ({title, item}) =>
+  <div>
+    <div className="facet-title">{title}</div>
+    {item}
   </div>;
 
-const ColorItem = props => {
-  const item = props.item;
-  const selected = props.selectedItems.indexOf(props.item.value) !== -1;
+const CustomCheckbox = ({query, refine}) =>
+    <div className="input-group">
+      <input type="text"
+             value={query}
+             onChange={e => refine(e.target.value)}
+             className="form-control"
+             id="q"/>
+      <span className="input-group-btn">
+      <button className="btn btn-default"><i className="fa fa-search"></i></button>
+    </span>
+    </div>
+  ;
+
+const ColorItem = ({item, selectedItems, createURL, refine}) => {
+  const selected = selectedItems.indexOf(item.value) !== -1;
   const active = selected ? 'checked' : '';
   const value = selected ?
-    props.selectedItems.filter(v => v !== props.item.value) :
-    props.selectedItems.concat([props.item.value]);
+    selectedItems.filter(v => v !== item.value) :
+    selectedItems.concat([item.value]);
   return (
     <a
       key={item.value}
       className={`${active} facet-color`}
-      href={props.createURL(value)}
+      href={createURL(value)}
       onClick={e => {
         e.preventDefault();
-        props.refine(value);
+        refine(value);
       }}
       data-facet-value={item.value}
     >
@@ -147,31 +142,32 @@ const ColorItem = props => {
   );
 };
 
-const CustomColorRefinementList = props =>
-  <div>
-    {props.items.map(item =>
-      <ColorItem
-        key={item.value}
-        item={item}
-        selectedItems={props.selectedItems}
-        refine={props.refine}
-        createURL={props.createURL}
-      />
-    )}
-  </div>;
+const CustomColorRefinementList = ({items, selectedItems, refine, createURL}) =>
+    <div>
+      {items.map(item =>
+        <ColorItem
+          key={item.value}
+          item={item}
+          selectedItems={selectedItems}
+          refine={refine}
+          createURL={createURL}
+        />
+      )}
+    </div>
+  ;
 
-function CustomHits(props) {
+function CustomHits({hits}) {
   return (
     <main id="hits">
-      {props.hits.map((hit, idx) =>
+      {hits.map((hit, idx) =>
         <article className="hit" key={idx}>
           <div className="product-picture-wrapper">
             <div className="product-picture"><img src={`${hit.image}`}/></div>
           </div>
           <div className="product-desc-wrapper">
-            <div className="product-name">{hit.name}</div>
-            <div className="product-type">{hit.type}</div>
-            <div className="product-price">{hit.price}</div>
+            <div className="product-name" dangerouslySetInnerHTML={{__html: hit._highlightResult.name.value}}/>
+            <div className="product-type" dangerouslySetInnerHTML={{__html: hit._highlightResult.type.value}}/>
+            <div className="product-price">${hit.price}</div>
 
           </div>
         </article>
@@ -187,12 +183,12 @@ const CustomResults = createConnector({
     const noResults = search.results ? search.results.nbHits === 0 : false;
     return {query: state.q, noResults};
   },
-})(props => {
-  if (props.noResults) {
+})(({noResults, query}) => {
+  if (noResults) {
     return (
       <div className="results-wrapper">
         <div className="no-results">
-          No results found matching <span className="query">{props.query}</span>
+          No results found matching <span className="query">{query}</span>
         </div>
       </div>
     );
