@@ -1,3 +1,14 @@
+<a name="1.8.8"></a>
+## [1.8.8](https://github.com/algolia/instantsearch.js/compare/v1.8.6...v1.8.8) (2016-09-14)
+
+
+### Bug Fixes
+
+* **numericSelector:** do not change state on init (#1280) ([cf27db3](https://github.com/algolia/instantsearch.js/commit/cf27db3)), closes [#1253](https://github.com/algolia/instantsearch.js/issues/1253)
+* **Slider:** default precision to 2 (#1279) ([552b9ea](https://github.com/algolia/instantsearch.js/commit/552b9ea))
+
+
+
 <a name="1.8.6"></a>
 ## [1.8.6](https://github.com/algolia/instantsearch.js/compare/v1.8.5...v1.8.6) (2016-09-12)
 
