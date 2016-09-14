@@ -98,7 +98,7 @@ describe('rangeSlider()', () => {
           transformData: undefined,
           useCustomCompileOptions: {footer: false, header: false}
         },
-        pipsFormatter: () => {},
+        format: {to: () => {}, from: () => {}},
         tooltips: true
       };
 
@@ -181,7 +181,7 @@ describe('rangeSlider()', () => {
           transformData: undefined,
           useCustomCompileOptions: {footer: false, header: false}
         },
-        pipsFormatter: () => {},
+        format: {to: () => {}, from: () => {}},
         tooltips: true
       };
 
@@ -243,7 +243,7 @@ describe('rangeSlider()', () => {
           transformData: undefined,
           useCustomCompileOptions: {footer: false, header: false}
         },
-        pipsFormatter: () => {},
+        format: {to: () => {}, from: () => {}},
         tooltips: true
       };
 
@@ -292,7 +292,7 @@ describe('rangeSlider()', () => {
           transformData: undefined,
           useCustomCompileOptions: {footer: false, header: false}
         },
-        pipsFormatter: () => {},
+        format: {to: () => {}, from: () => {}},
         tooltips: true
       };
 
@@ -343,7 +343,7 @@ describe('rangeSlider()', () => {
           transformData: undefined,
           useCustomCompileOptions: {footer: false, header: false}
         },
-        pipsFormatter: () => {},
+        format: {to: () => {}, from: () => {}},
         tooltips: true
       };
 

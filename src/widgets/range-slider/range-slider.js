@@ -10,7 +10,6 @@ import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import cx from 'classnames';
 import SliderComponent from '../../components/Slider/Slider.js';
-import isInteger from 'is-integer';
 
 const bem = bemHelper('ais-range-slider');
 const defaultTemplates = {
@@ -72,11 +71,19 @@ function rangeSlider({
     pips = true,
     autoHideContainer = true,
     min: userMin,
-    max: userMax
+    max: userMax,
+    precision = 2
   } = {}) {
   if (!container || !attributeName) {
     throw new Error(usage);
   }
+
+  const formatToNumber = v => Number(Number(v).toFixed(precision));
+
+  const sliderFormatter = {
+    from: v => v,
+    to: v => formatToNumber(v).toLocaleString()
+  };
 
   const containerNode = getContainerNode(container);
   let Slider = headerFooterHOC(SliderComponent);
@@ -141,10 +148,10 @@ function rangeSlider({
     _refine(helper, oldValues, newValues) {
       helper.clearRefinements(attributeName);
       if (newValues[0] > oldValues.min) {
-        helper.addNumericRefinement(attributeName, '>=', newValues[0]);
+        helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
       }
       if (newValues[1] < oldValues.max) {
-        helper.addNumericRefinement(attributeName, '<=', newValues[1]);
+        helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
       }
       helper.search();
     },
@@ -161,10 +168,6 @@ function rangeSlider({
         min: null,
         max: null
       };
-
-      const pipsFormatter = isInteger(step) ?
-        v => Math.round(Number(v)).toLocaleString() :
-        v => Number(v).toLocaleString();
 
       if (userMin !== undefined) stats.min = userMin;
       if (userMax !== undefined) stats.max = userMax;
@@ -187,7 +190,7 @@ function rangeSlider({
           step={step}
           templateProps={this._templateProps}
           tooltips={tooltips}
-          pipsFormatter={pipsFormatter}
+          format={sliderFormatter}
         />,
         containerNode
       );
