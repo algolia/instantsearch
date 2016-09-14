@@ -11,7 +11,7 @@ This is the home of `react-instantsearch`, a set of [React](https://facebook.git
 **This is an alpha release, everything may be broken**.
 
 Links:
-- [Chat with us](https://gitter.im/react-instantsearch/Lobby) on gitter, we are active and waiting for feedback
+- [Chat with us](https://gitter.im/algolia/instantsearch.js) on gitter, we are active and waiting for feedback
 - Code is at <https://github.com/algolia/instantsearch.js/tree/v2>, jump in
 
 
