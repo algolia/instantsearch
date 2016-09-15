@@ -2,7 +2,7 @@
 title: InstantSearch
 layout: api.pug
 nav_groups:
-  - core
+  - widgets
 nav_sort: 1
 ---
 

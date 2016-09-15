@@ -63,6 +63,10 @@ const common = [
       sortBy: 'nav_sort',
       filterProperty: 'nav_groups',
     },
+    examples: {
+      sortBy: 'nav_sort',
+      filterProperty: 'nav_groups',
+    },
   }, {
     navListProperty: 'navs',
   }),
