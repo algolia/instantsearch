@@ -4,7 +4,7 @@ mixin nav(currentPath, nav)
       - var className = navItem.path === currentPath ? 'navItem--active' : 'navItem';
       li(class=className)
         a(href=h.publicPath(navItem.path))=navItem.file.title
-        if(navItem.children.length > 0) 
+        if(navItem.children.length > 0)
           nav(currentPath, navItem.children)
 
 doctype html
@@ -25,11 +25,13 @@ html
         +nav(nav_path, navs.core)
       .nav.widgets
         +nav(nav_path, navs.widgets)
-      .nav.headings
-        ul
-          for heading in headings
-            - var headingType = heading.type === 'h2' ? 'title' : 'subtitle';
-            li(class=headingType)
-              a(href=heading.id)=heading.text
+      .nav.examples
+        +nav(nav_path, navs.examples)
+      //- .nav.headings
+      //-   ul
+      //-     for heading in headings
+      //-       - var headingType = heading.type === 'h2' ? 'title' : 'subtitle';
+      //-       li(class=headingType)
+      //-         a(href=heading.id)=heading.text
     .content!=contents
     script(src=webpack.assets['assets/js/api.js'])
