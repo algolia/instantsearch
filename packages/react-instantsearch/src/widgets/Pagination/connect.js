@@ -1,5 +1,4 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
 
 import createConnector from '../../core/createConnector';
 
@@ -50,9 +49,6 @@ export default createConnector({
   },
 
   transitionState(props, prevState, nextState) {
-    if (prevState[props.id] === nextState[props.id]) {
-      return omit(nextState, props.id);
-    }
     return nextState;
   },
 

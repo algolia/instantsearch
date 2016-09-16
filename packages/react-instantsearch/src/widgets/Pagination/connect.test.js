@@ -48,10 +48,10 @@ describe('Pagination.connect', () => {
     expect(params.page).toBe(666);
   });
 
-  it('clears the state when an update occurs without change', () => {
+  it('Transition state whatever the value', () => {
     state = transitionState({id: 'ok'}, {ok: 1}, {ok: 1});
     expect(state).toEqual({
-      ok: undefined,
+      ok: 1,
     });
     state = transitionState({id: 'ok'}, {ok: 1}, {ok: 2});
     expect(state).toEqual({
