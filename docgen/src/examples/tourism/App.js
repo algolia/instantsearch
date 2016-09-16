@@ -36,7 +36,7 @@ function Header() {
     <div className="container-fluid" style={containerStyle}>
       <header className="navbar navbar-static-top aisdemo-navbar">
         <a href="./" className="is-logo">
-          <img src="https://community.algolia.com/instantsearch.js/examples/media/logo-is.png" width={40} />
+          <img src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width={40} />
         </a>
         <a href="./" className="logo">A</a>
         <i className="fa fa-search"></i>
