@@ -73,6 +73,25 @@ body {
   font-weight: 500;
 }
 
+.anchor {
+  margin-left: .2em;
+  display: inline;
+  visibility: hidden;
+}
+
+.heading .anchor {
+  color: #fb366e;
+  text-decoration: none;
+}
+
+.heading:hover .anchor {
+  visibility: visible;
+}
+
+.heading:target .anchor {
+  visibility: visible;
+}
+
 .content p {
   margin: 1rem 4rem;
   line-height: 1.5;
