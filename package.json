@@ -81,7 +81,7 @@
     "wdio-sauce-service": "0.2.5",
     "webdriverio": "4.2.16",
     "webpack": "1.13.2",
-    "webpack-dev-server": "1.15.0"
+    "webpack-dev-server": "1.16.0"
   },
   "dependencies": {
     "algoliasearch": "3.18.0",
