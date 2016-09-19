@@ -8,7 +8,7 @@
     "docs:publish": "babel-node scripts/gh-pages.js",
     "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
-    "lint:fix": "npm run lin eslint . --fix",
+    "lint:fix": "npm run lint eslint . --fix",
     "postinstall": "cd packages/react-instantsearch && npm install",
     "doctoc": "doctoc --maxlevel 1 README.md CONTRIBUTING.md",
     "test": "(cd packages/react-instantsearch && npm test) && npm run lint && NODE_ENV=production DOCS_MOUNT_POINT=/instantsearch.js/react/ DOCS_DIST=docs/react/ npm run docs:build && NODE_ENV=production npm run build",
