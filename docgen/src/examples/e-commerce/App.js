@@ -37,7 +37,7 @@ export default function App() {
 const Header = () =>
   <header className="content-wrapper">
     <a href="https://community.algolia.com/instantsearch.js/" className="is-logo"><img
-      src="assets/img/examples/ecommerce.png" width={40}/></a>
+      src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width={40}/></a>
     <a href="./" className="logo">amazing</a>
     <ConnectedSearchBox/>
   </header>;

@@ -55,8 +55,6 @@ In this section you can find several examples based on popular React UI librarie
 
 <script src="webpack.assets[`assets/img/examples/ecommerce.png>"></script>
 
-[![material-ui-demo](assets/img/examples/material-ui.gif)](MaterialUI.html)
+[![material-ui-demo](assets/img/material-ui.gif)](MaterialUI.html)
 
-[View it live](MaterialUI.html)
-
-[View code](http://github.com/algolia/instantsearch.js/tree/v2/docgen/assets/js/examples/material-ui)
+[View it live](MaterialUI.html), [read the code](http://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/material-ui)
