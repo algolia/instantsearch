@@ -31,7 +31,6 @@ class Range extends Component {
 
   constructor() {
     super();
-
     this.state = {
       controlled: false,
       value: null,

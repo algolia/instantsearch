@@ -541,111 +541,45 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   padding: 10px;
 }
 
-.Range {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 4px;
-  margin: 15px 0px;
+.ais-price-ranges--item {
+  list-style-type: none;
 }
 
-.Range__handles {
-  position: absolute;
-  top: 50%;
-  left: 0px;
-  right: 0px;
+.ais-price-ranges--list {
+  padding: 0;
 }
 
-.Range__handle {
-  position: absolute;
-  top: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 0px;
-  height: 0px;
+.RangeInput__labelMin__input, .RangeInput__labelMax__input {
+  width: 50px;
+  border-radius: 2px;
+  border: solid 1px #888;
+  font-weight: normal;
 }
 
-.Range__handle > .Range__handle__dot {
-  background-color: #3E82F7;
-  width: 10px;
-  height: 10px;
-  border-radius: 5px;
-  flex-shrink: 0;
-  transition: transform 0.1s ease;
+.RangeInput__labelMin:before, .RangeInput__labelMax:before {
+  content: '$';
+  margin-right: 5px;
 }
 
-.Range__handle:hover > .Range__handle__dot,
-.Range__handle--active > .Range__handle__dot {
-  transform: scale(2);
+.RangeInput__separator {
+  margin: 0px 5px;
 }
 
-.Range__handle__tooltip {
-  font-size: 0.8em;
-  padding: 0.3em 0.5em;
-  border-radius: 0.3em;
-  position: absolute;
-  top: -40px;
-  background-color: rgba(0, 0, 0, 0.6);
-  color: white;
-  opacity: 0;
-  transition: opacity 0.1s ease;
-  pointer-events: none;
+.RangeInput__submit {
+  display: block;
+  float: right;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin-left: 4px;
+  font-size: 10px;
+  line-height: 20px;
+  border: solid 1px #888;
+  border-radius: 50%;
+  text-align: center;
 }
 
-.Range__handle:hover > .Range__handle__tooltip,
-.Range__handle--active > .Range__handle__tooltip {
-  opacity: 1;
-}
-
-.Range__tracks {
-  width: 100%;
-  height: 4px;
-  display: flex;
-}
-
-.Range__track {
-  height: 100%;
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.Range__track:first-child {
-  border-top-left-radius: 2px;
-  border-bottom-left-radius: 2px;
-}
-
-.Range__track:last-child {
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-}
-
-.Range__track:nth-child(2) {
-  background-color: #3E82F7;
-}
-
-.Range__bounds {
-  position: absolute;
-  top: 100%;
-  left: 0px;
-  right: 0px;
-}
-
-.Range__bound {
-  position: absolute;
-  top: 0.6em;
-  color: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  font-size: 0.8em;
-  width: 0px;
-  height: 0px;
-}
-
-.Range__bound--min {
-  left: 0px;
-}
-
-.Range__bound--max {
-  right: 0px;
+.RangeInput__submit:hover {
+  color: #0063C3;
+  background-color: #FFFFFF;
 }
