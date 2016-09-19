@@ -10,7 +10,7 @@ html
     if stylesheets
       for sheet in stylesheets
         link(rel="stylesheet" href=sheet)
-    link(rel="stylesheet" href=h.publicPath(`assets/css/examples/${name}.css`))
+    link(rel="stylesheet" href=h.publicPath(`examples/${name}/style.css`))
   body
     .content!=contents
-    script(src=webpack.assets[`assets/js/examples/${name}/index.js`])
+    script(src=webpack.assets[`examples/${name}/index.js`])
