@@ -9,26 +9,31 @@ nav_groups:
 
 Lets users filter results within a numerical range, based on an attribute.
 
-## Props
+There's also a `Range.Input` which renders a range using inputs.
+
+By default, the Range will render as a slider.
+
+### Props
 
 <!-- props default ./index.js -->
 
-Name | Type | Default |Description
-:- | :- | :- | :-
-`attributeName` | `string` | | Name of the attribute for faceting
-`defaultValue` | `?{min: number, max: number}` | | Default state of the widget.
-`min` | `?number` | | Minimum value of the range. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
-`max` | `?number` | | Maximum value of the range. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
-`step` | `?number` | `1` | Every handle move will jump that number of steps.
-`id` | `?string` | | URL state serialization key. Defaults to the value of `attributeName`. The state of this widget takes the shape of an object `{min: ?number, max: ?number}`.
-
-### Theme
+#### Theme
 
 `root`, `handles`, `handle`, `handleActive`, `handleDot`, `handleTooltip`, `tracks`, `track`, `bounds`, `bound`, `boundMin`, `boundMax`
 
-### Translations
+#### Translations
 
 `value(n)`
+
+## Range.Input
+
+#### Theme
+
+`root`, `labelMin`, `inputMin`, `labelMax`, `inputMax`, `submit`, `separator`
+
+#### Translations
+
+`submit`, `separator`
 
 ## Implementing your own Range
 
