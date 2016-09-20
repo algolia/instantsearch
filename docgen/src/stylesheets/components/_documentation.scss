@@ -1,0 +1,378 @@
+.documentation-section {
+  padding-bottom: 200px;
+
+  .container {
+
+    article {
+      width: 100%;
+      position: relative;
+      margin-top: 60px;
+    }
+  }
+
+
+  h2 {
+    color: $charcoal-grey;
+    font-size: 28px;
+    padding-right: 1em;
+    border-bottom: 1px solid #d8d8d8;
+    margin-top: 32px;
+
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+
+  h3 {
+    margin-top: 32px;
+  }
+
+  h4 {
+    font-weight: normal;
+    text-decoration: underline;
+  }
+
+  .api-entry {
+    margin: 2em 0;
+
+    code {
+      font-size: 100%;
+      font-weight: bold;
+    }
+  }
+
+  .api tr td:first-child {
+    vertical-align: top;
+
+    p, ul {
+      font-size: 90%;
+      margin: .5em 0;
+      line-height: 1.5em;
+    }
+    ul {
+      padding-left: 1.5em;
+    }
+    em {
+      text-decoration: underline;
+      font-style: normal;
+    }
+  }
+
+  h2, h3, .api-entry, .css-class {
+    &:before {
+      content: "";
+      display: block;
+      height: $offset-height;
+      margin: -$offset-height 0 0;
+    }
+  }
+
+  .css-class {
+    white-space: nowrap;
+  }
+
+  .chapter-summary {
+    background: $bg-pale-accent;
+    padding: 10px;
+    border-radius: 4px;
+  }
+
+  .documentation-container {
+    float: left;
+    position: relative;
+    left: #{$sidebar-width};
+    width: calc(100% - #{$sidebar-width});
+    padding-left: 30px;
+    padding-top: 120px;
+
+    p,
+    ul,
+    ol {
+      font-size: 16px;
+      line-height: 22px;
+
+      li {
+        clear: both;
+        margin-bottom: 10px;
+      }
+
+      ul {
+        font-weight: normal;
+        font-size: 14px;
+        position: relative;
+
+        li {
+          height: 26px;
+          line-height: 26px;
+
+          &:before {
+            content: '-';
+            float: left;
+            margin-right: 6px;
+            color: $greyish
+          }
+        }
+      }
+    }
+
+    .content {
+      & p:first-child {
+        margin-top: 0;
+      }
+    }
+
+    pre {
+      margin: .5em 0px .5em -30px;
+      line-height: 23px;
+      white-space: pre;
+      overflow-x: auto;
+      word-break: inherit;
+      word-wrap: inherit;
+      padding: .5em 30px;
+      background: $silver;
+    }
+
+    // API tables
+    table.api {
+      padding: 0;
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      display: block;
+      margin: 0;
+
+      tr {
+        border-top: 1px solid #cccccc;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+
+        &:nth-child(2n) {
+          background-color: #f8f8f8;
+        }
+
+        th {
+          font-weight: bold;
+          border: 1px solid #cccccc;
+          text-align: left;
+          margin: 0;
+          padding: 6px 13px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+        td {
+          border: 1px solid #cccccc;
+          text-align: left;
+          margin: 0;
+          padding: 13px 13px;
+
+          &:first-child {
+            margin-top: 0;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+      &+ h2,
+      &+ h3 {
+        margin-top: 2em;
+      }
+
+
+      @include small-mq {
+        display: block;
+        float: left;
+        margin-bottom: 2em;
+
+          thead, tbody, th, td, tr {
+            display: block;
+            float: left;
+            width: 100%;
+          }
+          tbody {
+            border-bottom: 1px solid #cccccc;
+          }
+          tr {
+            border-left: 1px solid #cccccc;
+            border-right: 1px solid #cccccc;
+
+            th {
+              border: none;
+
+              &:nth-of-type(2) {
+                border-left: 1px solid #cccccc;
+              }
+            }
+          }
+          tr td  {
+            border: none;
+            overflow: auto;
+
+
+            &:nth-of-type(2) {
+             border-left: 1px solid #cccccc;
+            }
+          }
+
+          th, td {
+            width: 50%;
+            float: left;
+          }
+
+          tr:nth-child(even) {
+            background: #f8f8f8
+          }
+        }
+    }
+
+
+    .anchor {
+      margin-left: .2em;
+      display: inline;
+      visibility: hidden;
+    }
+
+    .algolia-places {
+      color: #000000;
+    }
+
+    h2 {
+      padding-bottom: 8px;
+    }
+
+    h2, h3, .api-entry {
+      .anchor {
+        text-decoration: none;
+      }
+      .anchor:after{
+        content: '#';
+        color: $accent-color;
+      }
+
+      &:hover {
+        .anchor {
+          visibility: visible;
+        }
+      }
+
+      &:target {
+        .anchor {
+          visibility: visible;
+        }
+      }
+    }
+
+    img {
+      max-width: 50%;
+      margin: 0 25%;
+    }
+  }
+
+  .DocProps {
+    .Prop,
+    .Type .Entry {
+      padding: 1.2em 0.8em;
+      background-color: #EEE;
+    }
+
+    .Prop:nth-child(even),
+    .Type .Entry:nth-child(even) {
+      background-color: #E5E5E5;
+    }
+
+    .Entry__head {
+      display: flex;
+      align-items: center;
+      padding-bottom: 1em;
+    }
+
+    .Entry__badge {
+      padding: .3em .5em;
+      font-size: 0.8em;
+      background-color: #7FDBFF;
+      margin-right: 0.5em;
+    }
+
+    .Entry__name {
+      font-weight: 700;
+      margin-right: 0.5em;
+    }
+
+    .Entry__description ~ .Entry__default {
+      padding-top: 1em;
+    }
+
+    .Entry__description p {
+      margin: 0;
+    }
+
+    .Entry__link {
+      display: none;
+      margin-left: 0.5em;
+    }
+
+    .Entry__head:hover .Entry__link {
+      display: inline;
+    }
+
+    .Prop__types {
+      padding-top: 1em;
+    }
+
+    .Type__head {
+      padding-bottom: 0.7em;
+    }
+
+    .Type__name {
+      font-weight: 700;
+    }
+
+    .Type__link {
+      display: none;
+    }
+
+    .Type__head:hover .Type__link {
+      display: inline;
+    }
+
+    .Type__entries {
+      font-size: 0.9em;
+      border: 1px solid #BBB;
+    }
+  }
+
+  @include small-mq {
+    padding-top: 32px;
+
+    .container {
+      .documentation-container {
+        left: 0;
+        width: 100%;
+        padding: 0 16px;
+      }
+
+      article {
+        float: left;
+        margin-top: 40px;
+      }
+    }
+
+    .documentation .hero-section {
+      .fl-left {
+        max-width: 300px !important;
+        width: 300px !important;
+      }
+    }
+  }
+}
+
+@import "docs/method"

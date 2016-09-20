@@ -1,8 +1,8 @@
 ---
 title: Examples
-layout: api.pug
+layout: examples.pug
 nav_groups:
-  - core
+  - examples
 ---
 # Examples
 

@@ -1,6 +1,6 @@
 ---
 title: Hits
-layout: api.pug
+layout: widget.pug
 nav_groups:
   - widgets
 ---

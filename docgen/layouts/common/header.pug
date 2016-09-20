@@ -1,0 +1,23 @@
+mixin navListItem(link, title, navGroup, currentNavGroup)
+  - var isCurrentNavGroup = currentNavGroup == navGroup;
+  - var itemCssClass = isCurrentNavGroup ? ['ac-nav-menu-list-item', 'active'] : ['ac-nav-menu-list-item'];
+  li(class=itemCssClass)
+    a(data-path=link, href=link, title=title)=title
+
+.ac-nav
+  .ac-nav-container
+    .ac-nav-brand
+      a.ac-logo(href='https://community.algolia.com/', title='Algolia Community')
+        img.ac-logo__lg(alt='Algolia Community', src='https://res.cloudinary.com/hilnmyskv/image/upload/logo-community-inline-dark.svg', width='150')
+        img.ac-logo__sm(alt='Algolia Community', src='https://res.cloudinary.com/hilnmyskv/image/upload/v1461180081/logo-community-sm.svg')
+      span.ac-nav-brand-breadcrumb
+      a.ac-nav-brand-title(href='./', title='Home')=pkg.name
+    .ac-nav-menu
+      ul.ac-nav-menu-list
+        +navListItem('gettingstarted.html', 'Getting started', 'gettingstarted', nav_groups)
+        +navListItem('Styling.html', 'Guide', 'core', nav_groups)
+        +navListItem('InstantSearch.html', 'API', 'widgets', nav_groups)
+        +navListItem('examples.html', 'Examples', 'examples', nav_groups)
+        li.ac-nav-menu-list-icon
+          a.ac-icon(href='https://github.com/algolia/algoliasearch-helper-js', title='GitHub repository')
+            span.ac-icon.ac-icon-github
