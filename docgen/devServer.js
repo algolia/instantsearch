@@ -18,6 +18,7 @@ export default function() {
     open: false,
     files: `${rootPath(process.env.DOCS_DIST || 'docs/react/')}**/*`,
     watchOptions: {
+      ignored: /\.js$/, // any change to a JavaScript file must be ignored, webpack handles it
       awaitWriteFinish: {
         stabilityThreshold: 150, // wait 150ms for the filesize to be stable (= write finished)
       },

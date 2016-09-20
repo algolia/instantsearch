@@ -50,7 +50,7 @@
     "react": "15.3.1",
     "react-docgen": "2.10.0",
     "react-dom": "15.3.1",
-    "react-hot-loader": "3.0.0-beta.3",
+    "react-hot-loader": "3.0.0-beta.4",
     "react-instantsearch": "file:./packages/react-instantsearch/",
     "recast": "0.11.14",
     "react-tap-event-plugin": "1.0.0",
