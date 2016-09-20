@@ -90,7 +90,6 @@ header .input-group .input-group-btn button {
 
 header .input-group .input-group-btn {
   height: 100%;
-  padding: 0 30px;
   border: 0;
   background: #FFBE61;
 }
@@ -582,4 +581,35 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
 .RangeInput__submit:hover {
   color: #0063C3;
   background-color: #FFFFFF;
+}
+
+.RangeRatings {
+  display: flex;
+  flex-direction: column;
+}
+
+.RangeRatings__link__icon:before {
+  content: '\2605';
+  color: #FBAE00;
+}
+
+.RangeRatings__link__icon--empty:before {
+  content: '\2606';
+  color: #FBAE00;
+}
+
+.RangeRatings__link--selected{
+  font-weight: 700;
+}
+
+.RangeRatings__link--disabled > .RangeRatings__link__count{
+  display:none;
+}
+
+.RangeRatings__link--disabled > .RangeRatings__link__icon--empty:before{
+  color: #C9C9C9;
+}
+
+.RangeRatings__link--disabled > .RangeRatings__link__icon:before{
+  color: #C9C9C9;
 }

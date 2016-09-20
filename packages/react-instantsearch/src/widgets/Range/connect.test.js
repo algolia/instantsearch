@@ -22,16 +22,19 @@ describe('Range.connect', () => {
       min: 5,
       max: 10,
       value: {min: 5, max: 10},
+      count: [],
     });
 
     const results = {
       getFacetStats: () => ({min: 5, max: 10}),
+      getFacetValues: () => [{name: '5', count: 10}, {name: '2', count: 20}],
     };
     props = getProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({
       min: 5,
       max: 10,
       value: {min: 5, max: 10},
+      count: [{value: '5', count: 10}, {value: '2', count: 20}],
     });
 
     props = getProps({attributeName: 'ok'}, {ok: {min: 6, max: 9}}, {});
@@ -48,6 +51,7 @@ describe('Range.connect', () => {
       min: 5,
       max: 10,
       value: {min: 6, max: 9},
+      count: [],
     });
 
     props = getProps({
@@ -61,6 +65,7 @@ describe('Range.connect', () => {
       min: 5,
       max: 10,
       value: {min: 6, max: 9},
+      count: [],
     });
 
     props = getProps({
@@ -73,6 +78,7 @@ describe('Range.connect', () => {
       min: 5,
       max: 10,
       value: {min: 6, max: 9},
+      count: [],
     });
   });
 

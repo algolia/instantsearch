@@ -98,6 +98,13 @@ export default createConnector({
       }
     }
 
+    const count = search.results ? search.results
+      .getFacetValues(attributeName)
+      .map(v => ({
+        value: v.name,
+        count: v.count,
+      })) : [];
+
     const {
       min: valueMin = min,
       max: valueMax = max,
@@ -107,6 +114,7 @@ export default createConnector({
       min,
       max,
       value: {min: valueMin, max: valueMax},
+      count,
     };
   },
 
