@@ -59,7 +59,7 @@ export default class LinkList extends Component {
     return (
       <ul {...applyTheme('root', 'root')}>
         {items.map(item =>
-          <li
+          <li // eslint-disable-line react/jsx-key, automatically done by themeable
             {...applyTheme(
               has(item, 'key') ? item.key : item.value,
               'item',
