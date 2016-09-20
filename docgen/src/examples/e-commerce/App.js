@@ -6,12 +6,13 @@ import {
   SearchBox,
   HierarchicalMenu,
   RefinementList,
-  Range,
   Hits,
   SortBy,
   Stats,
   Pagination,
   CurrentFilters,
+  NumericRefinementList,
+  Range,
   createConnector,
 } from 'react-instantsearch';
 
@@ -37,7 +38,8 @@ export default function App() {
 const Header = () =>
   <header className="content-wrapper">
     <a href="https://community.algolia.com/instantsearch.js/" className="is-logo"><img
-      src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width={40}/></a>
+      src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
+      width={40}/></a>
     <a href="./" className="logo">amazing</a>
     <ConnectedSearchBox/>
   </header>;
@@ -89,8 +91,22 @@ const Facets = () =>
           <RefinementListWithTitle
             title="Price"
             key="Price"
-            item={<Range attributeName="price"/>}
-          />]}
+            item={ <CustomPriceRanges
+              attributeName="price"
+              id="price_ranges"
+              items={[
+                {end: 10},
+                {start: 10, end: 20},
+                {start: 20, end: 50},
+                {start: 50, end: 100},
+                {start: 100, end: 300},
+                {start: 300, end: 500},
+                {start: 500},
+              ]}
+            />}
+          />,
+          <Range.Input attributeName="price" id="price_input"/>,
+        ]}
       />
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
     </aside>
@@ -215,6 +231,57 @@ const CustomResults = createConnector({
     );
   }
 });
+
+const CustomPriceRanges = NumericRefinementList.connect(React.createClass({
+  checkIfNeedReset(value) {
+    const selectedItem = this.props.selectedItem === value ? '' : value;
+    this.props.refine(selectedItem);
+  },
+
+  filteredItems(items){
+    let filteredItems = items;
+    if (!(this.props.selectedItem === '')) {
+      filteredItems = items.filter(i => this.props.selectedItem === i.value);
+    }
+    return filteredItems;
+  },
+
+  render() {
+    const {items, refine} = this.props;
+    const ranges = this.filteredItems(items).map(item => {
+      const min = parseFloat(item.value.split(':')[0]);
+      const max = parseFloat(item.value.split(':')[1]);
+
+      let label;
+      if (Number.isNaN(min)) {
+        label = `≤$${max}`;
+      } else if (Number.isNaN(max)) {
+        label = `≥$${min}`;
+      } else {
+        label = `$${min} - $${max}`;
+      }
+
+      return <PriceRange label={label} value={item.value} refine={refine} onClick={this.checkIfNeedReset}/>;
+    });
+
+    return (
+      <ul className="ais-price-ranges--list">
+        {ranges}
+      </ul>
+    );
+  },
+}));
+
+const PriceRange = ({label, value, onClick}) =>
+  <li className="ais-price-ranges--item">
+    <a
+      key={value}
+      onClick={onClick.bind(null, value)}
+      className="ais-price-ranges--link"
+    >
+      {label}
+    </a>
+  </li>;
 
 const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
 

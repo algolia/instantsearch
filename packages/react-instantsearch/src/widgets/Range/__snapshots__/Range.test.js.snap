@@ -1,0 +1,76 @@
+exports[`Range supports passing max/min values 1`] = `
+<div
+  className="Range"
+  onMouseDown={[Function anonymous]}>
+  <div
+    className="Range__tracks">
+    <div
+      className="Range__track"
+      style={
+        Object {
+          "width": "0%"
+        }
+      } />
+    <div
+      className="Range__track"
+      style={
+        Object {
+          "width": "100%"
+        }
+      } />
+    <div
+      className="Range__track"
+      style={
+        Object {
+          "width": "0%"
+        }
+      } />
+  </div>
+  <div
+    className="Range__bounds">
+    <div
+      className="Range__bound Range__bound--min">
+      <div>
+        0
+      </div>
+    </div>
+    <div
+      className="Range__bound Range__bound--max">
+      <div>
+        100
+      </div>
+    </div>
+  </div>
+  <div
+    className="Range__handles">
+    <div
+      className="Range__handle"
+      style={
+        Object {
+          "left": "0%"
+        }
+      }>
+      <div
+        className="Range__handle__dot" />
+      <div
+        className="Range__handle__tooltip">
+        0
+      </div>
+    </div>
+    <div
+      className="Range__handle"
+      style={
+        Object {
+          "left": "100%"
+        }
+      }>
+      <div
+        className="Range__handle__dot" />
+      <div
+        className="Range__handle__tooltip">
+        100
+      </div>
+    </div>
+  </div>
+</div>
+`;
