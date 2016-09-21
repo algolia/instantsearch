@@ -4,7 +4,7 @@ import themeable from '../../core/themeable';
 
 import List from '../../components/List';
 
-class NumericRefinementList extends Component {
+class MultiRange extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
@@ -49,9 +49,10 @@ class NumericRefinementList extends Component {
 }
 
 export default themeable({
-  root: 'NumericRefinementList',
-  items: 'NumericRefinementList__items',
-  item: 'NumericRefinementList__item',
-  itemSelected: 'NumericRefinementList__item--selected',
-  itemLabel: 'NumericRefinementList__item__label',
-})(NumericRefinementList);
+  root: 'MultiRange',
+  items: 'MultiRange__items',
+  item: 'MultiRange__item',
+  itemSelected: 'MultiRange__item--selected',
+  itemLabel: 'MultiRange__item__label',
+  itemRadio: 'MultiRange__item__radio',
+})(MultiRange);

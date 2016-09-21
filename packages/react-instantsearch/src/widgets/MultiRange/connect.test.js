@@ -15,7 +15,7 @@ const {
 let props;
 let params;
 
-describe('NumericRefinementList.connect', () => {
+describe('MultiRange.connect', () => {
   it('provides the correct props to the component', () => {
     props = getProps({
       items: [
