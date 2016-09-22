@@ -2,6 +2,7 @@
 
 import metalsmith from 'metalsmith';
 import {rootPath} from './path.js';
+import metadata from './config/metadata.js';
 
 export default function builder({
   clean = true,
@@ -12,6 +13,7 @@ export default function builder({
   // default source directory is join(__dirname, 'src');
   // https://github.com/metalsmith/metalsmith#sourcepath
   metalsmith(__dirname)
+    .metadata(metadata)
     .clean(clean)
     .destination(rootPath(destination))
     .use(middlewares)

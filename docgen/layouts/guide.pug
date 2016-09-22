@@ -1,0 +1,8 @@
+extends archetypes/content-with-menu.pug
+include mixins/nav.pug
+
+block navigation
+  +nav(nav_path, navs.core, 2)
+
+block content
+  .content!=contents

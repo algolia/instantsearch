@@ -1,0 +1,123 @@
+.hero-section {
+  background: linear-gradient(-30deg, rgba(24, 40, 72, 0.4) 0%, #182848 90%) #1D96C7;
+  color: $hero-color-accent;
+  padding-top: $navigation-height*1.5;
+
+  .container {
+    margin-top: 40px;
+  }
+
+  .relative {
+    margin-top: 4em;
+    float: left;
+    width: 100%;
+    display: none;
+
+    body.index &{
+      display: block;
+    }
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    position: relative;
+
+    &:after {
+      position: absolute;
+      display: block;
+      content: '';
+      width: 16px;
+      height: 2px;
+      background: $hero-color-accent;
+      top: 30px;
+      left: 0;
+      right: 0;
+      margin: auto;
+      opacity: 0.5;
+    }
+  }
+  .article-title {
+    width: calc(#{$max-width} - 150px);
+    h1 {
+      line-height: 46px;
+      padding: 16px 0;
+      margin-top: 32px;
+    }
+  }
+
+  .project-logo {
+    width: 150px;
+  }
+
+
+  h3 {
+    font-size: 20px;
+    color: $hero-color-accent;
+    font-weight: 400;
+    padding: 8px 0;
+  }
+
+
+  @include small-mq {
+    text-align: center;
+    padding-top: 16px;
+    position: relative;
+    max-width: 100%;
+
+    .fl-left {
+      width: 100%;
+      margin: auto;
+      margin-top: $navigation-height * 1.5;
+      max-width: 500px;
+      float: none;
+
+       body.index &{
+        margin-top: $navigation-height * 2;
+      }
+    }
+
+    .fl-right {
+      display: none;
+    }
+
+    .small-illustration {
+      max-width: 30%;
+      display: block;
+      margin: auto;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    .btn {
+      max-width: 100%;
+    }
+
+    #json-response-text {
+      text-align: left;
+    }
+  }
+
+
+  &.shrink {
+    min-height: 314px;
+  }
+
+  .fl-right svg {
+    max-width: 260px;
+    position: relative;
+    top: -20px;
+
+    path,
+    ellipse {
+      transform: translateY(12px);
+    }
+  }
+}
