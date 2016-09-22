@@ -1,0 +1,22 @@
+mixin nav(currentPath, navItems, depth)
+  - var currentDepth = depth || 0;
+  if navItems
+    ul
+      for navItem in navItems
+        - var isCurrentFile = navItem.path === currentPath;
+        - var className = (isCurrentFile ? 'navItem-active' : 'navItem') + ' level-h' + currentDepth;
+        - var activeClass = isCurrentFile ? 'navItem-active' : '';
+        li(class=className)
+          a(href=h.publicPath(navItem.path) class=activeClass)=navItem.file.title
+          if(isCurrentFile)
+            +navContent(headings, currentDepth)
+          if(navItem.children.length > 0)
+            +nav(currentPath, navItem.children, currentDepth + 1)
+
+mixin navContent(headings, currentDepth)
+  ul
+    each item in headings
+      - var level = parseFloat(/h([0-9]+)/.exec(item.tag)[1]);
+      - var actualLevel = level + currentDepth - 1;
+      li(class='level-h' + actualLevel)
+        a(href='#' + item.id)= item.text

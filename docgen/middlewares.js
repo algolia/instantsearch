@@ -1,21 +1,24 @@
-import layouts from 'metalsmith-layouts';
 import headings from 'metalsmith-headings';
-import navigation from 'metalsmith-navigation';
+import layouts from 'metalsmith-layouts';
 import markdown from 'metalsmith-markdown';
-
-import inlineProps from './plugins/inlineProps/index.js';
-import renderer from './mdRenderer.js';
-import source from './plugins/source.js';
-import onlyChanged from './plugins/onlyChanged.js';
-import assets from './plugins/assets.js';
-import ignore from './plugins/ignore.js';
-import helpers from './plugins/helpers.js';
-import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
-import webpackStartConfig from './webpack.config.start.babel.js';
-import webpackBuildConfig from './webpack.config.build.babel';
 import msWebpack from 'ms-webpack';
+import navigation from 'metalsmith-navigation';
+import sass from 'metalsmith-sass';
+
+import assets from './plugins/assets.js';
+import helpers from './plugins/helpers.js';
+import ignore from './plugins/ignore.js';
+import inlineProps from './plugins/inlineProps/index.js';
+// import onlyChanged from './plugins/onlyChanged.js';
+import source from './plugins/source.js';
+import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
+
 // performance and debug info for metalsmith, when needed see usage below
 // import {start as perfStart, stop as perfStop} from './plugins/perf.js';
+
+import renderer from './mdRenderer.js';
+import webpackStartConfig from './webpack.config.start.babel.js';
+import webpackBuildConfig from './webpack.config.build.babel';
 
 import {reactPackage} from './path.js';
 
@@ -37,7 +40,12 @@ const common = [
     source: './assets/',
     destination: './assets/',
   }),
+  sass({
+    sourceMap: true,
+    sourceMapContents: true,
+  }),
   ignore(fileName => {
+    if (/\.swp$/.test(fileName)) return true;
     // if it's a build js file, keep it (`build`)
     if (/-build\.js$/.test(fileName)) return false;
 
@@ -53,6 +61,7 @@ const common = [
   markdown({
     renderer,
   }),
+  headings('h2'),
   // After markdown, so that paths point to the correct HTML file
   navigation({
     core: {
@@ -67,15 +76,18 @@ const common = [
       sortBy: 'nav_sort',
       filterProperty: 'nav_groups',
     },
+    gettingstarted: {
+      sortBy: 'nav_sort',
+      filterProperty: 'nav_groups',
+    },
   }, {
     navListProperty: 'navs',
   }),
-  onlyChanged,
+  // onlyChanged,
 
   // perfStart(),
   inlineProps,
   // perfStop(),
-  headings('h2, h3'),
   layouts('pug'),
 ];
 

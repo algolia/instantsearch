@@ -4,7 +4,7 @@ import {rootPath} from './path';
 
 export default {
   entry: {
-    'assets/js/api': join(__dirname, 'assets/js/api.js'),
+    'js/main': join(__dirname, 'assets/js/main.js'),
     'examples/e-commerce/index': join(__dirname, 'src/examples/e-commerce/index.js'),
     'examples/media/index': join(__dirname, 'src/examples/media/index.js'),
     'examples/tourism/index': join(__dirname, 'src/examples/tourism/index.js'),
