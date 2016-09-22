@@ -89,6 +89,11 @@ const Facets = () =>
             item={<ConnectedColorRefinementList attributeName="colors" operator="or"/>}
           />,
           <RefinementListWithTitle
+            title="Rating"
+            key="rating"
+            item={<Range.Rating attributeName="rating" max={5}/>}
+          />,
+          <RefinementListWithTitle
             title="Price"
             key="Price"
             item={ <CustomPriceRanges
@@ -105,7 +110,7 @@ const Facets = () =>
               ]}
             />}
           />,
-          <Range.Input attributeName="price" id="price_input"/>,
+          <Range.Input key="price_input" attributeName="price" id="price_input"/>,
         ]}
       />
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
@@ -176,21 +181,33 @@ function CustomHits({hits}) {
   return (
     <main id="hits">
       {hits.map((hit, idx) =>
-        <article className="hit" key={idx}>
-          <div className="product-picture-wrapper">
-            <div className="product-picture"><img src={`${hit.image}`}/></div>
-          </div>
-          <div className="product-desc-wrapper">
-            <div className="product-name" dangerouslySetInnerHTML={{__html: hit._highlightResult.name.value}}/>
-            <div className="product-type" dangerouslySetInnerHTML={{__html: hit._highlightResult.type.value}}/>
-            <div className="product-price">${hit.price}</div>
-
-          </div>
-        </article>
+        <Hit item={hit} key={idx}/>
       )}
     </main>
   );
 }
+
+const Hit = ({item}) => {
+  const icons = [];
+  for (let i = 0; i < 5; i++) {
+    const suffix = i >= item.rating ? '--empty' : '';
+    icons.push(<label key={i} label className={`RangeRatings__link__icon${suffix}`}></label>);
+  }
+  return (
+    <article className="hit">
+      <div className="product-picture-wrapper">
+        <div className="product-picture"><img src={`${item.image}`}/></div>
+      </div>
+      <div className="product-desc-wrapper">
+        <div className="product-name" dangerouslySetInnerHTML={{__html: item._highlightResult.name.value}}/>
+        <div className="product-type" dangerouslySetInnerHTML={{__html: item._highlightResult.type.value}}/>
+        <div>
+          {icons}
+          <div className="product-price">${item.price}</div>
+        </div>
+      </div>
+    </article>);
+};
 
 const CustomResults = createConnector({
   displayName: 'CustomResults',
@@ -261,7 +278,8 @@ const CustomPriceRanges = NumericRefinementList.connect(React.createClass({
         label = `$${min} - $${max}`;
       }
 
-      return <PriceRange label={label} value={item.value} refine={refine} onClick={this.checkIfNeedReset}/>;
+      return <PriceRange label={label} key={item.value} value={item.value}
+                         refine={refine} onClick={this.checkIfNeedReset}/>;
     });
 
     return (

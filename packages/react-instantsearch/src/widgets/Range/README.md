@@ -9,7 +9,8 @@ nav_groups:
 
 Lets users filter results within a numerical range, based on an attribute.
 
-There's also a `Range.Input` which renders a range using inputs.
+There's also a `Range.Input`  which renders a range using inputs and a `Range.Ratings` which renders a list of ratings 
+ranges. 
 
 By default, the Range will render as a slider.
 
@@ -34,6 +35,17 @@ By default, the Range will render as a slider.
 #### Translations
 
 `submit`, `separator`
+
+## Range.Ratings
+
+#### Theme
+
+`root`, `ratingLink`, `ratingLinkSelected` `ratingIcon`, `ratingIconEmpty` `ratingLabel`, `ratingCount`
+
+#### Translations
+
+`ratingLabel`
+
 
 ## Implementing your own Range
 
