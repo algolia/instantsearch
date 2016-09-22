@@ -27,12 +27,6 @@ html
           +nav(nav_path, navs.widgets)
         .nav.examples
           +nav(nav_path, navs.examples)
-        //- .nav.headings
-        //-   ul
-        //-     for heading in headings
-        //-       - var headingType = heading.type === 'h2' ? 'title' : 'subtitle';
-        //-       li(class=headingType)
-        //-         a(href=heading.id)=heading.text
       .content!=contents
     include ./common/footer.pug
     script(src=webpack.assets['assets/js/api.js'])
