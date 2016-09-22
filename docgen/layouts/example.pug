@@ -12,5 +12,6 @@ html
         link(rel="stylesheet" href=sheet)
     link(rel="stylesheet" href=h.publicPath(`examples/${name}/style.css`))
   body
+    include ./common/header.pug
     .content!=contents
     script(src=webpack.assets[`examples/${name}/index.js`])

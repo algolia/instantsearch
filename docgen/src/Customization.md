@@ -1,12 +1,10 @@
 ---
 title: Making your own widgets
-layout: api.pug
+layout: guide.pug
 nav_groups:
   - core
 nav_sort: 5
 ---
-
-# Making your own widgets
 
 While react-instantsearch already provides widgets out of the box, there are cases where you need to implement a custom feature that isn't covered by the default widget set.
 

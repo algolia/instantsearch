@@ -1,0 +1,21 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,500,600,700|Open+Sans:400,600,700);
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 14px;
+  font-family: "Raleway", Helvetica Neue, helvetica;
+}
+
+hr {
+  margin: 0;
+}
+
+figure {
+  figcaption {
+    text-indent: -9999px;
+    color: transparent;
+  }
+}
