@@ -119,7 +119,7 @@ export default class Slider extends Component {
     const offsets = value.map(v => inverseLerp(min, max, v) * 100);
 
     const handles = offsets.map((offset, i) =>
-      <div
+      <div // eslint-disable-line react/jsx-key, automatically done by themeable
         {...applyTheme(i, 'handle', i === activeIdx && 'handleActive')}
         style={{
           left: `${offset}%`,
@@ -135,7 +135,7 @@ export default class Slider extends Component {
     const offsetsWithMinMax = [0].concat(offsets).concat([100]);
 
     const tracks = offsetsWithMinMax.slice(0, -1).map((offset, i) =>
-      <div
+      <div // eslint-disable-line react/jsx-key, automatically done by themeable
         {...applyTheme(i, 'track')}
         style={{
           width: `${offsetsWithMinMax[i + 1] - offset}%`,
