@@ -47,15 +47,15 @@ const common = [
   ignore(fileName => {
     if (/\.swp$/.test(fileName)) return true;
     // if it's a build js file, keep it (`build`)
-    if (/-build\.js$/.test(fileName)) {
-      return false;
-    }
+    if (/-build\.js$/.test(fileName)) return false;
 
-    // if it's a non js build file, skip it (`start` and `build`)
-    if (/assets\/js\/(.*)?\.js$/.test(fileName)) {
-      return true;
-    }
+    // if it's an example JavaScript file, keep it
+    if (/examples\/(.*)?\.js$/.test(fileName)) return false;
 
+    // if it's any other JavaScript file, ignore it, it's handled by build files above
+    if (/\.js$/.test(fileName)) return true;
+
+    // otherwise, keep file
     return false;
   }),
   markdown({

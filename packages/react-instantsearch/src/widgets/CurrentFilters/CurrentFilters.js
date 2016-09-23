@@ -25,7 +25,9 @@ class CurrentFilters extends Component {
       <div {...applyTheme('root', 'root')}>
         <div {...applyTheme('filters', 'filters')}>
           {displayedFilters.map(filter =>
-            <div {...applyTheme(filter.key, 'filter')}>
+            <div // eslint-disable-line react/jsx-key, automatically done by themeable
+              {...applyTheme(filter.key, 'filter')}
+            >
               <span {...applyTheme('filterLabel', 'filterLabel')}>
                 {filter.label}
               </span>

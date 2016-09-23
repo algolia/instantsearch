@@ -16,6 +16,8 @@ export default function themeable(defaultTheme) {
 
     Themeable.displayName = `Themeable(${getDisplayName(Composed)})`;
 
+    Themeable.defaultTheme = defaultTheme;
+
     Themeable.propTypes = {
       theme: __DOC__ === 'yes' ?
         {type: {name: 'theme', value: defaultTheme}} :
