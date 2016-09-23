@@ -37,7 +37,7 @@ function getSelectedItem(props, state) {
 }
 
 export default createConnector({
-  displayName: 'AlgoliaNumericRefinementList',
+  displayName: 'AlgoliaMultiRange',
 
   propTypes: {
     /**
@@ -62,7 +62,7 @@ export default createConnector({
     /**
      * List of options.
      * @public
-     * @defines NumericRefinementListItem
+     * @defines MultiRangeItem
      */
     items: PropTypes.arrayOf(PropTypes.shape({
       /**

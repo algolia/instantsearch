@@ -11,7 +11,7 @@ import {
   Stats,
   Pagination,
   CurrentFilters,
-  NumericRefinementList,
+  MultiRange,
   Range,
   createConnector,
 } from 'react-instantsearch';
@@ -249,7 +249,7 @@ const CustomResults = createConnector({
   }
 });
 
-const CustomPriceRanges = NumericRefinementList.connect(React.createClass({
+const CustomPriceRanges = MultiRange.connect(React.createClass({
   checkIfNeedReset(value) {
     const selectedItem = this.props.selectedItem === value ? '' : value;
     this.props.refine(selectedItem);

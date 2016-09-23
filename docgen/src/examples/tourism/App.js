@@ -5,7 +5,7 @@ import {
   Pagination,
   Range,
   RefinementList,
-  NumericRefinementList,
+  MultiRange,
 } from 'react-instantsearch';
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
@@ -161,7 +161,7 @@ OptionCapacity.propTypes = {
   value: PropTypes.string,
 };
 
-const CapacitySelector = NumericRefinementList.connect(({items, selectedItem, refine}) => {
+const CapacitySelector = MultiRange.connect(({items, selectedItem, refine}) => {
   const selectValue = e => refine(e.target.value);
 
   const allOption = <OptionCapacity label="" value="" isSelected={Boolean(selectedItem)} key="all"/>;

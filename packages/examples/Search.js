@@ -13,7 +13,7 @@ import {
   SearchBox,
   Hits,
   HitsPerPage,
-  NumericRefinementList,
+  MultiRange,
   Range,
   CurrentFilters,
   Toggle,
@@ -94,7 +94,7 @@ class Search extends Component {
               value: v => `$${v.toLocaleString()}`,
             }}
           />
-          <NumericRefinementList
+          <MultiRange
             attributeName="rating"
             items={[
               {
