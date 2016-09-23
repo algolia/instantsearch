@@ -1,0 +1,129 @@
+exports[`RangeInput supports having a selected item 1`] = `
+<div
+  className="MultiRange">
+  <div
+    className="MultiRange__items">
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item MultiRange__item--selected">
+      <label>
+        <input
+          checked={true}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RangeInput supports passing items values 1`] = `
+<div
+  className="MultiRange">
+  <div
+    className="MultiRange__items">
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+    <div
+      className="MultiRange__item">
+      <label>
+        <input
+          checked={false}
+          className="MultiRange__item__radio"
+          onChange={[Function bound refine]}
+          type="radio" />
+        <span
+          className="MultiRange__item__label">
+          label
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+`;

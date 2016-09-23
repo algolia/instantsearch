@@ -1,11 +1,11 @@
 ---
-title: NumericRefinementList
+title: MultiRange
 layout: widget.pug
 nav_groups:
   - widgets
 ---
 
-# NumericRefinementList
+# MultiRange
 
 Lets the user pick between a list of refinement ranges for a particular numeric facet.
 
@@ -17,12 +17,12 @@ Lets the user pick between a list of refinement ranges for a particular numeric 
 
 `root`, `items`, `item`, `itemSelected`, `itemLabel`
 
-## Implementing your own NumericRefinementList
+## Implementing your own MultiRange
 
-See [Making your own widgets](../Customization.md) for more information on how to use the `NumericRefinementList.connect` HOC.
+See [Making your own widgets](../Customization.md) for more information on how to use the `MultiRange.connect` HOC.
 
 ```
-import {NumericRefinementList.connect} from 'react-instantsearch';
+import {MultiRange.connect} from 'react-instantsearch';
 
 function Item(props) {
   const value = props.selected ? null : props.item.value;
@@ -41,7 +41,7 @@ function Item(props) {
   );
 }
 
-function MyNumericRefinementList(props) {
+function MyMultiRange(props) {
   return (
     <div>
       {props.items.map(item =>
@@ -57,9 +57,9 @@ function MyNumericRefinementList(props) {
   );
 }
 
-// `NumericRefinementList.connect` accepts the same `id`, `attributeName` and
-// `items` props as `NumericRefinementList`.
+// `MultiRange.connect` accepts the same `id`, `attributeName` and
+// `items` props as `MultiRange`.
 // `items` are transformed into a simpler `{label: ?node, value: string}`
 // shape before being passed to the connected component.
-export default NumericRefinementList.connect(MyNumericRefinementList);
+export default MultiRange.connect(MyMultiRange);
 ```

@@ -4,3 +4,4 @@ packages/examples
 coverage/
 # generated documentation website
 docs/
+dist/

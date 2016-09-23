@@ -8,7 +8,7 @@ import Pagination from './src/widgets/Pagination/index.js';
 import RefinementList from './src/widgets/RefinementList/index.js';
 import Menu from './src/widgets/Menu/index.js';
 import HierarchicalMenu from './src/widgets/HierarchicalMenu/index.js';
-import NumericRefinementList from './src/widgets/NumericRefinementList/index.js';
+import MultiRange from './src/widgets/MultiRange/index.js';
 import Range from './src/widgets/Range/index.js';
 import CurrentFilters from './src/widgets/CurrentFilters/index.js';
 import Toggle from './src/widgets/Toggle/index.js';
@@ -34,7 +34,7 @@ export {
   RefinementList,
   Menu,
   HierarchicalMenu,
-  NumericRefinementList,
+  MultiRange,
   Range,
   CurrentFilters,
   Toggle,
