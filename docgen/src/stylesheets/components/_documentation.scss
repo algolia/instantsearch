@@ -58,14 +58,6 @@
     }
   }
 
-  h2, h3, .api-entry, .css-class {
-    &:before {
-      content: "";
-      display: block;
-      height: $offset-height;
-      margin: -$offset-height 0 0;
-    }
-  }
 
   .css-class {
     white-space: nowrap;
@@ -129,7 +121,18 @@
       word-break: inherit;
       word-wrap: inherit;
       padding: .5em 30px;
-      background: $silver;
+      background: #f8f8f8;
+      border: 1px solid #d8d8d8;
+      border-left: none;
+    }
+
+    h2, h3, .api-entry, .css-class {
+      &:before {
+        content: "";
+        display: block;
+        height: $offset-height;
+        margin: -$offset-height 0 0;
+      }
     }
 
     // API tables
