@@ -1,60 +1,60 @@
 exports[`RangeInput supports having a selected item 1`] = `
 <div
-  className="MultiRange">
+  className="root">
   <div
-    className="MultiRange__items">
+    className="items">
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item MultiRange__item--selected">
+      className="item itemSelected undefined undefined">
       <label>
         <input
           checked={true}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
@@ -65,61 +65,61 @@ exports[`RangeInput supports having a selected item 1`] = `
 
 exports[`RangeInput supports passing items values 1`] = `
 <div
-  className="MultiRange">
+  className="root">
   <div
-    className="MultiRange__items">
+    className="items">
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>
     </div>
     <div
-      className="MultiRange__item">
+      className="item false undefined undefined">
       <label>
         <input
           checked={false}
-          className="MultiRange__item__radio"
+          className="itemRadio"
           onChange={[Function bound refine]}
           type="radio" />
         <span
-          className="MultiRange__item__label">
+          className="itemLabel">
           label
         </span>
       </label>

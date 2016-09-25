@@ -1,0 +1,34 @@
+.root {
+  text-align: center;
+}
+
+.root .item {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 3px;
+  margin: 1px;
+  border-color: #ddd;
+  background: transparent;
+}
+
+.item .itemLink{
+  display: block;
+  color: #FF585B;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.item.itemSelected.itemPage {
+  background: #FF585B;
+}
+
+.item.itemSelected.itemPage .itemLink {
+  color: #FFFFFF;
+  border-color: #FF585B;
+}
+
+.itemDisabled {
+  visibility: hidden;
+}

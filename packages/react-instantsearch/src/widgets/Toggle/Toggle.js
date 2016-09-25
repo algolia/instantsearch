@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../../core/themeable';
+import theme from './Toggle.css';
 
 class Toggle extends Component {
   static propTypes = {
@@ -33,8 +34,4 @@ class Toggle extends Component {
   }
 }
 
-export default themeable({
-  root: 'Toggle',
-  checkbox: 'Toggle__checkbox',
-  label: 'Toggle__label',
-})(Toggle);
+export default themeable(theme)(Toggle);

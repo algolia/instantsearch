@@ -20,7 +20,7 @@ By default, the Range will render as a slider.
 
 #### Theme
 
-`root`, `handles`, `handle`, `handleActive`, `handleDot`, `handleTooltip`, `tracks`, `track`, `bounds`, `bound`, `boundMin`, `boundMax`
+`root`, `handles`, `handle`, `handle_active`, `handleDot`, `handleTooltip`, `tracks`, `track`, `bounds`, `bound`, `boundMin`, `boundMax`
 
 #### Translations
 

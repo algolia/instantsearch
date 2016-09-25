@@ -120,7 +120,7 @@ export default class Slider extends Component {
 
     const handles = offsets.map((offset, i) =>
       <div // eslint-disable-line react/jsx-key, automatically done by themeable
-        {...applyTheme(i, 'handle', i === activeIdx && 'handleActive')}
+        {...applyTheme(i, 'handle', i === activeIdx && 'handle_active')}
         style={{
           left: `${offset}%`,
         }}

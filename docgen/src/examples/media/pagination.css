@@ -1,0 +1,36 @@
+.item {
+  display: inline-block;
+  border: 1px solid;
+  border-color: #ddd;
+}
+
+.item + .item {
+  margin-left: 4px;
+}
+
+.itemDisabled {
+  display: none;
+}
+
+.itemLink {
+  display:block;
+  background: #F8F8F8;
+  padding: 3px 8px;
+  color: #333333;
+}
+
+.itemSelected {
+  background: #FF585B;
+}
+
+.itemSelected .itemLink {
+  border-color: #b5b5b5;
+  background: #E8E8E8;
+}
+
+.itemLink:hover {
+  text-decoration: none;
+  border-color: #cfcfcf;
+  background: #ebebeb;
+  color: #333333;
+}

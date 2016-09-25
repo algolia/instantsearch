@@ -3,6 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
+import theme from './CurrentFilters.css';
+
 class CurrentFilters extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
@@ -51,14 +53,7 @@ class CurrentFilters extends Component {
   }
 }
 
-export default themeable({
-  root: 'CurrentFilters',
-  filters: 'CurrentFilters__filters',
-  filter: 'CurrentFilters__filter',
-  filterLabel: 'CurrentFilters__filter__label',
-  filterClear: 'CurrentFilters__filter__clear',
-  clearAll: 'CurrentFilters__clearAll',
-})(
+export default themeable(theme)(
   translatable({
     clearFilter: '×',
     clearAll: 'Clear all',

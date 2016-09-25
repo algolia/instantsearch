@@ -190,8 +190,8 @@ function CustomHits({hits}) {
 const Hit = ({item}) => {
   const icons = [];
   for (let i = 0; i < 5; i++) {
-    const suffix = i >= item.rating ? '--empty' : '';
-    icons.push(<label key={i} label className={`RangeRatings__link__icon${suffix}`}></label>);
+    const suffix = i >= item.rating ? '_empty' : '';
+    icons.push(<label key={i} label className={`ais-RangeRatings__ratingIcon${suffix}`}></label>);
   }
   return (
     <article className="hit">
@@ -201,7 +201,7 @@ const Hit = ({item}) => {
       <div className="product-desc-wrapper">
         <div className="product-name" dangerouslySetInnerHTML={{__html: item._highlightResult.name.value}}/>
         <div className="product-type" dangerouslySetInnerHTML={{__html: item._highlightResult.type.value}}/>
-        <div>
+        <div className="ais-RangeRatings__ratingLink">
           {icons}
           <div className="product-price">${item.price}</div>
         </div>
@@ -243,7 +243,7 @@ const CustomResults = createConnector({
           <Stats />
         </section>
         <ConnectedHits hitsPerPage={16}/>
-        <Pagination showLast={true}/>
+        <footer><Pagination showLast={true}/></footer>
       </div>
     );
   }

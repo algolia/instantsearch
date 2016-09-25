@@ -1,29 +1,29 @@
 exports[`RangeInput applies translations 1`] = `
 <form
-  className="RangeInput"
+  className="root"
   onSubmit={[Function anonymous]}>
   <label
-    className="RangeInput__labelMin">
+    className="labelMin">
     <input
-      className="RangeInput__labelMin__input"
+      className="inputMin"
       onChange={[Function onChange]}
       type="number"
       value={0} />
   </label>
   <span
-    className="RangeInput__separator">
+    className="separator">
     SEPARATOR
   </span>
   <label
-    className="RangeInput__labelMax">
+    className="labelMax">
     <input
-      className="RangeInput__labelMax__input"
+      className="inputMax"
       onChange={[Function onChange]}
       type="number"
       value={100} />
   </label>
   <button
-    className="RangeInput__submit"
+    className="submit"
     type="submit">
     SUBMIT
   </button>
@@ -32,30 +32,30 @@ exports[`RangeInput applies translations 1`] = `
 
 exports[`RangeInput supports passing max/min values 1`] = `
 <form
-  className="RangeInput"
+  className="root"
   onSubmit={[Function anonymous]}>
   <label
-    className="RangeInput__labelMin">
+    className="labelMin">
     <input
-      className="RangeInput__labelMin__input"
+      className="inputMin"
       onChange={[Function onChange]}
       type="number"
       value={0} />
   </label>
   <span
-    className="RangeInput__separator">
+    className="separator">
     to
   </span>
   <label
-    className="RangeInput__labelMax">
+    className="labelMax">
     <input
-      className="RangeInput__labelMax__input"
+      className="inputMax"
       onChange={[Function onChange]}
       type="number"
       value={100} />
   </label>
   <button
-    className="RangeInput__submit"
+    className="submit"
     type="submit">
     go
   </button>

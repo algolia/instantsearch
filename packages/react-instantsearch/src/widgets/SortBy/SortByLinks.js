@@ -4,6 +4,8 @@ import themeable from '../../core/themeable';
 
 import LinkList from '../../components/LinkList';
 
+import theme from './SortByLinks.css';
+
 class SortByLinks extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -44,9 +46,4 @@ class SortByLinks extends Component {
   }
 }
 
-export default themeable({
-  root: 'SortByLinks',
-  item: 'SortByLinks__item',
-  itemLink: 'SortByLinks__item__link',
-  itemSelected: 'SortByLinks__item--selected',
-})(SortByLinks);
+export default themeable(theme)(SortByLinks);

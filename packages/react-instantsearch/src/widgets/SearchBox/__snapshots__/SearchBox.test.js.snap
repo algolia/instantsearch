@@ -1,29 +1,47 @@
 exports[`SearchBox applies its default props 1`] = `
 <form
-  className="SearchBox"
+  className="root"
   noValidate={true}
   onReset={[Function anonymous]}
   onSubmit={[Function anonymous]}>
   <div
-    className="SearchBox__wrapper"
+    className="wrapper"
     role="search">
     <input
       autoComplete={false}
       autoFocus={false}
-      className="SearchBox__input"
+      className="input"
       onChange={[Function anonymous]}
       placeholder="Search your website"
       required={true}
       type="search"
       value="" />
     <button
-      className="SearchBox__submit"
+      className="submit"
       title="Submit your search query."
-      type="submit" />
+      type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
     <button
-      className="SearchBox__reset"
+      className="reset"
       title="Clear the search query."
-      type="reset" />
+      type="reset">
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
   </div>
 </form>
 `;
@@ -49,44 +67,78 @@ exports[`SearchBox lets you customize its theme 1`] = `
     <button
       className="SUBMIT"
       title="Submit your search query."
-      type="submit" />
+      type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
     <button
       className="RESET"
       title="Clear the search query."
-      type="reset" />
+      type="reset">
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
   </div>
 </form>
 `;
 
 exports[`SearchBox lets you customize its translations 1`] = `
 <form
-  className="SearchBox"
+  className="root"
   noValidate={true}
   onReset={[Function anonymous]}
   onSubmit={[Function anonymous]}>
   <div
-    className="SearchBox__wrapper"
+    className="wrapper"
     role="search">
     <input
       autoComplete={false}
       autoFocus={false}
-      className="SearchBox__input"
+      className="input"
       onChange={[Function anonymous]}
       placeholder="PLACEHOLDER"
       required={true}
       type="search"
       value="" />
     <button
-      className="SearchBox__submit"
+      className="submit"
       title="SUBMIT_TITLE"
       type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
       SUBMIT
     </button>
     <button
-      className="SearchBox__reset"
+      className="reset"
       title="RESET_TITLE"
       type="reset">
       RESET
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
     </button>
   </div>
 </form>
@@ -94,90 +146,144 @@ exports[`SearchBox lets you customize its translations 1`] = `
 
 exports[`SearchBox transfers the autoFocus prop to the underlying input element 1`] = `
 <form
-  className="SearchBox"
+  className="root"
   noValidate={true}
   onReset={[Function anonymous]}
   onSubmit={[Function anonymous]}>
   <div
-    className="SearchBox__wrapper"
+    className="wrapper"
     role="search">
     <input
       autoComplete={false}
       autoFocus={true}
-      className="SearchBox__input"
+      className="input"
       onChange={[Function anonymous]}
       placeholder="Search your website"
       required={true}
       type="search"
       value="" />
     <button
-      className="SearchBox__submit"
+      className="submit"
       title="Submit your search query."
-      type="submit" />
+      type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
     <button
-      className="SearchBox__reset"
+      className="reset"
       title="Clear the search query."
-      type="reset" />
+      type="reset">
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
   </div>
 </form>
 `;
 
 exports[`SearchBox treats its query prop as its input value 1`] = `
 <form
-  className="SearchBox"
+  className="root"
   noValidate={true}
   onReset={[Function anonymous]}
   onSubmit={[Function anonymous]}>
   <div
-    className="SearchBox__wrapper"
+    className="wrapper"
     role="search">
     <input
       autoComplete={false}
       autoFocus={false}
-      className="SearchBox__input"
+      className="input"
       onChange={[Function anonymous]}
       placeholder="Search your website"
       required={true}
       type="search"
       value="QUERY1" />
     <button
-      className="SearchBox__submit"
+      className="submit"
       title="Submit your search query."
-      type="submit" />
+      type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
     <button
-      className="SearchBox__reset"
+      className="reset"
       title="Clear the search query."
-      type="reset" />
+      type="reset">
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
   </div>
 </form>
 `;
 
 exports[`SearchBox treats its query prop as its input value 2`] = `
 <form
-  className="SearchBox"
+  className="root"
   noValidate={true}
   onReset={[Function anonymous]}
   onSubmit={[Function anonymous]}>
   <div
-    className="SearchBox__wrapper"
+    className="wrapper"
     role="search">
     <input
       autoComplete={false}
       autoFocus={false}
-      className="SearchBox__input"
+      className="input"
       onChange={[Function anonymous]}
       placeholder="Search your website"
       required={true}
       type="search"
       value="QUERY2" />
     <button
-      className="SearchBox__submit"
+      className="submit"
       title="Submit your search query."
-      type="submit" />
+      type="submit">
+      <svg
+        id="ris-search-icon"
+        viewBox="0 0 40 40"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
     <button
-      className="SearchBox__reset"
+      className="reset"
       title="Clear the search query."
-      type="reset" />
+      type="reset">
+      <svg
+        id="ris-clear-icon"
+        viewBox="0 0 20 20"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+          fillRule="evenodd" />
+      </svg>
+    </button>
   </div>
 </form>
 `;
