@@ -7,6 +7,8 @@ import translatable from '../../core/translatable';
 
 import LinkList from '../../components/LinkList';
 
+import theme from './Pagination.css';
+
 function getPagesDisplayedCount(padding, total) {
   return Math.min(2 * padding + 1, total);
 }
@@ -40,19 +42,6 @@ function getPages(page, total, padding) {
 
   return range(first, last);
 }
-
-const ThemedLinkList = themeable({
-  root: 'Pagination',
-  item: 'Pagination__item',
-  itemFirst: 'Pagination__item--first',
-  itemLast: 'Pagination__item--last',
-  itemPrevious: 'Pagination__item--previous',
-  itemNext: 'Pagination__item--next',
-  itemPage: 'Pagination__item--page',
-  itemSelected: 'Pagination__item--selected',
-  itemDisabled: 'Pagination__item--disabled',
-  itemLink: 'Pagination__item__link',
-})(LinkList);
 
 class Pagination extends Component {
   static propTypes = {
@@ -102,7 +91,7 @@ class Pagination extends Component {
   };
 
   static defaultProps = {
-    listComponent: ThemedLinkList,
+    listComponent: LinkList,
     showFirst: true,
     showPrevious: true,
     showNext: true,
@@ -120,9 +109,8 @@ class Pagination extends Component {
     return {
       key: `${modifier}.${value}`,
       modifier,
-      disabled:
-        value < 0 ||
-        value >= Math.min(maxPages, nbPages),
+      disabled: value < 0 ||
+      value >= Math.min(maxPages, nbPages),
       label: translate(translationKey, value),
       value,
       ariaLabel: translate(`aria${capitalize(translationKey)}`, value),
@@ -218,15 +206,17 @@ class Pagination extends Component {
   }
 }
 
-export default translatable({
-  previous: '‹',
-  next: '›',
-  first: '«',
-  last: '»',
-  page: page => (page + 1).toString(),
-  ariaPrevious: 'Previous page',
-  ariaNext: 'Next page',
-  ariaFirst: 'First page',
-  ariaLast: 'Last page',
-  ariaPage: page => `Page ${(page + 1).toString()}`,
-})(Pagination);
+export default themeable(theme)(
+  translatable({
+    previous: '‹',
+    next: '›',
+    first: '«',
+    last: '»',
+    page: page => (page + 1).toString(),
+    ariaPrevious: 'Previous page',
+    ariaNext: 'Next page',
+    ariaFirst: 'First page',
+    ariaLast: 'Last page',
+    ariaPage: page => `Page ${(page + 1).toString()}`,
+  })(Pagination)
+);

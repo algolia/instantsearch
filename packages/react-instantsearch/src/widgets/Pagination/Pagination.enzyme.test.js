@@ -30,13 +30,13 @@ describe('Pagination', () => {
       />
     );
     wrapper
-      .find('.Pagination__item__link')
+      .find('.itemLink')
       .filterWhere(e => e.text() === '8')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual(7);
     wrapper
-      .find('.Pagination__item__link')
+      .find('.itemLink')
       .filterWhere(e => e.text() === '10')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
@@ -44,26 +44,26 @@ describe('Pagination', () => {
     expect(parameters.isSamePage).toBe(true);
     expect(parameters.valueOf()).toBe(9);
     wrapper
-      .find('.Pagination__item--previous')
-      .find('.Pagination__item__link')
+      .find('.itemPrevious')
+      .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(3);
     expect(refine.mock.calls[2][0]).toEqual(8);
     wrapper
-      .find('.Pagination__item--next')
-      .find('.Pagination__item__link')
+      .find('.itemNext')
+      .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(4);
     expect(refine.mock.calls[3][0]).toEqual(10);
     wrapper
-      .find('.Pagination__item--first')
-      .find('.Pagination__item__link')
+      .find('.itemFirst')
+      .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(5);
     expect(refine.mock.calls[4][0]).toEqual(0);
     wrapper
-      .find('.Pagination__item--last')
-      .find('.Pagination__item__link')
+      .find('.itemLast')
+      .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(6);
     expect(refine.mock.calls[5][0]).toEqual(19);
@@ -78,7 +78,7 @@ describe('Pagination', () => {
       />
     );
     const el = wrapper
-      .find('.Pagination__item__link')
+      .find('.itemLink')
       .filterWhere(e => e.text() === '8');
     el.simulate('click', {button: 1});
     el.simulate('click', {altKey: true});

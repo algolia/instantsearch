@@ -1,0 +1,46 @@
+.root{
+}
+
+.item {
+  display: inline-block;
+  padding: 3px;
+}
+
+.itemSelected a {
+  color: #000000;
+  font-weight: bold;
+}
+
+.itemDisabled {
+  visibility: visible;
+}
+
+.itemDisabled a {
+  color: #bbbbbb;
+}
+
+.itemDisabled a:hover {
+  cursor: default;
+  text-decoration: none;
+}
+
+.itemFirst {
+}
+
+.itemLast {
+}
+
+.itemPrevious {
+}
+
+.itemNext {
+}
+
+.itemPage {
+}
+
+.itemLink {
+}
+
+
+

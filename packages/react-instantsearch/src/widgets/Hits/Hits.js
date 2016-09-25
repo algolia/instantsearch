@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../../core/themeable';
+import theme from './Hits.css';
 
 class Hits extends Component {
   static propTypes = {
@@ -41,6 +42,4 @@ class Hits extends Component {
   }
 }
 
-export default themeable({
-  root: 'Hits',
-})(Hits);
+export default themeable(theme)(Hits);

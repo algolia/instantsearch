@@ -67,7 +67,7 @@ class List extends Component {
           item.value,
           'item',
           selected && 'itemSelected',
-          children && 'itemParent',
+          children && 'item_parent',
           selectedParent && 'itemSelectedParent'
         )}
       >

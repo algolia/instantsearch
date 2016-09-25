@@ -3,6 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 
 import LinkList from '../../components/LinkList';
+import theme from './HitsPerPage.css';
 
 class HitsPerPage extends Component {
   static propTypes = {
@@ -58,9 +59,4 @@ class HitsPerPage extends Component {
   }
 }
 
-export default themeable({
-  root: 'HitsPerPage',
-  item: 'HitsPerPage__item',
-  itemLink: 'HitsPerPage__item__link',
-  itemSelected: 'HitsPerPage__item--selected',
-})(HitsPerPage);
+export default themeable(theme)(HitsPerPage);
