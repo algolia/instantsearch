@@ -3,6 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
+import theme from './Error.css';
+
 class Error extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -20,9 +22,7 @@ class Error extends Component {
   }
 }
 
-export default themeable({
-  root: 'Error',
-})(
+export default themeable(theme)(
   translatable({
     error: 'There was an error processing your request. Please try again.',
   })(Error)

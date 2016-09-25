@@ -1,0 +1,33 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.ratingLink > .ratingIcon:before {
+  content: '\2605';
+  color: #FBAE00;
+}
+
+.ratingLink > .ratingIconEmpty:before {
+  content: '\2606';
+  color: #FBAE00;
+}
+
+.ratingLinkSelected{
+  font-weight: 700;
+}
+
+.ratingLinkDisabled > .ratingCount{
+  display:none;
+}
+
+.ratingLinkDisabled > .ratingIconEmpty:before{
+  color: #C9C9C9;
+}
+
+.ratingLinkDisabled > .ratingIcon:before{
+  color: #C9C9C9;
+}
+
+.ratingLabel {
+}

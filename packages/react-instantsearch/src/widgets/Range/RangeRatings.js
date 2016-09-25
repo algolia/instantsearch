@@ -3,11 +3,14 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
+import theme from './RangeRatings.css';
+
 class RangeRatings extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
+    createURL: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
     value: PropTypes.shape({
@@ -30,11 +33,11 @@ class RangeRatings extends Component {
     }
   }
 
-  buildItem({max, lowerBound, count, applyTheme, translate}) {
+  buildItem({max, lowerBound, count, applyTheme, translate, createURL}) {
     const icons = [];
     for (let icon = 0; icon < max; icon++) {
-      const theme = icon >= lowerBound ? 'ratingIconEmpty' : 'ratingIcon';
-      icons.push(<span {...applyTheme(theme, theme)} key={icon}/>);
+      const iconTheme = icon >= lowerBound ? 'ratingIconEmpty' : 'ratingIcon';
+      icons.push(<span {...applyTheme(iconTheme, iconTheme)} key={icon}/>);
     }
 
     const selected = lowerBound === this.props.value.min &&
@@ -49,6 +52,7 @@ class RangeRatings extends Component {
         disabled && 'ratingLinkDisabled')}
          key={lowerBound}
          onClick={this.onClick.bind(this, lowerBound, max)}
+         href={createURL({lowerBound, max})}
       >
         {icons}
         <span {...applyTheme('ratingLabel', 'ratingLabel')}>{translate('ratingLabel')}</span>
@@ -58,7 +62,7 @@ class RangeRatings extends Component {
   }
 
   render() {
-    const {applyTheme, translate, refine, min, max, count} = this.props;
+    const {applyTheme, translate, refine, min, max, count, createURL} = this.props;
     const items = [];
     for (let i = max; i >= min; i--) {
       const itemCount = count.reduce((acc, item) => {
@@ -72,6 +76,7 @@ class RangeRatings extends Component {
         count: itemCount,
         applyTheme,
         translate,
+        createURL,
       }));
     }
     return (
@@ -82,16 +87,7 @@ class RangeRatings extends Component {
   }
 }
 
-export default themeable({
-  root: 'RangeRatings',
-  ratingLink: 'RangeRatings__link',
-  ratingLinkSelected: 'RangeRatings__link--selected',
-  ratingLinkDisabled: 'RangeRatings__link--disabled',
-  ratingIcon: 'RangeRatings__link__icon',
-  ratingIconEmpty: 'RangeRatings__link__icon--empty',
-  ratingLabel: 'RangeRatings__link__label',
-  ratingCount: 'RangeRatings__link__count',
-})(translatable({
+export default themeable(theme)(translatable({
   ratingLabel: ' & Up',
 })(RangeRatings)
 );

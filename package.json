@@ -12,10 +12,17 @@
     "postinstall": "cd packages/react-instantsearch && npm install",
     "doctoc": "doctoc --maxlevel 1 README.md CONTRIBUTING.md",
     "test": "(cd packages/react-instantsearch && npm test) && npm run lint && NODE_ENV=production DOCS_MOUNT_POINT=/instantsearch.js/react/ DOCS_DIST=docs/react/ npm run docs:build && NODE_ENV=production npm run build",
-    "dev": "cd packages/react-instantsearch && npm run dev"
+    "dev": "cd packages/react-instantsearch && npm run dev",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "repository": "algolia/instantsearch.js",
   "dependencies": {
+    "@kadira/react-storybook-addon-info": "3.2.1",
+    "@kadira/storybook": "^2.5.2",
+    "@kadira/storybook-addon-knobs": "1.2.2",
+    "@kadira/storybook-addon-notes": "1.0.1",
+    "@kadira/storybook-addon-options": "1.0.1",
     "async": "2.0.1",
     "babel-cli": "6.14.0",
     "babel-loader": "6.2.5",
@@ -31,6 +38,7 @@
     "doctoc": "1.2.0",
     "doctrine": "1.4.0",
     "ejs": "2.5.2",
+    "empty-loader": "1.0.1",
     "escape-html": "1.0.3",
     "eslint-config-algolia": "5.5.1",
     "gh-pages": "0.11.0",

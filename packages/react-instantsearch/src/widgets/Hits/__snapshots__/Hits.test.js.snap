@@ -1,6 +1,6 @@
 exports[`Hits accepts a itemComponent prop 1`] = `
 <div
-  className="Hits">
+  className="root">
   <Hit
     hit={
       Object {

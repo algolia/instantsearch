@@ -7,7 +7,7 @@ nav_groups:
 
 # Stats
 
-The `Stats` widget is where users type their search queries.
+The `Stats` widget lets you display how many results matched the query and how fast the search was.
 
 ### Theme
 

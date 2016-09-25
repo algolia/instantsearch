@@ -12,6 +12,7 @@
     "babel-cli": "6.14.0",
     "babel-jest": "15.0.0",
     "enzyme": "2.4.1",
+    "identity-obj-proxy": "3.0.0",
     "jest-cli": "15.1.1",
     "mockdate": "1.0.4",
     "react": "15.3.2",
@@ -32,6 +33,11 @@
   "peerDependencies": {
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^.+\\.(css)$": "<rootDir>/test/styleMock.js"
+    }
   },
   "license": "MIT"
 }

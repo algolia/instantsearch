@@ -1,31 +1,31 @@
 exports[`HitsPerPage applies translations 1`] = `
 <ul
-  className="HitsPerPage">
+  className="root">
   <li
-    className="HitsPerPage__item HitsPerPage__item--selected">
+    className="item itemSelected undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       111
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       333
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       666
@@ -36,32 +36,32 @@ exports[`HitsPerPage applies translations 1`] = `
 
 exports[`HitsPerPage supports passing number items 1`] = `
 <ul
-  className="HitsPerPage">
+  className="root">
   <li
-    className="HitsPerPage__item HitsPerPage__item--selected">
+    className="item itemSelected undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       111
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       333
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       666
@@ -72,32 +72,32 @@ exports[`HitsPerPage supports passing number items 1`] = `
 
 exports[`HitsPerPage supports passing object items 1`] = `
 <ul
-  className="HitsPerPage">
+  className="root">
   <li
-    className="HitsPerPage__item HitsPerPage__item--selected">
+    className="item itemSelected undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       111 items
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       333 items
     </a>
   </li>
   <li
-    className="HitsPerPage__item">
+    className="item false undefined undefined">
     <a
       aria-label={undefined}
-      className="HitsPerPage__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       666 items

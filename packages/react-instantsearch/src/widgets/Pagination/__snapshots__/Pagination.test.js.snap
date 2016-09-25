@@ -1,101 +1,101 @@
 exports[`Pagination allows toggling display of the first page button on and off 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -106,92 +106,92 @@ exports[`Pagination allows toggling display of the first page button on and off 
 
 exports[`Pagination allows toggling display of the first page button on and off 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -202,112 +202,112 @@ exports[`Pagination allows toggling display of the first page button on and off 
 
 exports[`Pagination allows toggling display of the last page button on and off 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--last">
+    className="item false false itemLast">
     <a
       aria-label="Last page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       »
@@ -318,102 +318,102 @@ exports[`Pagination allows toggling display of the last page button on and off 1
 
 exports[`Pagination allows toggling display of the last page button on and off 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -424,102 +424,102 @@ exports[`Pagination allows toggling display of the last page button on and off 2
 
 exports[`Pagination allows toggling display of the next page button on and off 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -530,92 +530,92 @@ exports[`Pagination allows toggling display of the next page button on and off 1
 
 exports[`Pagination allows toggling display of the next page button on and off 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
@@ -626,102 +626,102 @@ exports[`Pagination allows toggling display of the next page button on and off 2
 
 exports[`Pagination allows toggling display of the previous page button on and off 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -732,92 +732,92 @@ exports[`Pagination allows toggling display of the previous page button on and o
 
 exports[`Pagination allows toggling display of the previous page button on and off 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -828,102 +828,102 @@ exports[`Pagination allows toggling display of the previous page button on and o
 
 exports[`Pagination applies its default props 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -934,136 +934,136 @@ exports[`Pagination applies its default props 1`] = `
 
 exports[`Pagination displays the correct padding of links 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--disabled Pagination__item--first">
+    className="item itemSelected itemDisabled itemFirst">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       «
     </span>
   </li>
   <li
-    className="Pagination__item Pagination__item--disabled Pagination__item--previous">
+    className="item false itemDisabled itemPrevious">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       ‹
     </span>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 1"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       1
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 2"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       2
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 3"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       3
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 4"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       4
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 5"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       5
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 6"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       6
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -1074,122 +1074,122 @@ exports[`Pagination displays the correct padding of links 1`] = `
 
 exports[`Pagination displays the correct padding of links 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 6"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       6
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 11"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       11
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 12"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       12
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 13"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       13
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 14"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       14
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -1200,101 +1200,101 @@ exports[`Pagination displays the correct padding of links 2`] = `
 
 exports[`Pagination displays the correct padding of links 3`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 14"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       14
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 15"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       15
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 16"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       16
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 17"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       17
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 18"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       18
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 19"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       19
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 20"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       20
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    className="item false itemDisabled itemNext">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       ›
     </span>
   </li>
@@ -1303,82 +1303,82 @@ exports[`Pagination displays the correct padding of links 3`] = `
 
 exports[`Pagination displays the correct padding of links 4`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 1"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       1
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 2"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       2
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 3"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       3
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 4"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       4
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 5"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       5
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="Next page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ›
@@ -1525,132 +1525,132 @@ exports[`Pagination lets you customize its theme 1`] = `
 
 exports[`Pagination lets you customize its translations 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="ARIA_FIRST"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       FIRST
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="ARIA_PREVIOUS"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PREVIOUS
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_2"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_2
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_3"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_3
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_4"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_4
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_5"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_5
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_6"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_6
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="ARIA_PAGE_9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="ARIA_PAGE_10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       PAGE_10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--next">
+    className="item false false itemNext">
     <a
       aria-label="ARIA_NEXT"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       NEXT
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--last">
+    className="item false false itemLast">
     <a
       aria-label="ARIA_LAST"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       LAST
@@ -1661,108 +1661,108 @@ exports[`Pagination lets you customize its translations 1`] = `
 
 exports[`Pagination lets you force a maximum of pages 1`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 4"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       4
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 5"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       5
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 6"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       6
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 10"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       10
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    className="item false itemDisabled itemNext">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       ›
     </span>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--disabled Pagination__item--last">
+    className="item itemSelected itemDisabled itemLast">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       »
     </span>
   </li>
@@ -1771,108 +1771,108 @@ exports[`Pagination lets you force a maximum of pages 1`] = `
 
 exports[`Pagination lets you force a maximum of pages 2`] = `
 <ul
-  className="Pagination">
+  className="root">
   <li
-    className="Pagination__item Pagination__item--first">
+    className="item false false itemFirst">
     <a
       aria-label="First page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       «
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--previous">
+    className="item false false itemPrevious">
     <a
       aria-label="Previous page"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       ‹
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 3"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       3
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 4"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       4
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 5"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       5
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 6"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       6
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 7"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       7
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--page">
+    className="item false undefined itemPage">
     <a
       aria-label="Page 8"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       8
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--page">
+    className="item itemSelected undefined itemPage">
     <a
       aria-label="Page 9"
-      className="Pagination__item__link"
+      className="itemLink"
       href="#"
       onClick={[Function anonymous]}>
       9
     </a>
   </li>
   <li
-    className="Pagination__item Pagination__item--disabled Pagination__item--next">
+    className="item false itemDisabled itemNext">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       ›
     </span>
   </li>
   <li
-    className="Pagination__item Pagination__item--selected Pagination__item--disabled Pagination__item--last">
+    className="item itemSelected itemDisabled itemLast">
     <span
-      className="Pagination__item__link">
+      className="itemLink">
       »
     </span>
   </li>
