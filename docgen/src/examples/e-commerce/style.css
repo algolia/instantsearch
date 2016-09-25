@@ -130,48 +130,48 @@ aside .facet-title {
   clear: both;
 }
 
-aside .HierarchicalMenu__item__link, aside a {
+aside .ais-HierarchicalMenu__itemLink, aside a {
   color: #000000;
 }
 
-aside .HierarchicalMenu__item__link:hover, aside a:hover {
+aside .ais-HierarchicalMenu__itemLink:hover, aside a:hover {
   color: #B32500;
   text-decoration: none;
 }
 
-aside .HierarchicalMenu__item--selected > a, .HierarchicalMenu__item--selectedParent > a {
+aside .ais-HierarchicalMenu__itemSelected > a, .ais-HierarchicalMenu__itemSelectedParent > a {
   font-weight: bold;
 }
 
-aside .HierarchicalMenu__item__link input, aside a input {
+aside .ais-HierarchicalMenu__itemLink input, aside a input {
   margin-right: 4px;
 }
 
-aside .HierarchicalMenu__item__label:before {
+aside .ais-HierarchicalMenu__itemLabel:before {
   content: "> "
 }
 
-aside .HierarchicalMenu__item__children {
+aside .ais-HierarchicalMenu__itemChildren {
   margin-left: 10px;
 }
 
-aside .RefinementList__item label {
+aside .ais-RefinementList__item label {
   font-weight: 100
 }
 
-aside .RefinementList__item label input {
+aside .ais-RefinementList__item label input {
   margin-right: 5px;
 }
 
-aside .RefinementList__item__count, .HierarchicalMenu__item__count {
+aside .ais-RefinementList__itemCount, .ais-HierarchicalMenu__itemCount {
   color: #6F6E6C;
 }
 
-aside .RefinementList__item__count:before, .HierarchicalMenu__item__count:before {
+aside .ais-RefinementList__itemCount:before, .ais-HierarchicalMenu__itemCount:before {
   content: '('
 }
 
-aside .RefinementList__item__count:after, .HierarchicalMenu__item__count:after {
+aside .ais-RefinementList__itemCount:after, .ais-HierarchicalMenu__itemCount:after {
   content: ')'
 }
 
@@ -392,7 +392,7 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   border: 1px solid lightgray;
 }
 
-.Stats {
+.ais-Stats__root {
   padding-left: 10px;
   font-size: .8em;
 }
@@ -487,57 +487,6 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   background-color: #FFBE61;
 }
 
-.Pagination {
-  margin-top: 10px;
-  background-color: #EEE;
-  font-size: 1.2em;
-  line-height: 3em;
-  text-align: center;
-}
-
-.Pagination:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.Pagination .Pagination__item {
-  display: inline-block;
-  padding: 3px;
-}
-
-.Pagination .Pagination__item--selected a {
-  color: #000000;
-  font-weight: bold;
-}
-
-.Pagination .Pagination__item--disabled {
-  visibility: visible;
-}
-
-.Pagination .Pagination__item--disabled a {
-  color: #bbbbbb;
-}
-
-.Pagination .Pagination__item--disabled a:hover {
-  cursor: default;
-  text-decoration: none;
-}
-
-.Pagination ul {
-  margin: 0;
-  padding: 0;
-}
-
-.Pagination li {
-  padding: 0 8px;
-}
-
-.Pagination .fa {
-  position: relative;
-  top: 5px;
-}
-
 .thank-you {
   text-align: center;
   font-size: .8em;
@@ -552,23 +501,36 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   padding: 0;
 }
 
-.RangeInput__labelMin__input, .RangeInput__labelMax__input {
+footer {
+  margin-top: 10px;
+  font-size: 1.2em;
+  line-height: 3em;
+  text-align: center;
+}
+
+footer:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.ais-RangeInput__inputMin, .ais-RangeInput__inputMax {
   width: 50px;
   border-radius: 2px;
   border: solid 1px #888;
   font-weight: normal;
 }
 
-.RangeInput__labelMin:before, .RangeInput__labelMax:before {
+.ais-RangeInput__labelMin:before, .ais-RangeInput__labelMax:before {
   content: '$';
   margin-right: 5px;
 }
 
-.RangeInput__separator {
+.ais-RangeInput__separator {
   margin: 0px 5px;
 }
 
-.RangeInput__submit {
+.ais-RangeInput__submit {
   display: block;
   float: right;
   width: 22px;
@@ -582,38 +544,7 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   text-align: center;
 }
 
-.RangeInput__submit:hover {
+.ais-RangeInput__submit:hover {
   color: #0063C3;
   background-color: #FFFFFF;
-}
-
-.RangeRatings {
-  display: flex;
-  flex-direction: column;
-}
-
-.RangeRatings__link__icon:before {
-  content: '\2605';
-  color: #FBAE00;
-}
-
-.RangeRatings__link__icon--empty:before {
-  content: '\2606';
-  color: #FBAE00;
-}
-
-.RangeRatings__link--selected{
-  font-weight: 700;
-}
-
-.RangeRatings__link--disabled > .RangeRatings__link__count{
-  display:none;
-}
-
-.RangeRatings__link--disabled > .RangeRatings__link__icon--empty:before{
-  color: #C9C9C9;
-}
-
-.RangeRatings__link--disabled > .RangeRatings__link__icon:before{
-  color: #C9C9C9;
 }

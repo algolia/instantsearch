@@ -2,6 +2,23 @@ import React, {Component, PropTypes} from 'react';
 
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
+import theme from './SearchBox.css';
+
+/* eslint-disable max-len */
+const SubmitIcon = () =>
+  <svg xmlns="http://www.w3.org/2000/svg" id="ris-search-icon" viewBox="0 0 40 40">
+    <path
+      d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
+      fillRule="evenodd"></path>
+  </svg>;
+
+const ResetIcon = () =>
+  <svg xmlns="http://www.w3.org/2000/svg" id="ris-clear-icon" viewBox="0 0 20 20">
+    <path
+      d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
+      fillRule="evenodd"/>
+  </svg>;
+/* eslint-enable max-len */
 
 class SearchBox extends Component {
   static propTypes = {
@@ -187,6 +204,7 @@ class SearchBox extends Component {
             title={translate('submitTitle')}
             {...applyTheme('submit', 'submit')}
           >
+            {<SubmitIcon/>}
             {translate('submit')}
           </button>
           <button
@@ -195,6 +213,7 @@ class SearchBox extends Component {
             {...applyTheme('reset', 'reset')}
           >
             {translate('reset')}
+            {<ResetIcon/>}
           </button>
         </div>
       </form>
@@ -202,13 +221,7 @@ class SearchBox extends Component {
   }
 }
 
-export default themeable({
-  root: 'SearchBox',
-  wrapper: 'SearchBox__wrapper',
-  input: 'SearchBox__input',
-  submit: 'SearchBox__submit',
-  reset: 'SearchBox__reset',
-})(
+export default themeable(theme)(
   translatable({
     submit: null,
     reset: null,

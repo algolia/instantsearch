@@ -33,7 +33,6 @@ describe('SearchBox', () => {
     );
     expect(inst.toJSON()).toMatchSnapshot();
   });
-
   it('lets you customize its theme', () => {
     tree = renderer.create(
       <SearchBox

@@ -2,6 +2,7 @@ import React, {PropTypes, Component} from 'react';
 
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
+import theme from './Stats.css';
 
 class Stats extends Component {
   static propTypes = {
@@ -21,9 +22,7 @@ class Stats extends Component {
   }
 }
 
-export default themeable({
-  root: 'Stats',
-})(
+export default themeable(theme)(
   translatable({
     stats: (n, ms) =>
       `${n.toLocaleString()} results found in ${ms.toLocaleString()}ms`,

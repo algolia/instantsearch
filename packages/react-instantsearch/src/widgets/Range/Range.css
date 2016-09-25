@@ -1,0 +1,108 @@
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 4px;
+  margin: 40px 0px;
+}
+
+.handles {
+  position: absolute;
+  top: 50%;
+  left: 0px;
+  right: 0px;
+}
+
+.handle {
+  position: absolute;
+  top: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0px;
+  height: 0px;
+}
+
+.handle > .handleDot {
+  background-color: #3E82F7;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: transform 0.1s ease;
+}
+
+.handle:hover > .handleDot,
+.handle_active > .handleDot {
+  transform: scale(2);
+}
+
+.handleTooltip {
+  font-size: 0.8em;
+  padding: 0.3em 0.5em;
+  border-radius: 0.3em;
+  position: absolute;
+  top: -40px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  pointer-events: none;
+}
+
+.handle:hover > .handleTooltip,
+.handle_active > .handleTooltip {
+  opacity: 1;
+}
+
+.tracks {
+  width: 100%;
+  height: 4px;
+  display: flex;
+}
+
+.track {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.track:first-child {
+  border-top-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+.track:last-child {
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.track:nth-child(2) {
+  background-color: #3E82F7;
+}
+
+.bounds {
+  position: absolute;
+  top: 100%;
+  left: 0px;
+  right: 0px;
+}
+
+.bound {
+  position: absolute;
+  top: 0.6em;
+  color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 0.8em;
+  width: 0px;
+  height: 0px;
+}
+
+.boundMin {
+  left: 0px;
+}
+
+.boundMax {
+  right: 0px;
+}

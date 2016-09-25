@@ -4,6 +4,7 @@ import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
 import Select from '../../components/Select';
+import theme from './MenuSelect.css';
 
 class MenuSelect extends Component {
   static propTypes = {
@@ -36,9 +37,7 @@ class MenuSelect extends Component {
   }
 }
 
-export default themeable({
-  root: 'MenuSelect',
-})(
+export default themeable(theme)(
   translatable({
     none: 'None',
     count: count => count.toLocaleString(),

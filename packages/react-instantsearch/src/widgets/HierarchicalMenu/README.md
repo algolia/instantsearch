@@ -15,7 +15,7 @@ The hierarchical menu is a widget that lets the user explore a tree-like structu
 
 ### Theme
 
-`root`, `items`, `item`, `itemSelected`, `itemParent`, `itemSelectedParent`, `itemLink`, `itemLabel`, `itemCount`, `itemChildren`, `showMore`
+`root`, `items`, `item`, `itemSelected`, `item_parent`, `itemSelectedParent`, `itemLink`, `itemLabel`, `itemCount`, `itemChildren`, `showMore`
 
 ### Translations
 
