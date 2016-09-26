@@ -174,7 +174,11 @@ class InstantSearch extends Component {
   getKnownKeys = () => this.aisManager.getWidgetsIds();
 
   render() {
-    return Children.only(this.props.children);
+    const childrenCount = Children.count(this.props.children);
+    if (childrenCount === 0)
+      return null;
+    else
+      return Children.only(this.props.children);
   }
 }
 
