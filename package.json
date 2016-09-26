@@ -42,7 +42,7 @@
     "babel-template": "6.15.0",
     "babel-types": "6.15.0",
     "cheerio": "0.22.0",
-    "clean-css": "3.4.19",
+    "clean-css": "3.4.20",
     "collect-json": "1.0.8",
     "compression": "1.6.2",
     "conventional-changelog-cli": "1.2.0",
