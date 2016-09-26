@@ -9,8 +9,6 @@ class SearchBox extends Component {
     refine: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
-    // @TODO: implement
-    // poweredBy: PropTypes.bool,
 
     /**
      * List of keyboard shortcuts that focus the search box.
@@ -42,7 +40,6 @@ class SearchBox extends Component {
 
   static defaultProps = {
     query: '',
-    // poweredBy: false,
     focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
