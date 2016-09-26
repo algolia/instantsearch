@@ -2,6 +2,7 @@
 
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
+import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 
 const {
   optimize: {OccurenceOrderPlugin},
@@ -29,6 +30,7 @@ export default {
     ),
   },
   plugins: [
+    new WatchMissingNodeModulesPlugin(),
     new OccurenceOrderPlugin(), // spelling mistake fixed in webpack 2.0
     new HotModuleReplacementPlugin(),
     new NoErrorsPlugin(),
