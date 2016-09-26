@@ -9,7 +9,7 @@ import assets from './plugins/assets.js';
 import helpers from './plugins/helpers.js';
 import ignore from './plugins/ignore.js';
 import inlineProps from './plugins/inlineProps/index.js';
-// import onlyChanged from './plugins/onlyChanged.js';
+import onlyChanged from './plugins/onlyChanged.js';
 import source from './plugins/source.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
 
@@ -40,12 +40,12 @@ const common = [
     source: './assets/',
     destination: './assets/',
   }),
-  sass({
-    sourceMap: true,
-    sourceMapContents: true,
-  }),
   ignore(fileName => {
+    // This is a fix for VIM swp files inside src/,
+    // We could also configure VIM to store swp files somewhere else
+    // http://stackoverflow.com/questions/1636297/how-to-change-the-folder-path-for-swp-files-in-vim
     if (/\.swp$/.test(fileName)) return true;
+
     // if it's a build js file, keep it (`build`)
     if (/-build\.js$/.test(fileName)) return false;
 
@@ -54,6 +54,9 @@ const common = [
 
     // if it's any other JavaScript file, ignore it, it's handled by build files above
     if (/\.js$/.test(fileName)) return true;
+
+    // ignore scss partials, only include scss entrypoints
+    if (/_.*\.s[ac]ss/.test(fileName)) return true;
 
     // otherwise, keep file
     return false;
@@ -83,18 +86,22 @@ const common = [
   }, {
     navListProperty: 'navs',
   }),
-  // onlyChanged,
 
   // perfStart(),
-  inlineProps,
+  sass({
+    sourceMap: true,
+    sourceMapContents: true,
+  }),
   // perfStop(),
-  layouts('pug'),
 ];
 
 // development mode
 export const start = [
   webpackEntryMetadata(webpackStartConfig),
   ...common,
+  onlyChanged,
+  inlineProps,
+  layouts('pug'),
 ];
 
 export const build = [
@@ -110,4 +117,6 @@ export const build = [
     },
   }),
   ...common,
+  inlineProps,
+  layouts('pug'),
 ];
