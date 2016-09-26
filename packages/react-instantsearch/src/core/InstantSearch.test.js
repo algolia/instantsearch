@@ -41,6 +41,22 @@ describe('InstantSearch', () => {
 
     expect(() => {
       mount(
+        <InstantSearch {...DEFAULT_PROPS}>
+        </InstantSearch>
+      );
+    }).not.toThrow();
+
+    expect(() => {
+      mount(
+        <InstantSearch {...DEFAULT_PROPS}>
+          <div />
+          <div />
+        </InstantSearch>
+      );
+    }).toThrow();
+
+    expect(() => {
+      mount(
         <InstantSearch
           {...DEFAULT_PROPS}
           state={{}}
