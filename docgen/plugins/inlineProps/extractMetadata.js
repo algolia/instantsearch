@@ -51,12 +51,22 @@ const requireFromString = memoize(requireFromStringRaw);
 export default function extractMetadata(entriesArray, callback) {
   getCompiler(entriesArray).run((err, stats) => {
     if (err) {
-      callback(err);
+      callback(
+        new Error(
+          `Error while generating props documentation,
+          webpack error was ${err}`
+        )
+      );
       return;
     }
 
     if (stats.compilation.errors.length > 0) {
-      callback(stats.compilation.errors[0]);
+      callback(
+        new Error(
+          `Error while generating props documentation,
+          webpack error was ${stats.compilation.errors[0]}`
+        )
+      );
       return;
     }
 
