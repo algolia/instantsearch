@@ -26,6 +26,12 @@ export default function() {
         stabilityThreshold: 150, // wait 150ms for the filesize to be stable (= write finished)
       },
     },
+    notify: {
+      styles: {
+        bottom: 0,
+        top: 'auto',
+      },
+    },
     middleware: [
       compression(),
       webpackDevMiddleware(compiler, {
