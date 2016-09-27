@@ -27,7 +27,7 @@
   },
   "repository": "algolia/instantsearch.js",
   "devDependencies": {
-    "autoprefixer": "6.4.1",
+    "autoprefixer": "6.5.0",
     "babel-cli": "6.11.4",
     "babel-core": "6.13.2",
     "babel-loader": "6.2.5",
