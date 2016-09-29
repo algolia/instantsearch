@@ -90,7 +90,7 @@ function getPositionsKeyElements($sidebar) {
   const sidebarTop = sidebarBBox.top - bodyBBox.top;
   const footer = document.querySelector('.ac-footer');
   const navigation = document.querySelector('.ac-nav');
-  const menu = document.querySelector('.sidebar > ul');
+  const menu = document.querySelector('.sidebar-container');
   const height = document.querySelector('html').getBoundingClientRect().height;
   const navHeight = navigation.offsetHeight;
   const footerHeight = footer.offsetHeight;

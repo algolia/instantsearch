@@ -8,13 +8,9 @@ nav.sidebar {
   padding-top: 120px;
   overflow: auto;
 
-  ul {
-    list-style: none;
+  .sidebar-container {
     width: 100%;
     max-width: $sidebar-width;
-    padding: 0;
-    margin: 0;
-    float: left;
 
     &.fixed {
       position: fixed;
@@ -24,36 +20,42 @@ nav.sidebar {
       overflow: auto;
     }
 
+    ul {
+      list-style: none;
+      padding: 0;
+    }
 
-    li {
-      width: 100%;
-      line-height: 32px;
-
-      &.level-h2 {}
-      &.level-h3 {
-        line-height: 24px;
-        font-size: 12px;
-        padding-left: 12px;
-        font-family: "Open sans";
-      }
-
-      a {
-        text-decoration: none;
-        display: block;
+    .sidebar-elements {
+      .sidebar-element {
         width: 100%;
-        color: $charcoal-grey-75;
-        font-weight: 400;
+        line-height: 32px;
+
+        &.level-h2 {}
+        &.level-h3 {
+          line-height: 24px;
+          font-size: 12px;
+          padding-left: 12px;
+          font-family: "Open sans";
+        }
+
+        a {
+          text-decoration: none;
+          display: block;
+          width: 100%;
+          color: $charcoal-grey-75;
+          font-weight: 400;
 
 
-        &:focus,
-        &:target {
-          @extend %active-links;
-        }
-        &.active{
-          @extend %active-links;
-        }
-        &.navItem-active{
-          @extend %active-links;
+          &:focus,
+          &:target {
+            @extend %active-links;
+          }
+          &.active{
+            @extend %active-links;
+          }
+          &.navItem-active{
+            @extend %active-links;
+          }
         }
       }
     }

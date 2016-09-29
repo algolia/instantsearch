@@ -86,7 +86,6 @@ const common = [
   }, {
     navListProperty: 'navs',
   }),
-
   // perfStart(),
   sass({
     sourceMap: true,

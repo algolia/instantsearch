@@ -12,6 +12,18 @@ export default createConnector({
      * @public
      */
     hitsPerPage: PropTypes.number,
+    /**
+     * Component used for rendering each hit from the
+     * results. If it is not provided the rendering defaults
+     * to displaying the hit in its JSON form.
+     *
+     * The component will be called with a `hit` prop.
+     * @public
+     */
+    itemComponent: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.func,
+    ]),
   },
 
   getProps(props, state, search) {
