@@ -39,7 +39,7 @@
     "babel-preset-react": "6.11.1",
     "babel-preset-stage-2": "6.13.0",
     "babel-register": "6.16.0",
-    "babel-template": "6.15.0",
+    "babel-template": "6.16.0",
     "babel-types": "6.16.0",
     "cheerio": "0.22.0",
     "clean-css": "3.4.20",
