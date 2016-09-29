@@ -11,6 +11,7 @@ html
       for sheet in stylesheets
         link(rel="stylesheet" href=sheet)
     link(rel="stylesheet" href=h.publicPath(`examples/${name}/style.css`))
+    link(rel='stylesheet', href=h.publicPath('header.css'))
   body
     include ./common/header.pug
     .content!=contents
