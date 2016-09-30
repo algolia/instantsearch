@@ -14,10 +14,10 @@ mixin navListItem(link, title, navGroup, currentNavGroup)
       a.ac-nav-brand-title(href='./', title='Home')=pkg.name
     .ac-nav-menu
       ul.ac-nav-menu-list
-        +navListItem('gettingstarted.html', 'Getting started', 'gettingstarted', nav_groups)
-        +navListItem('Styling.html', 'Guide', 'core', nav_groups)
-        +navListItem('InstantSearch.html', 'API', 'widgets', nav_groups)
-        +navListItem('examples.html', 'Examples', 'examples', nav_groups)
+        +navListItem(h.publicPath('gettingstarted.html'), 'Getting started', 'gettingstarted', nav_groups)
+        +navListItem(h.publicPath('Styling.html', 'Guide'), 'core', nav_groups)
+        +navListItem(h.publicPath('InstantSearch.html'), 'API', 'widgets', nav_groups)
+        +navListItem(h.publicPath('examples.html'), 'Examples', 'examples', nav_groups)
         li.ac-nav-menu-list-icon
           a.ac-icon(href='https://github.com/algolia/algoliasearch-helper-js', title='GitHub repository')
             span.ac-icon.ac-icon-github
