@@ -3,11 +3,11 @@ em {
 }
 
 .Header {
-  position: fixed;
+  position: relative;
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 1600;
 }
 
 .Header__appBar {
@@ -15,7 +15,7 @@ em {
 }
 
 .Sidebar__header {
-  position: fixed;
+  position: relative;
   z-index: 2;
 }
 
@@ -24,13 +24,15 @@ em {
 }
 
 .Sidebar__facets {
-  margin-top: 128px;
+}
+
+.Sidebar__facets span[type='button']{
+  background: white!important;
 }
 
 .Content {
   display: flex;
   justify-content: space-around;
-  margin-top: 128px;
 }
 
 .Content__hits {
@@ -50,12 +52,12 @@ em {
 .Content__hits__card {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
 }
 
 .Content__hits__card__img {
-  max-width: 100px;
-  max-height: 100px;
+  max-width: 120px;
+  max-height: 120px;
 }
 
 .Pagination {
