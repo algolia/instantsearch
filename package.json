@@ -63,7 +63,7 @@
     "mkdirp": "0.5.1",
     "mocha": "3.1.0",
     "mversion": "1.10.1",
-    "node-sass": "3.9.3",
+    "node-sass": "3.10.1",
     "postcss-cli": "2.5.2",
     "preact": "6.1.0",
     "preact-compat": "3.0.0",
