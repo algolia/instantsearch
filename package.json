@@ -4,7 +4,7 @@
   "scripts": {
     "start": "babel-node docgen/start.js",
     "build": "./scripts/build.sh",
-    "docs:build": "DOCS_DIST=docs/react babel-node docgen/build.js",
+    "docs:build": "DOCS_DIST=docs/react babel-node docgen/build.js && npm run build-storybook",
     "docs:publish": "babel-node scripts/gh-pages.js",
     "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
@@ -14,8 +14,8 @@
     "test": "jest && npm run lint && NODE_ENV=production DOCS_MOUNT_POINT=/instantsearch.js/react/ DOCS_DIST=docs/react/ npm run docs:build && NODE_ENV=production npm run build",
     "dev": "jest --watch --bail",
     "coverage": "jest --coverage",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 6006 -c ./storybook -s ./storybook",
+    "build-storybook": "build-storybook -s ./storybook/public -o docs/react/storybook -c ./storybook"
   },
   "repository": "algolia/instantsearch.js",
   "dependencies": {
