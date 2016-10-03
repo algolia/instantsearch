@@ -36,6 +36,7 @@ Only for `Pagination`: `previous`, `next`, `first`, `last`, `ariaPrevious`, `ari
 See [Making your own widgets](../Customization.md) for more information on how to use the `Pagination.connect` HOC.
 
 ```
+import React from 'react';
 import {Pagination} from 'react-instantsearch';
 
 function MyPagination(props) {

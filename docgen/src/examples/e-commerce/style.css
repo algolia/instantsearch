@@ -27,7 +27,7 @@ hr:after {
 }
 
 header {
-  position: fixed;
+  position: absolute;
   z-index: 99;
   top: 0;
   width: 100%;
@@ -95,7 +95,7 @@ header .input-group .input-group-btn {
 }
 
 aside {
-  position: fixed;
+  position: relative;
   overflow-y: auto;
   top: 60px;
   left: 0;
@@ -104,6 +104,7 @@ aside {
   padding: 20px;
   border-right: 1px solid #EEE;
   background: #FFFFFF;
+  z-index: 1000;
 }
 
 aside .facet-category-title {
@@ -337,6 +338,9 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
 }
 
 .results-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
   padding: 70px 10px 10px 240px;
 }
 

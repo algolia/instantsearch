@@ -9,15 +9,13 @@ html
     title react-instantsearch | #{title}
     link(rel='stylesheet', href=h.publicPath('index.css'))
     link(rel='stylesheet', href=h.publicPath('assets/css/theme.css'))
-    // link(rel='stylesheet', href=h.publicPath('assets/css/site.css'))
-    // link(rel='stylesheet', href=h.publicPath('assets/css/DocProps.css'))
   body
     include ../common/header.pug
     section.hero-section.shrink
       .container
         .hero-container
           .fl-right.project-logo
-            img(src='images/al-helper-logo.svg')
+            img(src=h.publicPath('images/al-helper-logo.svg'))
           .fl-left.article-title
             a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
               span#icon-algolia.icon.icon-algolia-small.no-mobile
