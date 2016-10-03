@@ -33,7 +33,7 @@ const getCompiler = memoize(entriesArray => {
 
     resolve: {
       alias: {
-        'insert-css': './noop.js',
+        'insert-css': join(__dirname, 'noop.js'),
       },
     },
 
