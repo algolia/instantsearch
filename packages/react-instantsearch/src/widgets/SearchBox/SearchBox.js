@@ -2,7 +2,9 @@ import React, {Component, PropTypes} from 'react';
 
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
+import insertCss from 'insert-css';
 import theme from './SearchBox.css';
+insertCss(theme.code, {prepend: true});
 
 /* eslint-disable max-len */
 const SubmitIcon = () =>
@@ -221,7 +223,7 @@ class SearchBox extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     submit: null,
     reset: null,

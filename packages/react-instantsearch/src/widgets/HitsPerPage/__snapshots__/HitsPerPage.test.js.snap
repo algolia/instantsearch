@@ -2,32 +2,32 @@ exports[`HitsPerPage applies translations 1`] = `
 <ul
   className="root">
   <li
-    className="item itemSelected undefined undefined">
+    className="item itemSelected">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       111
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       333
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       666
     </a>
   </li>
@@ -38,32 +38,32 @@ exports[`HitsPerPage supports passing number items 1`] = `
 <ul
   className="root">
   <li
-    className="item itemSelected undefined undefined">
+    className="item itemSelected">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       111
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       333
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       666
     </a>
   </li>
@@ -74,32 +74,32 @@ exports[`HitsPerPage supports passing object items 1`] = `
 <ul
   className="root">
   <li
-    className="item itemSelected undefined undefined">
+    className="item itemSelected">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       111 items
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       333 items
     </a>
   </li>
   <li
-    className="item false undefined undefined">
+    className="item">
     <a
       aria-label={undefined}
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       666 items
     </a>
   </li>

@@ -1,9 +1,8 @@
 module.exports = {
   "extends": "algolia",
   "rules": {
-    "comma-dangle": ["error", "always-multiline"],
-    "no-multiple-empty-lines": ["error", {"max": 1}],
-    "react/jsx-key": ["error"],
-    "no-prototype-builtins": 0
+    // monorepo not supported for this rule
+    // https://github.com/benmosher/eslint-plugin-import/issues/458
+    "import/no-extraneous-dependencies": ["off"]
   }
 };
