@@ -46,34 +46,41 @@ function validateNextProps(props, nextProps) {
   }
 }
 
+/**
+ * @description
+ * InstantSearch is the root component of all react-instantsearch implementation.
+ * It provides to all the connected components (aka widgets) a mean to interact
+ * with the search state.
+ * @kind component
+ * @category core
+ * @propType {string} appId - The Algolia application id.
+ * @propType {string} apiKey - Your Algolia Search-Only API key.
+ * @propType {string} indexName - The index in which to search.
+ * @propType {bool=true} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
+ * @propType {object} history - A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over urlSync. See [Custom History](#custom-history).
+ * @propType {number=700} threshold - Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
+ * @propType {func} onStateChange - See [Controlled State](#controlled-state).
+ * @propType {object} state - See [Controlled State](#controlled-state).
+ * @propType {func} createURL - See [Controlled State](#controlled-state).
+ * @example
+ * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch';
+ *
+ * export default function Search() {
+ *   return (
+ *     <InstantSearch
+ *       appId="appId"
+ *       apiKey="apiKey"
+ *       indexName="indexName"
+ *     >
+ *       <div>
+ *         <SearchBox />
+ *         <Hits />
+ *       </div>
+ *     </InstantSearch>
+ *   );
+ * }
+ */
 class InstantSearch extends Component {
-  static propTypes = {
-    // @TODO: These props are currently constant.
-    appId: PropTypes.string.isRequired,
-    apiKey: PropTypes.string.isRequired,
-    indexName: PropTypes.string.isRequired,
-
-    history: PropTypes.object,
-    urlSync: PropTypes.bool,
-    threshold: PropTypes.number,
-    createURL: PropTypes.func,
-
-    state: PropTypes.object,
-    onStateChange: PropTypes.func,
-
-    children: PropTypes.node,
-  };
-
-  static defaultProps = {
-    urlSync: true,
-    threshold: 700,
-  };
-
-  static childContextTypes = {
-    // @TODO: more precise widgets manager propType
-    ais: PropTypes.object.isRequired,
-  };
-
   constructor(props) {
     super(props);
 
@@ -140,7 +147,7 @@ class InstantSearch extends Component {
     };
   }
 
-  createHrefForState = state => {
+  createHrefForState(state) {
     state = this.aisManager.transitionState(state);
 
     if (this.isControlled) {
@@ -150,13 +157,13 @@ class InstantSearch extends Component {
     } else {
       return '#';
     }
-  };
+  }
 
-  onHistoryInternalStateUpdate = state => {
+  onHistoryInternalStateUpdate(state) {
     this.aisManager.onExternalStateUpdate(state);
-  };
+  }
 
-  onWidgetsInternalStateUpdate = state => {
+  onWidgetsInternalStateUpdate(state) {
     state = this.aisManager.transitionState(state);
 
     if (this.isControlled) {
@@ -169,9 +176,11 @@ class InstantSearch extends Component {
         this.hsManager.onExternalStateUpdate(state);
       }
     }
-  };
+  }
 
-  getKnownKeys = () => this.aisManager.getWidgetsIds();
+  getKnownKeys() {
+    this.aisManager.getWidgetsIds();
+  }
 
   render() {
     const childrenCount = Children.count(this.props.children);
@@ -181,5 +190,32 @@ class InstantSearch extends Component {
       return Children.only(this.props.children);
   }
 }
+
+InstantSearch.propTypes = {
+  // @TODO: These props are currently constant.
+  appId: PropTypes.string.isRequired,
+  apiKey: PropTypes.string.isRequired,
+  indexName: PropTypes.string.isRequired,
+
+  history: PropTypes.object,
+  urlSync: PropTypes.bool,
+  threshold: PropTypes.number,
+  createURL: PropTypes.func,
+
+  state: PropTypes.object,
+  onStateChange: PropTypes.func,
+
+  children: PropTypes.node,
+};
+
+InstantSearch.defaultProps = {
+  urlSync: true,
+  threshold: 700,
+};
+
+InstantSearch.childContextTypes = {
+  // @TODO: more precise widgets manager propType
+  ais: PropTypes.object.isRequired,
+};
 
 export default InstantSearch;

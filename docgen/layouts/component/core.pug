@@ -1,0 +1,40 @@
+extends ../archetypes/content-with-menu.pug
+
+include ../mixins/nav.pug
+
+block navigation
+  - var headings = [{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Props'}, {tag: 'h2', id:'theme', text: 'Theming keys'},{tag: 'h2', id:'translation', text: 'Translation keys'}, {tag: 'h2', id:'example', text: 'Example'}];
+  +nav(navPath, navigation, title, headings)
+
+block content
+  h2#description Description
+    a.anchor(href='#description')
+  p=description
+  h2#proptypes Props
+    a.anchor(href='#proptypes')
+  if proptype
+    p List of props exposed by
+      code=name
+    table.api.proptypes
+      tbody
+        each type in proptype
+          tr.api-entry-values
+            td.api-entry-name
+              div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
+                a.anchor(href=`#default-props-entry-${name}-${type.name}`)
+            td.api-entry-type
+              code=type.type
+            td.api-entry-default-value
+              if type.defaultValue
+                span default value: 
+                code=type.defaultValue
+          tr.api-entry-description
+            td(colspan=3)=type.description
+  else
+    p This component does not accept props.
+  h2#example Example
+    a.anchor(href='#example')
+  if examples
+    pre
+      each example in examples
+        code=example

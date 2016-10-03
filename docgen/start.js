@@ -17,6 +17,7 @@ builder({middlewares}, err => {
 
 // then we watch and rebuild
 watch([
+  rootPath('packages/react-instantsearch/src/**/*.js'),
   rootPath('docgen/assets/'),
   rootPath('docgen/src/**/*'),
   rootPath('docgen/layouts/**/*.pug'),
