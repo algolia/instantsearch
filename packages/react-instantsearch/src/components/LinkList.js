@@ -24,6 +24,7 @@ export default class LinkList extends Component {
         value: PropTypes.oneOfType([
           PropTypes.string,
           PropTypes.number,
+          PropTypes.object,
         ]).isRequired,
 
         /**
@@ -50,6 +51,7 @@ export default class LinkList extends Component {
     selectedItem: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.number,
+      PropTypes.object,
     ]),
     onSelect: PropTypes.func.isRequired,
   };
@@ -63,7 +65,8 @@ export default class LinkList extends Component {
             {...applyTheme(
               has(item, 'key') ? item.key : item.value,
               'item',
-              item.value === selectedItem && 'itemSelected',
+              // eslint-disable-next-line
+              item.value == selectedItem && 'itemSelected',
               item.disabled && 'itemDisabled',
               item.modifier
             )}

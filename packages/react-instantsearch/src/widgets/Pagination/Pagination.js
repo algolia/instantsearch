@@ -170,12 +170,18 @@ class Pagination extends Component {
         ariaLabel: translate('ariaPrevious'),
       });
     }
+
+    const samePage = {
+      valueOf: () => page,
+      isSamePage: true,
+    };
+
     items = items.concat(
       getPages(page, totalPages, pagesPadding).map(value => ({
         key: value,
         modifier: 'itemPage',
         label: translate('page', value),
-        value,
+        value: value === page ? samePage : value,
         ariaLabel: translate('ariaPage', value),
       }))
     );

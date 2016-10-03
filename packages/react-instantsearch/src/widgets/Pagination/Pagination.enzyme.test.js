@@ -40,7 +40,9 @@ describe('Pagination', () => {
       .filterWhere(e => e.text() === '10')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
-    expect(refine.mock.calls[1][0]).toEqual(9);
+    const parameters = refine.mock.calls[1][0];
+    expect(parameters.isSamePage).toBe(true);
+    expect(parameters.valueOf()).toBe(9);
     wrapper
       .find('.Pagination__item--previous')
       .find('.Pagination__item__link')
