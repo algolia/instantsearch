@@ -21,9 +21,6 @@ export default {
   module: {
     loaders: [{
       test: /\.js$/, exclude: /node_modules/, loader: 'babel',
-    }, {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader?modules=true&localIdentName=ais-[name]__[local]',
     }],
   },
   resolve: {

@@ -28,11 +28,13 @@ const getCompiler = memoize(entriesArray => {
             join(__dirname, 'transformPropsLoader.js'),
           ],
         },
-        {
-          test: /\.css$/,
-          loader: 'empty-loader',
-        },
       ],
+    },
+
+    resolve: {
+      alias: {
+        'insert-css': './noop.js',
+      },
     },
 
     plugins: [
