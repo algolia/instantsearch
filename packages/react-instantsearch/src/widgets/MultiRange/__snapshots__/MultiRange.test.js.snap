@@ -4,12 +4,12 @@ exports[`RangeInput supports having a selected item 1`] = `
   <div
     className="items">
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -18,12 +18,12 @@ exports[`RangeInput supports having a selected item 1`] = `
       </label>
     </div>
     <div
-      className="item itemSelected undefined undefined">
+      className="item itemSelected">
       <label>
         <input
           checked={true}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -32,12 +32,12 @@ exports[`RangeInput supports having a selected item 1`] = `
       </label>
     </div>
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -46,12 +46,12 @@ exports[`RangeInput supports having a selected item 1`] = `
       </label>
     </div>
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -69,12 +69,12 @@ exports[`RangeInput supports passing items values 1`] = `
   <div
     className="items">
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -83,12 +83,12 @@ exports[`RangeInput supports passing items values 1`] = `
       </label>
     </div>
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -97,12 +97,12 @@ exports[`RangeInput supports passing items values 1`] = `
       </label>
     </div>
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">
@@ -111,12 +111,12 @@ exports[`RangeInput supports passing items values 1`] = `
       </label>
     </div>
     <div
-      className="item false undefined undefined">
+      className="item">
       <label>
         <input
           checked={false}
           className="itemRadio"
-          onChange={[Function bound refine]}
+          onChange={[Function]}
           type="radio" />
         <span
           className="itemLabel">

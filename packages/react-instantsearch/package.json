@@ -2,29 +2,14 @@
   "name": "react-instantsearch",
   "version": "2.0.0-beta.9",
   "scripts": {
-    "test": "jest",
-    "dev": "jest --watch",
-    "coverage": "jest --coverage",
     "build": "./scripts/build.sh"
   },
   "repository": "algolia/instantsearch.js/packages/react-instantsearch",
-  "devDependencies": {
-    "babel-cli": "6.14.0",
-    "babel-jest": "15.0.0",
-    "enzyme": "2.4.1",
-    "identity-obj-proxy": "3.0.0",
-    "jest-cli": "15.1.1",
-    "mockdate": "1.0.4",
-    "react": "15.3.2",
-    "react-addons-test-utils": "15.3.2",
-    "react-dom": "15.3.2",
-    "react-test-renderer": "15.3.2",
-    "webpack": "1.13.2"
-  },
   "dependencies": {
     "algoliasearch": "3.18.1",
     "algoliasearch-helper": "2.14.0",
     "history": "2.1.2",
+    "insert-css": "1.0.0",
     "lodash": "4.16.2",
     "qs": "6.2.1",
     "react-addons-shallow-compare": "15.3.2",
@@ -33,11 +18,6 @@
   "peerDependencies": {
     "react": "^15.0.0",
     "react-dom": "^15.0.0"
-  },
-  "jest": {
-    "moduleNameMapper": {
-      "^.+\\.(css)$": "<rootDir>/test/styleMock.js"
-    }
   },
   "license": "MIT"
 }

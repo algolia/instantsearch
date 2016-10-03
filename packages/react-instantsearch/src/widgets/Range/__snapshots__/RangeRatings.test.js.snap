@@ -2,9 +2,9 @@ exports[`Range applies translations 1`] = `
 <div
   className="root">
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -27,9 +27,9 @@ exports[`Range applies translations 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -52,9 +52,9 @@ exports[`Range applies translations 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -77,9 +77,9 @@ exports[`Range applies translations 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -102,9 +102,9 @@ exports[`Range applies translations 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink ratingLinkSelected false"
+    className="ratingLink ratingLinkSelected"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -133,9 +133,9 @@ exports[`Range supports passing max/min values 1`] = `
 <div
   className="root">
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -158,9 +158,9 @@ exports[`Range supports passing max/min values 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -183,9 +183,9 @@ exports[`Range supports passing max/min values 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -208,9 +208,9 @@ exports[`Range supports passing max/min values 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink false false"
+    className="ratingLink"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span
@@ -233,9 +233,9 @@ exports[`Range supports passing max/min values 1`] = `
     </span>
   </a>
   <a
-    className="ratingLink ratingLinkSelected false"
+    className="ratingLink ratingLinkSelected"
     href="#"
-    onClick={[Function bound onClick]}>
+    onClick={[Function]}>
     <span
       className="ratingIcon" />
     <span

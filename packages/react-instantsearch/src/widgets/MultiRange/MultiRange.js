@@ -3,7 +3,9 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 
 import List from '../../components/List';
+import insertCss from 'insert-css';
 import theme from './MultiRange.css';
+insertCss(theme.code, {prepend: true});
 
 class MultiRange extends Component {
   static propTypes = {
@@ -49,4 +51,4 @@ class MultiRange extends Component {
   }
 }
 
-export default themeable(theme)(MultiRange);
+export default themeable(theme.classNames)(MultiRange);

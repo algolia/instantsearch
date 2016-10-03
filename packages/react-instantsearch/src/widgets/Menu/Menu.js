@@ -6,7 +6,9 @@ import translatable from '../../core/translatable';
 
 import List from '../../components/List';
 import Link from '../../components/Link';
+import insertCss from 'insert-css';
 import theme from './Menu.css';
+insertCss(theme.code, {prepend: true});
 
 class Menu extends Component {
   static propTypes = {
@@ -62,7 +64,7 @@ class Menu extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),
