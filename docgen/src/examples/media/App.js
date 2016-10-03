@@ -66,7 +66,7 @@ const Facets = () => <aside>
     <RefinementList.Links
       attributeName="genre"
       theme={{
-        ...RefinementList.Links.defaultTheme,
+        ...RefinementList.Links.defaultClassNames,
         items: 'nav nav-list',
         itemCount: 'badge pull-right',
         itemLink: 'item',
