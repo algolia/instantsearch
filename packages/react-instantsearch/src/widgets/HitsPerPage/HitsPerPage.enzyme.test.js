@@ -19,6 +19,7 @@ describe('HitsPerPage', () => {
         hitsPerPage={111}
       />
     );
+
     wrapper
       .find('.itemLink')
       .filterWhere(e => e.text() === '333')

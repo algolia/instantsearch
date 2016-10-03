@@ -3,7 +3,9 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import {isNaN} from 'lodash';
 import translatable from '../../core/translatable';
+import insertCss from 'insert-css';
 import theme from './RangeInput.css';
+insertCss(theme.code, {prepend: true});
 
 class RangeInput extends Component {
   static propTypes = {
@@ -57,7 +59,7 @@ class RangeInput extends Component {
   }
 }
 
-export default themeable(theme)(translatable({
+export default themeable(theme.classNames)(translatable({
   submit: 'go',
   separator: 'to',
 })(RangeInput)

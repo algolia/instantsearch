@@ -2,102 +2,102 @@ exports[`Pagination allows toggling display of the first page button on and off 
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -108,92 +108,92 @@ exports[`Pagination allows toggling display of the first page button on and off 
 <ul
   className="root">
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -204,112 +204,112 @@ exports[`Pagination allows toggling display of the last page button on and off 1
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
   <li
-    className="item false false itemLast">
+    className="item itemLast">
     <a
       aria-label="Last page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       »
     </a>
   </li>
@@ -320,102 +320,102 @@ exports[`Pagination allows toggling display of the last page button on and off 2
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -426,102 +426,102 @@ exports[`Pagination allows toggling display of the next page button on and off 1
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -532,92 +532,92 @@ exports[`Pagination allows toggling display of the next page button on and off 2
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
@@ -628,102 +628,102 @@ exports[`Pagination allows toggling display of the previous page button on and o
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -734,92 +734,92 @@ exports[`Pagination allows toggling display of the previous page button on and o
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -830,102 +830,102 @@ exports[`Pagination applies its default props 1`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -943,129 +943,129 @@ exports[`Pagination displays the correct padding of links 1`] = `
     </span>
   </li>
   <li
-    className="item false itemDisabled itemPrevious">
+    className="item itemDisabled itemPrevious">
     <span
       className="itemLink">
       ‹
     </span>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 1"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       1
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 2"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       2
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 3"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       3
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 4"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       4
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 5"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       5
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 6"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       6
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -1076,122 +1076,122 @@ exports[`Pagination displays the correct padding of links 2`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 6"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       6
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 11"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       11
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 12"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       12
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 13"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       13
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 14"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       14
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -1202,97 +1202,97 @@ exports[`Pagination displays the correct padding of links 3`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 14"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       14
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 15"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       15
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 16"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       16
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 17"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       17
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 18"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       18
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 19"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       19
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 20"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       20
     </a>
   </li>
   <li
-    className="item false itemDisabled itemNext">
+    className="item itemDisabled itemNext">
     <span
       className="itemLink">
       ›
@@ -1305,82 +1305,82 @@ exports[`Pagination displays the correct padding of links 4`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 1"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       1
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 2"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       2
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 3"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       3
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 4"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       4
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 5"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       5
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="Next page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -1396,7 +1396,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="First page"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
@@ -1406,7 +1406,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Previous page"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
@@ -1416,7 +1416,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 2"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       2
     </a>
   </li>
@@ -1426,7 +1426,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 3"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       3
     </a>
   </li>
@@ -1436,7 +1436,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 4"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       4
     </a>
   </li>
@@ -1446,7 +1446,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 5"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       5
     </a>
   </li>
@@ -1456,7 +1456,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 6"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       6
     </a>
   </li>
@@ -1466,7 +1466,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 7"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
@@ -1476,7 +1476,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 8"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
@@ -1486,7 +1486,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 9"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
@@ -1496,7 +1496,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Page 10"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
@@ -1506,7 +1506,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Next page"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ›
     </a>
   </li>
@@ -1516,7 +1516,7 @@ exports[`Pagination lets you customize its theme 1`] = `
       aria-label="Last page"
       className="LINK"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       »
     </a>
   </li>
@@ -1527,132 +1527,132 @@ exports[`Pagination lets you customize its translations 1`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="ARIA_FIRST"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       FIRST
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="ARIA_PREVIOUS"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PREVIOUS
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_2"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_2
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_3"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_3
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_4"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_4
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_5"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_5
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_6"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_6
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_8
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="ARIA_PAGE_9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_9
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="ARIA_PAGE_10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       PAGE_10
     </a>
   </li>
   <li
-    className="item false false itemNext">
+    className="item itemNext">
     <a
       aria-label="ARIA_NEXT"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       NEXT
     </a>
   </li>
   <li
-    className="item false false itemLast">
+    className="item itemLast">
     <a
       aria-label="ARIA_LAST"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       LAST
     </a>
   </li>
@@ -1663,97 +1663,97 @@ exports[`Pagination lets you force a maximum of pages 1`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 4"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       4
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 5"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       5
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 6"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       6
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       10
     </a>
   </li>
   <li
-    className="item false itemDisabled itemNext">
+    className="item itemDisabled itemNext">
     <span
       className="itemLink">
       ›
@@ -1773,97 +1773,97 @@ exports[`Pagination lets you force a maximum of pages 2`] = `
 <ul
   className="root">
   <li
-    className="item false false itemFirst">
+    className="item itemFirst">
     <a
       aria-label="First page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       «
     </a>
   </li>
   <li
-    className="item false false itemPrevious">
+    className="item itemPrevious">
     <a
       aria-label="Previous page"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       ‹
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 3"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       3
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 4"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       4
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 5"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       5
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 6"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       6
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 7"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       7
     </a>
   </li>
   <li
-    className="item false undefined itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       8
     </a>
   </li>
   <li
-    className="item itemSelected undefined itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
       href="#"
-      onClick={[Function anonymous]}>
+      onClick={[Function]}>
       9
     </a>
   </li>
   <li
-    className="item false itemDisabled itemNext">
+    className="item itemDisabled itemNext">
     <span
       className="itemLink">
       ›

@@ -4,7 +4,9 @@ import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
 import Slider from '../../components/Slider';
+import insertCss from 'insert-css';
 import theme from './Range.css';
+insertCss(theme.code, {prepend: true});
 
 class Range extends Component {
   static propTypes = {
@@ -81,7 +83,7 @@ class Range extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     value: v => v.toLocaleString(),
   })(

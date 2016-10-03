@@ -7,7 +7,9 @@ import translatable from '../../core/translatable';
 
 import LinkList from '../../components/LinkList';
 
+import insertCss from 'insert-css';
 import theme from './Pagination.css';
+insertCss(theme.code, {prepend: true});
 
 function getPagesDisplayedCount(padding, total) {
   return Math.min(2 * padding + 1, total);
@@ -206,7 +208,7 @@ class Pagination extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     previous: '‹',
     next: '›',

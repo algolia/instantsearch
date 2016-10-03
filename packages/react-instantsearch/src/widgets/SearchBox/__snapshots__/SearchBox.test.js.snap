@@ -2,8 +2,8 @@ exports[`SearchBox applies its default props 1`] = `
 <form
   className="root"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="wrapper"
     role="search">
@@ -11,7 +11,7 @@ exports[`SearchBox applies its default props 1`] = `
       autoComplete={false}
       autoFocus={false}
       className="input"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="Search your website"
       required={true}
       type="search"
@@ -50,8 +50,8 @@ exports[`SearchBox lets you customize its theme 1`] = `
 <form
   className="ROOT"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="WRAPPER"
     role="search">
@@ -59,7 +59,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
       autoComplete={false}
       autoFocus={false}
       className="INPUT"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="Search your website"
       required={true}
       type="search"
@@ -98,8 +98,8 @@ exports[`SearchBox lets you customize its translations 1`] = `
 <form
   className="root"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="wrapper"
     role="search">
@@ -107,7 +107,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
       autoComplete={false}
       autoFocus={false}
       className="input"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="PLACEHOLDER"
       required={true}
       type="search"
@@ -148,8 +148,8 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
 <form
   className="root"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="wrapper"
     role="search">
@@ -157,7 +157,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       autoComplete={false}
       autoFocus={true}
       className="input"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="Search your website"
       required={true}
       type="search"
@@ -196,8 +196,8 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
 <form
   className="root"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="wrapper"
     role="search">
@@ -205,7 +205,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       autoComplete={false}
       autoFocus={false}
       className="input"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="Search your website"
       required={true}
       type="search"
@@ -244,8 +244,8 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
 <form
   className="root"
   noValidate={true}
-  onReset={[Function anonymous]}
-  onSubmit={[Function anonymous]}>
+  onReset={[Function]}
+  onSubmit={[Function]}>
   <div
     className="wrapper"
     role="search">
@@ -253,7 +253,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       autoComplete={false}
       autoFocus={false}
       className="input"
-      onChange={[Function anonymous]}
+      onChange={[Function]}
       placeholder="Search your website"
       required={true}
       type="search"

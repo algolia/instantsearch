@@ -6,7 +6,9 @@ import translatable from '../../core/translatable';
 
 import List from '../../components/List';
 import Link from '../../components/Link';
+import insertCss from 'insert-css';
 import theme from './HierarchicalMenu.css';
+insertCss(theme.code, {prepend: true});
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   label: PropTypes.node,
@@ -77,7 +79,7 @@ class HierarchicalMenu extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),

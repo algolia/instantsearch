@@ -5,7 +5,9 @@ import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
 import List from '../../components/List';
+import insertCss from 'insert-css';
 import theme from './RefinementList.css';
+insertCss(theme.code, {prepend: true});
 
 class RefinementList extends Component {
   static propTypes = {
@@ -75,7 +77,7 @@ class RefinementList extends Component {
   }
 }
 
-export default themeable(theme)(
+export default themeable(theme.classNames)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),
