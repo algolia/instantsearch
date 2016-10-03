@@ -99,7 +99,7 @@ export const start = [
   webpackEntryMetadata(webpackStartConfig),
   ...common,
   onlyChanged,
-  // inlineProps,
+  inlineProps,
   layouts('pug'),
 ];
 
@@ -116,6 +116,6 @@ export const build = [
     },
   }),
   ...common,
-  // inlineProps,
+  inlineProps,
   layouts('pug'),
 ];
