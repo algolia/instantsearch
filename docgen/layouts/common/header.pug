@@ -15,7 +15,7 @@ mixin navListItem(link, title, navGroup, currentNavGroup)
     .ac-nav-menu
       ul.ac-nav-menu-list
         +navListItem(h.publicPath('gettingstarted.html'), 'Getting started', 'gettingstarted', nav_groups)
-        +navListItem(h.publicPath('Styling.html', 'Guide'), 'core', nav_groups)
+        +navListItem(h.publicPath('Styling.html'), 'Guide', 'core', nav_groups)
         +navListItem(h.publicPath('InstantSearch.html'), 'API', 'widgets', nav_groups)
         +navListItem(h.publicPath('examples.html'), 'Examples', 'examples', nav_groups)
         li.ac-nav-menu-list-icon
