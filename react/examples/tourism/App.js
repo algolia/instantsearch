@@ -6,10 +6,19 @@ import {
   Range,
   RefinementList,
   MultiRange,
+  overrideTheme,
 } from 'react-instantsearch';
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
+
+import insertCss from 'insert-css';
+import sliderTheme from './slider.css';
+import paginationTheme from './pagination.css';
+import searchBoxTheme from './searchbox.css';
+insertCss(sliderTheme.code);
+insertCss(paginationTheme.code);
+insertCss(searchBoxTheme.code);
 
 export default function TourismInstantsearchSample() {
   return (
@@ -40,7 +49,7 @@ function Header() {
         </a>
         <a href="./" className="logo">A</a>
         <i className="fa fa-search"></i>
-        <SearchBox />
+        <SearchBox theme={searchBoxTheme.classNames}/>
       </header>
     </div>
   );
@@ -234,11 +243,12 @@ const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
 });
 
 function Price() {
+  const theme = overrideTheme(Range, sliderTheme.classNames);
   return (
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Price Range</div>
       <div className="col-sm-9">
-        <Range attributeName="price"/>
+        <Range theme={theme} attributeName="price"/>
       </div>
     </div>
   );
@@ -277,7 +287,7 @@ function Results() {
         <MyHits/>
       </div>
       <div className="row">
-        <Pagination />
+        <Pagination theme={paginationTheme.classNames}/>
         <div className="thank-you">
           Data from <a href="https://www.airbnb.com/">airbnb.com</a>,
           user pics from <a href="https://randomuser.me/">randomuser.me</a>

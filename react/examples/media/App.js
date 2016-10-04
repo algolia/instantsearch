@@ -12,6 +12,10 @@ import {
   Range,
 } from 'react-instantsearch';
 
+import insertCss from 'insert-css';
+import paginationTheme from './pagination.css';
+insertCss(paginationTheme.code);
+
 export default function App() {
   return <InstantSearch
     appId="latency"
@@ -126,5 +130,5 @@ const Results = () =>
     <div id="stats" className="text-right text-muted"><Stats/></div>
     <hr />
     <div id="hits"><Hits itemComponent={Hit} hitsPerPage={10} /></div>
-    <div id="pagination" className="text-center"><Pagination/></div>
+    <div id="pagination" className="text-center"><Pagination theme={paginationTheme.classNames}/></div>
   </article>;
