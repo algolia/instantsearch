@@ -46,7 +46,7 @@
     "collect-json": "1.0.8",
     "compression": "1.6.2",
     "conventional-changelog-cli": "1.2.0",
-    "dmd": "1.4.2",
+    "dmd": "2.0.3",
     "doctoc": "1.2.0",
     "enzyme": "2.4.1",
     "eslint-config-algolia": "5.1.0",
