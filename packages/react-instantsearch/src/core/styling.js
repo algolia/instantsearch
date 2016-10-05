@@ -8,18 +8,15 @@ import _ from 'lodash';
  * If a key is present in the new provided theme, it will get the corresponding class name and add it to new object next to
  * the default one.
  *
- * @param {Component} Component the react component for overriding its theme.
- * @param {Object} theme A new theme object containing both default and new class names.
- * @returns {Object} the user theme containing the new class names.
+ * @param {Object} baseTheme the object containing the base theme
+ * @param {Object} newTheme the object containing new class names that will be merged.
+ * @returns {Object} A new object containing both base and new class names.
  */
-export default function overrideTheme(Component, theme) {
-  if (!Component.defaultTheme) {
-    throw new Error(`Component ${Component.displayName} does not have a default theme to override`);
-  }
-  return _.entries(Component.defaultTheme).reduce((acc, i) => {
+export default function mergeClassNames(baseTheme, newTheme) {
+  return _.entries(baseTheme).reduce((acc, i) => {
     const key = i[0];
     const defaultClassName = i[1];
-    const newClassName = theme[key] ? ` ${theme[key]}` : '';
+    const newClassName = newTheme[key] ? ` ${newTheme[key]}` : '';
     acc[key] = `${defaultClassName}${newClassName}`;
     return acc;
   }, {});

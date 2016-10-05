@@ -17,19 +17,19 @@ describe('themeable', () => {
     const th = () => null;
     reactThemeable.mockImplementationOnce(() => th);
     const Dummy = () => null;
-    const defaultTheme = {};
-    const Themed = themeable(defaultTheme)(Dummy);
+    const defaultClassNames = {};
+    const Themed = themeable(defaultClassNames)(Dummy);
     expect(shallow(<Themed />).find(Dummy).props().applyTheme).toBe(th);
-    expect(reactThemeable.mock.calls[0][0]).toBe(defaultTheme);
+    expect(reactThemeable.mock.calls[0][0]).toBe(defaultClassNames);
   });
 
   it('uses the theme passed as props instead of the default one', () => {
     const th = () => null;
     reactThemeable.mockImplementationOnce(() => th);
     const Dummy = () => null;
-    const defaultTheme = {test: 'hello'};
+    const defaultClassNames = {test: 'hello'};
     const theme = {test: 'why'};
-    const Themed = themeable(defaultTheme)(Dummy);
+    const Themed = themeable(defaultClassNames)(Dummy);
     expect(shallow(<Themed theme={theme} />).find(Dummy).props().applyTheme).toBe(th);
     expect(reactThemeable.mock.calls[0][0]).toBe(theme);
   });

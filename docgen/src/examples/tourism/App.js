@@ -6,7 +6,7 @@ import {
   Range,
   RefinementList,
   MultiRange,
-  overrideTheme,
+  mergeClassNames,
 } from 'react-instantsearch';
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
@@ -243,7 +243,7 @@ const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
 });
 
 function Price() {
-  const theme = overrideTheme(Range, sliderTheme.classNames);
+  const theme = mergeClassNames(Range.defaultClassNames, sliderTheme.classNames);
   return (
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Price Range</div>
