@@ -70,11 +70,11 @@ To change it, let's create a new css file called `searchBox.css`.
 >}
 >```
 
-Now that we have redefined the background color of the submit button to green, we need to import it. Also, for our SearchBox we don't want to redefine completely its theme. So we are going to use the `mergeClassNames` function provided by `react-instantsearch`.
+Now that we have redefined the background color of the submit button to green, we need to import it. Also, for our SearchBox we don't want to redefine completely its theme. So we are going to use the `extendTheme` function provided by `react-instantsearch`.
 
 ```js
-//We need to add mergeClassNames to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters, mergeClassNames} from 'react-instantsearch';
+extendTheme
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters, extendTheme} from 'react-instantsearch';
 
 //we need to import our custom SearchBox style
 import searchBoxStyle from './searchbox.css';
@@ -85,7 +85,7 @@ function Search() {
   return (
     <div className='container'>
       <CurrentFilters/>
-      <SearchBox theme={mergeClassNames(SearchBox.defaultClassNames, searchBoxStyle)}/>
+      <SearchBox theme={extendTheme(SearchBox.defaultClassNames, searchBoxStyle)}/>
       <RefinementList attributeName="category" />
       <Hits itemComponent={Product} /> 
       <Pagination />
@@ -95,7 +95,7 @@ function Search() {
 ```
 
 You can retrieve the default class names used by a widget by accessing the `defaultClassNames` attribute on a component. 
-The goal of the [`mergeClassNames`]() function is to add your own class names to the default ones. It will create a new object, containing both default and new class names.
+The goal of the [`extendTheme`]() function is to add your own class names to the default ones. It will create a new object, containing both default and new class names.
  
 Now the searchBox has a green submit button and it has kept the default theme provided out-of-the-box. 
 
@@ -103,7 +103,7 @@ In this part, we've seen the following:
 
 * Where to find the theme keys existing for each widgets
 * How to extend a default theme
-* How to use the `mergeClassNames` function
+* How to use the `extendTheme` function
 
 ## Create a new theme for the RefinementList widget 
 
@@ -142,7 +142,7 @@ Fine, it's time to create a new css file called `refinementList.css` to define o
 Then we need to import it and use it as our new `refinementList` theme:
 
 ```js
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters, mergeClassNames} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters, extendTheme} from 'react-instantsearch';
 
 import searchBoxStyle from './searchbox.css';
 import refinementListStyle from './refinementList.css'
@@ -153,7 +153,7 @@ function Search() {
   return (
     <div className='container'>
       <CurrentFilters/>
-      <SearchBox theme={mergeClassNames(SearchBox, searchBoxStyle)}/>
+      <SearchBox theme={extendTheme(SearchBox, searchBoxStyle)}/>
       <RefinementList theme={refinementListStyle} attributeName="category" />
       <Hits itemComponent={Product} /> 
       <Pagination />
@@ -163,7 +163,7 @@ function Search() {
 ```
 
 That's it. Now, our refinementList has a complete different theme. If you inspect the widget, you will see that every class names that was defined for our default currentFilters are gone. 
-That's because if you're applying a theme without the `mergeClassNames` function, it will erase completely the default one. 
+That's because if you're applying a theme without the `extendTheme` function, it will erase completely the default one. 
 
 In this part, we've seen the following:
 
