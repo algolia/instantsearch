@@ -1159,15 +1159,6 @@ You may want to create and publish your own community widget, we have a [dedicat
 
 If you want your widget to be listed here, [open an issue](https://github.com/algolia/instantsearch.js/issues).
 
-### googleMaps
-
-The [googleMaps](https://github.com/instantsearch/instantsearch-googlemaps) widget can display your [Algolia geo hits](https://www.algolia.com/doc/rest#geo-search-parameters) on a map using [Google Maps APIs](https://developers.google.com/maps/).
-
-**Widget demo**:
-<img src="{% asset_path googleMaps.gif %}" width="100%" />
-
-See the [full documentation](https://github.com/instantsearch/instantsearch-googlemaps#readme).
-
 ### ionRangeSlider
 
 Provides [Ion.RangeSlider](https://github.com/IonDen/ion.rangeSlider) as a widget. This is a jQuery plugin so you will need to use jQuery in your page.
@@ -1351,7 +1342,7 @@ A third option for your widgets is [React](http://facebook.github.io/react/). in
 
 We have a simple commonJS boilerplate: [<i class='fa fa-github'></i> instantsearch/instantsearch-React-widget ](https://github.com/instantsearch/instantsearch-React-widget).
 
-Or you can wrap an existing React component, see our [<i class='fa fa-github'></i> instantsearch/instantsearch-googlemaps](https://github.com/instantsearch/instantsearch-googlemaps) widget.
+Or you can wrap an existing React component, see our [<i class='fa fa-github'></i> instantsearch/instantsearch-googlemaps](https://github.com/instantsearch/instantsearch-googlemaps) example widget.
 
 ### Custom themes
 
