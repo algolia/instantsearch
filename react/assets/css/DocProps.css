@@ -1,0 +1,70 @@
+.Prop,
+.Type .Entry {
+  padding: 1.2em 0.8em;
+  background-color: #EEE;
+}
+
+.Prop:nth-child(even),
+.Type .Entry:nth-child(even) {
+  background-color: #E5E5E5;
+}
+
+.Entry__head {
+  display: flex;
+  align-items: center;
+  padding-bottom: 1em;
+}
+
+.Entry__badge {
+  padding: .3em .5em;
+  font-size: 0.8em;
+  background-color: #7FDBFF;
+  margin-right: 0.5em;
+}
+
+.Entry__name {
+  font-weight: 700;
+  margin-right: 0.5em;
+}
+
+.Entry__description ~ .Entry__default {
+  padding-top: 1em;
+}
+
+.Entry__description p {
+  margin: 0;
+}
+
+.Entry__link {
+  display: none;
+  margin-left: 0.5em;
+}
+
+.Entry__head:hover .Entry__link {
+  display: inline;
+}
+
+.Prop__types {
+  padding-top: 1em;
+}
+
+.Type__head {
+  padding-bottom: 0.7em;
+}
+
+.Type__name {
+  font-weight: 700;
+}
+
+.Type__link {
+  display: none;
+}
+
+.Type__head:hover .Type__link {
+  display: inline;
+}
+
+.Type__entries {
+  font-size: 0.9em;
+  border: 1px solid #BBB;
+}

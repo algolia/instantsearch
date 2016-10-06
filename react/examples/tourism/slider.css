@@ -1,0 +1,23 @@
+.root {
+  margin: 20px 25px;
+}
+
+.handle > .handleDot {
+  border: 3px solid #FF585B;
+  background: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+
+.handle:hover > .handleDot,
+.handle_active > .handleDot {
+  background-color: #FF585B;
+  transform: none;
+}
+
+.track:nth-child(2) {
+  background-color: #FF585B
+}

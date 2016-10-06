@@ -1,0 +1,65 @@
+em {
+  color: rgb(0, 188, 212);;
+}
+
+.Header {
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1600;
+}
+
+.Header__appBar {
+  box-shadow: none !important;
+}
+
+.Sidebar__header {
+  position: relative;
+  z-index: 2;
+}
+
+.Sidebar__header__appBar {
+  box-shadow : none !important;
+}
+
+.Sidebar__facets {
+}
+
+.Sidebar__facets span[type='button']{
+  background: white!important;
+}
+
+.Content {
+  display: flex;
+  justify-content: space-around;
+}
+
+.Content__hits {
+  display: flex;
+  flex-direction: column;
+  flex: 10;
+}
+
+.Header__searchBox {
+  background-color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0px 10px;
+}
+
+.Content__hits__card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.Content__hits__card__img {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.Pagination {
+  margin-top: 30px;
+}
