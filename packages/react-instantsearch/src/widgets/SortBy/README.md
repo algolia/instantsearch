@@ -65,7 +65,7 @@ function MySortBy(props) {
   );
 }
 
-// `SortBy.connect` accepts the same `id` and `defaultSelectedIndex` props as
+// `SortBy.connect` accepts the same `id` and `defaultRefinement` props as
 // `SortBy`.
 export default SortBy.connect(MySortBy);
 ```

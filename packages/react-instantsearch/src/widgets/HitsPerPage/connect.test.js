@@ -18,13 +18,13 @@ let params;
 describe('HitsPerPage.connect', () => {
   it('provides the correct props to the component', () => {
     props = getProps({id: 'hPP'}, {hPP: 10});
-    expect(props).toEqual({hitsPerPage: 10});
+    expect(props).toEqual({currentRefinement: 10});
 
     props = getProps({id: 'hPP'}, {hPP: '10'});
-    expect(props).toEqual({hitsPerPage: 10});
+    expect(props).toEqual({currentRefinement: 10});
 
-    props = getProps({id: 'hPP', defaultHitsPerPage: 20}, {});
-    expect(props).toEqual({hitsPerPage: 20});
+    props = getProps({id: 'hPP', defaultRefinement: 20}, {});
+    expect(props).toEqual({currentRefinement: 20});
   });
 
   it('calling refine updates the widget\'s state', () => {
@@ -44,7 +44,7 @@ describe('HitsPerPage.connect', () => {
     params = getSP(sp, {id: 'hPP'}, {hPP: '10'});
     expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 10));
 
-    params = getSP(sp, {id: 'hPP', defaultHitsPerPage: 20}, {});
+    params = getSP(sp, {id: 'hPP', defaultRefinement: 20}, {});
     expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 20));
   });
 
