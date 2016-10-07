@@ -3,12 +3,12 @@
   flex-direction: column;
 }
 
-.ratingLink > .ratingIcon:before {
+.ratingIcon:before {
   content: '\2605';
   color: #FBAE00;
 }
 
-.ratingLink > .ratingIconEmpty:before {
+.ratingIconEmpty:before {
   content: '\2606';
   color: #FBAE00;
 }
@@ -17,17 +17,41 @@
   font-weight: 700;
 }
 
-.ratingLinkDisabled > .ratingCount{
+.ratingCountDisabled{
   display:none;
 }
 
-.ratingLinkDisabled > .ratingIconEmpty:before{
+.ratingIconEmptyDisabled:before{
   color: #C9C9C9;
 }
 
-.ratingLinkDisabled > .ratingIcon:before{
+.ratingIconDisabled:before{
   color: #C9C9C9;
 }
 
 .ratingLabel {
+}
+
+.ratingLabelDisabled {
+}
+
+.ratingLabelSelected {
+}
+
+.ratingIconSelected {
+}
+
+.ratingIconEmptySelected {
+}
+
+.ratingCountSelected {
+}
+
+.ratingCount{
+}
+
+.ratingLink{
+}
+
+.ratingLinkDisabled{
 }

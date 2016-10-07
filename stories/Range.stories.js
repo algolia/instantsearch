@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Range} from '../packages/react-instantsearch';
+import {Range, extendTheme} from '../packages/react-instantsearch';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
 import Wrapper from './util';
 
@@ -26,6 +26,22 @@ stories.add('default', () =>
     <Range attributeName="price"
            min={30}
            max={100}
+    />
+  </Wrapper>
+).add('extend theme', () =>
+  <Wrapper >
+    <Range attributeName="price"
+           theme={extendTheme(Range.defaultClassNames, {
+             track: {
+               background: 'red',
+             },
+             trackSelected: {
+               backgroundColor: 'green',
+             },
+             handleDot: {
+               backgroundColor: 'green',
+             },
+           })}
     />
   </Wrapper>
 ).add('playground', () =>

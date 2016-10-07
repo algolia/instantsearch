@@ -23,12 +23,12 @@ class MultiRange extends Component {
     return (
       <label>
         <input
-          {...applyTheme('itemRadio', 'itemRadio')}
+          {...applyTheme('itemRadio', 'itemRadio', selected && 'itemRadioSelected')}
           type="radio"
           checked={selected}
           onChange={refine.bind(null, item.value)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel')}>
+        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
           {item.label}
         </span>
       </label>

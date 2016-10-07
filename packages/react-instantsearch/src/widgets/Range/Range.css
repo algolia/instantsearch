@@ -23,7 +23,7 @@
   height: 0px;
 }
 
-.handle > .handleDot {
+.handleDot {
   background-color: #3E82F7;
   width: 10px;
   height: 10px;
@@ -32,8 +32,8 @@
   transition: transform 0.1s ease;
 }
 
-.handle:hover > .handleDot,
-.handle_active > .handleDot {
+.handleDot:hover,
+.handleDotActive {
   transform: scale(2);
 }
 
@@ -50,8 +50,8 @@
   pointer-events: none;
 }
 
-.handle:hover > .handleTooltip,
-.handle_active > .handleTooltip {
+.handleTooltip:hover,
+.handleTooltipActive {
   opacity: 1;
 }
 
@@ -64,19 +64,11 @@
 .track {
   height: 100%;
   background: rgba(0, 0, 0, 0.15);
-}
-
-.track:first-child {
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
 }
 
-.track:last-child {
-  border-top-right-radius: 2px;
-  border-bottom-right-radius: 2px;
-}
-
-.track:nth-child(2) {
+.trackSelected{
   background-color: #3E82F7;
 }
 
