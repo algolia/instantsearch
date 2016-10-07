@@ -1,3 +1,13 @@
+<a name="1.8.10"></a>
+## [1.8.10](https://github.com/algolia/instantsearch.js/compare/v1.8.9...v1.8.10) (2016-10-07)
+
+
+### Bug Fixes
+
+* **lodash:** set lodash back to 4.15.0, fixes build, unknown issue for now ([ba4247e](https://github.com/algolia/instantsearch.js/commit/ba4247e))
+
+
+
 <a name="1.8.9"></a>
 ## [1.8.9](https://github.com/algolia/instantsearch.js/compare/v1.8.8...v1.8.9) (2016-10-07)
 
