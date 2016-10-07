@@ -12,13 +12,9 @@ import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
 
-import insertCss from 'insert-css';
 import sliderTheme from './slider.css';
 import paginationTheme from './pagination.css';
 import searchBoxTheme from './searchbox.css';
-insertCss(sliderTheme.code);
-insertCss(paginationTheme.code);
-insertCss(searchBoxTheme.code);
 
 export default function TourismInstantsearchSample() {
   return (
@@ -243,7 +239,7 @@ const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
 });
 
 function Price() {
-  const theme = overrideTheme(Range, sliderTheme.classNames);
+  const theme = overrideTheme(Range, sliderTheme);
   return (
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Price Range</div>

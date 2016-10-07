@@ -5,9 +5,8 @@ import themeable from '../../core/themeable';
 
 import Pagination from './Pagination';
 import Select from '../../components/Select';
-import insertCss from 'insert-css';
+
 import theme from './PaginationSelect.css';
-insertCss(theme.code, {prepend: true});
 
 function PaginationSelect(props) {
   return (
@@ -32,4 +31,4 @@ if (__DOC__ === 'yes') {
   );
 }
 
-export default themeable(theme.classNames)(PaginationSelect);
+export default themeable(theme)(PaginationSelect);

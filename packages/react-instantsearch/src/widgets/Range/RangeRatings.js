@@ -3,9 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
-import insertCss from 'insert-css';
 import theme from './RangeRatings.css';
-insertCss(theme.code, {prepend: true});
 
 class RangeRatings extends Component {
   static propTypes = {
@@ -89,7 +87,7 @@ class RangeRatings extends Component {
   }
 }
 
-export default themeable(theme.classNames)(translatable({
+export default themeable(theme)(translatable({
   ratingLabel: ' & Up',
 })(RangeRatings)
 );
