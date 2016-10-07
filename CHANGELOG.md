@@ -1,3 +1,13 @@
+<a name="1.8.9"></a>
+## [1.8.9](https://github.com/algolia/instantsearch.js/compare/v1.8.8...v1.8.9) (2016-10-07)
+
+
+### Bug Fixes
+
+* **react:** avoid duplicating React ([59010f6](https://github.com/algolia/instantsearch.js/commit/59010f6)), closes [#1386](https://github.com/algolia/instantsearch.js/issues/1386)
+
+
+
 <a name="1.8.8"></a>
 ## [1.8.8](https://github.com/algolia/instantsearch.js/compare/v1.8.6...v1.8.8) (2016-09-14)
 
