@@ -1,3 +1,13 @@
+<a name="1.8.11"></a>
+## [1.8.11](https://github.com/algolia/instantsearch.js/compare/v1.8.10...v1.8.11) (2016-10-07)
+
+
+### Bug Fixes
+
+* **merge:** merge only plain object from searchParameters ([aab1c87](https://github.com/algolia/instantsearch.js/commit/aab1c87))
+
+
+
 <a name="1.8.10"></a>
 ## [1.8.10](https://github.com/algolia/instantsearch.js/compare/v1.8.9...v1.8.10) (2016-10-07)
 
