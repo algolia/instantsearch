@@ -9,6 +9,7 @@ NODE_ENV=production npm run build
 INDEX_PAGE=index npm run test:functional
 INDEX_PAGE=index-preact npm run test:functional
 ./scripts/validate-commit-msgs.sh
+npm run docs:jsdoc # check we are able to generate docs
 
 # test the website can be built without errors
 cd docs
