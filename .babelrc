@@ -22,9 +22,6 @@
     },
     "development": {
       "plugins": [
-        ["babel-plugin-transform-inline-localize-css-import", {
-          "localFormat": "ais-$cssFilename__$token"
-        }],
         "transform-react-jsx-source",
         "react-hot-loader/babel"
       ]

@@ -5,7 +5,11 @@ import {omit} from 'lodash';
 import {getDisplayName} from './utils';
 import {withKeysPropType} from './propTypes';
 
-export default function themeable(defaultClassNames) {
+export default function themeable(defaultTheme) {
+  let defaultClassNames = defaultTheme;
+  if (process.env.NODE_ENV !== 'development'){
+    defaultClassNames = defaultTheme.classNames;
+  }
   return Composed => {
     function Themeable(props) {
       const {theme = defaultClassNames, ...otherProps} = props;

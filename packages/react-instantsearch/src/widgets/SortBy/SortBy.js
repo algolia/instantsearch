@@ -3,9 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 
 import Select from '../../components/Select';
-import insertCss from 'insert-css';
+
 import theme from './SortBy.css';
-insertCss(theme.code, {prepend: true});
 
 class SortBy extends Component {
   static propTypes = {
@@ -48,4 +47,4 @@ class SortBy extends Component {
   }
 }
 
-export default themeable(theme.classNames)(SortBy);
+export default themeable(theme)(SortBy);

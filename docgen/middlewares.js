@@ -99,7 +99,9 @@ export const start = [
   webpackEntryMetadata(webpackStartConfig),
   ...common,
   onlyChanged,
+/*
   inlineProps,
+*/
   layouts('pug'),
 ];
 

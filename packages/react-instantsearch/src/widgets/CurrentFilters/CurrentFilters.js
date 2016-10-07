@@ -3,9 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
-import insertCss from 'insert-css';
 import theme from './CurrentFilters.css';
-insertCss(theme.code, {prepend: true});
 
 class CurrentFilters extends Component {
   static propTypes = {
@@ -55,7 +53,7 @@ class CurrentFilters extends Component {
   }
 }
 
-export default themeable(theme.classNames)(
+export default themeable(theme)(
   translatable({
     clearFilter: '×',
     clearAll: 'Clear all',

@@ -2,7 +2,7 @@
   "private": true,
   "version": "2.0.0-beta.11",
   "scripts": {
-    "start": "babel-node docgen/start.js",
+    "start": "NODE_ENV=development babel-node docgen/start.js",
     "build": "./scripts/build.sh",
     "docs:build": "DOCS_DIST=docs/react babel-node docgen/build.js && npm run build-storybook",
     "docs:publish": "babel-node scripts/gh-pages.js",
