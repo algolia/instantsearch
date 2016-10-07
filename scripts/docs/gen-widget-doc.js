@@ -36,12 +36,12 @@ function renderMarkdown(data, fns) {
   let template = fs.readFileSync(path.resolve(__dirname, './widgetTemplate.hbs'), 'utf8');
 
   fns.forEach(fn => {
-    let dmdStream = dmd({
+    const fileContent = dmd(data, {
       template: util.format(template, fn.name),
       helper: ['./scripts/helpers']
     });
 
-    dmdStream.pipe(fs.createWriteStream(path.join(p.output, `${fn.name}.md`)));
-    dmdStream.end(JSON.stringify(data));
+    const filePath = path.join(p.output, `${fn.name}.md`);
+    fs.writeFile(filePath, fileContent);
   });
 }
