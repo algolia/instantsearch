@@ -1,8 +1,7 @@
 import React, {PropTypes} from 'react';
 import doctrine from 'doctrine';
-import marked from 'marked';
 
-import renderer from '../../mdRenderer.js';
+import md from '../../mdRenderer.js';
 import highlight from '../../syntaxHighlighting.js';
 
 function intercalate(list, a) {
@@ -156,7 +155,7 @@ function Type(props) {
         required={entryType.required}
         type={entryType}
         namedTypes={namedTypes}
-        description={marked(entryType.description || '', {renderer})}
+        description={md.render(entryType.description || '')}
       />
     );
 
@@ -202,7 +201,7 @@ function Prop(props) {
     type: shapes[i].type,
   }));
 
-  const mdDesc = marked(description, {renderer});
+  const mdDesc = md.render(description);
 
   return (
     <div className="Prop">
