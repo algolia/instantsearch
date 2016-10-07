@@ -6,7 +6,7 @@ import forEach from 'lodash/forEach';
 import mergeWith from 'lodash/mergeWith';
 import union from 'lodash/union';
 import clone from 'lodash/clone';
-import isObject from 'lodash/isObject';
+import isPlainObject from 'lodash/isPlainObject';
 import {EventEmitter} from 'events';
 import urlSyncWidget from './url-sync.js';
 import version from './version.js';
@@ -208,7 +208,7 @@ function enhanceConfiguration(searchParametersFromUrl) {
       }
 
       // avoid mutating objects
-      if (isObject(a)) {
+      if (isPlainObject(a)) {
         return mergeWith({}, a, b, customizer);
       }
 
