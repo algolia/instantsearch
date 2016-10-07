@@ -1,14 +1,12 @@
-import marked from 'marked';
-import unescape from 'unescape-html';
+import MarkdownIt from 'markdown-it';
+import markdownItAnchor from 'markdown-it-anchor';
 
 import highlight from './syntaxHighlighting.js';
 
-const renderer = new marked.Renderer();
-renderer.heading = (text, level, raw) => {
-  const id = raw.toLowerCase().replace(/[^\w]+/g, '-');
-  return `<h${level} id="${id}" class="heading">${text}<a class="anchor" href="#${id}"></a></h${level}>`;
-};
-renderer.code = (code, lang) => highlight(code, lang);
-renderer.codespan = code => highlight(unescape(code), 'js', true);
+const md =
+  new MarkdownIt('default', {
+    highlight: (str, lang) => highlight(str, lang),
+  })
+  .use(markdownItAnchor, {permalink: true, permalinkClass: 'anchor', permalinkSymbol: ''});
 
-export default renderer;
+export default md;
