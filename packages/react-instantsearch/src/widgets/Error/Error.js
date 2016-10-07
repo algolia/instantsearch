@@ -3,9 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../../core/themeable';
 import translatable from '../../core/translatable';
 
-import insertCss from 'insert-css';
 import theme from './Error.css';
-insertCss(theme.code, {prepend: true});
 
 class Error extends Component {
   static propTypes = {
@@ -24,7 +22,7 @@ class Error extends Component {
   }
 }
 
-export default themeable(theme.classNames)(
+export default themeable(theme)(
   translatable({
     error: 'There was an error processing your request. Please try again.',
   })(Error)
