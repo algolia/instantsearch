@@ -20,7 +20,8 @@ By default, the Range will render as a slider.
 
 #### Theme
 
-`root`, `handles`, `handle`, `handle_active`, `handleDot`, `handleTooltip`, `tracks`, `track`, `bounds`, `bound`, `boundMin`, `boundMax`
+`root`, `handles`, `handle`, `handleActive`, `handleDot`, `handleTooltip`, `tracks`, `track`, `bounds`, `bound`, `boundMin`, `boundMax`
+`trackSelected`, `handleDotActive`, `handleTooltipActive`
 
 #### Translations
 
@@ -41,7 +42,8 @@ By default, the Range will render as a slider.
 #### Theme
 
 `root`, `ratingLink`, `ratingLinkSelected` `ratingIcon`, `ratingIconEmpty` `ratingLabel`, `ratingCount`
-
+`ratingLabelDisabled`, `ratingLabelSelected`, `ratingCountDisabled`, `ratingIconDisabled`, `ratingIconEmptyDisabled`, 
+`ratingLabelSelected`, `ratingCountSelected`, `ratingIconSelected`, `ratingIconEmptySelected`,  
 #### Translations
 
 `ratingLabel`

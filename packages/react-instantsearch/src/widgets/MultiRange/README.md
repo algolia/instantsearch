@@ -15,7 +15,7 @@ Lets the user pick between a list of refinement ranges for a particular numeric 
 
 ### Theme
 
-`root`, `items`, `item`, `itemSelected`, `itemLabel`
+`root`, `items`, `item`, `itemSelected`, `itemLabel`, `itemLabelSelected`, `itemRadio`, `itemRadioSelected`
 
 ## Implementing your own MultiRange
 

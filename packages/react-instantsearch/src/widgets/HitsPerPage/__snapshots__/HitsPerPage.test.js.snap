@@ -5,7 +5,7 @@ exports[`HitsPerPage applies translations 1`] = `
     className="item itemSelected">
     <a
       aria-label={undefined}
-      className="itemLink"
+      className="itemLink itemLinkSelected"
       href="#"
       onClick={[Function]}>
       111
@@ -41,7 +41,7 @@ exports[`HitsPerPage supports passing number items 1`] = `
     className="item itemSelected">
     <a
       aria-label={undefined}
-      className="itemLink"
+      className="itemLink itemLinkSelected"
       href="#"
       onClick={[Function]}>
       111
@@ -77,7 +77,7 @@ exports[`HitsPerPage supports passing object items 1`] = `
     className="item itemSelected">
     <a
       aria-label={undefined}
-      className="itemLink"
+      className="itemLink itemLinkSelected"
       href="#"
       onClick={[Function]}>
       111 items
