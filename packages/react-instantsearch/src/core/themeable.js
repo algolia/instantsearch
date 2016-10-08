@@ -4,12 +4,19 @@ import {omit} from 'lodash';
 
 import {getDisplayName} from './utils';
 import {withKeysPropType} from './propTypes';
+import insertCss from 'insert-css';
 
 export default function themeable(defaultTheme) {
   let defaultClassNames = defaultTheme;
-  if (process.env.NODE_ENV !== 'development'){
+
+  if (defaultTheme.classNames !== undefined) {
     defaultClassNames = defaultTheme.classNames;
   }
+
+  if (defaultTheme.code !== undefined) {
+    insertCss(defaultTheme.code);
+  }
+
   return Composed => {
     function Themeable(props) {
       const {theme = defaultClassNames, ...otherProps} = props;
