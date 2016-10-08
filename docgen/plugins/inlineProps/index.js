@@ -11,9 +11,9 @@ const r = resolve.bind(null, __dirname);
 export default function inlineProps(files, m, callback) {
   const propMatches = [];
   const entries = [];
-  Object.values(files).forEach(file => {
+  Object.values(files).filter(file => (/\.md$/).test(file.path)).forEach(file => {
     const contents = file.contents.toString();
-    const propMatcher = /<!-- props ([A-Za-z\.]+) (.*) -->/g;
+    const propMatcher = /<p>&lt;!-- props ([A-Za-z\.]+) (.*) --&gt;<\/p>/g;
     let match;
     // there can be multiple places in a single file
     // where we try to inline props
