@@ -11,10 +11,17 @@ import {
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
+import insertCss from 'insert-css';
 
 import sliderTheme from './slider.css';
 import paginationTheme from './pagination.css';
 import searchBoxTheme from './searchbox.css';
+
+if (sliderTheme.code) {
+  insertCss(sliderTheme.code);
+  insertCss(paginationTheme.code);
+  insertCss(searchBoxTheme.code);
+}
 
 export default function TourismInstantsearchSample() {
   return (

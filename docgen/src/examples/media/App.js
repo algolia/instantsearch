@@ -12,7 +12,13 @@ import {
   Range,
 } from 'react-instantsearch';
 
+import insertCss from 'insert-css';
+
 import paginationTheme from './pagination.css';
+
+if (paginationTheme.code) {
+  insertCss(paginationTheme.code);
+}
 
 export default function App() {
   return <InstantSearch
