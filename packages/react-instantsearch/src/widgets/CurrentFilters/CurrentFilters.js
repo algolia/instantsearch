@@ -57,7 +57,7 @@ class CurrentFilters extends Component {
 
 export default themeable(theme.classNames)(
   translatable({
-    clearFilter: '×',
+    clearFilter: '✕',
     clearAll: 'Clear all',
   })(CurrentFilters)
 );
