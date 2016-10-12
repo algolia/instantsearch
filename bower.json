@@ -1,0 +1,20 @@
+{
+  "name": "instantsearch.js",
+  "description": "instantsearch.js is a library of widgets to build high performance instant search experiences using Algolia",
+  "main": [
+    "dist-es5-module/index.js",
+    "src/css/instantsearch.scss"
+  ],
+  "authors": [
+    "Algolia <support@algolia.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/algolia/instantsearch.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
