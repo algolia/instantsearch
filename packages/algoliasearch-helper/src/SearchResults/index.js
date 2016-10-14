@@ -569,8 +569,8 @@ function vanillaSortFn(order, data) {
 
 /**
  * Get a the list of values for a given facet attribute. Those values are sorted
- * refinement first, descending count (bigger value on top), and name asending
- * (alphabetical order). The sort formula can overriden using either string based
+ * refinement first, descending count (bigger value on top), and name ascending
+ * (alphabetical order). The sort formula can overridden using either string based
  * predicates or a function.
  *
  * This method will return all the values returned by the Algolia engine plus all
