@@ -299,7 +299,7 @@ const MaterialUiBottomNavigation = React.createClass({
     return {selectedIndex: 0};
   },
 
-  select(index){
+  select(index) {
     this.setState({selectedIndex: index});
   },
 
