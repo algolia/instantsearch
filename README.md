@@ -22,8 +22,11 @@
 
 We use our documentation website as the main way to develop instantsearch.js.
 
+We recommend using [yarn](https://yarnpkg.com/en/docs/install) to install
+your development environment.
+
 ```sh
-npm install
+yarn
 npm start
 ```
 

@@ -6,14 +6,14 @@
   },
   "repository": "algolia/instantsearch.js/packages/react-instantsearch",
   "dependencies": {
-    "algoliasearch": "3.18.1",
-    "algoliasearch-helper": "2.14.0",
-    "history": "2.1.2",
-    "insert-css": "1.0.0",
-    "lodash": "4.16.2",
-    "qs": "6.2.1",
-    "react-addons-shallow-compare": "15.3.2",
-    "react-themeable": "1.1.0"
+    "algoliasearch": "^3.18.1",
+    "algoliasearch-helper": "^2.14.0",
+    "history": "^2.1.2",
+    "insert-css": "^1.0.0",
+    "lodash": "^4.16.2",
+    "qs": "^6.2.1",
+    "react-addons-shallow-compare": "^15.3.2",
+    "react-themeable": "^1.1.0"
   },
   "peerDependencies": {
     "react": "^15.0.0",

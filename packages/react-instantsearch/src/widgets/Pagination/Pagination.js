@@ -131,7 +131,7 @@ class Pagination extends Component {
       createURL,
       translate,
       listComponent: ListComponent,
-      ...otherProps,
+      ...otherProps
     } = this.props;
 
     const totalPages = Math.min(nbPages, maxPages);
