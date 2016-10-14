@@ -3,6 +3,7 @@ module.exports = {
   "rules": {
     // monorepo not supported for this rule
     // https://github.com/benmosher/eslint-plugin-import/issues/458
-    "import/no-extraneous-dependencies": ["off"]
+    "import/no-extraneous-dependencies": ["off"],
+    "space-before-blocks": ["error"],
   }
 };
