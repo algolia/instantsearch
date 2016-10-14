@@ -22,8 +22,8 @@ fi
 git pull origin v2
 git fetch origin --tags
 
-# printf "Release: npm install"
-npm install
+# printf "Release: install dependencies"
+yarn
 
 # No need for complex release process for now, only patch releases should be ok
 # currentVersion=`cat package.json | json version`
