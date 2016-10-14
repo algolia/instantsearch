@@ -100,6 +100,18 @@ You need to manually load the companion [CSS file](http://cdn.jsdelivr.net/insta
 
 </div>
 
+### Bower
+
+Use jsDelivr builds to install with bower:
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet ignore">
+{% highlight sh %}
+bower install https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.js
+{% endhighlight %}
+  </div>
+</div>
+
 ### Light build
 
 We created a light build that uses [Preact](https://preactjs.com/) instead of [React](http://reactjs.org/) internally.
