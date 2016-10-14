@@ -255,7 +255,7 @@ const CustomPriceRanges = MultiRange.connect(React.createClass({
     this.props.refine(selectedItem);
   },
 
-  filteredItems(items){
+  filteredItems(items) {
     let filteredItems = items;
     if (!(this.props.selectedItem === '')) {
       filteredItems = items.filter(i => this.props.selectedItem === i.value);

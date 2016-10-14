@@ -38,7 +38,7 @@ export default function hightlight(attribute, hit) {
   if (!hit) throw new Error('The hit containing the attribute should be provided');
   if (!hit.hasOwnProperty(attribute)) throw new Error(`${attribute} should be a retrievable attribute.`);
   if (!hit._highlightResult ||
-      !hit._highlightResult.hasOwnProperty(attribute)){
+      !hit._highlightResult.hasOwnProperty(attribute)) {
     throw new Error(`${attribute} should be an highlighted attribute`);
   }
 

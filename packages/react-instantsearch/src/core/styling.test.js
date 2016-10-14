@@ -23,7 +23,7 @@ describe('styling', () => {
     const Component = {};
     Component.displayName = 'name';
 
-    function toStyle(){
+    function toStyle() {
       styling(Component, {});
     }
 
