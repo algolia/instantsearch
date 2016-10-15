@@ -6,62 +6,123 @@ nav_groups:
 nav_sort: 1
 ---
 
-All widgets that render one or more DOM nodes accept a `theme` prop. This prop is a map of keys to corresponding `className` or `style` prop values. 
-The different theme keys supported by components are described on their respective documentation page. You can also provide themes using css-modules, Aphrodite, JSS and others if you want. 
-See [`react-themeable`](https://github.com/markdalgleish/react-themeable) for the underlying implementation and options.
+Default widgets in react-instantsearch comes with some styling already applied and loaded. When styling components, you can decide to either extend or completely replace our default styles, using CSS classes or inline styles.
 
-By default, we provide `defaultTheme` for each widgets using css-modules under the hood. Most widgets have empty default theme, but the `SearchBox`, `RangeRatings`, `Range` and `Pagination` widgets 
-are delivered with a built-in one and are ready to use. 
+All widgets accept a `theme` prop. This prop is a map of keys to corresponding `className` or `style` prop values. The different theme keys supported by every widgets are described on their respective documentation page. 
 
-You can access every default theme easily. Here is an example if you want to retrieve the `SearchBox` default theme:
+By default, we provide `defaultClassNames` for each widgets but they are mostly not styled. However, the `SearchBox`, `RangeRatings`, `Range` and `Pagination` widgets are delivered with a built-in style and are ready to use without any configuration on your side. 
 
-```
-const searchBoxDefaultTheme = SearchBox.defaultTheme;
-```
+## CSS classes styling
 
-### Example: Styling a SearchBox
+### Reusing our class names
 
-#### Redefining class names 
+By default we provide BEM class names to every element of a widget. That way it's very easy for you to replace or extend the style of a widget. 
 
-If you want to use pure css on your side, either you can use the generated class names we provide for each widgets, or you can redefine your own. You can also directly use some css. 
+Let's see an example with the `RangeInput` widget:
 
-```
-import {SearchBox} from 'react-instantsearch';
-
-export default function ThemedSearchBox(props) {
-  return (
-    <SearchBox
-      {...props}
-      theme={{
-        root: 'MySearchBox',
-        wrapper: 'MySearchBox__wrapper',
-        input: {
-          color: 'red',
-        },
-        submit: 'MySearchBox__submit',
-        reset: {
-          display: 'none',
-        },
-      }}
-    />
-  );
-}
+```html
+<form data-reactroot="" class="ais-RangeInput__root">
+	<label class="ais-RangeInput__labelMin">
+		<input type="number" class="ais-RangeInput__inputMin" value="0.39">
+	</label>
+	<span class="ais-RangeInput__separator">to</span>
+	<label class="ais-RangeInput__labelMax">
+		<input type="number" class="ais-RangeInput__inputMax" value="799">
+	</label>
+	<button class="ais-RangeInput__submit" type="submit">go</button>
+</form>
 ```
 
-If you want to use css-modules, aphrodite and other libraries supported by react-themeable you will also need to use the `theme` prop. Please refer to the [`react-themeable documentation`](https://github.com/markdalgleish/react-themeable)
-to see the correct syntax. 
+If you want to change the color of the separator you may have a css file with the following style: 
 
-Be aware that giving a theme prop to a widget will erase completely the existing default theme. 
+```css
+	ais-RangeInput__separator {
+		color: 'red'
+	}
+```
 
-#### Overriding some default theme properties 
+### Providing your own classes
 
-For the `SearchBox`, `RangeRatings`, `Range` and `Pagination` widgets, maybe you only wants to redefine some properties like colors.
-You can do that by retrieving their default themes and perform a merge with yours and then use the `theme` prop.
+The BEM classes we provide can be change to suits your need. To change them, you'll need to use the `theme` prop of a widget by passing an object that will map theme keys to your class names. 
 
-Check the [tourism source code](https://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/tourism) for a real-life example. 
-The slider overrides some of the default theme properties.
+Let's see an example if we want to change the class names of the `RangeInput` widget:
 
+```js
+	const rangeInputClassNames = {
+		root: 'root-class-name',
+		labelMin: 'label-min-class-name',
+		inputMin: 'input-min-class-name',
+		separator: 'separator-class-name',
+		labelMax: 'labelMax-class-name',
+		inputMax: 'input-max-class-name',
+		submit: 'submit-class-name'
+	}
+	<RangeInput theme={rangeInputClassNames} />
+```
 
+## Inline styling
 
+### Providing inline styles
 
+You can style widgets by using directly inline styles. It can be achieved by providing an object that will map theme keys to your inline styles. 
 
+Let's see an example to use inline styles on the `RangeInput` widget: 
+
+```js
+	const rangeInputInlineStyles = {
+		root: {/*inlineStyles*/},
+		labelMin: {/*inlineStyles*/},
+		inputMin: {/*inlineStyles*/},
+		separator: {/*inlineStyles*/},
+		labelMax: {/*inlineStyles*/},
+		inputMax: {/*inlineStyles*/},
+		submit: {/*inlineStyles*/}
+	}
+	<RangeInput theme={rangeInputInlineStyles} />
+```
+
+Be careful, if you pass a new theme to the `theme` props, it will erase completely the one we provide by default. 
+
+### Extending our default theme
+
+As told above, passing a new theme to the `theme` props will erase completely the one we provide by default, including default class names. Howerver, it could be convenient to keep a default theme and just be able to change some of its properties. To do that, we provide a function called `extendTheme`.
+
+This function takes the widget `defaultClassNames` and the inline styles you want to apply and return a new theme. Those `defaultClassNames` can be retrieve on any widgets. 
+
+Let's see an example by changing the color of the `SearchBox` submit button: 
+
+```js
+	import {SearchBox, extendTheme} from 'react-instantsearch';
+
+	const searchBoxExtendedStyle = {
+		submit: {
+			backgroundColor: 'red',
+		}
+	}
+	
+	<SearchBox theme={extendTheme(SearchBox.defaultClassNames, searchBoxExtendedStyle)} >/
+```
+
+**Remember, you can find the available theme keys for a widget on their documentation page.**
+
+## react-themeable
+
+We use [`react-themeable`](https://github.com/markdalgleish/react-themeable) to style `react-instantsearch` widgets. We explained how to style widgets using class names or inline styles, but indeed the `theme` prop accepts any parameter that react-themeable supports. You can find all available options [on their website](https://github.com/markdalgleish/react-themeable).
+
+## Tooling
+
+### Localized CSS with babel
+
+Default styling in `react-instantsearch` is done using css-modules. However, you have nothing to import other than the widget itself to enjoy our default themes. 
+
+When building `react-instantsearch` we are using [babel-plugin-transform-inline-localize-css-import](https://github.com/algolia/babel-plugin-transform-inline-localize-css-import). We've made this babel plugin in order to be able to embed both class names and styles inside our widgets.
+
+If you want you can also use it with your own code and load the css with [`insert-css`](https://github.com/substack/insert-css).
+
+```js
+import theme from './theme.css'
+
+insertCss(theme.code);
+
+<SearchBox theme={theme.classNames}/>
+```

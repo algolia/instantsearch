@@ -19,9 +19,12 @@ exports[`Range applies translations 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       5
       )
     </span>
@@ -44,9 +47,12 @@ exports[`Range applies translations 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       9
       )
     </span>
@@ -69,9 +75,12 @@ exports[`Range applies translations 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       12
       )
     </span>
@@ -94,9 +103,12 @@ exports[`Range applies translations 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       14
       )
     </span>
@@ -106,22 +118,25 @@ exports[`Range applies translations 1`] = `
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ratingIcon ratingIconSelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingLabel">
+      className="ratingLabel ratingLabelSelected">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="ratingCount">
-       (
+      className="ratingCount ratingCountSelected">
+      (
       15
       )
     </span>
@@ -150,9 +165,12 @@ exports[`Range supports passing max/min values 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       5
       )
     </span>
@@ -175,9 +193,12 @@ exports[`Range supports passing max/min values 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       9
       )
     </span>
@@ -200,9 +221,12 @@ exports[`Range supports passing max/min values 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       12
       )
     </span>
@@ -225,9 +249,12 @@ exports[`Range supports passing max/min values 1`] = `
       className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
       className="ratingCount">
-       (
+      (
       14
       )
     </span>
@@ -237,22 +264,25 @@ exports[`Range supports passing max/min values 1`] = `
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ratingIcon ratingIconSelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="ratingLabel">
+      className="ratingLabel ratingLabelSelected">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="ratingCount">
-       (
+      className="ratingCount ratingCountSelected">
+      (
       15
       )
     </span>

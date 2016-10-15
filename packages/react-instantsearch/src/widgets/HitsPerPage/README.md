@@ -23,7 +23,7 @@ There's also a `HitsPerPageSelect` which renders a select control.
 
 `root`
 
-Only for `HitsPerPage`: `item`, `itemSelected`
+Only for `HitsPerPage`: `item`, `itemSelected`, `itemLinkDisabled`, `itemLinkSelected`
 
 ## Implementing your own HitsPerPage
 

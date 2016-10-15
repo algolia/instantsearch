@@ -19,7 +19,8 @@ There's also a `MenuSelect` which renders a select control.
 
 `root`
 
-Only for `Menu`: `items`, `item`, `itemSelected`, `itemLink`, `itemLabel`, `itemCount`, `showMore`
+Only for `Menu`: `items`, `item`, `itemSelected`, `itemLink`, `itemLinkSelected`, `itemLabel`, `itemLabelSelected`, 
+`itemCount`, `itemCountSelected`, `showMore`
 
 ### Translations
 

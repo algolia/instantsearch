@@ -17,7 +17,8 @@ There's also a `RefinementListLinks` which renders items as links.
 
 ### Theme
 
-`root`, `items`, `item`, `itemSelected`, `itemLabel`, `itemCount`, `showMore`
+`root`, `items`, `item`, `itemSelected`, `itemLabel`, `itemLabelSelected`, `itemCount`, `itemCountSelected`, `showMore`,
+`itemCheckbox`, `itemCheckboxSelected`
 
 Only for `RefinementListLinks`: `itemLink`
 
