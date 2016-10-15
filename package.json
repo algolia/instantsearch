@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "2.0.0-beta.13",
+  "version": "2.0.0-beta.14",
   "scripts": {
     "start": "NODE_ENV=development babel-node docgen/start.js",
     "build": "./scripts/build.sh",
