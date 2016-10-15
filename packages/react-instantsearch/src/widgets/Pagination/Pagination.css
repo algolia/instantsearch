@@ -6,7 +6,7 @@
   padding: 3px;
 }
 
-.itemSelected a {
+.itemSelected {
   color: #000000;
   font-weight: bold;
 }
@@ -15,11 +15,11 @@
   visibility: visible;
 }
 
-.itemDisabled a {
+.itemDisabled {
   color: #bbbbbb;
 }
 
-.itemDisabled a:hover {
+.itemDisabled:hover {
   cursor: default;
   text-decoration: none;
 }

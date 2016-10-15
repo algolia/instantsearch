@@ -22,11 +22,11 @@ exports[`RangeInput supports having a selected item 1`] = `
       <label>
         <input
           checked={true}
-          className="itemRadio"
+          className="itemRadio itemRadioSelected"
           onChange={[Function]}
           type="radio" />
         <span
-          className="itemLabel">
+          className="itemLabel itemLabelSelected">
           label
         </span>
       </label>
