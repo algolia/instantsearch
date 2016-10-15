@@ -34,19 +34,26 @@ class RangeRatings extends Component {
   }
 
   buildItem({max, lowerBound, count, applyTheme, translate, createURL}) {
-    const icons = [];
-    for (let icon = 0; icon < max; icon++) {
-      const iconTheme = icon >= lowerBound ? 'ratingIconEmpty' : 'ratingIcon';
-      icons.push(<span {...applyTheme(iconTheme, iconTheme)} key={icon}/>);
-    }
-
     const selected = lowerBound === this.props.value.min &&
       max === this.props.value.max;
     const disabled = !count;
 
+    const icons = [];
+    for (let icon = 0; icon < max; icon++) {
+      const iconTheme = icon >= lowerBound ? 'ratingIconEmpty' : 'ratingIcon';
+      icons.push(
+        <span {...applyTheme(
+          iconTheme,
+          iconTheme,
+          selected && `${iconTheme}Selected`,
+          disabled && `${iconTheme}Disabled`,
+        )} key={icon}
+        />);
+    }
+
     return (
       <a {...applyTheme(
-        lowerBound,
+        'ratingLink',
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
@@ -55,8 +62,21 @@ class RangeRatings extends Component {
          href={createURL({lowerBound, max})}
       >
         {icons}
-        <span {...applyTheme('ratingLabel', 'ratingLabel')}>{translate('ratingLabel')}</span>
-        <span {...applyTheme('ratingCount', 'ratingCount')}> ({count})</span>
+        <span {...applyTheme(
+          'ratingLabel',
+          'ratingLabel',
+          selected && 'ratingLabelSelected',
+          disabled && 'ratingLabelDisabled')}>
+          {translate('ratingLabel')}
+          </span>
+        <span> </span>
+        <span {...applyTheme(
+          'ratingCount',
+          'ratingCount',
+          selected && 'ratingCountSelected',
+          disabled && 'ratingCountDisabled')}>
+          ({count})
+        </span>
       </a>
     );
   }

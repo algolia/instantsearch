@@ -17,3 +17,4 @@ module.exports = {
     ],
   },
 };
+/* eslint-enable import/no-commonjs */
