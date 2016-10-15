@@ -42,16 +42,16 @@ class RefinementList extends Component {
     return (
       <label key={key}>
         <input
-          {...applyTheme('itemCheckbox', 'itemCheckbox')}
+          {...applyTheme('itemCheckbox', 'itemCheckbox', selected && 'itemCheckboxSelected')}
           type="checkbox"
           checked={selected}
           onChange={this.onItemChange.bind(null, item)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel')}>
+        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
           {item.value}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount')}>
+        <span {...applyTheme('itemCount', 'itemCount', selected && 'itemCountSelected')}>
           {translate('count', item.count)}
         </span>
       </label>

@@ -30,15 +30,15 @@ class Menu extends Component {
     const value = selected ? null : item.value;
     return (
       <Link
-        {...applyTheme('itemLink', 'itemLink')}
+        {...applyTheme('itemLink', 'itemLink', selected && 'itemLinkSelected')}
         onClick={refine.bind(null, value)}
         href={createURL(value)}
       >
-        <span {...applyTheme('itemLabel', 'itemLabel')}>
+        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
           {item.value}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount')}>
+        <span {...applyTheme('itemCount', 'itemCount', selected && 'itemCountSelected')}>
           {translate('count', item.count)}
         </span>
       </Link>

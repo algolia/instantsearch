@@ -12,7 +12,7 @@ exports[`Range supports passing max/min values 1`] = `
         }
       } />
     <div
-      className="track"
+      className="track trackSelected"
       style={
         Object {
           "width": "100%",
