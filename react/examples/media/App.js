@@ -13,8 +13,12 @@ import {
 } from 'react-instantsearch';
 
 import insertCss from 'insert-css';
+
 import paginationTheme from './pagination.css';
-insertCss(paginationTheme.code);
+
+if (paginationTheme.code) {
+  insertCss(paginationTheme.code);
+}
 
 export default function App() {
   return <InstantSearch
@@ -33,21 +37,23 @@ export default function App() {
 }
 
 const Header = () =>
-<header className="row">
-  <a href="https://community.algolia.com/instantsearch.js/" className="is-logo">
-  <img src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png" width="40" /></a>
-  <a href="./" className="logo">You<i className="fa fa-youtube-play"></i></a>
-  <SearchBox />
-</header>;
+  <header className="row">
+    <a href="https://community.algolia.com/instantsearch.js/" className="is-logo">
+      <img
+        src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
+        width="40"/></a>
+    <a href="./" className="logo">You<i className="fa fa-youtube-play"></i></a>
+    <SearchBox />
+  </header>;
 
 const SearchBox = OriginalSearchBox.connect(
   ({query, refine}) =>
     <div className="searchbox-container">
       <div className="input-group">
         <input type="text"
-          value={query}
-          onChange={e => refine(e.target.value)}
-          className="form-control"
+               value={query}
+               onChange={e => refine(e.target.value)}
+               className="form-control"
         />
         <span className="input-group-btn">
           <button className="btn btn-default"><i className="fa fa-search"></i></button>
@@ -66,7 +72,7 @@ const Facets = () => <aside>
     <RefinementList.Links
       attributeName="genre"
       theme={{
-        ...RefinementList.Links.defaultTheme,
+        ...RefinementList.Links.defaultClassNames,
         items: 'nav nav-list',
         itemCount: 'badge pull-right',
         itemLink: 'item',
@@ -82,12 +88,12 @@ const Facets = () => <aside>
 </aside>;
 
 const Panel = ({title, children, id}) =>
-<div id={id}>
-  <h5><i className="fa fa-chevron-right"></i> {title}</h5>
-  {children}
-</div>;
+  <div id={id}>
+    <h5><i className="fa fa-chevron-right"></i> {title}</h5>
+    {children}
+  </div>;
 
-const Star = ({active}) => <span className={`star${active ? '' : '__empty'}`} />;
+const Star = ({active}) => <span className={`star${active ? '' : '__empty'}`}/>;
 const Stars = ({rating}) => {
   const stars = [];
   for (let i = 1; i <= 5; ++i) {
@@ -96,7 +102,7 @@ const Stars = ({rating}) => {
   return <span className="stars">{stars.map((active, idx) => <Star key={idx} active={active}/>)}</span>;
 };
 const Genre = ({name}) => <span className="badge">{name}</span>;
-const Genres = ({genres}) => <p className="genre">{genres.map((genre, idx) => <Genre name={genre} key={idx} />)}</p>;
+const Genres = ({genres}) => <p className="genre">{genres.map((genre, idx) => <Genre name={genre} key={idx}/>)}</p>;
 
 const Hit = ({
   hit: {
@@ -121,7 +127,7 @@ const Hit = ({
         <Stars rating={rating}/>
       </h4>
       <p className="year">{year}</p>
-      <Genres genres={genre} />
+      <Genres genres={genre}/>
     </div>
   </div>;
 
@@ -129,6 +135,7 @@ const Results = () =>
   <article>
     <div id="stats" className="text-right text-muted"><Stats/></div>
     <hr />
-    <div id="hits"><Hits itemComponent={Hit} hitsPerPage={10} /></div>
-    <div id="pagination" className="text-center"><Pagination theme={paginationTheme.classNames}/></div>
+    <div id="hits"><Hits itemComponent={Hit} hitsPerPage={10}/></div>
+    <div id="pagination" className="text-center"><Pagination
+      theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/></div>
   </article>;
