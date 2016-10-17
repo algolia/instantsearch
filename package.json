@@ -48,7 +48,7 @@
     "conventional-changelog-cli": "1.2.0",
     "dmd": "2.1.1",
     "doctoc": "1.2.0",
-    "enzyme": "2.4.1",
+    "enzyme": "2.5.0",
     "eslint-config-algolia": "5.1.0",
     "expect": "1.20.1",
     "expect-jsx": "2.6.0",
