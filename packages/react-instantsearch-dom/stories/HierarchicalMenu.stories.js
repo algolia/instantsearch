@@ -2,14 +2,14 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {HierarchicalMenu} from '../packages/react-instantsearch';
 import {withKnobs, text, boolean, number} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('HierarchicalMenu', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits >
     <HierarchicalMenu
       id="categories"
       attributes={[
@@ -18,9 +18,9 @@ stories.add('default', () =>
         'sub_sub_category',
       ]}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('with default selected item', () =>
-  <Wrapper >
+  <WrapWithHits >
     <HierarchicalMenu
       id="categories"
       attributes={[
@@ -30,9 +30,9 @@ stories.add('default', () =>
       ]}
       defaultSelectedItem="Eating"
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('with show more', () =>
-  <Wrapper >
+  <WrapWithHits >
     <HierarchicalMenu
       id="categories"
       attributes={[
@@ -44,9 +44,9 @@ stories.add('default', () =>
       limitMax={5}
       showMore={true}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('with sort by', () =>
-  <Wrapper >
+  <WrapWithHits >
     <HierarchicalMenu
       id="categories"
       attributes={[
@@ -56,9 +56,9 @@ stories.add('default', () =>
       ]}
       sortBy={['count:desc']}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits >
     <HierarchicalMenu
       id="categories"
       attributes={[
@@ -72,5 +72,5 @@ stories.add('default', () =>
       showMore={boolean('showMore', true)}
       sortBy={[text('sort by', 'name:asc')]}
     />
-  </Wrapper>
+  </WrapWithHits>
 );
