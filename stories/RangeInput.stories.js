@@ -2,23 +2,23 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {Range} from '../packages/react-instantsearch';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('RangeInput', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits >
     <Range.Input attributeName="price"/>
-  </Wrapper>
+  </WrapWithHits>
 ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range.Input attributeName="rating"
                   min={number('max', 0)}
                   max={number('max', 300)}
                   translations={object('translate', {submit: ' go', separator: 'to'})}
     />
-  </Wrapper>
+  </WrapWithHits>
 );
