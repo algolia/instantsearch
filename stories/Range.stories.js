@@ -2,34 +2,34 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {Range, extendTheme} from '../packages/react-instantsearch';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('Range', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range attributeName="price"/>
-  </Wrapper>
+  </WrapWithHits>
 ).add('providing default value', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range attributeName="price"
            defaultValue={{min: 50, max: 200}}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('custom min/max bounds', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range attributeName="price"
            min={30}
            max={100}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('extend theme', () =>
-  <Wrapper >
+  <WrapWithHits >
     <Range attributeName="price"
            theme={extendTheme(Range.defaultClassNames, {
              track: {
@@ -43,14 +43,14 @@ stories.add('default', () =>
              },
            })}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range attributeName="price"
            defaultValue={object('default value', {min: 150, max: 200})}
            min={number('min', 100)}
            max={number('max', 400)}
     />
-  </Wrapper>
+  </WrapWithHits>
 );

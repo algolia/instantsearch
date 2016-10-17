@@ -2,14 +2,14 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {SortBy} from '../packages/react-instantsearch';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('SortBy', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default ', () =>
-  <Wrapper >
+  <WrapWithHits >
     <SortBy
       items={[
         {value: 'ikea'},
@@ -18,9 +18,9 @@ stories.add('default ', () =>
       ]}
       defaultSelectedIndex="ikea"
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('with labels', () =>
-  <Wrapper >
+  <WrapWithHits >
     <SortBy
       items={[
         {value: 'ikea', label: 'Featured'},
@@ -29,9 +29,9 @@ stories.add('default ', () =>
       ]}
       defaultSelectedIndex="ikea"
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('with links', () =>
-  <Wrapper >
+  <WrapWithHits >
     <SortBy.Links
       items={[
         {value: 'ikea', label: 'Featured'},
@@ -40,5 +40,5 @@ stories.add('default ', () =>
       ]}
       defaultSelectedIndex="ikea"
     />
-  </Wrapper>
+  </WrapWithHits>
 );
