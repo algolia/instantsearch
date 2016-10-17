@@ -2,18 +2,18 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {SearchBox, extendTheme} from '../packages/react-instantsearch';
 import {withKnobs, object} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('SearchBox', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits searchBox={false}>
     <SearchBox/>
-  </Wrapper>
+  </WrapWithHits>
 ).add('extend theme', () =>
-  <Wrapper >
+  <WrapWithHits searchBox={false}>
     <SearchBox
       theme={extendTheme(SearchBox.defaultClassNames, {
         submit: {
@@ -21,9 +21,9 @@ stories.add('default', () =>
         },
       })}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits searchBox={false}>
     <SearchBox
       translations={object('translate', {
         submit: null,
@@ -33,5 +33,5 @@ stories.add('default', () =>
         placeholder: 'Search your website.',
       })}
     />
-  </Wrapper>
+  </WrapWithHits>
 );

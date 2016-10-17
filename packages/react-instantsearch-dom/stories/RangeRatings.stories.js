@@ -2,18 +2,18 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {Range, extendTheme} from '../packages/react-instantsearch';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
-const stories = storiesOf('Range Ratings', module);
+const stories = storiesOf('RangeRatings', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits >
     <Range.Rating attributeName="rating" max={6}/>
-  </Wrapper>
+  </WrapWithHits>
 ).add('extend theme', () =>
-  <Wrapper >
+  <WrapWithHits >
     <Range.Rating
       attributeName="rating"
       max={6}
@@ -23,13 +23,13 @@ stories.add('default', () =>
         },
       })}
     />
-  </Wrapper>
+  </WrapWithHits>
 ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits >
 
     <Range.Rating attributeName="rating"
                   max={number('max', 6)}
                   translations={object('translate', {ratingLabel: ' & Up'})}
     />
-  </Wrapper>
+  </WrapWithHits>
 );
