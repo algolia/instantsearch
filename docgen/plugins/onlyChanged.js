@@ -14,7 +14,7 @@ let layoutChange = true;
 let cssChange = true;
 const layoutFiles = join(__dirname, '../layouts/**/*');
 const cssFiles = join(__dirname, '../src/stylesheets/**/*');
-const CSSEntryPoints = ['index.css'];
+const CSSEntryPoints = ['stylesheets/index.css'];
 
 const hasChanged = file => Date.parse(file.stats.ctime) > lastRunTime ||
   Date.parse(file.stats.mtime) > lastRunTime;
