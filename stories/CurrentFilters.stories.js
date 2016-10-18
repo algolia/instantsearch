@@ -14,7 +14,7 @@ stories.add('default', () =>
       <CurrentFilters />
       <RefinementList
         attributeName="colors"
-        defaultSelectedItems={['Black']}
+        defaultRefinement={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
   </Wrap>
@@ -26,7 +26,7 @@ stories.add('default', () =>
       />
       <RefinementList
         attributeName="colors"
-        defaultSelectedItems={['Black']}
+        defaultRefinement={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
   </Wrap>
@@ -38,7 +38,7 @@ stories.add('default', () =>
       />
       <RefinementList
         attributeName="colors"
-        defaultSelectedItems={['Black']}
+        defaultRefinement={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
   </Wrap>

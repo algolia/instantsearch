@@ -14,7 +14,7 @@ stories.add('default', () =>
       <Stats />
       <RefinementList
         attributeName="colors"
-        defaultSelectedItems={['Black']}
+        defaultRefinement={['Black']}
         theme={{root: {display: 'none'}}}
       />
     </div>

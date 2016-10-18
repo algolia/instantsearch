@@ -28,7 +28,7 @@ stories.add('default', () =>
                   {start: 100, end: 500, label: '$100-$500'},
                   {start: 500, label: '>$500'},
                 ]}
-                defaultSelectedItem=":10"
+                defaultRefinement=":10"
     />
   </WrapWithHits>
 );
