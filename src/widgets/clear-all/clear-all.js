@@ -20,7 +20,7 @@ const bem = bemHelper('ais-clear-all');
  * Allows to clear all refinements at once
  * @function clearAll
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string[]} [options.excludeAttributes] Initial collapsed state of a collapsible widget
+ * @param  {string[]} [options.excludeAttributes] List of attributes names to exclude from clear actions
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.link] Link template

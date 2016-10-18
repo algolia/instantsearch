@@ -8,7 +8,7 @@
 <span class='attr-optional'>`options.excludeAttributes`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-<p class="attr-description">Initial collapsed state of a collapsible widget</p>
+<p class="attr-description">List of attributes names to exclude from clear actions</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
