@@ -19,7 +19,7 @@ class Menu extends Component {
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })),
-    selectedItem: PropTypes.string,
+    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -49,7 +49,7 @@ class Menu extends Component {
     return (
       <List
         renderItem={this.renderItem}
-        selectedItems={[this.props.selectedItem]}
+        selectedItems={[this.props.currentRefinement]}
         {...pick(this.props, [
           'applyTheme',
           'translate',

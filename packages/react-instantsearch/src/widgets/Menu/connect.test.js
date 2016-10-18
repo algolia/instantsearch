@@ -24,16 +24,16 @@ describe('Menu.connect', () => {
     };
 
     props = getProps({id: 'ok'}, {ok: 'wat'}, {results});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({attributeName: 'ok'}, {ok: 'wat'}, {results});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({id: 'ok', defaultSelectedItem: 'wat'}, {}, {results});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    props = getProps({id: 'ok', defaultRefinement: 'wat'}, {}, {results});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({id: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], selectedItem: null});
+    expect(props).toEqual({items: [], currentRefinement: null});
 
     results.getFacetValues.mockClear();
     const sortBy = ['my:custom:sort'];

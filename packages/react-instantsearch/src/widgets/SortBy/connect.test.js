@@ -18,13 +18,13 @@ let params;
 describe('SortBy.connect', () => {
   it('provides the correct props to the component', () => {
     props = getProps({id: 'i'}, {});
-    expect(props).toEqual({selectedIndex: null});
+    expect(props).toEqual({currentRefinement: null});
 
     props = getProps({id: 'i'}, {i: 'yep'});
-    expect(props).toEqual({selectedIndex: 'yep'});
+    expect(props).toEqual({currentRefinement: 'yep'});
 
-    props = getProps({id: 'i', defaultSelectedIndex: 'yep'}, {});
-    expect(props).toEqual({selectedIndex: 'yep'});
+    props = getProps({id: 'i', defaultRefinement: 'yep'}, {});
+    expect(props).toEqual({currentRefinement: 'yep'});
   });
 
   it('calling refine updates the widget\'s state', () => {

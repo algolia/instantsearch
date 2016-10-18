@@ -16,7 +16,7 @@ describe('HitsPerPage', () => {
         createURL={() => '#'}
         items={[111, 333, 666]}
         refine={refine}
-        hitsPerPage={111}
+        currentRefinement={111}
       />
     );
 
