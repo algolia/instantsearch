@@ -10,7 +10,7 @@ class HitsPerPageSelect extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    hitsPerPage: PropTypes.number.isRequired,
+    currentRefinement: PropTypes.number.isRequired,
 
     /**
      * List of hits per page options.
@@ -36,7 +36,7 @@ class HitsPerPageSelect extends Component {
 
   render() {
     const {
-      hitsPerPage,
+      currentRefinement,
       refine,
       items,
       applyTheme,
@@ -45,7 +45,7 @@ class HitsPerPageSelect extends Component {
     return (
       <Select
         onSelect={refine}
-        selectedItem={hitsPerPage}
+        selectedItem={currentRefinement}
         items={items}
         applyTheme={applyTheme}
       />
