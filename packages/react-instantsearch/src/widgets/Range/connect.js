@@ -18,8 +18,8 @@ function getValue(props, state) {
     }
     return {min, max};
   }
-  if (typeof props.defaultValue !== 'undefined') {
-    return props.defaultValue;
+  if (typeof props.defaultRefinement !== 'undefined') {
+    return props.defaultRefinement;
   }
   return {};
 }
@@ -45,7 +45,7 @@ export default createConnector({
      * @public
      * @defines RangeState
      */
-    defaultValue: PropTypes.shape({
+    defaultRefinement: PropTypes.shape({
       /**
        * Start of the range
        */

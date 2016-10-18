@@ -72,7 +72,7 @@ describe('Range.connect', () => {
       attributeName: 'ok',
       min: 5,
       max: 10,
-      defaultValue: {min: 6, max: 9},
+      defaultRefinement: {min: 6, max: 9},
     }, {}, {});
     expect(props).toEqual({
       min: 5,

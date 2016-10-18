@@ -23,7 +23,7 @@ class HierarchicalMenu extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
-    selectedItem: PropTypes.string,
+    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -63,7 +63,7 @@ class HierarchicalMenu extends Component {
       <List
         renderItem={this.renderItem}
         selectedItems={
-          this.props.selectedItem === null ? [] : [this.props.selectedItem]
+          this.props.currentRefinement === null ? [] : [this.props.currentRefinement]
         }
         {...pick(this.props, [
           'applyTheme',

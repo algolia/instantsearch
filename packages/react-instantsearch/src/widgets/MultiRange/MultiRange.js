@@ -13,7 +13,7 @@ class MultiRange extends Component {
       label: PropTypes.node.isRequired,
       value: PropTypes.string.isRequired,
     })).isRequired,
-    selectedItem: PropTypes.string.isRequired,
+    currentRefinement: PropTypes.string.isRequired,
     refine: PropTypes.func.isRequired,
   };
 
@@ -36,7 +36,7 @@ class MultiRange extends Component {
   };
 
   render() {
-    const {items, selectedItem, applyTheme} = this.props;
+    const {items, currentRefinement, applyTheme} = this.props;
 
     return (
       <List
@@ -44,7 +44,7 @@ class MultiRange extends Component {
         showMore={false}
         applyTheme={applyTheme}
         items={items}
-        selectedItems={[selectedItem]}
+        selectedItems={[currentRefinement]}
       />
     );
   }
