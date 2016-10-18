@@ -1,0 +1,16 @@
+.root {
+  display: flex;
+}
+
+.algoliaLink {
+  padding: 0 5px;
+}
+
+.algoliaLink svg {
+  width: 45px;
+  height: 16px;
+}
+
+.searchBy {
+
+}
