@@ -7,8 +7,8 @@ function getSelectedIndex(props, state) {
   if (state[id]) {
     return state[id];
   }
-  if (props.defaultSelectedIndex) {
-    return props.defaultSelectedIndex;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return null;
 }
@@ -29,7 +29,7 @@ export default createConnector({
      * The default selected index.
      * @public
      */
-    defaultSelectedIndex: PropTypes.string,
+    defaultRefinement: PropTypes.string,
   },
 
   defaultProps: {
@@ -37,8 +37,8 @@ export default createConnector({
   },
 
   getProps(props, state) {
-    const selectedIndex = getSelectedIndex(props, state);
-    return {selectedIndex};
+    const currentRefinement = getSelectedIndex(props, state);
+    return {currentRefinement};
   },
 
   refine(props, state, nextSelectedIndex) {

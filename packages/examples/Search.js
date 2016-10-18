@@ -85,7 +85,7 @@ class Search extends Component {
                 value: 'instant_search_price_desc',
               },
             ]}
-            defaultSelectedIndex="instant_search"
+            defaultRefinement="instant_search"
           />
           <HitsPerPage items={[10, 20, 30]} defaultHitsPerPage={20} />
           <Range
@@ -117,7 +117,7 @@ class Search extends Component {
           />
           <RefinementList
             attributeName="categories"
-            defaultSelectedItems={['Audio']}
+            defaultRefinement={['Audio']}
           />
           <Menu
             attributeName="brand"

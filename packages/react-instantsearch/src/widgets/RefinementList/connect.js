@@ -15,8 +15,8 @@ function getSelectedItems(props, state) {
     }
     return state[id];
   }
-  if (props.defaultSelectedItems) {
-    return props.defaultSelectedItems;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return [];
 }
@@ -78,7 +78,7 @@ export default createConnector({
      * The default state of this widget, as an array of facet values.
      * @public
      */
-    defaultSelectedItems: PropTypes.arrayOf(PropTypes.string),
+    defaultRefinement: PropTypes.arrayOf(PropTypes.string),
   },
 
   defaultProps: {
@@ -110,7 +110,7 @@ export default createConnector({
         count: v.count,
       }));
 
-    return {items, selectedItems: getSelectedItems(props, state)};
+    return {items, currentRefinement: getSelectedItems(props, state)};
   },
 
   refine(props, state, nextSelected) {
@@ -119,7 +119,7 @@ export default createConnector({
       ...state,
       // Setting the value to an empty string ensures that it is persisted in
       // the URL as an empty value.
-      // This is necessary in the case where `defaultSelectedItems` contains one
+      // This is necessary in the case where `defaultRefinement` contains one
       // item and we try to deselect it. `nextSelected` would be an empty array,
       // which would not be persisted to the URL.
       // {foo: ['bar']} => "foo[0]=bar"

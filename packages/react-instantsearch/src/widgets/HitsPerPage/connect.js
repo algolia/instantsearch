@@ -9,7 +9,7 @@ function getHitsPerPage(props, state) {
     }
     return state[props.id];
   }
-  return props.defaultHitsPerPage;
+  return props.defaultRefinement;
 }
 
 export default createConnector({
@@ -25,7 +25,7 @@ export default createConnector({
      * Default state of the widget.
      * @public
      */
-    defaultHitsPerPage: PropTypes.number.isRequired,
+    defaultRefinement: PropTypes.number.isRequired,
   },
 
   defaultProps: {
@@ -34,7 +34,7 @@ export default createConnector({
 
   getProps(props, state) {
     return {
-      hitsPerPage: getHitsPerPage(props, state),
+      currentRefinement: getHitsPerPage(props, state),
     };
   },
 

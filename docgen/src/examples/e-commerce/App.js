@@ -163,13 +163,13 @@ const ColorItem = ({item, selectedItems, createURL, refine}) => {
   );
 };
 
-const CustomColorRefinementList = ({items, selectedItems, refine, createURL}) =>
+const CustomColorRefinementList = ({items, currentRefinement, refine, createURL}) =>
     <div>
       {items.map(item =>
         <ColorItem
           key={item.value}
           item={item}
-          selectedItems={selectedItems}
+          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />
@@ -237,7 +237,7 @@ const CustomResults = createConnector({
                 {value: 'ikea_price_asc', label: 'Price asc.'},
                 {value: 'ikea_price_desc', label: 'Price desc.'},
               ]}
-              defaultSelectedIndex="ikea"
+              defaultRefinement="ikea"
             />
           </div>
           <Stats />
