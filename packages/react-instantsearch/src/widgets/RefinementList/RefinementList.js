@@ -18,15 +18,15 @@ class RefinementList extends Component {
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })),
-    selectedItems: PropTypes.arrayOf(PropTypes.string),
+    currentRefinement: PropTypes.arrayOf(PropTypes.string),
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
   onItemChange = (item, e) => {
-    const {selectedItems} = this.props;
-    const nextSelectedItems = selectedItems.slice();
+    const {currentRefinement} = this.props;
+    const nextSelectedItems = currentRefinement.slice();
     const idx = nextSelectedItems.indexOf(item.value);
     if (e.target.checked && idx === -1) {
       nextSelectedItems.push(item.value);
@@ -62,11 +62,11 @@ class RefinementList extends Component {
     return (
       <List
         renderItem={this.renderItem}
+        selectedItems={this.props.currentRefinement}
         {...pick(this.props, [
           'applyTheme',
           'translate',
           'items',
-          'selectedItems',
           'showMore',
           'limitMin',
           'limitMax',

@@ -9,7 +9,7 @@ import theme from './HitsPerPage.css';
 class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
-    hitsPerPage: PropTypes.number.isRequired,
+    currentRefinement: PropTypes.number.isRequired,
     applyTheme: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
 
@@ -39,7 +39,7 @@ class HitsPerPage extends Component {
 
   render() {
     const {
-      hitsPerPage,
+      currentRefinement,
       refine,
       items,
       applyTheme,
@@ -52,7 +52,7 @@ class HitsPerPage extends Component {
           typeof item === 'number' ? {value: item, label: item} : item
         )}
         onSelect={refine}
-        selectedItem={hitsPerPage}
+        selectedItem={currentRefinement}
         applyTheme={applyTheme}
         createURL={createURL}
       />

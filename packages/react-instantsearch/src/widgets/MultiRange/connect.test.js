@@ -26,7 +26,7 @@ describe('MultiRange.connect', () => {
       items: [
         {label: 'All', value: ''},
       ],
-      selectedItem: '',
+      currentRefinement: '',
     });
 
     props = getProps({
@@ -40,7 +40,7 @@ describe('MultiRange.connect', () => {
         {label: 'All', value: ''},
         {label: 'Ok', value: '100:'},
       ],
-      selectedItem: '',
+      currentRefinement: '',
     });
 
     props = getProps({
@@ -54,7 +54,7 @@ describe('MultiRange.connect', () => {
         {label: 'All', value: ''},
         {label: 'Not ok', value: ':200'},
       ],
-      selectedItem: '',
+      currentRefinement: '',
     });
 
     props = getProps({
@@ -72,17 +72,17 @@ describe('MultiRange.connect', () => {
         {label: 'Not ok', value: ':200'},
         {label: 'Maybe ok?', value: '100:200'},
       ],
-      selectedItem: '',
+      currentRefinement: '',
     });
 
     props = getProps({id: 'ok', items: []}, {ok: 'wat'});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({attributeName: 'ok', items: []}, {ok: 'wat'});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({id: 'ok', items: [], defaultSelectedItem: 'wat'}, {});
-    expect(props).toEqual({items: [], selectedItem: 'wat'});
+    props = getProps({id: 'ok', items: [], defaultRefinement: 'wat'}, {});
+    expect(props).toEqual({items: [], currentRefinement: 'wat'});
   });
 
   it('calling refine updates the widget\'s state', () => {

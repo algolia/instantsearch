@@ -173,13 +173,13 @@ OptionCapacity.propTypes = {
   value: PropTypes.string,
 };
 
-const CapacitySelector = MultiRange.connect(({items, selectedItem, refine}) => {
+const CapacitySelector = MultiRange.connect(({items, currentRefinement, refine}) => {
   const selectValue = e => refine(e.target.value);
 
-  const allOption = <OptionCapacity label="" value="" isSelected={Boolean(selectedItem)} key="all"/>;
+  const allOption = <OptionCapacity label="" value="" isSelected={Boolean(currentRefinement)} key="all"/>;
 
   const options = items.map(item => {
-    const isSelected = item.value === selectedItem;
+    const isSelected = item.value === currentRefinement;
     const val = parseFloat(item.value.split(':')[0]);
     const label = `${val} person${val > 1 ? 's' : ''}`;
     return <OptionCapacity label={label} value={item.value} isSelected={isSelected} key={item.value}/>;
@@ -189,7 +189,7 @@ const CapacitySelector = MultiRange.connect(({items, selectedItem, refine}) => {
 
   return (
     <div className="capacity-menu-wrapper">
-      <select defaultValue={selectedItem} onChange={selectValue}>
+      <select defaultValue={currentRefinement} onChange={selectValue}>
         {options}
       </select>
     </div>
@@ -207,12 +207,12 @@ function DatesAndGuest() {
   );
 }
 
-const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
+const RoomType = RefinementList.connect(({items, refine, currentRefinement}) => {
   const itemComponents = items.map(item => {
-    const isSelected = selectedItems.indexOf(item.value) !== -1;
+    const isSelected = currentRefinement.indexOf(item.value) !== -1;
     const value = isSelected ?
-      selectedItems.filter(v => v !== item.value) :
-      selectedItems.concat([item.value]);
+      currentRefinement.filter(v => v !== item.value) :
+      currentRefinement.concat([item.value]);
     const selectedClassName = isSelected ? ' ais-refinement-list--item__active' : '';
     const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (
