@@ -16,8 +16,6 @@ import CurrentFilters from './src/widgets/CurrentFilters/index.js';
 import Toggle from './src/widgets/Toggle/index.js';
 import SortBy from './src/widgets/SortBy/index.js';
 import Loading from './src/widgets/Loading/index.js';
-import EmptyQuery from './src/widgets/EmptyQuery/index.js';
-import NoResults from './src/widgets/NoResults/index.js';
 import Stats from './src/widgets/Stats/index.js';
 import Error from './src/widgets/Error/index.js';
 import ScrollTo from './src/widgets/ScrollTo/index.js';
@@ -43,8 +41,6 @@ export {
   Toggle,
   SortBy,
   Loading,
-  EmptyQuery,
-  NoResults,
   Stats,
   Error,
   ScrollTo,
