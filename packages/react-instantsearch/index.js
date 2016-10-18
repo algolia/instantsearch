@@ -21,6 +21,7 @@ import NoResults from './src/widgets/NoResults/index.js';
 import Stats from './src/widgets/Stats/index.js';
 import Error from './src/widgets/Error/index.js';
 import ScrollTo from './src/widgets/ScrollTo/index.js';
+import PoweredBy from './src/widgets/PoweredBy/index.js';
 
 // Doing `export {default as Thing} from 'thing'` causes warnings with
 // react-hot-loader.
@@ -47,6 +48,7 @@ export {
   Stats,
   Error,
   ScrollTo,
+  PoweredBy,
 
   highlight,
   extendTheme,
