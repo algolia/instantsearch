@@ -49,7 +49,7 @@ numericRefinementList({
   container,
   attributeName,
   options,
-  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
+  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
   [ templates.{header,item,footer} ],
   [ transformData.{item} ],
   [ autoHideContainer ],
