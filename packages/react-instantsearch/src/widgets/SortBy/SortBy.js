@@ -27,7 +27,7 @@ class SortBy extends Component {
       value: PropTypes.string.isRequired,
     })).isRequired,
 
-    selectedIndex: PropTypes.string.isRequired,
+    currentRefinement: PropTypes.string.isRequired,
   };
 
   onChange = e => {
@@ -35,11 +35,11 @@ class SortBy extends Component {
   }
 
   render() {
-    const {applyTheme, refine, items, selectedIndex} = this.props;
+    const {applyTheme, refine, items, currentRefinement} = this.props;
     return (
       <Select
         applyTheme={applyTheme}
-        selectedItem={selectedIndex}
+        selectedItem={currentRefinement}
         onSelect={refine}
         items={items}
       />

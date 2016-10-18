@@ -14,8 +14,8 @@ function getSelectedItem(props, state) {
     }
     return state[id];
   }
-  if (props.defaultSelectedItem) {
-    return props.defaultSelectedItem;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return null;
 }
@@ -64,7 +64,7 @@ export default createConnector({
      * The default state of this widget.
      * @public
      */
-    defaultSelectedItem: PropTypes.string,
+    defaultRefinement: PropTypes.string,
   },
 
   defaultProps: {
@@ -95,7 +95,7 @@ export default createConnector({
         count: v.count,
       }));
 
-    return {items, selectedItem: getSelectedItem(props, state)};
+    return {items, currentRefinement: getSelectedItem(props, state)};
   },
 
   refine(props, state, nextSelectedItem) {

@@ -60,7 +60,7 @@ function MyMenu(props) {
 }
 
 // `Menu.connect` accepts the same `id`, `attributeName`, `sortBy`,
-// `defaultSelectedItems`, `showMore`, `limitMin` and `limitMax` props
+// `defaultRefinement`, `showMore`, `limitMin` and `limitMax` props
 // as `Menu`.
 // When `showMore === true`, `limitMax` facet values will be retrieved.
 // Otherwise, `limitMin` facet values will be retrieved.

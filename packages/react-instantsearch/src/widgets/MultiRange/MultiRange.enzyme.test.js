@@ -19,7 +19,7 @@ describe('RangeInput', () => {
           {label: 'label', value: '20:30'},
           {label: 'label', value: '30:'},
         ]}
-        selectedItem=""
+        currentRefinement=""
       />
     );
 

@@ -24,16 +24,16 @@ describe('RefinementList.connect', () => {
     };
 
     props = getProps({id: 'ok'}, {ok: ['wat']}, {results});
-    expect(props).toEqual({items: [], selectedItems: ['wat']});
+    expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
     props = getProps({attributeName: 'ok'}, {ok: ['wat']}, {results});
-    expect(props).toEqual({items: [], selectedItems: ['wat']});
+    expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
-    props = getProps({id: 'ok', defaultSelectedItems: ['wat']}, {}, {results});
-    expect(props).toEqual({items: [], selectedItems: ['wat']});
+    props = getProps({id: 'ok', defaultRefinement: ['wat']}, {}, {results});
+    expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
     props = getProps({id: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], selectedItems: []});
+    expect(props).toEqual({items: [], currentRefinement: []});
 
     results.getFacetValues.mockClear();
     const sortBy = ['my:custom:sort'];

@@ -10,8 +10,8 @@ function getSelectedItem(props, state) {
     }
     return state[id];
   }
-  if (props.defaultSelectedItem) {
-    return props.defaultSelectedItem;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return null;
 }
@@ -77,7 +77,7 @@ export default createConnector({
      * Default state of this widget.
      * @public
      */
-    defaultSelectedItem: PropTypes.string,
+    defaultRefinement: PropTypes.string,
 
     /**
      * Display a show more button for increasing the number of refinement values
@@ -126,7 +126,7 @@ export default createConnector({
     const value = results.getFacetValues(id, {sortBy});
     return {
       items: value.data ? transformValue(value.data, limit) : [],
-      selectedItem: getSelectedItem(props, state),
+      currentRefinement: getSelectedItem(props, state),
     };
   },
 

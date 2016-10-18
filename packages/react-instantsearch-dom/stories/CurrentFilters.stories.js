@@ -2,14 +2,14 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {CurrentFilters, RefinementList} from '../packages/react-instantsearch';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {Wrap} from './util';
 
 const stories = storiesOf('CurrentFilters', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <Wrap >
     <div>
       <CurrentFilters />
       <RefinementList
@@ -17,9 +17,9 @@ stories.add('default', () =>
         defaultSelectedItems={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
-  </Wrapper>
+  </Wrap>
 ).add('only filters', () =>
-  <Wrapper >
+  <Wrap >
     <div>
       <CurrentFilters
         theme={{clearAll: {display: 'none'}} }
@@ -29,9 +29,9 @@ stories.add('default', () =>
         defaultSelectedItems={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
-  </Wrapper>
+  </Wrap>
 ).add('only clear all button', () =>
-  <Wrapper >
+  <Wrap >
     <div>
       <CurrentFilters
         theme={{filters: {display: 'none'}} }
@@ -41,5 +41,5 @@ stories.add('default', () =>
         defaultSelectedItems={['Black']}
         theme={{root: {display: 'none'}}}
       /></div>
-  </Wrapper>
+  </Wrap>
 );

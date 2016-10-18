@@ -78,7 +78,7 @@ const Content = React.createClass({
         <div className="Header">
           <AppBar
             title="AMAZING"
-            iconElementRight={<ConnectedSortBy defaultSelectedIndex="ikea"/>}
+            iconElementRight={<ConnectedSortBy defaultRefinement="ikea"/>}
             onLeftIconButtonTouchTap={this.drawerAction}
             className="Header__appBar"
           />
@@ -160,14 +160,14 @@ const CheckBoxItem = ({item, selectedItems, refine}) => {
     ;
 };
 
-const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, refine, createURL}) =>
+const MaterialUiCheckBoxRefinementList = ({items, attributeName, currentRefinement, refine, createURL}) =>
     <List>
       <Subheader style={{fontSize: 18}}>{attributeName.toUpperCase()}</Subheader>
       {items.map(item =>
         <CheckBoxItem
           key={item.value}
           item={item}
-          selectedItems={selectedItems}
+          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />
@@ -175,7 +175,7 @@ const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, 
     </List>
   ;
 
-const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
+const MaterialUiNestedList = function ({id, items, refine, currentRefinement}) {
   return <List>
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
@@ -187,7 +187,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
             e.preventDefault();
             refine(child.value);
           }}
-          style={selectedItem && selectedItem.includes(child.value) ? {fontWeight: 700} : {}}
+          style={currentRefinement && currentRefinement.includes(child.value) ? {fontWeight: 700} : {}}
         />
       ) : [];
       return <ListItem
@@ -199,7 +199,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
           e.preventDefault();
           refine(item.value);
         }}
-        style={selectedItem && selectedItem.includes(item.value) ? {fontWeight: 700} : {}}
+        style={currentRefinement && currentRefinement.includes(item.value) ? {fontWeight: 700} : {}}
       />;
     }
     )}
@@ -209,7 +209,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
 const MaterialUiSortBy = React.createClass({
 
   getInitialState() {
-    return {value: this.props.defaultSelectedIndex};
+    return {value: this.props.defaultRefinement};
   },
 
   handleChange (ev, index, value) {

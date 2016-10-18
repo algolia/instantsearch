@@ -2,19 +2,19 @@ import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {Pagination} from '../packages/react-instantsearch';
 import {withKnobs, boolean, number} from '@kadira/storybook-addon-knobs';
-import Wrapper from './util';
+import {WrapWithHits} from './util';
 
 const stories = storiesOf('Pagination', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <Wrapper >
+  <WrapWithHits >
     <Pagination/>
-  </Wrapper>
+  </WrapWithHits>
 )
   .add('with all props', () =>
-    <Wrapper >
+    <WrapWithHits >
     <Pagination
         showFirst={true}
         showLast={true}
@@ -23,9 +23,9 @@ stories.add('default', () =>
         pagesPadding={2}
         maxPages={3}
       />
-    </Wrapper>
+    </WrapWithHits>
   ).add('playground', () =>
-  <Wrapper >
+  <WrapWithHits >
   <Pagination
       showFirst={boolean('show First', true)}
       showLast={boolean('show Last', true)}
@@ -34,5 +34,5 @@ stories.add('default', () =>
       pagesPadding={number('pages Padding', 2)}
       maxPages={number('max Pages', 3)}
     />
-  </Wrapper>
+  </WrapWithHits>
 );

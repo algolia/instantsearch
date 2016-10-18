@@ -17,7 +17,7 @@ describe('RangeInput', () => {
           {label: 'label', value: '20:30'},
           {label: 'label', value: '30:'},
         ]}
-        selectedItem=""
+        currentRefinement=""
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -34,7 +34,7 @@ describe('RangeInput', () => {
           {label: 'label', value: '20:30'},
           {label: 'label', value: '30:'},
         ]}
-        selectedItem="10:20"
+        currentRefinement="10:20"
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
