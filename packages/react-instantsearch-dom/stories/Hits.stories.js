@@ -14,6 +14,6 @@ stories.add('default', () =>
   </WrapWithHits>
 ).add('with max hits per page', () =>
   <WrapWithHits >
-    <Hits hitsPerPage={5}/>
+    <Hits defaultRefinement={5}/>
   </WrapWithHits>
 );
