@@ -1,7 +1,7 @@
 ---
 title: Internationalization
 layout: guide.pug
-category: core
+category: guide
 ---
 
 All widgets rendering text that is not otherwise configurable via props accept a `translations` prop. This prop is a mapping of keys to translation values. Translation values can be either a `String` or a `Function`, as some take parameters. The different translation keys supported by components and their optional parameters are described on their respective documentation page.

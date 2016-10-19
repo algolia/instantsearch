@@ -1,7 +1,7 @@
 ---
 title: Styling
 layout: guide.pug
-category: core
+category: guide
 ---
 
 Default widgets in react-instantsearch comes with some styling already applied and loaded. When styling components, you can decide to either extend or completely replace our default styles, using CSS classes or inline styles.

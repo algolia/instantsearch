@@ -21,7 +21,6 @@ watch([
   rootPath('docgen/assets/'),
   rootPath('docgen/src/**/*'),
   rootPath('docgen/layouts/**/*.pug'),
-  rootPath('packages/react-instantsearch/src/**/*.md'),
 ], {
   ignoreInitial: true,
   ignored: /assets\/js\/(.*)?\.js$/,

@@ -46,6 +46,7 @@ function validateNextProps(props, nextProps) {
   }
 }
 
+/* eslint valid-jsdoc: 0 */
 /**
  * @description
  * InstantSearch is the root component of all react-instantsearch implementation.
@@ -98,8 +99,8 @@ class InstantSearch extends Component {
       this.hsManager = createHistoryStateManager({
         history: hs,
         threshold: props.threshold,
-        onInternalStateUpdate: this.onHistoryInternalStateUpdate,
-        getKnownKeys: this.getKnownKeys,
+        onInternalStateUpdate: this.onHistoryInternalStateUpdate.bind(this),
+        getKnownKeys: this.getKnownKeys.bind(this),
       });
       // @TODO: Since widgets haven't been registered yet, we have no way of
       // knowing which URL query keys are known and which aren't. As such,
@@ -137,12 +138,22 @@ class InstantSearch extends Component {
   }
 
   getChildContext() {
+    // If not already cached, cache the bound methods so that we can forward them as part
+    // of the context.
+    if (!this._aisContextCache) {
+      this._aisContextCache = {
+        ais: {
+          onInternalStateUpdate: this.onWidgetsInternalStateUpdate.bind(this),
+          createHrefForState: this.createHrefForState.bind(this),
+        },
+      };
+    }
+
     return {
       ais: {
+        ...this._aisContextCache.ais,
         store: this.aisManager.store,
         widgetsManager: this.aisManager.widgetsManager,
-        onInternalStateUpdate: this.onWidgetsInternalStateUpdate,
-        createHrefForState: this.createHrefForState,
       },
     };
   }
@@ -179,7 +190,7 @@ class InstantSearch extends Component {
   }
 
   getKnownKeys() {
-    this.aisManager.getWidgetsIds();
+    return this.aisManager.getWidgetsIds();
   }
 
   render() {

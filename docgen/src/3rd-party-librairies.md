@@ -1,7 +1,7 @@
 ---
 title: Integration with other React UI Libraries
 layout: guide.pug
-category: core
+category: guide
 ---
 
 Even if react-instantsearch provides widgets out of the box you are free to use it with
