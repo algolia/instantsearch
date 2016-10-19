@@ -10,7 +10,7 @@ describe('generateRanges()', () => {
       min: 1.01,
       max: 4999.98,
       avg: 243.349,
-      sum: 2433490.0
+      sum: 2433490.0,
     };
     const expected = [
       {to: 2},
@@ -20,7 +20,7 @@ describe('generateRanges()', () => {
       {from: 240, to: 1820},
       {from: 1820, to: 3400},
       {from: 3400, to: 4980},
-      {from: 4980}
+      {from: 4980},
     ];
     expect(generateRanges(stats)).toEqual(expected);
   });
@@ -34,7 +34,7 @@ describe('generateRanges()', () => {
       {from: 30, to: 35},
       {from: 35, to: 40},
       {from: 40, to: 45},
-      {from: 45}
+      {from: 45},
     ];
     expect(generateRanges(stats)).toEqual(expected);
   });
@@ -48,7 +48,7 @@ describe('generateRanges()', () => {
       {from: 120, to: 130},
       {from: 130, to: 131},
       {from: 131, to: 132},
-      {from: 132}
+      {from: 132},
     ];
     expect(generateRanges(stats)).toEqual(expected);
   });

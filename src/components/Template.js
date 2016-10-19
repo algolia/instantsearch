@@ -22,7 +22,7 @@ class Template extends React.Component {
       templateKey: this.props.templateKey,
       compileOptions,
       helpers: this.props.templatesConfig.helpers,
-      data: transformData(this.props.transformData, this.props.templateKey, this.props.data)
+      data: transformData(this.props.transformData, this.props.templateKey, this.props.data),
     });
 
     if (content === null) {
@@ -45,7 +45,7 @@ Template.propTypes = {
   templateKey: React.PropTypes.string,
   templates: React.PropTypes.objectOf(React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.func
+    React.PropTypes.func,
   ])),
   templatesConfig: React.PropTypes.shape({
     helpers: React.PropTypes.objectOf(React.PropTypes.func),
@@ -54,24 +54,24 @@ Template.propTypes = {
       asString: React.PropTypes.bool,
       sectionTags: React.PropTypes.arrayOf(React.PropTypes.shape({
         o: React.PropTypes.string,
-        c: React.PropTypes.string
+        c: React.PropTypes.string,
       })),
       delimiters: React.PropTypes.string,
-      disableLambda: React.PropTypes.bool
-    })
+      disableLambda: React.PropTypes.bool,
+    }),
   }),
   transformData: React.PropTypes.oneOfType([
     React.PropTypes.func,
-    React.PropTypes.objectOf(React.PropTypes.func)
+    React.PropTypes.objectOf(React.PropTypes.func),
   ]),
-  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool)
+  useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool),
 };
 
 Template.defaultProps = {
   data: {},
   useCustomCompileOptions: {},
   templates: {},
-  templatesConfig: {}
+  templatesConfig: {},
 };
 
 function transformData(fn, templateKey, originalData) {

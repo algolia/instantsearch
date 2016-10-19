@@ -24,7 +24,7 @@ describe('headerFooter', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       templateProps: {},
-      ...extraProps
+      ...extraProps,
     };
     const componentWrappedInHeaderFooter = headerFooter(TestComponent);
     return shallow(React.createElement(componentWrappedInHeaderFooter, props));
@@ -35,11 +35,11 @@ describe('headerFooter', () => {
     defaultProps = {
       cssClasses: {
         root: 'root',
-        body: 'body'
+        body: 'body',
       },
       collapsible: false,
       templateProps: {
-      }
+      },
     };
     renderer = createRenderer();
   });
@@ -58,7 +58,7 @@ describe('headerFooter', () => {
   it('should add a header if such a template is passed', () => {
     // Given
     defaultProps.templateProps.templates = {
-      header: 'HEADER'
+      header: 'HEADER',
     };
     // When
     const out = render(defaultProps);
@@ -68,8 +68,8 @@ describe('headerFooter', () => {
       templateKey: 'header',
       transformData: null,
       templates: {
-        header: 'HEADER'
-      }
+        header: 'HEADER',
+      },
     };
     expect(out).toEqualJSX(
       <div className="ais-root root">
@@ -84,7 +84,7 @@ describe('headerFooter', () => {
   it('should add a footer if such a template is passed', () => {
     // Given
     defaultProps.templateProps.templates = {
-      footer: 'FOOTER'
+      footer: 'FOOTER',
     };
     // When
     const out = render(defaultProps);
@@ -94,8 +94,8 @@ describe('headerFooter', () => {
       templateKey: 'footer',
       transformData: null,
       templates: {
-        footer: 'FOOTER'
-      }
+        footer: 'FOOTER',
+      },
     };
     expect(out).toEqualJSX(
       <div className="ais-root root">
@@ -115,23 +115,23 @@ describe('headerFooter', () => {
     beforeEach(() => {
       defaultProps.templateProps.templates = {
         header: 'yo header',
-        footer: 'yo footer'
+        footer: 'yo footer',
       };
       templateProps = {
         data: {},
         transformData: null,
         templates: {
           header: 'yo header',
-          footer: 'yo footer'
-        }
+          footer: 'yo footer',
+        },
       };
       headerTemplateProps = {
         templateKey: 'header',
-        ...templateProps
+        ...templateProps,
       };
       footerTemplateProps = {
         templateKey: 'footer',
-        ...templateProps
+        ...templateProps,
       };
     });
 
@@ -170,18 +170,18 @@ describe('headerFooter', () => {
       const props = {
         headerFooterData: {
           header: {
-            foo: 'bar'
+            foo: 'bar',
           },
           footer: {
-            foo: 'baz'
-          }
+            foo: 'baz',
+          },
         },
         templateProps: {
           templates: {
             header: 'header',
-            footer: 'footer'
-          }
-        }
+            footer: 'footer',
+          },
+        },
       };
 
       // When

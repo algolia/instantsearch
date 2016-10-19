@@ -4,7 +4,7 @@ import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-  prefixKeys
+  prefixKeys,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import filter from 'lodash/filter';
@@ -75,7 +75,7 @@ function refinementList({
     collapsible = false,
     transformData,
     autoHideContainer = true,
-    showMore = false
+    showMore = false,
   }) {
   const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
@@ -118,13 +118,13 @@ function refinementList({
     active: cx(bem('item', 'active'), userCssClasses.active),
     label: cx(bem('label'), userCssClasses.label),
     checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count)
+    count: cx(bem('count'), userCssClasses.count),
   };
 
   return {
     getConfiguration: configuration => {
       const widgetConfiguration = {
-        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName]
+        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName],
       };
 
       const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
@@ -137,7 +137,7 @@ function refinementList({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates: allTemplates
+        templates: allTemplates,
       });
 
       this.toggleRefinement = facetValue => helper
@@ -156,7 +156,7 @@ function refinementList({
       // Pass count of currently selected items to the header template
       const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
       const headerFooterData = {
-        header: {refinedFacetsCount}
+        header: {refinedFacetsCount},
       };
 
       ReactDOM.render(
@@ -175,7 +175,7 @@ function refinementList({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

@@ -2,7 +2,6 @@
 
 import expect from 'expect';
 
-
 import menu from '../menu';
 
 describe('menu', () => {

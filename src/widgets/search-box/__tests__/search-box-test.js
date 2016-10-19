@@ -3,7 +3,6 @@
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import searchBox from '../search-box';
 import EventEmitter from 'events';
 
@@ -26,15 +25,15 @@ describe('searchBox()', () => {
 
   beforeEach(() => {
     state = {
-      query: ''
+      query: '',
     };
     helper = {
       setQuery: sinon.spy(),
       search: sinon.spy(),
       state: {
-        query: ''
+        query: '',
       },
-      ...EventEmitter.prototype
+      ...EventEmitter.prototype,
     };
   });
 
@@ -78,7 +77,7 @@ describe('searchBox()', () => {
     it('supports cssClasses option', () => {
       opts.cssClasses = {
         root: ['root-class', 'cx'],
-        input: 'input-class'
+        input: 'input-class',
       };
 
       widget = searchBox(opts);
@@ -206,7 +205,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        poweredBy: false
+        poweredBy: false,
       });
 
       // When
@@ -220,7 +219,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        poweredBy: true
+        poweredBy: true,
       });
 
       // When
@@ -234,7 +233,7 @@ describe('searchBox()', () => {
       // Given
       widget = searchBox({
         ...defaultWidgetOptions,
-        poweredBy: true
+        poweredBy: true,
       });
 
       // When
@@ -256,9 +255,9 @@ describe('searchBox()', () => {
         poweredBy: {
           cssClasses: {
             root: 'myroot',
-            link: 'mylink'
-          }
-        }
+            link: 'mylink',
+          },
+        },
       });
 
       // When
@@ -280,9 +279,9 @@ describe('searchBox()', () => {
         poweredBy: {
           cssClasses: {
             root: 'myroot',
-            link: 'mylink'
-          }
-        }
+            link: 'mylink',
+          },
+        },
       });
 
       // When
@@ -300,8 +299,8 @@ describe('searchBox()', () => {
       widget = searchBox({
         ...defaultWidgetOptions,
         poweredBy: {
-          template: '<div>Foobar</div>'
-        }
+          template: '<div>Foobar</div>',
+        },
       });
 
       // When
@@ -316,8 +315,8 @@ describe('searchBox()', () => {
       widget = searchBox({
         ...defaultWidgetOptions,
         poweredBy: {
-          template: '<div>Foobar--{{url}}</div>'
-        }
+          template: '<div>Foobar--{{url}}</div>',
+        },
       });
 
       // When
@@ -332,8 +331,8 @@ describe('searchBox()', () => {
       widget = searchBox({
         ...defaultWidgetOptions,
         poweredBy: {
-          template: data => `<div>Foobar--${data.url}</div>`
-        }
+          template: data => `<div>Foobar--${data.url}</div>`,
+        },
       });
 
       // When
@@ -350,8 +349,8 @@ describe('searchBox()', () => {
         poweredBy: {
           template: `
 
-          <div>Foobar</div>`
-        }
+          <div>Foobar</div>`,
+        },
       });
 
       // When
@@ -366,8 +365,8 @@ describe('searchBox()', () => {
       widget = searchBox({
         ...defaultWidgetOptions,
         poweredBy: {
-          template: 'Foobar <img src="./test.gif" class="should-be-found"/>'
-        }
+          template: 'Foobar <img src="./test.gif" class="should-be-found"/>',
+        },
       });
 
       // When

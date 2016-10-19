@@ -5,7 +5,6 @@ import expect from 'expect';
 import range from 'lodash/range';
 import sinon from 'sinon';
 
-
 import SearchParameters from 'algoliasearch-helper/src/SearchParameters';
 import InstantSearch from '../InstantSearch';
 
@@ -33,14 +32,14 @@ describe('InstantSearch lifecycle', () => {
     helper.getState = sinon.stub().returns({});
     helper.setState = sinon.spy();
     helper.state = {
-      setQueryParameters(params) { return new SearchParameters(params); }
+      setQueryParameters(params) { return new SearchParameters(params); },
     };
 
     urlSync = {
       createURL: sinon.spy(),
       onHistoryChange: () => {},
       getConfiguration: sinon.spy(),
-      render: () => {}
+      render: () => {},
     };
 
     algoliasearch = sinon.stub().returns(client);
@@ -54,7 +53,7 @@ describe('InstantSearch lifecycle', () => {
       some: 'configuration',
       values: [-2, -1],
       index: indexName,
-      another: {config: 'parameter'}
+      another: {config: 'parameter'},
     };
 
     InstantSearch.__Rewire__('urlSyncWidget', () => urlSync);
@@ -66,7 +65,7 @@ describe('InstantSearch lifecycle', () => {
       apiKey,
       indexName,
       searchParameters,
-      urlSync: {}
+      urlSync: {},
     });
   });
 
@@ -106,7 +105,7 @@ describe('InstantSearch lifecycle', () => {
       appId,
       apiKey,
       indexName,
-      searchFunction: searchSpy
+      searchFunction: searchSpy,
     });
     search.start();
     expect(searchSpy.calledOnce).toBe(true);
@@ -122,12 +121,12 @@ describe('InstantSearch lifecycle', () => {
       indexName,
       searchParameters: {
         disjunctiveFacetsRefinements,
-        facetsRefinements
-      }
+        facetsRefinements,
+      },
     });
     search.addWidget({
       getConfiguration: () => ({disjunctiveFacetsRefinements: {fruits: ['orange']}}),
-      init: () => {}
+      init: () => {},
     });
     search.start();
     expect(search.searchParameters.facetsRefinements).toEqual({fruits: ['apple']});
@@ -142,7 +141,7 @@ describe('InstantSearch lifecycle', () => {
         init: sinon.spy(() => {
           helper.state.sendMeToUrlSync = true;
         }),
-        render: sinon.spy()
+        render: sinon.spy(),
       };
       search.addWidget(widget);
     });
@@ -170,8 +169,8 @@ describe('InstantSearch lifecycle', () => {
               some: 'modified',
               values: [-2, -1],
               index: indexName,
-              another: {different: 'parameter', config: 'parameter'}
-            }
+              another: {different: 'parameter', config: 'parameter'},
+            },
           ]);
       });
 
@@ -216,7 +215,7 @@ describe('InstantSearch lifecycle', () => {
               results,
               state: helper.state,
               helper,
-              templatesConfig: search.templatesConfig
+              templatesConfig: search.templatesConfig,
             }]);
         });
       });
@@ -231,7 +230,7 @@ describe('InstantSearch lifecycle', () => {
       widgets = widgets.map((widget, widgetIndex) =>
         ({
           init() {},
-          getConfiguration: sinon.stub().returns({values: [widgetIndex]})
+          getConfiguration: sinon.stub().returns({values: [widgetIndex]}),
         })
       );
       widgets.forEach(search.addWidget, search);

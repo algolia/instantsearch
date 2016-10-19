@@ -5,7 +5,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -41,9 +40,9 @@ describe('clearAll()', () => {
     helper = {
       state: {
         clearRefinements: sinon.stub().returnsThis(),
-        clearTags: sinon.stub().returnsThis()
+        clearTags: sinon.stub().returnsThis(),
       },
-      search: sinon.spy()
+      search: sinon.spy(),
     };
 
     props = {
@@ -53,7 +52,7 @@ describe('clearAll()', () => {
         header: 'ais-clear-all--header',
         body: 'ais-clear-all--body',
         footer: 'ais-clear-all--footer',
-        link: 'ais-clear-all--link'
+        link: 'ais-clear-all--link',
       },
       collapsible: false,
       hasRefinements: false,
@@ -62,9 +61,9 @@ describe('clearAll()', () => {
         templates: defaultTemplates,
         templatesConfig: undefined,
         transformData: undefined,
-        useCustomCompileOptions: {header: false, footer: false, link: false}
+        useCustomCompileOptions: {header: false, footer: false, link: false},
       },
-      url: '#all-cleared'
+      url: '#all-cleared',
     };
     widget.init({helper});
   });
@@ -125,7 +124,7 @@ describe('clearAll()', () => {
   function getProps(extraProps = {}) {
     return {
       ...props,
-      ...extraProps
+      ...extraProps,
     };
   }
 });

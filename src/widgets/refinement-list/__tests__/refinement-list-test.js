@@ -24,7 +24,6 @@ describe('refinementList()', () => {
   const renderer = createRenderer();
   const helpers = createHelpers('en-US');
 
-
   beforeEach(() => {
     container = document.createElement('div');
 
@@ -191,7 +190,7 @@ describe('refinementList()', () => {
     it('formats counts', () => {
       const props = {
         templatesConfig: {helpers},
-        templates: defaultTemplates
+        templates: defaultTemplates,
       };
       renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
       const out = renderer.getRenderOutput();
@@ -212,7 +211,7 @@ describe('refinementList()', () => {
           active: 'active',
           label: 'label',
           checkbox: 'checkbox',
-          count: 'count'
+          count: 'count',
         };
 
         // When
@@ -263,13 +262,13 @@ describe('refinementList()', () => {
         // Given
         const facetValues = [{
           name: 'foo',
-          isRefined: true
+          isRefined: true,
         }, {
           name: 'bar',
-          isRefined: true
+          isRefined: true,
         }, {
           name: 'baz',
-          isRefined: false
+          isRefined: false,
         }];
         results.getFacetValues = sinon.stub().returns(facetValues);
 
@@ -287,10 +286,10 @@ describe('refinementList()', () => {
         const initOptions = {helper, createURL};
         const facetValues = [{
           name: 'foo',
-          isRefined: true
+          isRefined: true,
         }, {
           name: 'bar',
-          isRefined: false
+          isRefined: false,
         }];
         results.getFacetValues = sinon.stub().returns(facetValues);
         const renderOptions = {results, helper, templatesConfig, state};
@@ -321,7 +320,7 @@ describe('refinementList()', () => {
       options = {container, attributeName: 'attributeName'};
       helper = {
         toggleRefinement: sinon.stub().returnsThis(),
-        search: sinon.spy()
+        search: sinon.spy(),
       };
     });
 

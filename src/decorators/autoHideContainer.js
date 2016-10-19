@@ -1,5 +1,4 @@
-// Issue with eslint + high-order components like decorators
-/* eslint react/prop-types: 0 */
+/* eslint-disable react/no-find-dom-node */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -33,7 +32,7 @@ function autoHideContainer(ComposedComponent) {
   }
 
   AutoHide.propTypes = {
-    shouldAutoHideContainer: React.PropTypes.bool.isRequired
+    shouldAutoHideContainer: React.PropTypes.bool.isRequired,
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)

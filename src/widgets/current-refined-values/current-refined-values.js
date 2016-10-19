@@ -7,7 +7,7 @@ import {
   prepareTemplateProps,
   getRefinements,
   clearRefinementsFromState,
-  clearRefinementsAndSearch
+  clearRefinementsAndSearch,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import isUndefined from 'lodash/isUndefined';
@@ -80,7 +80,7 @@ function currentRefinedValues({
     collapsible = false,
     transformData,
     autoHideContainer = true,
-    cssClasses: userCssClasses = {}
+    cssClasses: userCssClasses = {},
   }) {
   const attributesOK = isArray(attributes) &&
     reduce(
@@ -164,14 +164,14 @@ function currentRefinedValues({
         item: cx(bem('item'), userCssClasses.item),
         link: cx(bem('link'), userCssClasses.link),
         count: cx(bem('count'), userCssClasses.count),
-        footer: cx(bem('footer'), userCssClasses.footer)
+        footer: cx(bem('footer'), userCssClasses.footer),
       };
 
       const templateProps = prepareTemplateProps({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
 
       const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
@@ -198,7 +198,7 @@ function currentRefinedValues({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

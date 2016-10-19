@@ -18,7 +18,7 @@ describe('PriceRangesForm', () => {
 
   function render(extraProps = {}) {
     const props = {
-      ...extraProps
+      ...extraProps,
     };
     renderer.render(<PriceRangesForm {...props} />);
     return renderer.getRenderOutput();
@@ -30,7 +30,7 @@ describe('PriceRangesForm', () => {
         labels: {
           currency: '$',
           separator: 'to',
-          button: 'Go'
+          button: 'Go',
         },
         cssClasses: {
           form: 'form',
@@ -38,12 +38,12 @@ describe('PriceRangesForm', () => {
           input: 'input',
           currency: 'currency',
           separator: 'separator',
-          button: 'button'
+          button: 'button',
         },
         currentRefinement: {
           from: 10,
-          to: 20
-        }
+          to: 20,
+        },
       });
       expect(out).toEqualJSX(
         <form className="form" onSubmit={() => {}} ref="form">
@@ -71,7 +71,7 @@ describe('PriceRangesForm', () => {
         <PriceRangesForm
           currentRefinement={{
             from: 10,
-            to: 20
+            to: 20,
           }}
           refine={refine}
         />

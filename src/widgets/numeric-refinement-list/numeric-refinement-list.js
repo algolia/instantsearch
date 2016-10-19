@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import find from 'lodash/find';
@@ -63,7 +63,7 @@ function numericRefinementList({
     templates = defaultTemplates,
     collapsible = false,
     transformData,
-    autoHideContainer = true
+    autoHideContainer = true,
   }) {
   if (!container || !attributeName || !options) {
     throw new Error(usage);
@@ -84,7 +84,7 @@ function numericRefinementList({
     item: cx(bem('item'), userCssClasses.item),
     label: cx(bem('label'), userCssClasses.label),
     radio: cx(bem('radio'), userCssClasses.radio),
-    active: cx(bem('item', 'active'), userCssClasses.active)
+    active: cx(bem('item', 'active'), userCssClasses.active),
   };
 
   return {
@@ -93,7 +93,7 @@ function numericRefinementList({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
 
       this._toggleRefinement = facetValue => {
@@ -106,7 +106,7 @@ function numericRefinementList({
         ({
           ...facetValue,
           isRefined: isRefined(state, attributeName, facetValue),
-          attributeName
+          attributeName,
         })
       );
 
@@ -127,7 +127,7 @@ function numericRefinementList({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

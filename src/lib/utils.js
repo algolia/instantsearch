@@ -16,7 +16,7 @@ export {
   getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch,
-  prefixKeys
+  prefixKeys,
 };
 
 /**
@@ -103,14 +103,14 @@ function prepareTemplateProps({
   transformData,
   defaultTemplates,
   templates,
-  templatesConfig
+  templatesConfig,
 }) {
   const preparedTemplates = prepareTemplates(defaultTemplates, templates);
 
   return {
     transformData,
     templatesConfig,
-    ...preparedTemplates
+    ...preparedTemplates,
   };
 }
 
@@ -189,7 +189,7 @@ function getRefinements(results, state) {
           attributeName,
           name: `${value}`,
           numericValue: value,
-          operator
+          operator,
         });
       });
     });

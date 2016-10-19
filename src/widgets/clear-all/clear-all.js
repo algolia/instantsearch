@@ -6,7 +6,7 @@ import {
   prepareTemplateProps,
   getRefinements,
   clearRefinementsFromState,
-  clearRefinementsAndSearch
+  clearRefinementsAndSearch,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -51,7 +51,7 @@ function clearAll({
     cssClasses: userCssClasses = {},
     collapsible = false,
     autoHideContainer = true,
-    excludeAttributes = []
+    excludeAttributes = [],
   } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -68,7 +68,7 @@ function clearAll({
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
     footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link)
+    link: cx(bem('link'), userCssClasses.link),
   };
 
   return {
@@ -102,7 +102,7 @@ function clearAll({
       if (this.clearAttributes.length > 0) {
         clearRefinementsAndSearch(helper, this.clearAttributes);
       }
-    }
+    },
   };
 }
 

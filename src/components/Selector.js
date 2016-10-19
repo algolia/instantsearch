@@ -35,27 +35,27 @@ Selector.propTypes = {
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
+      React.PropTypes.arrayOf(React.PropTypes.string),
     ]),
     item: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.arrayOf(React.PropTypes.string)
-    ])
+      React.PropTypes.arrayOf(React.PropTypes.string),
+    ]),
   }),
   currentValue: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.number
+    React.PropTypes.number,
   ]).isRequired,
   options: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       value: React.PropTypes.oneOfType([
         React.PropTypes.string,
-        React.PropTypes.number
+        React.PropTypes.number,
       ]).isRequired,
-      label: React.PropTypes.string.isRequired
+      label: React.PropTypes.string.isRequired,
     })
   ).isRequired,
-  setValue: React.PropTypes.func.isRequired
+  setValue: React.PropTypes.func.isRequired,
 };
 
 export default Selector;

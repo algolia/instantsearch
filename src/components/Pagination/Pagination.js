@@ -21,11 +21,11 @@ class Pagination extends React.Component {
     additionalClassName = null,
     isDisabled = false,
     isActive = false,
-    createURL
+    createURL,
   }) {
     const cssClasses = {
       item: cx(this.props.cssClasses.item, additionalClassName),
-      link: cx(this.props.cssClasses.link)
+      link: cx(this.props.cssClasses.link),
     };
     if (isDisabled) {
       cssClasses.item = cx(cssClasses.item, this.props.cssClasses.disabled);
@@ -56,7 +56,7 @@ class Pagination extends React.Component {
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.previous,
       pageNumber: pager.currentPage - 1,
-      createURL
+      createURL,
     });
   }
 
@@ -67,7 +67,7 @@ class Pagination extends React.Component {
       isDisabled: pager.isLastPage(),
       label: this.props.labels.next,
       pageNumber: pager.currentPage + 1,
-      createURL
+      createURL,
     });
   }
 
@@ -78,7 +78,7 @@ class Pagination extends React.Component {
       isDisabled: pager.isFirstPage(),
       label: this.props.labels.first,
       pageNumber: 0,
-      createURL
+      createURL,
     });
   }
 
@@ -89,7 +89,7 @@ class Pagination extends React.Component {
       isDisabled: pager.isLastPage(),
       label: this.props.labels.last,
       pageNumber: pager.total - 1,
-      createURL
+      createURL,
     });
   }
 
@@ -105,7 +105,7 @@ class Pagination extends React.Component {
         isActive,
         label: pageNumber + 1,
         pageNumber,
-        createURL
+        createURL,
       }));
     });
 
@@ -126,7 +126,7 @@ class Pagination extends React.Component {
     const pager = new Paginator({
       currentPage: this.props.currentPage,
       total: this.props.nbPages,
-      padding: this.props.padding
+      padding: this.props.padding,
     });
 
     const createURL = this.props.createURL;
@@ -155,26 +155,26 @@ Pagination.propTypes = {
     first: React.PropTypes.string,
     last: React.PropTypes.string,
     active: React.PropTypes.string,
-    disabled: React.PropTypes.string
+    disabled: React.PropTypes.string,
   }),
   currentPage: React.PropTypes.number,
   labels: React.PropTypes.shape({
     first: React.PropTypes.string,
     last: React.PropTypes.string,
     next: React.PropTypes.string,
-    previous: React.PropTypes.string
+    previous: React.PropTypes.string,
   }),
   nbHits: React.PropTypes.number,
   nbPages: React.PropTypes.number,
   padding: React.PropTypes.number,
   setCurrentPage: React.PropTypes.func.isRequired,
-  showFirstLast: React.PropTypes.bool
+  showFirstLast: React.PropTypes.bool,
 };
 
 Pagination.defaultProps = {
   nbHits: 0,
   currentPage: 0,
-  nbPages: 0
+  nbPages: 0,
 };
 
 export default Pagination;

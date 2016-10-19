@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import defaultTemplates from '../defaultTemplates.js';
 import {
-  prepareTemplateProps
+  prepareTemplateProps,
 } from '../../../lib/utils.js';
 
 // cannot use a function declaration because of
@@ -18,11 +18,11 @@ const currentToggle = ({
   hasAnOffValue,
   containerNode,
   RefinementList,
-  cssClasses
+  cssClasses,
 } = {}) => ({
   getConfiguration() {
     return {
-      disjunctiveFacets: [attributeName]
+      disjunctiveFacets: [attributeName],
     };
   },
   toggleRefinement(helper, facetValue, isRefined) {
@@ -50,7 +50,7 @@ const currentToggle = ({
       transformData,
       defaultTemplates,
       templatesConfig,
-      templates
+      templates,
     });
 
     this.toggleRefinement = this.toggleRefinement.bind(this, helper);
@@ -75,13 +75,13 @@ const currentToggle = ({
     const onFacetValue = {
       name: label,
       isRefined: onData !== undefined ? onData.isRefined : false,
-      count: onData === undefined ? null : onData.count
+      count: onData === undefined ? null : onData.count,
     };
     const offData = hasAnOffValue ? find(allFacetValues, {name: offValue.toString()}) : undefined;
     const offFacetValue = {
       name: label,
       isRefined: offData !== undefined ? offData.isRefined : false,
-      count: offData === undefined ? results.nbHits : offData.count
+      count: offData === undefined ? results.nbHits : offData.count,
     };
 
     // what will we show by default,
@@ -94,7 +94,7 @@ const currentToggle = ({
       isRefined,
       count: nextRefinement === undefined ? null : nextRefinement.count,
       onFacetValue,
-      offFacetValue
+      offFacetValue,
     };
 
     // Bind createURL to this specific attribute
@@ -118,7 +118,7 @@ const currentToggle = ({
       />,
       containerNode
     );
-  }
+  },
 });
 
 export default currentToggle;

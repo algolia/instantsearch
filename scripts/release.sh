@@ -30,8 +30,8 @@ if [ $HOTFIX == '0' ]; then
   git merge origin/develop
 fi
 
-printf "Release: npm install"
-npm install
+printf "Release: install dependencies"
+yarn
 
 currentVersion=`cat package.json | json version`
 

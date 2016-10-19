@@ -4,7 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -32,34 +31,34 @@ describe('numericSelector()', () => {
     container = document.createElement('div');
     options = [
       {value: 1, label: 'first'},
-      {value: 2, label: 'second'}
+      {value: 2, label: 'second'},
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
-      item: 'custom-item'
+      item: 'custom-item',
     };
     widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
     expectedProps = {
       cssClasses: {
         root: 'ais-numeric-selector custom-root cx',
-        item: 'ais-numeric-selector--item custom-item'
+        item: 'ais-numeric-selector--item custom-item',
       },
       currentValue: 1,
       shouldAutoHideContainer: true,
       options: [
         {value: 1, label: 'first'},
-        {value: 2, label: 'second'}
+        {value: 2, label: 'second'},
       ],
-      setValue: () => {}
+      setValue: () => {},
     };
     helper = {
       addNumericRefinement: sinon.spy(),
       clearRefinements: sinon.spy(),
-      search: sinon.spy()
+      search: sinon.spy(),
     };
     results = {
       hits: [],
-      nbHits: 0
+      nbHits: 0,
     };
     widget.init({helper});
     helper.addNumericRefinement.reset();
@@ -69,9 +68,9 @@ describe('numericSelector()', () => {
     expect(widget.getConfiguration({}, {})).toEqual({
       numericRefinements: {
         aNumAttr: {
-          '=': [1]
-        }
-      }
+          '=': [1],
+        },
+      },
     });
   });
 
@@ -79,16 +78,16 @@ describe('numericSelector()', () => {
     const urlState = {
       numericRefinements: {
         aNumAttr: {
-          '=': [2]
-        }
-      }
+          '=': [2],
+        },
+      },
     };
     expect(widget.getConfiguration({}, urlState)).toEqual({
       numericRefinements: {
         aNumAttr: {
-          '=': [2]
-        }
-      }
+          '=': [2],
+        },
+      },
     });
   });
 
@@ -107,9 +106,9 @@ describe('numericSelector()', () => {
     helper.state = {
       numericRefinements: {
         aNumAttr: {
-          '=': [20]
-        }
-      }
+          '=': [20],
+        },
+      },
     };
     expectedProps.currentValue = 20;
     widget.render({helper, results, state: helper.state});

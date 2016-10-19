@@ -47,7 +47,7 @@ const hashUrlUtils = {
   },
   readUrl() {
     return window.location.hash.slice(1);
-  }
+  },
 };
 
 /**
@@ -70,7 +70,7 @@ const modernUrlUtils = {
   },
   readUrl() {
     return window.location.search.slice(1);
-  }
+  },
 };
 
 // we always push the full url to the url bar. Not a relative one.
@@ -142,7 +142,7 @@ class URLSync {
       {
         moreAttributes: foreignConfig,
         mapping: this.mapping,
-        safe: true
+        safe: true,
       }
     );
 
@@ -205,6 +205,5 @@ function urlSync(options = {}) {
 
   return new URLSync(urlUtils, options);
 }
-
 
 export default urlSync;

@@ -10,7 +10,7 @@ export default cb => {
   // watch webpack
   compiler.watch({
     aggregateTimeout: 300,
-    usePolling: true
+    usePolling: true,
   }, compilationDone);
 
   // watch test files

@@ -10,7 +10,7 @@ describe('Hits', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       cssClasses: {},
-      ...extraProps
+      ...extraProps,
     };
     return shallow(React.createElement(Hits, props));
   }
@@ -20,8 +20,8 @@ describe('Hits', () => {
       // Given
       const props = {
         results: {
-          hits: []
-        }
+          hits: [],
+        },
       };
 
       // When
@@ -35,12 +35,12 @@ describe('Hits', () => {
       // Given
       const props = {
         results: {
-          hits: []
+          hits: [],
         },
         cssClasses: {
           root: 'my_root',
-          empty: 'my_empty'
-        }
+          empty: 'my_empty',
+        },
       };
 
       // When
@@ -58,14 +58,14 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
-          }]
+            foo: 'bar',
+          }],
         },
         templateProps: {
           templates: {
-            allItems: 'all items'
-          }
-        }
+            allItems: 'all items',
+          },
+        },
       };
 
       // When
@@ -80,18 +80,18 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
-          }]
+            foo: 'bar',
+          }],
         },
         templateProps: {
           templates: {
-            allItems: 'all items'
-          }
+            allItems: 'all items',
+          },
         },
         cssClasses: {
           root: 'my_root',
-          allItems: 'my_all_items'
-        }
+          allItems: 'my_all_items',
+        },
       };
 
       // When
@@ -106,16 +106,16 @@ describe('Hits', () => {
       // Given
       const results = {
         hits: [{
-          foo: 'bar'
-        }]
+          foo: 'bar',
+        }],
       };
       const props = {
         results,
         templateProps: {
           templates: {
-            allItems: 'all items'
-          }
-        }
+            allItems: 'all items',
+          },
+        },
       };
 
       // When
@@ -132,16 +132,16 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
+            foo: 'bar',
           }, {
-            foo: 'baz'
-          }]
+            foo: 'baz',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
-        }
+            item: 'one item',
+          },
+        },
       };
 
       // When
@@ -157,17 +157,17 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
-          }]
+            foo: 'bar',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
+            item: 'one item',
+          },
         },
         cssClasses: {
-          item: 'my_item'
-        }
+          item: 'my_item',
+        },
       };
 
       // When
@@ -182,19 +182,19 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
+            foo: 'bar',
           }, {
-            foo: 'baz'
-          }]
+            foo: 'baz',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
+            item: 'one item',
+          },
         },
         cssClasses: {
-          root: 'my_root'
-        }
+          root: 'my_root',
+        },
       };
 
       // When
@@ -210,16 +210,16 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
+            foo: 'bar',
           }, {
-            foo: 'baz'
-          }]
+            foo: 'baz',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
-        }
+            item: 'one item',
+          },
+        },
       };
 
       // When
@@ -235,16 +235,16 @@ describe('Hits', () => {
       const props = {
         results: {
           hits: [{
-            foo: 'bar'
+            foo: 'bar',
           }, {
-            foo: 'baz'
-          }]
+            foo: 'baz',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
-        }
+            item: 'one item',
+          },
+        },
       };
 
       // When
@@ -261,17 +261,17 @@ describe('Hits', () => {
         results: {
           hits: [{
             objectID: 'BAR',
-            foo: 'bar'
+            foo: 'bar',
           }, {
             objectID: 'BAZ',
-            foo: 'baz'
-          }]
+            foo: 'baz',
+          }],
         },
         templateProps: {
           templates: {
-            item: 'one item'
-          }
-        }
+            item: 'one item',
+          },
+        },
       };
 
       // When

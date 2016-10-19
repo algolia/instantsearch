@@ -15,22 +15,22 @@ const search = instantsearch({
     mapping: {
       q: 'query',
       hPP: 'hits',
-      hFR: 'hierarchical'
-    }
-  }
+      hFR: 'hierarchical',
+    },
+  },
 });
 
 search.addWidget(
   instantsearch.widgets.searchBox({
     container: '#search-box',
     placeholder: 'Search for products',
-    poweredBy: true
+    poweredBy: true,
   })
 );
 
 search.addWidget(
   instantsearch.widgets.stats({
-    container: '#stats'
+    container: '#stats',
   })
 );
 
@@ -40,11 +40,11 @@ search.addWidget(
     indices: [
       {name: 'instant_search', label: 'Most relevant'},
       {name: 'instant_search_price_asc', label: 'Lowest price'},
-      {name: 'instant_search_price_desc', label: 'Highest price'}
+      {name: 'instant_search_price_desc', label: 'Highest price'},
     ],
     cssClasses: {
-      select: 'form-control'
-    }
+      select: 'form-control',
+    },
   })
 );
 
@@ -54,11 +54,11 @@ search.addWidget(
     options: [
       {value: 6, label: '6 per page'},
       {value: 12, label: '12 per page'},
-      {value: 24, label: '24 per page'}
+      {value: 24, label: '24 per page'},
     ],
     cssClasses: {
-      select: 'form-control'
-    }
+      select: 'form-control',
+    },
   })
 );
 
@@ -67,9 +67,9 @@ search.addWidget(
     container: '#hits-table',
     templates: {
       empty,
-      allItems
+      allItems,
     },
-    hitsPerPage: 24
+    hitsPerPage: 24,
   })
 );
 
@@ -78,9 +78,9 @@ search.addWidget(
     container: '#hits',
     templates: {
       empty,
-      item
+      item,
     },
-    hitsPerPage: 24
+    hitsPerPage: 24,
   })
 );
 
@@ -89,16 +89,16 @@ search.addWidget(
     container: '#pagination',
     cssClasses: {
       root: 'pagination', // This uses Bootstrap classes
-      active: 'active'
+      active: 'active',
     },
-    maxPages: 20
+    maxPages: 20,
   })
 );
 
 search.addWidget(
   instantsearch.widgets.clearAll({
     container: '#clear-all',
-    autoHideContainer: false
+    autoHideContainer: false,
   })
 );
 
@@ -108,34 +108,34 @@ search.addWidget(
     cssClasses: {
       header: 'facet-title',
       link: 'facet-value facet-value-removable',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
     },
     templates: {
-      header: 'Current refinements'
+      header: 'Current refinements',
     },
     attributes: [
       {
         name: 'price',
         label: 'Price',
-        transformData: data => { data.name = `$${data.name}`; return data; }
+        transformData: data => { data.name = `$${data.name}`; return data; },
       },
       {
         name: 'price_range',
         label: 'Price range',
-        transformData: data => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; }
+        transformData: data => { data.name = data.name.replace(/(\d+)/g, '$$$1'); return data; },
       },
       {
         name: 'free_shipping',
-        transformData: data => { if (data.name === 'true') data.name = 'Free shipping'; return data; }
-      }
-    ]
+        transformData: data => { if (data.name === 'true') data.name = 'Free shipping'; return data; },
+      },
+    ],
   })
 );
 
 search.addWidget(
   instantsearch.widgets.refinementList({
     collapsible: {
-      collapsed: true
+      collapsed: true,
     },
     container: '#brands',
     attributeName: 'brand',
@@ -145,18 +145,18 @@ search.addWidget(
       header: 'facet-title',
       item: 'facet-value checkbox',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Brands with collapsible <span class="collapse-arrow"></span>'
+      header: 'Brands with collapsible <span class="collapse-arrow"></span>',
     },
     showMore: {
       templates: {
         active: '<button>Show less</button>',
-        inactive: '<button>Show more</button>'
+        inactive: '<button>Show more</button>',
       },
-      limit: 10
-    }
+      limit: 10,
+    },
   })
 );
 
@@ -170,11 +170,11 @@ search.addWidget(
       header: 'facet-title',
       item: 'facet-value checkbox',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Brands'
-    }
+      header: 'Brands',
+    },
   })
 );
 
@@ -184,11 +184,11 @@ search.addWidget(
     attributeName: 'rating',
     max: 5,
     labels: {
-      andUp: '& Up'
+      andUp: '& Up',
     },
     templates: {
-      header: 'Rating'
-    }
+      header: 'Rating',
+    },
   })
 );
 
@@ -202,17 +202,17 @@ search.addWidget(
       {end: 4, name: 'less than 4'},
       {start: 4, end: 4, name: '4'},
       {start: 5, end: 10, name: 'between 5 and 10'},
-      {start: 10, name: 'more than 10'}
+      {start: 10, name: 'more than 10'},
     ],
     cssClasses: {
       header: 'facet-title',
       link: 'facet-value',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Price numeric list'
-    }
+      header: 'Price numeric list',
+    },
   })
 );
 
@@ -226,15 +226,15 @@ search.addWidget(
       header: 'facet-title',
       item: 'facet-value checkbox',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Price ranges'
+      header: 'Price ranges',
     },
     transformData(data) {
       data.name = data.name.replace(/(\d+) - (\d+)/, '$$$1 - $$$2').replace(/> (\d+)/, '> $$$1');
       return data;
-    }
+    },
   })
 );
 
@@ -247,11 +247,11 @@ search.addWidget(
       header: 'facet-title',
       item: 'facet-value checkbox',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Shipping'
-    }
+      header: 'Shipping',
+    },
   })
 );
 
@@ -263,19 +263,19 @@ search.addWidget(
     showMore: {
       templates: {
         active: '<button>Show less</button>',
-        inactive: '<button>Show more</button>'
+        inactive: '<button>Show more</button>',
       },
-      limit: 10
+      limit: 10,
     },
     cssClasses: {
       header: 'facet-title',
       link: 'facet-value',
       count: 'facet-count pull-right',
-      active: 'facet-active'
+      active: 'facet-active',
     },
     templates: {
-      header: 'Categories'
-    }
+      header: 'Categories',
+    },
   })
 );
 
@@ -284,18 +284,18 @@ search.addWidget(
     container: '#price',
     attributeName: 'price',
     cssClasses: {
-      header: 'facet-title'
+      header: 'facet-title',
     },
     templates: {
-      header: 'Price'
+      header: 'Price',
     },
     max: 500,
     step: 10,
     tooltips: {
       format(rawValue) {
         return `$${Math.round(rawValue).toLocaleString()}`;
-      }
-    }
+      },
+    },
   })
 );
 
@@ -307,12 +307,12 @@ search.addWidget(
       header: 'facet-title',
       list: 'hierarchical-categories-list',
       link: 'facet-value',
-      count: 'facet-count pull-right'
+      count: 'facet-count pull-right',
     },
     rootPath: 'Cameras & Camcorders',
     templates: {
-      header: 'Hierarchical categories'
-    }
+      header: 'Hierarchical categories',
+    },
   })
 );
 
@@ -321,7 +321,7 @@ search.addWidget(
     container: '#price-ranges',
     attributeName: 'price',
     templates: {
-      header: 'Price ranges'
+      header: 'Price ranges',
     },
     cssClasses: {
       header: 'facet-title',
@@ -329,8 +329,8 @@ search.addWidget(
       range: 'facet-value',
       form: '',
       input: 'fixed-input-sm',
-      button: 'btn btn-default btn-sm'
-    }
+      button: 'btn btn-default btn-sm',
+    },
   })
 );
 
@@ -343,8 +343,8 @@ search.addWidget(
       {label: 'Default', value: 0},
       {label: 'Top 10', value: 9991},
       {label: 'Top 100', value: 9901},
-      {label: 'Top 500', value: 9501}
-    ]
+      {label: 'Top 500', value: 9501},
+    ],
   })
 );
 

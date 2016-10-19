@@ -4,7 +4,7 @@ import findIndex from 'lodash/findIndex';
 import map from 'lodash/map';
 import {
   bemHelper,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -35,7 +35,7 @@ function sortBySelector({
     container,
     indices,
     cssClasses: userCssClasses = {},
-    autoHideContainer = false
+    autoHideContainer = false,
   } = {}) {
   if (!container || !indices) {
     throw new Error(usage);
@@ -54,7 +54,7 @@ function sortBySelector({
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item)
+    item: cx(bem('item'), userCssClasses.item),
   };
 
   return {
@@ -80,7 +80,7 @@ function sortBySelector({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

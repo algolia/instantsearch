@@ -19,7 +19,7 @@ describe('RefinementList', () => {
     const props = {
       createURL,
       facetValues: [],
-      ...extraProps
+      ...extraProps,
     };
     return shallow(React.createElement(RefinementList, props));
   }
@@ -29,8 +29,8 @@ describe('RefinementList', () => {
       // Given
       const props = {
         cssClasses: {
-          list: 'list'
-        }
+          list: 'list',
+        },
       };
 
       // When
@@ -44,11 +44,11 @@ describe('RefinementList', () => {
       // Given
       const props = {
         cssClasses: {
-          item: 'item'
+          item: 'item',
         },
         facetValues: [
-          {name: 'foo', isRefined: true}
-        ]
+          {name: 'foo', isRefined: true},
+        ],
       };
 
       // When
@@ -62,12 +62,12 @@ describe('RefinementList', () => {
       // Given
       const props = {
         cssClasses: {
-          active: 'active'
+          active: 'active',
         },
         facetValues: [
           {name: 'foo', isRefined: true},
-          {name: 'bar', isRefined: false}
-        ]
+          {name: 'bar', isRefined: false},
+        ],
       };
 
       // When
@@ -86,8 +86,8 @@ describe('RefinementList', () => {
       const props = {
         facetValues: [
           {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: false}
-        ]
+          {name: 'bar', isRefined: false},
+        ],
       };
 
       // When
@@ -104,7 +104,7 @@ describe('RefinementList', () => {
       // Given
       const props = {
         facetValues: [{name: 'no', youpiName: 'hello'}],
-        attributeNameKey: 'youpiName'
+        attributeNameKey: 'youpiName',
       };
 
       // When
@@ -122,8 +122,8 @@ describe('RefinementList', () => {
       const props = {
         facetValues: [
           {name: 'foo', isRefined: false},
-          {name: 'bar', isRefined: true}
-        ]
+          {name: 'bar', isRefined: true},
+        ],
       };
 
       // When
@@ -143,8 +143,8 @@ describe('RefinementList', () => {
       const props = {
         facetValues: [
           {name: 'foo', count: 42},
-          {name: 'bar', count: 16}
-        ]
+          {name: 'bar', count: 16},
+        ],
       };
 
       // When
@@ -165,10 +165,10 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: false,
-        limitMin: 2
+        limitMin: 2,
       };
 
       // When
@@ -184,11 +184,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: true,
         limitMin: 2,
-        limitMax: 3
+        limitMax: 3,
       };
 
       // When
@@ -204,11 +204,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         limitMin: 2,
         limitMax: 3,
-        showMore: true
+        showMore: true,
       };
 
       // When
@@ -226,11 +226,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: true,
         limitMin: 2,
-        limitMax: 3
+        limitMax: 3,
       };
 
       // When
@@ -247,11 +247,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: false,
         limitMin: 2,
-        limitMax: 3
+        limitMax: 3,
       };
 
       // When
@@ -268,11 +268,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: true,
         limitMin: 2,
-        limitMax: 5
+        limitMax: 5,
       };
 
       // When
@@ -290,11 +290,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         showMore: true,
         limitMin: 3,
-        limitMax: 4
+        limitMax: 4,
       };
 
       // When
@@ -311,11 +311,11 @@ describe('RefinementList', () => {
         facetValues: [
           {name: 'foo'},
           {name: 'bar'},
-          {name: 'baz'}
+          {name: 'baz'},
         ],
         limitMin: 2,
         limitMax: 3,
-        showMore: true
+        showMore: true,
       };
 
       // When
@@ -343,10 +343,10 @@ describe('RefinementList', () => {
             name: 'foo',
             data: [
               {name: 'bar'},
-              {name: 'baz'}
-            ]
-          }
-        ]
+              {name: 'baz'},
+            ],
+          },
+        ],
       };
 
       // When
@@ -365,17 +365,17 @@ describe('RefinementList', () => {
       // Given
       const props = {
         cssClasses: {
-          depth: 'depth-'
+          depth: 'depth-',
         },
         facetValues: [
           {
             name: 'foo',
             data: [
               {name: 'bar'},
-              {name: 'baz'}
-            ]
-          }
-        ]
+              {name: 'baz'},
+            ],
+          },
+        ],
       };
 
       // When

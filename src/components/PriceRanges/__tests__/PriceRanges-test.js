@@ -29,7 +29,7 @@ describe('PriceRanges', () => {
 
   function render(extraProps = {}) {
     const props = {
-      ...extraProps
+      ...extraProps,
     };
     renderer.render(<PriceRanges {...props} />);
     return renderer.getRenderOutput();
@@ -37,7 +37,7 @@ describe('PriceRanges', () => {
 
   function getComponentWithMockRendering(extraProps) {
     const props = {
-      ...extraProps
+      ...extraProps,
     };
     return TestUtils.renderIntoDocument(<PriceRanges {...props} />);
   }
@@ -61,15 +61,15 @@ describe('PriceRanges', () => {
           cssClasses: {
             item: 'item',
             link: 'link',
-            active: 'active'
+            active: 'active',
           },
-          currency: '$'
+          currency: '$',
         };
         facetValue = {
           from: 1,
           to: 10,
           isRefined: false,
-          url: 'url'
+          url: 'url',
         };
       });
 
@@ -113,7 +113,7 @@ describe('PriceRanges', () => {
         // Given
         const mockEvent = {preventDefault: sinon.spy()};
         const props = {
-          refine: sinon.spy()
+          refine: sinon.spy(),
         };
         const component = getComponentWithMockRendering(props);
 
@@ -134,7 +134,7 @@ describe('PriceRanges', () => {
           labels: {button: 'hello'},
           currency: '$',
           refine: 'refine',
-          facetValues: [{from: 0, to: 10}, {from: 10, to: 20}]
+          facetValues: [{from: 0, to: 10}, {from: 10, to: 20}],
         };
         const component = getComponentWithMockRendering(props);
 
@@ -159,7 +159,7 @@ describe('PriceRanges', () => {
       // Given
       const mockedGetItem = stubMethod('getItemFromFacetValue');
       const props = {
-        facetValues: [{}, {}, {}, {}]
+        facetValues: [{}, {}, {}, {}],
       };
 
       // When
@@ -175,9 +175,9 @@ describe('PriceRanges', () => {
       stubMethod('getForm', <form />);
       const props = {
         cssClasses: {
-          list: 'list'
+          list: 'list',
         },
-        facetValues: [{}, {}, {}, {}]
+        facetValues: [{}, {}, {}, {}],
       };
 
       // When
@@ -203,9 +203,9 @@ describe('PriceRanges', () => {
         facetValues: [{from: 1, to: 10, isRefined: false}],
         templateProps: {
           templates: {
-            item: 'item'
-          }
-        }
+            item: 'item',
+          },
+        },
       };
       const component = TestUtils.renderIntoDocument(<PriceRanges {...props} />);
       const link = TestUtils.findRenderedDOMComponentWithTag(component, 'a');

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -67,7 +67,7 @@ function starRating({
     templates = defaultTemplates,
     collapsible = false,
     transformData,
-    autoHideContainer = true
+    autoHideContainer = true,
   }) {
   const containerNode = getContainerNode(container);
   let RefinementList = headerFooterHOC(RefinementListComponent);
@@ -91,7 +91,7 @@ function starRating({
     count: cx(bem('count'), userCssClasses.count),
     star: cx(bem('star'), userCssClasses.star),
     emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-    active: cx(bem('item', 'active'), userCssClasses.active)
+    active: cx(bem('item', 'active'), userCssClasses.active),
   };
 
   return {
@@ -102,7 +102,7 @@ function starRating({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
       this._toggleRefinement = this._toggleRefinement.bind(this, helper);
     },
@@ -139,7 +139,7 @@ function starRating({
           name: String(star),
           count,
           isRefined: refinedStar === star,
-          labels
+          labels,
         });
       }
 
@@ -182,7 +182,7 @@ function starRating({
         }
       });
       return refinedStar;
-    }
+    },
   };
 }
 

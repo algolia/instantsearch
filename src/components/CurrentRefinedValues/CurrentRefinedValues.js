@@ -68,7 +68,7 @@ function getCustomTemplateProps(attribute) {
   const customTemplateProps = {};
   if (attribute.template !== undefined) {
     customTemplateProps.templates = {
-      item: attribute.template
+      item: attribute.template,
     };
   }
   if (attribute.transformData !== undefined) {
@@ -114,7 +114,7 @@ CurrentRefinedValues.propTypes = {
   clearAllClick: React.PropTypes.func,
   clearAllPosition: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.bool
+    React.PropTypes.bool,
   ]),
   clearAllURL: React.PropTypes.string,
   clearRefinementClicks: React.PropTypes.arrayOf(
@@ -128,10 +128,10 @@ CurrentRefinedValues.propTypes = {
     list: React.PropTypes.string,
     item: React.PropTypes.string,
     link: React.PropTypes.string,
-    count: React.PropTypes.string
+    count: React.PropTypes.string,
   }).isRequired,
   refinements: React.PropTypes.array,
-  templateProps: React.PropTypes.object.isRequired
+  templateProps: React.PropTypes.object.isRequired,
 };
 
 export default CurrentRefinedValues;

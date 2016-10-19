@@ -4,7 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -47,26 +46,26 @@ describe('hitsPerPageSelector()', () => {
     container = document.createElement('div');
     options = [
       {value: 10, label: '10 results'},
-      {value: 20, label: '20 results'}
+      {value: 20, label: '20 results'},
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
-      item: 'custom-item'
+      item: 'custom-item',
     };
     widget = hitsPerPageSelector({container, options, cssClasses});
     helper = {
       state: {
-        hitsPerPage: 20
+        hitsPerPage: 20,
       },
       setQueryParameter: sinon.stub().returnsThis(),
-      search: sinon.spy()
+      search: sinon.spy(),
     };
     state = {
-      hitsPerPage: 10
+      hitsPerPage: 10,
     };
     results = {
       hits: [],
-      nbHits: 0
+      nbHits: 0,
     };
   });
 
@@ -81,15 +80,15 @@ describe('hitsPerPageSelector()', () => {
     props = {
       cssClasses: {
         root: 'ais-hits-per-page-selector custom-root cx',
-        item: 'ais-hits-per-page-selector--item custom-item'
+        item: 'ais-hits-per-page-selector--item custom-item',
       },
       currentValue: 10,
       shouldAutoHideContainer: true,
       options: [
         {value: 10, label: '10 results'},
-        {value: 20, label: '20 results'}
+        {value: 20, label: '20 results'},
       ],
-      setValue: () => {}
+      setValue: () => {},
     };
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);

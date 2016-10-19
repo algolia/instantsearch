@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import defaultTemplates from '../defaultTemplates.js';
 import {
-  prepareTemplateProps
+  prepareTemplateProps,
 } from '../../../lib/utils.js';
 
 export default function currentToggle({
@@ -16,12 +16,12 @@ export default function currentToggle({
   hasAnOffValue,
   containerNode,
   RefinementList,
-  cssClasses
+  cssClasses,
 } = {}) {
   return {
     getConfiguration() {
       return {
-        facets: [attributeName]
+        facets: [attributeName],
       };
     },
     toggleRefinement(helper, facetValue, isRefined) {
@@ -49,7 +49,7 @@ export default function currentToggle({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
       this.toggleRefinement = this.toggleRefinement.bind(this, helper);
 
@@ -77,7 +77,7 @@ export default function currentToggle({
       const facetValue = {
         name: label,
         isRefined,
-        count
+        count,
       };
 
       // Bind createURL to this specific attribute
@@ -97,6 +97,6 @@ export default function currentToggle({
         />,
         containerNode
       );
-    }
+    },
   };
 }

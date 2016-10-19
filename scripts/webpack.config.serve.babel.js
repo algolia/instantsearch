@@ -7,8 +7,8 @@ export default {
     ...baseConfig.plugins,
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false
-      }
-    })
-  ]
+        warnings: false,
+      },
+    }),
+  ],
 };

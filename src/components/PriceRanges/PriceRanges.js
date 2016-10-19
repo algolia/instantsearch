@@ -17,14 +17,14 @@ class PriceRanges extends React.Component {
   getForm() {
     const labels = {
       currency: this.props.currency,
-      ...this.props.labels
+      ...this.props.labels,
     };
 
     let currentRefinement;
     if (this.props.facetValues.length === 1) {
       currentRefinement = {
         from: this.props.facetValues[0].from !== undefined ? this.props.facetValues[0].from : '',
-        to: this.props.facetValues[0].to !== undefined ? this.props.facetValues[0].to : ''
+        to: this.props.facetValues[0].to !== undefined ? this.props.facetValues[0].to : '',
       };
     } else {
       currentRefinement = {from: '', to: ''};
@@ -49,7 +49,7 @@ class PriceRanges extends React.Component {
     const handleClick = this.refine.bind(this, facetValue.from, facetValue.to);
     const data = {
       currency: this.props.currency,
-      ...facetValue
+      ...facetValue,
     };
     return (
       <div className={cssClassItem} key={key}>
@@ -91,20 +91,20 @@ PriceRanges.propTypes = {
     label: React.PropTypes.string,
     link: React.PropTypes.string,
     list: React.PropTypes.string,
-    separator: React.PropTypes.string
+    separator: React.PropTypes.string,
   }),
   currency: React.PropTypes.string,
   facetValues: React.PropTypes.array,
   labels: React.PropTypes.shape({
     button: React.PropTypes.string,
-    to: React.PropTypes.string
+    to: React.PropTypes.string,
   }),
   refine: React.PropTypes.func.isRequired,
-  templateProps: React.PropTypes.object.isRequired
+  templateProps: React.PropTypes.object.isRequired,
 };
 
 PriceRanges.defaultProps = {
-  cssClasses: {}
+  cssClasses: {},
 };
 
 export default PriceRanges;
