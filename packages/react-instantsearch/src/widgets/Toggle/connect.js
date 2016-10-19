@@ -103,7 +103,6 @@ export default createConnector({
     const filters = [];
     if (checked) {
       filters.push({
-        key: id,
         label: props.label,
         clear: nextState => ({
           ...nextState,
