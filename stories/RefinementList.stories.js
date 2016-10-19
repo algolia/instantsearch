@@ -16,7 +16,7 @@ stories.add('default', () =>
   <WrapWithHits >
     <RefinementList
       attributeName="colors"
-      defaultSelectedItems={['Black']}
+      defaultRefinement={['Black']}
     />
   </WrapWithHits>
 ).add('with show more', () =>
@@ -39,7 +39,7 @@ stories.add('default', () =>
   <WrapWithHits >
     <RefinementList
       attributeName="colors"
-      defaultSelectedItems={[text('defaultSelectedItems', 'Black'), 'White']}
+      defaultRefinement={[text('defaultSelectedItems', 'Black'), 'White']}
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
       showMore={boolean('showMore', true)}
