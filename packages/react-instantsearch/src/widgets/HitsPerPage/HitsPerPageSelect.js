@@ -4,11 +4,13 @@ import themeable from '../../core/themeable';
 
 import Select from '../../components/Select';
 
+import theme from './HitsPerPageSelect.css';
+
 class HitsPerPageSelect extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    hitsPerPage: PropTypes.number.isRequired,
+    currentRefinement: PropTypes.number.isRequired,
 
     /**
      * List of hits per page options.
@@ -17,27 +19,24 @@ class HitsPerPageSelect extends Component {
      * @public
      * @defines HitsPerPageSelectItem
      */
-    items: PropTypes.oneOfType([
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          /**
-           * Number of hits to display.
-           */
-          value: PropTypes.number.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        /**
+         * Number of hits to display.
+         */
+        value: PropTypes.number.isRequired,
 
-          /**
-           * Label to display on the option.
-           */
-          label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        })
-      ),
-      PropTypes.arrayOf(PropTypes.number),
-    ]),
+        /**
+         * Label to display on the option.
+         */
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
   };
 
   render() {
     const {
-      hitsPerPage,
+      currentRefinement,
       refine,
       items,
       applyTheme,
@@ -46,7 +45,7 @@ class HitsPerPageSelect extends Component {
     return (
       <Select
         onSelect={refine}
-        selectedItem={hitsPerPage}
+        selectedItem={currentRefinement}
         items={items}
         applyTheme={applyTheme}
       />
@@ -54,6 +53,4 @@ class HitsPerPageSelect extends Component {
   }
 }
 
-export default themeable({
-  root: 'HitsPerPageSelect',
-})(HitsPerPageSelect);
+export default themeable(theme)(HitsPerPageSelect);

@@ -1,4 +1,5 @@
 import {PropTypes} from 'react';
+import {omit} from 'lodash';
 
 import createConnector from '../../core/createConnector';
 
@@ -49,6 +50,14 @@ export default createConnector({
   },
 
   transitionState(props, prevState, nextState) {
+    if (nextState[props.id] && nextState[props.id].isSamePage) {
+      return {
+        ...nextState,
+        [props.id]: prevState[props.id],
+      };
+    } else if (prevState[props.id] === nextState[props.id]) {
+      return omit(nextState, props.id);
+    }
     return nextState;
   },
 

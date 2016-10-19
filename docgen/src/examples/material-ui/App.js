@@ -60,24 +60,30 @@ const Content = React.createClass({
     this.setState({drawer: !this.state.drawer});
   },
   render() {
-    const drawerStyle = {
-      boxShadow: 'none',
-      transform: 'none',
+    const baseDrawerStyle = {
+      position: 'absolute',
     };
-    const marginLeft = this.state.drawer ? 400 : 0;
-    const displayDrawer = this.state.drawer ? {} : {display: 'none'};
+    const openDrawerStyle = {
+      ...baseDrawerStyle,
+      transform: 'translate(0)',
+    };
+    const closedDrawerStyle = {
+      ...baseDrawerStyle,
+      transform: 'translate(-400px)',
+    };
+    const marginLeft = this.state.drawer ? 300 : 0;
+    const displayDrawer = this.state.drawer ? openDrawerStyle : closedDrawerStyle;
     return (
       <div>
         <div className="Header">
           <AppBar
             title="AMAZING"
-            iconElementRight={<ConnectedSortBy defaultSelectedIndex="ikea"/>}
+            iconElementRight={<ConnectedSortBy defaultRefinement="ikea"/>}
             onLeftIconButtonTouchTap={this.drawerAction}
             className="Header__appBar"
           />
-          <ConnectedSearchBox marginLeft={marginLeft}/>
         </div>
-        <Drawer open={this.state.drawer} width={400} containerStyle={{...drawerStyle, ...displayDrawer}}
+        <Drawer open={this.state.drawer} width={300} containerStyle={displayDrawer}
                 className="Sidebar">
           <div className="Sidebar__header">
             <AppBar title="AMAZING"
@@ -102,6 +108,7 @@ const Content = React.createClass({
         </Drawer>
         <div className="Content">
           <div className="Content__hits">
+            <ConnectedSearchBox marginLeft={marginLeft}/>
             <ConnectedHits
               hitsPerPage={20}
               marginLeft={marginLeft}
@@ -153,14 +160,14 @@ const CheckBoxItem = ({item, selectedItems, refine}) => {
     ;
 };
 
-const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, refine, createURL}) =>
+const MaterialUiCheckBoxRefinementList = ({items, attributeName, currentRefinement, refine, createURL}) =>
     <List>
-      <Subheader>{attributeName.toUpperCase()}</Subheader>
+      <Subheader style={{fontSize: 18}}>{attributeName.toUpperCase()}</Subheader>
       {items.map(item =>
         <CheckBoxItem
           key={item.value}
           item={item}
-          selectedItems={selectedItems}
+          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />
@@ -168,9 +175,9 @@ const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, 
     </List>
   ;
 
-const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
+const MaterialUiNestedList = function ({id, items, refine, currentRefinement}) {
   return <List>
-    <Subheader>{id.toUpperCase()}</Subheader>
+    <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
       const nestedElements = item.children ? item.children.map((child, childIdx) =>
         <ListItem
@@ -180,7 +187,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
             e.preventDefault();
             refine(child.value);
           }}
-          style={selectedItem && selectedItem.includes(child.value) ? {fontWeight: 700} : {}}
+          style={currentRefinement && currentRefinement.includes(child.value) ? {fontWeight: 700} : {}}
         />
       ) : [];
       return <ListItem
@@ -192,7 +199,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
           e.preventDefault();
           refine(item.value);
         }}
-        style={selectedItem && selectedItem.includes(item.value) ? {fontWeight: 700} : {}}
+        style={currentRefinement && currentRefinement.includes(item.value) ? {fontWeight: 700} : {}}
       />;
     }
     )}
@@ -202,7 +209,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
 const MaterialUiSortBy = React.createClass({
 
   getInitialState() {
-    return {value: this.props.defaultSelectedIndex};
+    return {value: this.props.defaultRefinement};
   },
 
   handleChange (ev, index, value) {
@@ -248,19 +255,27 @@ function CustomHits({hits, marginLeft}) {
     width: 270,
     height: 250,
     marginBottom: 10,
+    marginLeft: 10,
+    position: 'relative',
+  };
+  const imageHolderStyle = {
+    textAlign: 'center',
   };
   return (
     <main id="hits" style={{marginLeft}} className="Content__hits__card">
       {hits.map((hit, idx) =>
-        <Card key={idx} style={cardStyle} containerStyle={cardStyle}>
+        <Card key={idx} style={cardStyle}>
           <CardHeader
             subtitle={<span dangerouslySetInnerHTML={{__html: hit._highlightResult.name.value}}/>}
           />
-          <img src={hit.image} className="Content__hits__card__img"/>
+          <div style={imageHolderStyle}>
+            <img src={hit.image} className="Content__hits__card__img"/>
+          </div>
           <CardTitle
             title={<span dangerouslySetInnerHTML={{__html: `${hit._highlightResult.name.value} - $${hit.price}`}}/>}
             subtitle={<span dangerouslySetInnerHTML={{__html: hit._highlightResult.type.value}}/>}
-            titleStyle={{fontSize: 13}}
+            style={{position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)'}}
+            titleStyle={{fontSize: 16}}
           />
         </Card>
       )}
@@ -273,7 +288,7 @@ function MaterialUiClearAllFilters({filters, refine}) {
     <FlatButton
       onTouchTap={() => refine(filters)}
       label="Clear All"
-      style={{height: 48, width: 400, backgroundColor: 'white'}}
+      style={{height: 48, width: 300, backgroundColor: 'white'}}
     />
   );
 }
@@ -284,7 +299,7 @@ const MaterialUiBottomNavigation = React.createClass({
     return {selectedIndex: 0};
   },
 
-  select(index){
+  select(index) {
     this.setState({selectedIndex: index});
   },
 

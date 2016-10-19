@@ -1,22 +1,22 @@
 exports[`Hits accepts a itemComponent prop 1`] = `
 <div
-  className="Hits">
+  className="root">
   <Hit
     hit={
       Object {
-        "objectID": 0
+        "objectID": 0,
       }
     } />
   <Hit
     hit={
       Object {
-        "objectID": 1
+        "objectID": 1,
       }
     } />
   <Hit
     hit={
       Object {
-        "objectID": 2
+        "objectID": 2,
       }
     } />
 </div>

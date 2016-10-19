@@ -1,5 +1,7 @@
-import InstantSearch from './src/core/InstantSearch.js';
-import createConnector from './src/core/createConnector.js';
+import InstantSearch from './src/core/InstantSearch';
+import createConnector from './src/core/createConnector';
+import extendTheme from './src/core/styling';
+import highlight from './src/core/highlight.js';
 
 import Hits from './src/widgets/Hits/index.js';
 import HitsPerPage from './src/widgets/HitsPerPage/index.js';
@@ -19,6 +21,7 @@ import NoResults from './src/widgets/NoResults/index.js';
 import Stats from './src/widgets/Stats/index.js';
 import Error from './src/widgets/Error/index.js';
 import ScrollTo from './src/widgets/ScrollTo/index.js';
+import PoweredBy from './src/widgets/PoweredBy/index.js';
 
 // Doing `export {default as Thing} from 'thing'` causes warnings with
 // react-hot-loader.
@@ -45,4 +48,8 @@ export {
   Stats,
   Error,
   ScrollTo,
+  PoweredBy,
+
+  highlight,
+  extendTheme,
 };

@@ -7,6 +7,8 @@ import translatable from '../../core/translatable';
 import List from '../../components/List';
 import Link from '../../components/Link';
 
+import theme from './RefinementListLinks.css';
+
 class RefinementListLinks extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -17,15 +19,15 @@ class RefinementListLinks extends Component {
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })),
-    selectedItems: PropTypes.arrayOf(PropTypes.string),
+    currentRefinement: PropTypes.arrayOf(PropTypes.string),
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
   getSelectedItems = item => {
-    const {selectedItems} = this.props;
-    const nextSelectedItems = selectedItems.slice();
+    const {currentRefinement} = this.props;
+    const nextSelectedItems = currentRefinement.slice();
     const idx = nextSelectedItems.indexOf(item.value);
     if (idx === -1) {
       nextSelectedItems.push(item.value);
@@ -59,11 +61,11 @@ class RefinementListLinks extends Component {
     return (
       <List
         renderItem={this.renderItem}
+        selectedItems={this.props.currentRefinement}
         {...pick(this.props, [
           'applyTheme',
           'translate',
           'items',
-          'selectedItems',
           'showMore',
           'limitMin',
           'limitMax',
@@ -73,15 +75,7 @@ class RefinementListLinks extends Component {
   }
 }
 
-export default themeable({
-  root: 'RefinementListLinks',
-  items: 'RefinementListLinks__items',
-  item: 'RefinementListLinks__item',
-  itemSelected: 'RefinementListLinks__item--selected',
-  itemLink: 'RefinementListLinks__item__link',
-  itemLabel: 'RefinementListLinks__item__label',
-  itemCount: 'RefinementListLinks__item__count',
-})(
+export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),

@@ -7,6 +7,8 @@ import translatable from '../../core/translatable';
 import List from '../../components/List';
 import Link from '../../components/Link';
 
+import theme from './Menu.css';
+
 class Menu extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
@@ -17,7 +19,7 @@ class Menu extends Component {
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })),
-    selectedItem: PropTypes.string,
+    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -28,15 +30,15 @@ class Menu extends Component {
     const value = selected ? null : item.value;
     return (
       <Link
-        {...applyTheme('itemLink', 'itemLink')}
+        {...applyTheme('itemLink', 'itemLink', selected && 'itemLinkSelected')}
         onClick={refine.bind(null, value)}
         href={createURL(value)}
       >
-        <span {...applyTheme('itemLabel', 'itemLabel')}>
+        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
           {item.value}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount')}>
+        <span {...applyTheme('itemCount', 'itemCount', selected && 'itemCountSelected')}>
           {translate('count', item.count)}
         </span>
       </Link>
@@ -47,7 +49,7 @@ class Menu extends Component {
     return (
       <List
         renderItem={this.renderItem}
-        selectedItems={[this.props.selectedItem]}
+        selectedItems={[this.props.currentRefinement]}
         {...pick(this.props, [
           'applyTheme',
           'translate',
@@ -61,16 +63,7 @@ class Menu extends Component {
   }
 }
 
-export default themeable({
-  root: 'Menu',
-  items: 'Menu__items',
-  item: 'Menu__item',
-  itemSelected: 'Menu__item--selected',
-  itemLink: 'Menu__item__link',
-  itemLabel: 'Menu__item__value',
-  itemCount: 'Menu__item__count',
-  showMore: 'Menu__showMore',
-})(
+export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),

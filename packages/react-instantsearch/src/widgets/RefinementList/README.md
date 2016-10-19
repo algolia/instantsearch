@@ -17,7 +17,8 @@ There's also a `RefinementListLinks` which renders items as links.
 
 ### Theme
 
-`root`, `items`, `item`, `itemSelected`, `itemLabel`, `itemCount`, `showMore`
+`root`, `items`, `item`, `itemSelected`, `itemLabel`, `itemLabelSelected`, `itemCount`, `itemCountSelected`, `showMore`,
+`itemCheckbox`, `itemCheckboxSelected`
 
 Only for `RefinementListLinks`: `itemLink`
 
@@ -58,7 +59,7 @@ function MyRefinementList(props) {
       {props.items.map(item =>
         <Item
           item={item}
-          selectedItems={props.selectedItems}
+          selectedItems={props.currentRefinement}
           refine={props.refine}
           createURL={props.createURL}
         />
@@ -68,7 +69,7 @@ function MyRefinementList(props) {
 }
 
 // `RefinementList.connect` accepts the same `id`, `attributeName`, `operator`,
-// `sortBy`, `defaultSelectedItems`, `showMore`, `limitMin` and `limitMax` props
+// `sortBy`, `defaultRefinement`, `showMore`, `limitMin` and `limitMax` props
 // as `RefinementList`.
 // When `showMore === true`, `limitMax` facet values will be retrieved.
 // Otherwise, `limitMin` facet values will be retrieved.

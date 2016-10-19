@@ -19,7 +19,8 @@ There's also a `MenuSelect` which renders a select control.
 
 `root`
 
-Only for `Menu`: `items`, `item`, `itemSelected`, `itemLink`, `itemLabel`, `itemCount`, `showMore`
+Only for `Menu`: `items`, `item`, `itemSelected`, `itemLink`, `itemLinkSelected`, `itemLabel`, `itemLabelSelected`, 
+`itemCount`, `itemCountSelected`, `showMore`
 
 ### Translations
 
@@ -59,7 +60,7 @@ function MyMenu(props) {
 }
 
 // `Menu.connect` accepts the same `id`, `attributeName`, `sortBy`,
-// `defaultSelectedItems`, `showMore`, `limitMin` and `limitMax` props
+// `defaultRefinement`, `showMore`, `limitMin` and `limitMax` props
 // as `Menu`.
 // When `showMore === true`, `limitMax` facet values will be retrieved.
 // Otherwise, `limitMin` facet values will be retrieved.

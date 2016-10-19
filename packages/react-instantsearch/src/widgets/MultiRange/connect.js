@@ -30,8 +30,8 @@ function getSelectedItem(props, state) {
   if (typeof state[id] !== 'undefined') {
     return state[id];
   }
-  if (props.defaultSelectedItem) {
-    return props.defaultSelectedItem;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return '';
 }
@@ -82,14 +82,14 @@ export default createConnector({
 
   getProps(props, state) {
     const {items} = props;
-    const selectedItem = getSelectedItem(props, state);
+    const currentRefinement = getSelectedItem(props, state);
 
     return {
       items: items.map(item => ({
         label: item.label,
         value: stringifyItem(item),
       })),
-      selectedItem,
+      currentRefinement,
     };
   },
 

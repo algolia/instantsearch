@@ -1,6 +1,5 @@
 import headings from 'metalsmith-headings';
 import layouts from 'metalsmith-layouts';
-import markdown from 'metalsmith-markdown';
 import msWebpack from 'ms-webpack';
 import navigation from 'metalsmith-navigation';
 import nav from './plugins/navigation.js';
@@ -10,13 +9,13 @@ import assets from './plugins/assets.js';
 import helpers from './plugins/helpers.js';
 import ignore from './plugins/ignore.js';
 import jsdoc from './plugins/jsdoc-data.js';
+import markdown from './plugins/markdown.js';
 import onlyChanged from './plugins/onlyChanged.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
 
 // performance and debug info for metalsmith, when needed see usage below
 // import {start as perfStart, stop as perfStop} from './plugins/perf.js';
 
-import renderer from './mdRenderer.js';
 import webpackStartConfig from './webpack.config.start.babel.js';
 import webpackBuildConfig from './webpack.config.build.babel';
 
@@ -47,9 +46,7 @@ const common = [
     // otherwise, keep file
     return false;
   }),
-  markdown({
-    renderer,
-  }),
+  markdown,
   headings('h2'),
   jsdoc({
     src: '../packages/react-instantsearch/src/widgets/*/@(index|connect).js',

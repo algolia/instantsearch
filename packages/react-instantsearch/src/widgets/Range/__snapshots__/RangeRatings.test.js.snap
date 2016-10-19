@@ -1,122 +1,142 @@
 exports[`Range applies translations 1`] = `
 <div
-  className="RangeRatings">
+  className="root">
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       5
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       9
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       12
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       14
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link RangeRatings__link--selected"
-    onClick={[Function bound onClick]}>
+    className="ratingLink ratingLinkSelected"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon ratingIconSelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel ratingLabelSelected">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount ratingCountSelected">
+      (
       15
       )
     </span>
@@ -126,123 +146,143 @@ exports[`Range applies translations 1`] = `
 
 exports[`Range supports passing max/min values 1`] = `
 <div
-  className="RangeRatings">
+  className="root">
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       5
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       9
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       12
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link"
-    onClick={[Function bound onClick]}>
+    className="ratingLink"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount">
+      (
       14
       )
     </span>
   </a>
   <a
-    className="RangeRatings__link RangeRatings__link--selected"
-    onClick={[Function bound onClick]}>
+    className="ratingLink ratingLinkSelected"
+    href="#"
+    onClick={[Function]}>
     <span
-      className="RangeRatings__link__icon" />
+      className="ratingIcon ratingIconSelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__icon--empty" />
+      className="ratingIconEmpty ratingIconEmptySelected" />
     <span
-      className="RangeRatings__link__label">
+      className="ratingLabel ratingLabelSelected">
        & Up
     </span>
+    <span>
+       
+    </span>
     <span
-      className="RangeRatings__link__count">
-       (
+      className="ratingCount ratingCountSelected">
+      (
       15
       )
     </span>

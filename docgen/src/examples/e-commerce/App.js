@@ -163,13 +163,13 @@ const ColorItem = ({item, selectedItems, createURL, refine}) => {
   );
 };
 
-const CustomColorRefinementList = ({items, selectedItems, refine, createURL}) =>
+const CustomColorRefinementList = ({items, currentRefinement, refine, createURL}) =>
     <div>
       {items.map(item =>
         <ColorItem
           key={item.value}
           item={item}
-          selectedItems={selectedItems}
+          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />
@@ -190,8 +190,8 @@ function CustomHits({hits}) {
 const Hit = ({item}) => {
   const icons = [];
   for (let i = 0; i < 5; i++) {
-    const suffix = i >= item.rating ? '--empty' : '';
-    icons.push(<label key={i} label className={`RangeRatings__link__icon${suffix}`}></label>);
+    const suffix = i >= item.rating ? '_empty' : '';
+    icons.push(<label key={i} label className={`ais-RangeRatings__ratingIcon${suffix}`}></label>);
   }
   return (
     <article className="hit">
@@ -201,7 +201,7 @@ const Hit = ({item}) => {
       <div className="product-desc-wrapper">
         <div className="product-name" dangerouslySetInnerHTML={{__html: item._highlightResult.name.value}}/>
         <div className="product-type" dangerouslySetInnerHTML={{__html: item._highlightResult.type.value}}/>
-        <div>
+        <div className="ais-RangeRatings__ratingLink">
           {icons}
           <div className="product-price">${item.price}</div>
         </div>
@@ -237,13 +237,13 @@ const CustomResults = createConnector({
                 {value: 'ikea_price_asc', label: 'Price asc.'},
                 {value: 'ikea_price_desc', label: 'Price desc.'},
               ]}
-              defaultSelectedIndex="ikea"
+              defaultRefinement="ikea"
             />
           </div>
           <Stats />
         </section>
         <ConnectedHits hitsPerPage={16}/>
-        <Pagination showLast={true}/>
+        <footer><Pagination showLast={true}/></footer>
       </div>
     );
   }
@@ -255,7 +255,7 @@ const CustomPriceRanges = MultiRange.connect(React.createClass({
     this.props.refine(selectedItem);
   },
 
-  filteredItems(items){
+  filteredItems(items) {
     let filteredItems = items;
     if (!(this.props.selectedItem === '')) {
       filteredItems = items.filter(i => this.props.selectedItem === i.value);

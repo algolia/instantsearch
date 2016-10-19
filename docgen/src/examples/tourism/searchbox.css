@@ -1,0 +1,72 @@
+.root {
+  position: absolute;
+  width: 280px;
+  height: 33px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  font-size: 14px;
+  top: 20px;
+  left: 165px;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.input {
+  display: inline-block;
+  -webkit-transition: box-shadow .4s ease, background .4s ease;
+  transition: box-shadow .4s ease, background .4s ease;
+  border: 0;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 0px #CCCCCC;
+  background: #FFFFFF;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  white-space: normal;
+  font-size: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.input::-webkit-search-decoration, .input::-webkit-search-cancel-button, .input::-webkit-search-results-button, .input::-webkit-search-results-decoration {
+  display: none;
+}
+
+.input:hover {
+  box-shadow: inset 0 0 0 0px #b3b3b3;
+}
+
+.input:focus, .input:active {
+  outline: 0;
+  box-shadow: inset 0 0 0 0px #D6DEE3;
+  background: #FFFFFF;
+}
+
+.input::-webkit-input-placeholder {
+  color: #9AAEB5;
+}
+
+.input::-moz-placeholder {
+  color: #9AAEB5;
+}
+
+.input:-ms-input-placeholder {
+  color: #9AAEB5;
+}
+
+.input::placeholder {
+  color: #9AAEB5;
+}
+
+.submit {
+  display: none;
+}
+
+.reset {
+  display: none;
+}

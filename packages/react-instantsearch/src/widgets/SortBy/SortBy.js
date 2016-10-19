@@ -4,6 +4,8 @@ import themeable from '../../core/themeable';
 
 import Select from '../../components/Select';
 
+import theme from './SortBy.css';
+
 class SortBy extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -25,7 +27,7 @@ class SortBy extends Component {
       value: PropTypes.string.isRequired,
     })).isRequired,
 
-    selectedIndex: PropTypes.string.isRequired,
+    currentRefinement: PropTypes.string.isRequired,
   };
 
   onChange = e => {
@@ -33,11 +35,11 @@ class SortBy extends Component {
   }
 
   render() {
-    const {applyTheme, refine, items, selectedIndex} = this.props;
+    const {applyTheme, refine, items, currentRefinement} = this.props;
     return (
       <Select
         applyTheme={applyTheme}
-        selectedItem={selectedIndex}
+        selectedItem={currentRefinement}
         onSelect={refine}
         items={items}
       />
@@ -45,6 +47,4 @@ class SortBy extends Component {
   }
 }
 
-export default themeable({
-  root: 'SortBy',
-})(SortBy);
+export default themeable(theme)(SortBy);

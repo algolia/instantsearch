@@ -125,8 +125,8 @@ export default class Slider extends Component {
           left: `${offset}%`,
         }}
       >
-        <div {...applyTheme('handleDot', 'handleDot')} />
-        <div {...applyTheme('handleTooltip', 'handleTooltip')}>
+        <div {...applyTheme('handleDot', 'handleDot', i === activeIdx && 'handleDotActive')} />
+        <div {...applyTheme('handleTooltip', 'handleTooltip', i === activeIdx && 'handleTooltipActive')}>
           {translate('value', value[i])}
         </div>
       </div>
@@ -136,7 +136,7 @@ export default class Slider extends Component {
 
     const tracks = offsetsWithMinMax.slice(0, -1).map((offset, i) =>
       <div // eslint-disable-line react/jsx-key, automatically done by themeable
-        {...applyTheme(i, 'track')}
+        {...applyTheme(i, 'track', i === 1 && 'trackSelected')}
         style={{
           width: `${offsetsWithMinMax[i + 1] - offset}%`,
         }}

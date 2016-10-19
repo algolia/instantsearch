@@ -1,8 +1,8 @@
 language: node_js
 node_js: stable
-before_install:
-  - (cd packages/react-instantsearch && npm install)
-before_cache: npm prune
+install:
+  - npm install --global yarn
+  - yarn
 branches:
   only:
     - master
@@ -11,5 +11,5 @@ branches:
     - /^greenkeeper-.*$/
 cache:
   directories:
-  - node_modules
-  - packages/react-instantsearch/node_modules
+  - ~/.yarn
+  - ~/.nvm

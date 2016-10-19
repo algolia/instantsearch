@@ -48,14 +48,20 @@ describe('Pagination.connect', () => {
     expect(params.page).toBe(666);
   });
 
-  it('Transition state whatever the value', () => {
+  it('Transition state when the value is identical and does not contain isSamePage flag', () => {
     state = transitionState({id: 'ok'}, {ok: 1}, {ok: 1});
-    expect(state).toEqual({
-      ok: 1,
-    });
+    expect(state).toEqual({});
     state = transitionState({id: 'ok'}, {ok: 1}, {ok: 2});
     expect(state).toEqual({
       ok: 2,
+    });
+    const newSameValue = {
+      valueOf: () => 1,
+      isSamePage: true,
+    };
+    state = transitionState({id: 'ok'}, {ok: 1}, {ok: newSameValue});
+    expect(state).toEqual({
+      ok: 1,
     });
   });
 

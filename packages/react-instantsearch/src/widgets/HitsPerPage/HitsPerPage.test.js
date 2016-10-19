@@ -12,7 +12,7 @@ describe('HitsPerPage', () => {
         createURL={() => '#'}
         refine={() => null}
         items={[111, 333, 666]}
-        hitsPerPage={111}
+        currentRefinement={111}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -28,7 +28,7 @@ describe('HitsPerPage', () => {
           {label: '333 items', value: 333},
           {label: '666 items', value: 666},
         ]}
-        hitsPerPage={111}
+        currentRefinement={111}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -44,7 +44,7 @@ describe('HitsPerPage', () => {
           label: 'HITS_LABEL',
           value: v => `HITS_VALUE_${v}`,
         }}
-        hitsPerPage={111}
+        currentRefinement={111}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();

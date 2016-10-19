@@ -16,17 +16,18 @@ describe('HitsPerPage', () => {
         createURL={() => '#'}
         items={[111, 333, 666]}
         refine={refine}
-        hitsPerPage={111}
+        currentRefinement={111}
       />
     );
+
     wrapper
-      .find('.HitsPerPage__item__link')
+      .find('.itemLink')
       .filterWhere(e => e.text() === '333')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual(333);
     wrapper
-      .find('.HitsPerPage__item__link')
+      .find('.itemLink')
       .filterWhere(e => e.text() === '666')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);

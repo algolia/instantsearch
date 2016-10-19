@@ -5,6 +5,8 @@ import translatable from '../../core/translatable';
 
 import Select from '../../components/Select';
 
+import theme from './MenuSelect.css';
+
 class MenuSelect extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
@@ -14,16 +16,16 @@ class MenuSelect extends Component {
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
     })).isRequired,
-    selectedItem: PropTypes.string.isRequired,
+    currentRefinement: PropTypes.string.isRequired,
   };
 
   render() {
-    const {applyTheme, refine, items, selectedItem, translate} = this.props;
+    const {applyTheme, refine, items, currentRefinement, translate} = this.props;
 
     return (
       <Select
         applyTheme={applyTheme}
-        selectedItem={selectedItem || ''}
+        selectedItem={currentRefinement || ''}
         onSelect={refine}
         items={[
           {label: translate('none'), value: ''},
@@ -36,9 +38,7 @@ class MenuSelect extends Component {
   }
 }
 
-export default themeable({
-  root: 'MenuSelect',
-})(
+export default themeable(theme)(
   translatable({
     none: 'None',
     count: count => count.toLocaleString(),

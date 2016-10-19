@@ -7,6 +7,8 @@ import translatable from '../../core/translatable';
 import List from '../../components/List';
 import Link from '../../components/Link';
 
+import theme from './HierarchicalMenu.css';
+
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   label: PropTypes.node,
   value: PropTypes.string.isRequired,
@@ -21,7 +23,7 @@ class HierarchicalMenu extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
-    selectedItem: PropTypes.string,
+    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -61,7 +63,7 @@ class HierarchicalMenu extends Component {
       <List
         renderItem={this.renderItem}
         selectedItems={
-          this.props.selectedItem === null ? [] : [this.props.selectedItem]
+          this.props.currentRefinement === null ? [] : [this.props.currentRefinement]
         }
         {...pick(this.props, [
           'applyTheme',
@@ -76,19 +78,7 @@ class HierarchicalMenu extends Component {
   }
 }
 
-export default themeable({
-  root: 'HierarchicalMenu',
-  items: 'HierarchicalMenu__items',
-  item: 'HierarchicalMenu__item',
-  itemSelected: 'HierarchicalMenu__item--selected',
-  itemParent: 'HierarchicalMenu__item--parent',
-  itemSelectedParent: 'HierarchicalMenu__item--selectedParent',
-  itemLink: 'HierarchicalMenu__item__link',
-  itemLabel: 'HierarchicalMenu__item__label',
-  itemCount: 'HierarchicalMenu__item__count',
-  itemChildren: 'HierarchicalMenu__item__children',
-  showMore: 'HierarchicalMenu__showMore',
-})(
+export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
     count: count => count.toLocaleString(),

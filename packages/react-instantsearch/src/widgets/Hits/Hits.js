@@ -4,6 +4,7 @@
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../../core/themeable';
+import theme from './Hits.css';
 
 /**
  * Widget used to display the results from Algolia.
@@ -50,6 +51,4 @@ Hits.defaultProps = {
     >{JSON.stringify(hit).slice(0, 100)}...</div>,
 };
 
-export default themeable({
-  root: 'Hits',
-})(Hits);
+export default themeable(theme)(Hits);

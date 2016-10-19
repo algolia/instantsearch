@@ -19,15 +19,15 @@ describe('RangeInput', () => {
           {label: 'label', value: '20:30'},
           {label: 'label', value: '30:'},
         ]}
-        selectedItem=""
+        currentRefinement=""
       />
     );
 
-    const items = wrapper.find('.MultiRange__item');
+    const items = wrapper.find('.item');
 
     expect(items.length).toBe(4);
 
-    const firstItem = items.first().find('.MultiRange__item__radio');
+    const firstItem = items.first().find('.itemRadio');
 
     firstItem.simulate('change', {target: {checked: true}});
 

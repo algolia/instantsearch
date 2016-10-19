@@ -15,7 +15,7 @@ The hierarchical menu is a widget that lets the user explore a tree-like structu
 
 ### Theme
 
-`root`, `items`, `item`, `itemSelected`, `itemParent`, `itemSelectedParent`, `itemLink`, `itemLabel`, `itemCount`, `itemChildren`, `showMore`
+`root`, `items`, `item`, `itemSelected`, `item_parent`, `itemSelectedParent`, `itemLink`, `itemLabel`, `itemCount`, `itemChildren`, `showMore`
 
 ### Translations
 
@@ -85,7 +85,7 @@ function MyHierarchicalMenu(props) {
       {props.items.map(item =>
         <Item
           item={item}
-          selectedItems={props.selectedItems}
+          selectedItems={props.currentRefinement}
           createURL={props.createURL}
           refine={props.refine}
         />
@@ -95,7 +95,7 @@ function MyHierarchicalMenu(props) {
 }
 
 // `HierarchicalMenu.connect` accepts the same `name`, `attributes`, `showMore`,
-// `limitMin`, `limitMax`, `defaultSelectedItem`, `separator`, `rootPath`,
+// `limitMin`, `limitMax`, `defaultRefinement`, `separator`, `rootPath`,
 // `showParentLevel` and `sortBy` props as `HierarchicalMenu`.
 // When `showMore === true`, `limitMax` facet values will be retrieved.
 // Otherwise, `limitMin` facet values will be retrieved.

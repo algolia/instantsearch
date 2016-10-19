@@ -1,0 +1,57 @@
+.root {
+  display: flex;
+  flex-direction: column;
+}
+
+.ratingIcon:before {
+  content: '\2605';
+  color: #FBAE00;
+}
+
+.ratingIconEmpty:before {
+  content: '\2606';
+  color: #FBAE00;
+}
+
+.ratingLinkSelected{
+  font-weight: 700;
+}
+
+.ratingCountDisabled{
+  display:none;
+}
+
+.ratingIconEmptyDisabled:before{
+  color: #C9C9C9;
+}
+
+.ratingIconDisabled:before{
+  color: #C9C9C9;
+}
+
+.ratingLabel {
+}
+
+.ratingLabelDisabled {
+}
+
+.ratingLabelSelected {
+}
+
+.ratingIconSelected {
+}
+
+.ratingIconEmptySelected {
+}
+
+.ratingCountSelected {
+}
+
+.ratingCount{
+}
+
+.ratingLink{
+}
+
+.ratingLinkDisabled{
+}
