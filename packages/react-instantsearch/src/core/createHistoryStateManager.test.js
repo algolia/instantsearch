@@ -177,6 +177,23 @@ describe('createHistoryStateManager', () => {
         search: '?a=1&b=2&c=3',
       });
     });
+
+    it('remove empty values from the url', () => {
+      const initialLocation = {
+        search: '?c=1&b=2&a=3',
+      };
+      const history = createMockHistory(initialLocation);
+      const hsm = createHistoryStateManager({
+        history,
+        threshold: 0,
+        onInternalStateUpdate: () => null,
+        getKnownKeys: () => ['a', 'c'],
+      });
+
+      expect(hsm.createHrefForState({a: '', c: ''})).toEqual({
+        search: '?b=2',
+      });
+    });
   });
 
   describe('unlisten', () => {
