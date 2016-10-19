@@ -1,3 +1,13 @@
+<a name="1.8.12"></a>
+## [1.8.12](https://github.com/algolia/instantsearch.js/compare/v1.8.11...v1.8.12) (2016-10-19)
+
+
+### Bug Fixes
+
+* **numericRefinementList:** classes on radio buttons (#1358) (#1432) ([fec6495](https://github.com/algolia/instantsearch.js/commit/fec6495))
+
+
+
 <a name="1.8.11"></a>
 ## [1.8.11](https://github.com/algolia/instantsearch.js/compare/v1.8.10...v1.8.11) (2016-10-07)
 
