@@ -14,12 +14,12 @@ function headerFooter(ComposedComponent) {
       super(props);
       this.handleHeaderClick = this.handleHeaderClick.bind(this);
       this.state = {
-        collapsed: props.collapsible && props.collapsible.collapsed
+        collapsed: props.collapsible && props.collapsible.collapsed,
       };
 
       this._cssClasses = {
         root: cx('ais-root', this.props.cssClasses.root),
-        body: cx('ais-body', this.props.cssClasses.body)
+        body: cx('ais-body', this.props.cssClasses.body),
       };
 
       this._footerElement = this._getElement({type: 'footer'});
@@ -44,7 +44,7 @@ function headerFooter(ComposedComponent) {
     }
     handleHeaderClick() {
       this.setState({
-        collapsed: !this.state.collapsed
+        collapsed: !this.state.collapsed,
       });
     }
     render() {
@@ -60,12 +60,12 @@ function headerFooter(ComposedComponent) {
 
       const cssClasses = {
         ...this._cssClasses,
-        root: cx(rootCssClasses)
+        root: cx(rootCssClasses),
       };
 
       const headerElement = this._getElement({
         type: 'header',
-        handleClick: this.props.collapsible ? this.handleHeaderClick : null
+        handleClick: this.props.collapsible ? this.handleHeaderClick : null,
       });
 
       return (
@@ -86,21 +86,21 @@ function headerFooter(ComposedComponent) {
     collapsible: React.PropTypes.oneOfType([
       React.PropTypes.bool,
       React.PropTypes.shape({
-        collapsed: React.PropTypes.bool
-      })
+        collapsed: React.PropTypes.bool,
+      }),
     ]),
     cssClasses: React.PropTypes.shape({
       root: React.PropTypes.string,
       header: React.PropTypes.string,
       body: React.PropTypes.string,
-      footer: React.PropTypes.string
+      footer: React.PropTypes.string,
     }),
-    templateProps: React.PropTypes.object
+    templateProps: React.PropTypes.object,
   };
 
   HeaderFooter.defaultProps = {
     cssClasses: {},
-    collapsible: false
+    collapsible: false,
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)

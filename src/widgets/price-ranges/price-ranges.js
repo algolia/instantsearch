@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
 import defaultTemplates from './defaultTemplates.js';
@@ -64,7 +64,7 @@ function priceRanges({
     collapsible = false,
     labels: userLabels = {},
     currency: userCurrency = '$',
-    autoHideContainer = true
+    autoHideContainer = true,
   } = {}) {
   let currency = userCurrency;
 
@@ -81,7 +81,7 @@ function priceRanges({
   const labels = {
     button: 'Go',
     separator: 'to',
-    ...userLabels
+    ...userLabels,
   };
 
   const cssClasses = {
@@ -98,7 +98,7 @@ function priceRanges({
     currency: cx(bem('currency'), userCssClasses.currency),
     button: cx(bem('button'), userCssClasses.button),
     separator: cx(bem('separator'), userCssClasses.separator),
-    footer: cx(bem('footer'), userCssClasses.footer)
+    footer: cx(bem('footer'), userCssClasses.footer),
   };
 
   // before we had opts.currency, you had to pass labels.currency
@@ -106,7 +106,7 @@ function priceRanges({
 
   return {
     getConfiguration: () => ({
-      facets: [attributeName]
+      facets: [attributeName],
     }),
 
     _generateRanges(results) {
@@ -154,7 +154,7 @@ function priceRanges({
       this._templateProps = prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
     },
 
@@ -198,7 +198,7 @@ function priceRanges({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

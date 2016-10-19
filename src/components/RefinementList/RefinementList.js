@@ -10,7 +10,7 @@ class RefinementList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowMoreOpen: false
+      isShowMoreOpen: false,
     };
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleClickShowMore = this.handleClickShowMore.bind(this);
@@ -42,7 +42,7 @@ class RefinementList extends React.Component {
     const templateData = {...facetValue, url, cssClasses: this.props.cssClasses};
 
     const cssClassItem = cx(this.props.cssClasses.item, {
-      [this.props.cssClasses.active]: facetValue.isRefined
+      [this.props.cssClasses.active]: facetValue.isRefined,
     });
 
     let key = facetValue[this.props.attributeNameKey];
@@ -161,7 +161,7 @@ RefinementList.propTypes = {
     active: React.PropTypes.string,
     depth: React.PropTypes.string,
     item: React.PropTypes.string,
-    list: React.PropTypes.string
+    list: React.PropTypes.string,
   }),
   depth: React.PropTypes.number,
   facetValues: React.PropTypes.array,
@@ -169,13 +169,13 @@ RefinementList.propTypes = {
   limitMin: React.PropTypes.number,
   showMore: React.PropTypes.bool,
   templateProps: React.PropTypes.object.isRequired,
-  toggleRefinement: React.PropTypes.func.isRequired
+  toggleRefinement: React.PropTypes.func.isRequired,
 };
 
 RefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
-  attributeNameKey: 'name'
+  attributeNameKey: 'name',
 };
 
 export default RefinementList;

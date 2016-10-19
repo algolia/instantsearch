@@ -58,14 +58,14 @@ describe('rangeSlider()', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
       expect(widget.getConfiguration()).toEqual({
         disjunctiveFacets: ['aNumAttr'],
-        numericRefinements: {aNumAttr: {'>=': [100]}}
+        numericRefinements: {aNumAttr: {'>=': [100]}},
       });
     });
 
     it('does not refine when previous configuration', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
       expect(widget.getConfiguration({numericRefinements: {aNumAttr: {}}})).toEqual({
-        disjunctiveFacets: ['aNumAttr']
+        disjunctiveFacets: ['aNumAttr'],
       });
     });
 
@@ -73,7 +73,7 @@ describe('rangeSlider()', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
       expect(widget.getConfiguration()).toEqual({
         disjunctiveFacets: ['aNumAttr'],
-        numericRefinements: {aNumAttr: {'>=': [100], '<=': [200]}}
+        numericRefinements: {aNumAttr: {'>=': [100], '<=': [200]}},
       });
     });
 
@@ -83,7 +83,7 @@ describe('rangeSlider()', () => {
           root: 'ais-range-slider',
           header: 'ais-range-slider--header',
           body: 'ais-range-slider--body',
-          footer: 'ais-range-slider--footer'
+          footer: 'ais-range-slider--footer',
         },
         collapsible: false,
         onChange: () => {},
@@ -96,10 +96,10 @@ describe('rangeSlider()', () => {
           templates: {footer: '', header: ''},
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {footer: false, header: false}
+          useCustomCompileOptions: {footer: false, header: false},
         },
         format: {to: () => {}, from: () => {}},
-        tooltips: true
+        tooltips: true,
       };
 
       it('sets the right ranges', () => {
@@ -122,9 +122,9 @@ describe('rangeSlider()', () => {
             name: 'aNumAttr',
             stats: {
               min: 1.99,
-              max: 4999.98
-            }
-          }]
+              max: 4999.98,
+            },
+          }],
         };
         widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
         helper.setState(widget.getConfiguration());
@@ -133,7 +133,7 @@ describe('rangeSlider()', () => {
         const props = {
           ...defaultProps,
           range: {min: 100, max: 5000},
-          start: [100, Infinity]
+          start: [100, Infinity],
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
@@ -149,14 +149,14 @@ describe('rangeSlider()', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
       expect(widget.getConfiguration()).toEqual({
         disjunctiveFacets: ['aNumAttr'],
-        numericRefinements: {aNumAttr: {'<=': [100]}}
+        numericRefinements: {aNumAttr: {'<=': [100]}},
       });
     });
 
     it('does not refine when previous configuration', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
       expect(widget.getConfiguration({numericRefinements: {aNumAttr: {}}})).toEqual({
-        disjunctiveFacets: ['aNumAttr']
+        disjunctiveFacets: ['aNumAttr'],
       });
     });
 
@@ -166,7 +166,7 @@ describe('rangeSlider()', () => {
           root: 'ais-range-slider',
           header: 'ais-range-slider--header',
           body: 'ais-range-slider--body',
-          footer: 'ais-range-slider--footer'
+          footer: 'ais-range-slider--footer',
         },
         collapsible: false,
         onChange: () => {},
@@ -179,10 +179,10 @@ describe('rangeSlider()', () => {
           templates: {footer: '', header: ''},
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {footer: false, header: false}
+          useCustomCompileOptions: {footer: false, header: false},
         },
         format: {to: () => {}, from: () => {}},
-        tooltips: true
+        tooltips: true,
       };
 
       it('will use the results min when only max passed', () => {
@@ -191,9 +191,9 @@ describe('rangeSlider()', () => {
             name: 'aNumAttr',
             stats: {
               min: 1.99,
-              max: 4999.98
-            }
-          }]
+              max: 4999.98,
+            },
+          }],
         };
         widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
         helper.setState(widget.getConfiguration());
@@ -202,7 +202,7 @@ describe('rangeSlider()', () => {
         const props = {
           ...defaultProps,
           range: {min: 1, max: 100},
-          start: [-Infinity, 100]
+          start: [-Infinity, 100],
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
@@ -228,7 +228,7 @@ describe('rangeSlider()', () => {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
           body: 'ais-range-slider--body',
-          footer: 'ais-range-slider--footer'
+          footer: 'ais-range-slider--footer',
         },
         collapsible: false,
         onChange: () => {},
@@ -241,10 +241,10 @@ describe('rangeSlider()', () => {
           templates: {footer: '', header: ''},
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {footer: false, header: false}
+          useCustomCompileOptions: {footer: false, header: false},
         },
         format: {to: () => {}, from: () => {}},
-        tooltips: true
+        tooltips: true,
       };
 
       expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
@@ -263,9 +263,9 @@ describe('rangeSlider()', () => {
           name: 'aNumAttr',
           stats: {
             min: 65,
-            max: 65
-          }
-        }]
+            max: 65,
+          },
+        }],
       };
     });
 
@@ -277,7 +277,7 @@ describe('rangeSlider()', () => {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
           body: 'ais-range-slider--body',
-          footer: 'ais-range-slider--footer'
+          footer: 'ais-range-slider--footer',
         },
         collapsible: false,
         onChange: () => {},
@@ -290,10 +290,10 @@ describe('rangeSlider()', () => {
           templates: {footer: '', header: ''},
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {footer: false, header: false}
+          useCustomCompileOptions: {footer: false, header: false},
         },
         format: {to: () => {}, from: () => {}},
-        tooltips: true
+        tooltips: true,
       };
 
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
@@ -309,9 +309,9 @@ describe('rangeSlider()', () => {
           name: 'aNumAttr',
           stats: {
             min: 1.99,
-            max: 4999.98
-          }
-        }]
+            max: 4999.98,
+          },
+        }],
       };
     });
 
@@ -328,7 +328,7 @@ describe('rangeSlider()', () => {
           root: 'ais-range-slider root cx',
           header: 'ais-range-slider--header',
           body: 'ais-range-slider--body',
-          footer: 'ais-range-slider--footer'
+          footer: 'ais-range-slider--footer',
         },
         collapsible: false,
         onChange: () => {},
@@ -341,10 +341,10 @@ describe('rangeSlider()', () => {
           templates: {footer: '', header: ''},
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {footer: false, header: false}
+          useCustomCompileOptions: {footer: false, header: false},
         },
         format: {to: () => {}, from: () => {}},
-        tooltips: true
+        tooltips: true,
       };
 
       expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');

@@ -1,6 +1,6 @@
 import {
   bemHelper,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import forEach from 'lodash/forEach';
 import isString from 'lodash/isString';
@@ -56,7 +56,7 @@ function searchBox({
   wrapInput = true,
   autofocus = 'auto',
   searchOnEnterKeyPressOnly = false,
-  queryHook
+  queryHook,
 }) {
   // the 'input' event is triggered when the input value changes
   // in any case: typing, copy pasting with mouse..
@@ -107,7 +107,7 @@ function searchBox({
         role: 'textbox',
         spellcheck: 'false',
         type: 'text',
-        value: query
+        value: query,
       };
 
       // Overrides attributes if not already set
@@ -127,12 +127,12 @@ function searchBox({
       poweredBy = {
         cssClasses: {},
         template: defaultTemplates.poweredBy,
-        ...poweredBy
+        ...poweredBy,
       };
 
       const poweredByCSSClasses = {
         root: cx(bem('powered-by'), poweredBy.cssClasses.root),
-        link: cx(bem('powered-by-link'), poweredBy.cssClasses.link)
+        link: cx(bem('powered-by-link'), poweredBy.cssClasses.link),
       };
 
       const url = 'https://www.algolia.com/?' +
@@ -143,7 +143,7 @@ function searchBox({
 
       const templateData = {
         cssClasses: poweredByCSSClasses,
-        url
+        url,
       };
 
       const template = poweredBy.template;
@@ -267,7 +267,7 @@ function searchBox({
       if (helper.state.query !== this._input.value) {
         this._input.value = helper.state.query;
       }
-    }
+    },
   };
 }
 

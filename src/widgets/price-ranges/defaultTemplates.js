@@ -17,5 +17,5 @@ export default {
       {{to}}
     {{/to}}
   `,
-  footer: ''
+  footer: '',
 };

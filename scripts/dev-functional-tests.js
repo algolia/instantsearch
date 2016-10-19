@@ -15,7 +15,7 @@ const launch = debounce(() => {
   wdio = spawn('wdio', ['functional-tests/wdio.conf.js'], {stdio: [null, process.stdout, null]});
 }, 1500, {
   leading: true,
-  trailing: true
+  trailing: true,
 });
 
 watch(launch);

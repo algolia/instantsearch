@@ -4,14 +4,14 @@ const INDEX_PAGE = process.env.INDEX_PAGE || 'index.html';
 
 let conf = {
   specs: [
-    'functional-tests/specs/**'
+    'functional-tests/specs/**',
   ],
   reporters: ['dot'],
   framework: 'mocha',
   mochaOpts: {
     ui: 'bdd',
     timeout: 50000,
-    compilers: ['js:babel-core/register']
+    compilers: ['js:babel-core/register'],
   },
   baseUrl: 'http://localhost:9000',
   onPrepare() {
@@ -32,7 +32,7 @@ let conf = {
   },
   onComplete() {
     testServer.stop();
-  }
+  },
 };
 
 if (process.env.CI === 'true') {
@@ -49,24 +49,24 @@ if (process.env.CI === 'true') {
         browserName: 'chrome',
         platform: 'Windows 10',
         version: '', // latest stable
-        screenResolution: '1280x1024'
+        screenResolution: '1280x1024',
       },
       {
         browserName: 'internet explorer',
         platform: 'Windows 10',
         version: '11',
-        screenResolution: '1280x1024'
+        screenResolution: '1280x1024',
       },
       {
         browserName: 'safari',
-        version: '9'
+        version: '9',
       },
       {
         browserName: 'MicrosoftEdge',
         platform: 'Windows 10',
         version: '',
-        screenResolution: '1280x1024'
-      }
+        screenResolution: '1280x1024',
+      },
       // Firefox disabled, Firefox selenium support is not yet good
       // {
       //   browserName: 'firefox',
@@ -84,7 +84,7 @@ if (process.env.CI === 'true') {
       //   platformName: 'iOS'
       // },
     ],
-    ...conf
+    ...conf,
   };
 } else {
   conf = {
@@ -92,7 +92,7 @@ if (process.env.CI === 'true') {
     port: 24444,
     path: '/wd/hub',
     capabilities: [{browserName: 'firefox'}],
-    ...conf
+    ...conf,
   };
 }
 

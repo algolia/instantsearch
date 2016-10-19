@@ -24,7 +24,7 @@ class ClearAll extends React.Component {
 
   render() {
     const data = {
-      hasRefinements: this.props.hasRefinements
+      hasRefinements: this.props.hasRefinements,
     };
 
     return (
@@ -45,11 +45,11 @@ class ClearAll extends React.Component {
 ClearAll.propTypes = {
   clearAll: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
-    link: React.PropTypes.string
+    link: React.PropTypes.string,
   }),
   hasRefinements: React.PropTypes.bool.isRequired,
   templateProps: React.PropTypes.object.isRequired,
-  url: React.PropTypes.string.isRequired
+  url: React.PropTypes.string.isRequired,
 };
 
 export default ClearAll;

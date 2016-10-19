@@ -4,7 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -26,7 +25,7 @@ describe('hits()', () => {
   let props;
   const defaultTemplates = {
     hit: 'hit',
-    empty: 'empty'
+    empty: 'empty',
   };
 
   beforeEach(() => {
@@ -39,7 +38,7 @@ describe('hits()', () => {
       transformData: undefined,
       templatesConfig: undefined,
       templates: defaultTemplates,
-      useCustomCompileOptions: {hit: false, empty: false}
+      useCustomCompileOptions: {hit: false, empty: false},
     };
     widget = hits({container, cssClasses: {root: ['root', 'cx']}});
     widget.init({});
@@ -79,8 +78,8 @@ describe('hits()', () => {
       cssClasses: {
         root: 'ais-hits root cx',
         item: 'ais-hits--item',
-        empty: 'ais-hits__empty'
-      }
+        empty: 'ais-hits__empty',
+      },
     };
   }
 });

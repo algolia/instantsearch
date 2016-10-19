@@ -22,10 +22,9 @@ describe('Slider', () => {
 
     props = {
       range: {min: 0, max: 5000},
-      format: {to: () => {}, from: () => {}}
+      format: {to: () => {}, from: () => {}},
     };
   });
-
 
   it('should render <NouiSlider {...props} />', () => {
     const out = render();
@@ -41,7 +40,7 @@ describe('Slider', () => {
           density: 3,
           mode: 'positions',
           stepped: true,
-          values: [0, 50, 100]
+          values: [0, 50, 100],
         }}
         range={props.range}
       />

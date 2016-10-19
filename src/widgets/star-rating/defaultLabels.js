@@ -1,3 +1,3 @@
 export default {
-  andUp: '& Up'
+  andUp: '& Up',
 };

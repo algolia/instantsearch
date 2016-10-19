@@ -4,7 +4,6 @@ import path from 'path';
 
 let server;
 
-
 const loadNonMinified = () => (req, res, next) => {
   const buildType = /^\/(.*)?\.min\.js$/;
   const minifiedJavaScriptMatch = buildType.exec(req.path);
@@ -38,5 +37,5 @@ export default {
   ),
   stop: () => {
     server.close();
-  }
+  },
 };

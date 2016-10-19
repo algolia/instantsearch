@@ -22,7 +22,7 @@ describe('Template', () => {
     it('supports templates as strings', () => {
       const props = getProps({
         templates: {test: 'it works with {{type}}'},
-        data: {type: 'strings'}
+        data: {type: 'strings'},
       });
 
       renderer.render(<Template {...props} />);
@@ -35,7 +35,7 @@ describe('Template', () => {
     it('supports templates as functions returning a string', () => {
       const props = getProps({
         templates: {test: templateData => `it also works with ${templateData.type}`},
-        data: {type: 'functions'}
+        data: {type: 'functions'},
       });
 
       renderer.render(<Template {...props} />);
@@ -48,7 +48,7 @@ describe('Template', () => {
     it('supports templates as functions returning a React element', () => {
       const props = getProps({
         templates: {test: templateData => <p>it also works with {templateData.type}</p>},
-        data: {type: 'functions'}
+        data: {type: 'functions'},
       });
 
       renderer.render(<Template {...props} />);
@@ -63,7 +63,7 @@ describe('Template', () => {
         templates: {test: 'it configures compilation <%options%>'},
         data: {options: 'delimiters'},
         useCustomCompileOptions: {test: true},
-        templatesConfig: {compileOptions: {delimiters: '<% %>'}}
+        templatesConfig: {compileOptions: {delimiters: '<% %>'}},
       });
 
       renderer.render(<Template {...props} />);
@@ -79,7 +79,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{#helpers.emphasis}}{{feature}}{{/helpers.emphasis}}'},
         data: {feature: 'helpers'},
-        templatesConfig: {helpers: {emphasis: (text, render) => `<em>${render(text)}</em>`}}
+        templatesConfig: {helpers: {emphasis: (text, render) => `<em>${render(text)}</em>`}},
       });
 
       renderer.render(<Template {...props} />);
@@ -100,9 +100,9 @@ describe('Template', () => {
               // context will be different when using arrow function (lexical scope used)
               expect(this).toBe(data);
               done();
-            }
-          }
-        }
+            },
+          },
+        },
       });
 
       renderer.render(<Template {...props} />);
@@ -117,7 +117,7 @@ describe('Template', () => {
         transformData: originalData => {
           originalData.feature = 'transformData';
           return originalData;
-        }
+        },
       });
 
       renderer.render(<Template {...props} />);
@@ -141,7 +141,7 @@ describe('Template', () => {
           expect(clonedData.a).toNotBe(data.a);
           expect(clonedData).toEqual(data);
           return clonedData;
-        }
+        },
       });
 
       renderer.render(<Template {...props} />);
@@ -161,8 +161,8 @@ describe('Template', () => {
             expect(clonedData.a).toNotBe(data.a);
             expect(clonedData).toEqual(data);
             return clonedData;
-          }
-        }
+          },
+        },
       });
 
       renderer.render(<Template {...props} />);
@@ -173,7 +173,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
-        transformData: () => { /* missing return value */ }
+        transformData: () => { /* missing return value */ },
       });
 
       expect(() => {
@@ -186,8 +186,8 @@ describe('Template', () => {
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
         transformData: {
-          anotherKey: d => d
-        }
+          anotherKey: d => d,
+        },
       });
 
       expect(() => {
@@ -199,7 +199,7 @@ describe('Template', () => {
       const props = getProps({
         templates: {test: 'it supports {{feature}}'},
         data: {feature: 'replace me'},
-        transformData: () => true
+        transformData: () => true,
       });
 
       expect(() => {
@@ -218,7 +218,7 @@ describe('Template', () => {
     const expectedProps = {
       className: 'hey',
       dangerouslySetInnerHTML: {__html: ''},
-      onClick: fn
+      onClick: fn,
     };
     expect(out).toEqualJSX(<div {...expectedProps}></div>);
   });
@@ -228,11 +228,10 @@ describe('Template', () => {
     let component;
     let container;
 
-
     beforeEach(() => {
       container = document.createElement('div');
       props = getProps({
-        data: {hello: 'mom'}
+        data: {hello: 'mom'},
       });
       component = ReactDOM.render(<Template {...props} />, container);
       sinon.spy(component, 'render');
@@ -263,7 +262,7 @@ describe('Template', () => {
     templateKey = 'test',
     useCustomCompileOptions = {},
     templatesConfig = {helper: {}, compileOptions: {}},
-    transformData = null
+    transformData = null,
   }) {
     return {templates, data, templateKey, useCustomCompileOptions, templatesConfig, transformData};
   }

@@ -5,7 +5,7 @@ class PriceRangesForm extends React.Component {
     super(props);
     this.state = {
       from: props.currentRefinement.from,
-      to: props.currentRefinement.to
+      to: props.currentRefinement.to,
     };
   }
 
@@ -16,7 +16,7 @@ class PriceRangesForm extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({
       from: props.currentRefinement.from,
-      to: props.currentRefinement.to
+      to: props.currentRefinement.to,
     });
   }
 
@@ -65,25 +65,23 @@ PriceRangesForm.propTypes = {
     form: React.PropTypes.string,
     input: React.PropTypes.string,
     label: React.PropTypes.string,
-    separator: React.PropTypes.string
+    separator: React.PropTypes.string,
   }),
   currentRefinement: React.PropTypes.shape({
     from: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
-    to: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number])
+    to: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.number]),
   }),
   labels: React.PropTypes.shape({
     button: React.PropTypes.string,
     currency: React.PropTypes.string,
-    separator: React.PropTypes.string
+    separator: React.PropTypes.string,
   }),
-  refine: React.PropTypes.func.isRequired
+  refine: React.PropTypes.func.isRequired,
 };
-
 
 PriceRangesForm.defaultProps = {
   cssClasses: {},
-  labels: {}
+  labels: {},
 };
-
 
 export default PriceRangesForm;

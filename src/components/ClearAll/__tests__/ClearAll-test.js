@@ -17,11 +17,11 @@ describe('ClearAll', () => {
   const defaultProps = {
     clearAll: () => {},
     cssClasses: {
-      link: 'custom-link'
+      link: 'custom-link',
     },
     hasRefinements: false,
     templateProps: {},
-    url: '#all-cleared!'
+    url: '#all-cleared!',
   };
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('ClearAll', () => {
 
   it('should handle clicks (and special clicks)', () => {
     const props = {
-      clearAll: sinon.spy()
+      clearAll: sinon.spy(),
     };
     const preventDefault = sinon.spy();
     const component = new ClearAll(props);
@@ -61,11 +61,10 @@ describe('ClearAll', () => {
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
 
-
   function render(extraProps = {}) {
     const props = {
       ...defaultProps,
-      ...extraProps
+      ...extraProps,
     };
     renderer.render(<ClearAll {...props} />);
     return renderer.getRenderOutput();

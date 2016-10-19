@@ -9,7 +9,7 @@
 # This works by running webpack in watch mode as well as simply serving the dist
 # folder through a local web server.
 
-npm install
+yarn
 node-sass -o ./dist/ ./src/css --output-style expanded
 node-sass -o ./dist/ --watch ./src/css --output-style expanded &
 NODE_ENV=production webpack --config ./scripts/webpack.config.serve.babel.js -w &

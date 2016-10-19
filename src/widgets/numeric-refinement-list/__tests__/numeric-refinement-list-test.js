@@ -57,7 +57,7 @@ describe('numericRefinementList()', () => {
       {end: 4, name: 'less than 4'},
       {start: 4, end: 4, name: '4'},
       {start: 5, end: 10, name: 'between 5 and 10'},
-      {start: 10, name: 'more than 10'}
+      {start: 10, name: 'more than 10'},
     ];
 
     container = document.createElement('div');
@@ -65,23 +65,23 @@ describe('numericRefinementList()', () => {
       container,
       attributeName: 'price',
       options,
-      cssClasses: {root: ['root', 'cx']}
+      cssClasses: {root: ['root', 'cx']},
     });
     helper = {
       state: {
-        getNumericRefinements: sinon.stub().returns([])
+        getNumericRefinements: sinon.stub().returns([]),
       },
       addNumericRefinement: sinon.spy(),
       search: sinon.spy(),
-      setState: sinon.stub().returnsThis()
+      setState: sinon.stub().returnsThis(),
     };
     state = {
       getNumericRefinements: sinon.stub().returns([]),
       clearRefinements: sinon.stub().returnsThis(),
-      addNumericRefinement: sinon.stub().returnsThis()
+      addNumericRefinement: sinon.stub().returnsThis(),
     };
     results = {
-      hits: []
+      hits: [],
     };
 
     helper.state.clearRefinements = sinon.stub().returns(helper.state);
@@ -104,7 +104,7 @@ describe('numericRefinementList()', () => {
         label: 'ais-refinement-list--label',
         list: 'ais-refinement-list--list',
         radio: 'ais-refinement-list--radio',
-        root: 'ais-refinement-list root cx'
+        root: 'ais-refinement-list root cx',
       },
       collapsible: false,
       createURL() {},
@@ -113,7 +113,7 @@ describe('numericRefinementList()', () => {
         {attributeName: 'price', end: 4, isRefined: false, name: 'less than 4'},
         {attributeName: 'price', end: 4, isRefined: false, name: '4', start: 4},
         {attributeName: 'price', end: 10, isRefined: false, name: 'between 5 and 10', start: 5},
-        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10}
+        {attributeName: 'price', isRefined: false, name: 'more than 10', start: 10},
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -122,16 +122,16 @@ describe('numericRefinementList()', () => {
           footer: '',
           header: '',
           // eslint-disable-next-line max-len
-          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>'
+          item: '<label class="{{cssClasses.label}}">\n <input type="radio" class="{{cssClasses.radio}}" name="{{attributeName}}" {{#isRefined}}checked{{/isRefined}} />{{name}}\n</label>',
         },
         templatesConfig: undefined,
         transformData: undefined,
         useCustomCompileOptions: {
           footer: false,
           header: false,
-          item: false
-        }
-      }
+          item: false,
+        },
+      },
     };
 
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
@@ -194,7 +194,7 @@ describe('numericRefinementList()', () => {
     const testWidget = numericRefinementList({
       container,
       attributeName: 'price',
-      options: initialOptions
+      options: initialOptions,
     });
 
     // When
@@ -203,7 +203,6 @@ describe('numericRefinementList()', () => {
     // Then
     expect(initialOptions).toEqual(initialOptionsClone);
   });
-
 
   afterEach(() => {
     numericRefinementList.__ResetDependency__('ReactDOM');

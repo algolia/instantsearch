@@ -44,7 +44,7 @@ instantsearch.widgets = {
   sortBySelector,
   starRating,
   stats,
-  toggle
+  toggle,
 };
 instantsearch.version = version;
 instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;

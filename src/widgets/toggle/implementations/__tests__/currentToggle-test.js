@@ -61,27 +61,27 @@ describe('currentToggle()', () => {
           templatesConfig: undefined,
           templates: defaultTemplates,
           useCustomCompileOptions: {header: false, item: false, footer: false},
-          transformData: undefined
+          transformData: undefined,
         };
         helper = {
           state: {
-            isDisjunctiveFacetRefined: sinon.stub().returns(false)
+            isDisjunctiveFacetRefined: sinon.stub().returns(false),
           },
           removeDisjunctiveFacetRefinement: sinon.spy(),
           addDisjunctiveFacetRefinement: sinon.spy(),
-          search: sinon.spy()
+          search: sinon.spy(),
         };
         state = {
           removeDisjunctiveFacetRefinement: sinon.spy(),
           addDisjunctiveFacetRefinement: sinon.spy(),
-          isDisjunctiveFacetRefined: sinon.stub().returns(false)
+          isDisjunctiveFacetRefined: sinon.stub().returns(false),
         };
         props = {
           cssClasses: {},
           collapsible: false,
           templateProps,
           createURL() {},
-          toggleRefinement() {}
+          toggleRefinement() {},
         };
         createURL = () => '#';
         widget.init({state});
@@ -91,7 +91,7 @@ describe('currentToggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}]),
         };
         widget = currentToggle({containerNode, attributeName, label, userValues});
         widget.getConfiguration();
@@ -116,8 +116,8 @@ describe('currentToggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([
             {name: 'true', count: 2, isRefined: false},
-            {name: 'false', count: 1, isRefined: false}
-          ])
+            {name: 'false', count: 1, isRefined: false},
+          ]),
         };
         props.cssClasses.root = 'test';
         props = {
@@ -126,10 +126,10 @@ describe('currentToggle()', () => {
             isRefined: false,
             name: label,
             offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
-            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
+            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
-          ...props
+          ...props,
         };
         cssClasses = {root: 'test'};
         widget = currentToggle({
@@ -139,7 +139,7 @@ describe('currentToggle()', () => {
           cssClasses,
           userValues,
           RefinementList,
-          collapsible
+          collapsible,
         });
         widget.getConfiguration();
         widget.init({state, helper});
@@ -153,8 +153,8 @@ describe('currentToggle()', () => {
           nbHits: 1,
           getFacetValues: sinon.stub().returns([
             {name: 'true', count: 2, isRefined: false},
-            {name: 'false', count: 1, isRefined: false}
-          ])
+            {name: 'false', count: 1, isRefined: false},
+          ]),
         };
         widget = currentToggle({
           containerNode,
@@ -163,7 +163,7 @@ describe('currentToggle()', () => {
           cssClasses,
           userValues,
           RefinementList,
-          collapsible
+          collapsible,
         });
         widget.getConfiguration();
         widget.init({state, helper});
@@ -177,10 +177,10 @@ describe('currentToggle()', () => {
             false,
             name: label,
             offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
-            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false}
+            onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
-          ...props
+          ...props,
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -191,7 +191,7 @@ describe('currentToggle()', () => {
         results = {
           hits: [],
           nbHits: 0,
-          getFacetValues: sinon.stub().returns([])
+          getFacetValues: sinon.stub().returns([]),
         };
         widget = currentToggle({
           containerNode,
@@ -200,7 +200,7 @@ describe('currentToggle()', () => {
           cssClasses,
           userValues,
           RefinementList,
-          collapsible
+          collapsible,
         });
         widget.getConfiguration();
         widget.init({state, helper});
@@ -213,10 +213,10 @@ describe('currentToggle()', () => {
             isRefined: false,
             count: null,
             onFacetValue: {name: label, isRefined: false, count: null},
-            offFacetValue: {name: label, isRefined: false, count: 0}
+            offFacetValue: {name: label, isRefined: false, count: 0},
           }],
           shouldAutoHideContainer: true,
-          ...props
+          ...props,
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -226,16 +226,16 @@ describe('currentToggle()', () => {
       it('when refined', () => {
         helper = {
           state: {
-            isDisjunctiveFacetRefined: sinon.stub().returns(true)
-          }
+            isDisjunctiveFacetRefined: sinon.stub().returns(true),
+          },
         };
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
           getFacetValues: sinon.stub().returns([
             {name: 'true', count: 2, isRefined: true},
-            {name: 'false', count: 1, isRefined: false}
-          ])
+            {name: 'false', count: 1, isRefined: false},
+          ]),
         };
         widget = currentToggle({
           containerNode,
@@ -244,7 +244,7 @@ describe('currentToggle()', () => {
           cssClasses,
           userValues,
           RefinementList,
-          collapsible
+          collapsible,
         });
         widget.getConfiguration();
         widget.init({state, helper});
@@ -257,10 +257,10 @@ describe('currentToggle()', () => {
             isRefined: true,
             name: label,
             onFacetValue: {name: label, isRefined: true, count: 2},
-            offFacetValue: {name: label, isRefined: false, count: 1}
+            offFacetValue: {name: label, isRefined: false, count: 1},
           }],
           shouldAutoHideContainer: false,
-          ...props
+          ...props,
         };
 
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -271,7 +271,7 @@ describe('currentToggle()', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
-          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}])
+          getFacetValues: sinon.stub().returns([{name: 'true', count: 2}, {name: 'false', count: 1}]),
         };
         widget = currentToggle({
           containerNode,
@@ -280,7 +280,7 @@ describe('currentToggle()', () => {
           cssClasses,
           userValues,
           RefinementList,
-          collapsible
+          collapsible,
         });
         widget.getConfiguration();
         widget.init({state, helper});
@@ -308,7 +308,7 @@ describe('currentToggle()', () => {
         helper = {
           removeDisjunctiveFacetRefinement: sinon.spy(),
           addDisjunctiveFacetRefinement: sinon.spy(),
-          search: sinon.spy()
+          search: sinon.spy(),
         };
       });
 
@@ -375,10 +375,10 @@ describe('currentToggle()', () => {
         widget = currentToggle({containerNode, attributeName, label, hasAnOffValue: true, userValues});
         widget.getConfiguration();
         const state = {
-          isDisjunctiveFacetRefined: sinon.stub().returns(false)
+          isDisjunctiveFacetRefined: sinon.stub().returns(false),
         };
         const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy(),
         };
 
         // When
@@ -393,10 +393,10 @@ describe('currentToggle()', () => {
         widget = currentToggle({containerNode, attributeName, label, userValues, hasAnOffValue: true});
         widget.getConfiguration();
         const state = {
-          isDisjunctiveFacetRefined: sinon.stub().returns(true)
+          isDisjunctiveFacetRefined: sinon.stub().returns(true),
         };
         const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy(),
         };
 
         // When
@@ -411,7 +411,7 @@ describe('currentToggle()', () => {
         widget.getConfiguration();
         const state = {};
         const helper = {
-          addDisjunctiveFacetRefinement: sinon.spy()
+          addDisjunctiveFacetRefinement: sinon.spy(),
         };
 
         // When

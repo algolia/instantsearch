@@ -29,7 +29,7 @@ export const searchBox = {
   },
   get() {
     return browser.getValue('#search-box');
-  }
+  },
 };
 
 // export function getRefinementFromSelector(selector) {
@@ -55,7 +55,7 @@ function formatRefinements(refinementsAsHTML) {
 
       count: maybeCount && maybeCount[0] && maybeCount[0].nodeValue !== undefined ?
         parseInt(maybeCount[0].nodeValue, 10) :
-        'n/a'
+        'n/a',
     };
   });
 }

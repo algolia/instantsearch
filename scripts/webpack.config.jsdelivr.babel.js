@@ -8,29 +8,29 @@ export default {
     path: './dist/',
     filename: 'instantsearch.js',
     library: 'instantsearch',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
   module: {
     loaders: [{
-      test: /\.js$/, exclude: /node_modules/, loader: 'babel'
+      test: /\.js$/, exclude: /node_modules/, loader: 'babel',
     }, {
-      test: require.resolve('react'), loader: 'expose?React'
+      test: require.resolve('react'), loader: 'expose?React',
     }, {
-      test: require.resolve('react-dom'), loader: 'expose?ReactDOM'
-    }]
+      test: require.resolve('react-dom'), loader: 'expose?ReactDOM',
+    }],
   },
   resolve: {
-    fallback: [join(__dirname, '..', 'node_modules')]
+    fallback: [join(__dirname, '..', 'node_modules')],
   },
   // same issue, for loaders like babel
   resolveLoader: {
-    fallback: [join(__dirname, '..', 'node_modules')]
+    fallback: [join(__dirname, '..', 'node_modules')],
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
-      }
-    })
-  ]
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+  ],
 };
