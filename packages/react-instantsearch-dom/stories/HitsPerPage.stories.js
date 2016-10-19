@@ -11,19 +11,19 @@ stories.addDecorator(withKnobs);
 stories.add('default ', () =>
   <WrapWithHits >
     <HitsPerPage
-      defaultHitsPerPage={2}
+      defaultRefinement={4}
       items={[2, 4, 6, 8]}/>
   </WrapWithHits>
 ).add('defaultSelect', () =>
   <WrapWithHits >
     <HitsPerPage.Select
-      defaultHitsPerPage={2}
+      defaultRefinement={4}
       items={[{value: 2}, {value: 4}, {value: 6}, {value: 8}]}/>
   </WrapWithHits>
 ).add('with label', () =>
   <WrapWithHits >
     <HitsPerPage.Select
-      defaultHitsPerPage={2}
+      defaultRefinement={4}
       items={[{value: 2, label: '2 hits per page'},
         {value: 4, label: '4 hits per page'},
         {value: 6, label: '6 hits per page'},
@@ -32,7 +32,7 @@ stories.add('default ', () =>
 ).add('playground', () =>
     <WrapWithHits >
       <HitsPerPage.Select
-        defaultHitsPerPage={number('default hits per page', 2)}
+        defaultRefinement={number('default hits per page', 4)}
         items={[{value: 2, label: '2 hits per page'},
           {value: 4, label: '4 hits per page'},
           {value: 6, label: '6 hits per page'},

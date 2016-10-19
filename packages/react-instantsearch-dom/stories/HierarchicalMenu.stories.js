@@ -28,7 +28,7 @@ stories.add('default', () =>
         'sub_category',
         'sub_sub_category',
       ]}
-      defaultSelectedItem="Eating"
+      defaultRefinement="Eating"
     />
   </WrapWithHits>
 ).add('with show more', () =>
@@ -66,7 +66,7 @@ stories.add('default', () =>
         'sub_category',
         'sub_sub_category',
       ]}
-      defaultSelectedItem={text('defaultSelectedItem', 'Bathroom')}
+      defaultRefinement={text('defaultSelectedItem', 'Bathroom')}
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
       showMore={boolean('showMore', true)}

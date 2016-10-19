@@ -16,7 +16,7 @@ stories.add('default ', () =>
         {value: 'ikea_price_asc'},
         {value: 'ikea_price_desc'},
       ]}
-      defaultSelectedIndex="ikea"
+      defaultRefinement="ikea"
     />
   </WrapWithHits>
 ).add('with labels', () =>
@@ -27,7 +27,7 @@ stories.add('default ', () =>
         {value: 'ikea_price_asc', label: 'Price asc.'},
         {value: 'ikea_price_desc', label: 'Price desc.'},
       ]}
-      defaultSelectedIndex="ikea"
+      defaultRefinement="ikea"
     />
   </WrapWithHits>
 ).add('with links', () =>
@@ -38,7 +38,7 @@ stories.add('default ', () =>
         {value: 'ikea_price_asc', label: 'Price asc.'},
         {value: 'ikea_price_desc', label: 'Price desc.'},
       ]}
-      defaultSelectedIndex="ikea"
+      defaultRefinement="ikea"
     />
   </WrapWithHits>
 );
