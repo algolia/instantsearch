@@ -12,6 +12,7 @@ import inlineProps from './plugins/inlineProps/index.js';
 import onlyChanged from './plugins/onlyChanged.js';
 import source from './plugins/source.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
+import autoprefixer from './plugins/autoprefixer.js';
 
 // performance and debug info for metalsmith, when needed see usage below
 // import {start as perfStart, stop as perfStop} from './plugins/perf.js';
@@ -87,7 +88,10 @@ const common = [
   sass({
     sourceMap: true,
     sourceMapContents: true,
+    outputStyle: 'nested',
   }),
+  // since we use @import, autoprefixer is used after sass
+  autoprefixer,
   // perfStop(),
 ];
 
