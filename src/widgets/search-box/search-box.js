@@ -92,7 +92,13 @@ function searchBox({
     },
     wrapInput(input) {
       // Wrap input in a .ais-search-box div
-      const wrapper = document.createElement('div');
+      const wrapper = document.createElement('form');
+      wrapper.action = '#';
+      wrapper.onsubmit = function(e){
+        e.preventDefault();
+        document.activeElement.blur();
+      };
+
       const CSSClassesToAdd = cx(bem(null), cssClasses.root).split(' ');
       CSSClassesToAdd.forEach(cssClass => wrapper.classList.add(cssClass));
       wrapper.appendChild(input);
