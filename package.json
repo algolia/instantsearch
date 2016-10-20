@@ -88,6 +88,7 @@
     "recast": "^0.11.14",
     "recursive-readdir": "^2.1.0",
     "require-from-string": "^1.2.1",
+    "rheostat": "^2.0.1",
     "stat-mode": "^0.2.2",
     "style-loader": "^0.13.1",
     "unescape-html": "^1.0.0",
