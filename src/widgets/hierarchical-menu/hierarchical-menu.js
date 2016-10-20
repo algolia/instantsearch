@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -71,7 +71,7 @@ function hierarchicalMenu({
     autoHideContainer = true,
     templates = defaultTemplates,
     collapsible = false,
-    transformData
+    transformData,
   } = {}) {
   if (!container || !attributes || !attributes.length) {
     throw new Error(usage);
@@ -99,7 +99,7 @@ function hierarchicalMenu({
     item: cx(bem('item'), userCssClasses.item),
     active: cx(bem('item', 'active'), userCssClasses.active),
     link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count)
+    count: cx(bem('count'), userCssClasses.count),
   };
 
   return {
@@ -109,11 +109,11 @@ function hierarchicalMenu({
         attributes,
         separator,
         rootPath,
-        showParentLevel
+        showParentLevel,
       }],
       maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
         Math.max(currentConfiguration.maxValuesPerFacet, limit) :
-        limit
+        limit,
     }),
     init({helper, templatesConfig}) {
       this._toggleRefinement = facetValue => helper
@@ -124,7 +124,7 @@ function hierarchicalMenu({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
     },
     _prepareFacetValues(facetValues, state) {
@@ -160,7 +160,7 @@ function hierarchicalMenu({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

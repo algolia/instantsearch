@@ -21,7 +21,7 @@ describe('RefinementListItem', () => {
       templateData: {template: 'data'},
       templateKey: 'item key',
       templateProps: {template: 'props'},
-      subItems: <div/>
+      subItems: <div/>,
     };
     renderer = createRenderer();
   });

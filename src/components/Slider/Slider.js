@@ -38,7 +38,7 @@ class Slider extends React.Component {
         mode: 'positions',
         density: 3,
         values: [0, 50, 100],
-        stepped: true
+        stepped: true,
       };
     } else {
       pips = this.props.pips;
@@ -65,7 +65,7 @@ Slider.propTypes = {
   onSlide: React.PropTypes.func,
   pips: React.PropTypes.oneOfType([
     React.PropTypes.bool,
-    React.PropTypes.object
+    React.PropTypes.object,
   ]),
   range: React.PropTypes.object.isRequired,
   start: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
@@ -73,10 +73,10 @@ Slider.propTypes = {
     React.PropTypes.bool,
     React.PropTypes.arrayOf(
       React.PropTypes.shape({
-        to: React.PropTypes.func
+        to: React.PropTypes.func,
       })
-    )
-  ])
+    ),
+  ]),
 };
 
 export default Slider;

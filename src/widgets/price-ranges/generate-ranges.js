@@ -29,7 +29,7 @@ function generateRanges(stats) {
     next = min;
 
     facetValues.push({
-      to: next
+      to: next,
     });
 
     while (next < avg) {
@@ -40,7 +40,7 @@ function generateRanges(stats) {
       }
       facetValues.push({
         from,
-        to: next
+        to: next,
       });
     }
     while (next < max) {
@@ -51,7 +51,7 @@ function generateRanges(stats) {
       }
       facetValues.push({
         from,
-        to: next
+        to: next,
       });
     }
 
@@ -59,7 +59,7 @@ function generateRanges(stats) {
       if (next !== avg) {
         facetValues.push({
           from: next,
-          to: avg
+          to: avg,
         });
         next = avg;
       }

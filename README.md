@@ -128,7 +128,13 @@ We use the [polyfill.io](https://cdn.polyfill.io/v2/docs/).
 
 ## Development workflow
 
-Only the local example:
+Requirements:
+- [Node.js](https://nodejs.org/)
+- [yarn](https://yarnpkg.com/en/docs/install)
+- [Ruby](https://www.ruby-lang.org/en/)
+- [Bundler](http://bundler.io/)
+
+Run the local example:
 
 ```sh
 npm run dev
@@ -136,11 +142,17 @@ npm run dev
 # make changes in your widgets, or in example/app.js
 ```
 
-Local example and docs:
+Run local example and docs:
 
 ```sh
 npm run dev:docs
 # open http://localhost:4000/
+```
+
+Run tests and lint:
+
+```sh
+npm test
 ```
 
 ## Test

@@ -6,5 +6,5 @@ export default {
   {{labels.andUp}}
   {{#count}}<span class="{{cssClasses.count}}">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span>{{/count}}
 </a>`,
-  footer: ''
+  footer: '',
 };

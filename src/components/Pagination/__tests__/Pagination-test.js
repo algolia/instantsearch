@@ -63,7 +63,7 @@ describe('Pagination', () => {
     const out = new Pagination({cssClasses: {}}).pageLink({
       label: 'test',
       pageNumber: 8,
-      createURL
+      createURL,
     });
 
     expect(out).toEqualJSX(
@@ -86,7 +86,7 @@ describe('Pagination', () => {
       label: 'test',
       isDisabled: true,
       pageNumber: 8,
-      createURL
+      createURL,
     });
 
     expect(out).toEqualJSX(
@@ -111,7 +111,7 @@ describe('Pagination', () => {
 
   it('should handle special clicks', () => {
     const props = {
-      setCurrentPage: sinon.spy()
+      setCurrentPage: sinon.spy(),
     };
     const preventDefault = sinon.spy();
     const component = new Pagination(props);
@@ -138,7 +138,7 @@ describe('Pagination', () => {
         first: 'first',
         last: 'last',
         active: 'active',
-        disabled: 'disabled'
+        disabled: 'disabled',
       },
       labels: {first: '', last: '', next: '', previous: ''},
       currentPage: 0,
@@ -146,7 +146,7 @@ describe('Pagination', () => {
       nbPages: 20,
       padding: 3,
       setCurrentPage: () => {},
-      ...extraProps
+      ...extraProps,
     };
 
     renderer.render(<Pagination {...props} />);

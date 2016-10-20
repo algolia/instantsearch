@@ -96,15 +96,15 @@ describe('CurrentRefinedValues', () => {
       header: 'DEFAULT HEADER TEMPLATE',
       clearAll: 'DEFAULT CLEAR ALL TEMPLATE',
       item: 'DEFAULT ITEM TEMPLATE',
-      footer: 'DEFAULT FOOTER TEMPLATE'
+      footer: 'DEFAULT FOOTER TEMPLATE',
     };
 
     templateProps = {
       templates: {
         clearAll: 'CLEAR ALL',
-        item: '{{attributeName}}: {{name}}'
+        item: '{{attributeName}}: {{name}}',
       },
-      defaultTemplates
+      defaultTemplates,
     };
 
     cssClasses = {
@@ -112,7 +112,7 @@ describe('CurrentRefinedValues', () => {
       list: 'list-class',
       item: 'item-class',
       link: 'link-class',
-      count: 'count-class'
+      count: 'count-class',
     };
 
     refinements = [
@@ -122,7 +122,7 @@ describe('CurrentRefinedValues', () => {
       {type: 'disjunctive', attributeName: 'disjunctiveFacet', name: 'disjunctiveFacet-val1'},
       {type: 'hierarchical', attributeName: 'hierarchicalFacet', name: 'hierarchicalFacet-val1'},
       {type: 'numeric', attributeName: 'numericFacet', name: 'numericFacet-val1', operator: '>='},
-      {type: 'tag', attributeName: '_tags', name: 'tag1'}
+      {type: 'tag', attributeName: '_tags', name: 'tag1'},
     ];
 
     refinementKeys = [
@@ -132,7 +132,7 @@ describe('CurrentRefinedValues', () => {
       'disjunctiveFacet:disjunctiveFacet-val1',
       'hierarchical:hierarchicalFacet-val1',
       'numericFacet>=numericFacet-val1',
-      '_tags:tag1'
+      '_tags:tag1',
     ];
 
     clearRefinementURLs = [
@@ -142,7 +142,7 @@ describe('CurrentRefinedValues', () => {
       '#cleared-disjunctiveFacet-val1',
       '#cleared-hierarchicalFacet-val1',
       '#cleared-numericFacet-val1',
-      '#cleared-tag1'
+      '#cleared-tag1',
     ];
 
     refinementTemplateData = [
@@ -152,7 +152,7 @@ describe('CurrentRefinedValues', () => {
       {cssClasses, ...refinements[3]},
       {cssClasses, ...refinements[4]},
       {displayOperator: '&ge;', cssClasses, ...refinements[5]},
-      {cssClasses, ...refinements[6]}
+      {cssClasses, ...refinements[6]},
     ];
 
     refinementTemplateProps = [{}, {}, {}, {}, {}, {}, {}];
@@ -164,7 +164,7 @@ describe('CurrentRefinedValues', () => {
         disjunctiveFacet: {name: 'disjunctiveFacet'},
         hierarchicalFacet: {name: 'hierarchicalFacet'},
         numericFacet: {name: 'numericFacet'},
-        _tags: {name: '_tags'}
+        _tags: {name: '_tags'},
       },
       clearAllClick: () => {},
       clearAllPosition: 'before',
@@ -173,31 +173,31 @@ describe('CurrentRefinedValues', () => {
       clearRefinementURLs,
       cssClasses,
       refinements,
-      templateProps
+      templateProps,
     };
 
     listProps = {
-      className: 'list-class'
+      className: 'list-class',
     };
     clearAllLinkProps = {
       className: 'clear-all-class',
       href: '#cleared-all',
-      onClick: () => {}
+      onClick: () => {},
     };
     clearAllTemplateProps = {
       templateKey: 'clearAll',
-      ...templateProps
+      ...templateProps,
     };
     itemProps = {
-      className: 'item-class'
+      className: 'item-class',
     };
     itemLinkProps = {
       className: 'link-class',
-      onClick: () => {}
+      onClick: () => {},
     };
     itemTemplateProps = {
       templateKey: 'item',
-      ...templateProps
+      ...templateProps,
     };
   });
 
@@ -234,7 +234,7 @@ describe('CurrentRefinedValues', () => {
       forEach(refinements, (refinement, i) => {
         if (refinement.attributeName === 'facet') {
           refinementTemplateProps[i].templates = {
-            item: 'CUSTOM TEMPLATE'
+            item: 'CUSTOM TEMPLATE',
           };
         }
       });
@@ -317,7 +317,6 @@ describe('CurrentRefinedValues', () => {
       expect(render()).toEqualJSX(build(false));
     });
   });
-
 
   context('options.clearAllURL', () => {
     it('is used in the clearAll element before', () => {
@@ -497,7 +496,7 @@ describe('CurrentRefinedValues', () => {
       refinements = [
         {type: 'numeric', attributeName: 'customNumericFilter', operator: '=', name: 'val1'},
         {type: 'numeric', attributeName: 'customNumericFilter', operator: '<=', name: 'val2'},
-        {type: 'numeric', attributeName: 'customNumericFilter', operator: '>=', name: 'val3'}
+        {type: 'numeric', attributeName: 'customNumericFilter', operator: '>=', name: 'val3'},
       ];
 
       parameters.refinements = refinements;
@@ -507,12 +506,12 @@ describe('CurrentRefinedValues', () => {
       refinementKeys.push([
         'customNumericFilter=val1',
         'customNumericFilter<=val2',
-        'customNumericFilter>=val3'
+        'customNumericFilter>=val3',
       ]);
       refinementTemplateData = [
         {cssClasses, displayOperator: '=', ...refinements[0]},
         {cssClasses, displayOperator: '&le;', ...refinements[1]},
-        {cssClasses, displayOperator: '&ge;', ...refinements[2]}
+        {cssClasses, displayOperator: '&ge;', ...refinements[2]},
       ];
 
       expect(out).toEqualJSX(build());

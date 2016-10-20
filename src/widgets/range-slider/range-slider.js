@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import find from 'lodash/find';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -14,7 +14,7 @@ import SliderComponent from '../../components/Slider/Slider.js';
 const bem = bemHelper('ais-range-slider');
 const defaultTemplates = {
   header: '',
-  footer: ''
+  footer: '',
 };
 
 /**
@@ -72,7 +72,7 @@ function rangeSlider({
     autoHideContainer = true,
     min: userMin,
     max: userMax,
-    precision = 2
+    precision = 2,
   } = {}) {
   if (!container || !attributeName) {
     throw new Error(usage);
@@ -82,7 +82,7 @@ function rangeSlider({
 
   const sliderFormatter = {
     from: v => v,
-    to: v => formatToNumber(v).toLocaleString()
+    to: v => formatToNumber(v).toLocaleString(),
   };
 
   const containerNode = getContainerNode(container);
@@ -95,13 +95,13 @@ function rangeSlider({
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer)
+    footer: cx(bem('footer'), userCssClasses.footer),
   };
 
   return {
     getConfiguration: originalConf => {
       const conf = {
-        disjunctiveFacets: [attributeName]
+        disjunctiveFacets: [attributeName],
       };
 
       if (
@@ -142,7 +142,7 @@ function rangeSlider({
 
       return {
         min,
-        max
+        max,
       };
     },
     _refine(helper, oldValues, newValues) {
@@ -159,14 +159,14 @@ function rangeSlider({
       this._templateProps = prepareTemplateProps({
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
     },
     render({results, helper}) {
       const facet = find(results.disjunctiveFacets, {name: attributeName});
       const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
         min: null,
-        max: null
+        max: null,
       };
 
       if (userMin !== undefined) stats.min = userMin;
@@ -194,7 +194,7 @@ function rangeSlider({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

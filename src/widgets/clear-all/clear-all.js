@@ -6,7 +6,7 @@ import {
   prepareTemplateProps,
   getRefinements,
   clearRefinementsFromState,
-  clearRefinementsAndSearch
+  clearRefinementsAndSearch,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -20,6 +20,7 @@ const bem = bemHelper('ais-clear-all');
  * Allows to clear all refinements at once
  * @function clearAll
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
+ * @param  {string[]} [options.excludeAttributes] List of attributes names to exclude from clear actions
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header] Header template
  * @param  {string|Function} [options.templates.link] Link template
@@ -50,7 +51,7 @@ function clearAll({
     cssClasses: userCssClasses = {},
     collapsible = false,
     autoHideContainer = true,
-    excludeAttributes = []
+    excludeAttributes = [],
   } = {}) {
   if (!container) {
     throw new Error(usage);
@@ -67,7 +68,7 @@ function clearAll({
     header: cx(bem('header'), userCssClasses.header),
     body: cx(bem('body'), userCssClasses.body),
     footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link)
+    link: cx(bem('link'), userCssClasses.link),
   };
 
   return {
@@ -101,7 +102,7 @@ function clearAll({
       if (this.clearAttributes.length > 0) {
         clearRefinementsAndSearch(helper, this.clearAttributes);
       }
-    }
+    },
   };
 }
 

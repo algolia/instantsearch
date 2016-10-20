@@ -59,7 +59,7 @@ class InstantSearch extends EventEmitter {
     numberLocale,
     searchParameters = {},
     urlSync = null,
-    searchFunction
+    searchFunction,
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
@@ -82,7 +82,7 @@ Usage: instantsearch({
     this.widgets = [];
     this.templatesConfig = {
       helpers: createHelpers({numberLocale}),
-      compileOptions: {}
+      compileOptions: {},
     };
 
     if (searchFunction) {
@@ -173,7 +173,7 @@ Usage: instantsearch({
         results,
         state,
         helper,
-        createURL: this._createAbsoluteURL
+        createURL: this._createAbsoluteURL,
       });
     });
     this.emit('render');
@@ -187,7 +187,7 @@ Usage: instantsearch({
           helper,
           templatesConfig: this.templatesConfig,
           createURL: this._createAbsoluteURL,
-          onHistoryChange: this._onHistoryChange
+          onHistoryChange: this._onHistoryChange,
         });
       }
     });

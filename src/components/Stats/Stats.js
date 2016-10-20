@@ -19,7 +19,7 @@ class Stats extends React.Component {
       page: this.props.page,
       processingTimeMS: this.props.processingTimeMS,
       query: this.props.query,
-      cssClasses: this.props.cssClasses
+      cssClasses: this.props.cssClasses,
     };
 
     return (
@@ -30,7 +30,7 @@ class Stats extends React.Component {
 
 Stats.propTypes = {
   cssClasses: React.PropTypes.shape({
-    time: React.PropTypes.string
+    time: React.PropTypes.string,
   }),
   hitsPerPage: React.PropTypes.number,
   nbHits: React.PropTypes.number,
@@ -38,7 +38,7 @@ Stats.propTypes = {
   page: React.PropTypes.number,
   processingTimeMS: React.PropTypes.number,
   query: React.PropTypes.string,
-  templateProps: React.PropTypes.object.isRequired
+  templateProps: React.PropTypes.object.isRequired,
 };
 
 export default Stats;

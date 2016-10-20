@@ -4,7 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -40,14 +39,14 @@ describe('starRating()', () => {
       addDisjunctiveFacetRefinement: sinon.spy(),
       getRefinements: sinon.stub().returns([]),
       search: sinon.spy(),
-      setState: sinon.spy()
+      setState: sinon.spy(),
     };
     state = {
-      toggleRefinement: sinon.spy()
+      toggleRefinement: sinon.spy(),
     };
     results = {
       getFacetValues: sinon.stub().returns([]),
-      hits: []
+      hits: [],
     };
     createURL = () => '#';
     widget.init({helper});
@@ -74,7 +73,7 @@ describe('starRating()', () => {
         list: 'ais-star-rating--list',
         star: 'ais-star-rating--star',
         emptyStar: 'ais-star-rating--star__empty',
-        root: 'ais-star-rating'
+        root: 'ais-star-rating',
       },
       collapsible: false,
       createURL: () => {},
@@ -82,7 +81,7 @@ describe('starRating()', () => {
         {isRefined: false, stars: [true, true, true, true, false], count: 0, name: '4', labels: defaultLabels},
         {isRefined: false, stars: [true, true, true, false, false], count: 0, name: '3', labels: defaultLabels},
         {isRefined: false, stars: [true, true, false, false, false], count: 0, name: '2', labels: defaultLabels},
-        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels}
+        {isRefined: false, stars: [true, false, false, false, false], count: 0, name: '1', labels: defaultLabels},
       ],
       toggleRefinement: () => {},
       shouldAutoHideContainer: false,
@@ -93,9 +92,9 @@ describe('starRating()', () => {
         useCustomCompileOptions: {
           footer: false,
           header: false,
-          item: false
-        }
-      }
+          item: false,
+        },
+      },
     };
 
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
@@ -118,8 +117,8 @@ describe('starRating()', () => {
         isRefined: true,
         name: '1',
         stars: [true, false, false, false, false],
-        labels: defaultLabels
-      }
+        labels: defaultLabels,
+      },
     ]);
   });
 

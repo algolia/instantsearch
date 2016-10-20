@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   bemHelper,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import some from 'lodash/some';
 import cx from 'classnames';
@@ -36,7 +36,7 @@ function hitsPerPageSelector({
     container,
     options: userOptions,
     cssClasses: userCssClasses = {},
-    autoHideContainer = false
+    autoHideContainer = false,
   } = {}) {
   let options = userOptions;
 
@@ -52,7 +52,7 @@ function hitsPerPageSelector({
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item)
+    item: cx(bem('item'), userCssClasses.item),
   };
 
   return {
@@ -100,7 +100,7 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

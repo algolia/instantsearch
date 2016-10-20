@@ -4,7 +4,7 @@ import defaults from 'lodash/defaults';
 import cx from 'classnames';
 import {
   bemHelper,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import PaginationComponent from '../../components/Pagination/Pagination.js';
@@ -13,7 +13,7 @@ const defaultLabels = {
   previous: '‹',
   next: '›',
   first: '«',
-  last: '»'
+  last: '»',
 };
 const bem = bemHelper('ais-pagination');
 
@@ -63,7 +63,7 @@ function pagination({
     padding = 3,
     showFirstLast = true,
     autoHideContainer = true,
-    scrollTo: userScrollTo = 'body'
+    scrollTo: userScrollTo = 'body',
   } = {}) {
   let scrollTo = userScrollTo;
 
@@ -92,7 +92,7 @@ function pagination({
     first: cx(bem('item', 'first'), userCssClasses.first),
     last: cx(bem('item', 'last'), userCssClasses.last),
     active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled)
+    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled),
   };
 
   const labels = defaults(userLabels, defaultLabels);
@@ -131,7 +131,7 @@ function pagination({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

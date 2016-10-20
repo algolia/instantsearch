@@ -16,15 +16,14 @@ describe('Selector', () => {
     renderer = createRenderer();
   });
 
-
   it('should render <Selector/> with strings', () => {
     const out = render({
       currentValue: 'index-a',
       cssClasses: {
         root: 'custom-root',
-        item: 'custom-item'
+        item: 'custom-item',
       },
-      options: [{value: 'index-a', label: 'Index A'}, {value: 'index-b', label: 'Index B'}]
+      options: [{value: 'index-a', label: 'Index A'}, {value: 'index-b', label: 'Index B'}],
     });
     expect(out).toEqualJSX(
       <select
@@ -43,9 +42,9 @@ describe('Selector', () => {
       currentValue: 10,
       cssClasses: {
         root: 'custom-root',
-        item: 'custom-item'
+        item: 'custom-item',
       },
-      options: [{value: 10, label: '10 results per page'}, {value: 20, label: '20 results per page'}]
+      options: [{value: 10, label: '10 results per page'}, {value: 20, label: '20 results per page'}],
     });
     expect(out).toEqualJSX(
       <select

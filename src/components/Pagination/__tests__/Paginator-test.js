@@ -9,7 +9,7 @@ describe('paginator: simple cases', () => {
     const pager = new Paginator({
       currentPage: 0,
       total: 10,
-      padding: 2
+      padding: 2,
     });
 
     it('should return the pages', () => {
@@ -31,7 +31,7 @@ describe('paginator: simple cases', () => {
     const pager = new Paginator({
       currentPage: 2,
       total: 10,
-      padding: 2
+      padding: 2,
     });
 
     it('should return the pages', () => {
@@ -53,7 +53,7 @@ describe('paginator: simple cases', () => {
     const pager = new Paginator({
       currentPage: 5,
       total: 10,
-      padding: 2
+      padding: 2,
     });
 
     it('should return the pages', () => {
@@ -75,7 +75,7 @@ describe('paginator: simple cases', () => {
     const pager = new Paginator({
       currentPage: 8,
       total: 10,
-      padding: 2
+      padding: 2,
     });
 
     it('should return the pages', () => {
@@ -97,7 +97,7 @@ describe('paginator: simple cases', () => {
     const pager = new Paginator({
       currentPage: 9,
       total: 10,
-      padding: 2
+      padding: 2,
     });
 
     it('should return the pages', () => {
@@ -120,7 +120,7 @@ describe('paginator: number of pages is less than 2*padding+1', () => {
   const pager = new Paginator({
     currentPage: 0,
     total: 1,
-    padding: 2
+    padding: 2,
   });
 
   it('should return the pages', () => {
@@ -142,7 +142,7 @@ describe('paginator: bug #668', () => {
   const pager = new Paginator({
     currentPage: 4,
     total: 6,
-    padding: 3
+    padding: 3,
   });
 
   it('should return the pages', () => {

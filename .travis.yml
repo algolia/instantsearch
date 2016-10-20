@@ -1,5 +1,5 @@
 language: node_js
-node_js: 6
+node_js: stable
 addons:
   apt:
     sources:
@@ -11,8 +11,9 @@ before_install:
   - git config --global user.name "algobot"
   - rvm install 2.3.1
   - rvm use 2.3.1
-before_cache: npm prune
-install: npm install
+install:
+  - npm install --global yarn
+  - yarn
 script: ./scripts/test-ci.sh
 branches:
   only:
@@ -25,7 +26,8 @@ branches:
 sudo: false
 cache:
   directories:
-    - node_modules
+    - ~/.yarn
+    - ~/.nvm
 env:
   global:
     - CXX=g++-4.8

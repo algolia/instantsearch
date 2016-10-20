@@ -4,7 +4,6 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -44,22 +43,22 @@ describe('sortBySelector()', () => {
     container = document.createElement('div');
     indices = [
       {name: 'index-a', label: 'Index A'},
-      {name: 'index-b', label: 'Index B'}
+      {name: 'index-b', label: 'Index B'},
     ];
     cssClasses = {
       root: ['custom-root', 'cx'],
-      item: 'custom-item'
+      item: 'custom-item',
     };
     widget = sortBySelector({container, indices, cssClasses});
     helper = {
       getIndex: sinon.stub().returns('index-a'),
       setIndex: sinon.stub().returnsThis(),
-      search: sinon.spy()
+      search: sinon.spy(),
     };
 
     results = {
       hits: [],
-      nbHits: 0
+      nbHits: 0,
     };
     widget.init({helper});
   });
@@ -74,15 +73,15 @@ describe('sortBySelector()', () => {
     props = {
       cssClasses: {
         root: 'ais-sort-by-selector custom-root cx',
-        item: 'ais-sort-by-selector--item custom-item'
+        item: 'ais-sort-by-selector--item custom-item',
       },
       currentValue: 'index-a',
       shouldAutoHideContainer: true,
       options: [
         {value: 'index-a', label: 'Index A'},
-        {value: 'index-b', label: 'Index B'}
+        {value: 'index-b', label: 'Index B'},
       ],
-      setValue: () => {}
+      setValue: () => {},
     };
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);

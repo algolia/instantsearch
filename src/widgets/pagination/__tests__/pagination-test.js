@@ -37,13 +37,13 @@ describe('pagination()', () => {
       first: 'first',
       last: 'last',
       active: 'active',
-      disabled: 'disabled'
+      disabled: 'disabled',
     };
     widget = pagination({container, scrollTo: false, cssClasses});
     results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 200, hitsPerPage: 10, nbPages: 20};
     helper = {
       setCurrentPage: sinon.spy(),
-      search: sinon.spy()
+      search: sinon.spy(),
     };
     widget.init({helper});
   });
@@ -75,7 +75,7 @@ describe('pagination()', () => {
     beforeEach(() => {
       scrollIntoView = sinon.spy();
       const getContainerNode = sinon.stub().returns({
-        scrollIntoView
+        scrollIntoView,
       });
       pagination.__Rewire__('getContainerNode', getContainerNode);
     });
@@ -116,7 +116,7 @@ describe('pagination()', () => {
         first: 'ais-pagination--item__first first',
         last: 'ais-pagination--item__last last',
         active: 'ais-pagination--item__active active',
-        disabled: 'ais-pagination--item__disabled disabled'
+        disabled: 'ais-pagination--item__disabled disabled',
       },
       currentPage: 0,
       shouldAutoHideContainer: false,
@@ -126,7 +126,7 @@ describe('pagination()', () => {
       padding: 3,
       setCurrentPage: () => {},
       showFirstLast: true,
-      createURL: () => '#'
+      createURL: () => '#',
     };
   }
 });
@@ -155,7 +155,7 @@ describe('pagination MaxPage', () => {
       first: 'first',
       last: 'last',
       active: 'active',
-      disabled: 'disabled'
+      disabled: 'disabled',
     };
     results = {hits: [{first: 'hit', second: 'hit'}], nbHits: 300, hitsPerPage: 10, nbPages: 30};
     paginationOptions = {container, scrollTo: false, cssClasses};

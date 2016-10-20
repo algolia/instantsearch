@@ -4,7 +4,7 @@ import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
-  prefixKeys
+  prefixKeys,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
@@ -70,7 +70,7 @@ function menu({
     collapsible = false,
     transformData,
     autoHideContainer = true,
-    showMore = false
+    showMore = false,
   } = {}) {
   const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
@@ -107,7 +107,7 @@ function menu({
     item: cx(bem('item'), userCssClasses.item),
     active: cx(bem('item', 'active'), userCssClasses.active),
     link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count)
+    count: cx(bem('count'), userCssClasses.count),
   };
 
   return {
@@ -115,8 +115,8 @@ function menu({
       const widgetConfiguration = {
         hierarchicalFacets: [{
           name: hierarchicalFacetName,
-          attributes: [attributeName]
-        }]
+          attributes: [attributeName],
+        }],
       };
 
       const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
@@ -129,7 +129,7 @@ function menu({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates: allTemplates
+        templates: allTemplates,
       });
       this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
       this._toggleRefinement = facetValue => helper
@@ -167,7 +167,7 @@ function menu({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

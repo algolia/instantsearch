@@ -6,13 +6,13 @@ export default {
     path: './dist/',
     filename: 'instantsearch-preact.js',
     library: 'instantsearch',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
   resolve: {
     alias: {
       'react': 'preact-compat',
-      'react-dom': 'preact-compat'
+      'react-dom': 'preact-compat',
     },
-    ...baseConfig.resolve
-  }
+    ...baseConfig.resolve,
+  },
 };

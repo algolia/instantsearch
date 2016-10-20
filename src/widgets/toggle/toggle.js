@@ -1,6 +1,6 @@
 import {
   bemHelper,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import defaultTemplates from './defaultTemplates.js';
 import cx from 'classnames';
@@ -76,7 +76,7 @@ function toggle({
     collapsible = false,
     cssClasses: userCssClasses = {},
     transformData,
-    autoHideContainer = true
+    autoHideContainer = true,
   } = {}) {
   const containerNode = getContainerNode(container);
 
@@ -101,7 +101,7 @@ function toggle({
     active: cx(bem('item', 'active'), userCssClasses.active),
     label: cx(bem('label'), userCssClasses.label),
     checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count)
+    count: cx(bem('count'), userCssClasses.count),
   };
 
   // store the computed options for usage in the two toggle implementations
@@ -115,7 +115,7 @@ function toggle({
     hasAnOffValue,
     containerNode,
     RefinementList,
-    cssClasses
+    cssClasses,
   };
 
   return {
@@ -133,7 +133,7 @@ function toggle({
       return toggleImplementation.getConfiguration(currentSearchParameters, searchParametersFromUrl);
     },
     init() {},
-    render() {}
+    render() {},
   };
 }
 

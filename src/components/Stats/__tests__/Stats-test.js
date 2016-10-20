@@ -17,14 +17,13 @@ describe('Stats', () => {
     renderer = createRenderer();
   });
 
-
   it('should render <Template data= />', () => {
     const out = render();
     const defaultProps = {
       cssClasses: {},
       hasManyResults: true,
       hasNoResults: false,
-      hasOneResult: false
+      hasOneResult: false,
     };
     expect(out).toEqualJSX(
       <Template
@@ -49,7 +48,7 @@ describe('Stats', () => {
       page: 0,
       processingTimeMS: 42,
       query: 'a query',
-      ...extraProps
+      ...extraProps,
     };
   }
 });

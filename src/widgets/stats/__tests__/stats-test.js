@@ -40,7 +40,7 @@ describe('stats()', () => {
       nbPages: 10,
       hitsPerPage: 2,
       processingTimeMS: 42,
-      query: 'a query'
+      query: 'a query',
     };
   });
 
@@ -57,7 +57,7 @@ describe('stats()', () => {
         header: 'ais-stats--header',
         footer: 'ais-stats--footer',
         root: 'ais-stats',
-        time: 'ais-stats--time'
+        time: 'ais-stats--time',
       },
       collapsible: false,
       hitsPerPage: 2,
@@ -67,7 +67,7 @@ describe('stats()', () => {
       processingTimeMS: 42,
       query: 'a query',
       shouldAutoHideContainer: false,
-      templateProps: ReactDOM.render.firstCall.args[0].props.templateProps
+      templateProps: ReactDOM.render.firstCall.args[0].props.templateProps,
     };
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
     expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');

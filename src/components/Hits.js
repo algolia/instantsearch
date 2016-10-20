@@ -9,7 +9,7 @@ class Hits extends React.Component {
     const renderedHits = map(this.props.results.hits, (hit, position) => {
       const data = {
         ...hit,
-        __hitIndex: position
+        __hitIndex: position,
       };
       return (
         <Template
@@ -79,14 +79,14 @@ Hits.propTypes = {
     root: React.PropTypes.string,
     item: React.PropTypes.string,
     allItems: React.PropTypes.string,
-    empty: React.PropTypes.string
+    empty: React.PropTypes.string,
   }),
   results: React.PropTypes.object,
-  templateProps: React.PropTypes.object.isRequired
+  templateProps: React.PropTypes.object.isRequired,
 };
 
 Hits.defaultProps = {
-  results: {hits: []}
+  results: {hits: []},
 };
 
 export default Hits;

@@ -2,7 +2,7 @@ import templates from './defaultShowMoreTemplates.js';
 
 const defaultShowMoreConfig = {
   templates,
-  limit: 100
+  limit: 100,
 };
 
 export default function getShowMoreConfig(showMoreOptions) {

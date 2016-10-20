@@ -78,9 +78,9 @@ describe('hierarchicalMenu()', () => {
           rootPath: null,
           attributes: ['hello', 'world'],
           separator: ' > ',
-          showParentLevel: true
+          showParentLevel: true,
         }],
-        maxValuesPerFacet: 10
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -93,9 +93,9 @@ describe('hierarchicalMenu()', () => {
           rootPath: null,
           attributes: ['hello', 'world'],
           separator: ' ? ',
-          showParentLevel: true
+          showParentLevel: true,
         }],
-        maxValuesPerFacet: 10
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -108,9 +108,9 @@ describe('hierarchicalMenu()', () => {
           rootPath: null,
           attributes: ['hello', 'world'],
           separator: ' > ',
-          showParentLevel: false
+          showParentLevel: false,
         }],
-        maxValuesPerFacet: 10
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -123,9 +123,9 @@ describe('hierarchicalMenu()', () => {
           rootPath: 'Beer',
           attributes: ['hello', 'world'],
           separator: ' > ',
-          showParentLevel: true
+          showParentLevel: true,
         }],
-        maxValuesPerFacet: 10
+        maxValuesPerFacet: 10,
       });
     });
 
@@ -163,7 +163,7 @@ describe('hierarchicalMenu()', () => {
     const defaultTemplates = {
       header: 'header',
       item: 'item',
-      footer: 'footer'
+      footer: 'footer',
     };
     let templateProps;
     let helper;
@@ -176,7 +176,7 @@ describe('hierarchicalMenu()', () => {
         transformData: undefined,
         templatesConfig: undefined,
         templates: defaultTemplates,
-        useCustomCompileOptions: {header: false, item: false, footer: false}
+        useCustomCompileOptions: {header: false, item: false, footer: false},
       };
       cssClasses = {
         active: 'ais-hierarchical-menu--item__active',
@@ -188,16 +188,16 @@ describe('hierarchicalMenu()', () => {
         item: 'ais-hierarchical-menu--item',
         link: 'ais-hierarchical-menu--link',
         list: 'ais-hierarchical-menu--list',
-        root: 'ais-hierarchical-menu'
+        root: 'ais-hierarchical-menu',
       };
       data = {data: [{name: 'foo'}, {name: 'bar'}]};
       results = {getFacetValues: sinon.spy(() => data)};
       helper = {
         toggleRefinement: sinon.stub().returnsThis(),
-        search: sinon.spy()
+        search: sinon.spy(),
       };
       state = {
-        toggleRefinement: sinon.spy()
+        toggleRefinement: sinon.spy(),
       };
       options = {container, attributes};
       createURL = () => '#';
@@ -213,7 +213,7 @@ describe('hierarchicalMenu()', () => {
         item: 'item',
         active: 'active',
         link: 'link',
-        count: 'count'
+        count: 'count',
       };
 
       widget = hierarchicalMenu({...options, cssClasses: userCssClasses});
@@ -230,7 +230,7 @@ describe('hierarchicalMenu()', () => {
         item: 'ais-hierarchical-menu--item item',
         active: 'ais-hierarchical-menu--item__active active',
         link: 'ais-hierarchical-menu--link link',
-        count: 'ais-hierarchical-menu--count count'
+        count: 'ais-hierarchical-menu--count count',
       });
     });
 
@@ -261,9 +261,9 @@ describe('hierarchicalMenu()', () => {
       expect(results.getFacetValues.getCall(0).args).toEqual([
         'hello', {
           sortBy: [
-            'name:asc'
-          ]
-        }
+            'name:asc',
+          ],
+        },
       ]);
     });
 
@@ -275,9 +275,9 @@ describe('hierarchicalMenu()', () => {
       expect(results.getFacetValues.getCall(0).args).toEqual([
         'hello', {
           sortBy: [
-            'count:asc'
-          ]
-        }
+            'count:asc',
+          ],
+        },
       ]);
     });
 
@@ -285,7 +285,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({...options, templates: {
         header: 'header2',
         item: 'item2',
-        footer: 'footer2'
+        footer: 'footer2',
       }});
       widget.init({helper, createURL});
       widget.render({results, state});
@@ -293,7 +293,7 @@ describe('hierarchicalMenu()', () => {
         .toEqual({
           header: 'header2',
           item: 'item2',
-          footer: 'footer2'
+          footer: 'footer2',
         });
     });
 
@@ -331,7 +331,7 @@ describe('hierarchicalMenu()', () => {
         {name: 'six'},
         {name: 'seven'},
         {name: 'eight'},
-        {name: 'nine'}
+        {name: 'nine'},
       ];
 
       const firstLevel = [
@@ -339,7 +339,7 @@ describe('hierarchicalMenu()', () => {
         {name: 'two', data: secondLevel},
         {name: 'three'},
         {name: 'four'},
-        {name: 'five'}
+        {name: 'five'},
       ];
 
       data = {data: firstLevel};
@@ -348,9 +348,9 @@ describe('hierarchicalMenu()', () => {
         {name: 'two', data: [
           {name: 'six'},
           {name: 'seven'},
-          {name: 'eight'}
+          {name: 'eight'},
         ]},
-        {name: 'three'}
+        {name: 'three'},
       ];
       widget = hierarchicalMenu({...options, limit: 3});
       widget.init({helper, createURL});

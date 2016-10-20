@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
 import headerFooterHOC from '../../decorators/headerFooter.js';
@@ -45,7 +45,7 @@ function stats({
     autoHideContainer = true,
     templates = defaultTemplates,
     collapsible = false,
-    transformData
+    transformData,
   } = {}) {
   if (!container) throw new Error(usage);
   const containerNode = getContainerNode(container);
@@ -64,7 +64,7 @@ function stats({
     footer: cx(bem('footer'), userCssClasses.footer),
     header: cx(bem('header'), userCssClasses.header),
     root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time)
+    time: cx(bem('time'), userCssClasses.time),
   };
 
   return {
@@ -73,7 +73,7 @@ function stats({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
     },
 
@@ -93,7 +93,7 @@ function stats({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

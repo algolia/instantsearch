@@ -33,7 +33,6 @@ describe('priceRanges()', () => {
   let headerFooter;
   let createURL;
 
-
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     autoHideContainer = sinon.stub().returns(PriceRanges);
@@ -52,8 +51,8 @@ describe('priceRanges()', () => {
         min: 1.99,
         max: 4999.98,
         avg: 243.349,
-        sum: 2433490.0
-      })
+        sum: 2433490.0,
+      }),
     };
   });
 
@@ -69,12 +68,12 @@ describe('priceRanges()', () => {
         getRefinements: sinon.stub().returns([]),
         clearRefinements: sinon.spy(),
         addNumericRefinement: sinon.spy(),
-        search: sinon.spy()
+        search: sinon.spy(),
       };
 
       state = {
         clearRefinements: sinon.stub().returnsThis(),
-        addNumericRefinement: sinon.stub().returnsThis()
+        addNumericRefinement: sinon.stub().returnsThis(),
       };
 
       createURL = sinon.stub().returns('#createURL');
@@ -94,7 +93,7 @@ describe('priceRanges()', () => {
           list: 'ais-price-ranges--list',
           link: 'ais-price-ranges--link',
           root: 'ais-price-ranges root cx',
-          separator: 'ais-price-ranges--separator'
+          separator: 'ais-price-ranges--separator',
         },
         collapsible: false,
         shouldAutoHideContainer: false,
@@ -105,15 +104,15 @@ describe('priceRanges()', () => {
         currency: '$',
         labels: {
           separator: 'to',
-          button: 'Go'
+          button: 'Go',
         },
         refine() {},
         templateProps: {
           templates: defaultTemplates,
           templatesConfig: undefined,
           transformData: undefined,
-          useCustomCompileOptions: {header: false, footer: false, item: false}
-        }
+          useCustomCompileOptions: {header: false, footer: false, item: false},
+        },
       };
       widget.init({helper});
     });

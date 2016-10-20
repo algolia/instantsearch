@@ -22,8 +22,8 @@ class PaginationLink extends React.Component {
     let attributes = {
       className: cssClasses.link,
       dangerouslySetInnerHTML: {
-        __html: label
-      }
+        __html: label,
+      },
     };
 
     // "Enable" the element, by making it a link
@@ -33,7 +33,7 @@ class PaginationLink extends React.Component {
         ...attributes,
         'aria-label': ariaLabel,
         'href': url,
-        'onClick': this.handleClick
+        'onClick': this.handleClick,
       };
     }
 
@@ -50,20 +50,20 @@ class PaginationLink extends React.Component {
 PaginationLink.propTypes = {
   ariaLabel: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.number
+    React.PropTypes.number,
   ]).isRequired,
   cssClasses: React.PropTypes.shape({
     item: React.PropTypes.string,
-    link: React.PropTypes.string
+    link: React.PropTypes.string,
   }),
   handleClick: React.PropTypes.func.isRequired,
   isDisabled: React.PropTypes.bool,
   label: React.PropTypes.oneOfType([
     React.PropTypes.string,
-    React.PropTypes.number
+    React.PropTypes.number,
   ]).isRequired,
   pageNumber: React.PropTypes.number,
-  url: React.PropTypes.string
+  url: React.PropTypes.string,
 };
 
 export default PaginationLink;

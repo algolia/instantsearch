@@ -59,27 +59,30 @@ Since instantsearch.js is a UI library, if your issue is UI related then adding 
 # Development workflow
 
 Requirements:
-- [Node.js](https://nodejs.org/en/)
-- npm@3 (comes with latest Node.js)
+- [Node.js](https://nodejs.org/)
+- [yarn](https://yarnpkg.com/en/docs/install)
 - [Ruby](https://www.ruby-lang.org/en/)
 - [Bundler](http://bundler.io/)
 
-Rapidly iterate with our example app:
+Run the local example:
 
 ```sh
 npm run dev
+# open http://localhost:8080
+# make changes in your widgets, or in example/app.js
 ```
 
-Run the tests and lint:
+Run local example and docs:
+
+```sh
+npm run dev:docs
+# open http://localhost:4000/
+```
+
+Run tests and lint:
 
 ```sh
 npm test
-```
-
-Launch the website docs dev tool:
-```
-npm run dev:docs
-# open http://localhost:4000/
 ```
 
 # Serving the build

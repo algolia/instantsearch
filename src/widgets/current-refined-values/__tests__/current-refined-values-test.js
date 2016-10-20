@@ -27,10 +27,10 @@ describe('currentRefinedValues()', () => {
         clearAll: 'after',
         templates: {},
         transformData: {
-          item: data => data
+          item: data => data,
         },
         autoHideContainer: false,
-        cssClasses: {}
+        cssClasses: {},
       };
       boundWidget = currentRefinedValues.bind(null, parameters);
     });
@@ -74,17 +74,17 @@ describe('currentRefinedValues()', () => {
       it('doesn\'t throw usage with name, label, template and transformData', () => {
         parameters.attributes = [
           {
-            name: 'attr1'
+            name: 'attr1',
           }, {
             name: 'attr2',
-            label: 'Attr 2'
+            label: 'Attr 2',
           }, {
             name: 'attr3',
-            template: 'SPECIFIC TEMPLATE'
+            template: 'SPECIFIC TEMPLATE',
           }, {
             name: 'attr4',
-            transformData: data => { data.name = 'newname'; return data; }
-          }
+            transformData: data => { data.name = 'newname'; return data; },
+          },
         ];
         expect(boundWidget).toNotThrow();
       });
@@ -192,14 +192,14 @@ describe('currentRefinedValues()', () => {
 
       it('doesn\'t throw usage with a string template', () => {
         parameters.templates = {
-          item: 'STRING TEMPLATE'
+          item: 'STRING TEMPLATE',
         };
         expect(boundWidget).toNotThrow();
       });
 
       it('doesn\'t throw usage with a function template', () => {
         parameters.templates = {
-          item: () => 'ITEM TEMPLATE'
+          item: () => 'ITEM TEMPLATE',
         };
         expect(boundWidget).toNotThrow();
       });
@@ -209,7 +209,7 @@ describe('currentRefinedValues()', () => {
           header: 'HEADER TEMPLATE',
           item: 'ITEM TEMPLATE',
           clearAll: 'CLEAR ALL TEMPLATE',
-          footer: 'FOOTER TEMPLATE'
+          footer: 'FOOTER TEMPLATE',
         };
         expect(boundWidget).toNotThrow();
       });
@@ -222,14 +222,14 @@ describe('currentRefinedValues()', () => {
       it('throws usage if one of the template keys doesn\'t exist', () => {
         parameters.templates = {
           header: 'HEADER TEMPLATE',
-          notExistingKey: 'NOT EXISTING KEY TEMPLATE'
+          notExistingKey: 'NOT EXISTING KEY TEMPLATE',
         };
         expect(boundWidget).toThrow(/Usage/);
       });
 
       it('throws usage if a template is not a string or a function', () => {
         parameters.templates = {
-          item: true
+          item: true,
         };
         expect(boundWidget).toThrow(/Usage/);
       });
@@ -248,7 +248,7 @@ describe('currentRefinedValues()', () => {
 
       it('doesn\'t throw usage with an object of functions', () => {
         parameters.transformData = {
-          item: data => data
+          item: data => data,
         };
         expect(boundWidget).toNotThrow();
       });
@@ -294,7 +294,7 @@ describe('currentRefinedValues()', () => {
 
       it('doesn\'t throw usage with string class', () => {
         parameters.cssClasses = {
-          item: 'item-class'
+          item: 'item-class',
         };
         expect(boundWidget).toNotThrow();
       });
@@ -309,7 +309,7 @@ describe('currentRefinedValues()', () => {
           item: 'item-class',
           link: 'link-class',
           count: 'count-class',
-          footer: 'footer-class'
+          footer: 'footer-class',
         };
         expect(boundWidget).toNotThrow();
       });
@@ -321,14 +321,14 @@ describe('currentRefinedValues()', () => {
 
       it('throws usage if one of the cssClasses keys doesn\'t exist', () => {
         parameters.cssClasses = {
-          notExistingKey: 'not-existing-class'
+          notExistingKey: 'not-existing-class',
         };
         expect(boundWidget).toThrow(/Usage/);
       });
 
       it('throws usage if one of the cssClasses values is not a string', () => {
         parameters.cssClasses = {
-          item: true
+          item: true,
         };
         expect(boundWidget).toThrow(/Usage/);
       });
@@ -338,7 +338,7 @@ describe('currentRefinedValues()', () => {
   context('getConfiguration()', () => {
     it('configures nothing', () => {
       const widget = currentRefinedValues({
-        container: document.createElement('div')
+        container: document.createElement('div'),
       });
       expect(widget.getConfiguration).toEqual(undefined);
     });
@@ -379,7 +379,7 @@ describe('currentRefinedValues()', () => {
           {name: 'hierarchicalFacet'},
           {name: 'numericFacet'},
           {name: 'numericDisjunctiveFacet'},
-          {name: '_tags'}
+          {name: '_tags'},
         ],
         onlyListedAttributes: true,
         clearAll: 'after',
@@ -387,7 +387,7 @@ describe('currentRefinedValues()', () => {
           header: 'HEADER',
           item: 'ITEM',
           clearAll: 'CLEAR ALL',
-          footer: 'FOOTER'
+          footer: 'FOOTER',
         },
         autoHideContainer: false,
         cssClasses: {
@@ -399,8 +399,8 @@ describe('currentRefinedValues()', () => {
           item: 'item-css-class',
           link: 'link-css-class',
           count: 'count-css-class',
-          footer: 'footer-css-class'
-        }
+          footer: 'footer-css-class',
+        },
       };
 
       client = algoliasearch('APP_ID', 'API_KEY');
@@ -410,8 +410,8 @@ describe('currentRefinedValues()', () => {
         hierarchicalFacets: [{
           name: 'hierarchicalFacet',
           attributes: ['hierarchicalFacet.lvl0', 'hierarchicalFacet.lvl1'],
-          separator: ' > '
-        }]
+          separator: ' > ',
+        }],
       });
       helper
         .toggleRefinement('facet', 'facet-val1')
@@ -437,15 +437,15 @@ describe('currentRefinedValues()', () => {
             data: {
               'facet-val1': 1,
               'facet-val2': 2,
-              'facet-val3': 42
-            }
+              'facet-val3': 42,
+            },
           }, {
             name: 'extraFacet',
             exhaustive: true,
             data: {
               'extraFacet-val1': 42,
-              'extraFacet-val2': 42
-            }
+              'extraFacet-val2': 42,
+            },
           }],
           disjunctiveFacets: [{
             name: 'disjunctiveFacet',
@@ -453,8 +453,8 @@ describe('currentRefinedValues()', () => {
             data: {
               'disjunctiveFacet-val1': 3,
               'disjunctiveFacet-val2': 4,
-              'disjunctiveFacet-val3': 42
-            }
+              'disjunctiveFacet-val3': 42,
+            },
           }],
           hierarchicalFacets: [{
             name: 'hierarchicalFacet',
@@ -465,19 +465,19 @@ describe('currentRefinedValues()', () => {
               data: [{
                 name: 'hierarchicalFacet-val2',
                 count: 6,
-                exhaustive: true
-              }]
+                exhaustive: true,
+              }],
             }, { // Here to confirm we're taking the right nested one
               name: 'hierarchicalFacet-val2',
               count: 42,
-              exhaustive: true
-            }]
-          }]
+              exhaustive: true,
+            }],
+          }],
         },
         helper,
         state: helper.state,
         templatesConfig: {randomAttributeNeverUsed: 'value'},
-        createURL: () => '#cleared'
+        createURL: () => '#cleared',
       };
 
       refinements = [
@@ -496,7 +496,7 @@ describe('currentRefinedValues()', () => {
         {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: '3', numericValue: 3, operator: '>='},
         {type: 'numeric', attributeName: 'numericDisjunctiveFacet', name: '4', numericValue: 4, operator: '<='},
         {type: 'tag', attributeName: '_tags', name: 'tag1'},
-        {type: 'tag', attributeName: '_tags', name: 'tag2'}
+        {type: 'tag', attributeName: '_tags', name: 'tag2'},
       ];
 
       expectedProps = {
@@ -507,7 +507,7 @@ describe('currentRefinedValues()', () => {
           hierarchicalFacet: {name: 'hierarchicalFacet'},
           numericFacet: {name: 'numericFacet'},
           numericDisjunctiveFacet: {name: 'numericDisjunctiveFacet'},
-          _tags: {name: '_tags'}
+          _tags: {name: '_tags'},
         },
         clearAllClick: () => {},
         collapsible: false,
@@ -522,7 +522,7 @@ describe('currentRefinedValues()', () => {
           item: 'ais-current-refined-values--item item-css-class',
           link: 'ais-current-refined-values--link link-css-class',
           count: 'ais-current-refined-values--count count-css-class',
-          footer: 'ais-current-refined-values--footer footer-css-class'
+          footer: 'ais-current-refined-values--footer footer-css-class',
         },
         shouldAutoHideContainer: false,
         templateProps: prepareTemplateProps({
@@ -532,9 +532,9 @@ describe('currentRefinedValues()', () => {
             header: 'HEADER',
             item: 'ITEM',
             clearAll: 'CLEAR ALL',
-            footer: 'FOOTER'
-          }
-        })
+            footer: 'FOOTER',
+          },
+        }),
       };
       setRefinementsInExpectedProps();
     });
@@ -619,7 +619,7 @@ describe('currentRefinedValues()', () => {
             attributeName: 'extraFacet',
             name: 'extraFacet-val1',
             count: 42,
-            exhaustive: true
+            exhaustive: true,
           });
 
           const widget = currentRefinedValues(parameters);
@@ -635,13 +635,13 @@ describe('currentRefinedValues()', () => {
 
         it('should render and pass all attributes defined in each objects', () => {
           parameters.attributes = [{
-            name: 'facet'
+            name: 'facet',
           }, {
             name: 'facetExclude',
-            label: 'Facet exclude'
+            label: 'Facet exclude',
           }, {
             name: 'disjunctiveFacet',
-            transformData: data => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; },
           }];
 
           refinements = filter(refinements, refinement =>
@@ -655,16 +655,16 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
             facet: {
-              name: 'facet'
+              name: 'facet',
             },
             facetExclude: {
               name: 'facetExclude',
-              label: 'Facet exclude'
+              label: 'Facet exclude',
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => { data.name = 'newname'; return data; }
-            }
+              transformData: data => { data.name = 'newname'; return data; },
+            },
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
@@ -685,7 +685,7 @@ describe('currentRefinedValues()', () => {
             attributeName: 'extraFacet',
             name: 'extraFacet-val1',
             count: 42,
-            exhaustive: true
+            exhaustive: true,
           });
 
           const widget = currentRefinedValues(parameters);
@@ -707,7 +707,7 @@ describe('currentRefinedValues()', () => {
             attributeName: 'extraFacet',
             name: 'extraFacet-val1',
             count: 42,
-            exhaustive: true
+            exhaustive: true,
           });
 
           const widget = currentRefinedValues(parameters);
@@ -723,13 +723,13 @@ describe('currentRefinedValues()', () => {
 
         it('should render and pass all attributes defined in each objects', () => {
           parameters.attributes = [{
-            name: 'facet'
+            name: 'facet',
           }, {
             name: 'facetExclude',
-            label: 'Facet exclude'
+            label: 'Facet exclude',
           }, {
             name: 'disjunctiveFacet',
-            transformData: data => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; },
           }];
 
           refinements.splice(0, 0, {
@@ -737,7 +737,7 @@ describe('currentRefinedValues()', () => {
             attributeName: 'extraFacet',
             name: 'extraFacet-val1',
             count: 42,
-            exhaustive: true
+            exhaustive: true,
           });
           const firstRefinements = filter(refinements, refinement =>
             ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1
@@ -754,16 +754,16 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
             facet: {
-              name: 'facet'
+              name: 'facet',
             },
             facetExclude: {
               name: 'facetExclude',
-              label: 'Facet exclude'
+              label: 'Facet exclude',
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => { data.name = 'newname'; return data; }
-            }
+              transformData: data => { data.name = 'newname'; return data; },
+            },
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
@@ -778,13 +778,13 @@ describe('currentRefinedValues()', () => {
 
         it('should default to false', () => {
           parameters.attributes = [{
-            name: 'facet'
+            name: 'facet',
           }, {
             name: 'facetExclude',
-            label: 'Facet exclude'
+            label: 'Facet exclude',
           }, {
             name: 'disjunctiveFacet',
-            transformData: data => { data.name = 'newname'; return data; }
+            transformData: data => { data.name = 'newname'; return data; },
           }];
 
           refinements.splice(0, 0, {
@@ -792,7 +792,7 @@ describe('currentRefinedValues()', () => {
             attributeName: 'extraFacet',
             name: 'extraFacet-val1',
             count: 42,
-            exhaustive: true
+            exhaustive: true,
           });
           const firstRefinements = filter(refinements, refinement =>
             ['facet', 'facetExclude', 'disjunctiveFacet'].indexOf(refinement.attributeName) !== -1
@@ -809,16 +809,16 @@ describe('currentRefinedValues()', () => {
           setRefinementsInExpectedProps();
           expectedProps.attributes = {
             facet: {
-              name: 'facet'
+              name: 'facet',
             },
             facetExclude: {
               name: 'facetExclude',
-              label: 'Facet exclude'
+              label: 'Facet exclude',
             },
             disjunctiveFacet: {
               name: 'disjunctiveFacet',
-              transformData: data => { data.name = 'newname'; return data; }
-            }
+              transformData: data => { data.name = 'newname'; return data; },
+            },
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
@@ -960,7 +960,7 @@ describe('currentRefinedValues()', () => {
           attributeName: 'extraFacet',
           name: 'extraFacet-val1',
           count: 42,
-          exhaustive: true
+          exhaustive: true,
         });
         const firstRefinements = filter(refinements, {attributeName: 'disjunctiveFacet'});
         const secondRefinements = filter(refinements, {attributeName: 'facetExclude'});
@@ -976,7 +976,7 @@ describe('currentRefinedValues()', () => {
         setRefinementsInExpectedProps();
         expectedProps.attributes = {
           disjunctiveFacet: {name: 'disjunctiveFacet'},
-          facetExclude: {name: 'facetExclude'}
+          facetExclude: {name: 'facetExclude'},
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true);

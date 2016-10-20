@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {
   bemHelper,
   prepareTemplateProps,
-  getContainerNode
+  getContainerNode,
 } from '../../lib/utils.js';
 import cx from 'classnames';
 import Hits from '../../components/Hits.js';
@@ -44,7 +44,7 @@ function hits({
     cssClasses: userCssClasses = {},
     templates = defaultTemplates,
     transformData,
-    hitsPerPage = 20
+    hitsPerPage = 20,
   } = {}) {
   if (!container) {
     throw new Error(`Must provide a container.${usage}`);
@@ -58,7 +58,7 @@ function hits({
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty)
+    empty: cx(bem(null, 'empty'), userCssClasses.empty),
   };
 
   return {
@@ -68,7 +68,7 @@ function hits({
         transformData,
         defaultTemplates,
         templatesConfig,
-        templates
+        templates,
       });
     },
     render({results}) {
@@ -81,7 +81,7 @@ function hits({
         />,
         containerNode
       );
-    }
+    },
   };
 }
 

@@ -10,5 +10,5 @@ export default {
     '{{#exclude}}-{{/exclude}}' +
     '{{name}} <span class="{{cssClasses.count}}">{{count}}</span>',
   clearAll: 'Clear all',
-  footer: ''
+  footer: '',
 };
