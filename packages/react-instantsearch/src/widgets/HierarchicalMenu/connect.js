@@ -180,7 +180,6 @@ export default createConnector({
     return {
       id,
       filters: !selectedItem ? [] : [{
-        key: `${id}.${selectedItem}`,
         label: `${id}: ${selectedItem}`,
         clear: nextState => ({
           ...nextState,

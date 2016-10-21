@@ -15,7 +15,7 @@ export default createConnector({
 
   getProps(props, state, search, metadata) {
     return {
-      filters: metadata.reduce((res, meta) =>
+      items: metadata.reduce((res, meta) =>
         typeof meta.filters !== 'undefined' ? res.concat(meta.filters) : res
       , []),
     };

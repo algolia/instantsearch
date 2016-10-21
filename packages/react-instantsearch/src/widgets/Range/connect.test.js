@@ -110,7 +110,6 @@ describe('Range.connect', () => {
     expect(metadata).toEqual({
       id: 'wot',
       filters: [{
-        key: 'wot.5 <= wot',
         label: '5 <= wot',
         // Ignore clear, we test it later
         clear: metadata.filters[0].clear,
@@ -127,7 +126,6 @@ describe('Range.connect', () => {
     expect(metadata).toEqual({
       id: 'wot',
       filters: [{
-        key: 'wot.wot <= 10',
         label: 'wot <= 10',
         clear: metadata.filters[0].clear,
       }],
@@ -140,7 +138,6 @@ describe('Range.connect', () => {
     expect(metadata).toEqual({
       id: 'wot',
       filters: [{
-        key: 'wot.5 <= wot <= 10',
         label: '5 <= wot <= 10',
         clear: metadata.filters[0].clear,
       }],

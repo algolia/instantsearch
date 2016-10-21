@@ -128,7 +128,6 @@ export default createConnector({
     if (value !== '') {
       const {label} = find(props.items, item => stringifyItem(item) === value);
       filters.push({
-        key: `${id}.${value}`,
         label: `${props.attributeName}: ${label}`,
         clear: nextState => ({
           ...nextState,
