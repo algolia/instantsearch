@@ -1,3 +1,13 @@
+<a name="1.8.13"></a>
+## [1.8.13](https://github.com/algolia/instantsearch.js/compare/v1.8.12...v1.8.13) (2016-10-21)
+
+
+### Bug Fixes
+
+* **searchbox:** poweredBy Algolia logo weren't visible in firefox ([39701f8](https://github.com/algolia/instantsearch.js/commit/39701f8))
+
+
+
 <a name="1.8.12"></a>
 ## [1.8.12](https://github.com/algolia/instantsearch.js/compare/v1.8.11...v1.8.12) (2016-10-19)
 
