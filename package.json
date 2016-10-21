@@ -57,11 +57,8 @@
     "google-map-react": "^0.20.0",
     "insert-css": "^1.0.0",
     "jest-cli": "^16.0.0",
-<<<<<<< 1bc8e63a051c3156e8c9007b68e0c36b5ea4f2a6
     "jsdoc-parse": "^1.2.7",
-=======
     "json-loader": "^0.5.4",
->>>>>>> rebase me [design]
     "jstransformer-markdown-it": "^1.0.0",
     "lodash": "^4.16.2",
     "markdown-it": "^8.0.0",
