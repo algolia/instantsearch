@@ -204,7 +204,6 @@ describe('HierarchicalMenu.connect', () => {
     expect(metadata).toEqual({
       id: 'ok',
       filters: [{
-        key: 'ok.wat',
         label: 'ok: wat',
         // Ignore clear, we test it later
         clear: metadata.filters[0].clear,

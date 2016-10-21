@@ -155,7 +155,6 @@ export default createConnector({
     return {
       id,
       filters: getSelectedItems(props, state).map(item => ({
-        key: `${id}.${item}`,
         label: `${props.attributeName}: ${item}`,
         clear: nextState => {
           const nextSelectedItems = getSelectedItems(props, nextState).filter(

@@ -136,7 +136,6 @@ describe('MultiRange.connect', () => {
     expect(metadata).toEqual({
       id: 'wot',
       filters: [{
-        key: 'wot.100:200',
         label: 'wot: YAY',
         // Ignore clear, we test it later
         clear: metadata.filters[0].clear,

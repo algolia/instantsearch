@@ -12,7 +12,7 @@ describe('CurrentFilters.connect', () => {
       {filters: ['two']},
       {filters: ['three']},
     ]);
-    expect(props.filters).toEqual(['one', 'two', 'three']);
+    expect(props.items).toEqual(['one', 'two', 'three']);
   });
 
   it('refine applies the selected filters clear method on state', () => {
