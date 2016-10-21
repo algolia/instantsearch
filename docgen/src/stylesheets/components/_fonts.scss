@@ -1,4 +1,5 @@
-p a {
+p a,
+a {
   color: #21A4D7;
   text-decoration: none;
 }
@@ -8,6 +9,7 @@ p a {
 h1,h2,h3,h4 {
   padding: 0;
   margin: 0;
+  font-family: 'Raleway', Helvetica Neue, helvetica, sans-serif;
 }
 
 h1 {

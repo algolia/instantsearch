@@ -1,0 +1,22 @@
+<svg width="16px" height="20px" viewBox="0 0 16 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.1 (33804) - http://www.bohemiancoding.com/sketch -->
+    <title>Menu-icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Community-header_tests" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="iPhone-7---menu-closed" transform="translate(-344.000000, -21.000000)" stroke="#FFFFFF">
+            <g id="Menu" transform="translate(345.000000, 21.000000)">
+                <g id="Menu-icon">
+                    <g id="Menu">
+                        <g id="Group-3" stroke-width="2">
+                            <path d="M5.5,1 L13.5,1" id="Line"></path>
+                            <path d="M0.5,7 L13.5,7" id="Line"></path>
+                            <path d="M5.5,13 L13.5,13" id="Line"></path>
+                            <path d="M0.5,19 L13.5,19" id="Line"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

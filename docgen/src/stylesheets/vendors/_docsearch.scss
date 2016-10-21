@@ -1,7 +1,5 @@
-@import "docsearch/docsearch",
-        "docsearch/dropdown",
-        "docsearch/searchbox";
-
-
-@include searchbox($searchbox-config...);
-@include dropdown($dropdown-config...);
+.cm-navigation .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+  right: 0!important;
+  left: -536px!important;
+  top: 20px !important;
+}

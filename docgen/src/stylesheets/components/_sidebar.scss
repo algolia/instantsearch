@@ -14,7 +14,7 @@ nav.sidebar {
 
     &.fixed {
       position: fixed;
-      top: $navigation-height;
+      top: ($navigation-height + 40px);
       z-index: 9;
       max-height: calc(100vh - #{$navigation-height});
       overflow: auto;

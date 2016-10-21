@@ -1,7 +1,61 @@
 .hero-section {
-  background: linear-gradient(-30deg, rgba(24, 40, 72, 0.4) 0%, #182848 90%) #1D96C7;
+  background: linear-gradient(45deg, #395299 0%, #2faddc 90%) #3066BE;
   color: $hero-color-accent;
   padding-top: $navigation-height*1.5;
+  overflow: hidden;
+  position: relative;
+  z-index: 0;
+  perspective: 300px;
+  margin-top: $nav-height;
+
+  &:before,
+  &:after {
+    content: '';
+    display: block;
+    user-select: none;
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  &:before {
+    background: {
+      image: url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 357 1282\' xmlns=\'http://www.w3.org/2000/svg\'><title>pattern</title><g transform=\'translate(1 1)\' stroke=\'%23FFF\' fill=\'none\' fill-rule=\'evenodd\'><path d=\'M0 51v103M0 51L88.8.2M177.5 51v103m0-103L266.3.2M177.5 51L88.8.2M355.1 51L266.3.2M88.8 204.8v103m0-103l88.7-50.8m-88.7 50.8L0 154m266.3 50.8v103M88.8 1125v103m177.5-103v103m0-1023.2l88.8-50.8m-88.8 50.8L177.5 154M0 358.5v103m0-103l88.8-50.7m88.7 50.7v103m0-103l88.8-50.7m-88.8 50.7l-88.7-50.7m266.3 50.7l-88.8-50.7M88.8 512.2v103m0-103l88.7-50.7m-88.7 50.7L0 461.5m266.3 50.7v103m0-103l88.8-50.7m-88.8 50.7l-88.8-50.7M0 666v103m0-103l88.8-50.8m88.7 50.8v103m0-103l88.8-50.8M177.5 666l-88.7-50.8M355.1 666l-88.8-50.8M88.8 819.8v103m0-103l88.7-50.8m-88.7 50.8L0 769m266.3 50.8v103m0-103l88.8-50.8m-88.8 50.8L177.5 769M0 973.5v103m0-103l88.8-50.7m88.7 50.7v103m0-103l88.8-50.7m-88.8 50.7l-88.7-50.7m266.3 50.7l-88.8-50.7M88.8 1127.2l88.7-50.7m-88.7 50.7L0 1076.5m266.3 50.7l88.8-50.7m-88.8 50.7l-88.8-50.7\' stroke-width=\'2\'/><path d=\'M88.8 102.8L0 51.5m88.8 51.3l88.7-51.3m88.8 51.3l-88.8-51.3m88.8 51.3l88.8-51.3M88.8 102.8v102.4M0 256.5l88.8-51.3m88.7 51.3l-88.7-51.3m177.5-102.4v102.4m-88.8 51.3l88.8-51.3m88.8 51.3l-88.8-51.3M0 256.5V359m88.8 51.2L0 359m177.5-102.5V359m-88.7 51.2l88.7-51.2m88.8 51.2L177.5 359m88.8 51.2l88.8-51.2M88.8 410.2v102.6M0 564l88.8-51.2m88.7 51.2l-88.7-51.2m177.5-102.6v102.6M177.5 564l88.8-51.2m88.8 51.2l-88.8-51.2M0 564v102.5m88.8 51.3L0 666.5M177.5 564v102.5m-88.7 51.3l88.7-51.3m88.8 51.3l-88.8-51.3m88.8 51.3l88.8-51.3M88.8 717.8v102.4M0 871.5l88.8-51.3m88.7 51.3l-88.7-51.3m177.5-102.4v102.4m-88.8 51.3l88.8-51.3m88.8 51.3l-88.8-51.3M0 871.5V974m0 205v102.5m88.8-256.3L0 974m177.5-102.5V974m0 205v102.5m-88.7-256.3l88.7-51.2m88.8 51.2L177.5 974m88.8 51.2l88.8-51.2m-266.3 51.2v102.6M0 1179l88.8-51.2m88.7 51.2l-88.7-51.2m177.5-102.6v102.6m-88.8 51.2l88.8-51.2m88.8 51.2l-88.8-51.2\' stroke-dasharray=\'6\'/><circle stroke-width=\'2\' cx=\'88.8\' cy=\'102.5\' r=\'5.3\'/><circle stroke-width=\'2\' cx=\'89.1\' cy=\'408.8\' r=\'10.6\'/><circle stroke-width=\'2\' cx=\'88.7\' cy=\'718\' r=\'16\'/><circle stroke-width=\'2\' cx=\'88.6\' cy=\'1025\' r=\'21.3\'/></g></svg>"), linear-gradient(to right, black, white);
+      repeat:  repeat, no-repeat;
+      position:  center center, center center;
+      size:  144px, 100%;
+      blend-mode: overlay;
+    }
+    height: 1000px;
+    width: 300vw;
+    left: -100vw;
+    top: -370px;
+    mix-blend-mode: soft-light;
+    opacity: 0.75;
+  }
+
+  &:after {
+    width: 520px;
+    height: 520px;
+    z-index: 1;
+    background: {
+      image: url('../images/react-logo-bg.svg');
+      size: 380px;
+      repeat: no-repeat;
+      position: center center;
+    }
+    bottom: -120px;
+    left: -120px;
+    transform: rotate(-25deg);
+    opacity: 0.3;
+    mix-blend-mode: overlay;
+    animation: roll 60s linear infinite;
+    will-change: transform;
+  }
 
   .container {
     margin-top: 40px;
@@ -16,6 +70,11 @@
     body.index &{
       display: block;
     }
+  }
+
+  .article-title a {
+    width: 20px;
+    display: inline-block;
   }
 
   .icon {
@@ -38,17 +97,22 @@
       opacity: 0.5;
     }
   }
-  .article-title {
-    width: calc(#{$max-width} - 150px);
-    h1 {
-      line-height: 46px;
-      padding: 16px 0;
-      margin-top: 32px;
+
+  .project-logo {
+    width: 500px;
+
+     svg {
+      max-width: 30% !important;
+      display: block;
+      margin: auto;
     }
   }
 
-  .project-logo {
-    width: 150px;
+
+  .is-react-logo {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1800;
+    animation: swan-dash 5s ease-out forwards 1s;
   }
 
 
@@ -119,5 +183,65 @@
     ellipse {
       transform: translateY(12px);
     }
+  }
+
+  body.documentation &{
+    min-height: 150px;
+    height: 150px;
+    padding: 0;
+
+    &:after {
+      display: none;
+    }
+
+    .container,
+    .relative {
+      margin-top: 0;
+    }
+
+    .fl-right,
+    .fl-left {
+      padding-top: 2.5em;
+    }
+
+    .project-logo svg{
+      max-width: 20% !important;
+      top: 0px
+    }
+
+    .article-title h1 {
+      padding-top: 0.25em;
+    }
+  }
+}
+
+$x: 120;
+@keyframes roll {
+  0% {
+    transform: rotate(0)
+  }
+  50% {
+    transform: rotate(($x/2)+deg) scale(1.2)
+  }
+  100% {
+    transform: rotate($x+deg)
+  }
+}
+
+@keyframes fill {
+  0% {
+    fill-opacity: 0;
+  }
+
+  100% {
+    fill-opacity: 1;
+  }
+}
+
+
+
+@keyframes swan-dash {
+  100% {
+    stroke-dashoffset: 0;
   }
 }
