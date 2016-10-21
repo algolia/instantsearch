@@ -196,6 +196,10 @@ We use [semver](http://semver-ftw.org/).
 
 This task will merge develop into master.
 
+```sh
+npm run release
+```
+
 # Hotfixes
 
 All our work is done on the develop branch but it could be necessary to push a hotfix to the master
