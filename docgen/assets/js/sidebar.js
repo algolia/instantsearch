@@ -15,7 +15,7 @@ function sidebarFollowScroll(sidebarContainer) {
   const positionSidebar = () => {
     const currentScroll = window.pageYOffset;
     if (currentScroll > sidebarTop - navHeight) {
-      const fold = height - footerHeight - menuHeight - 50;
+      const fold = height - footerHeight - menuHeight - 100;
       if (currentScroll > fold) {
         sidebarContainer.style.top = `${fold - currentScroll + navHeight + 20}px`;
       } else {
