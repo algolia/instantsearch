@@ -157,7 +157,6 @@ export default createConnector({
         filterLabel += ` <= ${value.max}`;
       }
       filter = {
-        key: `${id}.${filterLabel}`,
         label: filterLabel,
         clear: nextState => ({
           ...nextState,

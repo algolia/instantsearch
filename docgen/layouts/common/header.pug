@@ -16,7 +16,8 @@ mixin navListItem(link, title, navGroup, currentNavGroup)
       ul.ac-nav-menu-list
         +navListItem(h.publicPath('gettingstarted.html'), 'Getting started', 'gettingstarted', nav_groups)
         +navListItem(h.publicPath('Styling.html'), 'Guide', 'core', nav_groups)
-        +navListItem(h.publicPath('InstantSearch.html'), 'API', 'widgets', nav_groups)
+        +navListItem(h.publicPath('component/InstantSearch.html'), 'Components', 'component', nav_groups)
+        +navListItem(h.publicPath('HOC/Hits.html'), 'Connectors', 'HOC', nav_groups)
         +navListItem(h.publicPath('examples.html'), 'Examples', 'examples', nav_groups)
         li.ac-nav-menu-list-icon
           a.ac-icon(href='https://github.com/algolia/algoliasearch-helper-js', title='GitHub repository')

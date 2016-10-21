@@ -16,8 +16,9 @@ const layoutFiles = join(__dirname, '../layouts/**/*');
 const cssFiles = join(__dirname, '../src/stylesheets/**/*');
 const CSSEntryPoints = ['stylesheets/index.css'];
 
-const hasChanged = file => Date.parse(file.stats.ctime) > lastRunTime ||
-  Date.parse(file.stats.mtime) > lastRunTime;
+const hasChanged = file => file.stats && file.stats.ctime && file.stats.mtime ?
+  Date.parse(file.stats.ctime) > lastRunTime || Date.parse(file.stats.mtime) > lastRunTime :
+  true;
 
 export default function onlyChanged(files, metalsmith, cb) {
   if (lastRunTime === false) {
@@ -40,12 +41,12 @@ export default function onlyChanged(files, metalsmith, cb) {
     Object
       .entries(files)
       .map(([name, file]) => done => {
-        if (!file.layout) {
-          if (!file.stats) {
-            done(null); // keep file, we do not know
-            return;
-          }
+        if (!file.stats) {
+          done(null); // keep file, we do not know
+          return;
+        }
 
+        if (!file.layout) {
           const cssEntryPointNeedsUpdate = CSSEntryPoints.indexOf(name) !== -1 && cssChange === true;
 
           if (!hasChanged(file) && !cssEntryPointNeedsUpdate) {

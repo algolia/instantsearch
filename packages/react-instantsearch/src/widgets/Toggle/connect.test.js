@@ -70,7 +70,6 @@ describe('Toggle.connect', () => {
       id: 't',
       filters: [
         {
-          key: 't',
           label: 'yep',
           // Ignore clear, we test it later
           clear: metadata.filters[0].clear,

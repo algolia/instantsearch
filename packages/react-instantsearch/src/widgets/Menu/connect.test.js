@@ -148,7 +148,6 @@ describe('Menu.connect', () => {
     expect(metadata).toEqual({
       id: 'ok',
       filters: [{
-        key: 'ok.wat',
         label: 'wot: wat',
         // Ignore clear, we test it later
         clear: metadata.filters[0].clear,
