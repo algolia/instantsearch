@@ -1,4 +1,4 @@
-mixin nav(currentPath, navItems, title)
+mixin nav(currentPath, navItems, title, headings)
   div.sidebar-container
     h2.sidebar-header=title
     ul.sidebar-elements
@@ -14,15 +14,13 @@ mixin navRec(currentPath, navItems, title, depth)
     - var className = ['sidebar-element', ('level-h' + depth), (isCurrentFile ? 'navItem-active' : 'navItem')];
     - var activeClass = isCurrentFile ? 'navItem-active' : '';
     li(class=className)
-      a(href=h.publicPath(navItem.path) class=activeClass)=navItem.file.title
+      a(href=h.publicPath(navItem.path) class=activeClass)=navItem.title
       ul
         if(isCurrentFile)
           +navContent(headings, depth)
-        if(navItem.children.length > 0)
-          +navRec(currentPath, navItem.children, title, depth + 1)
 
 mixin navContent(headings, currentDepth)
-  if headings.length > 1
+  if headings && headings.length > 1
     each item in headings
       - var level = parseFloat(/h([0-9]+)/.exec(item.tag)[1]);
       - var actualLevel = level + currentDepth - 1;

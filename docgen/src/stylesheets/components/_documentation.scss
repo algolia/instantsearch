@@ -33,7 +33,7 @@
   }
 
   .api-entry {
-    margin: 2em 0;
+    font-weight: bold;
 
     code {
       font-size: 100%;
@@ -141,11 +141,11 @@
       border-collapse: collapse;
       border-spacing: 0;
       width: 100%;
-      display: block;
+      display: table;
       margin: 0;
 
       tr {
-        border-top: 1px solid #cccccc;
+        border-left: 1px solid #cccccc;
         background-color: white;
         margin: 0;
         padding: 0;
@@ -156,7 +156,6 @@
 
         th {
           font-weight: bold;
-          border: 1px solid #cccccc;
           text-align: left;
           margin: 0;
           padding: 6px 13px;
@@ -171,7 +170,7 @@
         }
 
         td {
-          border: 1px solid #cccccc;
+          // border: 1px solid #cccccc;
           text-align: left;
           margin: 0;
           padding: 13px 13px;
@@ -182,6 +181,7 @@
 
           &:last-child {
             margin-bottom: 0;
+            width: 100%;
           }
         }
       }
@@ -202,11 +202,12 @@
             width: 100%;
           }
           tbody {
-            border-bottom: 1px solid #cccccc;
+            // border-bottom: 1px solid #cccccc;
           }
           tr {
-            border-left: 1px solid #cccccc;
-            border-right: 1px solid #cccccc;
+            // border-left: 1px solid #cccccc;
+            // border-right: 1px solid #cccccc;
+            border-left: 1px solid #ccc;
 
             th {
               border: none;
@@ -278,6 +279,17 @@
       max-width: 50%;
       margin: 0 25%;
     }
+  }
+
+  tr.api-entry-values {
+    border-top: 10px solid #fff;
+    .api-entry-type {
+      white-space: nowrap;
+    }
+  }
+
+  tr.api-entry-description {
+    // border-bottom: 10px solid #fff;
   }
 
   .DocProps {

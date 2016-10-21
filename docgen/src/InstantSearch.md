@@ -1,9 +1,7 @@
 ---
 title: InstantSearch
 layout: widget.pug
-nav_groups:
-  - widgets
-nav_sort: 1
+category: guide
 ---
 
 Connects to your Algolia index and provides data to all children widgets.

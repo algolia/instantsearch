@@ -1,9 +1,7 @@
 ---
 title: Getting started
 layout: getting-started.pug
-nav_groups:
-  - gettingstarted
-nav_sort: 0
+category: gettingstarted
 ---
 
 ## Welcome to react-instantsearch
