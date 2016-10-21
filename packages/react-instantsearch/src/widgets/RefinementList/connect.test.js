@@ -165,13 +165,11 @@ describe('RefinementList.connect', () => {
       id: 'ok',
       filters: [
         {
-          key: 'ok.wat',
           label: 'wot: wat',
           // Ignore clear, we test it later
           clear: metadata.filters[0].clear,
         },
         {
-          key: 'ok.wut',
           label: 'wot: wut',
           clear: metadata.filters[1].clear,
         },

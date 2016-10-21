@@ -9,42 +9,41 @@ class CurrentFilters extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(PropTypes.shape({
-      key: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string,
     })).isRequired,
     refine: PropTypes.func.isRequired,
   };
 
   render() {
-    const {applyTheme, translate, filters, refine} = this.props;
-    const displayedFilters = filters.filter(filter => !filter.hide);
-    if (displayedFilters.length === 0) {
+    const {applyTheme, translate, items, refine} = this.props;
+
+    if (items.length === 0) {
       return null;
     }
 
     return (
       <div {...applyTheme('root', 'root')}>
-        <div {...applyTheme('filters', 'filters')}>
-          {displayedFilters.map(filter =>
+        <div {...applyTheme('items', 'items')}>
+          {items.map(item =>
             <div // eslint-disable-line react/jsx-key, automatically done by themeable
-              {...applyTheme(filter.key, 'filter')}
+              {...applyTheme(item.label, 'item')}
             >
-              <span {...applyTheme('filterLabel', 'filterLabel')}>
-                {filter.label}
+              <span {...applyTheme('itemLabel', 'itemLabel')}>
+                {item.label}
               </span>
               <button
-                {...applyTheme('filterClear', 'filterClear')}
-                onClick={refine.bind(null, [filter])}
+                {...applyTheme('itemClear', 'itemClear')}
+                onClick={refine.bind(null, [item])}
               >
-                {translate('clearFilter', filter)}
+                {translate('clearFilter', item)}
               </button>
             </div>
           )}
         </div>
         <button
           {...applyTheme('clearAll', 'clearAll')}
-          onClick={refine.bind(null, displayedFilters)}
+          onClick={refine.bind(null, items)}
         >
           {translate('clearAll')}
         </button>
