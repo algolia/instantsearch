@@ -1,8 +1,7 @@
 ---
 title: Examples
 layout: examples.pug
-nav_groups:
-  - examples
+category: examples
 ---
 # Examples
 
