@@ -47,15 +47,15 @@ class List extends Component {
     return extended ? limitMax : limitMin;
   };
 
-  renderItem = (item, parent = null) => {
+  renderItem = (item, key, parent = null) => {
     const {selectedItems, applyTheme} = this.props;
     const selected = selectedItems.indexOf(item.value) !== -1;
     const limit = this.getLimit();
 
     const children = item.children &&
-      <div {...applyTheme('itemChildren', 'itemChildren')}>
-        {item.children.slice(0, limit).map(child =>
-          this.renderItem(child, item)
+      <div key={key} {...applyTheme('itemChildren', 'itemChildren')}>
+        {item.children.slice(0, limit).map((child, _key) =>
+          this.renderItem(child, item, _key)
         )}
       </div>;
 
@@ -108,7 +108,7 @@ class List extends Component {
     return (
       <div {...applyTheme('root', 'root')}>
         <div {...applyTheme('items', 'items')}>
-          {items.slice(0, limit).map(item => this.renderItem(item))}
+          {items.slice(0, limit).map((item, key) => this.renderItem(item, key))}
         </div>
         {this.renderShowMore()}
       </div>

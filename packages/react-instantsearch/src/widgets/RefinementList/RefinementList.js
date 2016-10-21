@@ -36,11 +36,11 @@ class RefinementList extends Component {
     this.props.refine(nextSelectedItems);
   }
 
-  renderItem = (item, selected) => {
+  renderItem = (item, selected, key) => {
     const {translate, applyTheme} = this.props;
 
     return (
-      <label>
+      <label key={key}>
         <input
           {...applyTheme('itemCheckbox', 'itemCheckbox', selected && 'itemCheckboxSelected')}
           type="checkbox"
