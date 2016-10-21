@@ -1,4 +1,4 @@
-import {omit, pick} from 'lodash';
+import {omit, omitBy, pick} from 'lodash';
 import qs from 'qs';
 
 function getStateFromLocation(location, knownKeys = null) {
@@ -19,10 +19,18 @@ function alphabeticalSort(a, b) {
 function applyStateToLocation(location, state, knownKeys) {
   const urlState = getStateFromLocation(location);
   const unknownParameters = omit(urlState, knownKeys);
-  const query = {
+  const allParameters = {
     ...unknownParameters,
     ...state,
   };
+
+  /*
+  This is a temporary fix for the display of unselected facet in the URL.
+  see: https://github.com/algolia/instantsearch.js/issues/1286
+  in the long term we need to think about our strategy to handle defaultFaceting & URL management
+  */
+  const query = omitBy(allParameters, value => value === '');
+
   if (location.query) {
     return {
       ...location,
