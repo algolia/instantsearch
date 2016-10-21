@@ -7120,6 +7120,10 @@ restore-cursor@^1.0.1:
     exit-hook "^1.0.0"
     onetime "^1.0.0"
 
+rheostat@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/rheostat/-/rheostat-2.0.1.tgz#e9a465f05385f95aa2e229b0854e22fa08b28d3a"
+
 right-align@^0.1.1:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/right-align/-/right-align-0.1.3.tgz#61339b722fe6a3515689210d24e14c96148613ef"
