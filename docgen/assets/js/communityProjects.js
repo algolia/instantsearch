@@ -16,7 +16,7 @@ function init() {
   });
 
   list.forEach(function(t) {
-    let tpl = '<div class="dropdown-item"><a href="'+ t.url +'"><span class="item-icon" style="background-color: '+ t.backgroundColor +'"><span><img src="'+ t.logo +'" onerror="this.src=\'images/logo-community.svg\'"></span></span><h4>'+ t.name +'</h4></a></div>';
+    let tpl = '<div class="dropdown-item"><a href="'+ t.url +'"><span class="item-icon" style="background-color: '+ t.backgroundColor +'"><span><img src="'+ t.logo +'" ></span></span><h4>'+ t.name +'</h4></a></div>';
     template.push(tpl);
   });
   target.innerHTML = String(template).replace(/[,]/g, '');

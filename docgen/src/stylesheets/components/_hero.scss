@@ -36,7 +36,7 @@
     top: -370px;
     mix-blend-mode: soft-light;
     opacity: 0.75;
-    transform: skew(-20deg) rotateY(-10deg);
+    transform: rotateY(-10deg);
   }
 
   &:after {
@@ -204,6 +204,9 @@
 
     &:after {
       display: none;
+    }
+    &:before {
+      z-index: -1;
     }
 
     .container,
