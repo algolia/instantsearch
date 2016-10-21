@@ -17,8 +17,6 @@ function getSelectedItem(props, state) {
 }
 
 function transformValue(value, limit) {
-  // @TODO: Calling `value.slice(0, limit).map(...)` breaks react-docgen.
-  // Submit an issue.
   const limitValue = value.slice(0, limit);
   return limitValue.map(v => ({
     label: v.name,
