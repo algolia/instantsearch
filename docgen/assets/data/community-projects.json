@@ -1,0 +1,33 @@
+[
+	{
+		"name":"places.js",
+		"url":"http://something.com/places.js",
+		"logo":"http://something.com/places.js.png"
+	},
+	{
+		"name":"wordpress",
+		"url":"http://something.com/wordpress",
+		"logo":"http://something.com/wordpress.png"
+	},
+	{
+		"name":"Autocomplete.js",
+		"url":"https://github.com/algolia/autocomplete.js",
+		"logo":"https://community.algolia.com/img/illus-autocomplete.svg",
+		"backgroundColor": "#00587f"
+	},
+	{
+		"name":"instantsearch.js",
+		"url":"https://community.algolia.com/instantsearch.js/",
+		"logo":"https://community.algolia.com/img/logo-is.svg"
+	},
+	{
+		"name":"Helper.js",
+		"url":"https://community.algolia.com/algoliasearch-helper-js/",
+		"logo":"https://community.algolia.com/img/logo-helper.svg"
+	},
+	{
+		"name":"magento",
+		"url":"http://something.com/magento",
+		"logo":"http://something.com/magento.png"
+	}
+]
