@@ -6,7 +6,7 @@ import createConnector from '../../core/createConnector';
 function getPage(props, state) {
   let page = state[props.id];
   if (typeof page === 'undefined') {
-    page = 0;
+    page = 1;
   } else if (typeof page === 'string') {
     page = parseInt(page, 10);
   }
@@ -46,7 +46,7 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setPage(getPage(props, state));
+    return searchParameters.setPage(getPage(props, state) - 1);
   },
 
   transitionState(props, prevState, nextState) {

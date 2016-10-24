@@ -42,7 +42,7 @@ exports[`Pagination allows toggling display of the first page button on and off 
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -52,7 +52,7 @@ exports[`Pagination allows toggling display of the first page button on and off 
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -138,7 +138,7 @@ exports[`Pagination allows toggling display of the first page button on and off 
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -148,7 +148,7 @@ exports[`Pagination allows toggling display of the first page button on and off 
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -244,7 +244,7 @@ exports[`Pagination allows toggling display of the last page button on and off 1
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -254,7 +254,7 @@ exports[`Pagination allows toggling display of the last page button on and off 1
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -360,7 +360,7 @@ exports[`Pagination allows toggling display of the last page button on and off 2
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -370,7 +370,7 @@ exports[`Pagination allows toggling display of the last page button on and off 2
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -466,7 +466,7 @@ exports[`Pagination allows toggling display of the next page button on and off 1
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -476,7 +476,7 @@ exports[`Pagination allows toggling display of the next page button on and off 1
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -572,7 +572,7 @@ exports[`Pagination allows toggling display of the next page button on and off 2
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -582,7 +582,7 @@ exports[`Pagination allows toggling display of the next page button on and off 2
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -668,7 +668,7 @@ exports[`Pagination allows toggling display of the previous page button on and o
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -678,7 +678,7 @@ exports[`Pagination allows toggling display of the previous page button on and o
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -764,7 +764,7 @@ exports[`Pagination allows toggling display of the previous page button on and o
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -774,7 +774,7 @@ exports[`Pagination allows toggling display of the previous page button on and o
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -870,7 +870,7 @@ exports[`Pagination applies its default props 1`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -880,7 +880,7 @@ exports[`Pagination applies its default props 1`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -936,21 +936,27 @@ exports[`Pagination displays the correct padding of links 1`] = `
 <ul
   className="root">
   <li
-    className="item itemSelected itemDisabled itemFirst">
-    <span
-      className="itemLink">
+    className="item itemFirst">
+    <a
+      aria-label="First page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       «
-    </span>
+    </a>
   </li>
   <li
-    className="item itemDisabled itemPrevious">
-    <span
-      className="itemLink">
+    className="item itemPrevious">
+    <a
+      aria-label="Previous page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       ‹
-    </span>
+    </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 1"
       className="itemLink"
@@ -1126,7 +1132,7 @@ exports[`Pagination displays the correct padding of links 2`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -1136,7 +1142,7 @@ exports[`Pagination displays the correct padding of links 2`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -1272,7 +1278,7 @@ exports[`Pagination displays the correct padding of links 3`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 19"
       className="itemLink"
@@ -1282,7 +1288,7 @@ exports[`Pagination displays the correct padding of links 3`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 20"
       className="itemLink"
@@ -1292,11 +1298,14 @@ exports[`Pagination displays the correct padding of links 3`] = `
     </a>
   </li>
   <li
-    className="item itemDisabled itemNext">
-    <span
-      className="itemLink">
+    className="item itemNext">
+    <a
+      aria-label="Next page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       ›
-    </span>
+    </a>
   </li>
 </ul>
 `;
@@ -1327,6 +1336,16 @@ exports[`Pagination displays the correct padding of links 4`] = `
   <li
     className="item itemPage">
     <a
+      aria-label="Page 0"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      0
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
       aria-label="Page 1"
       className="itemLink"
       href="#"
@@ -1345,7 +1364,7 @@ exports[`Pagination displays the correct padding of links 4`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 3"
       className="itemLink"
@@ -1355,23 +1374,13 @@ exports[`Pagination displays the correct padding of links 4`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 4"
       className="itemLink"
       href="#"
       onClick={[Function]}>
       4
-    </a>
-  </li>
-  <li
-    className="item itemPage">
-    <a
-      aria-label="Page 5"
-      className="itemLink"
-      href="#"
-      onClick={[Function]}>
-      5
     </a>
   </li>
   <li
@@ -1471,7 +1480,7 @@ exports[`Pagination lets you customize its theme 1`] = `
     </a>
   </li>
   <li
-    className="ITEM PAGE">
+    className="ITEM SELECTED PAGE">
     <a
       aria-label="Page 8"
       className="LINK"
@@ -1481,7 +1490,7 @@ exports[`Pagination lets you customize its theme 1`] = `
     </a>
   </li>
   <li
-    className="ITEM SELECTED PAGE">
+    className="ITEM PAGE">
     <a
       aria-label="Page 9"
       className="LINK"
@@ -1544,16 +1553,6 @@ exports[`Pagination lets you customize its translations 1`] = `
       href="#"
       onClick={[Function]}>
       PREVIOUS
-    </a>
-  </li>
-  <li
-    className="item itemPage">
-    <a
-      aria-label="ARIA_PAGE_2"
-      className="itemLink"
-      href="#"
-      onClick={[Function]}>
-      PAGE_2
     </a>
   </li>
   <li
@@ -1634,6 +1633,16 @@ exports[`Pagination lets you customize its translations 1`] = `
       href="#"
       onClick={[Function]}>
       PAGE_10
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="ARIA_PAGE_11"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      PAGE_11
     </a>
   </li>
   <li
@@ -1733,7 +1742,7 @@ exports[`Pagination lets you force a maximum of pages 1`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -1743,7 +1752,7 @@ exports[`Pagination lets you force a maximum of pages 1`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 10"
       className="itemLink"
@@ -1753,18 +1762,24 @@ exports[`Pagination lets you force a maximum of pages 1`] = `
     </a>
   </li>
   <li
-    className="item itemDisabled itemNext">
-    <span
-      className="itemLink">
+    className="item itemNext">
+    <a
+      aria-label="Next page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       ›
-    </span>
+    </a>
   </li>
   <li
-    className="item itemSelected itemDisabled itemLast">
-    <span
-      className="itemLink">
+    className="item itemLast">
+    <a
+      aria-label="Last page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       »
-    </span>
+    </a>
   </li>
 </ul>
 `;
@@ -1843,7 +1858,7 @@ exports[`Pagination lets you force a maximum of pages 2`] = `
     </a>
   </li>
   <li
-    className="item itemPage">
+    className="item itemSelected itemPage">
     <a
       aria-label="Page 8"
       className="itemLink"
@@ -1853,7 +1868,7 @@ exports[`Pagination lets you force a maximum of pages 2`] = `
     </a>
   </li>
   <li
-    className="item itemSelected itemPage">
+    className="item itemPage">
     <a
       aria-label="Page 9"
       className="itemLink"
@@ -1863,18 +1878,24 @@ exports[`Pagination lets you force a maximum of pages 2`] = `
     </a>
   </li>
   <li
-    className="item itemDisabled itemNext">
-    <span
-      className="itemLink">
+    className="item itemNext">
+    <a
+      aria-label="Next page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       ›
-    </span>
+    </a>
   </li>
   <li
-    className="item itemSelected itemDisabled itemLast">
-    <span
-      className="itemLink">
+    className="item itemLast">
+    <a
+      aria-label="Last page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
       »
-    </span>
+    </a>
   </li>
 </ul>
 `;
