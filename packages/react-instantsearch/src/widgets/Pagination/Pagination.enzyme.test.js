@@ -34,15 +34,15 @@ describe('Pagination', () => {
       .filterWhere(e => e.text() === '8')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
-    expect(refine.mock.calls[0][0]).toEqual(7);
+    expect(refine.mock.calls[0][0]).toEqual(8);
     wrapper
       .find('.itemLink')
-      .filterWhere(e => e.text() === '10')
+      .filterWhere(e => e.text() === '9')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(2);
     const parameters = refine.mock.calls[1][0];
-    expect(parameters.isSamePage).toBe(true);
     expect(parameters.valueOf()).toBe(9);
+    expect(parameters.isSamePage).toBe(true);
     wrapper
       .find('.itemPrevious')
       .find('.itemLink')
@@ -60,13 +60,13 @@ describe('Pagination', () => {
       .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(5);
-    expect(refine.mock.calls[4][0]).toEqual(0);
+    expect(refine.mock.calls[4][0]).toEqual(1);
     wrapper
       .find('.itemLast')
       .find('.itemLink')
       .simulate('click');
     expect(refine.mock.calls.length).toBe(6);
-    expect(refine.mock.calls[5][0]).toEqual(19);
+    expect(refine.mock.calls[5][0]).toEqual(20);
   });
 
   it('ignores special clicks', () => {
