@@ -1,6 +1,6 @@
 import React, {PropTypes} from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Range} from '../packages/react-instantsearch';
+import {connectRange} from '../packages/react-instantsearch/connectors';
 import {WrapWithHits} from './util';
 import Rheostat from 'rheostat';
 
@@ -49,7 +49,7 @@ stories.add('Airbnb Rheostat', () => {
     }
   }
 
-  const AirbnbRheostatConnected = Range.connect(AirbnbRheostat);
+  const AirbnbRheostatConnected = connectRange(AirbnbRheostat);
 
   return <WrapWithHits >
     <AirbnbRheostatConnected attributeName="price"/>

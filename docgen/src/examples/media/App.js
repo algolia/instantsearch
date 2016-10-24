@@ -4,13 +4,14 @@ import React from 'react';
 
 import {
   InstantSearch,
-  SearchBox as OriginalSearchBox,
-  RefinementList,
+  RefinementListLinks,
   Hits,
   Stats,
   Pagination,
-  Range,
-} from 'react-instantsearch';
+  RangeRatings,
+} from 'react-instantsearch/dom';
+
+import {connectSearchBox} from 'react-instantsearch/connectors';
 
 import insertCss from 'insert-css';
 
@@ -46,7 +47,7 @@ const Header = () =>
     <SearchBox />
   </header>;
 
-const SearchBox = OriginalSearchBox.connect(
+const SearchBox = connectSearchBox(
   ({query, refine}) =>
     <div className="searchbox-container">
       <div className="input-group">
@@ -69,10 +70,10 @@ const Facets = () => <aside>
   </ul>
   <Panel title="Genres" id="genres"
   >
-    <RefinementList.Links
+    <RefinementListLinks
       attributeName="genre"
       theme={{
-        ...RefinementList.Links.defaultClassNames,
+        ...RefinementListLinks.defaultClassNames,
         items: 'nav nav-list',
         itemCount: 'badge pull-right',
         itemLink: 'item',
@@ -82,7 +83,7 @@ const Facets = () => <aside>
     />
   </Panel>
   <Panel title="Rating" id="ratings">
-    <Range.Rating attributeName="rating" max={5}/>
+    <RangeRatings attributeName="rating" max={5}/>
   </Panel>
   <div className="thank-you">Data courtesy of <a href="https://www.imdb.com/">imdb.com</a></div>
 </aside>;

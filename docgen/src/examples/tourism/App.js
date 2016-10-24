@@ -1,12 +1,15 @@
 import {
   InstantSearch,
-  Hits,
   SearchBox,
   Pagination,
   Range,
-  RefinementList,
-  MultiRange,
-} from 'react-instantsearch';
+} from 'react-instantsearch/dom';
+import {
+  connectHits,
+  connectMultiRange,
+  connectRefinementList,
+} from 'react-instantsearch/connectors';
+
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
@@ -141,7 +144,7 @@ HitsMap.propTypes = {
   hits: PropTypes.array,
 };
 
-const ConnectedHitsMap = Hits.connect(HitsMap);
+const ConnectedHitsMap = connectHits(HitsMap);
 
 function Capacity() {
   return (
@@ -173,7 +176,7 @@ OptionCapacity.propTypes = {
   value: PropTypes.string,
 };
 
-const CapacitySelector = MultiRange.connect(({items, currentRefinement, refine}) => {
+const CapacitySelector = connectMultiRange(({items, currentRefinement, refine}) => {
   const selectValue = e => refine(e.target.value);
 
   const allOption = <OptionCapacity label="" value="" isSelected={Boolean(currentRefinement)} key="all"/>;
@@ -207,7 +210,7 @@ function DatesAndGuest() {
   );
 }
 
-const RoomType = RefinementList.connect(({items, refine, currentRefinement}) => {
+const RoomType = connectRefinementList(({items, refine, currentRefinement}) => {
   const itemComponents = items.map(item => {
     const isSelected = currentRefinement.indexOf(item.value) !== -1;
     const value = isSelected ?
@@ -256,7 +259,7 @@ function Price() {
   );
 }
 
-const MyHits = Hits.connect(({hits}) => {
+const MyHits = connectHits(({hits}) => {
   const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);
   return <div id="hits">{hs}</div>;
 });
