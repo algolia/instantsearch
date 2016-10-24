@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {HitsPerPage} from '../packages/react-instantsearch';
+import {HitsPerPage} from '../packages/react-instantsearch/dom';
 import {withKnobs, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 

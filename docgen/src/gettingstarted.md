@@ -27,7 +27,7 @@ As mentionned earlier react-instantsearch is meant to be used with Algolia.
 
 Therefore, you'll need the credentials to an Algolia index. Here are
 the credentials to an already configured index:
- - `appId`: `latency` 
+ - `appId`: `latency`
  - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
  - `indexName`: `bestbuy`
 
@@ -57,7 +57,7 @@ that they can update themselves if needed.
 ```javascript
 import React from 'react';
 
-import {InstantSearch} from 'react-instantsearch';
+import {InstantSearch} from 'react-instantsearch/dom';
 
 const App = () =>
   <InstantSearch
@@ -102,7 +102,7 @@ And while we're doing that, let's create a new component for the search:
 
 ```javascript
 // First, we need to add the Hits component to our import
-import {InstantSearch, Hits} from 'react-instantsearch';
+import {InstantSearch, Hits} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -156,7 +156,7 @@ Now let's modify the `Hits` usage to add our new `itemComponent`.
 function Search() {
   return (
     <div className="container">
-      <Hits itemComponent={Product} /> 
+      <Hits itemComponent={Product} />
     </div>
   );
 }
@@ -177,7 +177,7 @@ in the Search component that we created before:
 
 ```javascript
 // We need to add the SearchBox to our import
-import {InstantSearch, Hits, SearchBox} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -185,7 +185,7 @@ function Search() {
   return (
     <div className='container'>
       <SearchBox />
-      <Hits itemComponent={Product} /> 
+      <Hits itemComponent={Product} />
     </div>
   );
 }
@@ -197,7 +197,7 @@ search result component:
 
 ```javascript
 // We need to add the highlight function to our import
-import {InstantSearch, Hits, SearchBox, highlight} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox, highlight} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -233,7 +233,7 @@ to filter the products by categories:
 
 ```javascript
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -242,7 +242,7 @@ function Search() {
     <div className='container'>
       <SearchBox />
       <RefinementList attributeName="category" />
-      <Hits itemComponent={Product} /> 
+      <Hits itemComponent={Product} />
     </div>
   );
 }
@@ -270,7 +270,7 @@ we can use them directly without further configuration.
 
 ```javascript
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters} from 'react-instantsearch';
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -280,7 +280,7 @@ function Search() {
       <CurrentFilters/>
       <SearchBox />
       <RefinementList attributeName="category" />
-      <Hits itemComponent={Product} /> 
+      <Hits itemComponent={Product} />
       <Pagination />
     </div>
   );

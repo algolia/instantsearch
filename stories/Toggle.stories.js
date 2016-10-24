@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Toggle} from '../packages/react-instantsearch';
+import {Toggle} from '../packages/react-instantsearch/dom';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
