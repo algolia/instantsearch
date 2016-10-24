@@ -54,12 +54,14 @@ nav.sidebar {
           font-weight: 400;
           padding: 0 0.15em;
           line-height: 1.5;
+          transition: color 0.2s ease, box-shadow 0.2s ease, font-weight 0.2s ease;
 
           &:focus,
           &:target {
             @extend %active-links;
           }
           &.active{
+            transition: color 0.2s ease, box-shadow 0.2s ease;
             @extend %active-links;
           }
           &.navItem-active{

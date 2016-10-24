@@ -35,9 +35,10 @@
         .cm-navigation__brands-dropdown__container
           div(data-inject-community='')
         .cm-navigation__brands-dropdown__footer
-          img(src=h.publicPath('images/logo-community.svg'))
-          img(src=h.publicPath('images/logo-algolia.svg'))
-          |  community
+          a(href="https://community.algolia.com")
+            img(src=h.publicPath('images/logo-community.svg'), class="community-logo")
+            img(src=h.publicPath('images/logo-algolia.svg'), class="algolia-logo")
+            |  community
   .cm-navigation__menu-mobile-trigger
     button#open-menu
       img(src=h.publicPath('images/menu-icon.svg'))

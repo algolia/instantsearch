@@ -23,9 +23,3 @@ figure {
     color: transparent;
   }
 }
-
-body {
-  @include isRetina {
-    color: red !important
-  }
-}

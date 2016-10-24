@@ -1,4 +1,4 @@
-const debug = true;
+
 
 const cmSearch = function () {
   const searchIcon = document.querySelector('#search');
@@ -114,8 +114,8 @@ function displayDropdown() {
   // Make sure to remove the dropdown if the user move the mouse
   // and if the dropdown isn't hovered
   document.body.addEventListener('mousemove', function(e) {
-    hover = true;
-    if (hover === false && debug === false) {
+    // hover = true;
+    if (hover === false ) {
       removeDropdown();
     }
   });
@@ -144,6 +144,39 @@ const shrinkMenu = function() {
   const menuItems = menu.childNodes;
 };
 
+// If the user type :"s", open the searchbox
+function catchCmdF() {
+  let keyPressed = {};
+
+  document.addEventListener('keydown', function(e) {
+    keyPressed[e.keyCode] = true;
+  }, false);
+  document.addEventListener('keyup', function(e) {
+    keyPressed[e.keyCode] = false;
+  }, false);
+
+  function searchLoop() {
+    if (keyPressed['83']) {
+      document.querySelector('.cm-search__input').classList.add('open');
+      document.querySelector('#searchbox').focus();
+
+      setTimeout(function() {
+        keyPressed = {};
+      }, 500);
+    } else if (keyPressed['27']) {
+      document.querySelector('.cm-search__input').classList.remove('open');
+      document.querySelector('#searchbox').blur();
+
+      setTimeout(function() {
+        keyPressed = {};
+      }, 500);
+    }
+    setTimeout(searchLoop, 5);
+  }
+
+  searchLoop();
+}
+
 window.addEventListener('DOMContentLoaded', function() {
   cmSearch();
   toggleMobileMenu({
@@ -153,6 +186,7 @@ window.addEventListener('DOMContentLoaded', function() {
   wrapMenuOnMobile();
   displayDropdown();
   shrinkMenu();
+  catchCmdF();
 });
 
 window.onresize = function(e) {

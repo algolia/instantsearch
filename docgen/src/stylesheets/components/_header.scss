@@ -191,6 +191,12 @@ $nav-background-light: mix($nav-background,#fff,92%);
       svg {
         vertical-align: middle
       }
+
+      font-size: 18px;
+
+      a {
+        color: #000;
+      }
     }
 
     p {
@@ -199,8 +205,26 @@ $nav-background-light: mix($nav-background,#fff,92%);
       color: #1d3657;
     }
 
+    [data-inject-community] {
+      padding: 0 1em;
+    }
+
     .dropdown-item {
       flex: 50%;
+      margin: 0.5em auto;
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba(black, 0.1);
+
+        .item-icon {
+          transform: scale(1.1);
+
+          img {
+            transform: scale(1.1)
+          }
+        }
+      }
 
       a {
         display: flex;
@@ -218,8 +242,19 @@ $nav-background-light: mix($nav-background,#fff,92%);
       }
 
       .item-icon {
-        span {
-          padding: 8px;
+        width: 38px;
+        height: 38px;
+        margin: 8px;
+        border-radius: 4px;
+        padding: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        transition: transform 0.3s ease;
+
+        img {
+          max-width: 100%;
+          transition: transform 0.3s ease 0.15s;
         }
       }
 
@@ -232,6 +267,15 @@ $nav-background-light: mix($nav-background,#fff,92%);
         vertical-align: middle;
         margin: auto;
       }
+    }
+
+    .community-logo {
+      max-width: 28px;
+      margin-right: 6px;
+    }
+
+    .algolia-logo {
+      max-width: 80px
     }
   }
 

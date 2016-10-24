@@ -183,6 +183,13 @@
 %active-links {
   color: $accent-color;
   box-shadow: inset -2px 0 0 0 $accent-color;
+  font-weight: bold;
+
+  @supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
+    background: -webkit-linear-gradient(120deg, $accent-color, $accent-color-darkish);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
   @include small-mq {
     font-weight: bold;

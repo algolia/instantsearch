@@ -43,13 +43,16 @@ $brand-primary: #1D96C7;
 $black: #0a1724;
 $white-75: rgba(white, 0.75);
 $chocolate: #7d4704;
-
+$nice-purple: #8f64f3;
+$nice-blue:  #39b1de;
 // Business variables
 $react-color: #00D8FF;
 $hero-color: $saffron-mango;
 $hero-color-accent: #FFF;
-$accent-color: $red-pink;
-$accent-color-darkish: $darkish-pink;
+// $accent-color: $red-pink;
+// $accent-color-darkish: $darkish-pink;
+$accent-color: $nice-purple;
+$accent-color-darkish: $nice-blue;
 $bg-pale-accent: $saffron-mango-light;
 
 // #3066BE
