@@ -20,7 +20,7 @@ let state;
 describe('Pagination.connect', () => {
   it('provides the correct props to the component', () => {
     props = getProps({id: 'ok'}, {}, {results: {nbPages: 666}});
-    expect(props).toEqual({page: 0, nbPages: 666});
+    expect(props).toEqual({page: 1, nbPages: 666});
 
     props = getProps({id: 'ok'}, {ok: 5}, {results: {nbPages: 666}});
     expect(props).toEqual({page: 5, nbPages: 666});
@@ -44,7 +44,7 @@ describe('Pagination.connect', () => {
 
   it('refines the page parameter', () => {
     const initSP = new SearchParameters();
-    params = getSP(initSP, {id: 'ok'}, {ok: 666});
+    params = getSP(initSP, {id: 'ok'}, {ok: 667});
     expect(params.page).toBe(666);
   });
 
