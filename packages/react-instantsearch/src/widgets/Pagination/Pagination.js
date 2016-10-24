@@ -40,7 +40,7 @@ function getPages(page, total, padding) {
   const first = page - paddingLeft;
   const last = page + paddingRight;
 
-  return range(first, last);
+  return range(first + 1, last + 1);
 }
 
 class Pagination extends Component {
@@ -109,7 +109,7 @@ class Pagination extends Component {
     return {
       key: `${modifier}.${value}`,
       modifier,
-      disabled: value < 0 ||
+      disabled: value < 1 ||
       value >= Math.min(maxPages, nbPages),
       label: translate(translationKey, value),
       value,
@@ -135,16 +135,16 @@ class Pagination extends Component {
     } = this.props;
 
     const totalPages = Math.min(nbPages, maxPages);
-    const lastPage = totalPages - 1;
+    const lastPage = totalPages;
 
     let items = [];
     if (showFirst) {
       items.push({
         key: 'first',
         modifier: 'itemFirst',
-        disabled: page === 0,
+        disabled: page === 1,
         label: translate('first'),
-        value: 0,
+        value: 1,
         ariaLabel: translate('ariaFirst'),
       });
     }
@@ -152,7 +152,7 @@ class Pagination extends Component {
       items.push({
         key: 'previous',
         modifier: 'itemPrevious',
-        disabled: page === 0,
+        disabled: page === 1,
         label: translate('previous'),
         value: page - 1,
         ariaLabel: translate('ariaPrevious'),
@@ -212,11 +212,11 @@ export default themeable(theme)(
     next: '›',
     first: '«',
     last: '»',
-    page: page => (page + 1).toString(),
+    page: page => page.toString(),
     ariaPrevious: 'Previous page',
     ariaNext: 'Next page',
     ariaFirst: 'First page',
     ariaLast: 'Last page',
-    ariaPage: page => `Page ${(page + 1).toString()}`,
+    ariaPage: page => `Page ${page.toString()}`,
   })(Pagination)
 );
