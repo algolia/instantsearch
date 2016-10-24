@@ -15,7 +15,7 @@ More on that on the [making your own widgets](Customization.html#making-your-own
 Let's take an example building a SearchBox using Material UI:
 
 ```js
-import {SearchBox} from 'react-instantsearch';
+import {connectSearchBox} from 'react-instantsearch/connectors';
 import {TextField} from 'material-ui';
 
 const MaterialUiSearchBox = props => {
@@ -26,7 +26,7 @@ const MaterialUiSearchBox = props => {
   />;
 };
 
-const ConnectedSearchBox = SearchBox.connect(MaterialUiSearchBox);
+const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 ```
 
 Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearch` component:

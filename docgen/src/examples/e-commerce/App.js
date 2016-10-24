@@ -1,20 +1,24 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
+import {createConnector} from 'react-instantsearch';
 import {
   InstantSearch,
-  SearchBox,
   HierarchicalMenu,
   RefinementList,
-  Hits,
   SortBy,
   Stats,
   Pagination,
   CurrentFilters,
-  MultiRange,
-  Range,
-  createConnector,
-} from 'react-instantsearch';
+  RangeRatings,
+  RangeInput,
+} from 'react-instantsearch/dom';
+import {
+  connectSearchBox,
+  connectRefinementList,
+  connectHits,
+  connectMultiRange,
+} from 'react-instantsearch/connectors';
 
 export default function App() {
   return (
@@ -91,7 +95,7 @@ const Facets = () =>
           <RefinementListWithTitle
             title="Rating"
             key="rating"
-            item={<Range.Rating attributeName="rating" max={5}/>}
+            item={<RangeRatings attributeName="rating" max={5}/>}
           />,
           <RefinementListWithTitle
             title="Price"
@@ -110,7 +114,7 @@ const Facets = () =>
               ]}
             />}
           />,
-          <Range.Input key="price_input" attributeName="price" id="price_input"/>,
+          <RangeInput key="price_input" attributeName="price" id="price_input"/>,
         ]}
       />
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
@@ -249,7 +253,7 @@ const CustomResults = createConnector({
   }
 });
 
-const CustomPriceRanges = MultiRange.connect(React.createClass({
+const CustomPriceRanges = connectMultiRange(React.createClass({
   checkIfNeedReset(value) {
     const selectedItem = this.props.selectedItem === value ? '' : value;
     this.props.refine(selectedItem);
@@ -301,8 +305,6 @@ const PriceRange = ({label, value, onClick}) =>
     </a>
   </li>;
 
-const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
-
-const ConnectedColorRefinementList = RefinementList.connect(CustomColorRefinementList);
-
-const ConnectedHits = Hits.connect(CustomHits);
+const ConnectedSearchBox = connectSearchBox(CustomCheckbox);
+const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);
+const ConnectedHits = connectHits(CustomHits);

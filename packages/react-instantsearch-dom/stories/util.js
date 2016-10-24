@@ -1,5 +1,11 @@
 import React from 'react';
-import {InstantSearch, Hits, CurrentFilters, SearchBox, Pagination} from '../packages/react-instantsearch';
+import {
+  InstantSearch,
+  CurrentFilters,
+  SearchBox,
+  Pagination,
+} from '../packages/react-instantsearch/dom';
+import {connectHits} from '../packages/react-instantsearch/connectors';
 import style from './util.css';
 
 const Wrap = props =>
@@ -62,7 +68,7 @@ const WrapWithHits = ({children, searchBox = true}) =>
     </div>
   </InstantSearch>;
 
-const CustomHits = Hits.connect(({hits}) =>
+const CustomHits = connectHits(({hits}) =>
   <div className={style.hits}>
     {hits.map((hit, idx) =>
       <div key={idx} className={style.hit}>

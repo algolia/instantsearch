@@ -3,15 +3,16 @@
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import {
-  SearchBox,
-  HierarchicalMenu,
-  RefinementList,
-  Hits,
-  CurrentFilters,
-  InstantSearch,
-  SortBy,
-  Pagination,
-} from 'react-instantsearch';
+  connectSearchBox,
+  connectRefinementList,
+  connectHierarchicalMenu,
+  connectSortBy,
+  connectHits,
+  connectCurrentFilters,
+  connectPagination,
+} from 'react-instantsearch/connectors';
+import {InstantSearch} from 'react-instantsearch/dom';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
   TextField,
@@ -359,16 +360,16 @@ const MaterialUiBottomNavigation = React.createClass({
   },
 });
 
-const ConnectedSearchBox = SearchBox.connect(MaterialUiSearchBox);
+const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 
-const ConnectedCheckBoxRefinementList = RefinementList.connect(MaterialUiCheckBoxRefinementList);
+const ConnectedCheckBoxRefinementList = connectRefinementList(MaterialUiCheckBoxRefinementList);
 
-const ConnectedNestedList = HierarchicalMenu.connect(MaterialUiNestedList);
+const ConnectedNestedList = connectHierarchicalMenu(MaterialUiNestedList);
 
-const ConnectedSortBy = SortBy.connect(MaterialUiSortBy);
+const ConnectedSortBy = connectSortBy(MaterialUiSortBy);
 
-const ConnectedHits = Hits.connect(CustomHits);
+const ConnectedHits = connectHits(CustomHits);
 
-const ConnectedCurrentFilters = CurrentFilters.connect(MaterialUiClearAllFilters);
+const ConnectedCurrentFilters = connectCurrentFilters(MaterialUiClearAllFilters);
 
-const ConnectedPagination = Pagination.connect(MaterialUiBottomNavigation);
+const ConnectedPagination = connectPagination(MaterialUiBottomNavigation);

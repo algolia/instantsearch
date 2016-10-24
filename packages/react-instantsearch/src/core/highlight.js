@@ -24,7 +24,7 @@ function extractTagName(highlightedValue) {
  * @param {object} hit the hit from the algolia response
  * @returns {Array.<string|ReactElement>} the array of react element
  * @example
- * const ProductHits = Hits.connect(({hits}) => {
+ * const ProductHits = connectHits(({hits}) => {
  *   const hitComponents = hits.map( hit =>
  *     <div key={hit.objectID}>
  *       <span className="hit-name">{hightlight('name', hit)}</span>

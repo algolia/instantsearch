@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Pagination} from '../packages/react-instantsearch';
+import {Pagination} from '../packages/react-instantsearch/dom';
 import {withKnobs, boolean, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
