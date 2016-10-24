@@ -64,7 +64,7 @@ function validateNextProps(props, nextProps) {
  * @propType {object} state - See [Controlled State](#controlled-state).
  * @propType {func} createURL - See [Controlled State](#controlled-state).
  * @example
- * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch';
+ * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
  *
  * export default function Search() {
  *   return (

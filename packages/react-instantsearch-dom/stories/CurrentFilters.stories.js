@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {CurrentFilters, RefinementList} from '../packages/react-instantsearch';
+import {CurrentFilters, RefinementList} from '../packages/react-instantsearch/dom';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
 import {Wrap} from './util';
 

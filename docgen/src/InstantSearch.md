@@ -7,7 +7,7 @@ category: guide
 Connects to your Algolia index and provides data to all children widgets.
 
 ```js
-import {InstantSearch, SearchBox, Hits} from 'react-instantsearch';
+import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
 
 export default function Search() {
   return (
@@ -58,7 +58,7 @@ If you're using [React Router](https://github.com/reactjs/react-router) and/or t
 
 ```js
 import {withRouter} from 'react-router';
-import {InstantSearch} from 'react-instantsearch';
+import {InstantSearch} from 'react-instantsearch/dom';
 
 function Search(props) {
   return (
@@ -79,7 +79,7 @@ export default withRouter(Search);
 #### With a custom history
 
 ```js
-import {InstantSearch, SearchBox, Hits} from 'react-instantsearch';
+import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
 
 import myHistory from './path-to-my-history';
 
