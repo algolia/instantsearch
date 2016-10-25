@@ -1,5 +1,3 @@
-
-
 const cmSearch = function () {
   const searchIcon = document.querySelector('#search');
   const cancelIcon = document.querySelector('#cancel');

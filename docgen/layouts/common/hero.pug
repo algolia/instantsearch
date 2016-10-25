@@ -1,10 +1,18 @@
 section.hero-section.shrink
   .container
     .hero-container
+
+      .fl-left.article-title.doc-only
+        a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
+          span#icon-algolia.icon.icon-algolia-small_white.no-mobile
+        figure
+          img(src=h.publicPath("images/react-instant-search-logo.svg"))
+          figcaption
+            h1=title
+
       .fl-left.article-title
         a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this')
           span#icon-algolia.icon.icon-algolia-small_white.no-mobile
-        //- h1=title
         figure
           img(src=h.publicPath("images/react-instant-search-logo-text.svg"))
           figcaption

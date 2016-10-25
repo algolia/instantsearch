@@ -49,14 +49,14 @@ $nav-background-light: mix($nav-background,#fff,92%);
       float: left
     }
 
-    @media (max-width: 960px) {
+    @media (max-width: 1140px) {
       max-width: auto;
       width: auto;
 
-      > div {
+
        transform: translateX(-204px);
        float: left;
-      }
+
     }
 
 
@@ -122,7 +122,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
       }
     }
     &--project {
-      padding-left: 2em;
+      padding-left: 2.5em;
     }
   }
 
@@ -306,6 +306,12 @@ $nav-background-light: mix($nav-background,#fff,92%);
     height: $nav-height;
     line-height: $nav-height;
 
+    @media (max-width: 960px) {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
     @include component('menu', 'list') {
       list-style: none;
       padding: 0;
@@ -334,6 +340,10 @@ $nav-background-light: mix($nav-background,#fff,92%);
           left: 0;
           animation: slidebg 0.8s ease;
           will-change: background-size;
+        }
+
+        a:not([href]) {
+          cursor: pointer
         }
 
       }
@@ -501,33 +511,33 @@ $nav-background-light: mix($nav-background,#fff,92%);
         &.open {
           width: 300px;
 
-          input {
-            background: #2e3f4f;
-            width: 100%;
-            border-radius: 3px;
-            transform: translateX(calc(-300px + 1.5em));
-            outline: none;
-            padding-left: 2.1em;
-            cursor: auto;
-            color: #fff;
-            @include placeholder {
-              color: rgba(#ffffff, 0.3);
-            }
-            &~ button#search {
-              transform: translateX(calc(-300px + 1.6em));
-            }
-            &~ button#cancel {
-              display: block;
-              svg {
-                opacity: 0.8;
+          // input {
+          //   background: #2e3f4f;
+          //   width: 100%;
+          //   border-radius: 3px;
+          //   transform: translateX(calc(-300px + 1.5em));
+          //   outline: none;
+          //   padding-left: 2.1em;
+          //   cursor: auto;
+          //   color: #fff;
+          //   @include placeholder {
+          //     color: rgba(#ffffff, 0.3);
+          //   }
+          //   &~ button#search {
+          //     transform: translateX(calc(-300px + 1.6em));
+          //   }
+          //   &~ button#cancel {
+          //     display: block;
+          //     svg {
+          //       opacity: 0.8;
 
-                &:hover {
-                  transform: scale(1.1);
-                  opacity: 1;
-                }
-              }
-            }
-          }
+          //       &:hover {
+          //         transform: scale(1.1);
+          //         opacity: 1;
+          //       }
+          //     }
+          //   }
+          // }
 
 
           // DOCSEARCH RELATED
@@ -561,16 +571,17 @@ $nav-background-light: mix($nav-background,#fff,92%);
           }
 
 
-          @media (max-width: 1000px) {
-            width: 30vw;
+          @media (max-width: 1200px) {
+            width: 200px;
 
-            input {
-              transform: translateX(calc(-30vw + 1.5em));
-
-              &~ button#search {
-                transform: translateX(calc(-30vw + 1.6em));
-              }
+            .algolia-autocomplete input {
+              transform: translateX(calc(-200px + 1.5em));
             }
+
+            button#search {
+              transform: translateX(calc(-200px + 1.6em));
+            }
+
           }
         }
       }

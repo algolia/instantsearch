@@ -1,3 +1,9 @@
+.doc-only {
+  display: none;
+}
+
+
+// Start the hero
 .hero-section {
   background: linear-gradient(to right, mix(#895cf2, #fff, 95%) 0%,  mix(#2faddc, #fff, 95%) 90%) mix(#3066BE, #fff, 95%);
   color: $hero-color-accent;
@@ -8,8 +14,7 @@
   perspective: 300px;
   margin-top: $nav-height;
 
-  &:before,
-  &:after {
+  &:before {
     content: '';
     display: block;
     user-select: none;
@@ -47,29 +52,6 @@
       background-blend-mode: overlay;
       left: -100vw;
       transform: rotateY(-10deg);
-    }
-  }
-
-  &:after {
-    width: 520px;
-    height: 520px;
-    z-index: 1;
-    background: {
-      image: url('../images/react-logo-bg.svg');
-      size: 380px;
-      repeat: no-repeat;
-      position: center center;
-    }
-    bottom: -120px;
-    left: -120px;
-    transform: rotate(-25deg);
-    opacity: 0.3;
-    mix-blend-mode: overlay;
-    animation: roll 60s linear infinite;
-    will-change: transform;
-
-    @media (min-width: 2000px) {
-      left: 10vw;
     }
   }
 
@@ -217,6 +199,33 @@
     height: 150px;
     padding: 0;
 
+    .fl-left:not(.doc-only) {
+      display: none;
+    }
+
+    .doc-only {
+      display: block;
+
+      a {
+        display: none;
+      }
+
+      figure {
+        img {
+          max-width: 46px;
+          margin: 6px 14px -6px;
+        }
+
+        figcaption {
+          position: relative;
+          text-indent: inherit;
+          top: inherit;
+          color: #fff;
+          display: inline-block;
+        }
+      }
+    }
+
     &:after {
       display: none;
     }
@@ -242,19 +251,6 @@
     .article-title h1 {
       padding-top: 0.25em;
     }
-  }
-}
-
-$x: 120;
-@keyframes roll {
-  0% {
-    transform: rotate(0)
-  }
-  50% {
-    transform: rotate(($x/2)+deg) scale(1.2)
-  }
-  100% {
-    transform: rotate($x+deg)
   }
 }
 
