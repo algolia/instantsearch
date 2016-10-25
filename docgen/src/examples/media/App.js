@@ -4,14 +4,13 @@ import React from 'react';
 
 import {
   InstantSearch,
-  RefinementListLinks,
   Hits,
   Stats,
   Pagination,
   RangeRatings,
 } from 'react-instantsearch/dom';
 
-import {connectSearchBox} from 'react-instantsearch/connectors';
+import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
 
 import insertCss from 'insert-css';
 
@@ -72,13 +71,6 @@ const Facets = () => <aside>
   >
     <RefinementListLinks
       attributeName="genre"
-      theme={{
-        ...RefinementListLinks.defaultClassNames,
-        items: 'nav nav-list',
-        itemCount: 'badge pull-right',
-        itemLink: 'item',
-        itemSelected: 'active',
-      }}
       sortBy={['isRefined']}
     />
   </Panel>
@@ -140,3 +132,32 @@ const Results = () =>
     <div id="pagination" className="text-center"><Pagination
       theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/></div>
   </article>;
+
+const RefinementListLinks = connectRefinementList(({items, refine, currentRefinement}) => {
+  const itemComponents = items.map(item => {
+    const isSelected = currentRefinement.indexOf(item.value) !== -1;
+    const value = isSelected ?
+      currentRefinement.filter(v => v !== item.value) :
+      currentRefinement.concat([item.value]);
+    const selectedClassName = isSelected ? ' active' : '';
+    const itemClassName = `${selectedClassName}`;
+    return (
+      <div className={itemClassName} key={item.value}>
+        <a className="item" onClick={e => {
+          e.preventDefault();
+          refine(value);
+        }}>
+          <span> {item.value}</span>
+          <span className="badge pull-right">{item.count}</span>
+        </a>
+      </div>
+    );
+  });
+
+  return (
+    <div className="nav nav-list">
+      {itemComponents}
+    </div>
+  );
+});
+

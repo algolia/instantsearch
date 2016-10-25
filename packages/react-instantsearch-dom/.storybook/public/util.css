@@ -1,0 +1,102 @@
+.container {
+  padding: 50px 40px 40px;
+  position: relative;
+  overflow-x: hidden;
+  clear: left;
+}
+
+.container:after{
+  font-size: 11px;
+  top: 0;
+  left: 0;
+  color: #999999;
+  padding: 4px 6px;
+  line-height: 1em;
+  position: absolute;
+  background-color: #F3F3F3;
+  border: solid 1px #E4E4E4;
+  border-width: 0 1px 1px 0;
+}
+
+.widget-container {
+  border: solid 1px #E4E4E4;
+  border-radius: 5px 5px 0px 0px;
+}
+
+.widget-container:after {
+  content: "Widget display";
+  border-radius: 5px 0 3px;
+}
+
+.hits-container {
+  border-left: solid 1px #E4E4E4;
+  border-right: solid 1px #E4E4E4;
+  border-bottom: solid 1px #E4E4E4;
+  display: flex;
+  flex-direction: column;
+}
+
+.hits-container:after {
+  content: "Results";
+}
+
+.footer-container {
+  padding: 10px;
+  border-radius: 0px 0px 5px 5px;
+  position: relative;
+  overflow-x: hidden;
+  clear: left;
+  border-bottom: solid 1px #E4E4E4;
+  border-left: solid 1px #E4E4E4;
+  border-right: solid 1px #E4E4E4;
+}
+
+.footer-container:after {
+  content: "Visit our playground to play with the widget props";
+  text-align: center;
+  font-size: 11px;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: #999999;
+  padding: 4px 6px;
+  line-height: 1em;
+  position: absolute;
+  background-color: #F3F3F3;
+  border: solid 1px #E4E4E4;
+  border-width: 0 1px 1px 0;
+}
+
+.hit {
+  margin: 10px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.hit-actions {
+  display:flex;
+}
+
+.hit-content {
+  padding: 0px 10px;
+}
+
+.hit-picture img{
+  width: 80px;
+  height: 80px;
+}
+
+.hit-type {
+  color: #888888;
+  font-size: 13px;
+}
+
+.hit-pagination {
+  align-self: center;
+}
+
+em {
+  color: #3e82f7;
+  font-weight: 700;
+  font-style: normal;
+}

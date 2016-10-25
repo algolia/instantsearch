@@ -9,7 +9,7 @@ const stories = storiesOf('HierarchicalMenu', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="HierarchicalMenu" >
     <HierarchicalMenu
       id="categories"
       attributes={[
