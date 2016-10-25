@@ -5,7 +5,6 @@ export {default as Error} from './src/widgets/Error.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Hits} from './src/widgets/Hits.js';
 export {default as HitsPerPage} from './src/widgets/HitsPerPage.js';
-export {default as Loading} from './src/widgets/Loading.js';
 export {default as Menu} from './src/widgets/Menu.js';
 export {default as MultiRange} from './src/widgets/MultiRange.js';
 export {default as Pagination} from './src/widgets/Pagination.js';
