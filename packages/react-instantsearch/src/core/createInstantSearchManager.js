@@ -4,11 +4,14 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 
+function identity(x) { return x; }
+
 export default function createInstantSearchManager({
   appId,
   apiKey,
   indexName,
   initialState,
+  configureSearchParameters = identity,
 }) {
   const client = algoliasearch(appId, apiKey);
   const helper = algoliasearchHelper(client);
@@ -40,10 +43,7 @@ export default function createInstantSearchManager({
 
   function search() {
     const baseSP = new SearchParameters({index: indexName});
-    // @TODO: Provide a way to configure base SearchParameters.
-    // We previously had a `configureSearchParameters : SP -> SP` option.
-    // We could also just have a `baseSearchParameters : SP` option.
-    const searchParameters = getSearchParameters(baseSP);
+    const searchParameters = configureSearchParameters(getSearchParameters(baseSP));
 
     helper.searchOnce(searchParameters)
       .then(({content}) => {

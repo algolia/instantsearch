@@ -57,6 +57,9 @@ function validateNextProps(props, nextProps) {
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.
+ * @propType {function=identity} configureSearchParameters - function to tweak the parameters sent to Algolia.
+ * It is executed after the SearchParameters are resolved from the widgets. It can contains some
+ * logic to conditionally apply some parameters based on the state. Signature `SearchParameters => SearchParameters`.
  * @propType {bool=true} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
  * @propType {object} history - A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over urlSync. See [Custom History](#custom-history).
  * @propType {number=700} threshold - Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
@@ -118,6 +121,7 @@ class InstantSearch extends Component {
       appId: props.appId,
       apiKey: props.apiKey,
       indexName: props.indexName,
+      configureSearchParameters: props.configureSearchParameters,
 
       initialState,
     });
@@ -207,6 +211,8 @@ InstantSearch.propTypes = {
   appId: PropTypes.string.isRequired,
   apiKey: PropTypes.string.isRequired,
   indexName: PropTypes.string.isRequired,
+
+  configureSearchParameters: PropTypes.func,
 
   history: PropTypes.object,
   urlSync: PropTypes.bool,

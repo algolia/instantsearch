@@ -4,6 +4,19 @@ import {omit, has} from 'lodash';
 import {shallowEqual, getDisplayName} from './utils';
 
 /**
+ * @typedef {object} ConnectorDescription
+ * @property {string} displayName - the displayName used by the wrapper
+ * @property {function} refine - a function to filter the local state
+ * @property {function} getSearchParameters - function transforming the local state to a SearchParameters
+ * @property {function} getMetadata - metadata of the widget
+ * @property {function} transitionState - hook after the state has changed
+ * @property {function} getProps - transform the state into props passed to the wrapped component.
+ * Receives (props, widgetStates, searchState, metadata) and returns the local state.
+ * @property {object} propTypes - PropTypes forwarded to the wrapped component.
+ * @property {object} defaultProps - default values for the props
+ */
+
+/**
  * Connectors are the HOC used to transform React components
  * into InstantSearch widgets.
  * In order to simplify the construction of such connectors
