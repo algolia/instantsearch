@@ -3,7 +3,7 @@ extends ../archetypes/content-with-menu.pug
 include ../mixins/nav.pug
 
 block navigation
-  - var headings = [{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Props'}, {tag: 'h2', id:'theme', text: 'Theming keys'},{tag: 'h2', id:'translation', text: 'Translation keys'}, {tag: 'h2', id:'example', text: 'Example'}];
+  - var headings = [{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Props'}, {tag: 'h2', id:'theme', text: 'Theming keys'},{tag: 'h2', id:'translation', text: 'Translation keys'}, {tag: 'h2', id:'example', text: 'Example'}, {tag: 'h2', id:'live', text: 'See it live'}];
   +nav(navPath, navigation, title, headings)
 
 block content
@@ -68,3 +68,9 @@ block content
   if examples
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
+  h2#live See it live
+    a.anchor(href='#live')
+  if (process.env.NODE_ENV === 'development')
+    p <iframe frameborder="0" height=800px width=800px src="http://localhost:6006/iframe.html?dataId=0&selectedKind=#{name}&selectedStory=default&full=0&down=1&left=0&panelRight=1&downPanel=kadirahq%2Fstorybook-addon-knobs"></iframe>
+  else
+    p <iframe frameborder="0" height=800px width=800px src="https://community.algolia.com/instantsearch.js/react/storybook/iframe.html?dataId=0&selectedKind=#{name}&selectedStory=default&full=0&down=1&left=0&panelRight=1&downPanel=kadirahq%2Fstorybook-addon-knobs"></iframe>

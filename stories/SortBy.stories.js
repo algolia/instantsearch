@@ -30,15 +30,4 @@ stories.add('default ', () =>
       defaultRefinement="ikea"
     />
   </WrapWithHits>
-).add('with links', () =>
-  <WrapWithHits >
-    <SortBy.Links
-      items={[
-        {value: 'ikea', label: 'Featured'},
-        {value: 'ikea_price_asc', label: 'Price asc.'},
-        {value: 'ikea_price_desc', label: 'Price desc.'},
-      ]}
-      defaultRefinement="ikea"
-    />
-  </WrapWithHits>
 );

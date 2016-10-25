@@ -1336,16 +1336,6 @@ exports[`Pagination displays the correct padding of links 4`] = `
   <li
     className="item itemPage">
     <a
-      aria-label="Page 0"
-      className="itemLink"
-      href="#"
-      onClick={[Function]}>
-      0
-    </a>
-  </li>
-  <li
-    className="item itemPage">
-    <a
       aria-label="Page 1"
       className="itemLink"
       href="#"
@@ -1381,6 +1371,16 @@ exports[`Pagination displays the correct padding of links 4`] = `
       href="#"
       onClick={[Function]}>
       4
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 5"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      5
     </a>
   </li>
   <li

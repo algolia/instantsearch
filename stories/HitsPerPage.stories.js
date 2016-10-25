@@ -8,21 +8,9 @@ const stories = storiesOf('HitsPerPage', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default ', () =>
+stories.add('default', () =>
   <WrapWithHits >
     <HitsPerPage
-      defaultRefinement={4}
-      items={[2, 4, 6, 8]}/>
-  </WrapWithHits>
-).add('defaultSelect', () =>
-  <WrapWithHits >
-    <HitsPerPage.Select
-      defaultRefinement={4}
-      items={[{value: 2}, {value: 4}, {value: 6}, {value: 8}]}/>
-  </WrapWithHits>
-).add('with label', () =>
-  <WrapWithHits >
-    <HitsPerPage.Select
       defaultRefinement={4}
       items={[{value: 2, label: '2 hits per page'},
         {value: 4, label: '4 hits per page'},
@@ -31,7 +19,7 @@ stories.add('default ', () =>
   </WrapWithHits>
 ).add('playground', () =>
     <WrapWithHits >
-      <HitsPerPage.Select
+      <HitsPerPage
         defaultRefinement={number('default hits per page', 4)}
         items={[{value: 2, label: '2 hits per page'},
           {value: 4, label: '4 hits per page'},

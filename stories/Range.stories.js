@@ -1,15 +1,14 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Range, extendTheme} from '../packages/react-instantsearch/dom';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
-
-const stories = storiesOf('Range', module);
+import Range from './3rdPartiesIntegration.stories';
+const stories = storiesOf('RangeSlider', module);
 
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="RangeSlider">
 
     <Range attributeName="price"/>
   </WrapWithHits>
@@ -26,22 +25,6 @@ stories.add('default', () =>
     <Range attributeName="price"
            min={30}
            max={100}
-    />
-  </WrapWithHits>
-).add('extend theme', () =>
-  <WrapWithHits >
-    <Range attributeName="price"
-           theme={extendTheme(Range.defaultClassNames, {
-             track: {
-               background: 'red',
-             },
-             trackSelected: {
-               backgroundColor: 'green',
-             },
-             handleDot: {
-               backgroundColor: 'green',
-             },
-           })}
     />
   </WrapWithHits>
 ).add('playground', () =>

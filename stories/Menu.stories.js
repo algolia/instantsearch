@@ -9,7 +9,7 @@ const stories = storiesOf('Menu', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="Menu">
     <Menu
       attributeName="category"
     />
