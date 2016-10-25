@@ -1,5 +1,4 @@
 function dropdowns() {
-
   const openDropdown = document.querySelectorAll('[data-toggle-dropdown]');
   const otherDropdown = document.querySelectorAll('.simple-dropdown');
 
@@ -27,4 +26,4 @@ function dropdowns() {
   }
 }
 
-dropdowns();
+export default dropdowns;

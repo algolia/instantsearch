@@ -12,5 +12,8 @@ if (container && sidebar) {
     sidebarContainer,
     headerStartLevel: 2,
   });
-};
+}
 
+header();
+communityProjects();
+dropdowns();

@@ -1,119 +1,118 @@
-const cmSearch = function () {
-  const searchIcon = document.querySelector('#search');
-  const cancelIcon = document.querySelector('#cancel');
-  const searchContainer = document.querySelector('.cm-search__input');
-  const searchInput = document.querySelector('#searchbox');
+export default function initHeader() {
+  const cmSearch = function () {
+    const searchIcon = document.querySelector('#search');
+    const cancelIcon = document.querySelector('#cancel');
+    const searchContainer = document.querySelector('.cm-search__input');
+    const searchInput = document.querySelector('#searchbox');
 
-  function openSearchInput () {
-    searchContainer.classList.add('open');
-    searchInput.focus();
-  }
-
-  function closeSearchInput () {
-    searchContainer.classList.remove('open');
-  }
-
-  function emptySearchInput () {
-    if (searchInput.value !== '') {
-      searchInput.value = '';
-    } else {
-      closeSearchInput();
+    function openSearchInput () {
+      searchContainer.classList.add('open');
+      searchInput.focus();
     }
-  }
 
-  searchIcon.addEventListener('click', openSearchInput);
-  cancelIcon.addEventListener('click', emptySearchInput);
+    function closeSearchInput () {
+      searchContainer.classList.remove('open');
+    }
 
-  window.onresize = function () {
-    emptySearchInput();
-    closeSearchInput();
+    function emptySearchInput () {
+      if (searchInput.value !== '') {
+        searchInput.value = '';
+      } else {
+        closeSearchInput();
+      }
+    }
+
+    searchIcon.addEventListener('click', openSearchInput);
+    cancelIcon.addEventListener('click', emptySearchInput);
+
+    window.onresize = function () {
+      emptySearchInput();
+      closeSearchInput();
+    };
+
+    return cmSearch;
   };
 
-  return cmSearch;
-};
+  const toggleMobileMenu = function(args) {
+    const trigger = args.trigger || '#open-menu';
+    let opened = false;
+    const target = args.target || '.cm-navigation__menu';
+    const openedClass = args.openedClass || 'opened';
 
-const toggleMobileMenu = function(args) {
-  const trigger = args.trigger || '#open-menu';
-  let opened = false;
-  const target = args.target || '.cm-navigation__menu';
-  const openedClass = args.openedClass || 'opened';
+    document.querySelector(trigger).addEventListener('click', toggleMenu);
 
-  document.querySelector(trigger).addEventListener('click', toggleMenu);
-
-  function toggleMenu() {
-    if (document.body.clientWidth < 768) {
-      if (opened === false) {
-        opened = true;
-        document.querySelector('#menu-wrapper').classList.add(openedClass);
-      } else {
-        opened = false;
-        document.querySelector('#menu-wrapper').classList.remove(openedClass);
-      }
-    } else {
-      if (opened === false) {
+    function toggleMenu() {
+      if (document.body.clientWidth < 768) {
+        if (opened === false) {
+          opened = true;
+          document.querySelector('#menu-wrapper').classList.add(openedClass);
+        } else {
+          opened = false;
+          document.querySelector('#menu-wrapper').classList.remove(openedClass);
+        }
+      } else if (opened === false) {
         opened = true;
         document.querySelector(target).classList.add(openedClass);
       } else {
         opened = false;
         document.querySelector(target).classList.remove(openedClass);
       }
+
+      const cancelIconMobile = document.querySelector('#cancel-mobile');
+      cancelIconMobile.addEventListener('click', mobileSearchBla);
+
+      function mobileSearchBla() {
+        document.querySelector('#searchbox-mobile').value = '';
+      }
     }
+  };
 
-    const cancelIconMobile = document.querySelector('#cancel-mobile');
-    cancelIconMobile.addEventListener('click', mobileSearchBla);
+  function wrapMenuOnMobile() {
+    const container = document.querySelector('.cm-navigation');
+    const wrapper = document.createElement('div');
+    wrapper.id = 'menu-wrapper';
+    wrapper.classList.add('cm-navigation__menu');
+    wrapper.classList.add('mobile-navigation-wrapper');
+    const innerMenu = document.querySelector('.cm-navigation__menu').innerHTML;
 
-    function mobileSearchBla() {
-      document.querySelector('#searchbox-mobile').value = '';
+    if (!document.getElementById('menu-wrapper')) {
+      wrapper.innerHTML = innerMenu;
+      container.appendChild(wrapper);
+
+      setTimeout(() => {
+        const inm = document.querySelector('.mobile-navigation-wrapper input');
+        const searchButton = document.querySelector('.mobile-navigation-wrapper button#search');
+        const cancelButton = document.querySelector('.mobile-navigation-wrapper button#cancel');
+        inm.id = 'searchbox-mobile';
+        searchButton.id = 'search-mobile';
+        cancelButton.id = 'cancel-mobile';
+      });
+    } else {
+      document.getElementById('menu-wrapper').remove();
     }
   }
-};
 
-function wrapMenuOnMobile() {
-  const container = document.querySelector('.cm-navigation');
-  const wrapper = document.createElement('div');
-  wrapper.id = 'menu-wrapper';
-  wrapper.classList.add('cm-navigation__menu');
-  wrapper.classList.add('mobile-navigation-wrapper');
-  const innerMenu = document.querySelector('.cm-navigation__menu').innerHTML;
+  function displayDropdown() {
+    let hover = false;
+    const trigger = document.querySelectorAll('.cm-navigation__brands--community')[0];
+    const ddHolder = document.querySelectorAll('.cm-navigation__brands-dropdown')[0];
+    const dropdownClass = 'dropdownActive';
 
-  if (!document.getElementById('menu-wrapper')) {
-    wrapper.innerHTML = innerMenu;
-    container.appendChild(wrapper);
+    trigger.addEventListener('mouseenter', addDropdown);
+    trigger.addEventListener('mouseleave', removeDropdown);
 
-    setTimeout(function(){
-      const inm = document.querySelector('.mobile-navigation-wrapper input');
-      const searchButton = document.querySelector('.mobile-navigation-wrapper button#search');
-      const cancelButton = document.querySelector('.mobile-navigation-wrapper button#cancel');
-      inm.id = 'searchbox-mobile';
-      searchButton.id = 'search-mobile';
-      cancelButton.id = 'cancel-mobile';
+    ddHolder.addEventListener('mouseenter', () => {
+      hover = true;
+      keepDropdown();
     });
-  } else {
-    document.getElementById('menu-wrapper').remove();
-  }
-}
 
-function displayDropdown() {
-  let hover = false;
-  const trigger = document.querySelectorAll('.cm-navigation__brands--community')[0];
-  const ddHolder = document.querySelectorAll('.cm-navigation__brands-dropdown')[0];
-  const dropdownClass = 'dropdownActive';
-
-  trigger.addEventListener('mouseenter', addDropdown);
-  trigger.addEventListener('mouseleave', removeDropdown);
-
-  ddHolder.addEventListener('mouseenter', function(){
-    hover = true;
-    keepDropdown();
-  });
-
-  ddHolder.addEventListener('mouseleave', removeDropdown);
+    ddHolder.addEventListener('mouseleave', removeDropdown);
 
   // Make sure to remove the dropdown if the user move the mouse
   // and if the dropdown isn't hovered
-  document.body.addEventListener('mousemove', function(e) {
+  document.body.addEventListener('mousemove', e => {
     // hover = true;
-    if (hover === false ) {
+    if (hover === false) {
       removeDropdown();
     }
   });
@@ -137,19 +136,14 @@ function displayDropdown() {
   }
 }
 
-const shrinkMenu = function() {
-  const menu = document.querySelector('.cm-menu__list');
-  const menuItems = menu.childNodes;
-};
-
 // If the user type :"s", open the searchbox
 function catchCmdF() {
   let keyPressed = {};
 
-  document.addEventListener('keydown', function(e) {
+  document.addEventListener('keydown', e => {
     keyPressed[e.keyCode] = true;
   }, false);
-  document.addEventListener('keyup', function(e) {
+  document.addEventListener('keyup', e => {
     keyPressed[e.keyCode] = false;
   }, false);
 
@@ -158,14 +152,14 @@ function catchCmdF() {
       document.querySelector('.cm-search__input').classList.add('open');
       document.querySelector('#searchbox').focus();
 
-      setTimeout(function() {
+      setTimeout(() => {
         keyPressed = {};
       }, 500);
     } else if (keyPressed['27']) {
       document.querySelector('.cm-search__input').classList.remove('open');
       document.querySelector('#searchbox').blur();
 
-      setTimeout(function() {
+      setTimeout(() => {
         keyPressed = {};
       }, 500);
     }
@@ -175,7 +169,7 @@ function catchCmdF() {
   searchLoop();
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', () => {
   cmSearch();
   toggleMobileMenu({
     trigger: '#open-menu',
@@ -183,12 +177,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
   wrapMenuOnMobile();
   displayDropdown();
-  shrinkMenu();
   catchCmdF();
 });
 
-window.onresize = function(e) {
+window.addEventListener('resize', () => {
   if (document.body.clientWidth < 768) {
     wrapMenuOnMobile();
   }
-};
+});
+
+}

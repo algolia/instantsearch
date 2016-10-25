@@ -4,7 +4,7 @@ function init() {
   const list = [];
   const target = document.querySelector('[data-inject-community]');
 
-  projects.forEach(function(e) {
+  projects.forEach(e => {
     list.push({
       name: e.name,
       url: e.url,
@@ -13,7 +13,7 @@ function init() {
     });
   });
 
-  list.forEach(function(t) {
+  list.forEach(t => {
     const tpl = `
       <div class="dropdown-item">
         <a href="${t.url}">
@@ -27,4 +27,5 @@ function init() {
   });
 }
 
-document.body.addEventListener('DOMContentLoaded', init());
+export default init;
+
