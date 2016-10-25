@@ -58,6 +58,7 @@
     "insert-css": "^1.0.0",
     "jest-cli": "^16.0.2",
     "jsdoc-parse": "^1.2.7",
+    "json-loader": "^0.5.4",
     "jstransformer-markdown-it": "^2.0.0",
     "lodash": "^4.16.2",
     "markdown-it": "^8.0.1",

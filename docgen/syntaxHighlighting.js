@@ -3,13 +3,13 @@ import 'codemirror/mode/jsx/jsx';
 
 import escape from 'escape-html';
 
-const blockTheme = 'cm-s-default';
-const spanTheme = 'cm-s-default';
+const blockTheme = 'cm-s-mdn-like';
+const spanTheme = 'cm-s-mdn-like';
 
 export default function highlight(source, lang = 'js', inline = false) {
   let output = '';
   // Even though highlight accepts a lang parameter, force to JSX for now.
-  runMode(source, 'jsx', (text, style) => {
+  runMode(source, lang, (text, style) => {
     text = escape(text);
     if (!style) {
       output += text;

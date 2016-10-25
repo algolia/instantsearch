@@ -1,202 +1,749 @@
-.ac-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: $navigation-height;
-  padding: 0 16px;
-  margin: 0;
-  line-height: $navigation-height;
-  z-index: 101;
-  font-family: $font-settings;
-  box-sizing: border-box;
-  color: #fff;
-  background: $black;
-  font-weight: 400;
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700';
 
+@import '../vendors/family',
+        '../vendors/mixins';
+
+$nav-background: #1d2f40;
+$nav-background-medium: mix($nav-background,#fff,96%);
+$nav-background-light: mix($nav-background,#fff,92%);
+
+
+
+@include component('navigation') {
+  background: $nav-background;
+  width: 100%;
+  height: $nav-height;
+  font-family: $font-stack;
+  float: left;
+  transform-style: preserve-3d;
+  perspective: 2000px;
+  position: fixed;
+  z-index: 10;
 
   a {
     color: #fff;
     text-decoration: none;
+    font-weight: 300;
   }
 
-  .ac-nav-container {
-    width: 100%;
-    height: $navigation-height;
-    margin: auto;
-    line-height: $navigation-height;
 
-    @media (min-width: $bp-huge){
-      max-width: calc(#{$max-container-width} + 260px)
-    }
-
-    @media (max-width: $bp-big){
-      max-width: 100%
-    }
-  }
-
-  .ac-nav-brand,
-  .ac-nav-menu {
-    max-height: 50px;
-  }
-
-  .ac-nav-brand {
-    float: left;
-  }
-  .ac-nav-menu {
-    float: right;
-  }
-
-  .ac-logo {
-    padding-left: 8px;
-    font-size: 26px;
-    font-weight: 100;
-    vertical-align: sub;
-
-    .ac-logo__lg,
-    .ac-logo__sm {
-      position: relative;
-      top: -2px;
-      width: 200px;
-      margin-right: 6px;
-      vertical-align: middle;
-
-      &.ac-logo__sm {
-        width: 34px;
-        display: none;
-        visibility: hidden;
-
-        @media (max-width: 960px){
-          display: inline-block;
-          visibility: visible
-        }
-      }
-
-      &.ac-logo__lg {
-        @media (max-width: 960px){
-          display: none;
-        }
-      }
-    }
-  }
-
-  .ac-nav-brand-title {
-    position: relative;
-    font-size: 1.2em;
-    font-weight: 400;
-    vertical-align: middle;
-    padding-left: 8px;
-    top: -2px;
-  }
-
-  .ac-nav-menu svg {
-    position: relative;
-  }
-
-  .ac-nav-searchbox {
-    float: left;
+  @include component('navigation', 'brands') {
+    max-width: 560px;
     width: auto;
-    height: $navigation-height;
+    height: $nav-height;
+    float: left;
+    overflow: hidden;
 
-    .searchbox {
-    }
-
-    .searchbox__submit svg {
-      width: 12px;
-      height: 12px;
-      vertical-align: middle;
-      fill: #fff;
-      top: -1px;
-    }
-
-    .searchbox__input {
+    > div {
+      float: left;
+      text-align: center;
+      line-height: $nav-height;
       position: relative;
-      vertical-align: top;
-      line-height: 1.2;
-      font-weight: 500;
-      background: $black;
+      transition: transform 0.4s ease;
     }
 
-    .searchbox__input,
-    .searchbox__submit {
+    a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      float: left
+    }
 
-      @media (max-width: 960px) {
-        display: none;
+    @media (max-width: 1140px) {
+      max-width: auto;
+      width: auto;
+
+
+       transform: translateX(-204px);
+       float: left;
+
+    }
+
+
+    &--algolia {
+      width: 180px;
+      background: $nav-background-light;
+      @include arrowSeparator($nav-background-light);
+      z-index: 10;
+      height: $nav-height;
+
+      svg {
+        width: 60%;
+        max-width: 90px;
+        vertical-align: middle;
+        transition: transform 0.2s ease;
+
+        use {
+          fill: #fff;
+        }
+
+        path {
+          transition: fill 0.6s !important;
+          will-change: fill;
+          fill: #fff;
+        }
       }
+
+
+
+      &:hover {
+
+        svg path:nth-child(1) {
+          fill: #46AEDA;
+        }
+        svg {
+          transform: scale(1.1)
+        }
+      }
+    }
+
+    &--community {
+      width: 180px;
+      background: $nav-background-medium;
+      @include arrowSeparator($nav-background-medium);
+
+      svg {
+        display: inline;
+        width: 32px;
+        vertical-align: middle;
+        margin-right: 0.5em;
+        margin-left: 1em;
+      }
+
+      &.dropdownActive {
+         &~ .cm-navigation__dropdown-holder .cm-navigation__brands-dropdown,
+          .cm-navigation__dropdown-holder:hover {
+          transform: none;
+          opacity: 1;
+          z-index: 11;
+          visibility: visible;
+          pointer-events: auto;
+        }
+      }
+    }
+    &--project {
+      padding-left: 2.5em;
     }
   }
 
-  .ac-nav-menu-list {
-    padding: 0;
-    margin: 0;
-    float: left;
-    list-style: none;
-    max-height: $navigation-height;
 
-    @media (max-width: 960px) {
+  .cm-navigation__dropdown-holder {
+    position: absolute !important;
+    top: $nav-height;
+    left: 0;
+    max-width: 490px;
+    width: 100%;
+    height: 800px;
+    perspective: 500px;
+    pointer-events: none;
+  }
+  @include component('navigation', 'brands-dropdown') {
+    width: 490px;
+    position: absolute !important;
+    z-index: -1;
+    top: 10px;
+    left: 1em;
+    background: #FFF;
+    border-radius: 8px;
+    box-shadow: 0 32px 44px 0 rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: rotateX(-20deg) translateZ(20px) scale(0.95);
+    transform-origin: 50% -50px;
+    opacity: 0;
+    will-change: transform, opacity, visibility;
+    transition-property: transform, opacity, -webkit-transform ,visibility;
+    transition-duration: .35s;
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    @media ( max-width: 768px ) {
       display: none;
     }
 
-    .ac-nav-menu-list-item,
-    .ac-nav-menu-list-icon {
-      float: left;
-      padding: 0 14px;
-      font-size: 14px;
-      max-height: $navigation-height;
+    &:after {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 24px;
+      background: #fff;
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      transform: rotate(-45deg) translateY(-10px);
+      transform-origin: 50% 0;
+      border-radius: 3px;
+    }
 
-      &.active {
-        a {
-          padding-bottom: 15px;
-          border-bottom: 2px solid $accent-color;
+    &__container {
+      margin: 2em 0 0;
+      float: left;
+      width: 100%;
+      background: #f6f9fc;
+    }
+
+    &__footer {
+      img,
+      svg {
+        vertical-align: middle
+      }
+
+      font-size: 18px;
+
+      a {
+        color: #000;
+      }
+    }
+
+    p {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1d3657;
+    }
+
+    [data-inject-community] {
+      padding: 0 1em;
+    }
+
+    .dropdown-item {
+      flex: 50%;
+      margin: 0.5em auto;
+      border-radius: 3px;
+
+      &:hover {
+        background: rgba(black, 0.1);
+
+        .item-icon {
+          transform: scale(1.1);
+
+          img {
+            transform: scale(1.1)
+          }
         }
       }
 
-      .ac-icon {
-        height: 50px;
+      a {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        color: #1d2f40;
+      }
+
+      h4 {
+        flex: 60%;
+        text-align: center;
+        text-transform: capitalize;
+        text-align: left
+      }
+
+      .item-icon {
+        width: 38px;
+        height: 38px;
+        margin: 8px;
+        border-radius: 4px;
+        padding: 8px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        transition: transform 0.3s ease;
+
+        img {
+          max-width: 100%;
+          transition: transform 0.3s ease 0.15s;
+        }
+      }
+
+      svg,
+      img {
+        margin: 0 16px;
+        flex: 20%;
+        max-width: 32px;
+        text-align: center;
+        vertical-align: middle;
+        margin: auto;
+      }
+    }
+
+    .community-logo {
+      max-width: 28px;
+      margin-right: 6px;
+    }
+
+    .algolia-logo {
+      max-width: 80px
+    }
+  }
+
+  @include component('navigation', 'menu-mobile-trigger') {
+    float: right;
+    height: $nav-height;
+    line-height: $nav-height;
+    display: none;
+
+    button {
+      appearance: none;
+      border: none;
+      background: transparent;
+      padding: 0 1em;
+    }
+
+    @media (max-width: 768px) {
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  @include component('navigation', 'menu') {
+    float: right;
+    width: auto;
+    height: $nav-height;
+    line-height: $nav-height;
+
+    @media (max-width: 960px) {
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
+
+    @include component('menu', 'list') {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      float: left;
+      position: relative;
+
+      &__item {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        height: $nav-height;
+        line-height: $nav-height;
+        float: left;
+        margin-right: 20px;
+        position: relative;
+
+
+        &.active:after {
+          content: "";
+          background: linear-gradient(to bottom, $accent-color, $accent-color 100%)no-repeat center left / 100% 100%;
+          width: 100%;
+          height: 4px;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          animation: slidebg 0.8s ease;
+          will-change: background-size;
+        }
+
+        a:not([href]) {
+          cursor: pointer
+        }
+
+      }
+
+
+      &.shrinked-nav {
+
+        .cm-menu__list__item {
+          display: none
+        }
+
+        &~ .hidden-nav {
+          display: block
+        }
+      }
+    }
+
+    // Hidden nav if more than 5 items
+    .hidden-nav {
+      display: none;
+      width: 180px;
+      position: relative;
+    }
+
+
+    .github-icon {
+      height: 22px;
+      line-height: $nav-height;
+
+      svg {
+        max-height: 100%;
+        vertical-align: middle;
+
+        use {
+          fill: #fff
+        }
+      }
+    }
+
+    @include component('menu', 'search') {
+      width: auto;
+      padding: 0 16px;
+      height: $nav-height;
+      float: left;
+
+      &--holder {
+        float: left;
+        position: relative;
+        width: 32px;
+        height: $nav-height;
+      }
+
+      @include component('search', 'input') {
+        position: relative;
+        width: auto;
+        overflow: visible;
+        transition: width 0.28s ease;
+
+        button {
+          appearance: none;
+          border: none;
+          background: transparent;
+          position: absolute;
+          z-index: 3;
+          top: 0;
+          bottom: 0;
+          margin: auto;
+          outline: none;
+          display: none;
+          width: 16px;
+          height: 16px;
+          transition: transform 0.28s ease;
+
+
+          &#search,
+          &#search-mobile {
+            display: block;
+            left: 8px;
+
+            svg {
+              pointer-events: none;
+              max-width: 16px;
+              max-height: $nav-height;
+              display: inline-block;
+              vertical-align: middle;
+              z-index: 1;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              margin: auto;
+              transition: opacity 0.28s ease 0.15s;
+              pointer-events: all;
+              margin: auto;
+              use {
+                fill: #fff
+              }
+            }
+          }
+
+          &#cancel,
+          &#cancel-mobile {
+
+            svg {
+              max-width: 16px;
+              display: inline-block;
+              vertical-align: middle;
+              max-height: $nav-height;
+              z-index: 1;
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              margin: auto;
+              transition: opacity 0.28s ease 0.15s;
+              pointer-events: all;
+              opacity: 0;
+              right: 16px;
+
+              use {
+                fill: #fff
+              }
+            }
+
+            &:active svg {
+              transform: scale(0.9)
+            }
+          }
+        }
+
+        // DOCSEARCH RELATED
+        .algolia-autocomplete {
+          position: inherit !important;
+          display: initial !important;
+        }
+
+        input[type=search] {
+          padding: 0;
+          margin: 0;
+          appearance: none;
+          background: transparent;
+          width: 32px;
+          height: 32px;
+          border: 1px solid;
+          border: none;
+          position: relative;
+          left: 0;
+          z-index: 1;
+          cursor: pointer;
+          transition: background 0.28s ease, transform 0.28s ease, border-radius 0.28s ease, width 0.28s ease;
+          color: transparent;
+          padding: 8px;
+          @include placeholder {
+            color: transparent;
+          }
+
+          &#searchbox {
+            vertical-align: middle !important
+
+          }
+        }
+
+        &.open {
+          width: 300px;
+
+          // input {
+          //   background: #2e3f4f;
+          //   width: 100%;
+          //   border-radius: 3px;
+          //   transform: translateX(calc(-300px + 1.5em));
+          //   outline: none;
+          //   padding-left: 2.1em;
+          //   cursor: auto;
+          //   color: #fff;
+          //   @include placeholder {
+          //     color: rgba(#ffffff, 0.3);
+          //   }
+          //   &~ button#search {
+          //     transform: translateX(calc(-300px + 1.6em));
+          //   }
+          //   &~ button#cancel {
+          //     display: block;
+          //     svg {
+          //       opacity: 0.8;
+
+          //       &:hover {
+          //         transform: scale(1.1);
+          //         opacity: 1;
+          //       }
+          //     }
+          //   }
+          // }
+
+
+          // DOCSEARCH RELATED
+          .algolia-autocomplete input {
+            background: #2e3f4f;
+            width: 100%;
+            border-radius: 3px;
+            transform: translateX(calc(-300px + 1.5em));
+            outline: none;
+            padding-left: 2.1em;
+            cursor: auto;
+            color: #fff;
+            @include placeholder {
+              color: rgba(#ffffff, 0.3);
+            }
+          }
+
+          button#search {
+            transform: translateX(calc(-300px + 1.6em));
+          }
+          button#cancel {
+            display: block;
+            svg {
+              opacity: 0.8;
+
+              &:hover {
+                transform: scale(1.1);
+                opacity: 1;
+              }
+            }
+          }
+
+
+          @media (max-width: 1200px) {
+            width: 200px;
+
+            .algolia-autocomplete input {
+              transform: translateX(calc(-200px + 1.5em));
+            }
+
+            button#search {
+              transform: translateX(calc(-200px + 1.6em));
+            }
+
+          }
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: calc(100vh - #{$nav-height});
+      background: #fff;
+      float: left;
+      transition: transform 0.18s ease;
+      will-change: transform;
+      perspective: 2000px;
+
+      &:not(.mobile-navigation-wrapper) {
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+
+      .cm-menu__list {
+        width: 100%;
+
+        &__item {
+          width: 100%;
+          border-bottom: 1px solid rgba(#1D3657, 0.10);
+
+          &:first-child {
+            border-top: 1px solid rgba(#1D3657, 0.10);
+          }
+        }
+
+        a {
+          color: #1D2F40;
+          font-weight: bold;
+          padding: 0 1em;
+          float: left;
+        }
+
+        figure {
+          svg,
+          img {
+            display: none;
+          }
+
+          figcaption {
+            text-indent: 0;
+            display: inline-block;
+            position: relative;
+
+          }
+        }
+      }
+
+      &:not(.opened) {
+        transform: translateX(100%) rotateY(10deg) skewY(10deg);
       }
     }
   }
 
-  // Responsive nav
-  select {
-    display: none;
-    visibility: hidden;
+  .mobile-navigation-wrapper {
     position: absolute;
-    top: 16px;
-    right: 8px;
+    top: $nav-height;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    transform-origin: 50% -100%;
+    background-color: #f6f9fc;
 
-    &:not(.device) {
-      background: linear-gradient(#efefef, #ccc);
-      color: $black;
+    &:not(.opened) {
+      transform: translateY(-100%) rotateX(-30deg);
     }
 
-    @media (max-width: 960px){
-      display: inline-block;
-      visibility: visible;
+    #searchbox-mobile,
+    .cm-menu__search,
+    .cm-menu__search--holder {
+      width: 100%;
+    }
+    .cm-menu__search {
+      padding: 0;
+    }
+
+    .cm-menu__search--holder {
+      background-color: #edf0f4;
+    }
+    &.cm-navigation__menu .cm-menu__search .cm-search__input button#search-mobile {
+      left: 1em;
+    }
+    &.cm-navigation__menu .cm-menu__search .cm-search__input button#cancel-mobile {
+      right: 1em;
+      opacity: 1;
+      display: block;
+
+      svg {
+        opacity: 1;
+      }
+    }
+
+    &.cm-navigation__menu .cm-menu__search .cm-search__input button#search-mobile svg use,
+    &.cm-navigation__menu .cm-menu__search .cm-search__input button#cancel-mobile svg use {
+      fill: #2f404f !important
+    }
+    &.cm-navigation__menu .cm-menu__search .cm-search__input input {
+      color: #2f404f;
+      padding-left: 2.5em;
     }
   }
+}
 
 
 
-  .ac-nav-brand-breadcrumb {
-    display: inline-block;
-    width: 24px;
-    height: $navigation-height;
-    background: url('../images/icon-arrow-pipe.svg')no-repeat center center / 20px 20px;
-    vertical-align: middle;
-    margin-top: -4px;
-  }
+/**
+ *
+ */
+[data-inject-community] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
-  .ac-icon {
+/**
+ * Interactions
+*/
+
+.cm-badge {
+  svg {
+    transition: transform 0.3s ease;
     display: inline-block;
     position: relative;
-    width: 26px;
-    height: 36px;
-    margin: auto;
-    vertical-align: sub;
-
-    &.ac-icon-github {
-      background: url('../images/icon-github.svg')no-repeat center center / contain
+  }
+  .cm-navigation__brands--community:hover &{
+    svg {
+      transform: scale(1.3) rotate(-6deg)
     }
+  }
+}
+
+/**
+ * Animatitons
+ */
+
+
+
+/**
+ * a11y
+*/
+
+figure {
+  figcaption {
+    position: absolute;
+    text-indent: -99999px;
+    top: 0;
+  }
+}
+
+
+
+@keyframes slidebg{
+  0%, 40% {
+    background-size: 0 100%;
+  }
+  100% {
+    background-size: 100% 100%;
   }
 }

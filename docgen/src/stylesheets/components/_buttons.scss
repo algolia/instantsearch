@@ -1,7 +1,6 @@
 .btn {
-  background: $accent-color-darkish;
-  color: #fff;
-  border: 1px solid $accent-color;
+  background: linear-gradient(to right, mix(#895cf2, #fff, 95%) 0%,  mix(#2faddc, #fff, 95%) 90%) mix(#3066BE, #fff, 95%);
+  color: $hero-color-accent;
   height: 40px;
   max-width: 140px;
   line-height: 40px;
@@ -14,12 +13,13 @@
   font-weight: 600;
   font-size: 12px;
   box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  transition: background 0.1s ease;
+  transition: background 0.1s ease, transform 0.1s ease;
   cursor: pointer;
 
   &:hover,
   &:active {
-    background: $accent-color
+    background: linear-gradient(to right, mix(#895cf2, #fff, 90%) 0%,  mix(#2faddc, #fff, 90%) 90%) mix(#3066BE, #fff, 90%);
+    transform: scale(0.95)
   }
 
   &.btn-cta {
