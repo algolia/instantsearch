@@ -9,7 +9,7 @@ block navigation
 block content
   h2#description Description
     a.anchor(href='#description')
-  p=description
+  p!=h.markdown(description)
   h2#proptypes Props
     a.anchor(href='#proptypes')
   if proptype
@@ -66,6 +66,5 @@ block content
   h2#example Example
     a.anchor(href='#example')
   if examples
-    pre
-      each example in examples
-        code=example
+    each example in examples
+      p!=h.highlight(example, {lang: 'jsx'})

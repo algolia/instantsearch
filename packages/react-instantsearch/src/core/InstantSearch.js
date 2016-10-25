@@ -58,8 +58,10 @@ function validateNextProps(props, nextProps) {
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.
  * @propType {function=identity} configureSearchParameters - function to tweak the parameters sent to Algolia.
- * It is executed after the SearchParameters are resolved from the widgets. It can contains some
- * logic to conditionally apply some parameters based on the state. Signature `SearchParameters => SearchParameters`.
+ * It is executed after the [SearchParameters](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
+ * are resolved from the widgets. It can contain some logic to conditionally apply some parameters based on the state.
+ * Signature `SearchParameters => SearchParameters`. By default its value is `identity`, a function
+ * that takes one argument and returns it unmodified.
  * @propType {bool=true} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
  * @propType {object} history - A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over urlSync. See [Custom History](#custom-history).
  * @propType {number=700} threshold - Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
