@@ -110,80 +110,79 @@ export default function initHeader() {
 
   // Make sure to remove the dropdown if the user move the mouse
   // and if the dropdown isn't hovered
-  document.body.addEventListener('mousemove', e => {
+    document.body.addEventListener('mousemove', () => {
     // hover = true;
-    if (hover === false) {
-      removeDropdown();
+      if (hover === false) {
+        removeDropdown();
+      }
+    });
+
+    function addDropdown() {
+      trigger.classList.add(dropdownClass);
     }
-  });
 
-  function addDropdown() {
-    trigger.classList.add(dropdownClass);
-  }
-
-  function removeDropdown() {
-    if (hover === true) {
-      trigger.classList.remove(dropdownClass);
-      hover = false;
-    } else {
+    function removeDropdown() {
+      if (hover === true) {
+        trigger.classList.remove(dropdownClass);
+        hover = false;
+      } else {
       // ...
+      }
+    }
+
+    function keepDropdown() {
+      trigger.classList.add(dropdownClass);
+      hover = true;
     }
   }
-
-  function keepDropdown() {
-    trigger.classList.add(dropdownClass);
-    hover = true;
-  }
-}
 
 // If the user type :"s", open the searchbox
-function catchCmdF() {
-  let keyPressed = {};
+  function catchCmdF() {
+    let keyPressed = {};
 
-  document.addEventListener('keydown', e => {
-    keyPressed[e.keyCode] = true;
-  }, false);
-  document.addEventListener('keyup', e => {
-    keyPressed[e.keyCode] = false;
-  }, false);
+    document.addEventListener('keydown', e => {
+      keyPressed[e.keyCode] = true;
+    }, false);
+    document.addEventListener('keyup', e => {
+      keyPressed[e.keyCode] = false;
+    }, false);
 
-  function searchLoop() {
-    if (keyPressed['83']) {
-      document.querySelector('.cm-search__input').classList.add('open');
-      document.querySelector('#searchbox').focus();
+    function searchLoop() {
+      if (keyPressed['83']) {
+        document.querySelector('.cm-search__input').classList.add('open');
+        document.querySelector('#searchbox').focus();
 
-      setTimeout(() => {
-        keyPressed = {};
-      }, 500);
-    } else if (keyPressed['27']) {
-      document.querySelector('.cm-search__input').classList.remove('open');
-      document.querySelector('#searchbox').blur();
+        setTimeout(() => {
+          keyPressed = {};
+        }, 500);
+      } else if (keyPressed['27']) {
+        document.querySelector('.cm-search__input').classList.remove('open');
+        document.querySelector('#searchbox').blur();
 
-      setTimeout(() => {
-        keyPressed = {};
-      }, 500);
+        setTimeout(() => {
+          keyPressed = {};
+        }, 500);
+      }
+      setTimeout(searchLoop, 5);
     }
-    setTimeout(searchLoop, 5);
+
+    searchLoop();
   }
 
-  searchLoop();
-}
+  window.addEventListener('DOMContentLoaded', () => {
+    cmSearch();
+    toggleMobileMenu({
+      trigger: '#open-menu',
+    });
 
-window.addEventListener('DOMContentLoaded', () => {
-  cmSearch();
-  toggleMobileMenu({
-    trigger: '#open-menu',
+    wrapMenuOnMobile();
+    displayDropdown();
+    catchCmdF();
   });
 
-  wrapMenuOnMobile();
-  displayDropdown();
-  catchCmdF();
-});
-
-window.addEventListener('resize', () => {
-  if (document.body.clientWidth < 768) {
-    wrapMenuOnMobile();
-  }
-});
-
+  window.addEventListener('resize', () => {
+    if (document.body.clientWidth < 768) {
+      wrapMenuOnMobile();
+    }
+  });
 }
