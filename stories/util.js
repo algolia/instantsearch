@@ -37,7 +37,7 @@ const resetStyle = {
 const WrapWithHits = ({children, searchBox = true, linkedStoryGroup}) => {
   const playgroundUrl = process.env.NODE_ENV === 'development'
     ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground`
-    : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground`
+    : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground`;
   const playgroundLink = linkedStoryGroup
     ? <a target="_blank"
          href={playgroundUrl}>
