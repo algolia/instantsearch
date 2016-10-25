@@ -50,7 +50,10 @@ const common = [
   markdown,
   headings('h2'),
   jsdoc({
-    src: '../packages/react-instantsearch/src/widgets/*/@(index|connect).js',
+    src: '../packages/react-instantsearch/src/widgets/*.js',
+  }),
+  jsdoc({
+    src: '../packages/react-instantsearch/src/connectors/*.js',
   }),
   jsdoc({
     src: '../packages/react-instantsearch/src/core/InstantSearch.js',
