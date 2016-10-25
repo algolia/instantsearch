@@ -27,7 +27,7 @@ function calculatePaddingLeft(current, padding, total, totalDisplayedPages) {
 
 function getPages(page, total, padding) {
   const totalDisplayedPages = getPagesDisplayedCount(padding, total);
-  if (totalDisplayedPages === total) return range(0, total);
+  if (totalDisplayedPages === total) return range(1, total + 1);
 
   const paddingLeft = calculatePaddingLeft(
     page,
@@ -39,7 +39,6 @@ function getPages(page, total, padding) {
 
   const first = page - paddingLeft;
   const last = page + paddingRight;
-
   return range(first + 1, last + 1);
 }
 

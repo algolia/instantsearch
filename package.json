@@ -2,7 +2,7 @@
   "private": true,
   "version": "2.0.0-beta.14",
   "scripts": {
-    "start": "NODE_ENV=development babel-node docgen/start.js",
+    "start": "NODE_ENV=development babel-node docgen/start.js & npm run storybook & wait",
     "build": "./scripts/build.sh",
     "docs:build": "DOCS_DIST=docs/react babel-node docgen/build.js && npm run build-storybook",
     "docs:publish": "babel-node scripts/gh-pages.js",
@@ -13,8 +13,8 @@
     "test": "jest && npm run lint && NODE_ENV=production DOCS_MOUNT_POINT=/instantsearch.js/react/ DOCS_DIST=docs/react/ npm run docs:build && NODE_ENV=production npm run build",
     "dev": "jest --watch --bail",
     "coverage": "jest --coverage",
-    "storybook": "start-storybook -p 6006 -c ./storybook -s ./storybook",
-    "build-storybook": "build-storybook -s ./storybook/public -o docs/react/storybook -c ./storybook"
+    "storybook": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook",
+    "build-storybook": "NODE_ENV=production build-storybook -s ./storybook/public -o docs/react/storybook -c ./storybook"
   },
   "repository": "algolia/instantsearch.js",
   "dependencies": {

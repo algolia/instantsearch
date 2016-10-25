@@ -14,23 +14,22 @@ describe('HitsPerPage', () => {
     const wrapper = mount(
       <HitsPerPage
         createURL={() => '#'}
-        items={[111, 333, 666]}
+        items={[{value: 2, label: '2 hits per page'},
+          {value: 4, label: '4 hits per page'},
+          {value: 6, label: '6 hits per page'},
+          {value: 8, label: '8 hits per page'}]}
         refine={refine}
         currentRefinement={111}
       />
     );
 
-    wrapper
-      .find('.itemLink')
-      .filterWhere(e => e.text() === '333')
-      .simulate('click');
+    const selectedValue = wrapper
+      .find('.root');
+    expect(selectedValue.find('option').length).toBe(4);
+
+    selectedValue.find('select').simulate('change', {target: {value: '6'}});
+
     expect(refine.mock.calls.length).toBe(1);
-    expect(refine.mock.calls[0][0]).toEqual(333);
-    wrapper
-      .find('.itemLink')
-      .filterWhere(e => e.text() === '666')
-      .simulate('click');
-    expect(refine.mock.calls.length).toBe(2);
-    expect(refine.mock.calls[1][0]).toEqual(666);
+    expect(refine.mock.calls[0][0]).toEqual('6');
   });
 });

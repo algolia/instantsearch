@@ -1,40 +1,35 @@
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../core/themeable';
-
-import LinkList from './LinkList';
-
+import Select from './Select';
 import theme from './HitsPerPage.css';
 
 class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
-    currentRefinement: PropTypes.number.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    createURL: PropTypes.func.isRequired,
+    currentRefinement: PropTypes.number.isRequired,
 
     /**
      * List of hits per page options.
      * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
+     * Beware: Contrary to `HitsPerPage`, the `label` of `HitsPerPage` items must be either a string or a number.
      * @public
-     * @defines HitsPerPageItem
+     * @defines HitsPerPageSelectItem
      */
-    items: PropTypes.oneOfType([
-      PropTypes.arrayOf(
-        PropTypes.shape({
-          /**
-           * Number of hits to display.
-           */
-          value: PropTypes.number.isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        /**
+         * Number of hits to display.
+         */
+        value: PropTypes.number.isRequired,
 
-          /**
-           * Node to render in place of the option item.
-           */
-          label: PropTypes.node,
-        })
-      ),
-      PropTypes.arrayOf(PropTypes.number),
-    ]),
+        /**
+         * Label to display on the option.
+         */
+        label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      })
+    ),
   };
 
   render() {
@@ -43,18 +38,14 @@ class HitsPerPage extends Component {
       refine,
       items,
       applyTheme,
-      createURL,
     } = this.props;
 
     return (
-      <LinkList
-        items={items.map(item =>
-          typeof item === 'number' ? {value: item, label: item} : item
-        )}
+      <Select
         onSelect={refine}
         selectedItem={currentRefinement}
+        items={items}
         applyTheme={applyTheme}
-        createURL={createURL}
       />
     );
   }
