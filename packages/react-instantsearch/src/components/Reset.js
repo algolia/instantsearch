@@ -7,20 +7,20 @@ class Reset extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
-    filters: PropTypes.arrayOf(PropTypes.object).isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
     refine: PropTypes.func.isRequired,
   };
 
   render() {
-    const {applyTheme, translate, filters, refine} = this.props;
-    if (filters.length === 0) {
+    const {applyTheme, translate, items, refine} = this.props;
+    if (items.length === 0) {
       return null;
     }
 
     return (
       <button
         {...applyTheme('root', 'root')}
-        onClick={refine.bind(null, filters)}
+        onClick={refine.bind(null, items)}
       >
         {translate('reset')}
       </button>
