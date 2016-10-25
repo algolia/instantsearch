@@ -1,0 +1,38 @@
+[
+	{
+		"name":"places.js",
+		"url":"https://community.algolia.com/places/",
+		"logo":"https://community.algolia.com/places/images/svg/places-illustration-65745839.svg",
+		"backgroundColor": "#3a5395"
+	},
+	{
+		"name":"wordpress",
+		"url":"https://community.algolia.com/wordpress",
+		"logo":"https://community.algolia.com/wordpress/img/icons/wp-icon.svg",
+		"backgroundColor": "linear-gradient(to bottom right, #4041B2, #516ED1)"
+	},
+	{
+		"name":"Autocomplete.js",
+		"url":"https://github.com/algolia/autocomplete.js",
+		"logo":"https://community.algolia.com/img/illus-autocomplete.svg",
+		"backgroundColor": "#00587f"
+	},
+	{
+		"name":"instantsearch.js",
+		"url":"https://community.algolia.com/instantsearch.js/",
+		"logo":"https://community.algolia.com/img/logo-is.svg",
+		"backgroundColor": "#385D72"
+	},
+	{
+		"name":"Helper.js",
+		"url":"https://community.algolia.com/algoliasearch-helper-js/",
+		"logo":"https://community.algolia.com/img/logo-helper.svg",
+		"backgroundColor": "#FDBD57"
+	},
+	{
+		"name":"magento",
+		"url":"https://community.algolia.com/magento/",
+		"logo":"http://res.cloudinary.com/hilnmyskv/image/upload/v1477318624/magento-icon-white.svg",
+		"backgroundColor": "linear-gradient(to bottom right, #ed9259, #e76d22)"
+	}
+]

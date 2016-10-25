@@ -19,20 +19,26 @@ export default {
     // filename: '[name].[chunkhash].js',
   },
   module: {
-    loaders: [{
-      test: /\.js$/, exclude: /node_modules/, loader: 'babel',
-    }, {
-      test: /\.css$/,
-      loader: 'style',
-    }, {
-      test: /\.css$/,
-      loader: 'css',
-      query: {
-        modules: true,
-        importLoaders: 1,
-        localIdentName: 'ais-[name]__[local]',
+    loaders: [
+      {
+        test: /\.json$/, exclude: /node_modules/, loader: 'json',
       },
-    }],
+      {
+        test: /\.js$/, exclude: /node_modules/, loader: 'babel',
+      },
+      {
+        test: /\.css$/,
+        loader: 'style',
+      },
+      {
+        test: /\.css$/,
+        loader: 'css',
+        query: {
+          modules: true,
+          importLoaders: 1,
+          localIdentName: 'ais-[name]__[local]',
+        },
+      }],
   },
   resolve: {
     alias: {

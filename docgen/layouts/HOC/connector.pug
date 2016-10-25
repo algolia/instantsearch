@@ -54,5 +54,6 @@ block content
     p This connector does not provided props to its wrapped Component.
   h2#example Example
     a.anchor(href='#example')
-  pre
-    code=example
+  if examples
+    each example in examples
+      p!=h.highlight(example, {lang: 'jsx'})
