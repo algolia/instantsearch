@@ -14,7 +14,7 @@ nav.sidebar {
 
     &.fixed {
       position: fixed;
-      top: $navigation-height;
+      top: ($navigation-height + 40px);
       z-index: 9;
       max-height: calc(100vh - #{$navigation-height});
       overflow: auto;
@@ -24,6 +24,7 @@ nav.sidebar {
       font-weight: normal;
       font-size: 1.8em;
       line-height: 1.5em;
+      padding-bottom: 5px;
     }
 
     ul {
@@ -35,6 +36,7 @@ nav.sidebar {
       .sidebar-element {
         width: 100%;
         line-height: 32px;
+        margin-bottom: 1em;
 
         &.level-h2 {}
         &.level-h3 {
@@ -50,13 +52,16 @@ nav.sidebar {
           width: 100%;
           color: $charcoal-grey-75;
           font-weight: 400;
-
+          padding: 0 0.15em;
+          line-height: 1.5;
+          transition: color 0.2s ease, box-shadow 0.2s ease, font-weight 0.2s ease;
 
           &:focus,
           &:target {
             @extend %active-links;
           }
           &.active{
+            transition: color 0.2s ease, box-shadow 0.2s ease;
             @extend %active-links;
           }
           &.navItem-active{

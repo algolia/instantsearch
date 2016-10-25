@@ -6,12 +6,12 @@
         'vendors/mixins',
         'vendors/base',
         'vendors/helpers',
-        'vendors/animations';
+        'vendors/family',
+        'vendors/animations',
+        'vendors/docsearch';
 
 @import 'components/header',
         'components/footer',
-        'components/home',
-        'components/code-highlight',
         'components/icons',
         'components/containers',
         'components/navigation',
@@ -24,20 +24,8 @@
         'components/examples-intro',
         'components/examples',
         'components/footer',
-        'components/visual-helper',
         'components/hero',
-        'components/clipboard';
+        'components/clipboard',
+        'components/dropdown';
 
-/* Style */
-svg#isReactLogo * {
-  fill-opacity: 0;
-  transition: fill-opacity 0.1s;
-  stroke: #00D8FF;
-  stroke-width: 6;
-  fill: #00D8FF;
-}
-
-svg#isReactLogo.finished * {
-  fill-opacity: 1;
-}
 
