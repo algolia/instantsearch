@@ -1,4 +1,4 @@
-export {default as CurrentFilters} from './CurrentFilters.js';
+export {default as CurrentRefinements} from './CurrentRefinements.js';
 export {default as Error} from './Error.js';
 export {default as HierarchicalMenu} from './HierarchicalMenu.js';
 export {default as Hits} from './Hits.js';
@@ -11,7 +11,7 @@ export {default as Range} from './Range.js';
 export {default as RangeInput} from './RangeInput.js';
 export {default as RangeRatings} from './RangeRatings.js';
 export {default as RefinementList} from './RefinementList.js';
-export {default as Reset} from './Reset.js';
+export {default as ClearAll} from './ClearAll.js';
 export {default as ScrollTo} from './ScrollTo.js';
 export {default as SearchBox} from './SearchBox.js';
 export {default as SortBy} from './SortBy.js';
