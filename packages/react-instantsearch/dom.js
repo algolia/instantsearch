@@ -1,6 +1,6 @@
 export {default as InstantSearch} from './src/core/InstantSearch.js';
 export {default as extendTheme} from './src/core/styling.js';
-export {default as CurrentFilters} from './src/widgets/CurrentFilters.js';
+export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
 export {default as Error} from './src/widgets/Error.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Hits} from './src/widgets/Hits.js';
@@ -13,7 +13,7 @@ export {default as Range} from './src/widgets/Range.js';
 export {default as RangeInput} from './src/widgets/RangeInput.js';
 export {default as RangeRatings} from './src/widgets/RangeRatings.js';
 export {default as RefinementList} from './src/widgets/RefinementList.js';
-export {default as Reset} from './src/widgets/Reset.js';
+export {default as ClearAll} from './src/widgets/ClearAll.js';
 export {default as ScrollTo} from './src/widgets/ScrollTo.js';
 export {default as SearchBox} from './src/widgets/SearchBox.js';
 export {default as SortBy} from './src/widgets/SortBy.js';

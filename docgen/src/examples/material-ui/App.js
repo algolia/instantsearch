@@ -8,7 +8,7 @@ import {
   connectHierarchicalMenu,
   connectSortBy,
   connectHits,
-  connectCurrentFilters,
+  connectCurrentRefinements,
   connectPagination,
 } from 'react-instantsearch/connectors';
 import {InstantSearch} from 'react-instantsearch/dom';
@@ -91,7 +91,7 @@ const Content = React.createClass({
                     onLeftIconButtonTouchTap={this.drawerAction}
                     className="Sidebar__header__appBar"
             />
-            <ConnectedCurrentFilters/>
+            <ConnectedCurrentRefinements/>
           </div>
           <div className="Sidebar__facets">
             <ConnectedNestedList
@@ -370,6 +370,6 @@ const ConnectedSortBy = connectSortBy(MaterialUiSortBy);
 
 const ConnectedHits = connectHits(CustomHits);
 
-const ConnectedCurrentFilters = connectCurrentFilters(MaterialUiClearAllFilters);
+const ConnectedCurrentRefinements = connectCurrentRefinements(MaterialUiClearAllFilters);
 
 const ConnectedPagination = connectPagination(MaterialUiBottomNavigation);

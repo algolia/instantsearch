@@ -1,10 +1,10 @@
-import connectCurrentFilters from '../connectors/connectCurrentFilters.js';
-import CurrentFiltersComponent from '../components/CurrentFilters.js';
+import connectCurrentRefinements from '../connectors/connectCurrentRefinements.js';
+import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
 
 /**
- * The CurrentFilters widget displays the list of filters currently applied to the search parameters.
+ * The CurrentRefinements widget displays the list of filters currently applied to the search parameters.
  * It also lets the user remove each one of them.
- * @name CurrentFilters
+ * @name CurrentRefinements
  * @kind component
  * @category widget
  * @themeKey root - the root div of the widget
@@ -16,4 +16,4 @@ import CurrentFiltersComponent from '../components/CurrentFilters.js';
  * @translationKey clearFilter - the label?
  * @translationKey clearAll - the clear all button value
  */
-export default connectCurrentFilters(CurrentFiltersComponent);
+export default connectCurrentRefinements(CurrentRefinementsComponent);
