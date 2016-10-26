@@ -1,11 +1,10 @@
 ---
 title: Examples
-layout: examples.pug
+layout: main-entry.pug
 category: examples
+tocVisibility: false
 ---
-# Examples
 
-* e-commerce: [live demo](examples/e-commerce/index.html) [code](https://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/e-commerce)
-* tourism: [live demo](examples/tourism/index.html) [code](https://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/tourism)
-* media: [live demo](examples/media/index.html) [code](https://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/media)
-* Material-UI: [live demo](examples/material-ui/index.html) [code](https://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/material-ui)
+To demonstrate the flexibility of react-instantsearch we have created some demos.
+If you think that there is a missing use-case don't hesitate to create an issue
+on [our github page](https://github.com/algolia/instantsearch.js/issues).
