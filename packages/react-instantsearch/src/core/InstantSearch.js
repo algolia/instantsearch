@@ -61,7 +61,7 @@ function validateNextProps(props, nextProps) {
  * It will be overriden by the search parameters resolved via the widgets. Typical use case:
  * setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information
  * about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
- * @propType {bool=true} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
+ * @propType {bool=false} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](#url-synchronization).
  * @propType {object} history - A custom [history](https://github.com/ReactTraining/history) to push location to. Useful for quick integration with [React Router](https://github.com/reactjs/react-router). Takes precedence over urlSync. See [Custom History](#custom-history).
  * @propType {number=700} threshold - Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](#location-debouncing).
  * @propType {func} onStateChange - See [Controlled State](#controlled-state).
@@ -227,7 +227,7 @@ InstantSearch.propTypes = {
 };
 
 InstantSearch.defaultProps = {
-  urlSync: true,
+  urlSync: false,
   threshold: 700,
 };
 
