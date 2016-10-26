@@ -15,7 +15,7 @@ import {
   HitsPerPage,
   MultiRange,
   Range,
-  CurrentFilters,
+  CurrentRefinements,
   Toggle,
   Stats,
   SortBy,
@@ -63,8 +63,8 @@ class Search extends Component {
             <SearchBox />
           </ScrollTo>
           <Stats />
-          <CurrentFilters />
-          <CurrentFilters.Reset />
+          <CurrentRefinements />
+          <ClearAll />
           <Toggle
             attributeName="free_shipping"
             value={true}

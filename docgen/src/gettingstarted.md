@@ -264,20 +264,21 @@ We now miss two elements in our search interface:
  - the ability to browse beyond the first page of results
  - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](Pagination.html)
-and [CurrentFilter](CurrentFilters.html) components. Both have nice defaults which means that
+Those two features are implemented respectively with the [Pagination](Pagination.html), the [ClearAll](ClearAll.html)
+and [CurrentRefinements](CurrentRefinements.html) components. Both have nice defaults which means that
 we can use them directly without further configuration.
 
 ```javascript
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentFilters} from 'react-instantsearch/dom';
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
 
 // [...]
 
 function Search() {
   return (
     <div className='container'>
-      <CurrentFilters/>
+      <CurrentRefinements/>
+      <ClearAll/>
       <SearchBox />
       <RefinementList attributeName="category" />
       <Hits itemComponent={Product} />
@@ -288,8 +289,8 @@ function Search() {
 ```
 
 Current filters will display all the filters currently selected by the user.
-This gives the user a synthetic way of understanding the current search. It
-also displays a button to remove all the filters.
+This gives the user a synthetic way of understanding the current search. Clear all 
+displays a button to remove all the filters.
 
 In this part, we've seen the following:
  - how to clear the filters

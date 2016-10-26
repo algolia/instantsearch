@@ -85,7 +85,7 @@ export default createConnector({
         return null;
       }
 
-      const stats = search.results.getFacetStats(attributeName);
+      const stats = search.results.getFacetStats('attributeName');
       if (!stats) {
         return null;
       }

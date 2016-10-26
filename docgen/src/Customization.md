@@ -170,7 +170,7 @@ If your widget is stateful, the corresponding URL key should be declared on the 
 
 The metadata object also allows you to declare any data that you would like to pass down to all other widgets. The list of metadata objects of all components is available as the fourth argument to the `getProps` method.
 
-The `CurrentFilters` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
+The `CurrentRefinements` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
 
 ```js
 const CoolWidget = createConnector({
@@ -186,7 +186,7 @@ const CoolWidget = createConnector({
       filters.push({
         // Unique identifier for this filter.
         key: `queryAndPage.query`,
-        // String label (or node) that should appear in the CurrentFilters
+        // String label (or node) that should appear in the CurrentRefinements
         // component.
         label: `Query: ${query}`,
         // Describes how clearing this filter affects the InstantSearch state.

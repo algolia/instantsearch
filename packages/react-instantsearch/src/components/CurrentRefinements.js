@@ -3,9 +3,9 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../core/themeable';
 import translatable from '../core/translatable';
 
-import theme from './CurrentFilters.css';
+import theme from './CurrentRefinements.css';
 
-class CurrentFilters extends Component {
+class CurrentRefinements extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
@@ -41,12 +41,6 @@ class CurrentFilters extends Component {
             </div>
           )}
         </div>
-        <button
-          {...applyTheme('clearAll', 'clearAll')}
-          onClick={refine.bind(null, items)}
-        >
-          {translate('clearAll')}
-        </button>
       </div>
     );
   }
@@ -55,6 +49,5 @@ class CurrentFilters extends Component {
 export default themeable(theme)(
   translatable({
     clearFilter: '✕',
-    clearAll: 'Clear all',
-  })(CurrentFilters)
+  })(CurrentRefinements)
 );
