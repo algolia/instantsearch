@@ -15,7 +15,7 @@ stories.add('default', () =>
 ).add('playground', () =>
   <WrapWithHits >
 
-    <RangeInput attributeName="rating"
+    <RangeInput attributeName="price"
                   min={number('max', 0)}
                   max={number('max', 300)}
                   translations={object('translate', {submit: ' go', separator: 'to'})}

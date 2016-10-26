@@ -14,7 +14,6 @@ import {
   Hits,
   HitsPerPage,
   MultiRange,
-  Range,
   CurrentRefinements,
   Toggle,
   Stats,
@@ -88,12 +87,6 @@ class Search extends Component {
             defaultRefinement="instant_search"
           />
           <HitsPerPage items={[10, 20, 30]} defaultHitsPerPage={20} />
-          <Range
-            attributeName="price"
-            translations={{
-              value: v => `$${v.toLocaleString()}`,
-            }}
-          />
           <MultiRange
             attributeName="rating"
             items={[

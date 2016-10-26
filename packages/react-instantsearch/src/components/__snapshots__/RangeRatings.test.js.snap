@@ -1,4 +1,4 @@
-exports[`Range applies translations 1`] = `
+exports[`RangeRatings applies translations 1`] = `
 <div
   className="root">
   <a
@@ -144,7 +144,7 @@ exports[`Range applies translations 1`] = `
 </div>
 `;
 
-exports[`Range supports passing max/min values 1`] = `
+exports[`RangeRatings supports passing max/min values 1`] = `
 <div
   className="root">
   <a

@@ -7,7 +7,6 @@ export {default as Menu} from './Menu.js';
 export {default as MultiRange} from './MultiRange.js';
 export {default as Pagination} from './Pagination.js';
 export {default as PoweredBy} from './PoweredBy.js';
-export {default as Range} from './Range.js';
 export {default as RangeInput} from './RangeInput.js';
 export {default as RangeRatings} from './RangeRatings.js';
 export {default as RefinementList} from './RefinementList.js';
