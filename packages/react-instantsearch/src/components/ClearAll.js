@@ -3,7 +3,7 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../core/themeable';
 import translatable from '../core/translatable';
 
-class Reset extends Component {
+class ClearAll extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     applyTheme: PropTypes.func.isRequired,
@@ -29,9 +29,9 @@ class Reset extends Component {
 }
 
 export default themeable({
-  root: 'Reset',
+  root: 'ClearAll',
 })(
   translatable({
-    reset: 'Reset everything',
-  })(Reset)
+    reset: 'ClearAll everything',
+  })(ClearAll)
 );

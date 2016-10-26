@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   InstantSearch,
-  Reset,
+  ClearAll,
   SearchBox,
   Pagination,
 } from '../packages/react-instantsearch/dom';
@@ -64,7 +64,7 @@ const WrapWithHits = ({children, searchBox = true, linkedStoryGroup}) => {
               <SearchBox translations={{placeholder: 'Search into our furnitures: chair, table, tv unit...'}}/>
               : null}
             <div>
-              <Reset
+              <ClearAll
                 theme={resetStyle}
                 translations={{reset: 'Clear all filters'}}
               />

@@ -9,7 +9,7 @@ import {
   SortBy,
   Stats,
   Pagination,
-  CurrentFilters,
+  ClearAll,
   RangeRatings,
   RangeInput,
 } from 'react-instantsearch/dom';
@@ -51,16 +51,9 @@ const Header = () =>
 const Facets = () =>
     <aside>
 
-      <CurrentFilters
-        theme={{
-          root: 'CurrentFilters',
-          filters: {
-            display: 'none',
-          },
-          clearAll: 'CurrentFilters__clearAll btn',
-        }}
+      <ClearAll
         translations={{
-          clearAll: 'Clear all filters',
+          reset: 'Clear all filters',
         }}
       />
 

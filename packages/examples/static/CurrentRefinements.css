@@ -1,14 +1,14 @@
-.CurrentFilters {
+.CurrentRefinements {
   display: flex;
   align-items: center;
 }
 
-.CurrentFilters__filters {
+.CurrentRefinements__filters {
   display: flex;
   margin-right: 0.6em;
 }
 
-.CurrentFilters__filter {
+.CurrentRefinements__filter {
   display: flex;
   align-items: stretch;
   margin-right: 0.4em;
@@ -17,11 +17,11 @@
   color: rgba(0, 0, 0, 0.7);
 }
 
-.CurrentFilters__filter__label {
+.CurrentRefinements__filter__label {
   padding: 0.6em 0 0.6em 0.8em;
 }
 
-.CurrentFilters__filter__clear {
+.CurrentRefinements__filter__clear {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -30,16 +30,6 @@
   color: #3e82f7;
 }
 
-.CurrentFilters__filter__clear:hover {
+.CurrentRefinements__filter__clear:hover {
   color: red;
-}
-
-
-.CurrentFilters__clearAll {
-  color: #3e82f7;
-  background: transparent;
-  border: none;
-  font-size: 1em;
-  cursor: pointer;
-  padding: 0;
 }
