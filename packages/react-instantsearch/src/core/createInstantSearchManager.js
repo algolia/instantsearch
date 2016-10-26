@@ -4,11 +4,22 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 
+/**
+ * Creates a new instance of the InstantSearchManager which controls the widgets and
+ * trigger the search when the widgets are updated.
+ * @param {string} appId - the application ID
+ * @param {string} apiKey - the api key
+ * @param {string} indexName - the main index name
+ * @param {object} initialState - initial widget state
+ * @param {object} SearchParameters - optional additional parameters to send to the algolia API
+ * @return {InstantSearchManager} a new instance of InstantSearchManager
+ */
 export default function createInstantSearchManager({
   appId,
   apiKey,
   indexName,
   initialState,
+  searchParameters = {},
 }) {
   const client = algoliasearch(appId, apiKey);
   const helper = algoliasearchHelper(client);
@@ -29,23 +40,24 @@ export default function createInstantSearchManager({
       .map(widget => widget.getMetadata(state));
   }
 
-  function getSearchParameters(searchParameters) {
+  function getSearchParameters(initialSearchParameters) {
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
       .reduce(
         (res, widget) => widget.getSearchParameters(res),
-        searchParameters
+        initialSearchParameters
       );
   }
 
   function search() {
-    const baseSP = new SearchParameters({index: indexName});
-    // @TODO: Provide a way to configure base SearchParameters.
-    // We previously had a `configureSearchParameters : SP -> SP` option.
-    // We could also just have a `baseSearchParameters : SP` option.
-    const searchParameters = getSearchParameters(baseSP);
+    const baseSP = new SearchParameters({
+      ...searchParameters,
+      index: indexName,
+    });
+    const widgetSearchParameters = getSearchParameters(baseSP);
 
-    helper.searchOnce(searchParameters)
+    helper
+      .searchOnce(widgetSearchParameters)
       .then(({content}) => {
         store.setState({
           ...store.getState(),

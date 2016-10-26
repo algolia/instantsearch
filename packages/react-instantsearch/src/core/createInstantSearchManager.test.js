@@ -32,7 +32,7 @@ describe('createInstantSearchManager', () => {
   let initialState;
   let ism;
 
-  function init() {
+  function init(otherISMParameters = {}) {
     createHrefForState = jest.fn(a => a);
     onInternalStateUpdate = jest.fn();
     initialState = {
@@ -46,6 +46,7 @@ describe('createInstantSearchManager', () => {
       initialState,
       createHrefForState,
       onInternalStateUpdate,
+      ...otherISMParameters,
     });
   }
 
@@ -133,7 +134,7 @@ describe('createInstantSearchManager', () => {
     });
   });
 
-  function testSearch(promise) {
+  function testSearch(promise, searchParameters = undefined) {
     const helper = {
       searchOnce: jest.fn(() => promise),
     };
@@ -153,7 +154,7 @@ describe('createInstantSearchManager', () => {
         },
       ],
     }));
-    init();
+    init({searchParameters});
     return helper.searchOnce;
   }
 
@@ -181,6 +182,16 @@ describe('createInstantSearchManager', () => {
       const params = searchOnce.mock.calls[0][0];
       expect(params.query).toBe('hello');
       expect(params.page).toBe(20);
+    });
+
+    it('when searching it adds the searchParameters if any', () => {
+      const searchOnce = testSearch(new Promise(() => null), {distinct: 1});
+      const onUpdate = createWidgetsManager.mock.calls[0][0];
+      onUpdate();
+      const params = searchOnce.mock.calls[0][0];
+      expect(params.query).toBe('hello');
+      expect(params.page).toBe(20);
+      expect(params.distinct).toBe(1);
     });
   });
 
