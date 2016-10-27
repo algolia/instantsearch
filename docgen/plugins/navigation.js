@@ -14,6 +14,7 @@ export default function() {
         path,
         title: data.title,
         navWeight: data.navWeight,
+        metadata: data,
       });
     });
 
