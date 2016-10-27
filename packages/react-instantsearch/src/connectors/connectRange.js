@@ -24,52 +24,30 @@ function getValue(props, state) {
   return {};
 }
 
+/**
+ * Range connector provides the logic to create connected
+ * components that will give the ability for a user to refine results using
+ * a numeric range.
+ * @name Range
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - URL state serialization key. Defaults to the value of `attributeName`.
+ * @propType {string} attributeName - Name of the attribute for faceting
+ * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
+ * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
+ * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
+ */
 export default createConnector({
   displayName: 'AlgoliaRange',
 
   propTypes: {
-    /**
-     * URL state serialization key. Defaults to the value of `attributeName`.
-     * @public
-     */
     id: PropTypes.string,
-
-    /**
-     * Name of the attribute for faceting
-     * @public
-     */
     attributeName: PropTypes.string.isRequired,
-
-    /**
-     * Default state of the widget.
-     * @public
-     * @defines RangeState
-     */
     defaultRefinement: PropTypes.shape({
-      /**
-       * Start of the range
-       */
       min: PropTypes.number.isRequired,
-      /**
-       * End of the range
-       */
       max: PropTypes.number.isRequired,
     }),
-
-    /**
-     * Minimum value.
-     * When this isn't set, the minimum value will be automatically computed by
-     * Algolia using the data in the index.
-     * @public
-     */
     min: PropTypes.number,
-
-    /**
-     * Maximum value.
-     * When this isn't set, the maximum value will be automatically computed by
-     * Algolia using the data in the index.
-     * @public
-     */
     max: PropTypes.number,
   },
 
@@ -85,7 +63,7 @@ export default createConnector({
         return null;
       }
 
-      const stats = search.results.getFacetStats('attributeName');
+      const stats = search.results.getFacetStats(attributeName);
       if (!stats) {
         return null;
       }

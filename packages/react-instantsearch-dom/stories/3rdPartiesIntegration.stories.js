@@ -1,4 +1,4 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {connectRange} from '../packages/react-instantsearch/connectors';
 import {WrapWithHits} from './util';
@@ -8,52 +8,27 @@ const stories = storiesOf('Integration With Other Libraries', module);
 
 stories.add('Airbnb Rheostat', () =>
   <WrapWithHits >
-    <AirbnbRheostatConnected attributeName="price"/>
+    <ConnectedRange attributeName="price"/>
   </WrapWithHits>
 );
 
-class AirbnbRheostat extends React.Component {
-
-  static propTypes = {
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
-    value: PropTypes.shape({
-      min: PropTypes.number,
-      max: PropTypes.number,
-    }).isRequired,
-    refine: PropTypes.func.isRequired,
+const ConnectedRange = connectRange(({min, max, value, refine}) => {
+  const updateValue = sliderState => {
+    if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
+      refine({min: sliderState.values[0], max: sliderState.values[1]});
+    }
   };
 
-  constructor(props) {
-    super(props);
-    this.updateValue = this.updateValue.bind(this);
-  }
+  return (
+    <div>
+      <Rheostat
+        min={min}
+        max={max}
+        values={[value.min, value.max]}
+        onChange={updateValue}
+      />
+    </div>
+  );
+});
 
-  updateValue(sliderState) {
-    this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
-  }
-
-  render() {
-    return (
-      <div>
-        <Rheostat
-          min={this.props.min}
-          max={this.props.max}
-          values={[this.props.value.min, this.props.value.max]}
-          onChange={this.updateValue}
-        />
-        <ol>
-          <lh>Values</lh>
-          <li> {this.props.value.min}
-          </li>
-          <li> {this.props.value.max}
-          </li>
-        </ol>
-      </div>
-    );
-  }
-}
-
-const AirbnbRheostatConnected = connectRange(AirbnbRheostat);
-
-export default AirbnbRheostatConnected;
+export default ConnectedRange;
