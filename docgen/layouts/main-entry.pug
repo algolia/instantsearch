@@ -1,0 +1,9 @@
+extends archetypes/single-column-formatted.pug
+include mixins/nav-main.pug
+
+block content
+  .content
+    .documentation-section
+      div!=contents
+      h2 Table of content
+      +nav(navPath, navigation, title, headings)
