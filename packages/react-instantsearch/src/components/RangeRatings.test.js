@@ -5,7 +5,7 @@ import renderer from 'react/lib/ReactTestRenderer';
 
 import RangeRatings from './RangeRatings';
 
-describe('Range', () => {
+describe('RangeRatings', () => {
   it('supports passing max/min values', () => {
     const tree = renderer.create(
       <RangeRatings

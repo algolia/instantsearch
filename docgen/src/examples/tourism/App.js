@@ -2,26 +2,25 @@ import {
   InstantSearch,
   SearchBox,
   Pagination,
-  Range,
 } from 'react-instantsearch/dom';
 import {
   connectHits,
   connectMultiRange,
   connectRefinementList,
+  connectRange,
 } from 'react-instantsearch/connectors';
 
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
 
+import Rheostat from 'rheostat';
 import insertCss from 'insert-css';
 
-import sliderTheme from './slider.css';
 import paginationTheme from './pagination.css';
 import searchBoxTheme from './searchbox.css';
 
-if (sliderTheme.code) {
-  insertCss(sliderTheme.code);
+if (paginationTheme.code) {
   insertCss(paginationTheme.code);
   insertCss(searchBoxTheme.code);
 }
@@ -250,10 +249,10 @@ const RoomType = connectRefinementList(({items, refine, currentRefinement}) => {
 
 function Price() {
   return (
-    <div className="row aisdemo-filter">
+    <div className="row aisdemo-filter rheostat-container">
       <div className="col-sm-2 aisdemo-filter-title">Price Range</div>
       <div className="col-sm-9">
-        <Range theme={sliderTheme.classNames ? sliderTheme.classNames : sliderTheme} attributeName="price"/>
+        <ConnectedRange attributeName="price"/>
       </div>
     </div>
   );
@@ -301,3 +300,26 @@ function Results() {
     </div>
   );
 }
+
+const ConnectedRange = connectRange(({min, max, value, refine}) => {
+  const updateValue = sliderState => {
+    if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
+      refine({min: sliderState.values[0], max: sliderState.values[1]});
+    }
+  };
+
+  return (
+    <div>
+      <Rheostat
+        min={min}
+        max={max}
+        values={[value.min, value.max]}
+        onChange={updateValue}
+      />
+      <div className="rheostat-values">
+        <span>{value.min}</span>
+        <span>{value.max}</span>
+      </div>
+    </div>
+  );
+});
