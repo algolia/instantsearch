@@ -1,8 +1,5 @@
 .documentation-section {
-  padding-bottom: 200px;
-
   .container {
-
     article {
       width: 100%;
       position: relative;
@@ -10,6 +7,12 @@
     }
   }
 
+  p,
+  ul,
+  ol {
+    font-size: 16px;
+    line-height: 22px;
+  }
 
   h2 {
     color: $charcoal-grey;
@@ -76,6 +79,7 @@
     width: calc(100% - #{$sidebar-width});
     padding-left: 30px;
     padding-top: 120px;
+    padding-bottom: 200px;
 
     p,
     ul,

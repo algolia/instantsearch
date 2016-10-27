@@ -7,13 +7,14 @@ export default function() {
     // First we scann all the HTML files to retrieve all the related documents based
     // on the category attribute in the metadata
     forEach(files, (data, path) => {
-      if (!path.match(/\.html$/)) return;
+      if (!path.match(/\.html$/) || data.tocVisibility === false) return;
       const category = data.category || 'other';
       categories[category] = categories[category] || [];
       categories[category].push({
         path,
         title: data.title,
         navWeight: data.navWeight,
+        metadata: data,
       });
     });
 
@@ -26,7 +27,10 @@ export default function() {
       // than one without.
       // Then navigation is sorted by title.
       data.navigation = categories[category].sort((a, b) => {
-        if (a.navWeight === b.navWeight || a.navWeight === undefined || b.navWeight === undefined) {
+        if (a.title && b.title &&
+            (a.navWeight === b.navWeight ||
+            a.navWeight === undefined ||
+            b.navWeight === undefined)) {
           return a.title.localeCompare(b.title);
         } else {
           return b.navWeight - a.navWeight;
