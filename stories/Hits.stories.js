@@ -9,7 +9,7 @@ const stories = storiesOf('Hits', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="Hits">
     <Hits />
   </WrapWithHits>
 ).add('with max hits per page', () =>

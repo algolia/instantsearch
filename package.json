@@ -13,13 +13,13 @@
     "test": "jest && npm run lint && NODE_ENV=production DOCS_MOUNT_POINT=/instantsearch.js/react/ DOCS_DIST=docs/react/ npm run docs:build && NODE_ENV=production npm run build",
     "dev": "jest --watch --bail",
     "coverage": "jest --coverage",
-    "storybook": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook",
+    "storybook": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook/public",
     "build-storybook": "NODE_ENV=production build-storybook -s ./storybook/public -o docs/react/storybook -c ./storybook"
   },
   "repository": "algolia/instantsearch.js",
   "dependencies": {
     "@kadira/react-storybook-addon-info": "^3.3.0",
-    "@kadira/storybook": "^2.26.0",
+    "@kadira/storybook": "^2.27.0",
     "@kadira/storybook-addon-knobs": "^1.2.3",
     "@kadira/storybook-addon-notes": "^1.0.1",
     "@kadira/storybook-addon-options": "^1.0.1",

@@ -9,7 +9,7 @@ const stories = storiesOf('HitsPerPage', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="HitsPerPage" >
     <HitsPerPage
       defaultRefinement={4}
       items={[{value: 2, label: '2 hits per page'},

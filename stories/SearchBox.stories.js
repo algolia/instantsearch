@@ -9,7 +9,7 @@ const stories = storiesOf('SearchBox', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits searchBox={false} linkedStoryGroup="SearchBox">
+  <WrapWithHits searchBox={false} hasPlayground={true} linkedStoryGroup="SearchBox">
     <SearchBox/>
   </WrapWithHits>
 ).add('extend theme', () =>

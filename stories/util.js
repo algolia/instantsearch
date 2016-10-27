@@ -34,16 +34,31 @@ const resetStyle = {
   },
 };
 
-const WrapWithHits = ({children, searchBox = true, linkedStoryGroup}) => {
+const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup}) => {
   const playgroundUrl = process.env.NODE_ENV === 'development'
-    ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground`
-    : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground`;
-  const playgroundLink = linkedStoryGroup
+    ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`
+    : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`;
+  const sourceCodeUrl = `https://github.com/algolia/instantsearch.js/tree/v2/stories/${linkedStoryGroup}.stories.js`;
+  const playgroundLink = hasPlayground
     ? <a target="_blank"
-         href={playgroundUrl}>
-    <div className="footer-container"></div>
+         href={playgroundUrl}
+         className="playground-url"
+  >
+    <span>Visit our playground to play with the widget props</span>
   </a>
     : null;
+
+  const footer = linkedStoryGroup ?
+      <div className="footer-container">
+        {playgroundLink}
+        <a target="_blank"
+           href={sourceCodeUrl}
+           className="source-code-url"
+        >
+          <div>View source code</div>
+        </a>
+      </div>
+      : null;
 
   return <InstantSearch
     className="container-fluid"
@@ -73,7 +88,7 @@ const WrapWithHits = ({children, searchBox = true, linkedStoryGroup}) => {
           <CustomHits hitsPerPage={3}/>
           <div className="hit-pagination"><Pagination showLast={true}/></div>
         </div>
-        {playgroundLink}
+        {footer}
       </div>
     </div>
   </InstantSearch>;
@@ -106,6 +121,7 @@ WrapWithHits.propTypes = {
   children: React.PropTypes.node,
   searchBox: React.PropTypes.boolean,
   linkedStoryGroup: React.PropTypes.string,
+  hasPlayground: React.PropTypes.boolean,
 };
 
 export {

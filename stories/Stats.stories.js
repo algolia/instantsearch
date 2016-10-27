@@ -9,7 +9,7 @@ const stories = storiesOf('Stats', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="Stats">
     <div>
       <Stats />
       <RefinementList
