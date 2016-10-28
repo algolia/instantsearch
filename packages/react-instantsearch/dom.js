@@ -4,6 +4,7 @@ export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Hits} from './src/widgets/Hits.js';
 export {default as HitsPerPage} from './src/widgets/HitsPerPage.js';
+export {default as InfiniteHits} from './src/widgets/InfiniteHits.js';
 export {default as Menu} from './src/widgets/Menu.js';
 export {default as MultiRange} from './src/widgets/MultiRange.js';
 export {default as Pagination} from './src/widgets/Pagination.js';

@@ -9,6 +9,7 @@ export default {
     'examples/media/index': join(__dirname, 'src/examples/media/index.js'),
     'examples/tourism/index': join(__dirname, 'src/examples/tourism/index.js'),
     'examples/material-ui/index': join(__dirname, 'src/examples/material-ui/index.js'),
+    'examples/infiniteHits/index': join(__dirname, 'src/examples/infiniteHits/index.js'),
   },
   devtool: 'source-map',
   output: {

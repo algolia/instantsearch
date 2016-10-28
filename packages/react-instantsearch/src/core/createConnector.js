@@ -139,7 +139,7 @@ export default function createConnector(connectorDesc) {
         metadata,
       } = store.getState();
       const searchState = {results, searching, error};
-      return connectorDesc.getProps(props, widgets, searchState, metadata);
+      return connectorDesc.getProps.call(this, props, widgets, searchState, metadata);
     };
 
     refine = (...args) => {
