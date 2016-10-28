@@ -9,7 +9,7 @@ const stories = storiesOf('Pagination', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="Pagination">
+  <WrapWithHits hasPlayground={true} linkedStoryGroup="Pagination">
     <Pagination/>
   </WrapWithHits>
 )

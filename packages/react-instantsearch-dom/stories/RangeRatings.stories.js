@@ -9,7 +9,7 @@ const stories = storiesOf('RangeRatings', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="RangeRatings">
+  <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeRatings">
     <RangeRatings attributeName="rating" max={6}/>
   </WrapWithHits>
 ).add('playground', () =>

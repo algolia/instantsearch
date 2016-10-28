@@ -41,30 +41,25 @@
 }
 
 .footer-container {
-  padding: 10px;
   border-radius: 0px 0px 5px 5px;
-  position: relative;
+  display: flex;
+  justify-content: space-around;
   overflow-x: hidden;
   clear: left;
   border-bottom: solid 1px #E4E4E4;
   border-left: solid 1px #E4E4E4;
   border-right: solid 1px #E4E4E4;
+  background-color: #F3F3F3;
 }
 
-.footer-container:after {
-  content: "Visit our playground to play with the widget props";
-  text-align: center;
+.playground-url, .source-code-url {
   font-size: 11px;
   top: 0;
   left: 0;
-  right: 0;
   color: #999999;
   padding: 4px 6px;
   line-height: 1em;
-  position: absolute;
   background-color: #F3F3F3;
-  border: solid 1px #E4E4E4;
-  border-width: 0 1px 1px 0;
 }
 
 .hit {

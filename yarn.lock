@@ -79,7 +79,7 @@
     react-modal "^1.2.1"
     redux "^3.5.2"
 
-"@kadira/storybook@^2.26.0":
+"@kadira/storybook@^2.27.0":
   version "2.27.0"
   resolved "https://registry.yarnpkg.com/@kadira/storybook/-/storybook-2.27.0.tgz#e3e8fcbb1902e904a82e40d9b17b01e5202b2fa7"
   dependencies:

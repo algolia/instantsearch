@@ -9,7 +9,7 @@ const stories = storiesOf('RangeInput', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="RangeInput">
+  <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeInput">
     <RangeInput attributeName="price"/>
   </WrapWithHits>
 ).add('playground', () =>
