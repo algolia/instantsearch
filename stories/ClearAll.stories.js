@@ -9,7 +9,7 @@ const stories = storiesOf('ClearAll', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="ClearAll">
     <div>
       <ClearAll />
       <RefinementList

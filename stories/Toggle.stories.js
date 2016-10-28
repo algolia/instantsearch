@@ -9,7 +9,7 @@ const stories = storiesOf('Toggle', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits>
+  <WrapWithHits linkedStoryGroup="Toggle">
     <Toggle attributeName="materials"
             label="Made with solid pine"
             value={'Solid pine'}

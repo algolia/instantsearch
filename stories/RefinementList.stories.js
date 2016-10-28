@@ -9,7 +9,7 @@ const stories = storiesOf('RefinementList', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="RefinementList">
+  <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
     <RefinementList attributeName="colors"/>
   </WrapWithHits>
 ).add('with selected item', () =>
