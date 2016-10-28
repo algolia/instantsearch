@@ -1,0 +1,182 @@
+exports[`HierarchicalMenu applies translations 1`] = `
+<div
+  className="root">
+  <div
+    className="items">
+    <div
+      className="item item_parent">
+      <a
+        className="itemLink"
+        href="#"
+        onClick={[Function]}>
+        <span
+          className="itemLabel">
+          white
+        </span>
+         
+        <span
+          className="itemCount">
+          10
+        </span>
+      </a>
+      <div
+        className="itemChildren">
+        <div
+          className="item">
+          <a
+            className="itemLink"
+            href="#"
+            onClick={[Function]}>
+            <span
+              className="itemLabel">
+              white1
+            </span>
+             
+            <span
+              className="itemCount">
+              3
+            </span>
+          </a>
+        </div>
+        <div
+          className="item">
+          <a
+            className="itemLink"
+            href="#"
+            onClick={[Function]}>
+            <span
+              className="itemLabel">
+              white2
+            </span>
+             
+            <span
+              className="itemCount">
+              4
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      className="item">
+      <a
+        className="itemLink"
+        href="#"
+        onClick={[Function]}>
+        <span
+          className="itemLabel">
+          black
+        </span>
+         
+        <span
+          className="itemCount">
+          20
+        </span>
+      </a>
+    </div>
+    <div
+      className="item">
+      <a
+        className="itemLink"
+        href="#"
+        onClick={[Function]}>
+        <span
+          className="itemLabel">
+          blue
+        </span>
+         
+        <span
+          className="itemCount">
+          30
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`HierarchicalMenu default hierarchical menu 1`] = `
+<div
+  className="root">
+  <div
+    className="items">
+    <div
+      className="item item_parent">
+      <a
+        className="itemLink"
+        href="#"
+        onClick={[Function]}>
+        <span
+          className="itemLabel">
+          white
+        </span>
+         
+        <span
+          className="itemCount">
+          10
+        </span>
+      </a>
+      <div
+        className="itemChildren">
+        <div
+          className="item">
+          <a
+            className="itemLink"
+            href="#"
+            onClick={[Function]}>
+            <span
+              className="itemLabel">
+              white1
+            </span>
+             
+            <span
+              className="itemCount">
+              3
+            </span>
+          </a>
+        </div>
+        <div
+          className="item">
+          <a
+            className="itemLink"
+            href="#"
+            onClick={[Function]}>
+            <span
+              className="itemLabel">
+              white2
+            </span>
+             
+            <span
+              className="itemCount">
+              4
+            </span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div
+      className="item">
+      <a
+        className="itemLink"
+        href="#"
+        onClick={[Function]}>
+        <span
+          className="itemLabel">
+          black
+        </span>
+         
+        <span
+          className="itemCount">
+          20
+        </span>
+      </a>
+    </div>
+  </div>
+  <button
+    className="showMore"
+    disabled={false}
+    onClick={[Function]}>
+    Show more
+  </button>
+</div>
+`;
