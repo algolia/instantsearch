@@ -8,7 +8,7 @@ const stories = storiesOf('RangeSlider', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="RangeSlider">
+  <WrapWithHits hasPlayground={true} linkedStoryGroup="RangeSlider">
 
     <Range attributeName="price"/>
   </WrapWithHits>

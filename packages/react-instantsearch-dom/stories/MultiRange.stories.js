@@ -9,7 +9,7 @@ const stories = storiesOf('MultiRange', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits >
+  <WrapWithHits linkedStoryGroup="MultiRange">
     <MultiRange attributeName="price"
     items={[
       {end: 10, label: '<$10'},
