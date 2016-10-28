@@ -1,8 +1,10 @@
 ** WORK IN PROGRESS **
 
+We are currently working on react-instantsearch. Roadmap: https://github.com/algolia/instantsearch.js/projects/1
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+**Table of Contents**
 
 - [Project structure](#project-structure)
 - [Development](#development)
@@ -31,8 +33,6 @@ npm start
 ```
 
 Go to <http://localhost:3000>.
-
-See the current issues in [GitHub](https://github.com/algolia/instantsearch.js/issues?q=is%3Aopen+is%3Aissue+label%3Av2) or [Waffle](https://waffle.io/algolia/instantsearch.js?label=v2).
 
 # Test
 
