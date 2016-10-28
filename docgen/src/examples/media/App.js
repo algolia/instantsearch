@@ -12,14 +12,6 @@ import {
 
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
 
-import insertCss from 'insert-css';
-
-import paginationTheme from './pagination.css';
-
-if (paginationTheme.code) {
-  insertCss(paginationTheme.code);
-}
-
 export default function App() {
   return <InstantSearch
     appId="latency"
@@ -129,8 +121,7 @@ const Results = () =>
     <div id="stats" className="text-right text-muted"><Stats/></div>
     <hr />
     <div id="hits"><Hits itemComponent={Hit} hitsPerPage={10}/></div>
-    <div id="pagination" className="text-center"><Pagination
-      theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/></div>
+    <div id="pagination" className="text-center"><Pagination /></div>
   </article>;
 
 const RefinementListLinks = connectRefinementList(({items, refine, currentRefinement}) => {
