@@ -19,6 +19,7 @@ We are currently working on react-instantsearch. Roadmap: https://github.com/alg
 - `packages/`: actually published npm packages
 - `packages/react-instantsearch`: Set of React Components for instantsearch (In development)
 - `packages/instantsearch`: `react-instantsearch` wrapped as a vanilla library with string templating abilities for ease of use in non framework situations (no React, no Angular) (Not yet started)
+- `docgen/`: documentation website
 
 # Development
 
