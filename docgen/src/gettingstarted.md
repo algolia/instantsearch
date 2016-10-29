@@ -23,7 +23,7 @@ In this tutorial, you'll learn how to:
 
 ## Before we start
 
-As mentionned earlier react-instantsearch is meant to be used with Algolia.
+As mentionned earlier, react-instantsearch is meant to be used with Algolia.
 
 Therefore, you'll need the credentials to an Algolia index. Here are
 the credentials to an already configured index:
@@ -31,7 +31,7 @@ the credentials to an already configured index:
  - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
  - `indexName`: `bestbuy`
 
-It contains data for a e-commerce website.
+It contains data for an e-commerce website.
 
 This guide also expects you to have a working [React](https://facebook.github.io/react/) project. To follow this
 guide in the best conditions, we suggest you use
@@ -75,7 +75,7 @@ React.render(<App />, document.querySelector('#app'));
 
 `appId`, `apiKey` and `indexName` are mandatory. Those props are the
 credentials of your application in Algolia. They can be found in your [Algolia
-dasboard](https://www.algolia.com/api-keys).
+dashboard](https://www.algolia.com/api-keys).
 
 Congratulations 🎉  Your application is now connected to Algolia! This wrapper
 will provide a context so that the instantsearch components you add inside
@@ -129,7 +129,7 @@ const App = () =>
 ```
 
 You should now be able to see the results without any styling. This
-view lets you inspect the values that are retrieve from Algolia, in order
+view lets you inspect the values that are retrieved from Algolia, in order
 to build your custom view.
 
 In order to customize the view for each product, we can use a special prop
@@ -217,7 +217,7 @@ dialog between the user and the data.
 
 In this part, we've seen the following:
  - how to add a SearchBox to make queries into the records
- - how to highligth the matched part of the results
+ - how to highlight the matched part of the results
  - the importance of highlighting in a text-based search
 
 ## Add some filters
@@ -289,7 +289,7 @@ function Search() {
 ```
 
 Current filters will display all the filters currently selected by the user.
-This gives the user a synthetic way of understanding the current search. Clear all 
+This gives the user a synthetic way of understanding the current search. `ClearAll`
 displays a button to remove all the filters.
 
 In this part, we've seen the following:
@@ -302,7 +302,7 @@ At this point, you know all the basics of react-instantsearch. All the
 components can be customised further using connectors, like
 in the paragraph about displaying the results.
 
-Here some suggested guides and reference that you might be interested in:
+Here are some suggested guides and references that you might be interested in:
  - [How to style your search](Styling.html)
  - [Advanced examples using react-instantsearch](examples.html)
  - [The API for widgets and components](InstantSearch.html)
