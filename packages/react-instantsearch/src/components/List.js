@@ -80,14 +80,14 @@ class List extends Component {
   renderShowMore() {
     const {showMore, translate, applyTheme} = this.props;
     const {extended} = this.state;
-
+    const disabled = this.props.limitMin >= this.props.items.length;
     if (!showMore) {
       return null;
     }
 
     return (
-      <button
-        {...applyTheme('showMore', 'showMore')}
+      <button disabled={disabled}
+        {...applyTheme('showMore', 'showMore', disabled && 'showMoreDisabled')}
         onClick={this.onShowMoreClick}
       >
         {translate('showMore', extended)}
