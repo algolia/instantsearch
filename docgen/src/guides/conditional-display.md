@@ -1,9 +1,7 @@
 ---
 title: Conditional Display
 layout: guide.pug
-nav_groups:
-  - core
-nav_sort: 1
+category: guide
 ---
 
 Using our connector and [`createConnector`](Customization.html#creating-your-own-connectors) approach, you can 
@@ -56,4 +54,28 @@ const content = createConnector({
     return <div>{content}</div>;
  });
 ```
+
+## Displaying content when there's an error
+ 
+By using the [`createConnector`](Customization.html#creating-your-own-connectors) function you may also access the `search` object 
+that holds the search results, search errors and search loading state. By doing so you're able to know when an error occurred and 
+decide what to do with it. 
+
+Here's an example: 
+
+```js
+const content = createConnector({
+    displayName: 'ConditionalError',
+    getProps(props, state, search) {
+      return {error: search.error};
+    },
+ })(({error}) => {
+    const content = error
+      ? <div>An error occurred: {error.message}</div>
+      : <div>Some results</div>;
+    return <div>{content}</div>;
+ });
+```
+
+
 

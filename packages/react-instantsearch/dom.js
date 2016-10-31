@@ -1,7 +1,6 @@
 export {default as InstantSearch} from './src/core/InstantSearch.js';
 export {default as extendTheme} from './src/core/styling.js';
 export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
-export {default as Error} from './src/widgets/Error.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Hits} from './src/widgets/Hits.js';
 export {default as HitsPerPage} from './src/widgets/HitsPerPage.js';
