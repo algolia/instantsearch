@@ -4,7 +4,7 @@ module.exports = {
     loaders: [
       {
         test: /\.css$/,
-        loader: 'style',
+        loader: 'style?insertAt=top',
       }, {
         test: /\.css$/,
         loader: 'css',

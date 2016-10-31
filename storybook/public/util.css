@@ -95,3 +95,12 @@ em {
   font-weight: 700;
   font-style: normal;
 }
+
+.ClearAll {
+  height: 100%;
+  display: flex;
+  border:  none;
+  background-color: #3e82f7;
+  color: white;
+  margin-left: 5px;
+}
