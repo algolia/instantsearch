@@ -1,0 +1,118 @@
+exports[`RefinementList applies translations 1`] = `
+<div
+  className="root">
+  <div
+    style={Object {}}>
+    <div
+      className="item">
+      <label>
+        <input
+          checked={false}
+          className="itemCheckbox"
+          onChange={[Function]}
+          type="checkbox" />
+        <span
+          className="itemLabel">
+          white
+        </span>
+         
+        <span
+          className="itemCount">
+          10
+        </span>
+      </label>
+    </div>
+    <div
+      className="item">
+      <label>
+        <input
+          checked={false}
+          className="itemCheckbox"
+          onChange={[Function]}
+          type="checkbox" />
+        <span
+          className="itemLabel">
+          black
+        </span>
+         
+        <span
+          className="itemCount">
+          20
+        </span>
+      </label>
+    </div>
+    <div
+      className="item">
+      <label>
+        <input
+          checked={false}
+          className="itemCheckbox"
+          onChange={[Function]}
+          type="checkbox" />
+        <span
+          className="itemLabel">
+          blue
+        </span>
+         
+        <span
+          className="itemCount">
+          30
+        </span>
+      </label>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RefinementList default refinement list 1`] = `
+<div
+  className="root">
+  <div
+    style={Object {}}>
+    <div
+      className="item itemSelected">
+      <label>
+        <input
+          checked={true}
+          className="itemCheckbox itemCheckboxSelected"
+          onChange={[Function]}
+          type="checkbox" />
+        <span
+          className="itemLabel itemLabelSelected">
+          white
+        </span>
+         
+        <span
+          className="itemCount itemCountSelected">
+          10
+        </span>
+      </label>
+    </div>
+    <div
+      className="item">
+      <label>
+        <input
+          checked={false}
+          className="itemCheckbox"
+          onChange={[Function]}
+          type="checkbox" />
+        <span
+          className="itemLabel">
+          black
+        </span>
+         
+        <span
+          className="itemCount">
+          20
+        </span>
+      </label>
+    </div>
+  </div>
+  <button
+    className="showMore"
+    disabled={false}
+    onClick={[Function]}>
+    Show more
+  </button>
+</div>
+`;
