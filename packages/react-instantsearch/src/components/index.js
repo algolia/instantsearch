@@ -1,5 +1,4 @@
 export {default as CurrentRefinements} from './CurrentRefinements.js';
-export {default as Error} from './Error.js';
 export {default as HierarchicalMenu} from './HierarchicalMenu.js';
 export {default as Hits} from './Hits.js';
 export {default as HitsPerPage} from './HitsPerPage.js';
