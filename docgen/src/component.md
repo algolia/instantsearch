@@ -7,8 +7,8 @@ tocVisibility: false
 
 
 react-instantsearch provides a root component and widgets. The root component
-will provide the children a context to let them interact with Algolia. The
-widgets are the components who have the ability to interact with the context.
+will provide a context to its children to let them interact with Algolia. Widgets
+are components that have the ability to interact with the context.
 
 ## Widgets
 
