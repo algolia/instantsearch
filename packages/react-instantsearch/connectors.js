@@ -1,5 +1,4 @@
 export {default as connectCurrentRefinements} from './src/connectors/connectCurrentRefinements.js';
-export {default as connectError} from './src/connectors/connectError.js';
 export {default as connectHierarchicalMenu} from './src/connectors/connectHierarchicalMenu.js';
 export {default as connectHits} from './src/connectors/connectHits.js';
 export {default as connectHitsPerPage} from './src/connectors/connectHitsPerPage.js';
