@@ -12,10 +12,12 @@ stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="ClearAll">
     <div>
       <ClearAll />
-      <RefinementList
-        attributeName="colors"
-        defaultRefinement={['Black']}
-        theme={{root: {display: 'none'}}}
-      /></div>
+      <div style={{display: 'none'}}>
+        <RefinementList
+          attributeName="colors"
+          defaultRefinement={['Black']}
+        />
+      </div>
+      </div>
   </WrapWithHits>
 );

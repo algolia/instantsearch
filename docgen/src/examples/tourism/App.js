@@ -15,15 +15,6 @@ import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
 
 import Rheostat from 'rheostat';
-import insertCss from 'insert-css';
-
-import paginationTheme from './pagination.css';
-import searchBoxTheme from './searchbox.css';
-
-if (paginationTheme.code) {
-  insertCss(paginationTheme.code);
-  insertCss(searchBoxTheme.code);
-}
 
 export default function TourismInstantsearchSample() {
   return (
@@ -54,7 +45,7 @@ function Header() {
         </a>
         <a href="./" className="logo">A</a>
         <i className="fa fa-search"></i>
-        <SearchBox theme={searchBoxTheme.classNames ? searchBoxTheme.classNames : searchBoxTheme}/>
+        <SearchBox/>
       </header>
     </div>
   );
@@ -291,7 +282,7 @@ function Results() {
         <MyHits/>
       </div>
       <div className="row">
-        <Pagination theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/>
+        <Pagination/>
         <div className="thank-you">
           Data from <a href="https://www.airbnb.com/">airbnb.com</a>,
           user pics from <a href="https://randomuser.me/">randomuser.me</a>

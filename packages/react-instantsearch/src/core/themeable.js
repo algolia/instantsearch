@@ -14,7 +14,7 @@ export default function themeable(defaultTheme) {
   }
 
   if (defaultTheme.code !== undefined) {
-    insertCss(defaultTheme.code);
+    insertCss(defaultTheme.code, {prepend: true});
   }
 
   return Composed => {

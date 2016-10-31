@@ -22,18 +22,6 @@ Wrap.propTypes = {
   children: React.PropTypes.node,
 };
 
-const resetStyle = {
-  root: {
-    paddingLeft: 10,
-    height: '100%',
-    display: 'flex',
-    border: 'none',
-    backgroundColor: '#3e82f7',
-    color: 'white',
-    marginLeft: 5,
-  },
-};
-
 const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup}) => {
   const playgroundUrl = process.env.NODE_ENV === 'development'
     ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`
@@ -80,7 +68,6 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
               : null}
             <div>
               <ClearAll
-                theme={resetStyle}
                 translations={{reset: 'Clear all filters'}}
               />
             </div>
