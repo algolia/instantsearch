@@ -95,7 +95,7 @@
     "classnames": "^2.2.5",
     "events": "^1.1.0",
     "hogan.js": "^3.0.2",
-    "lodash": "^4.16.4",
+    "lodash": "^4.16.6",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-nouislider": "^1.13.0",
