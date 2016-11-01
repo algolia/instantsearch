@@ -6,13 +6,13 @@ function getId(props) {
   return props.id || props.attributeName;
 }
 
-function getChecked(props, state) {
+function getCurrentRefinement(props, state) {
   const id = getId(props);
   if (state[id]) {
     return state[id] === 'on';
   }
-  if (props.defaultChecked) {
-    return props.defaultChecked;
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
   }
   return false;
 }
@@ -61,11 +61,11 @@ export default createConnector({
     /**
      * Default state of the widget. Should the toggle be checked by default?
      */
-    defaultChecked: PropTypes.bool,
+    defaultRefinement: PropTypes.bool,
   },
 
   getProps(props, state) {
-    const checked = getChecked(props, state);
+    const checked = getCurrentRefinement(props, state);
     return {checked};
   },
 
@@ -78,7 +78,7 @@ export default createConnector({
 
   getSearchParameters(searchParameters, props, state) {
     const {attributeName, value, filter} = props;
-    const checked = getChecked(props, state);
+    const checked = getCurrentRefinement(props, state);
 
     if (checked) {
       if (attributeName) {
@@ -99,7 +99,7 @@ export default createConnector({
 
   getMetadata(props, state) {
     const id = getId(props);
-    const checked = getChecked(props, state);
+    const checked = getCurrentRefinement(props, state);
     const filters = [];
     if (checked) {
       filters.push({

@@ -2,7 +2,7 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
-function getQuery(props, state) {
+function getCurrentRefinement(props, state) {
   if (typeof state[props.id] !== 'undefined') {
     return state[props.id];
   }
@@ -27,7 +27,7 @@ export default createConnector({
 
   getProps(props, state) {
     return {
-      query: getQuery(props, state),
+      query: getCurrentRefinement(props, state),
     };
   },
 
@@ -39,6 +39,6 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setQuery(getQuery(props, state));
+    return searchParameters.setQuery(getCurrentRefinement(props, state));
   },
 });

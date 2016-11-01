@@ -16,29 +16,29 @@ class Menu extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
       count: PropTypes.number.isRequired,
+      isRefined: PropTypes.bool.isRequired,
     })),
-    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
-  renderItem = (item, selected) => {
+  renderItem = item => {
     const {refine, createURL, applyTheme, translate} = this.props;
-    const value = selected ? null : item.value;
     return (
       <Link
-        {...applyTheme('itemLink', 'itemLink', selected && 'itemLinkSelected')}
-        onClick={refine.bind(null, value)}
-        href={createURL(value)}
+        {...applyTheme('itemLink', 'itemLink', item.isRefined && 'itemLinkSelected')}
+        onClick={() => refine(item.value)}
+        href={createURL(item.value)}
       >
-        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
-          {item.value}
+        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+          {item.label}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount', selected && 'itemCountSelected')}>
+        <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
           {translate('count', item.count)}
         </span>
       </Link>
@@ -49,7 +49,6 @@ class Menu extends Component {
     return (
       <List
         renderItem={this.renderItem}
-        selectedItems={[this.props.currentRefinement]}
         {...pick(this.props, [
           'applyTheme',
           'translate',

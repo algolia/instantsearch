@@ -24,7 +24,7 @@ describe('connectMultiRange', () => {
     }, {});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: ''},
+        {label: 'All', value: '', isRefined: true},
       ],
       currentRefinement: '',
     });
@@ -37,8 +37,8 @@ describe('connectMultiRange', () => {
     }, {});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: ''},
-        {label: 'Ok', value: '100:'},
+        {label: 'All', value: '', isRefined: true},
+        {label: 'Ok', value: '100:', isRefined: false},
       ],
       currentRefinement: '',
     });
@@ -51,8 +51,8 @@ describe('connectMultiRange', () => {
     }, {});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: ''},
-        {label: 'Not ok', value: ':200'},
+        {label: 'All', value: '', isRefined: true},
+        {label: 'Not ok', value: ':200', isRefined: false},
       ],
       currentRefinement: '',
     });
@@ -67,10 +67,10 @@ describe('connectMultiRange', () => {
     }, {});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: ''},
-        {label: 'Ok', value: '100:'},
-        {label: 'Not ok', value: ':200'},
-        {label: 'Maybe ok?', value: '100:200'},
+        {label: 'All', value: '', isRefined: true},
+        {label: 'Ok', value: '100:', isRefined: false},
+        {label: 'Not ok', value: ':200', isRefined: false},
+        {label: 'Maybe ok?', value: '100:200', isRefined: false},
       ],
       currentRefinement: '',
     });

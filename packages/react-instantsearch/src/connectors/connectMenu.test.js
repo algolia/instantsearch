@@ -44,10 +44,12 @@ describe('connectMenu', () => {
     results.getFacetValues.mockImplementation(() => [
       {
         name: 'wat',
+        isRefined: true,
         count: 20,
       },
       {
         name: 'oy',
+        isRefined: false,
         count: 10,
       },
     ]);
@@ -55,10 +57,14 @@ describe('connectMenu', () => {
     expect(props.items).toEqual([
       {
         value: 'wat',
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
       {
         value: 'oy',
+        label: 'oy',
+        isRefined: false,
         count: 10,
       },
     ]);
@@ -67,6 +73,8 @@ describe('connectMenu', () => {
     expect(props.items).toEqual([
       {
         value: 'wat',
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
     ]);
@@ -79,6 +87,8 @@ describe('connectMenu', () => {
     expect(props.items).toEqual([
       {
         value: 'wat',
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
     ]);

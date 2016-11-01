@@ -25,7 +25,7 @@ function getId(props) {
   return props.id || props.attributeName;
 }
 
-function getSelectedItem(props, state) {
+function getCurrentRefinement(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
     return state[id];
@@ -82,27 +82,31 @@ export default createConnector({
 
   getProps(props, state) {
     const {items} = props;
-    const currentRefinement = getSelectedItem(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
 
     return {
-      items: items.map(item => ({
-        label: item.label,
-        value: stringifyItem(item),
-      })),
+      items: items.map(item => {
+        const value = stringifyItem(item);
+        return {
+          label: item.label,
+          value,
+          isRefined: value === currentRefinement,
+        };
+      }),
       currentRefinement,
     };
   },
 
-  refine(props, state, nextSelectedItem) {
+  refine(props, state, nextRefinement) {
     return {
       ...state,
-      [getId(props, state)]: nextSelectedItem,
+      [getId(props, state)]: nextRefinement,
     };
   },
 
   getSearchParameters(searchParameters, props, state) {
     const {attributeName} = props;
-    const {start, end} = parseItem(getSelectedItem(props, state));
+    const {start, end} = parseItem(getCurrentRefinement(props, state));
 
     if (start) {
       searchParameters = searchParameters.addNumericRefinement(
@@ -123,7 +127,7 @@ export default createConnector({
 
   getMetadata(props, state) {
     const id = getId(props);
-    const value = getSelectedItem(props, state);
+    const value = getCurrentRefinement(props, state);
     const filters = [];
     if (value !== '') {
       const {label} = find(props.items, item => stringifyItem(item) === value);

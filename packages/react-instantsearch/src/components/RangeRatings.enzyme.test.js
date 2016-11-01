@@ -15,7 +15,7 @@ describe('RangeRatings', () => {
       refine={refine}
       min={1}
       max={5}
-      value={{min: 1, max: 5}}
+      currentRefinement={{min: 1, max: 5}}
       count={[{value: '1', count: 1},
         {value: '2', count: 2},
         {value: '3', count: 3},

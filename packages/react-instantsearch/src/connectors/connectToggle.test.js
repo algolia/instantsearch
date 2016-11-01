@@ -23,7 +23,7 @@ describe('connectToggle', () => {
     props = getProps({id: 't'}, {t: 'on'});
     expect(props).toEqual({checked: true});
 
-    props = getProps({id: 't', defaultChecked: true}, {});
+    props = getProps({id: 't', defaultRefinement: true}, {});
     expect(props).toEqual({checked: true});
   });
 

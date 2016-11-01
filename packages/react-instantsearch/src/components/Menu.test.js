@@ -12,14 +12,12 @@ describe('HierarchicalMenu', () => {
         refine={() => null}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10},
-          {value: 'black', count: 20},
-          {value: 'blue', count: 30},
-          {value: 'green', count: 30},
-          {value: 'red', count: 30},
+          {label: 'white', value: 'white', count: 10, isRefined: false},
+          {label: 'black', value: 'black', count: 20, isRefined: false},
+          {label: 'blue', value: 'blue', count: 30, isRefined: false},
+          {label: 'green', value: 'green', count: 30, isRefined: false},
+          {label: 'red', value: 'red', count: 30, isRefined: false},
         ]}
-        currentRefinement=""
-        selectedItems=""
         limitMin={2}
         limitMax={4}
         showMore={true}
@@ -34,14 +32,12 @@ describe('HierarchicalMenu', () => {
         refine={() => null}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10},
-          {value: 'black', count: 20},
-          {value: 'blue', count: 30},
-          {value: 'green', count: 30},
-          {value: 'red', count: 30},
+          {label: 'white', value: 'white', count: 10, isRefined: false},
+          {label: 'black', value: 'black', count: 20, isRefined: false},
+          {label: 'blue', value: 'blue', count: 30, isRefined: false},
+          {label: 'green', value: 'green', count: 30, isRefined: false},
+          {label: 'red', value: 'red', count: 30, isRefined: false},
         ]}
-        currentRefinement=""
-        selectedItems=""
         limitMin={2}
         limitMax={4}
         showMore={true}

@@ -12,12 +12,10 @@ describe('RefinementList', () => {
         refine={() => null}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10},
-          {value: 'black', count: 20},
-          {value: 'blue', count: 30},
+          {label: 'white', value: ['white'], count: 10, isRefined: true},
+          {label: 'black', value: ['black'], count: 20, isRefined: false},
+          {label: 'blue', value: ['blue'], count: 30, isRefined: false},
         ]}
-        currentRefinement={['white']}
-        selectedItems={['white']}
         limitMin={2}
         limitMax={4}
         showMore={true}
@@ -32,12 +30,10 @@ describe('RefinementList', () => {
         refine={() => null}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10},
-          {value: 'black', count: 20},
-          {value: 'blue', count: 30},
+          {label: 'white', value: ['white'], count: 10, isRefined: false},
+          {label: 'black', value: ['black'], count: 20, isRefined: false},
+          {label: 'blue', value: ['blue'], count: 30, isRefined: false},
         ]}
-        currentRefinement={[]}
-        selectedItems={[]}
         translations={{
           showMore: ' display more',
         }}

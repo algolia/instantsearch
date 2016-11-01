@@ -142,33 +142,25 @@ const MaterialUiSearchBox = ({query, refine, marginLeft}) => {
     </div>);
 };
 
-const CheckBoxItem = ({item, selectedItems, refine}) => {
-  const selected = selectedItems.indexOf(item.value) !== -1;
-  const value = selected ?
-    selectedItems.filter(v => v !== item.value) :
-    selectedItems.concat([item.value]);
-  return (
-    <ListItem key={item.value}
-              primaryText={item.value}
+const CheckBoxItem = ({item, refine}) =>
+    <ListItem
+              primaryText={item.label}
               leftCheckbox={
-                <Checkbox checked={selected}
+                <Checkbox checked={item.isRefined}
                           onCheck={e => {
                             e.preventDefault();
-                            refine(value);
+                            refine(item.value);
                           }}
                 />}
-    />)
-    ;
-};
+    />;
 
-const MaterialUiCheckBoxRefinementList = ({items, attributeName, currentRefinement, refine, createURL}) =>
+const MaterialUiCheckBoxRefinementList = ({items, attributeName, refine, createURL}) =>
     <List>
       <Subheader style={{fontSize: 18}}>{attributeName.toUpperCase()}</Subheader>
       {items.map(item =>
         <CheckBoxItem
-          key={item.value}
+          key={item.label}
           item={item}
-          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />
@@ -176,7 +168,7 @@ const MaterialUiCheckBoxRefinementList = ({items, attributeName, currentRefineme
     </List>
   ;
 
-const MaterialUiNestedList = function ({id, items, refine, currentRefinement}) {
+const MaterialUiNestedList = function ({id, items, refine}) {
   return <List>
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
@@ -188,7 +180,7 @@ const MaterialUiNestedList = function ({id, items, refine, currentRefinement}) {
             e.preventDefault();
             refine(child.value);
           }}
-          style={currentRefinement && currentRefinement.includes(child.value) ? {fontWeight: 700} : {}}
+          style={child.isRefined ? {fontWeight: 700} : {}}
         />
       ) : [];
       return <ListItem
@@ -200,7 +192,7 @@ const MaterialUiNestedList = function ({id, items, refine, currentRefinement}) {
           e.preventDefault();
           refine(item.value);
         }}
-        style={currentRefinement && currentRefinement.includes(item.value) ? {fontWeight: 700} : {}}
+        style={item.isRefined ? {fontWeight: 700} : {}}
       />;
     }
     )}
