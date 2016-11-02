@@ -15,6 +15,9 @@ stories.add('default', () =>
 ).add('playground', () =>
   <WrapWithHits searchBox={false}>
     <SearchBox
+      focusShortcuts={['s']}
+      searchAsYouType={true}
+      autoFocus={true}
       translations={object('translate', {
         submit: null,
         reset: null,
