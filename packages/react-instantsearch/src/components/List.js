@@ -1,16 +1,10 @@
 import React, {PropTypes, Component} from 'react';
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
-  value: PropTypes.string.isRequired,
+  value: PropTypes.any,
+  label: PropTypes.string.isRequired,
   children: (...args) => itemsPropType(...args),
 }));
-
-function hasSelectedChild(item, selectedItems) {
-  return item.children && item.children.some(child =>
-    selectedItems.indexOf(child.value) !== -1 ||
-    hasSelectedChild(child, selectedItems)
-  );
-}
 
 class List extends Component {
   static propTypes = {
@@ -18,7 +12,6 @@ class List extends Component {
     // Only required with showMore.
     translate: PropTypes.func,
     items: itemsPropType,
-    selectedItems: PropTypes.arrayOf(PropTypes.string).isRequired,
     renderItem: PropTypes.func.isRequired,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
@@ -47,31 +40,25 @@ class List extends Component {
     return extended ? limitMax : limitMin;
   };
 
-  renderItem = (item, parent = null) => {
-    const {selectedItems, applyTheme} = this.props;
-    const selected = selectedItems.indexOf(item.value) !== -1;
-    const limit = this.getLimit();
-
+  renderItem = item => {
     const children = item.children &&
-      <div {...applyTheme('itemChildren', 'itemChildren')}>
-        {item.children.slice(0, limit).map(child =>
+      <div {...this.props.applyTheme('itemChildren', 'itemChildren')}>
+        {item.children.slice(0, this.getLimit()).map(child =>
           this.renderItem(child, item)
         )}
       </div>;
 
-    const selectedParent = hasSelectedChild(item, selectedItems);
-
     return (
       <div
-        {...applyTheme(
-          item.value,
+        {...this.props.applyTheme(
+          item.key || item.label,
           'item',
-          selected && 'itemSelected',
+          item.isRefined && 'itemSelected',
           children && 'item_parent',
-          selectedParent && 'itemSelectedParent'
+          children && item.isRefined && 'itemSelectedParent'
         )}
       >
-        {this.props.renderItem(item, selected, parent, selectedParent)}
+        {this.props.renderItem(item)}
         {children}
       </div>
     );

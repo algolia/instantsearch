@@ -6,7 +6,7 @@ function getId(props) {
   return props.id || props.attributeName;
 }
 
-function getValue(props, state) {
+function getCurrentRefinement(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
     let {min, max} = state[id];
@@ -86,29 +86,29 @@ export default createConnector({
     const {
       min: valueMin = min,
       max: valueMax = max,
-    } = getValue(props, state);
+    } = getCurrentRefinement(props, state);
 
     return {
       min,
       max,
-      value: {min: valueMin, max: valueMax},
+      currentRefinement: {min: valueMin, max: valueMax},
       count,
     };
   },
 
-  refine(props, state, nextValue) {
+  refine(props, state, nextRefinement) {
     return {
       ...state,
-      [getId(props)]: nextValue,
+      [getId(props)]: nextRefinement,
     };
   },
 
   getSearchParameters(params, props, state) {
     const {attributeName} = props;
-    const value = getValue(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
     params = params.addDisjunctiveFacet(attributeName);
 
-    const {min, max} = value;
+    const {min, max} = currentRefinement;
     if (typeof min !== 'undefined') {
       params = params.addNumericRefinement(attributeName, '>=', min);
     }
@@ -121,18 +121,18 @@ export default createConnector({
 
   getMetadata(props, state) {
     const id = getId(props);
-    const value = getValue(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
     let filter;
-    const hasMin = typeof value.min !== 'undefined';
-    const hasMax = typeof value.max !== 'undefined';
+    const hasMin = typeof currentRefinement.min !== 'undefined';
+    const hasMax = typeof currentRefinement.max !== 'undefined';
     if (hasMin || hasMax) {
       let filterLabel = '';
       if (hasMin) {
-        filterLabel += `${value.min} <= `;
+        filterLabel += `${currentRefinement.min} <= `;
       }
       filterLabel += props.attributeName;
       if (hasMax) {
-        filterLabel += ` <= ${value.max}`;
+        filterLabel += ` <= ${currentRefinement.max}`;
       }
       filter = {
         label: filterLabel,

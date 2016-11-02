@@ -2,7 +2,7 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
-function getHitsPerPage(props, state) {
+function getCurrentRefinement(props, state) {
   if (typeof state[props.id] !== 'undefined') {
     if (typeof state[props.id] === 'string') {
       return parseInt(state[props.id], 10);
@@ -34,7 +34,7 @@ export default createConnector({
 
   getProps(props, state) {
     return {
-      currentRefinement: getHitsPerPage(props, state),
+      currentRefinement: getCurrentRefinement(props, state),
     };
   },
 
@@ -46,7 +46,7 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setHitsPerPage(getHitsPerPage(props, state));
+    return searchParameters.setHitsPerPage(getCurrentRefinement(props, state));
   },
 
   getMetadata(props) {

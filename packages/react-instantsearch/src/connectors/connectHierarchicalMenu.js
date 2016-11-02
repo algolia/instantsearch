@@ -1,8 +1,9 @@
 import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
+import {SearchParameters} from 'algoliasearch-helper';
 
-function getSelectedItem(props, state) {
+function getCurrentRefinement(props, state) {
   const id = props.id;
   if (typeof state[id] !== 'undefined') {
     if (state[id] === '') {
@@ -16,13 +17,48 @@ function getSelectedItem(props, state) {
   return null;
 }
 
-function transformValue(value, limit) {
+function getValue(path, props, state) {
+  const {
+    id,
+    attributes,
+    separator,
+    rootPath,
+    showParentLevel,
+  } = props;
+
+  const currentRefinement = getCurrentRefinement(props, state);
+  let nextRefinement;
+
+  if (currentRefinement === null) {
+    nextRefinement = path;
+  } else {
+    const tmpSearchParameters = new SearchParameters({
+      hierarchicalFacets: [{
+        name: id,
+        attributes,
+        separator,
+        rootPath,
+        showParentLevel,
+      }],
+    });
+
+    nextRefinement = tmpSearchParameters
+      .toggleHierarchicalFacetRefinement(id, currentRefinement)
+      .toggleHierarchicalFacetRefinement(id, path)
+      .getHierarchicalRefinement(id)[0];
+  }
+
+  return nextRefinement;
+}
+
+function transformValue(value, limit, props, state) {
   const limitValue = value.slice(0, limit);
   return limitValue.map(v => ({
     label: v.name,
-    value: v.path,
+    value: getValue(v.path, props, state),
     count: v.count,
-    children: v.data && transformValue(v.data, limit),
+    isRefined: v.isRefined,
+    children: v.data && transformValue(v.data, limit, props, state),
   }));
 }
 
@@ -123,15 +159,15 @@ export default createConnector({
     const limit = showMore ? limitMax : limitMin;
     const value = results.getFacetValues(id, {sortBy});
     return {
-      items: value.data ? transformValue(value.data, limit) : [],
-      currentRefinement: getSelectedItem(props, state),
+      items: value.data ? transformValue(value.data, limit, props, state) : [],
+      currentRefinement: getCurrentRefinement(props, state),
     };
   },
 
-  refine(props, state, nextSelectedItem) {
+  refine(props, state, nextRefinement) {
     return {
       ...state,
-      [props.id]: nextSelectedItem || '',
+      [props.id]: nextRefinement || '',
     };
   },
 
@@ -163,11 +199,11 @@ export default createConnector({
         ),
       });
 
-    const selectedItem = getSelectedItem(props, state);
-    if (selectedItem !== null) {
+    const currentRefinement = getCurrentRefinement(props, state);
+    if (currentRefinement !== null) {
       searchParameters = searchParameters.toggleHierarchicalFacetRefinement(
         id,
-        selectedItem
+        currentRefinement
       );
     }
 
@@ -176,11 +212,11 @@ export default createConnector({
 
   getMetadata(props, state) {
     const {id} = props;
-    const selectedItem = getSelectedItem(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
     return {
       id,
-      filters: !selectedItem ? [] : [{
-        label: `${id}: ${selectedItem}`,
+      filters: !currentRefinement ? [] : [{
+        label: `${id}: ${currentRefinement}`,
         clear: nextState => ({
           ...nextState,
           [id]: '',

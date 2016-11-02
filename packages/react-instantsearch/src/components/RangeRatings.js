@@ -13,7 +13,7 @@ class RangeRatings extends Component {
     createURL: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
-    value: PropTypes.shape({
+    currentRefinement: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
     }).isRequired,
@@ -26,7 +26,7 @@ class RangeRatings extends Component {
   onClick(min, max, e) {
     e.preventDefault();
     e.stopPropagation();
-    if (min === this.props.value.min && max === this.props.value.max) {
+    if (min === this.props.currentRefinement.min && max === this.props.currentRefinement.max) {
       this.props.refine('');
     } else {
       this.props.refine({min, max});
@@ -34,8 +34,8 @@ class RangeRatings extends Component {
   }
 
   buildItem({max, lowerBound, count, applyTheme, translate, createURL}) {
-    const selected = lowerBound === this.props.value.min &&
-      max === this.props.value.max;
+    const selected = lowerBound === this.props.currentRefinement.min &&
+      max === this.props.currentRefinement.max;
     const disabled = !count;
 
     const icons = [];
