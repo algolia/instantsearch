@@ -20,13 +20,13 @@ let state;
 describe('connectPagination', () => {
   it('provides the correct props to the component', () => {
     props = getProps({id: 'ok'}, {}, {results: {nbPages: 666}});
-    expect(props).toEqual({page: 1, nbPages: 666});
+    expect(props).toEqual({currentRefinement: 1, nbPages: 666});
 
     props = getProps({id: 'ok'}, {ok: 5}, {results: {nbPages: 666}});
-    expect(props).toEqual({page: 5, nbPages: 666});
+    expect(props).toEqual({currentRefinement: 5, nbPages: 666});
 
     props = getProps({id: 'ok'}, {ok: '5'}, {results: {nbPages: 666}});
-    expect(props).toEqual({page: 5, nbPages: 666});
+    expect(props).toEqual({currentRefinement: 5, nbPages: 666});
   });
 
   it('doesn\'t render when no results are available', () => {

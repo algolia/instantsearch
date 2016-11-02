@@ -3,7 +3,7 @@ import PaginationComponent from '../components/Pagination.js';
 
 /**
  * Pagination is a widget used for displaying hits corresponding to a certain page.
- * @name MultiRange
+ * @name Pagination
  * @kind component
  * @category widget
  * @propType {string} id - widget id, URL state serialization key. The state of this widget takes the shape of a `number`.
@@ -26,12 +26,12 @@ import PaginationComponent from '../components/Pagination.js';
  * @translationKey next - Label value for the next page link
  * @translationKey first - Label value for the first page link
  * @translationKey last - Label value for the last page link
- * @translationkey {string: function(page}} page - Label value for a page item
+ * @translationkey page - Label value for a page item. You get function(currentRefinement) and you need to return a string
  * @translationKey ariaPrevious - Accessibility label value for the previous page link
  * @translationKey ariaNext - Accessibility label value for the next page link
  * @translationKey ariaFirst - Accessibility label value for the first page link
  * @translationKey ariaLast - Accessibility label value for the last page link
- * @translationkey {string: function(page}} ariaPage- Accessibility label value for a page item
+ * @translationkey ariaPage - Accessibility label value for a page item. You get function(currentRefinement) and you need to return a string
  * @example
  * import React from 'react';
  *
@@ -49,5 +49,5 @@ import PaginationComponent from '../components/Pagination.js';
  *     </InstantSearch>
  *   );
  * }
- * */
+ */
 export default connectPagination(PaginationComponent);
