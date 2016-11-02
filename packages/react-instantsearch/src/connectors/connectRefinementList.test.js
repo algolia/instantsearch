@@ -44,21 +44,27 @@ describe('connectRefinementList', () => {
     results.getFacetValues.mockImplementation(() => [
       {
         name: 'wat',
+        isRefined: true,
         count: 20,
       },
       {
         name: 'oy',
+        isRefined: false,
         count: 10,
       },
     ]);
     props = getProps({id: 'ok'}, {}, {results});
     expect(props.items).toEqual([
       {
-        value: 'wat',
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
       {
-        value: 'oy',
+        value: ['oy'],
+        label: 'oy',
+        isRefined: false,
         count: 10,
       },
     ]);
@@ -66,7 +72,9 @@ describe('connectRefinementList', () => {
     props = getProps({id: 'ok', limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
-        value: 'wat',
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
     ]);
@@ -78,7 +86,9 @@ describe('connectRefinementList', () => {
     );
     expect(props.items).toEqual([
       {
-        value: 'wat',
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
         count: 20,
       },
     ]);
@@ -90,10 +100,10 @@ describe('connectRefinementList', () => {
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, ['yep']);
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      ok: ['yep'],
     });
   });
 

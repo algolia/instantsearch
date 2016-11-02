@@ -6,7 +6,7 @@ import theme from './Toggle.css';
 class Toggle extends Component {
   static propTypes = {
     applyTheme: PropTypes.func.isRequired,
-    checked: PropTypes.bool.isRequired,
+    currentRefinement: PropTypes.bool.isRequired,
     refine: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
   };
@@ -16,14 +16,14 @@ class Toggle extends Component {
   };
 
   render() {
-    const {applyTheme, checked, label} = this.props;
+    const {applyTheme, currentRefinement, label} = this.props;
 
     return (
       <label {...applyTheme('root')}>
         <input
           {...applyTheme('checkbox')}
           type="checkbox"
-          checked={checked}
+          checked={currentRefinement}
           onChange={this.onChange}
         />
         <span {...applyTheme('label')}>

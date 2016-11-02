@@ -16,7 +16,7 @@ describe('RangeInput', () => {
         refine={refine}
         min={0}
         max={100}
-        value={{min: 0, max: 100}}
+        currentRefinement={{min: 0, max: 100}}
       />
     );
 
@@ -51,7 +51,7 @@ describe('RangeInput', () => {
         refine={refine}
         min={0}
         max={100}
-        value={{min: 0, max: 100}}
+        currentRefinement={{min: 0, max: 100}}
       />
     );
 

@@ -37,9 +37,13 @@ function applyStateToLocation(location, state, knownKeys) {
       query,
     };
   }
+
   return {
     ...location,
-    search: query ? `?${qs.stringify(query, {sort: alphabeticalSort})}` : '',
+    search:
+      query && Object.keys(query).length > 0 ?
+        `?${qs.stringify(query, {sort: alphabeticalSort, arrayFormat: 'repeat'})}`
+        : '',
   };
 }
 

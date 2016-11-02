@@ -1,4 +1,4 @@
-exports[`RangeInput supports having a selected item 1`] = `
+exports[`MultiRange supports having a selected item 1`] = `
 <div
   className="root">
   <div
@@ -13,7 +13,7 @@ exports[`RangeInput supports having a selected item 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label1
         </span>
       </label>
     </div>
@@ -27,7 +27,7 @@ exports[`RangeInput supports having a selected item 1`] = `
           type="radio" />
         <span
           className="itemLabel itemLabelSelected">
-          label
+          label2
         </span>
       </label>
     </div>
@@ -41,7 +41,7 @@ exports[`RangeInput supports having a selected item 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label3
         </span>
       </label>
     </div>
@@ -55,7 +55,7 @@ exports[`RangeInput supports having a selected item 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label4
         </span>
       </label>
     </div>
@@ -63,7 +63,7 @@ exports[`RangeInput supports having a selected item 1`] = `
 </div>
 `;
 
-exports[`RangeInput supports passing items values 1`] = `
+exports[`MultiRange supports passing items values 1`] = `
 <div
   className="root">
   <div
@@ -78,7 +78,7 @@ exports[`RangeInput supports passing items values 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label1
         </span>
       </label>
     </div>
@@ -92,7 +92,7 @@ exports[`RangeInput supports passing items values 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label2
         </span>
       </label>
     </div>
@@ -106,7 +106,7 @@ exports[`RangeInput supports passing items values 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label3
         </span>
       </label>
     </div>
@@ -120,7 +120,7 @@ exports[`RangeInput supports passing items values 1`] = `
           type="radio" />
         <span
           className="itemLabel">
-          label
+          label4
         </span>
       </label>
     </div>

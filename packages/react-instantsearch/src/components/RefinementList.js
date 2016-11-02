@@ -15,43 +15,32 @@ class RefinementList extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
-      value: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      value: PropTypes.arrayOf(PropTypes.string).isRequired,
       count: PropTypes.number.isRequired,
+      isRefined: PropTypes.bool.isRequired,
     })),
-    currentRefinement: PropTypes.arrayOf(PropTypes.string),
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
-  onItemChange = (item, e) => {
-    const {currentRefinement} = this.props;
-    const nextSelectedItems = currentRefinement.slice();
-    const idx = nextSelectedItems.indexOf(item.value);
-    if (e.target.checked && idx === -1) {
-      nextSelectedItems.push(item.value);
-    } else if (!e.target.checked && idx !== -1) {
-      nextSelectedItems.splice(idx, 1);
-    }
-    this.props.refine(nextSelectedItems);
-  }
-
-  renderItem = (item, selected) => {
+  renderItem = item => {
     const {translate, applyTheme} = this.props;
 
     return (
       <label>
         <input
-          {...applyTheme('itemCheckbox', 'itemCheckbox', selected && 'itemCheckboxSelected')}
+          {...applyTheme('itemCheckbox', 'itemCheckbox', item.isRefined && 'itemCheckboxSelected')}
           type="checkbox"
-          checked={selected}
-          onChange={this.onItemChange.bind(null, item)}
+          checked={item.isRefined}
+          onChange={() => this.props.refine(item.value)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
-          {item.value}
+        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+          {item.label}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount', selected && 'itemCountSelected')}>
+        <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
           {translate('count', item.count)}
         </span>
       </label>
@@ -62,7 +51,6 @@ class RefinementList extends Component {
     return (
       <List
         renderItem={this.renderItem}
-        selectedItems={this.props.currentRefinement}
         {...pick(this.props, [
           'applyTheme',
           'translate',

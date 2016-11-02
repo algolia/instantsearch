@@ -13,7 +13,7 @@ class RangeInput extends Component {
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
-    value: PropTypes.shape({
+    currentRefinement: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
     }).isRequired,
@@ -21,11 +21,11 @@ class RangeInput extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {from: props.value.min, to: props.value.max};
+    this.state = {from: props.currentRefinement.min, to: props.currentRefinement.max};
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({from: nextProps.value.min, to: nextProps.value.max});
+    this.setState({from: nextProps.currentRefinement.min, to: nextProps.currentRefinement.max});
   }
 
   onSubmit = e => {

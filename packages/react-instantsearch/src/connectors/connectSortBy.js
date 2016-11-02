@@ -2,7 +2,7 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
-function getSelectedIndex(props, state) {
+function getCurrentRefinement(props, state) {
   const {id} = props;
   if (state[id]) {
     return state[id];
@@ -37,19 +37,19 @@ export default createConnector({
   },
 
   getProps(props, state) {
-    const currentRefinement = getSelectedIndex(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
     return {currentRefinement};
   },
 
-  refine(props, state, nextSelectedIndex) {
+  refine(props, state, nextRefinement) {
     return {
       ...state,
-      [props.id]: nextSelectedIndex,
+      [props.id]: nextRefinement,
     };
   },
 
   getSearchParameters(searchParameters, props, state) {
-    const selectedIndex = getSelectedIndex(props, state);
+    const selectedIndex = getCurrentRefinement(props, state);
     return searchParameters.setIndex(selectedIndex);
   },
 

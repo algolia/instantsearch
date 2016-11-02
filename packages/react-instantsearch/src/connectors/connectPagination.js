@@ -3,7 +3,7 @@ import {omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
-function getPage(props, state) {
+function getCurrentRefinement(props, state) {
   let page = state[props.id];
   if (typeof page === 'undefined') {
     page = 1;
@@ -34,7 +34,7 @@ export default createConnector({
     }
     return {
       nbPages: search.results.nbPages,
-      page: getPage(props, state),
+      page: getCurrentRefinement(props, state),
     };
   },
 
@@ -46,7 +46,7 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setPage(getPage(props, state) - 1);
+    return searchParameters.setPage(getCurrentRefinement(props, state) - 1);
   },
 
   transitionState(props, prevState, nextState) {
