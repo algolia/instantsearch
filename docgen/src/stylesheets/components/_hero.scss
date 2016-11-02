@@ -7,7 +7,7 @@
 .hero-section {
   background: linear-gradient(to right, mix(#895cf2, #fff, 95%) 0%,  mix(#2faddc, #fff, 95%) 90%) mix(#3066BE, #fff, 95%);
   color: $hero-color-accent;
-  padding-top: $navigation-height*1.5;
+  padding-top: $nav-height*1.5;
   overflow: hidden;
   position: relative;
   z-index: 5;
@@ -34,9 +34,8 @@
       position:  center center, center left ;
       size:  200px, 100%;
       blend-mode: overlay;
-
     }
-
+    z-index: -1;
     height: 1000px;
     width: 300vw;
     left: -130vw;
@@ -55,6 +54,7 @@
     }
   }
 
+  .container,
   .hero-container {
     position: relative;
     z-index: 5;
@@ -75,6 +75,8 @@
     a {
       width: 20px;
       display: inline-block;
+      position: relative;
+      z-index: 9;
     }
 
     figure {
@@ -121,7 +123,7 @@
   .is-react-logo {
     stroke-dasharray: 1400;
     stroke-dashoffset: 1800;
-    animation: swan-dash 5s ease-out forwards 1s;
+    animation: swan-dash #{$hero-logo-anim-length} ease-out forwards #{$hero-logo-anim-delay};
   }
 
 
@@ -142,12 +144,13 @@
     .fl-left {
       width: 100%;
       margin: auto;
-      margin-top: $navigation-height * 1.5;
+      margin-top: $nav-height * 1.5;
       max-width: 500px;
       float: none;
 
-       body.index &{
-        margin-top: $navigation-height * 2;
+
+       body.documentation &{
+        margin-top: 0;
       }
     }
 

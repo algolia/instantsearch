@@ -11,8 +11,8 @@ html
       for sheet in stylesheets
         link(rel="stylesheet" href=sheet)
     link(rel="stylesheet" href=h.publicPath(`examples/${name}/style.css`))
-    link(rel='stylesheet', href=h.publicPath('stylesheets/header.css'))
-  body
+    link(rel='stylesheet', href=h.publicPath('stylesheets/index.css'))
+  body.example
     include ./common/header.pug
     .content!=contents
     script(src=webpack.assets[`examples/${name}/index.js`])
