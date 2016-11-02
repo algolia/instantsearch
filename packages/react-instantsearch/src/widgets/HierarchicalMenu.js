@@ -15,17 +15,17 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
- * @themeKey root - Container of the widget
- * @themeKey items - Container of the items
- * @themeKey item - Id for a single list item
- * @themeKey itemSelected - Id for the selected items in the list
- * @themeKey itemParent - Id for the elements that contains a sub list
- * @themeKey itemSelectedParent - Id for parents that are currently selected
- * @themeKey itemLink - the link containing the label and the count
- * @themeKey itemLabel - the label of the entry
- * @themeKey itemCount - the count of the entry
- * @themeKey itemChildren - id representing a children
- * @themeKey showMore - container for the show more button
+ * @themeKey ais-HierarchicalMenu__root - Container of the widget
+ * @themeKey ais-HierarchicalMenu__items - Container of the items
+ * @themeKey ais-HierarchicalMenu__item - Id for a single list item
+ * @themeKey ais-HierarchicalMenu__itemSelected - Id for the selected items in the list
+ * @themeKey ais-HierarchicalMenu__itemParent - Id for the elements that have a sub list displayed
+ * @themeKey HierarchicalMenu__itemSelectedParent - Id for parents that have currently a child selected
+ * @themeKey ais-HierarchicalMenu__itemLink - the link containing the label and the count
+ * @themeKey ais-HierarchicalMenu__itemLabel - the label of the entry
+ * @themeKey ais-HierarchicalMenu__itemCount - the count of the entry
+ * @themeKey ais-HierarchicalMenu__itemChildren - id representing a children
+ * @themeKey ais-HierarchicalMenu__showMore - container for the show more button
  * @translationKey showMore - Label value of the button which togges the number of items
  * @translationKey count - Label for the display of count
  * @example
@@ -33,12 +33,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
 
  * import {
  *   InstantSearch,
- *   SearchBox as OriginalSearchBox,
- *   RefinementList,
- *   Hits,
- *   Stats,
- *   Pagination,
- *   Range,
+ *   HierarchicalMenu,
  * } from 'react-instantsearch/dom';
  *
  * export default function App() {
