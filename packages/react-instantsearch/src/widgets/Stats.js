@@ -7,7 +7,7 @@ import StatsComponent from '../components/Stats.js';
  * @kind component
  * @category widget
  * @themeKey ais-Stats__root - the root of the component
- * @translationkey {string: function(n, ms}} stats- The string displayed by the stats widget. n is a number of hits retrieved, ms is a processed time.
+ * @translationkey stats - The string displayed by the stats widget. You get function(n, ms) and you need to return a string. n is a number of hits retrieved, ms is a processed time.
  * @example
  * import React from 'react';
  *

@@ -42,13 +42,15 @@ export default function initHeader() {
     document.querySelector(trigger).addEventListener('click', toggleMenu);
 
     function toggleMenu() {
+      /* eslint-disable no-undef */
       docsearch({
         appId: 'EH63NL34B6',
         apiKey: '36b645758ad4f948b134e396f277ad7d',
         indexName: 'DOC',
         inputSelector: '#mobile-searchbox',
-        debug: true
+        debug: true,
       });
+      /* eslint-enable no-undef */
       if (document.body.clientWidth < 768) {
         if (opened === false) {
           opened = true;
@@ -85,10 +87,9 @@ export default function initHeader() {
     if (!document.getElementById('menu-wrapper')) {
       wrapper.innerHTML = innerMenu;
 
-
       container.appendChild(wrapper);
       setTimeout(() => {
-        document.querySelector('#menu-wrapper .cm-menu__list:first-of-type').style.display = "none"
+        document.querySelector('#menu-wrapper .cm-menu__list:first-of-type').style.display = 'none';
         const links = document.querySelectorAll('#menu-wrapper a');
         const linksArray = [];
         let linksTpl = '';
@@ -99,19 +100,19 @@ export default function initHeader() {
         searchButton.id = 'search-mobile';
         cancelButton.id = 'cancel-mobile';
 
-        links.forEach((e) => {
+        links.forEach(e => {
           if (e.getAttribute('data-link')) {
             linksArray.push({
               link: e.href,
-              name: e.textContent
+              name: e.textContent,
             });
           }
         });
 
-        linksArray.forEach( (e) => {
+        linksArray.forEach(e => {
           linksTpl += `<li class="cm-menu__list__item"><a href="${e.link}">${e.name}</a></li>`;
         });
-        wrapper.innerHTML += '<ul class="cm-menu__list">' + linksTpl + '</ul>';
+        wrapper.innerHTML += `<ul class="cm-menu__list">${linksTpl}</ul>`;
       });
     } else {
       document.getElementById('menu-wrapper').remove();

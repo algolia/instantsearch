@@ -34,7 +34,7 @@ export default createConnector({
     }
     return {
       nbPages: search.results.nbPages,
-      page: getCurrentRefinement(props, state),
+      currentRefinement: getCurrentRefinement(props, state),
     };
   },
 

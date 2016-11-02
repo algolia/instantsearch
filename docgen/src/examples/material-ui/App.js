@@ -311,20 +311,20 @@ const MaterialUiBottomNavigation = React.createClass({
               e.preventDefault();
               this.props.refine(0);
             }}
-            disabled={this.props.page <= 0}
+            disabled={this.props.currentRefinement <= 0}
           />
           <BottomNavigationItem
             label="Previous Page"
             icon={previous}
             onTouchTap={e => {
               e.preventDefault();
-              this.props.refine(this.props.page - 1);
+              this.props.refine(this.props.currentRefinement - 1);
             }}
-            disabled={this.props.page <= 0}
+            disabled={this.props.currentRefinement <= 0}
           />
           <BottomNavigationItem
             icon={<FontIcon><Badge
-              badgeContent={this.props.page}
+              badgeContent={this.props.currentRefinement}
               secondary={true}
             /></FontIcon>}
           />
@@ -333,9 +333,9 @@ const MaterialUiBottomNavigation = React.createClass({
             icon={next}
             onTouchTap={e => {
               e.preventDefault();
-              this.props.refine(this.props.page + 1);
+              this.props.refine(this.props.currentRefinement + 1);
             }}
-            disabled={this.props.page >= this.props.nbPages - 1}
+            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
           />
           <BottomNavigationItem
             label="Last Page"
@@ -344,7 +344,7 @@ const MaterialUiBottomNavigation = React.createClass({
               e.preventDefault();
               this.props.refine(this.props.nbPages - 1);
             }}
-            disabled={this.props.page >= this.props.nbPages - 1}
+            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
           />
         </BottomNavigation>
       </div>
