@@ -1632,14 +1632,6 @@ commander@^2.0.0, commander@^2.5.0, commander@^2.8.1, commander@^2.9.0, commande
   dependencies:
     graceful-readlink ">= 1.0.0"
 
-commander@0.6.1:
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-0.6.1.tgz#fa68a14f6a945d54dbbe50d8cdb3320e9e3b1a06"
-
-commander@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.3.0.tgz#fd430e889832ec353b9acd1de217c11cb3eef873"
-
 commander@2.8.x:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.8.1.tgz#06be367febfda0c330aa1e2a072d3dc9762425d4"
@@ -2518,10 +2510,6 @@ escape-string-regexp@^1.0.0, escape-string-regexp@^1.0.2, escape-string-regexp@^
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
 
-escape-string-regexp@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.2.tgz#4dbc2fe674e71949caf3fb2695ce7f2dc1d9a8d1"
-
 escodegen@^1.6.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/escodegen/-/escodegen-1.8.1.tgz#5a5b53af4693110bebb0867aa3430dd3b70a1018"
@@ -2602,6 +2590,10 @@ eslint-plugin-import@^2.0.1:
 eslint-plugin-jasmine@^1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-jasmine/-/eslint-plugin-jasmine-1.8.1.tgz#b22d75e63d42da8d9898d13b1e40d42a6d0c2a95"
+
+eslint-plugin-jasmine@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jasmine/-/eslint-plugin-jasmine-2.0.0.tgz#d663b03096d9ec7ac3dd83e9a221d818abcf95c9"
 
 eslint-plugin-react@^6.4.1:
   version "6.4.1"
@@ -3314,13 +3306,6 @@ glob@~7.0.3:
     minimatch "^3.0.2"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
-
-glob@3.2.11:
-  version "3.2.11"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-3.2.11.tgz#4a973f635b9190f715d10987d5c00fd2815ebe3d"
-  dependencies:
-    inherits "2"
-    minimatch "0.3"
 
 glob@7.0.5:
   version "7.0.5"
@@ -4084,13 +4069,6 @@ isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-jade@0.26.3:
-  version "0.26.3"
-  resolved "https://registry.yarnpkg.com/jade/-/jade-0.26.3.tgz#8f10d7977d8d79f2f6ff862a81b0513ccb25686c"
-  dependencies:
-    commander "0.6.1"
-    mkdirp "0.3.0"
-
 jodid25519@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/jodid25519/-/jodid25519-1.0.2.tgz#06d4912255093419477d425633606e0e90782967"
@@ -4741,13 +4719,6 @@ minimatch@~0.2.11:
     lru-cache "2"
     sigmund "~1.0.0"
 
-minimatch@0.3:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-0.3.0.tgz#275d8edaac4f1bb3326472089e7949c8394699dd"
-  dependencies:
-    lru-cache "2"
-    sigmund "~1.0.0"
-
 minimist@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.2.0.tgz#4dffe525dae2b864c66c2e23c6271d7afdecefce"
@@ -4777,21 +4748,6 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, "mkdirp@>=0.5 0", mkdirp@~0.5.0, mkdirp@~0.5.1, mk
 mkdirp@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.3.0.tgz#1bbf5ab1ba827af23575143490426455f481fe1e"
-
-mocha@^2.3.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/mocha/-/mocha-2.5.3.tgz#161be5bdeb496771eb9b35745050b622b5aefc58"
-  dependencies:
-    commander "2.3.0"
-    debug "2.2.0"
-    diff "1.4.0"
-    escape-string-regexp "1.0.2"
-    glob "3.2.11"
-    growl "1.9.2"
-    jade "0.26.3"
-    mkdirp "0.5.1"
-    supports-color "1.2.0"
-    to-iso-string "0.0.2"
 
 mocha@^3.1.2:
   version "3.1.2"
@@ -5026,9 +4982,9 @@ normalize-range@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/normalize-range/-/normalize-range-0.1.2.tgz#2d10c06bdfd312ea9777695a4d28439456b75942"
 
-nouislider@^8.5.1:
-  version "8.5.1"
-  resolved "https://registry.yarnpkg.com/nouislider/-/nouislider-8.5.1.tgz#df8dedd0e0de1afb074c33be1e6cf4d2919662e4"
+nouislider-algolia-fork@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/nouislider-algolia-fork/-/nouislider-algolia-fork-10.0.0.tgz#66d0a941aaa0ca64e58379e67bd320956f3cf3ce"
 
 npm-install-package@^1.0.2:
   version "1.1.0"
@@ -5676,11 +5632,11 @@ react-element-to-jsx-string@^3.0.0:
     stringify-object "^2.3.1"
     traverse "^0.6.6"
 
-react-nouislider@^1.13.0:
-  version "1.14.0"
-  resolved "https://registry.yarnpkg.com/react-nouislider/-/react-nouislider-1.14.0.tgz#343b77a1fd209b822f590037220eddd754e89126"
+react-nouislider@^1.14.1:
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/react-nouislider/-/react-nouislider-1.14.1.tgz#79bec7f0af07aeb999592494441164bef71d96c5"
   dependencies:
-    nouislider "^8.5.1"
+    nouislider-algolia-fork "^10.0.0"
 
 "react@^0.14.8 || ^15.0.1", react@^15.3.2:
   version "15.3.2"
@@ -6557,10 +6513,6 @@ supports-color@^3.1.0, supports-color@^3.1.1, supports-color@^3.1.2, supports-co
   dependencies:
     has-flag "^1.0.0"
 
-supports-color@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-1.2.0.tgz#ff1ed1e61169d06b3cf2d588e188b18d8847e17e"
-
 "symbol-tree@>= 3.1.0 < 4.0.0":
   version "3.1.4"
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.1.4.tgz#02b279348d337debc39694c5c95f882d448a312a"
@@ -6729,10 +6681,6 @@ to-factory@^1.0.0:
 to-fast-properties@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.2.tgz#f3f5c0c3ba7299a7ef99427e44633257ade43320"
-
-to-iso-string@0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/to-iso-string/-/to-iso-string-0.0.2.tgz#4dc19e664dfccbe25bd8db508b00c6da158255d1"
 
 to-vfile@^1.0.0:
   version "1.0.0"
@@ -7112,13 +7060,13 @@ wdio-dot-reporter@^0.0.6:
   dependencies:
     babel-runtime "^5.8.25"
 
-wdio-mocha-framework@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/wdio-mocha-framework/-/wdio-mocha-framework-0.4.3.tgz#57149ce5c7f27d10a2011440a2fe77f44ab02103"
+wdio-mocha-framework@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/wdio-mocha-framework/-/wdio-mocha-framework-0.5.0.tgz#3efa28d7f61ae1b52eb2932af83673a7579fb4bc"
   dependencies:
     babel-runtime "^5.8.25"
-    mocha "^2.3.3"
-    wdio-sync "0.5.13"
+    mocha "^3.1.2"
+    wdio-sync "0.6.0"
 
 wdio-sauce-service@^0.2.5:
   version "0.2.5"
@@ -7127,9 +7075,9 @@ wdio-sauce-service@^0.2.5:
     request "^2.67.0"
     sauce-connect-launcher "^0.15.1"
 
-wdio-sync@0.5.13:
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/wdio-sync/-/wdio-sync-0.5.13.tgz#b9b438ca591d51ee06690cb6a248cd6d73726113"
+wdio-sync@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/wdio-sync/-/wdio-sync-0.6.0.tgz#455adc4d2398f8878da602337fd1341264b6f380"
   dependencies:
     fibers "^1.0.9"
     object.assign "^4.0.3"
