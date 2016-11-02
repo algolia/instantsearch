@@ -21,7 +21,7 @@ describe('connectRange', () => {
     expect(props).toEqual({
       min: 5,
       max: 10,
-      value: {min: 5, max: 10},
+      currentRefinement: {min: 5, max: 10},
       count: [],
     });
 
@@ -33,7 +33,7 @@ describe('connectRange', () => {
     expect(props).toEqual({
       min: 5,
       max: 10,
-      value: {min: 5, max: 10},
+      currentRefinement: {min: 5, max: 10},
       count: [{value: '5', count: 10}, {value: '2', count: 20}],
     });
 
@@ -50,7 +50,7 @@ describe('connectRange', () => {
     expect(props).toEqual({
       min: 5,
       max: 10,
-      value: {min: 6, max: 9},
+      currentRefinement: {min: 6, max: 9},
       count: [],
     });
 
@@ -64,7 +64,7 @@ describe('connectRange', () => {
     expect(props).toEqual({
       min: 5,
       max: 10,
-      value: {min: 6, max: 9},
+      currentRefinement: {min: 6, max: 9},
       count: [],
     });
 
@@ -77,7 +77,7 @@ describe('connectRange', () => {
     expect(props).toEqual({
       min: 5,
       max: 10,
-      value: {min: 6, max: 9},
+      currentRefinement: {min: 6, max: 9},
       count: [],
     });
   });

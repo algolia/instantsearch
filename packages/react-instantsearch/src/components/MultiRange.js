@@ -13,22 +13,21 @@ class MultiRange extends Component {
       label: PropTypes.node.isRequired,
       value: PropTypes.string.isRequired,
     })).isRequired,
-    currentRefinement: PropTypes.string.isRequired,
     refine: PropTypes.func.isRequired,
   };
 
-  renderItem = (item, selected) => {
+  renderItem = item => {
     const {applyTheme, refine} = this.props;
 
     return (
       <label>
         <input
-          {...applyTheme('itemRadio', 'itemRadio', selected && 'itemRadioSelected')}
+          {...applyTheme('itemRadio', 'itemRadio', item.isRefined && 'itemRadioSelected')}
           type="radio"
-          checked={selected}
+          checked={item.isRefined}
           onChange={refine.bind(null, item.value)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel', selected && 'itemLabelSelected')}>
+        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
           {item.label}
         </span>
       </label>
@@ -36,15 +35,14 @@ class MultiRange extends Component {
   };
 
   render() {
-    const {items, currentRefinement, applyTheme} = this.props;
+    const {items, applyTheme} = this.props;
 
     return (
       <List
         renderItem={this.renderItem}
         showMore={false}
         applyTheme={applyTheme}
-        items={items}
-        selectedItems={[currentRefinement]}
+        items={items.map(item => ({...item, key: item.value}))}
       />
     );
   }

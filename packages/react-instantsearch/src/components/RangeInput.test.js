@@ -13,7 +13,7 @@ describe('RangeInput', () => {
         refine={() => null}
         min={0}
         max={100}
-        value={{min: 0, max: 100}}
+        currentRefinement={{min: 0, max: 100}}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -30,7 +30,7 @@ describe('RangeInput', () => {
         }}
         min={0}
         max={100}
-        value={{min: 0, max: 100}}
+        currentRefinement={{min: 0, max: 100}}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();

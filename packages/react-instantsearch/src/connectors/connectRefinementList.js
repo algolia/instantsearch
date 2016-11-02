@@ -6,12 +6,17 @@ function getId(props) {
   return props.id || props.attributeName;
 }
 
-function getSelectedItems(props, state) {
+function getCurrentRefinement(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
     if (typeof state[id] === 'string') {
-      // This is the case where we've deselected all items.
-      return [];
+      // All items were unselected
+      if (state[id] === '') {
+        return [];
+      }
+
+      // Only one item was in the state but we know it should be an array
+      return [state[id]];
     }
     return state[id];
   }
@@ -19,6 +24,15 @@ function getSelectedItems(props, state) {
     return props.defaultRefinement;
   }
   return [];
+}
+
+function getValue(name, props, state) {
+  const currentRefinement = getCurrentRefinement(props, state);
+  const isAnewValue = currentRefinement.indexOf(name) === -1;
+  const nextRefinement = isAnewValue ?
+    currentRefinement.concat([name]) : // cannot use .push(), it mutates
+    currentRefinement.filter(selectedValue => selectedValue !== name); // cannot use .splice(), it mutates
+  return nextRefinement;
 }
 
 export default createConnector({
@@ -106,15 +120,21 @@ export default createConnector({
       .getFacetValues(attributeName, {sortBy})
       .slice(0, limit)
       .map(v => ({
-        value: v.name,
+        label: v.name,
+        value: getValue(v.name, props, state),
         count: v.count,
+        isRefined: v.isRefined,
       }));
 
-    return {items, currentRefinement: getSelectedItems(props, state)};
+    return {
+      items,
+      currentRefinement: getCurrentRefinement(props, state),
+    };
   },
 
-  refine(props, state, nextSelected) {
+  refine(props, state, nextRefinement) {
     const id = getId(props);
+
     return {
       ...state,
       // Setting the value to an empty string ensures that it is persisted in
@@ -124,7 +144,7 @@ export default createConnector({
       // which would not be persisted to the URL.
       // {foo: ['bar']} => "foo[0]=bar"
       // {foo: []} => ""
-      [id]: nextSelected.length > 0 ? nextSelected : '',
+      [id]: nextRefinement.length > 0 ? nextRefinement : '',
     };
   },
 
@@ -145,7 +165,7 @@ export default createConnector({
 
     searchParameters = searchParameters[addKey](attributeName);
 
-    return getSelectedItems(props, state).reduce((res, val) =>
+    return getCurrentRefinement(props, state).reduce((res, val) =>
       res[addRefinementKey](attributeName, val)
     , searchParameters);
   },
@@ -154,10 +174,10 @@ export default createConnector({
     const id = getId(props);
     return {
       id,
-      filters: getSelectedItems(props, state).map(item => ({
+      filters: getCurrentRefinement(props, state).map(item => ({
         label: `${props.attributeName}: ${item}`,
         clear: nextState => {
-          const nextSelectedItems = getSelectedItems(props, nextState).filter(
+          const nextSelectedItems = getCurrentRefinement(props, nextState).filter(
             other => other !== item
           );
           return {

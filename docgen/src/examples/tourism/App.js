@@ -172,10 +172,9 @@ const CapacitySelector = connectMultiRange(({items, currentRefinement, refine}) 
   const allOption = <OptionCapacity label="" value="" isSelected={Boolean(currentRefinement)} key="all"/>;
 
   const options = items.map(item => {
-    const isSelected = item.value === currentRefinement;
     const val = parseFloat(item.value.split(':')[0]);
     const label = `${val} person${val > 1 ? 's' : ''}`;
-    return <OptionCapacity label={label} value={item.value} isSelected={isSelected} key={item.value}/>;
+    return <OptionCapacity label={label} value={item.value} isSelected={item.isRefined} key={item.value}/>;
   });
 
   options.unshift(allOption);
@@ -200,27 +199,23 @@ function DatesAndGuest() {
   );
 }
 
-const RoomType = connectRefinementList(({items, refine, currentRefinement}) => {
+const RoomType = connectRefinementList(({items, refine}) => {
   const itemComponents = items.map(item => {
-    const isSelected = currentRefinement.indexOf(item.value) !== -1;
-    const value = isSelected ?
-      currentRefinement.filter(v => v !== item.value) :
-      currentRefinement.concat([item.value]);
-    const selectedClassName = isSelected ? ' ais-refinement-list--item__active' : '';
+    const selectedClassName = item.isRefined ? ' ais-refinement-list--item__active' : '';
     const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (
-      <div className={itemClassName} key={item.value}>
+      <div className={itemClassName} key={item.label}>
         <div>
           <label className="ais-refinement-list--label" onClick={e => {
             e.preventDefault();
-            refine(value);
+            refine(item.value);
           }}>
             <input
               type="checkbox"
               className="ais-refinement-list--checkbox"
-              defaultChecked={isSelected ? 'checked' : ''}
+              defaultChecked={item.isRefined ? 'checked' : ''}
               />
-            {item.value}
+            {item.label}
             <span className="ais-refinement-list--count">{item.count}</span>
           </label>
         </div>
@@ -292,7 +287,7 @@ function Results() {
   );
 }
 
-const ConnectedRange = connectRange(({min, max, value, refine}) => {
+const ConnectedRange = connectRange(({min, max, currentRefinement, refine}) => {
   const updateValue = sliderState => {
     if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
       refine({min: sliderState.values[0], max: sliderState.values[1]});
@@ -304,12 +299,12 @@ const ConnectedRange = connectRange(({min, max, value, refine}) => {
       <Rheostat
         min={min}
         max={max}
-        values={[value.min, value.max]}
+        values={[currentRefinement.min, currentRefinement.max]}
         onChange={updateValue}
       />
       <div className="rheostat-values">
-        <span>{value.min}</span>
-        <span>{value.max}</span>
+        <span>{currentRefinement.min}</span>
+        <span>{currentRefinement.max}</span>
       </div>
     </div>
   );

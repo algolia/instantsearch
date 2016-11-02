@@ -139,34 +139,28 @@ const CustomCheckbox = ({query, refine}) =>
     </div>
   ;
 
-const ColorItem = ({item, selectedItems, createURL, refine}) => {
-  const selected = selectedItems.indexOf(item.value) !== -1;
-  const active = selected ? 'checked' : '';
-  const value = selected ?
-    selectedItems.filter(v => v !== item.value) :
-    selectedItems.concat([item.value]);
+const ColorItem = ({item, createURL, refine}) => {
+  const active = item.isRefined ? 'checked' : '';
   return (
     <a
-      key={item.value}
       className={`${active} facet-color`}
-      href={createURL(value)}
+      href={createURL(item.value)}
       onClick={e => {
         e.preventDefault();
-        refine(value);
+        refine(item.value);
       }}
-      data-facet-value={item.value}
+      data-facet-value={item.label}
     >
     </a>
   );
 };
 
-const CustomColorRefinementList = ({items, currentRefinement, refine, createURL}) =>
+const CustomColorRefinementList = ({items, refine, createURL}) =>
     <div>
       {items.map(item =>
         <ColorItem
-          key={item.value}
+          key={item.label}
           item={item}
-          selectedItems={currentRefinement}
           refine={refine}
           createURL={createURL}
         />

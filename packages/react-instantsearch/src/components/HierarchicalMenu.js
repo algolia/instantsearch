@@ -10,8 +10,8 @@ import Link from './Link';
 import theme from './HierarchicalMenu.css';
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
-  label: PropTypes.node,
-  value: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  value: PropTypes.string,
   count: PropTypes.number.isRequired,
   children: (...args) => itemsPropType(...args),
 }));
@@ -23,29 +23,19 @@ class HierarchicalMenu extends Component {
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: itemsPropType,
-    currentRefinement: PropTypes.string,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
   };
 
-  renderItem = (item, selected, parent, selectedParent) => {
+  renderItem = item => {
     const {createURL, refine, translate, applyTheme} = this.props;
-    let refineValue;
-    if (selected || selectedParent) {
-      if (parent !== null) {
-        refineValue = parent.value;
-      } else {
-        refineValue = null;
-      }
-    } else {
-      refineValue = item.value;
-    }
+
     return (
       <Link
         {...applyTheme('itemLink', 'itemLink')}
-        onClick={refine.bind(null, refineValue)}
-        href={createURL(refineValue)}
+        onClick={() => refine(item.value)}
+        href={createURL(item.value)}
       >
         <span {...applyTheme('itemLabel', 'itemLabel')}>
           {item.label}
@@ -62,9 +52,6 @@ class HierarchicalMenu extends Component {
     return (
       <List
         renderItem={this.renderItem}
-        selectedItems={
-          this.props.currentRefinement === null ? [] : [this.props.currentRefinement]
-        }
         {...pick(this.props, [
           'applyTheme',
           'translate',

@@ -6,7 +6,7 @@ function getId(props) {
   return props.id || props.attributeName;
 }
 
-function getSelectedItem(props, state) {
+function getCurrentRefinement(props, state) {
   const id = getId(props);
   if (typeof state[id] !== 'undefined') {
     if (state[id] === '') {
@@ -92,17 +92,22 @@ export default createConnector({
       .slice(0, limit)
       .map(v => ({
         value: v.name,
+        label: v.name,
         count: v.count,
+        isRefined: v.isRefined,
       }));
 
-    return {items, currentRefinement: getSelectedItem(props, state)};
+    return {
+      items,
+      currentRefinement: getCurrentRefinement(props, state),
+    };
   },
 
-  refine(props, state, nextSelectedItem) {
+  refine(props, state, nextRefinement) {
     const id = getId(props);
     return {
       ...state,
-      [id]: nextSelectedItem || '',
+      [id]: nextRefinement || '',
     };
   },
 
@@ -119,11 +124,11 @@ export default createConnector({
 
     searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
 
-    const selectedItem = getSelectedItem(props, state);
-    if (selectedItem !== null) {
+    const currentRefinement = getCurrentRefinement(props, state);
+    if (currentRefinement !== null) {
       searchParameters = searchParameters.addDisjunctiveFacetRefinement(
         attributeName,
-        selectedItem
+        currentRefinement
       );
     }
 
@@ -132,11 +137,11 @@ export default createConnector({
 
   getMetadata(props, state) {
     const id = getId(props);
-    const selectedItem = getSelectedItem(props, state);
+    const currentRefinement = getCurrentRefinement(props, state);
     return {
       id,
-      filters: selectedItem === null ? [] : [{
-        label: `${props.attributeName}: ${selectedItem}`,
+      filters: currentRefinement === null ? [] : [{
+        label: `${props.attributeName}: ${currentRefinement}`,
         clear: nextState => ({
           ...nextState,
           [id]: '',

@@ -17,6 +17,7 @@ export default function App() {
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="movies"
+    urlSync
   >
     <div>
       <Header/>
@@ -124,26 +125,18 @@ const Results = () =>
     <div id="pagination" className="text-center"><Pagination /></div>
   </article>;
 
-const RefinementListLinks = connectRefinementList(({items, refine, currentRefinement}) => {
-  const itemComponents = items.map(item => {
-    const isSelected = currentRefinement.indexOf(item.value) !== -1;
-    const value = isSelected ?
-      currentRefinement.filter(v => v !== item.value) :
-      currentRefinement.concat([item.value]);
-    const selectedClassName = isSelected ? ' active' : '';
-    const itemClassName = `${selectedClassName}`;
-    return (
-      <div className={itemClassName} key={item.value}>
-        <a className="item" onClick={e => {
-          e.preventDefault();
-          refine(value);
-        }}>
-          <span> {item.value}</span>
-          <span className="badge pull-right">{item.count}</span>
-        </a>
-      </div>
-    );
-  });
+const RefinementListLinks = connectRefinementList(({items, refine, createURL}) => {
+  const itemComponents = items.map(item =>
+    <div className={item.isRefined ? ' active' : ''} key={item.label}>
+      <a className="item" href={createURL(item.value)} onClick={e => {
+        e.preventDefault();
+        refine(item.value);
+      }}>
+        <span> {item.label}</span>
+        <span className="badge pull-right">{item.count}</span>
+      </a>
+    </div>
+  );
 
   return (
     <div className="nav nav-list">
@@ -151,4 +144,3 @@ const RefinementListLinks = connectRefinementList(({items, refine, currentRefine
     </div>
   );
 });
-

@@ -12,7 +12,7 @@ stories.add('Airbnb Rheostat', () =>
   </WrapWithHits>
 );
 
-const ConnectedRange = connectRange(({min, max, value, refine}) => {
+const ConnectedRange = connectRange(({min, max, currentRefinement, refine}) => {
   const updateValue = sliderState => {
     if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
       refine({min: sliderState.values[0], max: sliderState.values[1]});
@@ -24,7 +24,7 @@ const ConnectedRange = connectRange(({min, max, value, refine}) => {
       <Rheostat
         min={min}
         max={max}
-        values={[value.min, value.max]}
+        values={[currentRefinement.min, currentRefinement.max]}
         onChange={updateValue}
       />
     </div>

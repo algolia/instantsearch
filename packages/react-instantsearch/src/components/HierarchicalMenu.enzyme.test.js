@@ -20,8 +20,6 @@ describe('HierarchicalMenu', () => {
           {value: 'black', count: 20, label: 'black'},
           {value: 'blue', count: 30, label: 'blue'},
         ]}
-        currentRefinement=""
-        selectedItems=""
       />
     );
 
@@ -52,8 +50,6 @@ describe('HierarchicalMenu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
-        currentRefinement=""
-        selectedItems=""
       />
     );
 
@@ -81,8 +77,6 @@ describe('HierarchicalMenu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
-        currentRefinement=""
-        selectedItems=""
       />
     );
 
