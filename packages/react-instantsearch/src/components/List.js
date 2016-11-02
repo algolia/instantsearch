@@ -54,7 +54,7 @@ class List extends Component {
           item.key || item.label,
           'item',
           item.isRefined && 'itemSelected',
-          children && 'item_parent',
+          children && 'itemParent',
           children && item.isRefined && 'itemSelectedParent'
         )}
       >
