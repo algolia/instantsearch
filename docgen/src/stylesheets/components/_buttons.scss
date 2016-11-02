@@ -71,6 +71,15 @@
         color: #fff;
       }
     }
-  }
 
+    &-blue {
+      color:  $accent-color-darkish;
+
+      &:hover {
+        background: $accent-color-darkish;
+        border-color: $accent-color-darkish;
+        color: #fff;
+      }
+    }
+  }
 }

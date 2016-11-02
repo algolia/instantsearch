@@ -42,6 +42,13 @@ export default function initHeader() {
     document.querySelector(trigger).addEventListener('click', toggleMenu);
 
     function toggleMenu() {
+      docsearch({
+        appId: 'EH63NL34B6',
+        apiKey: '36b645758ad4f948b134e396f277ad7d',
+        indexName: 'DOC',
+        inputSelector: '#mobile-searchbox',
+        debug: true
+      });
       if (document.body.clientWidth < 768) {
         if (opened === false) {
           opened = true;
@@ -77,15 +84,34 @@ export default function initHeader() {
 
     if (!document.getElementById('menu-wrapper')) {
       wrapper.innerHTML = innerMenu;
-      container.appendChild(wrapper);
 
+
+      container.appendChild(wrapper);
       setTimeout(() => {
+        document.querySelector('#menu-wrapper .cm-menu__list:first-of-type').style.display = "none"
+        const links = document.querySelectorAll('#menu-wrapper a');
+        const linksArray = [];
+        let linksTpl = '';
         const inm = document.querySelector('.mobile-navigation-wrapper input');
         const searchButton = document.querySelector('.mobile-navigation-wrapper button#search');
         const cancelButton = document.querySelector('.mobile-navigation-wrapper button#cancel');
-        inm.id = 'searchbox-mobile';
+        inm.id = 'mobile-searchbox';
         searchButton.id = 'search-mobile';
         cancelButton.id = 'cancel-mobile';
+
+        links.forEach((e) => {
+          if (e.getAttribute('data-link')) {
+            linksArray.push({
+              link: e.href,
+              name: e.textContent
+            });
+          }
+        });
+
+        linksArray.forEach( (e) => {
+          linksTpl += `<li class="cm-menu__list__item"><a href="${e.link}">${e.name}</a></li>`;
+        });
+        wrapper.innerHTML += '<ul class="cm-menu__list">' + linksTpl + '</ul>';
       });
     } else {
       document.getElementById('menu-wrapper').remove();

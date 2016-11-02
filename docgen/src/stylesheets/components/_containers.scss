@@ -8,17 +8,20 @@ body {
 .container {
   margin: auto;
   width: 100%;
-  max-width: $max-width;
+  max-width: $max-container-width;
   float: none;
 }
 .row {
   float: left;
 
+  body.example &{
+    float: inherit
+  }
 }
 .text-right {
   text-align: right;
 }
-section {
+body:not(.example) section {
   min-height: 550px;
   width: 100%;
   float: left;

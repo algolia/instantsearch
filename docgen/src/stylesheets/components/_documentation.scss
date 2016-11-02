@@ -1,4 +1,5 @@
 .documentation-section {
+
   .container {
     article {
       width: 100%;
@@ -201,183 +202,184 @@
         float: left;
         margin-bottom: 2em;
 
-          thead, tbody, th, td, tr {
-            display: block;
-            float: left;
-            width: 100%;
-          }
-          tbody {
+        thead, tbody, th, td, tr {
+          display: block;
+          float: left;
+          width: 100%;
+        }
+        tbody {
 
-          }
-          tr {
+        }
+        tr {
 
 
-            border-left: 1px solid #ccc;
+          border-left: 1px solid #ccc;
 
-            th {
-              border: none;
-
-              &:nth-of-type(2) {
-                border-left: 1px solid #cccccc;
-              }
-            }
-          }
-          tr td  {
+          th {
             border: none;
-            overflow: auto;
-
 
             &:nth-of-type(2) {
-             border-left: 1px solid #cccccc;
+              border-left: 1px solid #cccccc;
             }
           }
-
-          th, td {
-            width: 50%;
-            float: left;
-          }
-
-          tr:nth-child(even) {
-            background: #f8f8f8
-          }
         }
+        tr td  {
+          border: none;
+          overflow: auto;
+
+
+          &:nth-of-type(2) {
+           border-left: 1px solid #cccccc;
+         }
+       }
+
+       th, td {
+        width: 50%;
+        float: left;
+      }
+
+      tr:nth-child(even) {
+        background: #f8f8f8
+      }
     }
+  }
 
 
+  .anchor {
+    margin-left: .2em;
+    display: inline;
+    visibility: hidden;
+  }
+
+  .algolia-places {
+    color: #000000;
+  }
+
+  h2 {
+    padding-bottom: 8px;
+  }
+
+  h2, h3, .api-entry {
     .anchor {
-      margin-left: .2em;
-      display: inline;
-      visibility: hidden;
+      text-decoration: none;
+    }
+    .anchor:after{
+      content: '#';
+      color: $accent-color;
     }
 
-    .algolia-places {
-      color: #000000;
-    }
-
-    h2 {
-      padding-bottom: 8px;
-    }
-
-    h2, h3, .api-entry {
+    &:hover {
       .anchor {
-        text-decoration: none;
-      }
-      .anchor:after{
-        content: '#';
-        color: $accent-color;
-      }
-
-      &:hover {
-        .anchor {
-          visibility: visible;
-        }
-      }
-
-      &:target {
-        .anchor {
-          visibility: visible;
-        }
+        visibility: visible;
       }
     }
 
-    img {
-      max-width: 50%;
-      margin: 0 25%;
+    &:target {
+      .anchor {
+        visibility: visible;
+      }
     }
   }
 
-  tr.api-entry-values {
-    border-top: 10px solid #fff;
-    .api-entry-type {
-      white-space: nowrap;
-    }
+  img {
+    max-width: 50%;
+    margin: 0 25%;
+  }
+}
+
+tr.api-entry-values {
+  border-top: 10px solid #fff;
+  .api-entry-type {
+    white-space: nowrap;
+  }
+}
+
+tr.api-entry-description {
+
+}
+
+.DocProps {
+  .Prop,
+  .Type .Entry {
+    padding: 1.2em 0.8em;
+    background-color: #EEE;
   }
 
-  tr.api-entry-description {
-
+  .Prop:nth-child(even),
+  .Type .Entry:nth-child(even) {
+    background-color: #E5E5E5;
   }
 
-  .DocProps {
-    .Prop,
-    .Type .Entry {
-      padding: 1.2em 0.8em;
-      background-color: #EEE;
-    }
-
-    .Prop:nth-child(even),
-    .Type .Entry:nth-child(even) {
-      background-color: #E5E5E5;
-    }
-
-    .Entry__head {
-      display: flex;
-      align-items: center;
-      padding-bottom: 1em;
-    }
-
-    .Entry__badge {
-      padding: .3em .5em;
-      font-size: 0.8em;
-      background-color: #7FDBFF;
-      margin-right: 0.5em;
-    }
-
-    .Entry__name {
-      font-weight: 700;
-      margin-right: 0.5em;
-    }
-
-    .Entry__description ~ .Entry__default {
-      padding-top: 1em;
-    }
-
-    .Entry__description p {
-      margin: 0;
-    }
-
-    .Entry__link {
-      display: none;
-      margin-left: 0.5em;
-    }
-
-    .Entry__head:hover .Entry__link {
-      display: inline;
-    }
-
-    .Prop__types {
-      padding-top: 1em;
-    }
-
-    .Type__head {
-      padding-bottom: 0.7em;
-    }
-
-    .Type__name {
-      font-weight: 700;
-    }
-
-    .Type__link {
-      display: none;
-    }
-
-    .Type__head:hover .Type__link {
-      display: inline;
-    }
-
-    .Type__entries {
-      font-size: 0.9em;
-      border: 1px solid #BBB;
-    }
+  .Entry__head {
+    display: flex;
+    align-items: center;
+    padding-bottom: 1em;
   }
 
-  @include small-mq {
+  .Entry__badge {
+    padding: .3em .5em;
+    font-size: 0.8em;
+    background-color: #7FDBFF;
+    margin-right: 0.5em;
+  }
+
+  .Entry__name {
+    font-weight: 700;
+    margin-right: 0.5em;
+  }
+
+  .Entry__description ~ .Entry__default {
+    padding-top: 1em;
+  }
+
+  .Entry__description p {
+    margin: 0;
+  }
+
+  .Entry__link {
+    display: none;
+    margin-left: 0.5em;
+  }
+
+  .Entry__head:hover .Entry__link {
+    display: inline;
+  }
+
+  .Prop__types {
+    padding-top: 1em;
+  }
+
+  .Type__head {
+    padding-bottom: 0.7em;
+  }
+
+  .Type__name {
+    font-weight: 700;
+  }
+
+  .Type__link {
+    display: none;
+  }
+
+  .Type__head:hover .Type__link {
+    display: inline;
+  }
+
+  .Type__entries {
+    font-size: 0.9em;
+    border: 1px solid #BBB;
+  }
+}
+
+@include small-mq {
     padding-top: 32px;
 
     .container {
+
       .documentation-container {
         left: 0;
         width: 100%;
-        padding: 0 16px;
+        padding: 32px 16px;
       }
 
       article {
