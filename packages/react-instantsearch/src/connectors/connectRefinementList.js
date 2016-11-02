@@ -35,63 +35,36 @@ function getValue(name, props, state) {
   return nextRefinement;
 }
 
+/**
+ * RefinementList connector provides the logic to build a widget that will
+ * give the user tha ability to choose multiple values for a specific facet.
+ * @name RefinementList
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - the id of the widget
+ * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
+ * @propType {string} attributeName - the name of the attribute in the record
+ * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
+ * @propType {number} [limitMin=10] - the minimum number of diplayed items
+ * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
+ * @propType {string[]} [sortBy=['count:desc','name:asc']] - defines how the items are sorted. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options
+ * @propType {string[]} defaultRefinement - the values of the items selected by default. The state of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the state is an empty string.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {string[]} currentRefinement - the refinement currently applied
+ * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
+ */
 export default createConnector({
   displayName: 'AlgoliaRefinementList',
 
   propTypes: {
-    /**
-     * URL state serialization key. Defaults to the value of `attributeName`.
-     * The state of this widget takes the form of a list of `string`s, which
-     * correspond to the values of all selected refinements.
-     * However, when there are no refinements selected, the value of the state
-     * is an empty string.
-     * @public
-     */
     id: PropTypes.string,
-
-    /**
-     * Name of the attribute for faceting
-     * @public
-     */
     attributeName: PropTypes.string.isRequired,
-
-    /**
-     * How to apply the refinements.
-     * @public
-     */
     operator: PropTypes.oneOf(['and', 'or']),
-
-    /**
-     * Display a show more button for increasing the number of refinement values
-     * from `limitMin` to `limitMax`.
-     * @public
-     */
     showMore: PropTypes.bool,
-
-    /**
-     * Minimum number of refinement values.
-     * @public
-     */
     limitMin: PropTypes.number,
-
-    /**
-     * Maximum number of refinement values. Ignored when `showMore` is `false`.
-     * @public
-     */
     limitMax: PropTypes.number,
-
-    /**
-     * How to sort refinement values.
-     * See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values)
-     * for the full list of options.
-     * @public
-     */
     sortBy: PropTypes.arrayOf(PropTypes.string),
-
-    /**
-     * The default state of this widget, as an array of facet values.
-     * @public
-     */
     defaultRefinement: PropTypes.arrayOf(PropTypes.string),
   },
 

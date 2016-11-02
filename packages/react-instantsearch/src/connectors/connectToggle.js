@@ -17,50 +17,30 @@ function getCurrentRefinement(props, state) {
   return false;
 }
 
+/**
+ * Toggle connector provides the logic to build a widget that will
+ *  provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
+ * @name Toggle
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`. Required when `attributeName` isn't present.
+ * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
+ * @propType {string} label - Label for this toggle.
+ * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.
+ * @propType {string} value - Value of the refinement to apply on `attributeName`. Required when `attributeName` is present.
+ * @propType {boolean} [defaultChecked=false] - Default state of the widget. Should the toggle be checked by default?
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ */
 export default createConnector({
   displayName: 'AlgoliaToggle',
 
   propTypes: {
-    /**
-     * URL state serialization key.
-     * The state of this widget takes the form of a `string` that can be either
-     * `'on'` or `'off'`.
-     * Required when `attributeName` isn't present.
-     * @public
-     */
     id: PropTypes.string,
-
-    /**
-     * Label for this toggle.
-     * @public
-     */
     label: PropTypes.string,
-
-    /**
-     * Custom filter.
-     * Takes in a `SearchParameters` and returns a new `SearchParameters` with
-     * the filter applied.
-     * @public
-     */
     filter: PropTypes.func,
-
-    /**
-     * Name of the attribute on which to apply the `value` refinement.
-     * Required when `value` is present.
-     * @public
-     */
     attributeName: PropTypes.string,
-
-    /**
-     * Value of the refinement to apply on `attributeName`.
-     * Required when `attributeName` is present.
-     * @public
-     */
     value: PropTypes.any,
-
-    /**
-     * Default state of the widget. Should the toggle be checked by default?
-     */
     defaultRefinement: PropTypes.bool,
   },
 

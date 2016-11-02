@@ -36,46 +36,31 @@ function getCurrentRefinement(props, state) {
   return '';
 }
 
+/**
+ * MultiRange connector provides the logic to build a widget that will
+ * give the user the ability to select a range value for a numeric attribute.
+ * Ranges are defined statically.
+ * @name MultiRange
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - widget id, defaults to the attribute name
+ * @propType {string} attributeName - the name of the attribute in the records
+ * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
+ * @propType {string} defaultRefinement - the value of the item selected by default, follow the shape of a `string` with a pattern of `'{start}:{end}'`.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {string} currentRefinement - the refinement currently applied.  follow the shape of a `string` with a pattern of `'{start}:{end}'` which corresponds to the current selected item. For instance, when the selected item is `{start: 10, end: 20}`, the state of the widget is `'10:20'`. When `start` isn't defined, the state of the widget is `':{end}'`, and the same way around when `end` isn't defined. However, when neither `start` nor `end` are defined, the state is an empty string.
+ * @providedPropType {array.<{isRefined: boolean, label: string, value: string}>} items - the list of ranges the MultiRange can display.
+ */
 export default createConnector({
   displayName: 'AlgoliaMultiRange',
 
   propTypes: {
-    /**
-     * URL state serialization key. Defaults to the value of `attributeName`.
-     * The state of this widget takes the shape of a `string` with a pattern of
-     * `'{start}:{end}'` which corresponds to the current selected item.
-     * For instance, when the selected item is `{start: 10, end: 20}`, the state
-     * of the widget is `'10:20'`. When `start` isn't defined, the state of the
-     * widget is `':{end}'`, and the same way around when `end` isn't defined.
-     * However, when neither `start` nor `end` are defined, the state is an
-     * empty string.
-     * @public
-     */
     id: PropTypes.string,
-
-    /**
-     * Name of the attribute for faceting
-     * @public
-     */
     attributeName: PropTypes.string.isRequired,
-
-    /**
-     * List of options.
-     * @public
-     * @defines MultiRangeItem
-     */
     items: PropTypes.arrayOf(PropTypes.shape({
-      /**
-       * Node to render in place of the option.
-       */
       label: PropTypes.node,
-      /**
-       * Inclusive start of the range.
-       */
       start: PropTypes.number,
-      /**
-       * Inclusive end of the range.
-       */
       end: PropTypes.number,
     })).isRequired,
   },
