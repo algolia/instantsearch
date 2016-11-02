@@ -13,7 +13,7 @@ const REQ_PROPS = {
 const DEFAULT_PROPS = {
   ...REQ_PROPS,
   nbPages: 20,
-  page: 9,
+  currentRefinement: 9,
 };
 
 let tree;
@@ -34,7 +34,7 @@ describe('Pagination', () => {
         {...REQ_PROPS}
         pagesPadding={5}
         nbPages={20}
-        page={0}
+        currentRefinement={0}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -45,7 +45,7 @@ describe('Pagination', () => {
         {...REQ_PROPS}
         pagesPadding={4}
         nbPages={20}
-        page={9}
+        currentRefinement={9}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -55,7 +55,7 @@ describe('Pagination', () => {
         {...REQ_PROPS}
         pagesPadding={3}
         nbPages={20}
-        page={19}
+        currentRefinement={19}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -65,7 +65,7 @@ describe('Pagination', () => {
         {...REQ_PROPS}
         pagesPadding={2}
         nbPages={5}
-        page={3}
+        currentRefinement={3}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -150,7 +150,7 @@ describe('Pagination', () => {
         maxPages={10}
         showLast
         nbPages={15}
-        page={9}
+        currentRefinement={9}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -161,7 +161,7 @@ describe('Pagination', () => {
         maxPages={10}
         showLast
         nbPages={9}
-        page={8}
+        currentRefinement={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -186,7 +186,7 @@ describe('Pagination', () => {
         showLast
         pagesPadding={4}
         nbPages={10}
-        page={8}
+        currentRefinement={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -211,7 +211,7 @@ describe('Pagination', () => {
         showLast
         pagesPadding={4}
         nbPages={10}
-        page={8}
+        currentRefinement={8}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();

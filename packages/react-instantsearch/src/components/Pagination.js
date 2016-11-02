@@ -45,7 +45,7 @@ function getPages(page, total, padding) {
 class Pagination extends Component {
   static propTypes = {
     nbPages: PropTypes.number.isRequired,
-    page: PropTypes.number.isRequired,
+    currentRefinement: PropTypes.number.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
 
@@ -120,7 +120,7 @@ class Pagination extends Component {
     const {
       nbPages,
       maxPages,
-      page,
+      currentRefinement,
       pagesPadding,
       showFirst,
       showPrevious,
@@ -141,7 +141,7 @@ class Pagination extends Component {
       items.push({
         key: 'first',
         modifier: 'itemFirst',
-        disabled: page === 1,
+        disabled: currentRefinement === 1,
         label: translate('first'),
         value: 1,
         ariaLabel: translate('ariaFirst'),
@@ -151,24 +151,24 @@ class Pagination extends Component {
       items.push({
         key: 'previous',
         modifier: 'itemPrevious',
-        disabled: page === 1,
+        disabled: currentRefinement === 1,
         label: translate('previous'),
-        value: page - 1,
+        value: currentRefinement - 1,
         ariaLabel: translate('ariaPrevious'),
       });
     }
 
     const samePage = {
-      valueOf: () => page,
+      valueOf: () => currentRefinement,
       isSamePage: true,
     };
 
     items = items.concat(
-      getPages(page, totalPages, pagesPadding).map(value => ({
+      getPages(currentRefinement, totalPages, pagesPadding).map(value => ({
         key: value,
         modifier: 'itemPage',
         label: translate('page', value),
-        value: value === page ? samePage : value,
+        value: value === currentRefinement ? samePage : value,
         ariaLabel: translate('ariaPage', value),
       }))
     );
@@ -176,9 +176,9 @@ class Pagination extends Component {
       items.push({
         key: 'next',
         modifier: 'itemNext',
-        disabled: page === lastPage,
+        disabled: currentRefinement === lastPage,
         label: translate('next'),
-        value: page + 1,
+        value: currentRefinement + 1,
         ariaLabel: translate('ariaNext'),
       });
     }
@@ -186,7 +186,7 @@ class Pagination extends Component {
       items.push({
         key: 'last',
         modifier: 'itemLast',
-        disabled: page === lastPage,
+        disabled: currentRefinement === lastPage,
         label: translate('last'),
         value: lastPage,
         ariaLabel: translate('ariaLast'),
@@ -197,7 +197,7 @@ class Pagination extends Component {
       <ListComponent
         {...otherProps}
         items={items}
-        selectedItem={page}
+        selectedItem={currentRefinement}
         onSelect={refine}
         createURL={createURL}
       />
@@ -211,11 +211,11 @@ export default themeable(theme)(
     next: '›',
     first: '«',
     last: '»',
-    page: page => page.toString(),
+    page: currentRefinement => currentRefinement.toString(),
     ariaPrevious: 'Previous page',
     ariaNext: 'Next page',
     ariaFirst: 'First page',
     ariaLast: 'Last page',
-    ariaPage: page => `Page ${page.toString()}`,
+    ariaPage: currentRefinement => `Page ${currentRefinement.toString()}`,
   })(Pagination)
 );

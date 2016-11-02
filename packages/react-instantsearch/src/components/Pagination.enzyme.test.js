@@ -16,7 +16,7 @@ const REQ_PROPS = {
 const DEFAULT_PROPS = {
   ...REQ_PROPS,
   nbPages: 20,
-  page: 9,
+  currentRefinement: 9,
 };
 
 describe('Pagination', () => {
