@@ -27,3 +27,29 @@
   position: relative;
   z-index: 0;
 }
+
+
+body.example {
+  .cm-navigation {
+    z-index: 99999;
+    top: 0;
+    border-bottom: 1px solid darken(#1d2f40, 10%);
+  }
+
+  aside {
+    float: left;
+    top: 130px;
+  }
+  .content-wrapper {
+    top: $nav-height;
+  }
+
+  #results-topbar {
+    min-height: 60px;
+  }
+
+  .input-group-btn button {
+        max-height: 29px;
+    line-height: 29px;
+  }
+}

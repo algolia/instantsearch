@@ -1,10 +1,11 @@
 ---
-title: Connectors
+title: Connectors Introduction
 layout: main-entry.pug
 category: HOC
-tocVisibility: false
+tocVisibility: true
 ---
 
+## Connectors Introduction
 Connectors are higher order components. They encapsulate the logic for
 a specific kind of widget and they provide a way to interact with
 the instantsearch context.

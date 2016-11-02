@@ -1,6 +1,6 @@
 
 .ac-footer {
-  min-height: 830px;
+  min-height: 830px !important;
   position: relative;
   text-align: center;
   color: $white-75;
@@ -30,6 +30,7 @@
     top: 48%;
     left: 50%;
     transform: translate(-50%, -50%);
+
 
     &:hover {
       .ac-icon-love-dark {
@@ -125,11 +126,11 @@
     background: $black;
     position: absolute;
     bottom: 0;
-    min-height: $navigation-height;
+    min-height: $nav-height;
 
     p {
       display: inline;
-      line-height: $navigation-height;
+      line-height: $nav-height;
       padding: 0;
       margin: 0;
       font-size: 14px;
@@ -199,13 +200,13 @@
   }
 
 
-  .ac-footer-btn-ghost-pink {
-    color:  $red-pink;
+  .ac-footer-btn-ghost-blue {
+    color:  $accent-color-darkish;
 
     &:hover {
-      background: $darkish-pink;
-      border-color: $red-pink;
-      color: #FFFFFF;
+      background: $accent-color-darkish;
+      border-color: $accent-color-darkish;
+      color: #fff;
     }
   }
 

@@ -1,10 +1,11 @@
 ---
-title: Components
+title: Components Introduction
 layout: main-entry.pug
 category: component
-tocVisibility: false
+tocVisibility: true
 ---
 
+## Components Introduction
 
 react-instantsearch provides a root component and widgets. The root component
 will provide a context to its children to let them interact with Algolia. Widgets
