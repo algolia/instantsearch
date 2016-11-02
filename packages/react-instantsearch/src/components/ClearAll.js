@@ -3,6 +3,8 @@ import React, {PropTypes, Component} from 'react';
 import themeable from '../core/themeable';
 import translatable from '../core/translatable';
 
+import theme from './ClearAll.css';
+
 class ClearAll extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
@@ -28,9 +30,7 @@ class ClearAll extends Component {
   }
 }
 
-export default themeable({
-  root: 'ClearAll',
-})(
+export default themeable(theme)(
   translatable({
     reset: 'ClearAll everything',
   })(ClearAll)

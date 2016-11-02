@@ -19,14 +19,14 @@ class Toggle extends Component {
     const {applyTheme, currentRefinement, label} = this.props;
 
     return (
-      <label {...applyTheme('root')}>
+      <label {...applyTheme('root', 'root')}>
         <input
-          {...applyTheme('checkbox')}
+          {...applyTheme('checkbox', 'checkbox')}
           type="checkbox"
           checked={currentRefinement}
           onChange={this.onChange}
         />
-        <span {...applyTheme('label')}>
+        <span {...applyTheme('label', 'label')}>
           {label}
         </span>
       </label>

@@ -4,7 +4,7 @@ exports[`HierarchicalMenu applies translations 1`] = `
   <div
     className="items">
     <div
-      className="item item_parent">
+      className="item itemParent">
       <a
         className="itemLink"
         href="#"
@@ -101,7 +101,7 @@ exports[`HierarchicalMenu default hierarchical menu 1`] = `
   <div
     className="items">
     <div
-      className="item item_parent">
+      className="item itemParent">
       <a
         className="itemLink"
         href="#"

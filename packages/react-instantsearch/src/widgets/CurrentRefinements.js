@@ -7,13 +7,32 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  * @name CurrentRefinements
  * @kind component
  * @category widget
- * @themeKey root - the root div of the widget
- * @themeKey filters - the container of the filters
- * @themeKey filter - a single filter
- * @themeKey filterLabel - the label of a filter
- * @themeKey filterClear - the trigger to remove the filter
- * @themeKey clearAll - the atomic option
- * @translationKey clearFilter - the label?
- * @translationKey clearAll - the clear all button value
+ * @themeKey ais-CurrentRefinements__root - the root div of the widget
+ * @themeKey ais-CurrentRefinements__items - the container of the filters
+ * @themeKey ais-CurrentRefinements__item - a single filter
+ * @themeKey ais-CurrentRefinements__itemLabel - the label of a filter
+ * @themeKey ais-CurrentRefinements__itemClear - the trigger to remove the filter
+ * @translationKey clearFilter - the remove filter button label
+ * @example
+ * import React from 'react';
+ *
+ * import {ClearAll, RefinementList} from '../packages/react-instantsearch/dom';
+ *
+ * export default function App() {
+ *   return (
+ *     <InstantSearch
+ *       className="container-fluid"
+ *       appId="latency"
+ *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+ *       indexName="ikea"
+ *     >
+ *       <CurrentRefinements />
+ *       <RefinementList
+          attributeName="colors"
+          defaultRefinement={['Black']}
+        />
+ *     </InstantSearch>
+ *   );
+ * }
  */
 export default connectCurrentRefinements(CurrentRefinementsComponent);

@@ -3,7 +3,7 @@ extends ../archetypes/content-with-menu.pug
 include ../mixins/nav.pug
 
 block navigation
-  - var headings = [{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Props'}, {tag: 'h2', id:'theme', text: 'Theming keys'},{tag: 'h2', id:'translation', text: 'Translation keys'}, {tag: 'h2', id:'example', text: 'Example'}, {tag: 'h2', id:'live', text: 'See it live'}];
+  - var headings = [{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Props'}, {tag: 'h2', id:'theme', text: 'Classnames'},{tag: 'h2', id:'translation', text: 'Translation keys'}, {tag: 'h2', id:'example', text: 'Example'}, {tag: 'h2', id:'live', text: 'See it live'}];
   +nav(navPath, navigation, title, headings)
 
 block content
@@ -33,8 +33,8 @@ block content
             td(colspan=3)=type.description
   else
     p This widget does not accept props.
-  h2#theme Theming keys
-    a.anchor(href='#theme')
+  h2#theme Classnames
+    a.anchor(href='#classnames')
   if themekey
     table.api
       tbody

@@ -23,7 +23,7 @@ describe('HierarchicalMenu', () => {
       />
     );
 
-    const itemParent = wrapper.find('.item .item_parent');
+    const itemParent = wrapper.find('.item .itemParent');
 
     expect(itemParent.length).toBe(1);
 
