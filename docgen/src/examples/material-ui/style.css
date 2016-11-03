@@ -5,7 +5,7 @@ em {
 .Header {
   position: relative;
   width: 100%;
-  top: 0;
+  top: 60px;
   left: 0;
   z-index: 1600;
 }
@@ -28,11 +28,13 @@ em {
 
 .Sidebar__facets span[type='button']{
   background: white!important;
+  -webkit-appearance: inherit;
 }
 
 .Content {
   display: flex;
   justify-content: space-around;
+  margin-top: 60px;
 }
 
 .Content__hits {

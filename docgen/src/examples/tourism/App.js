@@ -36,6 +36,7 @@ function Header() {
   const containerStyle = {
     paddingLeft: 0,
     paddingRight: 0,
+    marginTop: 50,
   };
   return (
     <div className="container-fluid" style={containerStyle}>
