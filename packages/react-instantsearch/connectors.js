@@ -2,7 +2,6 @@ export {default as connectCurrentRefinements} from './src/connectors/connectCurr
 export {default as connectHierarchicalMenu} from './src/connectors/connectHierarchicalMenu.js';
 export {default as connectHits} from './src/connectors/connectHits.js';
 export {default as connectHitsPerPage} from './src/connectors/connectHitsPerPage.js';
-export {default as connectLoading} from './src/connectors/connectLoading.js';
 export {default as connectMenu} from './src/connectors/connectMenu.js';
 export {default as connectMultiRange} from './src/connectors/connectMultiRange.js';
 export {default as connectPagination} from './src/connectors/connectPagination.js';
