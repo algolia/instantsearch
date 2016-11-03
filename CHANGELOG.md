@@ -1,3 +1,13 @@
+<a name="1.8.14"></a>
+## [1.8.14](https://github.com/algolia/instantsearch.js/compare/v1.8.13...v1.8.14) (2016-11-03)
+
+
+### Bug Fixes
+
+* **slider:** avoid multi touch issues (#1501) ([0b8a242](https://github.com/algolia/instantsearch.js/commit/0b8a242)), closes [#1186](https://github.com/algolia/instantsearch.js/issues/1186)
+
+
+
 <a name="1.8.13"></a>
 ## [1.8.13](https://github.com/algolia/instantsearch.js/compare/v1.8.12...v1.8.13) (2016-10-21)
 
