@@ -83,7 +83,7 @@
     "uglify-js": "^2.7.3",
     "watch": "^1.0.1",
     "wdio-dot-reporter": "^0.0.6",
-    "wdio-mocha-framework": "^0.5.0",
+    "wdio-mocha-framework": "^0.5.1",
     "wdio-sauce-service": "^0.2.5",
     "webdriverio": "^4.2.16",
     "webpack": "^1.13.2",
