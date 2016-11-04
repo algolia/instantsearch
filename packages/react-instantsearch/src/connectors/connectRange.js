@@ -2,6 +2,23 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
+/**
+ * Range connector provides the logic to create connected
+ * components that will give the ability for a user to refine results using
+ * a numeric range.
+ * @name Range
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - URL state serialization key. Defaults to the value of `attributeName`.
+ * @propType {string} attributeName - Name of the attribute for faceting
+ * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
+ * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
+ * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {string} currentRefinement - the refinement currently applied
+ */
+
 function getId(props) {
   return props.id || props.attributeName;
 }
@@ -23,20 +40,6 @@ function getCurrentRefinement(props, state) {
   }
   return {};
 }
-
-/**
- * Range connector provides the logic to create connected
- * components that will give the ability for a user to refine results using
- * a numeric range.
- * @name Range
- * @kind HOC
- * @category connector
- * @propType {string} id - URL state serialization key. Defaults to the value of `attributeName`.
- * @propType {string} attributeName - Name of the attribute for faceting
- * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
- * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
- * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
- */
 export default createConnector({
   displayName: 'AlgoliaRange',
 

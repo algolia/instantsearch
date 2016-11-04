@@ -2,11 +2,11 @@ import connectToggle from '../connectors/connectToggle.js';
 import ToggleComponent from '../components/Toggle.js';
 
 /**
- * The Toggle component displays a list of indexes allowing a user to change the hits sorting
+ * The Toggle provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
  * @name Toggle
  * @kind component
  * @category widget
- * @propType {string} [id="sort_by"] - URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`. Required when `attributeName` isn't present.
+ * @propType {string} id - URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`. Required when `attributeName` isn't present.
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
  * @propType {string} label - Label for this toggle.
  * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.

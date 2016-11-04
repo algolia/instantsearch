@@ -96,7 +96,7 @@ em {
   font-style: normal;
 }
 
-.ClearAll {
+.ais-ClearAll__root {
   height: 100%;
   display: flex;
   border:  none;
