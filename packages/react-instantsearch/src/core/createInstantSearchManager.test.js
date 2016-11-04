@@ -62,6 +62,13 @@ describe('createInstantSearchManager', () => {
     expect(algoliasearch.mock.calls[0]).toEqual(['appId', 'apiKey']);
   });
 
+  it('overrides the default algoliasearch client with algoliaClient', () => {
+    const algoliaClient = {};
+    init({algoliaClient});
+    expect(algoliasearch.mock.calls.length).toEqual(0);
+    expect(algoliasearchHelper.mock.calls[0][0]).toBe(algoliaClient);
+  });
+
   it('initializes the algoliasearch helper with correct options', () => {
     const client = {};
     algoliasearch.mockImplementationOnce(() => client);
