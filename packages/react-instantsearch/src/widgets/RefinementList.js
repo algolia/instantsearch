@@ -8,6 +8,7 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @category widget
  * @propType {string} id - the id of the widget
  * @propType {string} attributeName - the name of the attribute in the record
+ * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`

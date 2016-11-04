@@ -2,7 +2,7 @@ import connectSortBy from '../connectors/connectSortBy.js';
 import SortByComponent from '../components/SortBy.js';
 
 /**
- * The SortBy component displays a list of indexes allowing a user to change the hits sorting
+ * The SortBy component displays a list of indexes allowing a user to change the hits are sorting.
  * @name SortBy
  * @kind component
  * @category widget

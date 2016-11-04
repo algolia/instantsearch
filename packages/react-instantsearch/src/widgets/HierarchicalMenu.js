@@ -8,6 +8,8 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @name HierarchicalMenu
  * @kind component
  * @category widget
+ * @propType {string} id - URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
+ * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
  * @propType {number} [limitMin=10] -  The maximum number of items displayed.
  * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
@@ -15,6 +17,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
+ * @propType {string} defaultRefinement - the item value selected by default
  * @themeKey ais-HierarchicalMenu__root - Container of the widget
  * @themeKey ais-HierarchicalMenu__items - Container of the items
  * @themeKey ais-HierarchicalMenu__item - Id for a single list item
@@ -26,7 +29,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @themeKey ais-HierarchicalMenu__itemCount - the count of the entry
  * @themeKey ais-HierarchicalMenu__itemChildren - id representing a children
  * @themeKey ais-HierarchicalMenu__showMore - container for the show more button
- * @translationKey showMore - Label value of the button which togges the number of items
+ * @translationKey showMore - Label value of the button which toggles the number of items
  * @translationKey count - Label for the display of count
  * @example
  * import React from 'react';

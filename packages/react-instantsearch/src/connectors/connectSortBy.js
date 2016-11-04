@@ -13,22 +13,25 @@ function getCurrentRefinement(props, state) {
   return null;
 }
 
+/**
+ * SortBy connector provides the logic to build a widget that will
+ *  displays a list of indexes allowing a user to change the hits are sorting.
+ * @name SortBy
+ * @kind HOC
+ * @category connector
+ * @propType {string} [id="sort_by"] - URL state serialization key.
+ * @propType {string} defaultRefinement - The default selected index.
+ * @propType {{value, label}[]} items - The list of indexes to search in.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {string[]} currentRefinement - the refinement currently applied
+ * @providedPropType {array.<{label: string, value: string}>} items - the list of indexes the SortBy can display.
+ */
 export default createConnector({
   displayName: 'AlgoliaSortBy',
 
   propTypes: {
-    /**
-     * URL state serialization key.
-     * The state of this widget takes the form of a `string` (the current
-     * selected index).
-     * @public
-     */
     id: PropTypes.string,
-
-    /**
-     * The default selected index.
-     * @public
-     */
     defaultRefinement: PropTypes.string,
   },
 

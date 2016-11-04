@@ -13,14 +13,28 @@ function getCurrentRefinement(props, state) {
   return page;
 }
 
+/**
+ * Pagination connector provides the logic to build a widget that will
+ * let the user displays hits corresponding to a certain page.
+ * @name Pagination
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - widget id, URL state serialization key. The state of this widget takes the shape of a `number`.
+ * @propType {boolean} [showFirst=true] - Display the first page link.
+ * @propType {boolean} [showLast=false] - Display the last page link.
+ * @propType {boolean} [showPrevious=true] - Display the previous page link.
+ * @propType {boolean} [showNext=true] - Display the next page link.
+ * @propType {number} [pagesPadding=3] - How many page links to display around the current page.
+ * @propType {number} [maxPages=Infinity] - Maximum number of pages to display.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {number} nbPages - the total of existing pages
+ * @providedPropType {number} currentRefinement - the page refinement currently applied
+ */
 export default createConnector({
   displayName: 'AlgoliaPagination',
 
   propTypes: {
-    /**
-     * URL state serialization key.
-     * The state of this widget takes the shape of a `number`.
-     */
     id: PropTypes.string,
   },
 
