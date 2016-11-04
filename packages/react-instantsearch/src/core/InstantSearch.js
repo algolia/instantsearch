@@ -123,6 +123,7 @@ class InstantSearch extends Component {
       apiKey: props.apiKey,
       indexName: props.indexName,
       searchParameters: props.searchParameters,
+      algoliaClient: props.algoliaClient,
 
       initialState,
     });
@@ -212,6 +213,8 @@ InstantSearch.propTypes = {
   appId: PropTypes.string.isRequired,
   apiKey: PropTypes.string.isRequired,
   indexName: PropTypes.string.isRequired,
+
+  algoliaClient: PropTypes.object,
 
   searchParameters: PropTypes.object,
 
