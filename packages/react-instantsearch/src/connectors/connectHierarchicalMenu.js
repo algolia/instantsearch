@@ -62,49 +62,38 @@ function transformValue(value, limit, props, state) {
   }));
 }
 
+/**
+ * HierarchicalMenu connector provides the logic to build a widget that will
+ * give the user the ability to explore a tree-like structure.
+ * This is commonly used for multi-level categorization of products on e-commerce
+ * websites. From a UX point of view, we suggest not displaying more than two levels deep.
+ * @name HierarchicalMenu
+ * @kind HOC
+ * @category connector
+ * @propType {string} id - URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
+ * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
+ * @propType {string} defaultRefinement - the item value selected by default
+ * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
+ * @propType {number} [limitMin=10] -  The maximum number of items displayed.
+ * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
+ * @propType {string[]} [sortBy=['name:asc']] - Specifies the way the values are sorted for display. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options.
+ * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
+ * @propType {string[]} [rootPath=null] - The already selected and hidden path.
+ * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {string} currentRefinement - the refinement currently applied
+ * @providedPropType {array.<{children: object, count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the HierarchicalMenu can display. Children has the same shape as parent items.
+ */
 export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',
 
   propTypes: {
-    /**
-     * URL state serialization key.
-     * The state of this widget takes the shape of a `string`, which corresponds
-     * to the full path of the current selected refinement.
-     * @public
-     */
     id: PropTypes.string.isRequired,
-
-    /**
-     * List of attributes to use to generate the hierarchy of the menu.
-     * See the example for the convention to follow.
-     * @public
-     */
     attributes: PropTypes.arrayOf(PropTypes.string).isRequired,
-
-    /**
-     * Separator used in the attributes to separate level values.
-     * @public
-     */
     separator: PropTypes.string,
-
-    /**
-     * Prefix path to use if the first level is not the root level.
-     * @public
-     */
     rootPath: PropTypes.string,
-
-    /**
-     * Show the parent level of the current refined value
-     * @public
-     */
     showParentLevel: PropTypes.bool,
-
-    /**
-     * How to sort refinement values.
-     * See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values)
-     * for the full list of options.
-     * @public
-     */
     sortBy: PropTypes.arrayOf(PropTypes.string),
 
     /**
