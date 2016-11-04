@@ -88,6 +88,11 @@ header .input-group .input-group-btn button {
   background: #FFBE61;
 }
 
+header .input-group-btn button {
+  max-height: 29px;
+  line-height: 29px;
+}
+
 header .input-group .input-group-btn {
   height: 100%;
   border: 0;
