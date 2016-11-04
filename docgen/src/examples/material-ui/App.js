@@ -67,6 +67,8 @@ const Content = React.createClass({
     const openDrawerStyle = {
       ...baseDrawerStyle,
       transform: 'translate(0)',
+      height: 'initial',
+      top: 60,
     };
     const closedDrawerStyle = {
       ...baseDrawerStyle,
