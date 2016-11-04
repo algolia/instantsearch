@@ -19,9 +19,10 @@ export default function createInstantSearchManager({
   apiKey,
   indexName,
   initialState,
+  algoliaClient,
   searchParameters = {},
 }) {
-  const client = algoliasearch(appId, apiKey);
+  const client = algoliaClient || algoliasearch(appId, apiKey);
   const helper = algoliasearchHelper(client);
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
