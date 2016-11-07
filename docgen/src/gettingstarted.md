@@ -49,7 +49,7 @@ npm install --save react-instantsearch
 
 ## Add the InstantSearch wrapper
 
-The [instantsearch](InstantSearch.html) wrapper is the component that will connect to Algolia
+The [instantsearch](/component/InstantSearch.html) wrapper is the component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state
 of the search, do the queries and provide the results to the widgets so
 that they can update themselves if needed.
@@ -86,7 +86,7 @@ In this section we've seen:
  - configure your credentials with react-instantsearch
 
  > To get more *under the hood* information about the `InstantSearch` wrapper
- > component, we have [full documentation](InstantSearch.html) in the widget
+ > component, we have [full documentation](/component/InstantSearch.html) in the widget
  > section.
 
 ## Display the results
@@ -94,7 +94,7 @@ In this section we've seen:
 The core of a search experience is to display results. By default, react-instantsearch
 will do a query at the start of the page.
 
-The next widget we want to use is the [Hits](Hits.html) widget. This widget will
+The next widget we want to use is the [Hits](component/Hits.html) widget. This widget will
 display all the results returned by Algolia, and it will update when there
 are new results.
 
@@ -172,7 +172,7 @@ Now that we've added the results, we can start querying our index and filtering 
 to extract the meaningful records. With Algolia, the main way to filter the records
 into hits, is the text search.
 
-To implement this, react-instantsearch provides the [Searchbox](SearchBox.html) component. Let's add it
+To implement this, react-instantsearch provides the [Searchbox](component/SearchBox.html) component. Let's add it
 in the Search component that we created before:
 
 ```javascript
@@ -228,7 +228,7 @@ may also want to provide filters based on the structure of the records.
 Algolia provides a set of parameters for filtering by facets, numbers or geo
 location. Instantsearch packages those into a set of components and connector.
 
-Since the dataset used here is an e-commerce one, let's add a [RefinementList](RefinementList.html)
+Since the dataset used here is an e-commerce one, let's add a [RefinementList](component/RefinementList.html)
 to filter the products by categories:
 
 ```javascript
@@ -264,8 +264,8 @@ We now miss two elements in our search interface:
  - the ability to browse beyond the first page of results
  - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](Pagination.html), the [ClearAll](ClearAll.html)
-and [CurrentRefinements](CurrentRefinements.html) components. Both have nice defaults which means that
+Those two features are implemented respectively with the [Pagination](component/Pagination.html), the [ClearAll](component/ClearAll.html)
+and [CurrentRefinements](component/CurrentRefinements.html) components. Both have nice defaults which means that
 we can use them directly without further configuration.
 
 ```javascript
@@ -303,7 +303,7 @@ components can be customised further using connectors, like
 in the paragraph about displaying the results.
 
 Here are some suggested guides and references that you might be interested in:
- - [How to style your search](Styling.html)
+ - [How to style your search](/guides/styling.html)
  - [Advanced examples using react-instantsearch](examples.html)
- - [The API for widgets and components](InstantSearch.html)
+ - [The API for widgets and components](component.html)
  - [All the other guides](guides.html)

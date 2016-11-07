@@ -1,16 +1,16 @@
 ---
-title: Integration with other React UI Libraries
+title: 3rd party UI Libraries
 layout: guide.pug
 category: guide
+navWeight: 3
 ---
 
 Even if react-instantsearch provides widgets out of the box you are free to use it with
 any other React UI library (such as Material-UI, React Toolbox, React-Bootstrap and so
 on...). It also applies if you already have components of your own.
 
-To integrate react-instantsearch with another component you can use the **default connector provided by each widget**.
-Once connected, react-instantsearch widgets will behave as High-Order Components.
-More on that on the [making your own widgets](Customization.html#making-your-own-widgets) documentation.
+To integrate react-instantsearch within another component you can use the **connector provided for each kind of widget**.
+Check out the [connectors guide](connectors.html) to learn how to use them.
 
 Let's take an example building a SearchBox using Material UI:
 
@@ -40,8 +40,8 @@ Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearc
  </InstantSearch>
 ```
 
-Basically this strategy will work with any UI libraries. However, if you hit any limitation with the default connectors
-you can also [create your own connectors](Customization.html#creating-your-own-connectors).
+Basically this strategy will work with any UI libraries. However, if you hit any limitation with the connectors we provide
+you can also [create your own connectors](create-own-widget.html).
 
 ## Check out our Examples !
 
@@ -49,8 +49,6 @@ In this section you can find several examples based on popular React UI librarie
 
 ### Material-UI
 
-<script src="webpack.assets[`assets/img/examples/ecommerce.png>"></script>
+[![material-ui-demo](/assets/img/material-ui.gif)](/examples/material-ui)
 
-[![material-ui-demo](assets/img/material-ui.gif)](MaterialUI.html)
-
-[View it live](MaterialUI.html), [read the code](http://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/material-ui)
+[View it live](/examples/material-ui), [read the code](http://github.com/algolia/instantsearch.js/tree/v2/docgen/src/examples/material-ui)

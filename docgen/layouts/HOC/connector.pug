@@ -52,8 +52,3 @@ block content
             td(colspan=3)=type.description
   else
     p This connector does not provided props to its wrapped Component.
-  h2#example Example
-    a.anchor(href='#example')
-  if examples
-    each example in examples
-      p!=h.highlight(example, {lang: 'jsx'})

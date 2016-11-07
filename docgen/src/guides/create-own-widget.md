@@ -1,64 +1,13 @@
 ---
-title: Making your own widgets
+title: Creating widgets
 layout: guide.pug
 category: guide
+navWeight: 2
 ---
 
-While react-instantsearch already provides widgets out of the box, there are cases where you need to implement a custom feature that isn't covered by the default widget set.
-
-## Default widgets connectors
-
-All default widgets have a corresponding higher-order component that acts as a connector, providing the required props to the widget.
-
-For instance, if you want to create your own search box, you will need to use the `connectSearchBox` connector:
-
-```js
-import {connectSearchBox} from 'react-instantsearch/connectors';
-
-const MySearchBox = props =>
-  <input
-    type="text"
-    value={props.query}
-    onChange={e => props.refine(e.target.value)}
-  />;
-
-// `ConnectedSearchBox` renders a `MySearchBox` component that is connected to
-// the InstantSearch state, providing it with `query` and `refine` props for
-// reading and manipulating the current query of the search.
-// Note that this `ConnectedSearchBox` component will only work when rendered
-// as a child or a descendant of the `InstantSearch` component.
-const ConnectedSearchBox = connectSearchBox(MySearchBox);
-```
-
-### Stateful widgets
-
-While some widgets hold no state, like the `Hits` widget which simply renders the available hits, others do. For instance, the `SearchBox` widget's state is the current query.
-
-When a widget is stateful, its state will get serialized and persisted to the URL. The corresponding URL parameter key can be customized via the widget's `id` prop.
-
-Stateful widgets are also provided with `refine` and `createURL` methods. The `refine(nextState)` method allows the widget to edit its state, while the `createURL(nextState)` method allows the widget to generate a URL for the corresponding state.
-
-```js
-// Here's a variation on the usage of `connectSearchBox`: a component that just
-// renders a link to set the current query to "cute cats".
-// By adding an `onClick` handler on top of the `href`, and cancelling the
-// default behavior of the link, we avoid making a full-page reload when the
-// user clicks on the link, while ensuring that opening the link in a new tab
-// still works.
-const LookUpCuteCats = connectSearchBox(props =>
-  <a
-    href={props.createURL('cute cats')}
-    onClick={e => {
-      e.preventDefault();
-      props.refine('cute cats');
-    }}
-  />
-);
-```
-
-## Creating your own connectors
-
 If you wish to implement features that are not covered by the default widgets connectors, you will need to create your own connector via the `createConnector` method. This methods takes in a descriptor of your connector with the following properties and methods:
+
+## Creating your own connector
 
 ### displayName, propTypes, defaultProps
 
