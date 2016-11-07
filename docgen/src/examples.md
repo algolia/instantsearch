@@ -3,6 +3,7 @@ title: Examples Introduction
 layout: main-entry.pug
 category: examples
 tocVisibility: true
+navWeight: 1000
 ---
 
 ## Examples Introduction

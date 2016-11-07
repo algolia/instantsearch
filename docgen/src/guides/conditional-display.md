@@ -2,18 +2,19 @@
 title: Conditional Display
 layout: guide.pug
 category: guide
+navWeight: 1
 ---
 
-Using our connector and [`createConnector`](Customization.html#creating-your-own-connectors) approach, you can 
+Using our connector and [`createConnector`](create-own-widget.html) approach, you can 
 conditionally displayed content based on the search state. 
 
 Below are some typical use cases when using conditional display makes sense but don't hesitate to read the 
-[making your own widget documentation](Customization.html#creating-your-own-connectors), it will give you more details 
+[create your own widget documentation](create-own-widget.html), it will give you more details 
 about the api. 
 
 ## Displaying content when the query is empty
 
-You can do that by using the [`createConnector`](Customization.html#creating-your-own-connectors) function and
+You can do that by using the [`createConnector`](create-own-widget.html) function and
 then access the `state` of all widgets. By doing so you're able to get the query and decide what to do according to its state.
 
 Here's an example:
@@ -34,7 +35,7 @@ const Content = createConnector({
 
 ## Displaying content when there's no results 
  
-By using the [`createConnector`](Customization.html#creating-your-own-connectors) function you may also access the `search` object 
+By using the [`createConnector`](create-own-widget.html) function you may also access the `search` object 
 that holds the search results, search errors and search loading state. By doing so you're able to get the number of hits 
 returned and decide what to do according to this number. 
 
@@ -57,7 +58,7 @@ const content = createConnector({
 
 ## Displaying content when there's an error
  
-By using the [`createConnector`](Customization.html#creating-your-own-connectors) function you may also access the `search` object 
+By using the [`createConnector`](create-own-widget.html) function you may also access the `search` object 
 that holds the search results, search errors and search loading state. By doing so you're able to know when an error occurred and 
 decide what to do with it. 
 
