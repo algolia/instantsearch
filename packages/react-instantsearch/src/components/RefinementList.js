@@ -26,7 +26,7 @@ class RefinementList extends Component {
   };
 
   renderItem = item => {
-    const {translate, applyTheme} = this.props;
+    const {applyTheme} = this.props;
 
     return (
       <label>
@@ -41,7 +41,7 @@ class RefinementList extends Component {
         </span>
         {' '}
         <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
-          {translate('count', item.count)}
+          {item.count}
         </span>
       </label>
     );
@@ -67,6 +67,5 @@ class RefinementList extends Component {
 export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
-    count: count => count.toLocaleString(),
   })(RefinementList)
 );
