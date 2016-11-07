@@ -13,9 +13,9 @@ block content
   h2#proptypes Props
     a.anchor(href='#proptypes')
   if proptype
-    p List of props exposed by the
+    p List of props exposed by the   
       code=name
-      | widget
+      |  widget
     table.api.proptypes
       tbody
         each type in proptype
@@ -27,10 +27,10 @@ block content
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value: 
+                span default value:
                 code=type.defaultValue
           tr.api-entry-description
-            td(colspan=3)=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This widget does not accept props.
   h2#theme Classnames

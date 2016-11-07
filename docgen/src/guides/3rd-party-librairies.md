@@ -14,7 +14,7 @@ Check out the [connectors guide](connectors.html) to learn how to use them.
 
 Let's take an example building a SearchBox using Material UI:
 
-```js
+```javascript
 import {connectSearchBox} from 'react-instantsearch/connectors';
 import {TextField} from 'material-ui';
 
@@ -31,7 +31,7 @@ const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 
 Then, you will be able to use your `ConnectedSearchBox` inside the `InstantSearch` component:
 
-```js
+```javascript
 <InstantSearch
       appId="appId"
       apiKey="appKey"

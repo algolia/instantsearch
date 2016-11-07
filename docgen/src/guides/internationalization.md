@@ -9,7 +9,7 @@ All widgets rendering text that is not otherwise configurable via props accept a
 
 ### Example: Translating a Pagination
 
-```
+```javascript
 import {Pagination} from 'react-instantsearch/dom';
 
 function TranslatedPagination(props) {
