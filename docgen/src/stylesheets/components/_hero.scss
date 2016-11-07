@@ -40,7 +40,9 @@
     width: 300vw;
     left: -130vw;
     top: -370px;
-    mix-blend-mode: soft-light;
+    // @vvo had to disable this otherwise computer would die
+    // ref: https://github.com/algolia/instantsearch.js/issues/1512
+    // mix-blend-mode: soft-light;
     opacity: 0.75;
     transform: rotateY(-5deg);
 
