@@ -50,7 +50,7 @@ When building `react-instantsearch` we are using [babel-plugin-transform-inline-
 
 If you want you can also use it with your own code and load the css with [`insert-css`](https://github.com/substack/insert-css).
 
-```js
+```javascript
 import theme from './theme.css'
 
 insertCss(theme.code);

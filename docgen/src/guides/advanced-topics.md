@@ -12,7 +12,7 @@ is to to use a connector that will render nothing, like a virtual widget.
 
 Here's an example using the Menu connector to display by default the results from the "Dining" category.
 
-```
+```javascript
 const ConnectedMenu = connectMenu(() => {
     return null;
   });
@@ -29,9 +29,9 @@ To do that, you can use the appropriate connector and manually add your values.
 
 Here's an example to force category values for a Menu.
 
-```
+```javascript
 const ConnectedMenu = connectMenu(props => {
-    const items = [];`
+    const items = [];
     
     items.push(
       {label: 'Outdoor', value: 'Outdoor'},
@@ -46,6 +46,9 @@ const ConnectedMenu = connectMenu(props => {
             {i.label}</a>
         </div>
       )}</div>;
+});
+
+<ConnectedMenu attributeName="category"/>
 ```
 
 ## How to synchronize the url with the search
@@ -53,13 +56,13 @@ const ConnectedMenu = connectMenu(props => {
 The InstantSearch component features a complete URL synchronization solution. Whenever a widget's state changes, the URL will be updated to reflect the new state of the search UI. This has two main benefits:
 
 * the user can use the browser's back and forward buttons to navigate back and forth between the different states of the search.
-* the user can bookmark, copy and share a custom search URL.`
+* the user can bookmark, copy and share a custom search URL.
 
 To activate this feature, you need to pass the `urlSync` props when instantiating the InstantSearch component.
 
 Here's an example
 
-```
+```javascript
 <InstantSearch
     appId="appId"
     apiKey="apiKey"
@@ -68,3 +71,11 @@ Here's an example
   >
 </InstantSearch>
 ```
+
+**Location Debouncing**
+ 
+Since UI updates can happen in quick succession, for instance when the user types in a query, 
+the new locations are debounced. The treshold prop controls how long the component should wait between 
+state changes before pushing a new location instead of replacing the old one.
+
+
