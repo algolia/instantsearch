@@ -28,9 +28,7 @@ export default function() {
       // Then navigation is sorted by title.
       data.navigation = categories[category].sort((a, b) => {
         if (a.title && b.title &&
-            (a.navWeight === b.navWeight ||
-            a.navWeight === undefined ||
-            b.navWeight === undefined)) {
+            a.navWeight === b.navWeight) {
           return a.title.localeCompare(b.title);
         } else {
           return b.navWeight - a.navWeight;
