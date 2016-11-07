@@ -13,7 +13,7 @@ block content
   h2#proptypes Props
     a.anchor(href='#proptypes')
   if proptype
-    p List of props exposed by
+    p List of props exposed by 
       code=name
     table.api.proptypes
       tbody
@@ -26,10 +26,10 @@ block content
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value: 
+                span default value:
                 code=type.defaultValue
           tr.api-entry-description
-            td(colspan=3)=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This component does not accept props.
   h2#example Example

@@ -19,7 +19,7 @@ then access the `state` of all widgets. By doing so you're able to get the query
 
 Here's an example:
 
-```js
+```javascript
 const Content = createConnector({
     displayName: 'ConditionalQuery',
     getProps(props, state) {
@@ -41,7 +41,7 @@ returned and decide what to do according to this number.
 
 Here's an example: 
 
-```js
+```javascript
 const content = createConnector({
     displayName: 'ConditionalResults',
     getProps(props, state, search) {
@@ -64,7 +64,7 @@ decide what to do with it.
 
 Here's an example: 
 
-```js
+```javascript
 const content = createConnector({
     displayName: 'ConditionalError',
     getProps(props, state, search) {

@@ -28,7 +28,7 @@ block content
                 span default value: 
                 code=type.defaultValue
           tr.api-entry-description
-            td(colspan=3)=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This connector does not expose external props.
   h2#provided-props Provided props
@@ -49,6 +49,6 @@ block content
                 span default value: 
                 code=type.defaultValue
           tr.api-entry-description
-            td(colspan=3)=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This connector does not provided props to its wrapped Component.
