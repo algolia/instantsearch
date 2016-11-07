@@ -31,7 +31,7 @@ This method defines exactly how the `refine` prop of connected widgets affects t
 
 It takes in the current props of the higher-order component, the state of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
-```js
+```javascript
 const CoolWidget = createConnector({
   displayName: 'CoolWidget',
 
@@ -93,7 +93,7 @@ Every time the props or state of a widget change, all the `getSearchParameters` 
 
 As such, the `getSearchParameters` method allows you to describe how the state and props of a widget should affect the search parameters.
 
-```js
+```javascript
 const CoolWidget = createConnector({
   // displayName, getProps, refine
 
@@ -121,7 +121,7 @@ The metadata object also allows you to declare any data that you would like to p
 
 The `CurrentRefinements` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
 
-```js
+```javascript
 const CoolWidget = createConnector({
   // displayName, getProps, refine, getSearchParameters
 

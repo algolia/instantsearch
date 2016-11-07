@@ -24,7 +24,7 @@ All default widgets have a corresponding higher-order component that acts as a c
 
 For instance, if you want to create your own search box, you will need to use the `connectSearchBox` connector:
 
-```js
+```javascript
 import {connectSearchBox} from 'react-instantsearch/connectors';
 
 const MySearchBox = props =>
@@ -50,7 +50,7 @@ When a widget is stateful, its state will get serialized and persisted to the UR
 
 Stateful widgets are also provided with `refine` and `createURL` methods. The `refine(nextState)` method allows the widget to edit its state, while the `createURL(nextState)` method allows the widget to generate a URL for the corresponding state.
 
-```js
+```javascript
 // Here's a variation on the usage of `connectSearchBox`: a component that just
 // renders a link to set the current query to "cute cats".
 // By adding an `onClick` handler on top of the `href`, and cancelling the
