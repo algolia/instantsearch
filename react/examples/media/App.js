@@ -4,27 +4,20 @@ import React from 'react';
 
 import {
   InstantSearch,
-  SearchBox as OriginalSearchBox,
-  RefinementList,
   Hits,
   Stats,
   Pagination,
-  Range,
-} from 'react-instantsearch';
+  RangeRatings,
+} from 'react-instantsearch/dom';
 
-import insertCss from 'insert-css';
-
-import paginationTheme from './pagination.css';
-
-if (paginationTheme.code) {
-  insertCss(paginationTheme.code);
-}
+import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
 
 export default function App() {
   return <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="movies"
+    urlSync
   >
     <div>
       <Header/>
@@ -46,7 +39,7 @@ const Header = () =>
     <SearchBox />
   </header>;
 
-const SearchBox = OriginalSearchBox.connect(
+const SearchBox = connectSearchBox(
   ({query, refine}) =>
     <div className="searchbox-container">
       <div className="input-group">
@@ -69,20 +62,13 @@ const Facets = () => <aside>
   </ul>
   <Panel title="Genres" id="genres"
   >
-    <RefinementList.Links
+    <RefinementListLinks
       attributeName="genre"
-      theme={{
-        ...RefinementList.Links.defaultClassNames,
-        items: 'nav nav-list',
-        itemCount: 'badge pull-right',
-        itemLink: 'item',
-        itemSelected: 'active',
-      }}
       sortBy={['isRefined']}
     />
   </Panel>
   <Panel title="Rating" id="ratings">
-    <Range.Rating attributeName="rating" max={5}/>
+    <RangeRatings attributeName="rating" max={5}/>
   </Panel>
   <div className="thank-you">Data courtesy of <a href="https://www.imdb.com/">imdb.com</a></div>
 </aside>;
@@ -136,6 +122,25 @@ const Results = () =>
     <div id="stats" className="text-right text-muted"><Stats/></div>
     <hr />
     <div id="hits"><Hits itemComponent={Hit} hitsPerPage={10}/></div>
-    <div id="pagination" className="text-center"><Pagination
-      theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/></div>
+    <div id="pagination" className="text-center"><Pagination /></div>
   </article>;
+
+const RefinementListLinks = connectRefinementList(({items, refine, createURL}) => {
+  const itemComponents = items.map(item =>
+    <div className={item.isRefined ? ' active' : ''} key={item.label}>
+      <a className="item" href={createURL(item.value)} onClick={e => {
+        e.preventDefault();
+        refine(item.value);
+      }}>
+        <span> {item.label}</span>
+        <span className="badge pull-right">{item.count}</span>
+      </a>
+    </div>
+  );
+
+  return (
+    <div className="nav nav-list">
+      {itemComponents}
+    </div>
+  );
+});

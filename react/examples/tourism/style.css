@@ -36,7 +36,7 @@ body {
 
 .aisdemo-navbar .logo {
   display: inline-block;
-  padding: 14px 22px;
+  padding: 14px 30px;
   font-size: 40px;
   line-height: 1;
   font-family: Courier;
@@ -48,6 +48,79 @@ body {
   font-size: 30px;
   margin-left: 10px;
   color: #DCE0E0;
+}
+
+.ais-SearchBox__root {
+  position: absolute;
+  width: 280px;
+  height: 33px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  font-size: 14px;
+  top: 20px;
+  left: 165px;
+}
+
+.ais-SearchBox__wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.ais-SearchBox__input {
+  display: inline-block;
+  -webkit-transition: box-shadow .4s ease, background .4s ease;
+  transition: box-shadow .4s ease, background .4s ease;
+  border: 0;
+  border-radius: 1px;
+  box-shadow: inset 0 0 0 0px #CCCCCC;
+  background: #FFFFFF;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  white-space: normal;
+  font-size: inherit;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.ais-SearchBox__input::-webkit-search-decoration, .ais-SearchBox__input::-webkit-search-cancel-button, .ais-SearchBox__input::-webkit-search-results-button, .ais-SearchBox__input::-webkit-search-results-decoration {
+  display: none;
+}
+
+.ais-SearchBox__input:hover {
+  box-shadow: inset 0 0 0 0px #b3b3b3;
+}
+
+.ais-SearchBox__input:focus, .SearchBox__input:active {
+  outline: 0;
+  box-shadow: inset 0 0 0 0px #D6DEE3;
+  background: #FFFFFF;
+}
+
+.ais-SearchBox__input::-webkit-input-placeholder {
+  color: #9AAEB5;
+}
+
+.ais-SearchBox__input::-moz-placeholder {
+  color: #9AAEB5;
+}
+
+.ais-SearchBox__input:-ms-input-placeholder {
+  color: #9AAEB5;
+}
+
+.ais-SearchBox__input::placeholder {
+  color: #9AAEB5;
+}
+
+.ais-SearchBox__submit {
+  display: none;
+}
+
+.ais-SearchBox__reset {
+  display: none;
 }
 
 /* FILTERS
@@ -164,7 +237,8 @@ body {
 }
 
 .marker {
-  transform: translate(-50%, -100%) scale(0.5, 0.5);
+  -webkit-transform: translate(-50%, -100%) scale(0.5, 0.5);
+          transform: translate(-50%, -100%) scale(0.5, 0.5);
 }
 
 .capacity-filter {
@@ -230,6 +304,43 @@ body {
   color: #FF585B;
 }
 
+/* PAGINATION
+// ------------------------- */
+.ais-Pagination__root {
+  text-align: center;
+}
+
+.ais-Pagination__root .ais-Pagination__item {
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 3px;
+  margin: 1px;
+  border-color: #ddd;
+  background: transparent;
+}
+
+.ais-Pagination__item .ais-Pagination__itemLink {
+  display: block;
+  color: #FF585B;
+  line-height: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.ais-Pagination__item.ais-Pagination__itemSelected.ais-Pagination__itemPage {
+  background: #FF585B;
+}
+
+.ais-Pagination__item.ais-Pagination__itemSelected.ais-Pagination__itemPage .ais-Pagination__itemLink {
+  color: #FFFFFF;
+  border-color: #FF585B;
+}
+
+.ais-Pagination__itemDisabled {
+  visibility: hidden;
+}
+
 .thank-you {
   text-align: center;
   font-size: .8em;
@@ -237,4 +348,68 @@ body {
 
 .thank-you a {
   color: #FF585B;
+}
+
+/* RHEOSTAT RANGE
+// ------------------------- */
+.rheostat-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.rheostat {
+  height: 24px;
+  position: relative;
+  overflow: visible
+}
+
+.rheostat-background {
+  background: #dce0e0;
+  height: 2px;
+  position: relative;
+  top: 14px;
+  width: 100%
+}
+
+.rheostat-values {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 12px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.rheostat--disabled .rheostat-progress {
+  background-color: #edefed
+}
+
+.rheostat--disabled .rheostat-handle {
+  cursor: default
+}
+
+.rheostat-progress {
+  background-color: #FF585B;
+  height: 4px;
+  position: absolute;
+  top: 13px
+}
+
+.rheostat-handle {
+  border: 1px solid #FF585B;
+  background: #fff;
+  border-radius: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  height: 24px;
+  margin-left: -12px;
+  position: absolute;
+  z-index: 2;
+  width: 24px;
+  font-size: 0
 }

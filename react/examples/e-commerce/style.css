@@ -88,6 +88,11 @@ header .input-group .input-group-btn button {
   background: #FFBE61;
 }
 
+header .input-group-btn button {
+  max-height: 29px;
+  line-height: 29px;
+}
+
 header .input-group .input-group-btn {
   height: 100%;
   border: 0;
@@ -381,12 +386,9 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   display: inline-block;
 }
 
-.CurrentFilters {
+.ClearAll {
   display: block;
   margin-bottom: 16px;
-}
-
-.CurrentFilters__clearAll.btn {
   font-size: 13px;
   background-color: white;
   border: 1px solid lightgray;

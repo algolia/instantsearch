@@ -1,27 +1,20 @@
 import {
   InstantSearch,
-  Hits,
   SearchBox,
   Pagination,
-  Range,
-  RefinementList,
-  MultiRange,
-} from 'react-instantsearch';
+} from 'react-instantsearch/dom';
+import {
+  connectHits,
+  connectMultiRange,
+  connectRefinementList,
+  connectRange,
+} from 'react-instantsearch/connectors';
+
 import React, {PropTypes} from 'react';
 import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
 
-import insertCss from 'insert-css';
-
-import sliderTheme from './slider.css';
-import paginationTheme from './pagination.css';
-import searchBoxTheme from './searchbox.css';
-
-if (sliderTheme.code) {
-  insertCss(sliderTheme.code);
-  insertCss(paginationTheme.code);
-  insertCss(searchBoxTheme.code);
-}
+import Rheostat from 'rheostat';
 
 export default function TourismInstantsearchSample() {
   return (
@@ -43,6 +36,7 @@ function Header() {
   const containerStyle = {
     paddingLeft: 0,
     paddingRight: 0,
+    marginTop: 50,
   };
   return (
     <div className="container-fluid" style={containerStyle}>
@@ -52,7 +46,7 @@ function Header() {
         </a>
         <a href="./" className="logo">A</a>
         <i className="fa fa-search"></i>
-        <SearchBox theme={searchBoxTheme.classNames ? searchBoxTheme.classNames : searchBoxTheme}/>
+        <SearchBox/>
       </header>
     </div>
   );
@@ -141,7 +135,7 @@ HitsMap.propTypes = {
   hits: PropTypes.array,
 };
 
-const ConnectedHitsMap = Hits.connect(HitsMap);
+const ConnectedHitsMap = connectHits(HitsMap);
 
 function Capacity() {
   return (
@@ -173,23 +167,22 @@ OptionCapacity.propTypes = {
   value: PropTypes.string,
 };
 
-const CapacitySelector = MultiRange.connect(({items, selectedItem, refine}) => {
+const CapacitySelector = connectMultiRange(({items, currentRefinement, refine}) => {
   const selectValue = e => refine(e.target.value);
 
-  const allOption = <OptionCapacity label="" value="" isSelected={Boolean(selectedItem)} key="all"/>;
+  const allOption = <OptionCapacity label="" value="" isSelected={Boolean(currentRefinement)} key="all"/>;
 
   const options = items.map(item => {
-    const isSelected = item.value === selectedItem;
     const val = parseFloat(item.value.split(':')[0]);
     const label = `${val} person${val > 1 ? 's' : ''}`;
-    return <OptionCapacity label={label} value={item.value} isSelected={isSelected} key={item.value}/>;
+    return <OptionCapacity label={label} value={item.value} isSelected={item.isRefined} key={item.value}/>;
   });
 
   options.unshift(allOption);
 
   return (
     <div className="capacity-menu-wrapper">
-      <select defaultValue={selectedItem} onChange={selectValue}>
+      <select defaultValue={currentRefinement} onChange={selectValue}>
         {options}
       </select>
     </div>
@@ -207,27 +200,23 @@ function DatesAndGuest() {
   );
 }
 
-const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
+const RoomType = connectRefinementList(({items, refine}) => {
   const itemComponents = items.map(item => {
-    const isSelected = selectedItems.indexOf(item.value) !== -1;
-    const value = isSelected ?
-      selectedItems.filter(v => v !== item.value) :
-      selectedItems.concat([item.value]);
-    const selectedClassName = isSelected ? ' ais-refinement-list--item__active' : '';
+    const selectedClassName = item.isRefined ? ' ais-refinement-list--item__active' : '';
     const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (
-      <div className={itemClassName} key={item.value}>
+      <div className={itemClassName} key={item.label}>
         <div>
           <label className="ais-refinement-list--label" onClick={e => {
             e.preventDefault();
-            refine(value);
+            refine(item.value);
           }}>
             <input
               type="checkbox"
               className="ais-refinement-list--checkbox"
-              defaultChecked={isSelected ? 'checked' : ''}
+              defaultChecked={item.isRefined ? 'checked' : ''}
               />
-            {item.value}
+            {item.label}
             <span className="ais-refinement-list--count">{item.count}</span>
           </label>
         </div>
@@ -247,16 +236,16 @@ const RoomType = RefinementList.connect(({items, refine, selectedItems}) => {
 
 function Price() {
   return (
-    <div className="row aisdemo-filter">
+    <div className="row aisdemo-filter rheostat-container">
       <div className="col-sm-2 aisdemo-filter-title">Price Range</div>
       <div className="col-sm-9">
-        <Range theme={sliderTheme.classNames ? sliderTheme.classNames : sliderTheme} attributeName="price"/>
+        <ConnectedRange attributeName="price"/>
       </div>
     </div>
   );
 }
 
-const MyHits = Hits.connect(({hits}) => {
+const MyHits = connectHits(({hits}) => {
   const hs = hits.map(hit => <HitComponent key={hit.objectID} hit={hit} />);
   return <div id="hits">{hs}</div>;
 });
@@ -289,7 +278,7 @@ function Results() {
         <MyHits/>
       </div>
       <div className="row">
-        <Pagination theme={paginationTheme.classNames ? paginationTheme.classNames : paginationTheme}/>
+        <Pagination/>
         <div className="thank-you">
           Data from <a href="https://www.airbnb.com/">airbnb.com</a>,
           user pics from <a href="https://randomuser.me/">randomuser.me</a>
@@ -298,3 +287,26 @@ function Results() {
     </div>
   );
 }
+
+const ConnectedRange = connectRange(({min, max, currentRefinement, refine}) => {
+  const updateValue = sliderState => {
+    if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
+      refine({min: sliderState.values[0], max: sliderState.values[1]});
+    }
+  };
+
+  return (
+    <div>
+      <Rheostat
+        min={min}
+        max={max}
+        values={[currentRefinement.min, currentRefinement.max]}
+        onChange={updateValue}
+      />
+      <div className="rheostat-values">
+        <span>{currentRefinement.min}</span>
+        <span>{currentRefinement.max}</span>
+      </div>
+    </div>
+  );
+});

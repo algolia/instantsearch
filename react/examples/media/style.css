@@ -8,8 +8,10 @@ a {
   color: #333333;
 }
 
-hr {
+article hr {
   margin: 10px 14px;
+  float: none;
+  width: initial;
 }
 
 .is-logo {
@@ -38,7 +40,7 @@ header {
   padding: 10px;
   border-bottom: 1px solid #E8E8E8;
   position: relative;
-  top: 0;
+  top: 60px;
   left: 0;
   right: 0;
   z-index: 2;
@@ -63,6 +65,7 @@ header {
   padding-right: 20px;
   background: #F8F8F8;
   border-radius: 0;
+  box-shadow: none;
 }
 
 section {
@@ -79,6 +82,10 @@ section aside {
   width: 230px;
   background: #FFFFFF;
   border-right: 1px solid #E8E8E8;
+}
+
+section aside a {
+  color: black;
 }
 
 .nav {
@@ -114,6 +121,8 @@ section aside .badge {
   background: #BBBBBB;
   position: relative;
   top: 1px;
+  line-height: 9px;
+  padding: 3px 7px;
 }
 
 #genres .item {
@@ -136,12 +145,18 @@ section aside .badge {
   margin-top: -1px;
 }
 
+.genre .badge{
+  line-height: 9px;
+  padding: 3px 7px;
+  font-size: 12px;
+}
+
 #genres .active .badge {
   background: #333333;
 }
 
 section article {
-  margin-top: 7px;
+  margin-top: 64px;
   margin-bottom: 10px;
   margin-left: 237px;
   margin-right: 10px;
@@ -159,6 +174,44 @@ section article {
 
 #hits {
   padding: 0 15px;
+}
+
+.ais-Pagination__item {
+  display: inline-block;
+  border: 1px solid;
+  border-color: #ddd;
+  padding: 0px;
+}
+
+.ais-Pagination__item + .ais-Pagination__item {
+  margin-left: 4px;
+}
+
+.ais-Pagination__itemDisabled{
+  display: none;
+}
+
+.ais-Pagination__itemLink{
+  display:block;
+  background: #F8F8F8;
+  padding: 3px 8px;
+  color: #333333;
+}
+
+.ais-Pagination__itemSelected {
+  background: #FF585B;
+}
+
+.ais-Pagination__itemSelected .ais-Pagination__itemLink {
+  border-color: #b5b5b5;
+  background: #E8E8E8;
+}
+
+.ais-Pagination__itemLink:hover {
+  text-decoration: none;
+  border-color: #cfcfcf;
+  background: #ebebeb;
+  color: #333333;
 }
 
 .hit {
@@ -181,12 +234,17 @@ section article {
   background-repeat: no-repeat;
   background-position: center center;
 }
+.hit .media-body p{
+  font-size: 14px;
+}
 
 .hit .media-heading {
   color: #167AC6;
   font-weight: normal;
   font-size: 18px;
 }
+
+
 
 .thank-you {
   font-size: .8em;
@@ -242,6 +300,7 @@ section article {
   background: #BBBBBB;
 }
 
-#ratings > div {
+#ratings .ais-RangeRatings__root {
   padding: 0 20px;
 }
+

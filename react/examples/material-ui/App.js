@@ -3,15 +3,16 @@
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
 import {
-  SearchBox,
-  HierarchicalMenu,
-  RefinementList,
-  Hits,
-  CurrentFilters,
-  InstantSearch,
-  SortBy,
-  Pagination,
-} from 'react-instantsearch';
+  connectSearchBox,
+  connectRefinementList,
+  connectHierarchicalMenu,
+  connectSortBy,
+  connectHits,
+  connectCurrentRefinements,
+  connectPagination,
+} from 'react-instantsearch/connectors';
+import {InstantSearch} from 'react-instantsearch/dom';
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
   TextField,
@@ -66,6 +67,8 @@ const Content = React.createClass({
     const openDrawerStyle = {
       ...baseDrawerStyle,
       transform: 'translate(0)',
+      height: 'initial',
+      top: 60,
     };
     const closedDrawerStyle = {
       ...baseDrawerStyle,
@@ -78,7 +81,7 @@ const Content = React.createClass({
         <div className="Header">
           <AppBar
             title="AMAZING"
-            iconElementRight={<ConnectedSortBy defaultSelectedIndex="ikea"/>}
+            iconElementRight={<ConnectedSortBy defaultRefinement="ikea"/>}
             onLeftIconButtonTouchTap={this.drawerAction}
             className="Header__appBar"
           />
@@ -90,7 +93,7 @@ const Content = React.createClass({
                     onLeftIconButtonTouchTap={this.drawerAction}
                     className="Sidebar__header__appBar"
             />
-            <ConnectedCurrentFilters/>
+            <ConnectedCurrentRefinements/>
           </div>
           <div className="Sidebar__facets">
             <ConnectedNestedList
@@ -141,33 +144,25 @@ const MaterialUiSearchBox = ({query, refine, marginLeft}) => {
     </div>);
 };
 
-const CheckBoxItem = ({item, selectedItems, refine}) => {
-  const selected = selectedItems.indexOf(item.value) !== -1;
-  const value = selected ?
-    selectedItems.filter(v => v !== item.value) :
-    selectedItems.concat([item.value]);
-  return (
-    <ListItem key={item.value}
-              primaryText={item.value}
+const CheckBoxItem = ({item, refine}) =>
+    <ListItem
+              primaryText={item.label}
               leftCheckbox={
-                <Checkbox checked={selected}
+                <Checkbox checked={item.isRefined}
                           onCheck={e => {
                             e.preventDefault();
-                            refine(value);
+                            refine(item.value);
                           }}
                 />}
-    />)
-    ;
-};
+    />;
 
-const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, refine, createURL}) =>
+const MaterialUiCheckBoxRefinementList = ({items, attributeName, refine, createURL}) =>
     <List>
       <Subheader style={{fontSize: 18}}>{attributeName.toUpperCase()}</Subheader>
       {items.map(item =>
         <CheckBoxItem
-          key={item.value}
+          key={item.label}
           item={item}
-          selectedItems={selectedItems}
           refine={refine}
           createURL={createURL}
         />
@@ -175,7 +170,7 @@ const MaterialUiCheckBoxRefinementList = ({items, attributeName, selectedItems, 
     </List>
   ;
 
-const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
+const MaterialUiNestedList = function ({id, items, refine}) {
   return <List>
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
@@ -187,7 +182,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
             e.preventDefault();
             refine(child.value);
           }}
-          style={selectedItem && selectedItem.includes(child.value) ? {fontWeight: 700} : {}}
+          style={child.isRefined ? {fontWeight: 700} : {}}
         />
       ) : [];
       return <ListItem
@@ -199,7 +194,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
           e.preventDefault();
           refine(item.value);
         }}
-        style={selectedItem && selectedItem.includes(item.value) ? {fontWeight: 700} : {}}
+        style={item.isRefined ? {fontWeight: 700} : {}}
       />;
     }
     )}
@@ -209,7 +204,7 @@ const MaterialUiNestedList = function ({id, items, refine, selectedItem}) {
 const MaterialUiSortBy = React.createClass({
 
   getInitialState() {
-    return {value: this.props.defaultSelectedIndex};
+    return {value: this.props.defaultRefinement};
   },
 
   handleChange (ev, index, value) {
@@ -318,20 +313,20 @@ const MaterialUiBottomNavigation = React.createClass({
               e.preventDefault();
               this.props.refine(0);
             }}
-            disabled={this.props.page <= 0}
+            disabled={this.props.currentRefinement <= 0}
           />
           <BottomNavigationItem
             label="Previous Page"
             icon={previous}
             onTouchTap={e => {
               e.preventDefault();
-              this.props.refine(this.props.page - 1);
+              this.props.refine(this.props.currentRefinement - 1);
             }}
-            disabled={this.props.page <= 0}
+            disabled={this.props.currentRefinement <= 0}
           />
           <BottomNavigationItem
             icon={<FontIcon><Badge
-              badgeContent={this.props.page}
+              badgeContent={this.props.currentRefinement}
               secondary={true}
             /></FontIcon>}
           />
@@ -340,9 +335,9 @@ const MaterialUiBottomNavigation = React.createClass({
             icon={next}
             onTouchTap={e => {
               e.preventDefault();
-              this.props.refine(this.props.page + 1);
+              this.props.refine(this.props.currentRefinement + 1);
             }}
-            disabled={this.props.page >= this.props.nbPages - 1}
+            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
           />
           <BottomNavigationItem
             label="Last Page"
@@ -351,7 +346,7 @@ const MaterialUiBottomNavigation = React.createClass({
               e.preventDefault();
               this.props.refine(this.props.nbPages - 1);
             }}
-            disabled={this.props.page >= this.props.nbPages - 1}
+            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
           />
         </BottomNavigation>
       </div>
@@ -359,16 +354,16 @@ const MaterialUiBottomNavigation = React.createClass({
   },
 });
 
-const ConnectedSearchBox = SearchBox.connect(MaterialUiSearchBox);
+const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 
-const ConnectedCheckBoxRefinementList = RefinementList.connect(MaterialUiCheckBoxRefinementList);
+const ConnectedCheckBoxRefinementList = connectRefinementList(MaterialUiCheckBoxRefinementList);
 
-const ConnectedNestedList = HierarchicalMenu.connect(MaterialUiNestedList);
+const ConnectedNestedList = connectHierarchicalMenu(MaterialUiNestedList);
 
-const ConnectedSortBy = SortBy.connect(MaterialUiSortBy);
+const ConnectedSortBy = connectSortBy(MaterialUiSortBy);
 
-const ConnectedHits = Hits.connect(CustomHits);
+const ConnectedHits = connectHits(CustomHits);
 
-const ConnectedCurrentFilters = CurrentFilters.connect(MaterialUiClearAllFilters);
+const ConnectedCurrentRefinements = connectCurrentRefinements(MaterialUiClearAllFilters);
 
-const ConnectedPagination = Pagination.connect(MaterialUiBottomNavigation);
+const ConnectedPagination = connectPagination(MaterialUiBottomNavigation);

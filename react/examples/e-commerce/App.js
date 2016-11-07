@@ -1,20 +1,24 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
+import {createConnector} from 'react-instantsearch';
 import {
   InstantSearch,
-  SearchBox,
   HierarchicalMenu,
   RefinementList,
-  Hits,
   SortBy,
   Stats,
   Pagination,
-  CurrentFilters,
-  MultiRange,
-  Range,
-  createConnector,
-} from 'react-instantsearch';
+  ClearAll,
+  RangeRatings,
+  RangeInput,
+} from 'react-instantsearch/dom';
+import {
+  connectSearchBox,
+  connectRefinementList,
+  connectHits,
+  connectMultiRange,
+} from 'react-instantsearch/connectors';
 
 export default function App() {
   return (
@@ -47,16 +51,9 @@ const Header = () =>
 const Facets = () =>
     <aside>
 
-      <CurrentFilters
-        theme={{
-          root: 'CurrentFilters',
-          filters: {
-            display: 'none',
-          },
-          clearAll: 'CurrentFilters__clearAll btn',
-        }}
+      <ClearAll
         translations={{
-          clearAll: 'Clear all filters',
+          reset: 'Clear all filters',
         }}
       />
 
@@ -91,7 +88,7 @@ const Facets = () =>
           <RefinementListWithTitle
             title="Rating"
             key="rating"
-            item={<Range.Rating attributeName="rating" max={5}/>}
+            item={<RangeRatings attributeName="rating" max={5}/>}
           />,
           <RefinementListWithTitle
             title="Price"
@@ -110,7 +107,7 @@ const Facets = () =>
               ]}
             />}
           />,
-          <Range.Input key="price_input" attributeName="price" id="price_input"/>,
+          <RangeInput key="price_input" attributeName="price" id="price_input"/>,
         ]}
       />
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
@@ -142,34 +139,28 @@ const CustomCheckbox = ({query, refine}) =>
     </div>
   ;
 
-const ColorItem = ({item, selectedItems, createURL, refine}) => {
-  const selected = selectedItems.indexOf(item.value) !== -1;
-  const active = selected ? 'checked' : '';
-  const value = selected ?
-    selectedItems.filter(v => v !== item.value) :
-    selectedItems.concat([item.value]);
+const ColorItem = ({item, createURL, refine}) => {
+  const active = item.isRefined ? 'checked' : '';
   return (
     <a
-      key={item.value}
       className={`${active} facet-color`}
-      href={createURL(value)}
+      href={createURL(item.value)}
       onClick={e => {
         e.preventDefault();
-        refine(value);
+        refine(item.value);
       }}
-      data-facet-value={item.value}
+      data-facet-value={item.label}
     >
     </a>
   );
 };
 
-const CustomColorRefinementList = ({items, selectedItems, refine, createURL}) =>
+const CustomColorRefinementList = ({items, refine, createURL}) =>
     <div>
       {items.map(item =>
         <ColorItem
-          key={item.value}
+          key={item.label}
           item={item}
-          selectedItems={selectedItems}
           refine={refine}
           createURL={createURL}
         />
@@ -237,7 +228,7 @@ const CustomResults = createConnector({
                 {value: 'ikea_price_asc', label: 'Price asc.'},
                 {value: 'ikea_price_desc', label: 'Price desc.'},
               ]}
-              defaultSelectedIndex="ikea"
+              defaultRefinement="ikea"
             />
           </div>
           <Stats />
@@ -249,7 +240,7 @@ const CustomResults = createConnector({
   }
 });
 
-const CustomPriceRanges = MultiRange.connect(React.createClass({
+const CustomPriceRanges = connectMultiRange(React.createClass({
   checkIfNeedReset(value) {
     const selectedItem = this.props.selectedItem === value ? '' : value;
     this.props.refine(selectedItem);
@@ -301,8 +292,6 @@ const PriceRange = ({label, value, onClick}) =>
     </a>
   </li>;
 
-const ConnectedSearchBox = SearchBox.connect(CustomCheckbox);
-
-const ConnectedColorRefinementList = RefinementList.connect(CustomColorRefinementList);
-
-const ConnectedHits = Hits.connect(CustomHits);
+const ConnectedSearchBox = connectSearchBox(CustomCheckbox);
+const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);
+const ConnectedHits = connectHits(CustomHits);
