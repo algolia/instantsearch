@@ -53,3 +53,15 @@ npm run dev # watch mode, no lint
 npm run lint # only changed files in dev, all files in CI
 npm run lint:fix
 ```
+
+# Release
+
+```sh
+npm run release
+```
+
+# Update docs
+
+```sh
+npm run docs:update
+```
