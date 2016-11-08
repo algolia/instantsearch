@@ -20,9 +20,9 @@
     json-stringify-safe "^5.0.1"
     react-inspector "^1.1.0"
 
-"@kadira/storybook-addon-knobs@^1.2.3":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@kadira/storybook-addon-knobs/-/storybook-addon-knobs-1.4.0.tgz#642b1f0b5bbbb84c8a7ac6d5b125e844af066372"
+"@kadira/storybook-addon-knobs":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@kadira/storybook-addon-knobs/-/storybook-addon-knobs-1.5.0.tgz#2bd911e27ec1aa84cf89ece4bed079c8d247f0b5"
   dependencies:
     babel-runtime "^6.5.0"
     deep-equal "^1.0.1"
@@ -6697,7 +6697,7 @@ react-inspector@^1.1.0:
     is-dom "^1.0.5"
 
 "react-instantsearch@file:./packages/react-instantsearch/":
-  version "2.0.0-beta.14"
+  version "2.0.0-beta.15"
   dependencies:
     algoliasearch "^3.18.1"
     algoliasearch-helper "^2.14.0"
