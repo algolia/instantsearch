@@ -50,7 +50,7 @@ export default function initHeader() {
         inputSelector: '#mobile-searchbox',
         debug: true,
       });
-      /* eslint-enable no-undef */
+
       if (document.body.clientWidth < 768) {
         if (opened === false) {
           opened = true;
@@ -120,50 +120,27 @@ export default function initHeader() {
   }
 
   function displayDropdown() {
-    let hover = false;
-    const trigger = document.querySelectorAll('.cm-navigation__brands--community')[0];
-    const ddHolder = document.querySelectorAll('.cm-navigation__brands-dropdown')[0];
-    const dropdownClass = 'dropdownActive';
-
-    trigger.addEventListener('mouseenter', addDropdown);
-    trigger.addEventListener('mouseleave', removeDropdown);
-
-    ddHolder.addEventListener('mouseenter', () => {
-      hover = true;
-      keepDropdown();
-    });
-
-    ddHolder.addEventListener('mouseleave', removeDropdown);
-
-  // Make sure to remove the dropdown if the user move the mouse
-  // and if the dropdown isn't hovered
-    document.body.addEventListener('mousemove', () => {
-    // hover = true;
-      if (hover === false) {
-        removeDropdown();
+    let active = false;
+    const trigger = document.querySelector('.cm-navigation__brands--community');
+    document.querySelector('body').addEventListener('click', () => {
+      if (active) {
+        toggle();
       }
     });
 
-    function addDropdown() {
-      trigger.classList.add(dropdownClass);
-    }
+    trigger.addEventListener('click', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      toggle();
+    });
 
-    function removeDropdown() {
-      if (hover === true) {
-        trigger.classList.remove(dropdownClass);
-        hover = false;
-      } else {
-      // ...
-      }
-    }
-
-    function keepDropdown() {
-      trigger.classList.add(dropdownClass);
-      hover = true;
+    function toggle() {
+      active = !active;
+      trigger.classList.toggle('dropdownActive');
     }
   }
 
-// If the user type :"s", open the searchbox
+  // If the user type :"s" or "/", open the searchbox
   function catchCmdF() {
     let keyPressed = {};
 
@@ -175,7 +152,7 @@ export default function initHeader() {
     }, false);
 
     function searchLoop() {
-      if (keyPressed['83']) {
+      if (keyPressed['83'] || keyPressed['191']) {
         document.querySelector('.cm-search__input').classList.add('open');
         document.querySelector('#searchbox').focus();
 
