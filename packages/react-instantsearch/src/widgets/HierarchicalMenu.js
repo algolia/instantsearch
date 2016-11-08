@@ -30,7 +30,6 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @themeKey ais-HierarchicalMenu__itemChildren - id representing a children
  * @themeKey ais-HierarchicalMenu__showMore - container for the show more button
  * @translationKey showMore - Label value of the button which toggles the number of items
- * @translationKey count - Label for the display of count
  * @example
  * import React from 'react';
 

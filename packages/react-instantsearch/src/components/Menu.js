@@ -27,7 +27,7 @@ class Menu extends Component {
   };
 
   renderItem = item => {
-    const {refine, createURL, applyTheme, translate} = this.props;
+    const {refine, createURL, applyTheme} = this.props;
     return (
       <Link
         {...applyTheme('itemLink', 'itemLink', item.isRefined && 'itemLinkSelected')}
@@ -39,7 +39,7 @@ class Menu extends Component {
         </span>
         {' '}
         <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
-          {translate('count', item.count)}
+          {item.count}
         </span>
       </Link>
     );
@@ -65,6 +65,5 @@ class Menu extends Component {
 export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
-    count: count => count.toLocaleString(),
   })(Menu)
 );

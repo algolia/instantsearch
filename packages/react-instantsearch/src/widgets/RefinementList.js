@@ -25,7 +25,6 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @themeKey RefinementList__itemCount - the item count
  * @themeKey RefinementList__itemCountSelected - the selected item count
  * @themeKey ais-RefinementList__showMore - the button that let the user toggle more results
- * @translationkey count - The count formatting. Accepts one parameter, the number.
  * @translationkey showMore - The label of the show more button. Accepts one parameters, a boolean that is true if the values are expanded
  * @example
  * import React from 'react';

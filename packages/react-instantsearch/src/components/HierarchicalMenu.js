@@ -29,7 +29,7 @@ class HierarchicalMenu extends Component {
   };
 
   renderItem = item => {
-    const {createURL, refine, translate, applyTheme} = this.props;
+    const {createURL, refine, applyTheme} = this.props;
 
     return (
       <Link
@@ -42,7 +42,7 @@ class HierarchicalMenu extends Component {
         </span>
         {' '}
         <span {...applyTheme('itemCount', 'itemCount')}>
-          {translate('count', item.count)}
+          {item.count}
         </span>
       </Link>
     );
@@ -68,6 +68,5 @@ class HierarchicalMenu extends Component {
 export default themeable(theme)(
   translatable({
     showMore: extended => extended ? 'Show less' : 'Show more',
-    count: count => count.toLocaleString(),
   })(HierarchicalMenu)
 );
