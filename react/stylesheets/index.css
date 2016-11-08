@@ -3028,6 +3028,9 @@ body.example .btn {
 .doc-only {
   display: none; }
 
+.tagline a {
+  color: #3a5395; }
+
 .hero-section {
   background: -webkit-linear-gradient(left, #8f64f3 0%, #39b1de 90%) #3a6ec1;
   background: linear-gradient(to right, #8f64f3 0%, #39b1de 90%) #3a6ec1;
@@ -3088,7 +3091,7 @@ body.example .btn {
     display: none; }
     body.index .hero-section .relative {
       display: block; }
-  .hero-section .article-title a {
+  .hero-section .article-title .algolia-website-logo-link {
     width: 20px;
     display: inline-block;
     position: relative;
