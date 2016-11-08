@@ -1,11 +1,11 @@
 import createConnector from '../core/createConnector';
 
 /**
- * CurrentRefinements connector provides the logic to build a widget that will
+ * connectCurrentRefinements connector provides the logic to build a widget that will
  * give the user the ability to remove all or some of the filters that were
  * set.
- * @name CurrentRefinements
- * @kind HOC
+ * @name connectCurrentRefinements
+ * @kind connector
  * @category connector
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {array.<{key: string, label: string}>} filters - all the filters, the key for calling the refine prop function, label is for the display.

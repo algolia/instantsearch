@@ -10,10 +10,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * SearchBox connector provides the logic to build a widget that will
+ * connectSearchBox connector provides the logic to build a widget that will
  * let the user search for a query.
- * @name SearchBox
- * @kind HOC
+ * @name connectSearchBox
+ * @kind connector
  * @category connector
  * @propType {string} [id="q"] - URL state serialization key. The state of this widget takes the form of a `string`.
  * @propType {string[]} [focusShortcuts=['s','/']] - List of keyboard shortcuts that focus the search box. Accepts key names and key codes.

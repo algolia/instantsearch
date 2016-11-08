@@ -6,11 +6,11 @@ import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
 
 /**
- * Hits connector provides the logic to create connected
+ * connectHits connector provides the logic to create connected
  * components that will render the results retrived from
  * Algolia.
- * @name Hits
- * @kind HOC
+ * @name connectHits
+ * @kind connector
  * @category connector
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.

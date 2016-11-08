@@ -37,11 +37,11 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * MultiRange connector provides the logic to build a widget that will
+ * connectMultiRange connector provides the logic to build a widget that will
  * give the user the ability to select a range value for a numeric attribute.
  * Ranges are defined statically.
- * @name MultiRange
- * @kind HOC
+ * @name connectMultiRange
+ * @kind connector
  * @category connector
  * @propType {string} id - widget id, defaults to the attribute name
  * @propType {string} attributeName - the name of the attribute in the records

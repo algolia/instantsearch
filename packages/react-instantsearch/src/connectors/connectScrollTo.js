@@ -3,10 +3,10 @@ import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
 
 /**
- * ScrollTo connector provides the logic to build a widget that will
+ * connectScrollTo connector provides the logic to build a widget that will
  * let the page scroll to a certain point.
- * @name ScrollTo
- * @kind HOC
+ * @name connectScrollTo
+ * @kind connector
  * @category connector
  * @propType {string} [scrollOn="p"] - Widget state key on which to listen for changes, default to the pagination widget.
  * @providedPropType {any} value - the current refinement applied to the widget listened by scrollTo
