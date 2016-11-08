@@ -5,7 +5,7 @@
     "start": "NODE_ENV=development babel-node docgen/start.js & npm run storybook & wait",
     "build": "NODE_ENV=production ./scripts/build.sh",
     "docs:build": "DOCS_DIST=docs/react babel-node docgen/build.js && npm run build-storybook",
-    "docs:publish": "babel-node scripts/gh-pages.js",
+    "docs:update": "./scripts/docs:update.sh",
     "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
     "lint:fix": "eslint . --fix",

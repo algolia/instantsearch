@@ -9,10 +9,6 @@ category: gettingstarted
 React-instantsearch is the ultimate toolbox for creating instant search
 experience using [React](https://facebook.github.io/react/) and Algolia.
 
-**react-instantsearch is currently in Alpha stage, which means that API will
-break and you are VERY welcome to make any constructive feedback about your
-experience with our newest library on [github](https://github.com/algolia/instantsearch.js/issues/new?labels[]=packages/react-instantsearch) or [gitter](https://gitter.im/algolia/instantsearch.js). Thanks for trying it!**
-
 In this tutorial, you'll learn how to:
 
  - add react-instantsearch in your [React](https://facebook.github.io/react/) project
