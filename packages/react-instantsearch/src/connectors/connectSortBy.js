@@ -14,10 +14,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * SortBy connector provides the logic to build a widget that will
+ * connectSortBy connector provides the logic to build a widget that will
  *  displays a list of indexes allowing a user to change the hits are sorting.
- * @name SortBy
- * @kind HOC
+ * @name connectSortBy
+ * @kind connector
  * @category connector
  * @propType {string} [id="sort_by"] - URL state serialization key.
  * @propType {string} defaultRefinement - The default selected index.

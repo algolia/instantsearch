@@ -13,10 +13,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * HitsPerPage connector provides the logic to create connected
+ * connectHitsPerPage connector provides the logic to create connected
  * components that will allow a user to choose to display more or less results from Algolia.
- * @name HitsPerPage
- * @kind HOC
+ * @name connectHitsPerPage
+ * @kind connector
  * @category connector
  * @propType {string} [id="hPP"] - The id of the widget.
  * @propType {number} defaultRefinement - The number of items selected by default
