@@ -46,12 +46,13 @@ yarn
 
 newVersion=$(npm version --no-git-tag-version prerelease)
 
-# now build react-instantsearch
 (
 cd packages/react-instantsearch
 npm version --no-git-tag-version prerelease
+yarn
 )
 
+yarn
 npm run build
 
 # update changelog, not yet because of prototyping
@@ -66,7 +67,7 @@ npm run doctoc
 # git add and tag
 # commitMessage="v$newVersion\n\n$changelog"
 commitMessage="$newVersion"
-git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/
+git add package.json CHANGELOG.md README.md CONTRIBUTING.md packages/ yarn.lock
 printf "%s" $commitMessage | git commit --file -
 # not git tagging for now, still prototyping
 # git tag "v$newVersion"
@@ -85,9 +86,6 @@ npm publish
 cd ..
 rm -rf dist/
 )
-
-DOCS_MOUNT_POINT=/instantsearch.js/react/ NODE_ENV=production DOCS_DIST=docs/react/ npm run docs:build
-npm run docs:publish
 
 printf "Release:
 Package was published to npm.
