@@ -57,10 +57,7 @@ function validateNextProps(props, nextProps) {
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.
- * @propType {object} [searchParameters] - Object containing query parameters to be sent to Algolia.
- * It will be overriden by the search parameters resolved via the widgets. Typical use case:
- * setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information
- * about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
+ * @propType {object} [searchParameters] - Object containing query parameters to be sent to Algolia. It will be overriden by the search parameters resolved via the widgets. Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters). See [Configuring Algolia search parameters](/guides/advanced-topics.html#how-to-configure-algolia-search-parameters).
  * @propType {bool=false} urlSync - Enables automatic synchronization of widgets state to the URL. See [URL Synchronization](/guides/advanced-topics.html#how-to-synchronize-the-url-with-the-search).
  * @propType {number=700} threshold - Threshold in milliseconds above which new locations will be pushed to the history, instead of replacing the previous one. See [Location Debouncing](guides/advanced-topics.html#how-to-synchronize-the-url-with-the-search).
  * @example
