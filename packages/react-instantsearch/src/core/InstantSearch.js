@@ -203,8 +203,8 @@ class InstantSearch extends Component {
 
 InstantSearch.propTypes = {
   // @TODO: These props are currently constant.
-  appId: PropTypes.string.isRequired,
-  apiKey: PropTypes.string.isRequired,
+  appId: PropTypes.string,
+  apiKey: PropTypes.string,
   indexName: PropTypes.string.isRequired,
 
   algoliaClient: PropTypes.object,
