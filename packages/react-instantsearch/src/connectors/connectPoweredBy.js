@@ -1,10 +1,10 @@
 import createConnector from '../core/createConnector';
 
 /**
- * PoweredBy connector provides the logic to build a widget that
+ * connectPoweredBy connector provides the logic to build a widget that
  * will display a link to algolia.
- * @name PoweredBy
- * @kind HOC
+ * @name connectPoweredBy
+ * @kind connector
  * @category connector
  * @providedPropType {string} url - the url to redirect to algolia
  */

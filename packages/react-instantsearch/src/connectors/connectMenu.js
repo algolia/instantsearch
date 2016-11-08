@@ -21,10 +21,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * Menu connector provides the logic to build a widget that will
+ * connectMenu connector provides the logic to build a widget that will
  * give the user tha ability to choose a single value for a specific facet.
- * @name Menu
- * @kind HOC
+ * @name connectMenu
+ * @kind connector
  * @category connector
  * @propType {string} id - the id of the widget. Defaults to `attributeName`.
  * @propType {string} attributeName - the name of the attribute in the record
