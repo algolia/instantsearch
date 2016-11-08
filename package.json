@@ -20,7 +20,7 @@
   "dependencies": {
     "@kadira/react-storybook-addon-info": "^3.3.0",
     "@kadira/storybook": "^2.27.0",
-    "@kadira/storybook-addon-knobs": "^1.2.3",
+    "@kadira/storybook-addon-knobs": "^1.5.0",
     "@kadira/storybook-addon-notes": "^1.0.1",
     "@kadira/storybook-addon-options": "^1.0.1",
     "@kadira/storybook-addons": "^1.5.0",
