@@ -18,10 +18,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * Toggle connector provides the logic to build a widget that will
+ * connectToggle connector provides the logic to build a widget that will
  *  provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
- * @name Toggle
- * @kind HOC
+ * @name connectToggle
+ * @kind connector
  * @category connector
  * @propType {string} id - URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`. Required when `attributeName` isn't present.
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.

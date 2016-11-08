@@ -12,7 +12,7 @@ export default function(opts) {
 
     function dataReady(unfilteredSymbols) {
       const symbolsByCategory = groupBy(
-        unfilteredSymbols.filter(o => !o.deprecated && o.kind && (o.kind === 'component' || o.kind === 'HOC')),
+        unfilteredSymbols.filter(o => !o.deprecated && o.kind && (o.kind === 'component' || o.kind === 'connector')),
         'kind'
       );
 

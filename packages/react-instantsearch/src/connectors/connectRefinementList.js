@@ -36,10 +36,10 @@ function getValue(name, props, state) {
 }
 
 /**
- * RefinementList connector provides the logic to build a widget that will
+ * connectRefinementList connector provides the logic to build a widget that will
  * give the user tha ability to choose multiple values for a specific facet.
- * @name RefinementList
- * @kind HOC
+ * @name connectRefinementList
+ * @kind connector
  * @category connector
  * @propType {string} id - the id of the widget
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.

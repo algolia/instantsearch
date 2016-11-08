@@ -14,10 +14,10 @@ function getCurrentRefinement(props, state) {
 }
 
 /**
- * Pagination connector provides the logic to build a widget that will
+ * connectPagination connector provides the logic to build a widget that will
  * let the user displays hits corresponding to a certain page.
- * @name Pagination
- * @kind HOC
+ * @name connectPagination
+ * @kind connector
  * @category connector
  * @propType {string} id - widget id, URL state serialization key. The state of this widget takes the shape of a `number`.
  * @propType {boolean} [showFirst=true] - Display the first page link.

@@ -63,12 +63,12 @@ function transformValue(value, limit, props, state) {
 }
 
 /**
- * HierarchicalMenu connector provides the logic to build a widget that will
+ * connectHierarchicalMenu connector provides the logic to build a widget that will
  * give the user the ability to explore a tree-like structure.
  * This is commonly used for multi-level categorization of products on e-commerce
  * websites. From a UX point of view, we suggest not displaying more than two levels deep.
- * @name HierarchicalMenu
- * @kind HOC
+ * @name connectHierarchicalMenu
+ * @kind connector
  * @category connector
  * @propType {string} id - URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
  * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.

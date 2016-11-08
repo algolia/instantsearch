@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * Since a lot of sliders already exists, we did not include one by default.
  * However you can easily connect to react-instantsearch an existing one
- * using the [connectRange connector](/HOC/Range.html).
+ * using the [connectRange connector](/connector/connectRange.html).
  *
  * @name RangeSlider
  * @kind component
