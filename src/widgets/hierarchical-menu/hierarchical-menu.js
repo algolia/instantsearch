@@ -22,7 +22,7 @@ const bem = bemHelper('ais-hierarchical-menu');
  * @param  {string} [options.rootPath] Prefix path to use if the first level is not the root level.
  * @param  {string} [options.showParentLevel=false] Show the parent level of the current refined value
  * @param  {number} [options.limit=10] How much facet values to get
- * @param  {string[]|Function} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.  
+ * @param  {string[]|Function} [options.sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.header=''] Header template (root level only)
