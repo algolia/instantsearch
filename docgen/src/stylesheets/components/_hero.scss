@@ -2,6 +2,9 @@
   display: none;
 }
 
+.tagline a {
+  color: $denim-blue;
+}
 
 // Start the hero
 .hero-section {
@@ -74,7 +77,7 @@
   }
 
   .article-title  {
-    a {
+    .algolia-website-logo-link {
       width: 20px;
       display: inline-block;
       position: relative;
