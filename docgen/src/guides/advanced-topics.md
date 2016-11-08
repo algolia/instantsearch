@@ -5,7 +5,7 @@ category: guide
 navWeight: 0
 ---
 
-## How to preselect values
+## How to preselect values using Virtual Widgets
 
 Let's say you want to have some facet values already selected but without displaying them to the user. What you could do
 is to to use a connector that will render nothing, like a virtual widget. 
@@ -18,6 +18,28 @@ const ConnectedMenu = connectMenu(() => {
   });
 
 <ConnectedMenu attributeName="category" defaultRefinement="Dining"/>
+```
+
+## How to configure Algolia Search Parameters
+
+Sometimes you will need to configure some search parameters values
+([see the complete list of possible values](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters))
+but using a `Virtual Widget` will not be possible. A typical use case for it will be when you want to setup the distinct
+parameter for example. 
+
+In that case, our [InstantSearch root component](/component/InstantSearch.html) has a `searchParameters` props that can be used to do so. This props takes an object
+of SearchParameters values. 
+
+Here's an example for setting the `HitsPerPage` value:
+
+```jsx
+<InstantSearch
+    appId="appId"
+    apiKey="apiKey"
+    indexName="indexName"
+    searchParameters={{hitsPerPage: 30}}
+>
+</InstantSearch>
 ```
 
 ## How to use manual values with Menu and List
@@ -62,7 +84,7 @@ To activate this feature, you need to pass the `urlSync` props when instantiatin
 
 Here's an example
 
-```javascript
+```jsx
 <InstantSearch
     appId="appId"
     apiKey="apiKey"
