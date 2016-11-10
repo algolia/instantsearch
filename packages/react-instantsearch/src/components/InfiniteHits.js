@@ -8,13 +8,13 @@ import theme from './Hits.css';
 
 class InfiniteHits extends Component {
   render() {
-    const {applyTheme, itemComponent: ItemComponent, hits, isLastPage, refine} = this.props;
+    const {applyTheme, itemComponent: ItemComponent, hits, hasMore, refine} = this.props;
     const renderedHits = hits.map(hit =>
       <ItemComponent key={hit.objectID} hit={hit} />
     );
-    const loadMoreButton = isLastPage ?
-      <button disabled>Load more</button> :
-      <button onClick={() => refine()}>Load more</button>;
+    const loadMoreButton = hasMore ?
+      <button onClick={() => refine()}>Load more</button> :
+      <button disabled>Load more</button>;
 
     return (
       <div {...applyTheme('root', 'root')}>
@@ -32,7 +32,7 @@ InfiniteHits.propTypes = {
     PropTypes.string,
     PropTypes.func,
   ]).isRequired,
-  isLastPage: PropTypes.bool.isRequired,
+  hasMore: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
 };
 

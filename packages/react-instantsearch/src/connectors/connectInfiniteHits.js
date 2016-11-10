@@ -1,5 +1,5 @@
 /**
- * @module widgets/Hits
+ * @module widgets/InfiniteHits
  */
 import {PropTypes} from 'react';
 
@@ -9,8 +9,8 @@ import createConnector from '../core/createConnector';
  * InfiniteHits connector provides the logic to create connected
  * components that will render an continuous list of results retrieved from
  * Algolia. This connector provides a function to load more results.
- * @name InfiniteHits
- * @kind HOC
+ * @name connectInfiniteHits
+ * @kind connector
  * @category connector
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.
@@ -18,9 +18,10 @@ import createConnector from '../core/createConnector';
  *   the results. If it is not provided the rendering defaults to displaying the
  *   hit in its JSON form. The component will be called with a `hit` prop.
  * @providedPropType {array.<object>} hits - the records that matched the search state
+ * @providedPropType {boolean} hasMore - indicates if there are more pages to load
  */
 export default createConnector({
-  displayName: 'Algolia1000HitsDragon',
+  displayName: 'AlgoliaInfiniteHits',
 
   propTypes: {
     hitsPerPage: PropTypes.number,
@@ -38,8 +39,8 @@ export default createConnector({
     if (!resultsStruct.results) {
       this._allResults = [];
       return {
-        hits: [],
-        isLastPage: true,
+        hits: this._allResults,
+        hasMore: false,
       };
     }
 
@@ -55,14 +56,17 @@ export default createConnector({
           ...this._allResults,
           ...hits,
         ];
-      } else {
+      } else if (page < previousPage) {
         this._allResults = hits;
       }
+      // If it is the same page we do not touch the page result list
     }
 
+    const lastPageIndex = nbPages - 1;
+    const hasMore = page < lastPageIndex;
     return {
       hits: this._allResults,
-      isLastPage: nbPages === page + 1,
+      hasMore,
     };
   },
 
@@ -70,11 +74,11 @@ export default createConnector({
     const currentPage = widgetsState[props.id] ?
       widgetsState[props.id].page :
       0;
-    const isHitsPerPageDefined = typeof props.hitsPerPage !== 'undefined';
+    const isHitsPerPageDefined = typeof searchParameters.hitsPerPage !== 'undefined';
 
     return searchParameters.setQueryParameters({
       page: currentPage,
-      hitsPerPage: isHitsPerPageDefined ? props.hitsPerPage : searchParameters.hitsPerPage,
+      hitsPerPage: isHitsPerPageDefined ? searchParameters.hitsPerPage : props.hitsPerPage,
     });
   },
 
