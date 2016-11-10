@@ -13,7 +13,6 @@ const Wrap = props =>
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
-    urlSync={false}
   >
     {props.children}
   </InstantSearch>;
@@ -53,7 +52,6 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
-    urlSync={false}
   >
     <div>
       <div className="container widget-container">
