@@ -21,7 +21,8 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string} [options.operator='or'] How to apply refinements. Possible values: `or`, `and`
- * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count:asc|count:desc|name:asc|name:desc|isRefined`
+ * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count:asc|count:desc|name:asc|name:desc|isRefined`.
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
