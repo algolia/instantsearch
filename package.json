@@ -78,6 +78,7 @@
     "postcss": "^5.2.5",
     "postcss-scss": "^0.3.1",
     "pug": "^2.0.0-beta6",
+    "qs": "^6.3.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dev-utils": "^0.3.0",
