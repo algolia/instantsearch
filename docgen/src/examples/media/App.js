@@ -11,12 +11,16 @@ import {
 } from 'react-instantsearch/dom';
 
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
+import {withUrlSync} from '../urlSync';
 
-export default function App() {
-  return <InstantSearch
+const App = props =>
+  <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="movies"
+    state={props.state}
+    createURL={props.createURL.bind(this)}
+    onStateChange={props.onStateChange.bind(this)}
   >
     <div>
       <Header/>
@@ -26,7 +30,6 @@ export default function App() {
       </section>
     </div>
   </InstantSearch>;
-}
 
 const Header = () =>
   <header className="row">
@@ -143,3 +146,5 @@ const RefinementListLinks = connectRefinementList(({items, refine, createURL}) =
     </div>
   );
 });
+
+export default withUrlSync(App);

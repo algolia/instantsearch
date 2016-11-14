@@ -6531,7 +6531,7 @@ qs@^1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-1.2.2.tgz#19b57ff24dc2a99ce1f8bdf6afcda59f8ef61f88"
 
-qs@^6.1.0, qs@^6.2.0, qs@^6.2.1, "qs@>= 0.4.0", qs@~6.3.0:
+qs@^6.1.0, qs@^6.2.0, qs@^6.2.1, qs@^6.3.0, "qs@>= 0.4.0", qs@~6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.0.tgz#f403b264f23bc01228c74131b407f18d5ea5d442"
 
