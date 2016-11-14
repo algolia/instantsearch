@@ -1,8 +1,8 @@
 <!--
-  Before creating an issue please make sure you are using the latest version of the library.
-
-  Also ensure you did at least one GitHub search in current issues, maybe your question was
-  already answered
+  Thanks for participating in this project!
+  Please:
+    - make sure you are using the latest version of the library.
+    - do at least one GitHub search in current issues, maybe your question is already here
 -->
 
 **Do you want to request a *feature* or report a *bug*?**
