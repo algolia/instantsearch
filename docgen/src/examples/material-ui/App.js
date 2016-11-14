@@ -33,23 +33,24 @@ import {
 } from 'material-ui';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import SortIcon from 'material-ui/svg-icons/content/sort';
+import {withUrlSync} from '../urlSync';
 
 injectTapEventPlugin();
 
-export default function App() {
-  return (
-    <MuiThemeProvider>
-      <MaterialUiExample />
-    </MuiThemeProvider>
-  );
-}
+const App = props =>
+  <MuiThemeProvider>
+    <MaterialUiExample {...props} />
+  </MuiThemeProvider>;
 
-const MaterialUiExample = () =>
+const MaterialUiExample = props =>
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-    indexName="ikea">
-
+    indexName="ikea"
+    state={props.state}
+    createURL={props.createURL.bind(this)}
+    onStateChange={props.onStateChange.bind(this)}
+  >
     <Content/>
   </InstantSearch>;
 
@@ -145,16 +146,16 @@ const MaterialUiSearchBox = ({query, refine, marginLeft}) => {
 };
 
 const CheckBoxItem = ({item, refine}) =>
-    <ListItem
-              primaryText={item.label}
-              leftCheckbox={
-                <Checkbox checked={item.isRefined}
-                          onCheck={e => {
-                            e.preventDefault();
-                            refine(item.value);
-                          }}
-                />}
-    />;
+  <ListItem
+    primaryText={item.label}
+    leftCheckbox={
+      <Checkbox checked={item.isRefined}
+                onCheck={e => {
+                  e.preventDefault();
+                  refine(item.value);
+                }}
+      />}
+  />;
 
 const MaterialUiCheckBoxRefinementList = ({items, attributeName, refine, createURL}) =>
     <List>
@@ -175,27 +176,27 @@ const MaterialUiNestedList = function ({id, items, refine}) {
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
       const nestedElements = item.children ? item.children.map((child, childIdx) =>
-        <ListItem
-          primaryText={child.label}
-          key={childIdx}
+          <ListItem
+            primaryText={child.label}
+            key={childIdx}
+            onClick={e => {
+              e.preventDefault();
+              refine(child.value);
+            }}
+            style={child.isRefined ? {fontWeight: 700} : {}}
+          />
+        ) : [];
+      return <ListItem
+          primaryText={item.label}
+          key={idx}
+          primaryTogglesNestedList={true}
+          nestedItems={nestedElements}
           onClick={e => {
             e.preventDefault();
-            refine(child.value);
+            refine(item.value);
           }}
-          style={child.isRefined ? {fontWeight: 700} : {}}
-        />
-      ) : [];
-      return <ListItem
-        primaryText={item.label}
-        key={idx}
-        primaryTogglesNestedList={true}
-        nestedItems={nestedElements}
-        onClick={e => {
-          e.preventDefault();
-          refine(item.value);
-        }}
-        style={item.isRefined ? {fontWeight: 700} : {}}
-      />;
+          style={item.isRefined ? {fontWeight: 700} : {}}
+        />;
     }
     )}
   </List>;
@@ -278,10 +279,10 @@ function CustomHits({hits, marginLeft}) {
   );
 }
 
-function MaterialUiClearAllFilters({filters, refine}) {
+function MaterialUiClearAllFilters({items, refine}) {
   return (
     <FlatButton
-      onTouchTap={() => refine(filters)}
+      onTouchTap={() => refine(items)}
       label="Clear All"
       style={{height: 48, width: 300, backgroundColor: 'white'}}
     />
@@ -367,3 +368,5 @@ const ConnectedHits = connectHits(CustomHits);
 const ConnectedCurrentRefinements = connectCurrentRefinements(MaterialUiClearAllFilters);
 
 const ConnectedPagination = connectPagination(MaterialUiBottomNavigation);
+
+export default withUrlSync(App);

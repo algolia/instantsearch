@@ -19,25 +19,26 @@ import {
   connectHits,
   connectMultiRange,
 } from 'react-instantsearch/connectors';
+import {withUrlSync} from '../urlSync';
 
-export default function App() {
-  return (
-    <InstantSearch
-      className="container-fluid"
-      appId="latency"
-      apiKey="6be0576ff61c053d5f9a3225e2a90f76"
-      indexName="ikea"
-    >
-      <div>
-        <Header />
-        <div className="content-wrapper">
-          <Facets />
-          <CustomResults />
-        </div>
+const App = props =>
+  <InstantSearch
+    className="container-fluid"
+    appId="latency"
+    apiKey="6be0576ff61c053d5f9a3225e2a90f76"
+    indexName="ikea"
+    state={props.state}
+    createURL={props.createURL.bind(this)}
+    onStateChange={props.onStateChange.bind(this)}
+  >
+    <div>
+      <Header />
+      <div className="content-wrapper">
+        <Facets />
+        <CustomResults />
       </div>
-    </InstantSearch>
-  );
-}
+    </div>
+  </InstantSearch>;
 
 const Header = () =>
   <header className="content-wrapper">
@@ -295,3 +296,5 @@ const PriceRange = ({label, value, onClick}) =>
 const ConnectedSearchBox = connectSearchBox(CustomCheckbox);
 const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);
 const ConnectedHits = connectHits(CustomHits);
+
+export default withUrlSync(App);
