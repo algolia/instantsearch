@@ -1,45 +1,19 @@
 import {PropTypes, Component, Children} from 'react';
-import {createHistory} from 'history';
-
-import createHistoryStateManager from './createHistoryStateManager';
 import createInstantSearchManager from './createInstantSearchManager';
 
-function formatProps(props) {
-  return props.map(prop => `\`${prop}\``).join(', ');
-}
-
-const neededProps = ['state', 'onStateChange', 'createURL'];
 function validateProps(props) {
-  const presentProps = [];
-  const missingProps = [];
-  for (const prop of neededProps) {
-    if (props[prop]) {
-      presentProps.push(prop);
-    } else {
-      missingProps.push(prop);
-    }
-  }
-  if (presentProps.length !== 0 && missingProps.length !== 0) {
-    const missingPlural = missingProps.length > 1;
-    const presentPlural = presentProps.length > 1;
-    const missingPropsStr = formatProps(missingProps);
-    const presentPropsStr = formatProps(presentProps);
-    const missingPropName = `prop${missingPlural ? 's' : ''}`;
-    const presentPropName = `prop${presentPlural ? 's' : ''}`;
+  if (props.state && !props.onStateChange)
     throw new Error(
-      `You must provide ${missingPlural ? '' : 'a '}${missingPropsStr} ` +
-      `${missingPropName} alongside the ${presentPropsStr} ` +
-      `${presentPropName} on <InstantSearch>`
+      'You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>'
     );
-  }
 }
 
 function validateNextProps(props, nextProps) {
-  if (!props.onStateChange && nextProps.onStateChange) {
+  if (!props.state && nextProps.state) {
     throw new Error(
       'You can\'t switch <InstantSearch> from being uncontrolled to controlled'
     );
-  } else if (props.onStateChange && !nextProps.onStateChange) {
+  } else if (props.state && !nextProps.state) {
     throw new Error(
       'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
     );
@@ -85,32 +59,9 @@ class InstantSearch extends Component {
 
     validateProps(props);
 
-    this.isControlled = Boolean(props.onStateChange);
-    this.isHSControlled = !this.isControlled &&
-                          (props.history || props.urlSync);
+    this.isControlled = Boolean(props.state);
 
-    let initialState;
-    if (this.isControlled) {
-      initialState = props.state;
-    } else if (this.isHSControlled) {
-      const hs = props.history || createHistory();
-      this.hsManager = createHistoryStateManager({
-        history: hs,
-        threshold: props.threshold,
-        onInternalStateUpdate: this.onHistoryInternalStateUpdate.bind(this),
-        getKnownKeys: this.getKnownKeys.bind(this),
-      });
-      // @TODO: Since widgets haven't been registered yet, we have no way of
-      // knowing which URL query keys are known and which aren't. As such,
-      // `getStateFromCurrentLocation()` simply returns the current URL query
-      // deserialized.
-      // We might want to initialize to an empty state here and call
-      // `onHistoryInternalStateUpdate` on `componentDidMount`, once all widgets
-      // have been registered.
-      initialState = this.hsManager.getStateFromCurrentLocation();
-    } else {
-      initialState = {};
-    }
+    const initialState = this.isControlled ? props.state : {};
 
     this.aisManager = createInstantSearchManager({
       appId: props.appId,
@@ -128,12 +79,6 @@ class InstantSearch extends Component {
     validateNextProps(this.props, nextProps);
     if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.state);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.isHSControlled) {
-      this.hsManager.unlisten();
     }
   }
 
@@ -160,18 +105,7 @@ class InstantSearch extends Component {
 
   createHrefForState(state) {
     state = this.aisManager.transitionState(state);
-
-    if (this.isControlled) {
-      return this.props.createURL(state, this.getKnownKeys());
-    } else if (this.isHSControlled) {
-      return this.hsManager.createHrefForState(state, this.getKnownKeys());
-    } else {
-      return '#';
-    }
-  }
-
-  onHistoryInternalStateUpdate(state) {
-    this.aisManager.onExternalStateUpdate(state);
+    return this.isControlled && this.props.createURL ? this.props.createURL(state, this.getKnownKeys()) : '#';
   }
 
   onWidgetsInternalStateUpdate(state) {
@@ -180,12 +114,10 @@ class InstantSearch extends Component {
     if (this.isControlled) {
       this.props.onStateChange(state);
     } else {
-      this.aisManager.onExternalStateUpdate(state);
-      if (this.isHSControlled) {
-        // This needs to go after the aisManager's update, since it depends on new
-        // metadata.
-        this.hsManager.onExternalStateUpdate(state);
+      if (this.props.onStateChange) {
+        this.props.onStateChange(state);
       }
+      this.aisManager.onExternalStateUpdate(state);
     }
   }
 
@@ -212,20 +144,12 @@ InstantSearch.propTypes = {
 
   searchParameters: PropTypes.object,
 
-  history: PropTypes.object,
-  urlSync: PropTypes.bool,
-  threshold: PropTypes.number,
   createURL: PropTypes.func,
 
   state: PropTypes.object,
   onStateChange: PropTypes.func,
 
   children: PropTypes.node,
-};
-
-InstantSearch.defaultProps = {
-  urlSync: false,
-  threshold: 700,
 };
 
 InstantSearch.childContextTypes = {
