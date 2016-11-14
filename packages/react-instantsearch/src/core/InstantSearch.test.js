@@ -3,19 +3,13 @@
 
 import React from 'react';
 import {mount} from 'enzyme';
-import {createHistory} from 'history';
 
 import InstantSearch from './InstantSearch';
 
-import createHistoryStateManager from './createHistoryStateManager';
-jest.mock('./createHistoryStateManager', () => jest.fn(() => ({
-  getStateFromCurrentLocation: jest.fn(),
-})));
 import createInstantSearchManager from './createInstantSearchManager';
 jest.mock('./createInstantSearchManager', () => jest.fn(() => ({
   context: {},
 })));
-jest.mock('history');
 
 const DEFAULT_PROPS = {
   appId: 'foo',
@@ -26,7 +20,6 @@ const DEFAULT_PROPS = {
 
 describe('InstantSearch', () => {
   afterEach(() => {
-    createHistoryStateManager.mockClear();
     createInstantSearchManager.mockClear();
   });
 
@@ -64,7 +57,7 @@ describe('InstantSearch', () => {
           <div />
         </InstantSearch>
       );
-    }).toThrowError('You must provide `onStateChange`, `createURL` props alongside the `state` prop on <InstantSearch>');
+    }).toThrowError('You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>');
 
     expect(() => {
       mount(
@@ -76,7 +69,7 @@ describe('InstantSearch', () => {
           <div />
         </InstantSearch>
       );
-    }).toThrowError('You must provide a `onStateChange` prop alongside the `state`, `createURL` props on <InstantSearch>');
+    }).toThrowError('You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>');
 
     expect(() => {
       const wrapper = mount(
@@ -92,7 +85,7 @@ describe('InstantSearch', () => {
       wrapper.setProps({
         state: undefined,
       });
-    }).toThrowError('You must provide a `state` prop alongside the `onStateChange`, `createURL` props on <InstantSearch>');
+    }).toThrowError('You can\'t switch <InstantSearch> from being controlled to uncontrolled');
 
     expect(() => {
       const wrapper = mount(
@@ -175,46 +168,6 @@ describe('InstantSearch', () => {
     });
   });
 
-  it('works as a history controlled input', () => {
-    const widgetsIds = [];
-    const ism = {
-      transitionState: state => ({...state, transitioned: true}),
-      onExternalStateUpdate: jest.fn(),
-      getWidgetsIds: () => widgetsIds,
-    };
-    createInstantSearchManager.mockImplementation(() => ism);
-    const initialState = {a: 0};
-    const hsm = {
-      getStateFromCurrentLocation: jest.fn(() => initialState),
-      onExternalStateUpdate: jest.fn(),
-      createHrefForState: jest.fn(state => state),
-    };
-    createHistoryStateManager.mockImplementation(() => hsm);
-
-    const history = {};
-    const threshold = 666;
-    const wrapper = mount(
-      <InstantSearch {...DEFAULT_PROPS} history={history} threshold={threshold}>
-        <div />
-      </InstantSearch>
-    );
-    const nextState = {a: 1};
-
-    const args = createHistoryStateManager.mock.calls[0][0];
-    expect(args.history).toBe(history);
-    expect(args.threshold).toBe(threshold);
-    expect(args.getKnownKeys()).toBe(widgetsIds);
-    args.onInternalStateUpdate(nextState);
-    expect(ism.onExternalStateUpdate.mock.calls[0][0]).toBe(nextState);
-
-    const {ais: {onInternalStateUpdate}} = wrapper.instance().getChildContext();
-    onInternalStateUpdate(nextState);
-    expect(hsm.onExternalStateUpdate.mock.calls[0][0]).toEqual({
-      a: 1,
-      transitioned: true,
-    });
-  });
-
   it('works as an uncontrolled input', () => {
     const ism = {
       transitionState: state => ({...state, transitioned: true}),
@@ -235,19 +188,11 @@ describe('InstantSearch', () => {
       a: 1,
       transitioned: true,
     });
-  });
 
-  it('creates its own history if urlSync=true and history=undefined', () => {
-    const history = {};
-    createHistory.mockImplementationOnce(() => history);
-    mount(
-      <InstantSearch {...DEFAULT_PROPS} urlSync={true}>
-        <div />
-      </InstantSearch>
-    );
-
-    const args = createHistoryStateManager.mock.calls[0][0];
-    expect(args.history).toBe(history);
+    const onStateChange = jest.fn();
+    wrapper.setProps({onStateChange});
+    onInternalStateUpdate({a: 2});
+    expect(onStateChange.mock.calls[0][0]).toEqual({a: 2, transitioned: true});
   });
 
   it('exposes the isManager\'s store and widgetsManager in context', () => {
@@ -294,36 +239,6 @@ describe('InstantSearch', () => {
       expect(createURL.mock.calls[0][1]).toBe(widgetsIds);
     });
 
-    it('passes through to the hsManager when it is defined', () => {
-      const widgetsIds = [];
-      const ism = {
-        transitionState: state => ({...state, transitioned: true}),
-        getWidgetsIds: () => widgetsIds,
-      };
-      createInstantSearchManager.mockImplementation(() => ism);
-      const initialState = {a: 0};
-      const hsm = {
-        getStateFromCurrentLocation: jest.fn(() => initialState),
-        onExternalStateUpdate: jest.fn(),
-        createHrefForState: jest.fn(state => state),
-      };
-      createHistoryStateManager.mockImplementation(() => hsm);
-
-      const wrapper = mount(
-        <InstantSearch
-          {...DEFAULT_PROPS}
-          urlSync
-        >
-          <div />
-        </InstantSearch>
-      );
-
-      const {ais: {createHrefForState}} = wrapper.instance().getChildContext();
-      const outputURL = createHrefForState({a: 1});
-      expect(outputURL).toEqual({a: 1, transitioned: true});
-      expect(hsm.createHrefForState.mock.calls[0][1]).toBe(widgetsIds);
-    });
-
     it('returns # otherwise', () => {
       const wrapper = mount(
         <InstantSearch {...DEFAULT_PROPS}>
@@ -335,24 +250,5 @@ describe('InstantSearch', () => {
       const outputURL = createHrefForState({a: 1});
       expect(outputURL).toBe('#');
     });
-  });
-
-  it('cleans after itself when it unmounts', () => {
-    const hsm = {
-      getStateFromCurrentLocation: jest.fn(() => ({})),
-      unlisten: jest.fn(),
-    };
-    createHistoryStateManager.mockImplementation(() => hsm);
-
-    const wrapper = mount(
-      <InstantSearch
-        {...DEFAULT_PROPS}
-        urlSync
-      >
-        <div />
-      </InstantSearch>
-    );
-    wrapper.unmount();
-    expect(hsm.unlisten.mock.calls.length).toBe(1);
   });
 });
