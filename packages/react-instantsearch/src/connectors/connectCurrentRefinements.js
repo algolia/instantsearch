@@ -8,7 +8,7 @@ import createConnector from '../core/createConnector';
  * @kind connector
  * @category connector
  * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {array.<{key: string, label: string}>} filters - all the filters, the key for calling the refine prop function, label is for the display.
+ * @providedPropType {array.<{key: string, label: string}>} items - all the filters, the key for calling the refine prop function, label is for the display.
  */
 export default createConnector({
   displayName: 'AlgoliaCurrentRefinements',
