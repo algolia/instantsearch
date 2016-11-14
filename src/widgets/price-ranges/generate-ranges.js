@@ -7,6 +7,11 @@ function round(v, precision) {
 }
 
 function generateRanges(stats) {
+  // cannot compute any range
+  if (stats.min === stats.max) {
+    return [];
+  }
+
   let precision;
   if (stats.avg < 100) {
     precision = 1;
