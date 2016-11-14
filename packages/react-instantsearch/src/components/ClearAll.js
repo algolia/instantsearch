@@ -15,8 +15,14 @@ class ClearAll extends Component {
 
   render() {
     const {applyTheme, translate, items, refine} = this.props;
-    if (items.length === 0) {
-      return null;
+    const isDisabled = items.length === 0;
+
+    if (isDisabled) {
+      return (
+        <button {...applyTheme('root', 'root', 'clearAllDisabled')} disabled>
+          {translate('reset')}
+        </button>
+      );
     }
 
     return (
