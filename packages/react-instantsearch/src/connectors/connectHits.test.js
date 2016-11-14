@@ -18,7 +18,7 @@ describe('connectHits', () => {
     expect(props).toBe(null);
   });
 
-  it('defaults hitsPerPage to its hitsPerPage prop', () => {
+  it('defaults hitsPerPage to its hitsPerPage prop, use the state otherwise', () => {
     const params = new SearchParameters();
     const params2 = getSearchParameters(params, {hitsPerPage: 666});
     expect(params2.hitsPerPage).toBe(666);

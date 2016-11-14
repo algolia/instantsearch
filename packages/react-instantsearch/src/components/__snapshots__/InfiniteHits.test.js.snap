@@ -1,0 +1,27 @@
+exports[`Hits accepts a itemComponent prop 1`] = `
+<div
+  className="root">
+  <Hit
+    hit={
+      Object {
+        "objectID": 0,
+      }
+    } />
+  <Hit
+    hit={
+      Object {
+        "objectID": 1,
+      }
+    } />
+  <Hit
+    hit={
+      Object {
+        "objectID": 2,
+      }
+    } />
+  <button
+    disabled={true}>
+    Load more
+  </button>
+</div>
+`;
