@@ -15,18 +15,18 @@ By default we provide BEM class names to every element of a widget. That way it'
 
 Let's see an example with the `RangeInput` widget:
 
-```html
+```text/html
 <form data-reactroot="" class="ais-RangeInput__root">
 	<label class="ais-RangeInput__labelMin">
 		<input type="number" 
 		       class="ais-RangeInput__inputMin" 
-		       value="0.39">
+		       value="0.39" />
 	</label>
 	<span class="ais-RangeInput__separator">to</span>
 	<label class="ais-RangeInput__labelMax">
 		<input type="number" 
 		       class="ais-RangeInput__inputMax" 
-		       value="799">
+		       value="799" />
 	</label>
 	<button class="ais-RangeInput__submit" type="submit">go</button>
 </form>
