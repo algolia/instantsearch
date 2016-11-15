@@ -33,7 +33,7 @@ function getCurrentRefinement(props, state) {
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} [sortBy=['count:desc','name:asc']] - defines how the items are sorted. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options
  * @propType {string} defaultRefinement - the value of the item selected by default
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the Menu can display.
@@ -124,12 +124,14 @@ export default createConnector({
     const currentRefinement = getCurrentRefinement(props, state);
     return {
       id,
-      filters: currentRefinement === null ? [] : [{
+      items: currentRefinement === null ? [] : [{
         label: `${props.attributeName}: ${currentRefinement}`,
-        clear: nextState => ({
+        attributeName: props.attributeName,
+        value: nextState => ({
           ...nextState,
           [id]: '',
         }),
+        currentRefinement,
       }],
     };
   },

@@ -163,7 +163,7 @@ describe('connectRefinementList', () => {
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({id: 'ok'}, {});
-    expect(metadata).toEqual({id: 'ok', filters: []});
+    expect(metadata).toEqual({id: 'ok', items: []});
   });
 
   it('registers its filter in metadata', () => {
@@ -173,22 +173,30 @@ describe('connectRefinementList', () => {
     );
     expect(metadata).toEqual({
       id: 'ok',
-      filters: [
+      items: [
         {
-          label: 'wot: wat',
-          // Ignore clear, we test it later
-          clear: metadata.filters[0].clear,
-        },
-        {
-          label: 'wot: wut',
-          clear: metadata.filters[1].clear,
+          label: 'wot: ',
+          attributeName: 'wot',
+          currentRefinement: ['wat', 'wut'],
+          value: metadata.items[0].value,
+          items: [
+            {
+              label: 'wat',
+              value: metadata.items[0].items[0].value,
+            },
+            {
+              label: 'wut',
+              value: metadata.items[0].items[1].value,
+            },
+          ],
+          // Ignore value, we test it later
         },
       ],
     });
 
-    let state = metadata.filters[0].clear({ok: ['wat', 'wut']});
+    let state = metadata.items[0].items[0].value({ok: ['wat', 'wut']});
     expect(state).toEqual({ok: ['wut']});
-    state = metadata.filters[1].clear(state);
+    state = metadata.items[0].items[1].value(state);
     expect(state).toEqual({ok: ''});
   });
 });

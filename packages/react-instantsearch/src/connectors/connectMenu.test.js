@@ -150,21 +150,23 @@ describe('connectMenu', () => {
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({id: 'ok'}, {});
-    expect(metadata).toEqual({id: 'ok', filters: []});
+    expect(metadata).toEqual({id: 'ok', items: []});
   });
 
   it('registers its filter in metadata', () => {
     const metadata = getMetadata({id: 'ok', attributeName: 'wot'}, {ok: 'wat'});
     expect(metadata).toEqual({
       id: 'ok',
-      filters: [{
+      items: [{
         label: 'wot: wat',
+        attributeName: 'wot',
+        currentRefinement: 'wat',
         // Ignore clear, we test it later
-        clear: metadata.filters[0].clear,
+        value: metadata.items[0].value,
       }],
     });
 
-    const state = metadata.filters[0].clear({ok: 'wat'});
+    const state = metadata.items[0].value({ok: 'wat'});
     expect(state).toEqual({ok: ''});
   });
 });

@@ -118,7 +118,7 @@ describe('connectMultiRange', () => {
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({id: 'ok'}, {});
-    expect(metadata).toEqual({id: 'ok', filters: []});
+    expect(metadata).toEqual({id: 'ok', items: []});
   });
 
   it('registers its filter in metadata', () => {
@@ -135,14 +135,16 @@ describe('connectMultiRange', () => {
     );
     expect(metadata).toEqual({
       id: 'wot',
-      filters: [{
+      items: [{
         label: 'wot: YAY',
         // Ignore clear, we test it later
-        clear: metadata.filters[0].clear,
+        value: metadata.items[0].value,
+        attributeName: 'wot',
+        currentRefinement: 'YAY',
       }],
     });
 
-    const state = metadata.filters[0].clear({wot: '100:200'});
+    const state = metadata.items[0].value({wot: '100:200'});
     expect(state).toEqual({wot: ''});
   });
 });

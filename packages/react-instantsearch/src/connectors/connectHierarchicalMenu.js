@@ -80,7 +80,7 @@ function transformValue(value, limit, props, state) {
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{children: object, count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the HierarchicalMenu can display. Children has the same shape as parent items.
@@ -204,12 +204,14 @@ export default createConnector({
     const currentRefinement = getCurrentRefinement(props, state);
     return {
       id,
-      filters: !currentRefinement ? [] : [{
+      items: !currentRefinement ? [] : [{
         label: `${id}: ${currentRefinement}`,
-        clear: nextState => ({
+        attributeName: id,
+        value: nextState => ({
           ...nextState,
           [id]: '',
         }),
+        currentRefinement,
       }],
     };
   },

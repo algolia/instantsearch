@@ -14,7 +14,7 @@ import createConnector from '../core/createConnector';
  * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
  * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to select a range.
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  */
@@ -125,21 +125,23 @@ export default createConnector({
   getMetadata(props, state) {
     const id = getId(props);
     const currentRefinement = getCurrentRefinement(props, state);
-    let filter;
+    let item;
     const hasMin = typeof currentRefinement.min !== 'undefined';
     const hasMax = typeof currentRefinement.max !== 'undefined';
     if (hasMin || hasMax) {
-      let filterLabel = '';
+      let itemLabel = '';
       if (hasMin) {
-        filterLabel += `${currentRefinement.min} <= `;
+        itemLabel += `${currentRefinement.min} <= `;
       }
-      filterLabel += props.attributeName;
+      itemLabel += props.attributeName;
       if (hasMax) {
-        filterLabel += ` <= ${currentRefinement.max}`;
+        itemLabel += ` <= ${currentRefinement.max}`;
       }
-      filter = {
-        label: filterLabel,
-        clear: nextState => ({
+      item = {
+        label: itemLabel,
+        currentRefinement,
+        attributeName: props.attributeName,
+        value: nextState => ({
           ...nextState,
           [id]: {},
         }),
@@ -148,7 +150,7 @@ export default createConnector({
 
     return {
       id,
-      filters: filter ? [filter] : [],
+      items: item ? [item] : [],
     };
   },
 });
