@@ -68,9 +68,13 @@ npm run doctoc
 printf "\n\nRelease: regenerate widgets jsdoc"
 npm run docs:jsdoc
 
+# regenerate yarn.lock
+printf "Release: update yarn.lock"
+yarn
+
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
+git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
