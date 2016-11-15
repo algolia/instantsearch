@@ -11,7 +11,6 @@ import MenuComponent from '../components/Menu.js';
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
- * @propType {string[]} [sortBy=['count:desc','name:asc']] - defines how the items are sorted. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options
  * @propType {string} defaultRefinement - the value of the item selected by default
  * @themeKey ais-Menu__root - the root of the component
  * @themeKey ais-Menu__items - the container of all items in the menu

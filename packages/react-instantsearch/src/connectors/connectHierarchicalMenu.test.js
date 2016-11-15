@@ -35,12 +35,6 @@ describe('connectHierarchicalMenu', () => {
     expect(props).toEqual({items: [], currentRefinement: null});
 
     results.getFacetValues.mockClear();
-    results.getFacetValues.mockImplementationOnce(() => ({}));
-    const sortBy = ['my:custom:sort'];
-    getProps({id: 'ok', sortBy}, {}, {results});
-    expect(results.getFacetValues.mock.calls[0]).toEqual(['ok', {sortBy}]);
-
-    results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => ({
       data: [
         {

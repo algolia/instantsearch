@@ -62,6 +62,8 @@ function transformValue(value, limit, props, state) {
   }));
 }
 
+const sortBy = ['name:asc'];
+
 /**
  * connectHierarchicalMenu connector provides the logic to build a widget that will
  * give the user the ability to explore a tree-like structure.
@@ -76,7 +78,6 @@ function transformValue(value, limit, props, state) {
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
  * @propType {number} [limitMin=10] -  The maximum number of items displayed.
  * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
- * @propType {string[]} [sortBy=['name:asc']] - Specifies the way the values are sorted for display. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options.
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
@@ -94,7 +95,6 @@ export default createConnector({
     separator: PropTypes.string,
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
-    sortBy: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * Default state of this widget.
@@ -127,14 +127,13 @@ export default createConnector({
     showMore: false,
     limitMin: 10,
     limitMax: 20,
-    sortBy: ['name:asc'],
     separator: ' > ',
     rootPath: null,
     showParentLevel: true,
   },
 
   getProps(props, state, search) {
-    const {id, sortBy, showMore, limitMin, limitMax} = props;
+    const {id, showMore, limitMin, limitMax} = props;
     const {results} = search;
 
     const isFacetPresent =

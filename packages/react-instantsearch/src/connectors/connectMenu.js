@@ -20,6 +20,8 @@ function getCurrentRefinement(props, state) {
   return null;
 }
 
+const sortBy = ['count:desc', 'name:asc'];
+
 /**
  * connectMenu connector provides the logic to build a widget that will
  * give the user tha ability to choose a single value for a specific facet.
@@ -31,7 +33,6 @@ function getCurrentRefinement(props, state) {
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
- * @propType {string[]} [sortBy=['count:desc','name:asc']] - defines how the items are sorted. See [the helper documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#specifying-a-different-sort-order-for-values) for the full list of options
  * @propType {string} defaultRefinement - the value of the item selected by default
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
@@ -47,7 +48,6 @@ export default createConnector({
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
-    sortBy: PropTypes.arrayOf(PropTypes.string),
     defaultRefinement: PropTypes.string,
   },
 
@@ -55,12 +55,11 @@ export default createConnector({
     showMore: false,
     limitMin: 10,
     limitMax: 20,
-    sortBy: ['count:desc', 'name:asc'],
   },
 
   getProps(props, state, search) {
     const {results} = search;
-    const {attributeName, sortBy, showMore, limitMin, limitMax} = props;
+    const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
 
     const isFacetPresent =
