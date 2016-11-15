@@ -100,19 +100,26 @@ import qs from 'qs';
 
 class App extends Component {
    constructor (props) {
-           super(props);
-           this.state = {state: {...qs.parse(this.props.router.location.query)}}; //we initialize the state by parsing the url
-   }
+       super(props);
+       // we initialize the state by parsing the url
+       this.state = {state: {...qs.parse(this.props.router.location.query)}}; 
+    }
     
     /*
-    push the new state to the react-router history. The threshold is there to specify how long we should wait between
-    state changes before pushing a new location instead of replacing the old one. This is a very basic implementation you
-    might want to perform advanced behaviors like removing empty values from the url or being able to keep others query params. 
+    Push the new state to the react-router history. The threshold is there 
+    to specify how long we should wait between state changes before pushing 
+    a new location instead of replacing the old one. This is a very basic 
+    implementation you might want to perform advanced behaviors like removing 
+    empty values from the url or being able to keep others query params. 
     */
     onStateChange = (nextState) => {
         const THRESHOLD = 700;
         const newPush = Date.now();
-        this.setState({lastPush: newPush, state: nextState}); //the current state is saved to be given as the state props of InstantSearch root component
+        /*
+        the current state is saved to be given as the 
+        state props of InstantSearch root component
+        */
+        this.setState({lastPush: newPush, state: nextState});
         if (this.state.lastPush && newPush - this.state.lastPush  <= THRESHOLD) {
             this.props.router.replace(nextState ? `?${qs.stringify(nextState)}` : '');
         } else {
@@ -121,7 +128,8 @@ class App extends Component {
     };
     
     /*
-    This is the function that will be provided to every widgets and connectors. It allows you to be able to create a link. 
+    This is the function that will be provided to every widgets and connectors. 
+    It allows you to be able to create a link. 
     */
     createURL = (state) => {
         return `?${qs.stringify(state)}`; 
