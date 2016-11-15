@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import Template from '../Template';
+import TemplateWithTransformData, {Template} from '../Template';
 import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -120,11 +120,10 @@ describe('Template', () => {
         },
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<TemplateWithTransformData {...props} />);
 
       const out = renderer.getRenderOutput();
-      const content = 'it supports transformData';
-      const expectedJSX = <div dangerouslySetInnerHTML={{__html: content}}></div>;
+      const expectedJSX = <Template {...props} data={{feature: 'transformData'}} />;
 
       expect(out).toEqualJSX(expectedJSX);
     });
@@ -144,7 +143,7 @@ describe('Template', () => {
         },
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<TemplateWithTransformData {...props} />);
       expect(called).toBe(true);
     });
 
@@ -165,7 +164,7 @@ describe('Template', () => {
         },
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<TemplateWithTransformData {...props} />);
       expect(called).toBe(true);
     });
 
@@ -177,7 +176,7 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<Template {...props} />);
+        renderer.render(<TemplateWithTransformData {...props} />);
       }).toThrow('`transformData` must return a `object`, got `undefined`.');
     });
 
@@ -191,7 +190,7 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<Template {...props} />);
+        renderer.render(<TemplateWithTransformData {...props} />);
       }).toNotThrow();
     });
 
@@ -203,7 +202,7 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<Template {...props} />);
+        renderer.render(<TemplateWithTransformData {...props} />);
       }).toThrow('`transformData` must return a `object`, got `boolean`.');
     });
   });

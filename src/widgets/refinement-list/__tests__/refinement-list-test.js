@@ -1,18 +1,12 @@
 /* eslint-env mocha */
 
-import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
-import {createRenderer} from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list.js';
-import Template from '../../../components/Template.js';
-import createHelpers from '../../../lib/createHelpers.js';
-import defaultTemplates from '../defaultTemplates.js';
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -21,8 +15,6 @@ describe('refinementList()', () => {
   let options;
   let widget;
   let ReactDOM;
-  const renderer = createRenderer();
-  const helpers = createHelpers('en-US');
 
   beforeEach(() => {
     container = document.createElement('div');
@@ -185,17 +177,6 @@ describe('refinementList()', () => {
       results = {getFacetValues: sinon.stub().returns([{name: 'foo'}, {name: 'bar'}])};
       state = {toggleRefinement: sinon.spy()};
       createURL = () => '#';
-    });
-
-    it('formats counts', () => {
-      const props = {
-        templatesConfig: {helpers},
-        templates: defaultTemplates,
-      };
-      renderer.render(<Template data={{count: 1000}} {...props} templateKey="item" />);
-      const out = renderer.getRenderOutput();
-      // eslint-disable-next-line max-len
-      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
     });
 
     context('cssClasses', () => {

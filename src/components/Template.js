@@ -8,7 +8,7 @@ import hogan from 'hogan.js';
 
 import isEqual from 'lodash/isEqual';
 
-class Template extends React.Component {
+export class Template extends React.Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey;
   }
@@ -22,7 +22,7 @@ class Template extends React.Component {
       templateKey: this.props.templateKey,
       compileOptions,
       helpers: this.props.templatesConfig.helpers,
-      data: transformData(this.props.transformData, this.props.templateKey, this.props.data),
+      data: this.props.data,
     });
 
     if (content === null) {
@@ -137,4 +137,15 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
   );
 }
 
-export default Template;
+// Resolve transformData before Template, so transformData is always called
+// even if the data is the same. Allowing you to dynamically inject conditions in
+// transformData that will force re-rendering
+const withTransformData =
+  TemplateToWrap =>
+    props =>
+      <TemplateToWrap
+        {...props}
+        data={transformData(props.transformData, props.templateKey, props.data)} // eslint-disable-line react/prop-types
+      />;
+
+export default withTransformData(Template);
