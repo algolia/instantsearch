@@ -187,6 +187,53 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
+      it('supports negative numeric off or on values', () => {
+        results = {
+          hits: [{Hello: ', world!'}],
+          nbHits: 1,
+          getFacetValues: sinon.stub().returns([
+            {name: '-2', count: 2, isRefined: true},
+            {name: '5', count: 1, isRefined: false},
+          ]),
+        };
+        widget = currentToggle({
+          containerNode,
+          hasAnOffValue: true,
+          attributeName,
+          label,
+          cssClasses,
+          userValues: {
+            off: -2,
+            on: 5,
+          },
+          RefinementList,
+          collapsible,
+        });
+        widget.getConfiguration();
+        widget.init({state, helper});
+        widget.render({results, helper, state, createURL});
+        widget.render({results, helper, state, createURL});
+
+        props = {
+          facetValues: [{
+            count: 1,
+            isRefined: false,
+            name: label,
+            offFacetValue: {count: 2, name: label, isRefined: true},
+            onFacetValue: {count: 1, name: label, isRefined: false},
+          }],
+          shouldAutoHideContainer: false,
+          ...props,
+        };
+
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+        expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
+
+        widget.toggleRefinement(helper, 'facetValueToRefine', true);
+        expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)).toBe(true);
+        expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')).toBe(true);
+      });
+
       it('without facet values', () => {
         results = {
           hits: [],
