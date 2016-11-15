@@ -62,11 +62,9 @@ const Facets = () => <aside>
     <li><a href="./"><i className="fa fa-home"></i> Home</a></li>
     <li className="separator"></li>
   </ul>
-  <Panel title="Genres" id="genres"
-  >
+  <Panel title="Genres" id="genres">
     <RefinementListLinks
       attributeName="genre"
-      sortBy={['isRefined']}
     />
   </Panel>
   <Panel title="Rating" id="ratings">
