@@ -1,5 +1,7 @@
 import {runMode} from 'codemirror/addon/runmode/runmode.node';
 import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/css/css';
 
 import escape from 'escape-html';
 
