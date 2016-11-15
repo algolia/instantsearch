@@ -13,7 +13,6 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
  * @propType {number} [limitMin=10] -  The maximum number of items displayed.
  * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
- * @propType {string[]} [sortBy=['name:asc']] - Specifies the way the values are sorted for diplay.
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.

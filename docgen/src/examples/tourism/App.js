@@ -68,7 +68,6 @@ function Filters() {
             <RoomType
               attributeName="room_type"
               operator="or"
-              sortBy={['name:asc']}
               limitMin={3}/>
             <Price />
           </div>
@@ -209,7 +208,8 @@ function DatesAndGuest() {
 }
 
 const RoomType = connectRefinementList(({items, refine}) => {
-  const itemComponents = items.map(item => {
+  const sortedItems = items.sort((i1, i2) => i1.label.localeCompare(i2.label));
+  const itemComponents = sortedItems.map(item => {
     const selectedClassName = item.isRefined ? ' ais-refinement-list--item__active' : '';
     const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (

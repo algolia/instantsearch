@@ -36,11 +36,6 @@ describe('connectRefinementList', () => {
     expect(props).toEqual({items: [], currentRefinement: []});
 
     results.getFacetValues.mockClear();
-    const sortBy = ['my:custom:sort'];
-    getProps({attributeName: 'ok', sortBy}, {}, {results});
-    expect(results.getFacetValues.mock.calls[0]).toEqual(['ok', {sortBy}]);
-
-    results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
       {
         name: 'wat',
