@@ -29,7 +29,7 @@ function getCurrentRefinement(props, state) {
  * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.
  * @propType {string} value - Value of the refinement to apply on `attributeName`. Required when `attributeName` is present.
  * @propType {boolean} [defaultChecked=false] - Default state of the widget. Should the toggle be checked by default?
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  */
 export default createConnector({
@@ -80,16 +80,18 @@ export default createConnector({
   getMetadata(props, state) {
     const id = getId(props);
     const checked = getCurrentRefinement(props, state);
-    const filters = [];
+    const items = [];
     if (checked) {
-      filters.push({
+      items.push({
         label: props.label,
-        clear: nextState => ({
+        currentRefinement: props.label,
+        attributeName: props.attributeName,
+        value: nextState => ({
           ...nextState,
           [id]: 'off',
         }),
       });
     }
-    return {id, filters};
+    return {id, items};
   },
 });

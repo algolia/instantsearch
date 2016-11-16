@@ -27,17 +27,32 @@ class CurrentRefinements extends Component {
         <div {...applyTheme('items', 'items')}>
           {items.map(item =>
             <div // eslint-disable-line react/jsx-key, automatically done by themeable
-              {...applyTheme(item.label, 'item')}
+              {...applyTheme(item.label, 'item', item.items && 'itemParent')}
             >
               <span {...applyTheme('itemLabel', 'itemLabel')}>
                 {item.label}
               </span>
-              <button
-                {...applyTheme('itemClear', 'itemClear')}
-                onClick={refine.bind(null, [item])}
-              >
-                {translate('clearFilter', item)}
-              </button>
+              {item.items ?
+                item.items.map(nestedItem =>
+                  <div // eslint-disable-line react/jsx-key, automatically done by themeable
+                    {...applyTheme(nestedItem.label, 'item')}
+                  >
+                  <span {...applyTheme('itemLabel', 'itemLabel')}>
+                  {nestedItem.label}
+                  </span>
+                    <button
+                      {...applyTheme('itemClear', 'itemClear')}
+                      onClick={refine.bind(null, nestedItem.value)}
+                    >
+                      {translate('clearFilter', nestedItem)}
+                    </button>
+                  </div>) :
+                <button
+                  {...applyTheme('itemClear', 'itemClear')}
+                  onClick={refine.bind(null, item.value)}
+                >
+                  {translate('clearFilter', item)}
+                </button>}
             </div>
           )}
         </div>

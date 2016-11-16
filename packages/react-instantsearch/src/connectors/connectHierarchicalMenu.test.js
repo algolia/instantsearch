@@ -190,21 +190,23 @@ describe('connectHierarchicalMenu', () => {
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({id: 'ok'}, {});
-    expect(metadata).toEqual({id: 'ok', filters: []});
+    expect(metadata).toEqual({items: [], id: 'ok'});
   });
 
   it('registers its filter in metadata', () => {
     const metadata = getMetadata({id: 'ok'}, {ok: 'wat'});
     expect(metadata).toEqual({
       id: 'ok',
-      filters: [{
+      items: [{
         label: 'ok: wat',
+        attributeName: 'ok',
+        currentRefinement: 'wat',
         // Ignore clear, we test it later
-        clear: metadata.filters[0].clear,
+        value: metadata.items[0].value,
       }],
     });
 
-    const state = metadata.filters[0].clear({ok: 'wat'});
+    const state = metadata.items[0].value({ok: 'wat'});
     expect(state).toEqual({ok: ''});
   });
 });
