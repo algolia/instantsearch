@@ -30,7 +30,7 @@ p {
   font-family: 'Open Sans', Helvetica Neue, helvetica, sans-serif;
   font-size: 20px;
   line-height: 32px;
-  color: $charcoal-grey-75;
+  color: $blueish-grey;
 
   @include small-mq {
     font-size: 16px;
@@ -69,7 +69,6 @@ h2.title {
   }
 
   ~ p {
-    color: $charcoal-grey;
     font-size: 1.3em;
     text-align: center;
 
@@ -119,4 +118,21 @@ h4 {
 .glyph {
   opacity: 0.8;
   font-size: 0.75em;
+}
+
+
+/* codes
+====================*/
+
+p > code,
+code  {
+  border: 1px dotted rgba(black, 0.15);
+  padding: 4px 8px;
+  border-radius: 3px;
+}
+
+pre code {
+  border: none;
+  padding: inherit;
+  border-radius: none
 }

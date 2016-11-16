@@ -114,8 +114,6 @@ export default function initHeader() {
         });
         wrapper.innerHTML += `<ul class="cm-menu__list">${linksTpl}</ul>`;
       });
-    } else {
-      document.getElementById('menu-wrapper').remove();
     }
   }
 
