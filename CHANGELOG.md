@@ -1,3 +1,8 @@
+<a name="1.8.16"></a>
+## [1.8.16](https://github.com/algolia/instantsearch.js/compare/v1.8.15...v1.8.16) (2016-11-16)
+
+
+
 <a name="1.8.15"></a>
 ## [1.8.15](https://github.com/algolia/instantsearch.js/compare/v1.8.14...v1.8.15) (2016-11-16)
 
