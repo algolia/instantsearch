@@ -5,7 +5,7 @@ export default {
       {{^to}}
         &ge;
       {{/to}}
-      {{currency}}{{from}}
+      {{currency}}{{#helpers.formatNumber}}{{from}}{{/helpers.formatNumber}}
     {{/from}}
     {{#to}}
       {{#from}}
@@ -14,7 +14,7 @@ export default {
       {{^from}}
         &le;
       {{/from}}
-      {{to}}
+      {{#helpers.formatNumber}}{{to}}{{/helpers.formatNumber}}
     {{/to}}
   `,
   footer: '',
