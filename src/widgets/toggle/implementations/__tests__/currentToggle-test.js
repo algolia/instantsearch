@@ -4,13 +4,20 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
+import {createRenderer} from 'react-addons-test-utils';
+
 import currentToggle from '../currentToggle.js';
 import defaultTemplates from '../../defaultTemplates.js';
+import Template from '../../../../components/Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
+import createHelpers from '../../../../lib/createHelpers.js';
 
 describe('currentToggle()', () => {
+  const helpers = createHelpers('en-US');
+  const renderer = createRenderer();
+
   context('good usage', () => {
     let ReactDOM;
     let containerNode;
@@ -93,6 +100,14 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
         expect(ReactDOM.render.firstCall.args[1]).toEqual(containerNode);
         expect(ReactDOM.render.secondCall.args[1]).toEqual(containerNode);
+      });
+
+      it('formats counts', () => {
+        templateProps.templatesConfig = {helpers};
+        renderer.render(<Template data={{count: 1000}} {...templateProps} templateKey="item" />);
+        const out = renderer.getRenderOutput();
+        // eslint-disable-next-line max-len
+        expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: '<label class="">\n <input type="checkbox" class="" value="" />\n <span class="">1,000</span>\n</label>'}} />);
       });
 
       it('understands cssClasses', () => {

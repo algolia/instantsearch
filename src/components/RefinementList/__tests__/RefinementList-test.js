@@ -235,7 +235,7 @@ describe('RefinementList', () => {
 
       // When
       const root = shallowRender(props);
-      const actual = root.find('[templateKey="show-more-inactive"]');
+      const actual = root.find('Template').filter({templateKey: 'show-more-inactive'});
 
       // Then
       expect(actual.length).toEqual(1);

@@ -64,7 +64,7 @@ describe('headerFooter', () => {
     const out = render(defaultProps);
     // Then
     const templateProps = {
-      data: undefined,
+      data: {},
       templateKey: 'header',
       transformData: null,
       templates: {
@@ -90,7 +90,7 @@ describe('headerFooter', () => {
     const out = render(defaultProps);
     // Then
     const templateProps = {
-      data: undefined,
+      data: {},
       templateKey: 'footer',
       transformData: null,
       templates: {
@@ -118,7 +118,7 @@ describe('headerFooter', () => {
         footer: 'yo footer',
       };
       templateProps = {
-        data: undefined,
+        data: {},
         transformData: null,
         templates: {
           header: 'yo header',
