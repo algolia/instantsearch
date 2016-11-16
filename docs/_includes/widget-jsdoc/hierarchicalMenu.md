@@ -33,7 +33,7 @@
 <span class='attr-optional'>`options.sortBy`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> &#124; <code>function</code>)</span>
 </p>
-<p class="attr-description">How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.     You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).</p>
+<p class="attr-description">How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>

@@ -1,3 +1,16 @@
+<a name="1.8.15"></a>
+## [1.8.15](https://github.com/algolia/instantsearch.js/compare/v1.8.14...v1.8.15) (2016-11-16)
+
+
+### Bug Fixes
+
+* **priceRanges:** avoid displaying solo ranges (#1544) ([ff396f0](https://github.com/algolia/instantsearch.js/commit/ff396f0)), closes [#1536](https://github.com/algolia/instantsearch.js/issues/1536)
+* **priceRanges:** use formatNumber in defaultTemplate (#1559) ([557a501](https://github.com/algolia/instantsearch.js/commit/557a501)), closes [#1230](https://github.com/algolia/instantsearch.js/issues/1230)
+* **toggle:** support negative numeric values for on/off (#1551) ([e4d88e0](https://github.com/algolia/instantsearch.js/commit/e4d88e0)), closes [#1537](https://github.com/algolia/instantsearch.js/issues/1537)
+* **transformData:** always call transformData (#1555) ([49bfeca](https://github.com/algolia/instantsearch.js/commit/49bfeca)), closes [#1538](https://github.com/algolia/instantsearch.js/issues/1538)
+
+
+
 <a name="1.8.14"></a>
 ## [1.8.14](https://github.com/algolia/instantsearch.js/compare/v1.8.13...v1.8.14) (2016-11-03)
 
