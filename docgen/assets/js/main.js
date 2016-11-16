@@ -6,7 +6,6 @@ import dropdowns from './dropdowns.js';
 const container = document.querySelector('.documentation-container');
 const sidebarContainer = document.querySelector('.sidebar');
 
-
 if (sidebarContainer) {
   sidebar({
     headersContainer: container,
