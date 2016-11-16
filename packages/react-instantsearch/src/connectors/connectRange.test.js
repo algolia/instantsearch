@@ -109,14 +109,16 @@ describe('connectRange', () => {
     );
     expect(metadata).toEqual({
       id: 'wot',
-      filters: [{
+      items: [{
         label: '5 <= wot',
+        attributeName: 'wot',
+        currentRefinement: {min: 5, max: undefined},
         // Ignore clear, we test it later
-        clear: metadata.filters[0].clear,
+        value: metadata.items[0].value,
       }],
     });
 
-    const state = metadata.filters[0].clear({wot: {min: 5}});
+    const state = metadata.items[0].value({wot: {min: 5}});
     expect(state).toEqual({wot: {}});
 
     metadata = getMetadata(
@@ -125,9 +127,11 @@ describe('connectRange', () => {
     );
     expect(metadata).toEqual({
       id: 'wot',
-      filters: [{
+      items: [{
         label: 'wot <= 10',
-        clear: metadata.filters[0].clear,
+        attributeName: 'wot',
+        currentRefinement: {min: undefined, max: 10},
+        value: metadata.items[0].value,
       }],
     });
 
@@ -137,9 +141,11 @@ describe('connectRange', () => {
     );
     expect(metadata).toEqual({
       id: 'wot',
-      filters: [{
+      items: [{
         label: '5 <= wot <= 10',
-        clear: metadata.filters[0].clear,
+        attributeName: 'wot',
+        currentRefinement: {min: 5, max: 10},
+        value: metadata.items[0].value,
       }],
     });
   });
