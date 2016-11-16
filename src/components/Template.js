@@ -142,10 +142,12 @@ function transformHelpersToHogan(helpers, compileOptions, data) {
 // transformData that will force re-rendering
 const withTransformData =
   TemplateToWrap =>
-    props =>
-      <TemplateToWrap
+    props => {
+      const data = props.data === undefined ? {} : props.data; // eslint-disable-line react/prop-types
+      return <TemplateToWrap
         {...props}
-        data={transformData(props.transformData, props.templateKey, props.data)} // eslint-disable-line react/prop-types
+        data={transformData(props.transformData, props.templateKey, data)} // eslint-disable-line react/prop-types
       />;
+    };
 
 export default withTransformData(Template);

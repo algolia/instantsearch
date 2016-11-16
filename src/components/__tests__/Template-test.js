@@ -128,6 +128,23 @@ describe('Template', () => {
       expect(out).toEqualJSX(expectedJSX);
     });
 
+    it('defaults data to an empty {} object', () => {
+      const props = getProps({
+        templates: {test: 'it supports {{feature}}'},
+        transformData: originalData => {
+          originalData.test = 'transformData';
+          return originalData;
+        },
+      });
+
+      renderer.render(<TemplateWithTransformData {...props} />);
+
+      const out = renderer.getRenderOutput();
+      const expectedJSX = <Template {...props} data={{test: 'transformData'}} />;
+
+      expect(out).toEqualJSX(expectedJSX);
+    });
+
     it('transformData with a function is using a deep cloned version of the data', () => {
       let called = false;
       const data = {a: {}};
