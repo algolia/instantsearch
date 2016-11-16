@@ -50,7 +50,7 @@ const sortBy = ['isRefined', 'count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default. The state of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the state is an empty string.
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
@@ -138,26 +138,36 @@ export default createConnector({
     searchParameters = searchParameters[addKey](attributeName);
 
     return getCurrentRefinement(props, state).reduce((res, val) =>
-      res[addRefinementKey](attributeName, val)
-    , searchParameters);
+        res[addRefinementKey](attributeName, val)
+      , searchParameters);
   },
 
   getMetadata(props, state) {
     const id = getId(props);
     return {
       id,
-      filters: getCurrentRefinement(props, state).map(item => ({
-        label: `${props.attributeName}: ${item}`,
-        clear: nextState => {
-          const nextSelectedItems = getCurrentRefinement(props, nextState).filter(
-            other => other !== item
-          );
-          return {
-            ...nextState,
-            [id]: nextSelectedItems.length > 0 ? nextSelectedItems : '',
-          };
-        },
-      })),
+      items: getCurrentRefinement(props, state).length > 0 ? [{
+        attributeName: props.attributeName,
+        label: `${props.attributeName}: `,
+        currentRefinement: getCurrentRefinement(props, state),
+        value: nextState => ({
+          ...nextState,
+          [id]: '',
+        }),
+        items: getCurrentRefinement(props, state).map(item => ({
+          label: `${item}`,
+          value: nextState => {
+            const nextSelectedItems = getCurrentRefinement(props, nextState).filter(
+              other => other !== item
+            );
+
+            return {
+              ...nextState,
+              [id]: nextSelectedItems.length > 0 ? nextSelectedItems : '',
+            };
+          },
+        })),
+      }] : [],
     };
   },
 });

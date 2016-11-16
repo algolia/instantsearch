@@ -61,23 +61,25 @@ describe('connectToggle', () => {
   it('registers its filter in metadata', () => {
     let metadata = getMetadata({id: 't'}, {});
     expect(metadata).toEqual({
+      items: [],
       id: 't',
-      filters: [],
     });
 
-    metadata = getMetadata({id: 't', label: 'yep'}, {t: 'on'});
+    metadata = getMetadata({attributeName: 't', id: 't', label: 'yep'}, {t: 'on'});
     expect(metadata).toEqual({
-      id: 't',
-      filters: [
+      items: [
         {
           label: 'yep',
           // Ignore clear, we test it later
-          clear: metadata.filters[0].clear,
+          value: metadata.items[0].value,
+          attributeName: 't',
+          currentRefinement: 'yep',
         },
       ],
+      id: 't',
     });
 
-    const state = metadata.filters[0].clear({t: 'on'});
+    const state = metadata.items[0].value({t: 'on'});
     expect(state).toEqual({t: 'off'});
   });
 });

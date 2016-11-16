@@ -34,7 +34,7 @@ const sortBy = ['count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the Menu can display.
@@ -123,12 +123,14 @@ export default createConnector({
     const currentRefinement = getCurrentRefinement(props, state);
     return {
       id,
-      filters: currentRefinement === null ? [] : [{
+      items: currentRefinement === null ? [] : [{
         label: `${props.attributeName}: ${currentRefinement}`,
-        clear: nextState => ({
+        attributeName: props.attributeName,
+        value: nextState => ({
           ...nextState,
           [id]: '',
         }),
+        currentRefinement,
       }],
     };
   },
