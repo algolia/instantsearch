@@ -657,7 +657,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
 
   .mobile-navigation-wrapper {
     position: absolute;
-    z-index: 99;
+    z-index: 999;
     top: $nav-height;
     left: 0;
     width: 100%;
@@ -666,7 +666,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
     background-color: #f6f9fc;
 
     &:not(.opened) {
-      transform: translateY(-100%) rotateX(-30deg);
+      transform: translateX(-100%);
     }
 
     #mobile-searchbox,
