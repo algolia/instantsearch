@@ -6,7 +6,6 @@ import RangeInputComponent from '../components/RangeInput.js';
  * @name RangeInput
  * @kind component
  * @category widget
- * @propType {string} id - widget id, defaults to the attribute name
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
  * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.

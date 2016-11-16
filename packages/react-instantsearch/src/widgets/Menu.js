@@ -6,7 +6,6 @@ import MenuComponent from '../components/Menu.js';
  * @name Menu
  * @kind component
  * @category widget
- * @propType {string} id - the id of the widget
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items

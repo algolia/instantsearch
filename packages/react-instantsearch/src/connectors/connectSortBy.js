@@ -2,8 +2,12 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
+function getId() {
+  return 'sortBy';
+}
+
 function getCurrentRefinement(props, state) {
-  const {id} = props;
+  const id = getId();
   if (state[id]) {
     return state[id];
   }
@@ -19,7 +23,6 @@ function getCurrentRefinement(props, state) {
  * @name connectSortBy
  * @kind connector
  * @category connector
- * @propType {string} [id="sort_by"] - URL state serialization key.
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
  * @providedPropType {function} refine - a function to remove a single filter
@@ -31,12 +34,7 @@ export default createConnector({
   displayName: 'AlgoliaSortBy',
 
   propTypes: {
-    id: PropTypes.string,
     defaultRefinement: PropTypes.string,
-  },
-
-  defaultProps: {
-    id: 'sort_by',
   },
 
   getProps(props, state) {
@@ -45,9 +43,10 @@ export default createConnector({
   },
 
   refine(props, state, nextRefinement) {
+    const id = getId();
     return {
       ...state,
-      [props.id]: nextRefinement,
+      [id]: nextRefinement,
     };
   },
 
@@ -56,7 +55,7 @@ export default createConnector({
     return searchParameters.setIndex(selectedIndex);
   },
 
-  getMetadata(props) {
-    return {id: props.id};
+  getMetadata() {
+    return {id: getId()};
   },
 });

@@ -6,7 +6,6 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @name RefinementList
  * @kind component
  * @category widget
- * @propType {string} id - the id of the widget
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
