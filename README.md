@@ -10,6 +10,8 @@ We are currently working on react-instantsearch. Roadmap: https://github.com/alg
 - [Development](#development)
 - [Test](#test)
 - [Lint](#lint)
+- [Release](#release)
+- [Update docs](#update-docs)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
