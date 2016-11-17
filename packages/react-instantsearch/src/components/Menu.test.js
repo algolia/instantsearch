@@ -1,12 +1,12 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import renderer from 'react/lib/ReactTestRenderer';
+import renderer from 'react-test-renderer';
 
 import Menu from './Menu';
 
-describe('HierarchicalMenu', () => {
-  it('default hierarchical menu', () => {
+describe('Menu', () => {
+  it('default menu', () => {
     const tree = renderer.create(
       <Menu
         refine={() => null}
