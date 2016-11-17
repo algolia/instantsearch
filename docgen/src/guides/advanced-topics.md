@@ -51,7 +51,7 @@ To do that, you can use the appropriate connector and manually add your values.
 
 Here's an example to force category values for a Menu.
 
-```javascript
+```jsx
 const ConnectedMenu = connectMenu(props => {
     const items = [];
     
@@ -90,7 +90,7 @@ This function while provided to every widgets and connectors is only useful if y
 
 Here's an example showing you how to use [react-router](https://github.com/ReactTraining/react-router) with react-instantsearch. 
 
-```javascript
+```jsx
 import React, {Component} from 'react';
 import {
     InstantSearch
@@ -152,4 +152,128 @@ class App extends Component {
 
 export default withRouter(App);
 ```
+
+## React Native
+
+`react-instantsearch` is made to be compatible with [react native](https://facebook.github.io/react-native/). 
+To build your mobile application using both `react-instantsearch` and `react native` you will need to use the 
+proper [`InstantSearch root component`](/component/InstantSearch.html) 
+and take advantage of our [connectors API](/connector.html).
+
+Instead of using the `dom namespace` when importing the `InstantSearch root component` you will have to use the `native
+namespace`. 
+
+Here's an example showing you how to build a `SearchBox` and an infinite scroll view: 
+
+```jsx
+import React, {Component} from 'react';
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    ListView,
+    TextInput,
+    Image,
+} from 'react-native';
+import {InstantSearch} from 'react-instantsearch/native';
+import {connectSearchBox, connectInfiniteHits} from 'react-instantsearch/connectors';
+
+
+export default AwesomeProject = React.createClass({
+    render: function () {
+        return (
+            <View style={styles.maincontainer}>
+                <InstantSearch
+                    className="container-fluid"
+                    appId="appId"
+                    apiKey="apiKey"
+                    indexName="indexName"
+                >
+                    <View style={styles.maincontainer}>
+                        <CustomSearchBox/>
+                        <CustomHits/>
+                    </View>
+                </InstantSearch>
+            </View>
+        );
+    },
+});
+
+class SearchBox extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                onChangeText={(text) => this.props.refine(text)}
+                value={this.props.query}
+            />
+        );
+    }
+}
+
+const CustomSearchBox = connectSearchBox(SearchBox);
+
+const CustomHits = connectInfiniteHits(React.createClass({
+    onEndReached: function () {
+        if (this.props.hasMore) {
+            this.props.refine();
+        }
+    },
+
+    render: function () {
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        const hits = this.props.hits.length > 0 ?
+            <View style={styles.maincontainer}>
+                <ListView
+                    style={styles.list}
+                    dataSource={ds.cloneWithRows(this.props.hits)}
+                    renderRow={this._renderRow}
+                    onEndReached={this.onEndReached}/>
+            </View> : null;
+        return hits;
+    },
+
+    _renderRow: function (hit) {
+        return (
+            <View style={styles.item}>
+                <Image
+                    style={{height: 100, width: 100}}
+                    source={{uri: hit.image}}
+                />
+                <Text>
+                    {hit.name}
+                </Text>
+            </View> );
+    },
+}));
+
+
+const styles = StyleSheet.create({
+    maincontainer: {
+        backgroundColor: 'white',
+        flex: 1,
+        paddingTop: 20,
+        paddingBottom: 10,
+        flexDirection: 'column',
+    },
+    list: {
+        flex: 1,
+        flexDirection: 'column',
+    },
+    item: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: 'white'
+    }
+});
+
+AppRegistry.registerComponent('AwesomeProject', () => AwesomeProject);
+```
+
+
 
