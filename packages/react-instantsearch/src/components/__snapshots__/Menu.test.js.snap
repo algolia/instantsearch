@@ -1,4 +1,4 @@
-exports[`HierarchicalMenu applies translations 1`] = `
+exports[`Menu applies translations 1`] = `
 <div
   className="root">
   <div
@@ -47,7 +47,7 @@ exports[`HierarchicalMenu applies translations 1`] = `
 </div>
 `;
 
-exports[`HierarchicalMenu default hierarchical menu 1`] = `
+exports[`Menu default menu 1`] = `
 <div
   className="root">
   <div

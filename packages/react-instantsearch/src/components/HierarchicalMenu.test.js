@@ -1,7 +1,7 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import renderer from 'react/lib/ReactTestRenderer';
+import renderer from 'react-test-renderer';
 
 import HierarchicalMenu from './HierarchicalMenu';
 
