@@ -344,7 +344,7 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
 
 .results-wrapper {
   position: absolute;
-  top: 0;
+  top: 60px;
   right: 0;
   padding: 70px 10px 10px 240px;
 }
@@ -386,7 +386,7 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   display: inline-block;
 }
 
-.ClearAll {
+.ais-ClearAll__root {
   display: block;
   margin-bottom: 16px;
   font-size: 13px;
