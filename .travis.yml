@@ -3,6 +3,7 @@ node_js: stable
 install:
   - npm install --global yarn
   - yarn
+  - npm rebuild node-sass
 branches:
   only:
     - master

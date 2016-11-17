@@ -58,7 +58,7 @@ export default function(opts) {
  * ]
  * the first square bracket is  matched in order to detect optional parameter
  */
-const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?\]? - )?(.+)/;
+const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?(.+)/;
 function parseTypeNameValueDescription(v) {
   const parsed = typeNameValueDescription.exec(v);
   if (!parsed) return null;
