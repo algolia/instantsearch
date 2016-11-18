@@ -364,6 +364,15 @@ $nav-background-light: mix($nav-background,#fff,92%);
         margin-right: 20px;
         position: relative;
 
+        &:hover,
+        &.acitve {
+          border-bottom: 4px solid $accent-color;
+
+          @include small-mq {
+            border-bottom: none;
+          }
+        }
+
 
         &.active:after {
           content: "";
