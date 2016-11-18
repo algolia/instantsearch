@@ -6,7 +6,6 @@ import ToggleComponent from '../components/Toggle.js';
  * @name Toggle
  * @kind component
  * @category widget
- * @propType {string} id - URL state serialization key. The state of this widget takes the form of a `string` that can be either `'on'` or `'off'`. Required when `attributeName` isn't present.
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
  * @propType {string} label - Label for this toggle.
  * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.

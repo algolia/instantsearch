@@ -6,7 +6,6 @@ import RangeRatingsComponent from '../components/RangeRatings.js';
  * @name RangeRatings
  * @kind component
  * @category widget
- * @propType {string} id - widget id, defaults to the attribute name
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {number} min - Minimum value for the rating. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} max - Maximum value for the rating. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.

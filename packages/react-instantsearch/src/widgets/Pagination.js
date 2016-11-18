@@ -6,7 +6,6 @@ import PaginationComponent from '../components/Pagination.js';
  * @name Pagination
  * @kind component
  * @category widget
- * @propType {string} id - widget id, URL state serialization key. The state of this widget takes the shape of a `number`.
  * @propType {boolean} [showFirst=true] - Display the first page link.
  * @propType {boolean} [showLast=false] - Display the last page link.
  * @propType {boolean} [showPrevious=true] - Display the previous page link.

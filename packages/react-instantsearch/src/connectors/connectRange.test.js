@@ -83,7 +83,7 @@ describe('connectRange', () => {
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
       ok: 'yep',

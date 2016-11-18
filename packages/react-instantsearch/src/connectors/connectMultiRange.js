@@ -22,7 +22,7 @@ function parseItem(value) {
 }
 
 function getId(props) {
-  return props.id || props.attributeName;
+  return props.attributeName;
 }
 
 function getCurrentRefinement(props, state) {
@@ -43,7 +43,6 @@ function getCurrentRefinement(props, state) {
  * @name connectMultiRange
  * @kind connector
  * @category connector
- * @propType {string} id - widget id, defaults to the attribute name
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the shape of a `string` with a pattern of `'{start}:{end}'`.

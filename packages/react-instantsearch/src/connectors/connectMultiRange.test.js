@@ -75,18 +75,18 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({id: 'ok', items: []}, {ok: 'wat'});
+    props = getProps({attributeName: 'ok', items: []}, {ok: 'wat'});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({attributeName: 'ok', items: []}, {ok: 'wat'});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({id: 'ok', items: [], defaultRefinement: 'wat'}, {});
+    props = getProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
       ok: 'yep',
@@ -117,7 +117,7 @@ describe('connectMultiRange', () => {
   });
 
   it('registers its id in metadata', () => {
-    const metadata = getMetadata({id: 'ok'}, {});
+    const metadata = getMetadata({attributeName: 'ok'}, {});
     expect(metadata).toEqual({id: 'ok', items: []});
   });
 

@@ -17,31 +17,31 @@ let params;
 
 describe('connectSortBy', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({id: 'i'}, {});
+    props = getProps({}, {});
     expect(props).toEqual({currentRefinement: null});
 
-    props = getProps({id: 'i'}, {i: 'yep'});
+    props = getProps({}, {sortBy: 'yep'});
     expect(props).toEqual({currentRefinement: 'yep'});
 
-    props = getProps({id: 'i', defaultRefinement: 'yep'}, {});
+    props = getProps({defaultRefinement: 'yep'}, {});
     expect(props).toEqual({currentRefinement: 'yep'});
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      sortBy: 'yep',
     });
   });
 
   it('refines the index parameter', () => {
-    params = getSP(new SearchParameters(), {id: 'i'}, {i: 'yep'});
+    params = getSP(new SearchParameters(), {}, {sortBy: 'yep'});
     expect(params.index).toBe('yep');
   });
 
   it('registers its id in metadata', () => {
-    const metadata = getMetadata({id: 'i'});
-    expect(metadata).toEqual({id: 'i'});
+    const metadata = getMetadata({});
+    expect(metadata).toEqual({id: 'sortBy'});
   });
 });

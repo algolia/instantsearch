@@ -1,10 +1,13 @@
-import {PropTypes} from 'react';
-
 import createConnector from '../core/createConnector';
 
+function getId() {
+  return 'q';
+}
+
 function getCurrentRefinement(props, state) {
-  if (typeof state[props.id] !== 'undefined') {
-    return state[props.id];
+  const id = getId();
+  if (typeof state[id] !== 'undefined') {
+    return state[id];
   }
   return '';
 }
@@ -26,14 +29,6 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
 
-  propTypes: {
-    id: PropTypes.string,
-  },
-
-  defaultProps: {
-    id: 'q',
-  },
-
   getProps(props, state) {
     return {
       query: getCurrentRefinement(props, state),
@@ -41,9 +36,10 @@ export default createConnector({
   },
 
   refine(props, state, nextQuery) {
+    const id = getId();
     return {
       ...state,
-      [props.id]: nextQuery,
+      [id]: nextQuery,
     };
   },
 

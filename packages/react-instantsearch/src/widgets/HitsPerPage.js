@@ -11,7 +11,6 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * @name HitsPerPage
  * @kind component
  * @category widget
- * @propType {string} [id="hPP"] - The id of the widget.
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
  * @themeKey ais-HitsPerPage__root - the root of the component.
