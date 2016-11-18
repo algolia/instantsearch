@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
 
 function getId(props) {
-  return props.id || props.attributeName;
+  return props.attributeName;
 }
 
 function getCurrentRefinement(props, state) {
@@ -28,7 +28,6 @@ const sortBy = ['count:desc', 'name:asc'];
  * @name connectMenu
  * @kind connector
  * @category connector
- * @propType {string} id - the id of the widget. Defaults to `attributeName`.
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
@@ -43,7 +42,6 @@ export default createConnector({
   displayName: 'AlgoliaMenu',
 
   propTypes: {
-    id: PropTypes.string,
     attributeName: PropTypes.string.isRequired,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,

@@ -23,15 +23,15 @@ describe('connectHierarchicalMenu', () => {
     };
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({id: 'ok'}, {ok: 'wat'}, {results});
+    props = getProps({attributes: ['ok']}, {ok: 'wat'}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({id: 'ok', defaultRefinement: 'wat'}, {}, {results});
+    props = getProps({attributes: ['ok'], defaultRefinement: 'wat'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({id: 'ok'}, {}, {results});
+    props = getProps({attributes: ['ok']}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: null});
 
     results.getFacetValues.mockClear();
@@ -61,7 +61,7 @@ describe('connectHierarchicalMenu', () => {
         },
       ],
     }));
-    props = getProps({id: 'ok'}, {}, {results});
+    props = getProps({attributes: ['ok']}, {}, {results});
     expect(props.items).toEqual([
       {
         label: 'wat',
@@ -87,7 +87,7 @@ describe('connectHierarchicalMenu', () => {
       },
     ]);
 
-    props = getProps({id: 'ok', limitMin: 1}, {}, {results});
+    props = getProps({attributes: ['ok'], limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
         label: 'wat',
@@ -104,7 +104,7 @@ describe('connectHierarchicalMenu', () => {
     ]);
 
     props = getProps(
-      {id: 'ok', showMore: true, limitMin: 0, limitMax: 1},
+      {attributes: ['ok'], showMore: true, limitMin: 0, limitMax: 1},
       {},
       {results}
     );
@@ -125,12 +125,12 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({id: 'ok'}, {}, {});
+    props = getProps({attributes: ['ok']}, {}, {});
     expect(props).toBe(null);
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributes: ['ok']}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
       ok: 'yep',
@@ -141,22 +141,26 @@ describe('connectHierarchicalMenu', () => {
     const initSP = new SearchParameters({maxValuesPerFacet: 100});
 
     params = getSP(initSP, {
+      attributes: ['attribute'],
       limitMin: 101,
     }, {});
     expect(params.maxValuesPerFacet).toBe(101);
 
     params = getSP(initSP, {
+      attributes: ['attribute'],
       showMore: true,
       limitMax: 101,
     }, {});
     expect(params.maxValuesPerFacet).toBe(101);
 
     params = getSP(initSP, {
+      attributes: ['attribute'],
       limitMin: 99,
     }, {});
     expect(params.maxValuesPerFacet).toBe(100);
 
     params = getSP(initSP, {
+      attributes: ['attribute'],
       showMore: true,
       limitMax: 99,
     }, {});
@@ -167,34 +171,33 @@ describe('connectHierarchicalMenu', () => {
     const initSP = new SearchParameters();
 
     params = getSP(initSP, {
-      id: 'NAME',
       attributes: ['ATTRIBUTE'],
       separator: 'SEPARATOR',
       rootPath: 'ROOT_PATH',
       showParentLevel: true,
       limitMin: 1,
-    }, {NAME: 'ok'});
+    }, {ATTRIBUTE: 'ok'});
     expect(params).toEqual(
       initSP
       .addHierarchicalFacet({
-        name: 'NAME',
+        name: 'ATTRIBUTE',
         attributes: ['ATTRIBUTE'],
         separator: 'SEPARATOR',
         rootPath: 'ROOT_PATH',
         showParentLevel: true,
       })
-      .toggleHierarchicalFacetRefinement('NAME', 'ok')
+      .toggleHierarchicalFacetRefinement('ATTRIBUTE', 'ok')
       .setQueryParameter('maxValuesPerFacet', 1)
     );
   });
 
   it('registers its id in metadata', () => {
-    const metadata = getMetadata({id: 'ok'}, {});
+    const metadata = getMetadata({attributes: ['ok']}, {});
     expect(metadata).toEqual({items: [], id: 'ok'});
   });
 
   it('registers its filter in metadata', () => {
-    const metadata = getMetadata({id: 'ok'}, {ok: 'wat'});
+    const metadata = getMetadata({attributes: ['ok']}, {ok: 'wat'});
     expect(metadata).toEqual({
       id: 'ok',
       items: [{

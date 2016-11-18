@@ -9,7 +9,6 @@ import createConnector from '../core/createConnector';
  * @name connectRange
  * @kind connector
  * @category connector
- * @propType {string} id - URL state serialization key. Defaults to the value of `attributeName`.
  * @propType {string} attributeName - Name of the attribute for faceting
  * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
  * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
@@ -20,7 +19,7 @@ import createConnector from '../core/createConnector';
  */
 
 function getId(props) {
-  return props.id || props.attributeName;
+  return props.attributeName;
 }
 
 function getCurrentRefinement(props, state) {

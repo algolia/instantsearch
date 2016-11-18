@@ -17,55 +17,54 @@ let params;
 
 describe('connectToggle', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({id: 't'}, {});
+    props = getProps({attributeName: 't'}, {});
     expect(props).toEqual({checked: false});
 
-    props = getProps({id: 't'}, {t: 'on'});
+    props = getProps({attributeName: 't'}, {t: 'on'});
     expect(props).toEqual({checked: true});
 
-    props = getProps({id: 't', defaultRefinement: true}, {});
+    props = getProps({defaultRefinement: true, attributeName: 't'}, {});
     expect(props).toEqual({checked: true});
   });
 
   it('calling refine updates the widget\'s state', () => {
-    let state = refine({id: 'ok'}, {otherKey: 'val'}, true);
+    let state = refine({attributeName: 't'}, {otherKey: 'val'}, true);
     expect(state).toEqual({
       otherKey: 'val',
-      ok: 'on',
+      t: 'on',
     });
 
-    state = refine({id: 'ok'}, {otherKey: 'val'}, false);
+    state = refine({attributeName: 't'}, {otherKey: 'val'}, false);
     expect(state).toEqual({
       otherKey: 'val',
-      ok: 'off',
+      t: 'off',
     });
   });
 
   it('refines the corresponding facet', () => {
     params = getSP(new SearchParameters(), {
-      id: 't',
       attributeName: 'facet',
       value: 'val',
-    }, {t: 'on'});
+    }, {facet: 'on'});
     expect(params.getConjunctiveRefinements('facet')).toEqual(['val']);
   });
 
   it('applies the provided filter', () => {
     params = getSP(new SearchParameters(), {
-      id: 't',
+      attributeName: 'facet',
       filter: sp => sp.setQuery('yep'),
-    }, {t: 'on'});
+    }, {facet: 'on'});
     expect(params.query).toEqual('yep');
   });
 
   it('registers its filter in metadata', () => {
-    let metadata = getMetadata({id: 't'}, {});
+    let metadata = getMetadata({attributeName: 't'}, {});
     expect(metadata).toEqual({
       items: [],
       id: 't',
     });
 
-    metadata = getMetadata({attributeName: 't', id: 't', label: 'yep'}, {t: 'on'});
+    metadata = getMetadata({attributeName: 't', label: 'yep'}, {t: 'on'});
     expect(metadata).toEqual({
       items: [
         {

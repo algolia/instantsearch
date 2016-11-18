@@ -1,10 +1,14 @@
-import {PropTypes} from 'react';
 import {omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
+function getId() {
+  return 'p';
+}
+
 function getCurrentRefinement(props, state) {
-  let page = state[props.id];
+  const id = getId();
+  let page = state[id];
   if (typeof page === 'undefined') {
     page = 1;
   } else if (typeof page === 'string') {
@@ -34,14 +38,6 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaPagination',
 
-  propTypes: {
-    id: PropTypes.string,
-  },
-
-  defaultProps: {
-    id: 'p',
-  },
-
   getProps(props, state, search) {
     if (!search.results) {
       return null;
@@ -53,9 +49,10 @@ export default createConnector({
   },
 
   refine(props, state, nextPage) {
+    const id = getId();
     return {
       ...state,
-      [props.id]: nextPage,
+      [id]: nextPage,
     };
   },
 
@@ -64,20 +61,22 @@ export default createConnector({
   },
 
   transitionState(props, prevState, nextState) {
-    if (nextState[props.id] && nextState[props.id].isSamePage) {
+    const id = getId();
+    if (nextState[id] && nextState[id].isSamePage) {
       return {
         ...nextState,
-        [props.id]: prevState[props.id],
+        [id]: prevState[id],
       };
-    } else if (prevState[props.id] === nextState[props.id]) {
-      return omit(nextState, props.id);
+    } else if (prevState[id] === nextState[id]) {
+      return omit(nextState, id);
     }
     return nextState;
   },
 
-  getMetadata(props) {
+  getMetadata() {
+    const id = getId();
     return {
-      id: props.id,
+      id,
     };
   },
 });

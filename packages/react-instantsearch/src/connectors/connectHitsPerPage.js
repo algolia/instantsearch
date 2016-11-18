@@ -1,13 +1,16 @@
-import {PropTypes} from 'react';
-
 import createConnector from '../core/createConnector';
 
+function getId() {
+  return 'hPP';
+}
+
 function getCurrentRefinement(props, state) {
-  if (typeof state[props.id] !== 'undefined') {
-    if (typeof state[props.id] === 'string') {
-      return parseInt(state[props.id], 10);
+  const id = getId();
+  if (typeof state[id] !== 'undefined') {
+    if (typeof state[id] === 'string') {
+      return parseInt(state[id], 10);
     }
-    return state[props.id];
+    return state[id];
   }
   return props.defaultRefinement;
 }
@@ -18,7 +21,6 @@ function getCurrentRefinement(props, state) {
  * @name connectHitsPerPage
  * @kind connector
  * @category connector
- * @propType {string} [id="hPP"] - The id of the widget.
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
  * @providedPropType {function} refine - a function to remove a single filter
@@ -28,15 +30,6 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaHitsPerPage',
 
-  propTypes: {
-    id: PropTypes.string,
-    defaultRefinement: PropTypes.number.isRequired,
-  },
-
-  defaultProps: {
-    id: 'hPP',
-  },
-
   getProps(props, state) {
     return {
       currentRefinement: getCurrentRefinement(props, state),
@@ -44,9 +37,10 @@ export default createConnector({
   },
 
   refine(props, state, nextHitsPerPage) {
+    const id = getId();
     return {
       ...state,
-      [props.id]: nextHitsPerPage,
+      [id]: nextHitsPerPage,
     };
   },
 
@@ -54,7 +48,7 @@ export default createConnector({
     return searchParameters.setHitsPerPage(getCurrentRefinement(props, state));
   },
 
-  getMetadata(props) {
-    return {id: props.id};
+  getMetadata() {
+    return {id: getId()};
   },
 });

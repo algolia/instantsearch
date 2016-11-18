@@ -23,17 +23,14 @@ describe('connectRefinementList', () => {
       getFacetByName: () => true,
     };
 
-    props = getProps({id: 'ok'}, {ok: ['wat']}, {results});
-    expect(props).toEqual({items: [], currentRefinement: ['wat']});
+    props = getProps({attributeName: 'ok'}, {}, {results});
+    expect(props).toEqual({items: [], currentRefinement: []});
 
     props = getProps({attributeName: 'ok'}, {ok: ['wat']}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
-    props = getProps({id: 'ok', defaultRefinement: ['wat']}, {}, {results});
+    props = getProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat']});
-
-    props = getProps({id: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: []});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -48,7 +45,7 @@ describe('connectRefinementList', () => {
         count: 10,
       },
     ]);
-    props = getProps({id: 'ok'}, {}, {results});
+    props = getProps({attributeName: 'ok'}, {}, {results});
     expect(props.items).toEqual([
       {
         value: ['wat'],
@@ -64,7 +61,7 @@ describe('connectRefinementList', () => {
       },
     ]);
 
-    props = getProps({id: 'ok', limitMin: 1}, {}, {results});
+    props = getProps({attributeName: 'ok', limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
         value: ['wat'],
@@ -75,7 +72,7 @@ describe('connectRefinementList', () => {
     ]);
 
     props = getProps(
-      {id: 'ok', showMore: true, limitMin: 0, limitMax: 1},
+      {attributeName: 'ok', showMore: true, limitMin: 0, limitMax: 1},
       {},
       {results}
     );
@@ -90,12 +87,12 @@ describe('connectRefinementList', () => {
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({id: 'ok'}, {}, {});
+    props = getProps({attributeName: 'ok'}, {}, {});
     expect(props).toBe(null);
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, ['yep']);
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, ['yep']);
     expect(nextState).toEqual({
       otherKey: 'val',
       ok: ['yep'],
@@ -157,17 +154,17 @@ describe('connectRefinementList', () => {
   });
 
   it('registers its id in metadata', () => {
-    const metadata = getMetadata({id: 'ok'}, {});
+    const metadata = getMetadata({attributeName: 'ok'}, {});
     expect(metadata).toEqual({id: 'ok', items: []});
   });
 
   it('registers its filter in metadata', () => {
     const metadata = getMetadata(
-      {id: 'ok', attributeName: 'wot'},
-      {ok: ['wat', 'wut']}
+      {attributeName: 'wot'},
+      {wot: ['wat', 'wut']}
     );
     expect(metadata).toEqual({
-      id: 'ok',
+      id: 'wot',
       items: [
         {
           label: 'wot: ',
@@ -189,9 +186,9 @@ describe('connectRefinementList', () => {
       ],
     });
 
-    let state = metadata.items[0].items[0].value({ok: ['wat', 'wut']});
-    expect(state).toEqual({ok: ['wut']});
+    let state = metadata.items[0].items[0].value({wot: ['wat', 'wut']});
+    expect(state).toEqual({wot: ['wut']});
     state = metadata.items[0].items[1].value(state);
-    expect(state).toEqual({ok: ''});
+    expect(state).toEqual({wot: ''});
   });
 });
