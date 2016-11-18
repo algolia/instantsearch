@@ -15,7 +15,8 @@ const DEFAULT_PROPS = {
   appId: 'foo',
   apiKey: 'bar',
   indexName: 'foobar',
-  urlSync: false,
+  algoliaClient: {},
+  searchParameters: {},
 };
 
 describe('InstantSearch', () => {
@@ -126,10 +127,10 @@ describe('InstantSearch', () => {
       </InstantSearch>
     );
     expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
-      appId: DEFAULT_PROPS.appId,
-      apiKey: DEFAULT_PROPS.apiKey,
       indexName: DEFAULT_PROPS.indexName,
       initialState: {},
+      searchParameters: {},
+      algoliaClient: {},
     });
   });
 

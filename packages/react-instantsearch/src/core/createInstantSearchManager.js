@@ -1,4 +1,3 @@
-import algoliasearch from 'algoliasearch';
 import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 
 import createWidgetsManager from './createWidgetsManager';
@@ -7,23 +6,18 @@ import createStore from './createStore';
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
  * trigger the search when the widgets are updated.
- * @param {string} appId - the application ID
- * @param {string} apiKey - the api key
  * @param {string} indexName - the main index name
  * @param {object} initialState - initial widget state
  * @param {object} SearchParameters - optional additional parameters to send to the algolia API
  * @return {InstantSearchManager} a new instance of InstantSearchManager
  */
 export default function createInstantSearchManager({
-  appId,
-  apiKey,
   indexName,
   initialState,
   algoliaClient,
   searchParameters = {},
 }) {
-  const client = algoliaClient || algoliasearch(appId, apiKey);
-  const helper = algoliasearchHelper(client);
+  const helper = algoliasearchHelper(algoliaClient);
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
 
@@ -103,8 +97,8 @@ export default function createInstantSearchManager({
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.transitionState))
       .reduce((res, widget) =>
-        widget.transitionState(state, res)
-      , nextState);
+          widget.transitionState(state, res)
+        , nextState);
   }
 
   function onExternalStateUpdate(nextState) {
@@ -122,8 +116,8 @@ export default function createInstantSearchManager({
 
   function getWidgetsIds() {
     return store.getState().metadata.reduce((res, meta) =>
-      typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
-    , []);
+        typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
+      , []);
   }
 
   return {

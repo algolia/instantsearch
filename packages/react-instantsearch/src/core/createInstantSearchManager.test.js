@@ -3,8 +3,6 @@
 
 import createInstantSearchManager from './createInstantSearchManager';
 
-import algoliasearch from 'algoliasearch';
-jest.mock('algoliasearch', () => jest.fn());
 import algoliasearchHelper from 'algoliasearch-helper';
 jest.mock('algoliasearch-helper', () => {
   const output = jest.fn();
@@ -31,18 +29,18 @@ describe('createInstantSearchManager', () => {
   let onInternalStateUpdate;
   let initialState;
   let ism;
+  let algoliaClient;
 
   function init(otherISMParameters = {}) {
     createHrefForState = jest.fn(a => a);
     onInternalStateUpdate = jest.fn();
+    algoliaClient = jest.fn();
     initialState = {
       hello: 'yes',
     };
     ism = createInstantSearchManager({
-      appId: 'appId',
-      apiKey: 'apiKey',
       indexName: 'indexName',
-
+      algoliaClient,
       initialState,
       createHrefForState,
       onInternalStateUpdate,
@@ -51,29 +49,14 @@ describe('createInstantSearchManager', () => {
   }
 
   beforeEach(() => {
-    algoliasearch.mockClear();
     algoliasearchHelper.mockClear();
     createStore.mockClear();
     createWidgetsManager.mockClear();
   });
 
-  it('initializes the algoliasearch client with correct options', () => {
+  it('initializes the algoliasearch helper client with correct options', () => {
     init();
-    expect(algoliasearch.mock.calls[0]).toEqual(['appId', 'apiKey']);
-  });
-
-  it('overrides the default algoliasearch client with algoliaClient', () => {
-    const algoliaClient = {};
-    init({algoliaClient});
-    expect(algoliasearch.mock.calls.length).toEqual(0);
     expect(algoliasearchHelper.mock.calls[0][0]).toBe(algoliaClient);
-  });
-
-  it('initializes the algoliasearch helper with correct options', () => {
-    const client = {};
-    algoliasearch.mockImplementationOnce(() => client);
-    init();
-    expect(algoliasearchHelper.mock.calls[0][0]).toBe(client);
   });
 
   describe('store', () => {

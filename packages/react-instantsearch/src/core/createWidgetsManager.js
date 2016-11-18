@@ -10,7 +10,7 @@ export default function createWidgetsManager(onWidgetsUpdate) {
       return;
     }
     scheduled = true;
-    process.nextTick(() => {
+    setImmediate(() => {
       scheduled = false;
       onWidgetsUpdate();
     });

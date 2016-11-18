@@ -23,10 +23,10 @@ describe('createWidgetsManager', () => {
       jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
-      jest.runAllTicks();
+      jest.runAllImmediates();
       wm.registerWidget({});
       expect(onUpdate.mock.calls.length).toBe(0);
-      jest.runAllTicks();
+      jest.runAllImmediates();
       expect(onUpdate.mock.calls.length).toBe(1);
       jest.useRealTimers();
     });
@@ -37,10 +37,10 @@ describe('createWidgetsManager', () => {
       jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
-      jest.runAllTicks();
+      jest.runAllImmediates();
       wm.update();
       expect(onUpdate.mock.calls.length).toBe(0);
-      jest.runAllTicks();
+      jest.runAllImmediates();
       expect(onUpdate.mock.calls.length).toBe(1);
       jest.useRealTimers();
     });

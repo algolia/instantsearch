@@ -1,4 +1,8 @@
-export {default as InstantSearch} from './src/core/InstantSearch.js';
+import createInstantSearch from './src/core/createInstantSearch';
+import algoliasearch from 'algoliasearch';
+
+const InstantSearch = createInstantSearch(algoliasearch);
+export {InstantSearch};
 export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Hits} from './src/widgets/Hits.js';
