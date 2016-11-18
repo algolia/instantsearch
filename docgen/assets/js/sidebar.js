@@ -32,28 +32,6 @@ function sidebarFollowScroll(sidebarContainer) {
   document.addEventListener('scroll', positionSidebar);
 }
 
-function sidebarToggleFollowScroll(sidebarContainer) {
-  const {height, navHeight, footerHeight, menuHeight, sidebarTop} = getPositionsKeyElements(sidebarContainer);
-  const positionSidebar = () => {
-    const currentScroll = window.pageYOffset;
-    if (currentScroll > sidebarTop - navHeight) {
-      const fold = height - footerHeight - menuHeight - 100;
-      if (currentScroll > fold) {
-        sidebarContainer.style.top = `${fold - currentScroll + navHeight + 20}px`;
-      } else {
-        sidebarContainer.style.top = null;
-      }
-      sidebarContainer.classList.add('fixed');
-    } else {
-      sidebarContainer.classList.remove('fixed');
-    }
-  };
-
-  window.addEventListener('load', positionSidebar);
-  document.addEventListener('DOMContentLoaded', positionSidebar);
-  document.addEventListener('scroll', positionSidebar);
-}
-
 function scrollSpy(sidebarContainer, headersContainer) {
   const headers = [...headersContainer.querySelectorAll('h2')];
 
@@ -111,21 +89,24 @@ function activeLinks(sidebarContainer) {
 
 function toggleDocumentationSidebar() {
   const sidebarNav = document.querySelector('nav.sidebar');
-  const bodySize = document.body.clientWidth;
+  const trigger = document.querySelector('.sidebar-opener');
 
-  if (sidebarNav && bodySize < 960) {
-    const trigger = document.querySelector('.sidebar-opener');
-    const sidebarDoc = document.querySelector('.sidebar');
-
-    sidebarToggleFollowScroll(document.querySelector('.sidebar-opener'));
-
-    trigger.addEventListener('click', () => {
-      sidebarDoc.classList.toggle('Showed');
-      trigger.classList.toggle('Showed');
-    });
+  function init() {
+    const bodySize = document.body.clientWidth;
+    if (bodySize <= 960 && sidebarNav) {
+      trigger.addEventListener('click', () => {
+        sidebarNav.classList.toggle('Showed');
+        trigger.classList.toggle('Showed');
+      });
+    }
   }
+  init();
 }
 toggleDocumentationSidebar();
+
+window.addEventListener('resize', () => {
+  toggleDocumentationSidebar();
+});
 
 function getPositionsKeyElements($sidebar) {
   const sidebarBBox = $sidebar.getBoundingClientRect();
@@ -141,4 +122,3 @@ function getPositionsKeyElements($sidebar) {
 
   return {sidebarTop, height, navHeight, footerHeight, menuHeight};
 }
-

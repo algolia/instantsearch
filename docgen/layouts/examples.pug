@@ -2,3 +2,13 @@ extends archetypes/single-column-formatted.pug
 
 block content
   .content!=contents
+
+  - var values = ['e-commerce', 'e-commerce-infinite', 'material-ui', 'media', 'tourism'];
+
+  div(class="examples-container")
+    each val in values
+      div.example-tile
+         a(href=h.publicPath(`examples/${val}/index.html`))
+          figure
+            img(src=h.publicPath(`images/examples/${val}.png`))
+            figcaption #{val}
