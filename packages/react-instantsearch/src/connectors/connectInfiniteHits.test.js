@@ -90,14 +90,14 @@ describe.only('connectInfiniteHits', () => {
   });
 
   it('adds 1 to page when calling refine', () => {
-    const props = {id: 'pager'};
+    const props = {};
 
     const state0 = {};
 
     const state1 = connect.refine(props, state0);
-    expect(state1).toEqual({pager: {page: 1}});
+    expect(state1).toEqual({p: 1});
 
     const state2 = connect.refine(props, state1);
-    expect(state2).toEqual({pager: {page: 2}});
+    expect(state2).toEqual({p: 2});
   });
 });

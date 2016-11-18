@@ -98,7 +98,7 @@ const Content = React.createClass({
           </div>
           <div className="Sidebar__facets">
             <ConnectedNestedList
-              id="categories"
+              id="Categories"
               attributes={[
                 'category',
                 'sub_category',

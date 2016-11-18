@@ -6,7 +6,6 @@ import SearchBoxComponent from '../components/SearchBox.js';
  * @name SearchBox
  * @kind component
  * @category widget
- * @propType {string} [id="q"] - URL state serialization key. The state of this widget takes the form of a `string`.
  * @propType {string[]} [focusShortcuts=['s','/']] - List of keyboard shortcuts that focus the search box. Accepts key names and key codes.
  * @propType {boolean} [autoFocus=false] - Should the search box be focused on render?
  * @propType {boolean} [searchAsYouType=true] - Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.

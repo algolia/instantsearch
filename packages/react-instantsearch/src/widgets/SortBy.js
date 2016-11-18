@@ -6,7 +6,6 @@ import SortByComponent from '../components/SortBy.js';
  * @name SortBy
  * @kind component
  * @category widget
- * @propType {string} [id="sort_by"] - URL state serialization key. The state of this widget takes the form of a `string` (the current selected index).
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
  * @themeKey ais-SortBy__root - the root of the component

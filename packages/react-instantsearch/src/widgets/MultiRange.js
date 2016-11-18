@@ -6,7 +6,6 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * @name MultiRange
  * @kind component
  * @category widget
- * @propType {string} id - widget id, defaults to the attribute name
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the format "min:max".

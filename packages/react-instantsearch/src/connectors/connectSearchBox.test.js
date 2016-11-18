@@ -16,23 +16,23 @@ let params;
 
 describe('connectSearchBox', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({id: 'q'}, {});
+    props = getProps({}, {});
     expect(props).toEqual({query: ''});
 
-    props = getProps({id: 'q'}, {q: 'yep'});
+    props = getProps({}, {q: 'yep'});
     expect(props).toEqual({query: 'yep'});
   });
 
   it('calling refine updates the widget\'s state', () => {
-    const nextState = refine({id: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      q: 'yep',
     });
   });
 
   it('refines the query parameter', () => {
-    params = getSP(new SearchParameters(), {id: 'q'}, {q: 'bar'});
+    params = getSP(new SearchParameters(), {}, {q: 'bar'});
     expect(params.query).toBe('bar');
   });
 });

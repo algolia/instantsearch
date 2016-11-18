@@ -8,7 +8,6 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @name HierarchicalMenu
  * @kind component
  * @category widget
- * @propType {string} id - URL state serialization key. The state of this widget takes the shape of a `string`, which corresponds to the full path of the current selected refinement.
  * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
  * @propType {number} [limitMin=10] -  The maximum number of items displayed.

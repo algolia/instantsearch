@@ -11,7 +11,6 @@ stories.addDecorator(withKnobs);
 stories.add('default', () =>
   <WrapWithHits hasPlayground={true} linkedStoryGroup="HierarchicalMenu" >
     <HierarchicalMenu
-      id="categories"
       attributes={[
         'category',
         'sub_category',
@@ -22,7 +21,6 @@ stories.add('default', () =>
 ).add('with default selected item', () =>
   <WrapWithHits >
     <HierarchicalMenu
-      id="categories"
       attributes={[
         'category',
         'sub_category',
@@ -34,7 +32,6 @@ stories.add('default', () =>
 ).add('with show more', () =>
   <WrapWithHits >
     <HierarchicalMenu
-      id="categories"
       attributes={[
         'category',
         'sub_category',
@@ -48,7 +45,6 @@ stories.add('default', () =>
 ).add('with sort by', () =>
   <WrapWithHits >
     <HierarchicalMenu
-      id="categories"
       attributes={[
         'category',
         'sub_category',
@@ -60,7 +56,6 @@ stories.add('default', () =>
 ).add('playground', () =>
   <WrapWithHits >
     <HierarchicalMenu
-      id="categories"
       attributes={[
         'category',
         'sub_category',

@@ -62,7 +62,6 @@ const Facets = () =>
         title="Show results for"
         items={[
           <HierarchicalMenu
-            id="categories"
             key="categories"
             attributes={[
               'category',
@@ -96,7 +95,6 @@ const Facets = () =>
             key="Price"
             item={ <CustomPriceRanges
               attributeName="price"
-              id="price_ranges"
               items={[
                 {end: 10},
                 {start: 10, end: 20},
@@ -108,7 +106,7 @@ const Facets = () =>
               ]}
             />}
           />,
-          <RangeInput key="price_input" attributeName="price" id="price_input"/>,
+          <RangeInput key="price_input" attributeName="price"/>,
         ]}
       />
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>

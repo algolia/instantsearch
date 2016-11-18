@@ -5,6 +5,10 @@ import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';
 
+function getId() {
+  return 'p';
+}
+
 /**
  * InfiniteHits connector provides the logic to create connected
  * components that will render an continuous list of results retrieved from
@@ -22,10 +26,6 @@ export default createConnector({
 
   propTypes: {
     hitsPerPage: PropTypes.number,
-  },
-
-  defaultProps: {
-    id: 'infinityPagesOfThe1000hits',
   },
 
   getProps(componentProps, allWidgetsState, resultsStruct) {
@@ -64,8 +64,9 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, widgetsState) {
-    const currentPage = widgetsState[props.id] ?
-      widgetsState[props.id].page :
+    const id = getId();
+    const currentPage = widgetsState[id] ?
+      widgetsState[id] :
       0;
     const isHitsPerPageDefined = typeof searchParameters.hitsPerPage !== 'undefined';
 
@@ -76,24 +77,22 @@ export default createConnector({
   },
 
   refine(props, widgetsState) {
-    const nextPage = widgetsState[props.id] ?
-      widgetsState[props.id].page + 1 :
+    const id = getId();
+    const nextPage = widgetsState[id] ?
+      widgetsState[id] + 1 :
       1;
     return {
       ...widgetsState,
-      [props.id]: {
-        page: nextPage,
-      },
+      [id]: nextPage,
     };
   },
 
   transitionState(props, prevState, nextState) {
-    if (prevState[props.id] === nextState[props.id]) {
+    const id = getId();
+    if (prevState[id] === nextState[id]) {
       return {
         ...nextState,
-        [props.id]: {
-          page: 0,
-        },
+        [id]: 0,
       };
     }
     return nextState;
