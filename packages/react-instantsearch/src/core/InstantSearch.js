@@ -64,12 +64,9 @@ class InstantSearch extends Component {
     const initialState = this.isControlled ? props.state : {};
 
     this.aisManager = createInstantSearchManager({
-      appId: props.appId,
-      apiKey: props.apiKey,
       indexName: props.indexName,
       searchParameters: props.searchParameters,
       algoliaClient: props.algoliaClient,
-
       initialState,
     });
   }
@@ -136,11 +133,9 @@ class InstantSearch extends Component {
 
 InstantSearch.propTypes = {
   // @TODO: These props are currently constant.
-  appId: PropTypes.string,
-  apiKey: PropTypes.string,
   indexName: PropTypes.string.isRequired,
 
-  algoliaClient: PropTypes.object,
+  algoliaClient: PropTypes.object.isRequired,
 
   searchParameters: PropTypes.object,
 
