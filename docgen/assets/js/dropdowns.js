@@ -8,19 +8,29 @@ function dropdowns() {
 
   function toggleDropdown(element) {
     const dropdown = element.getAttribute('data-toggle-dropdown');
-    element.addEventListener('click', function() {
-      if (!document.getElementById(dropdown).classList.contains('opened')) {
+    const theDropdown = document.getElementById(dropdown);
+    element.addEventListener('click', () => {
+      if (!theDropdown.classList.contains('opened')) {
         for (let i = 0; i < otherDropdown.length; i++) {
           otherDropdown[i].classList.remove('opened');
         }
 
-        document.getElementById(dropdown).classList.add('opened');
-        document.getElementById(dropdown).setAttribute('aria-expanded', 'true');
-        this.setAttribute('aria-expanded', 'true');
+        theDropdown.classList.add('opened');
+        theDropdown.setAttribute('aria-expanded', 'true');
+        theDropdown.setAttribute('aria-expanded', 'true');
       } else {
-        document.getElementById(dropdown).classList.remove('opened');
-        document.getElementById(dropdown).setAttribute('aria-expanded', 'false');
-        this.setAttribute('aria-expanded', 'false');
+        theDropdown.classList.remove('opened');
+        theDropdown.setAttribute('aria-expanded', 'false');
+        theDropdown.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // When there is a click event
+    // Check if the clicked element is the
+    // dropdown toggler, if not, close the dropdown
+    document.body.addEventListener('click', e => {
+      if (e.target !== element) {
+        theDropdown.classList.remove('opened');
       }
     });
   }

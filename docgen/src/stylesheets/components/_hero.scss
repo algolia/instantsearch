@@ -130,11 +130,14 @@
   .project-logo {
     width: 30%;
 
+     img,
      svg {
       max-width: 50% !important;
       display: block;
       margin: auto;
     }
+
+
   }
 
 
@@ -170,6 +173,10 @@
        body.documentation &{
         margin-top: 0;
       }
+    }
+
+    .fl-left.project-logo {
+      display: none;
     }
 
     .fl-right {

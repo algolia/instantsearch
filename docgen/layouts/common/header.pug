@@ -1,4 +1,4 @@
-.cm-navigation
+nav.cm-navigation
   .cm-navigation__brands
     .cm-navigation__brands--algolia
       a#algoliaLogo(href='https://algolia.com')
@@ -59,13 +59,12 @@
       li.cm-menu__list__item
         a(href=h.publicPath('guides.html'), data-link = 'true') Guide
       li.cm-menu__list__item
-        a(aria-controls='dropdown-2', aria-expanded='false', data-toggle-dropdown='dropdown-2') API <span class="glyph">&#x25BC;</span>
-        ul#dropdown-2.simple-dropdown(role='tree', tabindex='-1')
+        a(aria-controls='dropdown-1', aria-expanded='false', data-toggle-dropdown='dropdown-1', class="dropdown-toggler") API <span class="glyph">&#x25BC;</span>
+        ul#dropdown-1.simple-dropdown(role='tree', tabindex='-1')
           li
             a(href=h.publicPath('component.html'), role='treeitem', data-link = 'true') Components
           li
             a(href=h.publicPath('connector.html'), role='treeitem', data-link = 'true') Connectors
-
 
       li.cm-menu__list__item
         a(href=h.publicPath('examples.html'), data-link = 'true') Examples

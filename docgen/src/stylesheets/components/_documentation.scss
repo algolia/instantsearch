@@ -1,4 +1,5 @@
-.documentation-section {
+.documentation-section,
+.examples-section {
 
   .container {
     article {
@@ -21,6 +22,7 @@
     padding-right: 1em;
     border-bottom: 1px solid #d8d8d8;
     margin-top: 32px;
+    padding-bottom: 8px;
 
     &:first-of-type {
       margin-top: 0;
@@ -80,8 +82,8 @@
     width: calc(100% - #{$sidebar-width});
     min-height: 890px;
     padding-left: 30px;
-    padding-top: 120px;
     padding-bottom: 200px;
+    padding-top: 120px;
 
     p,
     ul,
@@ -126,10 +128,16 @@
       overflow-x: auto;
       word-break: inherit;
       word-wrap: inherit;
-      padding: .5em 30px;
       border: 1px solid #d8d8d8;
       border-radius: 2px;
       border-left: none;
+      padding: 0.5em 0;
+
+      code {
+        display: block;
+        width: calc(100% - 4em);
+        margin: auto;
+      }
     }
 
 
@@ -292,9 +300,6 @@
     color: #000000;
   }
 
-  h2 {
-    padding-bottom: 8px;
-  }
 
   h2, h3, .api-entry {
     .anchor {
@@ -431,6 +436,10 @@ tr.api-entry-description {
       }
     }
   }
+}
+
+.examples-section > .container {
+  padding-top: 120px;
 }
 
 @import "docs/method";

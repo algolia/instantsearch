@@ -5,8 +5,8 @@ nav.sidebar {
   position: absolute;
   max-width: $sidebar-width;
   border-right: 1px solid #d8d8d8;
-  padding-top: 120px;
   overflow: auto;
+  padding-top: 120px;
 
   .sidebar-container {
     width: 100%;
@@ -55,6 +55,7 @@ nav.sidebar {
           padding: 0 0.15em;
           line-height: 1.5;
           transition: color 0.2s ease, box-shadow 0.2s ease, font-weight 0.2s ease;
+          font-size: 14px;
 
           &:focus,
           &:target {
@@ -93,6 +94,10 @@ nav.sidebar {
     will-change: transform;
     transition: transform 0.3s ease;
 
+    .sidebar-header {
+      max-width: calc(100% - 1em);
+    }
+
     &.Showed {
       transform: translateX(0);
     }
@@ -122,6 +127,12 @@ nav.sidebar {
   transition: transform 0.2s ease, left 0.2s ease;
   transform-origin: center center;
   cursor: pointer;
+  display: none;
+
+
+  @include small-mq {
+    display: block;
+  }
 
   &:active {
     transform: scale(0.9)
