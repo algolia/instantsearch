@@ -106,6 +106,13 @@ class App extends Component {
     }
     
     /*
+    Update the state when the back/forward button is used
+     */
+    componentWillReceiveProps(){
+        this.setState({state: qs.parse(this.props.router.location.query)});
+    }
+    
+    /*
     Push the new state to the react-router history. The threshold is there 
     to specify how long we should wait between state changes before pushing 
     a new location instead of replacing the old one. This is a very basic 

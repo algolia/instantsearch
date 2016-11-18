@@ -5,6 +5,7 @@ export const withUrlSync = App => class extends Component {
   constructor() {
     super();
     this.state = {searchState: qs.parse(window.location.search.slice(1))};
+    window.onpopstate = () => this.setState({searchState: qs.parse(window.location.search.slice(1))});
   }
 
   onStateChange = nextState => {
