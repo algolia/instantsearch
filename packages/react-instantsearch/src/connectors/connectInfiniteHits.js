@@ -1,6 +1,3 @@
-/**
- * @module widgets/InfiniteHits
- */
 import {PropTypes} from 'react';
 
 import createConnector from '../core/createConnector';

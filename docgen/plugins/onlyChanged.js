@@ -16,7 +16,7 @@ const layoutFiles = join(__dirname, '../layouts/**/*');
 const cssFiles = join(__dirname, '../src/stylesheets/**/*');
 const CSSEntryPoints = ['stylesheets/index.css'];
 
-const hasChanged = file => file.stats && file.stats.ctime && file.stats.mtime ?
+export const hasChanged = file => file.stats && file.stats.ctime && file.stats.mtime ?
   Date.parse(file.stats.ctime) > lastRunTime || Date.parse(file.stats.mtime) > lastRunTime :
   true;
 
