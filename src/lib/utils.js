@@ -17,6 +17,8 @@ export {
   clearRefinementsFromState,
   clearRefinementsAndSearch,
   prefixKeys,
+  escapeRefinement,
+  unescapeRefinement,
 };
 
 /**
@@ -171,7 +173,17 @@ function getRefinements(results, state) {
 
   forEach(state.disjunctiveFacetsRefinements, (refinements, attributeName) => {
     forEach(refinements, name => {
-      res.push(getRefinement(state, 'disjunctive', attributeName, name, results.disjunctiveFacets));
+      res.push(
+        getRefinement(
+          state,
+          'disjunctive',
+          attributeName,
+          // we unescapeRefinement any disjunctive refined value since they can be escaped
+          // when negative numeric values search `escapeRefinement` usage in code
+          unescapeRefinement(name),
+          results.disjunctiveFacets
+        )
+      );
     });
   });
 
@@ -232,4 +244,16 @@ function prefixKeys(prefix, obj) {
   }
 
   return undefined;
+}
+
+function escapeRefinement(value) {
+  if (typeof value === 'number' && value < 0) {
+    value = String(value).replace(/^-/, '\\-');
+  }
+
+  return value;
+}
+
+function unescapeRefinement(value) {
+  return String(value).replace(/^\\-/, '-');
 }

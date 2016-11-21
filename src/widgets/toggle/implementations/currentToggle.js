@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import defaultTemplates from '../defaultTemplates.js';
 import {
   prepareTemplateProps,
+  escapeRefinement,
+  unescapeRefinement,
 } from '../../../lib/utils.js';
 
 // cannot use a function declaration because of
@@ -122,17 +124,5 @@ const currentToggle = ({
     },
   };
 };
-
-function escapeRefinement(value) {
-  if (typeof value === 'number' && value < 0) {
-    value = String(value).replace('-', '\\-');
-  }
-
-  return value;
-}
-
-function unescapeRefinement(value) {
-  return String(value).replace(/^\\-/, '-');
-}
 
 export default currentToggle;
