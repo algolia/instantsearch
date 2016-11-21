@@ -10,13 +10,6 @@ class HitsPerPage extends Component {
     applyTheme: PropTypes.func.isRequired,
     currentRefinement: PropTypes.number.isRequired,
 
-    /**
-     * List of hits per page options.
-     * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
-     * Beware: Contrary to `HitsPerPage`, the `label` of `HitsPerPage` items must be either a string or a number.
-     * @public
-     * @defines HitsPerPageSelectItem
-     */
     items: PropTypes.arrayOf(
       PropTypes.shape({
         /**

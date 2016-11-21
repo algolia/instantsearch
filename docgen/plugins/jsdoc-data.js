@@ -2,13 +2,50 @@ import collectJson from 'collect-json';
 import jsdocParse from 'jsdoc-parse';
 import forEach from 'lodash/forEach';
 import groupBy from 'lodash/groupBy';
+import {hasChanged} from './onlyChanged.js';
+import {join} from 'path';
 
-export default function(opts) {
-  if (!opts.src) throw new Error('opts.src must be defined');
+let cachedFiles;
 
+export default function() {
   return function(files, metalsmith, done) {
-    const src = metalsmith.path(opts.src);
-    jsdocParse({src, json: true}).pipe(collectJson(dataReady));
+    const allFilles = Object
+      .entries(files)
+      .reduce((memo, [filename, file]) =>
+        (/\.jsdoc$/).test(filename) ?
+          [...memo, {filename: filename.replace(/\.jsdoc$/, ''), ...file}] :
+          memo,
+        []
+      );
+
+    const filesToParse = allFilles
+      .filter(file => hasChanged(file))
+      .map(file => file.filename);
+
+    if (cachedFiles) {
+      // remove any file from cache not present in filestoparse
+      Object.entries(cachedFiles).forEach(([buildFilename, file]) => {
+        if (!allFilles.some(({filename}) => file.filename === filename)) {
+          delete cachedFiles[buildFilename];
+        } else {
+          files[buildFilename] = cachedFiles[buildFilename];
+        }
+      });
+    } else {
+      cachedFiles = {};
+    }
+
+    allFilles.forEach(({filename}) => delete files[`${filename}.jsdoc`]);
+
+    if (filesToParse.length === 0) {
+      done();
+      return;
+    }
+
+    jsdocParse({
+      src: filesToParse,
+      json: true,
+    }).pipe(collectJson(dataReady));
 
     function dataReady(unfilteredSymbols) {
       const symbolsByCategory = groupBy(
@@ -18,18 +55,26 @@ export default function(opts) {
 
       forEach(symbolsByCategory, symbols => {
         forEach(symbols, data => {
-          const filename = `${data.kind}/${data.name}.html`;
+          const buildFilename = `${data.kind}/${data.name}.html`;
           const customTags = parseCustomTags(data.customTags);
           const isNameUnique = unfilteredSymbols.map(s => s.name).filter(n => n === data.name).length === 1;
           const title = isNameUnique ?
             data.name :
             `${data.name} ${data.category}`;
 
-          files[filename] = {
+          const fileFromMetalsmith = allFilles
+            .find(
+              ({filename}) =>
+              filename === join(data.meta.path, data.meta.filename)
+            );
+
+          files[buildFilename] = cachedFiles[buildFilename] = {
             ...data,
             ...customTags,
             mode: '0764',
             contents: '',
+            stats: fileFromMetalsmith && fileFromMetalsmith.stats,
+            filename: fileFromMetalsmith && fileFromMetalsmith.filename,
             title,
             layout: `${data.kind}/${data.category}.pug`,
             category: data.kind,

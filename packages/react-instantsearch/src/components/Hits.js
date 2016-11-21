@@ -1,6 +1,3 @@
-/**
- * @namespace widgets.Hits
- */
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../core/themeable';
@@ -23,11 +20,6 @@ Hits.propTypes = {
   applyTheme: PropTypes.func.isRequired,
   hits: PropTypes.array,
 
-  /**
-   * Component to render each hit with.
-   * The component will called with a `hit` prop.
-   * @public
-   */
   itemComponent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,

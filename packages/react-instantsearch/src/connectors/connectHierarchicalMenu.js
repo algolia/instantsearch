@@ -102,30 +102,12 @@ export default createConnector({
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
 
-    /**
-     * Default state of this widget.
-     * @public
-     */
     defaultRefinement: PropTypes.string,
 
-    /**
-     * Display a show more button for increasing the number of refinement values
-     * from `limitMin` to `limitMax`.
-     * @public
-     */
     showMore: PropTypes.bool,
 
-    /**
-     * Minimum number of refinement values.
-     * @public
-     */
     limitMin: PropTypes.number,
 
-    /**
-     * Maximum number of refinement values.
-     * Ignored when `showMore` is `false`.
-     * @public
-     */
     limitMax: PropTypes.number,
   },
 
