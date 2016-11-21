@@ -11,19 +11,8 @@ class SortBy extends Component {
     applyTheme: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
 
-    /**
-     * The different options, with the corresponding index.
-     * @public
-     * @defines SortByItem
-     */
     items: PropTypes.arrayOf(PropTypes.shape({
-      /**
-       * Label to display on the option.
-       */
       label: PropTypes.string.isRequired,
-      /**
-       * Index to use
-       */
       value: PropTypes.string.isRequired,
     })).isRequired,
 

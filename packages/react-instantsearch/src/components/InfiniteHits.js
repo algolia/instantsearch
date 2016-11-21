@@ -1,6 +1,3 @@
-/**
- * @namespace widgets.Hits
- */
 import React, {PropTypes, Component} from 'react';
 
 import themeable from '../core/themeable';

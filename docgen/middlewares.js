@@ -13,6 +13,7 @@ import markdown from './plugins/markdown.js';
 import onlyChanged from './plugins/onlyChanged.js';
 import webpackEntryMetadata from './plugins/webpackEntryMetadata.js';
 import autoprefixer from './plugins/autoprefixer.js';
+import sources from './plugins/sources.js';
 
 // performance and debug info for metalsmith, when needed see usage below
 // import {start as perfStart, stop as perfStop} from './plugins/perf.js';
@@ -20,11 +21,21 @@ import autoprefixer from './plugins/autoprefixer.js';
 import webpackStartConfig from './webpack.config.start.babel.js';
 import webpackBuildConfig from './webpack.config.build.babel';
 
+import {reactPackage} from './path.js';
+
 const common = [
   helpers,
   assets({
     source: './assets/',
     destination: './assets/',
+  }),
+  sources([
+    reactPackage('src/widgets/*.js'),
+    reactPackage('src/connectors/*.js'),
+    reactPackage('src/core/InstantSearch.js'),
+  ], {
+    ignore: '**/*.test.js',
+    computeFilename: filename => `${filename}.jsdoc`, // denotes jsdoc file but also avoid js ignore
   }),
   ignore(fileName => {
     // This is a fix for VIM swp files inside src/,
@@ -36,7 +47,7 @@ const common = [
     if (/-build\.js$/.test(fileName)) return false;
 
     // if it's an example JavaScript file, keep it
-    if (/examples\/(.*)?\.js$/.test(fileName)) return false;
+    // if (/examples\/(.*)?\.js$/.test(fileName)) return false;
 
     // if it's any other JavaScript file, ignore it, it's handled by build files above
     if (/\.js$/.test(fileName)) return true;
@@ -49,15 +60,7 @@ const common = [
   }),
   markdown,
   headings('h2'),
-  jsdoc({
-    src: '../packages/react-instantsearch/src/widgets/*.js',
-  }),
-  jsdoc({
-    src: '../packages/react-instantsearch/src/connectors/*.js',
-  }),
-  jsdoc({
-    src: '../packages/react-instantsearch/src/core/InstantSearch.js',
-  }),
+  jsdoc(),
   nav(),
   // After markdown, so that paths point to the correct HTML file
   navigation({
