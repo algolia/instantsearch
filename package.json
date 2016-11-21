@@ -54,6 +54,7 @@
     "eslint-plugin-jasmine": "^2.1.0",
     "eslint-plugin-react": "^6.7.1",
     "gh-pages": "^0.12.0",
+    "glob": "^7.1.1",
     "google-map-react": "^0.21.3",
     "insert-css": "^2.0.0",
     "jest-cli": "^17.0.3",

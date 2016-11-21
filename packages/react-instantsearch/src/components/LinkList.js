@@ -8,39 +8,19 @@ export default class LinkList extends Component {
     applyTheme: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
 
-    /**
-     * List of items to render.
-     * @public
-     */
     items: PropTypes.arrayOf(
-      /**
-       * @shape Item
-       */
       PropTypes.shape({
-        /**
-         * The value of the item.
-         * @public
-         */
         value: PropTypes.oneOfType([
           PropTypes.string,
           PropTypes.number,
           PropTypes.object,
         ]).isRequired,
 
-        /**
-         * When you have multiple items with the same value, another hint is
-         * needed in order to differentiate them. Defaults to `value`.
-         * @public
-         */
         key: PropTypes.oneOfType([
           PropTypes.string,
           PropTypes.number,
         ]),
 
-        /**
-         * Label to render for this item.
-         * @public
-         */
         label: PropTypes.node,
 
         modifier: PropTypes.string,
