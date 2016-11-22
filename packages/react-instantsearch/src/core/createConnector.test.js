@@ -17,6 +17,7 @@ function createState() {
 }
 
 describe('createConnector', () => {
+  const getId = () => 'id';
   describe('state', () => {
     it('computes passed props from props and state', () => {
       const getProps = jest.fn(props => ({gotProps: props}));
@@ -24,6 +25,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps,
+        getId,
       })(Dummy);
       const state = createState();
       const props = {
@@ -53,6 +55,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps,
+        getId,
       })(Dummy);
       const state = createState();
       let props = {hello: 'there'};
@@ -83,6 +86,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps,
+        getId,
       })(Dummy);
       let state = {
         ...createState(),
@@ -127,6 +131,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps: () => null,
+        getId,
       })(() => null);
       const unsubscribe = jest.fn();
       const wrapper = mount(<Connected />, {context: {
@@ -149,6 +154,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps,
+        getId,
       })(Dummy);
       const props = {
         hello: 'there',
@@ -184,6 +190,7 @@ describe('createConnector', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps: () => null,
+        getId,
       })(() => null);
       const registerWidget = jest.fn();
       mount(<Connected />, {context: {
@@ -207,6 +214,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => null,
         getMetadata,
+        getId,
       })(() => null);
       const registerWidget = jest.fn();
       const props = {hello: 'there'};
@@ -237,6 +245,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => null,
         getSearchParameters,
+        getId,
       })(() => null);
       const registerWidget = jest.fn();
       const props = {hello: 'there'};
@@ -269,6 +278,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => null,
         getMetadata: () => null,
+        getId,
       })(() => null);
       const update = jest.fn();
       const props = {hello: 'there'};
@@ -294,22 +304,35 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => null,
         getMetadata: () => null,
+        cleanUp: () => ({another: {state: 'state'}}),
       })(() => null);
       const unregister = jest.fn();
+      const setState = jest.fn();
+      const onInternalStateUpdate = jest.fn();
       const wrapper = mount(<Connected />, {context: {
         ais: {
           store: {
-            getState: () => ({}),
+            getState: () => ({widgets: {another: {state: 'state'}}}),
+            setState,
             subscribe: () => () => null,
           },
           widgetsManager: {
             registerWidget: () => unregister,
           },
+          onInternalStateUpdate,
         },
       }});
       expect(unregister.mock.calls.length).toBe(0);
+      expect(setState.mock.calls.length).toBe(0);
+      expect(onInternalStateUpdate.mock.calls.length).toBe(0);
+
       wrapper.unmount();
+
       expect(unregister.mock.calls.length).toBe(1);
+      expect(setState.mock.calls.length).toBe(1);
+      expect(onInternalStateUpdate.mock.calls.length).toBe(1);
+      expect(setState.mock.calls[0][0]).toEqual({widgets: {another: {state: 'state'}}});
+      expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({another: {state: 'state'}});
     });
   });
 
@@ -323,6 +346,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => ({}),
         refine,
+        getId,
       })(Dummy);
       const onInternalStateUpdate = jest.fn();
       const props = {hello: 'there'};
@@ -357,6 +381,7 @@ describe('createConnector', () => {
         displayName: 'CoolConnector',
         getProps: () => ({}),
         refine,
+        getId,
       })(Dummy);
       const createHrefForState = jest.fn();
       const props = {hello: 'there'};

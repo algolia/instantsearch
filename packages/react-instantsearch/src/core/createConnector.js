@@ -12,6 +12,8 @@ import {shallowEqual, getDisplayName} from './utils';
  * @property {function} transitionState - hook after the state has changed
  * @property {function} getProps - transform the state into props passed to the wrapped component.
  * Receives (props, widgetStates, searchState, metadata) and returns the local state.
+ * @property {function} getId - Receives props and return the id that will be used to identify the widget
+ * @property {function} cleanUp - hook when the widget will unmount. Receives (props, searchState) and return a cleaned state.
  * @property {object} propTypes - PropTypes forwarded to the wrapped component.
  * @property {object} defaultProps - default values for the props
  */
@@ -37,6 +39,7 @@ export default function createConnector(connectorDesc) {
   const hasSearchParameters = has(connectorDesc, 'getSearchParameters');
   const hasMetadata = has(connectorDesc, 'getMetadata');
   const hasTransitionState = has(connectorDesc, 'transitionState');
+  const hasCleanUp = has(connectorDesc, 'cleanUp');
   const isWidget = hasSearchParameters || hasMetadata || hasTransitionState;
 
   return Composed => class Connector extends Component {
@@ -59,7 +62,6 @@ export default function createConnector(connectorDesc) {
       super(props, context);
 
       const {ais: {store, widgetsManager}} = context;
-
       this.state = {
         props: this.getProps(props),
       };
@@ -112,9 +114,16 @@ export default function createConnector(connectorDesc) {
 
     componentWillUnmount() {
       this.unsubscribe();
-
       if (isWidget) {
         this.unregisterWidget();
+        if (hasCleanUp) {
+          const newState = connectorDesc.cleanUp(this.props, this.context.ais.store.getState().widgets);
+          this.context.ais.store.setState({
+            ...this.context.ais.store.getState(),
+            widgets: newState,
+          });
+          this.context.ais.onInternalStateUpdate(newState);
+        }
       }
     }
 
@@ -160,6 +169,8 @@ export default function createConnector(connectorDesc) {
           ...args
         )
       );
+
+    cleanUp = (...args) => connectorDesc.cleanUp(...args);
 
     render() {
       if (this.state.props === null) {

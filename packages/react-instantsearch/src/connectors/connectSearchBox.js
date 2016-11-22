@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+import {omit} from 'lodash';
 
 function getId() {
   return 'q';
@@ -41,6 +42,10 @@ export default createConnector({
       ...state,
       [id]: nextQuery,
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId());
   },
 
   getSearchParameters(searchParameters, props, state) {

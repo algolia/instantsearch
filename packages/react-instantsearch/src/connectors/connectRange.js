@@ -1,4 +1,5 @@
 import {PropTypes} from 'react';
+import {omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -65,7 +66,9 @@ export default createConnector({
         return null;
       }
 
-      const stats = search.results.getFacetStats(attributeName);
+      const stats = search.results.getFacetByName(attributeName) ?
+        search.results.getFacetStats(attributeName) : null;
+
       if (!stats) {
         return null;
       }
@@ -103,6 +106,10 @@ export default createConnector({
       ...state,
       [getId(props)]: nextRefinement,
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId(props));
   },
 
   getSearchParameters(params, props, state) {
