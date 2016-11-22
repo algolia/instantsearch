@@ -108,6 +108,16 @@ AlgoliaSearchHelper.prototype.search = function() {
 };
 
 /**
+ * Gets the search query parameters that would be sent to the Algolia Client
+ * for the hits
+ * @return {object} Query Parameters
+ */
+AlgoliaSearchHelper.prototype.getQuery = function() {
+  var state = this.state;
+  return requestBuilder._getHitsSearchParams(state);
+};
+
+/**
  * Start a search using a modified version of the current state. This method does
  * not trigger the helper lifecycle and does not modify the state kept internally
  * by the helper. This second aspect means that the next search call will be the
