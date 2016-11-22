@@ -1,5 +1,12 @@
 CHANGELOG
 
+2.15.0 - 2016-11-22
+ * feat(getQuery): return the main query that will be sent to Algolia using
+ the helper
+ * fix(searchOnce): Passing null for results to callback when err present. Fix #399
+ * doc(reference): fixed addDisjunctiveFacetRefinement example
+ * doc(content): Fix minor typos
+
 2.14.0 - 2016-09-09
  * feat(hierarchicalFacets): add add and remove operations on hierarchical facets
  * fix(SearchParameters): Using unknown parameters not showing warning

@@ -12719,8 +12719,8 @@ function vanillaSortFn(order, data) {
 
 /**
  * Get a the list of values for a given facet attribute. Those values are sorted
- * refinement first, descending count (bigger value on top), and name asending
- * (alphabetical order). The sort formula can overriden using either string based
+ * refinement first, descending count (bigger value on top), and name ascending
+ * (alphabetical order). The sort formula can overridden using either string based
  * predicates or a function.
  *
  * This method will return all the values returned by the Algolia engine plus all
@@ -13013,6 +13013,16 @@ AlgoliaSearchHelper.prototype.search = function() {
 };
 
 /**
+ * Gets the search query parameters that would be sent to the Algolia Client
+ * for the hits
+ * @return {object} Query Parameters
+ */
+AlgoliaSearchHelper.prototype.getQuery = function() {
+  var state = this.state;
+  return requestBuilder._getHitsSearchParams(state);
+};
+
+/**
  * Start a search using a modified version of the current state. This method does
  * not trigger the helper lifecycle and does not modify the state kept internally
  * by the helper. This second aspect means that the next search call will be the
@@ -13055,7 +13065,8 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
     return this.client.search(
       queries,
       function(err, content) {
-        cb(err, new SearchResults(tempState, content), tempState);
+        if (err) cb(err, null, tempState);
+        else cb(null, new SearchResults(tempState, content), tempState);
       });
   }
 
@@ -14563,7 +14574,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":273,"./SearchParameters/shortener":274,"lodash/bind":200,"lodash/forEach":208,"lodash/invert":216,"lodash/isArray":218,"lodash/isPlainObject":230,"lodash/isString":231,"lodash/map":238,"lodash/mapKeys":239,"lodash/mapValues":240,"lodash/pick":249,"qs":265,"qs/lib/utils":268}],282:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.14.0';
+module.exports = '2.15.0';
 
 },{}]},{},[1])(1)
 });
