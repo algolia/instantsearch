@@ -3,12 +3,12 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
-<span class='attr-optional'>`options.placeholder`<span class="show-description">…</span></span>
+<span class='attr-optional important'>`options.placeholder`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Input's placeholder</p>
+<p class="attr-description important">Input's placeholder</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.poweredBy`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code> &#124; <code>Object</code>)</span>

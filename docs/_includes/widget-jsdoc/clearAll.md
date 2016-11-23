@@ -3,7 +3,7 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.excludeAttributes`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>

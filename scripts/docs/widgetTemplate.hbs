@@ -2,10 +2,10 @@
 <h4 class="no-toc">Parameters</h4>
 {{#tableRow params "name" "type" "defaultvalue" "description" ~}}
 <p class="attr-name">
-{{#if optional}}<span class='attr-optional'>{{else}}<span class='attr-required'>{{/if}}`{{name}}`<span class="show-description">…</span></span>
+{{#if optional}}<span class='attr-optional{{#if important}} important{{/if}}'>{{else}}<span class='attr-required'>{{/if}}`{{name}}`<span class="show-description">…</span></span>
   <span class="attr-infos">{{#unless (equal defaultvalue undefined)}}Default:<code class="attr-default">{{defaultvalue}}</code>{{/unless}}({{>linked-type-list types=type.names delimiter=" &#124; " }})</span>
 </p>
-<p class="attr-description">{{{stripNewlines (inlineLinks description)}}}</p>
+<p class="attr-description{{#if important}} important{{/if}}{{#unless optional}} important{{/unless}}">{{{stripNewlines (inlineLinks description)}}}</p>
 {{/tableRow}}
 {{/function}}
 

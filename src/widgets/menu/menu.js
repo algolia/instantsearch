@@ -21,8 +21,8 @@ const bem = bemHelper('ais-menu');
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string} options.attributeName Name of the attribute for faceting
  * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
- *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
- * @param  {string} [options.limit=10] How many facets values to retrieve
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ * @param  {string} [options.limit=10] How many facets values to retrieve [*]
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
  * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked

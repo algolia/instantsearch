@@ -3,17 +3,22 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.attributes`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-<p class="attr-description">Array of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.</p>
+<p class="attr-description important">Array of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.</p>
 <p class="attr-name">
-<span class='attr-optional'>`options.separator`<span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">&#x27; &gt; &#x27;</code>(<code>string</code>)</span>
+<span class='attr-optional important'>`options.limit`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>number</code>)</span>
 </p>
-<p class="attr-description">Separator used in the attributes to separate level values.</p>
+<p class="attr-description important">How much facet values to get</p>
+<p class="attr-name">
+<span class='attr-optional important'>`options.separator`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">&quot;&gt;&quot;</code>(<code>string</code>)</span>
+</p>
+<p class="attr-description important">Separator used in the attributes to separate level values.</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.rootPath`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
@@ -24,11 +29,6 @@
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>string</code>)</span>
 </p>
 <p class="attr-description">Show the parent level of the current refined value</p>
-<p class="attr-name">
-<span class='attr-optional'>`options.limit`<span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>number</code>)</span>
-</p>
-<p class="attr-description">How much facet values to get</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.sortBy`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> &#124; <code>function</code>)</span>

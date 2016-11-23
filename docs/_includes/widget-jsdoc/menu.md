@@ -3,22 +3,22 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.attributeName`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the attribute for faceting</p>
+<p class="attr-description important">Name of the attribute for faceting</p>
 <p class="attr-name">
-<span class='attr-optional'>`options.sortBy`<span class="show-description">…</span></span>
+<span class='attr-optional important'>`options.sortBy`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;, &#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> &#124; <code>function</code>)</span>
 </p>
-<p class="attr-description">How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).</p>
+<p class="attr-description important">How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).</p>
 <p class="attr-name">
-<span class='attr-optional'>`options.limit`<span class="show-description">…</span></span>
+<span class='attr-optional important'>`options.limit`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>string</code>)</span>
 </p>
-<p class="attr-description">How many facets values to retrieve</p>
+<p class="attr-description important">How many facets values to retrieve</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.showMore`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> &#124; <code>boolean</code>)</span>
