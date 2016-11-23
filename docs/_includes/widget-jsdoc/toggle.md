@@ -3,17 +3,17 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.attributeName`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the attribute for faceting (eg. "free_shipping")</p>
+<p class="attr-description important">Name of the attribute for faceting (eg. "free_shipping")</p>
 <p class="attr-name">
 <span class='attr-required'>`options.label`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Human-readable name of the filter (eg. "Free Shipping")</p>
+<p class="attr-description important">Human-readable name of the filter (eg. "Free Shipping")</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.values`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>

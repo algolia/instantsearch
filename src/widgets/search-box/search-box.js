@@ -17,7 +17,7 @@ const KEY_SUPPRESS = 8;
  * Instantiate a searchbox
  * @function searchBox
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} [options.placeholder] Input's placeholder
+ * @param  {string} [options.placeholder] Input's placeholder [*]
  * @param  {boolean|Object} [options.poweredBy=false] Define if a "powered by Algolia" link should be added near the input
  * @param  {function|string} [options.poweredBy.template] Template used for displaying the link. Can accept a function or a Hogan string.
  * @param  {number} [options.poweredBy.cssClasses] CSS classes to add

@@ -14,6 +14,7 @@ group :development, :test do
   gem 'thin'
   gem 'guard-livereload'
   gem 'guard-bundler', require: false
+  gem 'rb-readline'
 end
 
 group :jekyll_plugins do

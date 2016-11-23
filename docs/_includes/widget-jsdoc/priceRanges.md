@@ -3,12 +3,12 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">Valid CSS Selector as a string or DOMElement</p>
+<p class="attr-description important">Valid CSS Selector as a string or DOMElement</p>
 <p class="attr-name">
 <span class='attr-required'>`options.attributeName`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the attribute for faceting</p>
+<p class="attr-description important">Name of the attribute for faceting</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>

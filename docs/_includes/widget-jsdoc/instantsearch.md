@@ -3,17 +3,17 @@
 <span class='attr-required'>`options.appId`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">The Algolia application ID</p>
+<p class="attr-description important">The Algolia application ID</p>
 <p class="attr-name">
 <span class='attr-required'>`options.apiKey`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">The Algolia search-only API key</p>
+<p class="attr-description important">The Algolia search-only API key</p>
 <p class="attr-name">
 <span class='attr-required'>`options.indexName`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">The name of the main index</p>
+<p class="attr-description important">The name of the main index</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.numberLocale`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>

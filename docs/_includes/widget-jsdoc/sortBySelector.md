@@ -3,22 +3,22 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.indices`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
 </p>
-<p class="attr-description">Array of objects defining the different indices to choose from.</p>
+<p class="attr-description important">Array of objects defining the different indices to choose from.</p>
 <p class="attr-name">
 <span class='attr-required'>`options.indices[0].name`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the index to target</p>
+<p class="attr-description important">Name of the index to target</p>
 <p class="attr-name">
 <span class='attr-required'>`options.indices[0].label`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Label displayed in the dropdown</p>
+<p class="attr-description important">Label displayed in the dropdown</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.autoHideContainer`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>

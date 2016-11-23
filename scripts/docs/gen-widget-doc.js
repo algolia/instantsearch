@@ -28,6 +28,16 @@ function dataReady(data) {
   other functions like the instantsearch() one */
   let fns = data.filter(token => token.kind === 'function');
 
+  // consider optional but important ([*]) params as important
+  data.forEach(d => {
+    (d.params || []).forEach(param => {
+      if (param.optional && param.description.indexOf('[*]') > -1) {
+        param.description = param.description.replace(/\s*\[\*\]$/g, '');
+        param.important = true;
+      }
+    });
+  });
+
   /* render an output file for each class */
   renderMarkdown(data, fns);
 }
