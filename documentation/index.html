@@ -23,7 +23,7 @@
     <meta content="1200" property="og:image:width">
     <meta content="500" property="og:image:height">
 
-    <link rel="stylesheet" href="/instantsearch.js/assets/main-4728424bf1eef388f3cd718e3e5007e3.css">
+    <link rel="stylesheet" href="/instantsearch.js/assets/main-38d1bd12ceadeade23b4d29f463f4b71.css">
     
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
     
@@ -119,7 +119,7 @@
   <p><img src="/instantsearch.js/assets/logo-instantsearch-beb3afc90aeba0e2d13a6a721c19f14a.svg" height="40" alt="logo instantsearch.js" /></p>
   <div class="lead">
     <p>Build the perfect UI with instantsearch.js,<br /> a library of widgets designed to help you create a high-performance instant-search experience.</p>
-    <p class="version">Version: <strong>1.8.15</strong></p>
+    <p class="version">Version: <strong>1.8.16</strong></p>
   </div>
   <div class="spacer40"></div>
   <div class="row">
@@ -275,17 +275,17 @@ React on your side.</p>
 <span class="attr-required"><code>options.appId</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">The Algolia application ID</p>
+      <p class="attr-description important">The Algolia application ID</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.apiKey</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">The Algolia search-only API key</p>
+      <p class="attr-description important">The Algolia search-only API key</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.indexName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">The name of the main index</p>
+      <p class="attr-description important">The name of the main index</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.numberLocale</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
@@ -580,12 +580,12 @@ The search box widget is where you users type their search queries.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.placeholder</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.placeholder</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Input’s placeholder</p>
+      <p class="attr-description important">Input’s placeholder</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.poweredBy</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code> | <code>Object</code>)</span>
@@ -697,7 +697,12 @@ The hits widget is the main component that displays results from Algolia. It acc
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-name">
+<span class="attr-optional important"><code>options.hitsPerPage</code><span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">20</code>(<code>number</code>)</span>
+</p>
+      <p class="attr-description important">The number of hits to display per page</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -738,11 +743,6 @@ The hits widget is the main component that displays results from Algolia. It acc
   <span class="attr-infos">(<code>function</code>)</span>
 </p>
       <p class="attr-description">Method used to change the object passed to the <code>allItems</code> template</p>
-      <p class="attr-name">
-<span class="attr-optional"><code>hitsPerPage</code><span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">20</code>(<code>number</code>)</span>
-</p>
-      <p class="attr-description">The number of hits to display per page</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.cssClasses</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -815,22 +815,22 @@ displayed at once.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
 </p>
-      <p class="attr-description">Array of objects defining the different values and labels</p>
+      <p class="attr-description important">Array of objects defining the different values and labels</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options[0].value</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>
 </p>
-      <p class="attr-description">number of hits to display per page</p>
+      <p class="attr-description important">number of hits to display per page</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options[0].label</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Label to display in the option</p>
+      <p class="attr-description important">Label to display in the option</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.autoHideContainer</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>
@@ -901,7 +901,7 @@ pages.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.labels</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -1055,22 +1055,22 @@ of an e-commerce website.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for faceting</p>
+      <p class="attr-description important">Name of the attribute for faceting</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.sortBy</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.sortBy</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;, &#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> | <code>function</code>)</span>
 </p>
-      <p class="attr-description">How to sort refinements. Possible values: <code>count|isRefined|name:asc|name:desc</code>.   You can also use a sort function that behaves like the standard Javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax">compareFunction</a>.</p>
+      <p class="attr-description important">How to sort refinements. Possible values: <code>count|isRefined|name:asc|name:desc</code>.   You can also use a sort function that behaves like the standard Javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax">compareFunction</a>.</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.limit</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.limit</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>string</code>)</span>
 </p>
-      <p class="attr-description">How many facets values to retrieve</p>
+      <p class="attr-description important">How many facets values to retrieve</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.showMore</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> | <code>boolean</code>)</span>
@@ -1237,17 +1237,22 @@ From a UX point of view, we suggest not displaying more than two levels deep.</p
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributes</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
 </p>
-      <p class="attr-description">Array of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.</p>
+      <p class="attr-description important">Array of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.separator</code><span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">&#x27; &gt; &#x27;</code>(<code>string</code>)</span>
+<span class="attr-optional important"><code>options.limit</code><span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>number</code>)</span>
 </p>
-      <p class="attr-description">Separator used in the attributes to separate level values.</p>
+      <p class="attr-description important">How much facet values to get</p>
+      <p class="attr-name">
+<span class="attr-optional important"><code>options.separator</code><span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">&quot;&gt;&quot;</code>(<code>string</code>)</span>
+</p>
+      <p class="attr-description important">Separator used in the attributes to separate level values.</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.rootPath</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
@@ -1258,11 +1263,6 @@ From a UX point of view, we suggest not displaying more than two levels deep.</p
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>string</code>)</span>
 </p>
       <p class="attr-description">Show the parent level of the current refined value</p>
-      <p class="attr-name">
-<span class="attr-optional"><code>options.limit</code><span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>number</code>)</span>
-</p>
-      <p class="attr-description">How much facet values to get</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.sortBy</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> | <code>function</code>)</span>
@@ -1434,27 +1434,27 @@ results with either the value <code>a</code> or <code>b</code> will match.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for faceting</p>
+      <p class="attr-description important">Name of the attribute for faceting</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.operator</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.operator</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code>(<code>string</code>)</span>
 </p>
-      <p class="attr-description">How to apply refinements. Possible values: <code>or</code>, <code>and</code></p>
+      <p class="attr-description important">How to apply refinements. Possible values: <code>or</code>, <code>and</code></p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.sortBy</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.sortBy</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">[&#x27;count:desc&#x27;, &#x27;name:asc&#x27;]</code>(<code>Array.&lt;string&gt;</code> | <code>function</code>)</span>
 </p>
-      <p class="attr-description">How to sort refinements. Possible values: <code>count:asc|count:desc|name:asc|name:desc|isRefined</code>.   You can also use a sort function that behaves like the standard Javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax">compareFunction</a>.</p>
+      <p class="attr-description important">How to sort refinements. Possible values: <code>count:asc|count:desc|name:asc|name:desc|isRefined</code>.   You can also use a sort function that behaves like the standard Javascript <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax">compareFunction</a>.</p>
       <p class="attr-name">
-<span class="attr-optional"><code>options.limit</code><span class="show-description">…</span></span>
+<span class="attr-optional important"><code>options.limit</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">10</code>(<code>string</code>)</span>
 </p>
-      <p class="attr-description">How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).</p>
+      <p class="attr-description important">How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.showMore</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> | <code>boolean</code>)</span>
@@ -1629,22 +1629,22 @@ This widget lets the user refine search results based on a numerical attribute. 
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for filtering</p>
+      <p class="attr-description important">Name of the attribute for filtering</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;Object&gt;</code>)</span>
 </p>
-      <p class="attr-description">List of all the options</p>
+      <p class="attr-description important">List of all the options</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options[].name</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the option</p>
+      <p class="attr-description important">Name of the option</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.options[].start</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>
@@ -1799,17 +1799,17 @@ Note that if you provide an “off” option, it will be refined at initializati
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for faceting (eg. “free_shipping”)</p>
+      <p class="attr-description important">Name of the attribute for faceting (eg. “free_shipping”)</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.label</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Human-readable name of the filter (eg. “Free Shipping”)</p>
+      <p class="attr-description important">Human-readable name of the filter (eg. “Free Shipping”)</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.values</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -1974,12 +1974,12 @@ The min and max values are automatically computed by Algolia using the data in t
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for faceting</p>
+      <p class="attr-description important">Name of the attribute for faceting</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.tooltips</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code> | <code>Object</code>)</span>
@@ -2115,12 +2115,12 @@ This filtering widget lets the user choose a price range. The ranges are dynamic
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">Valid CSS Selector as a string or DOMElement</p>
+      <p class="attr-description important">Valid CSS Selector as a string or DOMElement</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for faceting</p>
+      <p class="attr-description important">Name of the attribute for faceting</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -2294,30 +2294,30 @@ This filtering widget lets the user choose between numerical refinements from a 
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the numeric attribute to use</p>
+      <p class="attr-description important">Name of the numeric attribute to use</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
 </p>
-      <p class="attr-description">Array of objects defining the different values and labels</p>
+      <p class="attr-description important">Array of objects defining the different values and labels</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options[i].value</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>
 </p>
-      <p class="attr-description">The numerical value to refine with</p>
+      <p class="attr-description important">The numerical value to refine with</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.options[i].label</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Label to display in the option</p>
+      <p class="attr-description important">Label to display in the option</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.operator</code><span class="show-description">…</span></span>
-  <span class="attr-infos">(<code>string</code>)</span>
+  <span class="attr-infos">Default:<code class="attr-default">&#x27;=&#x27;</code>(<code>string</code>)</span>
 </p>
       <p class="attr-description">The operator to use to refine</p>
       <p class="attr-name">
@@ -2391,12 +2391,12 @@ This widget lets the user refine search results by clicking on stars. The stars 
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.attributeName</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the attribute for filtering</p>
+      <p class="attr-description important">Name of the attribute for filtering</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.max</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>
@@ -2562,7 +2562,7 @@ This widget clears all the refinements that are currently applied.</p>
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.excludeAttributes</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;string&gt;</code>)</span>
@@ -2676,7 +2676,7 @@ the user clear them one by one. This widget can also contain a
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-optional"><code>option.attributes</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
@@ -2854,22 +2854,22 @@ This widget lets you reorder your results. You need multiple indices for this to
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.indices</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
 </p>
-      <p class="attr-description">Array of objects defining the different indices to choose from.</p>
+      <p class="attr-description important">Array of objects defining the different indices to choose from.</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.indices[0].name</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Name of the index to target</p>
+      <p class="attr-description important">Name of the index to target</p>
       <p class="attr-name">
 <span class="attr-required"><code>options.indices[0].label</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-      <p class="attr-description">Label displayed in the dropdown</p>
+      <p class="attr-description important">Label displayed in the dropdown</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.autoHideContainer</code><span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>
@@ -2939,7 +2939,7 @@ This widget lets you display how many results matched the query and how fast the
 <span class="attr-required"><code>options.container</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> | <code>DOMElement</code>)</span>
 </p>
-      <p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+      <p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
       <p class="attr-name">
 <span class="attr-optional"><code>options.templates</code><span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -3533,7 +3533,7 @@ piCId = '1667';
 
 <script src="https://cdn.jsdelivr.net/clipboard.js/1.5/clipboard.min.js"></script>
 
-<script src="/instantsearch.js/assets/doc-56b247854928a3633bc147301cc1b398.js"></script>
+<script src="/instantsearch.js/assets/doc-84e80be69861f3d7fc02549d7d6e5ea7.js"></script>
 
 
     
