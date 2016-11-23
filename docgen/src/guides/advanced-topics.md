@@ -88,77 +88,11 @@ To be able to do that, you will need to provide three props to the [InstantSearc
 * createURL(state): this function is needed for every widgets that will render a link. It expects a string in return.
 This function while provided to every widgets and connectors is only useful if you are in a browser context. 
 
-Here's an example showing you how to use [react-router](https://github.com/ReactTraining/react-router) with react-instantsearch. 
-
-```jsx
-import React, {Component} from 'react';
-import {
-    InstantSearch
-} from 'react-instantsearch/dom';
-import {withRouter} from 'react-router';
-import qs from 'qs';
-
-class App extends Component {
-   constructor (props) {
-       super(props);
-       // we initialize the state by parsing the url
-       this.state = {state: {...qs.parse(this.props.router.location.query)}}; 
-    }
-    
-    /*
-    Update the state when the back/forward button is used
-     */
-    componentWillReceiveProps(){
-        this.setState({state: qs.parse(this.props.router.location.query)});
-    }
-    
-    /*
-    Push the new state to the react-router history. The threshold is there 
-    to specify how long we should wait between state changes before pushing 
-    a new location instead of replacing the old one. This is a very basic 
-    implementation you might want to perform advanced behaviors like removing 
-    empty values from the url or being able to keep others query params. 
-    */
-    onStateChange = (nextState) => {
-        const THRESHOLD = 700;
-        const newPush = Date.now();
-        /*
-        the current state is saved to be given as the 
-        state props of InstantSearch root component
-        */
-        this.setState({lastPush: newPush, state: nextState});
-        if (this.state.lastPush && newPush - this.state.lastPush  <= THRESHOLD) {
-            this.props.router.replace(nextState ? `?${qs.stringify(nextState)}` : '');
-        } else {
-            this.props.router.push(nextState ? `?${qs.stringify(nextState)}` : '');
-        }
-    };
-    
-    /*
-    This is the function that will be provided to every widgets and connectors. 
-    It allows you to be able to create a link. 
-    */
-    createURL = (state) => {
-        return `?${qs.stringify(state)}`; 
-    };
-
-    render() {
-        return (
-            <InstantSearch
-                appId="appId"
-                apiKey="apiKey"
-                indexName="indexName"
-                state={this.state.state}
-                onStateChange={this.onStateChange.bind(this)}
-                createURL={this.createURL.bind(this)}
-            >
-            </InstantSearch>
-        );
-    }
-}
-
-export default withRouter(App);
-```
+It exists many ways to manipulate the browser history. Here are some you could use:
+* Using [the browser history api](https://developer.mozilla.org/en-US/docs/Web/API/History_API)
+* Using a JavaScript history library
+* Using [react-router](https://github.com/ReactTraining/react-router). 
+See our [small demo app to have a full integration example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/react-router). 
 
 ## React Native
 
