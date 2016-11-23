@@ -3,22 +3,22 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.attributeName`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the attribute for filtering</p>
+<p class="attr-description important">Name of the attribute for filtering</p>
 <p class="attr-name">
 <span class='attr-required'>`options.options`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array.&lt;Object&gt;</code>)</span>
 </p>
-<p class="attr-description">List of all the options</p>
+<p class="attr-description important">List of all the options</p>
 <p class="attr-name">
 <span class='attr-required'>`options.options[].name`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Name of the option</p>
+<p class="attr-description important">Name of the option</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.options[].start`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>

@@ -3,22 +3,22 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
 <p class="attr-name">
 <span class='attr-required'>`options.options`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Array</code>)</span>
 </p>
-<p class="attr-description">Array of objects defining the different values and labels</p>
+<p class="attr-description important">Array of objects defining the different values and labels</p>
 <p class="attr-name">
 <span class='attr-required'>`options.options[0].value`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>number</code>)</span>
 </p>
-<p class="attr-description">number of hits to display per page</p>
+<p class="attr-description important">number of hits to display per page</p>
 <p class="attr-name">
 <span class='attr-required'>`options.options[0].label`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code>)</span>
 </p>
-<p class="attr-description">Label to display in the option</p>
+<p class="attr-description important">Label to display in the option</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.autoHideContainer`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>

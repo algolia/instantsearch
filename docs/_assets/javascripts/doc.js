@@ -185,7 +185,7 @@
     $('.attr-name').on('click', function() {
       var $descriptionParagraph = $(this).next('.attr-description')
       var isVisible = $descriptionParagraph.is(':visible');
-      $('.attr-description').hide();
+      $('.attr-description:not(.important)').hide();
       if(!isVisible) $descriptionParagraph.show();
     });
   }

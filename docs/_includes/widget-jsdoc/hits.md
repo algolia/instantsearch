@@ -3,7 +3,12 @@
 <span class='attr-required'>`options.container`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>string</code> &#124; <code>DOMElement</code>)</span>
 </p>
-<p class="attr-description">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-description important">CSS Selector or DOMElement to insert the widget</p>
+<p class="attr-name">
+<span class='attr-optional important'>`options.hitsPerPage`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">20</code>(<code>number</code>)</span>
+</p>
+<p class="attr-description important">The number of hits to display per page</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.templates`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
@@ -44,11 +49,6 @@
   <span class="attr-infos">(<code>function</code>)</span>
 </p>
 <p class="attr-description">Method used to change the object passed to the `allItems` template</p>
-<p class="attr-name">
-<span class='attr-optional'>`hitsPerPage`<span class="show-description">…</span></span>
-  <span class="attr-infos">Default:<code class="attr-default">20</code>(<code>number</code>)</span>
-</p>
-<p class="attr-description">The number of hits to display per page</p>
 <p class="attr-name">
 <span class='attr-optional'>`options.cssClasses`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
