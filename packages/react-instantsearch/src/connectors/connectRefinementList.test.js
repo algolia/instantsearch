@@ -11,6 +11,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -190,5 +191,10 @@ describe('connectRefinementList', () => {
     expect(state).toEqual({wot: ['wut']});
     state = metadata.items[0].items[1].value(state);
     expect(state).toEqual({wot: ''});
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

@@ -11,6 +11,7 @@ const {
   getSearchParameters: getSP,
   transitionState,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -68,5 +69,10 @@ describe('connectPagination', () => {
   it('registers its id in metadata', () => {
     const metadata = getMetadata({}, {});
     expect(metadata).toEqual({id: 'p'});
+  });
+
+  it('should return the right state when clean up', () => {
+    const newState = cleanUp({}, {p: {state: 'state'}, another: {state: 'state'}});
+    expect(newState).toEqual({another: {state: 'state'}});
   });
 });

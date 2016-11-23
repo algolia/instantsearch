@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+import {omit} from 'lodash';
 
 function getId() {
   return 'hPP';
@@ -42,6 +43,10 @@ export default createConnector({
       ...state,
       [id]: nextHitsPerPage,
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId());
   },
 
   getSearchParameters(searchParameters, props, state) {

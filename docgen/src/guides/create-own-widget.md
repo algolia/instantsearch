@@ -174,3 +174,25 @@ const CoolWidget = createConnector({
   },
 })(Widget);
 ```
+
+### cleanUp(props, state)
+
+This method is called when a widget is about to unmount in order to clean the state.
+
+It takes in the current props of the higher-order component and the state of all widgets and expect a new state in return.
+
+`props` are the props that were provided to the higher-order component.
+
+`state` holds the state of all widgets, with the shape `{[widgetId]: widgetState}`. Stateful widgets describe the format of their state in their respective documentation entry.
+
+```javascript
+import {omit} from 'lodash';
+
+const CoolWidget = createConnector({
+  // displayName, getProps, refine, getSearchParameters, getMetadata
+
+  cleanUp(props, state) {
+    return omit('queryAndPage', state)
+  },
+})(Widget);
+```

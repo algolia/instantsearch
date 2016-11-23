@@ -10,6 +10,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -28,6 +29,7 @@ describe('connectRange', () => {
     const results = {
       getFacetStats: () => ({min: 5, max: 10}),
       getFacetValues: () => [{name: '5', count: 10}, {name: '2', count: 20}],
+      getFacetByName: () => true,
     };
     props = getProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({
@@ -148,5 +150,10 @@ describe('connectRange', () => {
         value: metadata.items[0].value,
       }],
     });
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

@@ -1,4 +1,5 @@
 import {PropTypes} from 'react';
+import {omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 import {SearchParameters} from 'algoliasearch-helper';
@@ -147,6 +148,10 @@ export default createConnector({
       ...state,
       [id]: nextRefinement || '',
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId(props));
   },
 
   getSearchParameters(searchParameters, props, state) {
