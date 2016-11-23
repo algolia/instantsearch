@@ -11,13 +11,13 @@ export const withUrlSync = App => class extends Component {
   onStateChange = nextState => {
     const THRESHOLD = 700;
     const newPush = Date.now();
-    this.setState({lastPush: newPush, searchState: nextState});
-    const search = nextState ? `?${qs.stringify({...qs.parse(window.location.search.slice(1)), ...nextState})}` : '';
+    const search = nextState ? `?${qs.stringify(nextState)}` : '';
     if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
       window.history.replaceState(null, null, search);
     } else {
       window.history.pushState(null, null, search);
     }
+    this.setState({lastPush: newPush, searchState: nextState});
   };
 
   createURL = state => `?${qs.stringify(state)}`;

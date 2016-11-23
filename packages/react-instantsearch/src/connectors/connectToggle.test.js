@@ -10,6 +10,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -80,5 +81,10 @@ describe('connectToggle', () => {
 
     const state = metadata.items[0].value({t: 'on'});
     expect(state).toEqual({t: 'off'});
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

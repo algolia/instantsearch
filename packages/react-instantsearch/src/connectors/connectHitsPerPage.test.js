@@ -10,6 +10,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -48,5 +49,10 @@ describe('connectHitsPerPage', () => {
   it('registers its id in metadata', () => {
     const metadata = getMetadata({});
     expect(metadata).toEqual({id: 'hPP'});
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({}, {hPP: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

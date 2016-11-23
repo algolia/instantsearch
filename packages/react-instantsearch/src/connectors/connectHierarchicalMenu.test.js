@@ -10,6 +10,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -179,15 +180,15 @@ describe('connectHierarchicalMenu', () => {
     }, {ATTRIBUTE: 'ok'});
     expect(params).toEqual(
       initSP
-      .addHierarchicalFacet({
-        name: 'ATTRIBUTE',
-        attributes: ['ATTRIBUTE'],
-        separator: 'SEPARATOR',
-        rootPath: 'ROOT_PATH',
-        showParentLevel: true,
-      })
-      .toggleHierarchicalFacetRefinement('ATTRIBUTE', 'ok')
-      .setQueryParameter('maxValuesPerFacet', 1)
+        .addHierarchicalFacet({
+          name: 'ATTRIBUTE',
+          attributes: ['ATTRIBUTE'],
+          separator: 'SEPARATOR',
+          rootPath: 'ROOT_PATH',
+          showParentLevel: true,
+        })
+        .toggleHierarchicalFacetRefinement('ATTRIBUTE', 'ok')
+        .setQueryParameter('maxValuesPerFacet', 1)
     );
   });
 
@@ -211,5 +212,10 @@ describe('connectHierarchicalMenu', () => {
 
     const state = metadata.items[0].value({ok: 'wat'});
     expect(state).toEqual({ok: ''});
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({attributes: ['name']}, {name: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

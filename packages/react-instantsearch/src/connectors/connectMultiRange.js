@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {find} from 'lodash';
+import {find, omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -86,6 +86,10 @@ export default createConnector({
       ...state,
       [getId(props, state)]: nextRefinement,
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId(props));
   },
 
   getSearchParameters(searchParameters, props, state) {

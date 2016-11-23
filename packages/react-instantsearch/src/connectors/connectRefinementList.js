@@ -1,4 +1,5 @@
 import {PropTypes} from 'react';
+import {omit} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -117,6 +118,10 @@ export default createConnector({
       // {foo: []} => ""
       [id]: nextRefinement.length > 0 ? nextRefinement : '',
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId(props));
   },
 
   getSearchParameters(searchParameters, props, state) {
