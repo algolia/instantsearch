@@ -56,6 +56,10 @@ export default createConnector({
     };
   },
 
+  cleanUp(props, state) {
+    return omit(state, getId());
+  },
+
   getSearchParameters(searchParameters, props, state) {
     return searchParameters.setPage(getCurrentRefinement(props, state) - 1);
   },

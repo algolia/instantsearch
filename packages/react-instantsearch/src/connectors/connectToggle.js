@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-
+import {omit} from 'lodash';
 import createConnector from '../core/createConnector';
 
 function getId(props) {
@@ -52,6 +52,10 @@ export default createConnector({
       ...state,
       [getId(props, state)]: nextChecked ? 'on' : 'off',
     };
+  },
+
+  cleanUp(props, state) {
+    return omit(state, getId(props));
   },
 
   getSearchParameters(searchParameters, props, state) {

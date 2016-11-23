@@ -10,6 +10,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  cleanUp,
 } = connect;
 
 let props;
@@ -43,5 +44,10 @@ describe('connectSortBy', () => {
   it('registers its id in metadata', () => {
     const metadata = getMetadata({});
     expect(metadata).toEqual({id: 'sortBy'});
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({}, {sortBy: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });

@@ -9,6 +9,7 @@ const {
   getProps,
   refine,
   getSearchParameters: getSP,
+  cleanUp,
 } = connect;
 
 let props;
@@ -34,5 +35,10 @@ describe('connectSearchBox', () => {
   it('refines the query parameter', () => {
     params = getSP(new SearchParameters(), {}, {q: 'bar'});
     expect(params.query).toBe('bar');
+  });
+
+  it('should return the right state when clean up', () => {
+    const state = cleanUp({}, {q: {state: 'state'}, another: {state: 'state'}});
+    expect(state).toEqual({another: {state: 'state'}});
   });
 });
