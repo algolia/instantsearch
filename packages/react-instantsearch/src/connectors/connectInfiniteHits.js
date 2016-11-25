@@ -76,7 +76,7 @@ export default createConnector({
   refine(props, widgetsState) {
     const id = getId();
     const nextPage = widgetsState[id] ?
-      widgetsState[id] + 1 :
+      Number(widgetsState[id]) + 1 :
       1;
     return {
       ...widgetsState,
