@@ -1,7 +1,7 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
 import {RefinementList} from '../packages/react-instantsearch/dom';
-import {withKnobs, text, boolean, number, array} from '@kadira/storybook-addon-knobs';
+import {withKnobs, boolean, number, array} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
 const stories = storiesOf('RefinementList', module);
@@ -28,13 +28,6 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
-).add('sorted by name first', () =>
-  <WrapWithHits >
-    <RefinementList
-      attributeName="colors"
-      sortBy={['name:asc', 'count:desc']}
-    />
-  </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
     <RefinementList
@@ -43,7 +36,6 @@ stories.add('default', () =>
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
       showMore={boolean('showMore', true)}
-      sortBy={[text('sort by', 'count:desc')]}
     />
   </WrapWithHits>
 );

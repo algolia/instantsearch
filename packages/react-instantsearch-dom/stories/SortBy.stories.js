@@ -8,18 +8,7 @@ const stories = storiesOf('SortBy', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default ', () =>
-  <WrapWithHits linkedStoryGroup="SortBy" >
-    <SortBy
-      items={[
-        {value: 'ikea'},
-        {value: 'ikea_price_asc'},
-        {value: 'ikea_price_desc'},
-      ]}
-      defaultRefinement="ikea"
-    />
-  </WrapWithHits>
-).add('with labels', () =>
+stories.add('default', () =>
   <WrapWithHits >
     <SortBy
       items={[

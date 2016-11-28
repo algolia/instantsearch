@@ -42,17 +42,6 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
-).add('with sort by', () =>
-  <WrapWithHits >
-    <HierarchicalMenu
-      attributes={[
-        'category',
-        'sub_category',
-        'sub_sub_category',
-      ]}
-      sortBy={['count:desc']}
-    />
-  </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
     <HierarchicalMenu
@@ -65,7 +54,6 @@ stories.add('default', () =>
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
       showMore={boolean('showMore', true)}
-      sortBy={[text('sort by', 'name:asc')]}
     />
   </WrapWithHits>
 );
