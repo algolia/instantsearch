@@ -46,7 +46,7 @@ export default class LinkList extends Component {
               has(item, 'key') ? item.key : item.value,
               'item',
               // eslint-disable-next-line
-              item.value == selectedItem && 'itemSelected',
+              item.value == selectedItem && !item.disabled && 'itemSelected',
               item.disabled && 'itemDisabled',
               item.modifier
             )}
