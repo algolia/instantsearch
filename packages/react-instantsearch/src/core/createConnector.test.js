@@ -148,18 +148,14 @@ describe('createConnector', () => {
     });
 
     it('doesn\'t update the component when passed props don\'t change', () => {
-      let stateProps = {hoy: 'hey'};
-      const getProps = jest.fn(() => stateProps);
+      const getProps = jest.fn(() => {});
       const Dummy = jest.fn(() => null);
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProps,
         getId,
       })(Dummy);
-      const props = {
-        hello: 'there',
-      };
-      const wrapper = mount(<Connected {...props} />, {context: {
+      const wrapper = mount(<Connected />, {context: {
         ais: {
           store: {
             getState: () => ({}),
@@ -168,20 +164,10 @@ describe('createConnector', () => {
         },
       }});
       expect(Dummy.mock.calls.length).toBe(1);
-      wrapper.setProps({});
-      expect(Dummy.mock.calls.length).toBe(1);
-      stateProps = {hoy: 'hey'};
-      wrapper.setProps({});
-      expect(Dummy.mock.calls.length).toBe(1);
-      stateProps = {hey: 'hoy'};
-      wrapper.setProps({});
-      expect(Dummy.mock.calls.length).toBe(2);
-      wrapper.setProps({});
+      wrapper.setProps({hello: 'there'});
       expect(Dummy.mock.calls.length).toBe(2);
       wrapper.setProps({hello: 'there'});
       expect(Dummy.mock.calls.length).toBe(2);
-      wrapper.setProps({hello: 'you'});
-      expect(Dummy.mock.calls.length).toBe(3);
     });
   });
 
@@ -297,6 +283,32 @@ describe('createConnector', () => {
       expect(update.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'you'});
       expect(update.mock.calls.length).toBe(1);
+    });
+
+    it('dont update when props dont change', () => {
+      const Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProps: () => null,
+        getMetadata: () => null,
+        getId,
+      })(() => null);
+      const update = jest.fn();
+      const props = {hello: 'there'};
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget: () => null,
+            update,
+          },
+        },
+      }});
+      expect(update.mock.calls.length).toBe(0);
+      wrapper.setProps({hello: 'there'});
+      expect(update.mock.calls.length).toBe(0);
     });
 
     it('unregisters itself on unmount', () => {
