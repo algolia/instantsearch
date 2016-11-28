@@ -1,13 +1,6 @@
 import {PropTypes, Component, Children} from 'react';
 import createInstantSearchManager from './createInstantSearchManager';
 
-function validateProps(props) {
-  if (props.state && !props.onStateChange)
-    throw new Error(
-      'You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>'
-    );
-}
-
 function validateNextProps(props, nextProps) {
   if (!props.state && nextProps.state) {
     throw new Error(
@@ -57,8 +50,6 @@ class InstantSearch extends Component {
   constructor(props) {
     super(props);
 
-    validateProps(props);
-
     this.isControlled = Boolean(props.state);
 
     const initialState = this.isControlled ? props.state : {};
@@ -72,7 +63,6 @@ class InstantSearch extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    validateProps(nextProps);
     validateNextProps(this.props, nextProps);
     if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.state);
@@ -108,12 +98,11 @@ class InstantSearch extends Component {
   onWidgetsInternalStateUpdate(state) {
     state = this.aisManager.transitionState(state);
 
-    if (this.isControlled) {
+    if (this.props.onStateChange) {
       this.props.onStateChange(state);
-    } else {
-      if (this.props.onStateChange) {
-        this.props.onStateChange(state);
-      }
+    }
+
+    if (!this.isControlled) {
       this.aisManager.onExternalStateUpdate(state);
     }
   }
