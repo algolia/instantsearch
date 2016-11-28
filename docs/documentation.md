@@ -1060,6 +1060,61 @@ instantsearch.widgets.stats(options);
 
 <div id="stats-container" class="widget-container"></div>
 
+### Analytics
+
+#### analytics
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-stats.svg %}">
+This widget lets you send search data to your analytic services like Google Analytics, Segment.io, Kissmetrics and others. See example tab on the right side to see example codes of various analytics services.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.analytics({
+    pushFunction: function(formattedParameters, state, results) {
+      // Google Analytics
+      // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
+      // window.ga('send', 'pageView');
+
+      // GTM
+      // dataLayer.push({'event': 'search', 'Search Query': state.query, 'Facet Parameters': formattedParameters, 'Number of Hits': results.nbHits});
+
+      // Segment.io
+      // analytics.page( '[SEGMENT] instantsearch', { path: '/instantsearch/?query=' + state.query + '&' + formattedParameters });
+
+      // Kissmetrics
+      // var objParams = JSON.parse('{"' + decodeURI(formattedParameters.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}');
+      // var arrParams = $.map(objParams, function(value, index) {
+      //   return [value];
+      // });
+      //
+      // _kmq.push(['record', '[KM] Viewed Result page', {
+      //   'Query': state.query ,
+      //   'Number of Hits': results.nbHits,
+      //   'Search Params': arrParams
+      // }]);
+
+      // any other analytics service
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+  <div class="jsdoc js-toggle-jsdoc">
+{% highlight javascript %}
+instantsearch.widgets.analytics(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/analytics.md %}
+  </div>
+</div>
+
+</div>
+
 ## FAQ
 
 ### Default filters
