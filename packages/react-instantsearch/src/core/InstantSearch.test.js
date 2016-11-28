@@ -50,29 +50,6 @@ describe('InstantSearch', () => {
     }).toThrow();
 
     expect(() => {
-      mount(
-        <InstantSearch
-          {...DEFAULT_PROPS}
-          state={{}}
-        >
-          <div />
-        </InstantSearch>
-      );
-    }).toThrowError('You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>');
-
-    expect(() => {
-      mount(
-        <InstantSearch
-          {...DEFAULT_PROPS}
-          state={{}}
-          createURL={() => null}
-        >
-          <div />
-        </InstantSearch>
-      );
-    }).toThrowError('You must provide an `onStateChange` function as a prop if you want to manage the state of <InstantSearch>');
-
-    expect(() => {
       const wrapper = mount(
         <InstantSearch
           {...DEFAULT_PROPS}
