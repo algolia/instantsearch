@@ -1396,6 +1396,216 @@ exports[`Pagination displays the correct padding of links 4`] = `
 </ul>
 `;
 
+exports[`Pagination indicates when first button is relevant 1`] = `
+<ul
+  className="root">
+  <li
+    className="item itemDisabled itemFirst">
+    <span
+      className="itemLink">
+      «
+    </span>
+  </li>
+  <li
+    className="item itemDisabled itemPrevious">
+    <span
+      className="itemLink">
+      ‹
+    </span>
+  </li>
+  <li
+    className="item itemSelected itemPage">
+    <a
+      aria-label="Page 1"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      1
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 2"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      2
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 3"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      3
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 4"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      4
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 5"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      5
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 6"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      6
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 7"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      7
+    </a>
+  </li>
+  <li
+    className="item itemNext">
+    <a
+      aria-label="Next page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      ›
+    </a>
+  </li>
+</ul>
+`;
+
+exports[`Pagination indicates when first button is relevant 2`] = `
+<ul
+  className="root">
+  <li
+    className="item itemFirst">
+    <a
+      aria-label="First page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      «
+    </a>
+  </li>
+  <li
+    className="item itemPrevious">
+    <a
+      aria-label="Previous page"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      ‹
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 14"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      14
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 15"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      15
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 16"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      16
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 17"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      17
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 18"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      18
+    </a>
+  </li>
+  <li
+    className="item itemPage">
+    <a
+      aria-label="Page 19"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      19
+    </a>
+  </li>
+  <li
+    className="item itemSelected itemPage">
+    <a
+      aria-label="Page 20"
+      className="itemLink"
+      href="#"
+      onClick={[Function]}>
+      20
+    </a>
+  </li>
+  <li
+    className="item itemDisabled itemNext">
+    <span
+      className="itemLink">
+      ›
+    </span>
+  </li>
+  <li
+    className="item itemDisabled itemLast">
+    <span
+      className="itemLink">
+      »
+    </span>
+  </li>
+</ul>
+`;
+
 exports[`Pagination lets you customize its theme 1`] = `
 <ul
   className="ROOT">

@@ -89,6 +89,26 @@ describe('Pagination', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('indicates when first button is relevant', () => {
+    tree = renderer.create(
+      <Pagination
+        {...DEFAULT_PROPS}
+        showFirst
+        currentRefinement={1}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+
+    tree = renderer.create(
+      <Pagination
+        {...DEFAULT_PROPS}
+        showLast
+        currentRefinement={DEFAULT_PROPS.nbPages}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('allows toggling display of the last page button on and off', () => {
     tree = renderer.create(
       <Pagination
