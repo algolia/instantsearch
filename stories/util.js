@@ -21,7 +21,7 @@ Wrap.propTypes = {
   children: React.PropTypes.node,
 };
 
-const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup}) => {
+const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup, pagination = true}) => {
   const playgroundUrl = process.env.NODE_ENV === 'development'
     ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`
     : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`;
@@ -71,7 +71,7 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
             </div>
           </div>
           <CustomHits hitsPerPage={3}/>
-          <div className="hit-pagination"><Pagination showLast={true}/></div>
+          <div className="hit-pagination">{pagination ? <Pagination showLast={true}/> : null}</div>
         </div>
         {footer}
       </div>
@@ -107,6 +107,7 @@ WrapWithHits.propTypes = {
   searchBox: React.PropTypes.boolean,
   linkedStoryGroup: React.PropTypes.string,
   hasPlayground: React.PropTypes.boolean,
+  pagination: React.PropTypes.boolean,
 };
 
 export {
