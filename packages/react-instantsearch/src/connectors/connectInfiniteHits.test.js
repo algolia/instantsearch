@@ -100,4 +100,13 @@ describe.only('connectInfiniteHits', () => {
     const state2 = connect.refine(props, state1);
     expect(state2).toEqual({p: 2});
   });
+
+  it('automatically converts String state to Number', () => {
+    const props = {};
+
+    const state0 = {p: '0'};
+
+    const state1 = connect.refine(props, state0);
+    expect(state1).toEqual({p: 1});
+  });
 });
