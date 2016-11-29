@@ -10,19 +10,19 @@ stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
-    <RefinementList attributeName="colors"/>
+    <RefinementList attributeName="category"/>
   </WrapWithHits>
 ).add('with selected item', () =>
   <WrapWithHits >
     <RefinementList
-      attributeName="colors"
+      attributeName="category"
       defaultRefinement={['Black']}
     />
   </WrapWithHits>
 ).add('with show more', () =>
   <WrapWithHits >
     <RefinementList
-      attributeName="colors"
+      attributeName="category"
       limitMin={2}
       limitMax={5}
       showMore={true}
@@ -31,7 +31,7 @@ stories.add('default', () =>
 ).add('playground', () =>
   <WrapWithHits >
     <RefinementList
-      attributeName="colors"
+      attributeName="category"
       defaultRefinement={array('defaultSelectedItem', ['Black', 'White'])}
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
