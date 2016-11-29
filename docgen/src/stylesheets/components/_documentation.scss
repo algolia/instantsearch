@@ -202,6 +202,7 @@
           padding: 13px 13px;
           flex: 1;
           overflow: scroll;
+          white-space: normal;
 
 
           &:first-child {
@@ -209,6 +210,7 @@
             flex-grow: 1;
             min-width: 170px;
             border-right: 1px solid #CCC;
+            white-space: normal;
 
             &:only-child {
               border: none;
