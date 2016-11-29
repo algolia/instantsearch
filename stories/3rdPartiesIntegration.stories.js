@@ -12,23 +12,56 @@ stories.add('Airbnb Rheostat', () =>
   </WrapWithHits>
 );
 
-const ConnectedRange = connectRange(({min, max, currentRefinement, refine}) => {
-  const updateValue = sliderState => {
-    if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
-      refine({min: sliderState.values[0], max: sliderState.values[1]});
-    }
-  };
+const Range = React.createClass({
+  propTypes: {
+    min: React.PropTypes.number.isRequired,
+    max: React.PropTypes.number.isRequired,
+    currentRefinement: React.PropTypes.object.isRequired,
+    refine: React.PropTypes.func.isRequired,
+  },
 
-  return (
-    <div>
-      <Rheostat
-        min={min}
-        max={max}
-        values={[currentRefinement.min, currentRefinement.max]}
-        onChange={updateValue}
-      />
-    </div>
-  );
+  getInitialState() {
+    return {currentValues: {min: this.props.min, max: this.props.max}};
+  },
+
+  onValuesUpdated(sliderState) {
+    this.setState({currentValues: {min: sliderState.values[0], max: sliderState.values[1]}});
+  },
+
+  onChange(sliderState) {
+    if (sliderState.values[0] !== this.props.min || sliderState.values[1] !== this.props.max) {
+      this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
+    }
+  },
+
+  render() {
+    const {min, max, currentRefinement} = this.props;
+    const {currentValues} = this.state;
+    return (
+      <div>
+        <Rheostat
+          min={min}
+          max={max}
+          values={[currentRefinement.min, currentRefinement.max]}
+          onChange={this.onChange}
+          onValuesUpdated={this.onValuesUpdated}
+        />
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <div>{currentValues.min}</div>
+          <div>{currentValues.max}</div>
+        </div>
+      </div>
+    );
+  },
 });
+
+Range.propTypes = {
+  min: React.PropTypes.number.isRequired,
+  max: React.PropTypes.number.isRequired,
+  currentRefinement: React.PropTypes.object.isRequired,
+  refine: React.PropTypes.func.isRequired,
+};
+
+const ConnectedRange = connectRange(Range);
 
 export default ConnectedRange;
