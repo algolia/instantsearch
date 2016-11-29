@@ -2,7 +2,7 @@ import connectRange from '../connectors/connectRange.js';
 import RangeRatingsComponent from '../components/RangeRatings.js';
 
 /**
- * RangeRatings is a widget that allows a user to select a numeric range using inputs.
+ * RangeRatings lets the user refine search results by clicking on stars. The stars are based on the selected attributeName. The underlying rating attribute needs to have from min to max stars.
  * @name RangeRatings
  * @kind component
  * @category widget
