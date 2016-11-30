@@ -80,7 +80,7 @@
     "sass-lint": "^1.10.2",
     "semver": "^5.3.0",
     "sinon": "^2.0.0-pre",
-    "uglify-js": "^2.7.4",
+    "uglify-js": "^2.7.5",
     "watch": "^1.0.1",
     "wdio-dot-reporter": "^0.0.6",
     "wdio-mocha-framework": "^0.5.3",
