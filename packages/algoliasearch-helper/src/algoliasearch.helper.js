@@ -176,6 +176,28 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
 };
 
 /**
+ * Search for facet values based on an query and the name of a facetted attribute. This
+ * triggers a search and will retrun a promise. On top of using the query, it also sends
+ * the parameters from the state so that the search is narrowed to only the possible values.
+ * @param {string} query the string query for the search
+ * @param {string} facet the name of the facetted attribute
+ * @return {promise<FacetSearchResult>} the results of the search
+ */
+AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query) {
+  var state = this.state;
+  var index = this.client.initIndex(this.state.index);
+  var isDisjunctive = state.isDisjunctiveFacet(facet);
+  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, this.state);
+  return index.searchFacet(algoliaQuery).then(function addIsRefined(content) {
+    content.facetHits = forEach(content.facetHits, function(f) {
+      f.isRefined = isDisjunctive ? state.isDisjunctiveFacetRefined(facet, f.value) : state.isFacetRefined(facet, f.value);
+    });
+
+    return content;
+  });
+};
+
+/**
  * Sets the text query used for the search.
  *
  * This method resets the current page to 0.

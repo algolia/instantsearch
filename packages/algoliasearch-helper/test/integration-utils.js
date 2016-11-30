@@ -22,6 +22,18 @@ function setup(indexName, fn) {
     });
 }
 
+function withDatasetAndConfig(indexName, dataset, config) {
+  return setup(indexName, function(client, index) {
+    return index.addObjects(dataset).then(function() {
+      return index.setSettings(config);
+    }).then(function(content) {
+      return index.waitTask(content.taskID);
+    }).then(function() {
+      return client;
+    });
+  });
+}
+
 // some environements are not able to do indexing requests using
 // PUT, like IE8 and IE9
 var shouldRun;
@@ -37,5 +49,6 @@ if (!process.browser) {
 module.exports = {
   isCIBrowser: process.browser && process.env.TRAVIS_BUILD_NUMBER,
   setup: setup,
+  setupSimple: withDatasetAndConfig,
   shouldRun: shouldRun
 };

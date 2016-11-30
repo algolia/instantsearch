@@ -288,6 +288,17 @@ var requestBuilder = {
 
     var parentLevel = hierarchicalRefinement.split(separator).length - 1;
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
+  },
+
+  getSearchForFacetQuery: function(facetName, query, state) {
+    var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName) ?
+      state.clearRefinements(facetName) :
+      state;
+    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), {
+      facetQuery: query,
+      facetName: facetName
+    });
+    return queries;
   }
 };
 
