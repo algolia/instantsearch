@@ -70,6 +70,7 @@ const Content = React.createClass({
       transform: 'translate(0)',
       height: 'initial',
       top: 60,
+      zIndex: 90,
     };
     const closedDrawerStyle = {
       ...baseDrawerStyle,
