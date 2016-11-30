@@ -2,7 +2,7 @@
 title: Creating widgets
 layout: guide.pug
 category: guide
-navWeight: 2
+navWeight: 400
 ---
 
 If you wish to implement features that are not covered by the default widgets connectors, you will need to create your own connector via the `createConnector` method. This methods takes in a descriptor of your connector with the following properties and methods:
@@ -19,7 +19,7 @@ This method should return the props to forward to the composed component.
 
 `props` are the props that were provided to the higher-order component.
 
-`state` holds the state of all widgets, with the shape `{[widgetId]: widgetState}`. Stateful widgets describe the format of their state in their respective documentation entry.
+`state` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](/guides/instantsearch-state.html). 
 
 `search` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
@@ -29,7 +29,7 @@ This method should return the props to forward to the composed component.
 
 This method defines exactly how the `refine` prop of connected widgets affects the InstantSearch state.
 
-It takes in the current props of the higher-order component, the state of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
+It takes in the current props of the higher-order component, the [state](/guides/instantsearch-state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
 ```javascript
 const CoolWidget = createConnector({

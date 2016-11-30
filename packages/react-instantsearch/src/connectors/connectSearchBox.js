@@ -2,7 +2,7 @@ import createConnector from '../core/createConnector';
 import {omit} from 'lodash';
 
 function getId() {
-  return 'q';
+  return 'query';
 }
 
 function getCurrentRefinement(props, state) {

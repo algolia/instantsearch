@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {omit, isEmpty} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -7,13 +7,15 @@ function getId(props) {
   return props.attributeName;
 }
 
+const namespace = 'menu';
+
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (typeof state[id] !== 'undefined') {
-    if (state[id] === '') {
+  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
+    if (state[namespace][id] === '') {
       return null;
     }
-    return state[id];
+    return state[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -89,12 +91,16 @@ export default createConnector({
     const id = getId(props);
     return {
       ...state,
-      [id]: nextRefinement || '',
+      [namespace]: {[id]: nextRefinement ? nextRefinement : ''},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
 
   getSearchParameters(searchParameters, props, state) {
@@ -131,7 +137,7 @@ export default createConnector({
         attributeName: props.attributeName,
         value: nextState => ({
           ...nextState,
-          [id]: '',
+          [namespace]: {[id]: ''},
         }),
         currentRefinement,
       }],

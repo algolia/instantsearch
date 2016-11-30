@@ -20,7 +20,7 @@ describe('connectSearchBox', () => {
     props = getProps({}, {});
     expect(props).toEqual({query: ''});
 
-    props = getProps({}, {q: 'yep'});
+    props = getProps({}, {query: 'yep'});
     expect(props).toEqual({query: 'yep'});
   });
 
@@ -28,17 +28,17 @@ describe('connectSearchBox', () => {
     const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      q: 'yep',
+      query: 'yep',
     });
   });
 
   it('refines the query parameter', () => {
-    params = getSP(new SearchParameters(), {}, {q: 'bar'});
+    params = getSP(new SearchParameters(), {}, {query: 'bar'});
     expect(params.query).toBe('bar');
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({}, {q: {state: 'state'}, another: {state: 'state'}});
+    const state = cleanUp({}, {query: {state: 'state'}, another: {state: 'state'}});
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

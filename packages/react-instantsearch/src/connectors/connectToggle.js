@@ -1,15 +1,17 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {omit, isEmpty} from 'lodash';
 import createConnector from '../core/createConnector';
 
 function getId(props) {
   return props.attributeName;
 }
 
+const namespace = 'toggle';
+
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (state[id]) {
-    return state[id] === 'on';
+  if (state[namespace] && state[namespace][id]) {
+    return state[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -50,12 +52,16 @@ export default createConnector({
   refine(props, state, nextChecked) {
     return {
       ...state,
-      [getId(props, state)]: nextChecked ? 'on' : 'off',
+      [namespace]: {[getId(props, state)]: nextChecked},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
 
   getSearchParameters(searchParameters, props, state) {
@@ -90,7 +96,7 @@ export default createConnector({
         attributeName: props.attributeName,
         value: nextState => ({
           ...nextState,
-          [id]: 'off',
+          [namespace]: {[id]: false},
         }),
       });
     }

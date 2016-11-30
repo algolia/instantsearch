@@ -2,7 +2,7 @@
 title: Conditional Display
 layout: guide.pug
 category: guide
-navWeight: 1
+navWeight: 300
 ---
 
 Using our connector and [`createConnector`](create-own-widget.html) approach, you can 
@@ -15,7 +15,7 @@ about the api.
 ## Displaying content when the query is empty
 
 You can do that by using the [`createConnector`](create-own-widget.html) function and
-then access the `state` of all widgets. By doing so you're able to get the query and decide what to do according to its state.
+then access the [`state`](/guides/instantsearch-state.html) of all widgets. By doing so you're able to get the query and decide what to do according to its state.
 
 Here's an example:
 
@@ -23,7 +23,7 @@ Here's an example:
 const Content = createConnector({
     displayName: 'ConditionalQuery',
     getProps(props, state) {
-      return {query: state.q};
+      return {query: state.query};
     },
  })(({query}) => {
     const content = query
@@ -46,7 +46,7 @@ const content = createConnector({
     displayName: 'ConditionalResults',
     getProps(props, state, search) {
       const noResults = search.results ? search.results.nbHits === 0 : false;
-      return {query: state.q, noResults};
+      return {query: state.query, noResults};
     },
  })(({noResults, query}) => {
     const content = noResults

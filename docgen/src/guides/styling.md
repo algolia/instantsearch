@@ -2,7 +2,7 @@
 title: Styling
 layout: guide.pug
 category: guide
-navWeight: 6
+navWeight: 900
 ---
 
 Default widgets in react-instantsearch comes with some styling already applied and loaded. When styling components, you can decide to either extend or completely replace our default styles, using CSS class names.

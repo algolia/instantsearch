@@ -76,10 +76,10 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({attributeName: 'ok', items: []}, {ok: 'wat'});
+    props = getProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok', items: []}, {ok: 'wat'});
+    props = getProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
@@ -90,7 +90,7 @@ describe('connectMultiRange', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      multiRange: {ok: 'yep'},
     });
   });
 
@@ -100,17 +100,17 @@ describe('connectMultiRange', () => {
     params = getSP(initSP, {attributeName: 'facet'}, {facet: ''});
     expect(params.getNumericRefinements('facet')).toEqual({});
 
-    params = getSP(initSP, {attributeName: 'facet'}, {facet: '100:'});
+    params = getSP(initSP, {attributeName: 'facet'}, {multiRange: {facet: '100:'}});
     expect(params.getNumericRefinements('facet')).toEqual({
       '>=': [100],
     });
 
-    params = getSP(initSP, {attributeName: 'facet'}, {facet: ':200'});
+    params = getSP(initSP, {attributeName: 'facet'}, {multiRange: {facet: ':200'}});
     expect(params.getNumericRefinements('facet')).toEqual({
       '<=': [200],
     });
 
-    params = getSP(initSP, {attributeName: 'facet'}, {facet: '100:200'});
+    params = getSP(initSP, {attributeName: 'facet'}, {multiRange: {facet: '100:200'}});
     expect(params.getNumericRefinements('facet')).toEqual({
       '>=': [100],
       '<=': [200],
@@ -132,7 +132,7 @@ describe('connectMultiRange', () => {
           end: 200,
         }],
       },
-      {wot: '100:200'}
+      {multiRange: {wot: '100:200'}}
     );
     expect(metadata).toEqual({
       id: 'wot',
@@ -145,12 +145,18 @@ describe('connectMultiRange', () => {
       }],
     });
 
-    const state = metadata.items[0].value({wot: '100:200'});
-    expect(state).toEqual({wot: ''});
+    const state = metadata.items[0].value({multiRange: {wot: '100:200'}});
+    expect(state).toEqual({multiRange: {wot: ''}});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributeName: 'name'}, {
+      multiRange: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({multiRange: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributeName: 'name2'}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

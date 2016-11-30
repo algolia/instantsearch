@@ -21,7 +21,7 @@ describe('connectToggle', () => {
     props = getProps({attributeName: 't'}, {});
     expect(props).toEqual({checked: false});
 
-    props = getProps({attributeName: 't'}, {t: 'on'});
+    props = getProps({attributeName: 't'}, {toggle: {t: true}});
     expect(props).toEqual({checked: true});
 
     props = getProps({defaultRefinement: true, attributeName: 't'}, {});
@@ -32,13 +32,13 @@ describe('connectToggle', () => {
     let state = refine({attributeName: 't'}, {otherKey: 'val'}, true);
     expect(state).toEqual({
       otherKey: 'val',
-      t: 'on',
+      toggle: {t: true},
     });
 
     state = refine({attributeName: 't'}, {otherKey: 'val'}, false);
     expect(state).toEqual({
       otherKey: 'val',
-      t: 'off',
+      toggle: {t: false},
     });
   });
 
@@ -46,7 +46,7 @@ describe('connectToggle', () => {
     params = getSP(new SearchParameters(), {
       attributeName: 'facet',
       value: 'val',
-    }, {facet: 'on'});
+    }, {toggle: {facet: true}});
     expect(params.getConjunctiveRefinements('facet')).toEqual(['val']);
   });
 
@@ -54,7 +54,7 @@ describe('connectToggle', () => {
     params = getSP(new SearchParameters(), {
       attributeName: 'facet',
       filter: sp => sp.setQuery('yep'),
-    }, {facet: 'on'});
+    }, {toggle: {facet: true}});
     expect(params.query).toEqual('yep');
   });
 
@@ -65,7 +65,7 @@ describe('connectToggle', () => {
       id: 't',
     });
 
-    metadata = getMetadata({attributeName: 't', label: 'yep'}, {t: 'on'});
+    metadata = getMetadata({attributeName: 't', label: 'yep'}, {toggle: {t: true}});
     expect(metadata).toEqual({
       items: [
         {
@@ -79,12 +79,18 @@ describe('connectToggle', () => {
       id: 't',
     });
 
-    const state = metadata.items[0].value({t: 'on'});
-    expect(state).toEqual({t: 'off'});
+    const state = metadata.items[0].value({toggle: {t: true}});
+    expect(state).toEqual({toggle: {t: false}});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributeName: 'name'}, {
+      toggle: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({toggle: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributeName: 'name2'}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

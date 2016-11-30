@@ -24,7 +24,7 @@ describe('connectHierarchicalMenu', () => {
     };
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({attributes: ['ok']}, {ok: 'wat'}, {results});
+    props = getProps({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
@@ -134,7 +134,7 @@ describe('connectHierarchicalMenu', () => {
     const nextState = refine({attributes: ['ok']}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      hierarchicalMenu: {ok: 'yep'},
     });
   });
 
@@ -177,7 +177,7 @@ describe('connectHierarchicalMenu', () => {
       rootPath: 'ROOT_PATH',
       showParentLevel: true,
       limitMin: 1,
-    }, {ATTRIBUTE: 'ok'});
+    }, {hierarchicalMenu: {ATTRIBUTE: 'ok'}});
     expect(params).toEqual(
       initSP
         .addHierarchicalFacet({
@@ -198,7 +198,7 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('registers its filter in metadata', () => {
-    const metadata = getMetadata({attributes: ['ok']}, {ok: 'wat'});
+    const metadata = getMetadata({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}});
     expect(metadata).toEqual({
       id: 'ok',
       items: [{
@@ -210,12 +210,18 @@ describe('connectHierarchicalMenu', () => {
       }],
     });
 
-    const state = metadata.items[0].value({ok: 'wat'});
-    expect(state).toEqual({ok: ''});
+    const state = metadata.items[0].value({hierarchicalMenu: {ok: 'wat'}});
+    expect(state).toEqual({hierarchicalMenu: {ok: ''}});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributes: ['name']}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributes: ['name']}, {
+      hierarchicalMenu: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({hierarchicalMenu: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributes: ['name2']}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {find, omit} from 'lodash';
+import {find, omit, isEmpty} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -21,14 +21,16 @@ function parseItem(value) {
   };
 }
 
+const namespace = 'multiRange';
+
 function getId(props) {
   return props.attributeName;
 }
 
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (typeof state[id] !== 'undefined') {
-    return state[id];
+  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
+    return state[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -84,12 +86,16 @@ export default createConnector({
   refine(props, state, nextRefinement) {
     return {
       ...state,
-      [getId(props, state)]: nextRefinement,
+      [namespace]: {[getId(props, state)]: nextRefinement},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
 
   getSearchParameters(searchParameters, props, state) {
@@ -125,7 +131,7 @@ export default createConnector({
         currentRefinement: label,
         value: nextState => ({
           ...nextState,
-          [id]: '',
+          [namespace]: {[id]: ''},
         }),
       });
     }
