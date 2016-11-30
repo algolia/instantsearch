@@ -84,7 +84,7 @@
     "watch": "^1.0.1",
     "wdio-dot-reporter": "^0.0.6",
     "wdio-mocha-framework": "^0.5.3",
-    "wdio-sauce-service": "^0.2.5",
+    "wdio-sauce-service": "^0.3.0",
     "webdriverio": "^4.2.16",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
