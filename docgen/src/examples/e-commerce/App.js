@@ -12,6 +12,7 @@ import {
   ClearAll,
   StarRating,
   RangeInput,
+  Highlight,
 } from 'react-instantsearch/dom';
 import {
   connectSearchBox,
@@ -191,8 +192,8 @@ const Hit = ({item}) => {
         <div className="product-picture"><img src={`${item.image}`}/></div>
       </div>
       <div className="product-desc-wrapper">
-        <div className="product-name" dangerouslySetInnerHTML={{__html: item._highlightResult.name.value}}/>
-        <div className="product-type" dangerouslySetInnerHTML={{__html: item._highlightResult.type.value}}/>
+        <div className="product-name"><Highlight attributeName="name" hit={item} /></div>
+        <div className="product-type"><Highlight attributeName="type" hit={item} /></div>
         <div className="ais-StarRating__ratingLink">
           {icons}
           <div className="product-price">${item.price}</div>

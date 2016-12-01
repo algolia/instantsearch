@@ -3,6 +3,7 @@ import {
   InstantSearch,
   SearchBox,
   Pagination,
+  Highlight,
 } from 'react-instantsearch/dom';
 import {
   connectHits,
@@ -254,8 +255,6 @@ const MyHits = connectHits(({hits}) => {
 });
 
 function HitComponent({hit}) {
-  const description = `${hit.room_type} - ${hit._highlightResult.city.value}, ${hit._highlightResult.country.value}`;
-  const title = hit._highlightResult.name.value;
   return (
     <div className="hit col-sm-3">
       <div className="pictures-wrapper">
@@ -263,10 +262,20 @@ function HitComponent({hit}) {
         <img className="profile" src={hit.user.user.thumbnail_url}/>
       </div>
       <div className="infos">
-        <h4 className="media-heading" dangerouslySetInnerHTML={{__html: title}}></h4>
-        <p dangerouslySetInnerHTML={{__html: description}}></p>
+        <h4 className="media-heading">
+          <Highlight attributeName="name" hit={hit} />
+        </h4>
+        <HitDescription hit={hit}/>
       </div>
     </div>
+  );
+}
+
+function HitDescription({hit}) {
+  return (
+    <p>
+      {hit.room_type} - <Highlight attributeName="city" hit={hit} />, <Highlight attributeName="country" hit={hit} />
+    </p>
   );
 }
 

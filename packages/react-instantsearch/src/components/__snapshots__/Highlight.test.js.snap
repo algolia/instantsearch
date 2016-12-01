@@ -1,0 +1,16 @@
+exports[`Highlight parses an highlighted attribute of hit object 1`] = `
+<span
+  className="ais-highlighted">
+  awesome 
+  <em
+    className="ais-highlighted__value">
+    hi
+  </em>
+  ghlighted 
+  <em
+    className="ais-highlighted__value">
+    hi
+  </em>
+  t!
+</span>
+`;
