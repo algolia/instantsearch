@@ -176,7 +176,7 @@ const MaterialUiNestedList = function ({id, items, refine}) {
   return <List>
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
-      const nestedElements = item.children ? item.children.map((child, childIdx) =>
+      const nestedElements = item.items ? item.items.map((child, childIdx) =>
           <ListItem
             primaryText={child.label}
             key={childIdx}

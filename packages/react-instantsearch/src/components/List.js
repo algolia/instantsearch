@@ -3,7 +3,7 @@ import React, {PropTypes, Component} from 'react';
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   value: PropTypes.any,
   label: PropTypes.string.isRequired,
-  children: (...args) => itemsPropType(...args),
+  items: (...args) => itemsPropType(...args),
 }));
 
 class List extends Component {
@@ -41,9 +41,9 @@ class List extends Component {
   };
 
   renderItem = item => {
-    const children = item.children &&
-      <div {...this.props.cx('itemChildren')}>
-        {item.children.slice(0, this.getLimit()).map(child =>
+    const items = item.items &&
+      <div {...this.props.cx('itemItems')}>
+        {item.items.slice(0, this.getLimit()).map(child =>
           this.renderItem(child, item)
         )}
       </div>;
@@ -54,12 +54,12 @@ class List extends Component {
         {...this.props.cx(
           'item',
           item.isRefined && 'itemSelected',
-          children && 'itemParent',
-          children && item.isRefined && 'itemSelectedParent'
+          items && 'itemParent',
+          items && item.isRefined && 'itemSelectedParent'
         )}
       >
         {this.props.renderItem(item)}
-        {children}
+        {items}
       </div>
     );
   };
