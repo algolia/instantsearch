@@ -7,7 +7,7 @@ em {
   width: 100%;
   top: 60px;
   left: 0;
-  z-index: 1600;
+  z-index: 10;
 }
 
 .Header__appBar {
@@ -26,9 +26,9 @@ em {
 .Sidebar__facets {
 }
 
-.Sidebar__facets span[type='button']{
+span[type='button']{
   background: white!important;
-  -webkit-appearance: inherit;
+  -webkit-appearance: inherit!important;
 }
 
 .Content {
