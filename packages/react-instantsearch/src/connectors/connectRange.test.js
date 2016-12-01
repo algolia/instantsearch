@@ -47,7 +47,7 @@ describe('connectRange', () => {
       min: 5,
       max: 10,
     }, {
-      ok: {min: 6, max: 9},
+      range: {ok: {min: 6, max: 9}},
     }, {});
     expect(props).toEqual({
       min: 5,
@@ -61,7 +61,7 @@ describe('connectRange', () => {
       min: 5,
       max: 10,
     }, {
-      ok: {min: '6', max: '9'},
+      range: {ok: {min: '6', max: '9'}},
     }, {});
     expect(props).toEqual({
       min: 5,
@@ -88,7 +88,7 @@ describe('connectRange', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      range: {ok: 'yep'},
     });
   });
 
@@ -96,7 +96,7 @@ describe('connectRange', () => {
     params = getSP(
       new SearchParameters(),
       {attributeName: 'facet'},
-      {facet: {min: 10, max: 30}}
+      {range: {facet: {min: 10, max: 30}}}
     );
     expect(params.getNumericRefinements('facet')).toEqual({
       '>=': [10],
@@ -107,7 +107,7 @@ describe('connectRange', () => {
   it('registers its filter in metadata', () => {
     let metadata = getMetadata(
       {attributeName: 'wot'},
-      {wot: {min: 5}}
+      {range: {wot: {min: 5}}}
     );
     expect(metadata).toEqual({
       id: 'wot',
@@ -120,12 +120,12 @@ describe('connectRange', () => {
       }],
     });
 
-    const state = metadata.items[0].value({wot: {min: 5}});
-    expect(state).toEqual({wot: {}});
+    const state = metadata.items[0].value({range: {wot: {min: 5}}});
+    expect(state).toEqual({range: {wot: {}}});
 
     metadata = getMetadata(
       {attributeName: 'wot'},
-      {wot: {max: 10}}
+      {range: {wot: {max: 10}}}
     );
     expect(metadata).toEqual({
       id: 'wot',
@@ -139,7 +139,7 @@ describe('connectRange', () => {
 
     metadata = getMetadata(
       {attributeName: 'wot'},
-      {wot: {min: 5, max: 10}}
+      {range: {wot: {min: 5, max: 10}}}
     );
     expect(metadata).toEqual({
       id: 'wot',
@@ -153,7 +153,13 @@ describe('connectRange', () => {
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributeName: 'name'}, {
+      range: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({range: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributeName: 'name2'}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

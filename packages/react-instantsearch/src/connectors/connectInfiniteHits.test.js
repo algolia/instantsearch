@@ -95,18 +95,18 @@ describe.only('connectInfiniteHits', () => {
     const state0 = {};
 
     const state1 = connect.refine(props, state0);
-    expect(state1).toEqual({p: 1});
+    expect(state1).toEqual({page: 1});
 
     const state2 = connect.refine(props, state1);
-    expect(state2).toEqual({p: 2});
+    expect(state2).toEqual({page: 2});
   });
 
   it('automatically converts String state to Number', () => {
     const props = {};
 
-    const state0 = {p: '0'};
+    const state0 = {page: '0'};
 
     const state1 = connect.refine(props, state0);
-    expect(state1).toEqual({p: 1});
+    expect(state1).toEqual({page: 1});
   });
 });

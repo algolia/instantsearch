@@ -27,7 +27,7 @@ describe('connectRefinementList', () => {
     props = getProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: []});
 
-    props = getProps({attributeName: 'ok'}, {ok: ['wat']}, {results});
+    props = getProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
     props = getProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
@@ -96,7 +96,7 @@ describe('connectRefinementList', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, ['yep']);
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: ['yep'],
+      refinementList: {ok: ['yep']},
     });
   });
 
@@ -133,24 +133,24 @@ describe('connectRefinementList', () => {
       attributeName: 'ok',
       operator: 'or',
       limitMin: 1,
-    }, {ok: ['wat']});
+    }, {refinementList: {ok: ['wat']}});
     expect(params).toEqual(
       initSP
-      .addDisjunctiveFacet('ok')
-      .addDisjunctiveFacetRefinement('ok', 'wat')
-      .setQueryParameter('maxValuesPerFacet', 1)
+        .addDisjunctiveFacet('ok')
+        .addDisjunctiveFacetRefinement('ok', 'wat')
+        .setQueryParameter('maxValuesPerFacet', 1)
     );
 
     params = getSP(initSP, {
       attributeName: 'ok',
       operator: 'and',
       limitMin: 1,
-    }, {ok: ['wat']});
+    }, {refinementList: {ok: ['wat']}});
     expect(params).toEqual(
       initSP
-      .addFacet('ok')
-      .addFacetRefinement('ok', 'wat')
-      .setQueryParameter('maxValuesPerFacet', 1)
+        .addFacet('ok')
+        .addFacetRefinement('ok', 'wat')
+        .setQueryParameter('maxValuesPerFacet', 1)
     );
   });
 
@@ -162,7 +162,7 @@ describe('connectRefinementList', () => {
   it('registers its filter in metadata', () => {
     const metadata = getMetadata(
       {attributeName: 'wot'},
-      {wot: ['wat', 'wut']}
+      {refinementList: {wot: ['wat', 'wut']}}
     );
     expect(metadata).toEqual({
       id: 'wot',
@@ -187,14 +187,20 @@ describe('connectRefinementList', () => {
       ],
     });
 
-    let state = metadata.items[0].items[0].value({wot: ['wat', 'wut']});
-    expect(state).toEqual({wot: ['wut']});
+    let state = metadata.items[0].items[0].value({refinementList: {wot: ['wat', 'wut']}});
+    expect(state).toEqual({refinementList: {wot: ['wut']}});
     state = metadata.items[0].items[1].value(state);
-    expect(state).toEqual({wot: ''});
+    expect(state).toEqual({refinementList: {wot: ''}});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributeName: 'name'}, {
+      refinementList: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({refinementList: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributeName: 'name2'}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

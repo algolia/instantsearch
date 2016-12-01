@@ -3,7 +3,7 @@ title: What's react-instantsearch?
 layout: main-entry.pug
 category: guide
 tocVisibility: true
-navWeight: 7
+navWeight: 1000
 ---
 
 React-instantsearch is the ultimate toolbox for creating instant search experience using React and Algolia. 

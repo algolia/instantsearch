@@ -2,7 +2,7 @@
 title: Multiple InstantSearch
 layout: guide.pug
 category: guide
-navWeight: 0
+navWeight: 200
 ---
 
 You can use multiple `<InstantSearch/>` instances for cases like:
@@ -14,7 +14,7 @@ You can use multiple `<InstantSearch/>` instances for cases like:
 Two props on the [InstantSearch root component](/component/InstantSearch.html) can be used to inject state or be notified of state changes:
 
 * onStateChange(nextState): a function being called every time the `InstantSearch` state is updated. 
-* state: an object that is the current state of InstantSearch
+* [state](/guides/instantsearch-state.html): an object that is the current state of InstantSearch
 
 The idea is to have a main component that will receive every new state of the first instance and then pass it back to each `InstantSearch` instances.  
 
