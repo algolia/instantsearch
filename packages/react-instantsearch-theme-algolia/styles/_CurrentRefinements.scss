@@ -1,0 +1,40 @@
+.ais-CurrentRefinements__root {
+
+}
+
+.ais-CurrentRefinements__items {
+}
+
+.ais-CurrentRefinements__item {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  color: #fff;
+  background: $main-color;
+  font-size: 12px;
+}
+
+.ais-CurrentRefinements__itemLabel {
+}
+
+.ais-CurrentRefinements__itemParent {
+}
+
+.ais-CurrentRefinements__itemClear {
+  appearance: none;
+  background: none;
+  border: none;
+  color: #fff;
+  display: inline-block;
+  position: relative;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
