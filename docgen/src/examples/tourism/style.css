@@ -22,9 +22,9 @@ body {
 // ------------------------- */
 .aisdemo-navbar {
   margin: 0;
-  padding: 0;
   border-bottom: 1px solid #DCE0E0;
   position: relative;
+  padding-top: 60px;
 }
 
 .aisdemo-navbar .is-logo {
@@ -36,7 +36,7 @@ body {
 
 .aisdemo-navbar .logo {
   display: inline-block;
-  padding: 14px 30px;
+  padding: 14px 22px;
   font-size: 40px;
   line-height: 1;
   font-family: Courier;
@@ -57,7 +57,7 @@ body {
   white-space: nowrap;
   box-sizing: border-box;
   font-size: 14px;
-  top: 20px;
+  top: 80px;
   left: 165px;
 }
 
