@@ -1,56 +1,56 @@
 exports[`HierarchicalMenu applies translations 1`] = `
 <div
-  className="root">
+  className="ais-HierarchicalMenu__root">
   <div
-    className="items">
+    className="ais-HierarchicalMenu__items">
     <div
-      className="item itemParent">
+      className="ais-HierarchicalMenu__item ais-HierarchicalMenu__itemParent">
       <a
-        className="itemLink"
+        className="ais-HierarchicalMenu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-HierarchicalMenu__itemLabel">
           white
         </span>
          
         <span
-          className="itemCount">
+          className="ais-HierarchicalMenu__itemCount">
           10
         </span>
       </a>
       <div
-        className="itemChildren">
+        className="ais-HierarchicalMenu__itemChildren">
         <div
-          className="item">
+          className="ais-HierarchicalMenu__item">
           <a
-            className="itemLink"
+            className="ais-HierarchicalMenu__itemLink"
             href="#"
             onClick={[Function]}>
             <span
-              className="itemLabel">
+              className="ais-HierarchicalMenu__itemLabel">
               white1
             </span>
              
             <span
-              className="itemCount">
+              className="ais-HierarchicalMenu__itemCount">
               3
             </span>
           </a>
         </div>
         <div
-          className="item">
+          className="ais-HierarchicalMenu__item">
           <a
-            className="itemLink"
+            className="ais-HierarchicalMenu__itemLink"
             href="#"
             onClick={[Function]}>
             <span
-              className="itemLabel">
+              className="ais-HierarchicalMenu__itemLabel">
               white2
             </span>
              
             <span
-              className="itemCount">
+              className="ais-HierarchicalMenu__itemCount">
               4
             </span>
           </a>
@@ -58,35 +58,35 @@ exports[`HierarchicalMenu applies translations 1`] = `
       </div>
     </div>
     <div
-      className="item">
+      className="ais-HierarchicalMenu__item">
       <a
-        className="itemLink"
+        className="ais-HierarchicalMenu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-HierarchicalMenu__itemLabel">
           black
         </span>
          
         <span
-          className="itemCount">
+          className="ais-HierarchicalMenu__itemCount">
           20
         </span>
       </a>
     </div>
     <div
-      className="item">
+      className="ais-HierarchicalMenu__item">
       <a
-        className="itemLink"
+        className="ais-HierarchicalMenu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-HierarchicalMenu__itemLabel">
           blue
         </span>
          
         <span
-          className="itemCount">
+          className="ais-HierarchicalMenu__itemCount">
           30
         </span>
       </a>
@@ -97,57 +97,57 @@ exports[`HierarchicalMenu applies translations 1`] = `
 
 exports[`HierarchicalMenu default hierarchical menu 1`] = `
 <div
-  className="root">
+  className="ais-HierarchicalMenu__root">
   <div
-    className="items">
+    className="ais-HierarchicalMenu__items">
     <div
-      className="item itemParent">
+      className="ais-HierarchicalMenu__item ais-HierarchicalMenu__itemParent">
       <a
-        className="itemLink"
+        className="ais-HierarchicalMenu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-HierarchicalMenu__itemLabel">
           white
         </span>
          
         <span
-          className="itemCount">
+          className="ais-HierarchicalMenu__itemCount">
           10
         </span>
       </a>
       <div
-        className="itemChildren">
+        className="ais-HierarchicalMenu__itemChildren">
         <div
-          className="item">
+          className="ais-HierarchicalMenu__item">
           <a
-            className="itemLink"
+            className="ais-HierarchicalMenu__itemLink"
             href="#"
             onClick={[Function]}>
             <span
-              className="itemLabel">
+              className="ais-HierarchicalMenu__itemLabel">
               white1
             </span>
              
             <span
-              className="itemCount">
+              className="ais-HierarchicalMenu__itemCount">
               3
             </span>
           </a>
         </div>
         <div
-          className="item">
+          className="ais-HierarchicalMenu__item">
           <a
-            className="itemLink"
+            className="ais-HierarchicalMenu__itemLink"
             href="#"
             onClick={[Function]}>
             <span
-              className="itemLabel">
+              className="ais-HierarchicalMenu__itemLabel">
               white2
             </span>
              
             <span
-              className="itemCount">
+              className="ais-HierarchicalMenu__itemCount">
               4
             </span>
           </a>
@@ -155,25 +155,25 @@ exports[`HierarchicalMenu default hierarchical menu 1`] = `
       </div>
     </div>
     <div
-      className="item">
+      className="ais-HierarchicalMenu__item">
       <a
-        className="itemLink"
+        className="ais-HierarchicalMenu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-HierarchicalMenu__itemLabel">
           black
         </span>
          
         <span
-          className="itemCount">
+          className="ais-HierarchicalMenu__itemCount">
           20
         </span>
       </a>
     </div>
   </div>
   <button
-    className="showMore"
+    className="ais-HierarchicalMenu__showMore"
     disabled={false}
     onClick={[Function]}>
     Show more

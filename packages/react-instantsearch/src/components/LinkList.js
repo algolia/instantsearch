@@ -5,7 +5,7 @@ import Link from './Link';
 
 export default class LinkList extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
+    cx: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
 
     items: PropTypes.arrayOf(
@@ -37,14 +37,16 @@ export default class LinkList extends Component {
   };
 
   render() {
-    const {applyTheme, createURL, items, selectedItem, onSelect} = this.props;
+    const {cx, createURL, items, selectedItem, onSelect} = this.props;
     return (
-      <ul {...applyTheme('root', 'root')}>
+      <ul {...cx('root')}>
         {items.map(item =>
-          <li // eslint-disable-line react/jsx-key, automatically done by themeable
-            {...applyTheme(
-              has(item, 'key') ? item.key : item.value,
+          <li
+            key={has(item, 'key') ? item.key : item.value}
+            {...cx(
               'item',
+              // on purpose == following, see
+              // https://github.com/algolia/instantsearch.js/commit/bfed1f3512e40fb1e9989453582b4a2c2d90e3f2
               // eslint-disable-next-line
               item.value == selectedItem && !item.disabled && 'itemSelected',
               item.disabled && 'itemDisabled',
@@ -52,11 +54,11 @@ export default class LinkList extends Component {
             )}
           >
             {item.disabled ?
-              <span {...applyTheme('itemLink', 'itemLink', 'itemLinkDisabled')}>
+              <span {...cx('itemLink', 'itemLinkDisabled')}>
                 {has(item, 'label') ? item.label : item.value}
               </span> :
               <Link
-                {...applyTheme('itemLink', 'itemLink', item.value === selectedItem && 'itemLinkSelected')}
+                {...cx('itemLink', item.value === selectedItem && 'itemLinkSelected')}
                 aria-label={item.ariaLabel}
                 href={createURL(item.value)}
                 onClick={onSelect.bind(null, item.value)}

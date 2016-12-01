@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 import {join} from 'path';
 import {rootPath} from './path';
+import autoprefixer from 'autoprefixer';
 
 export default {
   entry: {
@@ -28,22 +29,16 @@ export default {
         test: /\.js$/, exclude: /node_modules/, loader: 'babel',
       },
       {
-        test: /\.css$/,
-        loader: 'style?insertAt=top',
+        test: /\.scss$/,
+        loaders: ['style', 'css', 'postcss', 'sass'],
       },
-      {
-        test: /\.css$/,
-        loader: 'css',
-        query: {
-          modules: true,
-          importLoaders: 1,
-          localIdentName: 'ais-[name]__[local]',
-        },
-      }],
+    ],
   },
+  postcss: [autoprefixer()],
   resolve: {
     alias: {
       'react-instantsearch': join(__dirname, '../packages/react-instantsearch/'),
+      'react-instantsearch-theme-algolia': join(__dirname, '../packages/react-instantsearch-theme-algolia/'),
     },
   },
   // replace usage of process.env.NODE_ENV with the actual NODE_ENV from command line

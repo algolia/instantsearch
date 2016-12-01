@@ -85,6 +85,19 @@ In this section we've seen:
  > component, we have [full documentation](/component/InstantSearch.html) in the widget
  > section.
 
+## Loading the theme
+
+We do not inject any CSS in your application by default, only CSS class names are declared
+on our widgets. It's your responsibility to then load a theme. We provide an Algolia theme
+that should be a good start.
+
+Just include it in your webpage:
+```html
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
+```
+
+Read the [styling](/guides/styling.html) guide for more information.
+
 ## Display the results
 
 The core of a search experience is to display results. By default, react-instantsearch

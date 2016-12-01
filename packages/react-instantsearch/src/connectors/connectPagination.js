@@ -14,6 +14,9 @@ function getCurrentRefinement(props, state) {
   } else if (typeof page === 'string') {
     page = parseInt(page, 10);
   }
+  if (props.defaultRefinement) {
+    return props.defaultRefinement;
+  }
   return page;
 }
 

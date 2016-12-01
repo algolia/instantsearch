@@ -9,7 +9,7 @@ import {mount} from 'enzyme';
 
 import ClearAll from './ClearAll.js';
 
-describe('ClearAll', () => {
+describe('ClearAll behavior', () => {
   it('is disabled when there is no filters', () => {
     const refine = jest.fn();
     const wrapper = mount(

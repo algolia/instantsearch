@@ -8,7 +8,7 @@ import {mount} from 'enzyme';
 
 import HitsPerPage from './HitsPerPage';
 
-describe('HitsPerPage', () => {
+describe('HitsPerPage behavior', () => {
   it('refines its value on change', () => {
     const refine = jest.fn();
     const wrapper = mount(
@@ -24,7 +24,7 @@ describe('HitsPerPage', () => {
     );
 
     const selectedValue = wrapper
-      .find('.root');
+      .find('.ais-HitsPerPage__root');
     expect(selectedValue.find('option').length).toBe(4);
 
     selectedValue.find('select').simulate('change', {target: {value: '6'}});

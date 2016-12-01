@@ -1,0 +1,17 @@
+exports[`HitsPerPage renders 1`] = `
+<select
+  className="ais-HitsPerPage__root"
+  onChange={[Function]}
+  value={5}>
+  <option
+    disabled={undefined}
+    value={5}>
+    show 5 hits
+  </option>
+  <option
+    disabled={undefined}
+    value={10}>
+    show 10 hits
+  </option>
+</select>
+`;

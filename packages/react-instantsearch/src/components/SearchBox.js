@@ -1,30 +1,22 @@
 import React, {Component, PropTypes} from 'react';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-import theme from './SearchBox.css';
+import classNames from './classNames.js';
+
+const cx = classNames('SearchBox');
 
 /* eslint-disable max-len */
-const SubmitIcon = () =>
-  <svg xmlns="http://www.w3.org/2000/svg" id="ris-search-icon" viewBox="0 0 40 40">
-    <path
-      d="M15.553 31.106c8.59 0 15.553-6.963 15.553-15.553S24.143 0 15.553 0 0 6.963 0 15.553s6.963 15.553 15.553 15.553zm0-3.888c6.443 0 11.665-5.222 11.665-11.665 0-6.442-5.222-11.665-11.665-11.665-6.442 0-11.665 5.223-11.665 11.665 0 6.443 5.223 11.665 11.665 11.665zM27.76 31.06c-.78-.78-.778-2.05.004-2.833l.463-.463c.783-.783 2.057-.78 2.834-.003l8.168 8.17c.782.78.78 2.05-.003 2.832l-.463.463c-.783.783-2.057.78-2.833.003l-8.17-8.167z"
-      fillRule="evenodd"></path>
-  </svg>;
-
 const ResetIcon = () =>
-  <svg xmlns="http://www.w3.org/2000/svg" id="ris-clear-icon" viewBox="0 0 20 20">
-    <path
-      d="M9.408 10L.296.888 0 .592.592 0l.296.296L10 9.408 19.112.296 19.408 0 20 .592l-.296.296L10.592 10l9.112 9.112.296.296-.592.592-.296-.296L10 10.592.888 19.704.592 20 0 19.408l.296-.296L9.408 10z"
-      fillRule="evenodd"/>
-  </svg>;
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
+  <g fill="none" fillRule="evenodd">
+    <path d="M12.99883 9.92647L22.22236.70294c.85882-.85647 2.2306-.84706 3.08235 0 .8518.85412.8471 2.22588 0 3.0753l-9.2329 9.22353 9.22353 9.22353c.85648.85882.84707 2.23058 0 3.08235-.8541.85176-2.22587.84706-3.0753 0l-9.22116-9.23294-9.22353 9.22357c-.85646.85647-2.22823.84706-3.07764 0-.85413-.85412-.84707-2.2259 0-3.0753l9.22823-9.22117L.70235 3.77823C-.1541 2.92177-.1541 1.55.69295.69588c.85647-.85176 2.22823-.84706 3.07764 0l9.2282 9.2353v-.0047z"/>
+  </g>
+</svg>;
 /* eslint-enable max-len */
 
 class SearchBox extends Component {
   static propTypes = {
     query: PropTypes.string,
     refine: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
 
     focusShortcuts: PropTypes.arrayOf(
@@ -155,7 +147,6 @@ class SearchBox extends Component {
 
   render() {
     const {
-      applyTheme,
       translate,
       autoFocus,
     } = this.props;
@@ -166,11 +157,11 @@ class SearchBox extends Component {
         noValidate
         onSubmit={this.onSubmit}
         onReset={this.onReset}
-        {...applyTheme('root', 'root')}
+        {...cx('root')}
       >
         <div
           role="search"
-          {...applyTheme('wrapper', 'wrapper')}
+          {...cx('wrapper')}
         >
           <input
             ref={this.onInputMount}
@@ -181,20 +172,12 @@ class SearchBox extends Component {
             required
             value={query}
             onChange={this.onChange}
-            {...applyTheme('input', 'input')}
+            {...cx('input')}
           />
-          <button
-            type="submit"
-            title={translate('submitTitle')}
-            {...applyTheme('submit', 'submit')}
-          >
-            {<SubmitIcon/>}
-            {translate('submit')}
-          </button>
           <button
             type="reset"
             title={translate('resetTitle')}
-            {...applyTheme('reset', 'reset')}
+            {...cx('reset')}
           >
             {translate('reset')}
             {<ResetIcon/>}
@@ -205,12 +188,10 @@ class SearchBox extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    submit: null,
-    reset: null,
-    submitTitle: 'Submit your search query.',
-    resetTitle: 'Clear the search query.',
-    placeholder: 'Search your website',
-  })(SearchBox)
-);
+export default translatable({
+  submit: null,
+  reset: null,
+  submitTitle: 'Submit your search query.',
+  resetTitle: 'Clear the search query.',
+  placeholder: 'Search your website',
+})(SearchBox);

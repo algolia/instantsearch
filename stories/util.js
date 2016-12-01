@@ -7,6 +7,7 @@ import {
 } from '../packages/react-instantsearch/dom';
 import {connectHits} from '../packages/react-instantsearch/connectors';
 import {linkTo} from '@kadira/storybook';
+import '../packages/react-instantsearch-theme-algolia/style.scss';
 
 const Wrap = props =>
   <InstantSearch

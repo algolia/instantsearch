@@ -1,8 +1,8 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-import theme from './PoweredBy.css';
+import classNames from './classNames.js';
+
+const cx = classNames('PoweredBy');
 
 /* eslint-disable max-len */
 const AlgoliaLogo = () =>
@@ -24,26 +24,22 @@ const AlgoliaLogo = () =>
 class PoweredBy extends Component {
   static propTypes = {
     url: PropTypes.string.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
   };
 
   render() {
     const {
-      applyTheme,
       translate,
       url,
     } = this.props;
 
-    return <div {...applyTheme('root', 'root')}>
-      <span {...applyTheme('searchBy', 'searchBy')}>{translate('searchBy')} </span>
-      <a href={url} target="_blank" {...applyTheme('algoliaLink', 'algoliaLink')}><AlgoliaLogo/></a>
+    return <div {...cx('root')}>
+      <span {...cx('searchBy')}>{translate('searchBy')} </span>
+      <a href={url} target="_blank" {...cx('algoliaLink')}><AlgoliaLogo/></a>
     </div>;
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    searchBy: 'Search by',
-  })(PoweredBy)
-);
+export default translatable({
+  searchBy: 'Search by',
+})(PoweredBy);
