@@ -1,25 +1,24 @@
 import React, {PropTypes, Component} from 'react';
 
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
+import classNames from './classNames.js';
 
-import theme from './ClearAll.css';
+const cx = classNames('ClearAll');
 
 class ClearAll extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     refine: PropTypes.func.isRequired,
   };
 
   render() {
-    const {applyTheme, translate, items, refine} = this.props;
+    const {translate, items, refine} = this.props;
     const isDisabled = items.length === 0;
 
     if (isDisabled) {
       return (
-        <button {...applyTheme('root', 'root', 'clearAllDisabled')} disabled>
+        <button {...cx('root')} disabled>
           {translate('reset')}
         </button>
       );
@@ -27,7 +26,7 @@ class ClearAll extends Component {
 
     return (
       <button
-        {...applyTheme('root', 'root')}
+        {...cx('root')}
         onClick={refine.bind(null, items)}
       >
         {translate('reset')}
@@ -36,8 +35,6 @@ class ClearAll extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    reset: 'ClearAll everything',
-  })(ClearAll)
-);
+export default translatable({
+  reset: 'ClearAll everything',
+})(ClearAll);

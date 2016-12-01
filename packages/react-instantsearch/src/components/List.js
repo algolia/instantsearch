@@ -8,7 +8,7 @@ const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
 
 class List extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
+    cx: PropTypes.func.isRequired,
     // Only required with showMore.
     translate: PropTypes.func,
     items: itemsPropType,
@@ -42,7 +42,7 @@ class List extends Component {
 
   renderItem = item => {
     const children = item.children &&
-      <div {...this.props.applyTheme('itemChildren', 'itemChildren')}>
+      <div {...this.props.cx('itemChildren')}>
         {item.children.slice(0, this.getLimit()).map(child =>
           this.renderItem(child, item)
         )}
@@ -50,8 +50,8 @@ class List extends Component {
 
     return (
       <div
-        {...this.props.applyTheme(
-          item.key || item.label,
+        key={item.key || item.label}
+        {...this.props.cx(
           'item',
           item.isRefined && 'itemSelected',
           children && 'itemParent',
@@ -65,7 +65,7 @@ class List extends Component {
   };
 
   renderShowMore() {
-    const {showMore, translate, applyTheme} = this.props;
+    const {showMore, translate, cx} = this.props;
     const {extended} = this.state;
     const disabled = this.props.limitMin >= this.props.items.length;
     if (!showMore) {
@@ -74,7 +74,7 @@ class List extends Component {
 
     return (
       <button disabled={disabled}
-        {...applyTheme('showMore', 'showMore', disabled && 'showMoreDisabled')}
+        {...cx('showMore', disabled && 'showMoreDisabled')}
         onClick={this.onShowMoreClick}
       >
         {translate('showMore', extended)}
@@ -83,7 +83,7 @@ class List extends Component {
   }
 
   render() {
-    const {applyTheme, items} = this.props;
+    const {cx, items} = this.props;
     if (items.length === 0) {
       return null;
     }
@@ -93,8 +93,8 @@ class List extends Component {
     // option.
     const limit = this.getLimit();
     return (
-      <div {...applyTheme('root', 'root')}>
-        <div {...applyTheme('items', 'items')}>
+      <div {...cx('root')}>
+        <div {...cx('items')}>
           {items.slice(0, limit).map(item => this.renderItem(item))}
         </div>
         {this.renderShowMore()}

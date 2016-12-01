@@ -64,7 +64,7 @@ button.playground-url{
   padding: 4px 6px;
   line-height: 1em;
   background-color: #F3F3F3;
-  
+
 }
 
 .hit {
@@ -99,13 +99,4 @@ em {
   color: #3e82f7;
   font-weight: 700;
   font-style: normal;
-}
-
-.ais-ClearAll__root {
-  height: 100%;
-  display: flex;
-  border:  none;
-  background-color: #3e82f7;
-  color: white;
-  margin-left: 5px;
 }

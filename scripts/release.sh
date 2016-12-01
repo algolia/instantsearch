@@ -52,6 +52,11 @@ npm version --no-git-tag-version prerelease
 yarn
 )
 
+(
+cd packages/react-instantsearch-theme-algolia
+npm version --no-git-tag-version prerelease
+)
+
 yarn
 npm run build
 
@@ -87,6 +92,10 @@ cd ..
 rm -rf dist/
 )
 
+(
+cd packages/react-instantsearch-theme-algolia
+npm publish
+)
+
 printf "Release:
-Package was published to npm.
-A job on travis-ci will be automatically launched to finalize the release."
+Package was published to npm."

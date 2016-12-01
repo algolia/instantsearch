@@ -23,11 +23,11 @@ describe('HierarchicalMenu', () => {
       />
     );
 
-    const itemParent = wrapper.find('.item .itemParent');
+    const itemParent = wrapper.find('.ais-HierarchicalMenu__item .ais-HierarchicalMenu__itemParent');
 
     expect(itemParent.length).toBe(1);
 
-    itemParent.find('.itemLink').first().simulate('click');
+    itemParent.find('.ais-HierarchicalMenu__itemLink').first().simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual('white');
 
@@ -53,13 +53,13 @@ describe('HierarchicalMenu', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-HierarchicalMenu__item');
 
     expect(items.length).toBe(2);
 
-    wrapper.find('.showMore').simulate('click');
+    wrapper.find('.ais-HierarchicalMenu__showMore').simulate('click');
 
-    expect(wrapper.find('.item').length).toBe(4);
+    expect(wrapper.find('.ais-HierarchicalMenu__item').length).toBe(4);
 
     wrapper.unmount();
   });
@@ -80,11 +80,11 @@ describe('HierarchicalMenu', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-HierarchicalMenu__item');
 
     expect(items.length).toBe(2);
 
-    expect(wrapper.find('.showMoreDisabled')).toBeDefined();
+    expect(wrapper.find('.ais-HierarchicalMenu__showMoreDisabled')).toBeDefined();
 
     wrapper.unmount();
   });

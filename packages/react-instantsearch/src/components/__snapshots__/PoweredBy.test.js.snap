@@ -1,13 +1,13 @@
 exports[`PoweredBy applies translations 1`] = `
 <div
-  className="root">
+  className="ais-PoweredBy__root">
   <span
-    className="searchBy">
+    className="ais-PoweredBy__searchBy">
      Search By
      
   </span>
   <a
-    className="algoliaLink"
+    className="ais-PoweredBy__algoliaLink"
     href="url"
     target="_blank">
     <svg
@@ -38,14 +38,14 @@ exports[`PoweredBy applies translations 1`] = `
 
 exports[`PoweredBy default 1`] = `
 <div
-  className="root">
+  className="ais-PoweredBy__root">
   <span
-    className="searchBy">
+    className="ais-PoweredBy__searchBy">
     Search by
      
   </span>
   <a
-    className="algoliaLink"
+    className="ais-PoweredBy__algoliaLink"
     href="url"
     target="_blank">
     <svg

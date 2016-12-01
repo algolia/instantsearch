@@ -1,14 +1,11 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
-
 import Select from './Select';
+import classNames from './classNames.js';
 
-import theme from './SortBy.css';
+const cx = classNames('SortBy');
 
 class SortBy extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
 
     items: PropTypes.arrayOf(PropTypes.shape({
@@ -24,10 +21,10 @@ class SortBy extends Component {
   }
 
   render() {
-    const {applyTheme, refine, items, currentRefinement} = this.props;
+    const {refine, items, currentRefinement} = this.props;
     return (
       <Select
-        applyTheme={applyTheme}
+        cx={cx}
         selectedItem={currentRefinement}
         onSelect={refine}
         items={items}
@@ -36,4 +33,4 @@ class SortBy extends Component {
   }
 }
 
-export default themeable(theme)(SortBy);
+export default SortBy;

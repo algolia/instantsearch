@@ -22,11 +22,11 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-Menu__item');
 
     expect(items.length).toBe(3);
 
-    const firstItem = items.first().find('.itemLink');
+    const firstItem = items.first().find('.ais-Menu__itemLink');
 
     firstItem.simulate('click');
 
@@ -55,13 +55,13 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-Menu__item');
 
     expect(items.length).toBe(2);
 
-    wrapper.find('.showMore').simulate('click');
+    wrapper.find('.ais-Menu__showMore').simulate('click');
 
-    expect(wrapper.find('.item').length).toBe(4);
+    expect(wrapper.find('.ais-Menu__item').length).toBe(4);
 
     wrapper.unmount();
   });
@@ -82,11 +82,11 @@ describe('Menu', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-Menu__item');
 
     expect(items.length).toBe(2);
 
-    expect(wrapper.find('.showMoreDisabled')).toBeDefined();
+    expect(wrapper.find('.ais-Menu__showMoreDisabled')).toBeDefined();
 
     wrapper.unmount();
   });

@@ -1,13 +1,11 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
+import classNames from './classNames.js';
 
-import theme from './RangeRatings.css';
+const cx = classNames('RangeRatings');
 
 class RangeRatings extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
@@ -33,7 +31,7 @@ class RangeRatings extends Component {
     }
   }
 
-  buildItem({max, lowerBound, count, applyTheme, translate, createURL}) {
+  buildItem({max, lowerBound, count, translate, createURL}) {
     const selected = lowerBound === this.props.currentRefinement.min &&
       max === this.props.currentRefinement.max;
     const disabled = !count;
@@ -42,18 +40,18 @@ class RangeRatings extends Component {
     for (let icon = 0; icon < max; icon++) {
       const iconTheme = icon >= lowerBound ? 'ratingIconEmpty' : 'ratingIcon';
       icons.push(
-        <span {...applyTheme(
-          iconTheme,
+        <span
+          key={icon}
+          {...cx(
           iconTheme,
           selected && `${iconTheme}Selected`,
           disabled && `${iconTheme}Disabled`,
-        )} key={icon}
+        )}
         />);
     }
 
     return (
-      <a {...applyTheme(
-        'ratingLink',
+      <a {...cx(
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
@@ -62,16 +60,14 @@ class RangeRatings extends Component {
          href={createURL({lowerBound, max})}
       >
         {icons}
-        <span {...applyTheme(
-          'ratingLabel',
+        <span {...cx(
           'ratingLabel',
           selected && 'ratingLabelSelected',
           disabled && 'ratingLabelDisabled')}>
           {translate('ratingLabel')}
           </span>
         <span> </span>
-        <span {...applyTheme(
-          'ratingCount',
+        <span {...cx(
           'ratingCount',
           selected && 'ratingCountSelected',
           disabled && 'ratingCountDisabled')}>
@@ -82,7 +78,7 @@ class RangeRatings extends Component {
   }
 
   render() {
-    const {applyTheme, translate, refine, min, max, count, createURL} = this.props;
+    const {translate, refine, min, max, count, createURL} = this.props;
     const items = [];
     for (let i = max; i >= min; i--) {
       const itemCount = count.reduce((acc, item) => {
@@ -94,20 +90,18 @@ class RangeRatings extends Component {
         max,
         refine,
         count: itemCount,
-        applyTheme,
         translate,
         createURL,
       }));
     }
     return (
-      <div {...applyTheme('root', 'root')}>
+      <div {...cx('root')}>
         {items}
       </div>
     );
   }
 }
 
-export default themeable(theme)(translatable({
+export default translatable({
   ratingLabel: ' & Up',
-})(RangeRatings)
-);
+})(RangeRatings);

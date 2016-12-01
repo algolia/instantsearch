@@ -1,11 +1,10 @@
 import React, {PropTypes, Component} from 'react';
+import classNames from './classNames.js';
 
-import themeable from '../core/themeable';
-import theme from './Toggle.css';
+const cx = classNames('Toggle');
 
 class Toggle extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     currentRefinement: PropTypes.bool.isRequired,
     refine: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
@@ -16,17 +15,17 @@ class Toggle extends Component {
   };
 
   render() {
-    const {applyTheme, currentRefinement, label} = this.props;
+    const {currentRefinement, label} = this.props;
 
     return (
-      <label {...applyTheme('root', 'root')}>
+      <label {...cx('root')}>
         <input
-          {...applyTheme('checkbox', 'checkbox')}
+          {...cx('checkbox')}
           type="checkbox"
           checked={currentRefinement}
           onChange={this.onChange}
         />
-        <span {...applyTheme('label', 'label')}>
+        <span {...cx('label')}>
           {label}
         </span>
       </label>
@@ -34,4 +33,4 @@ class Toggle extends Component {
   }
 }
 
-export default themeable(theme)(Toggle);
+export default Toggle;

@@ -1,13 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import range from 'lodash/range';
-
 import {capitalize} from '../core/utils';
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-
 import LinkList from './LinkList';
+import classNames from './classNames.js';
 
-import theme from './Pagination.css';
+const cx = classNames('Pagination');
 
 function getPagesDisplayedCount(padding, total) {
   return Math.min(2 * padding + 1, total);
@@ -172,6 +170,7 @@ class Pagination extends Component {
     return (
       <ListComponent
         {...otherProps}
+        cx={cx}
         items={items}
         selectedItem={currentRefinement}
         onSelect={refine}
@@ -181,17 +180,15 @@ class Pagination extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    previous: '‹',
-    next: '›',
-    first: '«',
-    last: '»',
-    page: currentRefinement => currentRefinement.toString(),
-    ariaPrevious: 'Previous page',
-    ariaNext: 'Next page',
-    ariaFirst: 'First page',
-    ariaLast: 'Last page',
-    ariaPage: currentRefinement => `Page ${currentRefinement.toString()}`,
-  })(Pagination)
-);
+export default translatable({
+  previous: '‹',
+  next: '›',
+  first: '«',
+  last: '»',
+  page: currentRefinement => currentRefinement.toString(),
+  ariaPrevious: 'Previous page',
+  ariaNext: 'Next page',
+  ariaFirst: 'First page',
+  ariaLast: 'Last page',
+  ariaPage: currentRefinement => `Page ${currentRefinement.toString()}`,
+})(Pagination);

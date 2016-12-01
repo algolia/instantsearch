@@ -3,7 +3,7 @@ import {has} from 'lodash';
 
 export default class Select extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
+    cx: PropTypes.func.isRequired,
     onSelect: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.oneOfType([
@@ -29,11 +29,11 @@ export default class Select extends Component {
   }
 
   render() {
-    const {applyTheme, items, selectedItem} = this.props;
+    const {cx, items, selectedItem} = this.props;
 
     return (
       <select
-        {...applyTheme('root', 'root')}
+        {...cx('root')}
         value={selectedItem}
         onChange={this.onChange}
       >

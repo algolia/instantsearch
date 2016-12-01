@@ -33,10 +33,10 @@ describe('RangeRatings', () => {
   });
 
   it('refines its value on change', () => {
-    const links = wrapper.find('.ratingLink');
+    const links = wrapper.find('.ais-RangeRatings__ratingLink');
     expect(links.length).toBe(5);
 
-    let selectedLink = wrapper.find('.ratingLinkSelected');
+    let selectedLink = wrapper.find('.ais-RangeRatings__ratingLinkSelected');
     expect(selectedLink.length).toBe(1);
 
     links.first().simulate('click');
@@ -45,31 +45,31 @@ describe('RangeRatings', () => {
     expect(refine.mock.calls[0][0]).toEqual({min: 5, max: 5});
 
     selectedLink = wrapper
-      .find('.ratingLinkSelected');
+      .find('.ais-RangeRatings__ratingLinkSelected');
     expect(selectedLink).toBeDefined();
 
     refine.mockClear();
 
     const disabledLink = wrapper
-      .find('.ratingLinkDisabled')
-      .find('.ratingIcon');
+      .find('.ais-RangeRatings__ratingLinkDisabled')
+      .find('.ais-RangeRatings__ratingIcon');
 
     expect(disabledLink.length).toBe(5);
   });
 
   it('should display the right number of stars', () => {
     wrapper
-      .find('.ratingLink')
+      .find('.ais-RangeRatings__ratingLink')
       .last()
       .simulate('click');
 
     const selectedLink = wrapper
-      .find('.ratingLinkSelected');
+      .find('.ais-RangeRatings__ratingLinkSelected');
 
     const fullIcon = selectedLink
-      .find('.ratingIcon');
+      .find('.ais-RangeRatings__ratingIcon');
     const emptyIcon = selectedLink
-      .first().find('.ratingIconEmpty');
+      .first().find('.ais-RangeRatings__ratingIconEmpty');
 
     expect(fullIcon.length).toBe(1);
     expect(emptyIcon.length).toBe(4);

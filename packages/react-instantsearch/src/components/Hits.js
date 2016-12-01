@@ -1,13 +1,13 @@
 import React, {PropTypes, Component} from 'react';
+import classNames from './classNames.js';
 
-import themeable from '../core/themeable';
-import theme from './Hits.css';
+const cx = classNames('Hits');
 
 class Hits extends Component {
   render() {
-    const {applyTheme, itemComponent: ItemComponent, hits} = this.props;
+    const {itemComponent: ItemComponent, hits} = this.props;
     return (
-      <div {...applyTheme('root', 'root')}>
+      <div {...cx('root')}>
         {hits.map(hit =>
           <ItemComponent key={hit.objectID} hit={hit} />
         )}
@@ -17,7 +17,6 @@ class Hits extends Component {
 }
 
 Hits.propTypes = {
-  applyTheme: PropTypes.func.isRequired,
   hits: PropTypes.array,
 
   itemComponent: PropTypes.oneOfType([
@@ -37,4 +36,4 @@ Hits.defaultProps = {
     >{JSON.stringify(hit).slice(0, 100)}...</div>,
 };
 
-export default themeable(theme)(Hits);
+export default Hits;

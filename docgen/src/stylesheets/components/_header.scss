@@ -159,8 +159,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
     height: 800px;
     perspective: 500px;
     pointer-events: none;
-
-
+    z-index: 99999999969;
   }
   @include component('navigation', 'brands-dropdown') {
     width: 490px;
@@ -388,6 +387,11 @@ $nav-background-light: mix($nav-background,#fff,92%);
 
         a:not([href]) {
           cursor: pointer
+        }
+
+        a {
+          display: block;
+          height: 100%;
         }
 
       }

@@ -1,14 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
 import {isNaN} from 'lodash';
 import translatable from '../core/translatable';
+import classNames from './classNames.js';
 
-import theme from './RangeInput.css';
+const cx = classNames('RangeInput');
 
 class RangeInput extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     min: PropTypes.number.isRequired,
@@ -37,29 +35,28 @@ class RangeInput extends Component {
   };
 
   render() {
-    const {applyTheme, translate} = this.props;
+    const {translate} = this.props;
     return (
-      <form {...applyTheme('root', 'root')} onSubmit={this.onSubmit}>
-        <label {...applyTheme('labelMin', 'labelMin')}>
-          <input {...applyTheme('inputMin', 'inputMin')}
+      <form {...cx('root')} onSubmit={this.onSubmit}>
+        <label {...cx('labelMin')}>
+          <input {...cx('inputMin')}
                  type="number" value={this.state.from} onChange={e => this.setState({from: e.target.value})}
           />
         </label>
-        <span {...applyTheme('separator', 'separator')}>{translate('separator')}</span>
-        <label {...applyTheme('labelMax', 'labelMax')}>
-          <input {...applyTheme('inputMax', 'inputMax')}
+        <span {...cx('separator')}>{translate('separator')}</span>
+        <label {...cx('labelMax')}>
+          <input {...cx('inputMax')}
                  type="number" value={this.state.to} onChange={e => this.setState({to: e.target.value})}
           />
         </label>
-        <button {...applyTheme('submit', 'submit')} type="submit">{translate('submit')}
+        <button {...cx('submit')} type="submit">{translate('submit')}
         </button>
       </form>
     );
   }
 }
 
-export default themeable(theme)(translatable({
+export default translatable({
   submit: 'go',
   separator: 'to',
-})(RangeInput)
-);
+})(RangeInput);
