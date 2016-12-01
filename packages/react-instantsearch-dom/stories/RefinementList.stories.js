@@ -16,7 +16,7 @@ stories.add('default', () =>
   <WrapWithHits >
     <RefinementList
       attributeName="category"
-      defaultRefinement={['Black']}
+      defaultRefinement={['Dining']}
     />
   </WrapWithHits>
 ).add('with show more', () =>
@@ -32,7 +32,7 @@ stories.add('default', () =>
   <WrapWithHits >
     <RefinementList
       attributeName="category"
-      defaultRefinement={array('defaultSelectedItem', ['Black', 'White'])}
+      defaultRefinement={array('defaultSelectedItem', ['Decoration', 'Lighting'])}
       limitMin={number('limitMin', 10)}
       limitMax={number('limitMax', 20)}
       showMore={boolean('showMore', true)}
