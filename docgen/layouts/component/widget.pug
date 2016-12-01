@@ -10,6 +10,10 @@ block content
   h2#description Description
     a.anchor(href='#description')
   p!=h.markdown(description)
+  if (process.env.NODE_ENV === 'development')
+    a.btn.btn-cta(href=`http://localhost:6006/?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
+  else
+    a.btn.btn-cta(href=`https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
   h2#proptypes Props
     a.anchor(href='#proptypes')
   if proptype
@@ -68,9 +72,3 @@ block content
   if examples
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
-  h2#live See it live
-    a.anchor(href='#live')
-  if (process.env.NODE_ENV === 'development')
-    p <iframe frameborder="0" height=800px width=650px src="http://localhost:6006/iframe.html?dataId=0&selectedKind=#{name}&selectedStory=default&full=0&down=1&left=0&panelRight=1&downPanel=kadirahq%2Fstorybook-addon-knobs"></iframe>
-  else
-    p <iframe frameborder="0" height=800px width=650px src="https://community.algolia.com/instantsearch.js/react/storybook/iframe.html?dataId=0&selectedKind=#{name}&selectedStory=default&full=0&down=1&left=0&panelRight=1&downPanel=kadirahq%2Fstorybook-addon-knobs"></iframe>
