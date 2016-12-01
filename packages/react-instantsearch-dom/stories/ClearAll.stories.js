@@ -14,8 +14,8 @@ stories.add('default', () =>
       <ClearAll />
       <div style={{display: 'none'}}>
         <RefinementList
-          attributeName="colors"
-          defaultRefinement={['Black']}
+          attributeName="cateogry"
+          defaultRefinement={['Dining']}
         />
       </div>
       </div>
