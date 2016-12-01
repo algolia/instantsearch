@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600,700');
+
+[class*="ais-"] {
+
+  font-family: 'Open Sans', sans-serif;
+
+  &[disabled],
+  &:disabled  {
+    opacity: 0.5;
+    pointer-events: none
+  }
+
+  input,
+  button,
+  select {
+    appearance: none;
+    background: transparent;
+    border: none;
+  }
+
+  input[type="date"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="email"],
+  input[type="month"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="submit"],
+  input[type="tel"],
+  input[type="text"],
+  input[type="time"],
+  input[type="url"],
+  input[type="week"], {
+    padding: 8px 16px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    border: solid 1px #d4d8e3;
+    appearance: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+
+
+select[class*="ais-"] {
+  appearance: none;
+  background: transparent;
+  border: none;
+  background: #ffffff url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 12 7\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M11 1L6.02 6 1 1\' stroke-width=\'1.5\' stroke=\'%23BFC7D8\' fill=\'none\' fill-rule=\'evenodd\' stroke-linecap=\'round\'/></svg>") no-repeat center right 16px / 10px;
+  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
+  border: solid 1px #d4d8e3;
+  padding: 8px 16px;
+  padding-right: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #697782;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 4px;
+  text-align: left;
+
+  &:hover,
+  &:active {
+    box-shadow: none;
+  }
+
+  &:focus,
+  &:active {
+    outline: none;
+    background: darken(white, 5%) url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 12 7\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M11 1L6.02 6 1 1\' stroke-width=\'1.5\' stroke=\'%23BFC7D8\' fill=\'none\' fill-rule=\'evenodd\' stroke-linecap=\'round\'/></svg>") no-repeat center right 16px / 10px
+  }
+}

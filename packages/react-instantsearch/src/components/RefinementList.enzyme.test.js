@@ -22,11 +22,11 @@ describe('RefinementList', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-RefinementList__item');
 
     expect(items.length).toBe(3);
 
-    const firstItem = items.first().find('.itemCheckbox');
+    const firstItem = items.first().find('.ais-RefinementList__itemCheckbox');
 
     firstItem.simulate('change', {target: {checked: true}});
 
@@ -55,13 +55,13 @@ describe('RefinementList', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-RefinementList__item');
 
     expect(items.length).toBe(2);
 
-    wrapper.find('.showMore').simulate('click');
+    wrapper.find('.ais-RefinementList__showMore').simulate('click');
 
-    expect(wrapper.find('.item').length).toBe(4);
+    expect(wrapper.find('.ais-RefinementList__item').length).toBe(4);
 
     wrapper.unmount();
   });
@@ -82,11 +82,11 @@ describe('RefinementList', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-RefinementList__item');
 
     expect(items.length).toBe(2);
 
-    expect(wrapper.find('.showMoreDisabled')).toBeDefined();
+    expect(wrapper.find('.ais-RefinementList__showMoreDisabled')).toBeDefined();
 
     wrapper.unmount();
   });

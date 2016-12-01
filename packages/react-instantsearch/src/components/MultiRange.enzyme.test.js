@@ -22,11 +22,11 @@ describe('RangeInput', () => {
       />
     );
 
-    const items = wrapper.find('.item');
+    const items = wrapper.find('.ais-MultiRange__item');
 
     expect(items.length).toBe(4);
 
-    const firstItem = items.first().find('.itemRadio');
+    const firstItem = items.first().find('.ais-MultiRange__itemRadio');
 
     firstItem.simulate('change', {target: {checked: true}});
 

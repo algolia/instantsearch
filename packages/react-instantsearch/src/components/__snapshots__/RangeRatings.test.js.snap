@@ -1,141 +1,141 @@
 exports[`RangeRatings applies translations 1`] = `
 <div
-  className="root">
+  className="ais-RangeRatings__root">
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       5
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       9
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       12
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       14
       )
     </span>
   </a>
   <a
-    className="ratingLink ratingLinkSelected"
+    className="ais-RangeRatings__ratingLink ais-RangeRatings__ratingLinkSelected"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon ratingIconSelected" />
+      className="ais-RangeRatings__ratingIcon ais-RangeRatings__ratingIconSelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingLabel ratingLabelSelected">
+      className="ais-RangeRatings__ratingLabel ais-RangeRatings__ratingLabelSelected">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount ratingCountSelected">
+      className="ais-RangeRatings__ratingCount ais-RangeRatings__ratingCountSelected">
       (
       15
       )
@@ -146,142 +146,142 @@ exports[`RangeRatings applies translations 1`] = `
 
 exports[`RangeRatings supports passing max/min values 1`] = `
 <div
-  className="root">
+  className="ais-RangeRatings__root">
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       5
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       9
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       12
       )
     </span>
   </a>
   <a
-    className="ratingLink"
+    className="ais-RangeRatings__ratingLink"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIcon" />
+      className="ais-RangeRatings__ratingIcon" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingIconEmpty" />
+      className="ais-RangeRatings__ratingIconEmpty" />
     <span
-      className="ratingLabel">
+      className="ais-RangeRatings__ratingLabel">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount">
+      className="ais-RangeRatings__ratingCount">
       (
       14
       )
     </span>
   </a>
   <a
-    className="ratingLink ratingLinkSelected"
+    className="ais-RangeRatings__ratingLink ais-RangeRatings__ratingLinkSelected"
     href="#"
     onClick={[Function]}>
     <span
-      className="ratingIcon ratingIconSelected" />
+      className="ais-RangeRatings__ratingIcon ais-RangeRatings__ratingIconSelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingIconEmpty ratingIconEmptySelected" />
+      className="ais-RangeRatings__ratingIconEmpty ais-RangeRatings__ratingIconEmptySelected" />
     <span
-      className="ratingLabel ratingLabelSelected">
+      className="ais-RangeRatings__ratingLabel ais-RangeRatings__ratingLabelSelected">
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ratingCount ratingCountSelected">
+      className="ais-RangeRatings__ratingCount ais-RangeRatings__ratingCountSelected">
       (
       15
       )

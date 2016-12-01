@@ -1,13 +1,12 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
 import Select from './Select';
-import theme from './HitsPerPage.css';
+import classNames from './classNames.js';
+
+const cx = classNames('HitsPerPage');
 
 class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     currentRefinement: PropTypes.number.isRequired,
 
     items: PropTypes.arrayOf(
@@ -30,7 +29,6 @@ class HitsPerPage extends Component {
       currentRefinement,
       refine,
       items,
-      applyTheme,
     } = this.props;
 
     return (
@@ -38,10 +36,10 @@ class HitsPerPage extends Component {
         onSelect={refine}
         selectedItem={currentRefinement}
         items={items}
-        applyTheme={applyTheme}
+        cx={cx}
       />
     );
   }
 }
 
-export default themeable(theme)(HitsPerPage);
+export default HitsPerPage;

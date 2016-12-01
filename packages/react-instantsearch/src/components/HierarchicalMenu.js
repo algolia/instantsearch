@@ -1,13 +1,11 @@
 import React, {PropTypes, Component} from 'react';
 import pick from 'lodash/pick';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-
 import List from './List';
 import Link from './Link';
+import classNames from './classNames.js';
 
-import theme from './HierarchicalMenu.css';
+const cx = classNames('HierarchicalMenu');
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   label: PropTypes.string.isRequired,
@@ -18,7 +16,6 @@ const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
 
 class HierarchicalMenu extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
@@ -29,19 +26,19 @@ class HierarchicalMenu extends Component {
   };
 
   renderItem = item => {
-    const {createURL, refine, applyTheme} = this.props;
+    const {createURL, refine} = this.props;
 
     return (
       <Link
-        {...applyTheme('itemLink', 'itemLink')}
+        {...cx('itemLink')}
         onClick={() => refine(item.value)}
         href={createURL(item.value)}
       >
-        <span {...applyTheme('itemLabel', 'itemLabel')}>
+        <span {...cx('itemLabel')}>
           {item.label}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount')}>
+        <span {...cx('itemCount')}>
           {item.count}
         </span>
       </Link>
@@ -52,8 +49,8 @@ class HierarchicalMenu extends Component {
     return (
       <List
         renderItem={this.renderItem}
+        cx={cx}
         {...pick(this.props, [
-          'applyTheme',
           'translate',
           'items',
           'showMore',
@@ -65,8 +62,6 @@ class HierarchicalMenu extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    showMore: extended => extended ? 'Show less' : 'Show more',
-  })(HierarchicalMenu)
-);
+export default translatable({
+  showMore: extended => extended ? 'Show less' : 'Show more',
+})(HierarchicalMenu);

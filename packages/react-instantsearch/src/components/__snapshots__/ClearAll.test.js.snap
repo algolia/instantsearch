@@ -1,0 +1,15 @@
+exports[`ClearAll has a disabled mode 1`] = `
+<button
+  className="ais-ClearAll__root"
+  disabled={true}>
+  ClearAll everything
+</button>
+`;
+
+exports[`ClearAll renders a clickable button 1`] = `
+<button
+  className="ais-ClearAll__root"
+  onClick={[Function]}>
+  ClearAll everything
+</button>
+`;
