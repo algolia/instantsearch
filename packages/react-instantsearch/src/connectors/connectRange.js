@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {omit, isEmpty} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -23,10 +23,12 @@ function getId(props) {
   return props.attributeName;
 }
 
+const namespace = 'range';
+
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (typeof state[id] !== 'undefined') {
-    let {min, max} = state[id];
+  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
+    let {min, max} = state[namespace][id];
     if (typeof min === 'string') {
       min = parseInt(min, 10);
     }
@@ -104,12 +106,16 @@ export default createConnector({
   refine(props, state, nextRefinement) {
     return {
       ...state,
-      [getId(props)]: nextRefinement,
+      [namespace]: {[getId(props)]: nextRefinement},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
 
   getSearchParameters(params, props, state) {
@@ -149,7 +155,7 @@ export default createConnector({
         attributeName: props.attributeName,
         value: nextState => ({
           ...nextState,
-          [id]: {},
+          [namespace]: {[id]: {}},
         }),
       };
     }

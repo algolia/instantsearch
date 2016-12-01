@@ -1,7 +1,9 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {omit, isEmpty} from 'lodash';
 
 import createConnector from '../core/createConnector';
+
+const namespace = 'refinementList';
 
 function getId(props) {
   return props.attributeName;
@@ -9,17 +11,18 @@ function getId(props) {
 
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (typeof state[id] !== 'undefined') {
-    if (typeof state[id] === 'string') {
+  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
+    const subState = state[namespace];
+    if (typeof subState[id] === 'string') {
       // All items were unselected
-      if (state[id] === '') {
+      if (subState[id] === '') {
         return [];
       }
 
       // Only one item was in the state but we know it should be an array
-      return [state[id]];
+      return [subState[id]];
     }
-    return state[id];
+    return subState[id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -106,7 +109,6 @@ export default createConnector({
 
   refine(props, state, nextRefinement) {
     const id = getId(props);
-
     return {
       ...state,
       // Setting the value to an empty string ensures that it is persisted in
@@ -116,14 +118,17 @@ export default createConnector({
       // which would not be persisted to the URL.
       // {foo: ['bar']} => "foo[0]=bar"
       // {foo: []} => ""
-      [id]: nextRefinement.length > 0 ? nextRefinement : '',
+      [namespace]: {[id]: nextRefinement.length > 0 ? nextRefinement : ''},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
-
   getSearchParameters(searchParameters, props, state) {
     const {attributeName, operator, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
@@ -156,7 +161,7 @@ export default createConnector({
         currentRefinement: getCurrentRefinement(props, state),
         value: nextState => ({
           ...nextState,
-          [id]: '',
+          [namespace]: {[id]: ''},
         }),
         items: getCurrentRefinement(props, state).map(item => ({
           label: `${item}`,
@@ -167,7 +172,7 @@ export default createConnector({
 
             return {
               ...nextState,
-              [id]: nextSelectedItems.length > 0 ? nextSelectedItems : '',
+              [namespace]: {[id]: nextSelectedItems.length > 0 ? nextSelectedItems : ''},
             };
           },
         })),

@@ -18,7 +18,7 @@ let params;
 
 describe('connectHitsPerPage', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({}, {hPP: '10'});
+    props = getProps({}, {hitsPerPage: '10'});
     expect(props).toEqual({currentRefinement: 10});
 
     props = getProps({defaultRefinement: 20}, {});
@@ -29,17 +29,17 @@ describe('connectHitsPerPage', () => {
     const nextState = refine({}, {otherKey: 'val'}, 30);
     expect(nextState).toEqual({
       otherKey: 'val',
-      hPP: 30,
+      hitsPerPage: 30,
     });
   });
 
   it('refines the hitsPerPage parameter', () => {
     const sp = new SearchParameters();
 
-    params = getSP(sp, {}, {hPP: 10});
+    params = getSP(sp, {}, {hitsPerPage: 10});
     expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 10));
 
-    params = getSP(sp, {}, {hPP: '10'});
+    params = getSP(sp, {}, {hitsPerPage: '10'});
     expect(params).toEqual(sp.setQueryParameter('hitsPerPage', 10));
 
     params = getSP(sp, {defaultRefinement: 20}, {});
@@ -48,11 +48,11 @@ describe('connectHitsPerPage', () => {
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({});
-    expect(metadata).toEqual({id: 'hPP'});
+    expect(metadata).toEqual({id: 'hitsPerPage'});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({}, {hPP: {state: 'state'}, another: {state: 'state'}});
+    const state = cleanUp({}, {hitsPerPage: {state: 'state'}, another: {state: 'state'}});
     expect(state).toEqual({another: {state: 'state'}});
   });
 });
