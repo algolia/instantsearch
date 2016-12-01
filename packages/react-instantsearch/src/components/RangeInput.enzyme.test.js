@@ -20,9 +20,9 @@ describe('RangeInput', () => {
       />
     );
 
-    const formChildren = wrapper.find('.submit');
+    const formChildren = wrapper.find('.ais-RangeInput__submit');
     wrapper
-      .find('.root')
+      .find('.ais-RangeInput__root')
       .simulate('submit', {target: {formChildren}});
 
     expect(refine.mock.calls.length).toBe(1);
@@ -34,7 +34,7 @@ describe('RangeInput', () => {
     wrapper.find('input').last().simulate('change', {target: {value: 99}});
 
     wrapper
-      .find('.root')
+      .find('.ais-RangeInput__root')
       .simulate('submit', {target: {formChildren}});
 
     expect(refine.mock.calls.length).toBe(1);
@@ -55,13 +55,13 @@ describe('RangeInput', () => {
       />
     );
 
-    const formChildren = wrapper.find('.submit');
+    const formChildren = wrapper.find('.ais-RangeInput__submit');
 
     wrapper.find('input').first().simulate('change', {target: {value: ''}});
     wrapper.find('input').last().simulate('change', {target: {value: ''}});
 
     wrapper
-      .find('.root')
+      .find('.ais-RangeInput__root')
       .simulate('submit', {target: {formChildren}});
 
     expect(refine.mock.calls.length).toBe(0);

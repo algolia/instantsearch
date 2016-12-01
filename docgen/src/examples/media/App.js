@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
+import 'react-instantsearch-theme-algolia/style.scss';
 
 import {
   InstantSearch,

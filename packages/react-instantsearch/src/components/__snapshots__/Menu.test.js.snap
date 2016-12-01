@@ -1,45 +1,45 @@
 exports[`Menu applies translations 1`] = `
 <div
-  className="root">
+  className="ais-Menu__root">
   <div
-    className="items">
+    className="ais-Menu__items">
     <div
-      className="item">
+      className="ais-Menu__item">
       <a
-        className="itemLink"
+        className="ais-Menu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-Menu__itemLabel">
           white
         </span>
          
         <span
-          className="itemCount">
+          className="ais-Menu__itemCount">
           10
         </span>
       </a>
     </div>
     <div
-      className="item">
+      className="ais-Menu__item">
       <a
-        className="itemLink"
+        className="ais-Menu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-Menu__itemLabel">
           black
         </span>
          
         <span
-          className="itemCount">
+          className="ais-Menu__itemCount">
           20
         </span>
       </a>
     </div>
   </div>
   <button
-    className="showMore"
+    className="ais-Menu__showMore"
     disabled={false}
     onClick={[Function]}>
      display more
@@ -49,46 +49,46 @@ exports[`Menu applies translations 1`] = `
 
 exports[`Menu default menu 1`] = `
 <div
-  className="root">
+  className="ais-Menu__root">
   <div
-    className="items">
+    className="ais-Menu__items">
     <div
-      className="item">
+      className="ais-Menu__item">
       <a
-        className="itemLink"
+        className="ais-Menu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-Menu__itemLabel">
           white
         </span>
          
         <span
-          className="itemCount">
+          className="ais-Menu__itemCount">
           10
         </span>
       </a>
     </div>
     <div
-      className="item">
+      className="ais-Menu__item">
       <a
-        className="itemLink"
+        className="ais-Menu__itemLink"
         href="#"
         onClick={[Function]}>
         <span
-          className="itemLabel">
+          className="ais-Menu__itemLabel">
           black
         </span>
          
         <span
-          className="itemCount">
+          className="ais-Menu__itemCount">
           20
         </span>
       </a>
     </div>
   </div>
   <button
-    className="showMore"
+    className="ais-Menu__showMore"
     disabled={false}
     onClick={[Function]}>
     Show more

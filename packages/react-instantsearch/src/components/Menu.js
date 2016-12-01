@@ -1,18 +1,15 @@
 import React, {PropTypes, Component} from 'react';
 import pick from 'lodash/pick';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-
 import List from './List';
 import Link from './Link';
+import classNames from './classNames.js';
 
-import theme from './Menu.css';
+const cx = classNames('Menu');
 
 class Menu extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
@@ -27,18 +24,18 @@ class Menu extends Component {
   };
 
   renderItem = item => {
-    const {refine, createURL, applyTheme} = this.props;
+    const {refine, createURL} = this.props;
     return (
       <Link
-        {...applyTheme('itemLink', 'itemLink', item.isRefined && 'itemLinkSelected')}
+        {...cx('itemLink', item.isRefined && 'itemLinkSelected')}
         onClick={() => refine(item.value)}
         href={createURL(item.value)}
       >
-        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+        <span {...cx('itemLabel', item.isRefined && 'itemLabelSelected')}>
           {item.label}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
+        <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
           {item.count}
         </span>
       </Link>
@@ -49,8 +46,8 @@ class Menu extends Component {
     return (
       <List
         renderItem={this.renderItem}
+        cx={cx}
         {...pick(this.props, [
-          'applyTheme',
           'translate',
           'items',
           'showMore',
@@ -62,8 +59,6 @@ class Menu extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    showMore: extended => extended ? 'Show less' : 'Show more',
-  })(Menu)
-);
+export default translatable({
+  showMore: extended => extended ? 'Show less' : 'Show more',
+})(Menu);

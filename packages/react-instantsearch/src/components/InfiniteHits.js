@@ -1,11 +1,11 @@
 import React, {PropTypes, Component} from 'react';
+import classNames from './classNames.js';
 
-import themeable from '../core/themeable';
-import theme from './Hits.css';
+const cx = classNames('InfiniteHits');
 
 class InfiniteHits extends Component {
   render() {
-    const {applyTheme, itemComponent: ItemComponent, hits, hasMore, refine} = this.props;
+    const {itemComponent: ItemComponent, hits, hasMore, refine} = this.props;
     const renderedHits = hits.map(hit =>
       <ItemComponent key={hit.objectID} hit={hit} />
     );
@@ -14,7 +14,7 @@ class InfiniteHits extends Component {
       <button disabled>Load more</button>;
 
     return (
-      <div {...applyTheme('root', 'root')}>
+      <div {...cx('root')}>
         {renderedHits}
         {loadMoreButton}
       </div>
@@ -23,7 +23,6 @@ class InfiniteHits extends Component {
 }
 
 InfiniteHits.propTypes = {
-  applyTheme: PropTypes.func.isRequired,
   hits: PropTypes.array,
   itemComponent: PropTypes.oneOfType([
     PropTypes.string,
@@ -44,4 +43,4 @@ InfiniteHits.defaultProps = {
     >{JSON.stringify(hit).slice(0, 100)}...</div>,
 };
 
-export default themeable(theme)(InfiniteHits);
+export default InfiniteHits;

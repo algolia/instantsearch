@@ -1,14 +1,11 @@
 import React, {PropTypes, Component} from 'react';
-
-import themeable from '../core/themeable';
-
 import List from './List';
+import classNames from './classNames.js';
 
-import theme from './MultiRange.css';
+const cx = classNames('MultiRange');
 
 class MultiRange extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.node.isRequired,
       value: PropTypes.string.isRequired,
@@ -17,17 +14,18 @@ class MultiRange extends Component {
   };
 
   renderItem = item => {
-    const {applyTheme, refine} = this.props;
+    const {refine} = this.props;
 
     return (
       <label>
         <input
-          {...applyTheme('itemRadio', 'itemRadio', item.isRefined && 'itemRadioSelected')}
+          {...cx('itemRadio', item.isRefined && 'itemRadioSelected')}
           type="radio"
           checked={item.isRefined}
           onChange={refine.bind(null, item.value)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+        <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
+        <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
           {item.label}
         </span>
       </label>
@@ -35,17 +33,17 @@ class MultiRange extends Component {
   };
 
   render() {
-    const {items, applyTheme} = this.props;
+    const {items} = this.props;
 
     return (
       <List
         renderItem={this.renderItem}
         showMore={false}
-        applyTheme={applyTheme}
+        cx={cx}
         items={items.map(item => ({...item, key: item.value}))}
       />
     );
   }
 }
 
-export default themeable(theme)(MultiRange);
+export default MultiRange;

@@ -5,55 +5,62 @@ category: guide
 navWeight: 900
 ---
 
-Default widgets in react-instantsearch comes with some styling already applied and loaded. When styling components, you can decide to either extend or completely replace our default styles, using CSS class names.
+All widgets under the `react-instantsearch/dom` namespace are shipped with fixed CSS class names.
 
-The different class names used by every widgets are described on their respective documentation page.
+The format for those class names is `ais-NameOfWidget__elementModifier`.
 
-## CSS classes styling
+The different class names used by every widgets are described on their respective documentation page. You
+can also inspect the underlying DOM and style accordingly.
 
-By default we provide BEM class names to every element of a widget. That way it's very easy for you to replace or extend the style of a widget.
+## Loading the theme
 
-Let's see an example with the `RangeInput` widget:
+We do not load any CSS into your page automatically but we provide an Algolia theme that you can load
+manually.
 
-```text/html
-<form data-reactroot="" class="ais-RangeInput__root">
-	<label class="ais-RangeInput__labelMin">
-		<input type="number" 
-		       class="ais-RangeInput__inputMin" 
-		       value="0.39" />
-	</label>
-	<span class="ais-RangeInput__separator">to</span>
-	<label class="ais-RangeInput__labelMax">
-		<input type="number" 
-		       class="ais-RangeInput__inputMax" 
-		       value="799" />
-	</label>
-	<button class="ais-RangeInput__submit" type="submit">go</button>
-</form>
+### Via CDN
+
+The theme is available on unpkg.com:
+- unminified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.css
+- minified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css
+
+You can either copy paste the content in your own app or use a direct link to unpkg.com:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
 ```
 
-If you want to change the color of the separator you may have a css file with the following style:
+### Via npm, Webpack
 
-```css
-	ais-RangeInput__separator {
-		color: 'red'
-	}
+```sh
+npm install react-instantsearch-theme-algolia --save
+npm install sass-loader style-loader css-loader autoprefixer postcss-loader --save-dev
 ```
 
-## Tooling
-
-### Localized CSS with babel
-
-Default styling in `react-instantsearch` is done using css-modules. However, you have nothing to import other than the widget itself to enjoy our default themes.
-
-When building `react-instantsearch` we are using [babel-plugin-transform-inline-localize-css-import](https://github.com/algolia/babel-plugin-transform-inline-localize-css-import). We've made this babel plugin in order to be able to embed both class names and styles inside our widgets.
-
-If you want you can also use it with your own code and load the css with [`insert-css`](https://github.com/substack/insert-css).
-
-```javascript
-import theme from './theme.css'
-
-insertCss(theme.code);
-
-<SearchBox theme={theme.classNames}/>
+App.js:
+```js
+import 'react-instantsearch-theme-algolia/style.scss';
+// import 'react-instantsearch-theme-algolia/style.css'
+// import 'react-instantsearch-theme-algolia/style.min.css'
 ```
+
+webpack.config.babel.js:
+```js
+import autoprefixer from 'autoprefixer';
+
+export default {
+	module: {
+		loaders: [
+			{
+				test: /\.scss$/,
+				loaders: ['style', 'css', 'postcss', 'sass'],
+			},
+		],
+	},
+	postcss: [autoprefixer()],
+}
+```
+
+### Other bundlers
+
+Any other module bundler like Browserify can be used to load our CSS. `react-instantsearch`
+does not rely on any specific module bundler or module loader.

@@ -1,16 +1,13 @@
 import React, {PropTypes, Component} from 'react';
 import pick from 'lodash/pick';
-
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
-
 import List from './List';
+import classNames from './classNames.js';
 
-import theme from './RefinementList.css';
+const cx = classNames('RefinementList');
 
 class RefinementList extends Component {
   static propTypes = {
-    applyTheme: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
@@ -25,34 +22,31 @@ class RefinementList extends Component {
     limitMax: PropTypes.number,
   };
 
-  renderItem = item => {
-    const {applyTheme} = this.props;
-
-    return (
+  renderItem = item =>
       <label>
         <input
-          {...applyTheme('itemCheckbox', 'itemCheckbox', item.isRefined && 'itemCheckboxSelected')}
+          {...cx('itemCheckbox', item.isRefined && 'itemCheckboxSelected')}
           type="checkbox"
           checked={item.isRefined}
           onChange={() => this.props.refine(item.value)}
         />
-        <span {...applyTheme('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+        <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
+        <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
           {item.label}
         </span>
         {' '}
-        <span {...applyTheme('itemCount', 'itemCount', item.isRefined && 'itemCountSelected')}>
+        <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
           {item.count}
         </span>
       </label>
-    );
-  };
+    ;
 
   render() {
     return (
       <List
         renderItem={this.renderItem}
+        cx={cx}
         {...pick(this.props, [
-          'applyTheme',
           'translate',
           'items',
           'showMore',
@@ -64,8 +58,6 @@ class RefinementList extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    showMore: extended => extended ? 'Show less' : 'Show more',
-  })(RefinementList)
-);
+export default translatable({
+  showMore: extended => extended ? 'Show less' : 'Show more',
+})(RefinementList);

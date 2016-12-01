@@ -6,20 +6,6 @@
     }],
   ],
   "env": {
-    "test": {
-      "plugins": [
-        ["babel-plugin-transform-inline-localize-css-import", {
-          "localFormat": "$token"
-        }]
-      ]
-    },
-    "production": {
-      "plugins": [
-        ["babel-plugin-transform-inline-localize-css-import", {
-          "localFormat": "ais-$cssFilename__$token"
-        }]
-      ]
-    },
     "development": {
       "plugins": [
         "transform-react-jsx-source",

@@ -1,14 +1,13 @@
 import React, {PropTypes, Component} from 'react';
 
-import themeable from '../core/themeable';
 import translatable from '../core/translatable';
+import classNames from './classNames.js';
 
-import theme from './CurrentRefinements.css';
+const cx = classNames('CurrentRefinements');
 
 class CurrentRefinements extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
-    applyTheme: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string,
     })).isRequired,
@@ -16,39 +15,41 @@ class CurrentRefinements extends Component {
   };
 
   render() {
-    const {applyTheme, translate, items, refine} = this.props;
+    const {translate, items, refine} = this.props;
 
     if (items.length === 0) {
       return null;
     }
 
     return (
-      <div {...applyTheme('root', 'root')}>
-        <div {...applyTheme('items', 'items')}>
+      <div {...cx('root')}>
+        <div {...cx('items')}>
           {items.map(item =>
-            <div // eslint-disable-line react/jsx-key, automatically done by themeable
-              {...applyTheme(item.label, 'item', item.items && 'itemParent')}
+            <div
+              key={item.label}
+              {...cx('item', item.items && 'itemParent')}
             >
-              <span {...applyTheme('itemLabel', 'itemLabel')}>
+              <span {...cx('itemLabel')}>
                 {item.label}
               </span>
               {item.items ?
                 item.items.map(nestedItem =>
-                  <div // eslint-disable-line react/jsx-key, automatically done by themeable
-                    {...applyTheme(nestedItem.label, 'item')}
+                  <div
+                    key={nestedItem.label}
+                    {...cx('item')}
                   >
-                  <span {...applyTheme('itemLabel', 'itemLabel')}>
+                  <span {...cx('itemLabel')}>
                   {nestedItem.label}
                   </span>
                     <button
-                      {...applyTheme('itemClear', 'itemClear')}
+                      {...cx('itemClear')}
                       onClick={refine.bind(null, nestedItem.value)}
                     >
                       {translate('clearFilter', nestedItem)}
                     </button>
                   </div>) :
                 <button
-                  {...applyTheme('itemClear', 'itemClear')}
+                  {...cx('itemClear')}
                   onClick={refine.bind(null, item.value)}
                 >
                   {translate('clearFilter', item)}
@@ -61,8 +62,6 @@ class CurrentRefinements extends Component {
   }
 }
 
-export default themeable(theme)(
-  translatable({
-    clearFilter: '✕',
-  })(CurrentRefinements)
-);
+export default translatable({
+  clearFilter: '✕',
+})(CurrentRefinements);
