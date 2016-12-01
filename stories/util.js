@@ -6,6 +6,7 @@ import {
   Pagination,
 } from '../packages/react-instantsearch/dom';
 import {connectHits} from '../packages/react-instantsearch/connectors';
+import {linkTo} from '@kadira/storybook';
 
 const Wrap = props =>
   <InstantSearch
@@ -22,17 +23,13 @@ Wrap.propTypes = {
 };
 
 const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup, pagination = true}) => {
-  const playgroundUrl = process.env.NODE_ENV === 'development'
-    ? `http://localhost:6006?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`
-    : `https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${linkedStoryGroup}&selectedStory=playground&panelRight=1`;
   const sourceCodeUrl = `https://github.com/algolia/instantsearch.js/tree/v2/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground
-    ? <a target="_blank"
-         href={playgroundUrl}
+    ? <button onClick={linkTo(linkedStoryGroup, 'playground')}
          className="playground-url"
   >
-    <span>Visit our playground to play with the widget props</span>
-  </a>
+    <span>Play with props</span>
+  </button>
     : null;
 
   const footer = linkedStoryGroup ?
