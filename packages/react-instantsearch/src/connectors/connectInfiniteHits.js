@@ -3,7 +3,7 @@ import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
 
 function getId() {
-  return 'p';
+  return 'page';
 }
 
 /**

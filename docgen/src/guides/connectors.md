@@ -2,7 +2,7 @@
 title: Using connectors
 layout: guide.pug
 category: guide
-navWeight: 4
+navWeight: 700
 ---
 
 While react-instantsearch already provides widgets out of the box, 

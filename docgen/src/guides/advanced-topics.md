@@ -2,7 +2,7 @@
 title: Advanced Topics
 layout: guide.pug
 category: guide
-navWeight: -1
+navWeight: 100
 ---
 
 ## How to preselect values using Virtual Widgets

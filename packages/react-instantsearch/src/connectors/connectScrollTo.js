@@ -8,7 +8,7 @@ import createConnector from '../core/createConnector';
  * @name connectScrollTo
  * @kind connector
  * @category connector
- * @propType {string} [scrollOn="p"] - Widget state key on which to listen for changes, default to the pagination widget.
+ * @propType {string} [scrollOn="page"] - Widget state key on which to listen for changes, default to the pagination widget.
  * @providedPropType {any} value - the current refinement applied to the widget listened by scrollTo
  */
 export default createConnector({
@@ -19,7 +19,7 @@ export default createConnector({
   },
 
   defaultProps: {
-    scrollOn: 'p',
+    scrollOn: 'page',
   },
 
   getProps(props, state) {

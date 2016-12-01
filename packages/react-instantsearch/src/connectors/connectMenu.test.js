@@ -24,10 +24,10 @@ describe('connectMenu', () => {
       getFacetByName: () => true,
     };
 
-    props = getProps({attributeName: 'ok'}, {ok: 'wat'}, {results});
+    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok'}, {ok: 'wat'}, {results});
+    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     props = getProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
@@ -99,7 +99,7 @@ describe('connectMenu', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      ok: 'yep',
+      menu: {ok: 'yep'},
     });
   });
 
@@ -135,12 +135,12 @@ describe('connectMenu', () => {
     params = getSP(initSP, {
       attributeName: 'ok',
       limitMin: 1,
-    }, {ok: 'wat'});
+    }, {menu: {ok: 'wat'}});
     expect(params).toEqual(
       initSP
-      .addDisjunctiveFacet('ok')
-      .addDisjunctiveFacetRefinement('ok', 'wat')
-      .setQueryParameter('maxValuesPerFacet', 1)
+        .addDisjunctiveFacet('ok')
+        .addDisjunctiveFacetRefinement('ok', 'wat')
+        .setQueryParameter('maxValuesPerFacet', 1)
     );
   });
 
@@ -150,7 +150,7 @@ describe('connectMenu', () => {
   });
 
   it('registers its filter in metadata', () => {
-    const metadata = getMetadata({attributeName: 'wot'}, {wot: 'wat'});
+    const metadata = getMetadata({attributeName: 'wot'}, {menu: {wot: 'wat'}});
     expect(metadata).toEqual({
       id: 'wot',
       items: [{
@@ -162,12 +162,18 @@ describe('connectMenu', () => {
       }],
     });
 
-    const state = metadata.items[0].value({wot: 'wat'});
-    expect(state).toEqual({wot: ''});
+    const state = metadata.items[0].value({menu: {wot: 'wat'}});
+    expect(state).toEqual({menu: {wot: ''}});
   });
 
   it('should return the right state when clean up', () => {
-    const state = cleanUp({attributeName: 'name'}, {name: {state: 'state'}, another: {state: 'state'}});
+    let state = cleanUp({attributeName: 'name'}, {
+      menu: {name: 'state', name2: 'state'},
+      another: {state: 'state'},
+    });
+    expect(state).toEqual({menu: {name2: 'state'}, another: {state: 'state'}});
+
+    state = cleanUp({attributeName: 'name2'}, state);
     expect(state).toEqual({another: {state: 'state'}});
   });
 });

@@ -23,10 +23,10 @@ describe('connectPagination', () => {
     props = getProps({}, {}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 1, nbPages: 666});
 
-    props = getProps({}, {p: 5}, {results: {nbPages: 666}});
+    props = getProps({}, {page: 5}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 5, nbPages: 666});
 
-    props = getProps({}, {p: '5'}, {results: {nbPages: 666}});
+    props = getProps({}, {page: '5'}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 5, nbPages: 666});
   });
 
@@ -39,40 +39,40 @@ describe('connectPagination', () => {
     const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      p: 'yep',
+      page: 'yep',
     });
   });
 
   it('refines the page parameter', () => {
     const initSP = new SearchParameters();
-    params = getSP(initSP, {}, {p: 667});
+    params = getSP(initSP, {}, {page: 667});
     expect(params.page).toBe(666);
   });
 
   it('Transition state when the value is identical and does not contain isSamePage flag', () => {
-    state = transitionState({}, {p: 1}, {p: 1});
+    state = transitionState({}, {page: 1}, {page: 1});
     expect(state).toEqual({});
-    state = transitionState({}, {p: 1}, {p: 2});
+    state = transitionState({}, {page: 1}, {page: 2});
     expect(state).toEqual({
-      p: 2,
+      page: 2,
     });
     const newSameValue = {
       valueOf: () => 1,
       isSamePage: true,
     };
-    state = transitionState({}, {p: 1}, {p: newSameValue});
+    state = transitionState({}, {page: 1}, {page: newSameValue});
     expect(state).toEqual({
-      p: 1,
+      page: 1,
     });
   });
 
   it('registers its id in metadata', () => {
     const metadata = getMetadata({}, {});
-    expect(metadata).toEqual({id: 'p'});
+    expect(metadata).toEqual({id: 'page'});
   });
 
   it('should return the right state when clean up', () => {
-    const newState = cleanUp({}, {p: {state: 'state'}, another: {state: 'state'}});
+    const newState = cleanUp({}, {page: {state: 'state'}, another: {state: 'state'}});
     expect(newState).toEqual({another: {state: 'state'}});
   });
 });

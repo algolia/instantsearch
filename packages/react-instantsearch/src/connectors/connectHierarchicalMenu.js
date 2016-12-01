@@ -1,18 +1,21 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {omit, isEmpty} from 'lodash';
 
 import createConnector from '../core/createConnector';
 import {SearchParameters} from 'algoliasearch-helper';
 
 export const getId = props => props.attributes[0];
 
+const namespace = 'hierarchicalMenu';
+
 function getCurrentRefinement(props, state) {
   const id = getId(props);
-  if (typeof state[id] !== 'undefined') {
-    if (state[id] === '') {
+  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
+    const subState = state[namespace];
+    if (subState[id] === '') {
       return null;
     }
-    return state[id];
+    return subState[id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -146,12 +149,16 @@ export default createConnector({
     const id = getId(props);
     return {
       ...state,
-      [id]: nextRefinement || '',
+      [namespace]: {[id]: nextRefinement || ''},
     };
   },
 
   cleanUp(props, state) {
-    return omit(state, getId(props));
+    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+    if (isEmpty(cleanState[namespace])) {
+      return omit(cleanState, namespace);
+    }
+    return cleanState;
   },
 
   getSearchParameters(searchParameters, props, state) {
@@ -206,7 +213,7 @@ export default createConnector({
         attributeName: rootAttribute,
         value: nextState => ({
           ...nextState,
-          [id]: '',
+          [namespace]: {[id]: ''},
         }),
         currentRefinement,
       }],

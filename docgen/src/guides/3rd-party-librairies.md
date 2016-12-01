@@ -2,7 +2,7 @@
 title: 3rd party UI Libraries
 layout: guide.pug
 category: guide
-navWeight: 3
+navWeight: 500
 ---
 
 Even if react-instantsearch provides widgets out of the box you are free to use it with
