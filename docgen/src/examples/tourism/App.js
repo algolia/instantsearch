@@ -35,13 +35,8 @@ const App = props =>
   </InstantSearch>;
 
 function Header() {
-  const containerStyle = {
-    paddingLeft: 0,
-    paddingRight: 0,
-    marginTop: 50,
-  };
   return (
-    <div className="container-fluid" style={containerStyle}>
+    <div className="container-fluid">
       <header className="navbar navbar-static-top aisdemo-navbar">
         <a href="./" className="is-logo">
           <img
