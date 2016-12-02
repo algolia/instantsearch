@@ -11,7 +11,7 @@ const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   label: PropTypes.string.isRequired,
   value: PropTypes.string,
   count: PropTypes.number.isRequired,
-  children: (...args) => itemsPropType(...args),
+  items: (...args) => itemsPropType(...args),
 }));
 
 class HierarchicalMenu extends Component {
