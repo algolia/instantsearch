@@ -8,7 +8,7 @@ import {
   Hits,
   Stats,
   Pagination,
-  RangeRatings,
+  StarRating,
 } from 'react-instantsearch/dom';
 
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
@@ -69,7 +69,7 @@ const Facets = () => <aside>
     />
   </Panel>
   <Panel title="Rating" id="ratings">
-    <RangeRatings attributeName="rating" max={5}/>
+    <StarRating attributeName="rating" max={5}/>
   </Panel>
   <div className="thank-you">Data courtesy of <a href="https://www.imdb.com/">imdb.com</a></div>
 </aside>;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
   InstantSearch, HierarchicalMenu,
-  Hits, Menu, Pagination, PoweredBy, RangeRatings,
+  Hits, Menu, Pagination, PoweredBy, StarRating,
   RefinementList, SearchBox, ClearAll,
 } from 'react-instantsearch/dom';
 /* eslint-disable import/no-unresolved */
@@ -70,7 +70,7 @@ class App extends Component {
                 <p>Refinement List</p>
                 <RefinementList attributeName="colors"/>
                 <p>Range Ratings</p>
-                <RangeRatings attributeName="rating" max={6}/>
+                <StarRating attributeName="rating" max={6}/>
 
               </div>
               <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
