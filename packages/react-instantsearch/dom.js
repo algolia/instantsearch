@@ -14,7 +14,7 @@ export {default as Pagination} from './src/widgets/Pagination.js';
 export {default as PoweredBy} from './src/widgets/PoweredBy.js';
 export {default as RangeInput} from './src/widgets/RangeInput.js';
 export {default as RangeSlider} from './src/widgets/RangeSlider.js';
-export {default as RangeRatings} from './src/widgets/RangeRatings.js';
+export {default as StarRating} from './src/widgets/StarRating.js';
 export {default as RefinementList} from './src/widgets/RefinementList.js';
 export {default as ClearAll} from './src/widgets/ClearAll.js';
 export {default as ScrollTo} from './src/widgets/ScrollTo.js';

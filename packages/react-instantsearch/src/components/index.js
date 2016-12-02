@@ -7,7 +7,7 @@ export {default as MultiRange} from './MultiRange.js';
 export {default as Pagination} from './Pagination.js';
 export {default as PoweredBy} from './PoweredBy.js';
 export {default as RangeInput} from './RangeInput.js';
-export {default as RangeRatings} from './RangeRatings.js';
+export {default as StarRating} from './StarRating.js';
 export {default as RefinementList} from './RefinementList.js';
 export {default as ClearAll} from './ClearAll.js';
 export {default as ScrollTo} from './ScrollTo.js';
