@@ -30,6 +30,13 @@
   }
 }
 
+@mixin openCaret() {
+  &:after {
+    top: 25%;
+    transform: rotate(90deg)
+  }
+}
+
 @mixin button(){
   background-color: #ffffff;
   box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2) !important;

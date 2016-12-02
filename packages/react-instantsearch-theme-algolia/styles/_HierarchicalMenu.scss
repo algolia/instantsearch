@@ -40,7 +40,8 @@
 .ais-HierarchicalMenu__itemParent {
 }
 
-.ais-HierarchicalMenu__itemSelectedParent {
+.ais-HierarchicalMenu__itemSelectedParent > .ais-HierarchicalMenu__itemLink   {
+  @include openCaret();
 }
 
 .ais-HierarchicalMenu__itemLink {
