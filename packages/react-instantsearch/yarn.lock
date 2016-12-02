@@ -10,9 +10,9 @@ agentkeepalive@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-2.2.0.tgz#c5d1bd4b129008f1163f236f86e5faea2026e2ef"
 
-algoliasearch-helper@^2.14.0:
-  version "2.14.0"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.14.0.tgz#ad009acf6a13857a00bc140ffd94ea3b7b7a0f66"
+algoliasearch-helper@^2.15.0:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.15.0.tgz#2fc970c147505d81e3234c9a3f8baeb222598d49"
   dependencies:
     events "^1.1.0"
     lodash "^4.13.1"
@@ -20,9 +20,9 @@ algoliasearch-helper@^2.14.0:
     qs "^6.2.1"
     util "^0.10.3"
 
-algoliasearch@^3.19.1:
-  version "3.19.1"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.19.1.tgz#c195a4335cdd92954afb9d28ef2920ec88d386a6"
+algoliasearch@^3.19.2:
+  version "3.19.2"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.19.2.tgz#735af3242006a65eef5028d912c097b0de49d3f5"
   dependencies:
     agentkeepalive "^2.1.1"
     debug "^2.3.2"
@@ -336,13 +336,13 @@ querystring-es3@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/querystring-es3/-/querystring-es3-0.2.1.tgz#9ec61f79049875707d69414596fd907a4d711e73"
 
-react-addons-shallow-compare@^15.4.0:
-  version "15.4.0"
-  resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.4.0.tgz#17b2cced1928937bbcdb4832fb200bc34bd47871"
+react-addons-shallow-compare@^15.4.1:
+  version "15.4.1"
+  resolved "https://registry.yarnpkg.com/react-addons-shallow-compare/-/react-addons-shallow-compare-15.4.1.tgz#b68103dd4d13144cb221065f6021de1822bd435a"
 
-react@^15.4.0:
-  version "15.4.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.4.0.tgz#736c1c7c542e8088127106e1f450b010f86d172b"
+react@^15.4.1:
+  version "15.4.1"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.4.1.tgz#498e918602677a3983cd0fd206dfe700389a0dd6"
   dependencies:
     fbjs "^0.8.4"
     loose-envify "^1.1.0"

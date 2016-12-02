@@ -5,14 +5,16 @@
   "scripts": {
     "build": "./scripts/build.sh"
   },
-  "repository": "algolia/instantsearch.js/packages/react-instantsearch",
+  "homepage": "https://community.algolia.com/instantsearch.js/react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js/"
+  },
   "dependencies": {
-    "algoliasearch": "^3.19.1",
-    "algoliasearch-helper": "^2.14.0",
+    "algoliasearch": "^3.19.2",
+    "algoliasearch-helper": "^2.15.0",
     "classnames": "^2.2.5",
-    "lodash": "^4.17.2",
-    "react": "^15.4.0",
-    "react-addons-shallow-compare": "^15.4.0"
+    "lodash": "^4.17.2"
   },
   "license": "MIT"
 }

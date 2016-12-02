@@ -2,7 +2,11 @@
   "name": "react-instantsearch-theme-algolia",
   "description": "Algolia theme for react-instantsearch",
   "version": "2.0.0-beta.18",
-  "repository": "algolia/instantsearch.js/packages/react-instantsearch-theme-algolia",
+  "homepage": "https://community.algolia.com/instantsearch.js/react/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/algolia/instantsearch.js/"
+  },
   "license": "MIT",
   "scripts": {
     "prepublish": "babel-node scripts/build"
