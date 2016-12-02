@@ -3,12 +3,12 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import RangeRatings from './RangeRatings';
+import StarRating from './StarRating';
 
-describe('RangeRatings', () => {
+describe('StarRating', () => {
   it('supports passing max/min values', () => {
     const tree = renderer.create(
-      <RangeRatings
+      <StarRating
         createURL={() => '#'}
         refine={() => null}
         min={1}
@@ -26,7 +26,7 @@ describe('RangeRatings', () => {
 
   it('applies translations', () => {
     const tree = renderer.create(
-      <RangeRatings
+      <StarRating
         createURL={() => '#'}
         refine={() => null}
         translations={{

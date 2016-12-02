@@ -9,7 +9,7 @@ import {
   SortBy,
   Stats,
   ClearAll,
-  RangeRatings,
+  StarRating,
   RangeInput,
 } from 'react-instantsearch/dom';
 import {
@@ -86,7 +86,7 @@ const Facets = () =>
           <RefinementListWithTitle
             title="Rating"
             key="rating"
-            item={<RangeRatings attributeName="rating" max={5}/>}
+            item={<StarRating attributeName="rating" max={5}/>}
           />,
           <RefinementListWithTitle
             title="Price"
@@ -183,7 +183,7 @@ const Hit = ({item}) => {
   const icons = [];
   for (let i = 0; i < 5; i++) {
     const suffix = i >= item.rating ? '_empty' : '';
-    icons.push(<label key={i} label className={`ais-RangeRatings__ratingIcon${suffix}`}></label>);
+    icons.push(<label key={i} label className={`ais-StarRating__ratingIcon${suffix}`}></label>);
   }
   return (
     <article className="hit">
@@ -193,7 +193,7 @@ const Hit = ({item}) => {
       <div className="product-desc-wrapper">
         <div className="product-name" dangerouslySetInnerHTML={{__html: item._highlightResult.name.value}}/>
         <div className="product-type" dangerouslySetInnerHTML={{__html: item._highlightResult.type.value}}/>
-        <div className="ais-RangeRatings__ratingLink">
+        <div className="ais-StarRating__ratingLink">
           {icons}
           <div className="product-price">${item.price}</div>
         </div>

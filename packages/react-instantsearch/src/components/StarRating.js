@@ -2,9 +2,9 @@ import React, {PropTypes, Component} from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
-const cx = classNames('RangeRatings');
+const cx = classNames('StarRating');
 
-class RangeRatings extends Component {
+class StarRating extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
@@ -49,12 +49,12 @@ class RangeRatings extends Component {
         )}
         />);
     }
-
     return (
       <a {...cx(
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
+         disabled={disabled}
          key={lowerBound}
          onClick={this.onClick.bind(this, lowerBound, max)}
          href={createURL({lowerBound, max})}
@@ -71,7 +71,7 @@ class RangeRatings extends Component {
           'ratingCount',
           selected && 'ratingCountSelected',
           disabled && 'ratingCountDisabled')}>
-          ({count})
+          {count}
         </span>
       </a>
     );
@@ -104,4 +104,4 @@ class RangeRatings extends Component {
 
 export default translatable({
   ratingLabel: ' & Up',
-})(RangeRatings);
+})(StarRating);

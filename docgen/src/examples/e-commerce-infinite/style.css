@@ -104,6 +104,7 @@ aside {
   padding: 20px;
   border-right: 1px solid #EEE;
   background: #FFFFFF;
+  z-index: 1000;
 }
 
 aside .facet-category-title {
