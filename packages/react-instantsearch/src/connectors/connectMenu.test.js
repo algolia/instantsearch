@@ -90,6 +90,29 @@ describe('connectMenu', () => {
     ]);
   });
 
+  it('if an item is equal to the currentRefinement, its value should be an empty string', () => {
+    const results = {
+      getFacetValues: jest.fn(() => []),
+      getFacetByName: () => true,
+    };
+    results.getFacetValues.mockImplementation(() => [
+      {
+        name: 'wat',
+        isRefined: true,
+        count: 20,
+      },
+    ]);
+
+    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
+
+    expect(props.items).toEqual([{
+      value: '',
+      label: 'wat',
+      isRefined: true,
+      count: 20,
+    }]);
+  });
+
   it('doesn\'t render when no results are available', () => {
     props = getProps({attributeName: 'ok'}, {}, {});
     expect(props).toBe(null);

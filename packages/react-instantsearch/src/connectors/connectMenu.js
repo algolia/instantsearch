@@ -23,6 +23,11 @@ function getCurrentRefinement(props, state) {
   return null;
 }
 
+function getValue(name, props, state) {
+  const currentRefinement = getCurrentRefinement(props, state);
+  return name === currentRefinement ? '' : name;
+}
+
 const sortBy = ['count:desc', 'name:asc'];
 
 /**
@@ -75,7 +80,7 @@ export default createConnector({
       .getFacetValues(attributeName, {sortBy})
       .slice(0, limit)
       .map(v => ({
-        value: v.name,
+        value: getValue(v.name, props, state),
         label: v.name,
         count: v.count,
         isRefined: v.isRefined,
