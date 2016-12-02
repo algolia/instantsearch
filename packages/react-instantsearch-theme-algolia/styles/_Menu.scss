@@ -31,11 +31,7 @@
 }
 
 .ais-Menu__itemCount {
-  float: right;
-  color: #697782;
-  opacity: 0.4;
-  text-align: right;
-
+  @include counterStyle()
 }
 
 .ais-Menu__showMore {
