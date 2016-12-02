@@ -64,7 +64,7 @@ function transformValue(value, limit, props, state) {
     value: getValue(v.path, props, state),
     count: v.count,
     isRefined: v.isRefined,
-    children: v.data && transformValue(v.data, limit, props, state),
+    items: v.data && transformValue(v.data, limit, props, state),
   }));
 }
 
@@ -89,7 +89,7 @@ const sortBy = ['name:asc'];
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} currentRefinement - the refinement currently applied
- * @providedPropType {array.<{children: object, count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the HierarchicalMenu can display. Children has the same shape as parent items.
+ * @providedPropType {array.<{items: object, count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the HierarchicalMenu can display. items has the same shape as parent items.
  */
 export default createConnector({
   displayName: 'AlgoliaHierarchicalMenu',

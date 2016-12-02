@@ -150,7 +150,7 @@ aside .ais-HierarchicalMenu__itemLabel:before {
   content: "> "
 }
 
-aside .ais-HierarchicalMenu__itemChildren {
+aside .ais-HierarchicalMenu__itemItems {
   margin-left: 10px;
 }
 

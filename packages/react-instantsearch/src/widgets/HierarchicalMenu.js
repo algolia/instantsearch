@@ -25,7 +25,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @themeKey ais-HierarchicalMenu__itemLink - the link containing the label and the count
  * @themeKey ais-HierarchicalMenu__itemLabel - the label of the entry
  * @themeKey ais-HierarchicalMenu__itemCount - the count of the entry
- * @themeKey ais-HierarchicalMenu__itemChildren - id representing a children
+ * @themeKey ais-HierarchicalMenu__itemItems - id representing a children
  * @themeKey ais-HierarchicalMenu__showMore - container for the show more button
  * @translationKey showMore - Label value of the button which toggles the number of items
  * @example

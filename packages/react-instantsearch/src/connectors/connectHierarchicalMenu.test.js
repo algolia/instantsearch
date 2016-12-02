@@ -68,7 +68,7 @@ describe('connectHierarchicalMenu', () => {
         label: 'wat',
         value: 'wat',
         count: 20,
-        children: [
+        items: [
           {
             label: 'wot',
             value: 'wat > wot',
@@ -94,7 +94,7 @@ describe('connectHierarchicalMenu', () => {
         label: 'wat',
         value: 'wat',
         count: 20,
-        children: [
+        items: [
           {
             label: 'wot',
             value: 'wat > wot',
@@ -114,7 +114,7 @@ describe('connectHierarchicalMenu', () => {
         label: 'wat',
         value: 'wat',
         count: 20,
-        children: [
+        items: [
           {
             label: 'wot',
             value: 'wat > wot',
