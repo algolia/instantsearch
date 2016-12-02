@@ -20,7 +20,7 @@ exports[`HierarchicalMenu applies translations 1`] = `
         </span>
       </a>
       <div
-        className="ais-HierarchicalMenu__itemChildren">
+        className="ais-HierarchicalMenu__itemItems">
         <div
           className="ais-HierarchicalMenu__item">
           <a
@@ -117,7 +117,7 @@ exports[`HierarchicalMenu default hierarchical menu 1`] = `
         </span>
       </a>
       <div
-        className="ais-HierarchicalMenu__itemChildren">
+        className="ais-HierarchicalMenu__itemItems">
         <div
           className="ais-HierarchicalMenu__item">
           <a

@@ -13,7 +13,7 @@ describe('HierarchicalMenu', () => {
         createURL={() => '#'}
         items={[
           {value: 'white', count: 10, label: 'white',
-            children: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
+            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
           {value: 'black', count: 20, label: 'black'},
           {value: 'blue', count: 30, label: 'blue'},
         ]}
@@ -32,7 +32,7 @@ describe('HierarchicalMenu', () => {
         createURL={() => '#'}
         items={[
           {value: 'white', count: 10, label: 'white',
-            children: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
+            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
           {value: 'black', count: 20, label: 'black'},
           {value: 'blue', count: 30, label: 'blue'},
         ]}
