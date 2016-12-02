@@ -3,7 +3,7 @@ import infoAddon from '@kadira/react-storybook-addon-info';
 import {setOptions} from '@kadira/storybook-addon-options';
 
 setOptions({
-  name: 'REACT-INSTANTSEARCH',
+  name: 'react-instantsearch',
   url: 'https://community.algolia.com/instantsearch.js/react/',
   goFullScreen: false,
   showLeftPanel: true,
