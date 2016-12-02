@@ -77,6 +77,10 @@ button.playground-url{
   display:flex;
 }
 
+.ais-SearchBox__root {
+  margin-right: 10px;
+}
+
 .hit-content {
   padding: 0px 10px;
 }
@@ -89,10 +93,6 @@ button.playground-url{
 .hit-type {
   color: #888888;
   font-size: 13px;
-}
-
-.hit-pagination {
-  align-self: center;
 }
 
 em {

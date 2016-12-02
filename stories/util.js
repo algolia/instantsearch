@@ -62,11 +62,9 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
             {searchBox ?
               <SearchBox translations={{placeholder: 'Search into our furnitures: chair, table, tv unit...'}}/>
               : null}
-            <div>
               <ClearAll
                 translations={{reset: 'Clear all filters'}}
               />
-            </div>
           </div>
           <CustomHits hitsPerPage={3}/>
           <div className="hit-pagination">{pagination ? <Pagination showLast={true}/> : null}</div>
