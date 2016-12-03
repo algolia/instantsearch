@@ -97,7 +97,7 @@
     "hogan.js": "^3.0.2",
     "lodash": "^4.17.0",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react-dom": "^15.4.0",
     "react-nouislider": "^1.14.1",
     "to-factory": "^1.0.0"
   },
