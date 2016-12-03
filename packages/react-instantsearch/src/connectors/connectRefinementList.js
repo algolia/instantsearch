@@ -46,7 +46,6 @@ const sortBy = ['isRefined', 'count:desc', 'name:asc'];
  * give the user tha ability to choose multiple values for a specific facet.
  * @name connectRefinementList
  * @kind connector
- * @category connector
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items

@@ -77,7 +77,6 @@ const sortBy = ['name:asc'];
  * websites. From a UX point of view, we suggest not displaying more than two levels deep.
  * @name connectHierarchicalMenu
  * @kind connector
- * @category connector
  * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
  * @propType {string} defaultRefinement - the item value selected by default
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.

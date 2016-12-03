@@ -1,8 +1,9 @@
 ---
-title: Styling
-layout: guide.pug
+title: Styling widgets
+mainTitle: Guide
+layout: main.pug
 category: guide
-navWeight: 900
+navWeight: 80
 ---
 
 All widgets under the `react-instantsearch/dom` namespace are shipped with fixed CSS class names.
@@ -31,32 +32,32 @@ You can either copy paste the content in your own app or use a direct link to un
 
 ### Via npm, Webpack
 
-```sh
+```shell
 npm install react-instantsearch-theme-algolia --save
 npm install sass-loader style-loader css-loader autoprefixer postcss-loader --save-dev
 ```
 
 App.js:
-```js
+```javascript
 import 'react-instantsearch-theme-algolia/style.scss';
 // import 'react-instantsearch-theme-algolia/style.css'
 // import 'react-instantsearch-theme-algolia/style.min.css'
 ```
 
 webpack.config.babel.js:
-```js
+```javascript
 import autoprefixer from 'autoprefixer';
 
 export default {
-	module: {
-		loaders: [
-			{
-				test: /\.scss$/,
-				loaders: ['style', 'css', 'postcss', 'sass'],
-			},
-		],
-	},
-	postcss: [autoprefixer()],
+  module: {
+    loaders: [
+      {
+        test: /\.scss$/,
+        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
+      },
+    ],
+  },
+  postcss: [autoprefixer()],
 }
 ```
 
@@ -64,3 +65,7 @@ export default {
 
 Any other module bundler like Browserify can be used to load our CSS. `react-instantsearch`
 does not rely on any specific module bundler or module loader.
+
+<div class="guide-nav">
+Next: <a href="/guide/i18n.html">i18n →</a>
+</div>

@@ -1,35 +1,34 @@
 ---
-title: Creating widgets
-layout: guide.pug
+title: Custom connectors
+mainTitle: Guide
+layout: main.pug
 category: guide
-navWeight: 400
+navWeight: 45
 ---
 
 If you wish to implement features that are not covered by the default widgets connectors, you will need to create your own connector via the `createConnector` method. This methods takes in a descriptor of your connector with the following properties and methods:
 
-## Creating your own connector
-
-### displayName, propTypes, defaultProps
+## displayName, propTypes, defaultProps
 
 Those properties are directly applied to the higher-order component. Providing a `displayName` is mandatory.
 
-### getProps(props, state, search, meta)
+## getProps(props, searchState, searchResults, meta)
 
 This method should return the props to forward to the composed component.
 
 `props` are the props that were provided to the higher-order component.
 
-`state` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](/guides/instantsearch-state.html). 
+`searchState` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](/guides/Search%20state.html).
 
-`search` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
+`searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
 `meta` is the list of metadata from all widgets whose connector defines a `getMetadata` method.
 
-### refine(props, state, ...args)
+## refine(props, searchState, ...args)
 
-This method defines exactly how the `refine` prop of connected widgets affects the InstantSearch state.
+This method defines exactly how the `refine` prop of connected widgets affects the search state.
 
-It takes in the current props of the higher-order component, the [state](/guides/instantsearch-state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
+It takes in the current props of the higher-order component, the [search state](/guides/Search%20state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
 ```javascript
 const CoolWidget = createConnector({
@@ -85,7 +84,7 @@ const CoolWidget = createConnector({
 
 In the example above, we create a widget that reads and manipulates the `queryAndPage` state entry. However, we haven't described how those entries should affect the search parameters passed to the Algolia client just yet.
 
-### getSearchParameters(searchParameters, props, state)
+## getSearchParameters(searchParameters, props, state)
 
 This method applies the current props and state to the provided `SearchParameters`, and returns a new `SearchParameters`. The `SearchParameters` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
 
@@ -111,7 +110,7 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-### getMetadata(props, state)
+## getMetadata(props, state)
 
 This method allows the widget to register a custom `metadata` object for any props and state combination.
 
@@ -175,7 +174,7 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-### cleanUp(props, state)
+## cleanUp(props, state)
 
 This method is called when a widget is about to unmount in order to clean the state.
 
@@ -196,3 +195,7 @@ const CoolWidget = createConnector({
   },
 })(Widget);
 ```
+
+<div class="guide-nav">
+Next: <a href="/guide/Conditional display.html">Conditional display →</a>
+</div>

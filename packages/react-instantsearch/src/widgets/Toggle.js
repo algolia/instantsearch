@@ -4,8 +4,7 @@ import ToggleComponent from '../components/Toggle.js';
 /**
  * The Toggle provides an on/off filtering feature based on an attribute value. Note that if you provide an “off” option, it will be refined at initialization.
  * @name Toggle
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
  * @propType {string} label - Label for this toggle.
  * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.

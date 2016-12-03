@@ -21,7 +21,6 @@ function getCurrentRefinement(props, state) {
  * components that will allow a user to choose to display more or less results from Algolia.
  * @name connectHitsPerPage
  * @kind connector
- * @category connector
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
  * @providedPropType {function} refine - a function to remove a single filter

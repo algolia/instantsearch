@@ -5,7 +5,6 @@ import createConnector from '../core/createConnector';
  * will display a link to algolia.
  * @name connectPoweredBy
  * @kind connector
- * @category connector
  * @providedPropType {string} url - the url to redirect to algolia
  */
 export default createConnector({

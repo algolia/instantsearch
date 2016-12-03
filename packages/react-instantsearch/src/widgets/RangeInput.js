@@ -4,8 +4,7 @@ import RangeInputComponent from '../components/RangeInput.js';
 /**
  * RangeInput is a widget that allows a user to select a numeric range using inputs.
  * @name RangeInput
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
  * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.

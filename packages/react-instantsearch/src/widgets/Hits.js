@@ -4,8 +4,7 @@ import HitsComponent from '../components/Hits.js';
 /**
  * Displays the list of hits for the current search parameters.
  * @name Hits
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.
  * @propType {Component} itemComponent - Component used for rendering each hit from
