@@ -18,10 +18,10 @@ let params;
 describe('connectSearchBox', () => {
   it('provides the correct props to the component', () => {
     props = getProvidedProps({}, {});
-    expect(props).toEqual({query: ''});
+    expect(props).toEqual({currentRefinement: ''});
 
     props = getProvidedProps({}, {query: 'yep'});
-    expect(props).toEqual({query: 'yep'});
+    expect(props).toEqual({currentRefinement: 'yep'});
   });
 
   it('calling refine updates the widget\'s state', () => {
