@@ -12,7 +12,7 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaCurrentRefinements',
 
-  getProps(props, state, search, metadata) {
+  getProvidedProps(props, state, search, metadata) {
     return {
       items: metadata.reduce((res, meta) =>
           typeof meta.items !== 'undefined' ? res.concat(meta.items) : res

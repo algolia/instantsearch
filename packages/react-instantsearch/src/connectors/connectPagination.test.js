@@ -6,7 +6,7 @@ import connect from './connectPagination';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   transitionState,
@@ -20,18 +20,18 @@ let state;
 
 describe('connectPagination', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({}, {}, {results: {nbPages: 666}});
+    props = getProvidedProps({}, {}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 1, nbPages: 666});
 
-    props = getProps({}, {page: 5}, {results: {nbPages: 666}});
+    props = getProvidedProps({}, {page: 5}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 5, nbPages: 666});
 
-    props = getProps({}, {page: '5'}, {results: {nbPages: 666}});
+    props = getProvidedProps({}, {page: '5'}, {results: {nbPages: 666}});
     expect(props).toEqual({currentRefinement: 5, nbPages: 666});
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({}, {}, {});
+    props = getProvidedProps({}, {}, {});
     expect(props).toBe(null);
   });
 

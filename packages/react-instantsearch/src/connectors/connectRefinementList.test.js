@@ -7,7 +7,7 @@ import connect from './connectRefinementList';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -24,13 +24,13 @@ describe('connectRefinementList', () => {
       getFacetByName: () => true,
     };
 
-    props = getProps({attributeName: 'ok'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: []});
 
-    props = getProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
-    props = getProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat']});
 
     results.getFacetValues.mockClear();
@@ -46,7 +46,7 @@ describe('connectRefinementList', () => {
         count: 10,
       },
     ]);
-    props = getProps({attributeName: 'ok'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props.items).toEqual([
       {
         value: ['wat'],
@@ -62,7 +62,7 @@ describe('connectRefinementList', () => {
       },
     ]);
 
-    props = getProps({attributeName: 'ok', limitMin: 1}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
         value: ['wat'],
@@ -72,7 +72,7 @@ describe('connectRefinementList', () => {
       },
     ]);
 
-    props = getProps(
+    props = getProvidedProps(
       {attributeName: 'ok', showMore: true, limitMin: 0, limitMax: 1},
       {},
       {results}
@@ -88,7 +88,7 @@ describe('connectRefinementList', () => {
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({attributeName: 'ok'}, {}, {});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {});
     expect(props).toBe(null);
   });
 

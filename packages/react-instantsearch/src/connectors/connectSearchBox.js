@@ -25,7 +25,7 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     return {
       query: getCurrentRefinement(props, state),
     };

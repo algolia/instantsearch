@@ -62,7 +62,7 @@ export default createConnector({
     limitMax: 20,
   },
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     const {results} = search;
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;

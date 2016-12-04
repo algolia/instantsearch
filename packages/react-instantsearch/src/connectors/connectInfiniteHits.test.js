@@ -9,7 +9,7 @@ describe.only('connectInfiniteHits', () => {
   it('provides the current hits to the component', () => {
     const providedThis = {};
     const hits = [{}];
-    const props = connect.getProps.call(providedThis, null, null, {
+    const props = connect.getProvidedProps.call(providedThis, null, null, {
       results: {hits, page: 0, hitsPerPage: 2, nbPages: 3},
     });
     expect(props.hits).toEqual(hits);
@@ -19,12 +19,12 @@ describe.only('connectInfiniteHits', () => {
     const providedThis = {};
     const hits = [{}, {}];
     const hits2 = [{}, {}];
-    const res1 = connect.getProps.call(providedThis, null, null, {
+    const res1 = connect.getProvidedProps.call(providedThis, null, null, {
       results: {hits, page: 0, hitsPerPage: 2, nbPages: 3},
     });
     expect(res1.hits).toEqual(hits);
     expect(res1.hasMore).toBe(true);
-    const res2 = connect.getProps.call(providedThis, null, null, {
+    const res2 = connect.getProvidedProps.call(providedThis, null, null, {
       results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3}
     });
     expect(res2.hits).toEqual([...hits, ...hits2]);
@@ -39,7 +39,7 @@ describe.only('connectInfiniteHits', () => {
     for (let page = 0; page < nbPages - 1; page++) {
       const hits = [{}, {}];
       allHits = [...allHits, ...hits];
-      const res = connect.getProps.call(providedThis, null, null, {
+      const res = connect.getProvidedProps.call(providedThis, null, null, {
         results: {
           hits,
           page,
@@ -54,7 +54,7 @@ describe.only('connectInfiniteHits', () => {
 
     const hits = [{}, {}];
     allHits = [...allHits, ...hits];
-    const res = connect.getProps.call(providedThis, null, null, {
+    const res = connect.getProvidedProps.call(providedThis, null, null, {
       results: {
         hits,
         page: nbPages - 1,
@@ -72,9 +72,13 @@ describe.only('connectInfiniteHits', () => {
     const hits = [{}, {}];
     const hits2 = [{}, {}];
     const hits3 = [{}];
-    connect.getProps.call(providedThis, null, null, {results: {hits, page: 0, hitsPerPage: 2, nbPages: 3}});
-    connect.getProps.call(providedThis, null, null, {results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3}});
-    const props = connect.getProps.call(providedThis, null, null, {
+    connect.getProvidedProps.call(providedThis, null, null, {
+      results: {hits, page: 0, hitsPerPage: 2, nbPages: 3}
+    });
+    connect.getProvidedProps.call(providedThis, null, null, {
+      results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3}
+    });
+    const props = connect.getProvidedProps.call(providedThis, null, null, {
       results: {hits: hits3, page: 2, hitsPerPage: 2, nbPages: 3}
     });
     expect(props.hits).toEqual([...hits, ...hits2, ...hits3]);

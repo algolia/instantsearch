@@ -3,12 +3,12 @@
 import connect from './connectPoweredBy';
 jest.mock('../core/createConnector');
 
-const {getProps} = connect;
+const {getProvidedProps} = connect;
 
 let props;
 describe('connectPoweredBy', () => {
   it('provides the correct props to the component', () => {
-    props = getProps();
+    props = getProvidedProps();
     expect(props).toEqual({url: 'https://www.algolia.com/?utm_source=instantsearch.js&utm_medium=website&utm_content=&utm_campaign=poweredby'});
   });
 });

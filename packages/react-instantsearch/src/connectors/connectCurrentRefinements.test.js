@@ -3,11 +3,11 @@
 import connect from './connectCurrentRefinements.js';
 jest.mock('../core/createConnector');
 
-const {refine, getProps} = connect;
+const {refine, getProvidedProps} = connect;
 
 describe('connectCurrentRefinements', () => {
   it('provides the correct props to the component', () => {
-    const props = getProps(null, null, null, [
+    const props = getProvidedProps(null, null, null, [
       {items: ['one']},
       {items: ['two']},
       {items: ['three']},

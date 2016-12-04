@@ -12,7 +12,7 @@ If you wish to implement features that are not covered by the default widgets co
 
 Those properties are directly applied to the higher-order component. Providing a `displayName` is mandatory.
 
-## getProps(props, searchState, searchResults, meta)
+## getProvidedProps(props, searchState, searchResults, meta)
 
 This method should return the props to forward to the composed component.
 
@@ -34,7 +34,7 @@ It takes in the current props of the higher-order component, the [search state](
 const CoolWidget = createConnector({
   displayName: 'CoolWidget',
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
     // to default its value.
     const [query, page] = state.queryAndPage || ['', 0];
@@ -94,7 +94,7 @@ As such, the `getSearchParameters` method allows you to describe how the state a
 
 ```javascript
 const CoolWidget = createConnector({
-  // displayName, getProps, refine
+  // displayName, getProvidedProps, refine
 
   getSearchParameters(searchParameters, props, state) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
@@ -116,13 +116,13 @@ This method allows the widget to register a custom `metadata` object for any pro
 
 If your widget is stateful, the corresponding URL key should be declared on the metadata object as the `id` property, so that the `InstantSearch` component can determine which URL keys it controls and which are foreign and should be left intact.
 
-The metadata object also allows you to declare any data that you would like to pass down to all other widgets. The list of metadata objects of all components is available as the fourth argument to the `getProps` method.
+The metadata object also allows you to declare any data that you would like to pass down to all other widgets. The list of metadata objects of all components is available as the fourth argument to the `getProvidedProps` method.
 
 The `CurrentRefinements` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
 
 ```javascript
 const CoolWidget = createConnector({
-  // displayName, getProps, refine, getSearchParameters
+  // displayName, getProvidedProps, refine, getSearchParameters
 
   getMetadata(props, state) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
@@ -188,7 +188,7 @@ It takes in the current props of the higher-order component and the state of all
 import {omit} from 'lodash';
 
 const CoolWidget = createConnector({
-  // displayName, getProps, refine, getSearchParameters, getMetadata
+  // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
 
   cleanUp(props, state) {
     return omit('queryAndPage', state)

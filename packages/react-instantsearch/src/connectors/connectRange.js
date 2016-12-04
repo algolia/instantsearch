@@ -55,7 +55,7 @@ export default createConnector({
     max: PropTypes.number,
   },
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     const {attributeName} = props;
     let {min, max} = props;
 
