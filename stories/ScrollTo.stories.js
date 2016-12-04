@@ -9,9 +9,9 @@ const stories = storiesOf('ScrollTo', module);
 stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
-  <WrapWithHits linkedStoryGroup="ScrollTo" >
+  <WrapWithHits linkedStoryGroup="ScrollTo" searchParameters={{hitsPerPage: 5}}>
     <ScrollTo >
-      <Hits hitsPerPage={5}/>
+      <Hits/>
     </ScrollTo>
   </WrapWithHits>
 );

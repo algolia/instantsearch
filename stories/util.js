@@ -23,7 +23,14 @@ Wrap.propTypes = {
   children: React.PropTypes.node,
 };
 
-const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linkedStoryGroup, pagination = true}) => {
+const WrapWithHits = ({
+  searchParameters: askedSearchParameters = {},
+  children,
+  searchBox = true,
+  hasPlayground = false,
+  linkedStoryGroup,
+  pagination = true,
+}) => {
   const sourceCodeUrl = `https://github.com/algolia/instantsearch.js/tree/v2/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground
     ? <button onClick={linkTo(linkedStoryGroup, 'playground')}
@@ -45,11 +52,17 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
       </div>
       : null;
 
+  const searchParameters = {
+    hitsPerPage: 3,
+    ...askedSearchParameters,
+  };
+
   return <InstantSearch
     className="container-fluid"
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
+    searchParameters={{...searchParameters}}
   >
     <div>
       <div className="container widget-container">
@@ -66,7 +79,7 @@ const WrapWithHits = ({children, searchBox = true, hasPlayground = false, linked
                 translations={{reset: 'Clear all filters'}}
               />
           </div>
-          <CustomHits hitsPerPage={3}/>
+          <CustomHits />
           <div className="hit-pagination">{pagination ? <Pagination showLast={true}/> : null}</div>
         </div>
         {footer}
@@ -104,6 +117,7 @@ WrapWithHits.propTypes = {
   linkedStoryGroup: React.PropTypes.string,
   hasPlayground: React.PropTypes.boolean,
   pagination: React.PropTypes.boolean,
+  searchParameters: React.PropTypes.object,
 };
 
 export {
