@@ -18,7 +18,6 @@ function getCurrentRefinement(props, state) {
  * let the user search for a query.
  * @name connectSearchBox
  * @kind connector
- * @category connector
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string} query - the query to search for.

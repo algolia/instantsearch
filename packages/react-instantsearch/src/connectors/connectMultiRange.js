@@ -44,7 +44,6 @@ function getCurrentRefinement(props, state) {
  * Ranges are defined statically.
  * @name connectMultiRange
  * @kind connector
- * @category connector
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the shape of a `string` with a pattern of `'{start}:{end}'`.

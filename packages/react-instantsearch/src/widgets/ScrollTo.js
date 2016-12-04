@@ -4,8 +4,7 @@ import ScrollToComponent from '../components/ScrollTo.js';
 /**
  * The ScrollTo component will made the page scroll to the component wrapped by it on a certain event.
  * @name ScrollTo
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} [scrollOn="p"] - Widget state key on which to listen for changes, default to the pagination widget.
  * @example
  * import React from 'react';

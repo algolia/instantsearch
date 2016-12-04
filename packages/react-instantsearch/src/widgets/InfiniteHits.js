@@ -7,8 +7,7 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * page and will trigger the search. The new results will be append in the
  * list of results.
  * @name InfiniteHits
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.
  * @propType {Component} itemComponent - Component used for rendering each hit from

@@ -56,12 +56,14 @@ function scrollSpy(sidebarContainer, headersContainer) {
       // then we take the closest to this position as reference
       .sort((header1, header2) => Math.abs(header1.rect.top) < Math.abs(header2.rect.top) ? -1 : 1);
 
-    if (highestVisibleHeaders.length === 0) {
+    if (headers[0] && highestVisibleHeaders.length === 0) {
       setActiveSidebarLink(headers[0]);
       return;
     }
 
-    setActiveSidebarLink(highestVisibleHeaders[0].element);
+    if (highestVisibleHeaders[0]) {
+      setActiveSidebarLink(highestVisibleHeaders[0].element);
+    }
   };
 
   findActiveSidebarLink();

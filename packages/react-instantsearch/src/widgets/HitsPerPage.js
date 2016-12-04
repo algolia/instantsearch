@@ -9,8 +9,7 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
  * Beware: the `label` of `HitsPerPage` items must be either a string or a number.
  * @name HitsPerPage
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
  * @themeKey ais-HitsPerPage__root - the root of the component.

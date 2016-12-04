@@ -4,8 +4,7 @@ import PoweredByComponent from '../components/PoweredBy.js';
 /**
  * PoweredBy is a widget that displays the Algolia logo.
  * @name PoweredBy
- * @kind component
- * @category widget
+ * @kind widget
  * @themeKey ais-PoweredBy__root - The root component of the widget
  * @themeKey ais-PoweredBy__searchBy - The powered by label
  * @themeKey ais-PoweredBy__algoliaLink - The algolia logo link

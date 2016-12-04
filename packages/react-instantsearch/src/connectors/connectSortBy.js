@@ -23,7 +23,6 @@ function getCurrentRefinement(props, state) {
  *  displays a list of indexes allowing a user to change the hits are sorting.
  * @name connectSortBy
  * @kind connector
- * @category connector
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
  * @providedPropType {function} refine - a function to remove a single filter

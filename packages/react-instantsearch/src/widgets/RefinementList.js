@@ -4,8 +4,7 @@ import RefinementListComponent from '../components/RefinementList.js';
 /**
  * The RefinementList component displays a list that let the end user choose multiple values for a specific facet.
  * @name RefinementList
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items

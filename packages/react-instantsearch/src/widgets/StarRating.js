@@ -4,8 +4,7 @@ import StarRatingComponent from '../components/StarRating.js';
 /**
  * StarRating lets the user refine search results by clicking on stars. The stars are based on the selected attributeName. The underlying rating attribute needs to have from min to max stars.
  * @name StarRating
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {number} min - Minimum value for the rating. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} max - Maximum value for the rating. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
