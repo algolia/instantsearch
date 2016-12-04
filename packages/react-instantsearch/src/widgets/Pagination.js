@@ -4,8 +4,7 @@ import PaginationComponent from '../components/Pagination.js';
 /**
  * Pagination is a widget used for displaying hits corresponding to a certain page.
  * @name Pagination
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {boolean} [showFirst=true] - Display the first page link.
  * @propType {boolean} [showLast=false] - Display the last page link.
  * @propType {boolean} [showPrevious=true] - Display the previous page link.

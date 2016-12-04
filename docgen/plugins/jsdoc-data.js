@@ -49,18 +49,22 @@ export default function() {
 
     function dataReady(unfilteredSymbols) {
       const symbolsByCategory = groupBy(
-        unfilteredSymbols.filter(o => !o.deprecated && o.kind && (o.kind === 'component' || o.kind === 'connector')),
+        unfilteredSymbols.filter(
+          o => !o.deprecated &&
+            o.kind &&
+            (o.kind === 'component' || o.kind === 'widget' || o.kind === 'connector')
+        ),
         'kind'
       );
 
       forEach(symbolsByCategory, symbols => {
         forEach(symbols, data => {
-          const buildFilename = `${data.kind}/${data.name}.html`;
+          const buildFilename = `${data.kind}s/${data.name}.html`;
           const customTags = parseCustomTags(data.customTags);
           const isNameUnique = unfilteredSymbols.map(s => s.name).filter(n => n === data.name).length === 1;
           const title = isNameUnique ?
             data.name :
-            `${data.name} ${data.category}`;
+            `${data.name} ${data.kind}`;
 
           const fileFromMetalsmith = allFilles
             .find(
@@ -76,9 +80,11 @@ export default function() {
             stats: fileFromMetalsmith && fileFromMetalsmith.stats,
             filename: fileFromMetalsmith && fileFromMetalsmith.filename,
             title,
-            layout: `${data.kind}/${data.category}.pug`,
+            mainTitle: `${data.kind.charAt(0).toUpperCase()}${data.kind.slice(1)}s`, //
+            withHeadings: false,
+            layout: `${data.kind}.pug`,
             category: data.kind,
-            navWeight: data.category === 'core' ? 100 : 0,
+            navWeight: data.name === 'InstantSearch' ? 1000 : 0,
           };
         });
       });

@@ -8,7 +8,6 @@ import createConnector from '../core/createConnector';
  * Algolia.
  * @name connectHits
  * @kind connector
- * @category connector
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.
  * @providedPropType {array.<object>} hits - the records that matched the search state

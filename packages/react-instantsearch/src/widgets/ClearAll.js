@@ -5,8 +5,7 @@ import ClearAllComponent from '../components/ClearAll.js';
  * The ClearAll widget display a button that let's the user clean every refinements applied
  * to the search.
  * @name ClearAll
- * @kind component
- * @category widget
+ * @kind widget
  * @themeKey ais-ClearAll__root - the widget button
  * @translationKey reset - the clear all button value
  * @example

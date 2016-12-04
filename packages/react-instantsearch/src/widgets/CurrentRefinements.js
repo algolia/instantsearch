@@ -5,8 +5,7 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  * The CurrentRefinements widget displays the list of filters currently applied to the search parameters.
  * It also lets the user remove each one of them.
  * @name CurrentRefinements
- * @kind component
- * @category widget
+ * @kind widget
  * @themeKey ais-CurrentRefinements__root - the root div of the widget
  * @themeKey ais-CurrentRefinements__items - the container of the filters
  * @themeKey ais-CurrentRefinements__item - a single filter

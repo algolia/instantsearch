@@ -2,7 +2,6 @@
 title: Examples
 layout: examples.pug
 category: examples
-tocVisibility: true
 navWeight: 1000
 ---
 

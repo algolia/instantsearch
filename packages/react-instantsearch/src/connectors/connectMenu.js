@@ -35,7 +35,6 @@ const sortBy = ['count:desc', 'name:asc'];
  * give the user tha ability to choose a single value for a specific facet.
  * @name connectMenu
  * @kind connector
- * @category connector
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items

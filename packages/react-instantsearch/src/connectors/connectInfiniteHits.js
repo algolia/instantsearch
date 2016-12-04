@@ -12,7 +12,6 @@ function getId() {
  * Algolia. This connector provides a function to load more results.
  * @name connectInfiniteHits
  * @kind connector
- * @category connector
  * @propType {number} hitsPerPage - How many hits should be displayed for every page.
  *   Ignored when a `HitsPerPage` component is also present.
  * @providedPropType {array.<object>} hits - the records that matched the search state

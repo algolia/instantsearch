@@ -8,6 +8,7 @@ const md =
     highlight: (str, lang) => highlight(str, lang),
     linkify: true,
     typographer: true,
+    html: true,
   })
   .use(markdownItAnchor, {permalink: true, permalinkClass: 'anchor', permalinkSymbol: ''});
 
