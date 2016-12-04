@@ -1,8 +1,9 @@
 ---
-title: Multiple InstantSearch
-layout: guide.pug
+title: Multi index
+mainTitle: Guide
+layout: main.pug
 category: guide
-navWeight: 200
+navWeight: 50
 ---
 
 You can use multiple `<InstantSearch/>` instances for cases like:
@@ -11,18 +12,19 @@ You can use multiple `<InstantSearch/>` instances for cases like:
 * sharing a single SearchBox
 * any use case involving synchronizing widgets between different `<InstantSearch>` instances
 
-Two props on the [InstantSearch root component](/component/InstantSearch.html) can be used to inject state or be notified of state changes:
+Two props on the [InstantSearch component](/widgets/InstantSearch.html) can be used to inject state or be notified of state changes:
 
-* onStateChange(nextState): a function being called every time the `InstantSearch` state is updated. 
-* [state](/guides/instantsearch-state.html): an object that is the current state of InstantSearch
+* onStateChange(nextState): a function being called every time the `InstantSearch` state is updated.
+* [state](/guides/Search%20state.html): a search state
 
-The idea is to have a main component that will receive every new state of the first instance and then pass it back to each `InstantSearch` instances.  
+The idea is to have a main component that will receive every new search state of the first instance
+and then pass it back to each `InstantSearch` instances.
 
-Refinements and parameters of an `InstantSearch` state needs to have their corresponding widgets or 
-[virtual widget](/guides/advanced-topics.html#how-to-preselect-values-using-virtual-widgets) added to be effectively applied.  
+Refinements and parameters of an `InstantSearch` state needs to have their corresponding widgets or
+[virtual widget](/guides/Virtual%20widgets.html) added to be effectively applied.
 
-Here's an example displaying hits from two different indices: 
- 
+Here's an example displaying hits from two different indices:
+
 ```jsx
 import React, {Component} from 'react';
 import { InstantSearch, Hits, SearchBox } from 'react-instantsearch/dom';
@@ -85,3 +87,7 @@ const SecondResults = props =>
 
 export default App;
 ```
+
+<div class="guide-nav">
+Next: <a href="/guide/Custom connectors.html">Custom connectors →</a>
+</div>

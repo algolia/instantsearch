@@ -4,8 +4,7 @@ import SearchBoxComponent from '../components/SearchBox.js';
 /**
  * The SearchBox component displays a search box that lets the user search for a specific query.
  * @name SearchBox
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string[]} [focusShortcuts=['s','/']] - List of keyboard shortcuts that focus the search box. Accepts key names and key codes.
  * @propType {boolean} [autoFocus=false] - Should the search box be focused on render?
  * @propType {boolean} [searchAsYouType=true] - Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.

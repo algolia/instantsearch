@@ -3,11 +3,10 @@ import React from 'react';
 /**
  * Since a lot of sliders already exists, we did not include one by default.
  * However you can easily connect to react-instantsearch an existing one
- * using the [connectRange connector](/connector/connectRange.html).
+ * using the [connectRange connector](/connectors/connectRange.html).
  *
  * @name RangeSlider
- * @kind component
- * @category widget
+ * @kind widget
  * @example
  *
  * //Here's an example showing how to connect the airbnb rheostat slider to react-instantsearch using the
@@ -72,8 +71,8 @@ import React from 'react';
  */
 export default connectRange(() =>
   <div>We do not provide any Slider, see the documentation to learn how to connect one easily:
-    <a target="_blank" href="https://community.algolia.com/instantsearch.js/react/component/RangeSlider.html">
-      https://community.algolia.com/instantsearch.js/react/component/RangeSlider.html
+    <a target="_blank" href="https://community.algolia.com/instantsearch.js/react/widgets/RangeSlider.html">
+      https://community.algolia.com/instantsearch.js/react/widgets/RangeSlider.html
     </a>
   </div>
 );

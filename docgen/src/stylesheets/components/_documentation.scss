@@ -1,12 +1,19 @@
 .documentation-section,
 .examples-section {
-
   .container {
     article {
       width: 100%;
       position: relative;
       margin-top: 60px;
     }
+  }
+
+  .guide-nav {
+    padding: 1em 0;
+    text-align: right;
+    border-top: 1px solid #d8d8d8;
+    border-bottom: 1px solid #d8d8d8;
+    margin-left: -30px;
   }
 
   p,
@@ -132,6 +139,8 @@
       border-radius: 2px;
       border-left: none;
       padding: 0.5em 0;
+      position: relative;
+      z-index: 1; // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
 
       code {
         display: block;
@@ -201,7 +210,6 @@
           margin: 0;
           padding: 13px 13px;
           flex: 1;
-          overflow: scroll;
           white-space: normal;
 
 

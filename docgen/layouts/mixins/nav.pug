@@ -6,18 +6,19 @@ mixin nav(currentPath, navItems, title, headings)
         if navItems.length === 1
           +navContent(headings, 0)
         else
-          +navRec(currentPath, navItems, title, 2)
+          +navRec(currentPath, navItems, title, 2, headings)
 
-mixin navRec(currentPath, navItems, title, depth)
+mixin navRec(currentPath, navItems, title, depth, headings)
   for navItem in navItems
-    - var isCurrentFile = navItem.path === currentPath;
-    - var className = ['sidebar-element', ('level-h' + depth), (isCurrentFile ? 'navItem-active' : 'navItem')];
-    - var activeClass = isCurrentFile ? 'navItem-active' : '';
-    li(class=className)
-      a(href=h.publicPath(navItem.path) class=activeClass)=navItem.title
-      ul
-        if(isCurrentFile)
-          +navContent(headings, depth)
+    - if(navItem.metadata.showInNav !== false)
+      - var isCurrentFile = navItem.path === currentPath;
+      - var className = ['sidebar-element', ('level-h' + depth), (isCurrentFile ? 'navItem-active' : 'navItem')];
+      - var activeClass = isCurrentFile ? 'navItem-active' : '';
+      li(class=className)
+        a(href=h.publicPath(navItem.path) class=activeClass)=navItem.title
+        ul
+          if(isCurrentFile)
+            +navContent(headings, depth)
 
 mixin navContent(headings, currentDepth)
   if headings && headings.length > 1

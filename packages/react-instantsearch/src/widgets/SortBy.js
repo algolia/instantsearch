@@ -4,8 +4,7 @@ import SortByComponent from '../components/SortBy.js';
 /**
  * The SortBy component displays a list of indexes allowing a user to change the hits are sorting.
  * @name SortBy
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
  * @themeKey ais-SortBy__root - the root of the component

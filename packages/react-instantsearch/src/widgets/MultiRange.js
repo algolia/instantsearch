@@ -4,8 +4,7 @@ import MultiRangeComponent from '../components/MultiRange.js';
 /**
  * MultiRange is a widget used for selecting the range value of a numeric attribute.
  * @name MultiRange
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the format "min:max".

@@ -19,8 +19,7 @@ function validateNextProps(props, nextProps) {
  * InstantSearch is the root component of all react-instantsearch implementation.
  * It provides to all the connected components (aka widgets) a mean to interact
  * with the search state.
- * @kind component
- * @category core
+ * @kind widget
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.

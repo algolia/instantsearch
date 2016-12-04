@@ -1,10 +1,9 @@
-extends ../archetypes/content-with-menu.pug
+extends archetypes/content-with-menu.pug
 
-include ../mixins/nav.pug
+include mixins/nav.pug
 
 block navigation
-  - var headings=[{tag: 'h2', id:'description', text: 'Description'}, {tag: 'h2', id:'proptypes', text: 'Exposed props'}, {tag: 'h2', id:'provided-props', text: 'Provided props'}, {tag: 'h2', id:'example', text: 'Example'}]
-  +nav(navPath, navigation, title, headings)
+  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
 
 block content
   h2#description Description
@@ -25,7 +24,7 @@ block content
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value: 
+                span default value:
                 code=type.defaultValue
           tr.api-entry-description
             td(colspan=3)!=h.markdown(type.description)
@@ -46,7 +45,7 @@ block content
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value: 
+                span default value:
                 code=type.defaultValue
           tr.api-entry-description
             td(colspan=3)!=h.markdown(type.description)

@@ -7,7 +7,6 @@ import createConnector from '../core/createConnector';
  * let the page scroll to a certain point.
  * @name connectScrollTo
  * @kind connector
- * @category connector
  * @propType {string} [scrollOn="page"] - Widget state key on which to listen for changes, default to the pagination widget.
  * @providedPropType {any} value - the current refinement applied to the widget listened by scrollTo
  */

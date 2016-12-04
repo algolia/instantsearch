@@ -1,25 +1,26 @@
 ---
 title: Getting started
-layout: getting-started.pug
+layout: main.pug
 category: gettingstarted
+withHeadings: true
 ---
 
 ## Welcome to react-instantsearch
 
 React-instantsearch is the ultimate toolbox for creating instant search
-experience using [React](https://facebook.github.io/react/) and Algolia.
+experience using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
 
 In this tutorial, you'll learn how to:
 
- - add react-instantsearch in your [React](https://facebook.github.io/react/) project
- - bootstrap react-instantsearch
+ - add `react-instantsearch` in your [React](https://facebook.github.io/react/) project
+ - bootstrap `react-instantsearch`
  - display results from Algolia
  - add components to filter the results
  - connect your own component to the search
 
 ## Before we start
 
-As mentionned earlier, react-instantsearch is meant to be used with Algolia.
+As mentionned earlier, `react-instantsearch` is meant to be used with `Algolia`.
 
 Therefore, you'll need the credentials to an Algolia index. Here are
 the credentials to an already configured index:
@@ -36,44 +37,54 @@ is the official React-CLI from Facebook.
 
 ## Install react-instantsearch
 
-react-instantsearch is available on [npm](https://www.npmjs.com). To install it you just need
-to type this command in your shell:
+`react-instantsearch` is available on [npm](https://www.npmjs.com). Install it:
 
-```sh
+```shell
 npm install --save react-instantsearch
+```
+
+## Add the stylesheet
+
+Our default widgets will look awesome with our default theme:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
 ```
 
 ## Add the InstantSearch wrapper
 
-The [instantsearch](/component/InstantSearch.html) wrapper is the component that will connect to Algolia
+The [InstantSearch](/widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state
 of the search, do the queries and provide the results to the widgets so
 that they can update themselves if needed.
 
-```javascript
+```jsx
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import {InstantSearch} from 'react-instantsearch/dom';
 
 const App = () =>
   <InstantSearch
-    appId={appId}
-    apiKey={apiKey}
-    indexName={indexName}
+    appId="latency"
+    apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
+    indexName="bestbuy"
   >
-   // The instantsearch components will go here
+    <div>
+      // Search widgets will go there
+    </div>
   </InstantSearch>
 
 // Needed only if you're js app doesn't do it already.
-// Create-react-app does it for you ;)
-React.render(<App />, document.querySelector('#app'));
+// Create-react-app does it for you
+ReactDOM.render(<App />, document.querySelector('#app'));
 ```
 
 `appId`, `apiKey` and `indexName` are mandatory. Those props are the
 credentials of your application in Algolia. They can be found in your [Algolia
 dashboard](https://www.algolia.com/api-keys).
 
-Congratulations 🎉  Your application is now connected to Algolia! This wrapper
+Congratulations 🎉 Your application is now connected to Algolia! This wrapper
 will provide a context so that the instantsearch components you add inside
 can interact with the search.
 
@@ -82,10 +93,9 @@ In this section we've seen:
  - configure your credentials with react-instantsearch
 
  > To get more *under the hood* information about the `InstantSearch` wrapper
- > component, we have [full documentation](/component/InstantSearch.html) in the widget
- > section.
+ > component, [read our guide](/guide/<InstantSearch>.html).
 
-## Loading the theme
+## Load the theme
 
 We do not inject any CSS in your application by default, only CSS class names are declared
 on our widgets. It's your responsibility to then load a theme. We provide an Algolia theme
@@ -98,18 +108,19 @@ Just include it in your webpage:
 
 Read the [styling](/guides/styling.html) guide for more information.
 
-## Display the results
+## Display results
 
 The core of a search experience is to display results. By default, react-instantsearch
-will do a query at the start of the page.
+will do a query at the start of the page and will retrieve the most relevant hits.
 
-The next widget we want to use is the [Hits](component/Hits.html) widget. This widget will
+To display results, we are gonna use the [Hits](/widgets/Hits.html) widget. This widget will
 display all the results returned by Algolia, and it will update when there
 are new results.
 
-And while we're doing that, let's create a new component for the search:
+While we're doing that, let's create a new component for the search so we
+ease the reading of our React code:
 
-```javascript
+```jsx
 // First, we need to add the Hits component to our import
 import {InstantSearch, Hits} from 'react-instantsearch/dom';
 
@@ -117,7 +128,7 @@ import {InstantSearch, Hits} from 'react-instantsearch/dom';
 
 function Search() {
   return (
-    <div className='container'>
+    <div className="container">
       <Hits />
     </div>
   );
@@ -126,12 +137,12 @@ function Search() {
 
 We can then call this component in the render of App:
 
-```javascript
+```jsx
 const App = () =>
   <InstantSearch
-    appId={appId}
-    apiKey={apiKey}
-    indexName={indexName}
+    appId="latency"
+    apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
+    indexName="bestbuy"
   >
    <Search/>
   </InstantSearch>
@@ -145,11 +156,11 @@ In order to customize the view for each product, we can use a special prop
 of the Hit component: `itemComponent`. This props accept a Component that
 will be used for each hit in the results from Algolia.
 
-```javascript
+```jsx
 function Product({hit}) {
   return (
     <div>
-      <span className="hit-name">{hit.name}</span>
+      {hit.name}
     </div>
   );
 };
@@ -161,10 +172,10 @@ but there is no limit as long as the data in the record.
 
 Now let's modify the `Hits` usage to add our new `itemComponent`.
 
-```javascript
+```jsx
 function Search() {
   return (
-    <div className="container">
+    <div>
       <Hits itemComponent={Product} />
     </div>
   );
@@ -177,14 +188,10 @@ In this section we've seen:
 
 ## Add a SearchBox
 
-Now that we've added the results, we can start querying our index and filtering it
-to extract the meaningful records. With Algolia, the main way to filter the records
-into hits, is the text search.
-
-To implement this, react-instantsearch provides the [Searchbox](component/SearchBox.html) component. Let's add it
+Now that we've added the results, we can start querying our index. To do this, we are gonna use the [Searchbox](/widgets/SearchBox.html) widget. Let's add it
 in the Search component that we created before:
 
-```javascript
+```jsx
 // We need to add the SearchBox to our import
 import {InstantSearch, Hits, SearchBox} from 'react-instantsearch/dom';
 
@@ -192,7 +199,7 @@ import {InstantSearch, Hits, SearchBox} from 'react-instantsearch/dom';
 
 function Search() {
   return (
-    <div className='container'>
+    <div>
       <SearchBox />
       <Hits itemComponent={Product} />
     </div>
@@ -204,7 +211,7 @@ The search is now interactive but we don't see what matched in each of the produ
 Good thing for us, Algolia computes the matching part. Let's add this to our custom
 search result component:
 
-```javascript
+```jsx
 // We need to add the highlight function to our import
 import {InstantSearch, Hits, SearchBox, highlight} from 'react-instantsearch/dom';
 
@@ -213,7 +220,7 @@ import {InstantSearch, Hits, SearchBox, highlight} from 'react-instantsearch/dom
 function Product({hit}) {
   return (
     <div>
-      <span className="hit-name">{highlight('name', hit)}</span>
+      {highlight('name', hit)}
     </div>
   );
 };
@@ -229,7 +236,7 @@ In this part, we've seen the following:
  - how to highlight the matched part of the results
  - the importance of highlighting in a text-based search
 
-## Add some filters
+## Add RefinementList
 
 While the SearchBox is the way to go when it comes to textual search, you
 may also want to provide filters based on the structure of the records.
@@ -237,10 +244,10 @@ may also want to provide filters based on the structure of the records.
 Algolia provides a set of parameters for filtering by facets, numbers or geo
 location. Instantsearch packages those into a set of components and connector.
 
-Since the dataset used here is an e-commerce one, let's add a [RefinementList](component/RefinementList.html)
+Since the dataset used here is an e-commerce one, let's add a [RefinementList](/widgets/RefinementList.html)
 to filter the products by categories:
 
-```javascript
+```jsx
 // We need to add the RefinementList to our import
 import {InstantSearch, Hits, SearchBox, hightlight, RefinementList} from 'react-instantsearch/dom';
 
@@ -273,11 +280,11 @@ We now miss two elements in our search interface:
  - the ability to browse beyond the first page of results
  - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](component/Pagination.html), the [ClearAll](component/ClearAll.html)
-and [CurrentRefinements](component/CurrentRefinements.html) components. Both have nice defaults which means that
+Those two features are implemented respectively with the [Pagination](/widgets/Pagination.html), the [ClearAll](/widgets/ClearAll.html)
+and [CurrentRefinements](/widgets/CurrentRefinements.html) components. Both have nice defaults which means that
 we can use them directly without further configuration.
 
-```javascript
+```jsx
 // We need to add the RefinementList to our import
 import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
 
@@ -311,8 +318,6 @@ At this point, you know all the basics of react-instantsearch. All the
 components can be customised further using connectors, like
 in the paragraph about displaying the results.
 
-Here are some suggested guides and references that you might be interested in:
- - [How to style your search](/guides/styling.html)
- - [Advanced examples using react-instantsearch](examples.html)
- - [The API for widgets and components](component.html)
- - [All the other guides](guides.html)
+<div class="guide-nav">
+Next: <a href="/guide/">Guide →</a>
+</div>

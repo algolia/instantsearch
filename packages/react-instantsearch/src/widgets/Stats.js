@@ -4,8 +4,7 @@ import StatsComponent from '../components/Stats.js';
 /**
  * The Stats component displays a string with the number of hits and the processed timed.
  * @name Stats
- * @kind component
- * @category widget
+ * @kind widget
  * @themeKey ais-Stats__root - the root of the component
  * @translationkey stats - The string displayed by the stats widget. You get function(n, ms) and you need to return a string. n is a number of hits retrieved, ms is a processed time.
  * @example

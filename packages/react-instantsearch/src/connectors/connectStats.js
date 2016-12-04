@@ -5,7 +5,6 @@ import createConnector from '../core/createConnector';
  *  displays algolia search statistics (hits number and processing time).
  * @name connectStats
  * @kind connector
- * @category connector
  * @providedPropType {number} nbHits - number of hits returned by Algolia.
  * @providedPropType {number} processingTimeMS - the time in ms took by Algolia to search for results.
  */
