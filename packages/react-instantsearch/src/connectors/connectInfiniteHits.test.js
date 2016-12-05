@@ -1,7 +1,5 @@
 /* eslint-env jest, jasmine */
-/* eslint-disable comma-dangle */
 
-import {SearchParameters} from 'algoliasearch-helper';
 import connect from './connectInfiniteHits.js';
 jest.mock('../core/createConnector');
 
@@ -25,7 +23,7 @@ describe.only('connectInfiniteHits', () => {
     expect(res1.hits).toEqual(hits);
     expect(res1.hasMore).toBe(true);
     const res2 = connect.getProvidedProps.call(providedThis, null, null, {
-      results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3}
+      results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3},
     });
     expect(res2.hits).toEqual([...hits, ...hits2]);
     expect(res2.hasMore).toBe(true);
@@ -44,7 +42,7 @@ describe.only('connectInfiniteHits', () => {
           hits,
           page,
           hitsPerPage: hits.length,
-          nbPages
+          nbPages,
         },
       });
       expect(res.hits).toEqual(allHits);
@@ -59,7 +57,7 @@ describe.only('connectInfiniteHits', () => {
         hits,
         page: nbPages - 1,
         hitsPerPage: hits.length,
-        nbPages
+        nbPages,
       },
     });
     expect(res.hits.length).toEqual(nbPages * 2);
@@ -73,24 +71,16 @@ describe.only('connectInfiniteHits', () => {
     const hits2 = [{}, {}];
     const hits3 = [{}];
     connect.getProvidedProps.call(providedThis, null, null, {
-      results: {hits, page: 0, hitsPerPage: 2, nbPages: 3}
+      results: {hits, page: 0, hitsPerPage: 2, nbPages: 3},
     });
     connect.getProvidedProps.call(providedThis, null, null, {
-      results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3}
+      results: {hits: hits2, page: 1, hitsPerPage: 2, nbPages: 3},
     });
     const props = connect.getProvidedProps.call(providedThis, null, null, {
-      results: {hits: hits3, page: 2, hitsPerPage: 2, nbPages: 3}
+      results: {hits: hits3, page: 2, hitsPerPage: 2, nbPages: 3},
     });
     expect(props.hits).toEqual([...hits, ...hits2, ...hits3]);
     expect(props.hasMore).toBe(false);
-  });
-
-  it('use the state for hitsPerPage, defaults to props, ', () => {
-    const params = new SearchParameters();
-    const params2 = connect.getSearchParameters(params, {hitsPerPage: 666}, {});
-    expect(params2.hitsPerPage).toBe(666);
-    const params3 = connect.getSearchParameters(params2, {hitsPerPage: 777}, {});
-    expect(params3.hitsPerPage).toBe(666);
   });
 
   it('adds 1 to page when calling refine', () => {

@@ -20,7 +20,7 @@ import ScrollToComponent from '../components/ScrollTo.js';
  *       indexName="ikea"
  *     >
  *       <ScrollTo >
- *            <Hits hitsPerPage={5}/>
+ *            <Hits />
  *       </ScrollTo>
  *     </InstantSearch>
  *   );

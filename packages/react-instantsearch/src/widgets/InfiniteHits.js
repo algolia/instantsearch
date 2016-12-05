@@ -6,10 +6,13 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * will also render a **load more** button that will add one to the current
  * page and will trigger the search. The new results will be append in the
  * list of results.
+ *
+ * To configure the number of hits being shown, use [HitsPerPage widget](/widgets/HitsPerPage.html),
+ * [connectHitsPerPage connector](/connectors/connectHitsPerPage.html) or pass the hitsPerPage
+ * parameter to the [searchParameters](/guide/Search%20parameters.html) prop on `<InstantSearch/>`.
+ *
  * @name InfiniteHits
  * @kind widget
- * @propType {number} hitsPerPage - How many hits should be displayed for every page.
- *   Ignored when a `HitsPerPage` component is also present.
  * @propType {Component} itemComponent - Component used for rendering each hit from
  *   the results. If it is not provided the rendering defaults to displaying the
  *   hit in its JSON form. The component will be called with a `hit` prop.
