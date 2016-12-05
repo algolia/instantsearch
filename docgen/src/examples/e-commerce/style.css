@@ -104,7 +104,6 @@ aside {
   padding: 20px;
   border-right: 1px solid #EEE;
   background: #FFFFFF;
-  z-index: 1000;
 }
 
 aside .facet-category-title {
@@ -118,6 +117,8 @@ aside .facet-wrapper {
   border-bottom: solid 1px #EEE;
   margin-bottom: 12px;
   font-size: .87em;
+  display: flex;
+  flex-direction: column;
 }
 
 aside .facet {
@@ -134,7 +135,16 @@ aside .ais-HierarchicalMenu__itemLink, aside a {
   color: #000000;
 }
 
-aside .ais-HierarchicalMenu__itemLink:hover, aside a:hover {
+aside .ais-HierarchicalMenu__item{
+  margin-top: 0px;
+  font-size: 12px;
+}
+
+aside .ais-HierarchicalMenu__item:after{
+  content: none;
+}
+
+aside .ais-HierarchicalMenu__itemLink:hover, aside a:hover, .ais-StarRating__ratingLink:hover {
   color: #B32500;
   text-decoration: none;
 }
@@ -155,8 +165,13 @@ aside .ais-HierarchicalMenu__itemItems {
   margin-left: 10px;
 }
 
+aside .ais-RefinementList__item {
+  font-size: 12px;
+}
+
 aside .ais-RefinementList__item label {
-  font-weight: 100
+  font-weight: 100;
+  color: #000000;
 }
 
 aside .ais-RefinementList__item label input {
@@ -165,6 +180,7 @@ aside .ais-RefinementList__item label input {
 
 aside .ais-RefinementList__itemCount, .ais-HierarchicalMenu__itemCount {
   color: #6F6E6C;
+  background-color: initial;
 }
 
 aside .ais-RefinementList__itemCount:before, .ais-HierarchicalMenu__itemCount:before {
@@ -381,12 +397,13 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
   display: inline-block;
 }
 
-.ClearAll {
+.ais-ClearAll__root {
   display: block;
   margin-bottom: 16px;
   font-size: 13px;
   background-color: white;
   border: 1px solid lightgray;
+  color: #000000;
 }
 
 .ais-Stats__root {
@@ -501,7 +518,6 @@ aside .facet-color[data-facet-value="White stained oak effect"] {
 footer {
   margin-top: 10px;
   font-size: 1.2em;
-  line-height: 3em;
   text-align: center;
 }
 
@@ -516,11 +532,17 @@ footer:after {
   border-radius: 2px;
   border: solid 1px #888;
   font-weight: normal;
+  font-size: 12px;
+  padding: 0px;
+  margin: 0px;
 }
 
 .ais-RangeInput__labelMin:before, .ais-RangeInput__labelMax:before {
   content: '$';
-  margin-right: 5px;
+}
+
+.ais-RangeInput__labelMin, .ais-RangeInput__labelMax {
+  min-width: 0px;
 }
 
 .ais-RangeInput__separator {
@@ -545,3 +567,25 @@ footer:after {
   color: #0063C3;
   background-color: #FFFFFF;
 }
+
+.ais-StarRating__ratingLabel, .ais-StarRating__ratingLabelSelected {
+  color: #000000;
+}
+
+.ais-StarRating__ratingLabelSelected {
+  font-weight: 700;
+}
+
+.ais-StarRating__ratingCount {
+  color: #6F6E6C;
+  background-color: initial;
+}
+
+.ais-StarRating__ratingCount::before {
+  content: '('
+}
+
+.ais-StarRating__ratingCount::after {
+  content: ')'
+}
+

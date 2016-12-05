@@ -35,9 +35,12 @@
 }
 
 .ais-Menu__showMore {
+  @include buttonTernary();
+  @include buttonLink();
 }
 
 .ais-Menu__showMoreDisabled {
+  @include disabled();
 }
 
 .ais-Menu__itemLinkSelected{

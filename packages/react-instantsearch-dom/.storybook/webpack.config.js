@@ -6,7 +6,7 @@ module.exports = {
     loaders: [
       {
         test: /\.scss$/,
-        loaders: ['style', 'css', 'postcss', 'sass'],
+        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
       },
     ],
   },

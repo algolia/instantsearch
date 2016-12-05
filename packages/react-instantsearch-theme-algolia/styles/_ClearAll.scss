@@ -1,8 +1,9 @@
 .ais-ClearAll__root {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: none;
-  font-size: 12px;
-  color: #fff;
-  background: $main-color;
+  @include buttonLink();
+  @include buttonSecondary();
 }
+
+.ais-ClearAll__root:disabled{
+  @include disabled();
+}
+
