@@ -57,7 +57,7 @@ exports[`RangeInput supports passing max/min values 1`] = `
   <button
     className="ais-RangeInput__submit"
     type="submit">
-    go
+    ok
   </button>
 </form>
 `;

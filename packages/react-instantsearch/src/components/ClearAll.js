@@ -36,5 +36,5 @@ class ClearAll extends Component {
 }
 
 export default translatable({
-  reset: 'ClearAll everything',
+  reset: 'Clear all filters',
 })(ClearAll);
