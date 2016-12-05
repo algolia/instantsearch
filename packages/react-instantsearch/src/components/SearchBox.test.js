@@ -24,12 +24,12 @@ describe('SearchBox', () => {
 
   it('treats its query prop as its input value', () => {
     const inst = renderer.create(
-      <SearchBox refine={() => null} query="QUERY1" />
+      <SearchBox refine={() => null} currentRefinement="QUERY1" />
     );
     expect(inst.toJSON()).toMatchSnapshot();
 
     inst.update(
-      <SearchBox refine={() => null} query="QUERY2" />
+      <SearchBox refine={() => null} currentRefinement="QUERY2" />
     );
     expect(inst.toJSON()).toMatchSnapshot();
   });

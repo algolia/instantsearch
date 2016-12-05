@@ -34,15 +34,15 @@ If you want to create your own search box, you will need to use the [`connectSea
 ```javascript
 import {connectSearchBox} from 'react-instantsearch/connectors';
 
-const MySearchBox = props =>
+const MySearchBox = ({currentRefinement, refine}) =>
   <input
     type="text"
-    value={props.query}
-    onChange={e => props.refine(e.target.value)}
+    value={currentRefinement}
+    onChange={e => refine(e.target.value)}
   />;
 
 // `ConnectedSearchBox` renders a `<MySearchBox>` component that is connected to
-// the <InstantSearch> state, providing it with `query` and `refine` props for
+// the <InstantSearch> state, providing it with `currentRefinement` and `refine` props for
 // reading and manipulating the current query of the search.
 // Note that this `ConnectedSearchBox` component will only work when rendered
 // as a child or a descendant of the `<InstantSearch>` component.
