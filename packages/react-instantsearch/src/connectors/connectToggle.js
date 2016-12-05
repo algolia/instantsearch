@@ -43,7 +43,7 @@ export default createConnector({
     defaultRefinement: PropTypes.bool,
   },
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     const checked = getCurrentRefinement(props, state);
     return {checked};
   },

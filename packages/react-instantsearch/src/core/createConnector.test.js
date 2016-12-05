@@ -20,11 +20,11 @@ describe('createConnector', () => {
   const getId = () => 'id';
   describe('state', () => {
     it('computes passed props from props and state', () => {
-      const getProps = jest.fn(props => ({gotProps: props}));
+      const getProvidedProps = jest.fn(props => ({gotProps: props}));
       const Dummy = () => null;
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps,
+        getProvidedProps,
         getId,
       })(Dummy);
       const state = createState();
@@ -39,7 +39,7 @@ describe('createConnector', () => {
           },
         },
       }});
-      const args = getProps.mock.calls[0];
+      const args = getProvidedProps.mock.calls[0];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
       expect(args[2].results).toBe(state.results);
@@ -50,11 +50,11 @@ describe('createConnector', () => {
     });
 
     it('updates on props change', () => {
-      const getProps = jest.fn(props => ({gotProps: props}));
+      const getProvidedProps = jest.fn(props => ({gotProps: props}));
       const Dummy = () => null;
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps,
+        getProvidedProps,
         getId,
       })(Dummy);
       const state = createState();
@@ -69,8 +69,8 @@ describe('createConnector', () => {
       }});
       props = {hello: 'you'};
       wrapper.setProps(props);
-      expect(getProps.mock.calls.length).toBe(2);
-      const args = getProps.mock.calls[1];
+      expect(getProvidedProps.mock.calls.length).toBe(2);
+      const args = getProvidedProps.mock.calls[1];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
       expect(args[2].results).toBe(state.results);
@@ -81,11 +81,11 @@ describe('createConnector', () => {
     });
 
     it('updates on state change', () => {
-      const getProps = jest.fn((props, state) => state);
+      const getProvidedProps = jest.fn((props, state) => state);
       const Dummy = () => null;
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps,
+        getProvidedProps,
         getId,
       })(Dummy);
       let state = {
@@ -116,8 +116,8 @@ describe('createConnector', () => {
         },
       };
       listener();
-      expect(getProps.mock.calls.length).toBe(2);
-      const args = getProps.mock.calls[1];
+      expect(getProvidedProps.mock.calls.length).toBe(2);
+      const args = getProvidedProps.mock.calls[1];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
       expect(args[2].results).toBe(state.results);
@@ -130,7 +130,7 @@ describe('createConnector', () => {
     it('unsubscribes from the store on unmount', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getId,
       })(() => null);
       const unsubscribe = jest.fn();
@@ -148,11 +148,11 @@ describe('createConnector', () => {
     });
 
     it('doesn\'t update the component when passed props don\'t change', () => {
-      const getProps = jest.fn(() => {});
+      const getProvidedProps = jest.fn(() => {});
       const Dummy = jest.fn(() => null);
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps,
+        getProvidedProps,
         getId,
       })(Dummy);
       const wrapper = mount(<Connected />, {context: {
@@ -175,7 +175,7 @@ describe('createConnector', () => {
     it('doesn\'t register itself as a widget when neither getMetadata nor getSearchParameters are present', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getId,
       })(() => null);
       const registerWidget = jest.fn();
@@ -198,7 +198,7 @@ describe('createConnector', () => {
       const getMetadata = jest.fn(() => metadata);
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getMetadata,
         getId,
       })(() => null);
@@ -229,7 +229,7 @@ describe('createConnector', () => {
       const getSearchParameters = jest.fn(() => sp);
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getSearchParameters,
         getId,
       })(() => null);
@@ -262,7 +262,7 @@ describe('createConnector', () => {
     it('calls update when props change', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getMetadata: () => null,
         getId,
       })(() => null);
@@ -288,7 +288,7 @@ describe('createConnector', () => {
     it('dont update when props dont change', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getMetadata: () => null,
         getId,
       })(() => null);
@@ -314,7 +314,7 @@ describe('createConnector', () => {
     it('unregisters itself on unmount', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => null,
+        getProvidedProps: () => null,
         getMetadata: () => null,
         cleanUp: () => ({another: {state: 'state'}}),
       })(() => null);
@@ -356,7 +356,7 @@ describe('createConnector', () => {
       const refine = jest.fn(() => nextState);
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => ({}),
+        getProvidedProps: () => ({}),
         refine,
         getId,
       })(Dummy);
@@ -391,7 +391,7 @@ describe('createConnector', () => {
       const refine = jest.fn(() => nextState);
       const Connected = createConnector({
         displayName: 'CoolConnector',
-        getProps: () => ({}),
+        getProvidedProps: () => ({}),
         refine,
         getId,
       })(Dummy);

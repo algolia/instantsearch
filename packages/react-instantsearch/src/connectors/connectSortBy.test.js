@@ -6,7 +6,7 @@ import connect from './connectSortBy';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -18,13 +18,13 @@ let params;
 
 describe('connectSortBy', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({}, {});
+    props = getProvidedProps({}, {});
     expect(props).toEqual({currentRefinement: null});
 
-    props = getProps({}, {sortBy: 'yep'});
+    props = getProvidedProps({}, {sortBy: 'yep'});
     expect(props).toEqual({currentRefinement: 'yep'});
 
-    props = getProps({defaultRefinement: 'yep'}, {});
+    props = getProvidedProps({defaultRefinement: 'yep'}, {});
     expect(props).toEqual({currentRefinement: 'yep'});
   });
 

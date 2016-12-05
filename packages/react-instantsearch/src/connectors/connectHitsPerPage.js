@@ -30,7 +30,7 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaHitsPerPage',
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     return {
       currentRefinement: getCurrentRefinement(props, state),
     };

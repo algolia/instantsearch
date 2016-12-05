@@ -6,7 +6,7 @@ import connect from './connectHierarchicalMenu';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -24,15 +24,15 @@ describe('connectHierarchicalMenu', () => {
     };
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}}, {results});
+    props = getProvidedProps({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({attributes: ['ok'], defaultRefinement: 'wat'}, {}, {results});
+    props = getProvidedProps({attributes: ['ok'], defaultRefinement: 'wat'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProps({attributes: ['ok']}, {}, {results});
+    props = getProvidedProps({attributes: ['ok']}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: null});
 
     results.getFacetValues.mockClear();
@@ -62,7 +62,7 @@ describe('connectHierarchicalMenu', () => {
         },
       ],
     }));
-    props = getProps({attributes: ['ok']}, {}, {results});
+    props = getProvidedProps({attributes: ['ok']}, {}, {results});
     expect(props.items).toEqual([
       {
         label: 'wat',
@@ -88,7 +88,7 @@ describe('connectHierarchicalMenu', () => {
       },
     ]);
 
-    props = getProps({attributes: ['ok'], limitMin: 1}, {}, {results});
+    props = getProvidedProps({attributes: ['ok'], limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
         label: 'wat',
@@ -104,7 +104,7 @@ describe('connectHierarchicalMenu', () => {
       },
     ]);
 
-    props = getProps(
+    props = getProvidedProps(
       {attributes: ['ok'], showMore: true, limitMin: 0, limitMax: 1},
       {},
       {results}
@@ -126,7 +126,7 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({attributes: ['ok']}, {}, {});
+    props = getProvidedProps({attributes: ['ok']}, {}, {});
     expect(props).toBe(null);
   });
 

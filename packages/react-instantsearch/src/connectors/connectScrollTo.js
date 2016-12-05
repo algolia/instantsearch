@@ -21,7 +21,7 @@ export default createConnector({
     scrollOn: 'page',
   },
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     const value = state[props.scrollOn];
     return {value};
   },
