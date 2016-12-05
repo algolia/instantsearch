@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import {join} from 'path';
-import {rootPath} from './path';
 import autoprefixer from 'autoprefixer';
+import config from './config.js';
 
 export default {
   entry: {
@@ -14,8 +14,8 @@ export default {
   },
   devtool: 'source-map',
   output: {
-    path: rootPath(process.env.DOCS_DIST || 'docs/react/'),
-    publicPath: process.env.DOCS_MOUNT_POINT || '/',
+    path: config.docsDist,
+    publicPath: config.publicPath,
     filename: '[name].js',
     // @TODO: in production this should be hashed
     // filename: '[name].[chunkhash].js',

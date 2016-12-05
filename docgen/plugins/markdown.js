@@ -10,7 +10,7 @@ export default function markdown(files, metalsmith, done) {
     const dir = dirname(file);
     let html = `${basename(file, extname(file))}.html`;
     if (dir !== '.') html = `${dir}/${html}`;
-    const str = md.render(data.contents.toString());
+    const str = md.render(data.contents.toString(), {path: html});
     data.contents = new Buffer(str);
     delete files[file];
     files[html] = data;

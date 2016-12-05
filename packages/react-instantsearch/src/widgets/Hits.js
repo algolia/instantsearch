@@ -4,9 +4,9 @@ import HitsComponent from '../components/Hits.js';
 /**
  * Displays the list of hits for the current search parameters.
  *
- * To configure the number of hits being shown, use [HitsPerPage widget](/widgets/HitsPerPage.html),
- * [connectHitsPerPage connector](/connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](/guide/Search%20parameters.html) prop on `<InstantSearch/>`.
+ * To configure the number of hits being shown, use [HitsPerPage widget](widgets/HitsPerPage.html),
+ * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
+ * parameter to the [searchParameters](guide/Search%20parameters.html) prop on `<InstantSearch/>`.
  *
  * @name Hits
  * @kind widget

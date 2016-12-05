@@ -17,10 +17,10 @@ need to return a string.
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/react-router) linking `react-instantsearch` to [react-router](https://github.com/ReactTraining/react-router).
 
 **Notes:**
-* The [state guide](/guide/State.html) details all widgets and connectors state values.
+* The [state guide](guide/State.html) details all widgets and connectors state values.
 * `react-instantsearch` can be plugged into any history or routing library, you only have to listen for state
 changes and inject state appropriately.
 
 <div class="guide-nav">
-Next: <a href="/guide/Search parameters.html">Search parameters →</a>
+Next: <a href="guide/Search parameters.html">Search parameters →</a>
 </div>

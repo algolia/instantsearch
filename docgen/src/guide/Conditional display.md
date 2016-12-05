@@ -6,7 +6,7 @@ category: guide
 navWeight: 40
 ---
 
-Using our connector and [`createConnector`](/guide/Custom%20connectors.html) approach, you can
+Using our connector and [`createConnector`](guide/Custom%20connectors.html) approach, you can
 conditionally display content based on the search state.
 
 ## Displaying content when the query is empty
@@ -77,5 +77,5 @@ const content = createConnector({
 ```
 
 <div class="guide-nav">
-Next: <a href="/guide/React native.html">React native →</a>
+Next: <a href="guide/React native.html">React native →</a>
 </div>
