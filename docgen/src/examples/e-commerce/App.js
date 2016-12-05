@@ -20,6 +20,7 @@ import {
   connectMultiRange,
 } from 'react-instantsearch/connectors';
 import {withUrlSync} from '../urlSync';
+import 'react-instantsearch-theme-algolia/style.scss';
 
 const App = props =>
   <InstantSearch

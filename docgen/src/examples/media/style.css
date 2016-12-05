@@ -163,6 +163,13 @@ section article {
   padding: 0 15px;
 }
 
+.ais-Pagination__root {
+  box-shadow: none;
+  border: none;
+  border-radius: initial;
+  padding: 0px;
+}
+
 .ais-Pagination__item {
   display: inline-block;
   border: 1px solid;
