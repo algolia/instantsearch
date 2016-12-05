@@ -68,7 +68,10 @@
 }
 
 .ais-HierarchicalMenu__showMore {
+  @include buttonTernary();
+  @include buttonLink();
 }
 
 .ais-HierarchicalMenu__showMoreDisabled {
+  @include disabled();
 }

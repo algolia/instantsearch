@@ -1,44 +1,38 @@
 .ais-RangeInput__root {
-
-  button {
-    @include button()
-  }
 }
 
 .ais-RangeInput__labelMin,
 .ais-RangeInput__labelMax {
   min-width: 80px;
   display: inline-block;
+}
 
-  input {
-    padding: 6px 8px !important;
+.ais-RangeInput__inputMin, .ais-RangeInput__inputMax {
+  font-weight: normal;
+  padding: 6px 8px;
+  font-size: 14px;
+  outline: none;
+  color: #697782;
+  margin: auto 8px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: solid 1px #d4d8e3;
+
+  @include placeholder {
     font-size: 14px;
-    outline: none;
-    background: url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 18 18\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12.5 11h-.79l-.28-.27C12.41 9.59 13 8.11 13 6.5 13 2.91 10.09 0 6.5 0S0 2.91 0 6.5 2.91 13 6.5 13c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L17.49 16l-4.99-5zm-6 0C4.01 11 2 8.99 2 6.5S4.01 2 6.5 2 11 4.01 11 6.5 8.99 11 6.5 11z\' fill=\'%23BFC7D8\' fill-rule=\'evenodd\'/></svg>")no-repeat center left 16px / 18px;
-    color: #697782;
-    margin: auto 8px;
-
-    @include placeholder {
-      font-size: 14px;
-    }
-
-    &:hover,
-    &:active,
-    &:focus {
-    }
   }
-}
 
-.ais-RangeInput__inputMin {
-}
-
-.ais-RangeInput__labelMax {
+  &:hover,
+  &:active,
+  &:focus {
+  }
 }
 
 .ais-RangeInput__inputMax {
 }
 
 .ais-RangeInput__submit {
+  @include button()
 }
 
 .ais-RangeInput__separator {

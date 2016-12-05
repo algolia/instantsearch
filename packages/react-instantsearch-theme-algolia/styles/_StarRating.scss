@@ -61,4 +61,5 @@
 }
 
 .ais-StarRating__ratingLinkDisabled{
+  @include disabled();
 }
