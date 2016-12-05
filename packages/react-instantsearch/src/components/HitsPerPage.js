@@ -19,7 +19,7 @@ class HitsPerPage extends Component {
         /**
          * Label to display on the option.
          */
-        label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        label: PropTypes.string,
       })
     ),
   };
@@ -30,7 +30,6 @@ class HitsPerPage extends Component {
       refine,
       items,
     } = this.props;
-
     return (
       <Select
         onSelect={refine}

@@ -17,6 +17,15 @@ stories.add('default', () =>
         {value: 6, label: '6 hits per page'},
         {value: 8, label: '8 hits per page'}]}/>
   </WrapWithHits>
+).add('without label', () =>
+  <WrapWithHits linkedStoryGroup="HitsPerPage" >
+    <HitsPerPage
+      defaultRefinement={4}
+      items={[{value: 2},
+        {value: 4},
+        {value: 6},
+        {value: 8}]}/>
+  </WrapWithHits>
 ).add('playground', () =>
     <WrapWithHits >
       <HitsPerPage

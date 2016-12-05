@@ -17,12 +17,23 @@ let props;
 let params;
 
 describe('connectHitsPerPage', () => {
+  const items = [{label: '10', value: 10}, {label: '20', value: 20}];
   it('provides the correct props to the component', () => {
-    props = getProvidedProps({}, {hitsPerPage: '10'});
-    expect(props).toEqual({currentRefinement: 10});
+    props = getProvidedProps({items}, {hitsPerPage: '10'});
+    expect(props).toEqual({
+      currentRefinement: 10,
+      items: [{label: '10', value: 10, isRefined: true}, {
+        label: '20', value: 20, isRefined: false,
+      }],
+    });
 
-    props = getProvidedProps({defaultRefinement: 20}, {});
-    expect(props).toEqual({currentRefinement: 20});
+    props = getProvidedProps({defaultRefinement: 20, items}, {});
+    expect(props).toEqual({
+      currentRefinement: 20,
+      items: [{
+        label: '10', value: 10, isRefined: false,
+      }, {label: '20', value: 20, isRefined: true}],
+    });
   });
 
   it('calling refine updates the widget\'s state', () => {

@@ -19,4 +19,15 @@ stories.add('default', () =>
       defaultRefinement="ikea"
     />
   </WrapWithHits>
+).add('without label', () =>
+  <WrapWithHits >
+    <SortBy
+      items={[
+        {value: 'ikea'},
+        {value: 'ikea_price_asc'},
+        {value: 'ikea_price_desc'},
+      ]}
+      defaultRefinement="ikea"
+    />
+  </WrapWithHits>
 );
