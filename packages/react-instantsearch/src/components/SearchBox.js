@@ -15,7 +15,7 @@ const ResetIcon = () =>
 
 class SearchBox extends Component {
   static propTypes = {
-    query: PropTypes.string,
+    currentRefinement: PropTypes.string,
     refine: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
 
@@ -32,7 +32,7 @@ class SearchBox extends Component {
   };
 
   static defaultProps = {
-    query: '',
+    currentRefinement: '',
     focusShortcuts: ['s', '/'],
     autoFocus: false,
     searchAsYouType: true,
@@ -42,7 +42,7 @@ class SearchBox extends Component {
     super();
 
     this.state = {
-      query: props.searchAsYouType ? null : props.query,
+      query: props.searchAsYouType ? null : props.currentRefinement,
     };
   }
 
@@ -61,17 +61,17 @@ class SearchBox extends Component {
     // new search has been triggered.
     if (
       !nextProps.searchAsYouType &&
-      nextProps.query !== this.props.query
+      nextProps.currentRefinement !== this.props.currentRefinement
     ) {
       this.setState({
-        query: nextProps.query,
+        query: nextProps.currentRefinement,
       });
     }
   }
 
   getQuery = () =>
     this.props.searchAsYouType ?
-      this.props.query :
+      this.props.currentRefinement :
       this.state.query;
 
   setQuery = val => {

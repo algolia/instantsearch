@@ -39,11 +39,11 @@ export default InfiniteSearch = () =>
     </InstantSearch>
   </View>;
 
-const SearchBox = connectSearchBox(() =>
+const SearchBox = connectSearchBox(({currentRefinement, refine}) =>
   <TextInput
     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-    onChangeText={(text) => this.props.refine(text)}
-    value={this.props.query}
+    onChangeText={(text) => refine(text)}
+    value={currentRefinement}
   />
 );
 

@@ -20,14 +20,14 @@ function getCurrentRefinement(props, state) {
  * @kind connector
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
- * @providedPropType {string} query - the query to search for.
+ * @providedPropType {string} currentRefinement - the query to search for.
  */
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
 
   getProvidedProps(props, state) {
     return {
-      query: getCurrentRefinement(props, state),
+      currentRefinement: getCurrentRefinement(props, state),
     };
   },
 

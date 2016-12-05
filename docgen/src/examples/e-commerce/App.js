@@ -126,10 +126,10 @@ const RefinementListWithTitle = ({title, item}) =>
     {item}
   </div>;
 
-const CustomCheckbox = ({query, refine}) =>
+const CustomSearchBox = ({currentRefinement, refine}) =>
     <div className="input-group">
       <input type="text"
-             value={query}
+             value={currentRefinement}
              onChange={e => refine(e.target.value)}
              className="form-control"
              id="q"/>
@@ -292,7 +292,7 @@ const PriceRange = ({label, value, onClick}) =>
     </a>
   </li>;
 
-const ConnectedSearchBox = connectSearchBox(CustomCheckbox);
+const ConnectedSearchBox = connectSearchBox(CustomSearchBox);
 const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);
 const ConnectedHits = connectHits(CustomHits);
 
