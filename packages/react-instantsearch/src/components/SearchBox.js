@@ -191,7 +191,6 @@ class SearchBox extends Component {
 export default translatable({
   submit: null,
   reset: null,
-  submitTitle: 'Submit your search query.',
   resetTitle: 'Clear the search query.',
-  placeholder: 'Search your website',
+  placeholder: 'Search here…',
 })(SearchBox);

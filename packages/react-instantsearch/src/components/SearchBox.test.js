@@ -56,7 +56,6 @@ describe('SearchBox', () => {
         translations={{
           submit: 'SUBMIT',
           reset: 'RESET',
-          submitTitle: 'SUBMIT_TITLE',
           resetTitle: 'RESET_TITLE',
           placeholder: 'PLACEHOLDER',
         }}
