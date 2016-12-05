@@ -18,14 +18,14 @@ let params;
 
 describe('connectSortBy', () => {
   it('provides the correct props to the component', () => {
-    props = getProvidedProps({}, {});
-    expect(props).toEqual({currentRefinement: null});
+    props = getProvidedProps({items: [{value: 'yep'}, {value: 'yop'}]}, {sortBy: 'yep'});
+    expect(props).toEqual({
+      items: [{value: 'yep', isRefined: true}, {value: 'yop', isRefined: false}],
+      currentRefinement: 'yep',
+    });
 
-    props = getProvidedProps({}, {sortBy: 'yep'});
-    expect(props).toEqual({currentRefinement: 'yep'});
-
-    props = getProvidedProps({defaultRefinement: 'yep'}, {});
-    expect(props).toEqual({currentRefinement: 'yep'});
+    props = getProvidedProps({items: [{value: 'yep'}], defaultRefinement: 'yep'}, {});
+    expect(props).toEqual({items: [{value: 'yep', isRefined: true}], currentRefinement: 'yep'});
   });
 
   it('calling refine updates the widget\'s state', () => {

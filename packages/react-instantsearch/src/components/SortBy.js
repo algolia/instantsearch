@@ -9,7 +9,7 @@ class SortBy extends Component {
     refine: PropTypes.func.isRequired,
 
     items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
+      label: PropTypes.string,
       value: PropTypes.string.isRequired,
     })).isRequired,
 
