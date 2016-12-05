@@ -12,8 +12,10 @@
 }
 
 input.ais-SearchBox__input[type="search"] {
+  @include input();
   width: 100%;
-  padding: 13px 44px !important;
+  padding: 13px 44px;
+  border: solid 1px #d4d8e3;
   font-size: 14px;
   outline: none;
   background: url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 18 18\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12.5 11h-.79l-.28-.27C12.41 9.59 13 8.11 13 6.5 13 2.91 10.09 0 6.5 0S0 2.91 0 6.5 2.91 13 6.5 13c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L17.49 16l-4.99-5zm-6 0C4.01 11 2 8.99 2 6.5S4.01 2 6.5 2 11 4.01 11 6.5 8.99 11 6.5 11z\' fill=\'%23BFC7D8\' fill-rule=\'evenodd\'/></svg>")no-repeat center left 16px / 18px;
@@ -33,7 +35,7 @@ input.ais-SearchBox__input[type="search"] {
 
   &:not(:placeholder-shown) ~ .ais-SearchBox__reset,
   &:not([value=""]) ~ .ais-SearchBox__reset {
-    transform: scale(1) !important;
+    transform: scale(1);
   }
 
   // I cannot really explain why I'm forced to do this
@@ -42,13 +44,13 @@ input.ais-SearchBox__input[type="search"] {
   // disable all the css in firefox.
   @supports (display: -moz-box) {
     &:not([value=""]) ~ .ais-SearchBox__reset{
-      transform: scale(2) translateY(-2px)!important;
+      transform: scale(1);
     }
   }
   // And for ipads/iphones
   @supports (font: -apple-system-headline) {
     &:not([value=""]) ~ .ais-SearchBox__reset{
-      transform: scale(5) translateY(0)!important;
+      transform: scale(1);
     }
   }
 }
@@ -85,8 +87,9 @@ input[type="search"].ais-SearchBox__input::-webkit-search-results-decoration {
 }
 
 .ais-SearchBox__reset {
+  @include buttonTernary();
   position: absolute;
-  top: 1.25em;
+  top: 1em;
   right: 1.5em;
   width: 24px;
   height: 24px;

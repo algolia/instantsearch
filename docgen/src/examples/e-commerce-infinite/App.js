@@ -18,6 +18,7 @@ import {
   connectInfiniteHits,
   connectMultiRange,
 } from 'react-instantsearch/connectors';
+import 'react-instantsearch-theme-algolia/style.scss';
 
 export default function App() {
   return (

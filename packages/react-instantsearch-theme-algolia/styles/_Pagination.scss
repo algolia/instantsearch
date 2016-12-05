@@ -38,10 +38,8 @@
 }
 
 .ais-Pagination__itemDisabled {
+  @include disabled();
   visibility: visible;
-}
-
-.ais-Pagination__itemDisabled {
   color: #bbbbbb;
 }
 

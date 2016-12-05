@@ -1,5 +1,4 @@
 .ais-HitsPerPage__root {
-  button {
-    @include button();
-  }
+  @include button();
+  @include select();
 }
