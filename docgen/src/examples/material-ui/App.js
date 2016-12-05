@@ -50,6 +50,7 @@ const MaterialUiExample = props =>
     state={props.state}
     createURL={props.createURL.bind(this)}
     onStateChange={props.onStateChange.bind(this)}
+    searchParameters={{hitsPerPage: 16}}
   >
     <Content/>
   </InstantSearch>;
@@ -115,7 +116,6 @@ const Content = React.createClass({
           <div className="Content__hits">
             <ConnectedSearchBox marginLeft={marginLeft}/>
             <ConnectedHits
-              hitsPerPage={20}
               marginLeft={marginLeft}
             />
           </div>

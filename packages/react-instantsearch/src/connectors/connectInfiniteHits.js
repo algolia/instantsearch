@@ -1,5 +1,3 @@
-import {PropTypes} from 'react';
-
 import createConnector from '../core/createConnector';
 
 function getId() {
@@ -12,17 +10,11 @@ function getId() {
  * Algolia. This connector provides a function to load more results.
  * @name connectInfiniteHits
  * @kind connector
- * @propType {number} hitsPerPage - How many hits should be displayed for every page.
- *   Ignored when a `HitsPerPage` component is also present.
  * @providedPropType {array.<object>} hits - the records that matched the search state
  * @providedPropType {boolean} hasMore - indicates if there are more pages to load
  */
 export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
-
-  propTypes: {
-    hitsPerPage: PropTypes.number,
-  },
 
   getProvidedProps(componentProps, allWidgetsState, resultsStruct) {
     if (!resultsStruct.results) {
@@ -64,11 +56,9 @@ export default createConnector({
     const currentPage = widgetsState[id] ?
       widgetsState[id] :
       0;
-    const isHitsPerPageDefined = typeof searchParameters.hitsPerPage !== 'undefined';
 
     return searchParameters.setQueryParameters({
       page: currentPage,
-      hitsPerPage: isHitsPerPageDefined ? searchParameters.hitsPerPage : props.hitsPerPage,
     });
   },
 
