@@ -6,7 +6,7 @@ import connect from './connectRange';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -18,7 +18,7 @@ let params;
 
 describe('connectRange', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({attributeName: 'ok', min: 5, max: 10}, {}, {});
+    props = getProvidedProps({attributeName: 'ok', min: 5, max: 10}, {}, {});
     expect(props).toEqual({
       min: 5,
       max: 10,
@@ -31,7 +31,7 @@ describe('connectRange', () => {
       getFacetValues: () => [{name: '5', count: 10}, {name: '2', count: 20}],
       getFacetByName: () => true,
     };
-    props = getProps({attributeName: 'ok'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({
       min: 5,
       max: 10,
@@ -39,10 +39,10 @@ describe('connectRange', () => {
       count: [{value: '5', count: 10}, {value: '2', count: 20}],
     });
 
-    props = getProps({attributeName: 'ok'}, {ok: {min: 6, max: 9}}, {});
+    props = getProvidedProps({attributeName: 'ok'}, {ok: {min: 6, max: 9}}, {});
     expect(props).toBe(null);
 
-    props = getProps({
+    props = getProvidedProps({
       attributeName: 'ok',
       min: 5,
       max: 10,
@@ -56,7 +56,7 @@ describe('connectRange', () => {
       count: [],
     });
 
-    props = getProps({
+    props = getProvidedProps({
       attributeName: 'ok',
       min: 5,
       max: 10,
@@ -70,7 +70,7 @@ describe('connectRange', () => {
       count: [],
     });
 
-    props = getProps({
+    props = getProvidedProps({
       attributeName: 'ok',
       min: 5,
       max: 10,

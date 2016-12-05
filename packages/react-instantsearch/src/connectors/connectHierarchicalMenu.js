@@ -123,7 +123,7 @@ export default createConnector({
     showParentLevel: true,
   },
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     const {showMore, limitMin, limitMax} = props;
     const id = getId(props);
     const {results} = search;

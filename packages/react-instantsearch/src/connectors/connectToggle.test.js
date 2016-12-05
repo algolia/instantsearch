@@ -6,7 +6,7 @@ import connect from './connectToggle';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -18,13 +18,13 @@ let params;
 
 describe('connectToggle', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({attributeName: 't'}, {});
+    props = getProvidedProps({attributeName: 't'}, {});
     expect(props).toEqual({checked: false});
 
-    props = getProps({attributeName: 't'}, {toggle: {t: true}});
+    props = getProvidedProps({attributeName: 't'}, {toggle: {t: true}});
     expect(props).toEqual({checked: true});
 
-    props = getProps({defaultRefinement: true, attributeName: 't'}, {});
+    props = getProvidedProps({defaultRefinement: true, attributeName: 't'}, {});
     expect(props).toEqual({checked: true});
   });
 

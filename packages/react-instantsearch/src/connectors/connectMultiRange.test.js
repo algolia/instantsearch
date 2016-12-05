@@ -6,7 +6,7 @@ import connect from './connectMultiRange';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -18,7 +18,7 @@ let params;
 
 describe('connectMultiRange', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({
+    props = getProvidedProps({
       items: [
         {label: 'All'},
       ],
@@ -30,7 +30,7 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({
+    props = getProvidedProps({
       items: [
         {label: 'All'},
         {label: 'Ok', start: 100},
@@ -44,7 +44,7 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({
+    props = getProvidedProps({
       items: [
         {label: 'All'},
         {label: 'Not ok', end: 200},
@@ -58,7 +58,7 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({
+    props = getProvidedProps({
       items: [
         {label: 'All'},
         {label: 'Ok', start: 100},
@@ -76,13 +76,13 @@ describe('connectMultiRange', () => {
       currentRefinement: '',
     });
 
-    props = getProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
+    props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
+    props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
+    props = getProvidedProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
   });
 

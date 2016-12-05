@@ -24,7 +24,7 @@ export default createConnector({
     hitsPerPage: PropTypes.number,
   },
 
-  getProps(componentProps, allWidgetsState, resultsStruct) {
+  getProvidedProps(componentProps, allWidgetsState, resultsStruct) {
     if (!resultsStruct.results) {
       this._allResults = [];
       return {

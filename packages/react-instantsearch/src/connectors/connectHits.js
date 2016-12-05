@@ -19,7 +19,7 @@ export default createConnector({
     hitsPerPage: PropTypes.number,
   },
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     if (!search.results) {
       return null;
     }

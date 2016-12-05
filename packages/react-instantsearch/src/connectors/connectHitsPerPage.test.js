@@ -6,7 +6,7 @@ import connect from './connectHitsPerPage';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -18,10 +18,10 @@ let params;
 
 describe('connectHitsPerPage', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({}, {hitsPerPage: '10'});
+    props = getProvidedProps({}, {hitsPerPage: '10'});
     expect(props).toEqual({currentRefinement: 10});
 
-    props = getProps({defaultRefinement: 20}, {});
+    props = getProvidedProps({defaultRefinement: 20}, {});
     expect(props).toEqual({currentRefinement: 20});
   });
 

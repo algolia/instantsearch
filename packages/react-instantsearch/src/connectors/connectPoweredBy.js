@@ -12,7 +12,7 @@ export default createConnector({
 
   propTypes: {},
 
-  getProps() {
+  getProvidedProps() {
     const url = 'https://www.algolia.com/?' +
       'utm_source=instantsearch.js&' +
       'utm_medium=website&' +
