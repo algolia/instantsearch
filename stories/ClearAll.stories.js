@@ -14,7 +14,7 @@ stories.add('default', () =>
       <ClearAll />
       <div style={{display: 'none'}}>
         <RefinementList
-          attributeName="cateogry"
+          attributeName="category"
           defaultRefinement={['Dining']}
         />
       </div>

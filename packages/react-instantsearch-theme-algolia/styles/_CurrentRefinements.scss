@@ -7,12 +7,7 @@
 
 .ais-CurrentRefinements__item {
   display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: none;
-  color: #fff;
-  background: $main-color;
-  font-size: 12px;
+  @include buttonSecondary();
 }
 
 .ais-CurrentRefinements__itemLabel {
@@ -22,6 +17,7 @@
 }
 
 .ais-CurrentRefinements__itemClear {
+  @include buttonLink();
   appearance: none;
   background: none;
   border: none;
