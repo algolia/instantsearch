@@ -30,6 +30,7 @@ const App = props =>
     state={props.state}
     createURL={props.createURL.bind(this)}
     onStateChange={props.onStateChange.bind(this)}
+    searchParameters={{hitsPerPage: 16}}
   >
     <div>
       <Header />
@@ -232,7 +233,7 @@ const CustomResults = createConnector({
           </div>
           <Stats />
         </section>
-        <ConnectedHits hitsPerPage={16}/>
+        <ConnectedHits/>
         <footer><Pagination showLast={true}/></footer>
       </div>
     );

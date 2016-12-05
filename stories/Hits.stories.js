@@ -12,8 +12,4 @@ stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="Hits">
     <Hits />
   </WrapWithHits>
-).add('with max hits per page', () =>
-  <WrapWithHits >
-    <Hits hitsPerPage={5}/>
-  </WrapWithHits>
 );
