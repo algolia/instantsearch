@@ -57,6 +57,6 @@ class RangeInput extends Component {
 }
 
 export default translatable({
-  submit: 'go',
+  submit: 'ok',
   separator: 'to',
 })(RangeInput);
