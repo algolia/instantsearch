@@ -40,7 +40,7 @@ function getCurrentRefinement(props, state) {
 export default createConnector({
   displayName: 'AlgoliaPagination',
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     if (!search.results) {
       return null;
     }

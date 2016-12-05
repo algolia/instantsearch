@@ -37,7 +37,7 @@ export default createConnector({
     defaultRefinement: PropTypes.string,
   },
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     const currentRefinement = getCurrentRefinement(props, state);
     return {currentRefinement};
   },

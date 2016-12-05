@@ -10,7 +10,7 @@ import {shallowEqual, getDisplayName} from './utils';
  * @property {function} getSearchParameters - function transforming the local state to a SearchParameters
  * @property {function} getMetadata - metadata of the widget
  * @property {function} transitionState - hook after the state has changed
- * @property {function} getProps - transform the state into props passed to the wrapped component.
+ * @property {function} getProvidedProps - transform the state into props passed to the wrapped component.
  * Receives (props, widgetStates, searchState, metadata) and returns the local state.
  * @property {function} getId - Receives props and return the id that will be used to identify the widget
  * @property {function} cleanUp - hook when the widget will unmount. Receives (props, searchState) and return a cleaned state.
@@ -63,12 +63,12 @@ export default function createConnector(connectorDesc) {
 
       const {ais: {store, widgetsManager}} = context;
       this.state = {
-        props: this.getProps(props),
+        props: this.getProvidedProps(props),
       };
 
       this.unsubscribe = store.subscribe(() => {
         this.setState({
-          props: this.getProps(this.props),
+          props: this.getProvidedProps(this.props),
         });
       });
 
@@ -103,7 +103,7 @@ export default function createConnector(connectorDesc) {
     componentWillReceiveProps(nextProps) {
       if (!shallowEqual(this.props, nextProps)) {
         this.setState({
-          props: this.getProps(nextProps),
+          props: this.getProvidedProps(nextProps),
         });
 
         if (isWidget) {
@@ -140,7 +140,7 @@ export default function createConnector(connectorDesc) {
       return !propsEqual || !shallowEqual(this.state.props, nextState.props);
     }
 
-    getProps = props => {
+    getProvidedProps = props => {
       const {ais: {store}} = this.context;
       const {
         results,
@@ -150,7 +150,7 @@ export default function createConnector(connectorDesc) {
         metadata,
       } = store.getState();
       const searchState = {results, searching, error};
-      return connectorDesc.getProps.call(this, props, widgets, searchState, metadata);
+      return connectorDesc.getProvidedProps.call(this, props, widgets, searchState, metadata);
     };
 
     refine = (...args) => {

@@ -7,7 +7,7 @@ import connect from './connectMenu';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   getMetadata,
@@ -24,16 +24,16 @@ describe('connectMenu', () => {
       getFacetByName: () => true,
     };
 
-    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
 
-    props = getProps({attributeName: 'ok'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: null});
 
     results.getFacetValues.mockClear();
@@ -49,7 +49,7 @@ describe('connectMenu', () => {
         count: 10,
       },
     ]);
-    props = getProps({attributeName: 'ok'}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props.items).toEqual([
       {
         value: 'wat',
@@ -65,7 +65,7 @@ describe('connectMenu', () => {
       },
     ]);
 
-    props = getProps({attributeName: 'ok', limitMin: 1}, {}, {results});
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results});
     expect(props.items).toEqual([
       {
         value: 'wat',
@@ -75,7 +75,7 @@ describe('connectMenu', () => {
       },
     ]);
 
-    props = getProps(
+    props = getProvidedProps(
       {attributeName: 'ok', showMore: true, limitMin: 0, limitMax: 1},
       {},
       {results}
@@ -103,7 +103,7 @@ describe('connectMenu', () => {
       },
     ]);
 
-    props = getProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
+    props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
 
     expect(props.items).toEqual([{
       value: '',
@@ -114,7 +114,7 @@ describe('connectMenu', () => {
   });
 
   it('doesn\'t render when no results are available', () => {
-    props = getProps({attributeName: 'ok'}, {}, {});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {});
     expect(props).toBe(null);
   });
 

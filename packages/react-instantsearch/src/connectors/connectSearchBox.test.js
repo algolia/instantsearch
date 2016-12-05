@@ -6,7 +6,7 @@ import connect from './connectSearchBox';
 jest.mock('../core/createConnector');
 
 const {
-  getProps,
+  getProvidedProps,
   refine,
   getSearchParameters: getSP,
   cleanUp,
@@ -17,10 +17,10 @@ let params;
 
 describe('connectSearchBox', () => {
   it('provides the correct props to the component', () => {
-    props = getProps({}, {});
+    props = getProvidedProps({}, {});
     expect(props).toEqual({query: ''});
 
-    props = getProps({}, {query: 'yep'});
+    props = getProvidedProps({}, {query: 'yep'});
     expect(props).toEqual({query: 'yep'});
   });
 

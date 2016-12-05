@@ -11,7 +11,7 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaStats',
 
-  getProps(props, state, search) {
+  getProvidedProps(props, state, search) {
     if (!search.results) {
       return null;
     }

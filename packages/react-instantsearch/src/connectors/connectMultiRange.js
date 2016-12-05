@@ -65,7 +65,7 @@ export default createConnector({
     })).isRequired,
   },
 
-  getProps(props, state) {
+  getProvidedProps(props, state) {
     const {items} = props;
     const currentRefinement = getCurrentRefinement(props, state);
 

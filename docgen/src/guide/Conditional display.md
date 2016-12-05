@@ -14,7 +14,7 @@ conditionally display content based on the search state.
 ```javascript
 const Content = createConnector({
     displayName: 'ConditionalQuery',
-    getProps(props, state) {
+    getProvidedProps(props, state) {
       return {query: state.query};
     },
  })(({query}) => {
@@ -30,7 +30,7 @@ const Content = createConnector({
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalResults',
-    getProps(props, state, search) {
+    getProvidedProps(props, state, search) {
       const noResults = search.results ? search.results.nbHits === 0 : false;
       return {query: state.query, noResults};
     },
@@ -47,7 +47,7 @@ const content = createConnector({
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalError',
-    getProps(props, state, search) {
+    getProvidedProps(props, state, search) {
       return {error: search.error};
     },
  })(({error}) => {
@@ -65,7 +65,7 @@ In slow user network situations you might want to know when the search results a
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalError',
-    getProps(props, state, search) {
+    getProvidedProps(props, state, search) {
       return {loading: search.loading};
     },
 })(({loading}) => {
