@@ -28,18 +28,27 @@ function getCurrentRefinement(props, state) {
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
- * @providedPropType {array.<{label: string, value: string}>} items - the list of indexes the SortBy can display.
+ * @providedPropType {array.<{isRefined: boolean, label?: string, value: string}>} items - the list of items the HitsPerPage can display.  If no label provided, the value will be displayed.
  */
 export default createConnector({
   displayName: 'AlgoliaSortBy',
 
   propTypes: {
     defaultRefinement: PropTypes.string,
+    items: PropTypes.arrayOf(PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.string.isRequired,
+    })).isRequired,
   },
 
   getProvidedProps(props, state) {
     const currentRefinement = getCurrentRefinement(props, state);
-    return {currentRefinement};
+    const items = props.items.map(item => item.value === currentRefinement
+      ? {...item, isRefined: true} : {...item, isRefined: false});
+    return {
+      items,
+      currentRefinement,
+    };
   },
 
   refine(props, state, nextRefinement) {
