@@ -44,11 +44,11 @@ const Header = () =>
   </header>;
 
 const SearchBox = connectSearchBox(
-  ({query, refine}) =>
+  ({currentRefinement, refine}) =>
     <div className="searchbox-container">
       <div className="input-group">
         <input type="text"
-               value={query}
+               value={currentRefinement}
                onChange={e => refine(e.target.value)}
                className="form-control"
         />

@@ -126,8 +126,8 @@ const Content = React.createClass({
   },
 });
 
-const MaterialUiSearchBox = ({query, refine, marginLeft}) => {
-  const clear = query ?
+const MaterialUiSearchBox = ({currentRefinement, refine, marginLeft}) => {
+  const clear = currentRefinement ?
     <FontIcon style={{color: 'lightgrey'}}
               className="material-icons"
               onTouchTap={() => refine('')}>clear</FontIcon>
@@ -135,7 +135,7 @@ const MaterialUiSearchBox = ({query, refine, marginLeft}) => {
   return (
     <div style={{marginLeft}} className="Header__searchBox">
       <FontIcon style={{color: 'lightgrey'}} className="material-icons">search</FontIcon>
-      <TextField value={query}
+      <TextField value={currentRefinement}
                  onChange={e => refine(e.target.value)}
                  id="SearchBox"
                  hintText="Search for a product..."
