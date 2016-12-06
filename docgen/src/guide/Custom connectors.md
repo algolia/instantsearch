@@ -26,7 +26,7 @@ This method should return the props to forward to the composed component.
 
 ## refine(props, searchState, ...args)
 
-This method defines exactly how the `refine` prop of connected widgets affects the search state.
+This method defines exactly how the `refine` prop of widgets affects the search state.
 
 It takes in the current props of the higher-order component, the [search state](guide/Search%20state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
@@ -35,7 +35,7 @@ const CoolWidget = createConnector({
   displayName: 'CoolWidget',
 
   getProvidedProps(props, searchState) {
-    // Since the `queryAndPage` state entry isn't necessarily defined, we need
+    // Since the `queryAndPage` searchState entry isn't necessarily defined, we need
     // to default its value.
     const [query, page] = searchState.queryAndPage || ['', 0];
 
@@ -125,7 +125,7 @@ const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters
 
   getMetadata(props, searchState) {
-    // Since the `queryAndPage` state entry isn't necessarily defined, we need
+    // Since the `queryAndPage` searchState entry isn't necessarily defined, we need
     // default its value.
     const [query, page] = searchState.queryAndPage || ['', 0];
 
@@ -137,14 +137,14 @@ const CoolWidget = createConnector({
         // String label (or node) that should appear in the CurrentRefinements
         // component.
         label: `Query: ${query}`,
-        // Describes how clearing this filter affects the InstantSearch state.
+        // Describes how clearing this filter affects the InstantSearch searchState.
         // In our case, clearing the query just resets it to an empty string
         // without affecting the page.
         clear: nextSearchState => {
           return {
             ...nextSearchState,
-            // Do not depend on the current `state` here. Since filters can be
-            // cleared in batches, the `state` parameter is not up-to-date when
+            // Do not depend on the current `searchState` here. Since filters can be
+            // cleared in batches, the `searchState` parameter is not up-to-date when
             // this method is called.
             queryAndPage: ['', nextSearchState.queryAndPage[1]],
           };

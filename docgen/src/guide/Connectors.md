@@ -41,10 +41,10 @@ const MySearchBox = ({currentRefinement, refine}) =>
     onChange={e => refine(e.target.value)}
   />;
 
-// `ConnectedSearchBox` renders a `<MySearchBox>` component that is connected to
+// `ConnectedSearchBox` renders a `<MySearchBox>` widget that is connected to
 // the <InstantSearch> state, providing it with `currentRefinement` and `refine` props for
 // reading and manipulating the current query of the search.
-// Note that this `ConnectedSearchBox` component will only work when rendered
+// Note that this `ConnectedSearchBox` widget will only work when rendered
 // as a child or a descendant of the `<InstantSearch>` component.
 const ConnectedSearchBox = connectSearchBox(MySearchBox);
 ```
