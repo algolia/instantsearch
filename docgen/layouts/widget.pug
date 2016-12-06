@@ -7,16 +7,16 @@ block navigation
 
 block content
   h2#description Description
-    a.anchor(href='#description')
+    a.anchor(href=`${navPath}#description`)
   p!=h.markdown(description)
   h2#example Example
-    a.anchor(href='#example')
+    a.anchor(href=`${navPath}#example`)
   if examples
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
     a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
   h2#proptypes Props
-    a.anchor(href='#proptypes')
+    a.anchor(href=`${navPath}#proptypes`)
   if proptype
     p List of props exposed by the
       code=name
@@ -27,7 +27,7 @@ block content
           tr.api-entry-values
             td.api-entry-name
               div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
-                a.anchor(href=`#default-props-entry-${name}-${type.name}`)
+                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
             td.api-entry-type
               code=type.type
             td.api-entry-default-value
@@ -39,7 +39,7 @@ block content
   else
     p This widget does not accept props.
   h2#theme Classnames
-    a.anchor(href='#classnames')
+    a.anchor(href=`${navPath}#classnames`)
   if themekey
     table.api
       tbody
@@ -48,13 +48,13 @@ block content
             td.api-entry-name
               - var themeId = `default-theme-entry-${name}-${type.key}`;
               div.api-entry(id=themeId)=type.key
-                a.anchor(href=`#${themeId}`)
+                a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
             td=type.description
   else
     p This widget does not accept theme.
-  h2#translation Translation keys
-    a.anchor(href='#translation')
+  h2#translations Translation keys
+    a.anchor(href=`${navPath}#translations`)
   if translationkey
     table.api
       tbody
@@ -63,7 +63,7 @@ block content
             td.api-entry-name
               - var themeId = `default-theme-entry-${name}-${type.key}`;
               div.api-entry(id=themeId)=type.key
-                a.anchor(href=`#${themeId}`)
+                a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
             td=type.description
   else
