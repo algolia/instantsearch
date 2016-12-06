@@ -17,5 +17,5 @@ This guide walks you through the different concepts around react-instantsearch i
 essentials to advanced topics. If you have 15 minutes to kill, we also have a [Getting started](/Getting%20started.html) for you to try.
 
 <div class="guide-nav">
-Next: <a href="/guide/Install.html">Install react-instantsearch →</a>
+Next: <a href="guide/Install.html">Install react-instantsearch →</a>
 </div>

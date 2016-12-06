@@ -9,8 +9,8 @@ mixin navRec(currentPath, navItems, title, depth)
     - var className = ['sidebar-element', ('level-h' + depth), (isCurrentFile ? 'navItem-active' : 'navItem')];
     - var activeClass = isCurrentFile ? 'navItem-active' : '';
     li(class=className)
-      a(href=h.publicPath(navItem.path) class=activeClass)=navItem.title
+      a(href=navItem.path class=activeClass)=navItem.title
       if navItem.metadata.source
         span
-          |  - 
+          |  -
           a(href=navItem.metadata.source) source code

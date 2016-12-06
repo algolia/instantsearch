@@ -8,15 +8,15 @@ import webpackConfig from './webpack.config.start.babel';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 import compression from 'compression';
-import {rootPath} from './path.js';
+import config from './config.js';
 
 export default function() {
   const compiler = webpack(webpackConfig);
   const bs = browserSync.create();
   bs.init({
-    server: rootPath(process.env.DOCS_DIST || 'docs/react/'),
+    server: config.docsDist,
     open: false,
-    files: `${rootPath(process.env.DOCS_DIST || 'docs/react/')}**/*`,
+    files: `${config.docsDist}**/*`,
     watchOptions: {
       ignored: [
         /\.js$/, // any change to a JavaScript file must be ignored, webpack handles it
