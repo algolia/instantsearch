@@ -29,6 +29,10 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.ga()
+);
+
+search.addWidget(
   instantsearch.widgets.stats({
     container: '#stats',
   })

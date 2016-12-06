@@ -24,6 +24,7 @@ import sortBySelector from '../widgets/sort-by-selector/sort-by-selector.js';
 import starRating from '../widgets/star-rating/star-rating.js';
 import stats from '../widgets/stats/stats.js';
 import toggle from '../widgets/toggle/toggle.js';
+import ga from '../widgets/ga/ga.js';
 import version from './version.js';
 
 const instantsearch = toFactory(InstantSearch);
@@ -45,6 +46,7 @@ instantsearch.widgets = {
   starRating,
   stats,
   toggle,
+  ga,
 };
 instantsearch.version = version;
 instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
