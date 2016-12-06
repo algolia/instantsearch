@@ -16,7 +16,7 @@ export default function() {
   bs.init({
     server: config.docsDist,
     open: false,
-    files: `${config.docsDist}**/*`,
+    files: `${config.docsDist}/**/*`,
     watchOptions: {
       ignored: [
         /\.js$/, // any change to a JavaScript file must be ignored, webpack handles it
