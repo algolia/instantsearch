@@ -1,10 +1,5 @@
 {
   "presets": ["latest", "react", "stage-2"],
-  "plugins": [
-    ["transform-define", {
-      "__DOC__": "no"
-    }],
-  ],
   "env": {
     "development": {
       "plugins": [
