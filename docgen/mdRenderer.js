@@ -1,5 +1,5 @@
 import MarkdownIt from 'markdown-it';
-import markdownItAnchor from './plugins/markdown-it-anchor';
+import markdownItAnchor from 'markdown-it-anchor';
 
 import highlight from './syntaxHighlighting.js';
 
