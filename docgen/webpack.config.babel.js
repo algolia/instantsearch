@@ -17,8 +17,6 @@ export default {
     path: config.docsDist,
     publicPath: config.publicPath,
     filename: '[name].js',
-    // @TODO: in production this should be hashed
-    // filename: '[name].[chunkhash].js',
   },
   module: {
     loaders: [

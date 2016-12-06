@@ -2,6 +2,7 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer';
+import {mount} from 'enzyme';
 
 import MultiRange from './MultiRange';
 
@@ -36,5 +37,33 @@ describe('MultiRange', () => {
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('refines its value on change', () => {
+    const refine = jest.fn();
+    const wrapper = mount(
+        <MultiRange
+          refine={refine}
+          items={[
+            {label: 'label', value: '10:'},
+            {label: 'label', value: '10:20'},
+            {label: 'label', value: '20:30'},
+            {label: 'label', value: '30:'},
+          ]}
+        />
+      );
+
+    const items = wrapper.find('.ais-MultiRange__item');
+
+    expect(items.length).toBe(4);
+
+    const firstItem = items.first().find('.ais-MultiRange__itemRadio');
+
+    firstItem.simulate('change', {target: {checked: true}});
+
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toEqual('10:');
+
+    wrapper.unmount();
   });
 });
