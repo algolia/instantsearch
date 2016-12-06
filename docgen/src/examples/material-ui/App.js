@@ -11,7 +11,10 @@ import {
   connectCurrentRefinements,
   connectPagination,
 } from 'react-instantsearch/connectors';
-import {InstantSearch} from 'react-instantsearch/dom';
+import {
+  InstantSearch,
+  Highlight,
+} from 'react-instantsearch/dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
@@ -263,14 +266,14 @@ function CustomHits({hits, marginLeft}) {
       {hits.map((hit, idx) =>
         <Card key={idx} style={cardStyle}>
           <CardHeader
-            subtitle={<span dangerouslySetInnerHTML={{__html: hit._highlightResult.name.value}}/>}
+            subtitle={<Highlight attributeName="name" hit={hit} />}
           />
           <div style={imageHolderStyle}>
             <img src={hit.image} className="Content__hits__card__img"/>
           </div>
           <CardTitle
-            title={<span dangerouslySetInnerHTML={{__html: `${hit._highlightResult.name.value} - $${hit.price}`}}/>}
-            subtitle={<span dangerouslySetInnerHTML={{__html: hit._highlightResult.type.value}}/>}
+            title={<span><Highlight attributeName="name" hit={hit} /> - ${hit.price}</span>}
+            subtitle={<Highlight attributeName="type" hit={hit} />}
             style={{position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)'}}
             titleStyle={{fontSize: 16}}
           />

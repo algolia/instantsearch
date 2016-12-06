@@ -9,6 +9,7 @@ import {
   Stats,
   Pagination,
   StarRating,
+  Highlight,
 } from 'react-instantsearch/dom';
 
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
@@ -92,32 +93,29 @@ const Stars = ({rating}) => {
 const Genre = ({name}) => <span className="badge">{name}</span>;
 const Genres = ({genres}) => <p className="genre">{genres.map((genre, idx) => <Genre name={genre} key={idx}/>)}</p>;
 
-const Hit = ({
-  hit: {
+const Hit = hit => {
+  const {
     image,
-    _highlightResult: {
-      title: {
-        value: title,
-      },
-    },
     rating,
     year,
     genre,
-  },
-}) =>
-  <div className="hit media">
-    <div className="media-left">
-      <div className="media-object" style={{backgroundImage: `url(${image})`}}></div>
+  } = hit.hit;
+  return (
+    <div className="hit media">
+      <div className="media-left">
+        <div className="media-object" style={{backgroundImage: `url(${image})`}}></div>
+      </div>
+      <div className="media-body">
+        <h4 className="media-heading">
+          <Highlight attributeName="title" hit={hit.hit} />
+          <Stars rating={rating}/>
+        </h4>
+        <p className="year">{year}</p>
+        <Genres genres={genre}/>
+      </div>
     </div>
-    <div className="media-body">
-      <h4 className="media-heading">
-        <span dangerouslySetInnerHTML={{__html: title}}/>
-        <Stars rating={rating}/>
-      </h4>
-      <p className="year">{year}</p>
-      <Genres genres={genre}/>
-    </div>
-  </div>;
+  );
+};
 
 const Results = () =>
   <article>
