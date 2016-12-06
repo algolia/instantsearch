@@ -14,10 +14,7 @@ block content
   if examples
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
-  if (process.env.NODE_ENV === 'development')
-    a.btn.btn-cta(href=`http://localhost:6006/?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
-  else
-    a.btn.btn-cta(href=`https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
+    a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
   h2#proptypes Props
     a.anchor(href='#proptypes')
   if proptype
