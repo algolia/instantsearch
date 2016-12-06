@@ -22,7 +22,7 @@ const highlight = ({attributeName, hit}) => parseAlgoliaHit({
  * @category connector
  * @providedPropType {function} highlight - the function to retrieve and parse an attribute from a hit. It takes a configuration object with 2 attribute: `attributeName` which is the path to the attribute in the record, and `hit` which is the hit from Algolia. It returns an array of object `{value: string, isHighlighted: boolean}`.
  * @example
- * const customHighlight = connectHighlight(({highlight, attributeName, hit) => {
+ * const CustomHighlight = connectHighlight(({highlight, attributeName, hit) => {
  *   const parsedHit = highlight({attributeName, hit});
  *   return parsedHit.map(part => {
  *     if(part.isHighlighted) return <em>{part.value}</em>;

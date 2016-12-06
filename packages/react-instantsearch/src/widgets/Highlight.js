@@ -4,8 +4,7 @@ import HighlightComponent from '../components/Highlight.js';
 /**
  * Renders an highlighted attribute.
  * @name Highlight
- * @kind component
- * @category widget
+ * @kind widget
  * @propType {string} attributeName - the location of the highlighted attribute in the hit
  * @propType {object} hit - the hit object containing the highlighted attribute
  * @example
