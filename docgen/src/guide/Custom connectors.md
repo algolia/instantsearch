@@ -18,7 +18,7 @@ This method should return the props to forward to the composed component.
 
 `props` are the props that were provided to the higher-order component.
 
-`searchState` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](/guides/Search%20state.html).
+`searchState` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](guidesSearch%20state.html).
 
 `searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
@@ -28,7 +28,7 @@ This method should return the props to forward to the composed component.
 
 This method defines exactly how the `refine` prop of connected widgets affects the search state.
 
-It takes in the current props of the higher-order component, the [search state](/guides/Search%20state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
+It takes in the current props of the higher-order component, the [search state](guide/Search%20state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
 ```javascript
 const CoolWidget = createConnector({
@@ -197,5 +197,5 @@ const CoolWidget = createConnector({
 ```
 
 <div class="guide-nav">
-Next: <a href="/guide/Conditional display.html">Conditional display →</a>
+Next: <a href="guide/Conditional display.html">Conditional display →</a>
 </div>

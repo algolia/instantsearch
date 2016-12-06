@@ -12,16 +12,16 @@ You can use multiple `<InstantSearch/>` instances for cases like:
 * sharing a single SearchBox
 * any use case involving synchronizing widgets between different `<InstantSearch>` instances
 
-Two props on the [InstantSearch component](/widgets/InstantSearch.html) can be used to inject state or be notified of state changes:
+Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject state or be notified of state changes:
 
 * onStateChange(nextState): a function being called every time the `InstantSearch` state is updated.
-* [state](/guides/Search%20state.html): a search state
+* [state](guide/Search%20state.html): a search state
 
 The idea is to have a main component that will receive every new search state of the first instance
 and then pass it back to each `InstantSearch` instances.
 
 Refinements and parameters of an `InstantSearch` state needs to have their corresponding widgets or
-[virtual widget](/guides/Virtual%20widgets.html) added to be effectively applied.
+[virtual widget](guide/Virtual%20widgets.html) added to be effectively applied.
 
 Here's an example displaying hits from two different indices:
 
@@ -89,5 +89,5 @@ export default App;
 ```
 
 <div class="guide-nav">
-Next: <a href="/guide/Custom connectors.html">Custom connectors →</a>
+Next: <a href="guide/Custom connectors.html">Custom connectors →</a>
 </div>

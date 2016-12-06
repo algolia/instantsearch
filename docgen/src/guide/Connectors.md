@@ -6,7 +6,7 @@ category: guide
 navWeight: 75
 ---
 
-`react-instantsearch` provides [widgets](/guide/Widgets.html) out of the box, those are great when you want
+`react-instantsearch` provides [widgets](guide/Widgets.html) out of the box, those are great when you want
 a default style to be applied and you do not need heavy customization of the underlying DOM or behavior of
 the widget.
 
@@ -15,7 +15,7 @@ the widget.
 * When you want to display our widgets using another UI library like [Material-UI](http://www.material-ui.com/)
 * When you want to have full control on the rendering without having to reimplement business logic
 * As soon as you hit a feature wall using our default widgets
-* When you are a react-native user, read our [react-native guide](/guide/React%20native.html)
+* When you are a react-native user, read our [react-native guide](guide/React%20native.html)
 
 ## What are connectors?
 
@@ -29,7 +29,7 @@ components which are called the **provided props**.
 
 ## How to use them?
 
-If you want to create your own search box, you will need to use the [`connectSearchBox()`](/connectors/connectSearchBox.html) connector:
+If you want to create your own search box, you will need to use the [`connectSearchBox()`](connectors/connectSearchBox.html) connector:
 
 ```javascript
 import {connectSearchBox} from 'react-instantsearch/connectors';
@@ -52,17 +52,17 @@ const ConnectedSearchBox = connectSearchBox(MySearchBox);
 ## Exposed props
 
 Connectors expose props to configure their behavior. Like the `attributeName`
-being refined in a [`<Menu>`](/widgets/Menu.html).
+being refined in a [`<Menu>`](widgets/Menu.html).
 
 One common exposed prop that you can use is the `defaultRefinement` one. Use it when as a way to provide the
-[default refinement](/guide/Default%20refinements.html) when the connected component will be mounted.
+[default refinement](guide/Default%20refinements.html) when the connected component will be mounted.
 
 ## Provided props
 
 Provided props always follow the same pattern for ease of use:
 - `currentRefinement`: Search state representation of the connector, most of the time you do not need that
 - `refine`: Function to call to refine the search state of the connector
-- `createURL`: See the [routing guide](/guide/Routing.html)
+- `createURL`: See the [routing guide](guide/Routing.html)
 - `items[{label, value, count}]`: Only when dealing with list based connectors
   - `label`: Text representation of the item to be shown
   - `value`: State representation to be used when calling `refine()` or `createURL()`
@@ -70,5 +70,5 @@ Provided props always follow the same pattern for ease of use:
   - `isRefined`: Indicates if the item is currently selected refining the search state
 
 <div class="guide-nav">
-Next: <a href="/guide/Default refinements.html">Default refinements →</a>
+Next: <a href="guide/Default refinements.html">Default refinements →</a>
 </div>

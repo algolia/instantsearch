@@ -6,7 +6,7 @@ category: guide
 navWeight: 70
 ---
 
-A frequent question that comes up is "How do I instantiate the [`<Menu>`](/widgets/Menu.html)
+A frequent question that comes up is "How do I instantiate the [`<Menu>`](widgets/Menu.html)
 widget with a pre selected item?".
 
 For this, Widgets and connectors expose a `defaultRefinement` prop.
@@ -31,9 +31,9 @@ const App = () =>
 ```
 
 **Notes:**
-* The [search state guide](/guide/Search%20state.html) details all widgets and connectors state values..
-* Default refinements are handy when used as [Virtual widgets](/guide/Virtual%20widgets.html).
+* The [search state guide](guide/Search%20state.html) details all widgets and connectors state values..
+* Default refinements are handy when used as [Virtual widgets](guide/Virtual%20widgets.html).
 
 <div class="guide-nav">
-Next: <a href="/guide/Virtual widgets.html">Virtual widgets →</a>
+Next: <a href="guide/Virtual widgets.html">Virtual widgets →</a>
 </div>

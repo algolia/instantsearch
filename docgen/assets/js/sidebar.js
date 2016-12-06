@@ -37,7 +37,12 @@ function scrollSpy(sidebarContainer, headersContainer) {
 
   const setActiveSidebarLink = header => {
     [...sidebarContainer.querySelectorAll('a')].forEach(item => {
-      if (item.getAttribute('href').slice(1) === header.getAttribute('id')) {
+      const currentHref = item.getAttribute('href');
+      const anchorToFind = `#${header.getAttribute('id')}`;
+      const isCurrentHeader =
+        currentHref.indexOf(anchorToFind) ===
+        currentHref.length - anchorToFind.length;
+      if (isCurrentHeader) {
         item.classList.add('active');
       } else {
         item.classList.remove('active');

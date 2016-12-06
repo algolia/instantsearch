@@ -43,17 +43,9 @@ is the official React-CLI from Facebook.
 npm install --save react-instantsearch
 ```
 
-## Add the stylesheet
-
-Our default widgets will look awesome with our default theme:
-
-```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
-```
-
 ## Add the InstantSearch wrapper
 
-The [InstantSearch](/widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
+The [InstantSearch](widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state
 of the search, do the queries and provide the results to the widgets so
 that they can update themselves if needed.
@@ -93,7 +85,7 @@ In this section we've seen:
  - configure your credentials with react-instantsearch
 
  > To get more *under the hood* information about the `InstantSearch` wrapper
- > component, [read our guide](/guide/<InstantSearch>.html).
+ > component, [read our guide](guide/<InstantSearch>.html).
 
 ## Load the theme
 
@@ -106,14 +98,14 @@ Just include it in your webpage:
 <link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
 ```
 
-Read the [styling](/guides/styling.html) guide for more information.
+Read the [styling](guide/Styling%20widgets.html) guide for more information.
 
 ## Display results
 
 The core of a search experience is to display results. By default, react-instantsearch
 will do a query at the start of the page and will retrieve the most relevant hits.
 
-To display results, we are gonna use the [Hits](/widgets/Hits.html) widget. This widget will
+To display results, we are gonna use the [Hits](widgets/Hits.html) widget. This widget will
 display all the results returned by Algolia, and it will update when there
 are new results.
 
@@ -188,7 +180,7 @@ In this section we've seen:
 
 ## Add a SearchBox
 
-Now that we've added the results, we can start querying our index. To do this, we are gonna use the [Searchbox](/widgets/SearchBox.html) widget. Let's add it
+Now that we've added the results, we can start querying our index. To do this, we are gonna use the [Searchbox](widgets/SearchBox.html) widget. Let's add it
 in the Search component that we created before:
 
 ```jsx
@@ -244,7 +236,7 @@ may also want to provide filters based on the structure of the records.
 Algolia provides a set of parameters for filtering by facets, numbers or geo
 location. Instantsearch packages those into a set of components and connector.
 
-Since the dataset used here is an e-commerce one, let's add a [RefinementList](/widgets/RefinementList.html)
+Since the dataset used here is an e-commerce one, let's add a [RefinementList](widgets/RefinementList.html)
 to filter the products by categories:
 
 ```jsx
@@ -280,8 +272,8 @@ We now miss two elements in our search interface:
  - the ability to browse beyond the first page of results
  - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](/widgets/Pagination.html), the [ClearAll](/widgets/ClearAll.html)
-and [CurrentRefinements](/widgets/CurrentRefinements.html) components. Both have nice defaults which means that
+Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), the [ClearAll](widgets/ClearAll.html)
+and [CurrentRefinements](widgets/CurrentRefinements.html) components. Both have nice defaults which means that
 we can use them directly without further configuration.
 
 ```jsx
@@ -319,5 +311,5 @@ components can be customised further using connectors, like
 in the paragraph about displaying the results.
 
 <div class="guide-nav">
-Next: <a href="/guide/">Guide →</a>
+Next: <a href="guide/">Guide →</a>
 </div>

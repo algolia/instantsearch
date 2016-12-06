@@ -7,9 +7,9 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * page and will trigger the search. The new results will be append in the
  * list of results.
  *
- * To configure the number of hits being shown, use [HitsPerPage widget](/widgets/HitsPerPage.html),
- * [connectHitsPerPage connector](/connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](/guide/Search%20parameters.html) prop on `<InstantSearch/>`.
+ * To configure the number of hits being shown, use [HitsPerPage widget](widgets/HitsPerPage.html),
+ * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
+ * parameter to the [searchParameters](guide/Search%20parameters.html) prop on `<InstantSearch/>`.
  *
  * @name InfiniteHits
  * @kind widget
