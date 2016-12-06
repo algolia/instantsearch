@@ -30,6 +30,7 @@ import {
   IconMenu,
   Drawer,
   Badge,
+  IconButton,
 } from 'material-ui';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import SortIcon from 'material-ui/svg-icons/content/sort';
@@ -47,9 +48,9 @@ const MaterialUiExample = props =>
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
-    state={props.state}
+    searchState={props.searchState}
     createURL={props.createURL.bind(this)}
-    onStateChange={props.onStateChange.bind(this)}
+    onSearchStateChange={props.onSearchStateChange.bind(this)}
     searchParameters={{hitsPerPage: 16}}
   >
     <Content/>
@@ -84,7 +85,11 @@ const Content = React.createClass({
         <div className="Header">
           <AppBar
             title="AMAZING"
-            iconElementRight={<ConnectedSortBy defaultRefinement="ikea"/>}
+            iconElementRight={<ConnectedSortBy
+              items={[{value: 'ikea', label: 'Featured'},
+                {value: 'ikea_price_desc', label: 'Price (desc)'},
+                {value: 'ikea_price_asc', label: 'Price (asc)'}]}
+              defaultRefinement="ikea"/>}
             onLeftIconButtonTouchTap={this.drawerAction}
             className="Header__appBar"
           />
@@ -216,31 +221,20 @@ const MaterialUiSortBy = React.createClass({
   render() {
     return (
       <IconMenu
-        iconButtonElement={<SortIcon style={{marginTop: 13, color: 'white'}}/>}
+        iconButtonElement={<IconButton><SortIcon color="white" style={{marginTop: 13}}/></IconButton>}
         onChange={this.handleChange}
         value={this.state.value}
       >
-        <MenuItem
-          value="ikea"
-          primaryText="Featured"
-          onTouchTap={e => {
-            e.preventDefault();
-            this.props.refine('ikea');
-          }}/>
-        <MenuItem
-          value="ikea_price_asc"
-          primaryText="Price (asc)"
-          onTouchTap={e => {
-            e.preventDefault();
-            this.props.refine('ikea_price_asc');
-          }}/>
-        <MenuItem
-          value="ikea_price_desc"
-          primaryText="Price (desc)"
-          onTouchTap={e => {
-            e.preventDefault();
-            this.props.refine('ikea_price_desc');
-          }}/>
+        {this.props.items.map(item =>
+          <MenuItem
+            key={item.value}
+            value={item.value}
+            primaryText={item.label}
+            onTouchTap={e => {
+              e.preventDefault();
+              this.props.refine(item.value);
+            }}/>
+        )}
       </IconMenu>
     );
   },

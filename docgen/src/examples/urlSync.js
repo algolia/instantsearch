@@ -8,24 +8,25 @@ export const withUrlSync = App => class extends Component {
     window.onpopstate = () => this.setState({searchState: qs.parse(window.location.search.slice(1))});
   }
 
-  onStateChange = nextState => {
+  onSearchStateChange = nextSearchState => {
     const THRESHOLD = 700;
     const newPush = Date.now();
-    const search = nextState ? `?${qs.stringify(nextState)}` : '';
+    const search = nextSearchState ? `${window.location.pathname}?${qs.stringify(nextSearchState)}` : '';
     if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
       window.history.replaceState(null, null, search);
     } else {
       window.history.pushState(null, null, search);
     }
-    this.setState({lastPush: newPush, searchState: nextState});
+    this.setState({lastPush: newPush, searchState: nextSearchState});
   };
 
-  createURL = state => `?${qs.stringify(state)}`;
+  createURL = searchState => `${window.location.pathname}?${qs.stringify(searchState)}`;
 
   render() {
     return <App {...this.props}
-                state={this.state.searchState}
-                onStateChange={this.onStateChange}
-                createURL={this.createURL}/>;
+                searchState={this.state.searchState}
+                onSearchStateChange={this.onSearchStateChange}
+                createURL={this.createURL}
+    />;
   }
 };
