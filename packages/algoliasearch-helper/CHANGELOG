@@ -1,5 +1,8 @@
 CHANGELOG
 
+2.16.0 - 2016-12-06
+ * feat(searchForFacetValues): new method to search in facet values
+
 2.15.0 - 2016-11-22
  * feat(getQuery): return the main query that will be sent to Algolia using
  the helper
