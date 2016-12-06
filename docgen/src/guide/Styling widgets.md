@@ -67,5 +67,5 @@ Any other module bundler like Browserify can be used to load our CSS. `react-ins
 does not rely on any specific module bundler or module loader.
 
 <div class="guide-nav">
-Next: <a href="guide/i18n.html">i18n →</a>
+Next: <a href="guide//Highlighting.html">Highlighting results →</a>
 </div>

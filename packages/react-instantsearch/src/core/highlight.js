@@ -1,67 +1,75 @@
-import React from 'react';
+import get from 'lodash/get';
 
-function extractTagName(highlightedValue) {
-  const tagParse = (/<(.+?)>/).exec(highlightedValue);
-  return tagParse === null ? null : tagParse[1];
+/**
+ * Find an highlighted attribute give a path `pathToAttribute`, parses it,
+ * and provided an array of objects with the string value and a boolean if this
+ * value is highlighted.
+ *
+ * In order to use this feature, highlight must be activated in the configruation of
+ * the index. The `preTag` and `postTag` attributes are respectively highlightPreTag and
+ * highligtPostTag in Algolia configuration.
+ *
+ * @param {string} preTag - string used to identify the start of an highlighted value
+ * @param {string} postTag - string used to identify the end of an highlighted value
+ * @param {string} pathToAttribute - path to the highlighted attribute in the results
+ * @param {object} hit - the actual hit returned by Algolia.
+ * @return {object[]} - An array of {value: string, isDefined: boolean}.
+ */
+export default function parseAlgoliaHit({
+  preTag = '<em>',
+  postTag = '</em>',
+  pathToAttribute,
+  hit,
+}) {
+  if (!hit) throw new Error('`hit`, the matching record, must be provided');
+
+  const highlightedValue = get(hit._highlightResult, pathToAttribute);
+  if (!highlightedValue) throw new Error(
+    `\`pathToAttribute\`=${pathToAttribute} must resolve to an highlighted attribute in the record`);
+
+  return parseHighlightedAttribute({preTag, postTag, highlightedValue: highlightedValue.value});
 }
 
 /**
- * This function transforms an highlighted response
- * to an array of React elements. This should be
- * used in place of dangerouslySetInnerHTML when
- * using the highlightReasult provided by Algolia.
+ * Parses an highlighted attribute into an array of objects with the string value, and
+ * a boolean that indicated if this part is highlighted.
  *
- * The function autodetects which tag is used in
- * results to highlight, and creates the corresponding
- * React element.
- *
- * It also creates keys on React elements to avoid warnings.
- *
- * The genegrated highlighted Elements use the `ais-hightlightedValue`
- * class name attached.
- *
- * @param {string} attribute the name of the attribute for which we want the highlighted value
- * @param {object} hit the hit from the algolia response
- * @returns {Array.<string|ReactElement>} the array of react element
- * @example
- * const ProductHits = connectHits(({hits}) => {
- *   const hitComponents = hits.map( hit =>
- *     <div key={hit.objectID}>
- *       <span className="hit-name">{hightlight('name', hit)}</span>
- *     </div>
- *   );
- *
- *   return <div className="hits">{hitComponents}</div>;
- * });
+ * @param {string} preTag - string used to identify the start of an highlighted value
+ * @param {string} postTag - string used to identify the end of an highlighted value
+ * @param {string} highlightedValue - highlighted attribute as returned by Algolia highlight feature
+ * @return {object[]} - An array of {value: string, isDefined: boolean}.
  */
-export default function hightlight(attribute, hit) {
-  if (!hit) throw new Error('The hit containing the attribute should be provided');
-  if (!hit.hasOwnProperty(attribute)) throw new Error(`${attribute} should be a retrievable attribute.`);
-  if (!hit._highlightResult ||
-      !hit._highlightResult.hasOwnProperty(attribute)) {
-    throw new Error(`${attribute} should be an highlighted attribute`);
+function parseHighlightedAttribute({
+  preTag,
+  postTag,
+  highlightedValue,
+}) {
+  const splitByPreTag = highlightedValue.split(preTag);
+  const firstValue = splitByPreTag.shift();
+  const elements = firstValue === '' ? [] : [{value: firstValue, isHighlighted: false}];
+
+  if (postTag === preTag) {
+    let isHighlighted = true;
+    splitByPreTag.forEach(split => {
+      elements.push({value: split, isHighlighted});
+      isHighlighted = !isHighlighted;
+    });
+  } else {
+    splitByPreTag.forEach(split => {
+      const splitByPostTag = split.split(postTag);
+      elements.push({
+        value: splitByPostTag[0],
+        isHighlighted: true,
+      });
+
+      if (splitByPostTag[1] !== '') {
+        elements.push({
+          value: splitByPostTag[1],
+          isHighlighted: false,
+        });
+      }
+    });
   }
-
-  const highlightedValue = hit._highlightResult[attribute].value;
-  const tag = extractTagName(highlightedValue);
-  const firstPassSplit = highlightedValue.split(`<${tag}>`);
-  const firstValue = firstPassSplit.shift();
-  const elements = firstValue === '' ? [] : [firstValue];
-
-  firstPassSplit.forEach((split, i) => {
-    const s = split.split(`</${tag}>`);
-    elements.push(
-      React.createElement(
-        tag,
-        {
-          key: `split-${i}-${s[0]}`,
-          className: 'ais-highlightedValue',
-        },
-        s[0]
-      )
-    );
-    if (s[1] !== '') elements.push(s[1]);
-  });
 
   return elements;
 }

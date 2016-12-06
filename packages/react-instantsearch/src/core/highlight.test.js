@@ -1,101 +1,87 @@
 /* eslint-env jest, jasmine */
-import React from 'react';
+import parseAlgoliaHit from './highlight.js';
 
-import highlight from './highlight.js';
-
-describe('highlight()', () => {
+describe('parseAlgoliaHit()', () => {
   it('creates a single element when there is no tag', () => {
     const value = 'foo bar baz';
     const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual([value]);
+    const out = parseAlgoliaHit({pathToAttribute: attribute, hit: createHit(attribute, value)});
+    expect(out).toEqual([{isHighlighted: false, value}]);
   });
 
   it('creates a single element when there is only a tag', () => {
     const textValue = 'foo bar baz';
     const value = `<em>${textValue}</em>`;
     const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual([<em className="ais-highlightedValue" key="split-0-foo bar baz">{textValue}</em>]);
+    const out = parseAlgoliaHit({pathToAttribute: attribute, hit: createHit(attribute, value)});
+    expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
-  it('creates two elements when there is a tag and some text', () => {
+  it('fetches and parses a deep attribute', () => {
     const textValue = 'foo bar baz';
-    const otherText = 'other text';
-    const value = `<em>${textValue}</em>${otherText}`;
-    const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual(
-      [
-        <em className="ais-highlightedValue" key="split-0-foo bar baz">{textValue}</em>,
-        otherText,
-      ]
-    );
+    const value = `<em>${textValue}</em>`;
+    const hit = {
+      lvl0: {lvl1: {lvl2: value}},
+      _highlightResult: {
+        lvl0: {lvl1: {lvl2: {value}}},
+      },
+    };
+    const out = parseAlgoliaHit({pathToAttribute: 'lvl0.lvl1.lvl2', hit});
+    expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
-  it('creates two elements when there is some text and a tag', () => {
-    const textValue = 'foo bar baz';
-    const otherText = 'other text';
-    const value = `${otherText}<em>${textValue}</em>`;
-    const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual(
-      [
-        otherText,
-        <em className="ais-highlightedValue" key="split-0-foo bar baz">{textValue}</em>,
-      ]
-    );
+  it('parses the string and returns the part that are highlighted - 1 big highlight', () => {
+    const str = 'like <em>al</em>golia does <em>al</em>golia';
+    const hit = createHit('attr', str);
+    const parsed = parseAlgoliaHit({pathToAttribute: 'attr', hit});
+    expect(parsed).toEqual([
+      {value: 'like ', isHighlighted: false},
+      {value: 'al', isHighlighted: true},
+      {value: 'golia does ', isHighlighted: false},
+      {value: 'al', isHighlighted: true},
+      {value: 'golia', isHighlighted: false},
+    ]);
   });
 
-  it('creates four elements when there is some text, a tag, another tag, and some text', () => {
-    const textValue = 'foo bar baz';
-    const otherText = 'other text';
-    const value = `${otherText}<em>${textValue}</em><em>${textValue}</em>${otherText}`;
-    const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual(
-      [
-        otherText,
-        <em className="ais-highlightedValue" key="split-0-foo bar baz">{textValue}</em>,
-        <em className="ais-highlightedValue" key="split-1-foo bar baz">{textValue}</em>,
-        otherText,
-      ]
-    );
-  });
-
-  it('creates three elements when there is a tag, some text and another tag', () => {
-    const textValue = 'foo bar baz';
-    const otherText = 'other text';
-    const value = `<em>${textValue}</em>${otherText}<em>${textValue}</em>`;
-    const attribute = 'attr';
-    const out = highlight(attribute, createHit(attribute, value));
-    expect(out).toEqual(
-      [
-        <em className="ais-highlightedValue" key="split-0-foo bar baz">{textValue}</em>,
-        otherText,
-        <em className="ais-highlightedValue" key="split-1-foo bar baz">{textValue}</em>,
-      ]
-    );
-  });
-
-  it('throws when the attribute is not returned in the hit', () => {
-    expect(highlight.bind(null, 'unknownAttribute', {}))
-      .toThrowError('unknownAttribute should be a retrievable attribute');
+  it('parses the string and returns the part that are highlighted - same pre and post tag', () => {
+    const str = 'surpise **lo**l mouhahah roflmao **lo**utre';
+    const hit = createHit('attr', str);
+    const parsed = parseAlgoliaHit({
+      preTag: '**',
+      postTag: '**',
+      pathToAttribute: 'attr',
+      hit,
+    });
+    expect(parsed).toEqual([
+      {value: 'surpise ', isHighlighted: false},
+      {value: 'lo', isHighlighted: true},
+      {value: 'l mouhahah roflmao ', isHighlighted: false},
+      {value: 'lo', isHighlighted: true},
+      {value: 'utre', isHighlighted: false},
+    ]);
   });
 
   it('throws when the attribute is not highlighted in the hit', () => {
-    expect(highlight.bind(null, 'notHighlightedAttribute', {notHighlightedAttribute: ''}))
-      .toThrowError('notHighlightedAttribute should be an highlighted attribute');
+    expect(parseAlgoliaHit.bind(null, {
+      pathToAttribute: 'notHighlightedAttribute',
+      hit: {notHighlightedAttribute: 'some value'},
+    })).toThrowError(
+      '`pathToAttribute`=notHighlightedAttribute must resolve to an highlighted attribute in the record'
+    );
   });
 
   it('throws when hit is `null`', () => {
-    expect(highlight.bind(null, 'unknownAttribute', null))
-      .toThrowError('The hit containing the attribute should be provided');
+    expect(parseAlgoliaHit.bind(null, {
+      pathToAttribute: 'unknownattribute',
+      hit: null,
+    })).toThrowError('`hit`, the matching record, must be provided');
   });
 
   it('throws when hit is `undefined`', () => {
-    expect(highlight.bind(null, 'unknownAttribute', undefined))
-      .toThrowError('The hit containing the attribute should be provided');
+    expect(parseAlgoliaHit.bind(null, {
+      pathToAttribute: 'unknownAttribute',
+      hit: undefined,
+    })).toThrowError('`hit`, the matching record, must be provided');
   });
 });
 
@@ -103,12 +89,7 @@ function createHit(attribute, value) {
   return {
     [attribute]: value,
     _highlightResult: {
-      [attribute]: {
-        value,
-        fullyHighlighted: true,
-        matchLevel: 'full',
-        matchedWords: [''],
-      },
+      [attribute]: {value},
     },
   };
 }

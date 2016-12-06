@@ -51,3 +51,8 @@ block content
             td(colspan=3)!=h.markdown(type.description)
   else
     p This connector does not provided props to its wrapped Component.
+  if examples
+    h2#example Example
+      a.anchor(href='#example')
+    each example in examples
+      p!=h.highlight(example, {lang: 'jsx'})
