@@ -36,7 +36,7 @@ export default createConnector({
 
   propTypes: {},
 
-  getProps() {
+  getProvidedProps() {
     return {highlight};
   },
 
