@@ -36,7 +36,7 @@ describe('connectHitsPerPage', () => {
     });
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({}, {otherKey: 'val'}, 30);
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -62,8 +62,11 @@ describe('connectHitsPerPage', () => {
     expect(metadata).toEqual({id: 'hitsPerPage'});
   });
 
-  it('should return the right state when clean up', () => {
-    const state = cleanUp({}, {hitsPerPage: {state: 'state'}, another: {state: 'state'}});
-    expect(state).toEqual({another: {state: 'state'}});
+  it('should return the right searchState when clean up', () => {
+    const searchState = cleanUp({}, {
+      hitsPerPage: {searchState: 'searchState'},
+      another: {searchState: 'searchState'},
+    });
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

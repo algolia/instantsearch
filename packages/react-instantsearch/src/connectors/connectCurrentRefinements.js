@@ -12,7 +12,7 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaCurrentRefinements',
 
-  getProvidedProps(props, state, search, metadata) {
+  getProvidedProps(props, searchState, searchResults, metadata) {
     return {
       items: metadata.reduce((res, meta) =>
           typeof meta.items !== 'undefined' ? res.concat(meta.items) : res
@@ -20,9 +20,9 @@ export default createConnector({
     };
   },
 
-  refine(props, state, items) {
+  refine(props, searchState, items) {
     // `value` corresponds to our internal clear function computed in each connector metadata.
     const refinementsToClear = items instanceof Array ? items.map(item => item.value) : [items];
-    return refinementsToClear.reduce((res, clear) => clear(res), state);
+    return refinementsToClear.reduce((res, clear) => clear(res), searchState);
   },
 });

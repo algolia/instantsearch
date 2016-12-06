@@ -16,8 +16,8 @@ function getId() {
 export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
 
-  getProvidedProps(componentProps, allWidgetsState, resultsStruct) {
-    if (!resultsStruct.results) {
+  getProvidedProps(props, searchState, searchResults) {
+    if (!searchResults.results) {
       this._allResults = [];
       return {
         hits: this._allResults,
@@ -25,7 +25,7 @@ export default createConnector({
       };
     }
 
-    const {hits, page, nbPages, hitsPerPage} = resultsStruct.results;
+    const {hits, page, nbPages, hitsPerPage} = searchResults.results;
 
     if (page === 0) {
       this._allResults = hits;
@@ -51,10 +51,10 @@ export default createConnector({
     };
   },
 
-  getSearchParameters(searchParameters, props, widgetsState) {
+  getSearchParameters(searchParameters, props, searchState) {
     const id = getId();
-    const currentPage = widgetsState[id] ?
-      widgetsState[id] :
+    const currentPage = searchState[id] ?
+      searchState[id] :
       0;
 
     return searchParameters.setQueryParameters({
@@ -62,25 +62,25 @@ export default createConnector({
     });
   },
 
-  refine(props, widgetsState) {
+  refine(props, searchState) {
     const id = getId();
-    const nextPage = widgetsState[id] ?
-      Number(widgetsState[id]) + 1 :
+    const nextPage = searchState[id] ?
+      Number(searchState[id]) + 1 :
       1;
     return {
-      ...widgetsState,
+      ...searchState,
       [id]: nextPage,
     };
   },
 
-  transitionState(props, prevState, nextState) {
+  transitionState(props, prevSearchState, nextSearchState) {
     const id = getId();
-    if (prevState[id] === nextState[id]) {
+    if (prevSearchState[id] === nextSearchState[id]) {
       return {
-        ...nextState,
+        ...nextSearchState,
         [id]: 0,
       };
     }
-    return nextState;
+    return nextSearchState;
   },
 });

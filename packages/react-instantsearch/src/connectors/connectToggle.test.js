@@ -28,15 +28,15 @@ describe('connectToggle', () => {
     expect(props).toEqual({checked: true});
   });
 
-  it('calling refine updates the widget\'s state', () => {
-    let state = refine({attributeName: 't'}, {otherKey: 'val'}, true);
-    expect(state).toEqual({
+  it('calling refine updates the widget\'s search state', () => {
+    let searchState = refine({attributeName: 't'}, {otherKey: 'val'}, true);
+    expect(searchState).toEqual({
       otherKey: 'val',
       toggle: {t: true},
     });
 
-    state = refine({attributeName: 't'}, {otherKey: 'val'}, false);
-    expect(state).toEqual({
+    searchState = refine({attributeName: 't'}, {otherKey: 'val'}, false);
+    expect(searchState).toEqual({
       otherKey: 'val',
       toggle: {t: false},
     });
@@ -79,18 +79,18 @@ describe('connectToggle', () => {
       id: 't',
     });
 
-    const state = metadata.items[0].value({toggle: {t: true}});
-    expect(state).toEqual({toggle: {t: false}});
+    const searchState = metadata.items[0].value({toggle: {t: true}});
+    expect(searchState).toEqual({toggle: {t: false}});
   });
 
-  it('should return the right state when clean up', () => {
-    let state = cleanUp({attributeName: 'name'}, {
-      toggle: {name: 'state', name2: 'state'},
-      another: {state: 'state'},
+  it('should return the right searchState when clean up', () => {
+    let searchState = cleanUp({attributeName: 'name'}, {
+      toggle: {name: 'searchState', name2: 'searchState'},
+      another: {searchState: 'searchState'},
     });
-    expect(state).toEqual({toggle: {name2: 'state'}, another: {state: 'state'}});
+    expect(searchState).toEqual({toggle: {name2: 'searchState'}, another: {searchState: 'searchState'}});
 
-    state = cleanUp({attributeName: 'name2'}, state);
-    expect(state).toEqual({another: {state: 'state'}});
+    searchState = cleanUp({attributeName: 'name2'}, searchState);
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

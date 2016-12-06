@@ -15,10 +15,10 @@ describe('connectCurrentRefinements', () => {
     expect(props.items).toEqual(['one', 'two', 'three']);
   });
 
-  it('refine applies the selected filters clear method on state', () => {
-    const state = refine(null, {wow: 'sweet'}, [{
+  it('refine applies the selected filters clear method on searchState', () => {
+    const searchState = refine(null, {wow: 'sweet'}, [{
       value: nextState => ({...nextState, cool: 'neat'}),
     }]);
-    expect(state).toEqual({wow: 'sweet', cool: 'neat'});
+    expect(searchState).toEqual({wow: 'sweet', cool: 'neat'});
   });
 });

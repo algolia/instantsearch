@@ -15,13 +15,13 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaHits',
 
-  getProvidedProps(props, state, search) {
-    if (!search.results) {
+  getProvidedProps(props, searchState, searchResults) {
+    if (!searchResults.results) {
       return null;
     }
 
     return {
-      hits: search.results.hits,
+      hits: searchResults.results.hits,
     };
   },
 });

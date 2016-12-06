@@ -92,21 +92,21 @@ export default function createInstantSearchManager({
     search();
   }
 
-  function transitionState(nextState) {
-    const state = store.getState().widgets;
+  function transitionState(nextSearchState) {
+    const searchState = store.getState().widgets;
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.transitionState))
       .reduce((res, widget) =>
-          widget.transitionState(state, res)
-        , nextState);
+          widget.transitionState(searchState, res)
+        , nextSearchState);
   }
 
-  function onExternalStateUpdate(nextState) {
-    const metadata = getMetadata(nextState);
+  function onExternalStateUpdate(nextSearchState) {
+    const metadata = getMetadata(nextSearchState);
 
     store.setState({
       ...store.getState(),
-      widgets: nextState,
+      widgets: nextSearchState,
       metadata,
       searching: true,
     });
