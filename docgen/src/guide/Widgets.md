@@ -28,7 +28,7 @@ const App = () =>
 **Notes:**
 * Find more widgets on [the API page](widgets/).
 * Every widget controlling the search state expose a `defaultRefinement` prop to configure the [default
-refinement](guide/Default refinements.html) of the widget when it's mounted.
+refinement](guide/Default%20refinements.html) of the widget when it's mounted.
 * Widgets are components that are [connected](guide/Connectors.html) to the index search context as soon
 as they are mounted as children of the [`<InstantSearch>` component](guide/<InstantSearch>.html).
 * Widget are not provided for react-native for now, react-native support is handled via connectors, read
