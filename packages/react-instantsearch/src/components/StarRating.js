@@ -31,7 +31,7 @@ class StarRating extends Component {
     }
   }
 
-  buildItem({max, lowerBound, count, translate, createURL}) {
+  buildItem({max, lowerBound, count, translate, createURL, isLowest}) {
     const selected = lowerBound === this.props.currentRefinement.min &&
       max === this.props.currentRefinement.max;
     const disabled = !count;
@@ -48,6 +48,32 @@ class StarRating extends Component {
           disabled && `${iconTheme}Disabled`,
         )}
         />);
+    }
+    if (isLowest && selected) {
+      return (
+        <div {...cx(
+          'ratingLink',
+          'ratingLinkSelected',
+          disabled && 'ratingLinkDisabled')}
+           disabled={disabled}
+           key={lowerBound}
+        >
+          {icons}
+          <span {...cx(
+            'ratingLabel',
+            'ratingLabelSelected',
+            disabled && 'ratingLabelDisabled')}>
+            {translate('ratingLabel')}
+            </span>
+          <span> </span>
+          <span {...cx(
+            'ratingCount',
+            'ratingCountSelected',
+            disabled && 'ratingCountDisabled')}>
+            {count}
+          </span>
+        </div>
+      );
     }
     return (
       <a {...cx(
@@ -92,6 +118,7 @@ class StarRating extends Component {
         count: itemCount,
         translate,
         createURL,
+        isLowest: i === min,
       }));
     }
     return (

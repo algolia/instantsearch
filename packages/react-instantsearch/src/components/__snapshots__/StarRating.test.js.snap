@@ -109,11 +109,9 @@ exports[`StarRating applies translations 1`] = `
       14
     </span>
   </a>
-  <a
+  <div
     className="ais-StarRating__ratingLink ais-StarRating__ratingLinkSelected"
-    disabled={false}
-    href="#"
-    onClick={[Function]}>
+    disabled={false}>
     <span
       className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected" />
     <span
@@ -135,7 +133,7 @@ exports[`StarRating applies translations 1`] = `
       className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected">
       15
     </span>
-  </a>
+  </div>
 </div>
 `;
 
@@ -250,11 +248,9 @@ exports[`StarRating supports passing max/min values 1`] = `
       14
     </span>
   </a>
-  <a
+  <div
     className="ais-StarRating__ratingLink ais-StarRating__ratingLinkSelected"
-    disabled={false}
-    href="#"
-    onClick={[Function]}>
+    disabled={false}>
     <span
       className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected" />
     <span
@@ -276,6 +272,6 @@ exports[`StarRating supports passing max/min values 1`] = `
       className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected">
       15
     </span>
-  </a>
+  </div>
 </div>
 `;
