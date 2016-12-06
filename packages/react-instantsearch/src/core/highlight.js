@@ -1,4 +1,4 @@
-import get from 'lodash/get';
+import {get} from 'lodash';
 
 /**
  * Find an highlighted attribute give a path `pathToAttribute`, parses it,

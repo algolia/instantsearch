@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import pick from 'lodash/pick';
+import {pick} from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import classNames from './classNames.js';
