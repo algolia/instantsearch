@@ -1,9 +1,10 @@
 import createConnector from '../core/createConnector';
 import parseAlgoliaHit from '../core/highlight';
 
+const timestamp = Date.now().toString();
 const config = {
-  highlightPreTag: '<ais-highlight>',
-  highlightPostTag: '</ais-highlight>',
+  highlightPreTag: `<ais-highlight-${timestamp}>`,
+  highlightPostTag: `</ais-highlight-${timestamp}>`,
 };
 
 const highlight = ({attributeName, hit}) => parseAlgoliaHit({
