@@ -24,12 +24,12 @@ ul.simple-dropdown {
   font-size: $sd-font-size;
   text-align: left;
   border: 1px solid $sd-border-color;
-  border-radius: 3px;
+  border-radius: 0 0 3px 3px;
   background: $sd-background-color;
   border: none;
   padding: 0;
   box-shadow: 0 1px 4px 0 rgba(31,59,93,0.5);
-  animation: fadeInDown 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  animation: fadeInDown 0.1s cubic-bezier(0.23, 1, 0.32, 1);
   padding: 0;
   margin: 0;
   overflow: hidden;

@@ -54,11 +54,11 @@ nav.cm-navigation
             svg
               use(xlink:href='#cancel-icon')
     ul.cm-menu__list
-      li.cm-menu__list__item
+      li.cm-menu__list__item(class=h.maybeActive(navPath, "Getting started.html"))
         a(href="Getting started.html", data-link = 'true') Getting started
-      li.cm-menu__list__item
+      li.cm-menu__list__item(class=h.maybeActive(navPath, "guide/"))
         a(href="guide/", data-link = 'true') Guide
-      li.cm-menu__list__item
+      li.cm-menu__list__item(class=h.maybeActive(navPath, ["widgets/", ["connectors/"]]))
         a(aria-controls='dropdown-1', aria-expanded='false', data-toggle-dropdown='dropdown-1', class="dropdown-toggler") API <span class="glyph">&#x25BC;</span>
         ul#dropdown-1.simple-dropdown(role='tree', tabindex='-1')
           li
@@ -68,7 +68,7 @@ nav.cm-navigation
           li
             a(href="connectors/", role='treeitem', data-link = 'true') Connectors
 
-      li.cm-menu__list__item
+      li.cm-menu__list__item(class=h.maybeActive(navPath, "examples/"))
         a(href="examples/", data-link = 'true') Examples
       li.cm-menu__list__item
         a(href='https://github.com/algolia/instantsearch.js/tree/v2', data-link = 'true')
