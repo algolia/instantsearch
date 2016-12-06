@@ -15,7 +15,7 @@ In this tutorial, you'll learn how to:
  - add `react-instantsearch` in your [React](https://facebook.github.io/react/) project
  - bootstrap `react-instantsearch`
  - display results from Algolia
- - add components to filter the results
+ - add widgets to filter the results
  - connect your own component to the search
 
 ## Before we start
@@ -77,7 +77,7 @@ credentials of your application in Algolia. They can be found in your [Algolia
 dashboard](https://www.algolia.com/api-keys).
 
 Congratulations 🎉 Your application is now connected to Algolia! This wrapper
-will provide a context so that the instantsearch components you add inside
+will provide a context so that the instantsearch widgets you add inside
 can interact with the search.
 
 In this section we've seen:
@@ -145,7 +145,7 @@ view lets you inspect the values that are retrieved from Algolia, in order
 to build your custom view.
 
 In order to customize the view for each product, we can use a special prop
-of the Hit component: `itemComponent`. This props accept a Component that
+of the Hit widget: `itemComponent`. This props accept a Component that
 will be used for each hit in the results from Algolia.
 
 ```jsx
@@ -158,7 +158,7 @@ function Product({hit}) {
 };
 ```
 
-The component receives a prop `hit` that contains the content of the
+The widget receives a prop `hit` that contains the content of the
 record. Here we are only displaying the name for the sake of simplicity
 but there is no limit as long as the data in the record.
 
@@ -236,7 +236,7 @@ While the SearchBox is the way to go when it comes to textual search, you
 may also want to provide filters based on the structure of the records.
 
 Algolia provides a set of parameters for filtering by facets, numbers or geo
-location. Instantsearch packages those into a set of components and connector.
+location. Instantsearch packages those into a set of widgets and connectors.
 
 Since the dataset used here is an e-commerce one, let's add a [RefinementList](widgets/RefinementList.html)
 to filter the products by categories:
@@ -275,12 +275,13 @@ We now miss two elements in our search interface:
  - the ability to reset the search state
 
 Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), the [ClearAll](widgets/ClearAll.html)
-and [CurrentRefinements](widgets/CurrentRefinements.html) components. Both have nice defaults which means that
+and [CurrentRefinements](widgets/CurrentRefinements.html) widgets. Both have nice defaults which means that
 we can use them directly without further configuration.
 
 ```jsx
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
+import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, 
+Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -308,7 +309,7 @@ In this part, we've seen the following:
 
 ## Next steps
 
-At this point, you know all the basics of react-instantsearch. All the
+At this point, you know all the basics of react-instantsearch. Also, all the
 components can be customised further using connectors, like
 in the paragraph about displaying the results.
 
