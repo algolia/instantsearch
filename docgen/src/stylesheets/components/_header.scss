@@ -364,7 +364,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
         position: relative;
 
         &:hover,
-        &.acitve {
+        &.active {
           border-bottom: 4px solid $accent-color;
 
           @include small-mq {
@@ -375,7 +375,6 @@ $nav-background-light: mix($nav-background,#fff,92%);
 
         &.active:after {
           content: "";
-          background: linear-gradient(to bottom, $accent-color, $accent-color 100%)no-repeat center left / 100% 100%;
           width: 100%;
           height: 4px;
           position: absolute;
