@@ -1,16 +1,25 @@
 exports[`Highlight parses an highlighted attribute of hit object 1`] = `
 <span
-  className="ais-highlighted">
-  awesome 
+  className="ais-Highlight">
+  <span
+    className="ais-Highlight__nonHighlighted">
+    awesome 
+  </span>
   <em
-    className="ais-highlighted__value">
+    className="ais-Highlight__highlighted">
     hi
   </em>
-  ghlighted 
+  <span
+    className="ais-Highlight__nonHighlighted">
+    ghlighted 
+  </span>
   <em
-    className="ais-highlighted__value">
+    className="ais-Highlight__highlighted">
     hi
   </em>
-  t!
+  <span
+    className="ais-Highlight__nonHighlighted">
+    t!
+  </span>
 </span>
 `;

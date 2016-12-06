@@ -3,11 +3,13 @@ import React from 'react';
 export default function Highlight({hit, attributeName, highlight}) {
   const parsedHighlightedValue = highlight({hit, attributeName});
   const reactHighlighted = parsedHighlightedValue.map((v, i) => {
-    if (!v.isHighlighted) return v.value;
     const key = `split-${i}-${v.value}`;
-    return <em key={key} className="ais-highlighted__value">{v.value}</em>;
+    if (!v.isHighlighted) {
+      return <span key={key} className="ais-Highlight__nonHighlighted">{v.value}</span>;
+    }
+    return <em key={key} className="ais-Highlight__highlighted">{v.value}</em>;
   });
-  return <span className="ais-highlighted">{reactHighlighted}</span>;
+  return <span className="ais-Highlight">{reactHighlighted}</span>;
 }
 
 Highlight.propTypes = {
