@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import range from 'lodash/range';
+import {range} from 'lodash';
 import {capitalize} from '../core/utils';
 import translatable from '../core/translatable';
 import LinkList from './LinkList';

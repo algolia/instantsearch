@@ -1,7 +1,6 @@
 import collectJson from 'collect-json';
 import jsdocParse from 'jsdoc-parse';
-import forEach from 'lodash/forEach';
-import groupBy from 'lodash/groupBy';
+import {forEach, groupBy} from 'lodash';
 import {hasChanged} from './onlyChanged.js';
 import {join} from 'path';
 

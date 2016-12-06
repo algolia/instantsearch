@@ -1,4 +1,4 @@
-import forEach from 'lodash/forEach';
+import {forEach} from 'lodash';
 
 export default function() {
   return function(files, metalsmith, done) {
