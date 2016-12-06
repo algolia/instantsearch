@@ -2,6 +2,7 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer';
+import {mount} from 'enzyme';
 
 import Pagination from './Pagination';
 
@@ -16,11 +17,9 @@ const DEFAULT_PROPS = {
   currentRefinement: 9,
 };
 
-let tree;
-
 describe('Pagination', () => {
   it('applies its default props', () => {
-    tree = renderer.create(
+    const tree = renderer.create(
       <Pagination
         {...DEFAULT_PROPS}
       />
@@ -29,7 +28,7 @@ describe('Pagination', () => {
   });
 
   it('displays the correct padding of links', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         {...REQ_PROPS}
         pagesPadding={5}
@@ -39,7 +38,6 @@ describe('Pagination', () => {
     ).toJSON();
     expect(tree).toMatchSnapshot();
 
-    // @TODO: use .update(nextElement) once it lands
     tree = renderer.create(
       <Pagination
         {...REQ_PROPS}
@@ -72,7 +70,7 @@ describe('Pagination', () => {
   });
 
   it('allows toggling display of the first page button on and off', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         showFirst
         {...DEFAULT_PROPS}
@@ -90,7 +88,7 @@ describe('Pagination', () => {
   });
 
   it('indicates when first button is relevant', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         {...DEFAULT_PROPS}
         showFirst
@@ -110,7 +108,7 @@ describe('Pagination', () => {
   });
 
   it('allows toggling display of the last page button on and off', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         showLast
         {...DEFAULT_PROPS}
@@ -128,7 +126,7 @@ describe('Pagination', () => {
   });
 
   it('allows toggling display of the previous page button on and off', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         showPrevious
         {...DEFAULT_PROPS}
@@ -146,7 +144,7 @@ describe('Pagination', () => {
   });
 
   it('allows toggling display of the next page button on and off', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         showNext
         {...DEFAULT_PROPS}
@@ -164,7 +162,7 @@ describe('Pagination', () => {
   });
 
   it('lets you force a maximum of pages', () => {
-    tree = renderer.create(
+    let tree = renderer.create(
       <Pagination
         {...REQ_PROPS}
         maxPages={10}
@@ -188,7 +186,7 @@ describe('Pagination', () => {
   });
 
   it('lets you customize its theme', () => {
-    tree = renderer.create(
+    const tree = renderer.create(
       <Pagination
         {...REQ_PROPS}
         theme={{
@@ -213,7 +211,7 @@ describe('Pagination', () => {
   });
 
   it('lets you customize its translations', () => {
-    tree = renderer.create(
+    const tree = renderer.create(
       <Pagination
         {...REQ_PROPS}
         translations={{
@@ -235,5 +233,73 @@ describe('Pagination', () => {
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('refines its value when clicking on a page link', () => {
+    const refine = jest.fn();
+    const wrapper = mount(
+        <Pagination
+          {...DEFAULT_PROPS}
+          refine={refine}
+          showLast
+        />
+      );
+    wrapper
+        .find('.ais-Pagination__itemLink')
+        .filterWhere(e => e.text() === '8')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toEqual(8);
+    wrapper
+        .find('.ais-Pagination__itemLink')
+        .filterWhere(e => e.text() === '9')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(2);
+    const parameters = refine.mock.calls[1][0];
+    expect(parameters.valueOf()).toBe(9);
+    expect(parameters.isSamePage).toBe(true);
+    wrapper
+        .find('.ais-Pagination__itemPrevious')
+        .find('.ais-Pagination__itemLink')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(3);
+    expect(refine.mock.calls[2][0]).toEqual(8);
+    wrapper
+        .find('.ais-Pagination__itemNext')
+        .find('.ais-Pagination__itemLink')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(4);
+    expect(refine.mock.calls[3][0]).toEqual(10);
+    wrapper
+        .find('.ais-Pagination__itemFirst')
+        .find('.ais-Pagination__itemLink')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(5);
+    expect(refine.mock.calls[4][0]).toEqual(1);
+    wrapper
+        .find('.ais-Pagination__itemLast')
+        .find('.ais-Pagination__itemLink')
+        .simulate('click');
+    expect(refine.mock.calls.length).toBe(6);
+    expect(refine.mock.calls[5][0]).toEqual(20);
+  });
+
+  it('ignores special clicks', () => {
+    const refine = jest.fn();
+    const wrapper = mount(
+        <Pagination
+          {...DEFAULT_PROPS}
+          refine={refine}
+        />
+      );
+    const el = wrapper
+        .find('.ais-Pagination__itemLink')
+        .filterWhere(e => e.text() === '8');
+    el.simulate('click', {button: 1});
+    el.simulate('click', {altKey: true});
+    el.simulate('click', {ctrlKey: true});
+    el.simulate('click', {metaKey: true});
+    el.simulate('click', {shiftKey: true});
+    expect(refine.mock.calls.length).toBe(0);
   });
 });
