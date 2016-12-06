@@ -110,17 +110,17 @@ test(
           {value: 'ba', highlighted: '<em>b</em>a', count: 1, isRefined: false}
         ]);
 
-        helper.addDisjunctiveFacetRefinement('f2', 'c');
+        helper.clearRefinements().addDisjunctiveFacetRefinement('f2', 'c');
         return helper.searchForFacetValues('f2', '');
       }).then(function(content) {
         t.ok(content, 'should get some content');
 
         t.deepEqual(content.facetHits, [
-          {value: 'b', highlighted: 'b', count: 2, isRefined: false},
-          {value: 'c', highlighted: 'c', count: 1, isRefined: false},
-          {value: 'x', highlighted: 'x', count: 1, isRefined: false},
-          {value: 'd', highlighted: 'd', count: 1, isRefined: false},
-          {value: 'y', highlighted: 'y', count: 1, isRefined: false}
+          {value: 'b', highlighted: '', count: 2, isRefined: false},
+          {value: 'c', highlighted: '', count: 2, isRefined: true},
+          {value: 'x', highlighted: '', count: 1, isRefined: false},
+          {value: 'd', highlighted: '', count: 1, isRefined: false},
+          {value: 'y', highlighted: '', count: 1, isRefined: false}
         ]);
 
         t.end();

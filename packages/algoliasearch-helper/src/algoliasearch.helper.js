@@ -188,9 +188,11 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query) {
   var index = this.client.initIndex(this.state.index);
   var isDisjunctive = state.isDisjunctiveFacet(facet);
   var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, this.state);
-  return index.searchFacet(algoliaQuery).then(function addIsRefined(content) {
+  return index.searchForFacetValues(algoliaQuery).then(function addIsRefined(content) {
     content.facetHits = forEach(content.facetHits, function(f) {
-      f.isRefined = isDisjunctive ? state.isDisjunctiveFacetRefined(facet, f.value) : state.isFacetRefined(facet, f.value);
+      f.isRefined = isDisjunctive ?
+        state.isDisjunctiveFacetRefined(facet, f.value) :
+        state.isFacetRefined(facet, f.value);
     });
 
     return content;
