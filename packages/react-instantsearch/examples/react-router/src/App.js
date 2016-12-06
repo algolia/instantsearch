@@ -12,21 +12,21 @@ import qs from 'qs';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {state: {...qs.parse(this.props.router.location.query)}};
+    this.state = {searchState: {...qs.parse(this.props.router.location.query)}};
   }
 
   componentWillReceiveProps() {
-    this.setState({state: qs.parse(this.props.router.location.query)});
+    this.setState({searchState: qs.parse(this.props.router.location.query)});
   }
 
-  onStateChange = nextState => {
+  onSearchStateChange = nextSearchState => {
     const THRESHOLD = 700;
     const newPush = Date.now();
-    this.setState({lastPush: newPush, state: nextState});
+    this.setState({lastPush: newPush, searchState: nextSearchState});
     if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
-      this.props.router.replace(nextState ? `?${qs.stringify(nextState)}` : '');
+      this.props.router.replace(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
     } else {
-      this.props.router.push(nextState ? `?${qs.stringify(nextState)}` : '');
+      this.props.router.push(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
     }
   };
 
@@ -38,8 +38,8 @@ class App extends Component {
         appId="latency"
         apiKey="6be0576ff61c053d5f9a3225e2a90f76"
         indexName="ikea"
-        state={this.state.state}
-        onStateChange={this.onStateChange.bind(this)}
+        searchState={this.state.searchState}
+        onSearchStateChange={this.onSearchStateChange.bind(this)}
         createURL={this.createURL.bind(this)}
       >
         <div>

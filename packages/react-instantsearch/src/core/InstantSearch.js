@@ -2,11 +2,11 @@ import {PropTypes, Component, Children} from 'react';
 import createInstantSearchManager from './createInstantSearchManager';
 
 function validateNextProps(props, nextProps) {
-  if (!props.state && nextProps.state) {
+  if (!props.searchState && nextProps.searchState) {
     throw new Error(
       'You can\'t switch <InstantSearch> from being uncontrolled to controlled'
     );
-  } else if (props.state && !nextProps.state) {
+  } else if (props.searchState && !nextProps.searchState) {
     throw new Error(
       'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
     );
@@ -18,7 +18,7 @@ function validateNextProps(props, nextProps) {
  * @description
  * InstantSearch is the root component of all react-instantsearch implementation.
  * It provides to all the connected components (aka widgets) a mean to interact
- * with the search state.
+ * with the searchState.
  * @kind widget
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
@@ -31,8 +31,8 @@ function validateNextProps(props, nextProps) {
  * [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
  *
  * Read the [search parameters guide](guide/Search%20parameters.html).
- * @propType {func} onStateChange - See [URL Routing](guide/advanced-topics.html#url-routing).
- * @propType {object} state - See [URL Routing](guide/advanced-topics.html#url-routing).
+ * @propType {func} onSearchStateChange - See [URL Routing](guide/advanced-topics.html#url-routing).
+ * @propType {object} onSearchState - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @propType {func} createURL - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
@@ -56,9 +56,9 @@ class InstantSearch extends Component {
   constructor(props) {
     super(props);
 
-    this.isControlled = Boolean(props.state);
+    this.isControlled = Boolean(props.searchState);
 
-    const initialState = this.isControlled ? props.state : {};
+    const initialState = this.isControlled ? props.searchState : {};
 
     this.aisManager = createInstantSearchManager({
       indexName: props.indexName,
@@ -71,7 +71,7 @@ class InstantSearch extends Component {
   componentWillReceiveProps(nextProps) {
     validateNextProps(this.props, nextProps);
     if (this.isControlled) {
-      this.aisManager.onExternalStateUpdate(nextProps.state);
+      this.aisManager.onExternalStateUpdate(nextProps.searchState);
     }
   }
 
@@ -96,20 +96,20 @@ class InstantSearch extends Component {
     };
   }
 
-  createHrefForState(state) {
-    state = this.aisManager.transitionState(state);
-    return this.isControlled && this.props.createURL ? this.props.createURL(state, this.getKnownKeys()) : '#';
+  createHrefForState(searchState) {
+    searchState = this.aisManager.transitionState(searchState);
+    return this.isControlled && this.props.createURL ? this.props.createURL(searchState, this.getKnownKeys()) : '#';
   }
 
-  onWidgetsInternalStateUpdate(state) {
-    state = this.aisManager.transitionState(state);
+  onWidgetsInternalStateUpdate(searchState) {
+    searchState = this.aisManager.transitionState(searchState);
 
-    if (this.props.onStateChange) {
-      this.props.onStateChange(state);
+    if (this.props.onSearchStateChange) {
+      this.props.onSearchStateChange(searchState);
     }
 
     if (!this.isControlled) {
-      this.aisManager.onExternalStateUpdate(state);
+      this.aisManager.onExternalStateUpdate(searchState);
     }
   }
 
@@ -136,8 +136,8 @@ InstantSearch.propTypes = {
 
   createURL: PropTypes.func,
 
-  state: PropTypes.object,
-  onStateChange: PropTypes.func,
+  searchState: PropTypes.object,
+  onSearchStateChange: PropTypes.func,
 
   children: PropTypes.node,
 };

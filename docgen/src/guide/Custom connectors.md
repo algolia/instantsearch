@@ -18,7 +18,7 @@ This method should return the props to forward to the composed component.
 
 `props` are the props that were provided to the higher-order component.
 
-`searchState` holds the state of all widgets. You can find the shape of all widgets state in [the corresponding guide](guidesSearch%20state.html).
+`searchState` holds the search state of all widgets. You can find the shape of all widgets search state in [the corresponding guide](guidesSearch%20state.html).
 
 `searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
@@ -34,26 +34,26 @@ It takes in the current props of the higher-order component, the [search state](
 const CoolWidget = createConnector({
   displayName: 'CoolWidget',
 
-  getProvidedProps(props, state) {
+  getProvidedProps(props, searchState) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
     // to default its value.
-    const [query, page] = state.queryAndPage || ['', 0];
+    const [query, page] = searchState.queryAndPage || ['', 0];
 
-    // Connect the underlying component to the `queryAndPage` state entry.
+    // Connect the underlying component to the `queryAndPage` searchState entry.
     return {
-      query: state.queryAndPage[0],
-      page: state.queryAndPage[1],
+      query: searchState.queryAndPage[0],
+      page: searchState.queryAndPage[1],
     }
   },
 
-  refine(props, state, newQuery, newPage) {
-    // When the underlying component calls its `refine` prop, update the state
+  refine(props, searchState, newQuery, newPage) {
+    // When the underlying component calls its `refine` prop, update the searchState
     // with the new query and page.
     return {
-      // `state` represents the state of *all* widgets. We need to extend it
+      // `searchState` represents the search state of *all* widgets. We need to extend it
       // instead of replacing it, otherwise other widgets will lose their
       // respective state.
-      ...state,
+      ...searchState,
       queryAndPage: [newQuery, newPage],
     };
   },
@@ -61,18 +61,18 @@ const CoolWidget = createConnector({
   <div>
     The query is {props.query}, the page is {props.page}.
     {/*
-      Clicking on this button will update the state to:
+      Clicking on this button will update the searchState to:
       {
-        ...otherState,
+        ...otherSearchState,
         query: 'algolia',
         page: 20,
       }
     */}
     <button onClick={() => props.refine('algolia', 20)} />
     {/*
-      Clicking on this button will update the state to:
+      Clicking on this button will update the searchState to:
       {
-        ...otherState,
+        ...otherSearchState,
         query: 'instantsearch',
         page: 15,
       }
@@ -84,7 +84,7 @@ const CoolWidget = createConnector({
 
 In the example above, we create a widget that reads and manipulates the `queryAndPage` state entry. However, we haven't described how those entries should affect the search parameters passed to the Algolia client just yet.
 
-## getSearchParameters(searchParameters, props, state)
+## getSearchParameters(searchParameters, props, searchState)
 
 This method applies the current props and state to the provided `SearchParameters`, and returns a new `SearchParameters`. The `SearchParameters` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
 
@@ -96,7 +96,7 @@ As such, the `getSearchParameters` method allows you to describe how the state a
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine
 
-  getSearchParameters(searchParameters, props, state) {
+  getSearchParameters(searchParameters, props, searchState) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
     // default its value.
     const [query, page] = state.queryAndPage || ['', 0];
@@ -110,7 +110,7 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-## getMetadata(props, state)
+## getMetadata(props, searchState)
 
 This method allows the widget to register a custom `metadata` object for any props and state combination.
 
@@ -124,10 +124,10 @@ The `CurrentRefinements` widget leverages this mechanism in order to allow any w
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
     // default its value.
-    const [query, page] = state.queryAndPage || ['', 0];
+    const [query, page] = searchState.queryAndPage || ['', 0];
 
     const filters = [];
     if (query !== '') {
@@ -140,13 +140,13 @@ const CoolWidget = createConnector({
         // Describes how clearing this filter affects the InstantSearch state.
         // In our case, clearing the query just resets it to an empty string
         // without affecting the page.
-        clear: nextState => {
+        clear: nextSearchState => {
           return {
-            ...nextState,
+            ...nextSearchState,
             // Do not depend on the current `state` here. Since filters can be
             // cleared in batches, the `state` parameter is not up-to-date when
             // this method is called.
-            queryAndPage: ['', nextState.queryAndPage[1]],
+            queryAndPage: ['', nextSearchState.queryAndPage[1]],
           };
         },
       });
@@ -156,10 +156,10 @@ const CoolWidget = createConnector({
       filters.push({
         key: `queryAndPage.page`,
         label: `Page: ${page}`,
-        clear: nextState => {
+        clear: nextSearchState => {
           return {
-            ...nextState,
-            queryAndPage: [nextState.queryAndPage[0], 0],
+            ...nextSearchState,
+            queryAndPage: [nextSearchState.queryAndPage[0], 0],
           };
         },
       });
@@ -174,15 +174,15 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-## cleanUp(props, state)
+## cleanUp(props, searchState)
 
-This method is called when a widget is about to unmount in order to clean the state.
+This method is called when a widget is about to unmount in order to clean the searchState.
 
-It takes in the current props of the higher-order component and the state of all widgets and expect a new state in return.
+It takes in the current props of the higher-order component and the searchState of all widgets and expect a new searchState in return.
 
 `props` are the props that were provided to the higher-order component.
 
-`state` holds the state of all widgets, with the shape `{[widgetId]: widgetState}`. Stateful widgets describe the format of their state in their respective documentation entry.
+`searchState` holds the searchState of all widgets, with the shape `{[widgetId]: widgetState}`. Stateful widgets describe the format of their searchState in their respective documentation entry.
 
 ```javascript
 import {omit} from 'lodash';
@@ -190,8 +190,8 @@ import {omit} from 'lodash';
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
 
-  cleanUp(props, state) {
-    return omit('queryAndPage', state)
+  cleanUp(props, searchState) {
+    return omit('queryAndPage', searchState)
   },
 })(Widget);
 ```
