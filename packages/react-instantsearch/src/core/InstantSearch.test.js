@@ -53,15 +53,15 @@ describe('InstantSearch', () => {
       const wrapper = mount(
         <InstantSearch
           {...DEFAULT_PROPS}
-          state={{}}
-          onStateChange={() => null}
+          searchState={{}}
+          onSearchStateChange={() => null}
           createURL={() => null}
         >
           <div />
         </InstantSearch>
       );
       wrapper.setProps({
-        state: undefined,
+        searchState: undefined,
       });
     }).toThrowError('You can\'t switch <InstantSearch> from being controlled to uncontrolled');
 
@@ -72,8 +72,8 @@ describe('InstantSearch', () => {
         </InstantSearch>
       );
       wrapper.setProps({
-        state: {},
-        onStateChange: () => null,
+        searchState: {},
+        onSearchStateChange: () => null,
         createURL: () => null,
       });
     }).toThrowError('You can\'t switch <InstantSearch> from being uncontrolled to controlled');
@@ -82,16 +82,16 @@ describe('InstantSearch', () => {
       const wrapper = mount(
         <InstantSearch
           {...DEFAULT_PROPS}
-          state={{}}
-          onStateChange={() => null}
+          searchState={{}}
+          onSearchStateChange={() => null}
           createURL={() => null}
         >
           <div />
         </InstantSearch>
       );
       wrapper.setProps({
-        state: undefined,
-        onStateChange: undefined,
+        searchState: undefined,
+        onSearchStateChange: undefined,
         createURL: undefined,
       });
     }).toThrowError('You can\'t switch <InstantSearch> from being controlled to uncontrolled');
@@ -113,22 +113,22 @@ describe('InstantSearch', () => {
 
   it('works as a controlled input', () => {
     const ism = {
-      transitionState: state => ({...state, transitioned: true}),
+      transitionState: searchState => ({...searchState, transitioned: true}),
       onExternalStateUpdate: jest.fn(),
     };
     createInstantSearchManager.mockImplementation(() => ism);
     const initialState = {a: 0};
-    const onStateChange = jest.fn(state => {
+    const onSearchStateChange = jest.fn(searchState => {
       // eslint-disable-next-line no-use-before-define
       wrapper.setProps({
-        state: {a: state.a + 1},
+        searchState: {a: searchState.a + 1},
       });
     });
     const wrapper = mount(
       <InstantSearch
         {...DEFAULT_PROPS}
-        state={initialState}
-        onStateChange={onStateChange}
+        searchState={initialState}
+        onSearchStateChange={onSearchStateChange}
         createURL={() => '#'}
       >
         <div />
@@ -137,7 +137,7 @@ describe('InstantSearch', () => {
     expect(createInstantSearchManager.mock.calls[0][0].initialState).toBe(initialState);
     const {ais: {onInternalStateUpdate}} = wrapper.instance().getChildContext();
     onInternalStateUpdate({a: 1});
-    expect(onStateChange.mock.calls[0][0]).toEqual({
+    expect(onSearchStateChange.mock.calls[0][0]).toEqual({
       transitioned: true,
       a: 1,
     });
@@ -148,7 +148,7 @@ describe('InstantSearch', () => {
 
   it('works as an uncontrolled input', () => {
     const ism = {
-      transitionState: state => ({...state, transitioned: true}),
+      transitionState: searchState => ({...searchState, transitioned: true}),
       onExternalStateUpdate: jest.fn(),
     };
     createInstantSearchManager.mockImplementation(() => ism);
@@ -167,10 +167,10 @@ describe('InstantSearch', () => {
       transitioned: true,
     });
 
-    const onStateChange = jest.fn();
-    wrapper.setProps({onStateChange});
+    const onSearchStateChange = jest.fn();
+    wrapper.setProps({onSearchStateChange});
     onInternalStateUpdate({a: 2});
-    expect(onStateChange.mock.calls[0][0]).toEqual({a: 2, transitioned: true});
+    expect(onSearchStateChange.mock.calls[0][0]).toEqual({a: 2, transitioned: true});
   });
 
   it('exposes the isManager\'s store and widgetsManager in context', () => {
@@ -194,17 +194,17 @@ describe('InstantSearch', () => {
     it('passes through to createURL when it is defined', () => {
       const widgetsIds = [];
       const ism = {
-        transitionState: state => ({...state, transitioned: true}),
+        transitionState: searchState => ({...searchState, transitioned: true}),
         getWidgetsIds: () => widgetsIds,
       };
       createInstantSearchManager.mockImplementation(() => ism);
-      const createURL = jest.fn(state => state);
+      const createURL = jest.fn(searchState => searchState);
 
       const wrapper = mount(
         <InstantSearch
           {...DEFAULT_PROPS}
-          state={{}}
-          onStateChange={() => null}
+          searchState={{}}
+          onSearchStateChange={() => null}
           createURL={createURL}
         >
           <div />

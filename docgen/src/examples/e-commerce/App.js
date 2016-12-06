@@ -29,9 +29,9 @@ const App = props =>
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
-    state={props.state}
+    searchState={props.searchState}
     createURL={props.createURL.bind(this)}
-    onStateChange={props.onStateChange.bind(this)}
+    onSearchStateChange={props.onSearchStateChange.bind(this)}
     searchParameters={{hitsPerPage: 16}}
   >
     <div>

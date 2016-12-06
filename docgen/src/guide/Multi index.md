@@ -12,15 +12,15 @@ You can use multiple `<InstantSearch/>` instances for cases like:
 * sharing a single SearchBox
 * any use case involving synchronizing widgets between different `<InstantSearch>` instances
 
-Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject state or be notified of state changes:
+Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject searchState or be notified of searchState changes:
 
-* onStateChange(nextState): a function being called every time the `InstantSearch` state is updated.
-* [state](guide/Search%20state.html): a search state
+* onSearchStateChange(onSearchStateChange): a function being called every time the `InstantSearch` searchState is updated.
+* [searchState](guide/Search%20state.html): a search state
 
 The idea is to have a main component that will receive every new search state of the first instance
 and then pass it back to each `InstantSearch` instances.
 
-Refinements and parameters of an `InstantSearch` state needs to have their corresponding widgets or
+Refinements and parameters of an `InstantSearch` searchState needs to have their corresponding widgets or
 [virtual widget](guide/Virtual%20widgets.html) added to be effectively applied.
 
 Here's an example displaying hits from two different indices:
@@ -46,7 +46,7 @@ class App extends Component {
       {/* You can also nest `<InstantSearch>` components,
        as long as you pass the right state and onStateChange function
        */}
-      <FirstResults onStateChange={this.onStateChange}/>
+      <FirstResults onSearchStateChange={this.onSearchStateChange}/>
       <SecondResults searchState={this.state.searchState}/>
     </div>
     );
@@ -58,8 +58,8 @@ const FirstResults = props =>
     appId="appId"
     apiKey="apiKey"
     indexName="firstIndexName"
-    state={props.searchState}
-    onStateChange={props.onStateChange}
+    searchState={props.searchState}
+    onSearchStateChange={props.onSearchStateChange}
   >
     <div>
       <SearchBox/>
@@ -77,7 +77,7 @@ const SecondResults = props =>
     appId="appId"
     apiKey="apiKey"
     indexName="secondIndexName"
-    state={props.searchState}
+    searchState={props.searchState}
   >
     <div>
       <Hits/>
