@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import omit from 'lodash/omit';
+import {omit} from 'lodash';
 
 import {isSpecialClick} from '../core/utils';
 

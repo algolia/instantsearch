@@ -1,5 +1,6 @@
 {
   "presets": ["latest", "react", "stage-2"],
+  "plugins": ["lodash"],
   "env": {
     "development": {
       "plugins": [
