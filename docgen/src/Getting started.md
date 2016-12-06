@@ -95,7 +95,7 @@ that should be a good start.
 
 Just include it in your webpage:
 ```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.19/style.min.css">
 ```
 
 Read the [styling](guide/Styling%20widgets.html) guide for more information.
@@ -220,7 +220,7 @@ function Product({hit}) {
 };
 ```
 
-Now the search displays the results and hightlights the part of the hit attribute
+Now the search displays the results and highlights the part of the hit attribute
 that matches the query. This pattern is very important in search, especially with
 Algolia, so that the user knows what's going on. This way we create the search
 dialog between the user and the data.
@@ -243,7 +243,7 @@ to filter the products by categories:
 
 ```jsx
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList} from 'react-instantsearch/dom';
+import {InstantSearch, Hits, SearchBox, Highlight, RefinementList} from 'react-instantsearch/dom';
 
 // [...]
 
@@ -280,7 +280,7 @@ we can use them directly without further configuration.
 
 ```jsx
 // We need to add the RefinementList to our import
-import {InstantSearch, Hits, SearchBox, hightlight, RefinementList, 
+import {InstantSearch, Hits, SearchBox, Highlight, RefinementList,
 Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
 
 // [...]

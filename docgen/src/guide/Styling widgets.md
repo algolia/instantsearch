@@ -21,13 +21,13 @@ manually.
 ### Via CDN
 
 The theme is available on unpkg.com:
-- unminified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.css
-- minified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css
+- unminified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.19/style.css
+- minified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.19/style.min.css
 
 You can either copy paste the content in your own app or use a direct link to unpkg.com:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/index.min.css">
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.19/style.min.css">
 ```
 
 ### Via npm, Webpack
@@ -67,5 +67,5 @@ Any other module bundler like Browserify can be used to load our CSS. `react-ins
 does not rely on any specific module bundler or module loader.
 
 <div class="guide-nav">
-Next: <a href="guide//Highlighting.html">Highlighting results →</a>
+Next: <a href="guide//Highlighting%20results.html">Highlighting results →</a>
 </div>
