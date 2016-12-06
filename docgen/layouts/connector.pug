@@ -7,10 +7,10 @@ block navigation
 
 block content
   h2#description Description
-    a.anchor(href='#description')
+    a.anchor(href=`${navPath}#description`)
   p=description
   h2#proptypes Exposed props
-    a.anchor(href='#proptypes')
+    a.anchor(href=`${navPath}#proptypes`)
   if proptype
     p These are the props exposed by the resulting Component.
     table.api.proptypes
@@ -19,7 +19,7 @@ block content
           tr.api-entry-values
             td.api-entry-name
               div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
-                a.anchor(href=`#default-props-entry-${name}-${type.name}`)
+                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
             td.api-entry-type
               code=type.type
             td.api-entry-default-value
@@ -31,7 +31,7 @@ block content
   else
     p This connector does not expose external props.
   h2#provided-props Provided props
-    a.anchor(href='#provided-props')
+    a.anchor(href=`${navPath}#provided-props`)
   if providedproptype
     p These are the props that the wrapped Component will receive.
     table.api.proptypes
@@ -40,7 +40,7 @@ block content
           tr.api-entry-values
             td.api-entry-name
               div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
-                a.anchor(href=`#default-props-entry-${name}-${type.name}`)
+                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
             td.api-entry-type
               code=type.type
             td.api-entry-default-value
@@ -53,6 +53,6 @@ block content
     p This connector does not provided props to its wrapped Component.
   if examples
     h2#example Example
-      a.anchor(href='#example')
+      a.anchor(href=`${navPath}#example`)
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
