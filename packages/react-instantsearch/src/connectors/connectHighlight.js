@@ -1,17 +1,13 @@
 import createConnector from '../core/createConnector';
 import parseAlgoliaHit from '../core/highlight';
 
-const timestamp = Date.now().toString();
-const config = {
-  highlightPreTag: `<ais-highlight-${timestamp}>`,
-  highlightPostTag: `</ais-highlight-${timestamp}>`,
-};
+import highlightTags from '../core/highlightTags.js';
 
 const highlight = ({attributeName, hit}) => parseAlgoliaHit({
   pathToAttribute: attributeName,
   hit,
-  preTag: config.highlightPreTag,
-  postTag: config.highlightPostTag,
+  preTag: highlightTags.highlightPreTag,
+  postTag: highlightTags.highlightPostTag,
 });
 
 /**
@@ -38,9 +34,5 @@ export default createConnector({
 
   getProvidedProps() {
     return {highlight};
-  },
-
-  getSearchParameters(searchParameters) {
-    return searchParameters.setQueryParameters(config);
   },
 });
