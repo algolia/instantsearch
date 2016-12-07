@@ -105,7 +105,7 @@ export default createConnector({
   refine(props, searchState, nextRefinement) {
     return {
       ...searchState,
-      [namespace]: {[getId(props)]: nextRefinement},
+      [namespace]: {...searchState[namespace], [getId(props)]: nextRefinement},
     };
   },
 

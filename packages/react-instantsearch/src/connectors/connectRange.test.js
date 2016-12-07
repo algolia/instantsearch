@@ -85,10 +85,10 @@ describe('connectRange', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val', range: {otherKey: 'val'}}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      range: {ok: 'yep'},
+      range: {ok: 'yep', otherKey: 'val'},
     });
   });
 
