@@ -5,7 +5,7 @@ const cx = classNames('Hits');
 
 class Hits extends Component {
   render() {
-    const {itemComponent: ItemComponent, hits} = this.props;
+    const {hitComponent: ItemComponent, hits} = this.props;
     return (
       <div {...cx('root')}>
         {hits.map(hit =>
@@ -19,14 +19,14 @@ class Hits extends Component {
 Hits.propTypes = {
   hits: PropTypes.array,
 
-  itemComponent: PropTypes.oneOfType([
+  hitComponent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
   ]).isRequired,
 };
 
 Hits.defaultProps = {
-  itemComponent: hit =>
+  hitComponent: hit =>
     <div
       style={{
         borderBottom: '1px solid #bbb',

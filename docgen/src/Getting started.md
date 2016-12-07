@@ -145,7 +145,7 @@ view lets you inspect the values that are retrieved from Algolia, in order
 to build your custom view.
 
 In order to customize the view for each product, we can use a special prop
-of the Hit widget: `itemComponent`. This props accept a Component that
+of the Hit widget: `hitComponent`. This props accept a Component that
 will be used for each hit in the results from Algolia.
 
 ```jsx
@@ -162,13 +162,13 @@ The widget receives a prop `hit` that contains the content of the
 record. Here we are only displaying the name for the sake of simplicity
 but there is no limit as long as the data in the record.
 
-Now let's modify the `Hits` usage to add our new `itemComponent`.
+Now let's modify the `Hits` usage to add our new `hitComponent`.
 
 ```jsx
 function Search() {
   return (
     <div>
-      <Hits itemComponent={Product} />
+      <Hits hitComponent={Product} />
     </div>
   );
 }
@@ -193,7 +193,7 @@ function Search() {
   return (
     <div>
       <SearchBox />
-      <Hits itemComponent={Product} />
+      <Hits hitComponent={Product} />
     </div>
   );
 }
@@ -252,7 +252,7 @@ function Search() {
     <div className='container'>
       <SearchBox />
       <RefinementList attributeName="category" />
-      <Hits itemComponent={Product} />
+      <Hits hitComponent={Product} />
     </div>
   );
 }
@@ -292,7 +292,7 @@ function Search() {
       <ClearAll/>
       <SearchBox />
       <RefinementList attributeName="category" />
-      <Hits itemComponent={Product} />
+      <Hits hitComponent={Product} />
       <Pagination />
     </div>
   );

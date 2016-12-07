@@ -122,12 +122,12 @@ const Results = () =>
   <article>
     <div id="stats" className="text-right text-muted"><Stats/></div>
     <hr />
-    <div id="hits"><Hits itemComponent={Hit} /></div>
+    <div id="hits"><Hits hitComponent={Hit} /></div>
     <div id="pagination" className="text-center"><Pagination /></div>
   </article>;
 
 const RefinementListLinks = connectRefinementList(({items, refine, createURL}) => {
-  const itemComponents = items.map(item =>
+  const hitComponents = items.map(item =>
     <div className={item.isRefined ? ' active' : ''} key={item.label}>
       <a className="item" href={createURL(item.value)} onClick={e => {
         e.preventDefault();
@@ -141,7 +141,7 @@ const RefinementListLinks = connectRefinementList(({items, refine, createURL}) =
 
   return (
     <div className="nav nav-list">
-      {itemComponents}
+      {hitComponents}
     </div>
   );
 });
