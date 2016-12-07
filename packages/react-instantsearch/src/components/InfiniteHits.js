@@ -5,7 +5,7 @@ const cx = classNames('InfiniteHits');
 
 class InfiniteHits extends Component {
   render() {
-    const {itemComponent: ItemComponent, hits, hasMore, refine} = this.props;
+    const {hitComponent: ItemComponent, hits, hasMore, refine} = this.props;
     const renderedHits = hits.map(hit =>
       <ItemComponent key={hit.objectID} hit={hit} />
     );
@@ -24,7 +24,7 @@ class InfiniteHits extends Component {
 
 InfiniteHits.propTypes = {
   hits: PropTypes.array,
-  itemComponent: PropTypes.oneOfType([
+  hitComponent: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.func,
   ]).isRequired,
@@ -33,7 +33,7 @@ InfiniteHits.propTypes = {
 };
 
 InfiniteHits.defaultProps = {
-  itemComponent: hit =>
+  hitComponent: hit =>
     <div
       style={{
         borderBottom: '1px solid #bbb',
