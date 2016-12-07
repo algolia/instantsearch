@@ -205,7 +205,7 @@ function DatesAndGuest() {
 
 const RoomType = connectRefinementList(({items, refine}) => {
   const sortedItems = items.sort((i1, i2) => i1.label.localeCompare(i2.label));
-  const itemComponents = sortedItems.map(item => {
+  const hitComponents = sortedItems.map(item => {
     const selectedClassName = item.isRefined ? ' ais-refinement-list--item__active' : '';
     const itemClassName = `ais-refinement-list--item col-sm-3 ${selectedClassName}`;
     return (
@@ -232,7 +232,7 @@ const RoomType = connectRefinementList(({items, refine}) => {
     <div className="row aisdemo-filter">
       <div className="col-sm-2 aisdemo-filter-title">Room Type</div>
       <div id="room_types col-sm-3">
-        {itemComponents}
+        {hitComponents}
       </div>
     </div>
   );

@@ -7,12 +7,12 @@ import {mount} from 'enzyme';
 import InfiniteHits from './InfiniteHits';
 
 describe('Hits', () => {
-  it('accepts a itemComponent prop', () => {
+  it('accepts a hitComponent prop', () => {
     const hits = [{objectID: 0}, {objectID: 1}, {objectID: 2}];
     const Hit = 'Hit';
     const tree = renderer.create(
       <InfiniteHits
-        itemComponent={Hit}
+        hitComponent={Hit}
         hits={hits}
         hasMore={false}
         refine={() => undefined}
@@ -30,7 +30,7 @@ describe('Hits', () => {
     const wrapped = mount(
         <InfiniteHits
           refine={mockedRefine}
-          itemComponent={Hit}
+          hitComponent={Hit}
           hits={hits}
           hasMore={true}
         />
@@ -45,7 +45,7 @@ describe('Hits', () => {
     const wrapped = mount(
         <InfiniteHits
           refine={() => undefined}
-          itemComponent={Hit}
+          hitComponent={Hit}
           hits={hits}
           hasMore={false}
         />
