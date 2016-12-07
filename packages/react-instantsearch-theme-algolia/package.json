@@ -1,7 +1,7 @@
 {
   "name": "react-instantsearch-theme-algolia",
   "description": "Algolia theme for react-instantsearch",
-  "version": "2.0.0-beta.18",
+  "version": "2.0.0-beta.19",
   "homepage": "https://community.algolia.com/instantsearch.js/react/",
   "repository": {
     "type": "git",
