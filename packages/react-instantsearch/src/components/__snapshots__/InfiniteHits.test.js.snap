@@ -1,4 +1,4 @@
-exports[`Hits accepts a itemComponent prop 1`] = `
+exports[`Hits accepts a hitComponent prop 1`] = `
 <div
   className="ais-InfiniteHits__root">
   <Hit
