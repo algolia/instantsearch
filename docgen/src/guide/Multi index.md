@@ -9,7 +9,7 @@ navWeight: 50
 You can use multiple `<InstantSearch/>` instances for cases like:
 
 * displaying hits from different indices
-* sharing a single SearchBox
+* sharing a single search box
 * any use case involving synchronizing widgets between different `<InstantSearch>` instances
 
 Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject searchState or be notified of searchState changes:
