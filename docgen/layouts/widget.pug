@@ -18,9 +18,14 @@ block content
   h2#proptypes Props
     a.anchor(href=`${navPath}#proptypes`)
   if proptype
-    p List of props exposed by the
-      code=name
-      |  widget
+    if name === 'InstantSearch'
+      p List of props exposed by the
+        code='<InstantSearch>'
+        |  widget
+    else
+      p List of props exposed by the
+        code=name
+        |  widget
     table.api.proptypes
       tbody
         each type in proptype
