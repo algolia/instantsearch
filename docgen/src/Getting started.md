@@ -204,14 +204,14 @@ Good thing for us, Algolia computes the matching part. Let's add this to our cus
 search result component:
 
 ```jsx
-// We need to add the highlight function to our import
+// We need to add the Highlight widget to our import
 import {InstantSearch, Hits, SearchBox, Highlight} from 'react-instantsearch/dom';
 
 // [...]
 
 function Product({hit}) {
   return (
-    <div>
+    <div style={{marginTop: 10px}}>
       <span className="hit-name">
         <Highlight attributeName="name" hit={hit} />
       </span>
