@@ -8,10 +8,10 @@ function getId(props) {
 
 const namespace = 'toggle';
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId(props);
-  if (state[namespace] && state[namespace][id]) {
-    return state[namespace][id];
+  if (searchState[namespace] && searchState[namespace][id]) {
+    return searchState[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -28,9 +28,9 @@ function getCurrentRefinement(props, state) {
  * @propType {string} label - Label for this toggle.
  * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.
  * @propType {string} value - Value of the refinement to apply on `attributeName`. Required when `attributeName` is present.
- * @propType {boolean} [defaultChecked=false] - Default state of the widget. Should the toggle be checked by default?
+ * @propType {boolean} [defaultChecked=false] - Default searchState of the widget. Should the toggle be checked by default?
  * @providedPropType {function} refine - a function to toggle a refinement
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  */
 export default createConnector({
   displayName: 'AlgoliaToggle',
@@ -43,29 +43,29 @@ export default createConnector({
     defaultRefinement: PropTypes.bool,
   },
 
-  getProvidedProps(props, state) {
-    const checked = getCurrentRefinement(props, state);
+  getProvidedProps(props, searchState) {
+    const checked = getCurrentRefinement(props, searchState);
     return {checked};
   },
 
-  refine(props, state, nextChecked) {
+  refine(props, searchState, nextChecked) {
     return {
-      ...state,
-      [namespace]: {[getId(props, state)]: nextChecked},
+      ...searchState,
+      [namespace]: {[getId(props, searchState)]: nextChecked},
     };
   },
 
-  cleanUp(props, state) {
-    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+  cleanUp(props, searchState) {
+    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
       return omit(cleanState, namespace);
     }
     return cleanState;
   },
 
-  getSearchParameters(searchParameters, props, state) {
+  getSearchParameters(searchParameters, props, searchState) {
     const {attributeName, value, filter} = props;
-    const checked = getCurrentRefinement(props, state);
+    const checked = getCurrentRefinement(props, searchState);
 
     if (checked) {
       if (attributeName) {
@@ -84,9 +84,9 @@ export default createConnector({
     return searchParameters;
   },
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     const id = getId(props);
-    const checked = getCurrentRefinement(props, state);
+    const checked = getCurrentRefinement(props, searchState);
     const items = [];
     if (checked) {
       items.push({

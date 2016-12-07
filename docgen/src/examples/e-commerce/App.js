@@ -205,9 +205,9 @@ const Hit = ({item}) => {
 const CustomResults = createConnector({
   displayName: 'CustomResults',
 
-  getProvidedProps(props, state, search) {
-    const noResults = search.results ? search.results.nbHits === 0 : false;
-    return {query: state.query, noResults};
+  getProvidedProps(props, searchState, searchResults) {
+    const noResults = searchResults.results ? searchResults.results.nbHits === 0 : false;
+    return {query: searchState.query, noResults};
   },
 })(({noResults, query}) => {
   if (noResults) {

@@ -84,7 +84,7 @@ describe('connectRange', () => {
     });
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -120,8 +120,8 @@ describe('connectRange', () => {
       }],
     });
 
-    const state = metadata.items[0].value({range: {wot: {min: 5}}});
-    expect(state).toEqual({range: {wot: {}}});
+    const searchState = metadata.items[0].value({range: {wot: {min: 5}}});
+    expect(searchState).toEqual({range: {wot: {}}});
 
     metadata = getMetadata(
       {attributeName: 'wot'},
@@ -152,14 +152,14 @@ describe('connectRange', () => {
     });
   });
 
-  it('should return the right state when clean up', () => {
-    let state = cleanUp({attributeName: 'name'}, {
-      range: {name: 'state', name2: 'state'},
-      another: {state: 'state'},
+  it('should return the right searchState when clean up', () => {
+    let searchState = cleanUp({attributeName: 'name'}, {
+      range: {name: 'searchState', name2: 'searchState'},
+      another: {searchState: 'searchState'},
     });
-    expect(state).toEqual({range: {name2: 'state'}, another: {state: 'state'}});
+    expect(searchState).toEqual({range: {name2: 'searchState'}, another: {searchState: 'searchState'}});
 
-    state = cleanUp({attributeName: 'name2'}, state);
-    expect(state).toEqual({another: {state: 'state'}});
+    searchState = cleanUp({attributeName: 'name2'}, searchState);
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

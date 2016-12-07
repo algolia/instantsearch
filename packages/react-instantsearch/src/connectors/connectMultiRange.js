@@ -27,10 +27,10 @@ function getId(props) {
   return props.attributeName;
 }
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId(props);
-  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
-    return state[namespace][id];
+  if (searchState[namespace] && typeof searchState[namespace][id] !== 'undefined') {
+    return searchState[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -48,8 +48,8 @@ function getCurrentRefinement(props, state) {
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the shape of a `string` with a pattern of `'{start}:{end}'`.
  * @providedPropType {function} refine - a function to select a range.
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
- * @providedPropType {string} currentRefinement - the refinement currently applied.  follow the shape of a `string` with a pattern of `'{start}:{end}'` which corresponds to the current selected item. For instance, when the selected item is `{start: 10, end: 20}`, the state of the widget is `'10:20'`. When `start` isn't defined, the state of the widget is `':{end}'`, and the same way around when `end` isn't defined. However, when neither `start` nor `end` are defined, the state is an empty string.
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
+ * @providedPropType {string} currentRefinement - the refinement currently applied.  follow the shape of a `string` with a pattern of `'{start}:{end}'` which corresponds to the current selected item. For instance, when the selected item is `{start: 10, end: 20}`, the searchState of the widget is `'10:20'`. When `start` isn't defined, the searchState of the widget is `':{end}'`, and the same way around when `end` isn't defined. However, when neither `start` nor `end` are defined, the searchState is an empty string.
  * @providedPropType {array.<{isRefined: boolean, label: string, value: string}>} items - the list of ranges the MultiRange can display.
  */
 export default createConnector({
@@ -65,9 +65,9 @@ export default createConnector({
     })).isRequired,
   },
 
-  getProvidedProps(props, state) {
+  getProvidedProps(props, searchState) {
     const {items} = props;
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
 
     return {
       items: items.map(item => {
@@ -82,24 +82,24 @@ export default createConnector({
     };
   },
 
-  refine(props, state, nextRefinement) {
+  refine(props, searchState, nextRefinement) {
     return {
-      ...state,
-      [namespace]: {[getId(props, state)]: nextRefinement},
+      ...searchState,
+      [namespace]: {[getId(props, searchState)]: nextRefinement},
     };
   },
 
-  cleanUp(props, state) {
-    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+  cleanUp(props, searchState) {
+    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
       return omit(cleanState, namespace);
     }
     return cleanState;
   },
 
-  getSearchParameters(searchParameters, props, state) {
+  getSearchParameters(searchParameters, props, searchState) {
     const {attributeName} = props;
-    const {start, end} = parseItem(getCurrentRefinement(props, state));
+    const {start, end} = parseItem(getCurrentRefinement(props, searchState));
 
     if (start) {
       searchParameters = searchParameters.addNumericRefinement(
@@ -118,9 +118,9 @@ export default createConnector({
     return searchParameters;
   },
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     const id = getId(props);
-    const value = getCurrentRefinement(props, state);
+    const value = getCurrentRefinement(props, searchState);
     const items = [];
     if (value !== '') {
       const {label} = find(props.items, item => stringifyItem(item) === value);

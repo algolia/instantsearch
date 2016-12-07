@@ -16,7 +16,7 @@ const {
 
 let props;
 let params;
-let state;
+let searchState;
 
 describe('connectPagination', () => {
   it('provides the correct props to the component', () => {
@@ -35,7 +35,7 @@ describe('connectPagination', () => {
     expect(props).toBe(null);
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -49,19 +49,19 @@ describe('connectPagination', () => {
     expect(params.page).toBe(666);
   });
 
-  it('Transition state when the value is identical and does not contain isSamePage flag', () => {
-    state = transitionState({}, {page: 1}, {page: 1});
-    expect(state).toEqual({});
-    state = transitionState({}, {page: 1}, {page: 2});
-    expect(state).toEqual({
+  it('Transition searchState when the value is identical and does not contain isSamePage flag', () => {
+    searchState = transitionState({}, {page: 1}, {page: 1});
+    expect(searchState).toEqual({});
+    searchState = transitionState({}, {page: 1}, {page: 2});
+    expect(searchState).toEqual({
       page: 2,
     });
     const newSameValue = {
       valueOf: () => 1,
       isSamePage: true,
     };
-    state = transitionState({}, {page: 1}, {page: newSameValue});
-    expect(state).toEqual({
+    searchState = transitionState({}, {page: 1}, {page: newSameValue});
+    expect(searchState).toEqual({
       page: 1,
     });
   });
@@ -71,8 +71,8 @@ describe('connectPagination', () => {
     expect(metadata).toEqual({id: 'page'});
   });
 
-  it('should return the right state when clean up', () => {
-    const newState = cleanUp({}, {page: {state: 'state'}, another: {state: 'state'}});
-    expect(newState).toEqual({another: {state: 'state'}});
+  it('should return the right searchState when clean up', () => {
+    const newState = cleanUp({}, {page: {searchState: 'searchState'}, another: {searchState: 'searchState'}});
+    expect(newState).toEqual({another: {searchState: 'searchState'}});
   });
 });

@@ -6,13 +6,13 @@ function getId() {
   return 'hitsPerPage';
 }
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId();
-  if (typeof state[id] !== 'undefined') {
-    if (typeof state[id] === 'string') {
-      return parseInt(state[id], 10);
+  if (typeof searchState[id] !== 'undefined') {
+    if (typeof searchState[id] === 'string') {
+      return parseInt(searchState[id], 10);
     }
-    return state[id];
+    return searchState[id];
   }
   return props.defaultRefinement;
 }
@@ -25,7 +25,7 @@ function getCurrentRefinement(props, state) {
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value: number, label: string}[]} items - List of hits per page options.
  * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{isRefined: boolean, label?: string, value: number}>} items - the list of items the HitsPerPage can display. If no label provided, the value will be displayed.
  */
@@ -40,8 +40,8 @@ export default createConnector({
     })).isRequired,
   },
 
-  getProvidedProps(props, state) {
-    const currentRefinement = getCurrentRefinement(props, state);
+  getProvidedProps(props, searchState) {
+    const currentRefinement = getCurrentRefinement(props, searchState);
     const items = props.items.map(item => item.value === currentRefinement
       ? {...item, isRefined: true} : {...item, isRefined: false});
     return {
@@ -50,20 +50,20 @@ export default createConnector({
     };
   },
 
-  refine(props, state, nextHitsPerPage) {
+  refine(props, searchState, nextHitsPerPage) {
     const id = getId();
     return {
-      ...state,
+      ...searchState,
       [id]: nextHitsPerPage,
     };
   },
 
-  cleanUp(props, state) {
-    return omit(state, getId());
+  cleanUp(props, searchState) {
+    return omit(searchState, getId());
   },
 
-  getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setHitsPerPage(getCurrentRefinement(props, state));
+  getSearchParameters(searchParameters, props, searchState) {
+    return searchParameters.setHitsPerPage(getCurrentRefinement(props, searchState));
   },
 
   getMetadata() {

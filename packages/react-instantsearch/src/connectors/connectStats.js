@@ -11,13 +11,13 @@ import createConnector from '../core/createConnector';
 export default createConnector({
   displayName: 'AlgoliaStats',
 
-  getProvidedProps(props, state, search) {
-    if (!search.results) {
+  getProvidedProps(props, searchState, searchResults) {
+    if (!searchResults.results) {
       return null;
     }
     return {
-      nbHits: search.results.nbHits,
-      processingTimeMS: search.results.processingTimeMS,
+      nbHits: searchResults.results.nbHits,
+      processingTimeMS: searchResults.results.processingTimeMS,
     };
   },
 });
