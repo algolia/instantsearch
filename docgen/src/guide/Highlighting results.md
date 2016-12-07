@@ -6,10 +6,10 @@ category: guide
 navWeight: 78
 ---
 
-Search is all about understanding the results. It's especially true when using
-the text based search. When a user types a query in the searchbox, the results
+Search is all about helping users understand the results. This is especially true when using
+text based search. When a user types a query in the searchbox, the results
 must show why the results are matching the query. That's why Algolia implements
-a powerful highlight let you display the matching parts of text attributes in
+a powerful highlight that lets you display the matching parts of text attributes in
 the results.
 
 This feature is already packaged for you in react-instantsearch and
