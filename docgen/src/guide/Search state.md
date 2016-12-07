@@ -11,106 +11,35 @@ If a widget uses an attribute, we store it under its widget category to prevent 
 
 Here's the `searchState` shape for all the connectors or widgets that we provide:
 
-## (connect)Range
-
 ```javascript
 {
-  range: {
-    attributeName: {
-      min: 2,
-      max: 3
-    }
+  const searchState = {
+    range: {
+      attributeName: {
+        min: 2,
+        max: 3
+      }
+    },
+    refinementList: {
+      attributeName: ['lemon', 'orange']
+    },
+    hierarchicalMenu: {
+      attributeName: 'fruits > orange'
+    },
+    menu: {
+      attributeName: 'orange'
+    },
+    multiRange: {
+      attributeName: '2:3'
+    },
+    toggle: {
+      attributeName: true
+    },
+    hitsPerPage: 10,
+    sortBy: 'mostPopular',
+    query: 'ora',
+    page: 2 //use by both (connect)Pagination and (connect)InfiniteHits
   }
-}
-```
-
-## (connect)RefinementList
-
-```javascript
-{
-  refinementList: {
-    attributeName: ['lemon', 'orange']
-  }
-}
-```
-
-## (connect)HierarchicalMenu
-
-```javascript
-{
-  hierarchicalMenu: {
-    attributeName: 'fruits > orange'
-  }
-}
-```
-
-## (connect)HitsPerPage
-
-```javascript
-{
-  hitsPerPage: 10
-}
-```
-
-## (connect)Menu
-
-```javascript
-{
-  menu: {
-    attributeName: 'orange'
-  }
-}
-```
-
-## (connect)MultiRange
-
-```javascript
-{
-  multiRange: {
-    attributeName: '2:3'
-  }
-}
-```
-
-## (connect)Toggle
-
-```javascript
-{
-  toggle: {
-    attributeName: true
-  }
-}
-```
-
-## (connect)SortBy
-
-```javascript
-{
-  sortBy: 'mostPopular'
-}
-```
-
-## (connect)SearchBox state
-
-```javascript
-{
-  query: 'ora'
-}
-```
-
-## (connect)Pagination
-
-```javascript
-{
-  page: 2
-}
-```
-
-## (connect)InfiniteHits
-
-```javascript
-{
-  page: 2
 }
 ```
 
