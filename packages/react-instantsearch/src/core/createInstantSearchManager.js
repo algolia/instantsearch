@@ -2,6 +2,7 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
+import highlightTags from './highlightTags.js';
 
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
@@ -48,6 +49,7 @@ export default function createInstantSearchManager({
     const baseSP = new SearchParameters({
       ...searchParameters,
       index: indexName,
+      ...highlightTags,
     });
     const widgetSearchParameters = getSearchParameters(baseSP);
 
