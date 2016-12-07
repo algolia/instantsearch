@@ -2,7 +2,7 @@ import connectStats from '../connectors/connectStats.js';
 import StatsComponent from '../components/Stats.js';
 
 /**
- * The Stats component displays a string with the number of hits and the processed timed.
+ * The Stats component displays a string with the number of hits and the processing time.
  * @name Stats
  * @kind widget
  * @themeKey ais-Stats__root - the root of the component
