@@ -95,7 +95,7 @@ export default createConnector({
     const id = getId(props);
     return {
       ...searchState,
-      [namespace]: {[id]: nextRefinement ? nextRefinement : ''},
+      [namespace]: {...searchState[namespace], [id]: nextRefinement ? nextRefinement : ''},
     };
   },
 

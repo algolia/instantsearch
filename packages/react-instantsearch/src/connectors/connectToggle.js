@@ -51,7 +51,7 @@ export default createConnector({
   refine(props, searchState, nextChecked) {
     return {
       ...searchState,
-      [namespace]: {[getId(props, searchState)]: nextChecked},
+      [namespace]: {...searchState[namespace], [getId(props, searchState)]: nextChecked},
     };
   },
 

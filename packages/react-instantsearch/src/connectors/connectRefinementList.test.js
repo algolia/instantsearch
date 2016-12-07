@@ -93,10 +93,10 @@ describe('connectRefinementList', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, ['yep']);
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val', refinementList: {otherKey: ['val']}}, ['yep']);
     expect(nextState).toEqual({
       otherKey: 'val',
-      refinementList: {ok: ['yep']},
+      refinementList: {ok: ['yep'], otherKey: ['val']},
     });
   });
 
