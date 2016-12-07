@@ -1,4 +1,4 @@
-import {PropTypes, Component, Children} from 'react';
+import React, {PropTypes, Component, Children} from 'react';
 import createInstantSearchManager from './createInstantSearchManager';
 
 function validateNextProps(props, nextProps) {
@@ -119,10 +119,11 @@ class InstantSearch extends Component {
 
   render() {
     const childrenCount = Children.count(this.props.children);
+    const {Root, props} = this.props.root;
     if (childrenCount === 0)
       return null;
     else
-      return Children.only(this.props.children);
+      return <Root {...props}>{this.props.children}</Root>;
   }
 }
 
@@ -140,6 +141,11 @@ InstantSearch.propTypes = {
   onSearchStateChange: PropTypes.func,
 
   children: PropTypes.node,
+
+  root: PropTypes.shape({
+    Root: PropTypes.string.isRequired,
+    props: PropTypes.object,
+  }).isRequired,
 };
 
 InstantSearch.childContextTypes = {

@@ -1,7 +1,10 @@
 import createInstantSearch from './src/core/createInstantSearch';
 import algoliasearch from 'algoliasearch';
 
-const InstantSearch = createInstantSearch(algoliasearch);
+const InstantSearch = createInstantSearch(algoliasearch, {
+  Root: 'div',
+  props: {className: 'ais-InstantSearch__root'},
+});
 export {InstantSearch};
 export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
