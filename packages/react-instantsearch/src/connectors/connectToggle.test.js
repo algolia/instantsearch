@@ -29,10 +29,10 @@ describe('connectToggle', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    let searchState = refine({attributeName: 't'}, {otherKey: 'val'}, true);
+    let searchState = refine({attributeName: 't'}, {otherKey: 'val', toggle: {otherKey: false}}, true);
     expect(searchState).toEqual({
       otherKey: 'val',
-      toggle: {t: true},
+      toggle: {t: true, otherKey: false},
     });
 
     searchState = refine({attributeName: 't'}, {otherKey: 'val'}, false);

@@ -117,7 +117,7 @@ export default createConnector({
       // which would not be persisted to the URL.
       // {foo: ['bar']} => "foo[0]=bar"
       // {foo: []} => ""
-      [namespace]: {[id]: nextRefinement.length > 0 ? nextRefinement : ''},
+      [namespace]: {...searchState[namespace], [id]: nextRefinement.length > 0 ? nextRefinement : ''},
     };
   },
 

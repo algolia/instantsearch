@@ -131,10 +131,10 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    const nextState = refine({attributes: ['ok']}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributes: ['ok']}, {otherKey: 'val', hierarchicalMenu: {otherKey: 'val'}}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      hierarchicalMenu: {ok: 'yep'},
+      hierarchicalMenu: {ok: 'yep', otherKey: 'val'},
     });
   });
 
