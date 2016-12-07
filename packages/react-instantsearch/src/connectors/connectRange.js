@@ -10,11 +10,11 @@ import createConnector from '../core/createConnector';
  * @name connectRange
  * @kind connector
  * @propType {string} attributeName - Name of the attribute for faceting
- * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the start and the end of the range.
+ * @propType {{min: number, max: number}} defaultRefinement - Default searchState of the widget containing the start and the end of the range.
  * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
  * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
  * @providedPropType {function} refine - a function to select a range.
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  */
 
@@ -24,10 +24,10 @@ function getId(props) {
 
 const namespace = 'range';
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId(props);
-  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
-    let {min, max} = state[namespace][id];
+  if (searchState[namespace] && typeof searchState[namespace][id] !== 'undefined') {
+    let {min, max} = searchState[namespace][id];
     if (typeof min === 'string') {
       min = parseInt(min, 10);
     }
@@ -55,7 +55,7 @@ export default createConnector({
     max: PropTypes.number,
   },
 
-  getProvidedProps(props, state, search) {
+  getProvidedProps(props, searchState, searchResults) {
     const {attributeName} = props;
     let {min, max} = props;
 
@@ -63,12 +63,12 @@ export default createConnector({
     const hasMax = typeof max !== 'undefined';
 
     if (!hasMin || !hasMax) {
-      if (!search.results) {
+      if (!searchResults.results) {
         return null;
       }
 
-      const stats = search.results.getFacetByName(attributeName) ?
-        search.results.getFacetStats(attributeName) : null;
+      const stats = searchResults.results.getFacetByName(attributeName) ?
+        searchResults.results.getFacetStats(attributeName) : null;
 
       if (!stats) {
         return null;
@@ -82,7 +82,7 @@ export default createConnector({
       }
     }
 
-    const count = search.results ? search.results
+    const count = searchResults.results ? searchResults.results
       .getFacetValues(attributeName)
       .map(v => ({
         value: v.name,
@@ -92,7 +92,7 @@ export default createConnector({
     const {
       min: valueMin = min,
       max: valueMax = max,
-    } = getCurrentRefinement(props, state);
+    } = getCurrentRefinement(props, searchState);
 
     return {
       min,
@@ -102,24 +102,24 @@ export default createConnector({
     };
   },
 
-  refine(props, state, nextRefinement) {
+  refine(props, searchState, nextRefinement) {
     return {
-      ...state,
+      ...searchState,
       [namespace]: {[getId(props)]: nextRefinement},
     };
   },
 
-  cleanUp(props, state) {
-    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+  cleanUp(props, searchState) {
+    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
       return omit(cleanState, namespace);
     }
     return cleanState;
   },
 
-  getSearchParameters(params, props, state) {
+  getSearchParameters(params, props, searchState) {
     const {attributeName} = props;
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
     params = params.addDisjunctiveFacet(attributeName);
 
     const {min, max} = currentRefinement;
@@ -133,9 +133,9 @@ export default createConnector({
     return params;
   },
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
     let item;
     const hasMin = typeof currentRefinement.min !== 'undefined';
     const hasMax = typeof currentRefinement.max !== 'undefined';

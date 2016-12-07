@@ -30,8 +30,8 @@ const Content = createConnector({
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalResults',
-    getProvidedProps(props, searchState, search) {
-      const noResults = search.results ? search.results.nbHits === 0 : false;
+    getProvidedProps(props, searchState, searchResults) {
+      const noResults = searchResults.results ? searchResults.results.nbHits === 0 : false;
       return {query: searchState.query, noResults};
     },
  })(({noResults, query}) => {
@@ -47,8 +47,8 @@ const content = createConnector({
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalError',
-    getProvidedProps(props, searchState, search) {
-      return {error: search.error};
+    getProvidedProps(props, searchState, searchResults) {
+      return {error: searchResults.error};
     },
  })(({error}) => {
     const content = error
@@ -65,8 +65,8 @@ In slow user network situations you might want to know when the search results a
 ```javascript
 const content = createConnector({
     displayName: 'ConditionalError',
-    getProvidedProps(props, searchState, search) {
-      return {loading: search.loading};
+    getProvidedProps(props, searchState, searchResults) {
+      return {loading: searchResults.loading};
     },
 })(({loading}) => {
     const content = loading

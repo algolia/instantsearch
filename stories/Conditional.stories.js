@@ -8,9 +8,9 @@ const stories = storiesOf('Conditionals', module);
 stories.add('NoResults/HasResults', () => {
   const Content = createConnector({
     displayName: 'ConditionalResults',
-    getProvidedProps(props, state, search) {
-      const noResults = search.results ? search.results.nbHits === 0 : false;
-      return {query: state.query, noResults};
+    getProvidedProps(props, searchState, searchResults) {
+      const noResults = searchResults.results ? searchResults.results.nbHits === 0 : false;
+      return {query: searchState.query, noResults};
     },
   })(({noResults, query}) => {
     const content = noResults
@@ -24,8 +24,8 @@ stories.add('NoResults/HasResults', () => {
 }).add('NoQuery/HasQuery', () => {
   const Content = createConnector({
     displayName: 'ConditionalQuery',
-    getProvidedProps(props, state) {
-      return {query: state.query};
+    getProvidedProps(props, searchState) {
+      return {query: searchState.query};
     },
   })(({query}) => {
     const content = query

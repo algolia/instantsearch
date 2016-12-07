@@ -5,10 +5,10 @@ function getId() {
   return 'query';
 }
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId();
-  if (typeof state[id] !== 'undefined') {
-    return state[id];
+  if (typeof searchState[id] !== 'undefined') {
+    return searchState[id];
   }
   return '';
 }
@@ -19,31 +19,31 @@ function getCurrentRefinement(props, state) {
  * @name connectSearchBox
  * @kind connector
  * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the query to search for.
  */
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
 
-  getProvidedProps(props, state) {
+  getProvidedProps(props, searchState) {
     return {
-      currentRefinement: getCurrentRefinement(props, state),
+      currentRefinement: getCurrentRefinement(props, searchState),
     };
   },
 
-  refine(props, state, nextQuery) {
+  refine(props, searchState, nextQuery) {
     const id = getId();
     return {
-      ...state,
+      ...searchState,
       [id]: nextQuery,
     };
   },
 
-  cleanUp(props, state) {
-    return omit(state, getId());
+  cleanUp(props, searchState) {
+    return omit(searchState, getId());
   },
 
-  getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setQuery(getCurrentRefinement(props, state));
+  getSearchParameters(searchParameters, props, searchState) {
+    return searchParameters.setQuery(getCurrentRefinement(props, searchState));
   },
 });

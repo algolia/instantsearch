@@ -85,10 +85,10 @@ describe('createInstantSearchManager', () => {
       createWidgetsManager.mockImplementationOnce(() => ({
         getWidgets: () => [
           {
-            transitionState: (state, nextState) => ({...nextState, first: true}),
+            transitionState: (searchState, nextSearchState) => ({...nextSearchState, first: true}),
           },
           {
-            transitionState: (state, nextState) => ({...nextState, second: true}),
+            transitionState: (searchState, nextSearchState) => ({...nextSearchState, second: true}),
           },
         ],
       }));

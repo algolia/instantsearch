@@ -6,9 +6,9 @@ function getId() {
   return 'page';
 }
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId();
-  let page = state[id];
+  let page = searchState[id];
   if (typeof page === 'undefined') {
     page = 1;
   } else if (typeof page === 'string') {
@@ -25,7 +25,7 @@ function getCurrentRefinement(props, state) {
  * let the user displays hits corresponding to a certain page.
  * @name connectPagination
  * @kind connector
- * @propType {string} id - widget id, URL state serialization key. The state of this widget takes the shape of a `number`.
+ * @propType {string} id - widget id, URL searchState serialization key. The searchState of this widget takes the shape of a `number`.
  * @propType {boolean} [showFirst=true] - Display the first page link.
  * @propType {boolean} [showLast=false] - Display the last page link.
  * @propType {boolean} [showPrevious=true] - Display the previous page link.
@@ -33,50 +33,50 @@ function getCurrentRefinement(props, state) {
  * @propType {number} [pagesPadding=3] - How many page links to display around the current page.
  * @propType {number} [maxPages=Infinity] - Maximum number of pages to display.
  * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {number} nbPages - the total of existing pages
  * @providedPropType {number} currentRefinement - the page refinement currently applied
  */
 export default createConnector({
   displayName: 'AlgoliaPagination',
 
-  getProvidedProps(props, state, search) {
-    if (!search.results) {
+  getProvidedProps(props, searchState, searchResults) {
+    if (!searchResults.results) {
       return null;
     }
     return {
-      nbPages: search.results.nbPages,
-      currentRefinement: getCurrentRefinement(props, state),
+      nbPages: searchResults.results.nbPages,
+      currentRefinement: getCurrentRefinement(props, searchState),
     };
   },
 
-  refine(props, state, nextPage) {
+  refine(props, searchState, nextPage) {
     const id = getId();
     return {
-      ...state,
+      ...searchState,
       [id]: nextPage,
     };
   },
 
-  cleanUp(props, state) {
-    return omit(state, getId());
+  cleanUp(props, searchState) {
+    return omit(searchState, getId());
   },
 
-  getSearchParameters(searchParameters, props, state) {
-    return searchParameters.setPage(getCurrentRefinement(props, state) - 1);
+  getSearchParameters(searchParameters, props, searchState) {
+    return searchParameters.setPage(getCurrentRefinement(props, searchState) - 1);
   },
 
-  transitionState(props, prevState, nextState) {
+  transitionState(props, prevSearchState, nextSearchState) {
     const id = getId();
-    if (nextState[id] && nextState[id].isSamePage) {
+    if (nextSearchState[id] && nextSearchState[id].isSamePage) {
       return {
-        ...nextState,
-        [id]: prevState[id],
+        ...nextSearchState,
+        [id]: prevSearchState[id],
       };
-    } else if (prevState[id] === nextState[id]) {
-      return omit(nextState, id);
+    } else if (prevSearchState[id] === nextSearchState[id]) {
+      return omit(nextSearchState, id);
     }
-    return nextState;
+    return nextSearchState;
   },
 
   getMetadata() {

@@ -92,7 +92,7 @@ describe('connectRefinementList', () => {
     expect(props).toBe(null);
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, ['yep']);
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -187,20 +187,20 @@ describe('connectRefinementList', () => {
       ],
     });
 
-    let state = metadata.items[0].items[0].value({refinementList: {wot: ['wat', 'wut']}});
-    expect(state).toEqual({refinementList: {wot: ['wut']}});
-    state = metadata.items[0].items[1].value(state);
-    expect(state).toEqual({refinementList: {wot: ''}});
+    let searchState = metadata.items[0].items[0].value({refinementList: {wot: ['wat', 'wut']}});
+    expect(searchState).toEqual({refinementList: {wot: ['wut']}});
+    searchState = metadata.items[0].items[1].value(searchState);
+    expect(searchState).toEqual({refinementList: {wot: ''}});
   });
 
-  it('should return the right state when clean up', () => {
-    let state = cleanUp({attributeName: 'name'}, {
-      refinementList: {name: 'state', name2: 'state'},
-      another: {state: 'state'},
+  it('should return the right searchState when clean up', () => {
+    let searchState = cleanUp({attributeName: 'name'}, {
+      refinementList: {name: 'searchState', name2: 'searchState'},
+      another: {searchState: 'searchState'},
     });
-    expect(state).toEqual({refinementList: {name2: 'state'}, another: {state: 'state'}});
+    expect(searchState).toEqual({refinementList: {name2: 'searchState'}, another: {searchState: 'searchState'}});
 
-    state = cleanUp({attributeName: 'name2'}, state);
-    expect(state).toEqual({another: {state: 'state'}});
+    searchState = cleanUp({attributeName: 'name2'}, searchState);
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });
