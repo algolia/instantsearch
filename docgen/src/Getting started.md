@@ -1,5 +1,5 @@
 ---
-title: Getting started
+title: Getting Started Guide
 layout: main.pug
 category: gettingstarted
 withHeadings: true
@@ -8,7 +8,7 @@ withHeadings: true
 ## Welcome to react-instantsearch
 
 React-instantsearch is the ultimate toolbox for creating instant search
-experience using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
+experiences using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
 
 In this tutorial, you'll learn how to:
 
@@ -28,7 +28,7 @@ the credentials to an already configured index:
  - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
  - `indexName`: `bestbuy`
 
-It contains data for an e-commerce website.
+It contains sample data for an e-commerce website.
 
 This guide also expects you to have a working [React](https://facebook.github.io/react/) project. To follow this
 guide in the best conditions, we suggest you use
@@ -47,7 +47,7 @@ npm install --save react-instantsearch
 
 The [<InstantSearch>](widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state
-of the search, do the queries and provide the results to the widgets so
+of the search, does the queries, and provides the results to the widgets so
 that they can update themselves if needed.
 
 ```jsx
@@ -145,7 +145,7 @@ view lets you inspect the values that are retrieved from Algolia, in order
 to build your custom view.
 
 In order to customize the view for each product, we can use a special prop
-of the Hit widget: `hitComponent`. This props accept a Component that
+of the Hit widget: `hitComponent`. This prop accepts a Component that
 will be used for each hit in the results from Algolia.
 
 ```jsx
@@ -160,7 +160,7 @@ function Product({hit}) {
 
 The widget receives a prop `hit` that contains the content of the
 record. Here we are only displaying the name for the sake of simplicity
-but there is no limit as long as the data in the record.
+but there is no limit as long as the data is in the record.
 
 Now let's modify the `Hits` usage to add our new `hitComponent`.
 
