@@ -8,7 +8,7 @@ block navigation
 block content
   h2#description Description
     a.anchor(href=`${navPath}#description`)
-  p=description
+  p!=h.markdown(description)
   h2#proptypes Exposed props
     a.anchor(href=`${navPath}#proptypes`)
   if proptype

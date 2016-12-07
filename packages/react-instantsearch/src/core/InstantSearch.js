@@ -16,7 +16,7 @@ function validateNextProps(props, nextProps) {
 /* eslint valid-jsdoc: 0 */
 /**
  * @description
- * InstantSearch is the root component of all react-instantsearch implementation.
+ * `<InstantSearch>` is the root component of all react-instantsearch implementation.
  * It provides to all the connected components (aka widgets) a mean to interact
  * with the searchState.
  * @kind widget
