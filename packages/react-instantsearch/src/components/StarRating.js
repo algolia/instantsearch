@@ -49,41 +49,24 @@ class StarRating extends Component {
         )}
         />);
     }
-    if (isLowest && selected) {
-      return (
-        <div {...cx(
-          'ratingLink',
-          'ratingLinkSelected',
-          disabled && 'ratingLinkDisabled')}
-           disabled={disabled}
-           key={lowerBound}
-        >
-          {icons}
-          <span {...cx(
-            'ratingLabel',
-            'ratingLabelSelected',
-            disabled && 'ratingLabelDisabled')}>
-            {translate('ratingLabel')}
-            </span>
-          <span> </span>
-          <span {...cx(
-            'ratingCount',
-            'ratingCountSelected',
-            disabled && 'ratingCountDisabled')}>
-            {count}
-          </span>
-        </div>
-      );
-    }
+
+    // The last item of the list (the default item), should not
+    // be clickable if it is selected.
+    const isLastAndSelect = isLowest && selected;
+    const StarsWrapper = isLastAndSelect ? 'div' : 'a';
+    const onClickHandler = isLowest && selected ? {} : {
+      href: createURL({lowerBound, max}),
+      onClick: this.onClick.bind(this, lowerBound, max),
+    };
+
     return (
-      <a {...cx(
+      <StarsWrapper {...cx(
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
          disabled={disabled}
          key={lowerBound}
-         onClick={this.onClick.bind(this, lowerBound, max)}
-         href={createURL({lowerBound, max})}
+         {...onClickHandler}
       >
         {icons}
         <span {...cx(
@@ -99,7 +82,7 @@ class StarRating extends Component {
           disabled && 'ratingCountDisabled')}>
           {count}
         </span>
-      </a>
+      </StarsWrapper>
     );
   }
 
