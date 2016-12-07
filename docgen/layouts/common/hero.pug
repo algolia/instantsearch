@@ -8,7 +8,12 @@ section.hero-section.shrink
         figure
           img(src="images/react-instant-search-logo.svg", width="46")
           figcaption
-            h1=mainTitle ? `${mainTitle} > <span>${title}</span>` : title
+            if mainTitle
+              h1
+                | #{mainTitle + ' > '}
+                span=title
+            else
+              h1=mainTitle
 
       .fl-left.article-title
         a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this', class='algolia-website-logo-link')
