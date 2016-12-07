@@ -102,3 +102,7 @@ const styles = StyleSheet.create({
 
 AppRegistry.registerComponent('InfiniteSearch', () => InfiniteSearch);
 ```
+
+<div class="guide-nav">
+Next: <a href="guide/Server-side rendering.html">Server-side rendering →</a>
+</div>
