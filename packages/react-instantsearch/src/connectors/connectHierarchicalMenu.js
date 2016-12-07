@@ -148,7 +148,7 @@ export default createConnector({
     const id = getId(props);
     return {
       ...searchState,
-      [namespace]: {[id]: nextRefinement || ''},
+      [namespace]: {...searchState[namespace], [id]: nextRefinement || ''},
     };
   },
 

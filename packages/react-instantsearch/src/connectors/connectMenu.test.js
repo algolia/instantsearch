@@ -119,10 +119,10 @@ describe('connectMenu', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val', menu: {otherKey: 'val'}}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      menu: {ok: 'yep'},
+      menu: {ok: 'yep', otherKey: 'val'},
     });
   });
 

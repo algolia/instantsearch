@@ -87,10 +87,10 @@ describe('connectMultiRange', () => {
   });
 
   it('calling refine updates the widget\'s search state', () => {
-    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
+    const nextState = refine({attributeName: 'ok'}, {otherKey: 'val', multiRange: {otherKey: 'val'}}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
-      multiRange: {ok: 'yep'},
+      multiRange: {ok: 'yep', otherKey: 'val'},
     });
   });
 
