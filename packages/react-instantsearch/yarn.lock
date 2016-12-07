@@ -10,9 +10,9 @@ agentkeepalive@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-2.2.0.tgz#c5d1bd4b129008f1163f236f86e5faea2026e2ef"
 
-algoliasearch-helper@^2.15.0:
-  version "2.15.0"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.15.0.tgz#2fc970c147505d81e3234c9a3f8baeb222598d49"
+algoliasearch-helper@^2.16.0:
+  version "2.16.0"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.16.0.tgz#c05b0334e72f1aa69cea3d659abec0d8a5f0147a"
   dependencies:
     events "^1.1.0"
     lodash "^4.13.1"
