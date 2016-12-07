@@ -43,9 +43,9 @@ is the official React-CLI from Facebook.
 npm install --save react-instantsearch
 ```
 
-## Add the InstantSearch wrapper
+## Add the <InstantSearch> wrapper
 
-The [InstantSearch](widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
+The [<InstantSearch>](widgets/InstantSearch.html) wrapper is the component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state
 of the search, do the queries and provide the results to the widgets so
 that they can update themselves if needed.
@@ -84,7 +84,7 @@ In this section we've seen:
  - how to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
  - configure your credentials with react-instantsearch
 
- > To get more *under the hood* information about the `InstantSearch` wrapper
+ > To get more *under the hood* information about the `<InstantSearch>` wrapper
  > component, [read our guide](guide/<InstantSearch>.html).
 
 ## Load the theme
