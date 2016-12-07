@@ -9,13 +9,13 @@ function getId(props) {
 
 const namespace = 'menu';
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId(props);
-  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
-    if (state[namespace][id] === '') {
+  if (searchState[namespace] && typeof searchState[namespace][id] !== 'undefined') {
+    if (searchState[namespace][id] === '') {
       return null;
     }
-    return state[namespace][id];
+    return searchState[namespace][id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -23,8 +23,8 @@ function getCurrentRefinement(props, state) {
   return null;
 }
 
-function getValue(name, props, state) {
-  const currentRefinement = getCurrentRefinement(props, state);
+function getValue(name, props, searchState) {
+  const currentRefinement = getCurrentRefinement(props, searchState);
   return name === currentRefinement ? '' : name;
 }
 
@@ -41,7 +41,7 @@ const sortBy = ['count:desc', 'name:asc'];
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
  * @providedPropType {function} refine - a function to toggle a refinement
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the Menu can display.
  */
@@ -62,8 +62,8 @@ export default createConnector({
     limitMax: 20,
   },
 
-  getProvidedProps(props, state, search) {
-    const {results} = search;
+  getProvidedProps(props, searchState, searchResults) {
+    const {results} = searchResults;
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
 
@@ -79,7 +79,7 @@ export default createConnector({
       .getFacetValues(attributeName, {sortBy})
       .slice(0, limit)
       .map(v => ({
-        value: getValue(v.name, props, state),
+        value: getValue(v.name, props, searchState),
         label: v.name,
         count: v.count,
         isRefined: v.isRefined,
@@ -87,27 +87,27 @@ export default createConnector({
 
     return {
       items,
-      currentRefinement: getCurrentRefinement(props, state),
+      currentRefinement: getCurrentRefinement(props, searchState),
     };
   },
 
-  refine(props, state, nextRefinement) {
+  refine(props, searchState, nextRefinement) {
     const id = getId(props);
     return {
-      ...state,
+      ...searchState,
       [namespace]: {[id]: nextRefinement ? nextRefinement : ''},
     };
   },
 
-  cleanUp(props, state) {
-    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+  cleanUp(props, searchState) {
+    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
       return omit(cleanState, namespace);
     }
     return cleanState;
   },
 
-  getSearchParameters(searchParameters, props, state) {
+  getSearchParameters(searchParameters, props, searchState) {
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
 
@@ -120,7 +120,7 @@ export default createConnector({
 
     searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
 
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
     if (currentRefinement !== null) {
       searchParameters = searchParameters.addDisjunctiveFacetRefinement(
         attributeName,
@@ -131,9 +131,9 @@ export default createConnector({
     return searchParameters;
   },
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
     return {
       id,
       items: currentRefinement === null ? [] : [{

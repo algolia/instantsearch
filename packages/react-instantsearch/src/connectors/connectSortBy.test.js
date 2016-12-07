@@ -28,7 +28,7 @@ describe('connectSortBy', () => {
     expect(props).toEqual({items: [{value: 'yep', isRefined: true}], currentRefinement: 'yep'});
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -46,8 +46,8 @@ describe('connectSortBy', () => {
     expect(metadata).toEqual({id: 'sortBy'});
   });
 
-  it('should return the right state when clean up', () => {
-    const state = cleanUp({}, {sortBy: {state: 'state'}, another: {state: 'state'}});
-    expect(state).toEqual({another: {state: 'state'}});
+  it('should return the right searchState when clean up', () => {
+    const searchState = cleanUp({}, {sortBy: {searchState: 'searchState'}, another: {searchState: 'searchState'}});
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

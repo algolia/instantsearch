@@ -130,7 +130,7 @@ describe('connectHierarchicalMenu', () => {
     expect(props).toBe(null);
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({attributes: ['ok']}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -210,18 +210,18 @@ describe('connectHierarchicalMenu', () => {
       }],
     });
 
-    const state = metadata.items[0].value({hierarchicalMenu: {ok: 'wat'}});
-    expect(state).toEqual({hierarchicalMenu: {ok: ''}});
+    const searchState = metadata.items[0].value({hierarchicalMenu: {ok: 'wat'}});
+    expect(searchState).toEqual({hierarchicalMenu: {ok: ''}});
   });
 
-  it('should return the right state when clean up', () => {
-    let state = cleanUp({attributes: ['name']}, {
-      hierarchicalMenu: {name: 'state', name2: 'state'},
-      another: {state: 'state'},
+  it('should return the right searchState when clean up', () => {
+    let searchState = cleanUp({attributes: ['name']}, {
+      hierarchicalMenu: {name: 'searchState', name2: 'searchState'},
+      another: {searchState: 'searchState'},
     });
-    expect(state).toEqual({hierarchicalMenu: {name2: 'state'}, another: {state: 'state'}});
+    expect(searchState).toEqual({hierarchicalMenu: {name2: 'searchState'}, another: {searchState: 'searchState'}});
 
-    state = cleanUp({attributes: ['name2']}, state);
-    expect(state).toEqual({another: {state: 'state'}});
+    searchState = cleanUp({attributes: ['name2']}, searchState);
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

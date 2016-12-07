@@ -7,10 +7,10 @@ function getId() {
   return 'sortBy';
 }
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId();
-  if (state[id]) {
-    return state[id];
+  if (searchState[id]) {
+    return searchState[id];
   }
   if (props.defaultRefinement) {
     return props.defaultRefinement;
@@ -26,7 +26,7 @@ function getCurrentRefinement(props, state) {
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
  * @providedPropType {function} refine - a function to remove a single filter
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{isRefined: boolean, label?: string, value: string}>} items - the list of items the HitsPerPage can display.  If no label provided, the value will be displayed.
  */
@@ -41,8 +41,8 @@ export default createConnector({
     })).isRequired,
   },
 
-  getProvidedProps(props, state) {
-    const currentRefinement = getCurrentRefinement(props, state);
+  getProvidedProps(props, searchState) {
+    const currentRefinement = getCurrentRefinement(props, searchState);
     const items = props.items.map(item => item.value === currentRefinement
       ? {...item, isRefined: true} : {...item, isRefined: false});
     return {
@@ -51,20 +51,20 @@ export default createConnector({
     };
   },
 
-  refine(props, state, nextRefinement) {
+  refine(props, searchState, nextRefinement) {
     const id = getId();
     return {
-      ...state,
+      ...searchState,
       [id]: nextRefinement,
     };
   },
 
-  cleanUp(props, state) {
-    return omit(state, getId());
+  cleanUp(props, searchState) {
+    return omit(searchState, getId());
   },
 
-  getSearchParameters(searchParameters, props, state) {
-    const selectedIndex = getCurrentRefinement(props, state);
+  getSearchParameters(searchParameters, props, searchState) {
+    const selectedIndex = getCurrentRefinement(props, searchState);
     return searchParameters.setIndex(selectedIndex);
   },
 

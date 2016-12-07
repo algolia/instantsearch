@@ -24,7 +24,7 @@ describe('connectSearchBox', () => {
     expect(props).toEqual({currentRefinement: 'yep'});
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -37,8 +37,8 @@ describe('connectSearchBox', () => {
     expect(params.query).toBe('bar');
   });
 
-  it('should return the right state when clean up', () => {
-    const state = cleanUp({}, {query: {state: 'state'}, another: {state: 'state'}});
-    expect(state).toEqual({another: {state: 'state'}});
+  it('should return the right searchState when clean up', () => {
+    const searchState = cleanUp({}, {query: {searchState: 'searchState'}, another: {searchState: 'searchState'}});
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });

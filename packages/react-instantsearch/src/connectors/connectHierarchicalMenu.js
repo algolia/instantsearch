@@ -8,10 +8,10 @@ export const getId = props => props.attributes[0];
 
 const namespace = 'hierarchicalMenu';
 
-function getCurrentRefinement(props, state) {
+function getCurrentRefinement(props, searchState) {
   const id = getId(props);
-  if (state[namespace] && typeof state[namespace][id] !== 'undefined') {
-    const subState = state[namespace];
+  if (searchState[namespace] && typeof searchState[namespace][id] !== 'undefined') {
+    const subState = searchState[namespace];
     if (subState[id] === '') {
       return null;
     }
@@ -23,7 +23,7 @@ function getCurrentRefinement(props, state) {
   return null;
 }
 
-function getValue(path, props, state) {
+function getValue(path, props, searchState) {
   const {
     id,
     attributes,
@@ -32,7 +32,7 @@ function getValue(path, props, state) {
     showParentLevel,
   } = props;
 
-  const currentRefinement = getCurrentRefinement(props, state);
+  const currentRefinement = getCurrentRefinement(props, searchState);
   let nextRefinement;
 
   if (currentRefinement === null) {
@@ -57,14 +57,14 @@ function getValue(path, props, state) {
   return nextRefinement;
 }
 
-function transformValue(value, limit, props, state) {
+function transformValue(value, limit, props, searchState) {
   const limitValue = value.slice(0, limit);
   return limitValue.map(v => ({
     label: v.name,
-    value: getValue(v.path, props, state),
+    value: getValue(v.path, props, searchState),
     count: v.count,
     isRefined: v.isRefined,
-    items: v.data && transformValue(v.data, limit, props, state),
+    items: v.data && transformValue(v.data, limit, props, searchState),
   }));
 }
 
@@ -86,7 +86,7 @@ const sortBy = ['name:asc'];
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
  * @providedPropType {function} refine - a function to toggle a refinement
- * @providedPropType {function} createURL - a function to generate a URL for the corresponding state
+ * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{items: object, count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the HierarchicalMenu can display. items has the same shape as parent items.
  */
@@ -123,10 +123,10 @@ export default createConnector({
     showParentLevel: true,
   },
 
-  getProvidedProps(props, state, search) {
+  getProvidedProps(props, searchState, searchResults) {
     const {showMore, limitMin, limitMax} = props;
     const id = getId(props);
-    const {results} = search;
+    const {results} = searchResults;
 
     const isFacetPresent =
       Boolean(results) &&
@@ -139,28 +139,28 @@ export default createConnector({
     const limit = showMore ? limitMax : limitMin;
     const value = results.getFacetValues(id, {sortBy});
     return {
-      items: value.data ? transformValue(value.data, limit, props, state) : [],
-      currentRefinement: getCurrentRefinement(props, state),
+      items: value.data ? transformValue(value.data, limit, props, searchState) : [],
+      currentRefinement: getCurrentRefinement(props, searchState),
     };
   },
 
-  refine(props, state, nextRefinement) {
+  refine(props, searchState, nextRefinement) {
     const id = getId(props);
     return {
-      ...state,
+      ...searchState,
       [namespace]: {[id]: nextRefinement || ''},
     };
   },
 
-  cleanUp(props, state) {
-    const cleanState = omit(state, `${namespace}.${getId(props)}`);
+  cleanUp(props, searchState) {
+    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
       return omit(cleanState, namespace);
     }
     return cleanState;
   },
 
-  getSearchParameters(searchParameters, props, state) {
+  getSearchParameters(searchParameters, props, searchState) {
     const {
       attributes,
       separator,
@@ -189,7 +189,7 @@ export default createConnector({
         ),
       });
 
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
     if (currentRefinement !== null) {
       searchParameters = searchParameters.toggleHierarchicalFacetRefinement(
         id,
@@ -200,10 +200,10 @@ export default createConnector({
     return searchParameters;
   },
 
-  getMetadata(props, state) {
+  getMetadata(props, searchState) {
     const rootAttribute = props.attributes[0];
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, state);
+    const currentRefinement = getCurrentRefinement(props, searchState);
 
     return {
       id,

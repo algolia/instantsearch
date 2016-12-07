@@ -86,7 +86,7 @@ describe('connectMultiRange', () => {
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
   });
 
-  it('calling refine updates the widget\'s state', () => {
+  it('calling refine updates the widget\'s search state', () => {
     const nextState = refine({attributeName: 'ok'}, {otherKey: 'val'}, 'yep');
     expect(nextState).toEqual({
       otherKey: 'val',
@@ -145,18 +145,18 @@ describe('connectMultiRange', () => {
       }],
     });
 
-    const state = metadata.items[0].value({multiRange: {wot: '100:200'}});
-    expect(state).toEqual({multiRange: {wot: ''}});
+    const searchState = metadata.items[0].value({multiRange: {wot: '100:200'}});
+    expect(searchState).toEqual({multiRange: {wot: ''}});
   });
 
-  it('should return the right state when clean up', () => {
-    let state = cleanUp({attributeName: 'name'}, {
-      multiRange: {name: 'state', name2: 'state'},
-      another: {state: 'state'},
+  it('should return the right searchState when clean up', () => {
+    let searchState = cleanUp({attributeName: 'name'}, {
+      multiRange: {name: 'searchState', name2: 'searchState'},
+      another: {searchState: 'searchState'},
     });
-    expect(state).toEqual({multiRange: {name2: 'state'}, another: {state: 'state'}});
+    expect(searchState).toEqual({multiRange: {name2: 'searchState'}, another: {searchState: 'searchState'}});
 
-    state = cleanUp({attributeName: 'name2'}, state);
-    expect(state).toEqual({another: {state: 'state'}});
+    searchState = cleanUp({attributeName: 'name2'}, searchState);
+    expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 });
