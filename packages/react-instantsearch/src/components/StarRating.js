@@ -31,7 +31,7 @@ class StarRating extends Component {
     }
   }
 
-  buildItem({max, lowerBound, count, translate, createURL}) {
+  buildItem({max, lowerBound, count, translate, createURL, isLowest}) {
     const selected = lowerBound === this.props.currentRefinement.min &&
       max === this.props.currentRefinement.max;
     const disabled = !count;
@@ -49,15 +49,24 @@ class StarRating extends Component {
         )}
         />);
     }
+
+    // The last item of the list (the default item), should not
+    // be clickable if it is selected.
+    const isLastAndSelect = isLowest && selected;
+    const StarsWrapper = isLastAndSelect ? 'div' : 'a';
+    const onClickHandler = isLowest && selected ? {} : {
+      href: createURL({lowerBound, max}),
+      onClick: this.onClick.bind(this, lowerBound, max),
+    };
+
     return (
-      <a {...cx(
+      <StarsWrapper {...cx(
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
          disabled={disabled}
          key={lowerBound}
-         onClick={this.onClick.bind(this, lowerBound, max)}
-         href={createURL({lowerBound, max})}
+         {...onClickHandler}
       >
         {icons}
         <span {...cx(
@@ -73,7 +82,7 @@ class StarRating extends Component {
           disabled && 'ratingCountDisabled')}>
           {count}
         </span>
-      </a>
+      </StarsWrapper>
     );
   }
 
@@ -92,6 +101,7 @@ class StarRating extends Component {
         count: itemCount,
         translate,
         createURL,
+        isLowest: i === min,
       }));
     }
     return (
