@@ -17,8 +17,8 @@ conditionally display content based on the search state.</p>
 <h2 id="displaying-content-when-theres-no-results">Displaying content when there’s no results <a class="anchor" href="guide/Conditional display.html#displaying-content-when-theres-no-results" aria-hidden="true"></a></h2>
 <pre class="CodeMirror cm-s-mdn-like"><code><span class="cm-keyword">const</span> <span class="cm-def">content</span> <span class="cm-operator">=</span> <span class="cm-variable">createConnector</span>({
     <span class="cm-property">displayName</span>: <span class="cm-string">&#39;ConditionalResults&#39;</span>,
-    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">search</span>) {
-      <span class="cm-keyword">const</span> <span class="cm-def">noResults</span> <span class="cm-operator">=</span> <span class="cm-variable-2">search</span>.<span class="cm-property">results</span> <span class="cm-operator">?</span> <span class="cm-variable-2">search</span>.<span class="cm-property">results</span>.<span class="cm-property">nbHits</span> <span class="cm-operator">===</span> <span class="cm-number">0</span> : <span class="cm-atom">false</span>;
+    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">searchResults</span>) {
+      <span class="cm-keyword">const</span> <span class="cm-def">noResults</span> <span class="cm-operator">=</span> <span class="cm-variable-2">searchResults</span>.<span class="cm-property">results</span> <span class="cm-operator">?</span> <span class="cm-variable-2">searchResults</span>.<span class="cm-property">results</span>.<span class="cm-property">nbHits</span> <span class="cm-operator">===</span> <span class="cm-number">0</span> : <span class="cm-atom">false</span>;
       <span class="cm-keyword">return</span> {<span class="cm-property">query</span>: <span class="cm-variable-2">searchState</span>.<span class="cm-property">query</span>, <span class="cm-property">noResults</span>};
     },
  })(({<span class="cm-def">noResults</span>, <span class="cm-def">query</span>}) <span class="cm-operator">=&gt;</span> {
@@ -31,8 +31,8 @@ conditionally display content based on the search state.</p>
 <h2 id="displaying-content-when-theres-an-error">Displaying content when there’s an error <a class="anchor" href="guide/Conditional display.html#displaying-content-when-theres-an-error" aria-hidden="true"></a></h2>
 <pre class="CodeMirror cm-s-mdn-like"><code><span class="cm-keyword">const</span> <span class="cm-def">content</span> <span class="cm-operator">=</span> <span class="cm-variable">createConnector</span>({
     <span class="cm-property">displayName</span>: <span class="cm-string">&#39;ConditionalError&#39;</span>,
-    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">search</span>) {
-      <span class="cm-keyword">return</span> {<span class="cm-property">error</span>: <span class="cm-variable-2">search</span>.<span class="cm-property">error</span>};
+    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">searchResults</span>) {
+      <span class="cm-keyword">return</span> {<span class="cm-property">error</span>: <span class="cm-variable-2">searchResults</span>.<span class="cm-property">error</span>};
     },
  })(({<span class="cm-def">error</span>}) <span class="cm-operator">=&gt;</span> {
     <span class="cm-keyword">const</span> <span class="cm-def">content</span> <span class="cm-operator">=</span> <span class="cm-variable-2">error</span>
@@ -45,8 +45,8 @@ conditionally display content based on the search state.</p>
 <p>In slow user network situations you might want to know when the search results are loading.</p>
 <pre class="CodeMirror cm-s-mdn-like"><code><span class="cm-keyword">const</span> <span class="cm-def">content</span> <span class="cm-operator">=</span> <span class="cm-variable">createConnector</span>({
     <span class="cm-property">displayName</span>: <span class="cm-string">&#39;ConditionalError&#39;</span>,
-    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">search</span>) {
-      <span class="cm-keyword">return</span> {<span class="cm-property">loading</span>: <span class="cm-variable-2">search</span>.<span class="cm-property">loading</span>};
+    <span class="cm-property">getProvidedProps</span>(<span class="cm-def">props</span>, <span class="cm-def">searchState</span>, <span class="cm-def">searchResults</span>) {
+      <span class="cm-keyword">return</span> {<span class="cm-property">loading</span>: <span class="cm-variable-2">searchResults</span>.<span class="cm-property">loading</span>};
     },
 })(({<span class="cm-def">loading</span>}) <span class="cm-operator">=&gt;</span> {
     <span class="cm-keyword">const</span> <span class="cm-def">content</span> <span class="cm-operator">=</span> <span class="cm-variable-2">loading</span>
@@ -78,4 +78,4 @@ Next: <a href="guide/React native.html">React native →</a>
   apiKey: '36b645758ad4f948b134e396f277ad7d',
   indexName: 'DOC',
   inputSelector: '#searchbox'
-});</script><script src="https://community.algolia.com/instantsearch.js/react/js/main.838fbbdc559acd423ce0-build.js"></script></body>
+});</script><script src="https://community.algolia.com/instantsearch.js/react/js/main.1aa131a09b6d1e09c840-build.js"></script></body>

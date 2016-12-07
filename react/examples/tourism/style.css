@@ -25,6 +25,7 @@ body {
   border-bottom: 1px solid #DCE0E0;
   position: relative;
   padding-top: 60px;
+  z-index: 99;
 }
 
 .aisdemo-navbar .is-logo {
