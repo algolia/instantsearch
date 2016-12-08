@@ -20,8 +20,8 @@
   &:hover,
   &:active {
     background: linear-gradient(to right, mix(#895cf2, #fff, 90%) 0%,  mix(#2faddc, #fff, 90%) 90%) mix(#3066BE, #fff, 90%);
-    background: mix(#2faddc, #fff, 90%);
-    transform: scale(0.95)
+    background: mix( #00aeff, #fff, 80%);
+    transform: scale(0.95);
   }
 
   &.btn-cta {
