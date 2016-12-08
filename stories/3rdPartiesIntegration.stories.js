@@ -29,9 +29,7 @@ const Range = React.createClass({
   },
 
   onChange(sliderState) {
-    if (sliderState.values[0] !== this.props.min || sliderState.values[1] !== this.props.max) {
-      this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
-    }
+    this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
   },
 
   render() {
