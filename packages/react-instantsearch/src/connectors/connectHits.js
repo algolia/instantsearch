@@ -24,4 +24,12 @@ export default createConnector({
       hits: searchResults.results.hits,
     };
   },
+
+  /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.
+   * To be considered as a widget you need either getSearchParameters, getMetadata or getTransitionState
+   * See createConnector.js
+    * */
+  getSearchParameters(searchParameters) {
+    return searchParameters;
+  },
 });
