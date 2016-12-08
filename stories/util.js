@@ -4,6 +4,7 @@ import {
   ClearAll,
   SearchBox,
   Pagination,
+  Highlight,
 } from '../packages/react-instantsearch/dom';
 import {connectHits} from '../packages/react-instantsearch/connectors';
 import {linkTo} from '@kadira/storybook';
@@ -97,14 +98,16 @@ const CustomHits = connectHits(({hits}) =>
         </div>
         <div className="hit-content">
           <div>
-              <span className="hit-name"
-                    dangerouslySetInnerHTML={{__html: hit._highlightResult.name.value}}></span>
+            <Highlight attributeName="name" hit={hit} />
             <span> - ${hit.price}</span>
             <span> - {hit.rating} stars</span>
           </div>
-          <div className="hit-type" dangerouslySetInnerHTML={{__html: hit._highlightResult.type.value}}></div>
-          <div className="hit-description"
-               dangerouslySetInnerHTML={{__html: hit._highlightResult.description.value}}></div>
+          <div className="hit-type">
+            <Highlight attributeName="type" hit={hit} />
+          </div>
+          <div className="hit-description">
+            <Highlight attributeName="description" hit={hit} />
+          </div>
         </div>
       </div>
     )}
