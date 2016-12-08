@@ -21,13 +21,13 @@ manually.
 ### Via CDN
 
 The theme is available on unpkg.com:
-- unminified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.22/style.css
-- minified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.22/style.min.css
+- unminified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/style.css
+- minified: https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/style.min.css
 
 You can either copy paste the content in your own app or use a direct link to unpkg.com:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.22/style.min.css">
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/style.min.css">
 ```
 
 ### Via npm, Webpack
