@@ -1,6 +1,6 @@
 .btn {
   background: linear-gradient(to right, mix(#895cf2, #fff, 95%) 0%,  mix(#2faddc, #fff, 95%) 90%) mix(#3066BE, #fff, 95%);
-  background: #2faddc;
+  background: #00aeff;
   color: $hero-color-accent;
   height: 40px;
   max-width: 140px;
@@ -42,10 +42,19 @@
     border-color: mix($black, #fff, 90%);
   }
 
+  &.btn-fat {
+    padding: 14px 20px;
+    line-height: inherit;
+    height: inherit;
+    font-size: 14px;
+    min-width: inherit;
+    width: inherit;
+  }
+
 
   &-ghost {
     background: transparent;
-    border-color: currentColor;
+    border: 1px solid currentColor;
     font-weight: bold;
     max-width: inherit;
     padding: 0 32px;
