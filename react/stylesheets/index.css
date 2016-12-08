@@ -2519,17 +2519,17 @@ nav.sidebar {
   position: absolute;
   max-width: 240px;
   border-right: 1px solid #d8d8d8;
-  overflow: auto;
+  overflow: hidden;
   padding-top: 120px; }
   nav.sidebar .sidebar-container {
     width: 100%;
     max-width: 240px; }
     nav.sidebar .sidebar-container.fixed {
       position: fixed;
-      top: 100px;
-      z-index: 9;
-      max-height: calc(100vh - 60px);
-      overflow: auto; }
+      top: 60px;
+      z-index: 9; }
+      nav.sidebar .sidebar-container.fixed .sidebar-elements {
+        overflow: auto; }
     nav.sidebar .sidebar-container h2.sidebar-header {
       font-weight: normal;
       font-size: 1.8em;
@@ -2715,7 +2715,7 @@ nav.sidebar {
   position: relative;
   left: 240px;
   width: calc(100% - 240px);
-  min-height: 890px;
+  min-height: 1000px;
   padding-left: 30px;
   padding-bottom: 200px;
   padding-top: 120px; }
