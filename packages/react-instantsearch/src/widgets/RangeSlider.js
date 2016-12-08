@@ -1,8 +1,8 @@
 import connectRange from '../connectors/connectRange.js';
 import React from 'react';
 /**
- * Since a lot of sliders already exists, we did not include one by default.
- * However you can easily connect to react-instantsearch an existing one
+ * Since a lot of sliders already exist, we did not include one by default.
+ * However you can easily connect react-instantsearch to an existing one
  * using the [connectRange connector](/connectors/connectRange.html).
  *
  * @name RangeSlider
