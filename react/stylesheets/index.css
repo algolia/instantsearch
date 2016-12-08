@@ -1637,6 +1637,29 @@ body:not(.example) section {
   @media (max-width: 768px) {
     .is-section__intro {
       display: none; } }
+  @media (min-width: 1500px) {
+    .is-section__intro:before {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 200px;
+      background: #f6f9fc;
+      -webkit-transform: skewY(-2deg) !important;
+              transform: skewY(-2deg) !important;
+      top: -100px;
+      z-index: 0; }
+    .is-section__intro:after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 200px;
+      background: #fff;
+      -webkit-transform: skewY(2deg) !important;
+              transform: skewY(2deg) !important;
+      top: 210px;
+      z-index: -1; } }
 
 .is-section__widgets {
   background: #fff;
@@ -1785,6 +1808,19 @@ body:not(.example) section {
     top: 480px;
     position: absolute;
     z-index: 0; }
+  @media (min-width: 1500px) {
+    .is-section__community:after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 140px;
+      background: #1b192b;
+      -webkit-transform: skewY(-2deg) !important;
+              transform: skewY(-2deg) !important;
+      top: -180px;
+      position: relative;
+      z-index: 3; } }
   @media (max-width: 768px) {
     .is-section__community .phone_illustration,
     .is-section__community .computer_illustration {
@@ -1890,7 +1926,10 @@ body:not(.example) section {
       display: inline-block;
       opacity: 0.5;
       padding: 0 20px;
-      max-width: calc(100% / 6); }
+      max-width: calc(100% / 6);
+      -webkit-transition: opacity 0.1s ease;
+      transition: opacity 0.1s ease;
+      will-change: opacity; }
       .is-section__marketing .brands-list li img {
         vertical-align: middle;
         max-width: 100%; }
@@ -1903,6 +1942,8 @@ body:not(.example) section {
     @media (max-width: 768px) {
       .is-section__marketing .brands-list {
         padding: 0; } }
+    .is-section__marketing .brands-list:hover li:not(:hover) {
+      opacity: 0.3; }
   .is-section__marketing:before {
     content: '';
     display: block;
@@ -2069,7 +2110,8 @@ ul.subtle-check-list {
   width: 100%;
   list-style: none;
   position: relative;
-  float: left; }
+  float: left;
+  padding: 0; }
   .cm-large-tiles figure,
   .cm-large-tiles img {
     height: 64px; }
@@ -2092,6 +2134,15 @@ ul.subtle-check-list {
     .cm-large-tiles .tile .item-title {
       color: #686d7d;
       font-size: 20px; }
+    .cm-large-tiles .tile > a {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0; }
+    .cm-large-tiles .tile .light-link {
+      margin-top: 8px;
+      display: inline-block; }
     .cm-large-tiles .tile .tile-container {
       position: absolute;
       top: 50%;
@@ -2188,8 +2239,8 @@ ul.subtle-check-list {
     @media (max-width: 768px) {
       .cm--feature-list .list-item {
         -webkit-box-flex: 0;
-            -ms-flex: 0 1 45%;
-                flex: 0 1 45%;
+            -ms-flex: 0 1 100%;
+                flex: 0 1 100%;
         margin-right: 0; }
         .cm--feature-list .list-item:last-of-type {
           -webkit-box-flex: 0;
@@ -2298,7 +2349,7 @@ pre.al-snippet {
   .btn:hover, .btn:active {
     background: -webkit-linear-gradient(left, #956cf3 0%, #44b5e0 90%) #4575c5;
     background: linear-gradient(to right, #956cf3 0%, #44b5e0 90%) #4575c5;
-    background: #44b5e0;
+    background: #33beff;
     -webkit-transform: scale(0.95);
             transform: scale(0.95); }
   .btn.btn-cta {
