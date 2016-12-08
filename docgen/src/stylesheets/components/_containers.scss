@@ -77,12 +77,6 @@ body:not(.example) section {
     }
   }
 
-  // [class*="__description"] {
-  //   top: 50%;
-  //   position: absolute;
-  //   transform: translateY(-50%)
-  // }
-
   // To handle diagonals
   &.is-section__intro,
   &.is-section__widgets,
@@ -105,8 +99,6 @@ body:not(.example) section {
     }
   }
 }
-
-
 
 //---------------------------------------
 //
@@ -444,8 +436,6 @@ body:not(.example) section {
       left: inherit;
       transform: none;
     }
-
-
   }
 }
 
@@ -502,6 +492,8 @@ body:not(.example) section {
       opacity: 0.5;
       padding: 0 20px;
       max-width: calc(100% / 6);
+      transition: opacity 0.1s ease;
+      will-change: opacity;
 
       img {
         vertical-align: middle;
@@ -522,6 +514,12 @@ body:not(.example) section {
     @include mobile-mq {
       padding: 0;
     }
+
+     &:hover {
+      li:not(:hover) {
+        opacity: 0.3;
+      }
+     }
   }
 
 
@@ -773,6 +771,20 @@ ul.subtle-check-list {
     .item-title {
       color: #686d7d;
       font-size: 20px;
+    }
+
+    > a  {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    .light-link {
+      margin-top: 8px;
+      display: inline-block;
+
     }
 
     .tile-container {
