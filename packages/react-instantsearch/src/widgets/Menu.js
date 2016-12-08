@@ -2,7 +2,7 @@ import connectMenu from '../connectors/connectMenu.js';
 import MenuComponent from '../components/Menu.js';
 
 /**
- * The Menu component displays a menu that let the end user choose a single value for a specific facet.
+ * The Menu component displays a menu that lets the end user choose a single value for a specific facet.
  * @name Menu
  * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
