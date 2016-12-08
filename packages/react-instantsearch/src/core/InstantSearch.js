@@ -32,7 +32,7 @@ function validateNextProps(props, nextProps) {
  *
  * Read the [search parameters guide](guide/Search%20parameters.html).
  * @propType {func} onSearchStateChange - See [URL Routing](guide/advanced-topics.html#url-routing).
- * @propType {object} onSearchState - See [URL Routing](guide/advanced-topics.html#url-routing).
+ * @propType {object} searchState - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @propType {func} createURL - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
