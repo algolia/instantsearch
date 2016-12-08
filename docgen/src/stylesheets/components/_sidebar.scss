@@ -5,7 +5,7 @@ nav.sidebar {
   position: absolute;
   max-width: $sidebar-width;
   border-right: 1px solid #d8d8d8;
-  overflow: auto;
+  overflow: hidden;
   padding-top: 120px;
 
   .sidebar-container {
@@ -14,10 +14,11 @@ nav.sidebar {
 
     &.fixed {
       position: fixed;
-      top: ($nav-height + 40px);
+      top: ($nav-height);
       z-index: 9;
-      max-height: calc(100vh - #{$nav-height});
-      overflow: auto;
+      .sidebar-elements{
+        overflow: auto;
+      }
     }
 
     h2.sidebar-header {
