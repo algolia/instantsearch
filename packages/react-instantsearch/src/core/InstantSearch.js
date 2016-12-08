@@ -16,8 +16,8 @@ function validateNextProps(props, nextProps) {
 /* eslint valid-jsdoc: 0 */
 /**
  * @description
- * `<InstantSearch>` is the root component of all react-instantsearch implementation.
- * It provides to all the connected components (aka widgets) a mean to interact
+ * `<InstantSearch>` is the root component of all react-instantsearch implementations.
+ * It provides all the connected components (aka widgets) a means to interact
  * with the searchState.
  * @kind widget
  * @propType {string} appId - The Algolia application id.
