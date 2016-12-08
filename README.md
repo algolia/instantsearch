@@ -62,6 +62,20 @@ npm run release
 npm run docs:update
 ```
 
+## What about instantsearch.js?
+
+[instantsearch.js][[instantsearch.js-v1-github-url]] is our first instant-search related project. We still support the current version (v1.x.x) of it. And you can still count on contributors to fix bugs.
+
+In the near future this current repository will hold any instant-search related project:
+- instantsearch-core
+- instantsearch.js v2 (based on react-instansearch)
+- instantsearch-vue
+- …
+
+While we are in transition mode, the `v2` branch is the main development branch for any of the upcoming projects.
+
+The `develop` branch will soon be renamed `v1` and `v2` will be the new develop as soon as we have instantsearch.js v2.
+
 [readme-logo]: ./docgen/readme-logo.png
 [website-url]: https://community.algolia.com/instantsearch.js/react/
 [algolia-url]: https://www.algolia.com/
