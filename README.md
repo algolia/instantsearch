@@ -64,7 +64,7 @@ npm run docs:update
 
 ## What about instantsearch.js?
 
-[instantsearch.js][[instantsearch.js-v1-github-url]] is our first instant-search related project. We still support the current version (v1.x.x) of it. And you can still count on contributors to fix bugs.
+[instantsearch.js][instantsearch.js-v1-github-url] is our first instant-search related project. We still support the current version (v1.x.x) of it. And you can still count on contributors to fix bugs.
 
 In the near future this current repository will hold any instant-search related project:
 - instantsearch-core
