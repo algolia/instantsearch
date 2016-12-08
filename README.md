@@ -68,7 +68,7 @@ npm run docs:update
 
 In the near future this current repository will hold any instant-search related project:
 - instantsearch-core
-- instantsearch.js v2 (based on react-instansearch)
+- instantsearch.js v2 (based on react-instantsearch)
 - instantsearch-vue
 - …
 
