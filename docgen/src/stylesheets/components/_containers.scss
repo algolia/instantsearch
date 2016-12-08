@@ -85,22 +85,17 @@ body:not(.example) section {
   &.is-section__live,
   &.is-section__twitter,
   &.is-section__marketing,
+  &.is-section__features,
   &.is-section__footer {
     z-index: 0;
-  }
 
 
-  [debug] &{
-    outline: 1px dotted red;
-    * {
-      outline: 1px dotted red;
-    }
+    @include small-mq {
+      &:before,
+      &:after {
+        display: none !important;
 
-    &::before,
-    &::after,
-    *:before,
-    *:after {
-      outline: 1px dotted blue !important;
+      }
     }
   }
 }
@@ -139,6 +134,10 @@ body:not(.example) section {
     right: 0;
     display: block;
     z-index: 2;
+  }
+
+  @include small-mq {
+   display: none;
   }
 }
 
@@ -186,6 +185,11 @@ body:not(.example) section {
     position: relative;
     z-index: 3;
   }
+
+
+  @include small-mq {
+   padding: 60px 0 !important;
+  }
 }
 
 
@@ -232,6 +236,10 @@ body:not(.example) section {
       position: relative;
       display: block;
     }
+  }
+
+  @include small-mq {
+    overflow: hidden;
   }
 }
 
@@ -313,6 +321,22 @@ body:not(.example) section {
     position: absolute;
     z-index: 0;
   }
+
+
+  @include small-mq {
+    .phone_illustration,
+    .computer_illustration {
+      display: none !important;
+    }
+    .section__graphic {
+      width: 30%;
+    }
+    .section__description {
+      width: 70%;
+      left: 0;
+    }
+
+  }
 }
 
 
@@ -344,6 +368,10 @@ body:not(.example) section {
     position: absolute;
     z-index: 0;
   }
+
+  @include small-mq {
+    display: none;
+  }
 }
 
 //---------------------------------------
@@ -365,6 +393,10 @@ body:not(.example) section {
     top: -20px;
     position: absolute;
     z-index: 0;
+  }
+
+  @include small-mq {
+    border-top: 1px solid rgba(black, 0.1);
   }
 }
 
@@ -430,6 +462,16 @@ body:not(.example) section {
       &:hover {
         opacity: 1;
       }
+
+
+      @include small-mq {
+        max-width: calc(100% / 3);
+        margin-bottom: 1em;
+      }
+    }
+
+    @include small-mq {
+      padding: 0;
     }
   }
 
@@ -455,6 +497,10 @@ body:not(.example) section {
     float: left;
     position: relative;
     min-height: 550px;
+
+    @include small-mq {
+      width: 100%;
+    }
   }
 
   .container {
@@ -474,6 +520,10 @@ body:not(.example) section {
       top: -20px;
       left: -80px;
       width: 100%;
+
+      @include small-mq {
+        display: none;
+      }
     }
 
     figure {
@@ -528,6 +578,15 @@ body:not(.example) section {
     .btn {
       margin-top: 3em;
     }
+
+
+    @include small-mq {
+      background: linear-gradient(to right, #12161e, #222432), linear-gradient(#30373b, #30373b);
+
+      .btn {
+        width: 100%;
+      }
+    }
   }
 
   .footer__call-to-action {
@@ -554,6 +613,10 @@ body:not(.example) section {
     top: -140px;
     position: absolute;
     z-index: 8;
+  }
+
+  @include small-mq {
+    padding: 0 !important;
   }
 }
 
@@ -650,6 +713,14 @@ ul.subtle-check-list {
     &:last-child:hover {
       background: rgba(black, 0.035)
     }
+
+    @include small-mq {
+      width: 50%;
+    }
+  }
+
+  @include small-mq {
+    padding: 1em;
   }
 
   a {
@@ -749,6 +820,11 @@ ul.subtle-check-list {
         left: 0;
         transform: translateY(-50%);
       }
+    }
+
+
+    @include small-mq {
+      flex: 0 1 45%;
     }
   }
 }
