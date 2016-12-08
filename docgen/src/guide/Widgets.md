@@ -19,9 +19,7 @@ const App = () =>
     apiKey="..."
     indexName="..."
   >
-    <div>
-      <SearchBox />
-    </div>
+    <SearchBox />
   </InstantSearch>;
 ```
 

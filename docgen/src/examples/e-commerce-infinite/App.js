@@ -30,12 +30,10 @@ export default function App() {
       indexName="ikea"
       searchParameters={{hitsPerPage: 16}}
     >
-      <div>
-        <Header />
-        <div className="content-wrapper">
-          <Facets />
-          <CustomResults />
-        </div>
+      <Header />
+      <div className="content-wrapper">
+        <Facets />
+        <CustomResults />
       </div>
     </InstantSearch>
   );

@@ -17,6 +17,7 @@ Here's an example configuring the [distinct parameter](https://www.algolia.com/d
   indexName="indexName"
   searchParameters={{distinct: 1}}
 >
+  // widgets
 </InstantSearch>
 ```
 

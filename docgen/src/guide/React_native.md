@@ -32,10 +32,8 @@ export default InfiniteSearch = () =>
       apiKey="apiKey"
       indexName="indexName"
     >
-      <View style={styles.maincontainer}>
-        <SearchBox/>
-        <Hits/>
-      </View>
+      <SearchBox/>
+      <Hits/>
     </InstantSearch>
   </View>;
 

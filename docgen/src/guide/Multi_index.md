@@ -61,10 +61,8 @@ const FirstResults = props =>
     searchState={props.searchState}
     onSearchStateChange={props.onSearchStateChange}
   >
-    <div>
-      <SearchBox/>
-      <Hits />
-    </div>
+    <SearchBox/>
+    <Hits />
   </InstantSearch>;
 
 /*
@@ -79,10 +77,8 @@ const SecondResults = props =>
     indexName="secondIndexName"
     searchState={props.searchState}
   >
-    <div>
-      <Hits/>
-      <VirtualSearchBox/>
-    </div>
+    <VirtualSearchBox/>
+    <Hits/>
   </InstantSearch>;
 
 export default App;

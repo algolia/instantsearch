@@ -42,47 +42,46 @@ class App extends Component {
         onSearchStateChange={this.onSearchStateChange.bind(this)}
         createURL={this.createURL.bind(this)}
       >
-        <div>
-          <div>
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginBottom: 10,
-            }}>
-              <SearchBox/>
-              <PoweredBy />
-            </div>
-            <div style={{display: 'flex'}}>
-              <div style={{padding: '0px 20px'}}>
-                <p>Hierarchical Menu</p>
-                <HierarchicalMenu
-                  id="categories"
-                  attributes={[
-                    'category',
-                    'sub_category',
-                    'sub_sub_category',
-                  ]}
-                />
-                <p>Menu</p>
-                <Menu attributeName="type"/>
-                <p>Refinement List</p>
-                <RefinementList attributeName="colors"/>
-                <p>Range Ratings</p>
-                <StarRating attributeName="rating" max={6}/>
 
+        <div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginBottom: 10,
+          }}>
+            <SearchBox/>
+            <PoweredBy />
+          </div>
+          <div style={{display: 'flex'}}>
+            <div style={{padding: '0px 20px'}}>
+              <p>Hierarchical Menu</p>
+              <HierarchicalMenu
+                id="categories"
+                attributes={[
+                  'category',
+                  'sub_category',
+                  'sub_sub_category',
+                ]}
+              />
+              <p>Menu</p>
+              <Menu attributeName="type"/>
+              <p>Refinement List</p>
+              <RefinementList attributeName="colors"/>
+              <p>Range Ratings</p>
+              <StarRating attributeName="rating" max={6}/>
+
+            </div>
+            <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
+              <div style={{display: 'flex', justifyContent: 'space-around'}}>
+                <ClearAll/>
               </div>
-              <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
-                <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                  <ClearAll/>
-                </div>
-                <div>
-                  <Hits />
-                </div>
-                <div style={{alignSelf: 'center'}}>
-                  <Pagination showLast={true}/>
-                </div>
+              <div>
+                <Hits />
+              </div>
+              <div style={{alignSelf: 'center'}}>
+                <Pagination showLast={true}/>
               </div>
             </div>
           </div>
