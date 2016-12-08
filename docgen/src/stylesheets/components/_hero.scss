@@ -138,6 +138,12 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
     padding-top: 16px;
     position: relative;
     max-width: 100%;
+    background-position: center center, center center;
+    background-size: 500px, 100%;
+
+    .hero-container {
+      top: 100px;
+    }
 
     .fl-left {
       width: 100%;

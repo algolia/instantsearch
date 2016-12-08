@@ -69,6 +69,12 @@ body:not(.example) section {
     width: 50%;
     float: left;
     padding: 0 1em;
+
+    @include mobile-mq {
+      width: 100%;
+      text-align: center;
+
+    }
   }
 
   // [class*="__description"] {
@@ -90,7 +96,7 @@ body:not(.example) section {
     z-index: 0;
 
 
-    @include small-mq {
+    @include mobile-mq {
       &:before,
       &:after {
         display: none !important;
@@ -136,7 +142,7 @@ body:not(.example) section {
     z-index: 2;
   }
 
-  @include small-mq {
+  @include mobile-mq {
    display: none;
   }
 }
@@ -171,6 +177,15 @@ body:not(.example) section {
     img {
       max-width: 100%;
     }
+
+    @include mobile-mq {
+      text-align: center;
+
+      img {
+        max-width: 80%;
+        margin: 1em 0;
+      }
+    }
   }
 
   .section__description {
@@ -187,7 +202,7 @@ body:not(.example) section {
   }
 
 
-  @include small-mq {
+  @include mobile-mq {
    padding: 60px 0 !important;
   }
 }
@@ -204,10 +219,18 @@ body:not(.example) section {
   color: #fff;
   padding-top: 40px;
   padding-bottom: 40px;
+  overflow: hidden;
+
+
+  @include small-mq {
+    overflow: hidden;
+
+  }
 
   .section__description {
     padding-right: 3em;
     margin-top: 120px;
+
     svg {
       stroke: #00aeff;
     }
@@ -216,6 +239,14 @@ body:not(.example) section {
   .light-link {
     float: right;
     clear: both;
+
+    @include mobile-mq {
+      float: none;
+      margin: auto;
+      width: 100%;
+      display: block;
+      margin-bottom: 2em;
+    }
   }
 
   .title,
@@ -237,8 +268,10 @@ body:not(.example) section {
       display: block;
     }
   }
-
   @include small-mq {
+    p { max-width: 100% }
+  }
+  @include mobile-mq {
     overflow: hidden;
   }
 }
@@ -323,19 +356,25 @@ body:not(.example) section {
   }
 
 
-  @include small-mq {
+  @include mobile-mq {
+
     .phone_illustration,
     .computer_illustration {
       display: none !important;
     }
-    .section__graphic {
-      width: 30%;
-    }
+
     .section__description {
-      width: 70%;
       left: 0;
     }
 
+    ul.subtle-check-list {
+      position: absolute;
+      z-index: 9;
+      top: 40%;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
   }
 }
 
@@ -369,7 +408,7 @@ body:not(.example) section {
     z-index: 0;
   }
 
-  @include small-mq {
+  @include mobile-mq {
     display: none;
   }
 }
@@ -389,14 +428,24 @@ body:not(.example) section {
     transform: translate(-50%, -50%);
   }
 
+
   @include diagonal(-2deg, #FFF, 180px, 'true', before) {
     top: -20px;
     position: absolute;
     z-index: 0;
   }
 
-  @include small-mq {
+  @include mobile-mq {
     border-top: 1px solid rgba(black, 0.1);
+
+    .container {
+      position: relative;
+      top: inherit;
+      left: inherit;
+      transform: none;
+    }
+
+
   }
 }
 
@@ -464,13 +513,13 @@ body:not(.example) section {
       }
 
 
-      @include small-mq {
+      @include mobile-mq {
         max-width: calc(100% / 3);
         margin-bottom: 1em;
       }
     }
 
-    @include small-mq {
+    @include mobile-mq {
       padding: 0;
     }
   }
@@ -498,7 +547,7 @@ body:not(.example) section {
     position: relative;
     min-height: 550px;
 
-    @include small-mq {
+    @include mobile-mq {
       width: 100%;
     }
   }
@@ -510,6 +559,10 @@ body:not(.example) section {
     transform: translate(-50%, -50%);
     z-index: 3;
     max-width: 60%;
+
+    @include mobile-mq {
+      max-width: 90%;
+    }
   }
 
   .footer__community {
@@ -521,9 +574,13 @@ body:not(.example) section {
       left: -80px;
       width: 100%;
 
-      @include small-mq {
+      @include mobile-mq {
         display: none;
       }
+    }
+
+    h3 {
+      font-size: 24px;
     }
 
     figure {
@@ -545,6 +602,9 @@ body:not(.example) section {
         &.icon-al {
          fill: #fff
         }
+      }
+      @include mobile-mq {
+       text-align: center;
       }
     }
 
@@ -577,10 +637,16 @@ body:not(.example) section {
 
     .btn {
       margin-top: 3em;
+
+      @include mobile-mq {
+        margin: 3em auto 0;
+        max-width: 100%;
+        width: 100%;
+      }
     }
 
 
-    @include small-mq {
+    @include mobile-mq {
       background: linear-gradient(to right, #12161e, #222432), linear-gradient(#30373b, #30373b);
 
       .btn {
@@ -590,6 +656,7 @@ body:not(.example) section {
   }
 
   .footer__call-to-action {
+
 
     h2 {
       font-size: 36px;
@@ -606,6 +673,16 @@ body:not(.example) section {
       color: #fff;
       min-width: 160px;
     }
+
+    @include mobile-mq {
+      text-align: center;
+
+      .btn {
+        max-width: 100%;
+        width: 100%;
+        margin-bottom: 2em;
+      }
+    }
   }
 
 
@@ -615,7 +692,7 @@ body:not(.example) section {
     z-index: 8;
   }
 
-  @include small-mq {
+  @include mobile-mq {
     padding: 0 !important;
   }
 }
@@ -714,12 +791,12 @@ ul.subtle-check-list {
       background: rgba(black, 0.035)
     }
 
-    @include small-mq {
+    @include mobile-mq {
       width: 50%;
     }
   }
 
-  @include small-mq {
+  @include mobile-mq {
     padding: 1em;
   }
 
@@ -736,7 +813,6 @@ ul.subtle-check-list {
 //----------------------------
 
 .cm--feature-list {
-  margin-left: 30px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -823,8 +899,18 @@ ul.subtle-check-list {
     }
 
 
-    @include small-mq {
+    @include mobile-mq {
       flex: 0 1 45%;
+      margin-right: 0;
+
+      &:last-of-type {
+        flex: 0 1 100%;
+      }
     }
+  }
+
+  @include mobile-mq {
+    justify-content: space-between;
+    padding-top: 30px;
   }
 }
