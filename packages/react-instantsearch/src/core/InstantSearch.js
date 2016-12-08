@@ -31,9 +31,9 @@ function validateNextProps(props, nextProps) {
  * [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
  *
  * Read the [search parameters guide](guide/Search_parameters.html).
- * @propType {func} onSearchStateChange - See [URL Routing](guide/advanced-topics.html#url-routing).
- * @propType {object} searchState - See [URL Routing](guide/advanced-topics.html#url-routing).
- * @propType {func} createURL - See [URL Routing](guide/advanced-topics.html#url-routing).
+ * @propType {func} onSearchStateChange - See [URL Routing](guide/Routing.html).
+ * @propType {object} searchState - See [URL Routing](guide/Routing.html).
+ * @propType {func} createURL - See [URL Routing](guide/Routing.html).
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
  *
