@@ -966,7 +966,7 @@ ellipse {
 .algolia-autocomplete .algolia-docsearch-suggestion--content {
   display: block;
   float: right;
-  width: 70%;
+  width: 66%;
   position: relative;
   padding: 5.33333px 0 5.33333px 10.66667px;
   cursor: pointer; }
@@ -997,12 +997,13 @@ ellipse {
 
 .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
   float: left;
-  width: 30%;
+  width: 34%;
   display: none;
   padding-left: 0;
-  text-align: right;
+  text-align: left;
   position: relative;
   padding: 5.33333px 10.66667px;
+  padding-left: 0;
   color: #39B1DE;
   font-size: 0.9em;
   word-wrap: break-word; }
@@ -1146,7 +1147,8 @@ ellipse {
   left: -436px !important;
   top: 40px !important;
   min-width: 420px !important;
-  width: 420px !important; }
+  width: 420px !important;
+  line-height: 1.2 !important; }
 
 /*
   MDN-LIKE Theme - Mozilla
@@ -2612,6 +2614,8 @@ nav.sidebar {
         nav.sidebar .sidebar-container .sidebar-elements .sidebar-element a.active {
           -webkit-transition: color 0.2s ease, box-shadow 0.2s ease;
           transition: color 0.2s ease, box-shadow 0.2s ease; }
+      nav.sidebar .sidebar-container .sidebar-elements .sidebar-element.guide a.navItem-active {
+        box-shadow: none; }
   @media (max-width: 960px) {
     nav.sidebar {
       width: calc(100% + 16px);
@@ -2690,10 +2694,22 @@ nav.sidebar {
 .documentation-section .guide-nav,
 .examples-section .guide-nav {
   padding: 1em 0;
-  text-align: right;
   border-top: 1px solid #d8d8d8;
-  border-bottom: 1px solid #d8d8d8;
-  margin-left: -30px; }
+  border-bottom: 1px solid #d8d8d8; }
+
+.documentation-section .guide-nav:after,
+.examples-section .guide-nav:after {
+  clear: both;
+  content: '';
+  display: block; }
+
+.documentation-section .guide-nav-left,
+.examples-section .guide-nav-left {
+  float: left; }
+
+.documentation-section .guide-nav-right,
+.examples-section .guide-nav-right {
+  float: right; }
 
 .documentation-section p,
 .documentation-section ul,
@@ -2818,7 +2834,7 @@ nav.sidebar {
     margin-top: 0; }
   .documentation-section .documentation-container pre,
   .examples-section .documentation-container pre {
-    margin: .5em 0px .5em -30px;
+    margin: .5em 0px .5em 0px;
     line-height: 23px;
     white-space: pre;
     overflow-x: auto;
@@ -2826,7 +2842,6 @@ nav.sidebar {
     word-wrap: inherit;
     border: 1px solid #d8d8d8;
     border-radius: 2px;
-    border-left: none;
     padding: 0.5em 0;
     position: relative;
     z-index: 1; }

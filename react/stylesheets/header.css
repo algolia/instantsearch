@@ -953,7 +953,7 @@ ellipse {
 .algolia-autocomplete .algolia-docsearch-suggestion--content {
   display: block;
   float: right;
-  width: 70%;
+  width: 66%;
   position: relative;
   padding: 5.33333px 0 5.33333px 10.66667px;
   cursor: pointer; }
@@ -984,12 +984,13 @@ ellipse {
 
 .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column {
   float: left;
-  width: 30%;
+  width: 34%;
   display: none;
   padding-left: 0;
-  text-align: right;
+  text-align: left;
   position: relative;
   padding: 5.33333px 10.66667px;
+  padding-left: 0;
   color: #39B1DE;
   font-size: 0.9em;
   word-wrap: break-word; }
@@ -1133,7 +1134,8 @@ ellipse {
   left: -436px !important;
   top: 40px !important;
   min-width: 420px !important;
-  width: 420px !important; }
+  width: 420px !important;
+  line-height: 1.2 !important; }
   @supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) { }
 
 .cm-navigation {
