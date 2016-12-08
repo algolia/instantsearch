@@ -17,6 +17,9 @@ const DEFAULT_PROPS = {
   indexName: 'foobar',
   algoliaClient: {},
   searchParameters: {},
+  root: {
+    Root: 'div',
+  },
 };
 
 describe('InstantSearch', () => {
@@ -47,7 +50,7 @@ describe('InstantSearch', () => {
           <div />
         </InstantSearch>
       );
-    }).toThrow();
+    }).not.toThrow();
 
     expect(() => {
       const wrapper = mount(
