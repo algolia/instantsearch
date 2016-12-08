@@ -2,8 +2,8 @@ import connectHitsPerPage from '../connectors/connectHitsPerPage.js';
 import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
 
 /**
- * The HitsPerPage widget displays a dropdown menu of possible number of items that can be displayed.
- * With it a user can choose to display more or less results from Algolia.
+ * The HitsPerPage widget displays a dropdown menu of the chosen number of items to be displayed.
+ * With it a user can choose to display more or fewer results from Algolia.
  *
  * List of hits per page options.
  * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
