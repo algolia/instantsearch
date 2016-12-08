@@ -5,7 +5,7 @@ import {join} from 'path';
 
 ghpages.clean();
 
-const site = join(__dirname, '../docs');
+const site = join(__dirname, '../docs-production');
 const logger = msg => console.log(msg);
 const end = err => {
   if (err) {

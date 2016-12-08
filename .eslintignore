@@ -4,4 +4,5 @@ packages/react-instantsearch/examples/*/node_modules/
 coverage/
 # generated documentation website
 docs/
+docs-production/
 dist/

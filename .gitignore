@@ -1,4 +1,5 @@
 /docs/
+/docs-production/
 node_modules/
 dist/
 npm-debug.log
