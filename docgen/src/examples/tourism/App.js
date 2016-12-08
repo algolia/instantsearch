@@ -28,11 +28,9 @@ const App = props =>
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
   >
-    <div>
-      <Header />
-      <Filters />
-      <Results />
-    </div>
+    <Header />
+    <Filters />
+    <Results />
   </InstantSearch>;
 
 function Header() {

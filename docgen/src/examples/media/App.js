@@ -26,13 +26,11 @@ const App = props =>
     onSearchStateChange={props.onSearchStateChange.bind(this)}
     searchParameters={{hitsPerPage: 10}}
   >
-    <div>
-      <Header/>
-      <section>
-        <Facets/>
-        <Results/>
-      </section>
-    </div>
+    <Header/>
+    <section>
+      <Facets/>
+      <Results/>
+    </section>
   </InstantSearch>;
 
 const Header = () =>

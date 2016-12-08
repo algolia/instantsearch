@@ -44,10 +44,8 @@ function validateNextProps(props, nextProps) {
  *       apiKey="apiKey"
  *       indexName="indexName"
  *     >
- *       <div>
- *         <SearchBox />
- *         <Hits />
- *       </div>
+ *       <SearchBox />
+ *       <Hits />
  *     </InstantSearch>
  *   );
  * }

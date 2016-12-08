@@ -23,11 +23,9 @@ const App = () =>
     apiKey="..."
     indexName="..."
   >
-    <div>
-      <SearchBox defaultRefinement="hi" />
-      <Hoodies/>
-      <Menu attributeName="fruits" defaultRefinement="Orange" />
-    </div>
+    <SearchBox defaultRefinement="hi" />
+    <Hoodies/>
+    <Menu attributeName="fruits" defaultRefinement="Orange" />
   </InstantSearch>;
 ```
 
