@@ -24,7 +24,7 @@ const App = props =>
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="airbnb"
-    onSearchState={props.onSearchState}
+    searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
   >
