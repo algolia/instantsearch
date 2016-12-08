@@ -137,6 +137,18 @@ body:not(.example) section {
   @include mobile-mq {
    display: none;
   }
+
+  @include big-min-mq {
+    @include diagonal(-2deg, #f6f9fc, 200px, 'true', before) {
+      top: -100px;
+      z-index: 0;
+    }
+
+    @include diagonal(2deg, #fff, 200px, 'true', after) {
+      top: 210px;
+      z-index: -1;
+    }
+  }
 }
 
 
@@ -347,6 +359,13 @@ body:not(.example) section {
     z-index: 0;
   }
 
+  @include big-min-mq {
+    @include diagonal(-2deg, #1b192b, 140px, 'true', after) {
+      top: -180px;
+      position: relative;
+      z-index: 3;
+    }
+  }
 
   @include mobile-mq {
 
