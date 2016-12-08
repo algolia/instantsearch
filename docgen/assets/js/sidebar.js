@@ -11,19 +11,23 @@ export default function sidebar(options) {
 }
 
 function sidebarFollowScroll(sidebarContainer) {
-  const {height, navHeight, footerHeight, menuHeight, sidebarTop} = getPositionsKeyElements(sidebarContainer);
+  const linksContainer = sidebarContainer.querySelector('ul');
+  const {height, navHeight, footerHeight, menuHeight, sidebarTop, titleHeight} =
+    getPositionsKeyElements(sidebarContainer);
   const positionSidebar = () => {
     const currentScroll = window.pageYOffset;
     if (currentScroll > sidebarTop - navHeight) {
-      const fold = height - footerHeight - menuHeight - 100;
+      const fold = height - footerHeight - menuHeight - navHeight;
       if (currentScroll > fold) {
-        sidebarContainer.style.top = `${fold - currentScroll + navHeight + 20}px`;
+        sidebarContainer.style.top = `${fold - currentScroll + navHeight}px`;
       } else {
         sidebarContainer.style.top = null;
       }
       sidebarContainer.classList.add('fixed');
+      linksContainer.style.maxHeight = `calc(100vh - ${titleHeight + navHeight}px)`;
     } else {
       sidebarContainer.classList.remove('fixed');
+      linksContainer.style.maxHeight = '';
     }
   };
 
@@ -117,6 +121,7 @@ window.addEventListener('resize', () => {
 
 function getPositionsKeyElements($sidebar) {
   const sidebarBBox = $sidebar.getBoundingClientRect();
+  const title = $sidebar.querySelector('.sidebar-header');
   const bodyBBox = document.body.getBoundingClientRect();
   const sidebarTop = sidebarBBox.top - bodyBBox.top;
   const footer = document.querySelector('.ac-footer');
@@ -126,6 +131,7 @@ function getPositionsKeyElements($sidebar) {
   const navHeight = navigation.offsetHeight;
   const footerHeight = footer.offsetHeight;
   const menuHeight = menu.offsetHeight;
+  const titleHeight = title.offsetHeight;
 
-  return {sidebarTop, height, navHeight, footerHeight, menuHeight};
+  return {sidebarTop, height, navHeight, footerHeight, menuHeight, titleHeight};
 }
