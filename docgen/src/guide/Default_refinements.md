@@ -31,9 +31,8 @@ const App = () =>
 ```
 
 **Notes:**
-* The [search state guide](guide/Search%20state.html) details all widgets and connectors state values..
-* Default refinements are handy when used as [Virtual widgets](guide/Virtual%20widgets.html).
+* The [search state guide](guide/Search_state.html) details all widgets and connectors state values.._* Default refinements are handy when used as [Virtual widgets](guide/Virtual_widgets.html).
 
 <div class="guide-nav">
-Next: <a href="guide/Virtual widgets.html">Virtual widgets →</a>
+Next: <a href="guide/Virtual_widgets.html">Virtual widgets →</a>
 </div>

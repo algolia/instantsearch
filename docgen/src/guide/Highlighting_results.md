@@ -61,7 +61,7 @@ Those parameters are taken from the context in which the the custom component
 is used, therefore it's reasonnable to have them as props.
 
 Here is an example of a custom Highlight widget. It can be used the same
-way the [Highlight widget](guide/Highlighting%20results.html#highlight-widget).
+way the [Highlight widget](guide/Highlighting_results.html#highlight-widget).
 
 ```javascript
 const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
