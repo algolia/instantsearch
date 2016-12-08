@@ -77,12 +77,6 @@ body:not(.example) section {
     }
   }
 
-  // [class*="__description"] {
-  //   top: 50%;
-  //   position: absolute;
-  //   transform: translateY(-50%)
-  // }
-
   // To handle diagonals
   &.is-section__intro,
   &.is-section__widgets,
@@ -105,8 +99,6 @@ body:not(.example) section {
     }
   }
 }
-
-
 
 //---------------------------------------
 //
@@ -144,6 +136,18 @@ body:not(.example) section {
 
   @include mobile-mq {
    display: none;
+  }
+
+  @include big-min-mq {
+    @include diagonal(-2deg, #f6f9fc, 200px, 'true', before) {
+      top: -100px;
+      z-index: 0;
+    }
+
+    @include diagonal(2deg, #fff, 200px, 'true', after) {
+      top: 210px;
+      z-index: -1;
+    }
   }
 }
 
@@ -355,6 +359,13 @@ body:not(.example) section {
     z-index: 0;
   }
 
+  @include big-min-mq {
+    @include diagonal(-2deg, #1b192b, 140px, 'true', after) {
+      top: -180px;
+      position: relative;
+      z-index: 3;
+    }
+  }
 
   @include mobile-mq {
 
@@ -444,8 +455,6 @@ body:not(.example) section {
       left: inherit;
       transform: none;
     }
-
-
   }
 }
 
@@ -502,6 +511,8 @@ body:not(.example) section {
       opacity: 0.5;
       padding: 0 20px;
       max-width: calc(100% / 6);
+      transition: opacity 0.1s ease;
+      will-change: opacity;
 
       img {
         vertical-align: middle;
@@ -522,6 +533,12 @@ body:not(.example) section {
     @include mobile-mq {
       padding: 0;
     }
+
+     &:hover {
+      li:not(:hover) {
+        opacity: 0.3;
+      }
+     }
   }
 
 
@@ -745,6 +762,7 @@ ul.subtle-check-list {
   list-style: none;
   position: relative;
   float: left;
+  padding: 0;
 
   figure,
   img {
@@ -772,6 +790,20 @@ ul.subtle-check-list {
     .item-title {
       color: #686d7d;
       font-size: 20px;
+    }
+
+    > a  {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+    }
+
+    .light-link {
+      margin-top: 8px;
+      display: inline-block;
+
     }
 
     .tile-container {
@@ -900,7 +932,7 @@ ul.subtle-check-list {
 
 
     @include mobile-mq {
-      flex: 0 1 45%;
+      flex: 0 1 100%;
       margin-right: 0;
 
       &:last-of-type {
