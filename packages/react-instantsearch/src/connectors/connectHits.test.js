@@ -3,7 +3,7 @@
 import connect from './connectHits.js';
 jest.mock('../core/createConnector');
 
-const {getProvidedProps} = connect;
+const {getProvidedProps, getSearchParameters} = connect;
 
 describe('connectHits', () => {
   it('provides the current hits to the component', () => {
@@ -15,5 +15,10 @@ describe('connectHits', () => {
   it('doesn\'t render when no hits are available', () => {
     const props = getProvidedProps(null, null, {results: null});
     expect(props).toBe(null);
+  });
+
+  it('should return the searchParameters unchanged', () => {
+    const searchParameters = getSearchParameters({hitsPerPage: 10});
+    expect(searchParameters).toEqual({hitsPerPage: 10});
   });
 });
