@@ -50,18 +50,20 @@ h2.title {
   text-align: center;
   width: 100%;
   font-size: 1.8em;
-  color: $charcoal-grey;
+  color: $charcoal-greyish;
   display: block;
   position: relative;
   margin-top: 120px;
   margin-bottom: 80px;
+  font-weight: 300;
+  font-family: 'Open Sans Light', 'Open Sans';
 
   &:after {
     content: '';
     position: absolute;
     width: 50px;
     height: 3px;
-    background: $accent-color;
+    background: $sweet-purple;
     top: 2.8em;
     left: 0;
     right: 0;
@@ -69,8 +71,10 @@ h2.title {
   }
 
   ~ p {
+
     font-size: 1.3em;
     text-align: center;
+    margin: 1em;
 
     @include small-mq {
       font-size: 16px;
@@ -86,18 +90,21 @@ h2.title {
 /* Small titles
 ======================*/
 h3.title {
-  font-size: 1.5em;
+  font-size: 20px;
   color: $greyish-brown;
-  font-weight: bold;
   margin: 0;
   padding: 0;
   line-height: 1.2em;
+  font-family: 'Open Sans', 'Open Sans', $font-fallback;
+  font-weight: 600;
 
   ~ p {
-    margin: 32px 0;
+    font-size: 14px;
+    margin: 1em 0;
     padding: 8px 0 0;
   }
 }
+
 h4 {
   font-size: 18px;
 }
