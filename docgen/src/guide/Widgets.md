@@ -32,5 +32,10 @@ as they are mounted as children of the [`<InstantSearch>` component](guide/<Inst
 the [react-native guide](guide/React_native.html).
 
 <div class="guide-nav">
-Next: <a href="guide/Styling_widgets.html">Styling widgets →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/<InstantSearch>.html">← &lt;InstantSearch&gt;</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Styling_widgets.html">Styling widgets →</a>
+    </div>
 </div>

@@ -27,5 +27,10 @@ Here's an example configuring the [distinct parameter](https://www.algolia.com/d
 the [`<HitsPerPage>` widget](widgets/HitsPerPage.html).
 
 <div class="guide-nav">
-Next: <a href="guide/Search_state.html">Search state →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Routing.html">← Routing</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Search%20state.html">Search state →</a>
+    </div>
 </div>

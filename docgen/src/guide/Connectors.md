@@ -70,5 +70,10 @@ Provided props always follow the same pattern for ease of use:
   - `isRefined`: Indicates if the item is currently selected refining the search state
 
 <div class="guide-nav">
-Next: <a href="guide/Default_refinements.html">Default refinements →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/i18n.html">← i18n</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Default_refinements.html">Default refinements →</a>
+    </div>
 </div>

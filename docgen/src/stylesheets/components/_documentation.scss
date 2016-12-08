@@ -10,10 +10,22 @@
 
   .guide-nav {
     padding: 1em 0;
-    text-align: right;
     border-top: 1px solid #d8d8d8;
     border-bottom: 1px solid #d8d8d8;
-    margin-left: -30px;
+  }
+
+  .guide-nav:after {
+    clear: both;
+    content: '';
+    display: block;
+  }
+
+  .guide-nav-left {
+    float: left
+  }
+
+  .guide-nav-right {
+      float: right
   }
 
   p,
