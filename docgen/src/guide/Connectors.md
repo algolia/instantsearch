@@ -15,7 +15,7 @@ the widget.
 * When you want to display our widgets using another UI library like [Material-UI](http://www.material-ui.com/)
 * When you want to have full control on the rendering without having to reimplement business logic
 * As soon as you hit a feature wall using our default widgets
-* When you are a react-native user, read our [react-native guide](guide/React%20native.html)
+* When you are a react-native user, read our [react-native guide](guide/React_native.html)
 
 ## What are connectors?
 
@@ -55,7 +55,7 @@ Connectors expose props to configure their behavior. Like the `attributeName`
 being refined in a [`<Menu>`](widgets/Menu.html).
 
 One common exposed prop that you can use is the `defaultRefinement` one. Use it when as a way to provide the
-[default refinement](guide/Default%20refinements.html) when the connected component will be mounted.
+[default refinement](guide/Default_refinements.html) when the connected component will be mounted.
 
 ## Provided props
 
@@ -70,5 +70,5 @@ Provided props always follow the same pattern for ease of use:
   - `isRefined`: Indicates if the item is currently selected refining the search state
 
 <div class="guide-nav">
-Next: <a href="guide/Default refinements.html">Default refinements →</a>
+Next: <a href="guide/Default_refinements.html">Default refinements →</a>
 </div>

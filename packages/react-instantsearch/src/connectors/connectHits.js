@@ -7,7 +7,7 @@ import createConnector from '../core/createConnector';
  *
  * To configure the number of hits retrieved, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search%20parameters.html) prop on `<InstantSearch/>`.
+ * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
  * @name connectHits
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state
