@@ -12,7 +12,7 @@ block content
     .container
       figure.widgets-illu
         img(src='images/reactis-logo-inline-expanded.svg')
-      h2.title Discover the main features
+      h2.title &lgt;<InstantSearch/>&gt;
       div.section__graphic
         img(src="images/components.png")
       div.section__description
@@ -21,7 +21,7 @@ block content
             use(xlink:href="#pen-icon")
         h3.title Build with design in mind
         p Our search widgets feature slick design by default and benefit from our experience building thousands of search interfaces.
-        a(href="#", class="light-link") Get started&nbsp;&gt;
+        a(href="Getting_started.html", class="light-link") Get started&nbsp;&gt;
 
   section.is-section__code-samples
     div.section__description.text-right
@@ -29,8 +29,8 @@ block content
         svg.desc-icon
           use(xlink:href="#bulb-icon")
       h3.title Intuitive API
-      p Connectors provide a simple way to modify the rendering of our widgets with minimal experience on Algolia’s API.
-      a(href="#", class="light-link") Get started&nbsp;&gt;
+      p We crunched feedback from hundreds of users of #[a(href="https://community.algolia.com/instantsearch.js/") instantsearch.js] into building react-instantsearch API.
+      a(href="guide/", class="light-link") Read the guide &nbsp;&gt;
     div.section__graphic
       pre(class="al-snippet" data-snippet-theme="dark")
         code.
@@ -70,15 +70,15 @@ block content
         img(src="images/react-laptop-12.svg", class="computer_illustration")
         ul.subtle-check-list
           li
-            | React-Native
+            | react-native
             svg
               use(xlink:href='#check-icon')
           li
-            | React UI Kit
+            | react-ui*
             svg
               use(xlink:href='#check-icon')
           li
-            | React-Router
+            | react-router
             svg
               use(xlink:href='#check-icon')
 
@@ -88,8 +88,8 @@ block content
           svg.desc-icon
             use(xlink:href="#react-icon")
         h3.title React-community ready
-        p Connectors provide a simple way to modify the rendering of our widgets with minimal experience on Algolia’s API.
-        a(href="#", class="light-link") Get started&nbsp;&gt;
+        p Connectors provide a way to plug any existing code or React library to react-instantsearch and Algolia.
+        a(href="guide/Connectors.html", class="light-link") Connectors guide &nbsp;&gt;
 
   section.is-section__live
     h2.title See it live
@@ -100,35 +100,35 @@ block content
             figure
               img(src="images/e-commerce.svg")
             h3.item-title E-commerce
-            a(href="#") See it live&nbsp;&gt;
+            a(href="examples/e-commerce") See it live&nbsp;&gt;
 
         li.examples-item.tile
           .tile-container
             figure
               img(src="images/e-commerce-infinite.svg")
             h3.item-title E-commerce &amp; Infinite Hits
-            a(href="#") See it live&nbsp;&gt;
+            a(href="examples/e-commerce-infinite") See it live&nbsp;&gt;
 
         li.examples-item.tile
           .tile-container
             figure
               img(src="images/material.svg")
             h3.item-title Material UI
-            a(href="#") See it live&nbsp;&gt;
+            a(href="examples/material-ui") See it live&nbsp;&gt;
 
         li.examples-item.tile
           .tile-container
             figure
               img(src="images/media.svg")
             h3.item-title Media
-            a(href="#") See it live&nbsp;&gt;
+            a(href="examples/media") See it live&nbsp;&gt;
 
         li.examples-item.tile
           .tile-container
             figure
               img(src="images/tourism.svg")
             h3.item-title Tourism
-            a(href="#") See it live&nbsp;&gt;
+            a(href="examples/tourism") See it live&nbsp;&gt;
 
         li.examples-item.tile.muted
           .tile-container
@@ -227,12 +227,10 @@ block content
         ul
           li Share your awesome projects <svg><use xlink:href="#check-icon"></svg>
           li Find useful tips & solutions <svg><use xlink:href="#check-icon"></svg>
-        a(href="", class="btn btn-ghost btn-ghost-blue") Join Discourse&nbsp;&gt;
+        a(href="", class="btn btn-ghost btn-ghost-blue") Join us on discourse&nbsp;&gt;
 
     div.footer__call-to-action
       .container
-        h2 InstantSearch.js for react
-        a(href="", class="btn btn-ghost btn-black") Get started
-        a(href="", class="btn btn-ghost btn-ghost-steel") Read documentation
-
-
+        h2 react-instantsearch
+        a(href="Getting_started.html", class="btn btn-ghost btn-black") Get started
+        a(href="guide/", class="btn btn-ghost btn-ghost-steel") Guide
