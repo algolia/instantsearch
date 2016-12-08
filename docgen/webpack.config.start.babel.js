@@ -12,7 +12,7 @@ const {
 
 export default {
   ...webpackConfig,
-  devtool: 'eval-source-map', // a lot faster than 'source-map', not ok for production though
+  devtool: 'source-map', // a lot faster than 'source-map', not ok for production though
   entry: {
     ...(
       Object
