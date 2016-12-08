@@ -44,17 +44,17 @@ yarn
 # printf "\n=> Release: please type the new chosen version > "
 # read -e newVersion
 
-newVersion=$(npm version --no-git-tag-version prerelease)
+newVersion=$(npm version major)
 
 (
 cd packages/react-instantsearch
-npm version --no-git-tag-version prerelease
+npm version major
 yarn
 )
 
 (
 cd packages/react-instantsearch-theme-algolia
-npm version --no-git-tag-version prerelease
+npm version major
 )
 
 yarn
