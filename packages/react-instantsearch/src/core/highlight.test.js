@@ -4,16 +4,16 @@ import parseAlgoliaHit from './highlight.js';
 describe('parseAlgoliaHit()', () => {
   it('creates a single element when there is no tag', () => {
     const value = 'foo bar baz';
-    const attribute = 'attr';
-    const out = parseAlgoliaHit({pathToAttribute: attribute, hit: createHit(attribute, value)});
+    const attributeName = 'attr';
+    const out = parseAlgoliaHit({attributeName, hit: createHit(attributeName, value)});
     expect(out).toEqual([{isHighlighted: false, value}]);
   });
 
   it('creates a single element when there is only a tag', () => {
     const textValue = 'foo bar baz';
     const value = `<em>${textValue}</em>`;
-    const attribute = 'attr';
-    const out = parseAlgoliaHit({pathToAttribute: attribute, hit: createHit(attribute, value)});
+    const attributeName = 'attr';
+    const out = parseAlgoliaHit({attributeName, hit: createHit(attributeName, value)});
     expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
@@ -26,14 +26,14 @@ describe('parseAlgoliaHit()', () => {
         lvl0: {lvl1: {lvl2: {value}}},
       },
     };
-    const out = parseAlgoliaHit({pathToAttribute: 'lvl0.lvl1.lvl2', hit});
+    const out = parseAlgoliaHit({attributeName: 'lvl0.lvl1.lvl2', hit});
     expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
   it('parses the string and returns the part that are highlighted - 1 big highlight', () => {
     const str = 'like <em>al</em>golia does <em>al</em>golia';
     const hit = createHit('attr', str);
-    const parsed = parseAlgoliaHit({pathToAttribute: 'attr', hit});
+    const parsed = parseAlgoliaHit({attributeName: 'attr', hit});
     expect(parsed).toEqual([
       {value: 'like ', isHighlighted: false},
       {value: 'al', isHighlighted: true},
@@ -49,7 +49,7 @@ describe('parseAlgoliaHit()', () => {
     const parsed = parseAlgoliaHit({
       preTag: '**',
       postTag: '**',
-      pathToAttribute: 'attr',
+      attributeName: 'attr',
       hit,
     });
     expect(parsed).toEqual([
@@ -63,23 +63,23 @@ describe('parseAlgoliaHit()', () => {
 
   it('throws when the attribute is not highlighted in the hit', () => {
     expect(parseAlgoliaHit.bind(null, {
-      pathToAttribute: 'notHighlightedAttribute',
+      attributeName: 'notHighlightedAttribute',
       hit: {notHighlightedAttribute: 'some value'},
     })).toThrowError(
-      '`pathToAttribute`=notHighlightedAttribute must resolve to an highlighted attribute in the record'
+      '`attributeName`=notHighlightedAttribute must resolve to an highlighted attribute in the record'
     );
   });
 
   it('throws when hit is `null`', () => {
     expect(parseAlgoliaHit.bind(null, {
-      pathToAttribute: 'unknownattribute',
+      attributeName: 'unknownattribute',
       hit: null,
     })).toThrowError('`hit`, the matching record, must be provided');
   });
 
   it('throws when hit is `undefined`', () => {
     expect(parseAlgoliaHit.bind(null, {
-      pathToAttribute: 'unknownAttribute',
+      attributeName: 'unknownAttribute',
       hit: undefined,
     })).toThrowError('`hit`, the matching record, must be provided');
   });
