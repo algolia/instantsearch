@@ -1,13 +1,238 @@
 extends archetypes/single-column.pug
 
 block content
-  section
-    .container
-      div
-        h2.title Beta release
-        :markdown-it
-          `react-instantsearch` is just around the corner, welcome to its beta website.
+  - var tweets =['666409672006606848','675635141713248256','684325213329305600','669552193419259904','672084577805012992','714625225359425536','669555344725696512','688027404741308417','783838738791227392','782584336323227648','787040561215582208','698839453469544448','687060441881796608','705467858961223680','665028633048821760','654785137272459265','661567388983279617','708574926962294784','707863195025858560'];
+  section.is-section__intro
+    img(src='images/Mockup.png',
+        srcset='images/Mockup.png, images/Mockup@2x.png 2000w',
+        alt='Mockup of Algolia experience',
+        class='intro-illu')
 
-          If you want to give us some feedback, you can either open an issue on [GitHub](https://github.com/algolia/instantsearch.js/issues/?label=◾+react-instantsearch)
-          or chat with us on [Gitter](https://gitter.im/algolia/instantsearch.js)
-        a.btn.btn-cta(href='Getting started.html') Get Started
+  section.is-section__widgets
+    .container
+      figure.widgets-illu
+        img(src='images/reactis-logo-inline-expanded.svg')
+      h2.title Discover the main features
+      div.section__graphic
+        img(src="images/components.png")
+      div.section__description
+        figure
+          svg.desc-icon
+            use(xlink:href="#pen-icon")
+        h3.title Build with design in mind
+        p Our search widgets feature slick design by default and benefit from our experience building thousands of search interfaces.
+        a(href="#", class="light-link") Get started&nbsp;&gt;
+
+  section.is-section__code-samples
+    div.section__description.text-right
+      figure
+        svg.desc-icon
+          use(xlink:href="#bulb-icon")
+      h3.title Intuitive API
+      p Connectors provide a simple way to modify the rendering of our widgets with minimal experience on Algolia’s API.
+      a(href="#", class="light-link") Get started&nbsp;&gt;
+    div.section__graphic
+      pre(class="al-snippet" data-snippet-theme="dark")
+        code.
+          <span class="sn-keyword">const</span> SearchBox <span class="sn-keyword">=</span> connectSearchBox(
+            ({query, refine}) <span class="sn-keyword">=></span>
+              <span class="sn-keyword">&lt;</span>div className<span class="sn-keyword">=</span><span class="sn-string">"searchbox-container"</span><span class="sn-keyword">></span>
+                <span class="sn-keyword">&lt;</span>div className<span class="sn-keyword">=</span><span class="sn-string">"input-group"</span><span class="sn-keyword">></span>
+                  <span class="sn-keyword">&lt;</span>input type<span class="sn-keyword">=</span><span class="sn-string">"text"</span>
+                         <span class="sn-variable">value</span><span class="sn-keyword">=</span>{query}
+                         <span class="sn-variable">onChange</span><span class="sn-keyword">=</span>{e <span class="sn-keyword">=></span> refine(e.<span class="sn-variable">target</span>.<span class="sn-variable">value</span>)}
+                         className<span class="sn-keyword">=</span><span class="sn-string">"form-control"</span>/<span class="sn-keyword">></span>
+
+                  <span class="sn-keyword">&lt;</span>span className<span class="sn-keyword">=</span><span class="sn-string">"input-group-btn"</span><span class="sn-keyword">></span>
+                    <span class="sn-keyword">&lt;</span>button className<span class="sn-keyword">=</span><span class="sn-string">"btn btn-default"</span><span class="sn-keyword">></span><span class="sn-keyword">&lt;</span>i className<span class="sn-keyword">=</span><span class="sn-string">"fa fa-search"</span><span class="sn-keyword">></span><span class="sn-keyword">&lt;</span>/i><span class="sn-keyword">&lt;</span>/button<span class="sn-keyword">></span>
+                  <span class="sn-keyword">&lt;</span>/span<span class="sn-keyword">></span>
+                <span class="sn-keyword">&lt;</span>/div<span class="sn-keyword">></span>
+              <span class="sn-keyword">&lt;</span>/div<span class="sn-keyword">></span>
+          );
+
+          <span class="sn-keyword">const</span> RefinementListLinks <span class="sn-keyword">=</span> connectRefinementList(({items, refine, createURL}) <span class="sn-keyword">=></span> {
+            <span class="sn-keyword">const</span> itemComponents <span class="sn-keyword">=</span> items.map(item <span class="sn-keyword">=></span>
+              <span class="sn-keyword">&lt;</span>div className<span class="sn-keyword">=</span>{item.isRefined ? <span class="sn-string">' active'</span> : <span class="sn-string">''</span>} key<span class="sn-keyword">=</span>{item.label}<span class="sn-keyword">></span>
+                <span class="sn-keyword">&lt;</span>a className<span class="sn-keyword">=</span><span class="sn-string">"item"</span> href<span class="sn-keyword">=</span>{createURL(item.<span class="sn-variable">value</span>)} <span class="sn-variable">onClick</span><span class="sn-keyword">=</span>{e <span class="sn-keyword">=></span> {
+                  e.preventDefault();
+                  refine(item.<span class="sn-variable">value</span>);
+                }}<span class="sn-keyword">></span>
+                  <span class="sn-keyword">&lt;</span>span<span class="sn-keyword">></span> {item.label}<span class="sn-keyword">&lt;</span>/span<span class="sn-keyword">></span>
+                  <span class="sn-keyword">&lt;</span>span className<span class="sn-keyword">=</span><span class="sn-string">"badge pull-right"</span><span class="sn-keyword">></span>{item.count}<span class="sn-keyword">&lt;</span>/span<span class="sn-keyword">></span>
+                <span class="sn-keyword">&lt;</span>/a<span class="sn-keyword">></span>
+              <span class="sn-keyword">&lt;</span>/div<span class="sn-keyword">></span>
+            );
+
+  section.is-section__community
+    .container
+      div.section__graphic
+        img(src="images/illu-mobile.svg", class="phone_illustration")
+        img(src="images/react-laptop-12.svg", class="computer_illustration")
+        ul.subtle-check-list
+          li
+            | React-Native
+            svg
+              use(xlink:href='#check-icon')
+          li
+            | React UI Kit
+            svg
+              use(xlink:href='#check-icon')
+          li
+            | React-Router
+            svg
+              use(xlink:href='#check-icon')
+
+
+      div.section__description
+        figure
+          svg.desc-icon
+            use(xlink:href="#react-icon")
+        h3.title React-community ready
+        p Connectors provide a simple way to modify the rendering of our widgets with minimal experience on Algolia’s API.
+        a(href="#", class="light-link") Get started&nbsp;&gt;
+
+  section.is-section__live
+    h2.title See it live
+    .container
+      ul.live__examples.cm-large-tiles
+        li.examples-item.tile
+          .tile-container
+            figure
+              img(src="images/e-commerce.svg")
+            h3.item-title E-commerce
+            a(href="#") See it live&nbsp;&gt;
+
+        li.examples-item.tile
+          .tile-container
+            figure
+              img(src="images/e-commerce-infinite.svg")
+            h3.item-title E-commerce &amp; Infinite Hits
+            a(href="#") See it live&nbsp;&gt;
+
+        li.examples-item.tile
+          .tile-container
+            figure
+              img(src="images/material.svg")
+            h3.item-title Material UI
+            a(href="#") See it live&nbsp;&gt;
+
+        li.examples-item.tile
+          .tile-container
+            figure
+              img(src="images/media.svg")
+            h3.item-title Media
+            a(href="#") See it live&nbsp;&gt;
+
+        li.examples-item.tile
+          .tile-container
+            figure
+              img(src="images/tourism.svg")
+            h3.item-title Tourism
+            a(href="#") See it live&nbsp;&gt;
+
+        li.examples-item.tile.muted
+          .tile-container
+            figure
+              img(src="images/more-icon.svg")
+            h3.item-title More to come
+
+  section.is-section__twitter
+    h2.title What they say
+
+    div
+      ul.press__tweets.press__tweets--loading.text-center
+        each val in tweets
+          li.press__tweet(data-tweet-id=val)
+            span.press__tweet__arrow.press__tweet__arrow--prev
+              <svg width="14" height="24" viewBox="0 0 14 24" xmlns="http://www.w3.org/2000/svg"><title>Path 111</title><path d="M1 0l12 12L1 24" stroke="#979797" stroke-width=".6" fill="none" fill-rule="evenodd"></path></svg>
+            span.press__tweet__arrow.press__tweet__arrow--next
+              <svg width="14" height="24" viewBox="0 0 14 24" xmlns="http://www.w3.org/2000/svg"><title>Path 111</title><path d="M1 0l12 12L1 24" stroke="#979797" stroke-width=".6" fill="none" fill-rule="evenodd"></path></svg>
+
+
+  section.is-section__features
+    .container
+      .cm--feature-list
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-speed')
+          span Unparalleled speed
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-indexing')
+          span Seamless indexing
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-typo')
+          span Typo tolerance
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-highlighting')
+          span Smart highlighting
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-facets')
+          span Instant faceting
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-sla')
+          span 99.99% SLA
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-security')
+          span First class hosting & security
+        .list-item
+          svg(viewbox='0 0 40 40')
+            use(xmlns:xlink='http://www.w3.org/1999/xlink', xlink:href='#feat-icon-analytics')
+          span Comprehensive analytics
+        .list-item.list-item_muted
+          a(href='https://algolia.com')
+            svg(width='35', height='40', viewbox='0 0 35 40', xmlns='http://www.w3.org/2000/svg')
+              path(d='M20.63 14.624l-2.422 8.572 7.798-4.27a8.925 8.925 0 0 0-5.376-4.302zm-19.136 8.75C1.494 32.554 8.944 40 18.138 40c9.194 0 16.645-7.445 16.645-16.627 0-9.182-7.45-16.628-16.645-16.628-9.193 0-16.644 7.446-16.644 16.628zm16.644-11.878c6.555 0 11.89 5.328 11.89 11.877 0 6.548-5.335 11.876-11.89 11.876-6.555 0-11.89-5.33-11.89-11.878 0-6.55 5.335-11.877 11.89-11.877zm5.745-6.807c.005-.067.02-.128.02-.194v-1.5A2.994 2.994 0 0 0 20.913 0h-5.23a2.993 2.993 0 0 0-2.986 2.998V4.47a19.298 19.298 0 0 1 11.185.22zM5.63 7.62a2.982 2.982 0 0 0-4.227 0l-.528.53a3.006 3.006 0 0 0 0 4.24l.562.563a19.602 19.602 0 0 1 4.494-5.03l-.3-.303z', fill='#697782', fill-rule='evenodd')
+            span Learn more about Algolia
+
+  section.is-section__marketing
+    .container
+      a(href="#", class="icon")
+        svg
+          use(xlink:href="#algolia-icon")
+      h2 Algolia is a leading provider of Search as a Service
+      h3 Join 2,000+ customers trusting us with their search
+
+      ul.brands-list
+        li.brand
+          img(src="images/mono-white_birchbox.svg")
+        li.brand
+          img(src="images/mono-white_medium.svg")
+        li.brand
+          img(src="images/mono-white_quicksilver.svg")
+        li.brand
+          img(src="images/mono-white_periscope.svg")
+        li.brand
+          img(src="images/mono-white_jadopado.svg")
+        li.brand
+          img(src="images/mono-white_arcteryx.svg")
+
+  section.is-section__footer
+    div.footer__community
+      .container
+        figure
+          svg.icon.icon-al
+            use(xlink:href="#algolia-icon")
+          svg.icon.icon-heart
+            use(xlink:href="#heart-icon")
+          svg.icon.icon-react
+            use(xlink:href="#react-icon")
+        h3 Join the community!
+
+        ul
+          li Share your awesome projects <svg><use xlink:href="#check-icon"></svg>
+          li Find useful tips & solutions <svg><use xlink:href="#check-icon"></svg>
+        a(href="", class="btn btn-ghost btn-ghost-blue") Join Discourse&nbsp;&gt;
+
+    div.footer__call-to-action
+      .container
+        h2 InstantSearch.js for react
+        a(href="", class="btn btn-ghost btn-black") Get started
+        a(href="", class="btn btn-ghost btn-ghost-steel") Read documentation
+
+

@@ -17,6 +17,7 @@ $saffron-mango: #FDBD57;
 $saffron-mango-light: #fef5e6;
 $charcoal-grey: #4a4a4c;
 $charcoal-grey-75: rgba(74, 74, 76, 0.75);
+$charcoal-greyish: #686d7d;
 $blueish-grey: #5c7080;
 $greyish-brown: #4a4a4a;
 $greyish: #a4a4a4;
@@ -33,12 +34,13 @@ $white-75: rgba(white, 0.75);
 $chocolate: #7d4704;
 $nice-purple: #8f64f3;
 $nice-blue:  #39b1de;
+$sweet-purple: #8e43e7;
 // Business variables
 $react-color: #00D8FF;
 $hero-color: $saffron-mango;
 $hero-color-accent: #FFF;
-$accent-color: $nice-purple;
-$accent-color-darkish: $nice-blue;
+$accent-color: #00aeff;
+$accent-color-darkish: $accent-color;
 $bg-pale-accent: $saffron-mango-light;
 
 $border: $silver;
@@ -60,6 +62,7 @@ $icon-arrow: "data:image/svg+xml;utf8,<svg width=\'19\' height=\'11\' viewBox=\'
 /* Dimensions
 ==================*/
 $max-container-width: 1100px;
+$container-width: 980px;
 $nav-height: 60px;
 $margin: 16px;
 $sidebar-width: 240px;
