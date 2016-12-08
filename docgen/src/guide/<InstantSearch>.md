@@ -26,7 +26,7 @@ const App = () =>
 ```
 
 **Notes:**
-* Just like we have `react-instansearch/dom`, there's the corresponding `react-instansearch/native` import endpoint, use the [React native guide](guide/React_native.html).
+* Just like we have `react-instantsearch/dom`, there's the corresponding `react-instantsearch/native` import endpoint, use the [React native guide](guide/React_native.html).
 * `<InstantSearch>` manages search on a single search index. We have a guide covering [multi index search and
 state synchronization](guide/Multi_index.html).
 * Internally we use [React's context](https://facebook.github.io/react/docs/context.html) to link widgets to
