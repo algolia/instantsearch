@@ -35,5 +35,10 @@ state synchronization](guide/Multi_index.html).
 * Other props are documented on the [`<InstantSearch>` API page](widgets/InstantSearch.html).
 
 <div class="guide-nav">
-Next: <a href="guide/Widgets.html">Widgets →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Install.html">← Install</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Widgets.html">Widgets →</a>
+    </div>
 </div>

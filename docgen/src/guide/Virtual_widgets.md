@@ -35,5 +35,10 @@ const App = () =>
 * The [search state guide](guide/Search_state.html) details all widgets and connectors state values..
 
 <div class="guide-nav">
-Next: <a href="guide/Routing.html">Routing →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Default_refinements.html">← Default Refinements</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Routing.html">Routing →</a>
+    </div>
 </div>

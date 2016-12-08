@@ -197,5 +197,10 @@ const CoolWidget = createConnector({
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Conditional_display.html">Conditional display →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Multi_index.html">← Multi_index</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Conditional_display.html">Conditional Display →</a>
+    </div>
 </div>

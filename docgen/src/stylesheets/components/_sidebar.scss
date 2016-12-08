@@ -70,6 +70,12 @@ nav.sidebar {
             @extend %active-links;
           }
         }
+
+        &.guide {
+            a.navItem-active {
+                box-shadow: none;
+            }
+        }
       }
     }
   }

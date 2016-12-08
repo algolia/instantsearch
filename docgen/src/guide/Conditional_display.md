@@ -76,4 +76,10 @@ const content = createConnector({
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/React_native.html">React native →</a></div>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Custom_connectors.html">← Custom Connectors</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/React_native.html">React native →</a>
+    </div>
+</div>
