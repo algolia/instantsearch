@@ -102,5 +102,10 @@ AppRegistry.registerComponent('InfiniteSearch', () => InfiniteSearch);
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Server-side_rendering.html">Server-side rendering →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Conditional_display.html">← Conditional Display</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Server-side_rendering.html">Server-side rendering →</a>
+    </div>
 </div>
