@@ -4,7 +4,7 @@ import parseAlgoliaHit from '../core/highlight';
 import highlightTags from '../core/highlightTags.js';
 
 const highlight = ({attributeName, hit}) => parseAlgoliaHit({
-  pathToAttribute: attributeName,
+  attributeName,
   hit,
   preTag: highlightTags.highlightPreTag,
   postTag: highlightTags.highlightPostTag,
