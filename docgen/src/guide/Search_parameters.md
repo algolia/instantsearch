@@ -21,10 +21,10 @@ Here's an example configuring the [distinct parameter](https://www.algolia.com/d
 ```
 
 **Notes:**
-* There's a dedicated guide showing how to [configure default refinements](guide/Default%20refinements.html) on widgets.
+* There's a dedicated guide showing how to [configure default refinements](guide/Default_refinements.html) on widgets.
 * You could also pass `hitsPerPage: 20` to configure the number of hits being shown when not using
 the [`<HitsPerPage>` widget](widgets/HitsPerPage.html).
 
 <div class="guide-nav">
-Next: <a href="guide/Search state.html">Search state →</a>
+Next: <a href="guide/Search_state.html">Search state →</a>
 </div>

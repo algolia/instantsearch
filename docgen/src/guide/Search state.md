@@ -44,5 +44,5 @@ Here's the `searchState` shape for all the connectors or widgets that we provide
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Multi index.html">Multi index →</a>
+Next: <a href="guide/Multi_index.html">Multi index →</a>
 </div>

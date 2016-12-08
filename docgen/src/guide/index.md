@@ -14,7 +14,7 @@ This means you need to have an account on Algolia in order to use `react-instant
 your GitHub account at https://www.algolia.com/users/sign_up, there's a 14 days trial.
 
 This guide walks you through the different concepts around react-instantsearch in a progressive way, from
-essentials to advanced topics. If you have 15 minutes to kill, we also have a [Getting started](/Getting%20started.html) for you to try.
+essentials to advanced topics. If you have 15 minutes to kill, we also have a [Getting started tutorial](/Getting_started.html) for you to try.
 
 <div class="guide-nav">
 Next: <a href="guide/Install.html">Install react-instantsearch →</a>

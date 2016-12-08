@@ -14,7 +14,7 @@ const md =
     permalink: true,
     permalinkClass: 'anchor',
     permalinkSymbol: '',
-    // generate proper Getting%20Started.html#install hrefs since we are
+    // generate proper Getting_started.html#install hrefs since we are
     // using the base href trick to handle different base urls (dev, prod)
     permalinkHref: (slug, {env: {path}}) => `${path}#${slug}`,
   });
