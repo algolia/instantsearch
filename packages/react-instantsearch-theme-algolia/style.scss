@@ -159,10 +159,12 @@ $main-color: #3369e7;
 // ------------------------------------
 
 @import
+'styles/InstantSearch',
 'styles/ClearAll',
 'styles/CurrentRefinements',
 'styles/HierarchicalMenu',
 'styles/Hits',
+'styles/Highlight',
 'styles/HitsPerPage',
 'styles/InfiniteHits',
 'styles/Menu',

@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Hits} from '../packages/react-instantsearch/dom';
+import {Hits, Highlight} from '../packages/react-instantsearch/dom';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -13,3 +13,20 @@ stories.add('default', () =>
     <Hits />
   </WrapWithHits>
 );
+
+stories.add('with custom rendering', () =>
+  <WrapWithHits linkedStoryGroup="Hits">
+    <Hits itemComponent={Product}/>
+  </WrapWithHits>
+);
+
+function Product({hit}) {
+  return <div>
+    <Highlight attributeName="name" hit={hit}/>
+    <p><Highlight attributeName="description" hit={hit}/></p>
+  </div>;
+}
+
+Product.propTypes = {
+  hit: React.PropTypes.object.isRequired,
+};
