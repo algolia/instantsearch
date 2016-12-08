@@ -900,7 +900,7 @@ ul.subtle-check-list {
 
 
     @include mobile-mq {
-      flex: 0 1 45%;
+      flex: 0 1 100%;
       margin-right: 0;
 
       &:last-of-type {
