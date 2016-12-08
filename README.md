@@ -1,6 +1,11 @@
-** WORK IN PROGRESS **
+[![react-instantsearch logo][readme-logo]][website-url]
 
-We are currently working on react-instantsearch. Roadmap: https://github.com/algolia/instantsearch.js/projects/1
+**Looking for instantsearch.js instead? Go to the [`develop`][instantsearch.js-v1-github-url] branch.**
+
+`react-instantsearch` is a set of [widgets][widgets-url] and [connectors][connectors-url] to add instant-search
+experiences in your [React][react-url] application, using [Algolia search engine][algolia-url].
+
+Documentation: <https://community.algolia.com/instantsearch.js/react/>.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -15,20 +20,9 @@ We are currently working on react-instantsearch. Roadmap: https://github.com/alg
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Project structure
+## Development
 
-- `/(root, you are here):` This is the main entry point of instantsearch.js where we build, develop, test and document all the instantsearch flavors.
-- `packages/`: actually published npm packages
-- `packages/react-instantsearch`: Set of React Components for instantsearch (In development)
-- `packages/instantsearch`: `react-instantsearch` wrapped as a vanilla library with string templating abilities for ease of use in non framework situations (no React, no Angular) (Not yet started)
-- `docgen/`: documentation website
-
-# Development
-
-We use our documentation website as the main way to develop instantsearch.js.
-
-We recommend using [yarn](https://yarnpkg.com/en/docs/install) to install
-your development environment.
+We use the [documentation website][website-url] as the main way to develop react-instantsearch.
 
 ```sh
 yarn
@@ -37,33 +31,41 @@ npm start
 
 Go to <http://localhost:3000>.
 
-# Test
+## Test
 
 We have unit tests for all `packages/`:
 
 ```sh
-npm test # one shot run, also lint
+npm test # one shot run, also lint and tries to build the documentation
 ```
 
 ```sh
-npm run dev # watch mode, no lint
+npm run dev # unit tests watch mode, no lint
 ```
 
-# Lint
+## Lint
 
 ```sh
 npm run lint # only changed files in dev, all files in CI
 npm run lint:fix
 ```
 
-# Release
+## Release
 
 ```sh
 npm run release
 ```
 
-# Update docs
+## Update docs
 
 ```sh
 npm run docs:update
 ```
+
+[readme-logo]: ./docgen/readme-logo.png
+[website-url]: https://community.algolia.com/instantsearch.js/react/
+[algolia-url]: https://www.algolia.com/
+[react-url]: https://facebook.github.io/react/
+[widgets-url]: https://community.algolia.com/instantsearch.js/react/widgets/
+[connectors-url]: https://community.algolia.com/instantsearch.js/react/widgets/connectors/
+[instantsearch.js-v1-github-url]: https://github.com/algolia/instantsearch.js/tree/develop
