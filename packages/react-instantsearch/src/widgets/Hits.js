@@ -6,7 +6,7 @@ import HitsComponent from '../components/Hits.js';
  *
  * To configure the number of hits being shown, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search%20parameters.html) prop on `<InstantSearch/>`.
+ * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
  *
  * @name Hits
  * @kind widget

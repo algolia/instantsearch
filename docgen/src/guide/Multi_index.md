@@ -15,13 +15,13 @@ You can use multiple `<InstantSearch/>` instances for cases like:
 Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject searchState or be notified of searchState changes:
 
 * onSearchStateChange(onSearchStateChange): a function being called every time the `<InstantSearch>` searchState is updated.
-* [searchState](guide/Search%20state.html): a search state
+* [searchState](guide/Search_state.html): a search state
 
 The idea is to have a main component that will receive every new search state of the first instance
 and then pass it back to each `<InstantSearch>` instances.
 
 Refinements and parameters of an `<InstantSearch>` searchState needs to have their corresponding widgets or
-[virtual widget](guide/Virtual%20widgets.html) added to be effectively applied.
+[virtual widget](guide/Virtual_widgets.html) added to be effectively applied.
 
 Here's an example displaying hits from two different indices:
 
@@ -89,5 +89,5 @@ export default App;
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Custom connectors.html">Custom connectors →</a>
+Next: <a href="guide/Custom_connectors.html">Custom connectors →</a>
 </div>

@@ -9,4 +9,4 @@ Widgets are React components with predefined styling and behavior. You can use t
 
 You will need to load the appropriate stylesheet, read our [styling guide](guide/Styling.html).
 
-There are no widgets for react-native for now, read our [react-native guide](guide/React%20native.html).
+There are no widgets for react-native for now, read our [react-native guide](guide/React_native.html).

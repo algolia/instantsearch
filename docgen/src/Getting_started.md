@@ -1,5 +1,5 @@
 ---
-title: Getting Started Guide
+title: Getting started tutorial
 layout: main.pug
 category: gettingstarted
 withHeadings: true
@@ -98,7 +98,7 @@ Just include it in your webpage:
 <link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0-beta.22/style.min.css">
 ```
 
-Read the [styling](guide/Styling%20widgets.html) guide for more information.
+Read the [styling](guide/Styling_widgets.html) guide for more information.
 
 ## Display results
 

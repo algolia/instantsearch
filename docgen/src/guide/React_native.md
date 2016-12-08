@@ -104,5 +104,5 @@ AppRegistry.registerComponent('InfiniteSearch', () => InfiniteSearch);
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Server-side rendering.html">Server-side rendering →</a>
+Next: <a href="guide/Server-side_rendering.html">Server-side rendering →</a>
 </div>

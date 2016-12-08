@@ -6,10 +6,9 @@ category: guide
 navWeight: 40
 ---
 
-Using our connector and [`createConnector`](guide/Custom%20connectors.html) approach, you can
-conditionally display content based on the search state.
+Using our connector and [`createConnector`](guide/Custom_connectors.html) approach, you can conditionally display content based on the search state.
 
-## Displaying content when the query is empty
+# Displaying content when the query is empty
 
 ```javascript
 const Content = createConnector({
@@ -25,7 +24,7 @@ const Content = createConnector({
  });
 ```
 
-## Displaying content when there's no results
+# Displaying content when there's no results
 
 ```javascript
 const content = createConnector({
@@ -42,7 +41,7 @@ const content = createConnector({
  });
 ```
 
-## Displaying content when there's an error
+# Displaying content when there's an error
 
 ```javascript
 const content = createConnector({
@@ -58,7 +57,7 @@ const content = createConnector({
  });
 ```
 
-## Displaying content when loading
+# Displaying content when loading
 
 In slow user network situations you might want to know when the search results are loading.
 
@@ -77,5 +76,4 @@ const content = createConnector({
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/React native.html">React native →</a>
-</div>
+Next: <a href="guide/React_native.html">React native →</a></div>

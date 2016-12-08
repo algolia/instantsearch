@@ -30,7 +30,7 @@ function validateNextProps(props, nextProps) {
  * For more information about the kind of object that can be provided on the
  * [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
  *
- * Read the [search parameters guide](guide/Search%20parameters.html).
+ * Read the [search parameters guide](guide/Search_parameters.html).
  * @propType {func} onSearchStateChange - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @propType {object} searchState - See [URL Routing](guide/advanced-topics.html#url-routing).
  * @propType {func} createURL - See [URL Routing](guide/advanced-topics.html#url-routing).
