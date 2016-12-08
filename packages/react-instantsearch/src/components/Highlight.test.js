@@ -8,7 +8,7 @@ import parseAlgoliaHit from '../core/highlight';
 
 describe('Highlight', () => {
   it('parses an highlighted attribute of hit object', () => {
-    const hit = {
+    const hitFromAPI = {
       objectID: 0,
       deep: {attribute: {value: 'awesome highlighted hit!'}},
       _highlightResult: {
@@ -20,14 +20,16 @@ describe('Highlight', () => {
         }}},
       },
     };
-    const highlight = config => parseAlgoliaHit({
+
+    const highlight = ({hit, attributeName}) => parseAlgoliaHit({
       preTag: '<ais-highlight>',
       postTag: '</ais-highlight>',
-      pathToAttribute: config.attributeName,
-      hit: config.hit,
+      attributeName,
+      hit,
     });
+
     const tree = renderer.create(
-      <Highlight attributeName="deep.attribute.value" hit={hit} highlight={highlight}/>
+      <Highlight attributeName="deep.attribute.value" hit={hitFromAPI} highlight={highlight}/>
     );
     expect(tree.toJSON()).toMatchSnapshot();
   });

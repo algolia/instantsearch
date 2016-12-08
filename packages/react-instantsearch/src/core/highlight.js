@@ -1,7 +1,7 @@
 import {get} from 'lodash';
 
 /**
- * Find an highlighted attribute give a path `pathToAttribute`, parses it,
+ * Find an highlighted attribute give a path `attributeName`, parses it,
  * and provided an array of objects with the string value and a boolean if this
  * value is highlighted.
  *
@@ -11,21 +11,21 @@ import {get} from 'lodash';
  *
  * @param {string} preTag - string used to identify the start of an highlighted value
  * @param {string} postTag - string used to identify the end of an highlighted value
- * @param {string} pathToAttribute - path to the highlighted attribute in the results
+ * @param {string} attributeName - path to the highlighted attribute in the results
  * @param {object} hit - the actual hit returned by Algolia.
  * @return {object[]} - An array of {value: string, isDefined: boolean}.
  */
 export default function parseAlgoliaHit({
   preTag = '<em>',
   postTag = '</em>',
-  pathToAttribute,
+  attributeName,
   hit,
 }) {
   if (!hit) throw new Error('`hit`, the matching record, must be provided');
 
-  const highlightedValue = get(hit._highlightResult, pathToAttribute);
+  const highlightedValue = get(hit._highlightResult, attributeName);
   if (!highlightedValue) throw new Error(
-    `\`pathToAttribute\`=${pathToAttribute} must resolve to an highlighted attribute in the record`);
+    `\`attributeName\`=${attributeName} must resolve to an highlighted attribute in the record`);
 
   return parseHighlightedAttribute({preTag, postTag, highlightedValue: highlightedValue.value});
 }
