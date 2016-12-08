@@ -34,12 +34,10 @@ const App = props =>
     onSearchStateChange={props.onSearchStateChange.bind(this)}
     searchParameters={{hitsPerPage: 16}}
   >
-    <div>
-      <Header />
-      <div className="content-wrapper">
-        <Facets />
-        <CustomResults />
-      </div>
+    <Header />
+    <div className="content-wrapper">
+      <Facets />
+      <CustomResults />
     </div>
   </InstantSearch>;
 
