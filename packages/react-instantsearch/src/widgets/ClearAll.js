@@ -2,7 +2,7 @@ import connectCurrentRefinements from '../connectors/connectCurrentRefinements.j
 import ClearAllComponent from '../components/ClearAll.js';
 
 /**
- * The ClearAll widget display a button that let's the user clean every refinements applied
+ * The ClearAll widget displays a button that lets the user clean every refinement applied
  * to the search.
  * @name ClearAll
  * @kind widget
