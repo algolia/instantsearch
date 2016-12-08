@@ -18,5 +18,10 @@ npm install react-instansearch --save
 * We recommend using [create-react-app](https://github.com/facebookincubator/create-react-app) if this is your first React application.
 
 <div class="guide-nav">
-Next: <a href="guide/<InstantSearch>.html">the &lt;InstantSearch&gt; component →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/index.html">← Welcome</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/<InstantSearch>.html">the &lt;InstantSearch&gt; component →</a>
+    </div>
 </div>

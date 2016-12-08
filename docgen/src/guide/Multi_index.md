@@ -85,5 +85,10 @@ export default App;
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/Custom_connectors.html">Custom connectors →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Search_parameters.html">← Search Parameters</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Custom_connectors.html">Custom connectors →</a>
+    </div>
 </div>

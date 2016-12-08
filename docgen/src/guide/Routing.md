@@ -22,5 +22,10 @@ need to return a string.
 changes and inject searchState appropriately.
 
 <div class="guide-nav">
-Next: <a href="guide/Search_parameters.html">Search parameters →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Virtual_widgets.html">← Virtual Widgets</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/Search_parameters.html">Search parameters →</a>
+    </div>
 </div>

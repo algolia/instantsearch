@@ -74,5 +74,10 @@ const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
 ```
 
 <div class="guide-nav">
-Next: <a href="guide/i18n.html">i18n →</a>
+    <div class="guide-nav-left">
+        Previous: <a href="guide/Styling_widgets.html">← Styling Widgets</a>
+    </div>
+    <div class="guide-nav-right">
+        Next: <a href="guide/i18n.html">i18n →</a>
+    </div>
 </div>
