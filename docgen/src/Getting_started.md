@@ -7,7 +7,7 @@ withHeadings: true
 
 ## Welcome to react-instantsearch
 
-React-instantsearch is the ultimate toolbox for creating instant search
+react-instantsearch is the ultimate toolbox for creating instant search
 experiences using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
 
 In this tutorial, you'll learn how to:
