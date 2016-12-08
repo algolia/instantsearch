@@ -129,7 +129,7 @@
     }
 
     pre {
-      margin: .5em 0px .5em -30px;
+      margin: .5em 0px .5em 0px;
       line-height: 23px;
       white-space: pre;
       overflow-x: auto;
@@ -137,7 +137,6 @@
       word-wrap: inherit;
       border: 1px solid #d8d8d8;
       border-radius: 2px;
-      border-left: none;
       padding: 0.5em 0;
       position: relative;
       z-index: 1; // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
