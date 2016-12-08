@@ -3288,8 +3288,8 @@ body.example .btn {
   color: #3a5395; }
 
 .hero-section {
-  background: url("../../images/react-atom.svg"), -webkit-linear-gradient(top left, #322f4c, #1c1b2f);
-  background: url("../../images/react-atom.svg"), linear-gradient(to bottom right, #322f4c, #1c1b2f);
+  background: url("../images/react-atom.svg"), -webkit-linear-gradient(top left, #322f4c, #1c1b2f);
+  background: url("../images/react-atom.svg"), linear-gradient(to bottom right, #322f4c, #1c1b2f);
   background-repeat: no-repeat, repeat;
   background-position: top center, top left;
   background-size: 800px, 100%;
