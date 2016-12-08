@@ -1,22 +1,20 @@
 section.hero-section.shrink
   .container
     .hero-container
-      .fl-left.article-title.doc-only
-        a(href='https://www.algolia.com/?utm_medium=social-owned&utm_source=algoliasearch-helper%20website&utm_campaign=homepage', title='Algolia built this', class='algolia-website-logo-link')
-          span#icon-algolia.icon.icon-algolia-small_white.no-mobile
-        figure
-          img(src="images/react-instant-search-logo.svg", width="46")
-          figcaption
-            if mainTitle
-              h1
-                | #{mainTitle + ' > '}
-                span=title
-            else
-              h1=mainTitle
-
-      .hero-content
-        h1.project-title=title
-        h2.tagline.
-          Boost search on your React apps with Algolia
-        a(href="#", class="btn btn-cta btn-fat") Get Started
-
+      if navPath !== 'index.html'
+        .fl-left.article-title.doc-only
+          figure
+            img(src="images/react-instant-search-logo.svg", width="46")
+            figcaption
+              if mainTitle
+                h1
+                  | #{mainTitle + ' > '}
+                  span=title
+              else
+                h1=title
+      else
+        .hero-content
+          h1.project-title=title
+          h2.tagline.
+            Boost search on your React apps with Algolia
+          a(href="#", class="btn btn-cta btn-fat") Get Started
