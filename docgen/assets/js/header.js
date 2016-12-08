@@ -44,9 +44,8 @@ export default function initHeader() {
     function toggleMenu() {
       /* eslint-disable no-undef */
       docsearch({
-        appId: 'EH63NL34B6',
-        apiKey: '36b645758ad4f948b134e396f277ad7d',
-        indexName: 'DOC',
+        apiKey: '5cb6763f264e31381e18639a1147634c',
+        indexName: 'react-instantsearch',
         inputSelector: '#mobile-searchbox',
         debug: true,
       });
