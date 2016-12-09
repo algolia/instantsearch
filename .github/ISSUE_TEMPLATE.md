@@ -20,6 +20,8 @@
 
 **Bug: What is the expected behavior?**
 
+**Bug: What browsers are impacted? Which versions?**
+
 **Feature: What is your use case.**
 
 **Feature: What is your proposed API entry, new option, to add**
