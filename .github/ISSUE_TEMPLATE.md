@@ -4,9 +4,7 @@
 
   This form is to report issues or new features.
   As for general questions like "How to do routing using react-instantsearch",
-  please search or post a question to:
-    - Our discourse forum: https://discourse.algolia.com/ (preferred);
-    - or StackOverflow: http://stackoverflow.com/questions/tagged/algolia
+  please search or post a question to our discourse forum: https://discourse.algolia.com/ (preferred).
 
   In any case,
     - make sure you are using the latest version of the library;
