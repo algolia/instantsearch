@@ -4,11 +4,12 @@
 
   This form is to report issues or new features.
   As for general questions like "How to do routing using react-instantsearch",
-  please search or post a question to our discourse forum: https://discourse.algolia.com/ (preferred).
+  please search or post a question to our discourse forum: https://discourse.algolia.com/.
 
   In any case,
     - make sure you are using the latest version of the library;
     - do at least one search in current issues or questions, your question might already be answered;
+    - do include details, screenshots when it's a visual issue, console errors otherwise;
   ***************************
 -->
 
@@ -20,9 +21,9 @@
 
 **Bug: What browsers are impacted? Which versions?**
 
-**Feature: What is your use case.**
+**Feature: What is your use case for such a feature?**
 
-**Feature: What is your proposed API entry, new option, to add**
+**Feature: What is your proposed API entry? The new option to add? What is the behavior?**
 
 <!--
   ***************************
