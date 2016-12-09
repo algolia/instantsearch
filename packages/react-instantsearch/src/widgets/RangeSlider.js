@@ -27,6 +27,19 @@ import React from 'react';
   getInitialState() {
     return {currentValues: {min: this.props.min, max: this.props.max}};
   },
+  
+  componentWillReceiveProps(sliderState) {
+    const value = {
+      min: sliderState.currentRefinement.min,
+      max: sliderState.currentRefinement.max
+    }
+
+    this.setState({
+      min: sliderState.min,
+      max: sliderState.max,
+      value: value
+    })
+  },
 
   onValuesUpdated(sliderState) {
     this.setState({currentValues: {min: sliderState.values[0], max: sliderState.values[1]}});
