@@ -24,6 +24,10 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count:asc|count:desc|name:asc|name:desc|isRefined`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
  * @param  {string} [options.limit=10] How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state). [*]
+ * @param  {object|boolean} [options.searchForFacetValues=false] Add a search input to let the user search for more facet values
+ * @param  {string} [options.searchForFacetValues.placeholder] Value of the search field placeholder
+ * @param  {string} [options.searchForFacetValues.templates] Templates to use for search for facet values
+ * @param  {string} [options.searchForFacetValues.templates.noResults] Templates to use for search for facet values
  * @param  {object|boolean} [options.showMore=false] Limit the number of results and display a showMore button
  * @param  {object} [options.showMore.templates] Templates to use for showMore
  * @param  {object} [options.showMore.templates.active] Template used when showMore was clicked
@@ -63,7 +67,8 @@ refinementList({
   [ autoHideContainer=true ],
   [ collapsible=false ],
   [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ]
+  [ collapsible=false ],
+  [ searchForFacetValues.{placeholder, templates: {noResults}}],
 })`;
 function refinementList({
     container,
@@ -77,6 +82,7 @@ function refinementList({
     transformData,
     autoHideContainer = true,
     showMore = false,
+    searchForFacetValues = false,
   }) {
   const showMoreConfig = getShowMoreConfig(showMore);
   if (showMoreConfig && showMoreConfig.limit < limit) {
@@ -103,11 +109,9 @@ function refinementList({
     }
   }
 
-  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
-  const allTemplates =
-    showMoreTemplates ?
-      {...templates, ...showMoreTemplates} :
-      templates;
+  const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
+  const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
+  const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
 
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
@@ -121,6 +125,76 @@ function refinementList({
     checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
     count: cx(bem('count'), userCssClasses.count),
   };
+
+  /* eslint-disable max-params */
+  const render = (facetValues, state, createURL,
+                  helperSpecializedSearchFacetValues, templateProps, toggleRefinement, isFromSearch) => {
+    // Bind createURL to this specific attribute
+    function _createURL(facetValue) {
+      return createURL(state.toggleRefinement(attributeName, facetValue));
+    }
+
+    // Pass count of currently selected items to the header template
+    const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
+    const headerFooterData = {
+      header: {refinedFacetsCount},
+    };
+
+    // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
+    // function
+    const searchFacetValues = helperSpecializedSearchFacetValues &&
+      helperSpecializedSearchFacetValues(
+        state,
+        createURL,
+        helperSpecializedSearchFacetValues,
+        templateProps,
+        toggleRefinement);
+
+    ReactDOM.render(
+      <RefinementList
+        collapsible={collapsible}
+        createURL={_createURL}
+        cssClasses={cssClasses}
+        facetValues={facetValues}
+        headerFooterData={headerFooterData}
+        limitMax={widgetMaxValuesPerFacet}
+        limitMin={limit}
+        shouldAutoHideContainer={!isFromSearch && facetValues.length === 0}
+        showMore={showMoreConfig !== null}
+        templateProps={templateProps}
+        toggleRefinement={toggleRefinement}
+        searchFacetValues={searchFacetValues}
+        searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+        isFromSearch={isFromSearch}
+      />,
+      containerNode
+    );
+  };
+
+  let lastResultsFromMainSearch = null;
+
+  // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
+  // function
+  const searchFacetValues = helper =>
+    (state, createURL, helperSpecializedSearchFacetValues, templateProps, toggleRefinement) =>
+    query => {
+      if (query === '' && lastResultsFromMainSearch) {
+        // render with previous data from the helper.
+        render(
+          lastResultsFromMainSearch, state, createURL,
+          helperSpecializedSearchFacetValues, templateProps, toggleRefinement, false);
+      } else {
+        helper.searchForFacetValues(attributeName, query).then(results => {
+          const facetValues = results.facetHits.map(h => {
+            h.name = h.value;
+            return h;
+          });
+          render(
+            facetValues, state, createURL,
+            helperSpecializedSearchFacetValues, templateProps, toggleRefinement, true);
+        });
+      }
+    };
 
   return {
     getConfiguration: configuration => {
@@ -144,38 +218,20 @@ function refinementList({
       this.toggleRefinement = facetValue => helper
         .toggleRefinement(attributeName, facetValue)
         .search();
+
+      this.searchFacetValues = searchForFacetValues ? searchFacetValues(helper) : null;
     },
     render({results, state, createURL}) {
       const facetValues = results
-        .getFacetValues(attributeName, {sortBy});
+        .getFacetValues(attributeName, {sortBy})
+        .map(h => {
+          h.highlighted = h.name;
+          return h;
+        });
 
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(attributeName, facetValue));
-      }
+      lastResultsFromMainSearch = facetValues;
 
-      // Pass count of currently selected items to the header template
-      const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
-      const headerFooterData = {
-        header: {refinedFacetsCount},
-      };
-
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          headerFooterData={headerFooterData}
-          limitMax={widgetMaxValuesPerFacet}
-          limitMin={limit}
-          shouldAutoHideContainer={facetValues.length === 0}
-          showMore={showMoreConfig !== null}
-          templateProps={this._templateProps}
-          toggleRefinement={this.toggleRefinement}
-        />,
-        containerNode
-      );
+      render(facetValues, state, createURL, this.searchFacetValues, this._templateProps, this.toggleRefinement, false);
     },
   };
 }
