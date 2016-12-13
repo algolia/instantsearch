@@ -61,9 +61,32 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
 
   .btn.btn-fat {
     max-width: 230px;
-    margin-top: 1em;
+    margin-top: 1.25em;
+    transition: none;
+
+    &:hover {
+      font-size: 17px
+    }
   }
 
+  /* KEEP ME PLEASE
+.illu-holder:after {
+    background-image: url(https://puu.sh/sO204/552666dfd4.gif);
+    content: '';
+    display: block;
+    width: 675px;
+    height: 419px;
+    position: absolute;
+    margin: auto;
+    z-index: 100;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    left: -1.2em;
+    top: -12em;
+    right: 0;
+}
+  */
 
   .article-title  {
     width: 70%;
