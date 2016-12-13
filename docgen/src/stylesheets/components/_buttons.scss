@@ -31,13 +31,14 @@ $btn-base-font-size: 12px;
   text-decoration: none;
   line-height: 1;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  transition: background 0.1s ease, font-size 0.05s ease;
+  transition: background 0.1s ease, transform 0.1s ease, font-size 0.05s ease;
+  will-change: background, transform, font-size ;
   cursor: pointer;
   background: $btn-primary-background-color;
   color: #fff;
 
   &:hover {
-    font-size: 13px;
+    transform: scale(1.05)
   }
 
   &:active {
@@ -50,7 +51,7 @@ $btn-base-font-size: 12px;
   }
 
   &[class*="-fat"] {
-    padding: 1.429em 1.929em;
+    padding: 1.329em 1.999em;
     font-size: 16px;
     box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
   }
