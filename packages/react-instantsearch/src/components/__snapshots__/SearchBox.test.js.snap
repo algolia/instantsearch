@@ -8,7 +8,7 @@ exports[`SearchBox applies its default props 1`] = `
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
@@ -45,7 +45,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
@@ -82,7 +82,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
@@ -120,7 +120,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={true}
       className="ais-SearchBox__input"
       onChange={[Function]}
@@ -157,7 +157,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
@@ -194,7 +194,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
     className="ais-SearchBox__wrapper"
     role="search">
     <input
-      autoComplete={false}
+      autoComplete="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
