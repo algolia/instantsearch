@@ -181,7 +181,8 @@
       margin: 0;
 
       tbody {
-        border: 1px solid #ccc
+        border: 1px solid #ccc;
+
       }
 
       tr {
@@ -461,6 +462,12 @@ tr.api-entry-description {
 
 .examples-section > .container {
   padding-top: 120px;
+}
+
+.storybook-section {
+  min-height: 120px;
+  text-align: center;
+  line-height: 120px;
 }
 
 @import "docs/method";

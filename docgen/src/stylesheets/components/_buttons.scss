@@ -1,95 +1,112 @@
+$color-map: (
+  ('primary', #2897c6),
+  ('blue', #00aeff),
+  ('grey', #686C7C),
+  ('black', #33383e),
+  ('pink', #fb366e),
+  ('green', #94be46),
+  ('greenish', #3ecf8e),
+  ('wine', #6e205f),
+  ('white', #fff)
+);
+
+$btn-primary-background-color: #00aeff;
+$btn-primary-text-color: #FFF;
+$btn-base-font-size: 12px;
+
 .btn {
-  background: linear-gradient(to right, mix(#895cf2, #fff, 95%) 0%,  mix(#2faddc, #fff, 95%) 90%) mix(#3066BE, #fff, 95%);
-  background: #00aeff;
-  color: $hero-color-accent;
-  height: 40px;
-  max-width: 140px;
-  line-height: 40px;
-  padding: 0 1em;
-  text-align: center;
-  display: block;
-  text-decoration: none;
+  display: inline-block;
+  position: relative;
+  padding: 1.083em 2.000em;
   border-radius: 3px;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: 12px;
-  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  transition: background 0.1s ease, transform 0.1s ease;
+  letter-spacing: 0.9px;
+
+  font: {
+    family: 'Open Sans', Segoe UI, sans-serif;
+    weight: 500;
+    size: $btn-base-font-size;
+  };
+
+  text-align: center;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  transition: background 0.1s ease, font-size 0.05s ease;
   cursor: pointer;
+  background: $btn-primary-background-color;
+  color: #fff;
 
-  &:hover,
+  &:hover {
+    font-size: 13px;
+  }
+
   &:active {
-    background: linear-gradient(to right, mix(#895cf2, #fff, 90%) 0%,  mix(#2faddc, #fff, 90%) 90%) mix(#3066BE, #fff, 90%);
-    background: mix( #00aeff, #fff, 80%);
-    transform: scale(0.95);
+    top: 2px;
   }
 
-  &.btn-cta {
-    max-width: 230px;
-    margin: 32px auto;
+  &[class*="-cta"] {
+    padding: 1.167em 4.000em;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.22);
   }
 
-  &.btn-grey {
-    background: $silver;
-    border-color: $light-blue-grey;
-    border-width: 2px;
-    color: $grey-blue;
-    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  &[class*="-fat"] {
+    padding: 1.429em 1.929em;
+    font-size: 16px;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
   }
 
-  &.btn-black {
-    background: $black;
-    border-color: mix($black, #fff, 90%);
+  &[class*="-uc"] {
+    text-transform: uppercase;
   }
 
-  &.btn-fat {
-    padding: 14px 20px;
-    line-height: inherit;
-    height: inherit;
-    font-size: 14px;
-    min-width: inherit;
-    width: inherit;
+  &[class*="-rd"] {
+    border-radius: 50px
   }
 
+   // Colors
+  @each $name, $color in $color-map {
+    &[class*="-#{$name}"] {
+      background: $color;
 
-  &-ghost {
-    background: transparent;
-    border: 1px solid currentColor;
-    font-weight: bold;
+      @if $color == white {
+        color: #33383e,
+      } @else {
+        color: #fff;
+      }
+
+      &:hover {
+        background: lighten($color, 5%);
+      }
+    }
+  }
+
+  &[class*="-ghost"] {
     max-width: inherit;
-    padding: 0 32px;
+    padding: 0.783em 2em 0.683em;
+    background: transparent;
+    border: 1px solid;
+    box-shadow: none;
+    font-weight: 800;
 
-    &-grey {
-      color:  $steel;
+    &:hover {
+      font-size: 12px;
+    }
 
-      &:hover {
-        background: $steel;
-        border-color: $steel;
-        color: #fff;
+    @each $name, $color in $color-map {
+      &[class*="-#{$name}"] {
+        color: $color;
+        border-color: currentColor;
 
-        .ico-triangle {
-          border-left-color: #fff
+        &:hover {
+          background: lighten($color, 5%);
+          border-color: $color;
+
+          @if $color == white {
+            color: #33383e,
+          } @else {
+            color: #fff;
+          }
         }
-      }
-    }
-
-    &-pink {
-      color:  $accent-color;
-
-      &:hover {
-        background: $accent-color;
-        border-color: $accent-color;
-        color: #fff;
-      }
-    }
-
-    &-blue {
-      color:  $accent-color-darkish;
-
-      &:hover {
-        background: $accent-color-darkish;
-        border-color: $accent-color-darkish;
-        color: #fff;
       }
     }
   }
