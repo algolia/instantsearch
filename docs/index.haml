@@ -1,6 +1,14 @@
 ---
 layout: default
 ---
+.marketing-banner
+  %a{:href => "#closeBanner", :class => "banner-close"} &#10005;
+  .banner__description
+    %a{:href => "https://community.algolia.com/instantsearch.js/react/"}
+      %p <span>Looking for a React version of instantsearch.js?</span> Have a look at React InstantSearch!
+
+      %img{:src => "http://res.cloudinary.com/hilnmyskv/image/upload/v1481540222/react-favicon_y43wx4.svg", :alt => "React-instantsearch icon"}/
+
 #space-overlay
 %div#space
 %section.hero.window
@@ -141,7 +149,7 @@ layout: default
           %a.btn.btn-primary{href: "{{ '/examples/' | prepend: site.baseurl }}"} See it in action!
     .spacer80
 
-{% contentfor site-footer %}
-<script src="https://cdn.jsdelivr.net/g/gsap@1.11.8(TweenMax.min.js+TimelineMax.min.js),scrollmagic@2.0.5(ScrollMagic.min.js+plugins/animation.gsap.min.js)"></script>
+{% contentfor site-footer %}https://cdn.jsdelivr.net/js-cookie/2.2.0/js.cookie.js
+<script src="https://cdn.jsdelivr.net/g/gsap@1.11.8(TweenMax.min.js+TimelineMax.min.js),scrollmagic@2.0.5(ScrollMagic.min.js+plugins/animation.gsap.min.js),js-cookie@2.2.0(js.cookie.js)"></script>
 {% javascript home.js %}
 {% endcontentfor %}

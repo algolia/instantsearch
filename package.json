@@ -71,7 +71,7 @@
     "mversion": "^1.10.1",
     "node-sass": "^3.13.0",
     "postcss-cli": "^2.6.0",
-    "preact": "^6.4.0",
+    "preact": "^7.1.0",
     "preact-compat": "^3.9.1",
     "pretty-bytes-cli": "^2.0.0",
     "raw-loader": "^0.5.1",
@@ -84,7 +84,7 @@
     "watch": "^1.0.1",
     "wdio-dot-reporter": "^0.0.6",
     "wdio-mocha-framework": "^0.5.3",
-    "wdio-sauce-service": "^0.2.5",
+    "wdio-sauce-service": "^0.3.0",
     "webdriverio": "^4.2.16",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2"
