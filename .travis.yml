@@ -11,9 +11,6 @@ before_install:
   - git config --global user.name "algobot"
   - rvm install 2.3.1
   - rvm use 2.3.1
-install:
-  - npm install --global yarn
-  - yarn
 script: ./scripts/test-ci.sh
 branches:
   only:
