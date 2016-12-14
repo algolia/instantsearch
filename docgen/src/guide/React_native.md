@@ -6,7 +6,7 @@ category: guide
 navWeight: 35
 ---
 
-`react-instantsearch` is compatible with [react-native](https://facebook.github.io/react-native/).
+React InstantSearch is compatible with [react-native](https://facebook.github.io/react-native/).
 
 Here's an example showing you how to build a `SearchBox` and an infinite scroll view:
 
