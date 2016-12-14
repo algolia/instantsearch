@@ -6,6 +6,7 @@ import {
 } from 'react-instantsearch/dom';
 /* eslint-disable import/no-unresolved */
 import {withRouter} from 'react-router';
+import 'react-instantsearch-theme-algolia/style.css';
 /* eslint-enable import/no-unresolved */
 import qs from 'qs';
 
@@ -19,7 +20,7 @@ class App extends Component {
     this.setState({searchState: qs.parse(this.props.router.location.query)});
   }
 
-  onSearchStateChange = nextSearchState => {
+  onSearchStateChange(nextSearchState) {
     const THRESHOLD = 700;
     const newPush = Date.now();
     this.setState({lastPush: newPush, searchState: nextSearchState});
@@ -28,7 +29,7 @@ class App extends Component {
     } else {
       this.props.router.push(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
     }
-  };
+  }
 
   createURL = state => `?${qs.stringify(state)}`;
 

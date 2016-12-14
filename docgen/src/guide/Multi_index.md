@@ -23,66 +23,7 @@ and then pass it back to each `<InstantSearch>` instances.
 Refinements and parameters of an `<InstantSearch>` searchState needs to have their corresponding widgets or
 [virtual widget](guide/Virtual_widgets.html) added to be effectively applied.
 
-Here's an example displaying hits from two different indices:
-
-```jsx
-import React, {Component} from 'react';
-import { InstantSearch, Hits, SearchBox } from 'react-instantsearch/dom';
-import {connectSearchBox} from 'react-instantsearch/connectors'
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {searchState: {}};
-  }
-
-  onStateChange = searchState => {
-    this.setState({searchState});
-  };
-
-  render() {
-    return (
-    <div>
-      {/* You can also nest `<InstantSearch>` components,
-       as long as you pass the right state and onStateChange function
-       */}
-      <FirstResults onSearchStateChange={this.onSearchStateChange}/>
-      <SecondResults searchState={this.state.searchState}/>
-    </div>
-    );
-  }
-}
-
-const FirstResults = props =>
-  <InstantSearch
-    appId="appId"
-    apiKey="apiKey"
-    indexName="firstIndexName"
-    searchState={props.searchState}
-    onSearchStateChange={props.onSearchStateChange}
-  >
-    <SearchBox/>
-    <Hits />
-  </InstantSearch>;
-
-/*
- To perform the same query as the FirstResults instance we need a virtual SearchBox widget
- to handle the search.
- */
-const VirtualSearchBox = connectSearchBox(() => null);
-const SecondResults = props =>
-  <InstantSearch
-    appId="appId"
-    apiKey="apiKey"
-    indexName="secondIndexName"
-    searchState={props.searchState}
-  >
-    <VirtualSearchBox/>
-    <Hits/>
-  </InstantSearch>;
-
-export default App;
-```
+[Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
 
 <div class="guide-nav">
     <div class="guide-nav-left">
