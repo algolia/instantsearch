@@ -10,7 +10,7 @@
 </p>
 <p class="attr-description important">Name of the attribute for faceting</p>
 <p class="attr-name">
-<span class='attr-required'>`options.operator`<span class="show-description">…</span></span>
+<span class='attr-optional important'>`options.operator`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">&#x27;or&#x27;</code>(<code>string</code>)</span>
 </p>
 <p class="attr-description important">How to apply refinements. Possible values: `or`, `and`</p>
