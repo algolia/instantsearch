@@ -234,25 +234,12 @@ function banner() {
   let headerHeight = header.offsetHeight;
   let close = document.querySelector('.banner-close');
 
-  let bannerOpen = false;
-  let cookies = document.cookie;
-
   let inThreeMonth = new Date();
   inThreeMonth.setMonth(inThreeMonth.getMonth() + 3);
 
-  // Original JavaScript code by Chirp Internet: www.chirp.com.au
-  // Please acknowledge use of this code by including this header.
-
-  function getCookie(name) {
-    var re = new RegExp(name + "=([^;]+)");
-    var value = re.exec(document.cookie);
-    return (value != null) ? unescape(value[1]) : null;
-  }
-
-
-  /* Setup cookies */
-  if (  document.cookie.indexOf('showReactBanner') == -1 ) {
-     document.cookie = `showReactBanner=true; expires=${inThreeMonth}; path=/`
+  // Cookies === js-cookie https://github.com/js-cookie/js-cookie
+  if (Cookies.get('showReactBanner') === undefined) {
+    Cookies.set('showReactBanner', true, {expires: 30}); // days
   }
 
   /* Second security - force banner to offset */
@@ -260,22 +247,20 @@ function banner() {
   banner.style.transform = `translateY(-${bannerHeight}px)`;
 
   /* Open banner after X seconds */
-  if ( getCookie('showReactBanner') == 'true') {
+  if ( Cookies.getJSON('showReactBanner') === true) {
     setTimeout( () => {
       banner.style.webkitTransform = `translateY(${headerHeight}px)`;
       banner.style.transform = `translateY(${headerHeight}px)`;
-      bannerOpen = true;
     }, 200);
   }
 
   /* Close banner if cross clicked */
   close.addEventListener('click', () => {
-    if ( bannerOpen ) {
+    if (Cookies.getJSON('showReactBanner') === true) { // handle multiple clicks
       banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
       banner.style.transform = `translateY(-${bannerHeight}px)`;
-       document.cookie = `showReactBanner=false; expires=${inThreeMonth}; path=/`
+      Cookies.set('showReactBanner', false, {expires: 30});
     }
-
   });
 }
 banner();
