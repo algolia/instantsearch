@@ -32,7 +32,7 @@ import React from 'react';
 
 import {InstantSearch, Hits, Highlight} from 'InstantSearch';
 
-const Hit = hit =>
+const Hit = ({hit}) =>
 <p>
   <Highlight attributeName='description' hit={hit}/>
 </p>;
