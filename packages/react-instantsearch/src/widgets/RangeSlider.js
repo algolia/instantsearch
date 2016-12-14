@@ -28,12 +28,17 @@ import React from 'react';
     return {currentValues: {min: this.props.min, max: this.props.max}};
   },
 
+  componentWillReceiveProps(sliderState) {
+    this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+  },
+
   onValuesUpdated(sliderState) {
     this.setState({currentValues: {min: sliderState.values[0], max: sliderState.values[1]}});
   },
 
   onChange(sliderState) {
-    if (sliderState.values[0] !== this.props.min || sliderState.values[1] !== this.props.max) {
+    if (this.props.currentRefinement.min !== sliderState.values[0] ||
+      this.props.currentRefinement.max !== sliderState.values[1]) {
       this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
     }
   },
