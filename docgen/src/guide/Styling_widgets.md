@@ -63,7 +63,7 @@ export default {
 
 ### Other bundlers
 
-Any other module bundler like Browserify can be used to load our CSS. `react-instantsearch`
+Any other module bundler like Browserify can be used to load our CSS. React InstantSearch
 does not rely on any specific module bundler or module loader.
 
 <div class="guide-nav">
