@@ -5,22 +5,22 @@ category: gettingstarted
 withHeadings: true
 ---
 
-## Welcome to react-instantsearch
+## Welcome to React InstantSearch
 
-react-instantsearch is the ultimate toolbox for creating instant search
+React InstantSearch is the ultimate toolbox for creating instant search
 experiences using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
 
 In this tutorial, you'll learn how to:
 
- - add `react-instantsearch` in your [React](https://facebook.github.io/react/) project
- - bootstrap `react-instantsearch`
+ - install `react-instantsearch` in your [React](https://facebook.github.io/react/) project
+ - bootstrap an app using the `<InstantSearch>` component
  - display results from Algolia
  - add widgets to filter the results
  - connect your own component to the search
 
 ## Before we start
 
-As mentionned earlier, `react-instantsearch` is meant to be used with `Algolia`.
+As mentionned earlier, React InstantSearch is meant to be used with `Algolia`.
 
 Therefore, you'll need the credentials to an Algolia index. Here are
 the credentials to an already configured index:
@@ -35,9 +35,9 @@ guide in the best conditions, we suggest you use
 [create-react-app](https://github.com/facebookincubator/create-react-app#getting-started) which
 is the official React-CLI from Facebook.
 
-## Install react-instantsearch
+## Install `react-instantsearch`
 
-`react-instantsearch` is available on [npm](https://www.npmjs.com). Install it:
+React InstantSearch is available on [npm](https://www.npmjs.com). Install it:
 
 ```shell
 npm install --save react-instantsearch
@@ -80,7 +80,7 @@ can interact with the search.
 
 In this section we've seen:
  - how to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
- - configure your credentials with react-instantsearch
+ - configure your credentials
 
  > To get more *under the hood* information about the `<InstantSearch>` wrapper
  > component, [read our guide](guide/<InstantSearch>.html).
@@ -100,7 +100,7 @@ Read the [styling](guide/Styling_widgets.html) guide for more information.
 
 ## Display results
 
-The core of a search experience is to display results. By default, react-instantsearch
+The core of a search experience is to display results. By default, React InstantSearch
 will do a query at the start of the page and will retrieve the most relevant hits.
 
 To display results, we are gonna use the [Hits](widgets/Hits.html) widget. This widget will
@@ -307,9 +307,7 @@ In this part, we've seen the following:
 
 ## Next steps
 
-At this point, you know all the basics of react-instantsearch. Also, all the
-components can be customised further using connectors, like
-in the paragraph about displaying the results.
+At this point, you know the basics of React InstantSearch. Read the guide to know and do more with it.
 
 <div class="guide-nav">
 Next: <a href="guide/">Guide →</a>

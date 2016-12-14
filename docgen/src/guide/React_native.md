@@ -6,7 +6,7 @@ category: guide
 navWeight: 35
 ---
 
-`react-instantsearch` is compatible with [react-native](https://facebook.github.io/react-native/).
+React InstantSearch is compatible with [react-native](https://facebook.github.io/react-native/).
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/reactnative) linking `react-instantsearch` to [react-native](https://facebook.github.io/react-native/).
 

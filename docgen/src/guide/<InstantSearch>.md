@@ -6,7 +6,7 @@ category: guide
 navWeight: 90
 ---
 
-Every `react-instantsearch` application starts by using a root `<InstantSearch>` component.
+Every React InstantSearch application starts by using a root `<InstantSearch>` component.
 
 This component provides the necessary context and information to its children (widgets), letting them interact with Algolia.
 

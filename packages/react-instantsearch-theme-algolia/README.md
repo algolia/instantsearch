@@ -1,5 +1,5 @@
 # react-instantsearch-theme-algolia
 
-This is [Algolia](https://www.algolia.com/) theme for react-instantsearch.
+This is [Algolia](https://www.algolia.com/) theme for React InstantSearch.
 
-Go to the [react-instantsearch website](https://community.algolia.com/instantsearch.js/react/) for more information.
+Go to the [React InstantSearch website](https://community.algolia.com/instantsearch.js/react/) for more information.

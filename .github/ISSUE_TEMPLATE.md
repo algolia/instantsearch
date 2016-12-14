@@ -3,7 +3,7 @@
   Thanks for participating in this project!
 
   This form is to report issues or new features.
-  As for general questions like "How to do routing using react-instantsearch",
+  As for general questions like "How to do routing using React InstantSearch",
   please search or post a question to our discourse forum: https://discourse.algolia.com/.
 
   In any case,

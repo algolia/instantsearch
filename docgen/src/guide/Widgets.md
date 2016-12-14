@@ -6,7 +6,7 @@ category: guide
 navWeight: 85
 ---
 
-`react-instantsearch` provides a set of DOM widgets with pre-defined DOM structure and behavior.
+React InstantSearch provides a set of DOM widgets with pre-defined DOM structure and behavior.
 
 Here's an example using the [`<SearchBox>`](widgets/SearchBox.html):
 

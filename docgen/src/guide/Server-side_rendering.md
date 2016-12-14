@@ -6,7 +6,7 @@ category: guide
 navWeight: 30
 ---
 
-`react-instantsearch` is not yet compatible with server-side rendering. This is one of our priority topics
+React InstantSearch is not yet compatible with server-side rendering. This is one of our priority topics
 right now. We will soon provide API entries to handle this usecase.
 
 <div class="guide-nav">
