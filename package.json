@@ -69,7 +69,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^3.2.0",
     "mversion": "^1.10.1",
-    "node-sass": "^3.13.0",
+    "node-sass": "^4.0.0",
     "postcss-cli": "^2.6.0",
     "preact": "^7.1.0",
     "preact-compat": "^3.9.4",
@@ -90,7 +90,7 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "algoliasearch": "^3.19.2",
+    "algoliasearch": "^3.20.0",
     "algoliasearch-helper": "^2.16.0",
     "classnames": "^2.2.5",
     "events": "^1.1.0",
