@@ -224,3 +224,43 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   document.body.appendChild(threeScript);
 });
+
+
+// Banner Marketing
+function banner() {
+  let header = document.querySelector('.ac-nav');
+  let banner = document.querySelector('.marketing-banner');
+  let bannerHeight = banner.offsetHeight;
+  let headerHeight = header.offsetHeight;
+  let close = document.querySelector('.banner-close');
+
+  let inThreeMonth = new Date();
+  inThreeMonth.setMonth(inThreeMonth.getMonth() + 3);
+
+  // Cookies === js-cookie https://github.com/js-cookie/js-cookie
+  if (Cookies.get('showReactBanner') === undefined) {
+    Cookies.set('showReactBanner', true, {expires: 30}); // days
+  }
+
+  /* Second security - force banner to offset */
+  banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
+  banner.style.transform = `translateY(-${bannerHeight}px)`;
+
+  /* Open banner after X seconds */
+  if ( Cookies.getJSON('showReactBanner') === true) {
+    setTimeout( () => {
+      banner.style.webkitTransform = `translateY(${headerHeight}px)`;
+      banner.style.transform = `translateY(${headerHeight}px)`;
+    }, 200);
+  }
+
+  /* Close banner if cross clicked */
+  close.addEventListener('click', () => {
+    if (Cookies.getJSON('showReactBanner') === true) { // handle multiple clicks
+      banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
+      banner.style.transform = `translateY(-${bannerHeight}px)`;
+      Cookies.set('showReactBanner', false, {expires: 30});
+    }
+  });
+}
+banner();
