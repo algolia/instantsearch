@@ -1,3 +1,20 @@
+<a name="1.9.0"></a>
+# [1.9.0](https://github.com/algolia/instantsearch.js/compare/v1.8.16...v1.9.0) (2016-12-14)
+
+
+### Bug Fixes
+
+* **currentRefinedValues:** unescape disjunctive facet refinement names (#1574) ([9ab65c4](https://github.com/algolia/instantsearch.js/commit/9ab65c4)), closes [#1569](https://github.com/algolia/instantsearch.js/issues/1569)
+* **transformData:** default data is an object when not provided (#1570) ([8eeeeba](https://github.com/algolia/instantsearch.js/commit/8eeeeba)), closes [#1538](https://github.com/algolia/instantsearch.js/issues/1538)
+
+
+### Features
+
+* **analytics:** new analytics widget to easily plug search to any analytics service ([09d8fda](https://github.com/algolia/instantsearch.js/commit/09d8fda))
+* **retry strategy:** new retry strategy ([afdcc3c](https://github.com/algolia/instantsearch.js/commit/afdcc3c))
+
+
+
 <a name="1.8.16"></a>
 ## [1.8.16](https://github.com/algolia/instantsearch.js/compare/v1.8.15...v1.8.16) (2016-11-16)
 
