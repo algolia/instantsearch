@@ -15,15 +15,15 @@ stories.add('default', () =>
 );
 
 stories.add('with custom rendering', () =>
-  <WrapWithHits linkedStoryGroup="Hits">
-    <Hits itemComponent={Product}/>
+  <WrapWithHits>
+    <Hits hitComponent={Product}/>
   </WrapWithHits>
 );
 
 function Product({hit}) {
   return <div>
     <Highlight attributeName="name" hit={hit}/>
-    <p><Highlight attributeName="description" hit={hit}/></p>
+    <p><Highlight attributeName="type" hit={hit}/></p>
   </div>;
 }
 
