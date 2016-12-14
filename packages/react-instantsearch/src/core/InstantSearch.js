@@ -141,7 +141,10 @@ InstantSearch.propTypes = {
   children: PropTypes.node,
 
   root: PropTypes.shape({
-    Root: PropTypes.string.isRequired,
+    Root: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.func,
+    ]),
     props: PropTypes.object,
   }).isRequired,
 };
