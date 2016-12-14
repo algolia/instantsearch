@@ -47,27 +47,38 @@ describe('StarRating', () => {
   });
 
   const refine = jest.fn();
-  const wrapper = mount(
-      <StarRating
-        createURL={() => '#'}
-        refine={refine}
-        min={1}
-        max={5}
-        currentRefinement={{min: 1, max: 5}}
-        count={[{value: '1', count: 1},
-          {value: '2', count: 2},
-          {value: '3', count: 3},
-          {value: '4', count: 3},
-          {value: '5', count: 0}]}
-      />
-    );
+  const createURL = jest.fn();
+  const starRating = <StarRating
+    createURL={createURL}
+    refine={refine}
+    min={1}
+    max={5}
+    currentRefinement={{min: 1, max: 5}}
+    count={[{value: '1', count: 1},
+      {value: '2', count: 2},
+      {value: '3', count: 3},
+      {value: '4', count: 3},
+      {value: '5', count: 0}]}
+  />;
+  const wrapper = mount(starRating);
 
   beforeEach(() => {
     refine.mockClear();
+    createURL.mockClear();
   });
 
   afterAll(() => {
     wrapper.unmount();
+  });
+
+  it('should create an URL for each row except for the largest: the default selected one', () => {
+    mount(starRating);
+
+    expect(createURL.mock.calls.length).toBe(4);
+    expect(createURL.mock.calls[0][0]).toEqual({min: 5, max: 5});
+    expect(createURL.mock.calls[1][0]).toEqual({min: 4, max: 5});
+    expect(createURL.mock.calls[2][0]).toEqual({min: 3, max: 5});
+    expect(createURL.mock.calls[3][0]).toEqual({min: 2, max: 5});
   });
 
   it('refines its value on change', () => {
@@ -83,31 +94,31 @@ describe('StarRating', () => {
     expect(refine.mock.calls[0][0]).toEqual({min: 5, max: 5});
 
     selectedLink = wrapper
-        .find('.ais-StarRating__ratingLinkSelected');
+      .find('.ais-StarRating__ratingLinkSelected');
     expect(selectedLink).toBeDefined();
 
     refine.mockClear();
 
     const disabledLink = wrapper
-        .find('.ais-StarRating__ratingLinkDisabled')
-        .find('.ais-StarRating__ratingIcon');
+      .find('.ais-StarRating__ratingLinkDisabled')
+      .find('.ais-StarRating__ratingIcon');
 
     expect(disabledLink.length).toBe(5);
   });
 
   it('should display the right number of stars', () => {
     wrapper
-        .find('.ais-StarRating__ratingLink')
-        .last()
-        .simulate('click');
+      .find('.ais-StarRating__ratingLink')
+      .last()
+      .simulate('click');
 
     const selectedLink = wrapper
-        .find('.ais-StarRating__ratingLinkSelected');
+      .find('.ais-StarRating__ratingLinkSelected');
 
     const fullIcon = selectedLink
-        .find('.ais-StarRating__ratingIcon');
+      .find('.ais-StarRating__ratingIcon');
     const emptyIcon = selectedLink
-        .first().find('.ais-StarRating__ratingIconEmpty');
+      .first().find('.ais-StarRating__ratingIconEmpty');
 
     expect(fullIcon.length).toBe(1);
     expect(emptyIcon.length).toBe(4);
