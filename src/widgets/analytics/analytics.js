@@ -55,7 +55,7 @@ function analytics({
         } else if (filter.hasOwnProperty('=')) {
           const equals = [];
           for (const equal in filter['=']) {
-            if (filter['='].hasOwnProperty(equal)) {
+            if (filter['='].hasOwnProperty(equal)) { // eslint-disable-line max-depth
               equals.push(filter['='][equal]);
             }
           }

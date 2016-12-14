@@ -30,7 +30,7 @@ search.addWidget(
 
 search.addWidget(
   instantsearch.widgets.analytics({
-    pushFunction: function(formattedParameters, state, results) {
+    pushFunction(/* formattedParameters, state, results*/) {
       // Google Analytics
       // window.ga('set', 'page', '/search/query/?query=' + state.query + '&' + formattedParameters + '&numberOfHits=' + results.nbHits);
       // window.ga('send', 'pageView');
@@ -53,7 +53,7 @@ search.addWidget(
       //   'Search Params': arrParams
       // }]);
     },
-    triggerOnUIInteraction: true
+    triggerOnUIInteraction: true,
   })
 );
 
