@@ -4,13 +4,10 @@
     "react-scripts": "0.7.0"
   },
   "dependencies": {
-    "lodash": "^4.16.6",
-    "qs": "^6.3.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "react-instantsearch": "file:../../dist",
-    "react-instantsearch-theme-algolia": "file:../../../react-instantsearch-theme-algolia",
-    "react-router": "^3.0.0"
+    "react-instantsearch-theme-algolia": "file:../../../react-instantsearch-theme-algolia"
   },
   "scripts": {
     "start": "react-scripts start"

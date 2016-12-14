@@ -64,11 +64,11 @@ SearchBox.propTypes = {
 const ConnectedSearchBox = connectSearchBox(SearchBox);
 
 class Hits extends React.Component {
-  onEndReached = () => {
+  onEndReached() {
     if (this.props.hasMore) {
       this.props.refine();
     }
-  };
+  }
 
   render() {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -77,7 +77,7 @@ class Hits extends React.Component {
         <ListView
           dataSource={ds.cloneWithRows(this.props.hits)}
           renderRow={this._renderRow}
-          onEndReached={this.onEndReached}/>
+          onEndReached={this.onEndReached.bind(this)}/>
       </View> : null;
     return hits;
   }
