@@ -224,3 +224,58 @@ document.addEventListener('DOMContentLoaded', function(){
   });
   document.body.appendChild(threeScript);
 });
+
+
+// Banner Marketing
+function banner() {
+  let header = document.querySelector('.ac-nav');
+  let banner = document.querySelector('.marketing-banner');
+  let bannerHeight = banner.offsetHeight;
+  let headerHeight = header.offsetHeight;
+  let close = document.querySelector('.banner-close');
+
+  let bannerOpen = false;
+  let cookies = document.cookie;
+
+  let inThreeMonth = new Date();
+  inThreeMonth.setMonth(inThreeMonth.getMonth() + 3);
+
+  // Original JavaScript code by Chirp Internet: www.chirp.com.au
+  // Please acknowledge use of this code by including this header.
+
+  function getCookie(name) {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? unescape(value[1]) : null;
+  }
+
+
+  /* Setup cookies */
+  if (  document.cookie.indexOf('showReactBanner') == -1 ) {
+     document.cookie = `showReactBanner=true; expires=${inThreeMonth}; path=/`
+  }
+
+  /* Second security - force banner to offset */
+  banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
+  banner.style.transform = `translateY(-${bannerHeight}px)`;
+
+  /* Open banner after X seconds */
+  if ( getCookie('showReactBanner') == 'true') {
+    setTimeout( () => {
+      banner.style.webkitTransform = `translateY(${headerHeight}px)`;
+      banner.style.transform = `translateY(${headerHeight}px)`;
+      bannerOpen = true;
+    }, 200);
+  }
+
+  /* Close banner if cross clicked */
+  close.addEventListener('click', () => {
+    if ( bannerOpen ) {
+      banner.style.webkitTransform = `translateY(-${bannerHeight}px)`;
+      banner.style.transform = `translateY(-${bannerHeight}px)`;
+       document.cookie = `showReactBanner=false; expires=${inThreeMonth}; path=/`
+    }
+
+  });
+}
+banner();

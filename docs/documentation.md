@@ -129,6 +129,10 @@ To use it, require this file:
   </div>
 </div>
 
+### React InstantSearch
+
+We also have a dedicated React library if you are already using React: [React InstantSearch](https://community.algolia.com/instantsearch.js/react/).
+
 ### Initialization
 
 <div class="codebox-combo">
