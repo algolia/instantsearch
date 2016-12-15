@@ -14,7 +14,8 @@ block content
   if examples
     each example in examples
       p!=h.highlight(example, {lang: 'jsx'})
-    a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
+    div.storybook-section
+      a.btn.btn-cta(href=`${storyBookPublicPath}?selectedKind=${name}&selectedStory=default` target='_blank') View in Storybook
   h2#proptypes Props
     a.anchor(href=`${navPath}#proptypes`)
   if proptype
@@ -55,7 +56,8 @@ block content
               div.api-entry(id=themeId)=type.key
                 a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
-            td=type.description
+            td
+              p=type.description
   else
     p This widget does not accept theme.
   h2#translations Translation keys
@@ -70,6 +72,7 @@ block content
               div.api-entry(id=themeId)=type.key
                 a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
-            td=type.description
+            td
+              p=type.description
   else
     p This widget does not have translations.

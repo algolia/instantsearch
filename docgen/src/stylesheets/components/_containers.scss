@@ -654,6 +654,12 @@ body:not(.example) section {
 
     .btn {
       margin-top: 3em;
+      font-size: 15px;
+      max-width: 300px;
+
+      &:hover {
+        font-size: 15px;
+      }
 
       @include mobile-mq {
         margin: 3em auto 0;
@@ -689,6 +695,13 @@ body:not(.example) section {
       max-width: inherit;
       color: #fff;
       min-width: 160px;
+      font-size: 15px;
+      max-width: 300px;
+
+      &:hover {
+        font-size: 15px;
+      }
+
     }
 
     @include mobile-mq {
