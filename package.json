@@ -9,7 +9,7 @@
     "release": "NODE_ENV=production ./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
     "lint:fix": "eslint . --fix",
-    "doctoc": "doctoc --maxlevel 1 README.md CONTRIBUTING.md",
+    "doctoc": "doctoc --maxlevel 1 README.md",
     "test": "jest && npm run lint && NODE_ENV=production npm run docs:build && NODE_ENV=production npm run build",
     "dev": "jest --watch --bail",
     "coverage": "jest --coverage",
