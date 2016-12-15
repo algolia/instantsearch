@@ -59,9 +59,15 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
   }
 
 
-  .btn.btn-fat {
-    max-width: 150px
+  .btn.btn-fat-uc {
+    max-width: 230px;
+    margin-top: 2.25em;
+
+    &:hover {
+      font-size: 16px
+    }
   }
+
 
 
   .article-title  {
