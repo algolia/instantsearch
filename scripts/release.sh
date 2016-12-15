@@ -73,7 +73,7 @@ npm run doctoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
-git add src/lib/version.js yarn.lock package.json CHANGELOG.md README.md CONTRIBUTING.md docs/_includes/widget-jsdoc
+git add package.json CHANGELOG.md README.md packages/ yarn.lock
 printf "$commitMessage" | git commit --file -
 git tag "v$newVersion"
 
