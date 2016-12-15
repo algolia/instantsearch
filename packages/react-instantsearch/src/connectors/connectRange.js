@@ -103,6 +103,9 @@ export default createConnector({
   },
 
   refine(props, searchState, nextRefinement) {
+    if (!isFinite(nextRefinement.min) || !isFinite(nextRefinement.max)) {
+      throw new Error('You can\'t provide non finite values to the range connector');
+    }
     return {
       ...searchState,
       [namespace]: {...searchState[namespace], [getId(props)]: nextRefinement},

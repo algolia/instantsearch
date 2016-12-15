@@ -1,8 +1,8 @@
-[![react-instantsearch logo][readme-logo]][website-url]
+[![React InstantSearch logo][readme-logo]][website-url]
 
 **Looking for instantsearch.js instead? Go to the [`develop`][instantsearch.js-v1-github-url] branch.**
 
-`react-instantsearch` is a set of [widgets][widgets-url] and [connectors][connectors-url] to add instant-search
+React InstantSearch is a set of [widgets][widgets-url] and [connectors][connectors-url] to add instant-search
 experiences in your [React][react-url] application, using [Algolia search engine][algolia-url].
 
 Documentation: <https://community.algolia.com/instantsearch.js/react/>.
@@ -22,7 +22,7 @@ Documentation: <https://community.algolia.com/instantsearch.js/react/>.
 
 ## Development
 
-We use the [documentation website][website-url] as the main way to develop react-instantsearch.
+We use the [documentation website][website-url] as the main way to develop React InstantSearch.
 
 ```sh
 yarn

@@ -11,7 +11,7 @@
     "url": "https://github.com/algolia/instantsearch.js/"
   },
   "dependencies": {
-    "algoliasearch": "^3.19.2",
+    "algoliasearch": "^3.20.0",
     "algoliasearch-helper": "^2.16.0",
     "classnames": "^2.2.5",
     "lodash": "^4.17.2"

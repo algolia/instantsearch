@@ -55,7 +55,7 @@ class StarRating extends Component {
     const isLastAndSelect = isLowest && selected;
     const StarsWrapper = isLastAndSelect ? 'div' : 'a';
     const onClickHandler = isLastAndSelect ? {} : {
-      href: createURL({lowerBound, max}),
+      href: createURL({min: lowerBound, max}),
       onClick: this.onClick.bind(this, lowerBound, max),
     };
 

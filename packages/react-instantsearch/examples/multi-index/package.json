@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "0.7.0"
+  },
+  "dependencies": {
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-instantsearch": "file:../../dist",
+    "react-instantsearch-theme-algolia": "file:../../../react-instantsearch-theme-algolia"
+  },
+  "scripts": {
+    "start": "react-scripts start"
+  },
+  "main": "index.js",
+  "license": "MIT"
+}
