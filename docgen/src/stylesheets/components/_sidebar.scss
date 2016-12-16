@@ -128,7 +128,7 @@ nav.sidebar {
   background-repeat: no-repeat;
   background-position: 65% center, center center;
   background-size: 60%, 100%;
-  z-index: 11;
+  z-index: 999;
   border-radius: 50%;
   box-shadow: 0 6px 8px 0 rgba(0,0,0,0.14),0 1px 5px 0 rgba(0,0,0,0.12),0 3px 1px -2px rgba(0,0,0,0.2);
   transition: transform 0.2s ease, left 0.2s ease;
