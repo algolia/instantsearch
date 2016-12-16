@@ -8,7 +8,7 @@ import hogan from 'hogan.js';
 
 import isEqual from 'lodash/isEqual';
 
-export class Template extends React.Component {
+export class PureTemplate extends React.Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.data, nextProps.data) || this.props.templateKey !== nextProps.templateKey;
   }
@@ -39,7 +39,7 @@ export class Template extends React.Component {
   }
 }
 
-Template.propTypes = {
+PureTemplate.propTypes = {
   data: React.PropTypes.object,
   rootProps: React.PropTypes.object,
   templateKey: React.PropTypes.string,
@@ -67,7 +67,7 @@ Template.propTypes = {
   useCustomCompileOptions: React.PropTypes.objectOf(React.PropTypes.bool),
 };
 
-Template.defaultProps = {
+PureTemplate.defaultProps = {
   data: {},
   useCustomCompileOptions: {},
   templates: {},
@@ -150,4 +150,4 @@ const withTransformData =
       />;
     };
 
-export default withTransformData(Template);
+export default withTransformData(PureTemplate);

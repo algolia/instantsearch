@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import TemplateWithTransformData, {Template} from '../Template';
+import TemplateWithTransformData, {PureTemplate} from '../Template';
 import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -25,7 +25,7 @@ describe('Template', () => {
         data: {type: 'strings'},
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
       const out = renderer.getRenderOutput();
 
       const content = 'it works with strings';
@@ -38,7 +38,7 @@ describe('Template', () => {
         data: {type: 'functions'},
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
       const out = renderer.getRenderOutput();
 
       const content = 'it also works with functions';
@@ -51,7 +51,7 @@ describe('Template', () => {
         data: {type: 'functions'},
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
       const out = renderer.getRenderOutput();
 
       const content = 'it also works with functions';
@@ -66,7 +66,7 @@ describe('Template', () => {
         templatesConfig: {compileOptions: {delimiters: '<% %>'}},
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
       const out = renderer.getRenderOutput();
 
       const content = 'it configures compilation delimiters';
@@ -82,7 +82,7 @@ describe('Template', () => {
         templatesConfig: {helpers: {emphasis: (text, render) => `<em>${render(text)}</em>`}},
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
       const out = renderer.getRenderOutput();
 
       const content = 'it supports <em>helpers</em>';
@@ -105,7 +105,7 @@ describe('Template', () => {
         },
       });
 
-      renderer.render(<Template {...props} />);
+      renderer.render(<PureTemplate {...props} />);
     });
   });
 
@@ -123,7 +123,7 @@ describe('Template', () => {
       renderer.render(<TemplateWithTransformData {...props} />);
 
       const out = renderer.getRenderOutput();
-      const expectedJSX = <Template {...props} data={{feature: 'transformData'}} />;
+      const expectedJSX = <PureTemplate {...props} data={{feature: 'transformData'}} />;
 
       expect(out).toEqualJSX(expectedJSX);
     });
@@ -140,7 +140,7 @@ describe('Template', () => {
       renderer.render(<TemplateWithTransformData {...props} />);
 
       const out = renderer.getRenderOutput();
-      const expectedJSX = <Template {...props} data={{test: 'transformData'}} />;
+      const expectedJSX = <PureTemplate {...props} data={{test: 'transformData'}} />;
 
       expect(out).toEqualJSX(expectedJSX);
     });
@@ -228,7 +228,7 @@ describe('Template', () => {
     function fn() {}
 
     const props = getProps({});
-    renderer.render(<Template rootProps={{className: 'hey', onClick: fn}} {...props}/>);
+    renderer.render(<PureTemplate rootProps={{className: 'hey', onClick: fn}} {...props}/>);
 
     const out = renderer.getRenderOutput();
     const expectedProps = {
@@ -249,25 +249,25 @@ describe('Template', () => {
       props = getProps({
         data: {hello: 'mom'},
       });
-      component = ReactDOM.render(<Template {...props} />, container);
+      component = ReactDOM.render(<PureTemplate {...props} />, container);
       sinon.spy(component, 'render');
     });
 
     it('does not call render when no change in data', () => {
-      ReactDOM.render(<Template {...props} />, container);
+      ReactDOM.render(<PureTemplate {...props} />, container);
       expect(component.render.called).toBe(false);
     });
 
     it('calls render when data changes', () => {
       props.data = {hello: 'dad'};
-      ReactDOM.render(<Template {...props} />, container);
+      ReactDOM.render(<PureTemplate {...props} />, container);
       expect(component.render.called).toBe(true);
     });
 
     it('calls render when templateKey changes', () => {
       props.templateKey += '-rerender';
       props.templates = {[props.templateKey]: ''};
-      ReactDOM.render(<Template {...props} />, container);
+      ReactDOM.render(<PureTemplate {...props} />, container);
       expect(component.render.called).toBe(true);
     });
   });

@@ -15,5 +15,3 @@ rm ./dev/instantsearch.css
 mv ./dev/instantsearch.css.symlink ./dev/instantsearch.css
 rm ./dev/bundle.js
 rm ./dev/bundle.js.map
-rm ./dev/instantsearch.js
-rm ./dev/instantsearch.js.map

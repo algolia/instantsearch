@@ -6,6 +6,8 @@ import Template from '../Template.js';
 import RefinementListItem from './RefinementListItem.js';
 import isEqual from 'lodash/isEqual';
 
+import SearchBox from '../SearchBox';
+
 class RefinementList extends React.Component {
   constructor(props) {
     super(props);
@@ -121,6 +123,20 @@ class RefinementList extends React.Component {
     this.setState({isShowMoreOpen});
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.searchbox && !nextProps.isFromSearch) {
+      this.searchbox.clearInput();
+    }
+  }
+
+  refineFirstValue() {
+    const firstValue = this.props.facetValues[0];
+    if (firstValue) {
+      const actualValue = firstValue[this.props.attributeNameKey];
+      this.props.toggleRefinement(actualValue);
+    }
+  }
+
   render() {
     // Adding `-lvl0` classes
     const cssClassList = [this.props.cssClasses.list];
@@ -144,9 +160,25 @@ class RefinementList extends React.Component {
         /> :
         undefined;
 
+    const searchInput = this.props.searchFacetValues ?
+      <SearchBox ref={i => { this.searchbox = i; }}
+        placeholder={this.props.searchPlaceholder}
+        onChange={this.props.searchFacetValues}
+        onValidate={() => this.refineFirstValue()}/> :
+      null;
+
+    const noResults = this.props.searchFacetValues && this.props.isFromSearch && this.props.facetValues.length === 0 ?
+      <Template
+        templateKey={'noResults'}
+        {...this.props.templateProps}
+      /> :
+      null;
+
     return (
       <div className={cx(cssClassList)}>
+        {searchInput}
         {displayedFacetValues.map(this._generateFacetItem, this)}
+        {noResults}
         {showMoreBtn}
       </div>
     );
@@ -170,6 +202,9 @@ RefinementList.propTypes = {
   showMore: React.PropTypes.bool,
   templateProps: React.PropTypes.object.isRequired,
   toggleRefinement: React.PropTypes.func.isRequired,
+  searchFacetValues: React.PropTypes.func,
+  searchPlaceholder: React.PropTypes.string,
+  isFromSearch: React.PropTypes.bool,
 };
 
 RefinementList.defaultProps = {
