@@ -241,6 +241,15 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
           top: inherit;
           color: #fff;
           display: inline-block;
+
+          @include small-mq {
+            width: calc(100% - 90px);
+
+            h1 {
+              font-size: 28px;
+              line-height: 1.2;
+            }
+          }
         }
       }
     }
@@ -320,9 +329,3 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
   top: 0;
 }
 
-
-//
-//
-//
-//
-//

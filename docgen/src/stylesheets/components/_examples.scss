@@ -21,6 +21,21 @@
       width: 100%;
       height: 100%;
       position: relative;
+
+
+      @include small-mq {
+        figcaption {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          display: block;
+          height: 50px;
+          line-height: 1;
+          font-size: 12px;
+          top: 30px;
+        }
+      }
     }
 
     &:after {
