@@ -29,7 +29,7 @@
     "babel-eslint": "^7.1.1",
     "babel-jest": "^18.0.0",
     "babel-loader": "^6.2.9",
-    "babel-plugin-lodash": "^3.2.10",
+    "babel-plugin-lodash": "^3.2.11",
     "babel-plugin-transform-react-jsx-source": "^6.9.0",
     "babel-polyfill": "^6.20.0",
     "babel-preset-latest": "^6.16.0",
@@ -92,7 +92,7 @@
     "string": "^3.3.3",
     "style-loader": "^0.13.1",
     "webpack": "^1.14.0",
-    "webpack-dev-middleware": "^1.8.3",
+    "webpack-dev-middleware": "^1.9.0",
     "webpack-hot-middleware": "^2.13.2"
   },
   "engines": {
