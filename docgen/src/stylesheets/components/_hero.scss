@@ -106,6 +106,8 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
   }
 
   h1.project-title {
+    position: relative;
+    top: -10px;
     font-size: 14px !important;
     font-weight: 800;
     text-transform: uppercase;
@@ -148,13 +150,13 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
     background-size: 500px, 100%;
 
     .hero-container {
-      top: 100px;
+      top: 70px;
     }
 
     .fl-left {
       width: 100%;
-      margin: auto;
       margin-top: $nav-height * 1.5;
+      padding-left: 2em;
       max-width: 500px;
       float: none;
 
@@ -314,7 +316,9 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
   }
 }
 
-
+.documentation .hero-container {
+  top: 0;
+}
 
 
 //

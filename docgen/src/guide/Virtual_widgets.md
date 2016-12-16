@@ -15,7 +15,7 @@ import {InstantSearch, SearchBox} from 'react-instantsearch/dom';
 import {connectMenu} from 'react-instantsearch/connectors';
 
 const VirtualMenu = connectMenu(() => null);
-const Hoodies = <VirtualMenu attributeName="clothes" defaultRefinement="hoodies"/>;
+const Hoodies = () => <VirtualMenu attributeName="clothes" defaultRefinement="hoodies"/>;
 
 const App = () =>
   <InstantSearch
