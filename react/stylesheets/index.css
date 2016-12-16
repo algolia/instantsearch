@@ -2648,6 +2648,10 @@ code {
   border: 1px dotted rgba(0, 0, 0, 0.15);
   padding: 4px 8px;
   border-radius: 3px; }
+  @media (max-width: 960px) {
+    p > code,
+    code {
+      word-break: break-all; } }
 
 pre code {
   border: none;
@@ -2820,6 +2824,10 @@ nav.sidebar {
   .documentation-section h2:first-of-type,
   .examples-section h2:first-of-type {
     margin-top: 0; }
+  @media (max-width: 960px) {
+    .documentation-section h2,
+    .examples-section h2 {
+      font-size: 22px; } }
 
 .documentation-section h3,
 .examples-section h3 {
@@ -3200,7 +3208,7 @@ nav.sidebar {
     .examples-section .container .documentation-container {
       left: 0;
       width: 100%;
-      padding: 32px 16px; }
+      padding: 32px 0; }
     .documentation-section .container article,
     .examples-section .container article {
       float: left;
@@ -3478,6 +3486,17 @@ nav.sidebar {
       width: 100%;
       height: 100%;
       position: relative; }
+      @media (max-width: 960px) {
+        .examples-container .example-tile a figcaption {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 100%;
+          display: block;
+          height: 50px;
+          line-height: 1;
+          font-size: 12px;
+          top: 30px; } }
     .examples-container .example-tile:after {
       content: '';
       position: absolute;
@@ -3718,6 +3737,12 @@ body.example .btn {
           top: inherit;
           color: #fff;
           display: inline-block; }
+          @media (max-width: 960px) {
+            body.documentation .hero-section .doc-only figure figcaption {
+              width: calc(100% - 90px); }
+              body.documentation .hero-section .doc-only figure figcaption h1 {
+                font-size: 28px;
+                line-height: 1.2; } }
     body.documentation .hero-section .btn {
       display: none; }
     body.documentation .hero-section .fl-left {
