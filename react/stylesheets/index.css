@@ -3626,6 +3626,8 @@ body.example .btn {
     .hero-section .article-title.doc-only {
       width: 100%; }
   .hero-section h1.project-title {
+    position: relative;
+    top: -10px;
     font-size: 14px !important;
     font-weight: 800;
     text-transform: uppercase; }
@@ -3658,11 +3660,11 @@ body.example .btn {
       background-position: center center, center center;
       background-size: 500px, 100%; }
       .hero-section .hero-container {
-        top: 100px; }
+        top: 70px; }
       .hero-section .fl-left {
         width: 100%;
-        margin: auto;
         margin-top: 90px;
+        padding-left: 2em;
         max-width: 500px;
         float: none; }
         body.documentation .hero-section .fl-left {
@@ -3766,6 +3768,9 @@ body.example .btn {
 @keyframes swan-dash {
   100% {
     stroke-dashoffset: 0; } }
+
+.documentation .hero-container {
+  top: 0; }
 
 /**
  * Dropdown style starts here
