@@ -46,6 +46,10 @@
     &:first-of-type {
       margin-top: 0;
     }
+
+    @include small-mq {
+      font-size: 22px;
+    }
   }
 
   h3 {
@@ -103,6 +107,8 @@
     padding-left: 30px;
     padding-bottom: 200px;
     padding-top: 120px;
+
+
 
     p,
     ul,
@@ -442,7 +448,7 @@ tr.api-entry-description {
       .documentation-container {
         left: 0;
         width: 100%;
-        padding: 32px 16px;
+        padding: 32px 0;
       }
 
       article {
