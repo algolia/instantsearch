@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "start": "NODE_ENV=development babel-node docgen/start.js & npm run storybook & wait",
     "build": "NODE_ENV=production ./scripts/build.sh",
