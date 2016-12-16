@@ -59,6 +59,7 @@ cd packages/react-instantsearch-theme-algolia
 npm version $newVersion
 )
 
+npm version $newVersion
 yarn
 npm run build
 
