@@ -60,28 +60,26 @@ describe('StarRating', () => {
       {value: '4', count: 3},
       {value: '5', count: 0}]}
   />;
-  const wrapper = mount(starRating);
 
   beforeEach(() => {
     refine.mockClear();
     createURL.mockClear();
   });
 
-  afterAll(() => {
-    wrapper.unmount();
-  });
-
   it('should create an URL for each row except for the largest: the default selected one', () => {
-    mount(starRating);
+    const wrapper = mount(starRating);
 
     expect(createURL.mock.calls.length).toBe(4);
     expect(createURL.mock.calls[0][0]).toEqual({min: 5, max: 5});
     expect(createURL.mock.calls[1][0]).toEqual({min: 4, max: 5});
     expect(createURL.mock.calls[2][0]).toEqual({min: 3, max: 5});
     expect(createURL.mock.calls[3][0]).toEqual({min: 2, max: 5});
+
+    wrapper.unmount();
   });
 
   it('refines its value on change', () => {
+    const wrapper = mount(starRating);
     const links = wrapper.find('.ais-StarRating__ratingLink');
     expect(links.length).toBe(5);
 
@@ -104,9 +102,11 @@ describe('StarRating', () => {
       .find('.ais-StarRating__ratingIcon');
 
     expect(disabledLink.length).toBe(5);
+    wrapper.unmount();
   });
 
   it('should display the right number of stars', () => {
+    const wrapper = mount(starRating);
     wrapper
       .find('.ais-StarRating__ratingLink')
       .last()
@@ -122,5 +122,18 @@ describe('StarRating', () => {
 
     expect(fullIcon.length).toBe(1);
     expect(emptyIcon.length).toBe(4);
+    wrapper.unmount();
+  });
+
+  it('clicking on the selected refinement should select the largest range', () => {
+    const wrapper = mount(starRating);
+    wrapper.setProps({currentRefinement: {min: 5, max: 5}});
+
+    const links = wrapper.find('.ais-StarRating__ratingLink');
+    links.first().simulate('click');
+
+    expect(refine.mock.calls.length).toBe(1);
+    expect(refine.mock.calls[0][0]).toEqual({min: 1, max: 5});
+    wrapper.unmount();
   });
 });
