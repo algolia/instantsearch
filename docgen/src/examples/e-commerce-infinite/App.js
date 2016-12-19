@@ -75,9 +75,14 @@ const Facets = () =>
         title="Refine by"
         items={[
           <RefinementListWithTitle
+            title="Type"
+            key="Type"
+            item={<RefinementList attributeName="type" operator="or" limitMin={5} searchForFacetValues/>}
+          />,
+          <RefinementListWithTitle
             title="Materials"
             key="Materials"
-            item={<RefinementList attributeName="materials" operator="or" limitMin={10}/>}
+            item={<RefinementList attributeName="materials" operator="or" limitMin={5} searchForFacetValues/>}
           />,
           <RefinementListWithTitle
             title="Color"

@@ -39,8 +39,6 @@ function getValue(name, props, searchState) {
   return nextRefinement;
 }
 
-const sortBy = ['isRefined', 'count:desc', 'name:asc'];
-
 /**
  * connectRefinementList connector provides the logic to build a widget that will
  * give the user tha ability to choose multiple values for a specific facet.
@@ -52,11 +50,16 @@ const sortBy = ['isRefined', 'count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default. The searchState of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the searchState is an empty string.
+ * @propType {boolean} [searchForFacetValues=false] - if set to true, the searchForFacetValues function is provided
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
+ * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
+ * @providedPropType {boolean} isSearchFrom - a boolean that says if the `items` props contains facet values from the global search or from the search for facet values results.
  */
+
+const sortBy = ['isRefined', 'count:desc', 'name:asc'];
 export default createConnector({
   displayName: 'AlgoliaRefinementList',
 
@@ -68,6 +71,7 @@ export default createConnector({
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     defaultRefinement: PropTypes.arrayOf(PropTypes.string),
+    searchForFacetValues: PropTypes.bool,
   },
 
   defaultProps: {
@@ -77,7 +81,7 @@ export default createConnector({
     limitMax: 20,
   },
 
-  getProvidedProps(props, searchState, searchResults) {
+  getProvidedProps(props, searchState, searchResults, metadata, searchForFacetValuesResults) {
     const {results} = searchResults;
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
@@ -90,19 +94,33 @@ export default createConnector({
       return null;
     }
 
-    const items = results
-      .getFacetValues(attributeName, {sortBy})
-      .slice(0, limit)
-      .map(v => ({
-        label: v.name,
-        value: getValue(v.name, props, searchState),
-        count: v.count,
-        isRefined: v.isRefined,
-      }));
+    const items = searchForFacetValuesResults && searchForFacetValuesResults[attributeName]
+      ? searchForFacetValuesResults[attributeName]
+        .slice(0, limit).map(
+          v => ({
+            label: v.value,
+            value: getValue(v.value, props, searchState),
+            _highlightResult: {label: {value: v.highlighted}},
+            count: v.count,
+            isRefined: v.isRefined,
+          }))
+      : results
+        .getFacetValues(attributeName, {sortBy})
+        .slice(0, limit)
+        .map(v => ({
+          label: v.name,
+          value: getValue(v.name, props, searchState),
+          count: v.count,
+          isRefined: v.isRefined,
+        }));
+    const isFromSearch = Boolean(searchForFacetValuesResults && searchForFacetValuesResults[attributeName]);
+    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
 
     return {
       items,
       currentRefinement: getCurrentRefinement(props, searchState),
+      isFromSearch,
+      searchForFacetValues,
     };
   },
 
@@ -121,6 +139,10 @@ export default createConnector({
     };
   },
 
+  searchForFacetValues(props, searchState, nextRefinement) {
+    return {facetName: props.attributeName, query: nextRefinement};
+  },
+
   cleanUp(props, searchState) {
     const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
     if (isEmpty(cleanState[namespace])) {
@@ -128,6 +150,7 @@ export default createConnector({
     }
     return cleanState;
   },
+
   getSearchParameters(searchParameters, props, searchState) {
     const {attributeName, operator, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
@@ -166,8 +189,8 @@ export default createConnector({
           label: `${item}`,
           value: nextState => {
             const nextSelectedItems = getCurrentRefinement(props, nextState).filter(
-              other => other !== item
-            );
+                other => other !== item
+              );
 
             return {
               ...nextState,
