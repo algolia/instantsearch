@@ -25,7 +25,7 @@ class StarRating extends Component {
     e.preventDefault();
     e.stopPropagation();
     if (min === this.props.currentRefinement.min && max === this.props.currentRefinement.max) {
-      this.props.refine('');
+      this.props.refine({min: this.props.min, max: this.props.max});
     } else {
       this.props.refine({min, max});
     }
@@ -64,9 +64,9 @@ class StarRating extends Component {
         'ratingLink',
         selected && 'ratingLinkSelected',
         disabled && 'ratingLinkDisabled')}
-         disabled={disabled}
-         key={lowerBound}
-         {...onClickHandler}
+                    disabled={disabled}
+                    key={lowerBound}
+                    {...onClickHandler}
       >
         {icons}
         <span {...cx(
