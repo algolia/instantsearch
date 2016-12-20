@@ -116,11 +116,11 @@ test(
         t.ok(content, 'should get some content');
 
         t.deepEqual(content.facetHits, [
-          {value: 'b', highlighted: '', count: 2, isRefined: false},
-          {value: 'c', highlighted: '', count: 2, isRefined: true},
-          {value: 'x', highlighted: '', count: 1, isRefined: false},
-          {value: 'd', highlighted: '', count: 1, isRefined: false},
-          {value: 'y', highlighted: '', count: 1, isRefined: false}
+          {value: 'b', highlighted: 'b', count: 2, isRefined: false},
+          {value: 'c', highlighted: 'c', count: 2, isRefined: true},
+          {value: 'd', highlighted: 'd', count: 1, isRefined: false},
+          {value: 'x', highlighted: 'x', count: 1, isRefined: false},
+          {value: 'y', highlighted: 'y', count: 1, isRefined: false}
         ]);
 
         t.end();
