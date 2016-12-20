@@ -35,10 +35,19 @@ inside the Helper.
 for one-shot searches that won't influence the rest of the app. It lets
 you change the parameters before sending the query.
 
-Most of the searches will be done using the first method.
+Most of the searches will be done using the first method because it
+implements a mechanism that ensure that the answers process will never
+be outdated. For example, if you do two searches close one to another and
+if the network is not reliable, you might end up having the second search
+results before the first one. This can't happend when using the event
+based method, that's why it is prefered.
+
+You can also search into the values of the facets using `searchForFacetValues`. This
+method can be called in the same way that `searchOnce`.
 
 {{> jsdoc jsdoc/helper/search}}
 {{> jsdoc jsdoc/helper/searchOnce}}
+{{> jsdoc jsdoc/helper/searchForFacetValues}}
 {{> jsdoc jsdoc/helper/clearCache}}
 
 ### Query and index
