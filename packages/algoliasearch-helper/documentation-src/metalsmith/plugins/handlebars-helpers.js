@@ -61,4 +61,13 @@ module.exports = function(requires) {
     var downloadLink = '<a href="http://codepen.io/Algolia/share/zip/' + hash + '/">Download this example.</a>';
     return new Handlebars.SafeString(downloadLink + copedenContent);
   });
+
+  Handlebars.registerHelper('cleanParameters', function(parameters) {
+    if(!parameters) return '';
+    return new Handlebars.SafeString(parameters.map(function(p, k) {
+      if(p.name.indexOf('.') !== -1) return '';
+      if(p.optional) return  `<span class="param param-${k} optional">${p.name}</span>`;
+      else return  `<span class="param param-${k}">${p.name}</span>`;
+    }).join(''));
+  });
 };
