@@ -7,9 +7,8 @@ import {
   connectRefinementList,
   connectHierarchicalMenu,
   connectSortBy,
-  connectHits,
+  connectInfiniteHits,
   connectCurrentRefinements,
-  connectPagination,
 } from 'react-instantsearch/connectors';
 import {
   InstantSearch,
@@ -24,6 +23,7 @@ import {
   List,
   ListItem,
   FlatButton,
+  RaisedButton,
   MenuItem,
   Card,
   Divider,
@@ -32,10 +32,8 @@ import {
   FontIcon,
   IconMenu,
   Drawer,
-  Badge,
   IconButton,
 } from 'material-ui';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import SortIcon from 'material-ui/svg-icons/content/sort';
 import {withUrlSync} from '../urlSync';
 
@@ -46,6 +44,7 @@ const App = props =>
     <MaterialUiExample {...props} />
   </MuiThemeProvider>;
 
+const isMobile = window.innerWidth < 450;
 const MaterialUiExample = props =>
   <InstantSearch
     appId="latency"
@@ -54,94 +53,101 @@ const MaterialUiExample = props =>
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 16}}
+    searchParameters={{hitsPerPage: 20}}
   >
     <Content/>
   </InstantSearch>;
 
 const Content = React.createClass({
   getInitialState() {
-    return {drawer: true};
+    return {drawer: !isMobile};
   },
   drawerAction () {
     this.setState({drawer: !this.state.drawer});
   },
   render() {
     const baseDrawerStyle = {
-      position: 'absolute',
+      transition: 'none',
+      top: 120,
     };
     const openDrawerStyle = {
       ...baseDrawerStyle,
       transform: 'translate(0)',
-      height: 'initial',
-      top: 60,
       zIndex: 90,
     };
     const closedDrawerStyle = {
       ...baseDrawerStyle,
-      transform: 'translate(-400px)',
+      transform: 'translate(-300px)',
     };
-    const marginLeft = this.state.drawer ? 300 : 0;
+    const defaultMarginLeft = isMobile ? window.innerWidth : 300;
+    const marginLeft = this.state.drawer ? defaultMarginLeft : 0;
     const displayDrawer = this.state.drawer ? openDrawerStyle : closedDrawerStyle;
     return (
       <div>
-        <div className="Header">
-          <AppBar
-            title="AMAZING"
-            iconElementRight={<ConnectedSortBy
+        <AppBar
+          title={isMobile ? '' : 'AMAZING'}
+          onLeftIconButtonTouchTap={this.drawerAction}
+          className="Header__appBar"
+        >
+          <div style={{display: 'flex', alignItems: 'center', flexGrow: 1}}>
+            <ConnectedSearchBox/>
+            <ConnectedSortBy
               items={[{value: 'ikea', label: 'Featured'},
                 {value: 'ikea_price_desc', label: 'Price (desc)'},
                 {value: 'ikea_price_asc', label: 'Price (asc)'}]}
-              defaultRefinement="ikea"/>}
-            onLeftIconButtonTouchTap={this.drawerAction}
-            className="Header__appBar"
-          />
-        </div>
-        <Drawer open={this.state.drawer} width={300} containerStyle={displayDrawer}
-                className="Sidebar">
-          <div className="Sidebar__header">
-            <AppBar title="AMAZING"
-                    onLeftIconButtonTouchTap={this.drawerAction}
-                    className="Sidebar__header__appBar"
-            />
-            <ConnectedCurrentRefinements/>
+              defaultRefinement="ikea"/>
           </div>
-          <div className="Sidebar__facets">
-            <ConnectedNestedList
-              id="Categories"
-              attributes={[
-                'category',
-                'sub_category',
-                'sub_sub_category',
-              ]}
-            />
-            <Divider />
-            <ConnectedCheckBoxRefinementList attributeName="materials" operator="or"/>
-            <ConnectedCheckBoxRefinementList attributeName="colors" operator="or"/>
+        </AppBar>
+        <div className="main">
+          <div className="Sidebar">
+            <Drawer open={this.state.drawer} width={marginLeft} containerStyle={displayDrawer}
+                    containerClassName="Drawer">
+              <ConnectedCurrentRefinements/>
+              <Divider />
+              <ConnectedNestedList
+                id="Categories"
+                attributes={[
+                  'category',
+                  'sub_category',
+                  'sub_sub_category',
+                ]}
+              />
+              <Divider />
+              <ConnectedCheckBoxRefinementList attributeName="materials" operator="or"/>
+              <ConnectedCheckBoxRefinementList attributeName="colors" operator="or"/>
+              <Divider />
+              <div style={{marginBottom: 120}}>
+                <ConnectedCurrentRefinements/>
+              </div>
+            </Drawer>
           </div>
-        </Drawer>
-        <div className="Content">
-          <div className="Content__hits">
-            <ConnectedSearchBox marginLeft={marginLeft}/>
-            <ConnectedHits
-              marginLeft={marginLeft}
-            />
+          <div className="Content__hits" style={{marginLeft, display: 'flex', flexDirection: 'column', marginTop: 140}}>
+            <ConnectedHits />
           </div>
         </div>
-        <ConnectedPagination marginLeft={marginLeft}/>
       </div>
     );
   },
 });
 
-const MaterialUiSearchBox = ({currentRefinement, refine, marginLeft}) => {
+const MaterialUiSearchBox = ({currentRefinement, refine}) => {
+  const style = {
+    backgroundColor: 'white',
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0px 10px',
+    marginLeft: 0,
+    flexGrow: 1,
+  };
+
   const clear = currentRefinement ?
     <FontIcon style={{color: 'lightgrey'}}
               className="material-icons"
               onTouchTap={() => refine('')}>clear</FontIcon>
     : null;
+
   return (
-    <div style={{marginLeft}} className="Header__searchBox">
+    <div style={style}>
       <FontIcon style={{color: 'lightgrey'}} className="material-icons">search</FontIcon>
       <TextField value={currentRefinement}
                  onChange={e => refine(e.target.value)}
@@ -155,16 +161,17 @@ const MaterialUiSearchBox = ({currentRefinement, refine, marginLeft}) => {
 };
 
 const CheckBoxItem = ({item, refine}) =>
-  <ListItem
-    primaryText={item.label}
-    leftCheckbox={
-      <Checkbox checked={item.isRefined}
-                onCheck={e => {
-                  e.preventDefault();
-                  refine(item.value);
-                }}
-      />}
-  />;
+    <ListItem
+      primaryText={item.label}
+      leftCheckbox={
+        <Checkbox checked={item.isRefined}
+                  onCheck={e => {
+                    e.preventDefault();
+                    refine(item.value);
+                  }}
+        />}
+    />
+  ;
 
 const MaterialUiCheckBoxRefinementList = ({items, attributeName, refine, createURL}) =>
     <List>
@@ -185,16 +192,16 @@ const MaterialUiNestedList = function ({id, items, refine}) {
     <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
     {items.map((item, idx) => {
       const nestedElements = item.items ? item.items.map((child, childIdx) =>
-          <ListItem
-            primaryText={child.label}
-            key={childIdx}
-            onClick={e => {
-              e.preventDefault();
-              refine(child.value);
-            }}
-            style={child.isRefined ? {fontWeight: 700} : {}}
-          />
-        ) : [];
+            <ListItem
+              primaryText={child.label}
+              key={childIdx}
+              onClick={e => {
+                e.preventDefault();
+                refine(child.value);
+              }}
+              style={child.isRefined ? {fontWeight: 700} : {}}
+            />
+          ) : [];
       return <ListItem
           primaryText={item.label}
           key={idx}
@@ -212,21 +219,12 @@ const MaterialUiNestedList = function ({id, items, refine}) {
 };
 
 const MaterialUiSortBy = React.createClass({
-
-  getInitialState() {
-    return {value: this.props.defaultRefinement};
-  },
-
-  handleChange (ev, index, value) {
-    this.setState({value});
-  },
-
   render() {
     return (
       <IconMenu
         iconButtonElement={<IconButton><SortIcon color="white" style={{marginTop: 13}}/></IconButton>}
         onChange={this.handleChange}
-        value={this.state.value}
+        value={this.props.currentRefinement}
       >
         {this.props.items.map(item =>
           <MenuItem
@@ -244,36 +242,64 @@ const MaterialUiSortBy = React.createClass({
 
 });
 
-function CustomHits({hits, marginLeft}) {
-  const cardStyle = {
-    width: 270,
-    height: 250,
-    marginBottom: 10,
-    marginLeft: 10,
-    position: 'relative',
+function CustomHits({hits, marginLeft, hasMore, refine}) {
+  const cardStyle = isMobile
+    ? {
+      width: '100%',
+      height: 250,
+      marginBottom: 10,
+      position: 'relative',
+    } : {
+      width: 270,
+      height: 250,
+      marginBottom: 10,
+      marginLeft: 10,
+      position: 'relative',
+    };
+
+  const containerCardStyle = {
+    marginLeft,
+    paddingLeft: isMobile ? 0 : 48,
+    display: 'flex',
+    flexWrap: 'wrap',
   };
   const imageHolderStyle = {
     textAlign: 'center',
   };
   return (
-    <main id="hits" style={{marginLeft}} className="Content__hits__card">
-      {hits.map((hit, idx) =>
-        <Card key={idx} style={cardStyle}>
-          <CardHeader
-            subtitle={<Highlight attributeName="name" hit={hit} />}
-          />
-          <div style={imageHolderStyle}>
-            <img src={hit.image} className="Content__hits__card__img"/>
-          </div>
-          <CardTitle
-            title={<span><Highlight attributeName="name" hit={hit} /> - ${hit.price}</span>}
-            subtitle={<Highlight attributeName="type" hit={hit} />}
-            style={{position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)'}}
-            titleStyle={{fontSize: 16}}
-          />
-        </Card>
-      )}
-    </main>
+    <div>
+      <main id="hits" style={containerCardStyle}>
+        {hits.map((hit, idx) =>
+          <Card key={idx} style={cardStyle}>
+            <CardHeader
+              subtitle={<Highlight attributeName="name" hit={hit}/>}
+            />
+            <div style={imageHolderStyle}>
+              <img src={hit.image} style={{maxWidth: 120, maxHeight: 120}}/>
+            </div>
+            <CardTitle
+              title={<span><Highlight attributeName="name" hit={hit}/> - ${hit.price}</span>}
+              subtitle={<Highlight attributeName="type" hit={hit}/>}
+              style={{position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)'}}
+              titleStyle={{fontSize: 16}}
+            />
+          </Card>
+        )}
+      </main>
+      <div style={{display: 'flex', justifyContent: 'center'}}>
+        <RaisedButton
+          onTouchTap={() => {
+            if (hasMore) {
+              refine();
+            }
+          }}
+          primary
+          disabled={!hasMore}
+          label="Load More"
+          style={{alignSelf: 'center', marginLeft, marginBottom: 10}}
+        />
+      </div>
+    </div>
   );
 }
 
@@ -282,76 +308,12 @@ function MaterialUiClearAllFilters({items, refine}) {
     <FlatButton
       onTouchTap={() => refine(items)}
       label="Clear All"
-      style={{height: 48, width: 300, backgroundColor: 'white'}}
+      primary
+      style={{height: 48, width: '100%'}}
+      className="ClearAll"
     />
   );
 }
-
-const MaterialUiBottomNavigation = React.createClass({
-
-  getInitialState() {
-    return {selectedIndex: 0};
-  },
-
-  select(index) {
-    this.setState({selectedIndex: index});
-  },
-
-  render() {
-    const ending = <FontIcon className="material-icons">fast_forward</FontIcon>;
-    const beginning = <FontIcon className="material-icons">fast_rewind</FontIcon>;
-    const next = <FontIcon className="material-icons">keyboard_arrow_right</FontIcon>;
-    const previous = <FontIcon className="material-icons">keyboard_arrow_left</FontIcon>;
-    return (
-      <div style={{marginLeft: this.props.marginLeft, marginTop: 30}}>
-        <BottomNavigation>
-          <BottomNavigationItem
-            label="First Page"
-            icon={beginning}
-            onTouchTap={e => {
-              e.preventDefault();
-              this.props.refine(0);
-            }}
-            disabled={this.props.currentRefinement <= 0}
-          />
-          <BottomNavigationItem
-            label="Previous Page"
-            icon={previous}
-            onTouchTap={e => {
-              e.preventDefault();
-              this.props.refine(this.props.currentRefinement - 1);
-            }}
-            disabled={this.props.currentRefinement <= 0}
-          />
-          <BottomNavigationItem
-            icon={<FontIcon><Badge
-              badgeContent={this.props.currentRefinement}
-              secondary={true}
-            /></FontIcon>}
-          />
-          <BottomNavigationItem
-            label="Next Page"
-            icon={next}
-            onTouchTap={e => {
-              e.preventDefault();
-              this.props.refine(this.props.currentRefinement + 1);
-            }}
-            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
-          />
-          <BottomNavigationItem
-            label="Last Page"
-            icon={ending}
-            onTouchTap={e => {
-              e.preventDefault();
-              this.props.refine(this.props.nbPages - 1);
-            }}
-            disabled={this.props.currentRefinement >= this.props.nbPages - 1}
-          />
-        </BottomNavigation>
-      </div>
-    );
-  },
-});
 
 const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 
@@ -361,10 +323,8 @@ const ConnectedNestedList = connectHierarchicalMenu(MaterialUiNestedList);
 
 const ConnectedSortBy = connectSortBy(MaterialUiSortBy);
 
-const ConnectedHits = connectHits(CustomHits);
+const ConnectedHits = connectInfiniteHits(CustomHits);
 
 const ConnectedCurrentRefinements = connectCurrentRefinements(MaterialUiClearAllFilters);
-
-const ConnectedPagination = connectPagination(MaterialUiBottomNavigation);
 
 export default withUrlSync(App);
