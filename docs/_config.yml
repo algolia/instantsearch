@@ -15,7 +15,7 @@ navigation:
  - text: About
    url: /about/
  - text: React InstantSearch
-   url: https://community.algolia.com/instantsearch.js/react/
+   url: /react/
 # Build settings
 markdown: kramdown
 
