@@ -10,11 +10,15 @@ var mapKeys = require('lodash/mapKeys');
 
 var qs = require('qs');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('setState should set the state of the helper and trigger a change event', function(t) {
   var state0 = {query: 'a query'};
   var state1 = {query: 'another query'};
 
-  var helper = algoliasearchHelper(null, null, state0);
+  var helper = algoliasearchHelper(fakeClient, null, state0);
 
   t.deepEquals(helper.state, new SearchParameters(state0), '(setstate) initial state should be state0');
 
@@ -35,7 +39,7 @@ test('setState should set the state of the helper and trigger a change event', f
 
 test('getState should return the current state of the helper', function(t) {
   var initialState = {query: 'a query'};
-  var helper = algoliasearchHelper(null, null, initialState);
+  var helper = algoliasearchHelper(fakeClient, null, initialState);
 
   t.deepEquals(helper.getState(),
     new SearchParameters(initialState),
@@ -59,7 +63,7 @@ test('getState should return an object according to the specified filters', func
     minWordSizefor1Typo: 1
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.toggleRefine('facetA', 'a');
   helper.toggleRefine('facetWeDontCareAbout', 'v');
@@ -114,7 +118,7 @@ test('Get the state as a query string', function(t) {
     disjunctiveFacets: ['facetB']
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -150,7 +154,7 @@ test('Set the state with a query parameter with index', function(t) {
     disjunctiveFacets: ['facetB']
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -161,7 +165,7 @@ test('Set the state with a query parameter with index', function(t) {
 
   var filters = ['index', 'query', 'attribute:*'];
 
-  var newHelper = algoliasearchHelper(null, null, initialState);
+  var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
   t.deepEquals(
@@ -180,7 +184,7 @@ test('Set the state with a query parameter without index', function(t) {
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
   };
-  var helper = algoliasearchHelper(null, null, initialState);
+  var helper = algoliasearchHelper(fakeClient, null, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -191,7 +195,7 @@ test('Set the state with a query parameter without index', function(t) {
 
   var filters = ['query', 'attribute:*'];
 
-  var newHelper = algoliasearchHelper(null, null, initialState);
+  var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   newHelper.setStateFromQueryString(helper.getStateAsQueryString({filters: filters}));
 
   t.deepEquals(
@@ -210,7 +214,7 @@ test('Set the state with a query parameter with unknown querystring attributes',
     facets: ['facetA', 'facetWeDontCareAbout'],
     disjunctiveFacets: ['facetB']
   };
-  var helper = algoliasearchHelper(null, null, initialState);
+  var helper = algoliasearchHelper(fakeClient, null, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -221,7 +225,7 @@ test('Set the state with a query parameter with unknown querystring attributes',
 
   var filters = ['query', 'attribute:*'];
 
-  var newHelper = algoliasearchHelper(null, null, initialState);
+  var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   var queryString = helper.getStateAsQueryString({filters: filters}) + '&foo=bar&toto=tata';
   newHelper.setStateFromQueryString(queryString);
 
@@ -242,7 +246,7 @@ test('Serialize with prefix', function(t) {
     disjunctiveFacets: ['facetB']
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -273,7 +277,7 @@ test('Serialize without any state to serialize, only more attributes', function(
   };
 
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   var filters = ['attribute:*'];
 
@@ -301,7 +305,7 @@ test('Serialize with prefix, this should have no impact on user provided paramat
     disjunctiveFacets: ['facetB']
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a');
@@ -340,7 +344,7 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
     disjunctiveFacets: ['facetB']
   };
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, initialState);
+  var helper = algoliasearchHelper(fakeClient, index, initialState);
 
   helper.setQuery('a query');
   helper.toggleRefine('facetA', 'a&b=13');
@@ -351,7 +355,7 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
 
   var filters = ['index', 'query', 'attribute:*'];
 
-  var newHelper = algoliasearchHelper(null, null, initialState);
+  var newHelper = algoliasearchHelper(fakeClient, null, initialState);
   var queryString = helper.getStateAsQueryString({filters: filters, prefix: 'calimerou_'});
   newHelper.setStateFromQueryString(queryString, {prefix: 'calimerou_'});
 
@@ -368,7 +372,7 @@ test('Should be able to deserialize qs with namespaced attributes', function(t) 
 
 test('getStateFromQueryString should parse page as number and be consistent with the state', function(t) {
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, {});
+  var helper = algoliasearchHelper(fakeClient, index, {});
 
   helper.setCurrentPage(10);
 
@@ -411,7 +415,7 @@ test('getStateFromQueryString should use its options', function(t) {
 
 test('should be able to get configuration that is not from algolia', function(t) {
   var index = 'indexNameInTheHelper';
-  var helper = algoliasearchHelper(null, index, {});
+  var helper = algoliasearchHelper(fakeClient, index, {});
 
   helper.setCurrentPage(10);
 

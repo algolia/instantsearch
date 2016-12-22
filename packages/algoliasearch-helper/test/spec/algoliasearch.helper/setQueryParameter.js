@@ -3,8 +3,12 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('setChange should change the current state', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
   var changed = false;
 
   helper.on('change', function() {
@@ -21,7 +25,7 @@ test('setChange should change the current state', function(t) {
 });
 
 test('setChange should not change the current state: no real modification', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
   var changed = false;
   var initialState = helper.state;
 

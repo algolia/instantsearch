@@ -80,7 +80,10 @@ test('Search should call the algolia client according to the number of refinemen
 });
 
 test('no mutating methods should trigger a search', function(t) {
-  var helper = algoliasearchHelper(undefined, 'Index', {
+  var client = algoliaSearch('dsf', 'dsfdf');
+  sinon.mock(client);
+
+  var helper = algoliasearchHelper(client, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });

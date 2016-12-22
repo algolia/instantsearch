@@ -6,8 +6,12 @@ var forEach = require('lodash/forEach');
 var algoliasearchHelper = require('../../../index.js');
 var requestBuilder = require('../../../src/requestBuilder');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('Distinct not set', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facetConj'],
     disjunctiveFacets: ['facet']
   });
@@ -62,7 +66,7 @@ test('Distinct not set', function(t) {
 });
 
 test('Distinct set to true', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facetConj'],
     disjunctiveFacets: ['facet']
   }).setQueryParameter('distinct', true);
@@ -108,7 +112,7 @@ test('Distinct set to true', function(t) {
 });
 
 test('Distinct to false', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facetConj'],
     disjunctiveFacets: ['facet']
   }).setQueryParameter('distinct', false);
@@ -155,7 +159,7 @@ test('Distinct to false', function(t) {
 
 test('Distinct as a number', function(t) {
   var distinctValue = 2;
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facetConj'],
     disjunctiveFacets: ['facet']
   }).setQueryParameter('distinct', distinctValue);

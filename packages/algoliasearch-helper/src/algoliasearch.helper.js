@@ -12,6 +12,7 @@ var bind = require('lodash/bind');
 var isEmpty = require('lodash/isEmpty');
 
 var url = require('./url');
+var version = require('./version');
 
 /**
  * Event triggered when a parameter is set or updated
@@ -80,6 +81,8 @@ var url = require('./url');
  * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
+  client.addAlgoliaAgent('JS Helper ' + version);
+
   this.client = client;
   var opts = options || {};
   opts.index = index;

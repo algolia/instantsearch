@@ -2,10 +2,14 @@
 
 var test = require('tape');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('hierarchical facets: add a facet -> set page to 0, trigger change', function(t) {
   t.plan(2);
   var algoliasearchHelper = require('../../../');
-  var helper = algoliasearchHelper(null, '', {
+  var helper = algoliasearchHelper(fakeClient, '', {
     hierarchicalFacets: [{
       name: 'categories',
       attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']
@@ -23,7 +27,7 @@ test('hierarchical facets: add a facet -> set page to 0, trigger change', functi
 test('hierarchical facets: remove a facet -> set page to 0, trigger change', function(t) {
   t.plan(2);
   var algoliasearchHelper = require('../../../');
-  var helper = algoliasearchHelper(null, '', {
+  var helper = algoliasearchHelper(fakeClient, '', {
     hierarchicalFacets: [{
       name: 'categories',
       attributes: ['categories.lvl0', 'categories.lvl1', 'categories.lvl2', 'categories.lvl3']

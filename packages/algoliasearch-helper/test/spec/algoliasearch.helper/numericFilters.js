@@ -4,6 +4,10 @@ var test = require('tape');
 var algoliaSearch = require('algoliasearch');
 var algoliasearchHelper = require('../../../index');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('Numeric filters: numeric filters from constructor', function(t) {
   var client = algoliaSearch('dsf', 'dsfdf');
 
@@ -68,7 +72,7 @@ test('Numeric filters: numeric filters from setters', function(t) {
 });
 
 test('Should be able to remove values one by one even 0s', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addNumericRefinement('attribute', '>', 0);
   helper.addNumericRefinement('attribute', '>', 4);
@@ -83,7 +87,7 @@ test('Should be able to remove values one by one even 0s', function(t) {
 test(
   'Should remove all the numeric values for a single operator if remove is called with two arguments',
   function(t) {
-    var helper = algoliasearchHelper(null, null, null);
+    var helper = algoliasearchHelper(fakeClient, null, null);
 
     helper.addNumericRefinement('attribute', '>', 0);
     helper.addNumericRefinement('attribute', '>', 4);
@@ -111,7 +115,7 @@ test(
 test(
   'Should remove all the numeric values for an attribute if remove is called with one argument',
   function(t) {
-    var helper = algoliasearchHelper(null, null, null);
+    var helper = algoliasearchHelper(fakeClient, null, null);
 
     helper.addNumericRefinement('attribute', '>', 0);
     helper.addNumericRefinement('attribute', '>', 4);
@@ -133,7 +137,7 @@ test(
 );
 
 test('Should be able to get if an attribute has numeric filter with hasRefinements', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   t.notOk(helper.hasRefinements('attribute'), 'not refined initially');
   helper.addNumericRefinement('attribute', '=', 42);
@@ -146,7 +150,7 @@ test('Should be able to remove the value even if it was a string used as a numbe
   var attributeName = 'attr';
   var n = '42';
 
-  var helper = algoliasearchHelper({}, 'index', {});
+  var helper = algoliasearchHelper(fakeClient, 'index', {});
 
   // add string - removes string
   helper.addNumericRefinement(attributeName, '=', n);
