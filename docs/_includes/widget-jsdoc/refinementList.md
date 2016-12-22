@@ -25,6 +25,26 @@
 </p>
 <p class="attr-description important">How much facet values to get. When the show more feature is activated this is the minimum number of facets requested (the show more button is not in active state).</p>
 <p class="attr-name">
+<span class='attr-optional'>`options.searchForFacetValues`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> &#124; <code>boolean</code>)</span>
+</p>
+<p class="attr-description">Add a search input to let the user search for more facet values</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.searchForFacetValues.placeholder`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span>
+</p>
+<p class="attr-description">Value of the search field placeholder</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.searchForFacetValues.templates`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span>
+</p>
+<p class="attr-description">Templates to use for search for facet values</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.searchForFacetValues.templates.noResults`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>string</code>)</span>
+</p>
+<p class="attr-description">Templates to use for search for facet values</p>
+<p class="attr-name">
 <span class='attr-optional'>`options.showMore`<span class="show-description">…</span></span>
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>object</code> &#124; <code>boolean</code>)</span>
 </p>

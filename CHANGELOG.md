@@ -1,3 +1,13 @@
+<a name="1.10.0"></a>
+# [1.10.0](https://github.com/algolia/instantsearch.js/compare/v1.9.0...v1.10.0) (2016-12-22)
+
+
+### Features
+
+* **widget:** Search for facet values - refinement list (#1753) ([b9e20f3](https://github.com/algolia/instantsearch.js/commit/b9e20f3))
+
+
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/algolia/instantsearch.js/compare/v1.8.16...v1.9.0) (2016-12-14)
 
