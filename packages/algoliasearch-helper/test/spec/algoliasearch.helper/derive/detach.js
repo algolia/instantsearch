@@ -6,6 +6,7 @@ var algoliasearchHelper = require('../../../../index.js');
 
 test('[Derivated helper] detach a derivative helper', function(t) {
   var client = {
+    addAlgoliaAgent: function() {},
     search: searchTest
   };
   var helper = algoliasearchHelper(client, '');

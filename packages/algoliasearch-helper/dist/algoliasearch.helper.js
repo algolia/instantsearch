@@ -79,7 +79,7 @@ algoliasearchHelper.url = require('./src/url');
 
 module.exports = algoliasearchHelper;
 
-},{"./src/SearchParameters":289,"./src/SearchResults":292,"./src/algoliasearch.helper":293,"./src/url":297,"./src/version.js":298}],2:[function(require,module,exports){
+},{"./src/SearchParameters":290,"./src/SearchResults":293,"./src/algoliasearch.helper":294,"./src/url":298,"./src/version.js":299}],2:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -10509,6 +10509,45 @@ function hasOwnProperty(obj, prop) {
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":285,"_process":279,"inherits":3}],287:[function(require,module,exports){
 'use strict';
+var util = require('util');
+var events = require('events');
+
+/**
+ * A DerivedHelper is a way to create sub requests to
+ * Algolia from a main helper.
+ * @class
+ * @classdesc The DerivedHelper provides an event based interface for search callbacks:
+ *  - search: when a search is triggered using the `search()` method.
+ *  - result: when the response is retrieved from Algolia and is processed.
+ *    This event contains a {@link SearchResults} object and the
+ *    {@link SearchParameters} corresponding to this answer.
+ */
+function DerivedHelper(mainHelper, fn) {
+  this.main = mainHelper;
+  this.fn = fn;
+  this.lastResults = null;
+}
+
+util.inherits(DerivedHelper, events.EventEmitter);
+
+/**
+ * Detach this helper from the main helper
+ * @return {undefined}
+ * @throws Error if the derived helper is already detached
+ */
+DerivedHelper.prototype.detach = function() {
+  this.removeAllListeners();
+  this.main.detachDerivedHelper(this);
+};
+
+DerivedHelper.prototype.getModifiedState = function(parameters) {
+  return this.fn(parameters);
+};
+
+module.exports = DerivedHelper;
+
+},{"events":2,"util":286}],288:[function(require,module,exports){
+'use strict';
 
 /**
  * Functions to manipulate refinement lists
@@ -10648,7 +10687,7 @@ var lib = {
 
 module.exports = lib;
 
-},{"lodash/defaults":217,"lodash/filter":219,"lodash/indexOf":229,"lodash/isEmpty":237,"lodash/isFunction":239,"lodash/isString":246,"lodash/isUndefined":249,"lodash/omit":259,"lodash/reduce":266}],288:[function(require,module,exports){
+},{"lodash/defaults":217,"lodash/filter":219,"lodash/indexOf":229,"lodash/isEmpty":237,"lodash/isFunction":239,"lodash/isString":246,"lodash/isUndefined":249,"lodash/omit":259,"lodash/reduce":266}],289:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/forEach');
@@ -10717,7 +10756,7 @@ function filterState(state, filters) {
 
 module.exports = filterState;
 
-},{"lodash/filter":219,"lodash/forEach":223,"lodash/indexOf":229,"lodash/isEmpty":237,"lodash/map":253}],289:[function(require,module,exports){
+},{"lodash/filter":219,"lodash/forEach":223,"lodash/indexOf":229,"lodash/isEmpty":237,"lodash/map":253}],290:[function(require,module,exports){
 'use strict';
 
 var keys = require('lodash/keys');
@@ -12398,7 +12437,7 @@ SearchParameters.prototype = {
  */
 module.exports = SearchParameters;
 
-},{"../functions/valToNumber":295,"./RefinementList":287,"./filterState":288,"lodash/defaults":217,"lodash/filter":219,"lodash/find":220,"lodash/forEach":223,"lodash/forOwn":224,"lodash/indexOf":229,"lodash/intersection":230,"lodash/isArray":233,"lodash/isEmpty":237,"lodash/isEqual":238,"lodash/isFunction":239,"lodash/isNaN":241,"lodash/isString":246,"lodash/isUndefined":249,"lodash/keys":250,"lodash/map":253,"lodash/merge":257,"lodash/omit":259,"lodash/reduce":266,"lodash/trim":276}],290:[function(require,module,exports){
+},{"../functions/valToNumber":296,"./RefinementList":288,"./filterState":289,"lodash/defaults":217,"lodash/filter":219,"lodash/find":220,"lodash/forEach":223,"lodash/forOwn":224,"lodash/indexOf":229,"lodash/intersection":230,"lodash/isArray":233,"lodash/isEmpty":237,"lodash/isEqual":238,"lodash/isFunction":239,"lodash/isNaN":241,"lodash/isString":246,"lodash/isUndefined":249,"lodash/keys":250,"lodash/map":253,"lodash/merge":257,"lodash/omit":259,"lodash/reduce":266,"lodash/trim":276}],291:[function(require,module,exports){
 'use strict';
 
 var invert = require('lodash/invert');
@@ -12485,7 +12524,7 @@ module.exports = {
   }
 };
 
-},{"lodash/invert":231,"lodash/keys":250}],291:[function(require,module,exports){
+},{"lodash/invert":231,"lodash/keys":250}],292:[function(require,module,exports){
 'use strict';
 
 module.exports = generateTrees;
@@ -12612,7 +12651,7 @@ function formatHierarchicalFacetValue(hierarchicalSeparator, currentRefinement) 
   };
 }
 
-},{"../functions/formatSort":294,"lodash/find":220,"lodash/last":252,"lodash/map":253,"lodash/orderBy":260,"lodash/pickBy":264,"lodash/reduce":266,"lodash/trim":276}],292:[function(require,module,exports){
+},{"../functions/formatSort":295,"lodash/find":220,"lodash/last":252,"lodash/map":253,"lodash/orderBy":260,"lodash/pickBy":264,"lodash/reduce":266,"lodash/trim":276}],293:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/forEach');
@@ -12711,7 +12750,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
  * @classdesc SearchResults contains the results of a query to Algolia using the
  * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
- * @param {object} algoliaResponse the response from algolia client
+ * @param {array.<object>} results the results from algolia client
  * @example <caption>SearchResults of the first query in
  * <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
@@ -12836,8 +12875,8 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
 }
  **/
 /*eslint-enable */
-function SearchResults(state, algoliaResponse) {
-  var mainSubResponse = algoliaResponse.results[0];
+function SearchResults(state, results) {
+  var mainSubResponse = results[0];
 
   /**
    * query used to generate the results
@@ -12887,7 +12926,7 @@ function SearchResults(state, algoliaResponse) {
    * sum of the processing time of all the queries
    * @member {number}
    */
-  this.processingTimeMS = sumBy(algoliaResponse.results, 'processingTimeMS');
+  this.processingTimeMS = sumBy(results, 'processingTimeMS');
   /**
    * The position if the position was guessed by IP.
    * @member {string}
@@ -12991,7 +13030,7 @@ function SearchResults(state, algoliaResponse) {
 
   // aggregate the refined disjunctive facets
   forEach(disjunctiveFacets, function(disjunctiveFacet) {
-    var result = algoliaResponse.results[nextDisjunctiveResult];
+    var result = results[nextDisjunctiveResult];
     var hierarchicalFacet = state.getHierarchicalFacetByName(disjunctiveFacet);
 
     // There should be only item in facets.
@@ -13050,7 +13089,7 @@ function SearchResults(state, algoliaResponse) {
       return;
     }
 
-    var result = algoliaResponse.results[nextDisjunctiveResult];
+    var result = results[nextDisjunctiveResult];
 
     forEach(result.facets, function(facetResults, dfacet) {
       var position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});
@@ -13367,21 +13406,24 @@ function getHierarchicalRefinement(state, attributeName, name, resultsFacets) {
 
 module.exports = SearchResults;
 
-},{"../functions/formatSort":294,"./generate-hierarchical-tree":291,"lodash/compact":215,"lodash/defaults":217,"lodash/find":220,"lodash/findIndex":221,"lodash/forEach":223,"lodash/get":225,"lodash/includes":228,"lodash/indexOf":229,"lodash/isArray":233,"lodash/isFunction":239,"lodash/map":253,"lodash/merge":257,"lodash/orderBy":260,"lodash/partial":261,"lodash/partialRight":262,"lodash/sumBy":270}],293:[function(require,module,exports){
+},{"../functions/formatSort":295,"./generate-hierarchical-tree":292,"lodash/compact":215,"lodash/defaults":217,"lodash/find":220,"lodash/findIndex":221,"lodash/forEach":223,"lodash/get":225,"lodash/includes":228,"lodash/indexOf":229,"lodash/isArray":233,"lodash/isFunction":239,"lodash/map":253,"lodash/merge":257,"lodash/orderBy":260,"lodash/partial":261,"lodash/partialRight":262,"lodash/sumBy":270}],294:[function(require,module,exports){
 'use strict';
 
 var SearchParameters = require('./SearchParameters');
 var SearchResults = require('./SearchResults');
+var DerivedHelper = require('./DerivedHelper');
 var requestBuilder = require('./requestBuilder');
 
 var util = require('util');
 var events = require('events');
 
+var flatten = require('lodash/flatten');
 var forEach = require('lodash/forEach');
-var bind = require('lodash/bind');
 var isEmpty = require('lodash/isEmpty');
+var map = require('lodash/map');
 
 var url = require('./url');
+var version = require('./version');
 
 /**
  * Event triggered when a parameter is set or updated
@@ -13450,6 +13492,8 @@ var url = require('./url');
  * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
+  client.addAlgoliaAgent('JS Helper ' + version);
+
   this.client = client;
   var opts = options || {};
   opts.index = index;
@@ -13457,6 +13501,7 @@ function AlgoliaSearchHelper(client, index, options) {
   this.lastResults = null;
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
+  this.derivedHelpers = [];
 }
 
 util.inherits(AlgoliaSearchHelper, events.EventEmitter);
@@ -13531,18 +13576,18 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
       queries,
       function(err, content) {
         if (err) cb(err, null, tempState);
-        else cb(null, new SearchResults(tempState, content), tempState);
-      });
+        else cb(err, new SearchResults(tempState, content.results), tempState);
+      }
+    );
   }
 
-  return this.client.search(queries).then(
-    function(content) {
-      return {
-        content: new SearchResults(tempState, content),
-        state: tempState,
-        _originalResponse: content
-      };
-    });
+  return this.client.search(queries).then(function(content) {
+    return {
+      content: new SearchResults(tempState, content.results),
+      state: tempState,
+      _originalResponse: content
+    };
+  });
 };
 
 /**
@@ -14457,27 +14502,47 @@ AlgoliaSearchHelper.prototype.getHierarchicalFacetBreadcrumb = function(facetNam
  */
 AlgoliaSearchHelper.prototype._search = function() {
   var state = this.state;
-  var queries = requestBuilder._getQueries(state.index, state);
+  var mainQueries = requestBuilder._getQueries(state.index, state);
+
+  var states = [{
+    state: state,
+    queriesCount: mainQueries.length,
+    helper: this
+  }];
 
   this.emit('search', state, this.lastResults);
-  this.client.search(queries,
-    bind(this._handleResponse,
-      this,
-      state,
-      this._queryId++));
+
+  var derivedQueries = map(this.derivedHelpers, function(derivedHelper) {
+    var derivedState = derivedHelper.getModifiedState(state);
+    var queries = requestBuilder._getQueries(derivedState.index, derivedState);
+    states.push({
+      state: derivedState,
+      queriesCount: queries.length,
+      helper: derivedHelper
+    });
+    derivedHelper.emit('search', derivedState, derivedHelper.lastResults);
+    return queries;
+  });
+
+  var queries = mainQueries.concat(flatten(derivedQueries));
+  var queryId = this._queryId++;
+
+  this.client.search(queries, this._dispatchAlgoliaResponse.bind(this, states, queryId));
 };
 
 /**
- * Transform the response as sent by the server and transform it into a user
- * usable objet that merge the results of all the batch requests.
+ * Transform the responses as sent by the server and transform them into a user
+ * usable objet that merge the results of all the batch requests. It will dispatch
+ * over the different helper + derived helpers (when there are some).
  * @private
- * @param {SearchParameters} state state used for to generate the request
+ * @param {array.<{SearchParameters, AlgoliaQueries, AlgoliaSearchHelper}>}
+ *  state state used for to generate the request
  * @param {number} queryId id of the current request
  * @param {Error} err error if any, null otherwise
  * @param {object} content content of the response
  * @return {undefined}
  */
-AlgoliaSearchHelper.prototype._handleResponse = function(state, queryId, err, content) {
+AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryId, err, content) {
   if (queryId < this._lastQueryIdReceived) {
     // Outdated answer
     return;
@@ -14490,9 +14555,17 @@ AlgoliaSearchHelper.prototype._handleResponse = function(state, queryId, err, co
     return;
   }
 
-  var formattedResponse = this.lastResults = new SearchResults(state, content);
+  var results = content.results;
+  forEach(states, function(s) {
+    var state = s.state;
+    var queriesCount = s.queriesCount;
+    var helper = s.helper;
 
-  this.emit('result', formattedResponse, state);
+    var specificResults = results.splice(0, queriesCount);
+
+    var formattedResponse = helper.lastResults = new SearchResults(state, specificResults);
+    helper.emit('result', formattedResponse, state);
+  });
 };
 
 AlgoliaSearchHelper.prototype.containsRefinement = function(query, facetFilters, numericFilters, tagFilters) {
@@ -14519,9 +14592,49 @@ AlgoliaSearchHelper.prototype._change = function() {
 
 /**
  * Clears the cache of the underlying Algolia client.
+ * @return {AlgoliaSearchHelper}
  */
 AlgoliaSearchHelper.prototype.clearCache = function() {
   this.client.clearCache();
+  return this;
+};
+
+/**
+ * Creates an derived instance of the Helper. A derived helper
+ * is a way to request other indices synchronised with the lifecycle
+ * of the main Helper. This mechanism uses the multiqueries feature
+ * of Algolia to aggregate all the requests in a single network call.
+ *
+ * This method takes a function that is used to create a new SearchParameter
+ * that will be used to create requests to Algolia. Those new requests
+ * are created just before the `search` event. The signature of the function
+ * is `SearchParameters -> SearchParameters`.
+ *
+ * This method returns a new DerivedHelper which is an EventEmitter
+ * that fires the same `search`, `results` and `error` events. Those
+ * events, however, will receive data specific to this DerivedHelper
+ * and the SearchParameters that is returned by the call of the
+ * parameter function.
+ * @param {function} fn SearchParameters -> SearchParameters
+ * @return {DerivedHelper}
+ */
+AlgoliaSearchHelper.prototype.derive = function(fn) {
+  var derivedHelper = new DerivedHelper(this, fn);
+  this.derivedHelpers.push(derivedHelper);
+  return derivedHelper;
+};
+
+/**
+ * This method detaches a derived Helper from the main one. Prefer using the one from the
+ * derived helper itself, to remove the event listeners too.
+ * @private
+ * @return {undefined}
+ * @throws Error
+ */
+AlgoliaSearchHelper.prototype.detachDerivedHelper = function(derivedHelper) {
+  var pos = this.derivedHelpers.indexOf(derivedHelper);
+  if (pos === -1) throw new Error('Derived helper already detached');
+  this.derivedHelpers.splice(pos, 1);
 };
 
 /**
@@ -14542,7 +14655,7 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 
 module.exports = AlgoliaSearchHelper;
 
-},{"./SearchParameters":289,"./SearchResults":292,"./requestBuilder":296,"./url":297,"events":2,"lodash/bind":214,"lodash/forEach":223,"lodash/isEmpty":237,"util":286}],294:[function(require,module,exports){
+},{"./DerivedHelper":287,"./SearchParameters":290,"./SearchResults":293,"./requestBuilder":297,"./url":298,"./version":299,"events":2,"lodash/flatten":222,"lodash/forEach":223,"lodash/isEmpty":237,"lodash/map":253,"util":286}],295:[function(require,module,exports){
 'use strict';
 
 var reduce = require('lodash/reduce');
@@ -14571,7 +14684,7 @@ module.exports = function formatSort(sortBy, defaults) {
   }, [[], []]);
 };
 
-},{"lodash/find":220,"lodash/reduce":266,"lodash/startsWith":267}],295:[function(require,module,exports){
+},{"lodash/find":220,"lodash/reduce":266,"lodash/startsWith":267}],296:[function(require,module,exports){
 'use strict';
 
 var map = require('lodash/map');
@@ -14592,7 +14705,7 @@ function valToNumber(v) {
 
 module.exports = valToNumber;
 
-},{"lodash/isArray":233,"lodash/isNumber":242,"lodash/isString":246,"lodash/map":253}],296:[function(require,module,exports){
+},{"lodash/isArray":233,"lodash/isNumber":242,"lodash/isString":246,"lodash/map":253}],297:[function(require,module,exports){
 'use strict';
 
 var forEach = require('lodash/forEach');
@@ -14899,7 +15012,7 @@ var requestBuilder = {
 
 module.exports = requestBuilder;
 
-},{"lodash/forEach":223,"lodash/isArray":233,"lodash/map":253,"lodash/merge":257,"lodash/reduce":266}],297:[function(require,module,exports){
+},{"lodash/forEach":223,"lodash/isArray":233,"lodash/map":253,"lodash/merge":257,"lodash/reduce":266}],298:[function(require,module,exports){
 'use strict';
 
 /**
@@ -15071,10 +15184,10 @@ exports.getQueryStringFromState = function(state, options) {
   return qs.stringify(encodedState, {encode: safe, sort: sort});
 };
 
-},{"./SearchParameters":289,"./SearchParameters/shortener":290,"lodash/bind":214,"lodash/forEach":223,"lodash/invert":231,"lodash/isArray":233,"lodash/isPlainObject":245,"lodash/isString":246,"lodash/map":253,"lodash/mapKeys":254,"lodash/mapValues":255,"lodash/pick":263,"qs":281,"qs/lib/utils":284}],298:[function(require,module,exports){
+},{"./SearchParameters":290,"./SearchParameters/shortener":291,"lodash/bind":214,"lodash/forEach":223,"lodash/invert":231,"lodash/isArray":233,"lodash/isPlainObject":245,"lodash/isString":246,"lodash/map":253,"lodash/mapKeys":254,"lodash/mapValues":255,"lodash/pick":263,"qs":281,"qs/lib/utils":284}],299:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.16.0';
+module.exports = '2.17.0';
 
 },{}]},{},[1])(1)
 });

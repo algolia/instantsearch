@@ -1,5 +1,11 @@
 CHANGELOG
 
+2.17.0 - 2016-12-22
+ * feat(derive): Let the user create a derivation of an helper
+ * misc(user-agent): Add a user agent for the JS Helper
+ * misc(ga): add trackers :see-no-evil:
+ * fix(doc): fix deep object documentation
+
 2.16.0 - 2016-12-06
  * feat(searchForFacetValues): new method to search in facet values
 
