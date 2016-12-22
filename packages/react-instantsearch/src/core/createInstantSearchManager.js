@@ -14,11 +14,21 @@ import highlightTags from './highlightTags.js';
  */
 export default function createInstantSearchManager({
   indexName,
-  initialState,
+  initialState = {},
   algoliaClient,
   searchParameters = {},
 }) {
-  const helper = algoliasearchHelper(algoliaClient);
+  const baseSP = new SearchParameters({
+    ...searchParameters,
+    index: indexName,
+    ...highlightTags,
+  });
+
+  const helper = algoliasearchHelper(algoliaClient, indexName, baseSP);
+  helper.on('result', handleSearchSuccess);
+  helper.on('error', handleSearchError);
+
+  const initialSearchParameters = helper.state;
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
 
@@ -36,7 +46,7 @@ export default function createInstantSearchManager({
       .map(widget => widget.getMetadata(state));
   }
 
-  function getSearchParameters(initialSearchParameters) {
+  function getSearchParameters() {
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
       .reduce(
@@ -46,37 +56,26 @@ export default function createInstantSearchManager({
   }
 
   function search() {
-    const baseSP = new SearchParameters({
-      ...searchParameters,
-      index: indexName,
-      ...highlightTags,
-    });
-    const widgetSearchParameters = getSearchParameters(baseSP);
+    const widgetSearchParameters = getSearchParameters(helper.state);
 
-    helper
-      .searchOnce(widgetSearchParameters)
-      .then(({content}) => {
-        store.setState({
-          ...store.getState(),
-          results: content,
-          searching: false,
-        });
-      }, error => {
-        store.setState({
-          ...store.getState(),
-          error,
-          searching: false,
-        });
-      })
-      .catch(error => {
-        // Since setState is synchronous, any error that occurs in the render of a
-        // component will be swallowed by this promise.
-        // This is a trick to make the error show up correctly in the console.
-        // See http://stackoverflow.com/a/30741722/969302
-        setTimeout(() => {
-          throw error;
-        });
-      });
+    helper.setState(widgetSearchParameters)
+          .search();
+  }
+
+  function handleSearchSuccess(content) {
+    store.setState({
+      ...store.getState(),
+      results: content,
+      searching: false,
+    });
+  }
+
+  function handleSearchError(error) {
+    store.setState({
+      ...store.getState(),
+      error,
+      searching: false,
+    });
   }
 
   // Called whenever a widget has been rendered with new props.

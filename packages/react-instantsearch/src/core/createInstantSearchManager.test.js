@@ -3,235 +3,144 @@
 
 import createInstantSearchManager from './createInstantSearchManager';
 
-import algoliasearchHelper from 'algoliasearch-helper';
-jest.mock('algoliasearch-helper', () => {
-  const output = jest.fn();
-  const SearchParameters = require.requireActual('algoliasearch-helper/src/SearchParameters');
-  output.SearchParameters = SearchParameters;
-  return output;
-});
+import algoliaClient from 'algoliasearch';
 
-import createStore from './createStore';
-jest.mock('./createStore', () => jest.fn(initialState => {
-  let state = initialState;
-  return {
-    setState: jest.fn(nextState => {
-      state = nextState;
-    }),
-    getState: () => state,
-  };
-}));
-import createWidgetsManager from './createWidgetsManager';
-jest.mock('./createWidgetsManager', () => jest.fn());
+jest.useFakeTimers();
 
-describe('createInstantSearchManager', () => {
-  let createHrefForState;
-  let onInternalStateUpdate;
-  let initialState;
-  let ism;
-  let algoliaClient;
-
-  function init(otherISMParameters = {}) {
-    createHrefForState = jest.fn(a => a);
-    onInternalStateUpdate = jest.fn();
-    algoliaClient = jest.fn();
-    initialState = {
-      hello: 'yes',
-    };
-    ism = createInstantSearchManager({
-      indexName: 'indexName',
-      algoliaClient,
-      initialState,
-      createHrefForState,
-      onInternalStateUpdate,
-      ...otherISMParameters,
-    });
+const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
+const response = {
+  results: [
+    {
+      params: 'query=&hitsPerPage=10&page=0&facets=%5B%5D&tagFilters=',
+      page: 0,
+      hits: [],
+      hitsPerPage: 10,
+      nbPages: 0,
+      processingTimeMS: 4,
+      query: '',
+      nbHits: 0,
+      index: 'index',
+    },
+  ],
+};
+client.search = jest.fn((queries, cb) => {
+  if (cb) {
+    setTimeout(() => {
+      cb(null, response);
+    }, 1);
+    return undefined;
   }
 
-  beforeEach(() => {
-    algoliasearchHelper.mockClear();
-    createStore.mockClear();
-    createWidgetsManager.mockClear();
+  return new Promise(resolve => {
+    resolve(response);
   });
+});
 
-  it('initializes the algoliasearch helper client with correct options', () => {
-    init();
-    expect(algoliasearchHelper.mock.calls[0][0]).toBe(algoliaClient);
-  });
-
-  describe('store', () => {
-    it('is initialized with correct data', () => {
-      init();
-      const data = createStore.mock.calls[0][0];
-      expect(data).toEqual({
-        widgets: initialState,
-        metadata: [],
-        results: null,
-        error: null,
-        searching: false,
-      });
+describe('createInstantSearchManager', () => {
+  it('initializes the manager with an empty state', () => {
+    const ism = createInstantSearchManager({
+      indexName: 'index',
+      initialState: {},
+      searchParameters: {},
+      algoliaClient: client,
     });
 
-    it('is exposed on the instance', () => {
-      const store = {};
-      createStore.mockImplementationOnce(() => store);
-      init();
-      expect(ism.store).toBe(store);
+    const store = ism.store.getState();
+    expect(store).toEqual({
+      error: null,
+      metadata: [],
+      results: null,
+      searching: false,
+      widgets: {},
+    });
+
+    const widgets = ism.widgetsManager.getWidgets();
+    expect(widgets).toEqual([]);
+
+    const nextState = {};
+    const transitionnedState = ism.transitionState(nextState);
+    expect(transitionnedState).toBe(nextState);
+
+    const widgetIds = ism.getWidgetsIds();
+    expect(widgetIds).toEqual([]);
+  });
+
+  describe('Widget manager', () => {
+    it('triggers the search when a widget is added', () => {
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client,
+      });
+
+      ism.widgetsManager.registerWidget({
+        getMetadata: () => {},
+        getSearchParameters: () => {},
+        transitionState: () => {},
+      });
+
+      const storeT0 = ism.store.getState();
+      expect(storeT0.searching).toBe(false);
+
+      setImmediate(() => {
+        const storeT1 = ism.store.getState();
+        expect(storeT1.searching).toBe(true);
+      });
     });
   });
 
-  describe('transitionState', () => {
-    it('executes all widgets\'s transitionState hooks', () => {
-      createWidgetsManager.mockImplementationOnce(() => ({
-        getWidgets: () => [
-          {
-            transitionState: (searchState, nextSearchState) => ({...nextSearchState, first: true}),
-          },
-          {
-            transitionState: (searchState, nextSearchState) => ({...nextSearchState, second: true}),
-          },
-        ],
-      }));
-      init();
-      ism.store.setState({
-        ...ism.store.getState(),
-        metadata: [
-          {id: 'q'},
-          {id: 'p'},
-        ],
+  describe('transitionstate', () => {
+    it('executes widgets transitionstate hooks', () => {
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client,
       });
-      const state = ism.transitionState({q: 'no', p: 3});
-      expect(state).toEqual({
-        q: 'no',
-        p: 3,
-        first: true,
-        second: true,
+
+      const nextSearchState = {};
+
+      ism.widgetsManager.registerWidget({
+        transitionState: (nxt, current) => {
+          expect(nxt).toEqual(nextSearchState);
+          return {...current, a: 1};
+        },
       });
+
+      ism.widgetsManager.registerWidget({
+        transitionState: (nxt, current) => {
+          expect(nxt).toEqual(nextSearchState);
+          return {...current, b: 2};
+        },
+      });
+
+      const state = ism.transitionState();
+      expect(state).toEqual({a: 1, b: 2});
     });
   });
 
   describe('getWidgetsIds', () => {
     it('returns the list of ids of all registered widgets', () => {
-      init();
-      ism.store.setState({
-        ...ism.store.getState(),
-        metadata: [
-          {id: 'q'},
-          {id: 'p'},
-        ],
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client,
       });
-      expect(ism.getWidgetsIds()).toEqual(['q', 'p']);
-    });
-  });
 
-  function testSearch(promise, searchParameters = undefined) {
-    const helper = {
-      searchOnce: jest.fn(() => promise),
-    };
-    algoliasearchHelper.mockImplementationOnce(() => helper);
-    createWidgetsManager.mockImplementationOnce(() => ({
-      getWidgets: () => [
-        {
-          getMetadata: s => ({id: 'q', hello: s.hello}),
-          getSearchParameters: sp => sp.setQuery('hello'),
-        },
-        {},
-        {
-          getMetadata: () => ({id: 'p'}),
-        },
-        {
-          getSearchParameters: sp => sp.setPage(20),
-        },
-      ],
-    }));
-    init({searchParameters});
-    return helper.searchOnce;
-  }
+      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'a'})});
+      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'b'})});
+      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'c'})});
+      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'd'})});
 
-  describe('widgetsManager', () => {
-    it('is exposed on the instance', () => {
-      const widgetsManager = {};
-      createWidgetsManager.mockImplementationOnce(() => widgetsManager);
-      init();
-      expect(ism.widgetsManager).toBe(widgetsManager);
-    });
+      const widgetIDsT0 = ism.getWidgetsIds().sort();
+      expect(widgetIDsT0).toEqual([]);
 
-    it('updates the store and searches on update', () => {
-      const searchOnce = testSearch(new Promise(() => null));
-      const onUpdate = createWidgetsManager.mock.calls[0][0];
-      onUpdate();
-      expect(ism.store.setState.mock.calls.length).toBe(1);
-      expect(ism.store.setState.mock.calls[0][0]).toEqual({
-        widgets: initialState,
-        metadata: [{id: 'q', hello: 'yes'}, {id: 'p'}],
-        results: null,
-        error: null,
-        searching: true,
-      });
-      expect(searchOnce.mock.calls.length).toBe(1);
-      const params = searchOnce.mock.calls[0][0];
-      expect(params.query).toBe('hello');
-      expect(params.page).toBe(20);
-    });
+      jest.runAllTimers();
 
-    it('when searching it adds the searchParameters if any', () => {
-      const searchOnce = testSearch(new Promise(() => null), {distinct: 1});
-      const onUpdate = createWidgetsManager.mock.calls[0][0];
-      onUpdate();
-      const params = searchOnce.mock.calls[0][0];
-      expect(params.query).toBe('hello');
-      expect(params.page).toBe(20);
-      expect(params.distinct).toBe(1);
-    });
-  });
-
-  describe('onExternalStateUpdate', () => {
-    it('updates the store and searches', () => {
-      const results = {};
-      const searchOnce = testSearch(Promise.resolve({content: results}));
-      ism.onExternalStateUpdate({hello: 'no'});
-      expect(ism.store.setState.mock.calls.length).toBe(1);
-      expect(ism.store.setState.mock.calls[0][0]).toEqual({
-        widgets: {hello: 'no'},
-        metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
-        results: null,
-        error: null,
-        searching: true,
-      });
-      expect(searchOnce.mock.calls.length).toBe(1);
-      const params = searchOnce.mock.calls[0][0];
-      expect(params.query).toBe('hello');
-      expect(params.page).toBe(20);
-
-      // Since promises are always resolved asynchronously, we need to create
-      // a new promise in order to hook into the next promise tick.
-      return Promise.resolve().then(() => {
-        expect(ism.store.setState.mock.calls.length).toBe(2);
-        expect(ism.store.setState.mock.calls[1][0]).toEqual({
-          widgets: {hello: 'no'},
-          metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
-          results,
-          error: null,
-          searching: false,
-        });
-      });
-    });
-
-    it('errors are correctly stored', () => {
-      const error = new Error();
-      testSearch(Promise.reject(error));
-      ism.onExternalStateUpdate({hello: 'no'});
-
-      return Promise.resolve().then(() => {
-        expect(ism.store.setState.mock.calls.length).toBe(2);
-        expect(ism.store.setState.mock.calls[1][0]).toEqual({
-          widgets: {hello: 'no'},
-          metadata: [{id: 'q', hello: 'no'}, {id: 'p'}],
-          results: null,
-          error,
-          searching: false,
-        });
-      });
+      const widgetIDsT1 = ism.getWidgetsIds().sort();
+      expect(widgetIDsT1).toEqual(['a', 'b', 'c', 'd']);
     });
   });
 });
