@@ -2,12 +2,16 @@
 
 var test = require('tape');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('hierarchical facets: getFacetValues', function(t) {
   var algoliasearchHelper = require('../../../');
   var SearchResults = require('../../../src/SearchResults');
 
   var indexName = 'hierarchical-simple-indexName';
-  var helper = algoliasearchHelper(null, indexName, {
+  var helper = algoliasearchHelper(fakeClient, indexName, {
     hierarchicalFacets: [{
       name: 'categories',
       attributes: ['categories.lvl0', 'categories.lvl1'],
@@ -89,7 +93,7 @@ test('hierarchical facets: getFacetValues', function(t) {
     ]
   };
 
-  var results = new SearchResults(helper.state, algoliaResponse);
+  var results = new SearchResults(helper.state, algoliaResponse.results);
 
   t.deepEqual(
     results.getFacetValues('categories', {sortBy: ['name:asc']}),

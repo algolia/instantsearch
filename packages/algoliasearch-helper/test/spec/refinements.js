@@ -4,11 +4,15 @@ var test = require('tape');
 var _ = require('lodash');
 var algoliasearchHelper = require('../../index');
 
+var emptyClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('Adding refinments should add an entry to the refinments attribute', function(t) {
   var facetName = 'facet1';
   var facetValue = '42';
 
-  var helper = algoliasearchHelper({}, 'index', {
+  var helper = algoliasearchHelper(emptyClient, 'index', {
     facets: [facetName]
   });
 
@@ -26,7 +30,7 @@ test('Adding refinments should add an entry to the refinments attribute', functi
 test('Adding several refinements for a single attribute should be handled', function(t) {
   var facetName = 'facet';
 
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
@@ -44,7 +48,7 @@ test('Adding several refinements for a single attribute should be handled', func
 test('Toggling several refinements for a single attribute should be handled', function(t) {
   var facetName = 'facet';
 
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
@@ -61,7 +65,7 @@ test('Toggling several refinements for a single attribute should be handled', fu
 });
 
 test('Using toggleRefine on a non specified facet should throw an exception', function(t) {
-  var helper = algoliasearchHelper(null, null, {});
+  var helper = algoliasearchHelper(emptyClient, null, {});
 
   t.throws(_.partial(helper.toggleRefine, 'unknown', 'value'));
 
@@ -71,7 +75,7 @@ test('Using toggleRefine on a non specified facet should throw an exception', fu
 test('Removing several refinements for a single attribute should be handled', function(t) {
   var facetName = 'facet';
 
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: [facetName]
   });
 
@@ -90,7 +94,7 @@ test('Removing several refinements for a single attribute should be handled', fu
 test('isDisjunctiveRefined', function(t) {
   var facet = 'MyFacet';
 
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     disjunctiveFacets: [facet]
   });
 
@@ -110,7 +114,7 @@ test('isDisjunctiveRefined', function(t) {
 });
 
 test('IsRefined should return true if the (facet, value ) is refined.', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1']
   });
 
@@ -126,7 +130,7 @@ test('IsRefined should return true if the (facet, value ) is refined.', function
 });
 
 test('isRefined(facet)/hasRefinements should return true if the facet is refined.', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1']
   });
 
@@ -148,7 +152,7 @@ test('isRefined(facet)/hasRefinements should return true if the facet is refined
 });
 
 test('getRefinements should return all the refinements for a given facet', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2', 'sales']
   });
@@ -193,7 +197,7 @@ test('getRefinements should return all the refinements for a given facet', funct
 });
 
 test('getRefinements should return an empty array if the facet has no refinement', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
@@ -205,7 +209,7 @@ test('getRefinements should return an empty array if the facet has no refinement
 });
 
 test('[Conjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
@@ -227,7 +231,7 @@ test('[Conjunctive] Facets should be resilient to user attempt to use numbers', 
 });
 
 test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });
@@ -249,7 +253,7 @@ test('[Disjunctive] Facets should be resilient to user attempt to use numbers', 
 });
 
 test('[Disjunctive] Facets should be resilient to user attempt to use numbers', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(emptyClient, null, {
     facets: ['facet1'],
     disjunctiveFacets: ['facet2']
   });

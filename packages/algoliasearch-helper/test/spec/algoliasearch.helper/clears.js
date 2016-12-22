@@ -7,8 +7,8 @@ var keys = require('lodash/keys');
 var isEmpty = require('lodash/isEmpty');
 var isUndefined = require('lodash/isUndefined');
 
-var fixture = function fixture() {
-  var helper = algoliasearchHelper(undefined, 'Index', {
+function fixture() {
+  var helper = algoliasearchHelper({addAlgoliaAgent: function() {}}, 'Index', {
     facets: ['facet1', 'facet2', 'both_facet', 'excluded1', 'excluded2'],
     disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'both_facet']
   });
@@ -23,7 +23,7 @@ var fixture = function fixture() {
     .addNumericRefinement('numeric1', '<', '10')
     .addNumericRefinement('numeric2', '>=', 0)
     .addNumericRefinement('numeric2', '<', 10);
-};
+}
 
 test('Check that the state objects match how we test them', function(t) {
   var helper = fixture();

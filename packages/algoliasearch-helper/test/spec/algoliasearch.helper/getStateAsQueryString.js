@@ -3,8 +3,12 @@
 var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('getStateAsQueryString', function(t) {
-  var helper = algoliaSearchHelper(null, 'fake index', {
+  var helper = algoliaSearchHelper(fakeClient, 'fake index', {
     facets: ['color'],
     hierarchicalFacets: [{
       name: 'products',
@@ -23,7 +27,7 @@ test('getStateAsQueryString', function(t) {
 });
 
 test('getStateAsQueryString({safe: true})', function(t) {
-  var helper = algoliaSearchHelper(null, 'fake index', {
+  var helper = algoliaSearchHelper(fakeClient, 'fake index', {
     facets: ['color'],
     hierarchicalFacets: [{
       name: 'products',

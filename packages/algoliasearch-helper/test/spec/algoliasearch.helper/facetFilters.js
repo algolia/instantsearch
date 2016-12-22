@@ -7,10 +7,14 @@ var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 var requestBuilder = require('../../../src/requestBuilder');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('The filters should contain the different filters for a single conjunctive facet with multiple refinements',
   function(t) {
     var facetName = 'myFacet';
-    var helper = algoliasearchHelper('', '', {
+    var helper = algoliasearchHelper(fakeClient, '', {
       facets: [facetName]
     });
 

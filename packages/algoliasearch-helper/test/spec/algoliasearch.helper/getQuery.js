@@ -3,8 +3,12 @@
 var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('getQuery', function(t) {
-  var helper = algoliaSearchHelper(null, 'IndexName', {
+  var helper = algoliaSearchHelper(fakeClient, 'IndexName', {
     disjunctiveFacets: ['df1', 'df2', 'df3'],
     disjunctiveFacetsRefinements: {
       df1: ['DF1-VAL-1'],

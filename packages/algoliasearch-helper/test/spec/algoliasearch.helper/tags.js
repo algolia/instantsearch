@@ -4,8 +4,12 @@ var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 var requestBuilder = require('../../../src/requestBuilder');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('Tag filters: operations on tags list', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addTag('tag').addTag('tag2');
   t.deepEqual(helper.getTags(), ['tag', 'tag2'], 'should be [ tag, tag2 ]');
@@ -17,7 +21,7 @@ test('Tag filters: operations on tags list', function(t) {
 });
 
 test('Tags filters: advanced query', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   var complexQuery = '(sea, city), romantic, -mountain';
 
@@ -29,7 +33,7 @@ test('Tags filters: advanced query', function(t) {
 });
 
 test('Tags filters: switching between advanced and simple API should be forbidden without clearing the refinements first', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   helper.addTag('tag').addTag('tag2');
   t.deepEqual(requestBuilder._getTagFilters(helper.state), 'tag,tag2', 'should be [ tag, tag2 ]');

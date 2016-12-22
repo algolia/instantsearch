@@ -7,7 +7,7 @@ var algoliaSearch = require('algoliasearch');
 var algoliasearchHelper = require('../../index');
 
 test('Search should call the algolia client according to the number of refinements', function(t) {
-  var testData = require('./search.testdata');
+  var testData = require('./search.testdata.js')();
 
   var client = algoliaSearch('dsf', 'dsfdf');
   var mock = sinon.mock(client);
@@ -48,6 +48,7 @@ test('Search should call the algolia client according to the number of refinemen
       {name: 'Paris', count: 3, isRefined: true}
     ];
 
+
     t.deepEqual(
       cityValuesCustom,
       expectedCityValuesCustom,
@@ -80,7 +81,10 @@ test('Search should call the algolia client according to the number of refinemen
 });
 
 test('no mutating methods should trigger a search', function(t) {
-  var helper = algoliasearchHelper(undefined, 'Index', {
+  var client = algoliaSearch('dsf', 'dsfdf');
+  sinon.mock(client);
+
+  var helper = algoliasearchHelper(client, 'Index', {
     disjunctiveFacets: ['city'],
     facets: ['tower']
   });

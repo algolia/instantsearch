@@ -3,10 +3,14 @@
 var test = require('tape');
 var algoliaSearchHelper = require('../../../index.js');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('getQueryParameter', function(t) {
   var bind = require('lodash/bind');
 
-  var helper = algoliaSearchHelper(null, null, {
+  var helper = algoliaSearchHelper(fakeClient, null, {
     facets: ['facet1'],
     minWordSizefor1Typo: 8,
     ignorePlurals: true

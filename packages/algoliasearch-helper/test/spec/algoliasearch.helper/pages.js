@@ -3,8 +3,12 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('setChange should change the current page', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
   helper.setCurrentPage(3);
@@ -13,7 +17,7 @@ test('setChange should change the current page', function(t) {
 });
 
 test('nextPage should increment the page by one', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
   helper.nextPage();
@@ -24,7 +28,7 @@ test('nextPage should increment the page by one', function(t) {
 });
 
 test('previousPage should decrement the current page by one', function(t) {
-  var helper = algoliasearchHelper(null, null, null);
+  var helper = algoliasearchHelper(fakeClient, null, null);
 
   t.ok(helper.getCurrentPage() === 0, 'First page should be 0');
   helper.setCurrentPage(3);
@@ -37,7 +41,7 @@ test('previousPage should decrement the current page by one', function(t) {
 test('pages should be reset if the mutation might change the number of pages', function(t) {
   var bind = require('lodash/bind');
 
-  var helper = algoliasearchHelper('', '', {
+  var helper = algoliasearchHelper(fakeClient, '', {
     facets: ['facet1', 'f2'],
     disjunctiveFacets: ['f1']
   });

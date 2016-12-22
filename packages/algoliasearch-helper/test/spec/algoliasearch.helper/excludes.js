@@ -3,8 +3,12 @@
 var test = require('tape');
 var algoliasearchHelper = require('../../../index');
 
+var fakeClient = {
+  addAlgoliaAgent: function() {}
+};
+
 test('addExclude should add an exclusion', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
 
@@ -22,7 +26,7 @@ test('addExclude should add an exclusion', function(t) {
 });
 
 test('removeExclude should remove an exclusion', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
 
@@ -50,7 +54,7 @@ test('isExcluded should allow to omit the value', function(t) {
   var facetValueToExclude = 'brand';
   var facetValueNotExcluded = 'bar';
 
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: [facetName]
   });
 
@@ -68,7 +72,7 @@ test('isExcluded should allow to omit the value', function(t) {
 });
 
 test('isExcluded should report exclusion correctly', function(t) {
-  var helper = algoliasearchHelper(null, null, {
+  var helper = algoliasearchHelper(fakeClient, null, {
     facets: ['facet']
   });
 

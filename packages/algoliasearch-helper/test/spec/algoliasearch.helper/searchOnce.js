@@ -8,7 +8,7 @@ var SearchParameters = require('../../../src/SearchParameters');
 var algoliasearchHelper = require('../../../index');
 
 test('searchOnce should call the algolia client according to the number of refinements and call callback with no error and with results when no error', function(t) {
-  var testData = require('../search.testdata');
+  var testData = require('../search.testdata')();
 
   var client = algoliaSearch('dsf', 'dsfdf');
   var mock = sinon.mock(client);
