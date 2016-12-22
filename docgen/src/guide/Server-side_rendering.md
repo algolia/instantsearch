@@ -13,4 +13,7 @@ right now. We will soon provide API entries to handle this usecase.
     <div class="guide-nav-left">
         Previous: <a href="guide/React_native.html">← React Native</a>
     </div>
+    <div class="guide-nav-right">
+            Next: <a href="guide//Autocomplete_menu.html">Autocomplete menu →</a>
+    </div>
 </div>
