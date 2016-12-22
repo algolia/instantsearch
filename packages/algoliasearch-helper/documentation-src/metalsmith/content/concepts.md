@@ -217,6 +217,27 @@ parameters object and its api to create new states that we can serialize.
 
 ![Search states](images/concepts/State is immutable.svg)
 
+### Derivations of the helper: multi-queries
+
+Derivation is the ability to create virtual helpers to be able to generate
+requests based on the main JS Helper instance. For example, with this feature,
+you can:
+ - query two indices at the same time.
+ - search in the same index with different parameters.
+
+The virtual helpers are created by calling the [derive](reference.html#AlgoliaSearchHelper#derive) method with a *derivation
+function*. The derivation function is used when `search` is called. For each
+derivated Helper, it will derive a new state from the main. All of those requests
+will be sent together along the main helper request. When Algolia answers come back,
+the results will be dispatched to each helper via events (`error` or `result`).
+
+Here is a schematic view of the process happening during a search with derivated helpers:
+
+<img src="images/concepts/derive-simplified.svg" alt="derivation" style="max-width: 100%;margin: 0 5%;">
+
+This schema only present a single derivated helper but there can be more than one.
+
+
 ### Smart page behaviour
 
 In a search engine, the most relevant results are always on the first page.

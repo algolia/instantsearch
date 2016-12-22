@@ -7,7 +7,7 @@ var algoliaSearch = require('algoliasearch');
 var algoliasearchHelper = require('../../index');
 
 test('Search should call the algolia client according to the number of refinements', function(t) {
-  var testData = require('./search.testdata');
+  var testData = require('./search.testdata.js')();
 
   var client = algoliaSearch('dsf', 'dsfdf');
   var mock = sinon.mock(client);
@@ -47,6 +47,7 @@ test('Search should call the algolia client according to the number of refinemen
       {name: 'San Francisco', count: 1, isRefined: false},
       {name: 'Paris', count: 3, isRefined: true}
     ];
+
 
     t.deepEqual(
       cityValuesCustom,

@@ -11,7 +11,7 @@ var SearchParameters = require('../../../src/SearchParameters');
 test('getRefinements(facetName) returns an empty array when there is no refinements set', function(t) {
   var data = require('./getRefinements/noFilters.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var refinements = result.getRefinements();
 
@@ -32,7 +32,7 @@ function hasSameNames(l1, l2) {
 test('getRefinements(facetName) returns a refinement(facet) when a facet refinement is set', function(t) {
   var data = require('./getRefinements/conjunctive-brand-apple.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var refinements = result.getRefinements();
   var facetValues = result.getFacetValues('brand');
@@ -54,7 +54,7 @@ test('getRefinements(facetName) returns a refinement(facet) when a facet refinem
 test('getRefinements(facetName) returns a refinement(exlude) when a facet exclusion is set', function(t) {
   var data = require('./getRefinements/exclude-apple.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var refinements = result.getRefinements();
   var facetValues = result.getFacetValues('brand');
@@ -78,7 +78,7 @@ test(
   function(t) {
     var data = require('./getRefinements/disjunctive-type-trendcase.json');
     var searchParams = new SearchParameters(data.state);
-    var result = new SearchResults(searchParams, data.content);
+    var result = new SearchResults(searchParams, data.content.results);
 
     var refinements = result.getRefinements();
     var facetValues = result.getFacetValues('type');
@@ -103,7 +103,7 @@ test(
   function(t) {
     var data = require('./getRefinements/hierarchical-cards.json');
     var searchParams = new SearchParameters(data.state);
-    var result = new SearchResults(searchParams, data.content);
+    var result = new SearchResults(searchParams, data.content.results);
 
     var refinements = result.getRefinements();
 
@@ -118,7 +118,7 @@ test(
 test('getRefinements(facetName) returns a refinement(numeric) when a numeric filter is set', function(t) {
   var data = require('./getRefinements/numeric-rating-3.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var refinements = result.getRefinements();
 
@@ -132,7 +132,7 @@ test('getRefinements(facetName) returns a refinement(numeric) when a numeric fil
 test('getRefinements(facetName) returnes a refinement(tag) when a tag is set', function(t) {
   var data = require('./getRefinements/dummy-tags.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var refinements = result.getRefinements();
 

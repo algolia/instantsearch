@@ -96,7 +96,7 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
  * @classdesc SearchResults contains the results of a query to Algolia using the
  * {@link AlgoliaSearchHelper}.
  * @param {SearchParameters} state state that led to the response
- * @param {object} algoliaResponse the response from algolia client
+ * @param {array.<object>} results the results from algolia client
  * @example <caption>SearchResults of the first query in
  * <a href="http://demos.algolia.com/instant-search-demo">the instant search demo</a></caption>
 {
@@ -221,8 +221,8 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
 }
  **/
 /*eslint-enable */
-function SearchResults(state, algoliaResponse) {
-  var mainSubResponse = algoliaResponse.results[0];
+function SearchResults(state, results) {
+  var mainSubResponse = results[0];
 
   /**
    * query used to generate the results
@@ -272,7 +272,7 @@ function SearchResults(state, algoliaResponse) {
    * sum of the processing time of all the queries
    * @member {number}
    */
-  this.processingTimeMS = sumBy(algoliaResponse.results, 'processingTimeMS');
+  this.processingTimeMS = sumBy(results, 'processingTimeMS');
   /**
    * The position if the position was guessed by IP.
    * @member {string}
@@ -376,7 +376,7 @@ function SearchResults(state, algoliaResponse) {
 
   // aggregate the refined disjunctive facets
   forEach(disjunctiveFacets, function(disjunctiveFacet) {
-    var result = algoliaResponse.results[nextDisjunctiveResult];
+    var result = results[nextDisjunctiveResult];
     var hierarchicalFacet = state.getHierarchicalFacetByName(disjunctiveFacet);
 
     // There should be only item in facets.
@@ -435,7 +435,7 @@ function SearchResults(state, algoliaResponse) {
       return;
     }
 
-    var result = algoliaResponse.results[nextDisjunctiveResult];
+    var result = results[nextDisjunctiveResult];
 
     forEach(result.facets, function(facetResults, dfacet) {
       var position = findIndex(state.hierarchicalFacets, {name: hierarchicalFacet.name});

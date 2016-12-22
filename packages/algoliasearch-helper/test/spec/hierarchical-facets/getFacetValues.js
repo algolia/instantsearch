@@ -93,7 +93,7 @@ test('hierarchical facets: getFacetValues', function(t) {
     ]
   };
 
-  var results = new SearchResults(helper.state, algoliaResponse);
+  var results = new SearchResults(helper.state, algoliaResponse.results);
 
   t.deepEqual(
     results.getFacetValues('categories', {sortBy: ['name:asc']}),

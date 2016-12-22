@@ -42,7 +42,7 @@ test('getFacetStats(facetName) returns stats for any facet or disjunctiveFacet',
     facets: ['age', 'country'],
     disjunctiveFacets: ['price']
   });
-  var result = new SearchResults(searchParams, response);
+  var result = new SearchResults(searchParams, response.results);
 
   t.throws(
     bind(result.getFacetStats, result, 'city'),
@@ -69,7 +69,7 @@ test('getFacetStats(facetName) returns stats if the facet is both a regular and 
     facets: ['price'],
     disjunctiveFacets: ['price']
   });
-  var result = new SearchResults(searchParams, response);
+  var result = new SearchResults(searchParams, response.results);
 
   t.deepEqual(
     result.getFacetStats('price'),

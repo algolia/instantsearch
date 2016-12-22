@@ -50,6 +50,10 @@ method can be called in the same way that `searchOnce`.
 {{> jsdoc jsdoc/helper/searchForFacetValues}}
 {{> jsdoc jsdoc/helper/clearCache}}
 
+### Derive / multi-queries
+
+{{> jsdoc jsdoc/helper/derive}}
+
 ### Query and index
 
 {{> jsdoc jsdoc/helper/setQuery}}

@@ -8,7 +8,7 @@ var SearchParameters = require('../../../src/SearchParameters');
 test('getFacetValues(facetName) returns a list of values using the defaults', function(t) {
   var data = require('./getFacetValues/disjunctive.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var facetValues = result.getFacetValues('brand');
 
@@ -28,7 +28,7 @@ test(
   function(t) {
     var data = require('./getFacetValues/disjunctive.json');
     var searchParams = new SearchParameters(data.state);
-    var result = new SearchResults(searchParams, data.content);
+    var result = new SearchResults(searchParams, data.content.results);
 
     var facetValues = result.getFacetValues('brand', {
       sortBy: ['isRefined']
@@ -46,7 +46,7 @@ test(
 test('getFacetValues(facetName) when no order is specified for count the order is descending', function(t) {
   var data = require('./getFacetValues/disjunctive.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var facetValues = result.getFacetValues('brand', {
     sortBy: ['count']
@@ -64,7 +64,7 @@ test('getFacetValues(facetName) when no order is specified for count the order i
 test('getFacetValues(facetName) when no order is specified for name the order is ascending', function(t) {
   var data = require('./getFacetValues/disjunctive.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var facetValues = result.getFacetValues('brand', {
     sortBy: ['name']
@@ -82,7 +82,7 @@ test('getFacetValues(facetName) when no order is specified for name the order is
 test('getFacetValues(facetName) testing the sort function', function(t) {
   var data = require('./getFacetValues/disjunctive.json');
   var searchParams = new SearchParameters(data.state);
-  var result = new SearchResults(searchParams, data.content);
+  var result = new SearchResults(searchParams, data.content.results);
 
   var facetValues = result.getFacetValues('brand', {
     sortBy: function(a, b) {
