@@ -11,6 +11,7 @@ before_install:
   - git config --global user.name "algobot"
   - rvm install 2.3.1
   - rvm use 2.3.1
+  - rm -rf /home/travis/.yarn
 script: ./scripts/test-ci.sh
 branches:
   only:
