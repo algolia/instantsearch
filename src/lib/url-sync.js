@@ -95,6 +95,7 @@ class URLSync {
     this.mapping = options.mapping || {};
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
+    this.updateOnEveryKeyStroke = options.updateOnEveryKeyStroke || true;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
 
     this.searchParametersFromUrl = AlgoliaSearchHelper
@@ -108,7 +109,11 @@ class URLSync {
     // we need to create a REAL helper to then get its state. Because some parameters
     // like hierarchicalFacet.rootPath are then triggering a default refinement that would
     // be not present if it was not going trough the SearchParameters constructor
-    this.originalConfig = algoliasearchHelper({}, currentConfiguration.index, currentConfiguration).state;
+    this.originalConfig = algoliasearchHelper(
+      {addAlgoliaAgent() {}},
+      currentConfiguration.index,
+      currentConfiguration
+    ).state;
     return this.searchParametersFromUrl;
   }
 
@@ -146,11 +151,19 @@ class URLSync {
       }
     );
 
-    if (this.timer() < this.threshold) {
-      this.urlUtils.replaceState(qs, {getHistoryState: this.getHistoryState});
-    } else {
-      this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
+    if (this.updateOnEveryKeyStroke === true) {
+      if (this.timer() < this.threshold) {
+        this.urlUtils.replaceState(qs, {getHistoryState: this.getHistoryState});
+      } else {
+        this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
+      }
+      return;
     }
+
+    clearTimeout(this.urlUpdateTimeout);
+    this.urlUpdateTimeout = setTimeout(() => {
+      this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
+    }, this.threshold);
   }
 
   // External API's
