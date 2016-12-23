@@ -44,7 +44,7 @@ describe('rangeSlider()', () => {
     container = document.createElement('div');
 
     helper = new AlgoliasearchHelper(
-      {search() {}},
+      {search() {}, addAlgoliaAgent: () => {}},
       'indexName',
       {disjunctiveFacets: ['aNumAttr']}
     );
