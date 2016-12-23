@@ -128,6 +128,7 @@ class URLSync {
   }
 
   onPopState(helper, fullState) {
+    clearTimeout(this.urlUpdateTimeout);
     // compare with helper.state
     const partialHelperState = helper.getState(this.trackedParameters);
     const fullHelperState = assign({}, this.originalConfig, partialHelperState);
