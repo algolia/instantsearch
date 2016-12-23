@@ -1,3 +1,13 @@
+<a name="1.10.2"></a>
+## [1.10.2](https://github.com/algolia/instantsearch.js/compare/v1.10.1...v1.10.2) (2016-12-23)
+
+
+### Bug Fixes
+
+* **url:** clear timeout on pop ([41ad9af](https://github.com/algolia/instantsearch.js/commit/41ad9af))
+
+
+
 <a name="1.10.1"></a>
 ## [1.10.1](https://github.com/algolia/instantsearch.js/compare/v1.10.0...v1.10.1) (2016-12-23)
 
