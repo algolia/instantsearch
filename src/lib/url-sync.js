@@ -95,7 +95,9 @@ class URLSync {
     this.mapping = options.mapping || {};
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
-    this.updateOnEveryKeyStroke = options.updateOnEveryKeyStroke || true;
+    this.updateOnEveryKeyStroke = options.updateOnEveryKeyStroke !== undefined ?
+      options.updateOnEveryKeyStroke :
+      true;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
 
     this.searchParametersFromUrl = AlgoliaSearchHelper
