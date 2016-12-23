@@ -145,7 +145,7 @@ describe('utils.getRefinements', () => {
   let results;
 
   beforeEach(() => {
-    helper = algoliasearchHelper({}, 'my_index', {
+    helper = algoliasearchHelper({addAlgoliaAgent: () => {}}, 'my_index', {
       facets: ['facet1', 'facet2', 'numericFacet1'],
       disjunctiveFacets: ['disjunctiveFacet1', 'disjunctiveFacet2', 'numericDisjunctiveFacet'],
       hierarchicalFacets: [{
@@ -462,7 +462,7 @@ describe('utils.clearRefinementsFromState', () => {
   let state;
 
   beforeEach(() => {
-    helper = algoliasearchHelper({}, 'my_index', {
+    helper = algoliasearchHelper({addAlgoliaAgent: () => {}}, 'my_index', {
       facets: ['facet1', 'facet2', 'numericFacet1', 'facetExclude1'],
       disjunctiveFacets: ['disjunctiveFacet1', 'numericDisjunctiveFacet'],
       hierarchicalFacets: [{
