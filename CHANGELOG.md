@@ -1,3 +1,18 @@
+<a name="1.10.1"></a>
+## [1.10.1](https://github.com/algolia/instantsearch.js/compare/v1.10.0...v1.10.1) (2016-12-23)
+
+
+### Bug Fixes
+
+* **url:** default param ([7a18e1c](https://github.com/algolia/instantsearch.js/commit/7a18e1c))
+
+
+### Features
+
+* **url:** add a beta updateOnEveryKeystroke option (#1779) ([63f73fe](https://github.com/algolia/instantsearch.js/commit/63f73fe))
+
+
+
 <a name="1.10.0"></a>
 # [1.10.0](https://github.com/algolia/instantsearch.js/compare/v1.9.0...v1.10.0) (2016-12-22)
 
