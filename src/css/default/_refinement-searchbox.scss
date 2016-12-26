@@ -1,4 +1,4 @@
-$custom:(
+$config-sffv:(
   input-width: 100%,
   input-height: 25px,
   border-width: 1px,
@@ -9,13 +9,11 @@ $custom:(
   input-focus-background: #FFFFFF,
   font-size: 14px,
   placeholder-color: #BBBBBB,
-  icon: sbx-icon-search-12,
   icon-size: 14px,
   icon-position: left,
   icon-color: #337AB7,
   icon-background: #FFFFFF,
   icon-background-opacity: 0,
-  icon-clear: sbx-icon-clear-2,
   icon-clear-size: 14px
 );
 
@@ -213,8 +211,8 @@ $custom:(
   }
 }
 
-.sbx-custom{
-  @include searchbox($custom...);
+.sbx-sffv{
+  @include searchbox($config-sffv...);
 }
 
 .ais-refinement-list--item em {
