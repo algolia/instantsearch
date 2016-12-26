@@ -52,6 +52,10 @@ function renderMarkdown(data, fns) {
     });
 
     const filePath = path.join(p.output, `${fn.name}.md`);
-    fs.writeFile(filePath, fileContent);
+    fs.writeFile(filePath, fileContent, err => {
+      if (err) {
+        throw err;
+      }
+    });
   });
 }
