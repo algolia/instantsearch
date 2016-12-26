@@ -1,3 +1,13 @@
+<a name="1.10.3"></a>
+## [1.10.3](https://github.com/algolia/instantsearch.js/compare/v1.10.2...v1.10.3) (2016-12-26)
+
+
+### Bug Fixes
+
+* **sffv-searchbox:** update classnames to avoid conflicts (#1781) ([f53e8fd](https://github.com/algolia/instantsearch.js/commit/f53e8fd))
+
+
+
 <a name="1.10.2"></a>
 ## [1.10.2](https://github.com/algolia/instantsearch.js/compare/v1.10.1...v1.10.2) (2016-12-23)
 
