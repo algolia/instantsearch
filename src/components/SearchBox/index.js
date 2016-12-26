@@ -27,7 +27,7 @@ export default class SearchBox extends React.Component {
 
     return (
       <form noValidate="novalidate"
-        className="searchbox sbx-custom"
+        className="searchbox sbx-sffv"
         onReset={() => { onChange(''); }}
         onSubmit={e => this.validateSearch(e) }
       >
@@ -41,14 +41,14 @@ export default class SearchBox extends React.Component {
           </symbol>
         </svg>
 
-        <div role="search" className="sbx-custom__wrapper">
-          <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className="sbx-custom__input" onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} />
-          <button type="submit" title="Submit your search query." className="sbx-custom__submit">
+        <div role="search" className="sbx-sffv__wrapper">
+          <input type="search" name="search" placeholder={placeholder} autoComplete="off" required="required" className="sbx-sffv__input" onChange={e => onChange(e.target.value)} ref={i => { this.input = i; }} />
+          <button type="submit" title="Submit your search query." className="sbx-sffv__submit">
             <svg role="img" aria-label="Search">
               <use xlinkHref="#sbx-icon-search-12"></use>
             </svg>
           </button>
-          <button type="reset" title="Clear the search query." className="sbx-custom__reset">
+          <button type="reset" title="Clear the search query." className="sbx-sffv__reset">
             <svg role="img" aria-label="Reset">
               <use xlinkHref="#sbx-icon-clear-2"></use>
             </svg>
