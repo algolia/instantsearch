@@ -83,7 +83,8 @@ var version = require('./version');
  * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
-  client.addAlgoliaAgent('JS Helper ' + version);
+  if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
+  else client.addAlgoliaAgent('JS Helper ' + version);
 
   this.client = client;
   var opts = options || {};
