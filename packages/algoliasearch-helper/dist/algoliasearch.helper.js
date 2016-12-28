@@ -13492,7 +13492,8 @@ var version = require('./version');
  * just an object containing the properties you need from it.
  */
 function AlgoliaSearchHelper(client, index, options) {
-  client.addAlgoliaAgent('JS Helper ' + version);
+  if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
+  else client.addAlgoliaAgent('JS Helper ' + version);
 
   this.client = client;
   var opts = options || {};
@@ -15187,7 +15188,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":290,"./SearchParameters/shortener":291,"lodash/bind":214,"lodash/forEach":223,"lodash/invert":231,"lodash/isArray":233,"lodash/isPlainObject":245,"lodash/isString":246,"lodash/map":253,"lodash/mapKeys":254,"lodash/mapValues":255,"lodash/pick":263,"qs":281,"qs/lib/utils":284}],299:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.17.0';
+module.exports = '2.17.1';
 
 },{}]},{},[1])(1)
 });
