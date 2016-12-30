@@ -20,6 +20,7 @@ exports[`Hits accepts a hitComponent prop 1`] = `
       }
     } />
   <button
+    className="ais-InfiniteHits__reset"
     disabled={true}>
     Load more
   </button>
