@@ -10,8 +10,8 @@ class InfiniteHits extends Component {
       <ItemComponent key={hit.objectID} hit={hit} />
     );
     const loadMoreButton = hasMore ?
-      <button {...cx('reset')} onClick={() => refine()}>Load more</button> :
-      <button {...cx('reset')} disabled>Load more</button>;
+      <button {...cx('loadMore')} onClick={() => refine()}>Load more</button> :
+      <button {...cx('loadMore')} disabled>Load more</button>;
 
     return (
       <div {...cx('root')}>
