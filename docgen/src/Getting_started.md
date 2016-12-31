@@ -37,10 +37,10 @@ is the official React-CLI from Facebook.
 
 ## Install `react-instantsearch`
 
-React InstantSearch is available on [npm](https://www.npmjs.com). Install it:
+React InstantSearch is available on [npm](https://www.npmjs.com). Install it with yarn:
 
 ```shell
-npm install --save react-instantsearch
+yarn add react-instantsearch
 ```
 
 ## Add the <InstantSearch> component
