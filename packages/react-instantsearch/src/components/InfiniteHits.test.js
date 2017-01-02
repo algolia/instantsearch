@@ -36,7 +36,7 @@ describe('Hits', () => {
         />
       );
     expect(mockedRefine.mock.calls.length).toBe(0);
-    wrapped.find('.ais-InfiniteHits__reset').simulate('click');
+    wrapped.find('.ais-InfiniteHits__loadMore').simulate('click');
     expect(mockedRefine.mock.calls.length).toBe(1);
   });
 
@@ -50,6 +50,6 @@ describe('Hits', () => {
           hasMore={false}
         />
       );
-    expect(wrapped.find('.ais-InfiniteHits__reset').props().disabled).toBe(true);
+    expect(wrapped.find('.ais-InfiniteHits__loadMore').props().disabled).toBe(true);
   });
 });
