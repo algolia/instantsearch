@@ -9,17 +9,24 @@
     flex: 0 1 47%;
     margin-bottom: 4em;
     padding: 1em;
-    background: #fefefe;
-    border: 1px solid #ebebeb;
-    box-shadow: 0 20px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 3px;
-    position: relative;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      border-bottom: none;
+      flex-grow: 1;
+    }
 
     a {
+      background: #fefefe;
+      padding: 1em;
+      border: 1px solid #ebebeb;
+      box-shadow: 0 20px 20px rgba(0, 0, 0, 0.08);
+      border-radius: 3px;
+      position: relative;
+      text-align: center;
       display: block;
       width: 100%;
-      height: 100%;
       position: relative;
 
 
@@ -36,55 +43,55 @@
           top: 30px;
         }
       }
-    }
-
-    &:after {
-      content:'';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      background: rgba($accent-color-darkish, 0.95);
-      opacity: 0;
-      z-index: 0;
-      border-radius: 3px;
-      transition: opacity 0.2s ease;
-      pointer-events: none;
-    }
-
-    figure {
-      img {
-        width: 100%;
-      }
-    }
-
-    figcaption {
-      width: 100%;
-      text-indent: 0;
-      color: inherit;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      text-transform: uppercase;
-      font-size: 1.6em;
-      font-weight: bold;
-      color: #fff;
-      transform: scale(0);
-      z-index: 2;
-      line-height: 0;
-      transition: transform 0.2s ease;
-    }
-
-    &:hover {
       &:after {
-        opacity: 1;
+        content:'';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        background: rgba($accent-color-darkish, 0.95);
+        opacity: 0;
+        z-index: 0;
+        border-radius: 3px;
+        transition: opacity 0.2s ease;
+        pointer-events: none;
+      }
+
+      figure {
+        img {
+          width: 100%;
+        }
       }
 
       figcaption {
-        transform: scale(1)
+        width: 100%;
+        text-indent: 0;
+        color: inherit;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        text-transform: uppercase;
+        font-size: 1.6em;
+        font-weight: bold;
+        color: #fff;
+        transform: scale(0);
+        z-index: 2;
+        line-height: 0;
+        transition: transform 0.2s ease;
+      }
+
+      &:hover {
+        &:after {
+          opacity: 1;
+        }
+
+        figcaption {
+          transform: scale(1)
+        }
       }
     }
+
   }
 }
 
