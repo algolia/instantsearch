@@ -23,11 +23,10 @@ export default function parseAlgoliaHit({
 }) {
   if (!hit) throw new Error('`hit`, the matching record, must be provided');
 
-  const highlightedValue = get(hit._highlightResult, attributeName);
-  if (!highlightedValue) throw new Error(
-    `\`attributeName\`=${attributeName} must resolve to an highlighted attribute in the record`);
+  const highlightObject = get(hit._highlightResult, attributeName);
+  const highlightedValue = !highlightObject ? '' : highlightObject.value;
 
-  return parseHighlightedAttribute({preTag, postTag, highlightedValue: highlightedValue.value});
+  return parseHighlightedAttribute({preTag, postTag, highlightedValue});
 }
 
 /**
