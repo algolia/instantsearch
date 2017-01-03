@@ -8,7 +8,7 @@ navWeight: 35
 
 React InstantSearch is compatible with [react-native](https://facebook.github.io/react-native/).
 
-[Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/reactnative) linking `react-instantsearch` to [react-native](https://facebook.github.io/react-native/).
+[Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/react-native) linking `react-instantsearch` to [react-native](https://facebook.github.io/react-native/).
 
 <div class="guide-nav">
     <div class="guide-nav-left">
