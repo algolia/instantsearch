@@ -2,6 +2,12 @@
 import parseAlgoliaHit from './highlight.js';
 
 describe('parseAlgoliaHit()', () => {
+  it('it does not break when there is a missing attribute', () => {
+    const attributeName = 'attr';
+    const out = parseAlgoliaHit({attributeName, hit: {}});
+    expect(out).toEqual([]);
+  });
+
   it('creates a single element when there is no tag', () => {
     const value = 'foo bar baz';
     const attributeName = 'attr';
@@ -59,15 +65,6 @@ describe('parseAlgoliaHit()', () => {
       {value: 'lo', isHighlighted: true},
       {value: 'utre', isHighlighted: false},
     ]);
-  });
-
-  it('throws when the attribute is not highlighted in the hit', () => {
-    expect(parseAlgoliaHit.bind(null, {
-      attributeName: 'notHighlightedAttribute',
-      hit: {notHighlightedAttribute: 'some value'},
-    })).toThrowError(
-      '`attributeName`=notHighlightedAttribute must resolve to an highlighted attribute in the record'
-    );
   });
 
   it('throws when hit is `null`', () => {
