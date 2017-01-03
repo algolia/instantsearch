@@ -3,21 +3,25 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import Highlight from './Highlight';
+import Highlighter from './Highlighter';
 import parseAlgoliaHit from '../core/highlight';
 
-describe('Highlight', () => {
+describe('Highlighter', () => {
   it('parses an highlighted attribute of hit object', () => {
     const hitFromAPI = {
       objectID: 0,
       deep: {attribute: {value: 'awesome highlighted hit!'}},
-      _highlightResult: {
-        deep: {attribute: {value: {
-          value: 'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
-          fullyHighlighted: true,
-          matchLevel: 'full',
-          matchedWords: [''],
-        }}},
+      _highlightProperty: {
+        deep: {
+          attribute: {
+            value: {
+              value: 'awesome <ais-highlight>hi</ais-highlight>ghlighted <ais-highlight>hi</ais-highlight>t!',
+              fullyHighlighted: true,
+              matchLevel: 'full',
+              matchedWords: [''],
+            },
+          },
+        },
       },
     };
 
@@ -30,7 +34,10 @@ describe('Highlight', () => {
     });
 
     const tree = renderer.create(
-      <Highlight attributeName="deep.attribute.value" hit={hitFromAPI} highlight={highlight}/>
+      <Highlighter attributeName="deep.attribute.value"
+                   hit={hitFromAPI}
+                   highlight={highlight}
+                   highlightProperty="_highlightProperty"/>
     );
     expect(tree.toJSON()).toMatchSnapshot();
   });

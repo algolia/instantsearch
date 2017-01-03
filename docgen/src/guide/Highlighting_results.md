@@ -14,15 +14,19 @@ the results.
 
 This feature is already packaged for you in react-instantsearch and
 like most of its features it comes in two flavors, depending on your use case:
- - when using the DOM, the widget is the way to go
+ - when using the DOM, widgets is the way to go
  - when using another rendering (such as react native), you will use the connector
 
-## &lt;Highlight&gt; widget
+## &lt;Highlight&gt; and &lt;Snippet&gt; widgets
 
 Highlighting is based on the results and you will need to make a custom Hit in order
-to use the Highlighter. The Highlight widget takes two props:
+to use the Highlighter. The Highlight and the Snippet widgets takes two props:
  - attributeName: the path to the highlighted attribute
  - hit: a single result object
+ 
+**Notes:**
+* Use the `<Highlight>` widget when you want to display the regular value of an attribute.
+* Use the `<Snippet>` widget when you want to display the snippet version of an attribute.
 
 Here is an example in which we create a custom Hit widget for results that have a
 `description` field that is highlighted.
@@ -52,23 +56,24 @@ export default function App() {
 ## connectHighlight connector
 
 The connector provides a function that will extract the highlighting data
-from the results. This function takes a single parameter object with two
+from the results. This function takes a single parameter object with three
 properties:
- - attributeName: the path to the highlighted attribute
+ - attributeName: the highlighted attribute name
  - hit: a single result object
+ - path: the path to the structure containing the highlighted attribute
 
 Those parameters are taken from the context in which the the custom component
-is used, therefore it's reasonnable to have them as props.
+is used, therefore it's reasonable to have them as props.
 
 Here is an example of a custom Highlight widget. It can be used the same
-way the [Highlight widget](guide/Highlighting_results.html#highlight-widget).
+way as the [widgets](guide/Highlighting_results.html#highlight-and-snippet-widgets).
 
 ```javascript
 const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
-  const parsedHit = highlight({attributeName, hit});
+  const parsedHit = highlight({attributeName, hit, highlightProperty: 'highlightProperty'});
   return parsedHit.map(part => {
     if(part.isHighlighted) return <em>{part.value}</em>;
-    return part.value:
+    return part.value;
   });
 });
 ```

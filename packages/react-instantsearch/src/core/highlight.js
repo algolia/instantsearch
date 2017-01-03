@@ -1,29 +1,31 @@
 import {get} from 'lodash';
 
 /**
- * Find an highlighted attribute give a path `attributeName`, parses it,
+ * Find an highlighted attribute given an `attributeName` and an `highlightProperty`, parses it,
  * and provided an array of objects with the string value and a boolean if this
  * value is highlighted.
  *
- * In order to use this feature, highlight must be activated in the configruation of
+ * In order to use this feature, highlight must be activated in the configuration of
  * the index. The `preTag` and `postTag` attributes are respectively highlightPreTag and
  * highligtPostTag in Algolia configuration.
  *
  * @param {string} preTag - string used to identify the start of an highlighted value
  * @param {string} postTag - string used to identify the end of an highlighted value
- * @param {string} attributeName - path to the highlighted attribute in the results
+ * @param {string} highlightProperty - the property that contains the highlight structure in the results
+ * @param {string} attributeName - the highlighted attribute to look for
  * @param {object} hit - the actual hit returned by Algolia.
  * @return {object[]} - An array of {value: string, isDefined: boolean}.
  */
 export default function parseAlgoliaHit({
   preTag = '<em>',
   postTag = '</em>',
+  highlightProperty,
   attributeName,
   hit,
 }) {
   if (!hit) throw new Error('`hit`, the matching record, must be provided');
 
-  const highlightObject = get(hit._highlightResult, attributeName);
+  const highlightObject = get(hit[highlightProperty], attributeName);
   const highlightedValue = !highlightObject ? '' : highlightObject.value;
 
   return parseHighlightedAttribute({preTag, postTag, highlightedValue});
