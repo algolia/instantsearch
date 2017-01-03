@@ -9,7 +9,8 @@ block content
   div(class="examples-container")
     each val in values
       div.example-tile
-         a(href=`${examplesEndpoint}/${val}`)
+        h2=val.title
+        a(href=`${examplesEndpoint}/${val.id}`)
           figure
-            img(src=`images/examples/${val}.png`)
-            figcaption #{val}
+            img(src=`images/examples/${val.id}.png`)
+            figcaption See the demo

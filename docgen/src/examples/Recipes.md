@@ -4,7 +4,19 @@ mainTitle: Examples
 layout: examples.pug
 category: examples
 navWeight: 1000
-examples: ['react-router', 'react-native', 'autocomplete', 'multi-index']
+examples: [{
+    id: 'react-router',
+    title: 'Usage with react-router.'
+  }, {
+    id: 'react-native',
+    title: 'Usage with react-native.'
+  }, {
+    id: 'autocomplete',
+    title: 'Autocomplete integration.'
+  }, {
+    id: 'multi-index',
+    title: 'Requests on multiple indices at once.'
+  }]
 examplesEndpoint: https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples
 ---
 
