@@ -3,6 +3,7 @@ import {pick} from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import Link from './Link';
+import Highlight from '../widgets/Highlight';
 import classNames from './classNames.js';
 
 const cx = classNames('Menu');
@@ -11,6 +12,7 @@ class Menu extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
+    searchForFacetValues: PropTypes.func,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
@@ -18,6 +20,7 @@ class Menu extends Component {
       count: PropTypes.number.isRequired,
       isRefined: PropTypes.bool.isRequired,
     })),
+    isFromSearch: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
@@ -25,6 +28,9 @@ class Menu extends Component {
 
   renderItem = item => {
     const {refine, createURL} = this.props;
+    const label = item._highlightResult
+      ? <Highlight attributeName="label" hit={item}/>
+      : item.label;
     return (
       <Link
         {...cx('itemLink', item.isRefined && 'itemLinkSelected')}
@@ -32,7 +38,7 @@ class Menu extends Component {
         href={createURL(item.value)}
       >
         <span {...cx('itemLabel', item.isRefined && 'itemLabelSelected')}>
-          {item.label}
+          {label}
         </span>
         {' '}
         <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
@@ -42,10 +48,15 @@ class Menu extends Component {
     );
   };
 
+  selectItem = item => {
+    this.props.refine(item.value);
+  };
+
   render() {
     return (
       <List
         renderItem={this.renderItem}
+        selectItem={this.selectItem}
         cx={cx}
         {...pick(this.props, [
           'translate',
@@ -53,6 +64,8 @@ class Menu extends Component {
           'showMore',
           'limitMin',
           'limitMax',
+          'isFromSearch',
+          'searchForFacetValues',
         ])}
       />
     );
@@ -61,4 +74,5 @@ class Menu extends Component {
 
 export default translatable({
   showMore: extended => extended ? 'Show less' : 'Show more',
+  noResults: 'No Results',
 })(Menu);
