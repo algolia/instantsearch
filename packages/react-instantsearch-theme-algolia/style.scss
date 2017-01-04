@@ -159,6 +159,7 @@ $main-color: #3369e7;
 // ------------------------------------
 
 @import
+'mixins/searchbox.shipow',
 'styles/InstantSearch',
 'styles/ClearAll',
 'styles/CurrentRefinements',

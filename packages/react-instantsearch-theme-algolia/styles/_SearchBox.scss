@@ -1,130 +1,24 @@
-.ais-SearchBox__root {
-  width: 300px;
-  * {
-    // outline: 1px solid rgba(red, 0.3)
-  }
-}
+$main-searchbox-config:(
+  input-width: 300px,
+  input-height: 45px,
+  border-width: 1px,
+  border-radius: 4px,
+  input-border-color: #D4D8E3,
+  input-focus-border-color: #D4D8E3,
+  input-background: #FFFFFF,
+  input-focus-background: #FFFFFF,
+  font-size: 14px,
+  placeholder-color: #697782,
+  icon: sbx-icon-search-13,
+  icon-size: 18px,
+  icon-position: left,
+  icon-color: #bfc7d8,
+  icon-background: #FFFFFF,
+  icon-background-opacity: 0,
+  icon-clear: sbx-icon-clear-3,
+  icon-clear-size: 12px
+);
 
-.ais-SearchBox__wrapper {
-  position: relative;
-  width: auto;
-}
-
-input.ais-SearchBox__input[type="search"] {
-  @include input();
-  width: 100%;
-  padding: 13px 44px;
-  border: solid 1px #d4d8e3;
-  font-size: 14px;
-  outline: none;
-  background: url("data:image/svg+xml;utf8,<svg viewBox=\'0 0 18 18\' xmlns=\'http://www.w3.org/2000/svg\'><path d=\'M12.5 11h-.79l-.28-.27C12.41 9.59 13 8.11 13 6.5 13 2.91 10.09 0 6.5 0S0 2.91 0 6.5 2.91 13 6.5 13c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L17.49 16l-4.99-5zm-6 0C4.01 11 2 8.99 2 6.5S4.01 2 6.5 2 11 4.01 11 6.5 8.99 11 6.5 11z\' fill=\'%23BFC7D8\' fill-rule=\'evenodd\'/></svg>")no-repeat center left 16px / 18px;
-  box-shadow: 0 1px 1px 0 rgba(85, 95, 110, 0.2);
-  transition: box-shadow 0.3s ease;
-  color: #697782;
-
-  @include placeholder {
-    font-size: 14px;
-  }
-
-  &:hover,
-  &:active,
-  &:focus {
-    box-shadow: none
-  }
-
-  &:not(:placeholder-shown) ~ .ais-SearchBox__reset,
-  &:not([value=""]) ~ .ais-SearchBox__reset {
-    transform: scale(1);
-  }
-
-  // I cannot really explain why I'm forced to do this
-  // for firefox. The over rule should have worked
-  // I think it's the :placeholder-shown rule that
-  // disable all the css in firefox.
-  @supports (display: -moz-box) {
-    &:not([value=""]) ~ .ais-SearchBox__reset{
-      transform: scale(1);
-    }
-  }
-  // And for ipads/iphones
-  @supports (font: -apple-system-headline) {
-    &:not([value=""]) ~ .ais-SearchBox__reset{
-      transform: scale(1);
-    }
-  }
-}
-
-.ais-SearchBox__input::-webkit-search-decoration, .input::-webkit-search-cancel-button, .input::-webkit-search-results-button, .input::-webkit-search-results-decoration {
-  display: none;
-}
-
-input[type="search"].ais-SearchBox__input::-webkit-search-decoration,
-input[type="search"].ais-SearchBox__input::-webkit-search-cancel-button,
-input[type="search"].ais-SearchBox__input::-webkit-search-results-button,
-input[type="search"].ais-SearchBox__input::-webkit-search-results-decoration {
-  display: none;
-}
-.ais-SearchBox__input:hover {
-
-}
-
-.ais-SearchBox__input:focus, .input:active {
-
-}
-
-.ais-SearchBox__input::placeholder {
-
-}
-
-.ais-SearchBox__submit {
-
-}
-
-
-.ais-SearchBox__submit::before {
-
-}
-
-.ais-SearchBox__reset {
-  @include buttonTernary();
-  position: absolute;
-  top: 1em;
-  right: 1.5em;
-  width: 24px;
-  height: 24px;
-  transform: scale(0);
-  transition: transform 0.3s ease;
-  outline: none;
-
-  svg {
-    path {fill: #bfc7d8; }
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  &:active svg,
-  &:focus svg {
-    path {fill: darken(#bfc7d8, 5%)}
-  }
-}
-
-.ais-SearchBox__reset svg {
-
-}
-.ais-SearchBox__input:valid ~ .reset {
-  display: block;
-  animation-name: ais-Searchbox__sbx-reset-in;
-  animation-duration: .15s;
-}
-
-@keyframes ais-Searchbox__sbx-reset-in {
-  0% {
-    transform: translate3d(-20%, 0, 0);
-    opacity: 0;
-  }
-  100% {
-    transform: none;
-    opacity: 1;
-  }
+.ais-SearchBox {
+  @include searchbox($main-searchbox-config...);
 }
