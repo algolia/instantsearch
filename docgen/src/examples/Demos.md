@@ -25,7 +25,7 @@ examples: [{
     title: 'Tourism',
     description: 'This demos shows the usage of react-instantsearch in the context of a home renting website'
   }]
-examplesEndpoint: /examples
+examplesEndpoint: examples
 ---
 
 ## Demos
