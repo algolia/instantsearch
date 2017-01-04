@@ -1,4 +1,5 @@
 import React, {PropTypes, Component} from 'react';
+import SearchBox from '../components/SearchBox';
 
 const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
   value: PropTypes.any,
@@ -13,11 +14,14 @@ class List extends Component {
     translate: PropTypes.func,
     items: itemsPropType,
     renderItem: PropTypes.func.isRequired,
+    selectItem: PropTypes.func,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     limit: PropTypes.number,
     show: PropTypes.func,
+    searchForFacetValues: PropTypes.func,
+    isFromSearch: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -74,26 +78,53 @@ class List extends Component {
 
     return (
       <button disabled={disabled}
-        {...cx('showMore', disabled && 'showMoreDisabled')}
-        onClick={this.onShowMoreClick}
+              {...cx('showMore', disabled && 'showMoreDisabled')}
+              onClick={this.onShowMoreClick}
       >
         {translate('showMore', extended)}
       </button>
     );
   }
 
+  renderSearchBox() {
+    const {cx, searchForFacetValues, isFromSearch, translate, items, selectItem} = this.props;
+    const noResults = items.length === 0 ? <div>{translate('noResults')}</div> : null;
+    return <div {...cx('SearchBox')}>
+        <SearchBox
+          currentRefinement={isFromSearch ? this.state.query : ''}
+          refine={value => {
+            this.setState({query: value});
+            searchForFacetValues(value);
+          }}
+          translate={translate}
+          onSubmit={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isFromSearch) {
+              selectItem(items[0]);
+            }
+          }}
+        />
+        {noResults}
+      </div>;
+  }
+
   render() {
-    const {cx, items} = this.props;
+    const {cx, items, searchForFacetValues} = this.props;
     if (items.length === 0) {
-      return null;
+      return <div {...cx('root')}>
+        {this.renderSearchBox()}
+      </div>;
     }
 
     // Always limit the number of items we show on screen, since the actual
     // number of retrieved items might vary with the `maxValuesPerFacet` config
     // option.
     const limit = this.getLimit();
+    const searchBox = searchForFacetValues ? this.renderSearchBox() : null;
     return (
       <div {...cx('root')}>
+        {searchBox}
         <div {...cx('items')}>
           {items.slice(0, limit).map(item => this.renderItem(item))}
         </div>

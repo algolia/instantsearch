@@ -15,6 +15,9 @@
   min-height: 22px;
   line-height: 22px;
 }
+.ais-Menu__item a {
+  outline: 0;
+}
 
 .ais-Menu__itemSelected {
   font-weight: bold;
@@ -50,4 +53,12 @@
 }
 
 .ais-Menu__itemLabelSelected{
+}
+
+.ais-Menu__SearchBox {
+  margin-bottom: 3px;
+}
+
+.ais-Menu__SearchBox .ais-SearchBox {
+  @include searchbox($sffv-searchbox-config...);
 }

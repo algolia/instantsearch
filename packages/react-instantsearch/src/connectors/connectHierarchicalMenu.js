@@ -58,8 +58,7 @@ function getValue(path, props, searchState) {
 }
 
 function transformValue(value, limit, props, searchState) {
-  const limitValue = value.slice(0, limit);
-  return limitValue.map(v => ({
+  return value.slice(0, limit).map(v => ({
     label: v.name,
     value: getValue(v.path, props, searchState),
     count: v.count,
@@ -136,8 +135,9 @@ export default createConnector({
 
     const limit = showMore ? limitMax : limitMin;
     const value = results.getFacetValues(id, {sortBy});
+    const items = value.data ? transformValue(value.data, limit, props, searchState) : [];
     return {
-      items: value.data ? transformValue(value.data, limit, props, searchState) : [],
+      items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement: getCurrentRefinement(props, searchState),
     };
   },
