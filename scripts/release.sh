@@ -50,16 +50,16 @@ read -e newVersion
 
 (
 cd packages/react-instantsearch
-npm version $newVersion
+mversion $newVersion
 yarn
 )
 
 (
 cd packages/react-instantsearch-theme-algolia
-npm version $newVersion
+mversion $newVersion
 )
 
-npm version $newVersion
+mversion $newVersion
 yarn
 npm run build
 
