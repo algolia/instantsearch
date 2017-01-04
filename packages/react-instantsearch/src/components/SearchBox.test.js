@@ -103,6 +103,22 @@ describe('SearchBox', () => {
     wrapper.unmount();
   });
 
+  it('onSubmit behavior should be override if provided as props', () => {
+    const onSubmit = jest.fn();
+    const refine = jest.fn();
+    const wrapper = mount(
+      <SearchBox
+        searchAsYouType={false}
+        onSubmit={onSubmit}
+        refine={refine}
+      />
+    );
+    wrapper.find('form').simulate('submit');
+    expect(onSubmit.mock.calls.length).toBe(1);
+    expect(refine.mock.calls.length).toBe(0);
+    wrapper.unmount();
+  });
+
   it('focuses the input when one of the keys in focusShortcuts is pressed', () => {
     let input;
     mount(

@@ -1,128 +1,280 @@
 exports[`RefinementList applies translations 1`] = `
-<div
-  className="ais-RefinementList__root">
+<div>
   <div
-    className="ais-RefinementList__items">
-    <div
-      className="ais-RefinementList__item">
-      <label>
+    className="ais-RefinementList__SearchBox">
+    <form
+      className="ais-SearchBox__root"
+      noValidate={true}
+      onReset={[Function]}
+      onSubmit={[Function]}>
+      <div
+        className="ais-SearchBox__wrapper"
+        role="search">
         <input
-          checked={false}
-          className="ais-RefinementList__itemCheckbox"
+          autoComplete="off"
+          autoFocus={false}
+          className="ais-SearchBox__input"
           onChange={[Function]}
-          type="checkbox" />
-        <span
-          className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
-        <span
-          className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
-          white
-        </span>
-         
-        <span
-          className="ais-RefinementList__itemCount">
-          10
-        </span>
-      </label>
-    </div>
+          placeholder="Search here…"
+          required={true}
+          type="search"
+          value="" />
+        <button
+          className="ais-SearchBox__reset"
+          title="Clear the search query."
+          type="reset">
+          <svg
+            viewBox="0 0 26 26"
+            xmlns="http://www.w3.org/2000/svg">
+            <g
+              fill="none"
+              fillRule="evenodd">
+              <path
+                d="M12.99883 9.92647L22.22236.70294c.85882-.85647 2.2306-.84706 3.08235 0 .8518.85412.8471 2.22588 0 3.0753l-9.2329 9.22353 9.22353 9.22353c.85648.85882.84707 2.23058 0 3.08235-.8541.85176-2.22587.84706-3.0753 0l-9.22116-9.23294-9.22353 9.22357c-.85646.85647-2.22823.84706-3.07764 0-.85413-.85412-.84707-2.2259 0-3.0753l9.22823-9.22117L.70235 3.77823C-.1541 2.92177-.1541 1.55.69295.69588c.85647-.85176 2.22823-.84706 3.07764 0l9.2282 9.2353v-.0047z" />
+            </g>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    className="ais-RefinementList__root">
     <div
-      className="ais-RefinementList__item">
-      <label>
-        <input
-          checked={false}
-          className="ais-RefinementList__itemCheckbox"
-          onChange={[Function]}
-          type="checkbox" />
-        <span
-          className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
-        <span
-          className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
-          black
-        </span>
-         
-        <span
-          className="ais-RefinementList__itemCount">
-          20
-        </span>
-      </label>
-    </div>
-    <div
-      className="ais-RefinementList__item">
-      <label>
-        <input
-          checked={false}
-          className="ais-RefinementList__itemCheckbox"
-          onChange={[Function]}
-          type="checkbox" />
-        <span
-          className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
-        <span
-          className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
-          blue
-        </span>
-         
-        <span
-          className="ais-RefinementList__itemCount">
-          30
-        </span>
-      </label>
+      className="ais-RefinementList__items">
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            white
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            10
+          </span>
+        </label>
+      </div>
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            black
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            20
+          </span>
+        </label>
+      </div>
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            blue
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            30
+          </span>
+        </label>
+      </div>
     </div>
   </div>
 </div>
 `;
 
 exports[`RefinementList default refinement list 1`] = `
-<div
-  className="ais-RefinementList__root">
+<div>
   <div
-    className="ais-RefinementList__items">
+    className="ais-RefinementList__root">
     <div
-      className="ais-RefinementList__item ais-RefinementList__itemSelected">
-      <label>
-        <input
-          checked={true}
-          className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
-          onChange={[Function]}
-          type="checkbox" />
-        <span
-          className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected" />
-        <span
-          className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected">
-          white
-        </span>
-         
-        <span
-          className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected">
-          10
-        </span>
-      </label>
+      className="ais-RefinementList__items">
+      <div
+        className="ais-RefinementList__item ais-RefinementList__itemSelected">
+        <label>
+          <input
+            checked={true}
+            className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected">
+            white
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected">
+            10
+          </span>
+        </label>
+      </div>
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            black
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            20
+          </span>
+        </label>
+      </div>
     </div>
-    <div
-      className="ais-RefinementList__item">
-      <label>
+    <button
+      className="ais-RefinementList__showMore"
+      disabled={false}
+      onClick={[Function]}>
+      Show more
+    </button>
+  </div>
+</div>
+`;
+
+exports[`RefinementList refinement list with search for facet values 1`] = `
+<div>
+  <div
+    className="ais-RefinementList__SearchBox">
+    <form
+      className="ais-SearchBox__root"
+      noValidate={true}
+      onReset={[Function]}
+      onSubmit={[Function]}>
+      <div
+        className="ais-SearchBox__wrapper"
+        role="search">
         <input
-          checked={false}
-          className="ais-RefinementList__itemCheckbox"
+          autoComplete="off"
+          autoFocus={false}
+          className="ais-SearchBox__input"
           onChange={[Function]}
-          type="checkbox" />
-        <span
-          className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
-        <span
-          className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
-          black
-        </span>
-         
-        <span
-          className="ais-RefinementList__itemCount">
-          20
-        </span>
-      </label>
+          placeholder="Search here…"
+          required={true}
+          type="search"
+          value="" />
+        <button
+          className="ais-SearchBox__reset"
+          title="Clear the search query."
+          type="reset">
+          <svg
+            viewBox="0 0 26 26"
+            xmlns="http://www.w3.org/2000/svg">
+            <g
+              fill="none"
+              fillRule="evenodd">
+              <path
+                d="M12.99883 9.92647L22.22236.70294c.85882-.85647 2.2306-.84706 3.08235 0 .8518.85412.8471 2.22588 0 3.0753l-9.2329 9.22353 9.22353 9.22353c.85648.85882.84707 2.23058 0 3.08235-.8541.85176-2.22587.84706-3.0753 0l-9.22116-9.23294-9.22353 9.22357c-.85646.85647-2.22823.84706-3.07764 0-.85413-.85412-.84707-2.2259 0-3.0753l9.22823-9.22117L.70235 3.77823C-.1541 2.92177-.1541 1.55.69295.69588c.85647-.85176 2.22823-.84706 3.07764 0l9.2282 9.2353v-.0047z" />
+            </g>
+          </svg>
+        </button>
+      </div>
+    </form>
+  </div>
+  <div
+    className="ais-RefinementList__root">
+    <div
+      className="ais-RefinementList__items">
+      <div
+        className="ais-RefinementList__item ais-RefinementList__itemSelected">
+        <label>
+          <input
+            checked={true}
+            className="ais-RefinementList__itemCheckbox ais-RefinementList__itemCheckboxSelected"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox ais-RefinementList__itemBoxSelected" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel ais-RefinementList__itemLabelSelected">
+            white
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount ais-RefinementList__itemCountSelected">
+            10
+          </span>
+        </label>
+      </div>
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            black
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            20
+          </span>
+        </label>
+      </div>
+      <div
+        className="ais-RefinementList__item">
+        <label>
+          <input
+            checked={false}
+            className="ais-RefinementList__itemCheckbox"
+            onChange={[Function]}
+            type="checkbox" />
+          <span
+            className="ais-RefinementList__itemBox ais-RefinementList__itemBox" />
+          <span
+            className="ais-RefinementList__itemLabel ais-RefinementList__itemLabel">
+            blue
+          </span>
+           
+          <span
+            className="ais-RefinementList__itemCount">
+            30
+          </span>
+        </label>
+      </div>
     </div>
   </div>
-  <button
-    className="ais-RefinementList__showMore"
-    disabled={false}
-    onClick={[Function]}>
-    Show more
-  </button>
 </div>
 `;

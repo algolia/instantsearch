@@ -36,6 +36,7 @@ export default function createConnector(connectorDesc) {
   }
 
   const hasRefine = has(connectorDesc, 'refine');
+  const hasSearchForFacetValues = has(connectorDesc, 'searchForFacetValues');
   const hasSearchParameters = has(connectorDesc, 'getSearchParameters');
   const hasMetadata = has(connectorDesc, 'getMetadata');
   const hasTransitionState = has(connectorDesc, 'transitionState');
@@ -143,14 +144,25 @@ export default function createConnector(connectorDesc) {
         error,
         widgets,
         metadata,
+        resultsFacetValues,
       } = store.getState();
       const searchState = {results, searching, error};
-      return connectorDesc.getProvidedProps.call(this, props, widgets, searchState, metadata);
+      return connectorDesc.getProvidedProps.call(this, props, widgets, searchState, metadata, resultsFacetValues);
     };
 
     refine = (...args) => {
       this.context.ais.onInternalStateUpdate(
         connectorDesc.refine(
+          this.props,
+          this.context.ais.store.getState().widgets,
+          ...args
+        )
+      );
+    };
+
+    searchForFacetValues = (...args) => {
+      this.context.ais.onSearchForFacetValues(
+        connectorDesc.searchForFacetValues(
           this.props,
           this.context.ais.store.getState().widgets,
           ...args
@@ -177,8 +189,13 @@ export default function createConnector(connectorDesc) {
       const refineProps = hasRefine ?
         {refine: this.refine, createURL: this.createURL} :
         {};
+      const searchForFacetValuesProps = hasSearchForFacetValues ?
+        {searchForFacetValues: this.searchForFacetValues} :
+        {};
+
       return (
         <Composed
+          {...searchForFacetValuesProps}
           {...this.props}
           {...this.state.props}
           {...refineProps}

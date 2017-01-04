@@ -11,6 +11,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  searchForFacetValues,
   cleanUp,
 } = connect;
 
@@ -18,20 +19,20 @@ let props;
 let params;
 
 describe('connectRefinementList', () => {
-  it('provides the correct props to the component', () => {
-    const results = {
-      getFacetValues: jest.fn(() => []),
-      getFacetByName: () => true,
-    };
+  const results = {
+    getFacetValues: jest.fn(() => []),
+    getFacetByName: () => true,
+  };
 
+  it('provides the correct props to the component', () => {
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: []});
+    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: ['wat']});
+    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: ['wat']});
+    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -85,6 +86,26 @@ describe('connectRefinementList', () => {
         count: 20,
       },
     ]);
+  });
+
+  it('facetValues results should be provided as props if they exists', () => {
+    props = getProvidedProps({attributeName: 'ok'}, {}, {results}, {}, {
+      ok: [{
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
+        count: 20,
+        highlighted: 'wat',
+      }],
+    });
+    expect(props.items).toEqual([{
+      _highlightResult: {label: {value: 'wat'}},
+      count: 20,
+      isRefined: true,
+      label: ['wat'],
+      value: [['wat']],
+    }]);
+    expect(props.isFromSearch).toBe(true);
   });
 
   it('doesn\'t render when no results are available', () => {
@@ -202,5 +223,13 @@ describe('connectRefinementList', () => {
 
     searchState = cleanUp({attributeName: 'name2'}, searchState);
     expect(searchState).toEqual({another: {searchState: 'searchState'}});
+  });
+
+  it('calling searchForFacetValues return the right searchForFacetValues parameters', () => {
+    const parameters = searchForFacetValues({attributeName: 'ok'}, {}, 'yep');
+    expect(parameters).toEqual({
+      facetName: 'ok',
+      query: 'yep',
+    });
   });
 });

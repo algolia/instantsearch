@@ -56,8 +56,7 @@ block content
               div.api-entry(id=themeId)=type.key
                 a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
-            td
-              p=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This widget does not accept theme.
   h2#translations Translation keys
@@ -72,7 +71,6 @@ block content
               div.api-entry(id=themeId)=type.key
                 a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
-            td
-              p=type.description
+            td(colspan=3)!=h.markdown(type.description)
   else
     p This widget does not have translations.
