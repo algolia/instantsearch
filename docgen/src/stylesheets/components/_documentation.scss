@@ -42,6 +42,8 @@
     border-bottom: 1px solid #d8d8d8;
     margin-top: 32px;
     padding-bottom: 8px;
+    position: relative;
+    z-index: 0;
 
     &:first-of-type {
       margin-top: 0;
@@ -173,6 +175,8 @@
         display: block;
         height: $offset-height;
         margin: -$offset-height 0 0;
+        position: relative;
+        z-index: 0;
       }
     }
 

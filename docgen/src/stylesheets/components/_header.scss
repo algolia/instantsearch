@@ -159,7 +159,12 @@ $nav-background-light: mix($nav-background,#fff,92%);
     height: 800px;
     perspective: 500px;
     pointer-events: none;
-    z-index: 99999999969;
+    z-index: 999;
+
+    @include small-mq {
+      display: none;
+
+    }
   }
   @include component('navigation', 'brands-dropdown') {
     width: 490px;
@@ -669,7 +674,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
 
   .mobile-navigation-wrapper {
     position: absolute;
-    z-index: 999;
+    z-index: 998;
     top: $nav-height;
     left: 0;
     width: 100%;
