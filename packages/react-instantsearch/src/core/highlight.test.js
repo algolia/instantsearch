@@ -4,14 +4,17 @@ import parseAlgoliaHit from './highlight.js';
 describe('parseAlgoliaHit()', () => {
   it('it does not break when there is a missing attribute', () => {
     const attributeName = 'attr';
-    const out = parseAlgoliaHit({attributeName, hit: {}});
+    const out = parseAlgoliaHit({attributeName, hit: {}, highlightProperty: '_highlightResult'});
     expect(out).toEqual([]);
   });
 
   it('creates a single element when there is no tag', () => {
     const value = 'foo bar baz';
     const attributeName = 'attr';
-    const out = parseAlgoliaHit({attributeName, hit: createHit(attributeName, value)});
+    const out = parseAlgoliaHit({
+      attributeName, hit: createHit(attributeName, value),
+      highlightProperty: '_highlightResult',
+    });
     expect(out).toEqual([{isHighlighted: false, value}]);
   });
 
@@ -19,7 +22,10 @@ describe('parseAlgoliaHit()', () => {
     const textValue = 'foo bar baz';
     const value = `<em>${textValue}</em>`;
     const attributeName = 'attr';
-    const out = parseAlgoliaHit({attributeName, hit: createHit(attributeName, value)});
+    const out = parseAlgoliaHit({
+      attributeName, hit: createHit(attributeName, value),
+      highlightProperty: '_highlightResult',
+    });
     expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
@@ -32,14 +38,14 @@ describe('parseAlgoliaHit()', () => {
         lvl0: {lvl1: {lvl2: {value}}},
       },
     };
-    const out = parseAlgoliaHit({attributeName: 'lvl0.lvl1.lvl2', hit});
+    const out = parseAlgoliaHit({attributeName: 'lvl0.lvl1.lvl2', hit, highlightProperty: '_highlightResult'});
     expect(out).toEqual([{value: textValue, isHighlighted: true}]);
   });
 
   it('parses the string and returns the part that are highlighted - 1 big highlight', () => {
     const str = 'like <em>al</em>golia does <em>al</em>golia';
     const hit = createHit('attr', str);
-    const parsed = parseAlgoliaHit({attributeName: 'attr', hit});
+    const parsed = parseAlgoliaHit({attributeName: 'attr', hit, highlightProperty: '_highlightResult'});
     expect(parsed).toEqual([
       {value: 'like ', isHighlighted: false},
       {value: 'al', isHighlighted: true},
@@ -57,6 +63,7 @@ describe('parseAlgoliaHit()', () => {
       postTag: '**',
       attributeName: 'attr',
       hit,
+      highlightProperty: '_highlightResult',
     });
     expect(parsed).toEqual([
       {value: 'surpise ', isHighlighted: false},
@@ -71,6 +78,7 @@ describe('parseAlgoliaHit()', () => {
     expect(parseAlgoliaHit.bind(null, {
       attributeName: 'unknownattribute',
       hit: null,
+      highlightProperty: '_highlightResult',
     })).toThrowError('`hit`, the matching record, must be provided');
   });
 
@@ -78,6 +86,7 @@ describe('parseAlgoliaHit()', () => {
     expect(parseAlgoliaHit.bind(null, {
       attributeName: 'unknownAttribute',
       hit: undefined,
+      highlightProperty: '_highlightResult',
     })).toThrowError('`hit`, the matching record, must be provided');
   });
 });
