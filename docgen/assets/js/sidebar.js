@@ -105,7 +105,7 @@ function toggleDocumentationSidebar() {
   function init() {
     const bodySize = document.body.clientWidth;
     if (bodySize <= 960 && sidebarNav) {
-      trigger.addEventListener('click', (e) => {
+      trigger.addEventListener('click', () => {
         sidebarNav.classList.toggle('Showed');
         trigger.classList.toggle('Showed');
       });
