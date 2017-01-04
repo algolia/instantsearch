@@ -39,7 +39,7 @@ function getValue(name, props, searchState) {
   return nextRefinement;
 }
 
-const sortBy = ['isRefined', 'count:desc', 'name:asc'];
+const sortBy = ['count:desc', 'name:asc'];
 
 /**
  * connectRefinementList connector provides the logic to build a widget that will
