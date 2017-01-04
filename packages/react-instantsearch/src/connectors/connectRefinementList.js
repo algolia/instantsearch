@@ -56,7 +56,7 @@ function getValue(name, props, searchState) {
  * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
- * @providedPropType {boolean} isSearchFrom - a boolean that says if the `items` props contains facet values from the global search or from the search for facet values results.
+ * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search for facet values results.
  */
 
 const sortBy = ['isRefined', 'count:desc', 'name:asc'];
