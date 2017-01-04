@@ -1270,7 +1270,10 @@ ellipse {
     -webkit-perspective: 500px;
             perspective: 500px;
     pointer-events: none;
-    z-index: 99999999969; }
+    z-index: 999; }
+    @media (max-width: 960px) {
+      .cm-navigation .cm-navigation__dropdown-holder {
+        display: none; } }
   .cm-navigation .cm-navigation__brands-dropdown {
     width: 490px;
     position: absolute !important;
@@ -1698,7 +1701,7 @@ ellipse {
                   transform: translateX(100%) rotateY(10deg) skewY(10deg); } }
   .cm-navigation .mobile-navigation-wrapper {
     position: absolute;
-    z-index: 999;
+    z-index: 998;
     top: 60px;
     left: 0;
     width: 100%;
