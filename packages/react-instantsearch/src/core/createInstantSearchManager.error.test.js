@@ -9,11 +9,11 @@ jest.useFakeTimers();
 
 jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
   let count = 0;
-  console.log('setup');
   const Helper = require.requireActual('algoliasearch-helper/src/algoliasearch.helper.js');
-  Helper.prototype._handleResponse = function(state) {
+  Helper.prototype._handleResponse = function (state) {
     this.emit('error', {count: count++}, state);
   };
+  Helper.prototype.searchForFacetValues = () => Promise.reject('error');
   return Helper;
 });
 
@@ -84,6 +84,29 @@ describe('createInstantSearchManager', () => {
         const store = ism.store.getState();
         expect(store.error).toEqual({count: 2});
         expect(store.results).toBe(null);
+      });
+    });
+
+    describe('on search for facet values', () => {
+      it.only('updates the store and searches', () => {
+        const ism = createInstantSearchManager({
+          indexName: 'index',
+          initialState: {},
+          searchParameters: {},
+          algoliaClient: client,
+        });
+
+        ism.onSearchForFacetValues({facetName: 'facetName', query: 'query'});
+
+        expect(ism.store.getState().error).toBe(null);
+
+        jest.runAllTimers();
+
+        return Promise.resolve().then(() => {
+          const store = ism.store.getState();
+          expect(store.error).toEqual('error');
+          expect(store.searchingForFacetValues).toBe(false);
+        });
       });
     });
   });

@@ -13,6 +13,7 @@ jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
   Helper.prototype._handleResponse = function(state) {
     this.emit('result', {count: count++}, state);
   };
+  Helper.prototype.searchForFacetValues = () => Promise.resolve({facetHits: 'results'});
   return Helper;
 });
 
@@ -83,6 +84,28 @@ describe('createInstantSearchManager', () => {
         const store = ism.store.getState();
         expect(store.results).toEqual({count: 2});
         expect(store.error).toBe(null);
+      });
+    });
+    describe('on search for facet values', () => {
+      it.only('updates the store and searches', () => {
+        const ism = createInstantSearchManager({
+          indexName: 'index',
+          initialState: {},
+          searchParameters: {},
+          algoliaClient: client,
+        });
+
+        ism.onSearchForFacetValues({facetName: 'facetName', query: 'query'});
+
+        expect(ism.store.getState().results).toBe(null);
+
+        jest.runAllTimers();
+
+        return Promise.resolve().then(() => {
+          const store = ism.store.getState();
+          expect(store.resultsFacetValues).toEqual({facetName: 'results'});
+          expect(store.searchingForFacetValues).toBe(false);
+        });
       });
     });
   });

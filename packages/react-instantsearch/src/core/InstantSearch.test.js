@@ -231,5 +231,22 @@ describe('InstantSearch', () => {
       const outputURL = createHrefForState({a: 1});
       expect(outputURL).toBe('#');
     });
+
+    it('search for facet values should be called if triggered', () => {
+      const ism = {
+        onSearchForFacetValues: jest.fn(),
+      };
+      createInstantSearchManager.mockImplementation(() => ism);
+      const wrapper = mount(
+          <InstantSearch
+            {...DEFAULT_PROPS}
+          >
+            <div />
+          </InstantSearch>
+        );
+      const {ais: {onSearchForFacetValues}} = wrapper.instance().getChildContext();
+      onSearchForFacetValues({a: 1});
+      expect(ism.onSearchForFacetValues.mock.calls[0][0]).toEqual({a: 1});
+    });
   });
 });
