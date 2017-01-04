@@ -3,6 +3,7 @@ import algoliasearchHelper, {SearchParameters} from 'algoliasearch-helper';
 import createWidgetsManager from './createWidgetsManager';
 import createStore from './createStore';
 import highlightTags from './highlightTags.js';
+import {omit} from 'lodash';
 
 /**
  * Creates a new instance of the InstantSearchManager which controls the widgets and
@@ -63,19 +64,21 @@ export default function createInstantSearchManager({
   }
 
   function handleSearchSuccess(content) {
-    store.setState({
+    const nextState = omit({
       ...store.getState(),
       results: content,
       searching: false,
-    });
+    }, 'resultsFacetValues');
+    store.setState(nextState);
   }
 
   function handleSearchError(error) {
-    store.setState({
+    const nextState = omit({
       ...store.getState(),
       error,
       searching: false,
-    });
+    }, 'resultsFacetValues');
+    store.setState(nextState);
   }
 
   // Called whenever a widget has been rendered with new props.
@@ -115,6 +118,40 @@ export default function createInstantSearchManager({
     search();
   }
 
+  function onSearchForFacetValues(nextSearchState) {
+    store.setState({
+      ...store.getState(),
+      searchingForFacetValues: true,
+    });
+
+    helper.searchForFacetValues(nextSearchState.facetName, nextSearchState.query)
+      .then(content => {
+        store.setState({
+          ...store.getState(),
+          resultsFacetValues: {
+            ...store.getState().resultsFacetValues,
+            [nextSearchState.facetName]: content.facetHits,
+          },
+          searchingForFacetValues: false,
+        });
+      }, error => {
+        store.setState({
+          ...store.getState(),
+          error,
+          searchingForFacetValues: false,
+        });
+      })
+      .catch(error => {
+        // Since setState is synchronous, any error that occurs in the render of a
+        // component will be swallowed by this promise.
+        // This is a trick to make the error show up correctly in the console.
+        // See http://stackoverflow.com/a/30741722/969302
+        setTimeout(() => {
+          throw error;
+        });
+      });
+  }
+
   function getWidgetsIds() {
     return store.getState().metadata.reduce((res, meta) =>
         typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
@@ -127,5 +164,6 @@ export default function createInstantSearchManager({
     getWidgetsIds,
     onExternalStateUpdate,
     transitionState,
+    onSearchForFacetValues,
   };
 }

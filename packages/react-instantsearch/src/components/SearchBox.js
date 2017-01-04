@@ -27,6 +27,7 @@ class SearchBox extends Component {
     autoFocus: PropTypes.bool,
 
     searchAsYouType: PropTypes.bool,
+    onSubmit: PropTypes.func,
 
     // For testing purposes
     __inputRef: PropTypes.func,
@@ -156,7 +157,7 @@ class SearchBox extends Component {
     return (
       <form
         noValidate
-        onSubmit={this.onSubmit}
+        onSubmit={this.props.onSubmit ? this.props.onSubmit : this.onSubmit}
         onReset={this.onReset}
         {...cx('root')}
       >

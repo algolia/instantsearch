@@ -23,14 +23,7 @@ function validateNextProps(props, nextProps) {
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.
- * @propType {object} [searchParameters] - Object containing query parameters to be sent to Algolia.
- * It will be overriden by the search parameters resolved via the widgets.
- *
- * Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`.
- * For more information about the kind of object that can be provided on the
- * [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters).
- *
- * Read the [search parameters guide](guide/Search_parameters.html).
+ * @propType {object} [searchParameters] - Object containing query parameters to be sent to Algolia. It will be overriden by the search parameters resolved via the widgets. Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters). Read the [search parameters guide](guide/Search_parameters.html).
  * @propType {func} onSearchStateChange - See [URL Routing](guide/Routing.html).
  * @propType {object} searchState - See [URL Routing](guide/Routing.html).
  * @propType {func} createURL - See [URL Routing](guide/Routing.html).
@@ -81,6 +74,7 @@ class InstantSearch extends Component {
         ais: {
           onInternalStateUpdate: this.onWidgetsInternalStateUpdate.bind(this),
           createHrefForState: this.createHrefForState.bind(this),
+          onSearchForFacetValues: this.onSearchForFacetValues.bind(this),
         },
       };
     }
@@ -109,6 +103,10 @@ class InstantSearch extends Component {
     if (!this.isControlled) {
       this.aisManager.onExternalStateUpdate(searchState);
     }
+  }
+
+  onSearchForFacetValues(searchState) {
+    this.aisManager.onSearchForFacetValues(searchState);
   }
 
   getKnownKeys() {

@@ -28,6 +28,10 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
+).add('with search for facets value', () =>
+  <WrapWithHits>
+    <RefinementList attributeName="category" searchForFacetValues/>
+  </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
     <RefinementList

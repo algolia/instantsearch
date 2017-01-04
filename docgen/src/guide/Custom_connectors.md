@@ -12,7 +12,7 @@ If you wish to implement features that are not covered by the default widgets co
 
 Those properties are directly applied to the higher-order component. Providing a `displayName` is mandatory.
 
-## getProvidedProps(props, searchState, searchResults, meta)
+## getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults)
 
 This method should return the props to forward to the composed component.
 
@@ -23,6 +23,8 @@ This method should return the props to forward to the composed component.
 `searchResults` holds the search results, search errors and search loading state, with the shape `{results: ?SearchResults, error: ?Error, loading: bool}`. The `SearchResults` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults).
 
 `meta` is the list of metadata from all widgets whose connector defines a `getMetadata` method.
+
+`searchForFacetValuesResults` holds the search for facet values results.
 
 ## refine(props, searchState, ...args)
 
@@ -174,6 +176,22 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
+## searchForFacetValues(props, searchState, nextRefinement)
+
+This method needs to be implemented if you want to have the ability to perform a search for facet values inside your widget. 
+
+It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `searchForFacetValues` props of stateful widgets, and returns an 
+object of the shape: `{facetName: string, query: string}`
+
+```javascript
+const CoolWidget = createConnector({
+  // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
+
+  searchForFacetValues(props, searchState, nextRefinement) {
+    return {facetName: props.attributeName, query: nextRefinement};
+  },
+})(Widget);
+```
 ## cleanUp(props, searchState)
 
 This method is called when a widget is about to unmount in order to clean the searchState.

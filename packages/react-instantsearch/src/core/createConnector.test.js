@@ -419,4 +419,41 @@ describe('createConnector', () => {
       expect(createHrefForState.mock.calls[0][0]).toBe(nextState);
     });
   });
+
+  describe('searchForFacetValues', () => {
+    it('passes a searchForFacetValues method to the component', () => {
+      const Dummy = () => null;
+      const searchState = {};
+      const widgets = {};
+      const searchForFacetValues = jest.fn(() => searchState);
+      const Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps: () => ({}),
+        searchForFacetValues,
+        getId,
+      })(Dummy);
+      const onSearchForFacetValues = jest.fn();
+      const props = {hello: 'there'};
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({
+              widgets,
+            }),
+            subscribe: () => null,
+          },
+          onSearchForFacetValues,
+        },
+      }});
+      const passedProps = wrapper.find(Dummy).props();
+      const facetName = 'facetName';
+      const query = 'query';
+      passedProps.searchForFacetValues(facetName, query);
+      expect(searchForFacetValues.mock.calls[0][0]).toEqual(props);
+      expect(searchForFacetValues.mock.calls[0][1]).toBe(widgets);
+      expect(searchForFacetValues.mock.calls[0][2]).toBe(facetName);
+      expect(searchForFacetValues.mock.calls[0][3]).toBe(query);
+      expect(onSearchForFacetValues.mock.calls[0][0]).toBe(searchState);
+    });
+  });
 });
