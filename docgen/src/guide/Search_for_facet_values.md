@@ -28,7 +28,7 @@ If activated, the refinement list should display an input to search for facet va
 When using the [`connectRefinementList`](connectors/connectRefinementList.html) connector, you have two provided props related to the search
 for facet values behavior:
 
-* `isSearchFrom`, If `true` this boolean indicate that the `items` prop contains the search for facet values results. 
+* `isFromSearch`, If `true` this boolean indicate that the `items` prop contains the search for facet values results. 
 * `searchForFacetValues`, a function to call when triggering the search for facet values. It takes one parameter, the search 
 for facet values query. 
 
