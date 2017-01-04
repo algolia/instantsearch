@@ -57,6 +57,7 @@
     "google-map-react": "^0.22.0",
     "jest-cli": "^18.0.0",
     "jsdoc-parse": "^1.2.7",
+    "json": "^9.0.4",
     "json-loader": "^0.5.4",
     "jstransformer-markdown-it": "^2.0.0",
     "lodash": "^4.17.2",
