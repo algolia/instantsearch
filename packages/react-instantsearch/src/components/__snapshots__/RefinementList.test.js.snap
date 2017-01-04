@@ -7,6 +7,30 @@ exports[`RefinementList applies translations 1`] = `
       noValidate={true}
       onReset={[Function]}
       onSubmit={[Function]}>
+      <svg
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+        xmlns="http://www.w3.org/2000/svg">
+        <symbol
+          id="sbx-icon-search-13"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
+            fillRule="evenodd" />
+        </symbol>
+        <symbol
+          id="sbx-icon-clear-3"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
+            fillRule="evenodd" />
+        </symbol>
+      </svg>
       <div
         className="ais-SearchBox__wrapper"
         role="search">
@@ -20,18 +44,24 @@ exports[`RefinementList applies translations 1`] = `
           type="search"
           value="" />
         <button
+          className="ais-SearchBox__submit"
+          title="Submit your search query."
+          type="submit">
+          <svg
+            role="img">
+            <use
+              href="#sbx-icon-search-13" />
+          </svg>
+        </button>
+        <button
           className="ais-SearchBox__reset"
+          onClick={[Function]}
           title="Clear the search query."
           type="reset">
           <svg
-            viewBox="0 0 26 26"
-            xmlns="http://www.w3.org/2000/svg">
-            <g
-              fill="none"
-              fillRule="evenodd">
-              <path
-                d="M12.99883 9.92647L22.22236.70294c.85882-.85647 2.2306-.84706 3.08235 0 .8518.85412.8471 2.22588 0 3.0753l-9.2329 9.22353 9.22353 9.22353c.85648.85882.84707 2.23058 0 3.08235-.8541.85176-2.22587.84706-3.0753 0l-9.22116-9.23294-9.22353 9.22357c-.85646.85647-2.22823.84706-3.07764 0-.85413-.85412-.84707-2.2259 0-3.0753l9.22823-9.22117L.70235 3.77823C-.1541 2.92177-.1541 1.55.69295.69588c.85647-.85176 2.22823-.84706 3.07764 0l9.2282 9.2353v-.0047z" />
-            </g>
+            role="img">
+            <use
+              href="#sbx-icon-clear-3" />
           </svg>
         </button>
       </div>
@@ -177,6 +207,30 @@ exports[`RefinementList refinement list with search for facet values 1`] = `
       noValidate={true}
       onReset={[Function]}
       onSubmit={[Function]}>
+      <svg
+        style={
+          Object {
+            "display": "none",
+          }
+        }
+        xmlns="http://www.w3.org/2000/svg">
+        <symbol
+          id="sbx-icon-search-13"
+          viewBox="0 0 40 40"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
+            fillRule="evenodd" />
+        </symbol>
+        <symbol
+          id="sbx-icon-clear-3"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
+            fillRule="evenodd" />
+        </symbol>
+      </svg>
       <div
         className="ais-SearchBox__wrapper"
         role="search">
@@ -190,18 +244,24 @@ exports[`RefinementList refinement list with search for facet values 1`] = `
           type="search"
           value="" />
         <button
+          className="ais-SearchBox__submit"
+          title="Submit your search query."
+          type="submit">
+          <svg
+            role="img">
+            <use
+              href="#sbx-icon-search-13" />
+          </svg>
+        </button>
+        <button
           className="ais-SearchBox__reset"
+          onClick={[Function]}
           title="Clear the search query."
           type="reset">
           <svg
-            viewBox="0 0 26 26"
-            xmlns="http://www.w3.org/2000/svg">
-            <g
-              fill="none"
-              fillRule="evenodd">
-              <path
-                d="M12.99883 9.92647L22.22236.70294c.85882-.85647 2.2306-.84706 3.08235 0 .8518.85412.8471 2.22588 0 3.0753l-9.2329 9.22353 9.22353 9.22353c.85648.85882.84707 2.23058 0 3.08235-.8541.85176-2.22587.84706-3.0753 0l-9.22116-9.23294-9.22353 9.22357c-.85646.85647-2.22823.84706-3.07764 0-.85413-.85412-.84707-2.2259 0-3.0753l9.22823-9.22117L.70235 3.77823C-.1541 2.92177-.1541 1.55.69295.69588c.85647-.85176 2.22823-.84706 3.07764 0l9.2282 9.2353v-.0047z" />
-            </g>
+            role="img">
+            <use
+              href="#sbx-icon-clear-3" />
           </svg>
         </button>
       </div>
