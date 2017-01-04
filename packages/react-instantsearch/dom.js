@@ -9,6 +9,7 @@ export {InstantSearch};
 export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';
 export {default as Highlight} from './src/widgets/Highlight.js';
+export {default as Snippet} from './src/widgets/Snippet.js';
 export {default as Hits} from './src/widgets/Hits.js';
 export {default as HitsPerPage} from './src/widgets/HitsPerPage.js';
 export {default as InfiniteHits} from './src/widgets/InfiniteHits.js';
