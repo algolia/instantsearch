@@ -3,12 +3,14 @@ extends archetypes/single-column-formatted.pug
 block content
   .content!=contents
 
-  - var values = ['e-commerce', 'e-commerce-infinite', 'material-ui', 'media', 'tourism'];
-
+  - var values = []
+  if examples
+      - values = examples
   div(class="examples-container")
     each val in values
       div.example-tile
-         a(href=`examples/${val}/index.html`)
+        h2=val.title
+        a(href=`${examplesEndpoint}/${val.id}`)
           figure
-            img(src=`images/examples/${val}.png`)
-            figcaption #{val}
+            img(src=`images/examples/${val.id}.png`)
+            figcaption See the demo
