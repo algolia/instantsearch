@@ -7,6 +7,7 @@ import SortByComponent from '../components/SortBy.js';
  * @kind widget
  * @propType {string} defaultRefinement - The default selected index.
  * @propType {{value, label}[]} items - The list of indexes to search in.
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-SortBy__root - the root of the component
  * @example
  * import React from 'react';

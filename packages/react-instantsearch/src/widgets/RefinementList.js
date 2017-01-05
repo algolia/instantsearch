@@ -12,6 +12,7 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @propType {number} [limitMax=20] - the maximum number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default
  * @propType {boolean} [searchForFacetValues=false] - true if the component should display an input to search for facet values
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-RefinementList__root - the root of the component
  * @themeKey ais-RefinementList__items - the container of all items in the list
  * @themeKey ais-RefinementList__itemSelected - the selected list item

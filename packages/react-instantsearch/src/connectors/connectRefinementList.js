@@ -47,10 +47,11 @@ function getValue(name, props, searchState) {
  * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
- * @propType {number} [limitMin=10] - the minimum number of diplayed items
+ * @propType {number} [limitMin=10] - the minimum number of displayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default. The searchState of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the searchState is an empty string.
  * @propType {boolean} [searchForFacetValues=false] - if set to true, the searchForFacetValues function is provided
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
@@ -72,6 +73,7 @@ export default createConnector({
     limitMax: PropTypes.number,
     defaultRefinement: PropTypes.arrayOf(PropTypes.string),
     searchForFacetValues: PropTypes.bool,
+    transformItems: PropTypes.func,
   },
 
   defaultProps: {

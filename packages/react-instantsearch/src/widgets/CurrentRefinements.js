@@ -6,6 +6,7 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  * It also lets the user remove each one of them.
  * @name CurrentRefinements
  * @kind widget
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-CurrentRefinements__root - the root div of the widget
  * @themeKey ais-CurrentRefinements__items - the container of the filters
  * @themeKey ais-CurrentRefinements__item - a single filter
