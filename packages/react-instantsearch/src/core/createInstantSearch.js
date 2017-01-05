@@ -16,13 +16,26 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       apiKey: PropTypes.string,
     };
 
+    constructor(props) {
+      super();
+      this.client = props.algoliaClient || defaultAlgoliaClient(props.appId, props.apiKey);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      const props = this.props;
+      if (nextProps.algoliaClient) {
+        this.client = nextProps.algoliaClient;
+      } else if (props.appId !== nextProps.appId || props.apiKey !== nextProps.apiKey) {
+        this.client = defaultAlgoliaClient(nextProps.appId, nextProps.apiKey);
+      }
+    }
+
     render() {
-      const client = this.props.algoliaClient || defaultAlgoliaClient(this.props.appId, this.props.apiKey);
       return (
         <InstantSearch
           {...this.props}
           root={root}
-          algoliaClient={client}
+          algoliaClient={this.client}
         />
       );
     }

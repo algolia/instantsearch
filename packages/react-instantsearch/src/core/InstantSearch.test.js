@@ -114,6 +114,44 @@ describe('InstantSearch', () => {
     });
   });
 
+  it('correctly instantiates again the isManager if the configuration change', () => {
+    mount(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+    expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
+      indexName: DEFAULT_PROPS.indexName,
+      initialState: {},
+      searchParameters: {},
+      algoliaClient: {},
+    });
+
+    mount(
+      <InstantSearch {...DEFAULT_PROPS} appId="otherApp">
+        <div />
+      </InstantSearch>
+    );
+    expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
+      indexName: DEFAULT_PROPS.indexName,
+      initialState: {},
+      searchParameters: {},
+      algoliaClient: {},
+    });
+
+    mount(
+      <InstantSearch {...DEFAULT_PROPS}>
+        <div />
+      </InstantSearch>
+    );
+    expect(createInstantSearchManager.mock.calls[0][0]).toEqual({
+      indexName: DEFAULT_PROPS.indexName,
+      initialState: {},
+      searchParameters: {},
+      algoliaClient: {},
+    });
+  });
+
   it('works as a controlled input', () => {
     const ism = {
       transitionState: searchState => ({...searchState, transitioned: true}),
