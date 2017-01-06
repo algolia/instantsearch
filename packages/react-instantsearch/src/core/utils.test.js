@@ -7,6 +7,7 @@ import {
   capitalize,
   assertFacetDefined,
   getDisplayName,
+  defer,
 } from './utils';
 
 import {SearchParameters, SearchResults} from 'algoliasearch-helper';
@@ -83,7 +84,9 @@ describe('utils', () => {
 
     it('gets the right displayName from React.createClass', () => {
       const SuperComponent = React.createClass({
-        render() { return null; },
+        render() {
+          return null;
+        },
         displayName: 'SuperComponent',
       });
 
@@ -94,4 +97,18 @@ describe('utils', () => {
       expect(getDisplayName(() => null)).toBe('UnknownComponent');
     });
   });
+  describe('defer', () => {
+    it('calling a function asynchronously, should be done as soon as possible.', () => {
+      let count = 0;
+
+      defer(() => {
+        count = 1;
+      });
+
+      return Promise.resolve().then(() => {
+        expect(count).toEqual(1);
+      });
+    });
+  });
 });
+

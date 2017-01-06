@@ -58,3 +58,6 @@ export function assertFacetDefined(searchParameters, searchResults, facet) {
 export function getDisplayName(Component) {
   return Component.displayName || Component.name || 'UnknownComponent';
 }
+
+const resolved = Promise.resolve();
+export const defer = f => { resolved.then(f); };
