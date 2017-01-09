@@ -20,29 +20,23 @@ describe('createWidgetsManager', () => {
     });
 
     it('schedules an update', () => {
-      jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
-      jest.runAllImmediates();
       wm.registerWidget({});
-      expect(onUpdate.mock.calls.length).toBe(0);
-      jest.runAllImmediates();
-      expect(onUpdate.mock.calls.length).toBe(1);
-      jest.useRealTimers();
+      return Promise.resolve().then(() => {
+        expect(onUpdate.mock.calls.length).toBe(1);
+      });
     });
   });
 
   describe('update', () => {
     it('schedules an update', () => {
-      jest.useFakeTimers();
       const onUpdate = jest.fn();
       const wm = createWidgetsManager(onUpdate);
-      jest.runAllImmediates();
       wm.update();
-      expect(onUpdate.mock.calls.length).toBe(0);
-      jest.runAllImmediates();
-      expect(onUpdate.mock.calls.length).toBe(1);
-      jest.useRealTimers();
+      return Promise.resolve().then(() => {
+        expect(onUpdate.mock.calls.length).toBe(1);
+      });
     });
   });
 });
