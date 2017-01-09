@@ -144,9 +144,24 @@ describe('connectMultiRange', () => {
         currentRefinement: 'YAY',
       }],
     });
+  });
 
-    const searchState = metadata.items[0].value({multiRange: {wot: '100:200'}});
-    expect(searchState).toEqual({multiRange: {wot: ''}});
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata(
+      {
+        attributeName: 'one',
+        items: [{
+          label: 'YAY',
+          start: 100,
+          end: 200,
+        }],
+      },
+      {multiRange: {one: '100:200', two: '200:400'}}
+    );
+
+    const searchState = metadata.items[0].value({multiRange: {one: '100:200', two: '200:400'}});
+
+    expect(searchState).toEqual({multiRange: {one: '', two: '200:400'}});
   });
 
   it('should return the right searchState when clean up', () => {

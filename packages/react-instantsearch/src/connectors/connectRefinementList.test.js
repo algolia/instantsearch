@@ -207,11 +207,21 @@ describe('connectRefinementList', () => {
         },
       ],
     });
+  });
 
-    let searchState = metadata.items[0].items[0].value({refinementList: {wot: ['wat', 'wut']}});
-    expect(searchState).toEqual({refinementList: {wot: ['wut']}});
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata(
+      {attributeName: 'one'},
+      {refinementList: {one: ['one1', 'one2'], two: ['two']}}
+    );
+
+    let searchState = metadata.items[0].items[0].value({refinementList: {one: ['one1', 'one2'], two: ['two']}});
+
+    expect(searchState).toEqual({refinementList: {one: ['one2'], two: ['two']}});
+
     searchState = metadata.items[0].items[1].value(searchState);
-    expect(searchState).toEqual({refinementList: {wot: ''}});
+
+    expect(searchState).toEqual({refinementList: {one: '', two: ['two']}});
   });
 
   it('should return the right searchState when clean up', () => {

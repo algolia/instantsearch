@@ -132,7 +132,7 @@ export default createConnector({
         currentRefinement: label,
         value: nextState => ({
           ...nextState,
-          [namespace]: {[id]: ''},
+          [namespace]: {...nextState[namespace], [id]: ''},
         }),
       });
     }

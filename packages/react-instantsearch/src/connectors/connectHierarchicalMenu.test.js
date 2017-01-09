@@ -209,9 +209,14 @@ describe('connectHierarchicalMenu', () => {
         value: metadata.items[0].value,
       }],
     });
+  });
 
-    const searchState = metadata.items[0].value({hierarchicalMenu: {ok: 'wat'}});
-    expect(searchState).toEqual({hierarchicalMenu: {ok: ''}});
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata({attributes: ['one']}, {hierarchicalMenu: {one: 'one', two: 'two'}});
+
+    const searchState = metadata.items[0].value({hierarchicalMenu: {one: 'one', two: 'two'}});
+
+    expect(searchState).toEqual({hierarchicalMenu: {one: '', two: 'two'}});
   });
 
   it('should return the right searchState when clean up', () => {
