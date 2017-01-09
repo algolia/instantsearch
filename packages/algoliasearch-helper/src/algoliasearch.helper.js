@@ -183,9 +183,32 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
 };
 
 /**
+ * Structure of each result when using
+ * [`searchForFacetValues()`](reference.html#AlgoliaSearchHelper#searchForFacetValues)
+ * @typedef FacetSearchHit
+ * @type {object}
+ * @property {string} value the facet value
+ * @property {string} highlighted the facet value highlighted with the query string
+ * @property {number} count number of occurence of this facet value
+ * @property {boolean} isRefined true if the value is already refined
+ */
+
+/**
+ * Structure of the data resolved by the
+ * [`searchForFacetValues()`](reference.html#AlgoliaSearchHelper#searchForFacetValues)
+ * promise.
+ * @typedef FacetSearchResult
+ * @type {objet}
+ * @property {FacetSearchHit} facetHits the results for this search for facet values
+ * @property {number} processingTimeMS time taken by the query insde the engine
+ */
+
+/**
  * Search for facet values based on an query and the name of a facetted attribute. This
  * triggers a search and will retrun a promise. On top of using the query, it also sends
  * the parameters from the state so that the search is narrowed to only the possible values.
+ *
+ * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
  * @param {string} query the string query for the search
  * @param {string} facet the name of the facetted attribute
  * @return {promise<FacetSearchResult>} the results of the search
