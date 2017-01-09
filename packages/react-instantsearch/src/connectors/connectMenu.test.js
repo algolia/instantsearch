@@ -11,6 +11,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  searchForFacetValues,
   cleanUp,
 } = connect;
 
@@ -25,16 +26,16 @@ describe('connectMenu', () => {
     };
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: null});
+    expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -198,5 +199,13 @@ describe('connectMenu', () => {
 
     searchState = cleanUp({attributeName: 'name2'}, searchState);
     expect(searchState).toEqual({another: {searchState: 'searchState'}});
+  });
+
+  it('calling searchForFacetValues return the right searchForFacetValues parameters', () => {
+    const parameters = searchForFacetValues({attributeName: 'ok'}, {}, 'yep');
+    expect(parameters).toEqual({
+      facetName: 'ok',
+      query: 'yep',
+    });
   });
 });

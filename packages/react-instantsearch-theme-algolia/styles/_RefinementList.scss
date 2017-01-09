@@ -66,27 +66,6 @@
 .ais-RefinementList__itemCheckboxSelected{
 }
 
-$sffv-searchbox-config:(
-  input-width: 300px,
-  input-height: 32px,
-  border-width: 1px,
-  border-radius: 3px,
-  input-border-color: #D4D8E3,
-  input-focus-border-color: #D4D8E3,
-  input-background: #FFFFFF,
-  input-focus-background: #FFFFFF,
-  font-size: 14px,
-  placeholder-color: #697782,
-  icon: sbx-icon-search-13,
-  icon-size: 14px,
-  icon-position: left,
-  icon-color: #bfc7d8,
-  icon-background: #FFFFFF,
-  icon-background-opacity: 0,
-  icon-clear: sbx-icon-clear-3,
-  icon-clear-size: 12px
-);
-
 .ais-RefinementList__SearchBox {
   margin-bottom: 3px;
 }

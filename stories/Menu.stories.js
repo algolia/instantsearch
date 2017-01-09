@@ -30,6 +30,10 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
+).add('with search for facets value', () =>
+  <WrapWithHits>
+    <Menu attributeName="category" searchForFacetValues/>
+  </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
     <Menu
