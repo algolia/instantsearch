@@ -1,3 +1,5 @@
+import {defer} from './utils';
+
 export default function createWidgetsManager(onWidgetsUpdate) {
   const widgets = [];
   // Is an update scheduled?
@@ -10,7 +12,7 @@ export default function createWidgetsManager(onWidgetsUpdate) {
       return;
     }
     scheduled = true;
-    setImmediate(() => {
+    defer(() => {
       scheduled = false;
       onWidgetsUpdate();
     });
