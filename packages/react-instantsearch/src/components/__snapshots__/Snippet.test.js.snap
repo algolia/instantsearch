@@ -1,0 +1,25 @@
+exports[`Snippet parses an highlighted snippet attribute of hit object 1`] = `
+<span
+  className="ais-Highlight">
+  <span
+    className="ais-Highlight__nonHighlighted">
+    awesome 
+  </span>
+  <em
+    className="ais-Highlight__highlighted">
+    hi
+  </em>
+  <span
+    className="ais-Highlight__nonHighlighted">
+    ghlighted 
+  </span>
+  <em
+    className="ais-Highlight__highlighted">
+    hi
+  </em>
+  <span
+    className="ais-Highlight__nonHighlighted">
+    t!
+  </span>
+</span>
+`;
