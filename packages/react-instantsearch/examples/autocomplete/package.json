@@ -8,8 +8,8 @@
     "react-autosuggest": "^7.0.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "react-instantsearch": "file:../../dist",
-    "react-instantsearch-theme-algolia": "file:../../../react-instantsearch-theme-algolia"
+    "react-instantsearch": "latest",
+    "react-instantsearch-theme-algolia": "latest"
   },
   "scripts": {
     "start": "react-scripts start"

@@ -10,5 +10,12 @@
   "license": "MIT",
   "scripts": {
     "prepublish": "babel-node scripts/build"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.6.1",
+    "cssnano": "^3.10.0",
+    "node-sass": "^4.2.0",
+    "postcss": "^5.2.9",
+    "postcss-scss": "^0.4.0"
   }
 }

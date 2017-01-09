@@ -26,7 +26,7 @@ We use the [documentation website][website-url] as the main way to develop React
 
 ```sh
 yarn
-npm start
+yarn start
 ```
 
 Go to <http://localhost:3000>.
@@ -36,30 +36,30 @@ Go to <http://localhost:3000>.
 We have unit tests for all `packages/`:
 
 ```sh
-npm test # one shot run, also lint and tries to build the documentation
+yarn test # one shot run, also lint and tries to build the documentation
 ```
 
 ```sh
-npm run dev # unit tests watch mode, no lint
+yarn dev # unit tests watch mode, no lint
 ```
 
 ## Lint
 
 ```sh
-npm run lint # only changed files in dev, all files in CI
-npm run lint:fix
+yarn lint # only changed files in dev, all files in CI
+yarn lint:fix
 ```
 
 ## Release
 
 ```sh
-npm run release
+yarn release
 ```
 
 ## Update docs
 
 ```sh
-npm run docs:update
+yarn docs:update
 ```
 
 ## What about instantsearch.js?

@@ -1,0 +1,4 @@
+exports[`Snippet parses an highlighted snippet attribute of hit object 1`] = `
+<span
+  className="ais-Highlight" />
+`;

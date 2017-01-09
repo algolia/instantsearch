@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {InstantSearch, Hits, SearchBox} from 'react-instantsearch/dom';
 import {connectSearchBox} from 'react-instantsearch/connectors';
-/* eslint-disable import/no-unresolved */
 import 'react-instantsearch-theme-algolia/style.css';
-/* eslint-enable import/no-unresolved */
 
 class App extends Component {
   constructor(props) {
@@ -66,4 +64,3 @@ SecondResults.propTypes = {
 };
 
 export default App;
-
