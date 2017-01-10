@@ -1,5 +1,10 @@
 CHANGELOG
 
+2.18.0 - 2017-01-10
+ * feat(client): Add methods to set/get the client.
+ * doc(sffv): Add the type of the results of searchForFacetValues
+ * test(constructor): Update and rename instanciate.js to instantiate.js
+
 2.17.1 - 2016-12-28
  * fix(agent): Add a test if addAlgoliaAgent exists
 

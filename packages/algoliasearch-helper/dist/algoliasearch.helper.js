@@ -13495,7 +13495,7 @@ function AlgoliaSearchHelper(client, index, options) {
   if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
   else client.addAlgoliaAgent('JS Helper ' + version);
 
-  this.client = client;
+  this.setClient(client);
   var opts = options || {};
   opts.index = index;
   this.state = SearchParameters.make(opts);
@@ -13592,9 +13592,32 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
 };
 
 /**
+ * Structure of each result when using
+ * [`searchForFacetValues()`](reference.html#AlgoliaSearchHelper#searchForFacetValues)
+ * @typedef FacetSearchHit
+ * @type {object}
+ * @property {string} value the facet value
+ * @property {string} highlighted the facet value highlighted with the query string
+ * @property {number} count number of occurence of this facet value
+ * @property {boolean} isRefined true if the value is already refined
+ */
+
+/**
+ * Structure of the data resolved by the
+ * [`searchForFacetValues()`](reference.html#AlgoliaSearchHelper#searchForFacetValues)
+ * promise.
+ * @typedef FacetSearchResult
+ * @type {objet}
+ * @property {FacetSearchHit} facetHits the results for this search for facet values
+ * @property {number} processingTimeMS time taken by the query insde the engine
+ */
+
+/**
  * Search for facet values based on an query and the name of a facetted attribute. This
  * triggers a search and will retrun a promise. On top of using the query, it also sends
  * the parameters from the state so that the search is narrowed to only the possible values.
+ *
+ * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
  * @param {string} query the string query for the search
  * @param {string} facet the name of the facetted attribute
  * @return {promise<FacetSearchResult>} the results of the search
@@ -14601,6 +14624,29 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 };
 
 /**
+ * Updates the internal client instance. If the reference of the clients
+ * are equal then no update is actually done.
+ * @param  {AlgoliaSearch} newClient an AlgoliaSearch client
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setClient = function(newClient) {
+  if (this.client === newClient) return this;
+
+  if (newClient.addAlgoliaAgent) newClient.addAlgoliaAgent('JS Helper ' + version);
+  this.client = newClient;
+
+  return this;
+};
+
+/**
+ * Gets the instance of the currently used client.
+ * @return {AlgoliaSearch}
+ */
+AlgoliaSearchHelper.prototype.getClient = function() {
+  return this.client;
+};
+
+/**
  * Creates an derived instance of the Helper. A derived helper
  * is a way to request other indices synchronised with the lifecycle
  * of the main Helper. This mechanism uses the multiqueries feature
@@ -15188,7 +15234,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":290,"./SearchParameters/shortener":291,"lodash/bind":214,"lodash/forEach":223,"lodash/invert":231,"lodash/isArray":233,"lodash/isPlainObject":245,"lodash/isString":246,"lodash/map":253,"lodash/mapKeys":254,"lodash/mapValues":255,"lodash/pick":263,"qs":281,"qs/lib/utils":284}],299:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.17.1';
+module.exports = '2.18.0';
 
 },{}]},{},[1])(1)
 });
