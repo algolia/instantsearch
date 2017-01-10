@@ -2,15 +2,15 @@
 	"name": "reactnative",
 	"version": "0.0.1",
 	"private": true,
+	"dependencies": {
+		"react": "^15.4.2",
+		"react-instantsearch": "latest",
+		"react-native": "^0.40.0"
+	},
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start"
 	},
-	"dependencies": {
-		"react": "15.4.1",
-		"react-native": "0.39.2",
-		"react-instantsearch": "file:../../dist"
-	},
 	"devDependencies": {
-		"babel-preset-react-native": "1.9.0"
+		"babel-preset-react-native": "^1.9.1"
 	}
 }

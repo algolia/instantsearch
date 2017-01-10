@@ -4,10 +4,8 @@ import {
   Hits, Menu, Pagination, PoweredBy, StarRating,
   RefinementList, SearchBox, ClearAll,
 } from 'react-instantsearch/dom';
-/* eslint-disable import/no-unresolved */
 import {withRouter} from 'react-router';
 import 'react-instantsearch-theme-algolia/style.css';
-/* eslint-enable import/no-unresolved */
 import qs from 'qs';
 
 class App extends Component {

@@ -1,13 +1,13 @@
 {
   "private": true,
   "devDependencies": {
-    "react-scripts": "0.7.0"
+    "react-scripts": "^0.8.5"
   },
   "dependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "react-instantsearch": "file:../../dist",
-    "react-instantsearch-theme-algolia": "file:../../../react-instantsearch-theme-algolia"
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-instantsearch": "latest",
+    "react-instantsearch-theme-algolia": "latest"
   },
   "scripts": {
     "start": "react-scripts start"

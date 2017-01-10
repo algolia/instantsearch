@@ -3,4 +3,4 @@
 set -e # exit when error
 
 cd packages/react-instantsearch
-npm run build
+yarn build
