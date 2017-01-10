@@ -14,6 +14,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       algoliaClient: PropTypes.object,
       appId: PropTypes.string,
       apiKey: PropTypes.string,
+      indexName: PropTypes.string.isRequired,
     };
 
     constructor(props) {
@@ -33,7 +34,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
     render() {
       return (
         <InstantSearch
-          {...this.props}
+          indexName={this.props.indexName}
           root={root}
           algoliaClient={this.client}
         />

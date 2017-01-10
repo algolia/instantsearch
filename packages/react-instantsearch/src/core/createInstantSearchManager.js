@@ -41,6 +41,11 @@ export default function createInstantSearchManager({
     searching: false,
   });
 
+  function updateClient(client) {
+    helper.setClient(client);
+    search(); // Will it work?
+  }
+
   function getMetadata(state) {
     return widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getMetadata))
@@ -165,5 +170,6 @@ export default function createInstantSearchManager({
     onExternalStateUpdate,
     transitionState,
     onSearchForFacetValues,
+    updateClient,
   };
 }
