@@ -71,7 +71,7 @@ Provided props always follow the same pattern for ease of use:
 
 <div class="guide-nav">
     <div class="guide-nav-left">
-        Previous: <a href="guide/i18n.html">← i18n</a>
+        Previous: <a href="guide/Sorting_and_filtering.html">← Sorting and filtering items</a>
     </div>
     <div class="guide-nav-right">
         Next: <a href="guide/Default_refinements.html">Default refinements →</a>

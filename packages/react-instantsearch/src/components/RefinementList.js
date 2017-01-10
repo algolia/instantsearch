@@ -28,6 +28,7 @@ class RefinementList extends Component {
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
+    transformItems: PropTypes.func,
   };
 
   selectItem = item => {

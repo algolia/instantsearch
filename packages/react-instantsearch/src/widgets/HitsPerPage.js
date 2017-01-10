@@ -12,6 +12,7 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * @kind widget
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-HitsPerPage__root - the root of the component.
  * @example
  * import React from 'react';

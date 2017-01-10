@@ -12,6 +12,7 @@ class CurrentRefinements extends Component {
       label: PropTypes.string,
     })).isRequired,
     refine: PropTypes.func.isRequired,
+    transformItems: PropTypes.func,
   };
 
   render() {

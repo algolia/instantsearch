@@ -11,6 +11,7 @@ class MultiRange extends Component {
       value: PropTypes.string.isRequired,
     })).isRequired,
     refine: PropTypes.func.isRequired,
+    transformItems: PropTypes.func,
   };
 
   renderItem = item => {

@@ -40,6 +40,7 @@ const sortBy = ['count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
@@ -54,6 +55,7 @@ export default createConnector({
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     defaultRefinement: PropTypes.string,
+    transformItems: PropTypes.func,
   },
 
   defaultProps: {

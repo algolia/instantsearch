@@ -3,6 +3,7 @@ import {storiesOf} from '@kadira/storybook';
 import {Menu} from '../packages/react-instantsearch/dom';
 import {withKnobs, text, boolean, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
+import {orderBy} from 'lodash';
 
 const stories = storiesOf('Menu', module);
 
@@ -29,6 +30,11 @@ stories.add('default', () =>
       limitMax={5}
       showMore={true}
     />
+  </WrapWithHits>
+).add('with the sort strategy changed', () =>
+  <WrapWithHits>
+    <Menu attributeName="category"
+          transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])}/>
   </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >

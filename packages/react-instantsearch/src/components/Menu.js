@@ -21,6 +21,7 @@ class Menu extends Component {
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
+    transformItems: PropTypes.func,
   };
 
   renderItem = item => {

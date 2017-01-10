@@ -14,6 +14,7 @@ class SortBy extends Component {
     })).isRequired,
 
     currentRefinement: PropTypes.string.isRequired,
+    transformItems: PropTypes.func,
   };
 
   onChange = e => {
