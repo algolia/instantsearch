@@ -14,7 +14,7 @@ if (!utils.shouldRun) {
 }
 var indexName = '_travis-algoliasearch-helper-js-' +
   (process.env.TRAVIS_BUILD_NUMBER || 'DEV') +
-  'helper_searchonce' + random(0, 5000);
+  'helper_sffv' + random(0, 5000);
 
 var dataset = [
   {objectID: '1', f: 'ba', f2: ['b']},
@@ -25,8 +25,7 @@ var dataset = [
 ];
 
 var config = {
-  searchableAttributes: ['f', 'f2'],
-  attributesForFaceting: ['f', 'f2']
+  attributesForFaceting: ['searchable(f)', 'searchable(f2)']
 };
 
 test(

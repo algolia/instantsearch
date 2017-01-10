@@ -86,7 +86,7 @@ function AlgoliaSearchHelper(client, index, options) {
   if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
   else client.addAlgoliaAgent('JS Helper ' + version);
 
-  this.client = client;
+  this.setClient(client);
   var opts = options || {};
   opts.index = index;
   this.state = SearchParameters.make(opts);
@@ -1212,6 +1212,29 @@ AlgoliaSearchHelper.prototype._change = function() {
 AlgoliaSearchHelper.prototype.clearCache = function() {
   this.client.clearCache();
   return this;
+};
+
+/**
+ * Updates the internal client instance. If the reference of the clients
+ * are equal then no update is actually done.
+ * @param  {AlgoliaSearch} newClient an AlgoliaSearch client
+ * @return {AlgoliaSearchHelper}
+ */
+AlgoliaSearchHelper.prototype.setClient = function(newClient) {
+  if (this.client === newClient) return this;
+
+  if (newClient.addAlgoliaAgent) newClient.addAlgoliaAgent('JS Helper ' + version);
+  this.client = newClient;
+
+  return this;
+};
+
+/**
+ * Gets the instance of the currently used client.
+ * @return {AlgoliaSearch}
+ */
+AlgoliaSearchHelper.prototype.getClient = function() {
+  return this.client;
 };
 
 /**

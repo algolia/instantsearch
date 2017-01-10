@@ -421,6 +421,11 @@ Algolia.
 {{> jsdoc jsdoc/helper/event:result}}
 {{> jsdoc jsdoc/helper/event:error}}
 
+### Client management
+
+{{> jsdoc jsdoc/helper/getClient}}
+{{> jsdoc jsdoc/helper/setClient}}
+
 ## SearchResults
 
 The SearchResults is the interface to read the results received from
