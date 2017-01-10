@@ -15,6 +15,7 @@ import HierarchicalMenuComponent from '../components/HierarchicalMenu.js';
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
  * @propType {string} defaultRefinement - the item value selected by default
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-HierarchicalMenu__root - Container of the widget
  * @themeKey ais-HierarchicalMenu__items - Container of the items
  * @themeKey ais-HierarchicalMenu__item - Id for a single list item

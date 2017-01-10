@@ -3,6 +3,7 @@ import {storiesOf} from '@kadira/storybook';
 import {RefinementList} from '../packages/react-instantsearch/dom';
 import {withKnobs, boolean, number, array} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
+import {orderBy} from 'lodash';
 
 const stories = storiesOf('RefinementList', module);
 
@@ -31,6 +32,11 @@ stories.add('default', () =>
 ).add('with search for facets value', () =>
   <WrapWithHits>
     <RefinementList attributeName="category" searchForFacetValues/>
+  </WrapWithHits>
+).add('with the sort strategy changed', () =>
+  <WrapWithHits>
+    <RefinementList attributeName="category"
+                    transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])}/>
   </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
