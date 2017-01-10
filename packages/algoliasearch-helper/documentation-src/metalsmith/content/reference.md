@@ -421,6 +421,11 @@ Algolia.
 {{> jsdoc jsdoc/helper/event:result}}
 {{> jsdoc jsdoc/helper/event:error}}
 
+### Client management
+
+{{> jsdoc jsdoc/helper/getClient}}
+{{> jsdoc jsdoc/helper/setClient}}
+
 ## SearchResults
 
 The SearchResults is the interface to read the results received from
@@ -471,6 +476,8 @@ that you might encounter in the documentation.
 
 {{> jsdoc jsdoc/helper/FacetRefinement}}
 {{> jsdoc jsdoc/helper/NumericRefinement}}
+{{> jsdoc jsdoc/helper/FacetSearchResult}}
+{{> jsdoc jsdoc/helper/FacetSearchHit}}
 {{> jsdoc jsdoc/results/Facet}}
 {{> jsdoc jsdoc/results/FacetValue}}
 {{> jsdoc jsdoc/results/HierarchicalFacet}}
