@@ -85,6 +85,7 @@ const sortBy = ['name:asc'];
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
@@ -104,14 +105,11 @@ export default createConnector({
     separator: PropTypes.string,
     rootPath: PropTypes.string,
     showParentLevel: PropTypes.bool,
-
     defaultRefinement: PropTypes.string,
-
     showMore: PropTypes.bool,
-
     limitMin: PropTypes.number,
-
     limitMax: PropTypes.number,
+    transformItems: PropTypes.func,
   },
 
   defaultProps: {

@@ -24,6 +24,7 @@ function getCurrentRefinement(props, searchState) {
  * @kind connector
  * @propType {number} defaultRefinement - The number of items selected by default
  * @propType {{value: number, label: string}[]} items - List of hits per page options.
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
@@ -38,6 +39,7 @@ export default createConnector({
       label: PropTypes.string,
       value: PropTypes.number.isRequired,
     })).isRequired,
+    transformItems: PropTypes.func,
   },
 
   getProvidedProps(props, searchState) {

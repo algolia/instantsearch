@@ -8,6 +8,7 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
  * @propType {string} defaultRefinement - the value of the item selected by default, follow the format "min:max".
+ * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @themeKey ais-MultiRange__root - The root component of the widget
  * @themeKey ais-MultiRange__items - The container of the items
  * @themeKey ais-MultiRange__item - A single item

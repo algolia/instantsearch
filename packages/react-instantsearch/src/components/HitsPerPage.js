@@ -8,7 +8,7 @@ class HitsPerPage extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
     currentRefinement: PropTypes.number.isRequired,
-
+    transformItems: PropTypes.func,
     items: PropTypes.arrayOf(
       PropTypes.shape({
         /**
