@@ -24,15 +24,16 @@ const response = {
   ],
 };
 client.search = jest.fn((queries, cb) => {
+  const clonedResponse = JSON.parse(JSON.stringify(response));
   if (cb) {
     setTimeout(() => {
-      cb(null, response);
+      cb(null, clonedResponse);
     }, 1);
     return undefined;
   }
 
   return new Promise(resolve => {
-    resolve(response);
+    resolve(clonedResponse);
   });
 });
 

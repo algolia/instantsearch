@@ -4,9 +4,7 @@ import {createConnector} from 'react-instantsearch';
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 import {forOwn} from 'lodash';
-/* eslint-disable import/no-unresolved */
 import 'react-instantsearch-theme-algolia/style.css';
-/* eslint-enable import/no-unresolved */
 
 class App extends Component {
   render() {
@@ -110,4 +108,3 @@ AutoComplete.propTypes = {
 const ConnectedAutoComplete = connectAutoComplete(AutoComplete);
 
 export default App;
-

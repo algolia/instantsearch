@@ -116,13 +116,16 @@ const Hit = hit => {
   );
 };
 
-const Results = () =>
-  <article>
-    <div id="stats" className="text-right text-muted"><Stats/></div>
-    <hr />
-    <div id="hits"><Hits hitComponent={Hit} /></div>
-    <div id="pagination" className="text-center"><Pagination /></div>
-  </article>;
+const Results = connectSearchBox(({currentRefinement}) =>
+  currentRefinement
+  ? <article>
+      <div id="stats" className="text-right text-muted"><Stats/></div>
+      <hr />
+      <div id="hits"><Hits hitComponent={Hit} /></div>
+      <div id="pagination" className="text-center"><Pagination /></div>
+    </article>
+  : null
+  );
 
 const RefinementListLinks = connectRefinementList(({items, refine, createURL}) => {
   const hitComponents = items.map(item =>
