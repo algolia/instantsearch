@@ -1,4 +1,4 @@
-This example shows how to use an external autocomplete component with react-instantsearch
+This example shows how to use an external autocomplete component with `react-instantsearch`
 It uses [react-autosuggest](https://github.com/moroshko/react-autosuggest) as the autocomplete external component.
 
 You will find two use cases:
@@ -8,7 +8,9 @@ You will find two use cases:
 
 To start the example:
 
-* npm install
-* npm start
+```sh
+yarn
+yarn start
+```
 
-Read more about react-instantsearch [in our documentation](https://community.algolia.com/instantsearch.js/react/).
+Read more about `react-instantsearch` [in our documentation](https://community.algolia.com/instantsearch.js/react/).

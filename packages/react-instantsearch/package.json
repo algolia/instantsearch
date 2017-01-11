@@ -1,5 +1,9 @@
 {
   "name": "react-instantsearch",
+  "author": {
+    "name": "Algolia, Inc.",
+    "url": "https://www.algolia.com"
+  },
   "description": "Boost search on your React apps with Algolia",
   "version": "2.1.0",
   "scripts": {
@@ -11,10 +15,17 @@
     "url": "https://github.com/algolia/instantsearch.js/"
   },
   "dependencies": {
-    "algoliasearch": "^3.20.0",
-    "algoliasearch-helper": "^2.16.0",
+    "algoliasearch": "^3.20.3",
+    "algoliasearch-helper": "^2.18.0",
     "classnames": "^2.2.5",
-    "lodash": "^4.17.2"
+    "lodash": "^4.17.4"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "enzyme": "^2.7.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-native": "^0.40.0",
+    "react-test-renderer": "^15.4.2"
+  }
 }

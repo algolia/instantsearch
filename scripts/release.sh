@@ -2,6 +2,7 @@
 
 set -e # exit when error
 
+# npm owner add and npm whoami cannot be moved to yarn yet
 if [[ -n $(cd packages/react-instantsearch && npm owner add "$(npm whoami)") ]]; then
   printf "Release: Not an owner of the npm repo, ask for it\n"
   exit 1
@@ -61,7 +62,7 @@ mversion $newVersion
 
 mversion $newVersion
 yarn
-npm run build
+yarn build
 
 # update changelog
 printf "\n\nRelease: update changelog"
@@ -70,7 +71,7 @@ conventional-changelog --preset angular --infile CHANGELOG.md --same-file
 
 # regenerate readme TOC
 printf "\n\nRelease: generate TOCS"
-npm run doctoc
+yarn doctoc
 
 # git add and tag
 commitMessage="v$newVersion\n\n$changelog"
@@ -87,14 +88,14 @@ git push origin --tags
 
 (
 cd packages/react-instantsearch/dist
-npm publish
+npm publish # This cannot be moved to yarn yet
 cd ..
 rm -rf dist/
 )
 
 (
 cd packages/react-instantsearch-theme-algolia
-npm publish
+npm publish  # This cannot be moved to yarn yet
 )
 
 printf "Release:
