@@ -185,7 +185,7 @@ export default createConnector({
         currentRefinement: getCurrentRefinement(props, searchState),
         value: nextState => ({
           ...nextState,
-          [namespace]: {[id]: ''},
+          [namespace]: {...nextState[namespace], [id]: ''},
         }),
         items: getCurrentRefinement(props, searchState).map(item => ({
           label: `${item}`,
@@ -196,7 +196,7 @@ export default createConnector({
 
             return {
               ...nextState,
-              [namespace]: {[id]: nextSelectedItems.length > 0 ? nextSelectedItems : ''},
+              [namespace]: {...nextState[namespace], [id]: nextSelectedItems.length > 0 ? nextSelectedItems : ''},
             };
           },
         })),

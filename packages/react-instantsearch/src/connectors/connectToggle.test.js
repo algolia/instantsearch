@@ -78,9 +78,14 @@ describe('connectToggle', () => {
       ],
       id: 't',
     });
+  });
 
-    const searchState = metadata.items[0].value({toggle: {t: true}});
-    expect(searchState).toEqual({toggle: {t: false}});
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata({attributeName: 'one', label: 'yep'}, {toggle: {one: true, two: false}});
+
+    const searchState = metadata.items[0].value({toggle: {one: true, two: false}});
+
+    expect(searchState).toEqual({toggle: {one: false, two: false}});
   });
 
   it('should return the right searchState when clean up', () => {

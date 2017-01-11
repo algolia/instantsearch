@@ -80,9 +80,6 @@ export default createConnector({
   },
 
   getMetadata() {
-    const id = getId();
-    return {
-      id,
-    };
+    return {id: getId()};
   },
 });
