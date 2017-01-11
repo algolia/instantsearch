@@ -1,16 +1,11 @@
 language: node_js
 node_js: stable
-install:
-  - npm install --global yarn
-  - yarn
-  - npm rebuild node-sass
+before_script:
+  - yarn boot
 branches:
   only:
     - master
     - develop
     - v2
     - /^greenkeeper-.*$/
-cache:
-  directories:
-  - ~/.yarn
-  - ~/.nvm
+cache: yarn

@@ -1,8 +1,10 @@
-This example shows how to target multiple indices using react-instantsearch
+This example shows how to target multiple indices using `react-instantsearch`.
 
-To start the example: 
+To start the example:
 
-* npm install
-* npm start
+```sh
+yarn
+yarn start
+```
 
-Read more about react-instantsearch [in our documentation](https://community.algolia.com/instantsearch.js/react/).
+Read more about `react-instantsearch` [in our documentation](https://community.algolia.com/instantsearch.js/react/).

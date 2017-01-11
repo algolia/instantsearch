@@ -4,9 +4,7 @@ import {createConnector} from 'react-instantsearch';
 import {connectSearchBox} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 import {isEqual, forOwn} from 'lodash';
-/* eslint-disable import/no-unresolved */
 import 'react-instantsearch-theme-algolia/style.css';
-/* eslint-enable import/no-unresolved */
 
 class App extends Component {
   constructor(props) {
@@ -180,4 +178,3 @@ AutoComplete.propTypes = {
 const VirtualAutoSuggest = connectAutoComplete(AutoComplete);
 
 export default App;
-

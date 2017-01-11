@@ -5,7 +5,6 @@
  */
 
 import React from 'react';
-/* eslint-disable import/no-unresolved */
 import {
   StyleSheet,
   Text,
@@ -14,7 +13,6 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-/* eslint-enable import/no-unresolved */
 import {InstantSearch} from 'react-instantsearch/native';
 import {connectSearchBox, connectInfiniteHits} from 'react-instantsearch/connectors';
 

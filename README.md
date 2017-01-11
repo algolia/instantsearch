@@ -1,32 +1,27 @@
-[![React InstantSearch logo][readme-logo]][website-url]
+[![React InstantSearch logo][readme-logo]][react-doc]
 
 **Looking for instantsearch.js instead? Go to the [`develop`][instantsearch.js-v1-github-url] branch.**
 
-React InstantSearch is a set of [widgets][widgets-url] and [connectors][connectors-url] to add instant-search
-experiences in your [React][react-url] application, using [Algolia search engine][algolia-url].
+## InstantSearch
 
-Documentation: <https://community.algolia.com/instantsearch.js/react/>.
+This is the main README of the InstantSearch project.
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+Currently we support [React](https://facebook.github.io/react/)
+and plain JavaScript (or Vanilla) via:
+- ⚛ React ➡️ [React InstantSearch][react-doc]
+- 🍦 Vanilla ➡️ [InstantSearch.js][vanilla-doc]
 
-- [Project structure](#project-structure)
-- [Development](#development)
-- [Test](#test)
-- [Lint](#lint)
-- [Release](#release)
-- [Update docs](#update-docs)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+This current branch (v2) holds the code for React InstantSearch,
+see [project status](#project-status) for more information on project structure.
 
 ## Development
 
-We use the [documentation website][website-url] as the main way to develop React InstantSearch.
+We use the [documentation website][react-doc] as the main way to develop
+React InstantSearch.
 
 ```sh
-yarn
-npm start
+yarn boot
+yarn start
 ```
 
 Go to <http://localhost:3000>.
@@ -36,48 +31,59 @@ Go to <http://localhost:3000>.
 We have unit tests for all `packages/`:
 
 ```sh
-npm test # one shot run, also lint and tries to build the documentation
+yarn test # one shot run, also lint and tries to build the documentation
 ```
 
 ```sh
-npm run dev # unit tests watch mode, no lint
+yarn dev # unit tests watch mode, no lint
 ```
 
 ## Lint
 
 ```sh
-npm run lint # only changed files in dev, all files in CI
-npm run lint:fix
+yarn lint # only changed files in dev, all files in CI
+yarn lint:fix
 ```
 
 ## Release
 
 ```sh
-npm run release
+yarn release
 ```
 
 ## Update docs
 
 ```sh
-npm run docs:update
+yarn docs:update
 ```
 
-## What about instantsearch.js?
+## Update deps
 
-[instantsearch.js][instantsearch.js-v1-github-url] is our first instant-search related project. We still support the current version (v1.x.x) of it. And you can still count on contributors to fix bugs.
+```sh
+yarn upgrade-deps
+```
 
-In the near future this current repository will hold any instant-search related project:
-- instantsearch-core
-- instantsearch.js v2 (based on react-instantsearch)
-- instantsearch-vue
+## Project status
+
+[InstantSearch.js][instantsearch.js-v1-github-url] was our first instant-search related project.
+We still support the current version (v1.x.x) of it. And you can still count on contributors to fix bugs.
+
+In a near future this current repository will hold any instant-search related project:
+- InstantSearch Core
+- InstantSearch.js v2 (based on React InstantSearch)
+- InstantSearch Vue
+- InstantSearch Angular
 - …
 
-While we are in transition mode, the `v2` branch is the main development branch for any of the upcoming projects.
+While we are in transition mode, the `v2` branch is the main development
+branch for any of the upcoming projects.
 
-The `develop` branch will soon be renamed `v1` and `v2` will be the new develop as soon as we have instantsearch.js v2.
+The `develop` branch will soon be renamed `v1` and `v2` will be the new develop as
+soon as we have instantsearch.js v2.
 
 [readme-logo]: ./docgen/readme-logo.png
-[website-url]: https://community.algolia.com/instantsearch.js/react/
+[react-doc]: https://community.algolia.com/instantsearch.js/react/
+[vanilla-doc]: https://community.algolia.com/instantsearch.js/
 [algolia-url]: https://www.algolia.com/
 [react-url]: https://facebook.github.io/react/
 [widgets-url]: https://community.algolia.com/instantsearch.js/react/widgets/
