@@ -161,6 +161,14 @@ describe('connectRange', () => {
     });
   });
 
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata({attributeName: 'one'}, {range: {one: {min: 5}, two: {max: 4}}});
+
+    const searchState = metadata.items[0].value({range: {one: {min: 5}, two: {max: 4}}});
+
+    expect(searchState).toEqual({range: {one: {}, two: {max: 4}}});
+  });
+
   it('should return the right searchState when clean up', () => {
     let searchState = cleanUp({attributeName: 'name'}, {
       range: {name: 'searchState', name2: 'searchState'},

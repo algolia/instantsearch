@@ -210,7 +210,7 @@ export default createConnector({
         attributeName: rootAttribute,
         value: nextState => ({
           ...nextState,
-          [namespace]: {[id]: ''},
+          [namespace]: {...nextState[namespace], [id]: ''},
         }),
         currentRefinement,
       }],

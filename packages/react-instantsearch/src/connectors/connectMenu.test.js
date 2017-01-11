@@ -184,9 +184,14 @@ describe('connectMenu', () => {
         value: metadata.items[0].value,
       }],
     });
+  });
 
-    const searchState = metadata.items[0].value({menu: {wot: 'wat'}});
-    expect(searchState).toEqual({menu: {wot: ''}});
+  it('items value function should clear it from the search state', () => {
+    const metadata = getMetadata({attributeName: 'one'}, {menu: {one: 'one', two: 'two'}});
+
+    const searchState = metadata.items[0].value({menu: {one: 'one', two: 'two'}});
+
+    expect(searchState).toEqual({menu: {one: '', two: 'two'}});
   });
 
   it('should return the right searchState when clean up', () => {

@@ -157,7 +157,7 @@ export default createConnector({
         attributeName: props.attributeName,
         value: nextState => ({
           ...nextState,
-          [namespace]: {[id]: {}},
+          [namespace]: {...nextState[namespace], [id]: {}},
         }),
       };
     }
