@@ -35,8 +35,8 @@ In some situations not only you want default refinements but you also do not wan
 To do this, you can use a [`<VirtualWidgets/>`](guide/Virtual_widgets.html). It allows you to pre refine any widget without
 rendering anything.
 
-Since by default the [`<CurrentRefinements/>`](widgets/CurrentRefinements.html) widget or the
-[`connectCurrentRefinements`](connectors/connectCurrentRefinements.html) will display your default refinement, you then need to filter the items inside them with `transformItems`.
+By default the [`<CurrentRefinements/>`](widgets/CurrentRefinements.html) widget or the
+[`connectCurrentRefinements`](connectors/connectCurrentRefinements.html) connector will display your default refinements. If you want to hide them, you need to filter the items with `transformItems`.
 
 ```jsx
 import {InstantSearch, SearchBox, Menu} from 'react-instantsearch/dom';
