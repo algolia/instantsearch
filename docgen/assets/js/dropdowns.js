@@ -29,7 +29,7 @@ function dropdowns() {
     // Check if the clicked element is the
     // dropdown toggler, if not, close the dropdown
     document.body.addEventListener('click', e => {
-      if (e.target !== element) {
+      if (!element.contains(e.target)) {
         theDropdown.classList.remove('opened');
       }
     });
