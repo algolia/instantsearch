@@ -28,24 +28,19 @@ const App = () =>
   </InstantSearch>;
 ```
 
-## What if I want some default refinements to be hidden?
+## Hiding default refinements
 
-Another frequent question that comes up is "How do I preselect some refinements but hide them in a way that it can't be
-unselected?".
+In some situations not only you want default refinements but you also do not want the user to be able to unselect them.
 
-For this, you can use a [`<VirtualWidgets/>`](guide/Virtual_widgets.html). It allows you to pre refine any widget without
-rendering anything. If you don't want a default refinement to be removed but you are using
-the [`<CurrentRefinements/>`](widgets/CurrentRefinements.html) widget or the
-[`connectCurrentRefinements`](connectors/connectCurrentRefinements.html) connector to display all the others,
-then you should use the `transformItems` props to filters the one you don't want.
+To do this, you can use a [`<VirtualWidgets/>`](guide/Virtual_widgets.html). It allows you to pre refine any widget without
+rendering anything.
 
-The following example will instantiate a search page that will show results
-that are oranges, a search box and a menu to select the oranges origin:
+Since by default the [`<CurrentRefinements/>`](widgets/CurrentRefinements.html) widget or the
+[`connectCurrentRefinements`](connectors/connectCurrentRefinements.html) will display your default refinement, you then need to filter the items inside them with `transformItems`.
 
 ```jsx
 import {InstantSearch, SearchBox, Menu} from 'react-instantsearch/dom';
 import {connectMenu} from 'react-instantsearch/connectors';
-import {filter} from 'lodash';
 
 const VirtualMenu = connectMenu(() => null);
 
@@ -57,7 +52,7 @@ const App = () =>
   >
     <div>
         <CurrentRefinements
-           transformItems={items => filter(items, item => item.currentRefinement !== 'Orange')}
+           transformItems={items => items.filter(item => item.currentRefinement !== 'Orange')}
         />
         <SearchBox/>
         <VirtualMenu attributeName="fruits" defaultRefinement={'Orange'} />
