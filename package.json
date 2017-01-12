@@ -4,6 +4,7 @@
   "scripts": {
     "boot": "./scripts/boot.sh",
     "upgrade-deps": "./scripts/upgrade-deps.sh",
+    "changelog": "conventional-changelog --preset angular --output-unreleased",
     "start": "NODE_ENV=development babel-node docgen/start.js & yarn storybook & wait",
     "build": "NODE_ENV=production ./scripts/build.sh",
     "docs:build": "babel-node docgen/build.js && yarn build-storybook",
