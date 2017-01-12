@@ -8,7 +8,7 @@ This is the main README of the InstantSearch project.
 
 Currently we support [React](https://facebook.github.io/react/)
 and plain JavaScript (or Vanilla) via:
-- ⚛ React ➡️ [React InstantSearch][react-doc]
+- ⚛ React and React Native ➡️ [React InstantSearch][react-doc]
 - 🍦 Vanilla ➡️ [InstantSearch.js][vanilla-doc]
 
 This current branch (v2) holds the code for React InstantSearch,
