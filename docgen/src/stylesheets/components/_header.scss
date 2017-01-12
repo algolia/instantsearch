@@ -71,21 +71,9 @@ $nav-background-light: mix($nav-background,#fff,92%);
       z-index: 10;
       height: $nav-height;
 
-      svg {
-        width: 60%;
-        max-width: 90px;
+      img {
+        max-width: 100%;
         vertical-align: middle;
-        transition: transform 0.2s ease;
-
-        use {
-          fill: #fff;
-        }
-
-        path {
-          transition: fill 0.6s !important;
-          will-change: fill;
-          fill: #fff;
-        }
       }
 
 
@@ -106,7 +94,7 @@ $nav-background-light: mix($nav-background,#fff,92%);
       background: $nav-background-medium;
       @include arrowSeparator($nav-background-medium);
 
-      svg {
+      img {
         display: inline;
         width: 32px;
         vertical-align: middle;
@@ -308,12 +296,12 @@ $nav-background-light: mix($nav-background,#fff,92%);
     }
 
     .community-logo {
-      max-width: 28px;
+      max-width: 140px;
       margin-right: 6px;
     }
 
     .algolia-logo {
-      max-width: 80px
+      max-width: 80px;
     }
   }
 
