@@ -4,7 +4,7 @@
     "name": "Algolia, Inc.",
     "url": "https://www.algolia.com"
   },
-  "description": "Boost search on your React apps with Algolia",
+  "description": "⚡ Lightning-fast search for React and React Native apps",
   "version": "2.1.0",
   "scripts": {
     "build": "./scripts/build.sh"

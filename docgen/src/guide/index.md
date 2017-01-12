@@ -6,7 +6,7 @@ category: guide
 navWeight: 100
 ---
 
-React InstantSearch is the ultimate toolbox for creating instant search experiences using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
+React InstantSearch is the ultimate toolbox for creating instant-search experiences using [React](https://facebook.github.io/react/) and [Algolia](https://www.algolia.com/).
 
 Algolia is a hosted Search API. React InstantSearch is built on top of it to make it easy to integrate of Algolia into your React applications.
 
