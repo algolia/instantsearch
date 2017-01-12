@@ -76,6 +76,7 @@
     "postcss-scss": "^0.4.0",
     "pug": "^2.0.0-beta6",
     "qs": "^6.3.0",
+    "rc-slider": "^5.4.3",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-autosuggest": "^8.0.0",
