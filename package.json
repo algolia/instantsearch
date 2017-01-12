@@ -25,7 +25,6 @@
     "@kadira/storybook-addon-notes": "^1.0.1",
     "@kadira/storybook-addon-options": "^1.0.1",
     "@kadira/storybook-addons": "^1.6.1",
-    "algoliasearch-helper": "^2.18.0",
     "async": "^2.1.4",
     "autoprefixer": "^6.6.1",
     "babel-cli": "^6.18.0",

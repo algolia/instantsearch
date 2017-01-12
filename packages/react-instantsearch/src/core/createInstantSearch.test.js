@@ -45,6 +45,7 @@ describe('createInstantSearch', () => {
       });
 
     const fakeClient = {
+      addAlgoliaAgent: () => {},
       search: () => {},
     };
 
@@ -82,6 +83,7 @@ describe('createInstantSearch', () => {
     wrapper.setProps({
       algoliaClient: {
         search: () => {},
+        addAlgoliaAgent: () => {},
       },
       apiKey: undefined,
       appId: undefined,

@@ -1,3 +1,4 @@
+export {default as connectConfigure} from './src/connectors/connectConfigure.js';
 export {default as connectCurrentRefinements} from './src/connectors/connectCurrentRefinements.js';
 export {default as connectHierarchicalMenu} from './src/connectors/connectHierarchicalMenu.js';
 export {default as connectHighlight} from './src/connectors/connectHighlight.js';

@@ -14,6 +14,10 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       algoliaClient: PropTypes.object,
       appId: PropTypes.string,
       apiKey: PropTypes.string,
+      children: React.PropTypes.oneOfType([
+        React.PropTypes.arrayOf(React.PropTypes.node),
+        React.PropTypes.node,
+      ]),
       indexName: PropTypes.string.isRequired,
     };
 
@@ -37,6 +41,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
           indexName={this.props.indexName}
           root={root}
           algoliaClient={this.client}
+          children={this.props.children}
         />
       );
     }

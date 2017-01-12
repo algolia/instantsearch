@@ -182,6 +182,7 @@ describe('createInstantSearchManager', () => {
 function makeClient(response) {
   const clientInstance = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
   const clonedResponse = JSON.parse(JSON.stringify(response));
+  clientInstance.addAlgoliaAgent = () => {};
   clientInstance.search = jest.fn((queries, cb) => {
     if (cb) {
       setTimeout(() => {

@@ -23,7 +23,7 @@ function validateNextProps(props, nextProps) {
  * @propType {string} appId - The Algolia application id.
  * @propType {string} apiKey - Your Algolia Search-Only API key.
  * @propType {string} indexName - The index in which to search.
- * @propType {object} [searchParameters] - Object containing query parameters to be sent to Algolia. It will be overriden by the search parameters resolved via the widgets. Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters). Read the [search parameters guide](guide/Search_parameters.html).
+ * @propType {object} [searchParameters] - This method of providing parameters to Algolia is now deprecated. Please use [`<configure/>`](widgets/Configure.html). Object containing query parameters to be sent to Algolia. It will be overriden by the search parameters resolved via the widgets. Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters). Read the [search parameters guide](guide/Search_parameters.html).
  * @propType {func} onSearchStateChange - See [URL Routing](guide/Routing.html).
  * @propType {object} searchState - See [URL Routing](guide/Routing.html).
  * @propType {func} createURL - See [URL Routing](guide/Routing.html).
@@ -61,6 +61,11 @@ class InstantSearch extends Component {
 
   componentWillReceiveProps(nextProps) {
     validateNextProps(this.props, nextProps);
+
+    if (this.props.indexName !== nextProps.indexName) {
+      this.aisManager.updateIndex(nextProps.indexName);
+    }
+
     if (this.isControlled) {
       this.aisManager.onExternalStateUpdate(nextProps.searchState);
     }
