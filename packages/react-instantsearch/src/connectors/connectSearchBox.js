@@ -10,6 +10,9 @@ function getCurrentRefinement(props, searchState) {
   if (typeof searchState[id] !== 'undefined') {
     return searchState[id];
   }
+  if (typeof props.defaultRefinement === 'string') {
+    return props.defaultRefinement;
+  }
   return '';
 }
 
