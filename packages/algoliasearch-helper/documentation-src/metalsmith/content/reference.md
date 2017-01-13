@@ -60,7 +60,7 @@ method can be called in the same way that `searchOnce`.
 {{> jsdoc jsdoc/helper/setIndex}}
 {{> jsdoc jsdoc/helper/getIndex}}
 
-### Pagination 
+### Pagination
 
 {{> jsdoc jsdoc/helper/setPage}}
 {{> jsdoc jsdoc/helper/nextPage}}
@@ -119,7 +119,7 @@ the answer from Algolia. They are accesisble using the
 {{> jsdoc jsdoc/helper/clearRefinements}}
 {{> jsdoc jsdoc/helper/addFacetRefinement}}
 {{> jsdoc jsdoc/helper/removeFacetRefinement}}
-{{> jsdoc jsdoc/helper/toggleRefinement}}
+{{> jsdoc jsdoc/helper/toggleFacetRefinement}}
 {{> jsdoc jsdoc/helper/hasRefinements}}
 {{> jsdoc jsdoc/helper/getRefinements}}
 
@@ -212,7 +212,7 @@ Given your objects looks like this:
 And you refine `products`:
 
 ```js
-helper.toggleRefinement('products', 'fruits > citrus');
+helper.toggleFacetRefinement('products', 'fruits > citrus');
 ```
 
 You will get a hierarchical presentation of your facet values: a navigation menu
@@ -283,7 +283,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefinement('products', 'fruits|citrus');
+helper.toggleFacetRefinement('products', 'fruits|citrus');
 ```
 
 Would mean that your objects look like so:
@@ -364,12 +364,12 @@ var helper = algoliasearchHelper(client, indexName, {
 });
 ```
 
-#### Methods 
+#### Methods
 
 {{> jsdoc jsdoc/helper/addHierarchicalFacetRefinement}}
 {{> jsdoc jsdoc/helper/getHierarchicalFacetBreadcrumb}}
 {{> jsdoc jsdoc/helper/removeHierarchicalFacetRefinement}}
-{{> jsdoc jsdoc/helper/toggleRefinement}}
+{{> jsdoc jsdoc/helper/toggleFacetRefinement}}
 
 ### Facet exclusions
 
@@ -489,7 +489,7 @@ that you might encounter in the documentation.
 ## SearchParameters
 
 The SearchParameters is the class that structures all the parameters
-that are needed to build a query to Algolia. 
+that are needed to build a query to Algolia.
 
 The SearchParameters instances are usually refered to as the state of
 the search. This state is available when receiving `change` and `search`
@@ -504,7 +504,7 @@ called on.
 
 The SearchParameters stores all the parameters to make the queries to Algolia.
 They can be of two types:
- 
+
  - raw parameters. Those parameters are sent directly to Algolia
 without any transformation. Like the query or any configuration that
 you can find in the [Rest API documentation](https://www.algolia.com/doc/rest-api/search#list-indexes).
@@ -578,9 +578,9 @@ All the attributes specific to the helper are described below:
 {{> jsdoc jsdoc/state/setTypoTolerance}}
 {{> jsdoc jsdoc/state/toggleDisjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/toggleExcludeFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleFacetRefinement}}
+{{> jsdoc jsdoc/state/toggleConjunctiveFacetRefinement}}
 {{> jsdoc jsdoc/state/toggleHierarchicalFacetRefinement}}
-{{> jsdoc jsdoc/state/toggleRefinement}}
+{{> jsdoc jsdoc/state/toggleFacetRefinement}}
 {{> jsdoc jsdoc/state/toggleTagRefinement}}
 {{> jsdoc jsdoc/state/validate}}
 

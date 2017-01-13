@@ -54,7 +54,7 @@ You can still use the [provided Algolia index](#using-the-provided-dataset),
 if you prefer. Otherwise, let's proceed with the setup of the library
 in the application.
 
-## Integrate 
+## Integrate
 
 The helper is available on different platforms. You can use it as a script, via bower or NPM. As the helper extends the client, we need to import both of them.
 
@@ -233,8 +233,8 @@ also make it so that it's possible using jQuery.
 
 ```javascript
 $('#facet-list').on('click', 'input[type=checkbox]', function(e) {
-  var facetValue = $(this).data('facet');  
-  helper.toggleRefinement('type', facetValue)
+  var facetValue = $(this).data('facet');
+  helper.toggleFacetRefinement('type', facetValue)
         .search();
 });
 
@@ -254,7 +254,7 @@ function renderFacetList(content) {
 ```
 
 The method [getFacetValues](reference.html#SearchResults#getFacetValues) returns the list of values usable to filter
-an attribute. The object returned by this method contains three properties: 
+an attribute. The object returned by this method contains three properties:
 
  - `name`: the value of the facet
  - `count`: the number of items in the whole results
@@ -310,5 +310,5 @@ Here are some pointers on where to go next:
 
 Last but not least, the Helper is an intermediate API on top of the client
 and it doesn't solve the UI complexity on its own. If you're looking for
-a more off-the-shelf solution, we created [instantsearch.js](https://community.algolia.com/instantsearch.js/) 
+a more off-the-shelf solution, we created [instantsearch.js](https://community.algolia.com/instantsearch.js/)
 which reuses the helper internally.

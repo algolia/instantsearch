@@ -23,7 +23,7 @@ test('hierarchical facets: attributes order', function(t) {
   });
 
   var search = sinon.stub(client, 'search');
-  helper.toggleRefinement('categories', 'beers');
+  helper.toggleFacetRefinement('categories', 'beers');
 
   var algoliaResponse = {
     'results': [{

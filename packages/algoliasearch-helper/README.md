@@ -422,7 +422,7 @@ Given your objects looks like this:
 And you refine `products`:
 
 ```js
-helper.toggleRefinement('products', 'fruits > citrus');
+helper.toggleFacetRefinement('products', 'fruits > citrus');
 ```
 
 You will get a hierarchical presentation of your facet values: a navigation menu
@@ -493,7 +493,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefinement('products', 'fruits|citrus');
+helper.toggleFacetRefinement('products', 'fruits|citrus');
 ```
 
 Would mean that your objects look like so:
@@ -585,7 +585,7 @@ var helper = algoliasearchHelper(client, indexName, {
   }]
 });
 
-helper.toggleRefinement('products', 'fruits|citrus');
+helper.toggleFacetRefinement('products', 'fruits|citrus');
 var breadcrumb = helper.getHierarchicalFacetBreadcrumb('products');
 
 console.log(breadcrumb);
@@ -708,7 +708,7 @@ helper.getPage(); // 0
 
 Non exhaustive list of operations that trigger a reset:
  - refinements (conjunctive, exclude, disjunctive, hierarchical, numeric)
- - tags 
+ - tags
  - index (setIndex)
  - setQuery
  - setHitsPerPage

@@ -1150,12 +1150,24 @@ SearchParameters.prototype = {
    * @param  {string} value the associated value
    * @return {SearchParameters}
    * @throws will throw an error if the facet is not declared in the settings of the helper
+   * @deprecated since version 2.19.0, see {@link SearchParameters#toggleFacetRefinement}
    */
   toggleRefinement: function toggleRefinement(facet, value) {
+    return this.toggleFacetRefinement(facet, value);
+  },
+  /**
+   * Generic toggle refinement method to use with facet, disjunctive facets
+   * and hierarchical facets
+   * @param  {string} facet the facet to refine
+   * @param  {string} value the associated value
+   * @return {SearchParameters}
+   * @throws will throw an error if the facet is not declared in the settings of the helper
+   */
+  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
     if (this.isHierarchicalFacet(facet)) {
       return this.toggleHierarchicalFacetRefinement(facet, value);
     } else if (this.isConjunctiveFacet(facet)) {
-      return this.toggleFacetRefinement(facet, value);
+      return this.toggleConjunctiveFacetRefinement(facet, value);
     } else if (this.isDisjunctiveFacet(facet)) {
       return this.toggleDisjunctiveFacetRefinement(facet, value);
     }
@@ -1170,7 +1182,7 @@ SearchParameters.prototype = {
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
-  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
+  toggleConjunctiveFacetRefinement: function toggleConjunctiveFacetRefinement(facet, value) {
     if (!this.isConjunctiveFacet(facet)) {
       throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
     }
