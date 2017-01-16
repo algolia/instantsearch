@@ -19,7 +19,7 @@ noFooter: true
 <div class="row">
 <div class="col-md-4 m-b">
 <div class="sticker sticker-algolia">
-<img src="{% asset_path logo-algolia-notext.svg %}" width="26"/>
+<img src="{% asset_path algolia-mark-white.svg %}" width="26"/>
 </div>
 Built on top of the <a href="https://www.algolia.com/?utm_medium=social-owned&utm_source=instantsearch.js%20website&utm_campaign=homepage">Algolia Search API</a>
 </div>
