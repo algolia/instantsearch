@@ -11,7 +11,6 @@ import {shallowEqual, getDisplayName} from './utils';
  * @property {function} getMetadata - metadata of the widget
  * @property {function} transitionState - hook after the state has changed
  * @property {function} getProvidedProps - transform the state into props passed to the wrapped component.
- * @property {function} getTransformedItems - apply any user modifications into the `items` prop passed to the wrapped component.
  * Receives (props, widgetStates, searchState, metadata) and returns the local state.
  * @property {function} getId - Receives props and return the id that will be used to identify the widget
  * @property {function} cleanUp - hook when the widget will unmount. Receives (props, searchState) and return a cleaned state.
@@ -60,12 +59,12 @@ export default function createConnector(connectorDesc) {
 
       const {ais: {store, widgetsManager}} = context;
       this.state = {
-        props: this.getTransformedItems(props),
+        props: this.getProvidedProps(props),
       };
 
       this.unsubscribe = store.subscribe(() => {
         this.setState({
-          props: this.getTransformedItems(props),
+          props: this.getProvidedProps(props),
         });
       });
 
@@ -100,7 +99,7 @@ export default function createConnector(connectorDesc) {
     componentWillReceiveProps(nextProps) {
       if (!shallowEqual(this.props, nextProps)) {
         this.setState({
-          props: this.getTransformedItems(nextProps),
+          props: this.getProvidedProps(nextProps),
         });
 
         if (isWidget) {
@@ -181,12 +180,6 @@ export default function createConnector(connectorDesc) {
       );
 
     cleanUp = (...args) => connectorDesc.cleanUp(...args);
-
-    getTransformedItems = props => {
-      const providedProps = this.getProvidedProps(props);
-      return props.transformItems && providedProps && providedProps.items
-          ? {...providedProps, items: props.transformItems(providedProps.items)} : providedProps;
-    };
 
     render() {
       if (this.state.props === null) {

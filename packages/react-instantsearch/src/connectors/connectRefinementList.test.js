@@ -86,6 +86,28 @@ describe('connectRefinementList', () => {
         count: 20,
       },
     ]);
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps(
+      {attributeName: 'ok', transformItems},
+      {},
+      {results}
+    );
+    expect(transformItems.mock.calls[0][0]).toEqual([
+      {
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
+        count: 20,
+      },
+      {
+        value: ['oy'],
+        label: 'oy',
+        isRefined: false,
+        count: 10,
+      },
+    ]);
+    expect(props.items).toEqual(['items']);
   });
 
   it('facetValues results should be provided as props if they exists', () => {
