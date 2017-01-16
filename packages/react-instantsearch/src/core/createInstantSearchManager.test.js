@@ -7,8 +7,7 @@ import algoliaClient from 'algoliasearch';
 
 jest.useFakeTimers();
 
-const client = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
-const response = {
+const defaultResponse = {
   results: [
     {
       params: 'query=&hitsPerPage=10&page=0&facets=%5B%5D&tagFilters=',
@@ -23,19 +22,7 @@ const response = {
     },
   ],
 };
-client.search = jest.fn((queries, cb) => {
-  const clonedResponse = JSON.parse(JSON.stringify(response));
-  if (cb) {
-    setTimeout(() => {
-      cb(null, clonedResponse);
-    }, 1);
-    return undefined;
-  }
-
-  return new Promise(resolve => {
-    resolve(clonedResponse);
-  });
-});
+const client = makeClient(defaultResponse);
 
 describe('createInstantSearchManager', () => {
   it('initializes the manager with an empty state', () => {
@@ -145,4 +132,69 @@ describe('createInstantSearchManager', () => {
       });
     });
   });
+
+  describe('client.search', () => {
+    it('should be called when there is a new widget', () => {
+      const client0 = makeClient(defaultResponse);
+      expect(client0.search).toHaveBeenCalledTimes(0);
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client0,
+      });
+
+      ism.widgetsManager.registerWidget({
+        getMetadata: () => {},
+        getSearchParameters: () => {},
+        transitionState: () => {},
+      });
+
+      return Promise.resolve().then(() => {
+        expect(client0.search).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it('should be called when there is a new client', () => {
+      const client0 = makeClient(defaultResponse);
+      expect(client0.search).toHaveBeenCalledTimes(0);
+
+      const ism = createInstantSearchManager({
+        indexName: 'index',
+        initialState: {},
+        searchParameters: {},
+        algoliaClient: client0,
+      });
+
+      const client1 = makeClient(defaultResponse);
+      expect(client1.search).toHaveBeenCalledTimes(0);
+
+      ism.updateClient(client1);
+
+      return Promise.resolve().then(() => {
+        expect(client0.search).toHaveBeenCalledTimes(0);
+        expect(client1.search).toHaveBeenCalledTimes(1);
+      });
+    });
+  });
 });
+
+function makeClient(response) {
+  const clientInstance = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
+  const clonedResponse = JSON.parse(JSON.stringify(response));
+  clientInstance.addAlgoliaAgent = () => {};
+  clientInstance.search = jest.fn((queries, cb) => {
+    if (cb) {
+      setTimeout(() => {
+        cb(null, clonedResponse);
+      }, 1);
+      return undefined;
+    }
+
+    return new Promise(resolve => {
+      resolve(clonedResponse);
+    });
+  });
+
+  return clientInstance;
+}

@@ -4,6 +4,7 @@ import {
   SearchBox,
   Pagination,
   Highlight,
+  Configure,
 } from 'react-instantsearch/dom';
 import {
   connectHits,
@@ -28,6 +29,7 @@ const App = props =>
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
   >
+    <Configure aroundLatLngViaIP={true}/>
     <Header />
     <Filters />
     <Results />
