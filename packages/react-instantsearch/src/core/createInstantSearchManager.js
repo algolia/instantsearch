@@ -29,7 +29,7 @@ export default function createInstantSearchManager({
   helper.on('result', handleSearchSuccess);
   helper.on('error', handleSearchError);
 
-  const initialSearchParameters = helper.state;
+  let initialSearchParameters = helper.state;
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
 
@@ -40,6 +40,11 @@ export default function createInstantSearchManager({
     error: null,
     searching: false,
   });
+
+  function updateClient(client) {
+    helper.setClient(client);
+    search();
+  }
 
   function getMetadata(state) {
     return widgetsManager.getWidgets()
@@ -152,6 +157,11 @@ export default function createInstantSearchManager({
       });
   }
 
+  function updateIndex(newIndex) {
+    initialSearchParameters = initialSearchParameters.setIndex(newIndex);
+    search();
+  }
+
   function getWidgetsIds() {
     return store.getState().metadata.reduce((res, meta) =>
         typeof meta.id !== 'undefined' ? res.concat(meta.id) : res
@@ -165,5 +175,7 @@ export default function createInstantSearchManager({
     onExternalStateUpdate,
     transitionState,
     onSearchForFacetValues,
+    updateClient,
+    updateIndex,
   };
 }

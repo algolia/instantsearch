@@ -6,7 +6,7 @@ category: guide
 navWeight: 57
 ---
 
-Algolia has a [wide range of parameters](https://www.algolia.com/doc/api-client/javascript/search#search-parameters). If one of the parameter you want to use is not covered by any widget or connector, then you can directly pass it to the `<InstantSearch>` component.
+Algolia has a [wide range of parameters](https://www.algolia.com/doc/api-client/javascript/search#search-parameters). If one of the parameters you want to use is not covered by any widget or connector, then you can use the `<Configure>` widget. 
 
 Here's an example configuring the [distinct parameter](https://www.algolia.com/doc/api-client/javascript/parameters#distinct):
 
@@ -15,8 +15,8 @@ Here's an example configuring the [distinct parameter](https://www.algolia.com/d
   appId="appId"
   apiKey="apiKey"
   indexName="indexName"
-  searchParameters={{distinct: 1}}
 >
+  <Configure distinct={1}/>
   // widgets
 </InstantSearch>
 ```
