@@ -11,6 +11,7 @@ const {
   refine,
   getSearchParameters: getSP,
   getMetadata,
+  searchForFacetValues,
   cleanUp,
 } = connect;
 
@@ -25,16 +26,16 @@ describe('connectMenu', () => {
     };
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: null});
+    expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -88,6 +89,28 @@ describe('connectMenu', () => {
         count: 20,
       },
     ]);
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps(
+      {attributeName: 'ok', transformItems},
+      {},
+      {results}
+    );
+    expect(transformItems.mock.calls[0][0]).toEqual([
+      {
+        value: 'wat',
+        label: 'wat',
+        isRefined: true,
+        count: 20,
+      },
+      {
+        value: 'oy',
+        label: 'oy',
+        isRefined: false,
+        count: 10,
+      },
+    ]);
+    expect(props.items).toEqual(['items']);
   });
 
   it('if an item is equal to the currentRefinement, its value should be an empty string', () => {
@@ -203,5 +226,50 @@ describe('connectMenu', () => {
 
     searchState = cleanUp({attributeName: 'name2'}, searchState);
     expect(searchState).toEqual({another: {searchState: 'searchState'}});
+  });
+
+  it('calling searchForFacetValues return the right searchForFacetValues parameters', () => {
+    const parameters = searchForFacetValues({attributeName: 'ok'}, {}, 'yep');
+    expect(parameters).toEqual({
+      facetName: 'ok',
+      query: 'yep',
+    });
+  });
+
+  it('when search for facets values is activated order the item by isRefined first', () => {
+    const results = {
+      getFacetValues: jest.fn(() => []),
+      getFacetByName: () => true,
+    };
+    results.getFacetValues.mockClear();
+    results.getFacetValues.mockImplementation(() => [
+      {
+        name: 'wat',
+        isRefined: false,
+        count: 20,
+      },
+      {
+        name: 'oy',
+        isRefined: true,
+        count: 10,
+      },
+    ]);
+
+    props = connect.getProvidedProps({attributeName: 'ok', searchForFacetValues: true}, {}, {results});
+
+    expect(props.items).toEqual([
+      {
+        value: 'oy',
+        label: 'oy',
+        isRefined: true,
+        count: 10,
+      },
+      {
+        value: 'wat',
+        label: 'wat',
+        isRefined: false,
+        count: 20,
+      },
+    ]);
   });
 });

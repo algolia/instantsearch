@@ -31,6 +31,13 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
+).add('with search for facets value', () =>
+  <WrapWithHits>
+    <Menu attributeName="category"
+          searchForFacetValues
+          transformItems={items => orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc'])}
+    />
+  </WrapWithHits>
 ).add('with the sort strategy changed', () =>
   <WrapWithHits>
     <Menu attributeName="category"

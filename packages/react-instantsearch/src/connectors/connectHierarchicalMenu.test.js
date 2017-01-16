@@ -123,6 +123,34 @@ describe('connectHierarchicalMenu', () => {
         ],
       },
     ]);
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({attributes: ['ok'], transformItems}, {}, {results});
+    expect(transformItems.mock.calls[0][0]).toEqual([
+      {
+        label: 'wat',
+        value: 'wat',
+        count: 20,
+        items: [
+          {
+            label: 'wot',
+            value: 'wat > wot',
+            count: 15,
+          },
+          {
+            label: 'wut',
+            value: 'wat > wut',
+            count: 5,
+          },
+        ],
+      },
+      {
+        label: 'oy',
+        value: 'oy',
+        count: 10,
+      },
+    ]);
+    expect(props.items).toEqual(['items']);
   });
 
   it('doesn\'t render when no results are available', () => {

@@ -34,6 +34,13 @@ describe('connectHitsPerPage', () => {
         label: '10', value: 10, isRefined: false,
       }, {label: '20', value: 20, isRefined: true}],
     });
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({items, transformItems}, {hitsPerPage: '10'});
+    expect(transformItems.mock.calls[0][0]).toEqual(
+      [{label: '10', value: 10, isRefined: true}, {label: '20', value: 20, isRefined: false}]
+    );
+    expect(props.items).toEqual(['items']);
   });
 
   it('calling refine updates the widget\'s search state', () => {

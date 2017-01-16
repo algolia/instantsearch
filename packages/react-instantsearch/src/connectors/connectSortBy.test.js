@@ -26,6 +26,14 @@ describe('connectSortBy', () => {
 
     props = getProvidedProps({items: [{value: 'yep'}], defaultRefinement: 'yep'}, {});
     expect(props).toEqual({items: [{value: 'yep', isRefined: true}], currentRefinement: 'yep'});
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({items: [{value: 'yep'}, {value: 'yop'}], transformItems}, {sortBy: 'yep'});
+    expect(transformItems.mock.calls[0][0]).toEqual([
+      {value: 'yep', isRefined: true},
+      {value: 'yop', isRefined: false},
+    ]);
+    expect(props.items).toEqual(['items']);
   });
 
   it('calling refine updates the widget\'s search state', () => {

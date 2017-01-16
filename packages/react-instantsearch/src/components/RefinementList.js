@@ -4,7 +4,6 @@ import translatable from '../core/translatable';
 import List from './List';
 import classNames from './classNames.js';
 import Highlight from '../widgets/Highlight';
-import SearchBox from '../components/SearchBox';
 const cx = classNames('RefinementList');
 
 class RefinementList extends Component {
@@ -36,7 +35,7 @@ class RefinementList extends Component {
   };
 
   renderItem = item => {
-    const label = item._highlightResult
+    const label = this.props.isFromSearch
       ? <Highlight attributeName="label" hit={item}/>
       : item.label;
 
@@ -60,43 +59,22 @@ class RefinementList extends Component {
   };
 
   render() {
-    const facets = this.props.items.length > 0
-      ? <List
-        renderItem={this.renderItem}
-        cx={cx}
-        {...pick(this.props, [
-          'translate',
-          'items',
-          'showMore',
-          'limitMin',
-          'limitMax',
-        ])}
-      />
-      : <div>{this.props.translate('noResults')}</div>;
-
-    const searchBox = this.props.searchForFacetValues ?
-      <div {...cx('SearchBox')}>
-        <SearchBox
-          currentRefinement={this.props.isFromSearch ? this.state.query : ''}
-          refine={value => {
-            this.setState({query: value});
-            this.props.searchForFacetValues(value);
-          }}
-          translate={this.props.translate}
-          onSubmit={e => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.props.isFromSearch) {
-              this.selectItem(this.props.items[0]);
-            }
-          }}
-        />
-      </div> : null;
-
     return (
       <div>
-        {searchBox}
-        {facets}
+        <List
+          renderItem={this.renderItem}
+          selectItem={this.selectItem}
+          cx={cx}
+          {...pick(this.props, [
+            'translate',
+            'items',
+            'showMore',
+            'limitMin',
+            'limitMax',
+            'isFromSearch',
+            'searchForFacetValues',
+          ])}
+        />
       </div>
     );
   }

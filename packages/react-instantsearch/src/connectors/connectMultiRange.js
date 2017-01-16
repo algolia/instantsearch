@@ -68,18 +68,17 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const {items} = props;
     const currentRefinement = getCurrentRefinement(props, searchState);
-
+    const items = props.items.map(item => {
+      const value = stringifyItem(item);
+      return {
+        label: item.label,
+        value,
+        isRefined: value === currentRefinement,
+      };
+    });
     return {
-      items: items.map(item => {
-        const value = stringifyItem(item);
-        return {
-          label: item.label,
-          value,
-          isRefined: value === currentRefinement,
-        };
-      }),
+      items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
     };
   },

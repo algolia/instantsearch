@@ -31,16 +31,14 @@ describe('createConnector', () => {
       const props = {
         hello: 'there',
       };
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: () => null,
-            },
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: () => null,
           },
         },
-      });
+      }});
       const args = getProvidedProps.mock.calls[0];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
@@ -61,16 +59,14 @@ describe('createConnector', () => {
       })(Dummy);
       const state = createState();
       let props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: () => null,
-            },
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: () => null,
           },
         },
-      });
+      }});
       props = {hello: 'you'};
       wrapper.setProps(props);
       expect(getProvidedProps.mock.calls.length).toBe(2);
@@ -102,18 +98,16 @@ describe('createConnector', () => {
         hello: 'there',
       };
       let listener;
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: l => {
-                listener = l;
-              },
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: l => {
+              listener = l;
             },
           },
         },
-      });
+      }});
       expect(wrapper.find(Dummy).props()).toEqual({...props, ...state.widgets});
       state = {
         ...createState(),
@@ -140,16 +134,14 @@ describe('createConnector', () => {
         getId,
       })(() => null);
       const unsubscribe = jest.fn();
-      const wrapper = mount(<Connected />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => unsubscribe,
-            },
+      const wrapper = mount(<Connected />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => unsubscribe,
           },
         },
-      });
+      }});
       expect(unsubscribe.mock.calls.length).toBe(0);
       wrapper.unmount();
       expect(unsubscribe.mock.calls.length).toBe(1);
@@ -163,16 +155,14 @@ describe('createConnector', () => {
         getProvidedProps,
         getId,
       })(Dummy);
-      const wrapper = mount(<Connected />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => null,
-            },
+      const wrapper = mount(<Connected />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
           },
         },
-      });
+      }});
       expect(Dummy.mock.calls.length).toBe(1);
       wrapper.setProps({hello: 'there'});
       expect(Dummy.mock.calls.length).toBe(2);
@@ -189,19 +179,17 @@ describe('createConnector', () => {
         getId,
       })(() => null);
       const registerWidget = jest.fn();
-      mount(<Connected />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => null,
-            },
-            widgetsManager: {
-              registerWidget,
-            },
+      mount(<Connected />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget,
           },
         },
-      });
+      }});
       expect(registerWidget.mock.calls.length).toBe(0);
     });
 
@@ -216,19 +204,17 @@ describe('createConnector', () => {
       })(() => null);
       const registerWidget = jest.fn();
       const props = {hello: 'there'};
-      mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => null,
-            },
-            widgetsManager: {
-              registerWidget,
-            },
+      mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget,
           },
         },
-      });
+      }});
       expect(registerWidget.mock.calls.length).toBe(1);
       const state = {};
       const outputMetadata = registerWidget.mock.calls[0][0].getMetadata(state);
@@ -252,19 +238,17 @@ describe('createConnector', () => {
       const state = {
         widgets: {},
       };
-      mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: () => null,
-            },
-            widgetsManager: {
-              registerWidget,
-            },
+      mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => state,
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget,
           },
         },
-      });
+      }});
       expect(registerWidget.mock.calls.length).toBe(1);
       const inputSP = {};
       const outputSP = registerWidget.mock.calls[0][0].getSearchParameters(inputSP);
@@ -284,20 +268,18 @@ describe('createConnector', () => {
       })(() => null);
       const update = jest.fn();
       const props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => null,
-            },
-            widgetsManager: {
-              registerWidget: () => null,
-              update,
-            },
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget: () => null,
+            update,
           },
         },
-      });
+      }});
       expect(update.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'you'});
       expect(update.mock.calls.length).toBe(1);
@@ -312,20 +294,18 @@ describe('createConnector', () => {
       })(() => null);
       const update = jest.fn();
       const props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({}),
-              subscribe: () => null,
-            },
-            widgetsManager: {
-              registerWidget: () => null,
-              update,
-            },
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({}),
+            subscribe: () => null,
+          },
+          widgetsManager: {
+            registerWidget: () => null,
+            update,
           },
         },
-      });
+      }});
       expect(update.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'there'});
       expect(update.mock.calls.length).toBe(0);
@@ -341,21 +321,19 @@ describe('createConnector', () => {
       const unregister = jest.fn();
       const setState = jest.fn();
       const onInternalStateUpdate = jest.fn();
-      const wrapper = mount(<Connected />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({widgets: {another: {state: 'state'}}}),
-              setState,
-              subscribe: () => () => null,
-            },
-            widgetsManager: {
-              registerWidget: () => unregister,
-            },
-            onInternalStateUpdate,
+      const wrapper = mount(<Connected />, {context: {
+        ais: {
+          store: {
+            getState: () => ({widgets: {another: {state: 'state'}}}),
+            setState,
+            subscribe: () => () => null,
           },
+          widgetsManager: {
+            registerWidget: () => unregister,
+          },
+          onInternalStateUpdate,
         },
-      });
+      }});
       expect(unregister.mock.calls.length).toBe(0);
       expect(setState.mock.calls.length).toBe(0);
       expect(onInternalStateUpdate.mock.calls.length).toBe(0);
@@ -384,19 +362,17 @@ describe('createConnector', () => {
       })(Dummy);
       const onInternalStateUpdate = jest.fn();
       const props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({
-                widgets,
-              }),
-              subscribe: () => null,
-            },
-            onInternalStateUpdate,
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({
+              widgets,
+            }),
+            subscribe: () => null,
           },
+          onInternalStateUpdate,
         },
-      });
+      }});
       const passedProps = wrapper.find(Dummy).props();
       const arg1 = {};
       const arg2 = {};
@@ -421,19 +397,17 @@ describe('createConnector', () => {
       })(Dummy);
       const createHrefForState = jest.fn();
       const props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({
-                widgets,
-              }),
-              subscribe: () => null,
-            },
-            createHrefForState,
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({
+              widgets,
+            }),
+            subscribe: () => null,
           },
+          createHrefForState,
         },
-      });
+      }});
       const passedProps = wrapper.find(Dummy).props();
       const arg1 = {};
       const arg2 = {};
@@ -460,19 +434,17 @@ describe('createConnector', () => {
       })(Dummy);
       const onSearchForFacetValues = jest.fn();
       const props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => ({
-                widgets,
-              }),
-              subscribe: () => null,
-            },
-            onSearchForFacetValues,
+      const wrapper = mount(<Connected {...props} />, {context: {
+        ais: {
+          store: {
+            getState: () => ({
+              widgets,
+            }),
+            subscribe: () => null,
           },
+          onSearchForFacetValues,
         },
-      });
+      }});
       const passedProps = wrapper.find(Dummy).props();
       const facetName = 'facetName';
       const query = 'query';
@@ -482,116 +454,6 @@ describe('createConnector', () => {
       expect(searchForFacetValues.mock.calls[0][2]).toBe(facetName);
       expect(searchForFacetValues.mock.calls[0][3]).toBe(query);
       expect(onSearchForFacetValues.mock.calls[0][0]).toBe(searchState);
-    });
-  });
-
-  describe('transform items', () => {
-    it('transform items if the function exists', () => {
-      const getProvidedProps = jest.fn(() => ({items: 'some'}));
-      const Dummy = () => null;
-      const Connected = createConnector({
-        displayName: 'CoolConnector',
-        getProvidedProps,
-        getId,
-      })(Dummy);
-      const state = createState();
-      const transformItems = jest.fn(() => 'others');
-      const props = {
-        hello: 'there',
-        transformItems,
-      };
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: () => null,
-            },
-          },
-        },
-      });
-      expect(transformItems.mock.calls[0][0]).toEqual('some');
-      expect(wrapper.find(Dummy).props()).toEqual({
-        hello: 'there',
-        transformItems,
-        items: 'others',
-      });
-    });
-
-    it('transform provided props when props are updated', () => {
-      const getProvidedProps = jest.fn(() => ({items: 'some'}));
-      const Dummy = () => null;
-      const Connected = createConnector({
-        displayName: 'CoolConnector',
-        getProvidedProps,
-        getId,
-      })(Dummy);
-      const state = createState();
-      const transformItems = jest.fn(() => 'others');
-      let props = {
-        hello: 'there',
-        transformItems,
-      };
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: () => null,
-            },
-          },
-        },
-      });
-      props = {hello: 'you'};
-      wrapper.setProps(props);
-      expect(transformItems.mock.calls[0][0]).toEqual('some');
-      expect(wrapper.find(Dummy).props()).toEqual({
-        hello: 'you',
-        transformItems,
-        items: 'others',
-      });
-    });
-    it('updates on state change', () => {
-      const getProvidedProps = jest.fn(() => ({items: 'some'}));
-      const Dummy = () => null;
-      const Connected = createConnector({
-        displayName: 'CoolConnector',
-        getProvidedProps,
-        getId,
-      })(Dummy);
-      let state = {
-        ...createState(),
-        widgets: {
-          hoy: 'hey',
-        },
-      };
-      const transformItems = jest.fn(() => 'others');
-      const props = {
-        hello: 'there',
-        transformItems,
-      };
-      let listener;
-      const wrapper = mount(<Connected {...props} />, {
-        context: {
-          ais: {
-            store: {
-              getState: () => state,
-              subscribe: l => {
-                listener = l;
-              },
-            },
-          },
-        },
-      });
-      state = {
-        ...createState(),
-        widgets: {
-          hey: 'hoy',
-        },
-      };
-      listener();
-      expect(transformItems.mock.calls[0][0]).toEqual('some');
-      expect(wrapper.find(Dummy).props()).toEqual({...props, items: 'others'});
     });
   });
 });

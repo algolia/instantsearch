@@ -98,28 +98,27 @@ export default createConnector({
 
     const items = searchForFacetValuesResults && searchForFacetValuesResults[attributeName]
       ? searchForFacetValuesResults[attributeName]
-        .slice(0, limit).map(
-          v => ({
-            label: v.value,
-            value: getValue(v.value, props, searchState),
-            _highlightResult: {label: {value: v.highlighted}},
-            count: v.count,
-            isRefined: v.isRefined,
-          }))
+        .map(v => ({
+          label: v.value,
+          value: getValue(v.value, props, searchState),
+          _highlightResult: {label: {value: v.highlighted}},
+          count: v.count,
+          isRefined: v.isRefined,
+        }))
       : results
         .getFacetValues(attributeName, {sortBy})
-        .slice(0, limit)
         .map(v => ({
           label: v.name,
           value: getValue(v.name, props, searchState),
           count: v.count,
           isRefined: v.isRefined,
         }));
+    const transformedItems = props.transformItems ? props.transformItems(items) : items;
     const isFromSearch = Boolean(searchForFacetValuesResults && searchForFacetValuesResults[attributeName]);
     const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
 
     return {
-      items,
+      items: transformedItems.slice(0, limit),
       currentRefinement: getCurrentRefinement(props, searchState),
       isFromSearch,
       searchForFacetValues,

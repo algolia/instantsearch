@@ -7,12 +7,21 @@ const {refine, getProvidedProps} = connect;
 
 describe('connectCurrentRefinements', () => {
   it('provides the correct props to the component', () => {
-    const props = getProvidedProps(null, null, null, [
+    let props = getProvidedProps({}, null, null, [
       {items: ['one']},
       {items: ['two']},
       {items: ['three']},
     ]);
     expect(props.items).toEqual(['one', 'two', 'three']);
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({transformItems}, null, null, [
+      {items: ['one']},
+      {items: ['two']},
+      {items: ['three']},
+    ]);
+    expect(transformItems.mock.calls[0][0]).toEqual(['one', 'two', 'three']);
+    expect(props.items).toEqual(['items']);
   });
 
   it('refine applies the selected filters clear method on searchState', () => {
