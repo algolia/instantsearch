@@ -12,7 +12,12 @@ stories.add('default', () =>
   <WrapWithHits searchBox={false} hasPlayground={true} linkedStoryGroup="SearchBox">
     <SearchBox/>
   </WrapWithHits>
-).add('playground', () =>
+).add('with a default query', () =>
+  <WrapWithHits searchBox={false} hasPlayground={true} linkedStoryGroup="SearchBox">
+    <SearchBox defaultRefinement="battery" />
+  </WrapWithHits>
+)
+.add('playground', () =>
   <WrapWithHits searchBox={false}>
     <SearchBox
       focusShortcuts={['s']}

@@ -32,6 +32,14 @@ describe('connectSearchBox', () => {
     });
   });
 
+  it('supports defaultRefinement', () => {
+    expect(
+      getProvidedProps({defaultRefinement: 'yaw'}, {})
+    ).toEqual({
+      currentRefinement: 'yaw',
+    });
+  });
+
   it('refines the query parameter', () => {
     params = getSP(new SearchParameters(), {}, {query: 'bar'});
     expect(params.query).toBe('bar');
