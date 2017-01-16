@@ -84,6 +84,24 @@ describe('connectMultiRange', () => {
 
     props = getProvidedProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
     expect(props).toEqual({items: [], currentRefinement: 'wat'});
+
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({
+      items: [
+        {label: 'All'},
+        {label: 'Ok', start: 100},
+        {label: 'Not ok', end: 200},
+        {label: 'Maybe ok?', start: 100, end: 200},
+      ],
+      transformItems,
+    }, {});
+    expect(transformItems.mock.calls[0][0]).toEqual([
+      {label: 'All', value: '', isRefined: true},
+      {label: 'Ok', value: '100:', isRefined: false},
+      {label: 'Not ok', value: ':200', isRefined: false},
+      {label: 'Maybe ok?', value: '100:200', isRefined: false},
+    ]);
+    expect(props.items).toEqual(['items']);
   });
 
   it('calling refine updates the widget\'s search state', () => {

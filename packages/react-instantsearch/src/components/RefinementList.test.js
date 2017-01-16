@@ -28,7 +28,7 @@ describe('RefinementList', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('refinement list with search for facet values', () => {
+  it('refinement list with search for facet values but no search results', () => {
     const tree = renderer.create(
       <RefinementList
         refine={() => null}
@@ -45,6 +45,21 @@ describe('RefinementList', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('refinement list with search for facet values with search results', () => {
+    const tree = renderer.create(
+      <RefinementList
+        refine={() => null}
+        searchForFacetValues={() => null}
+        createURL={() => '#'}
+        items={[
+          {label: 'white', value: ['white'], count: 10, isRefined: true, _highlightResult: {label: 'white'}},
+        ]}
+        isFromSearch={true}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('applies translations', () => {
     const tree = renderer.create(
       <RefinementList
@@ -56,7 +71,7 @@ describe('RefinementList', () => {
           {label: 'black', value: ['black'], count: 20, isRefined: false},
           {label: 'blue', value: ['blue'], count: 30, isRefined: false},
         ]}
-        isFromSearch={true}
+        isFromSearch={false}
         translations={{
           showMore: ' display more',
           noResults: ' no results',

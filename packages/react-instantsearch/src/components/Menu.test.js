@@ -5,6 +5,8 @@ import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import Menu from './Menu';
 
+jest.mock('../widgets/Highlight');
+
 describe('Menu', () => {
   it('default menu', () => {
     const tree = renderer.create(
@@ -21,6 +23,39 @@ describe('Menu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
+        isFromSearch={false}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('Menu with search for facet values but no search results', () => {
+    const tree = renderer.create(
+      <Menu
+        refine={() => null}
+        searchForFacetValues={() => null}
+        createURL={() => '#'}
+        items={[
+          {label: 'white', value: 'white', count: 10, isRefined: true},
+          {label: 'black', value: 'black', count: 20, isRefined: false},
+          {label: 'blue', value: 'blue', count: 30, isRefined: false},
+        ]}
+        isFromSearch={false}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('Menu with search for facet values with search results', () => {
+    const tree = renderer.create(
+      <Menu
+        refine={() => null}
+        searchForFacetValues={() => null}
+        createURL={() => '#'}
+        items={[
+          {label: 'white', value: 'white', count: 10, isRefined: true, _highlightResult: {label: 'white'}},
+        ]}
+        isFromSearch={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -44,6 +79,7 @@ describe('Menu', () => {
         translations={{
           showMore: ' display more',
         }}
+        isFromSearch={false}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -60,6 +96,7 @@ describe('Menu', () => {
             {label: 'black', value: 'black', count: 20, isRefined: false},
             {label: 'blue', value: 'blue', count: 30, isRefined: false},
           ]}
+          isFromSearch={false}
         />
       );
 
@@ -93,6 +130,7 @@ describe('Menu', () => {
           limitMin={2}
           limitMax={4}
           showMore={true}
+          isFromSearch={false}
         />
       );
 
@@ -120,6 +158,7 @@ describe('Menu', () => {
           limitMin={2}
           limitMax={4}
           showMore={true}
+          isFromSearch={false}
         />
       );
 
@@ -130,5 +169,77 @@ describe('Menu', () => {
     expect(wrapper.find('.ais-Menu__showMoreDisabled')).toBeDefined();
 
     wrapper.unmount();
+  });
+
+  describe('search for facets value', () => {
+    const refine = jest.fn();
+    const searchForFacetValues = jest.fn();
+    const menu = <Menu
+      refine={refine}
+      searchForFacetValues={searchForFacetValues}
+      createURL={() => '#'}
+      items={[
+        {
+          label: 'white', value: 'white', count: 10, isRefined: false, _highlightResult: {label: {value: 'white'}},
+        },
+        {
+          label: 'black', value: 'black', count: 20, isRefined: false, _highlightResult: {label: {value: 'black'}},
+        },
+      ]}
+      isFromSearch={true}
+    />;
+
+    it('a searchbox should be displayed if the feature is activated', () => {
+      const wrapper = mount(menu);
+
+      const searchBox = wrapper.find('.ais-Menu__SearchBox');
+
+      expect(searchBox).toBeDefined();
+
+      wrapper.unmount();
+    });
+
+    it('searching for a value should call searchForFacetValues', () => {
+      const wrapper = mount(menu);
+
+      wrapper.find('.ais-Menu__SearchBox input').simulate('change', {target: {value: 'query'}});
+
+      expect(searchForFacetValues.mock.calls.length).toBe(1);
+      expect(searchForFacetValues.mock.calls[0][0]).toBe('query');
+
+      wrapper.unmount();
+    });
+
+    it('should refine the selected value and display selected refinement back', () => {
+      const wrapper = mount(menu);
+
+      const firstItem = wrapper.find('.ais-Menu__item').first().find('.ais-Menu__itemLink');
+      firstItem.simulate('click');
+
+      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls[0][0]).toEqual('white');
+      expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
+
+      const selectedRefinements = wrapper.find('.ais-Menu__item');
+      expect(selectedRefinements.length).toBe(2);
+
+      wrapper.unmount();
+    });
+
+    it('hit enter on the search values results list should refine the first facet value', () => {
+      refine.mockClear();
+      const wrapper = mount(menu);
+
+      wrapper.find('form').simulate('submit');
+
+      expect(refine.mock.calls.length).toBe(1);
+      expect(refine.mock.calls[0][0]).toEqual('white');
+      expect(wrapper.find('.ais-Menu__SearchBox input').props().value).toBe('');
+
+      const selectedRefinements = wrapper.find('.ais-Menu__item');
+      expect(selectedRefinements.length).toBe(2);
+
+      wrapper.unmount();
+    });
   });
 });

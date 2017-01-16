@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {omit, isEmpty} from 'lodash';
+import {omit, isEmpty, orderBy} from 'lodash';
 
 import createConnector from '../core/createConnector';
 
@@ -40,11 +40,11 @@ const sortBy = ['count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the Menu can display.
+ * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
  */
 export default createConnector({
   displayName: 'AlgoliaMenu',
@@ -64,7 +64,7 @@ export default createConnector({
     limitMax: 20,
   },
 
-  getProvidedProps(props, searchState, searchResults) {
+  getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults) {
     const {results} = searchResults;
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
@@ -77,19 +77,37 @@ export default createConnector({
       return null;
     }
 
-    const items = results
-      .getFacetValues(attributeName, {sortBy})
-      .slice(0, limit)
-      .map(v => ({
-        value: getValue(v.name, props, searchState),
-        label: v.name,
-        count: v.count,
-        isRefined: v.isRefined,
-      }));
+    const items = searchForFacetValuesResults && searchForFacetValuesResults[attributeName]
+      ? searchForFacetValuesResults[attributeName]
+        .map(
+          v => ({
+            label: v.value,
+            value: getValue(v.value, props, searchState),
+            _highlightResult: {label: {value: v.highlighted}},
+            count: v.count,
+            isRefined: v.isRefined,
+          }))
+      : results
+        .getFacetValues(attributeName, {sortBy})
+        .map(v => ({
+          label: v.name,
+          value: getValue(v.name, props, searchState),
+          count: v.count,
+          isRefined: v.isRefined,
+        }));
+
+    const isFromSearch = Boolean(searchForFacetValuesResults && searchForFacetValuesResults[attributeName]);
+    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
+
+    const sortedItems = !isFromSearch && props.searchForFacetValues ?
+      orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc']) : items;
+    const transformedItems = props.transformItems ? props.transformItems(sortedItems) : sortedItems;
 
     return {
-      items,
+      items: transformedItems.slice(0, limit),
       currentRefinement: getCurrentRefinement(props, searchState),
+      isFromSearch,
+      searchForFacetValues,
     };
   },
 
@@ -99,6 +117,10 @@ export default createConnector({
       ...searchState,
       [namespace]: {...searchState[namespace], [id]: nextRefinement ? nextRefinement : ''},
     };
+  },
+
+  searchForFacetValues(props, searchState, nextRefinement) {
+    return {facetName: props.attributeName, query: nextRefinement};
   },
 
   cleanUp(props, searchState) {

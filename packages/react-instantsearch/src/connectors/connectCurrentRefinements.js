@@ -18,10 +18,11 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults, metadata) {
+    const items = metadata.reduce((res, meta) =>
+        typeof meta.items !== 'undefined' ? res.concat(meta.items) : res
+      , []);
     return {
-      items: metadata.reduce((res, meta) =>
-          typeof meta.items !== 'undefined' ? res.concat(meta.items) : res
-        , []),
+      items: props.transformItems ? props.transformItems(items) : items,
     };
   },
 
