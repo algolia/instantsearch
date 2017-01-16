@@ -1,5 +1,6 @@
 import createConnector from '../core/createConnector';
 import {omit} from 'lodash';
+import {PropTypes} from 'react';
 
 function getId() {
   return 'query';
@@ -10,7 +11,7 @@ function getCurrentRefinement(props, searchState) {
   if (typeof searchState[id] !== 'undefined') {
     return searchState[id];
   }
-  if (typeof props.defaultRefinement === 'string') {
+  if (typeof props.defaultRefinement !== 'undefined') {
     return props.defaultRefinement;
   }
   return '';
@@ -27,6 +28,10 @@ function getCurrentRefinement(props, searchState) {
  */
 export default createConnector({
   displayName: 'AlgoliaSearchBox',
+
+  propTypes: {
+    defaultRefinement: PropTypes.string,
+  },
 
   getProvidedProps(props, searchState) {
     return {
