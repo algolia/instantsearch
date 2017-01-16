@@ -7,6 +7,7 @@ import {
 import {withRouter} from 'react-router';
 import 'react-instantsearch-theme-algolia/style.css';
 import qs from 'qs';
+import {isEqual} from 'lodash';
 
 class App extends Component {
   constructor(props) {
@@ -16,6 +17,10 @@ class App extends Component {
 
   componentWillReceiveProps() {
     this.setState({searchState: qs.parse(this.props.router.location.query)});
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !isEqual(this.state.searchState, nextState.searchState);
   }
 
   onSearchStateChange(nextSearchState) {
