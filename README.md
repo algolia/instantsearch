@@ -57,10 +57,16 @@ yarn release
 yarn docs:update
 ```
 
-## Update deps
+## Upgrade deps
 
 ```sh
 yarn upgrade-deps
+```
+
+## See next release changelog
+
+```sh
+yarn changelog
 ```
 
 ## Project status
