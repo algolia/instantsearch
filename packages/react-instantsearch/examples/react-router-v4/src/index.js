@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { BrowserRouter, Match } from 'react-router';
+import {BrowserRouter, Match} from 'react-router';
 
 ReactDOM.render(
   <BrowserRouter>
-    <Match 
+    <Match
       pattern="/"
       component={App}
     />

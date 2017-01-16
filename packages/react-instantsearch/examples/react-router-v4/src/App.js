@@ -9,25 +9,25 @@ import qs from 'qs';
 
 export default class App extends Component {
   constructor (props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
 
   onSearchStateChange (nextSearchState) {
-    const THRESHOLD = 700
-    const newPush = Date.now()
-    let { router } = this.context
-    this.setState({ lastPush: newPush })
+    const THRESHOLD = 700;
+    const newPush = Date.now();
+    const {router} = this.context;
+    this.setState({lastPush: newPush});
 
     if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
-      router.replaceWith(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '')
+      router.replaceWith(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
     } else {
-      router.transitionTo(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '')
+      router.transitionTo(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
     }
   }
 
   render() {
-    let { location } = this.props
+    const {location} = this.props;
     return (
       <InstantSearch
         appId="latency"
@@ -87,5 +87,5 @@ export default class App extends Component {
 }
 
 App.contextTypes = {
-  router: React.PropTypes.object
-}
+  router: React.PropTypes.object,
+};
