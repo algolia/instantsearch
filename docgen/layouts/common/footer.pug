@@ -156,9 +156,7 @@ svg(style='display: none')
             path(d='M1.395 30s1.072-3.222 3.437-3.222c2.365 0 2.365 3.222 4.73 3.222 2.366 0 2.366-3.222 4.731-3.222 2.365 0 2.365 3.222 4.73 3.222 2.366 0 3.76-3.222 3.76-3.222', stroke-width='1.5', stroke-linecap='square')
 
 
-script(type="text/javascript", src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js")
-script(src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js")
-script(src="https://code.jquery.com/jquery-3.1.1.min.js", integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=", crossorigin="anonymous")
+script(src="https://cdn.jsdelivr.net/g/jquery@3(jquery.slim.min.js),docsearch.js@2,underscorejs@1")
 script.
   docsearch({
     apiKey: '5cb6763f264e31381e18639a1147634c',
@@ -183,83 +181,85 @@ script.
       return t;
   }(document, "script", "twitter-wjs"));
 
-  $(function () {
+if navPath === 'index.html'
+  script.
+    $(function () {
 
-    var ACTIONS = {
-        PREV: 'PREV',
-        NEXT: 'NEXT'
-    };
-    var $prevBtn = $('.press__tweet__arrow--prev');
-    var $nextBtn = $('.press__tweet__arrow--next');
-    var $tweets = $('.press__tweet');
-    var $tweetsContainer = $('.press__tweets');
+      var ACTIONS = {
+          PREV: 'PREV',
+          NEXT: 'NEXT'
+      };
+      var $prevBtn = $('.press__tweet__arrow--prev');
+      var $nextBtn = $('.press__tweet__arrow--next');
+      var $tweets = $('.press__tweet');
+      var $tweetsContainer = $('.press__tweets');
 
-    var currentIndex = Math.floor($tweets.length / 2);
-    function setCurrentTweet(action) {
-        switch (action) {
-        case ACTIONS.PREV:
-            if (currentIndex <= $tweets.length) {
-                currentIndex--;
-            }
-            break;
-        case ACTIONS.NEXT:
-            if (currentIndex >= 0) {
-                currentIndex++;
-            }
-            break;
-        default:
-            currentIndex = action;
-        }
-        centerTweets(action);
-    }
-    function centerTweets() {
-        var action = arguments.length <= 0 || arguments[0] === undefined ? ACTIONS.PREV : arguments[0];
-        var $centerElement = $($tweets[currentIndex]);
-        var tweetSize = $(_.first($tweets)).width();
-        var _$centerElement$posit = $centerElement.position();
-        var left = _$centerElement$posit.left;
-        var containerSize = $tweetsContainer.width();
-        var gap = action === ACTIONS.NEXT ? tweetSize / 3 : tweetSize - 325;
-        var offset = -(containerSize / 2) + left + gap;
-        $tweets.removeClass('press__tweet--current');
-        $centerElement.addClass('press__tweet--current');
-        removeClickableTweets();
-        $(_.first($tweetsContainer)).css('transform', 'translateX(' + (offset > 0 ? '-' + (offset + 150) : 0) + 'px)');
-    }
-    function loadTweets() {
-        var promises = [];
-        $tweets.each(function (index, tweet) {
-            var $tweet = $(tweet);
-            var tweetId = $tweet.attr('data-tweet-id');
-            promises.push(twttr.widgets.createTweet(tweetId, tweet, {
-                cards: 'hidden',
-                conversation: 'none'
-            }));
-        });
-        return promises;
-    }
-    function removeLoadingClass() {
-        $tweetsContainer.removeClass('press__tweets--loading');
-    }
-    function bindEvents() {
-        $prevBtn.on('click', _.partial(setCurrentTweet, ACTIONS.PREV));
-        $nextBtn.on('click', _.partial(setCurrentTweet, ACTIONS.NEXT));
-        $(window).on('resize', _.debounce(centerTweets, 100));
-    }
+      var currentIndex = Math.floor($tweets.length / 2);
+      function setCurrentTweet(action) {
+          switch (action) {
+          case ACTIONS.PREV:
+              if (currentIndex <= $tweets.length) {
+                  currentIndex--;
+              }
+              break;
+          case ACTIONS.NEXT:
+              if (currentIndex >= 0) {
+                  currentIndex++;
+              }
+              break;
+          default:
+              currentIndex = action;
+          }
+          centerTweets(action);
+      }
+      function centerTweets() {
+          var action = arguments.length <= 0 || arguments[0] === undefined ? ACTIONS.PREV : arguments[0];
+          var $centerElement = $($tweets[currentIndex]);
+          var tweetSize = $(_.first($tweets)).width();
+          var _$centerElement$posit = $centerElement.position();
+          var left = _$centerElement$posit.left;
+          var containerSize = $tweetsContainer.width();
+          var gap = action === ACTIONS.NEXT ? tweetSize / 3 : tweetSize - 325;
+          var offset = -(containerSize / 2) + left + gap;
+          $tweets.removeClass('press__tweet--current');
+          $centerElement.addClass('press__tweet--current');
+          removeClickableTweets();
+          $(_.first($tweetsContainer)).css('transform', 'translateX(' + (offset > 0 ? '-' + (offset + 150) : 0) + 'px)');
+      }
+      function loadTweets() {
+          var promises = [];
+          $tweets.each(function (index, tweet) {
+              var $tweet = $(tweet);
+              var tweetId = $tweet.attr('data-tweet-id');
+              promises.push(twttr.widgets.createTweet(tweetId, tweet, {
+                  cards: 'hidden',
+                  conversation: 'none'
+              }));
+          });
+          return promises;
+      }
+      function removeLoadingClass() {
+          $tweetsContainer.removeClass('press__tweets--loading');
+      }
+      function bindEvents() {
+          $prevBtn.on('click', _.partial(setCurrentTweet, ACTIONS.PREV));
+          $nextBtn.on('click', _.partial(setCurrentTweet, ACTIONS.NEXT));
+          $(window).on('resize', _.debounce(centerTweets, 100));
+      }
 
-    function showTab(e) {
-        window.location.hash = e.target.hash;
-        window.scrollTo(0, 0);
-        centerTweets();
-    }
+      function showTab(e) {
+          window.location.hash = e.target.hash;
+          window.scrollTo(0, 0);
+          centerTweets();
+      }
 
-    function removeClickableTweets() {
-        $tweets.find('iframe').contents().find('.EmbeddedTweet').removeClass('js-clickToOpenTarget');
-        $tweets.nextAll('.press__tweet--current').find('iframe').contents().find('.EmbeddedTweet').addClass('js-clickToOpenTarget');
-    }
-    twttr.ready(function () {
-        Promise.all(loadTweets()).then(removeLoadingClass).then(centerTweets).then(removeClickableTweets);
+      function removeClickableTweets() {
+          $tweets.find('iframe').contents().find('.EmbeddedTweet').removeClass('js-clickToOpenTarget');
+          $tweets.nextAll('.press__tweet--current').find('iframe').contents().find('.EmbeddedTweet').addClass('js-clickToOpenTarget');
+      }
+      twttr.ready(function () {
+          Promise.all(loadTweets()).then(removeLoadingClass).then(centerTweets).then(removeClickableTweets);
+      });
+      bindEvents();
     });
-    bindEvents();
-  });
 include ./marketing.pug
