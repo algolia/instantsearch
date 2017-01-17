@@ -2,5 +2,4 @@
 
 set -e # exit when error
 
-cd packages/react-instantsearch
-yarn build
+(cd packages/react-instantsearch && yarn build)
