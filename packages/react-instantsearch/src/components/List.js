@@ -21,7 +21,11 @@ class List extends Component {
     limit: PropTypes.number,
     show: PropTypes.func,
     searchForFacetValues: PropTypes.func,
-    isFromSearch: PropTypes.bool.isRequired,
+    isFromSearch: PropTypes.bool,
+  };
+
+  defaultProps= {
+    isFromSearch: false,
   };
 
   constructor() {
