@@ -134,6 +134,7 @@ const CustomSearchBox = ({currentRefinement, refine}) =>
       <input type="text"
              value={currentRefinement}
              onChange={e => refine(e.target.value)}
+             autoComplete="off"
              className="form-control"
              id="q"/>
       <span className="input-group-btn">
