@@ -6,7 +6,7 @@ category: guide
 navWeight: 57
 ---
 
-Algolia has a [wide range of parameters](https://www.algolia.com/doc/api-client/javascript/search#search-parameters). If one of the parameters you want to use is not covered by any widget or connector, then you can use the `<Configure>` widget. 
+Algolia has a [wide range of parameters](https://www.algolia.com/doc/api-client/javascript/search#search-parameters). If one of the parameters you want to use is not covered by any widget or connector, then you can use the `<Configure>` widget.
 
 Here's an example configuring the [distinct parameter](https://www.algolia.com/doc/api-client/javascript/parameters#distinct):
 
@@ -31,6 +31,6 @@ the [`<HitsPerPage>` widget](widgets/HitsPerPage.html).
         Previous: <a href="guide/Routing.html">← Routing</a>
     </div>
     <div class="guide-nav-right">
-        Next: <a href="guide/Search%20state.html">Search state →</a>
+        Next: <a href="guide/Search_state.html">Search state →</a>
     </div>
 </div>
