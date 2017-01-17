@@ -1,100 +1,61 @@
 /* eslint-env jest, jasmine */
 /* eslint-disable no-console */
 import React from 'react';
-import {mount} from 'enzyme';
-
-import algoliaClient from 'algoliasearch';
+import {shallow} from 'enzyme';
 
 import createInstantSearch from './createInstantSearch';
+import InstantSearch from './InstantSearch.js';
+import pkg from '../../package.json';
 
 describe('createInstantSearch', () => {
-  it('Instanciate the client when no algoliaClient provided', () => {
-    const apiKey = '332335235235325';
-    const appId = 'myApp';
+  const algoliaClient = {addAlgoliaAgent: jest.fn()};
+  const algoliaClientFactory = jest.fn(() => algoliaClient);
+  const CustomInstantSearch = createInstantSearch(algoliaClientFactory, {Root: 'div'});
 
-    const algoliaClientFactory = jest.fn(algoliaClient);
-    const InstantSearch = createInstantSearch(
-      algoliaClientFactory, {
-        Root: 'div',
-        props: {className: 'ais-InstantSearch__root'},
-      });
-
-    const wrapper = mount(<InstantSearch appId={apiKey} apiKey={appId} indexName=""/>);
-
-    const otherApiKey = '50943204984230498';
-    const otherAppId = 'otherApp';
-    wrapper.setProps({
-      apiKey: otherApiKey,
-      appId: otherAppId,
-    });
-
-    wrapper.setProps({
-      apiKey: otherApiKey,
-      appId: otherAppId,
-    });
-
-    expect(algoliaClientFactory).toHaveBeenCalledTimes(2);
+  beforeEach(() => {
+    algoliaClient.addAlgoliaAgent.mockClear();
+    algoliaClientFactory.mockClear();
   });
 
-  it('Never call the client factory when algoliaClient is provided', () => {
-    const algoliaClientFactory = jest.fn(algoliaClient);
-    const InstantSearch = createInstantSearch(
-      algoliaClientFactory, {
-        Root: 'div',
-        props: {className: 'ais-InstantSearch__root'},
-      });
-
-    const fakeClient = {
-      addAlgoliaAgent: () => {},
-      search: () => {},
-    };
-
-    const wrapper = mount(<InstantSearch algoliaClient={fakeClient} indexName=""/>);
-
-    wrapper.setProps({
-      algoliaClient: {
-        search: () => {},
-      },
-    });
-
-    expect(algoliaClientFactory).toHaveBeenCalledTimes(0);
+  it('wraps InstantSearch', () => {
+    const wrapper = shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name"/>);
+    expect(wrapper.is(InstantSearch)).toBe(true);
+    expect(wrapper.props()).toMatchSnapshot();
+    expect(wrapper.props().algoliaClient).toBe(algoliaClient);
   });
 
-  it('Can switch from provided to non-provided algoliaClient, and instanciate accordingly', () => {
-    const apiKey = '332335235235325';
-    const appId = 'myApp';
+  it('creates an algolia client using the provided factory', () => {
+    shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name"/>);
+    expect(algoliaClientFactory).toHaveBeenCalledTimes(1);
+    expect(algoliaClientFactory).toHaveBeenCalledWith('app', 'key');
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(`react-instantsearch ${pkg.version}`);
+  });
 
-    const algoliaClientFactory = jest.fn(algoliaClient);
-    const InstantSearch = createInstantSearch(
-      algoliaClientFactory, {
-        Root: 'div',
-        props: {className: 'ais-InstantSearch__root'},
-      });
-
-    const wrapper = mount(<InstantSearch appId={apiKey} apiKey={appId} indexName=""/>);
-
-    const otherApiKey = '50943204984230498';
-    const otherAppId = 'otherApp';
-    wrapper.setProps({
-      apiKey: otherApiKey,
-      appId: otherAppId,
-    });
-
-    wrapper.setProps({
-      algoliaClient: {
-        search: () => {},
-        addAlgoliaAgent: () => {},
-      },
-      apiKey: undefined,
-      appId: undefined,
-    });
-
-    wrapper.setProps({
-      algoliaClient: undefined,
-      apiKey: otherApiKey,
-      appId: otherAppId,
-    });
-
+  it('updates the algoliaClient when appId or apiKey changes', () => {
+    const wrapper = shallow(<CustomInstantSearch appId="app" apiKey="key" indexName="name"/>);
+    wrapper.setProps({appId: 'app2', apiKey: 'key'});
+    wrapper.setProps({appId: 'app', apiKey: 'key2'});
     expect(algoliaClientFactory).toHaveBeenCalledTimes(3);
+    expect(algoliaClientFactory.mock.calls[1]).toEqual(['app2', 'key']);
+    expect(algoliaClientFactory.mock.calls[2]).toEqual(['app', 'key2']);
+  });
+
+  it('uses the provided algoliaClient', () => {
+    const wrapper = shallow(<CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />);
+    expect(algoliaClientFactory).toHaveBeenCalledTimes(0);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    expect(wrapper.props().algoliaClient).toBe(algoliaClient);
+  });
+
+  it('updates the algoliaClient when provided algoliaClient is passed down', () => {
+    const wrapper = shallow(<CustomInstantSearch algoliaClient={algoliaClient} indexName="name" />);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
+    const newAlgoliaClient = {addAlgoliaAgent: jest.fn()};
+    wrapper.setProps({
+      algoliaClient: newAlgoliaClient,
+    });
+    expect(wrapper.props().algoliaClient).toBe(newAlgoliaClient);
+    expect(newAlgoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
   });
 });

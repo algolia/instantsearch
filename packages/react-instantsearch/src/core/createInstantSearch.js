@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import InstantSearch from './InstantSearch';
+import pkg from '../../package.json';
 
 /**
  * Creates a specialized root InstantSearch component. It accepts
@@ -24,6 +25,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
     constructor(props) {
       super();
       this.client = props.algoliaClient || defaultAlgoliaClient(props.appId, props.apiKey);
+      this.client.addAlgoliaAgent(`react-instantsearch ${pkg.version}`);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,6 +35,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       } else if (props.appId !== nextProps.appId || props.apiKey !== nextProps.apiKey) {
         this.client = defaultAlgoliaClient(nextProps.appId, nextProps.apiKey);
       }
+      this.client.addAlgoliaAgent(`react-instantsearch ${pkg.version}`);
     }
 
     render() {

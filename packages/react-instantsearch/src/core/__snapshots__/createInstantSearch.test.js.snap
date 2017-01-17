@@ -1,0 +1,12 @@
+exports[`createInstantSearch wraps InstantSearch 1`] = `
+Object {
+  "algoliaClient": Object {
+    "addAlgoliaAgent": [Function],
+  },
+  "children": undefined,
+  "indexName": "name",
+  "root": Object {
+    "Root": "div",
+  },
+}
+`;
