@@ -2,4 +2,6 @@
 
 set -e # exit when error
 
-NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js
+yarn boot &&
+NODE_ENV=production yarn docs:build &&
+babel-node scripts/gh-pages.js

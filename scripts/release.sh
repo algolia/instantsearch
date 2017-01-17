@@ -29,7 +29,7 @@ git pull origin v2
 git fetch origin --tags
 
 # printf "Release: install dependencies"
-yarn
+yarn boot
 
 # No need for complex release process for now, only patch releases should be ok
 currentVersion=`cat package.json | json version`
@@ -52,7 +52,6 @@ read -e newVersion
 (
 cd packages/react-instantsearch
 mversion $newVersion
-yarn
 )
 
 (
@@ -61,7 +60,6 @@ mversion $newVersion
 )
 
 mversion $newVersion
-yarn
 yarn build
 
 # update changelog
