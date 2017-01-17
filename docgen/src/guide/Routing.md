@@ -17,7 +17,7 @@ need to return a string.
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/react-router) linking React InstantSearch to [react-router](https://github.com/ReactTraining/react-router).
 
 **Notes:**
-* The [search state guide](guide/State.html) details all widgets and connectors search state values.
+* The [search state guide](guide/Search_state.html) details all widgets and connectors search state values.
 * React InstantSearch can be plugged into any history or routing library, you only have to listen for searchState
 changes and inject searchState appropriately.
 
