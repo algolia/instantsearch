@@ -48,8 +48,10 @@ yarn lint:fix
 ## Release
 
 ```sh
-yarn release
+npm run release
 ```
+
+This cannot yet be moved to `yarn release` so please us `npm run release`.
 
 ## Update docs
 
