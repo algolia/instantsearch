@@ -66,6 +66,7 @@ describe('Menu', () => {
       <Menu
         refine={() => null}
         createURL={() => '#'}
+        searchForFacetValues={() => null}
         items={[
           {label: 'white', value: 'white', count: 10, isRefined: false},
           {label: 'black', value: 'black', count: 20, isRefined: false},
@@ -78,6 +79,7 @@ describe('Menu', () => {
         showMore={true}
         translations={{
           showMore: ' display more',
+          placeholder: 'placeholder',
         }}
         isFromSearch={false}
       />
