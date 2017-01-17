@@ -1200,21 +1200,9 @@ ellipse {
         top: 0;
         right: -34px;
         background: url("data:image/svg+xml;utf8,<svg width='31' height='62' viewBox='0 0 31 62' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>Rectangle</title><defs><path id='b' d='M6 1l23 30L6 61H0V1z'/><filter x='-50%' y='-50%' width='200%' height='200%' filterUnits='objectBoundingBox' id='a'><feOffset dx='1' in='SourceAlpha' result='shadowOffsetOuter1'/><feGaussianBlur stdDeviation='.5' in='shadowOffsetOuter1' result='shadowBlurOuter1'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0' in='shadowBlurOuter1'/></filter></defs><g fill='%232f404f' fill-rule='evenodd'><use filter='url(%23a)' xlink:href='%23b'/><use xlink:href='%23b'/></g></svg>") no-repeat; }
-      .cm-navigation .cm-navigation__brands--algolia svg {
-        width: 60%;
-        max-width: 90px;
-        vertical-align: middle;
-        -webkit-transition: -webkit-transform 0.2s ease;
-        transition: -webkit-transform 0.2s ease;
-        transition: transform 0.2s ease;
-        transition: transform 0.2s ease, -webkit-transform 0.2s ease; }
-        .cm-navigation .cm-navigation__brands--algolia svg use {
-          fill: #fff; }
-        .cm-navigation .cm-navigation__brands--algolia svg path {
-          -webkit-transition: fill 0.6s !important;
-          transition: fill 0.6s !important;
-          will-change: fill;
-          fill: #fff; }
+      .cm-navigation .cm-navigation__brands--algolia img {
+        max-width: 100%;
+        vertical-align: middle; }
       .cm-navigation .cm-navigation__brands--algolia:hover svg path:nth-child(1) {
         fill: #46AEDA; }
       .cm-navigation .cm-navigation__brands--algolia:hover svg {
@@ -1233,7 +1221,7 @@ ellipse {
         top: 0;
         right: -34px;
         background: url("data:image/svg+xml;utf8,<svg width='31' height='62' viewBox='0 0 31 62' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><title>Rectangle</title><defs><path id='b' d='M6 1l23 30L6 61H0V1z'/><filter x='-50%' y='-50%' width='200%' height='200%' filterUnits='objectBoundingBox' id='a'><feOffset dx='1' in='SourceAlpha' result='shadowOffsetOuter1'/><feGaussianBlur stdDeviation='.5' in='shadowOffsetOuter1' result='shadowBlurOuter1'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0' in='shadowBlurOuter1'/></filter></defs><g fill='%23263748' fill-rule='evenodd'><use filter='url(%23a)' xlink:href='%23b'/><use xlink:href='%23b'/></g></svg>") no-repeat; }
-      .cm-navigation .cm-navigation__brands--community svg {
+      .cm-navigation .cm-navigation__brands--community img {
         display: inline;
         width: 32px;
         vertical-align: middle;
@@ -1418,7 +1406,7 @@ ellipse {
         vertical-align: middle;
         margin: auto; }
     .cm-navigation .cm-navigation__brands-dropdown .community-logo {
-      max-width: 28px;
+      max-width: 140px;
       margin-right: 6px; }
     .cm-navigation .cm-navigation__brands-dropdown .algolia-logo {
       max-width: 80px; }
