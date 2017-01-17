@@ -1,6 +1,0 @@
-{
-  "extends": "../../.babelrc",
-  "plugins": [
-    ["inline-json-import", {}]
-  ]
-}
