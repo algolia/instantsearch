@@ -1,6 +1,6 @@
 {
   "presets": ["latest", "react", "stage-2"],
-  "plugins": ["lodash"],
+  "plugins": ["lodash", "inline-json-import"],
   "env": {
     "development": {
       "plugins": [
