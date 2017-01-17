@@ -50,6 +50,7 @@ const SearchBox = connectSearchBox(
         <input type="text"
                value={currentRefinement}
                onChange={e => refine(e.target.value)}
+               autoComplete="off"
                className="form-control"
         />
         <span className="input-group-btn">
