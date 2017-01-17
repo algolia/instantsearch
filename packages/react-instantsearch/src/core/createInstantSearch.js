@@ -41,6 +41,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
     render() {
       return (
         <InstantSearch
+          {...this.props}
           indexName={this.props.indexName}
           root={root}
           algoliaClient={this.client}
