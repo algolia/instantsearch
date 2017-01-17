@@ -95,7 +95,7 @@ that should be a good start.
 
 Just include it in your webpage:
 ```html
-<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.0.0/style.min.css">
+<link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@2.1.0/style.min.css">
 ```
 
 Read the [styling](guide/Styling_widgets.html) guide for more information.
