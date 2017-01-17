@@ -6,13 +6,29 @@ category: guide
 navWeight: 45
 ---
 
-If you wish to implement features that are not covered by the default widgets connectors, you will need to create your own connector via the `createConnector` method. This methods takes in a descriptor of your connector with the following properties and methods:
+If you wish to implement features that are not covered by the default widgets connectors,
+you will need to create your own connector via the `createConnector` method.
 
-## displayName, propTypes, defaultProps
+We tried very hard to make React InstantSearch a pluggable library that is able to solve
+most use cases in with simple API entries. But we could not plan everything and thus
+in some cases the current API may not be able to fulfill this promise of simplicity.
+
+If that's not the case or in doubt, **before diving into custom conectors**
+please expose us your use case and come ask us questions on [discourse](https://discourse.algolia.com/c/instantsearch)
+or [GitHub](https://github.com/algolia/instantsearch.js/issues) first. We will be glad
+that you do so.
+
+If you are confident `createConnector` is what you need, here's its API:
+
+## `const connector = createConnector(implementation)`
+
+`implementation` is an object whose shape and properties matches the following conventions:
+
+## `{displayName, propTypes, defaultProps}`
 
 Those properties are directly applied to the higher-order component. Providing a `displayName` is mandatory.
 
-## getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults)
+## `getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults)`
 
 This method should return the props to forward to the composed component.
 
@@ -26,13 +42,15 @@ This method should return the props to forward to the composed component.
 
 `searchForFacetValuesResults` holds the search for facet values results.
 
-## refine(props, searchState, ...args)
+## `refine(props, searchState, ...args)`
 
 This method defines exactly how the `refine` prop of widgets affects the search state.
 
 It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `refine` and `createURL` props of stateful widgets, and returns a new state.
 
 ```javascript
+import {createConnector} from 'react-instantsearch';
+
 const CoolWidget = createConnector({
   displayName: 'CoolWidget',
 
@@ -86,7 +104,7 @@ const CoolWidget = createConnector({
 
 In the example above, we create a widget that reads and manipulates the `queryAndPage` state entry. However, we haven't described how those entries should affect the search parameters passed to the Algolia client just yet.
 
-## getSearchParameters(searchParameters, props, searchState)
+## `getSearchParameters(searchParameters, props, searchState)`
 
 This method applies the current props and state to the provided `SearchParameters`, and returns a new `SearchParameters`. The `SearchParameters` type is described in the [Helper's documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters).
 
@@ -95,6 +113,8 @@ Every time the props or state of a widget change, all the `getSearchParameters` 
 As such, the `getSearchParameters` method allows you to describe how the state and props of a widget should affect the search parameters.
 
 ```javascript
+import {createConnector} from 'react-instantsearch';
+
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine
 
@@ -112,7 +132,7 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-## getMetadata(props, searchState)
+## `getMetadata(props, searchState)`
 
 This method allows the widget to register a custom `metadata` object for any props and state combination.
 
@@ -123,6 +143,8 @@ The metadata object also allows you to declare any data that you would like to p
 The `CurrentRefinements` widget leverages this mechanism in order to allow any widget to declare the filters it has applied. If you want to add your own filter, declare a `filters` property on your widget's metadata object:
 
 ```javascript
+import {createConnector} from 'react-instantsearch';
+
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters
 
@@ -176,14 +198,16 @@ const CoolWidget = createConnector({
 })(Widget);
 ```
 
-## searchForFacetValues(props, searchState, nextRefinement)
+## `searchForFacetValues(props, searchState, nextRefinement)`
 
-This method needs to be implemented if you want to have the ability to perform a search for facet values inside your widget. 
+This method needs to be implemented if you want to have the ability to perform a search for facet values inside your widget.
 
-It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `searchForFacetValues` props of stateful widgets, and returns an 
+It takes in the current props of the higher-order component, the [search state](guide/Search_state.html) of all widgets, as well as all arguments passed to the `searchForFacetValues` props of stateful widgets, and returns an
 object of the shape: `{facetName: string, query: string}`
 
 ```javascript
+import {createConnector} from 'react-instantsearch';
+
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
 
@@ -192,7 +216,7 @@ const CoolWidget = createConnector({
   },
 })(Widget);
 ```
-## cleanUp(props, searchState)
+## `cleanUp(props, searchState)`
 
 This method is called when a widget is about to unmount in order to clean the searchState.
 
@@ -204,6 +228,7 @@ It takes in the current props of the higher-order component and the searchState 
 
 ```javascript
 import {omit} from 'lodash';
+import {createConnector} from 'react-instantsearch';
 
 const CoolWidget = createConnector({
   // displayName, getProvidedProps, refine, getSearchParameters, getMetadata
