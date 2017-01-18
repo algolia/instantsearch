@@ -86,6 +86,10 @@ export default class App extends Component {
   }
 }
 
+App.propTypes = {
+  location: React.PropTypes.object,
+};
+
 App.contextTypes = {
   router: React.PropTypes.object,
 };
