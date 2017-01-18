@@ -4,9 +4,13 @@ Object {
     "addAlgoliaAgent": [Function],
   },
   "children": undefined,
+  "createURL": undefined,
   "indexName": "name",
+  "onSearchStateChange": undefined,
   "root": Object {
     "Root": "div",
   },
+  "searchParameters": undefined,
+  "searchState": undefined,
 }
 `;
