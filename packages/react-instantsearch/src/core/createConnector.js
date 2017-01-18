@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {has} from 'lodash';
+import {has, isEqual} from 'lodash';
 
 import {shallowEqual, getDisplayName} from './utils';
 
@@ -97,7 +97,7 @@ export default function createConnector(connectorDesc) {
     }
 
     componentWillReceiveProps(nextProps) {
-      if (!shallowEqual(this.props, nextProps)) {
+      if (!isEqual(this.props, nextProps)) {
         this.setState({
           props: this.getProvidedProps(nextProps),
         });
