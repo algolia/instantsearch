@@ -1,0 +1,20 @@
+{
+  "private": true,
+  "devDependencies": {
+    "react-scripts": "^0.8.5"
+  },
+  "dependencies": {
+    "lodash": "^4.16.6",
+    "qs": "^6.3.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-instantsearch": "latest",
+    "react-instantsearch-theme-algolia": "latest",
+    "react-router": "4.0.0-alpha.6"
+  },
+  "scripts": {
+    "start": "react-scripts start"
+  },
+  "main": "index.js",
+  "license": "MIT"
+}
