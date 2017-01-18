@@ -44,6 +44,7 @@
     padding-bottom: 8px;
     position: relative;
     z-index: 0;
+    pointer-events: none;
 
     &:first-of-type {
       margin-top: 0;
