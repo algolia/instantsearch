@@ -136,6 +136,7 @@ export default function createInstantSearchManager({
           resultsFacetValues: {
             ...store.getState().resultsFacetValues,
             [nextSearchState.facetName]: content.facetHits,
+            query: nextSearchState.query,
           },
           searchingForFacetValues: false,
         });

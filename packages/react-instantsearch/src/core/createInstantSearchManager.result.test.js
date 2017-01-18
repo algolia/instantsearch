@@ -107,7 +107,7 @@ describe('createInstantSearchManager', () => {
 
         return Promise.resolve().then(() => {
           const store = ism.store.getState();
-          expect(store.resultsFacetValues).toEqual({facetName: 'results'});
+          expect(store.resultsFacetValues).toEqual({facetName: 'results', query: 'query'});
           expect(store.searchingForFacetValues).toBe(false);
         });
       });

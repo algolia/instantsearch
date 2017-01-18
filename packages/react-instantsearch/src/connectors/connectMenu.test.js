@@ -90,6 +90,32 @@ describe('connectMenu', () => {
       },
     ]);
 
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results}, {}, {query: 'query', ok: [{
+      value: 'wat',
+      count: 10,
+      highlighted: 'wat',
+      isRefined: false,
+    }]});
+    expect(props.items).toEqual([
+      {
+        value: 'wat',
+        label: 'wat',
+        isRefined: false,
+        count: 10,
+        _highlightResult: {label: {value: 'wat'}},
+      },
+    ]);
+
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results}, {}, {query: ''});
+    expect(props.items).toEqual([
+      {
+        value: 'wat',
+        label: 'wat',
+        isRefined: true,
+        count: 20,
+      },
+    ]);
+
     const transformItems = jest.fn(() => ['items']);
     props = getProvidedProps(
       {attributeName: 'ok', transformItems},
