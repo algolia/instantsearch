@@ -96,7 +96,11 @@ export default createConnector({
       return null;
     }
 
-    const items = searchForFacetValuesResults && searchForFacetValuesResults[attributeName]
+    const isFromSearch = Boolean(searchForFacetValuesResults
+      && searchForFacetValuesResults[attributeName]
+      && searchForFacetValuesResults.query !== '');
+
+    const items = isFromSearch
       ? searchForFacetValuesResults[attributeName]
         .map(v => ({
           label: v.value,
@@ -113,8 +117,8 @@ export default createConnector({
           count: v.count,
           isRefined: v.isRefined,
         }));
+
     const transformedItems = props.transformItems ? props.transformItems(items) : items;
-    const isFromSearch = Boolean(searchForFacetValuesResults && searchForFacetValuesResults[attributeName]);
     const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
 
     return {
