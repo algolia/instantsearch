@@ -77,7 +77,11 @@ export default createConnector({
       return null;
     }
 
-    const items = searchForFacetValuesResults && searchForFacetValuesResults[attributeName]
+    const isFromSearch = Boolean(searchForFacetValuesResults
+      && searchForFacetValuesResults[attributeName]
+      && searchForFacetValuesResults.query !== '');
+
+    const items = isFromSearch
       ? searchForFacetValuesResults[attributeName]
         .map(
           v => ({
@@ -96,7 +100,6 @@ export default createConnector({
           isRefined: v.isRefined,
         }));
 
-    const isFromSearch = Boolean(searchForFacetValuesResults && searchForFacetValuesResults[attributeName]);
     const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
 
     const sortedItems = !isFromSearch && props.searchForFacetValues ?

@@ -73,6 +73,32 @@ describe('connectRefinementList', () => {
       },
     ]);
 
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results}, {}, {query: 'query', ok: [{
+      value: 'wat',
+      count: 10,
+      highlighted: 'wat',
+      isRefined: false,
+    }]});
+    expect(props.items).toEqual([
+      {
+        value: ['wat'],
+        label: 'wat',
+        isRefined: false,
+        count: 10,
+        _highlightResult: {label: {value: 'wat'}},
+      },
+    ]);
+
+    props = getProvidedProps({attributeName: 'ok', limitMin: 1}, {}, {results}, {}, {query: ''});
+    expect(props.items).toEqual([
+      {
+        value: ['wat'],
+        label: 'wat',
+        isRefined: true,
+        count: 20,
+      },
+    ]);
+
     props = getProvidedProps(
       {attributeName: 'ok', showMore: true, limitMin: 0, limitMax: 1},
       {},
