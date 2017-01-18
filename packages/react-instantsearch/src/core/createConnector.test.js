@@ -31,14 +31,16 @@ describe('createConnector', () => {
       const props = {
         hello: 'there',
       };
-      const wrapper = mount(<Connected {...props} />, {context: {
-        ais: {
-          store: {
-            getState: () => state,
-            subscribe: () => null,
+      const wrapper = mount(<Connected {...props} />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => state,
+              subscribe: () => null,
+            },
           },
         },
-      }});
+      });
       const args = getProvidedProps.mock.calls[0];
       expect(args[0]).toEqual(props);
       expect(args[1]).toBe(state.widgets);
@@ -59,14 +61,16 @@ describe('createConnector', () => {
       })(Dummy);
       const state = createState();
       let props = {hello: 'there'};
-      const wrapper = mount(<Connected {...props} />, {context: {
-        ais: {
-          store: {
-            getState: () => state,
-            subscribe: () => null,
+      const wrapper = mount(<Connected {...props} />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => state,
+              subscribe: () => null,
+            },
           },
         },
-      }});
+      });
       props = {hello: 'you'};
       wrapper.setProps(props);
       expect(getProvidedProps.mock.calls.length).toBe(2);
@@ -98,16 +102,18 @@ describe('createConnector', () => {
         hello: 'there',
       };
       let listener;
-      const wrapper = mount(<Connected {...props} />, {context: {
-        ais: {
-          store: {
-            getState: () => state,
-            subscribe: l => {
-              listener = l;
+      const wrapper = mount(<Connected {...props} />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => state,
+              subscribe: l => {
+                listener = l;
+              },
             },
           },
         },
-      }});
+      });
       expect(wrapper.find(Dummy).props()).toEqual({...props, ...state.widgets});
       state = {
         ...createState(),
@@ -134,40 +140,53 @@ describe('createConnector', () => {
         getId,
       })(() => null);
       const unsubscribe = jest.fn();
-      const wrapper = mount(<Connected />, {context: {
-        ais: {
-          store: {
-            getState: () => ({}),
-            subscribe: () => unsubscribe,
+      const wrapper = mount(<Connected />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => ({}),
+              subscribe: () => unsubscribe,
+            },
           },
         },
-      }});
+      });
       expect(unsubscribe.mock.calls.length).toBe(0);
       wrapper.unmount();
       expect(unsubscribe.mock.calls.length).toBe(1);
     });
 
     it('doesn\'t update the component when passed props don\'t change', () => {
-      const getProvidedProps = jest.fn(() => {});
+      const getProvidedProps = jest.fn(() => {
+      });
+      const getSearchParameters = jest.fn(() => {
+      });
+      const update = jest.fn();
       const Dummy = jest.fn(() => null);
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps,
+        getSearchParameters,
         getId,
       })(Dummy);
-      const wrapper = mount(<Connected />, {context: {
-        ais: {
-          store: {
-            getState: () => ({}),
-            subscribe: () => null,
+      const wrapper = mount(<Connected />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => ({}),
+              subscribe: () => null,
+            },
+            widgetsManager: {
+              registerWidget: () => null,
+              update,
+            },
           },
         },
-      }});
-      expect(Dummy.mock.calls.length).toBe(1);
-      wrapper.setProps({hello: 'there'});
-      expect(Dummy.mock.calls.length).toBe(2);
-      wrapper.setProps({hello: 'there'});
-      expect(Dummy.mock.calls.length).toBe(2);
+      });
+      expect(update.mock.calls.length).toBe(0);
+      wrapper.setProps({hello: 'there', another: ['one', 'two']});
+      expect(update.mock.calls.length).toBe(1);
+      wrapper.setProps({hello: 'there', another: ['one', 'two']});
+      expect(update.mock.calls.length).toBe(1);
     });
   });
 
