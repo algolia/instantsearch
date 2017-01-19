@@ -76,4 +76,9 @@ class Menu extends Component {
 export default translatable({
   showMore: extended => extended ? 'Show less' : 'Show more',
   noResults: 'No Results',
+  submit: null,
+  reset: null,
+  resetTitle: 'Clear the search query.',
+  submitTitle: 'Submit your search query.',
+  placeholder: 'Search here…',
 })(Menu);

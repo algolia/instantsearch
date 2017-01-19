@@ -75,6 +75,7 @@ describe('RefinementList', () => {
         translations={{
           showMore: ' display more',
           noResults: ' no results',
+          placeholder: 'placeholder',
         }}
       />
     ).toJSON();
