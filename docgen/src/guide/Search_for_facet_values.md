@@ -6,14 +6,16 @@ category: guide
 navWeight: 68
 ---
 
-If you use the [`<RefinementList/>`](widgets/RefinementList.html), [`<Menu/>`](widgets/Menu.html) widgets 
+If you use the [`<RefinementList/>`](widgets/RefinementList.html), [`<Menu/>`](widgets/Menu.html) widgets
 or the [`connectRefinementList`](connectors/connectRefinementList.html), [`<connectMenu/>`](widgets/Menu.html)
-connectors then the end user can choose values for a specific facet. If a facet has a lot of possible values then you can decide 
-to let the end user search inside them before selecting them. This feature is called search for facet values. 
+connectors then the end user can choose values for a specific facet. If a facet has a lot of possible values then you can decide
+to let the end user search inside them before selecting them. This feature is called search for facet values.
+
+In order for a facet to be searchable, it must be specified with the `searchable()` modifier. You can do it using [`attributesForFaceting`](https://www.algolia.com/doc/rest-api/search/#attributesforfaceting) or directly from your dashboard.
 
 ## with widgets
 
-To activate the search for facet values when using the [`<RefinementList/>`](widgets/RefinementList.html) or the [`<Menu/>`](widgets/Menu.html) widget 
+To activate the search for facet values when using the [`<RefinementList/>`](widgets/RefinementList.html) or the [`<Menu/>`](widgets/Menu.html) widget
 you need to pass the `searchForFacetValues` boolean as a prop.
 
 If activated, the widget should display an input to search for facet values.
@@ -34,12 +36,12 @@ If activated, the widget should display an input to search for facet values.
 
 ## with connectors
 
-When using the [`connectRefinementList`](connectors/connectRefinementList.html) or the [`connectMenu`](connectors/connectMenu.html) 
+When using the [`connectRefinementList`](connectors/connectRefinementList.html) or the [`connectMenu`](connectors/connectMenu.html)
 connector, you have two provided props related to the search for facet values behavior:
 
-* `isFromSearch`, If `true` this boolean indicate that the `items` prop contains the search for facet values results. 
-* `searchForFacetValues`, a function to call when triggering the search for facet values. It takes one parameter, the search 
-for facet values query. 
+* `isFromSearch`, If `true` this boolean indicate that the `items` prop contains the search for facet values results.
+* `searchForFacetValues`, a function to call when triggering the search for facet values. It takes one parameter, the search
+for facet values query.
 
 You will also need to pass the `searchForFacetValues` boolean as a prop.
 
@@ -52,7 +54,7 @@ const RefinementListWithSFFV = connectRefinementList(props => {
     const label = item._highlightResult
       ? <Highlight attributeName="label" hit={item}/>
       : item.label;
-      
+
     return <li key={item.value}>
       <a onClick={() => props.refine(item.value)}>
         {label} {item.isRefined ? '- selected' : ''}
@@ -69,7 +71,7 @@ const RefinementListWithSFFV = connectRefinementList(props => {
 
 <RefinementListWithSFFV attributeName="attributeName" searchForFacetValues/>
 ```
-The concept is identical when using the `connectMenu` connector. 
+The concept is identical when using the `connectMenu` connector.
 
 <div class="guide-nav">
     <div class="guide-nav-left">
