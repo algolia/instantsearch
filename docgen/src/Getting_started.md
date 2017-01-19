@@ -64,10 +64,10 @@ const App = () =>
     apiKey="3d9875e51fbd20c7754e65422f7ce5e1"
     indexName="bestbuy"
   >
-    // Search widgets will go there
+    {/* Search widgets will go there */}
   </InstantSearch>
 
-// Needed only if you're js app doesn't do it already.
+// Needed only if your js app doesn't do it already.
 // Create-react-app does it for you
 ReactDOM.render(<App />, document.querySelector('#app'));
 ```

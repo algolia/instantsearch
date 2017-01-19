@@ -6,12 +6,12 @@ category: guide
 navWeight: 60
 ---
 
-React InstantSearch provides the necessary API entries to allow you synchronizing its state with the browser
-url for example. The props you need to use are available on the `<InstantSearch>` component:
+React InstantSearch provides the necessary API entries to allow you to synchronize its state with the browser
+url for example. The props you need to use are available on the [`<InstantSearch>`](guide/<InstantSearch>.html) component:
 
-* onSearchStateChange(nextSearchState): Function called every time the search state is updated.
-* searchState: Inject a search state, turns the `<InstantSearch>` component into a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components).
-* createURL(searchState): Function used by every widget generating links and passed down to every connector. You
+* `onSearchStateChange(nextSearchState)`: Function called every time the search state is updated.
+* `searchState`: Inject a search state, turns the [`<InstantSearch>`](guide/<InstantSearch>.html) component into a [controlled component](https://facebook.github.io/react/docs/forms.html#controlled-components).
+* `createURL(searchState)`: Function used by every widget generating links and passed down to every connector. You
 need to return a string.
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/react-router) linking React InstantSearch to [react-router](https://github.com/ReactTraining/react-router).
