@@ -179,6 +179,15 @@
         position: relative;
         z-index: 0;
       }
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: $offset-height;
+        pointer-events: all;
+      }
     }
 
     // API tables
@@ -337,6 +346,9 @@
   h2, h3, .api-entry {
     .anchor {
       text-decoration: none;
+      position: absolute;
+      z-index: 2;
+      pointer-events: all;
     }
     .anchor:after{
       content: '#';
