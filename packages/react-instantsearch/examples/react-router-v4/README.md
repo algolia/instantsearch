@@ -4,7 +4,7 @@ if you are using react-router.
 To start the example:
 
 ```sh
-yarn
+yarn install --no-lockfile
 yarn start
 ```
 
