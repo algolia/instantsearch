@@ -9,7 +9,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublish": "babel-node scripts/build"
+    "build": "babel-node scripts/build.js",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
