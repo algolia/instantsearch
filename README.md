@@ -51,13 +51,21 @@ yarn lint:fix
 npm run release
 ```
 
-This cannot yet be moved to `yarn release` so please us `npm run release`.
+This cannot yet be moved to `yarn release` so please use `npm run release`.
 
 ## Update docs
 
 ```sh
-yarn docs:update
+yarn docs:deploy-production
 ```
+
+## Deploy a preview of docs
+
+```sh
+yarn docs:deploy-preview
+```
+
+This uses [netlify](https://www.netlify.com/).
 
 ## Upgrade deps
 

@@ -29,6 +29,10 @@ const common = [
     source: './assets/',
     destination: './assets/',
   }),
+  assets({
+    source: './rootFiles',
+    destination: './',
+  }),
   sources([
     reactPackage('src/widgets/*.js'),
     reactPackage('src/connectors/*.js'),
@@ -45,9 +49,6 @@ const common = [
 
     // if it's a build js file, keep it (`build`)
     if (/-build\.js$/.test(fileName)) return false;
-
-    // if it's an example JavaScript file, keep it
-    // if (/examples\/(.*)?\.js$/.test(fileName)) return false;
 
     // if it's any other JavaScript file, ignore it, it's handled by build files above
     if (/\.js$/.test(fileName)) return true;
