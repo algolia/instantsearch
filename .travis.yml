@@ -8,4 +8,9 @@ branches:
     - develop
     - v2
     - /^greenkeeper-.*$/
-cache: yarn
+cache:
+  yarn: true
+  directories:
+    - node_modules
+    - packages/react-instantsearch/node_modules
+    - packages/react-instantsearch-theme-algolia/node_modules
