@@ -92,7 +92,7 @@ class List extends Component {
 
   renderSearchBox() {
     const {cx, searchForFacetValues, isFromSearch, translate, items, selectItem} = this.props;
-    const noResults = items.length === 0 ? <div>{translate('noResults')}</div> : null;
+    const noResults = items.length === 0 ? <div {...cx('noResults')}>{translate('noResults')}</div> : null;
     return <div {...cx('SearchBox')}>
         <SearchBox
           currentRefinement={isFromSearch ? this.state.query : ''}
