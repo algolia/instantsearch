@@ -19,7 +19,7 @@ export default function translatable(defaultTranslations) {
         return translation;
       };
 
-      return <Composed {...otherProps} translate={translate} />;
+      return <Composed translate={translate} {...otherProps} />;
     }
 
     Translatable.displayName = `Translatable(${getDisplayName(Composed)})`;
