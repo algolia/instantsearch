@@ -1,7 +1,6 @@
 # eslint by default only ignores root node_modules/
 packages/*/node_modules
 packages/react-instantsearch/examples/*/node_modules/
-coverage/
 # generated documentation website
 docs/
 docs-production/

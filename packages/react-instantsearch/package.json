@@ -7,7 +7,8 @@
   "description": "⚡ Lightning-fast search for React and React Native apps",
   "version": "2.2.2",
   "scripts": {
-    "build": "./scripts/build.sh"
+    "build": "./scripts/build.sh",
+    "prepublish": "yarn build && rm -rf dist/"
   },
   "homepage": "https://community.algolia.com/instantsearch.js/react/",
   "repository": {
