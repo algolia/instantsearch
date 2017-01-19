@@ -3,7 +3,7 @@ This examples shows how to use `react-instantsearch` along with `react-native`.
 To start the example:
 
 ```sh
-yarn
+yarn install --no-lockfile
 yarn start
 ```
 
