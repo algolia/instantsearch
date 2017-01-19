@@ -21,7 +21,7 @@ const App = () =>
     apiKey="..."
     indexName="..."
   >
-    // Use widgets here
+    {/* Use widgets here */}
   </InstantSearch>;
 ```
 
