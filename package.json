@@ -9,7 +9,7 @@
     "docs:build": "babel-node docgen/build.js && yarn docs:storybook-build-production",
     "docs:deploy-production": "NODE_ENV=production yarn docs:build && babel-node scripts/gh-pages.js",
     "docs:build-preview": "./scripts/docs:build-preview.sh",
-    "docs:deploy-preview": "yarn docs:build-preview && netlify deploy",
+    "docs:deploy-preview": "yarn docs:build-preview && rm -f preview.zip && zip -r -9 preview.zip docs-production/ && netlify deploy && rm preview.zip",
     "release": "./scripts/release.sh",
     "lint": "if [ \"$CI\" = \"true\" ]; then eslint .; else eslint . --cache; fi",
     "lint:fix": "eslint . --fix",
