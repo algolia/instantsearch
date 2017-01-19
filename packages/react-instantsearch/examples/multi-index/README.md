@@ -3,7 +3,7 @@ This example shows how to target multiple indices using `react-instantsearch`.
 To start the example:
 
 ```sh
-yarn
+yarn install --no-lockfile
 yarn start
 ```
 

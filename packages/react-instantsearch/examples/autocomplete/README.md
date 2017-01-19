@@ -9,7 +9,7 @@ You will find two use cases:
 To start the example:
 
 ```sh
-yarn
+yarn install --no-lockfile
 yarn start
 ```
 
