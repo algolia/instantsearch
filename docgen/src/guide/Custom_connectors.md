@@ -120,7 +120,7 @@ const CoolWidget = createConnector({
 
   getSearchParameters(searchParameters, props, searchState) {
     // Since the `queryAndPage` state entry isn't necessarily defined, we need
-    // default its value.
+    // to default its value.
     const [query, page] = state.queryAndPage || ['', 0];
 
     // When the `queryAndPage` state entry changes, update the query and page of
@@ -150,7 +150,7 @@ const CoolWidget = createConnector({
 
   getMetadata(props, searchState) {
     // Since the `queryAndPage` searchState entry isn't necessarily defined, we need
-    // default its value.
+    // to default its value.
     const [query, page] = searchState.queryAndPage || ['', 0];
 
     const filters = [];
