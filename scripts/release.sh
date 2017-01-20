@@ -79,9 +79,10 @@ git tag "v$newVersion"
 printf "\n\nRelease: almost done, check everything in another terminal tab if you want.\n"
 read -p "=> Release: when ready, press [ENTER] to push to github and publish the package"
 
-printf "\n\nRelease: pushed to github, publish on npm"
 git push origin v2
 git push origin --tags
+
+printf "\n\nRelease: pushed to github, publish on npm"
 
 (
 cd packages/react-instantsearch
