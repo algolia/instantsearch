@@ -12,6 +12,7 @@ import CurrentRefinementsComponent from '../components/CurrentRefinements.js';
  * @themeKey ais-CurrentRefinements__item - a single filter
  * @themeKey ais-CurrentRefinements__itemLabel - the label of a filter
  * @themeKey ais-CurrentRefinements__itemClear - the trigger to remove the filter
+ * @themeKey ais-CurrentRefinements__noRefinement - present when there is no refinement
  * @translationKey clearFilter - the remove filter button label
  * @example
  * import React from 'react';

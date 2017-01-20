@@ -21,6 +21,7 @@ describe('HierarchicalMenu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -40,6 +41,7 @@ describe('HierarchicalMenu', () => {
         translations={{
           showMore: ' display more',
         }}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -57,6 +59,7 @@ describe('HierarchicalMenu', () => {
           {value: 'black', count: 20, label: 'black'},
           {value: 'blue', count: 30, label: 'blue'},
         ]}
+        canRefine={true}
       />
     );
 
@@ -87,6 +90,7 @@ describe('HierarchicalMenu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
+        canRefine={true}
       />
     );
 
@@ -114,6 +118,7 @@ describe('HierarchicalMenu', () => {
         limitMin={2}
         limitMax={4}
         showMore={true}
+        canRefine={true}
       />
     );
 
@@ -124,5 +129,38 @@ describe('HierarchicalMenu', () => {
     expect(wrapper.find('.ais-HierarchicalMenu__showMoreDisabled')).toBeDefined();
 
     wrapper.unmount();
+  });
+
+  describe('Panel compatibility', () => {
+    it('Should indicate when no more refinement', () => {
+      const canRefine = jest.fn();
+      const wrapper = mount(
+        <HierarchicalMenu
+        refine={() => null}
+        createURL={() => '#'}
+        items={[
+          {value: 'white', count: 10, label: 'white',
+            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
+          {value: 'black', count: 20, label: 'black'},
+          {value: 'blue', count: 30, label: 'blue'},
+        ]}
+        canRefine={true}
+      />,
+        {
+          context: {canRefine},
+          childContextTypes: {canRefine: React.PropTypes.func},
+        },
+      );
+
+      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls[0][0]).toEqual(true);
+      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(0);
+
+      wrapper.setProps({canRefine: false});
+
+      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls[1][0]).toEqual(false);
+      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(1);
+    });
   });
 });

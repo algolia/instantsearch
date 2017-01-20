@@ -18,6 +18,7 @@ describe('MultiRange', () => {
           {label: 'label3', value: '20:30', isRefined: false},
           {label: 'label4', value: '30:', isRefined: false},
         ]}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -34,6 +35,7 @@ describe('MultiRange', () => {
           {label: 'label3', value: '20:30', isRefined: false},
           {label: 'label4', value: '30:', isRefined: false},
         ]}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -50,6 +52,7 @@ describe('MultiRange', () => {
             {label: 'label', value: '20:30'},
             {label: 'label', value: '30:'},
           ]}
+          canRefine={true}
         />
       );
 

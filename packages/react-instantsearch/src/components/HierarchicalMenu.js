@@ -19,12 +19,25 @@ class HierarchicalMenu extends Component {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
     items: itemsPropType,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     transformItems: PropTypes.func,
   };
+
+  static contextTypes = {
+    canRefine: PropTypes.func,
+  };
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.context.canRefine) this.context.canRefine(props.canRefine);
+  }
 
   renderItem = item => {
     const {createURL, refine} = this.props;
@@ -57,6 +70,8 @@ class HierarchicalMenu extends Component {
           'showMore',
           'limitMin',
           'limitMax',
+          'isEmpty',
+          'canRefine',
         ])}
       />
     );

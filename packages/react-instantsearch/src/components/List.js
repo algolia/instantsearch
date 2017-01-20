@@ -22,6 +22,7 @@ class List extends Component {
     show: PropTypes.func,
     searchForFacetValues: PropTypes.func,
     isFromSearch: PropTypes.bool,
+    canRefine: PropTypes.bool,
   };
 
   defaultProps= {
@@ -114,10 +115,11 @@ class List extends Component {
   }
 
   render() {
-    const {cx, items, searchForFacetValues} = this.props;
+    const {cx, items, searchForFacetValues, canRefine} = this.props;
+    const searchBox = searchForFacetValues && canRefine ? this.renderSearchBox() : null;
     if (items.length === 0) {
-      return <div {...cx('root')}>
-        {this.renderSearchBox()}
+      return <div {...cx('root', !canRefine && 'noRefinement')}>
+        {searchBox}
       </div>;
     }
 
@@ -125,9 +127,8 @@ class List extends Component {
     // number of retrieved items might vary with the `maxValuesPerFacet` config
     // option.
     const limit = this.getLimit();
-    const searchBox = searchForFacetValues ? this.renderSearchBox() : null;
     return (
-      <div {...cx('root')}>
+      <div {...cx('root', !this.props.canRefine && 'noRefinement')}>
         {searchBox}
         <div {...cx('items')}>
           {items.slice(0, limit).map(item => this.renderItem(item))}

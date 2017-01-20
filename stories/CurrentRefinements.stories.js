@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {CurrentRefinements, RefinementList, Toggle} from '../packages/react-instantsearch/dom';
+import {CurrentRefinements, RefinementList, Toggle, Panel} from '../packages/react-instantsearch/dom';
 import {withKnobs} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -30,5 +30,23 @@ stories.add('default', () =>
         value={'Solid pine'}
       />
     </div>
+  </WrapWithHits>
+).add('with panel', () =>
+  <WrapWithHits>
+      <Panel title="Current Refinements">
+        <CurrentRefinements />
+        <div style={{display: 'none'}}>
+          <RefinementList
+            attributeName="category"
+            defaultRefinement={['Dining']}
+          />
+        </div>
+      </Panel>
+  </WrapWithHits>
+).add('with panel but no refinement', () =>
+  <WrapWithHits>
+      <Panel title="Current Refinements">
+        <CurrentRefinements />
+      </Panel>
   </WrapWithHits>
 );

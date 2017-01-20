@@ -12,6 +12,7 @@ class MultiRange extends Component {
     })).isRequired,
     refine: PropTypes.func.isRequired,
     transformItems: PropTypes.func,
+    canRefine: PropTypes.bool.isRefined,
   };
 
   renderItem = item => {
@@ -34,12 +35,13 @@ class MultiRange extends Component {
   };
 
   render() {
-    const {items} = this.props;
+    const {items, canRefine} = this.props;
 
     return (
       <List
         renderItem={this.renderItem}
         showMore={false}
+        canRefine={canRefine}
         cx={cx}
         items={items.map(item => ({...item, key: item.value}))}
       />

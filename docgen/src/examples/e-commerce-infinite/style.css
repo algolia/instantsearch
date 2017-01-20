@@ -126,10 +126,13 @@ aside .facet {
   margin-bottom: 16px;
 }
 
-aside .facet-title {
+.ais-Panel__title {
   font-weight: bold;
   margin: 4px 0;
   clear: both;
+  padding: initial;
+  text-transform: none;
+  border-bottom: none;
 }
 
 aside .ais-HierarchicalMenu__itemLink, aside a {

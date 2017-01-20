@@ -44,9 +44,11 @@ export default createConnector({
     if (!searchResults.results) {
       return null;
     }
+    const nbPages = searchResults.results.nbPages;
     return {
-      nbPages: searchResults.results.nbPages,
+      nbPages,
       currentRefinement: getCurrentRefinement(props, searchState),
+      canRefine: nbPages > 1,
     };
   },
 

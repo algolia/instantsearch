@@ -9,17 +9,30 @@ class StarRating extends Component {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
+    min: PropTypes.number,
+    max: PropTypes.number,
     currentRefinement: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
-    }).isRequired,
+    }),
     count: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.string,
       count: PropTypes.number,
-    })).isRequired,
+    })),
+    canRefine: PropTypes.bool.isRequired,
   };
+
+  static contextTypes = {
+    canRefine: PropTypes.func,
+  };
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.context.canRefine) this.context.canRefine(props.canRefine);
+  }
 
   onClick(min, max, e) {
     e.preventDefault();
@@ -87,7 +100,7 @@ class StarRating extends Component {
   }
 
   render() {
-    const {translate, refine, min, max, count, createURL} = this.props;
+    const {translate, refine, min, max, count, createURL, canRefine} = this.props;
     const items = [];
     for (let i = max; i >= min; i--) {
       const itemCount = count.reduce((acc, item) => {
@@ -105,7 +118,7 @@ class StarRating extends Component {
       }));
     }
     return (
-      <div {...cx('root')}>
+      <div {...cx('root', !canRefine && 'noRefinement')}>
         {items}
       </div>
     );

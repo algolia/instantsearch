@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Menu} from '../packages/react-instantsearch/dom';
+import {Menu, Panel, SearchBox} from '../packages/react-instantsearch/dom';
 import {withKnobs, text, boolean, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 import {orderBy} from 'lodash';
@@ -42,6 +42,25 @@ stories.add('default', () =>
   <WrapWithHits>
     <Menu attributeName="category"
           transformItems={items => orderBy(items, ['label', 'count'], ['asc', 'desc'])}/>
+  </WrapWithHits>
+).add('with panel', () =>
+  <WrapWithHits>
+      <Panel title="Category">
+        <Menu
+          attributeName="category"
+        />
+      </Panel>
+  </WrapWithHits>
+).add('with panel but no refinement', () =>
+  <WrapWithHits searchBox={false}>
+      <Panel title="Category">
+        <Menu
+          attributeName="category"
+        />
+        <div style={{display: 'none'}}>
+          <SearchBox defaultRefinement="ds" />
+        </div>
+      </Panel>
   </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >
