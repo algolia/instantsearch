@@ -44,8 +44,8 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const checked = getCurrentRefinement(props, searchState);
-    return {checked};
+    const currentRefinement = getCurrentRefinement(props, searchState);
+    return {currentRefinement};
   },
 
   refine(props, searchState, nextChecked) {

@@ -19,13 +19,13 @@ let params;
 describe('connectToggle', () => {
   it('provides the correct props to the component', () => {
     props = getProvidedProps({attributeName: 't'}, {});
-    expect(props).toEqual({checked: false});
+    expect(props).toEqual({currentRefinement: false});
 
     props = getProvidedProps({attributeName: 't'}, {toggle: {t: true}});
-    expect(props).toEqual({checked: true});
+    expect(props).toEqual({currentRefinement: true});
 
     props = getProvidedProps({defaultRefinement: true, attributeName: 't'}, {});
-    expect(props).toEqual({checked: true});
+    expect(props).toEqual({currentRefinement: true});
   });
 
   it('calling refine updates the widget\'s search state', () => {
