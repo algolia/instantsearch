@@ -4,6 +4,7 @@ mainTitle: Examples
 layout: examples.pug
 category: examples
 navWeight: 1000
+examplesCTA: 'Go to live demo'
 examples: [{
     id: 'e-commerce',
     title: 'E-commerce',
