@@ -1,3 +1,13 @@
+<a name="2.2.4"></a>
+## [2.2.4](https://github.com/algolia/instantsearch.js/compare/v2.2.3...v2.2.4) (2017-01-20)
+
+
+### Bug Fixes
+
+* **publish:** publish react-instantsearch/dist instead of root (#1884) ([64414e0](https://github.com/algolia/instantsearch.js/commit/64414e0))
+
+
+
 <a name="2.2.3"></a>
 ## [2.2.3](https://github.com/algolia/instantsearch.js/compare/v2.2.2...v2.2.3) (2017-01-20)
 
