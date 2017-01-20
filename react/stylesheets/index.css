@@ -2970,6 +2970,18 @@ nav.sidebar {
     margin: -80px 0 0;
     position: relative;
     z-index: 0; }
+  .documentation-section .documentation-container h2:after, .documentation-section .documentation-container h3:after, .documentation-section .documentation-container .api-entry:after, .documentation-section .documentation-container .css-class:after,
+  .examples-section .documentation-container h2:after,
+  .examples-section .documentation-container h3:after,
+  .examples-section .documentation-container .api-entry:after,
+  .examples-section .documentation-container .css-class:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 80px;
+    pointer-events: all; }
   .documentation-section .documentation-container table.api,
   .examples-section .documentation-container table.api {
     padding: 0;
@@ -3111,7 +3123,10 @@ nav.sidebar {
   .examples-section .documentation-container h2 .anchor,
   .examples-section .documentation-container h3 .anchor,
   .examples-section .documentation-container .api-entry .anchor {
-    text-decoration: none; }
+    text-decoration: none;
+    position: absolute;
+    z-index: 2;
+    pointer-events: all; }
   .documentation-section .documentation-container h2 .anchor:after, .documentation-section .documentation-container h3 .anchor:after, .documentation-section .documentation-container .api-entry .anchor:after,
   .examples-section .documentation-container h2 .anchor:after,
   .examples-section .documentation-container h3 .anchor:after,
