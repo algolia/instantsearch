@@ -8,7 +8,7 @@
   "version": "2.2.3",
   "scripts": {
     "build": "./scripts/build.sh",
-    "prepublish": "yarn build && rm -rf dist/"
+    "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "homepage": "https://community.algolia.com/instantsearch.js/react/",
   "repository": {
