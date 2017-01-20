@@ -4,9 +4,10 @@ mainTitle: Examples
 layout: examples.pug
 category: examples
 navWeight: 1000
+examplesCTA: 'Read the code'
 examples: [{
     id: 'react-router',
-    title: 'Usage with react-router.'
+    title: 'Usage with react-router v3.'
   }, {
     id: 'react-native',
     title: 'Usage with react-native.'
@@ -16,6 +17,9 @@ examples: [{
   }, {
     id: 'multi-index',
     title: 'Requests on multiple indices at once.'
+  }, {
+    id: 'react-router-v4',
+    title: 'Usage with react-router v4.'
   }]
 examplesEndpoint: https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples
 ---

@@ -7,5 +7,4 @@ navWeight: 1000
 
 ## Examples
 
-To demonstrate the flexibility of React InstantSearch we created some demos.
-If you think about a new example or have any questions about them, [come talk to us](https://discourse.algolia.com/c/instantsearch).
+To demonstrate the flexibility of React InstantSearch we created some [live demos](examples/Demos.html) and [code recipes](examples/Recipes.html) linking React InstantSearch to popular React libraries like [React Router](https://github.com/ReactTraining/react-router).
