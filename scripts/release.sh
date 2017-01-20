@@ -85,12 +85,12 @@ git push origin --tags
 
 (
 cd packages/react-instantsearch
-npm publish # This cannot be moved to yarn yet
+npm run build-and-publish
 )
 
 (
 cd packages/react-instantsearch-theme-algolia
-npm publish  # This cannot be moved to yarn yet
+npm run build-and-publish
 )
 
 printf "Release:
