@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel-node scripts/build.js",
-    "prepublish": "yarn build"
+    "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
     "autoprefixer": "^6.6.1",
