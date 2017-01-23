@@ -4,8 +4,8 @@ import {rootPath} from './path';
 const configs = {
   production: {
     docsDist: rootPath('docs-production/react'),
-    storyBookPublicPath: '/react/storybook/',
-    publicPath: '/react/',
+    storyBookPublicPath: 'storybook/',
+    publicPath: '/instantsearch.js/react/',
   },
   development: {
     docsDist: rootPath('docs/react'),
