@@ -23,7 +23,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "enzyme": "^2.7.0",
+    "enzyme": "^2.7.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-native": "^0.40.0",
