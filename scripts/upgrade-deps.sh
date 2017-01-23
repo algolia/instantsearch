@@ -5,7 +5,7 @@
 yarn upgrade-interactive &&
 (cd packages/react-instantsearch && yarn upgrade-interactive) &&
 (cd packages/react-instantsearch-theme-algolia && yarn upgrade-interactive) &&
-(cd packages/react-instantsearch/examples/autocomplete && yarn upgrade-interactive) &&
-(cd packages/react-instantsearch/examples/multi-index && yarn upgrade-interactive) &&
-(cd packages/react-instantsearch/examples/react-native && yarn upgrade-interactive) &&
-(cd packages/react-instantsearch/examples/react-router && yarn upgrade-interactive)
+(cd packages/react-instantsearch/examples/autocomplete && npm-check -u) &&
+(cd packages/react-instantsearch/examples/multi-index && npm-check -u) &&
+(cd packages/react-instantsearch/examples/react-native && npm-check -u) &&
+(cd packages/react-instantsearch/examples/react-router && npm-check -u)

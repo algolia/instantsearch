@@ -5,7 +5,7 @@ import {shallow} from 'enzyme';
 
 import createInstantSearch from './createInstantSearch';
 import InstantSearch from './InstantSearch.js';
-import pkg from '../../package.json';
+import {version} from '../../package.json';
 
 describe('createInstantSearch', () => {
   const algoliaClient = {addAlgoliaAgent: jest.fn()};
@@ -29,7 +29,7 @@ describe('createInstantSearch', () => {
     expect(algoliaClientFactory).toHaveBeenCalledTimes(1);
     expect(algoliaClientFactory).toHaveBeenCalledWith('app', 'key');
     expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledTimes(1);
-    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(`react-instantsearch ${pkg.version}`);
+    expect(algoliaClient.addAlgoliaAgent).toHaveBeenCalledWith(`react-instantsearch ${version}`);
   });
 
   it('updates the algoliaClient when appId or apiKey changes', () => {
