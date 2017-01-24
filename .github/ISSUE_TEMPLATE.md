@@ -29,7 +29,8 @@
   ***************************
   If the current behavior is a bug, please provide all the steps to reproduce and a minimal
   [JSFiddle](https://jsfiddle.net/) example or a repository on GitHub that we can `npm install`
-  and `npm start`.
+  and `npm start`. If you are reporting an issue on instantsearch.js, you can fork and adapt this
+  [jsFiddle implementation](https://jsfiddle.net/e6dd2496/).
 
   If you are requesting a new feature, we need to understand WHY would you
   need this feature, which means you should give the use case for such feature.
