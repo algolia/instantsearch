@@ -15,7 +15,7 @@ examples: [{
     description: 'This demos based on e-commerce demonstrates the usage of the load more UX pattern.'
   }, {
     id: 'material-ui',
-    title: 'Material ui integration',
+    title: 'Material-UI',
     description: 'This demos based on e-commerce demonstrates the integration of the Material UI component library with react-instantsearch.'
   }, {
     id: 'media',
