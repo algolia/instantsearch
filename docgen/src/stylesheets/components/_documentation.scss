@@ -45,17 +45,24 @@
     position: relative;
     z-index: 99;
 
+    &:not(.sidebar-header) {
+      display: inline-block;
+      width: 100%;
+      line-height: 1;
+      margin-top: -20px;
+    }
+
     &:first-of-type {
       margin-top: 0;
+
+      .content &{
+        margin-top: -10px;
+      }
     }
 
     @include small-mq {
       font-size: 22px;
     }
-  }
-
-  h3 {
-    margin-top: 32px;
   }
 
   h4 {
@@ -145,6 +152,9 @@
     }
 
     .content {
+      h2:first-of-type {
+        margin-top: -16px;
+      }
       & p:first-child {
         margin-top: 0;
       }
@@ -176,7 +186,7 @@
         content: "";
         display: block;
         height: $offset-height;
-        margin: -$offset-height 0 0;
+        margin: -($offset-height - 60) 0 0;
         position: relative;
         z-index: 0;
         pointer-events: none;
