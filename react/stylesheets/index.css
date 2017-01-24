@@ -2572,6 +2572,9 @@ p {
     line-height: 32px;
     color: rgba(74, 74, 76, 0.75); }
 
+li {
+  color: #5c7080; }
+
 /* Big titles
 ======================*/
 h2.title {
@@ -2832,17 +2835,22 @@ nav.sidebar {
   padding-bottom: 8px;
   position: relative;
   z-index: 99; }
+  .documentation-section h2:not(.sidebar-header),
+  .examples-section h2:not(.sidebar-header) {
+    display: inline-block;
+    width: 100%;
+    line-height: 1;
+    margin-top: -20px; }
   .documentation-section h2:first-of-type,
   .examples-section h2:first-of-type {
     margin-top: 0; }
+    .content .documentation-section h2:first-of-type, .content
+    .examples-section h2:first-of-type {
+      margin-top: -10px; }
   @media (max-width: 960px) {
     .documentation-section h2,
     .examples-section h2 {
       font-size: 22px; } }
-
-.documentation-section h3,
-.examples-section h3 {
-  margin-top: 32px; }
 
 .documentation-section h4,
 .examples-section h4 {
@@ -2938,6 +2946,9 @@ nav.sidebar {
           float: left;
           margin-right: 6px;
           color: #a4a4a4; }
+  .documentation-section .documentation-container .content h2:first-of-type,
+  .examples-section .documentation-container .content h2:first-of-type {
+    margin-top: -16px; }
   .documentation-section .documentation-container .content p:first-child,
   .examples-section .documentation-container .content p:first-child {
     margin-top: 0; }
@@ -2967,7 +2978,7 @@ nav.sidebar {
     content: "";
     display: block;
     height: 80px;
-    margin: -80px 0 0;
+    margin: -20px 0 0;
     position: relative;
     z-index: 0;
     pointer-events: none; }
@@ -3494,8 +3505,10 @@ nav.sidebar {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -ms-flex-flow: row wrap;
-      flex-flow: row wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
