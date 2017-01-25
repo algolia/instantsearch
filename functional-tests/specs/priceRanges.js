@@ -13,7 +13,7 @@ describe('priceRanges', () => {
       .element(widget)
       .elements(item)
       .value.length
-    ).toBe(7)
+    ).toBe(8)
   );
 
   it('can refine by clicking a range', () => {
