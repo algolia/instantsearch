@@ -1130,8 +1130,10 @@ instantsearch.widgets.analytics(options);
 var search = instantsearch({
   [...],
   searchParameters: {
+    hierarchicalFacetsRefinements: { // menu is implemented as a hierarchicalFacetsRefinements
+      categories: ['Cell Phones']
+    },
     facetsRefinements: {
-      categories: ['Cell Phones'],
       isPremium: [true]
     },
     disjunctiveFacetsRefinements: {
@@ -1166,7 +1168,7 @@ load. Maybe automatically filter on `Cell Phones` made by either `Samsung` or
 
 If you are already using a widget to perform a filter on that attribute (like
 the `menu` or `refinementList` widgets), you can just use the
-`searchParameters.facetsRefinements` attribute option when instantiating instantsearch.
+`searchParameters.facetsRefinements` or `searchParameters.disjunctiveFacetsRefinements` (for refinementList) and `searchParameters.hierarchicalFacetsRefinements` (for menu) attribute option when instantiating instantsearch.
 
 Pass it an object where each key is the attribute you want to filter and each
 value is an array of the filtered values.  If you are using `OR` filters instead
