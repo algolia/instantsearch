@@ -139,35 +139,17 @@ export default function initHeader() {
 
   // If the user type :"s" or "/", open the searchbox
   function catchCmdF() {
-    let keyPressed = {};
+    document.addEventListener('keyup', maybeOpenSearchBox);
 
-    document.addEventListener('keydown', e => {
-      keyPressed[e.keyCode] = true;
-    }, false);
-    document.addEventListener('keyup', e => {
-      keyPressed[e.keyCode] = false;
-    }, false);
-
-    function searchLoop() {
-      if (keyPressed['83'] || keyPressed['191']) {
+    function maybeOpenSearchBox(e) {
+      if (e.target.tagName !== 'INPUT' && e.keyCode === 83 || e.keyCode === 191) {
         document.querySelector('.cm-search__input').classList.add('open');
         document.querySelector('#searchbox').focus();
-
-        setTimeout(() => {
-          keyPressed = {};
-        }, 500);
-      } else if (keyPressed['27']) {
+      } else if (e.keyCode === 27) {
         document.querySelector('.cm-search__input').classList.remove('open');
         document.querySelector('#searchbox').blur();
-
-        setTimeout(() => {
-          keyPressed = {};
-        }, 500);
       }
-      setTimeout(searchLoop, 5);
     }
-
-    searchLoop();
   }
 
   window.addEventListener('DOMContentLoaded', () => {
