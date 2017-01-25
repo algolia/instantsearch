@@ -27,6 +27,8 @@ import toggle from '../widgets/toggle/toggle.js';
 import analytics from '../widgets/analytics/analytics.js';
 import version from './version.js';
 
+import connectMenu from '../connectors/menu/connectMenu.js';
+
 const instantsearch = toFactory(InstantSearch);
 instantsearch.widgets = {
   clearAll,
@@ -47,6 +49,9 @@ instantsearch.widgets = {
   stats,
   toggle,
   analytics,
+};
+instantsearch.connectors = {
+  connectMenu,
 };
 instantsearch.version = version;
 instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
