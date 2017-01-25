@@ -23,6 +23,7 @@ import RefinementListComponent from '../components/RefinementList.js';
  * @themeKey RefinementList__itemCount - the item count
  * @themeKey RefinementList__itemCountSelected - the selected item count
  * @themeKey ais-RefinementList__showMore - the button that let the user toggle more results
+ * @themeKey ais-RefinementList__noRefinement - present when there is no refinement
  * @themeKey ais-RefinementList__SearchBox - the container of the search for facet values searchbox. See [the SearchBox documentation](widgets/SearchBox.html#classnames) for the classnames and translation keys of the SearchBox.
  * @translationkey showMore - The label of the show more button. Accepts one parameters, a boolean that is true if the values are expanded
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.

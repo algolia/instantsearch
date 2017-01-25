@@ -14,10 +14,11 @@ stories.add('Airbnb Rheostat', () =>
 
 const Range = React.createClass({
   propTypes: {
-    min: React.PropTypes.number.isRequired,
-    max: React.PropTypes.number.isRequired,
-    currentRefinement: React.PropTypes.object.isRequired,
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    currentRefinement: React.PropTypes.object,
     refine: React.PropTypes.func.isRequired,
+    canRefine: React.PropTypes.bool.isRequired,
   },
 
   getInitialState() {
@@ -25,7 +26,9 @@ const Range = React.createClass({
   },
 
   componentWillReceiveProps(sliderState) {
-    this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+    if (sliderState.canRefine) {
+      this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+    }
   },
 
   onValuesUpdated(sliderState) {
@@ -60,9 +63,9 @@ const Range = React.createClass({
 });
 
 Range.propTypes = {
-  min: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
-  currentRefinement: React.PropTypes.object.isRequired,
+  min: React.PropTypes.number,
+  max: React.PropTypes.number,
+  currentRefinement: React.PropTypes.object,
   refine: React.PropTypes.func.isRequired,
 };
 

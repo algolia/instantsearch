@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {HierarchicalMenu} from '../packages/react-instantsearch/dom';
+import {HierarchicalMenu, Panel, SearchBox} from '../packages/react-instantsearch/dom';
 import {withKnobs, text, boolean, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -41,6 +41,33 @@ stories.add('default', () =>
       limitMax={5}
       showMore={true}
     />
+  </WrapWithHits>
+).add('with panel', () =>
+  <WrapWithHits>
+      <Panel title="Category">
+        <HierarchicalMenu
+          attributes={[
+            'category',
+            'sub_category',
+            'sub_sub_category',
+          ]}
+        />
+      </Panel>
+  </WrapWithHits>
+).add('with panel but no refinement', () =>
+  <WrapWithHits searchBox={false}>
+      <Panel title="Category">
+        <HierarchicalMenu
+          attributes={[
+            'category',
+            'sub_category',
+            'sub_sub_category',
+          ]}
+        />
+        <div style={{display: 'none'}}>
+          <SearchBox defaultRefinement="ds" />
+        </div>
+      </Panel>
   </WrapWithHits>
 ).add('playground', () =>
   <WrapWithHits >

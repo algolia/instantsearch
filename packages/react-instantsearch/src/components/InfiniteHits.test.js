@@ -48,7 +48,7 @@ describe('Hits', () => {
           hitComponent={Hit}
           hits={hits}
           hasMore={false}
-        />
+          />
       );
     expect(wrapped.find('.ais-InfiniteHits__loadMore').props().disabled).toBe(true);
   });

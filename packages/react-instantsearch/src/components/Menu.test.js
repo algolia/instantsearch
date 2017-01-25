@@ -24,6 +24,7 @@ describe('Menu', () => {
         limitMax={4}
         showMore={true}
         isFromSearch={false}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -41,6 +42,7 @@ describe('Menu', () => {
           {label: 'blue', value: 'blue', count: 30, isRefined: false},
         ]}
         isFromSearch={false}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -56,6 +58,7 @@ describe('Menu', () => {
           {label: 'white', value: 'white', count: 10, isRefined: true, _highlightResult: {label: 'white'}},
         ]}
         isFromSearch={true}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -82,6 +85,7 @@ describe('Menu', () => {
           placeholder: 'placeholder',
         }}
         isFromSearch={false}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -99,6 +103,7 @@ describe('Menu', () => {
             {label: 'blue', value: 'blue', count: 30, isRefined: false},
           ]}
           isFromSearch={false}
+          canRefine={true}
         />
       );
 
@@ -133,6 +138,7 @@ describe('Menu', () => {
           limitMax={4}
           showMore={true}
           isFromSearch={false}
+          canRefine={true}
         />
       );
 
@@ -161,6 +167,7 @@ describe('Menu', () => {
           limitMax={4}
           showMore={true}
           isFromSearch={false}
+          canRefine={true}
         />
       );
 
@@ -189,6 +196,7 @@ describe('Menu', () => {
         },
       ]}
       isFromSearch={true}
+      canRefine={true}
     />;
 
     it('a searchbox should be displayed if the feature is activated', () => {
@@ -242,6 +250,38 @@ describe('Menu', () => {
       expect(selectedRefinements.length).toBe(2);
 
       wrapper.unmount();
+    });
+  });
+
+  describe('Panel compatibility', () => {
+    it('Should indicate when no more refinement', () => {
+      const canRefine = jest.fn();
+      const wrapper = mount(
+        <Menu
+          refine={() => null}
+          searchForFacetValues={() => null}
+          createURL={() => '#'}
+          items={[
+            {label: 'white', value: 'white', count: 10, isRefined: true, _highlightResult: {label: 'white'}},
+          ]}
+          isFromSearch={true}
+          canRefine={true}
+        />,
+        {
+          context: {canRefine},
+          childContextTypes: {canRefine: React.PropTypes.func},
+        },
+      );
+
+      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls[0][0]).toEqual(true);
+      expect(wrapper.find('.ais-Menu__noRefinement').length).toBe(0);
+
+      wrapper.setProps({canRefine: false});
+
+      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls[1][0]).toEqual(false);
+      expect(wrapper.find('.ais-Menu__noRefinement').length).toBe(1);
     });
   });
 });

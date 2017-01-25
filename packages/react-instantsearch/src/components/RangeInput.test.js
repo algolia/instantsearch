@@ -15,6 +15,7 @@ describe('RangeInput', () => {
         min={0}
         max={100}
         currentRefinement={{min: 0, max: 100}}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -32,6 +33,7 @@ describe('RangeInput', () => {
         min={0}
         max={100}
         currentRefinement={{min: 0, max: 100}}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -46,6 +48,7 @@ describe('RangeInput', () => {
           min={0}
           max={100}
           currentRefinement={{min: 0, max: 100}}
+          canRefine={true}
         />
       );
 
@@ -81,6 +84,7 @@ describe('RangeInput', () => {
           min={0}
           max={100}
           currentRefinement={{min: 0, max: 100}}
+          canRefine={true}
         />
       );
 
@@ -96,5 +100,35 @@ describe('RangeInput', () => {
     expect(refine.mock.calls.length).toBe(0);
 
     wrapper.unmount();
+  });
+
+  describe('Panel compatibility', () => {
+    it('Should indicate when no more refinement', () => {
+      const canRefine = jest.fn();
+      const wrapper = mount(
+        <RangeInput
+          createURL={() => '#'}
+          refine={() => {}}
+          min={0}
+          max={100}
+          currentRefinement={{min: 0, max: 100}}
+          canRefine={true}
+        />,
+        {
+          context: {canRefine},
+          childContextTypes: {canRefine: React.PropTypes.func},
+        },
+      );
+
+      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls[0][0]).toEqual(true);
+      expect(wrapper.find('.ais-RangeInput__noRefinement').length).toBe(0);
+
+      wrapper.setProps({canRefine: false});
+
+      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls[1][0]).toEqual(false);
+      expect(wrapper.find('.ais-RangeInput__noRefinement').length).toBe(1);
+    });
   });
 });

@@ -26,13 +26,20 @@ describe('connectRefinementList', () => {
 
   it('provides the correct props to the component', () => {
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
+
+    props = getProvidedProps({attributeName: 'ok'}, {}, {});
+    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -154,11 +161,6 @@ describe('connectRefinementList', () => {
       value: [['wat']],
     }]);
     expect(props.isFromSearch).toBe(true);
-  });
-
-  it('doesn\'t render when no results are available', () => {
-    props = getProvidedProps({attributeName: 'ok'}, {}, {});
-    expect(props).toBe(null);
   });
 
   it('calling refine updates the widget\'s search state', () => {

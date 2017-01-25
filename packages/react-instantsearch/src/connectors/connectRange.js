@@ -64,14 +64,18 @@ export default createConnector({
 
     if (!hasMin || !hasMax) {
       if (!searchResults.results) {
-        return null;
+        return {
+          canRefine: false,
+        };
       }
 
       const stats = searchResults.results.getFacetByName(attributeName) ?
         searchResults.results.getFacetStats(attributeName) : null;
 
       if (!stats) {
-        return null;
+        return {
+          canRefine: false,
+        };
       }
 
       if (!hasMin) {
@@ -99,6 +103,7 @@ export default createConnector({
       max,
       currentRefinement: {min: valueMin, max: valueMax},
       count,
+      canRefine: true,
     };
   },
 

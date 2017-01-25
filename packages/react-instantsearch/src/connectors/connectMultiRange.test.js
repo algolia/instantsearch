@@ -28,6 +28,7 @@ describe('connectMultiRange', () => {
         {label: 'All', value: '', isRefined: true},
       ],
       currentRefinement: '',
+      canRefine: true,
     });
 
     props = getProvidedProps({
@@ -42,6 +43,7 @@ describe('connectMultiRange', () => {
         {label: 'Ok', value: '100:', isRefined: false},
       ],
       currentRefinement: '',
+      canRefine: true,
     });
 
     props = getProvidedProps({
@@ -49,6 +51,7 @@ describe('connectMultiRange', () => {
         {label: 'All'},
         {label: 'Not ok', end: 200},
       ],
+      canRefine: true,
     }, {});
     expect(props).toEqual({
       items: [
@@ -56,6 +59,7 @@ describe('connectMultiRange', () => {
         {label: 'Not ok', value: ':200', isRefined: false},
       ],
       currentRefinement: '',
+      canRefine: true,
     });
 
     props = getProvidedProps({
@@ -65,6 +69,7 @@ describe('connectMultiRange', () => {
         {label: 'Not ok', end: 200},
         {label: 'Maybe ok?', start: 100, end: 200},
       ],
+      canRefine: true,
     }, {});
     expect(props).toEqual({
       items: [
@@ -74,16 +79,17 @@ describe('connectMultiRange', () => {
         {label: 'Maybe ok?', value: '100:200', isRefined: false},
       ],
       currentRefinement: '',
+      canRefine: true,
     });
 
     props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
 
     props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
 
     props = getProvidedProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
 
     const transformItems = jest.fn(() => ['items']);
     props = getProvidedProps({

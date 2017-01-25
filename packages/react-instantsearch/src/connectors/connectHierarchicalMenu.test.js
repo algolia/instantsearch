@@ -25,15 +25,10 @@ describe('connectHierarchicalMenu', () => {
 
     results.getFacetValues.mockImplementationOnce(() => ({}));
     props = getProvidedProps({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
+    expect(props).toEqual({canRefine: false, currentRefinement: 'wat', items: []});
 
-    results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProvidedProps({attributes: ['ok'], defaultRefinement: 'wat'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat'});
-
-    results.getFacetValues.mockImplementationOnce(() => ({}));
-    props = getProvidedProps({attributes: ['ok']}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: null});
+    props = getProvidedProps({attributes: ['ok']}, {}, {});
+    expect(props).toEqual({canRefine: false, currentRefinement: null, items: []});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => ({
@@ -151,11 +146,6 @@ describe('connectHierarchicalMenu', () => {
       },
     ]);
     expect(props.items).toEqual(['items']);
-  });
-
-  it('doesn\'t render when no results are available', () => {
-    props = getProvidedProps({attributes: ['ok']}, {}, {});
-    expect(props).toBe(null);
   });
 
   it('calling refine updates the widget\'s search state', () => {

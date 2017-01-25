@@ -25,6 +25,7 @@ import StarRatingComponent from '../components/StarRating.js';
  * @themeKey ais-StarRating__ratingCount - The link count
  * @themeKey ais-StarRating__ratingCountSelected - The selected link count
  * @themeKey ais-StarRating__ratingCountDisabled - The disabled link count
+ * @themeKey ais-StarRating__noRefinement - present when there is no refinement
  * @translationKey ratingLabel - Label value for the rating link
  * @example
  * import React from 'react';

@@ -3,14 +3,14 @@
 import connect from './connectInfiniteHits.js';
 jest.mock('../core/createConnector');
 
-describe.only('connectInfiniteHits', () => {
+describe('connectInfiniteHits', () => {
   it('provides the current hits to the component', () => {
     const providedThis = {};
     const hits = [{}];
     const props = connect.getProvidedProps.call(providedThis, null, null, {
       results: {hits, page: 0, hitsPerPage: 2, nbPages: 3},
     });
-    expect(props.hits).toEqual(hits);
+    expect(props).toEqual({hits, hasMore: true});
   });
 
   it('accumulate hits internally', () => {
