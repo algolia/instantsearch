@@ -19,9 +19,10 @@ import MenuComponent from '../components/Menu.js';
  * @themeKey ais-Menu__itemLink - the item link
  * @themeKey ais-Menu__itemLabelSelected - the selected item label
  * @themeKey ais-Menu__itemLabel - the item label
- * @themeKey Menu__itemCount - the item count
- * @themeKey Menu__itemCountSelected - the selected item count
- * @themeKey showMore - the button that let the user toggle more results
+ * @themeKey ais-Menu__itemCount - the item count
+ * @themeKey ais-Menu__itemCountSelected - the selected item count
+ * @themeKey ais-Menu__noRefinement - present when there is no refinement
+ * @themeKey ais-Menu__showMore - the button that let the user toggle more results
  * @themeKey ais-Menu__SearchBox - the container of the search for facet values searchbox. See [the SearchBox documentation](widgets/SearchBox.html#classnames) for the classnames and translation keys of the SearchBox.
  * @translationkey showMore - The label of the show more button. Accepts one parameters, a boolean that is true if the values are expanded
  * @translationkey noResults - The label of the no results text when no search for facet values results are found.

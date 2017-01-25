@@ -7,14 +7,14 @@ const {getProvidedProps, getSearchParameters} = connect;
 
 describe('connectHits', () => {
   it('provides the current hits to the component', () => {
-    const hits = {};
+    const hits = [{}];
     const props = getProvidedProps(null, null, {results: {hits}});
-    expect(props.hits).toBe(hits);
+    expect(props).toEqual({hits});
   });
 
   it('doesn\'t render when no hits are available', () => {
     const props = getProvidedProps(null, null, {results: null});
-    expect(props).toBe(null);
+    expect(props).toEqual({hits: []});
   });
 
   it('should return the searchParameters unchanged', () => {

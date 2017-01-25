@@ -12,12 +12,12 @@ import {
   StarRating,
   RangeInput,
   Highlight,
+  Panel,
 } from 'react-instantsearch/dom';
 import {
   connectSearchBox,
   connectRefinementList,
   connectInfiniteHits,
-  connectMultiRange,
 } from 'react-instantsearch/connectors';
 import 'react-instantsearch-theme-algolia/style.scss';
 
@@ -57,9 +57,8 @@ const Facets = () =>
         }}
       />
 
-      <SideBarSection
-        title="Show results for"
-        items={[
+      <section className="facet-wrapper">
+        <div className="facet-category-title facet">Show results for</div>
           <HierarchicalMenu
             key="categories"
             attributes={[
@@ -67,67 +66,28 @@ const Facets = () =>
               'sub_category',
               'sub_sub_category',
             ]}
-          />,
-        ]}
-      />
+          />
+      </section>
 
-      <SideBarSection
-        title="Refine by"
-        items={[
-          <RefinementListWithTitle
-            title="Type"
-            key="Type"
-            item={<RefinementList attributeName="type" operator="or" limitMin={5} searchForFacetValues/>}
-          />,
-          <RefinementListWithTitle
-            title="Materials"
-            key="Materials"
-            item={<RefinementList attributeName="materials" operator="or" limitMin={5} searchForFacetValues/>}
-          />,
-          <RefinementListWithTitle
-            title="Color"
-            key="Color"
-            item={<ConnectedColorRefinementList attributeName="colors" operator="or"/>}
-          />,
-          <RefinementListWithTitle
-            title="Rating"
-            key="rating"
-            item={<StarRating attributeName="rating" max={5}/>}
-          />,
-          <RefinementListWithTitle
-            title="Price"
-            key="Price"
-            item={ <CustomPriceRanges
-              attributeName="price"
-              items={[
-                {end: 10},
-                {start: 10, end: 20},
-                {start: 20, end: 50},
-                {start: 50, end: 100},
-                {start: 100, end: 300},
-                {start: 300, end: 500},
-                {start: 500},
-              ]}
-            />}
-          />,
-          <RangeInput key="price_input" attributeName="price" />,
-        ]}
-      />
+      <section className="facet-wrapper">
+        <div className="facet-category-title facet">RefineBy</div>
+          <Panel title="Type">
+            <RefinementList attributeName="type" operator="or" limitMin={5} searchForFacetValues/>
+          </Panel>
+          <Panel
+            title="Materials">
+            <RefinementList attributeName="materials" operator="or" limitMin={5} searchForFacetValues/>
+          </Panel>
+            <ConnectedColorRefinementList attributeName="colors" operator="or"/>
+          <Panel title="Rating">
+          <StarRating attributeName="rating" max={5}/>
+          </Panel>
+          <Panel title="Price">
+            <RangeInput key="price_input" attributeName="price" />
+          </Panel>
+      </section>
       <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
-    </aside>
-  ;
-
-const SideBarSection = ({title, items}) =>
-  <section className="facet-wrapper">
-    <div className="facet-category-title facet">{title}</div>
-    {items.map(i => i)}
-  </section>;
-
-const RefinementListWithTitle = ({title, item}) =>
-  <div>
-    <div className="facet-title">{title}</div>
-    {item}
-  </div>;
+    </aside>;
 
 const CustomSearchBox = ({currentRefinement, refine}) =>
     <div className="input-group">
@@ -160,7 +120,8 @@ const ColorItem = ({item, createURL, refine}) => {
 };
 
 const CustomColorRefinementList = ({items, refine, createURL}) =>
-    <div>
+    items.length > 0 ? <div>
+      <h5 className={'ais-Panel__Title'}>Colors</h5>
       {items.map(item =>
         <ColorItem
           key={item.label}
@@ -169,8 +130,7 @@ const CustomColorRefinementList = ({items, refine, createURL}) =>
           createURL={createURL}
         />
       )}
-    </div>
-  ;
+    </div> : null;
 
 function CustomHits({hits, refine, hasMore}) {
   const loadMoreButton = hasMore ?
@@ -246,58 +206,6 @@ const CustomResults = createConnector({
     );
   }
 });
-
-const CustomPriceRanges = connectMultiRange(React.createClass({
-  checkIfNeedReset(value) {
-    const selectedItem = this.props.selectedItem === value ? '' : value;
-    this.props.refine(selectedItem);
-  },
-
-  filteredItems(items) {
-    let filteredItems = items;
-    if (!(this.props.selectedItem === '')) {
-      filteredItems = items.filter(i => this.props.selectedItem === i.value);
-    }
-    return filteredItems;
-  },
-
-  render() {
-    const {items, refine} = this.props;
-    const ranges = this.filteredItems(items).map(item => {
-      const min = parseFloat(item.value.split(':')[0]);
-      const max = parseFloat(item.value.split(':')[1]);
-
-      let label;
-      if (Number.isNaN(min)) {
-        label = `≤$${max}`;
-      } else if (Number.isNaN(max)) {
-        label = `≥$${min}`;
-      } else {
-        label = `$${min} - $${max}`;
-      }
-
-      return <PriceRange label={label} key={item.value} value={item.value}
-                         refine={refine} onClick={this.checkIfNeedReset}/>;
-    });
-
-    return (
-      <ul className="ais-price-ranges--list">
-        {ranges}
-      </ul>
-    );
-  },
-}));
-
-const PriceRange = ({label, value, onClick}) =>
-  <li className="ais-price-ranges--item">
-    <a
-      key={value}
-      onClick={onClick.bind(null, value)}
-      className="ais-price-ranges--link"
-    >
-      {label}
-    </a>
-  </li>;
 
 const ConnectedSearchBox = connectSearchBox(CustomSearchBox);
 const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {RangeInput} from '../packages/react-instantsearch/dom';
+import {RangeInput, Panel, SearchBox} from '../packages/react-instantsearch/dom';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -20,5 +20,20 @@ stories.add('default', () =>
                   max={number('max', 300)}
                   translations={object('translate', {submit: ' go', separator: 'to'})}
     />
+  </WrapWithHits>
+).add('with panel', () =>
+  <WrapWithHits>
+      <Panel title="Price">
+        <RangeInput attributeName="price"/>
+      </Panel>
+  </WrapWithHits>
+).add('with panel but no refinement', () =>
+  <WrapWithHits searchBox={false}>
+      <Panel title="Price">
+         <RangeInput attributeName="price"/>
+         <div style={{display: 'none'}}>
+            <SearchBox defaultRefinement="ds" />
+         </div>
+      </Panel>
   </WrapWithHits>
 );

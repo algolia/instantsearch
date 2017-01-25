@@ -16,13 +16,9 @@ export default createConnector({
   displayName: 'AlgoliaHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    if (!searchResults.results) {
-      return null;
-    }
+    const hits = searchResults.results ? searchResults.results.hits : [];
 
-    return {
-      hits: searchResults.results.hits,
-    };
+    return {hits};
   },
 
   /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.

@@ -20,6 +20,7 @@ import PaginationComponent from '../components/Pagination.js';
  * @themeKey ais-Pagination__itemDisabled - a disabled item
  * @themeKey ais-Pagination__itemSelected - a selected item
  * @themeKey ais-Pagination__itemLink - The link of an item
+ * @themeKey ais-Pagination__noRefinement - present when there is no refinement
  * @translationKey previous - Label value for the previous page link
  * @translationKey next - Label value for the next page link
  * @translationKey first - Label value for the first page link

@@ -29,7 +29,9 @@ import React from 'react';
   },
 
   componentWillReceiveProps(sliderState) {
-    this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+    if (sliderState.canRefine) {
+      this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+    }
   },
 
   onValuesUpdated(sliderState) {

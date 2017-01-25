@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Pagination} from '../packages/react-instantsearch/dom';
+import {Pagination, Panel, SearchBox} from '../packages/react-instantsearch/dom';
 import {withKnobs, boolean, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -34,5 +34,20 @@ stories.add('default', () =>
       pagesPadding={number('pages Padding', 2)}
       maxPages={number('max Pages', 3)}
     />
+  </WrapWithHits>
+).add('with panel', () =>
+  <WrapWithHits>
+      <Panel title="Pages">
+        <Pagination/>
+      </Panel>
+  </WrapWithHits>
+).add('with panel but no refinement', () =>
+  <WrapWithHits searchBox={false}>
+      <Panel title="Pages">
+         <Pagination/>
+         <div style={{display: 'none'}}>
+            <SearchBox defaultRefinement="ds" />
+         </div>
+      </Panel>
   </WrapWithHits>
 );

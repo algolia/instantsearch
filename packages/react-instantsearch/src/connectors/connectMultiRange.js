@@ -80,6 +80,7 @@ export default createConnector({
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
+      canRefine: items.length > 0,
     };
   },
 

@@ -130,15 +130,21 @@ export default createConnector({
       Boolean(results.getFacetByName(id));
 
     if (!isFacetPresent) {
-      return null;
+      return {
+        items: [],
+        currentRefinement: getCurrentRefinement(props, searchState),
+        canRefine: false,
+      };
     }
 
     const limit = showMore ? limitMax : limitMin;
     const value = results.getFacetValues(id, {sortBy});
     const items = value.data ? transformValue(value.data, limit, props, searchState) : [];
+
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement: getCurrentRefinement(props, searchState),
+      canRefine: items.length > 0,
     };
   },
 
