@@ -85,7 +85,7 @@ const Content = React.createClass({
     return (
       <div>
         <AppBar
-          title={isMobile ? '' : 'AMAZING'}
+          title={isMobile ? '' : 'SHOP'}
           onLeftIconButtonTouchTap={this.drawerAction}
           className="Header__appBar"
         >
