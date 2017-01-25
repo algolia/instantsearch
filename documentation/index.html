@@ -3125,8 +3125,10 @@ This widget lets you send search data to your analytic services like Google Anal
         <pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">search</span> <span class="o">=</span> <span class="nx">instantsearch</span><span class="p">({</span>
   <span class="p">[...],</span>
   <span class="nx">searchParameters</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">hierarchicalFacetsRefinements</span><span class="o">:</span> <span class="p">{</span> <span class="c1">// menu is implemented as a hierarchicalFacetsRefinements</span>
+ <span class="err"> </span> <span class="err"> </span>  <span class="nx">categories</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Cell Phones&#39;</span><span class="p">]</span>
+ <span class="err"> </span>  <span class="p">},</span>
     <span class="nx">facetsRefinements</span><span class="o">:</span> <span class="p">{</span>
-      <span class="nx">categories</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;Cell Phones&#39;</span><span class="p">],</span>
       <span class="nx">isPremium</span><span class="o">:</span> <span class="p">[</span><span class="kc">true</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="nx">disjunctiveFacetsRefinements</span><span class="o">:</span> <span class="p">{</span>
@@ -3162,7 +3164,7 @@ load. Maybe automatically filter on <code>Cell Phones</code> made by either <cod
 
   <p>If you are already using a widget to perform a filter on that attribute (like
 the <code>menu</code> or <code>refinementList</code> widgets), you can just use the
-<code>searchParameters.facetsRefinements</code> attribute option when instantiating instantsearch.</p>
+<code>searchParameters.facetsRefinements</code> or <code>searchParameters.disjunctiveFacetsRefinements</code> (for refinementList) and <code>searchParameters.hierarchicalFacetsRefinements</code> (for menu) attribute option when instantiating instantsearch.</p>
 
   <p>Pass it an object where each key is the attribute you want to filter and each
 value is an array of the filtered values.  If you are using <code>OR</code> filters instead
