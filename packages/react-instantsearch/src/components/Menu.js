@@ -21,11 +21,24 @@ class Menu extends Component {
       isRefined: PropTypes.bool.isRequired,
     })),
     isFromSearch: PropTypes.bool.isRequired,
+    canRefine: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     transformItems: PropTypes.func,
   };
+
+  static contextTypes = {
+    canRefine: PropTypes.func,
+  };
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.context.canRefine) this.context.canRefine(props.canRefine);
+  }
 
   renderItem = item => {
     const {refine, createURL} = this.props;
@@ -67,6 +80,7 @@ class Menu extends Component {
           'limitMax',
           'isFromSearch',
           'searchForFacetValues',
+          'canRefine',
         ])}
       />
     );

@@ -9,21 +9,34 @@ class RangeInput extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
-    min: PropTypes.number.isRequired,
-    max: PropTypes.number.isRequired,
+    min: PropTypes.number,
+    max: PropTypes.number,
     currentRefinement: PropTypes.shape({
       min: PropTypes.number,
       max: PropTypes.number,
-    }).isRequired,
+    }),
+    canRefine: PropTypes.bool.isRequired,
+  };
+
+  static contextTypes = {
+    canRefine: PropTypes.func,
   };
 
   constructor(props) {
     super(props);
-    this.state = {from: props.currentRefinement.min, to: props.currentRefinement.max};
+    this.state = this.props.canRefine ?
+      {from: props.currentRefinement.min, to: props.currentRefinement.max} : {from: '', to: ''};
+  }
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({from: nextProps.currentRefinement.min, to: nextProps.currentRefinement.max});
+    if (nextProps.canRefine) {
+      this.setState({from: nextProps.currentRefinement.min, to: nextProps.currentRefinement.max});
+    }
+    if (this.context.canRefine) this.context.canRefine(nextProps.canRefine);
   }
 
   onSubmit = e => {
@@ -35,9 +48,9 @@ class RangeInput extends Component {
   };
 
   render() {
-    const {translate} = this.props;
+    const {translate, canRefine} = this.props;
     return (
-      <form {...cx('root')} onSubmit={this.onSubmit}>
+      <form {...cx('root', !canRefine && 'noRefinement')} onSubmit={this.onSubmit}>
         <label {...cx('labelMin')}>
           <input {...cx('inputMin')}
                  type="number" value={this.state.from} onChange={e => this.setState({from: e.target.value})}

@@ -20,6 +20,7 @@ describe('StarRating', () => {
           {value: '3', count: 3},
           {value: '4', count: 4},
           {value: '5', count: 5}]}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -41,6 +42,7 @@ describe('StarRating', () => {
           {value: '3', count: 3},
           {value: '4', count: 4},
           {value: '5', count: 5}]}
+        canRefine={true}
       />
     ).toJSON();
     expect(tree).toMatchSnapshot();
@@ -59,6 +61,7 @@ describe('StarRating', () => {
       {value: '3', count: 3},
       {value: '4', count: 3},
       {value: '5', count: 0}]}
+    canRefine={true}
   />;
 
   beforeEach(() => {
@@ -135,5 +138,27 @@ describe('StarRating', () => {
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual({min: 1, max: 5});
     wrapper.unmount();
+  });
+  describe('Panel compatibility', () => {
+    it('Should indicate when no more refinement', () => {
+      const canRefine = jest.fn();
+      const wrapper = mount(
+        starRating,
+        {
+          context: {canRefine},
+          childContextTypes: {canRefine: React.PropTypes.func},
+        },
+      );
+
+      expect(canRefine.mock.calls.length).toBe(1);
+      expect(canRefine.mock.calls[0][0]).toEqual(true);
+      expect(wrapper.find('.ais-StarRating__noRefinement').length).toBe(0);
+
+      wrapper.setProps({canRefine: false});
+
+      expect(canRefine.mock.calls.length).toBe(2);
+      expect(canRefine.mock.calls[1][0]).toEqual(false);
+      expect(wrapper.find('.ais-StarRating__noRefinement').length).toBe(1);
+    });
   });
 });

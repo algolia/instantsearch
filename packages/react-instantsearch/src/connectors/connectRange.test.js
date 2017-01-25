@@ -24,6 +24,7 @@ describe('connectRange', () => {
       max: 10,
       currentRefinement: {min: 5, max: 10},
       count: [],
+      canRefine: true,
     });
 
     const results = {
@@ -37,10 +38,11 @@ describe('connectRange', () => {
       max: 10,
       currentRefinement: {min: 5, max: 10},
       count: [{value: '5', count: 10}, {value: '2', count: 20}],
+      canRefine: true,
     });
 
     props = getProvidedProps({attributeName: 'ok'}, {ok: {min: 6, max: 9}}, {});
-    expect(props).toBe(null);
+    expect(props).toEqual({canRefine: false});
 
     props = getProvidedProps({
       attributeName: 'ok',
@@ -54,6 +56,7 @@ describe('connectRange', () => {
       max: 10,
       currentRefinement: {min: 6, max: 9},
       count: [],
+      canRefine: true,
     });
 
     props = getProvidedProps({
@@ -68,6 +71,7 @@ describe('connectRange', () => {
       max: 10,
       currentRefinement: {min: 6, max: 9},
       count: [],
+      canRefine: true,
     });
 
     props = getProvidedProps({
@@ -81,6 +85,7 @@ describe('connectRange', () => {
       max: 10,
       currentRefinement: {min: 6, max: 9},
       count: [],
+      canRefine: true,
     });
   });
 

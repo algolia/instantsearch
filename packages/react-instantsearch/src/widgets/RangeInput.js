@@ -16,6 +16,7 @@ import RangeInputComponent from '../components/RangeInput.js';
  * @themeKey ais-RangeInput__labelMax - The label for the max input
  * @themeKey ais-RangeInput__inputMax - The max input
  * @themeKey ais-RangeInput__submit - The submit button
+ * @themeKey ais-RangeInput__noRefinement - present when there is no refinement
  * @translationKey submit - Label value for the submit button
  * @translationKey separator - Label value for the input separator
  * @example

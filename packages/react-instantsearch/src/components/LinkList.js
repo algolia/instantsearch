@@ -34,12 +34,13 @@ export default class LinkList extends Component {
       PropTypes.object,
     ]),
     onSelect: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
   };
 
   render() {
-    const {cx, createURL, items, selectedItem, onSelect} = this.props;
+    const {cx, createURL, items, selectedItem, onSelect, canRefine} = this.props;
     return (
-      <ul {...cx('root')}>
+      <ul {...cx('root', !canRefine && 'noRefinement')}>
         {items.map(item =>
           <li
             key={has(item, 'key') ? item.key : item.value}

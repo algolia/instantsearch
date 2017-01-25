@@ -91,7 +91,7 @@ describe('createInstantSearchManager', () => {
       });
     });
     describe('on search for facet values', () => {
-      it.only('updates the store and searches', () => {
+      it('updates the store and searches', () => {
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},

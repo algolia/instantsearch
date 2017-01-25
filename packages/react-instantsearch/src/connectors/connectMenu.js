@@ -69,17 +69,24 @@ export default createConnector({
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
 
-    const isFacetPresent =
+    const canRefine =
       Boolean(results) &&
       Boolean(results.getFacetByName(attributeName));
-
-    if (!isFacetPresent) {
-      return null;
-    }
 
     const isFromSearch = Boolean(searchForFacetValuesResults
       && searchForFacetValuesResults[attributeName]
       && searchForFacetValuesResults.query !== '');
+    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
+
+    if (!canRefine) {
+      return {
+        items: [],
+        currentRefinement: getCurrentRefinement(props, searchState),
+        isFromSearch,
+        searchForFacetValues,
+        canRefine,
+      };
+    }
 
     const items = isFromSearch
       ? searchForFacetValuesResults[attributeName]
@@ -100,8 +107,6 @@ export default createConnector({
           isRefined: v.isRefined,
         }));
 
-    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
-
     const sortedItems = !isFromSearch && props.searchForFacetValues ?
       orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc']) : items;
     const transformedItems = props.transformItems ? props.transformItems(sortedItems) : sortedItems;
@@ -111,6 +116,7 @@ export default createConnector({
       currentRefinement: getCurrentRefinement(props, searchState),
       isFromSearch,
       searchForFacetValues,
+      canRefine: items.length > 0,
     };
   },
 

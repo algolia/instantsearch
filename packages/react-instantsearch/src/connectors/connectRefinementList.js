@@ -88,17 +88,24 @@ export default createConnector({
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
 
-    const isFacetPresent =
+    const canRefine =
       Boolean(results) &&
       Boolean(results.getFacetByName(attributeName));
-
-    if (!isFacetPresent) {
-      return null;
-    }
 
     const isFromSearch = Boolean(searchForFacetValuesResults
       && searchForFacetValuesResults[attributeName]
       && searchForFacetValuesResults.query !== '');
+    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
+
+    if (!canRefine) {
+      return {
+        items: [],
+        currentRefinement: getCurrentRefinement(props, searchState),
+        canRefine,
+        isFromSearch,
+        searchForFacetValues,
+      };
+    }
 
     const items = isFromSearch
       ? searchForFacetValuesResults[attributeName]
@@ -119,13 +126,13 @@ export default createConnector({
         }));
 
     const transformedItems = props.transformItems ? props.transformItems(items) : items;
-    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
 
     return {
       items: transformedItems.slice(0, limit),
       currentRefinement: getCurrentRefinement(props, searchState),
       isFromSearch,
       searchForFacetValues,
+      canRefine: items.length > 0,
     };
   },
 

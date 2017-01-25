@@ -9,6 +9,7 @@ import Pagination from './Pagination';
 const REQ_PROPS = {
   createURL: () => '#',
   refine: () => null,
+  canRefine: true,
 };
 
 const DEFAULT_PROPS = {
@@ -301,5 +302,30 @@ describe('Pagination', () => {
     el.simulate('click', {metaKey: true});
     el.simulate('click', {shiftKey: true});
     expect(refine.mock.calls.length).toBe(0);
+  });
+  it('Should indicate when no more refinement', () => {
+    const refine = jest.fn();
+    const canRefine = jest.fn();
+    const wrapper = mount(
+      <Pagination
+        {...DEFAULT_PROPS}
+        refine={refine}
+      canRefine={true}
+    />,
+      {
+        context: {canRefine},
+        childContextTypes: {canRefine: React.PropTypes.func},
+      },
+    );
+
+    expect(canRefine.mock.calls.length).toBe(1);
+    expect(canRefine.mock.calls[0][0]).toEqual(true);
+    expect(wrapper.find('.ais-Pagination__noRefinement').length).toBe(0);
+
+    wrapper.setProps({canRefine: false});
+
+    expect(canRefine.mock.calls.length).toBe(2);
+    expect(canRefine.mock.calls[1][0]).toEqual(false);
+    expect(wrapper.find('.ais-Pagination__noRefinement').length).toBe(1);
   });
 });

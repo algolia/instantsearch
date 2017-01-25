@@ -25,17 +25,25 @@ describe('connectMenu', () => {
       getFacetByName: () => true,
     };
 
-    props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
+    props = getProvidedProps({attributeName: 'ok'}, {}, {});
+    expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
+
+    props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
-    expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false});
+    expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false,
+      canRefine: false, searchForFacetValues: undefined});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -160,11 +168,6 @@ describe('connectMenu', () => {
       isRefined: true,
       count: 20,
     }]);
-  });
-
-  it('doesn\'t render when no results are available', () => {
-    props = getProvidedProps({attributeName: 'ok'}, {}, {});
-    expect(props).toBe(null);
   });
 
   it('calling refine updates the widget\'s search state', () => {

@@ -46,6 +46,7 @@ class Pagination extends Component {
     currentRefinement: PropTypes.number.isRequired,
     refine: PropTypes.func.isRequired,
     createURL: PropTypes.func.isRequired,
+    canRefine: PropTypes.bool.isRequired,
 
     translate: PropTypes.func.isRequired,
     listComponent: PropTypes.func,
@@ -72,6 +73,18 @@ class Pagination extends Component {
     pagesPadding: 3,
     maxPages: Infinity,
   };
+
+  static contextTypes = {
+    canRefine: PropTypes.func,
+  };
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.context.canRefine) this.context.canRefine(props.canRefine);
+  }
 
   getItem(modifier, translationKey, value) {
     const {
