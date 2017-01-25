@@ -332,6 +332,57 @@ search.addWidget(
   })
 );
 
+function customMenuRender(opts, isFirstRendering) {
+  const container = opts.containerNode;
+
+  let input;
+  if (isFirstRendering) {
+    input = document.createElement('select');
+    input.refine = opts.toggleRefinement;
+    input.addEventListener('change', e => {
+      input.refine(e.target.value);
+    });
+    container.innerHTML = '<div class="ais-toggle--header facet-title ais-header">Custom categories</div>';
+    container.appendChild(input);
+  } else {
+    input = container.querySelector('select');
+  }
+
+  input.refine = opts.toggleRefinement;
+
+  const facetValues = opts.facetValues;
+  const facetOptions = facetValues.map(f => {
+    const option = document.createElement('option');
+    option.innerHTML = f.name;
+    option.value = f.path;
+    option.selected = f.isRefined;
+    return option;
+  });
+  const isValueSelected = facetValues.find(f => f.isRefined);
+
+  const noValue = document.createElement('option');
+  noValue.value = '';
+  noValue.innerHTML = '';
+  noValue.selected = !isValueSelected;
+
+  input.innerHTML = '';
+
+  input.appendChild(noValue);
+  if (facetOptions.length > 0) {
+    facetOptions.forEach(o => {
+      input.appendChild(o);
+    });
+  }
+}
+
+search.addWidget(
+  instantsearch.widgets.menu({
+    container: '#custom-categories',
+    attributeName: 'categories',
+    limit: 3,
+  }).setCustomRender(customMenuRender)
+);
+
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
