@@ -15,30 +15,30 @@ Here's the `searchState` shape for all the connectors or widgets that we provide
 {
   const searchState = {
     range: {
-      attributeName: {
-        min: 2,
-        max: 3
+      price: {
+        min: 20,
+        max: 3000
       }
     },
     refinementList: {
-      attributeName: ['lemon', 'orange']
+      fruits: ['lemon', 'orange']
     },
     hierarchicalMenu: {
-      attributeName: 'fruits > orange'
+      products: 'Laptops > Surface'
     },
     menu: {
-      attributeName: 'orange'
+      brands: 'Sony'
     },
     multiRange: {
-      attributeName: '2:3'
+      rank: '2:5'
     },
     toggle: {
-      attributeName: true
+      freeShipping: true
     },
     hitsPerPage: 10,
     sortBy: 'mostPopular',
     query: 'ora',
-    page: 2 //use by both (connect)Pagination and (connect)InfiniteHits
+    page: 2
   }
 }
 ```

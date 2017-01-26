@@ -24,7 +24,7 @@ If activated, the widget should display an input to search for facet values.
 <a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
 
 ```javascript
-<RefinementList attributeName="attributeName" searchForFacetValues/>
+<RefinementList attributeName="brands" searchForFacetValues/>
 ```
 
 ### Menu
@@ -69,7 +69,7 @@ const RefinementListWithSFFV = connectRefinementList(props => {
   );
 });
 
-<RefinementListWithSFFV attributeName="attributeName" searchForFacetValues/>
+<RefinementListWithSFFV attributeName="brands" searchForFacetValues/>
 ```
 The concept is identical when using the `connectMenu` connector.
 
