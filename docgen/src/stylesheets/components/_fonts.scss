@@ -135,17 +135,6 @@ h4 {
 /* codes
 ====================*/
 
-p > code,
-code  {
-  border: 1px dotted rgba(black, 0.15);
-  padding: 4px 8px;
-  border-radius: 3px;
-
-  @include small-mq {
-    word-break: break-all;
-  }
-}
-
 pre code {
   border: none;
   padding: inherit;
