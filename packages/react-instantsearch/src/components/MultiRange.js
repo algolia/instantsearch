@@ -12,7 +12,7 @@ class MultiRange extends Component {
     })).isRequired,
     refine: PropTypes.func.isRequired,
     transformItems: PropTypes.func,
-    canRefine: PropTypes.bool.isRefined,
+    canRefine: PropTypes.bool.isRequired,
   };
 
   renderItem = item => {
