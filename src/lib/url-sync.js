@@ -23,7 +23,6 @@ function timerMaker(t0) {
  * @property {string} character the character used in the url
  * @property {function} onpopstate add an event listener for the URL change
  * @property {function} pushState creates a new entry in the browser history
- * @property {function} replaceState update the current entry of the browser history
  * @property {function} readUrl reads the query string of the parameters
  */
 
@@ -38,9 +37,6 @@ const hashUrlUtils = {
   },
   pushState(qs) {
     window.location.assign(getFullURL(this.createURL(qs)));
-  },
-  replaceState(qs) {
-    window.location.replace(getFullURL(this.createURL(qs)));
   },
   createURL(qs) {
     return window.location.search + this.character + qs;
@@ -61,9 +57,6 @@ const modernUrlUtils = {
   },
   pushState(qs, {getHistoryState}) {
     window.history.pushState(getHistoryState(), '', getFullURL(this.createURL(qs)));
-  },
-  replaceState(qs, {getHistoryState}) {
-    window.history.replaceState(getHistoryState(), '', getFullURL(this.createURL(qs)));
   },
   createURL(qs) {
     return this.character + qs + document.location.hash;
@@ -95,9 +88,6 @@ class URLSync {
     this.mapping = options.mapping || {};
     this.getHistoryState = options.getHistoryState || (() => null);
     this.threshold = options.threshold || 700;
-    this.updateOnEveryKeyStroke = options.updateOnEveryKeyStroke !== undefined ?
-      options.updateOnEveryKeyStroke :
-      true;
     this.trackedParameters = options.trackedParameters || ['query', 'attribute:*', 'index', 'page', 'hitsPerPage'];
 
     this.searchParametersFromUrl = AlgoliaSearchHelper
@@ -153,15 +143,6 @@ class URLSync {
         safe: true,
       }
     );
-
-    if (this.updateOnEveryKeyStroke === true) {
-      if (this.timer() < this.threshold) {
-        this.urlUtils.replaceState(qs, {getHistoryState: this.getHistoryState});
-      } else {
-        this.urlUtils.pushState(qs, {getHistoryState: this.getHistoryState});
-      }
-      return;
-    }
 
     clearTimeout(this.urlUpdateTimeout);
     this.urlUpdateTimeout = setTimeout(() => {
