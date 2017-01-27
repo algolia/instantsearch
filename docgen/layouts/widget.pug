@@ -44,7 +44,7 @@ block content
             td(colspan=3)!=h.markdown(type.description)
   else
     p This widget does not accept props.
-  h2#classnames Classnames
+  h2#classnames CSS classes
     a.anchor(href=`${navPath}#classnames`)
   if themekey
     table.api
@@ -53,7 +53,7 @@ block content
           tr.api-entry-values
             td.api-entry-name
               - var themeId = `default-theme-entry-${name}-${type.key}`;
-              div.api-entry(id=themeId)=type.key
+              div.api-entry(id=themeId)=`.${type.key} {}`
                 a.anchor(href=`${navPath}#${themeId}`)
           tr.api-entry-description
             td(colspan=3)!=h.markdown(type.description)
