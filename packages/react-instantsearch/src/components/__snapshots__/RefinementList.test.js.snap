@@ -198,7 +198,7 @@ exports[`RefinementList default refinement list 1`] = `
 </div>
 `;
 
-exports[`RefinementList refinement list with search for facet values but no search results 1`] = `
+exports[`RefinementList refinement list with search inside items but no search results 1`] = `
 <div>
   <div
     className="ais-RefinementList__root">
@@ -339,7 +339,7 @@ exports[`RefinementList refinement list with search for facet values but no sear
 </div>
 `;
 
-exports[`RefinementList refinement list with search for facet values with search results 1`] = `
+exports[`RefinementList refinement list with search inside items with search results 1`] = `
 <div>
   <div
     className="ais-RefinementList__root">

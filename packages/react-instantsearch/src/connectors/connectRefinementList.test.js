@@ -27,19 +27,28 @@ describe('connectRefinementList', () => {
   it('provides the correct props to the component', () => {
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {});
     expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false});
 
     props = getProvidedProps({attributeName: 'ok'}, {refinementList: {ok: ['wat']}}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: ['wat']}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: ['wat'], isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false});
+
+    props = getProvidedProps({attributeName: 'ok', withSearchBox: true}, {}, {results});
+    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
+      canRefine: false, withSearchBox: true});
+
+    // searchForFacetValues is @deprecated. This test should be removed when searchForFacetValues is removed
+    props = getProvidedProps({attributeName: 'ok', searchForFacetValues: true}, {}, {results});
+    expect(props).toEqual({items: [], currentRefinement: [], isFromSearch: false,
+      canRefine: false, withSearchBox: true});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -285,7 +294,7 @@ describe('connectRefinementList', () => {
     expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 
-  it('calling searchForFacetValues return the right searchForFacetValues parameters', () => {
+  it('calling searchForItems return the right searchForItems parameters', () => {
     const parameters = searchForFacetValues({attributeName: 'ok'}, {}, 'yep');
     expect(parameters).toEqual({
       facetName: 'ok',

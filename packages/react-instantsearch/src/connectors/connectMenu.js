@@ -40,11 +40,13 @@ const sortBy = ['count:desc', 'name:asc'];
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
+ * @propType {boolean} [withSearchBox=false] - allow search inside values
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the Menu can display.
- * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
+ * @providedPropType {function} searchForItems - a function to toggle a search inside items values
+ * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search inside items.
  */
 export default createConnector({
   displayName: 'AlgoliaMenu',
@@ -56,6 +58,8 @@ export default createConnector({
     limitMax: PropTypes.number,
     defaultRefinement: PropTypes.string,
     transformItems: PropTypes.func,
+    withSearchBox: PropTypes.bool,
+    searchForFacetValues: PropTypes.bool, //@deprecated
   },
 
   defaultProps: {
@@ -68,7 +72,6 @@ export default createConnector({
     const {results} = searchResults;
     const {attributeName, showMore, limitMin, limitMax} = props;
     const limit = showMore ? limitMax : limitMin;
-
     const canRefine =
       Boolean(results) &&
       Boolean(results.getFacetByName(attributeName));
@@ -76,14 +79,19 @@ export default createConnector({
     const isFromSearch = Boolean(searchForFacetValuesResults
       && searchForFacetValuesResults[attributeName]
       && searchForFacetValuesResults.query !== '');
-    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
+    const withSearchBox = props.withSearchBox || props.searchForFacetValues;
+    if (props.searchForFacetValues && process.env.NODE_ENV === 'development') {
+      // eslint-disable-next-line no-console
+      console.warn('react-instantsearch: `searchForFacetValues` has been renamed to' +
+        '`withSearchBox`, this will break in the next major version.');
+    }
 
     if (!canRefine) {
       return {
         items: [],
         currentRefinement: getCurrentRefinement(props, searchState),
         isFromSearch,
-        searchForFacetValues,
+        withSearchBox,
         canRefine,
       };
     }
@@ -107,15 +115,14 @@ export default createConnector({
           isRefined: v.isRefined,
         }));
 
-    const sortedItems = !isFromSearch && props.searchForFacetValues ?
+    const sortedItems = withSearchBox && !isFromSearch ?
       orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc']) : items;
     const transformedItems = props.transformItems ? props.transformItems(sortedItems) : sortedItems;
-
     return {
       items: transformedItems.slice(0, limit),
       currentRefinement: getCurrentRefinement(props, searchState),
       isFromSearch,
-      searchForFacetValues,
+      withSearchBox,
       canRefine: items.length > 0,
     };
   },

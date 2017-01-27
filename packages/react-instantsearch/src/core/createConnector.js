@@ -189,16 +189,24 @@ export default function createConnector(connectorDesc) {
       const refineProps = hasRefine ?
         {refine: this.refine, createURL: this.createURL} :
         {};
-      const searchForFacetValuesProps = hasSearchForFacetValues ?
-        {searchForFacetValues: this.searchForFacetValues} :
-        {};
+      const searchForFacetValuesProps = hasSearchForFacetValues
+      ? {searchForItems: this.searchForFacetValues,
+        searchForFacetValues: (facetName, query) => {
+          if (process.env.NODE_ENV === 'development') {
+            // eslint-disable-next-line no-console
+            console.warn('react-instantsearch: `searchForFacetValues` has been renamed to' +
+            '`searchForItems`, this will break in the next major version.');
+          }
+          this.searchForFacetValues(facetName, query);
+        }}
+        : {};
 
       return (
         <Composed
-          {...searchForFacetValuesProps}
           {...this.props}
           {...this.state.props}
           {...refineProps}
+          {...searchForFacetValuesProps}
         />
       );
     }

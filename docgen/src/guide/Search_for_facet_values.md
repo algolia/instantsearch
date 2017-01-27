@@ -1,78 +1,49 @@
 ---
-title: Search for facet values
+title: Searching in *Lists
 mainTitle: Guide
 layout: main.pug
 category: guide
 navWeight: 68
 ---
-
-If you use the [`<RefinementList/>`](widgets/RefinementList.html), [`<Menu/>`](widgets/Menu.html) widgets
-or the [`connectRefinementList`](connectors/connectRefinementList.html), [`<connectMenu/>`](widgets/Menu.html)
-connectors then the end user can choose values for a specific facet. If a facet has a lot of possible values then you can decide
-to let the end user search inside them before selecting them. This feature is called search for facet values.
-
-In order for a facet to be searchable, it must be specified with the `searchable()` modifier. You can do it using [`attributesForFaceting`](https://www.algolia.com/doc/rest-api/search/#attributesforfaceting) or directly from your dashboard.
-
-## with widgets
-
-To activate the search for facet values when using the [`<RefinementList/>`](widgets/RefinementList.html) or the [`<Menu/>`](widgets/Menu.html) widget
-you need to pass the `searchForFacetValues` boolean as a prop.
-
-If activated, the widget should display an input to search for facet values.
-
-### RefinementList
+You can allow the user to search inside lists of items like [`<RefinementList/>`](widgets/RefinementList.html), [`<Menu/>`](widgets/Menu.html) widgets
+or [`connectRefinementList`](connectors/connectRefinementList.html) and [`<connectMenu/>`](widgets/Menu.html) connectors.
+## Using widgets
+Use the `withSearchBox` prop to add a nice search box to supported widgets:
+- [`<RefinementList/>`](widgets/RefinementList.html)
+- [`<Menu/>`](widgets/Menu.html)
+```javascript
+<RefinementList attributeName="products" withSearchBox />
+```
 <a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
-
-```jsx
-<RefinementList attributeName="attributeName" searchForFacetValues/>
-```
-
-### Menu
-<a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=Menu&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
-
-```jsx
-<Menu attributeName="category" searchForFacetValues/>
-```
-
-## with connectors
-
-When using the [`connectRefinementList`](connectors/connectRefinementList.html) or the [`connectMenu`](connectors/connectMenu.html)
-connector, you have two provided props related to the search for facet values behavior:
-
-* `isFromSearch`, If `true` this boolean indicate that the `items` prop contains the search for facet values results.
-* `searchForFacetValues`, a function to call when triggering the search for facet values. It takes one parameter, the search
-for facet values query.
-
-You will also need to pass the `searchForFacetValues` boolean as a prop.
-
-```jsx
+## Using connectors
+You can implement your own search box for searching for items in lists when using
+[`connectRefinementList`](connectors/connectRefinementList.html) or
+[`connectMenu`](connectors/connectMenu.html) by using those provided props.
+* `searchForItems(query)`, call this method with a search query to trigger a new search for items
+* `isFromSearch`, When `true` you are in search mode and the provided `items` are search items results
+```javascript
 import {connectRefinementList} from '../packages/react-instantsearch/connectors';
 import {Highlight} from '../packages/react-instantsearch/dom';
-
-const RefinementListWithSFFV = connectRefinementList(props => {
+const RefinementListWithSearchBox = connectRefinementList(props => {
   const values = props.items.map(item => {
     const label = item._highlightResult
       ? <Highlight attributeName="label" hit={item}/>
       : item.label;
-
     return <li key={item.value}>
-      <a onClick={() => props.refine(item.value)}>
+      <span onClick={() => props.refine(item.value)}>
         {label} {item.isRefined ? '- selected' : ''}
       </a>
     </li>;
   });
   return (
     <div>
-      <input type="search" onChange={e => props.searchForFacetValues(e.target.value)}/>
+      <input type="search" onInput={e => props.searchForItems(e.target.value)}/>
       <ul>{values}</ul>
     </div>
   );
 });
-
-<RefinementListWithSFFV attributeName="brands" searchForFacetValues/>
+<RefinementListWithSearchBox attributeName="products"/>
 ```
-The concept is identical when using the `connectMenu` connector.
-
 <div class="guide-nav">
     <div class="guide-nav-left">
         Previous: <a href="guide/Default_refinements.html">← Default refinements</a>

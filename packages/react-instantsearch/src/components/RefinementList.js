@@ -15,7 +15,8 @@ class RefinementList extends Component {
   static propTypes = {
     translate: PropTypes.func.isRequired,
     refine: PropTypes.func.isRequired,
-    searchForFacetValues: PropTypes.func,
+    searchForItems: PropTypes.func.isRequired,
+    withSearchBox: PropTypes.bool,
     createURL: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.string.isRequired,
@@ -85,7 +86,8 @@ class RefinementList extends Component {
             'limitMin',
             'limitMax',
             'isFromSearch',
-            'searchForFacetValues',
+            'searchForItems',
+            'withSearchBox',
             'canRefine',
           ])}
         />

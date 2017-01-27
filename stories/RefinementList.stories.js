@@ -29,9 +29,9 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
-).add('with search for facets value', () =>
+).add('with search inside items', () =>
   <WrapWithHits>
-    <RefinementList attributeName="category" searchForFacetValues/>
+    <RefinementList attributeName="category" withSearchBox/>
   </WrapWithHits>
 ).add('with the sort strategy changed', () =>
   <WrapWithHits>
