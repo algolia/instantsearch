@@ -69,7 +69,7 @@ const RefinementListWithSFFV = connectRefinementList(props => {
   );
 });
 
-<RefinementListWithSFFV attributeName="attributeName" searchForFacetValues/>
+<RefinementListWithSFFV attributeName="brands" searchForFacetValues/>
 ```
 The concept is identical when using the `connectMenu` connector.
 

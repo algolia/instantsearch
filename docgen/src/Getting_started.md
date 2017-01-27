@@ -249,7 +249,7 @@ import {InstantSearch, Hits, SearchBox, Highlight, RefinementList} from 'react-i
 
 function Search() {
   return (
-    <div className='container'>
+    <div className="container">
       <SearchBox />
       <RefinementList attributeName="category" />
       <Hits hitComponent={Product} />
@@ -287,7 +287,7 @@ Pagination, CurrentRefinements, ClearAll} from 'react-instantsearch/dom';
 
 function Search() {
   return (
-    <div className='container'>
+    <div className="container">
       <CurrentRefinements/>
       <ClearAll/>
       <SearchBox />

@@ -23,7 +23,7 @@ Highlighting is based on the results and you will need to make a custom Hit in o
 to use the Highlighter. The Highlight and the Snippet widgets takes two props:
  - attributeName: the path to the highlighted attribute
  - hit: a single result object
- 
+
 **Notes:**
 * Use the `<Highlight>` widget when you want to display the regular value of an attribute.
 * Use the `<Snippet>` widget when you want to display the snippet version of an attribute.
@@ -38,7 +38,7 @@ import {InstantSearch, Hits, Highlight} from 'InstantSearch';
 
 const Hit = ({hit}) =>
 <p>
-  <Highlight attributeName='description' hit={hit}/>
+  <Highlight attributeName="description" hit={hit}/>
 </p>;
 
 export default function App() {
