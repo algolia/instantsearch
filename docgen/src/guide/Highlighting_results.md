@@ -31,7 +31,7 @@ to use the Highlighter. The Highlight and the Snippet widgets takes two props:
 Here is an example in which we create a custom Hit widget for results that have a
 `description` field that is highlighted.
 
-```javascript
+```jsx
 import React from 'react';
 
 import {InstantSearch, Hits, Highlight} from 'InstantSearch';
@@ -68,7 +68,7 @@ is used, therefore it's reasonable to have them as props.
 Here is an example of a custom Highlight widget. It can be used the same
 way as the [widgets](guide/Highlighting_results.html#highlight-and-snippet-widgets).
 
-```javascript
+```jsx
 const CustomHighlight = connectHighlight(({highlight, attributeName, hit}) => {
   const parsedHit = highlight({attributeName, hit, highlightProperty: 'highlightProperty'});
   return parsedHit.map(part => {
