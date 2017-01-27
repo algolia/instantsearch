@@ -87,10 +87,19 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
 
     figure {
       margin-top: 1em;
+      position: relative;
 
       img {
         max-width: 500px;
         margin: 0.5em 0;
+      }
+
+      .editOnGitHub {
+        position: absolute;
+        bottom: 3px;
+        font-size: 12px;
+        left: 0;
+        line-height: 1;
       }
     }
 
@@ -328,4 +337,3 @@ $css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
 .documentation .hero-container {
   top: 0;
 }
-
