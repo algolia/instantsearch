@@ -23,14 +23,14 @@ If activated, the widget should display an input to search for facet values.
 ### RefinementList
 <a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
 
-```javascript
+```jsx
 <RefinementList attributeName="attributeName" searchForFacetValues/>
 ```
 
 ### Menu
 <a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=Menu&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
 
-```javascript
+```jsx
 <Menu attributeName="category" searchForFacetValues/>
 ```
 
@@ -45,7 +45,7 @@ for facet values query.
 
 You will also need to pass the `searchForFacetValues` boolean as a prop.
 
-```javascript
+```jsx
 import {connectRefinementList} from '../packages/react-instantsearch/connectors';
 import {Highlight} from '../packages/react-instantsearch/dom';
 
