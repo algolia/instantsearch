@@ -1,29 +1,36 @@
 import {runMode} from 'codemirror/addon/runmode/runmode.node';
+import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/css/css';
-
 import escape from 'escape-html';
 
-const blockTheme = 'cm-s-mdn-like';
-const spanTheme = 'cm-s-mdn-like';
+export default function highlight(source, lang) {
+  let tokenizedSource = '';
 
-export default function highlight(source, lang = 'js', inline = false) {
-  let output = '';
-  // Even though highlight accepts a lang parameter, force to JSX for now.
-  runMode(source, lang, (text, style) => {
-    text = escape(text);
-    if (!style) {
-      output += text;
-      return;
-    }
-    const className = style.split(' ').map(s => `cm-${s}`).join(' ');
-    output += `<span class="${className}">${text}</span>`;
-  });
-
-  if (inline) {
-    return `<code class="CodeMirror ${spanTheme}">${output}</code>`;
+  if (lang === 'html') {
+    lang = 'htmlmixed';
   }
 
-  return `<pre class="CodeMirror ${blockTheme}"><code>${output}</code></pre>`;
+  const heading = lang === 'shell' ? 'Command' : 'Code';
+
+  // this is a synchronous callback API
+  runMode(source, lang, (text, style) => {
+    text = escape(text);
+
+    if (!style) {
+      tokenizedSource += text;
+      return;
+    }
+
+    tokenizedSource += `<span class="cs-${style.replace(/ +/g, ' cs-')}">${text}</span>`;
+  });
+
+  return (
+`<pre class="code-sample language-${lang}">
+  <div class="heading">${heading}</div>
+  <div class="code-wrap">
+    <code>${tokenizedSource}</code>
+  </div>
+</pre>`);
 }
