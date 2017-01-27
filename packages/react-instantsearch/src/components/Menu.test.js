@@ -5,7 +5,7 @@ import renderer from 'react-test-renderer';
 import {mount} from 'enzyme';
 import Menu from './Menu';
 
-jest.mock('../widgets/Highlight');
+jest.mock('../widgets/Highlight', () => () => null);
 
 describe('Menu', () => {
   it('default menu', () => {
