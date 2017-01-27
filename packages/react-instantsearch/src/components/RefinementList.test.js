@@ -6,7 +6,7 @@ import {mount} from 'enzyme';
 
 import RefinementList from './RefinementList';
 
-jest.mock('../widgets/Highlight');
+jest.mock('../widgets/Highlight', () => () => null);
 
 describe('RefinementList', () => {
   it('default refinement list', () => {
