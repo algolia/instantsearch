@@ -1,23 +1,11 @@
 exports[`Hits accepts a hitComponent prop 1`] = `
 <div
   className="ais-Hits__root">
-  <Hit
-    hit={
-      Object {
-        "objectID": 0,
-      }
-    } />
-  <Hit
-    hit={
-      Object {
-        "objectID": 1,
-      }
-    } />
-  <Hit
-    hit={
-      Object {
-        "objectID": 2,
-      }
-    } />
+  <div
+    id={0} />
+  <div
+    id={1} />
+  <div
+    id={2} />
 </div>
 `;
