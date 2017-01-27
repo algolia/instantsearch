@@ -101,6 +101,7 @@ class List extends Component {
             this.setState({query: value});
             searchForFacetValues(value);
           }}
+          focusShortcuts={[]}
           translate={translate}
           onSubmit={e => {
             e.preventDefault();
