@@ -19,7 +19,7 @@ export default function activateClipboard(codeSamples) {
     };
 
     const clipboard = new Clipboard(copyToClipboard, {
-      text: () => codeSample.textContent,
+      text: () => codeSample.querySelector('code').textContent,
     });
 
     setup();
