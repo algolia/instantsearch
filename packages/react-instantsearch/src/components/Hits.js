@@ -18,11 +18,7 @@ class Hits extends Component {
 
 Hits.propTypes = {
   hits: PropTypes.array,
-
-  hitComponent: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.func,
-  ]).isRequired,
+  hitComponent: PropTypes.func.isRequired,
 };
 
 Hits.defaultProps = {

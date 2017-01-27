@@ -2,6 +2,8 @@ import sidebar from './sidebar.js';
 import header from './header.js';
 import communityProjects from './communityProjects.js';
 import dropdowns from './dropdowns.js';
+import './editOnGitHub.js';
+import activateClipboard from './activateClipboard.js';
 
 const container = document.querySelector('.documentation-container');
 const sidebarContainer = document.querySelector('.sidebar');
@@ -17,3 +19,4 @@ if (sidebarContainer) {
 header();
 communityProjects();
 dropdowns();
+activateClipboard([...document.querySelectorAll('.code-sample')]);

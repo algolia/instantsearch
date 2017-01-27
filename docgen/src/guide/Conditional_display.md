@@ -10,7 +10,7 @@ Using our connector and [`createConnector`](guide/Custom_connectors.html) approa
 
 ## Displaying content when the query is empty
 
-```javascript
+```jsx
 const Content = createConnector({
     displayName: 'ConditionalQuery',
     getProvidedProps(props, searchState) {
@@ -26,7 +26,7 @@ const Content = createConnector({
 
 ## Displaying content when there's no results
 
-```javascript
+```jsx
 const content = createConnector({
     displayName: 'ConditionalResults',
     getProvidedProps(props, searchState, searchResults) {
@@ -43,7 +43,7 @@ const content = createConnector({
 
 ## Displaying content when there's an error
 
-```javascript
+```jsx
 const content = createConnector({
     displayName: 'ConditionalError',
     getProvidedProps(props, searchState, searchResults) {
@@ -61,7 +61,7 @@ const content = createConnector({
 
 In slow user network situations you might want to know when the search results are loading.
 
-```javascript
+```jsx
 const content = createConnector({
     displayName: 'ConditionalError',
     getProvidedProps(props, searchState, searchResults) {

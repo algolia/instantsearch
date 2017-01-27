@@ -42,15 +42,6 @@
     border-bottom: 1px solid #d8d8d8;
     margin-top: 32px;
     padding-bottom: 8px;
-    position: relative;
-    z-index: 99;
-
-    &:not(.sidebar-header) {
-      display: inline-block;
-      width: 100%;
-      line-height: 1;
-      margin-top: -20px;
-    }
 
     &:first-of-type {
       margin-top: 0;
@@ -160,46 +151,13 @@
       }
     }
 
-    pre {
-      margin: .5em 0px .5em 0px;
-      line-height: 23px;
-      white-space: pre;
-      overflow-x: auto;
-      word-break: inherit;
-      word-wrap: inherit;
-      border: 1px solid #d8d8d8;
-      border-radius: 2px;
-      padding: 0.5em 0;
-      position: relative;
-      z-index: 1; // avoid scroll bar being unusable because <code></code><h2></h2> used and headers have :content that will be over
-
-      code {
-        display: block;
-        width: calc(100% - 4em);
-        margin: auto;
-      }
-    }
-
-
     h2, h3, .api-entry, .css-class {
       &:before {
         content: "";
         display: block;
         height: $offset-height;
-        margin: -($offset-height - 60) 0 0;
-        position: relative;
-        z-index: 0;
-        pointer-events: none;
-      }
-      &:after {
-        content: "";
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: $offset-height;
-        pointer-events: all;
-        max-height: $offset-height
+        margin-top: -$offset-height;
+        box-sizing: content-box;
       }
     }
 
@@ -393,10 +351,6 @@ tr.api-entry-values {
   }
 }
 
-tr.api-entry-description {
-
-}
-
 .DocProps {
   .Prop,
   .Type .Entry {
@@ -501,9 +455,9 @@ tr.api-entry-description {
 }
 
 .storybook-section {
-  min-height: 120px;
+  margin-top: 20px;
   text-align: center;
-  line-height: 120px;
+  line-height: 42px;
 }
 
 @import "docs/method";

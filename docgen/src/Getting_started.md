@@ -45,7 +45,7 @@ yarn add react-instantsearch
 
 Note: we use `yarn` to install dependencies but React InstantSearch is also installable via `npm`.
 
-## Add the <InstantSearch> component
+## Add the `<InstantSearch>` component
 
 The [<InstantSearch>](widgets/InstantSearch.html) component that will connect to Algolia
 and that will synchronise all the widgets together. It maintains the state

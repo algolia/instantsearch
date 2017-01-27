@@ -11,7 +11,7 @@ If a widget uses an attribute, we store it under its widget category to prevent 
 
 Here's the `searchState` shape for all the connectors or widgets that we provide:
 
-```javascript
+```jsx
 {
   const searchState = {
     range: {

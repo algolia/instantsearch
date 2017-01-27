@@ -38,14 +38,14 @@ npm install sass-loader style-loader css-loader autoprefixer postcss-loader --sa
 ```
 
 App.js:
-```javascript
+```jsx
 import 'react-instantsearch-theme-algolia/style.scss';
 // import 'react-instantsearch-theme-algolia/style.css'
 // import 'react-instantsearch-theme-algolia/style.min.css'
 ```
 
 webpack.config.babel.js:
-```javascript
+```jsx
 import autoprefixer from 'autoprefixer';
 
 export default {
