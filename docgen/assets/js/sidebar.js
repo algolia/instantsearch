@@ -44,6 +44,7 @@ function scrollSpy(sidebarContainer, headersContainer) {
       const currentHref = item.getAttribute('href');
       const anchorToFind = `#${header.getAttribute('id')}`;
       const isCurrentHeader =
+        currentHref.indexOf(anchorToFind) > 0 &&
         currentHref.indexOf(anchorToFind) ===
         currentHref.length - anchorToFind.length;
       if (isCurrentHeader) {
