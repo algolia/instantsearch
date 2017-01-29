@@ -197,7 +197,7 @@ helper.setQuery('tv')
 
 An immutable object is an object which values cannot be modified after it is
 created. For example, in Javascript strings are immutable. This means that
-you can't direclty change the value and each write operation will return a new
+you can't directly change the value and each write operation will return a new
 object.
 
 Inside the Helper, we use an immutable object to store the search parameters. The
