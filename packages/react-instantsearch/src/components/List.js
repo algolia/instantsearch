@@ -64,6 +64,7 @@ class List extends Component {
         {...this.props.cx(
           'item',
           item.isRefined && 'itemSelected',
+          item.noRefinement && 'itemNoRefinement',
           items && 'itemParent',
           items && item.isRefined && 'itemSelectedParent'
         )}
