@@ -1,4 +1,4 @@
-exports[`Menu Menu with search for facet values but no search results 1`] = `
+exports[`Menu Menu with search inside items but no search results 1`] = `
 <div
   className="ais-Menu__root">
   <div
@@ -125,7 +125,7 @@ exports[`Menu Menu with search for facet values but no search results 1`] = `
 </div>
 `;
 
-exports[`Menu Menu with search for facet values with search results 1`] = `
+exports[`Menu Menu with search inside items with search results 1`] = `
 <div
   className="ais-Menu__root">
   <div

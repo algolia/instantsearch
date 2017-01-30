@@ -14,6 +14,7 @@ describe('RefinementList', () => {
       <RefinementList
         refine={() => null}
         createURL={() => '#'}
+        searchForItems={() => null}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: true},
           {label: 'black', value: ['black'], count: 20, isRefined: false},
@@ -29,11 +30,12 @@ describe('RefinementList', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('refinement list with search for facet values but no search results', () => {
+  it('refinement list with search inside items but no search results', () => {
     const tree = renderer.create(
       <RefinementList
         refine={() => null}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
+        withSearchBox
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: true},
@@ -47,11 +49,12 @@ describe('RefinementList', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('refinement list with search for facet values with search results', () => {
+  it('refinement list with search inside items with search results', () => {
     const tree = renderer.create(
       <RefinementList
         refine={() => null}
-        searchForFacetValues={() => null}
+        withSearchBox
+        searchForItems={() => null}
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: true, _highlightResult: {label: 'white'}},
@@ -67,7 +70,8 @@ describe('RefinementList', () => {
     const tree = renderer.create(
       <RefinementList
         refine={() => null}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
+        withSearchBox
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: false},
@@ -91,7 +95,7 @@ describe('RefinementList', () => {
     const wrapper = mount(
       <RefinementList
         refine={refine}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: false},
@@ -122,7 +126,7 @@ describe('RefinementList', () => {
     const wrapper = mount(
       <RefinementList
         refine={refine}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: false},
@@ -155,7 +159,7 @@ describe('RefinementList', () => {
     const wrapper = mount(
       <RefinementList
         refine={refine}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
         createURL={() => '#'}
         items={[
           {label: 'white', value: ['white'], count: 10, isRefined: false},
@@ -178,12 +182,13 @@ describe('RefinementList', () => {
     wrapper.unmount();
   });
 
-  describe('search for facets value', () => {
+  describe('search inside items', () => {
     const refine = jest.fn();
-    const searchForFacetValues = jest.fn();
+    const searchForItems = jest.fn();
     const refinementList = <RefinementList
       refine={refine}
-      searchForFacetValues={searchForFacetValues}
+      withSearchBox
+      searchForItems={searchForItems}
       createURL={() => '#'}
       items={[
         {
@@ -207,13 +212,13 @@ describe('RefinementList', () => {
       wrapper.unmount();
     });
 
-    it('searching for a value should call searchForFacetValues', () => {
+    it('searching for a value should call searchForItems', () => {
       const wrapper = mount(refinementList);
 
       wrapper.find('.ais-RefinementList__SearchBox input').simulate('change', {target: {value: 'query'}});
 
-      expect(searchForFacetValues.mock.calls.length).toBe(1);
-      expect(searchForFacetValues.mock.calls[0][0]).toBe('query');
+      expect(searchForItems.mock.calls.length).toBe(1);
+      expect(searchForItems.mock.calls[0][0]).toBe('query');
 
       wrapper.unmount();
     });
@@ -257,7 +262,7 @@ describe('RefinementList', () => {
       const wrapper = mount(
         <RefinementList
           refine={() => null}
-          searchForFacetValues={() => null}
+          searchForItems={() => null}
           createURL={() => '#'}
           items={[
             {label: 'blue', value: ['blue'], count: 30, isRefined: false},

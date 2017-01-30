@@ -12,6 +12,7 @@ describe('Menu', () => {
     const tree = renderer.create(
       <Menu
         refine={() => null}
+        searchForItems={() => null}
         createURL={() => '#'}
         items={[
           {label: 'white', value: 'white', count: 10, isRefined: false},
@@ -30,11 +31,12 @@ describe('Menu', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Menu with search for facet values but no search results', () => {
+  it('Menu with search inside items but no search results', () => {
     const tree = renderer.create(
       <Menu
         refine={() => null}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
+        withSearchBox
         createURL={() => '#'}
         items={[
           {label: 'white', value: 'white', count: 10, isRefined: true},
@@ -48,11 +50,12 @@ describe('Menu', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Menu with search for facet values with search results', () => {
+  it('Menu with search inside items with search results', () => {
     const tree = renderer.create(
       <Menu
         refine={() => null}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
+        withSearchBox
         createURL={() => '#'}
         items={[
           {label: 'white', value: 'white', count: 10, isRefined: true, _highlightResult: {label: 'white'}},
@@ -69,7 +72,8 @@ describe('Menu', () => {
       <Menu
         refine={() => null}
         createURL={() => '#'}
-        searchForFacetValues={() => null}
+        searchForItems={() => null}
+        withSearchBox
         items={[
           {label: 'white', value: 'white', count: 10, isRefined: false},
           {label: 'black', value: 'black', count: 20, isRefined: false},
@@ -96,6 +100,7 @@ describe('Menu', () => {
     const wrapper = mount(
         <Menu
           refine={refine}
+          searchForItems={() => null}
           createURL={() => '#'}
           items={[
             {label: 'white', value: 'white', count: 10, isRefined: false},
@@ -138,6 +143,7 @@ describe('Menu', () => {
           limitMax={4}
           showMore={true}
           isFromSearch={false}
+          searchForItems={() => null}
           canRefine={true}
         />
       );
@@ -167,6 +173,7 @@ describe('Menu', () => {
           limitMax={4}
           showMore={true}
           isFromSearch={false}
+          searchForItems={() => null}
           canRefine={true}
         />
       );
@@ -182,10 +189,11 @@ describe('Menu', () => {
 
   describe('search for facets value', () => {
     const refine = jest.fn();
-    const searchForFacetValues = jest.fn();
+    const searchForItems = jest.fn();
     const menu = <Menu
       refine={refine}
-      searchForFacetValues={searchForFacetValues}
+      withSearchBox={true}
+      searchForItems={searchForItems}
       createURL={() => '#'}
       items={[
         {
@@ -209,13 +217,13 @@ describe('Menu', () => {
       wrapper.unmount();
     });
 
-    it('searching for a value should call searchForFacetValues', () => {
+    it('searching for a value should call searchForItems', () => {
       const wrapper = mount(menu);
 
       wrapper.find('.ais-Menu__SearchBox input').simulate('change', {target: {value: 'query'}});
 
-      expect(searchForFacetValues.mock.calls.length).toBe(1);
-      expect(searchForFacetValues.mock.calls[0][0]).toBe('query');
+      expect(searchForItems.mock.calls.length).toBe(1);
+      expect(searchForItems.mock.calls[0][0]).toBe('query');
 
       wrapper.unmount();
     });
@@ -259,7 +267,7 @@ describe('Menu', () => {
       const wrapper = mount(
         <Menu
           refine={() => null}
-          searchForFacetValues={() => null}
+          searchForItems={() => null}
           createURL={() => '#'}
           items={[
             {label: 'white', value: 'white', count: 10, isRefined: true, _highlightResult: {label: 'white'}},

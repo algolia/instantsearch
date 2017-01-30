@@ -11,7 +11,7 @@ import MenuComponent from '../components/Menu.js';
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string} defaultRefinement - the value of the item selected by default
  * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
- * @propType {boolean} [searchForFacetValues=false] - true if the component should display an input to search for facet values
+ * @propType {boolean} [withSearchBox=false] - true if the component should display an input to search for facet values
  * @themeKey ais-Menu__root - the root of the component
  * @themeKey ais-Menu__items - the container of all items in the menu
  * @themeKey ais-Menu__item - a single item

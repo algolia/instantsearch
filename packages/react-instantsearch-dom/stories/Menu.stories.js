@@ -31,10 +31,10 @@ stories.add('default', () =>
       showMore={true}
     />
   </WrapWithHits>
-).add('with search for facets value', () =>
+).add('with search inside items', () =>
   <WrapWithHits>
     <Menu attributeName="category"
-          searchForFacetValues
+          withSearchBox
           transformItems={items => orderBy(items, ['isRefined', 'count', 'label'], ['desc', 'desc', 'asc'])}
     />
   </WrapWithHits>

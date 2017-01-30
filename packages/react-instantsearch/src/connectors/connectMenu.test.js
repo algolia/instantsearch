@@ -27,23 +27,23 @@ describe('connectMenu', () => {
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {});
     expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false, searchForItems: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false, searchForItems: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {menu: {ok: 'wat'}}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false, searchForItems: undefined});
 
     props = getProvidedProps({attributeName: 'ok', defaultRefinement: 'wat'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: 'wat', isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false, searchForItems: undefined});
 
     props = getProvidedProps({attributeName: 'ok'}, {}, {results});
     expect(props).toEqual({items: [], currentRefinement: null, isFromSearch: false,
-      canRefine: false, searchForFacetValues: undefined});
+      canRefine: false, searchForItems: undefined});
 
     results.getFacetValues.mockClear();
     results.getFacetValues.mockImplementation(() => [
@@ -257,7 +257,7 @@ describe('connectMenu', () => {
     expect(searchState).toEqual({another: {searchState: 'searchState'}});
   });
 
-  it('calling searchForFacetValues return the right searchForFacetValues parameters', () => {
+  it('calling searchForItems return the right searchForItems parameters', () => {
     const parameters = searchForFacetValues({attributeName: 'ok'}, {}, 'yep');
     expect(parameters).toEqual({
       facetName: 'ok',
@@ -284,6 +284,24 @@ describe('connectMenu', () => {
       },
     ]);
 
+    props = connect.getProvidedProps({attributeName: 'ok', withSearchBox: true}, {}, {results});
+
+    expect(props.items).toEqual([
+      {
+        value: 'oy',
+        label: 'oy',
+        isRefined: true,
+        count: 10,
+      },
+      {
+        value: 'wat',
+        label: 'wat',
+        isRefined: false,
+        count: 20,
+      },
+    ]);
+
+    // searchForFacetValues is @deprecated. This test should be removed when searchForFacetValues is removed
     props = connect.getProvidedProps({attributeName: 'ok', searchForFacetValues: true}, {}, {results});
 
     expect(props.items).toEqual([
