@@ -440,7 +440,7 @@ describe('createConnector', () => {
   });
 
   describe('searchForFacetValues', () => {
-    it('passes a searchForFacetValues method to the component', () => {
+    it('passes a searchForItems method to the component', () => {
       const Dummy = () => null;
       const searchState = {};
       const widgets = {};
@@ -467,12 +467,20 @@ describe('createConnector', () => {
       const passedProps = wrapper.find(Dummy).props();
       const facetName = 'facetName';
       const query = 'query';
-      passedProps.searchForFacetValues(facetName, query);
+      passedProps.searchForItems(facetName, query);
       expect(searchForFacetValues.mock.calls[0][0]).toEqual(props);
       expect(searchForFacetValues.mock.calls[0][1]).toBe(widgets);
       expect(searchForFacetValues.mock.calls[0][2]).toBe(facetName);
       expect(searchForFacetValues.mock.calls[0][3]).toBe(query);
       expect(onSearchForFacetValues.mock.calls[0][0]).toBe(searchState);
+
+      // searchForFacetValues is @deprecated. This test should be removed when searchForFacetValues is removed
+      passedProps.searchForFacetValues(facetName, query);
+      expect(searchForFacetValues.mock.calls[1][0]).toEqual(props);
+      expect(searchForFacetValues.mock.calls[1][1]).toBe(widgets);
+      expect(searchForFacetValues.mock.calls[1][2]).toBe(facetName);
+      expect(searchForFacetValues.mock.calls[1][3]).toBe(query);
+      expect(onSearchForFacetValues.mock.calls[1][0]).toBe(searchState);
     });
   });
 });

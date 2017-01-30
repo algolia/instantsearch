@@ -72,11 +72,11 @@ const Facets = () =>
       <section className="facet-wrapper">
         <div className="facet-category-title facet">RefineBy</div>
           <Panel title="Type">
-            <RefinementList attributeName="type" operator="or" limitMin={5} searchForFacetValues/>
+            <RefinementList attributeName="type" operator="or" limitMin={5} withSearchBox/>
           </Panel>
           <Panel
             title="Materials">
-            <RefinementList attributeName="materials" operator="or" limitMin={5} searchForFacetValues/>
+            <RefinementList attributeName="materials" operator="or" limitMin={5} withSearchBox/>
           </Panel>
             <ConnectedColorRefinementList attributeName="colors" operator="or"/>
           <Panel title="Rating">

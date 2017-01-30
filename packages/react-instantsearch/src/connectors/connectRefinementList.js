@@ -50,14 +50,14 @@ function getValue(name, props, searchState) {
  * @propType {number} [limitMin=10] - the minimum number of displayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default. The searchState of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the searchState is an empty string.
- * @propType {boolean} [searchForFacetValues=false] - if set to true, the searchForFacetValues function is provided
+ * @propType {boolean} [withSearchBox=false] - allow search inside values
  * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
- * @providedPropType {function} searchForFacetValues - a function to toggle a search for facet values
  * @providedPropType {string[]} currentRefinement - the refinement currently applied
  * @providedPropType {array.<{count: number, isRefined: boolean, label: string, value: string}>} items - the list of items the RefinementList can display.
- * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search for facet values results.
+ * @providedPropType {function} searchForItems - a function to toggle a search inside items values
+ * @providedPropType {boolean} isFromSearch - a boolean that says if the `items` props contains facet values from the global search or from the search inside items.
  */
 
 const sortBy = ['isRefined', 'count:desc', 'name:asc'];
@@ -72,7 +72,8 @@ export default createConnector({
     limitMin: PropTypes.number,
     limitMax: PropTypes.number,
     defaultRefinement: PropTypes.arrayOf(PropTypes.string),
-    searchForFacetValues: PropTypes.bool,
+    withSearchBox: PropTypes.bool,
+    searchForFacetValues: PropTypes.bool, // @deprecated
     transformItems: PropTypes.func,
   },
 
@@ -95,7 +96,12 @@ export default createConnector({
     const isFromSearch = Boolean(searchForFacetValuesResults
       && searchForFacetValuesResults[attributeName]
       && searchForFacetValuesResults.query !== '');
-    const searchForFacetValues = props.searchForFacetValues ? this.searchForFacetValues : undefined;
+    const withSearchBox = props.withSearchBox || props.searchForFacetValues;
+    if (process.env.NODE_ENV === 'development' && props.searchForFacetValues) {
+      // eslint-disable-next-line no-console
+      console.warn('react-instantsearch: `searchForFacetValues` has been renamed to' +
+        '`withSearchBox`, this will break in the next major version.');
+    }
 
     if (!canRefine) {
       return {
@@ -103,7 +109,7 @@ export default createConnector({
         currentRefinement: getCurrentRefinement(props, searchState),
         canRefine,
         isFromSearch,
-        searchForFacetValues,
+        withSearchBox,
       };
     }
 
@@ -131,7 +137,7 @@ export default createConnector({
       items: transformedItems.slice(0, limit),
       currentRefinement: getCurrentRefinement(props, searchState),
       isFromSearch,
-      searchForFacetValues,
+      withSearchBox,
       canRefine: items.length > 0,
     };
   },
