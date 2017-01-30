@@ -38,7 +38,7 @@ const RefinementListWithSearchBox = connectRefinementList(props => {
     return <li key={item.value}>
       <span onClick={() => props.refine(item.value)}>
         {label} {item.isRefined ? '- selected' : ''}
-      </a>
+      </span>
     </li>;
   });
   return (
