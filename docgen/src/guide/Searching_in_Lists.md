@@ -18,7 +18,9 @@ Use the `withSearchBox` prop to add a nice search box to supported widgets:
 <RefinementList attributeName="products" withSearchBox />
 ```
 
+<div class="storybook-section">
 <a class="btn" href="https://community.algolia.com/instantsearch.js/react/storybook/?selectedKind=RefinementList&selectedStory=with%20search%20for%20facets%20value" target="_blank">View in Storybook</a>
+</div>
 
 ## Using connectors
 You can implement your own search box for searching for items in lists when using
