@@ -80,7 +80,7 @@ export default createConnector({
       && searchForFacetValuesResults[attributeName]
       && searchForFacetValuesResults.query !== '');
     const withSearchBox = props.withSearchBox || props.searchForFacetValues;
-    if (props.searchForFacetValues && process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development' && props.searchForFacetValues) {
       // eslint-disable-next-line no-console
       console.warn('react-instantsearch: `searchForFacetValues` has been renamed to' +
         '`withSearchBox`, this will break in the next major version.');
