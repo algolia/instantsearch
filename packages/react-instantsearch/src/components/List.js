@@ -20,7 +20,8 @@ class List extends Component {
     limitMax: PropTypes.number,
     limit: PropTypes.number,
     show: PropTypes.func,
-    searchForFacetValues: PropTypes.func,
+    searchForItems: PropTypes.func,
+    withSearchBox: PropTypes.bool,
     isFromSearch: PropTypes.bool,
     canRefine: PropTypes.bool,
   };
@@ -92,14 +93,14 @@ class List extends Component {
   }
 
   renderSearchBox() {
-    const {cx, searchForFacetValues, isFromSearch, translate, items, selectItem} = this.props;
+    const {cx, searchForItems, isFromSearch, translate, items, selectItem} = this.props;
     const noResults = items.length === 0 ? <div {...cx('noResults')}>{translate('noResults')}</div> : null;
     return <div {...cx('SearchBox')}>
         <SearchBox
           currentRefinement={isFromSearch ? this.state.query : ''}
           refine={value => {
             this.setState({query: value});
-            searchForFacetValues(value);
+            searchForItems(value);
           }}
           focusShortcuts={[]}
           translate={translate}
@@ -116,8 +117,8 @@ class List extends Component {
   }
 
   render() {
-    const {cx, items, searchForFacetValues, canRefine} = this.props;
-    const searchBox = searchForFacetValues && canRefine ? this.renderSearchBox() : null;
+    const {cx, items, withSearchBox, canRefine} = this.props;
+    const searchBox = withSearchBox && canRefine ? this.renderSearchBox() : null;
     if (items.length === 0) {
       return <div {...cx('root', !canRefine && 'noRefinement')}>
         {searchBox}
