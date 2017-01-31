@@ -18,6 +18,7 @@ import GoogleMap from 'google-map-react';
 import {fitBounds} from 'google-map-react/utils';
 
 import Rheostat from 'rheostat';
+
 import {withUrlSync} from '../urlSync';
 
 const App = props =>
@@ -29,7 +30,7 @@ const App = props =>
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
   >
-    <Configure aroundLatLngViaIP={true}/>
+    <Configure aroundLatLngViaIP={true} aroundRadius="all" />
     <Header />
     <Filters />
     <Results />
@@ -116,7 +117,7 @@ function HitsMap({hits}) {
     nw: {lat: -85, lng: 180},
     se: {lat: 85, lng: -180},
   });
-  const boundsConfig = fitBounds(boundingPoints, availableSpace);
+  const boundsConfig = hits.length > 0 ? fitBounds(boundingPoints, availableSpace) : {};
   const markers = hits.map(hit => <CustomMarker lat={hit.lat} lng={hit.lng} key={hit.objectID}></CustomMarker>);
   const options = {
     minZoomOverride: true,
@@ -130,7 +131,7 @@ function HitsMap({hits}) {
       }}
       center={boundsConfig.center}
       zoom={boundsConfig.zoom}
-    >{markers}</GoogleMap>
+  >{markers}</GoogleMap>
   );
 }
 
@@ -300,27 +301,56 @@ function Results() {
   );
 }
 
-const ConnectedRange = connectRange(({min, max, currentRefinement, refine}) => {
-  const updateValue = sliderState => {
-    if (sliderState.values[0] !== min || sliderState.values[1] !== max) {
-      refine({min: sliderState.values[0], max: sliderState.values[1]});
-    }
-  };
+const Range = React.createClass({
+  propTypes: {
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    currentRefinement: React.PropTypes.object,
+    refine: React.PropTypes.func.isRequired,
+    canRefine: React.PropTypes.bool.isRequired,
+  },
 
-  return (
-    <div>
-      <Rheostat
-        min={min}
-        max={max}
-        values={[currentRefinement.min, currentRefinement.max]}
-        onChange={updateValue}
-      />
-      <div className="rheostat-values">
-        <span>{currentRefinement.min}</span>
-        <span>{currentRefinement.max}</span>
-      </div>
-    </div>
-  );
+  getInitialState() {
+    return {currentValues: {min: this.props.min, max: this.props.max}};
+  },
+
+  componentWillReceiveProps(sliderState) {
+    if (sliderState.canRefine) {
+      this.setState({currentValues: {min: sliderState.currentRefinement.min, max: sliderState.currentRefinement.max}});
+    }
+  },
+
+  onValuesUpdated(sliderState) {
+    this.setState({currentValues: {min: sliderState.values[0], max: sliderState.values[1]}});
+  },
+
+  onChange(sliderState) {
+    if (this.props.currentRefinement.min !== sliderState.values[0] ||
+      this.props.currentRefinement.max !== sliderState.values[1]) {
+      this.props.refine({min: sliderState.values[0], max: sliderState.values[1]});
+    }
+  },
+
+  render() {
+    const {min, max, currentRefinement} = this.props;
+    const {currentValues} = this.state;
+    return min !== max ?
+      <div>
+        <Rheostat
+          min={min}
+          max={max}
+          values={[currentRefinement.min, currentRefinement.max]}
+          onChange={this.onChange}
+          onValuesUpdated={this.onValuesUpdated}
+        />
+        <div className="rheostat-values">
+          <div>{currentValues.min}</div>
+          <div>{currentValues.max}</div>
+        </div>
+      </div> : null;
+  },
 });
+
+const ConnectedRange = connectRange(Range);
 
 export default withUrlSync(App);
