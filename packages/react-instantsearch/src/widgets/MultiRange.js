@@ -17,7 +17,8 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * @themeKey ais-MultiRange__itemLabelSelected - The selected label item
  * @themeKey ais-MultiRange__itemRadio - The radio of an item
  * @themeKey ais-MultiRange__itemRadioSelected - The selected radio item
- * @themeKey ais-MultiRange__noRefinement - present when there is no refinement
+ * @themeKey ais-MultiRange__noRefinement - present when there is no refinement for all ranges
+ * @themeKey ais-MultiRange__itemNoRefinement - present when there is no refinement for one range
  * @example
  * import React from 'react';
  *

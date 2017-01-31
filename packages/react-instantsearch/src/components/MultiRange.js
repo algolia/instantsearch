@@ -9,6 +9,8 @@ class MultiRange extends Component {
     items: PropTypes.arrayOf(PropTypes.shape({
       label: PropTypes.node.isRequired,
       value: PropTypes.string.isRequired,
+      isRefined: PropTypes.bool.isRequired,
+      noRefinement: PropTypes.bool.isRequired,
     })).isRequired,
     refine: PropTypes.func.isRequired,
     transformItems: PropTypes.func,
