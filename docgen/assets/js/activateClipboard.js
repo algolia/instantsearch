@@ -29,8 +29,5 @@ export default function activateClipboard(codeSamples) {
       done();
       timeout = setTimeout(setup, cleanAfter);
     });
-
-    // safari: https://clipboardjs.com/#browser-support
-    clipboard.on('error', () => copyToClipboard.setAttribute('data-hint', 'Hit ⌘+C to copy'));
   });
 }
