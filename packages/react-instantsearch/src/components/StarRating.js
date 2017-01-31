@@ -101,6 +101,7 @@ class StarRating extends Component {
 
   render() {
     const {translate, refine, min, max, count, createURL, canRefine} = this.props;
+
     const items = [];
     for (let i = max; i >= min; i--) {
       const itemCount = count.reduce((acc, item) => {
