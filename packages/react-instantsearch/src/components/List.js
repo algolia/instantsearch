@@ -35,6 +35,7 @@ class List extends Component {
 
     this.state = {
       extended: false,
+      query: '',
     };
   }
 
@@ -95,7 +96,8 @@ class List extends Component {
 
   renderSearchBox() {
     const {cx, searchForItems, isFromSearch, translate, items, selectItem} = this.props;
-    const noResults = items.length === 0 ? <div {...cx('noResults')}>{translate('noResults')}</div> : null;
+    const noResults = items.length === 0 &&
+      this.state.query !== '' ? <div {...cx('noResults')}>{translate('noResults')}</div> : null;
     return <div {...cx('SearchBox')}>
         <SearchBox
           currentRefinement={isFromSearch ? this.state.query : ''}
@@ -119,7 +121,7 @@ class List extends Component {
 
   render() {
     const {cx, items, withSearchBox, canRefine} = this.props;
-    const searchBox = withSearchBox && canRefine ? this.renderSearchBox() : null;
+    const searchBox = withSearchBox ? this.renderSearchBox() : null;
     if (items.length === 0) {
       return <div {...cx('root', !canRefine && 'noRefinement')}>
         {searchBox}
