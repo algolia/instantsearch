@@ -97,13 +97,12 @@ export default createConnector({
       min: valueMin = min,
       max: valueMax = max,
     } = getCurrentRefinement(props, searchState);
-
     return {
       min,
       max,
       currentRefinement: {min: valueMin, max: valueMax},
       count,
-      canRefine: true,
+      canRefine: count.length > 0,
     };
   },
 
