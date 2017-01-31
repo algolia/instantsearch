@@ -10,18 +10,18 @@ stories.addDecorator(withKnobs);
 
 stories.add('default', () =>
   <WrapWithHits hasPlayground={true} linkedStoryGroup="StarRating">
-    <StarRating attributeName="rating" max={6}/>
+    <StarRating attributeName="rating" max={6} min={1}/>
   </WrapWithHits>
 ).add('with panel', () =>
   <WrapWithHits>
       <Panel title="Ratings">
-        <StarRating attributeName="rating" max={6}/>
+        <StarRating attributeName="rating" max={6} min={1}/>
       </Panel>
   </WrapWithHits>
 ).add('with panel but no refinement', () =>
   <WrapWithHits searchBox={false}>
       <Panel title="Ratings">
-         <StarRating attributeName="rating" max={6}/>
+         <StarRating attributeName="rating" max={6} min={1}/>
          <div style={{display: 'none'}}>
             <SearchBox defaultRefinement="ds" />
          </div>
