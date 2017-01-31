@@ -51,14 +51,14 @@ stories.add('default', () =>
         />
       </Panel>
   </WrapWithHits>
-).add('with panel but no refinement', () =>
+).add('with panel but no available refinement', () =>
   <WrapWithHits searchBox={false}>
       <Panel title="Category">
         <Menu
           attributeName="category"
         />
         <div style={{display: 'none'}}>
-          <SearchBox defaultRefinement="ds" />
+          <SearchBox defaultRefinement="dkjsakdjskajdksjakdjaskj" />
         </div>
       </Panel>
   </WrapWithHits>

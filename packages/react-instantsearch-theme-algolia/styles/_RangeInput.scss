@@ -1,6 +1,12 @@
 .ais-RangeInput__root {
 }
 
+.ais-RangeInput__fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
 .ais-RangeInput__labelMin,
 .ais-RangeInput__labelMax {
   min-width: 80px;

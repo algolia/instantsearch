@@ -102,7 +102,7 @@ export default createConnector({
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
-      canRefine: !items.reduce((noRefinement, item) => noRefinement && item.noRefinement, true),
+      canRefine: items.length > 0 && items.some(item => item.noRefinement === false),
     };
   },
 

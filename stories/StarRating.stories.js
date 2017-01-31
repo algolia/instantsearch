@@ -1,6 +1,6 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {StarRating, Panel, SearchBox} from '../packages/react-instantsearch/dom';
+import {StarRating, Panel, SearchBox, Configure} from '../packages/react-instantsearch/dom';
 import {withKnobs, object, number} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
 
@@ -14,6 +14,13 @@ stories.add('default', () =>
   </WrapWithHits>
 ).add('with panel', () =>
   <WrapWithHits>
+      <Panel title="Ratings">
+        <StarRating attributeName="rating" max={6} min={1}/>
+      </Panel>
+  </WrapWithHits>
+).add('with some unavailable refinements', () =>
+  <WrapWithHits>
+      <Configure filters="rating>=4" />
       <Panel title="Ratings">
         <StarRating attributeName="rating" max={6} min={1}/>
       </Panel>

@@ -9,6 +9,7 @@ exports[`MultiRange supports having a selected item 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -25,6 +26,7 @@ exports[`MultiRange supports having a selected item 1`] = `
         <input
           checked={true}
           className="ais-MultiRange__itemRadio ais-MultiRange__itemRadioSelected"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -41,6 +43,7 @@ exports[`MultiRange supports having a selected item 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -57,6 +60,7 @@ exports[`MultiRange supports having a selected item 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -82,6 +86,7 @@ exports[`MultiRange supports passing items values 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -98,6 +103,7 @@ exports[`MultiRange supports passing items values 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -114,6 +120,7 @@ exports[`MultiRange supports passing items values 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span
@@ -130,6 +137,7 @@ exports[`MultiRange supports passing items values 1`] = `
         <input
           checked={false}
           className="ais-MultiRange__itemRadio"
+          disabled={false}
           onChange={[Function]}
           type="radio" />
         <span

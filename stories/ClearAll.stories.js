@@ -8,7 +8,7 @@ const stories = storiesOf('ClearAll', module);
 
 stories.addDecorator(withKnobs);
 
-stories.add('default', () =>
+stories.add('with refinements to clear', () =>
   <WrapWithHits linkedStoryGroup="ClearAll">
     <div>
       <ClearAll />
@@ -19,5 +19,11 @@ stories.add('default', () =>
         />
       </div>
       </div>
+  </WrapWithHits>
+);
+
+stories.add('nothing to clear', () =>
+  <WrapWithHits linkedStoryGroup="ClearAll">
+    <ClearAll />
   </WrapWithHits>
 );
