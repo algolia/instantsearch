@@ -66,13 +66,6 @@ import React from 'react';
   },
 });
 
- Range.propTypes = {
-  min: React.PropTypes.number.isRequired,
-  max: React.PropTypes.number.isRequired,
-  currentRefinement: React.PropTypes.object.isRequired,
-  refine: React.PropTypes.func.isRequired,
-};
-
  const ConnectedRange = connectRange(Range);
 
  */

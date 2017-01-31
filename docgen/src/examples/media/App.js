@@ -117,15 +117,13 @@ const Hit = hit => {
   );
 };
 
-const Results = connectSearchBox(({currentRefinement}) =>
-  currentRefinement
-  ? <article>
+const Results = connectSearchBox(() =>
+    <article>
       <div id="stats" className="text-right text-muted"><Stats/></div>
       <hr />
       <div id="hits"><Hits hitComponent={Hit} /></div>
       <div id="pagination" className="text-center"><Pagination /></div>
     </article>
-  : null
   );
 
 const RefinementListLinks = connectRefinementList(({items, refine, createURL}) => {
