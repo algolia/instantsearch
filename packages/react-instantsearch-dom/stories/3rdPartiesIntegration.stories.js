@@ -62,13 +62,6 @@ const Range = React.createClass({
   },
 });
 
-Range.propTypes = {
-  min: React.PropTypes.number,
-  max: React.PropTypes.number,
-  currentRefinement: React.PropTypes.object,
-  refine: React.PropTypes.func.isRequired,
-};
-
 const ConnectedRange = connectRange(Range);
 
 export default ConnectedRange;
