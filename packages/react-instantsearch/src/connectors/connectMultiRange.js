@@ -38,6 +38,25 @@ function getCurrentRefinement(props, searchState) {
   return '';
 }
 
+function isRefinementsRangeIncludesInsideItemRange(stats, start, end) {
+  return stats.min > start && stats.min < end || stats.max > start && stats.max < end;
+}
+
+function isItemRangeIncludedInsideRefinementsRange(stats, start, end) {
+  return start > stats.min && start < stats.max || end > stats.min && end < stats.max;
+}
+
+function itemHasRefinement(attributeName, results, value) {
+  const stats = results.getFacetByName(attributeName) ?
+        results.getFacetStats(attributeName) : null;
+  const range = value.split(':');
+  const start = Number(range[0]) === 0 || value === '' ? Number.NEGATIVE_INFINITY : Number(range[0]);
+  const end = Number(range[1]) === 0 || value === '' ? Number.POSITIVE_INFINITY : Number(range[1]);
+  return !(Boolean(stats) &&
+        (isRefinementsRangeIncludesInsideItemRange(stats, start, end)
+       || isItemRangeIncludedInsideRefinementsRange(stats, start, end)));
+}
+
 /**
  * connectMultiRange connector provides the logic to build a widget that will
  * give the user the ability to select a range value for a numeric attribute.
@@ -51,7 +70,7 @@ function getCurrentRefinement(props, searchState) {
  * @providedPropType {function} refine - a function to select a range.
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied.  follow the shape of a `string` with a pattern of `'{start}:{end}'` which corresponds to the current selected item. For instance, when the selected item is `{start: 10, end: 20}`, the searchState of the widget is `'10:20'`. When `start` isn't defined, the searchState of the widget is `':{end}'`, and the same way around when `end` isn't defined. However, when neither `start` nor `end` are defined, the searchState is an empty string.
- * @providedPropType {array.<{isRefined: boolean, label: string, value: string}>} items - the list of ranges the MultiRange can display.
+ * @providedPropType {array.<{isRefined: boolean, label: string, value: string, isRefined: boolean, noRefinement: boolean}>} items - the list of ranges the MultiRange can display.
  */
 export default createConnector({
   displayName: 'AlgoliaMultiRange',
@@ -67,7 +86,7 @@ export default createConnector({
     transformItems: PropTypes.func,
   },
 
-  getProvidedProps(props, searchState) {
+  getProvidedProps(props, searchState, searchResults) {
     const currentRefinement = getCurrentRefinement(props, searchState);
     const items = props.items.map(item => {
       const value = stringifyItem(item);
@@ -75,12 +94,15 @@ export default createConnector({
         label: item.label,
         value,
         isRefined: value === currentRefinement,
+        noRefinement: searchResults && searchResults.results ?
+         itemHasRefinement(getId(props), searchResults.results, value) : false,
       };
     });
+
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
-      canRefine: items.length > 0,
+      canRefine: !items.reduce((noRefinement, item) => noRefinement && item.noRefinement, true),
     };
   },
 
@@ -102,6 +124,7 @@ export default createConnector({
   getSearchParameters(searchParameters, props, searchState) {
     const {attributeName} = props;
     const {start, end} = parseItem(getCurrentRefinement(props, searchState));
+    searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
 
     if (start) {
       searchParameters = searchParameters.addNumericRefinement(
