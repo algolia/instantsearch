@@ -146,6 +146,7 @@ export default function createConnector(connectorDesc) {
         metadata,
         resultsFacetValues,
       } = store.getState();
+
       const searchState = {results, searching, error};
       return connectorDesc.getProvidedProps.call(this, props, widgets, searchState, metadata, resultsFacetValues);
     };
