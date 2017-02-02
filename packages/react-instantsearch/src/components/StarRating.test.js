@@ -56,7 +56,7 @@ describe('StarRating', () => {
     min={1}
     max={5}
     currentRefinement={{min: 1, max: 5}}
-    count={[{value: '1', count: 1},
+    count={[{value: '1', count: 4},
       {value: '2', count: 2},
       {value: '3', count: 3},
       {value: '4', count: 3},
@@ -139,6 +139,26 @@ describe('StarRating', () => {
     expect(refine.mock.calls[0][0]).toEqual({min: 1, max: 5});
     wrapper.unmount();
   });
+
+  it('the default selected range should be the lowest one with count', () => {
+    const wrapper = mount(starRating);
+    wrapper.setProps({count: [
+      {value: '2', count: 2},
+      {value: '3', count: 3},
+      {value: '4', count: 3},
+    ]});
+
+    const links = wrapper.find('.ais-StarRating__ratingLink');
+    expect(links.first().hasClass('ais-StarRating__ratingLinkSelected')).toBe(false);
+
+    const selected = wrapper.find('.ais-StarRating__ratingLinkSelected');
+    expect(selected.find('.ais-StarRating__ratingIconEmpty').length).toEqual(3);
+    expect(selected.find('.ais-StarRating__ratingIcon').length).toEqual(2);
+    expect(selected.text()).toContain('8');
+
+    wrapper.unmount();
+  });
+
   describe('Panel compatibility', () => {
     it('Should indicate when no more refinement', () => {
       const canRefine = jest.fn();

@@ -71,7 +71,6 @@ export default createConnector({
 
       const stats = searchResults.results.getFacetByName(attributeName) ?
         searchResults.results.getFacetStats(attributeName) : null;
-
       if (!stats) {
         return {
           canRefine: false,

@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
-
+import {isEmpty} from 'lodash';
 const cx = classNames('StarRating');
 
 class StarRating extends Component {
@@ -44,10 +44,12 @@ class StarRating extends Component {
     }
   }
 
-  buildItem({max, lowerBound, count, translate, createURL, isLowest}) {
-    const selected = lowerBound === this.props.currentRefinement.min &&
-      max === this.props.currentRefinement.max;
+  buildItem({max, lowerBound, count, translate, createURL, isLastSelectableItem}) {
     const disabled = !count;
+    const isCurrentMinLower = this.props.currentRefinement.min < lowerBound;
+    const selected = isLastSelectableItem && isCurrentMinLower ||
+    !disabled && lowerBound === this.props.currentRefinement.min
+   && max === this.props.currentRefinement.max;
 
     const icons = [];
     for (let icon = 0; icon < max; icon++) {
@@ -65,7 +67,7 @@ class StarRating extends Component {
 
     // The last item of the list (the default item), should not
     // be clickable if it is selected.
-    const isLastAndSelect = isLowest && selected;
+    const isLastAndSelect = isLastSelectableItem && selected;
     const StarsWrapper = isLastAndSelect ? 'div' : 'a';
     const onClickHandler = isLastAndSelect ? {} : {
       href: createURL({min: lowerBound, max}),
@@ -101,13 +103,12 @@ class StarRating extends Component {
 
   render() {
     const {translate, refine, min, max, count, createURL, canRefine} = this.props;
-
     const items = [];
     for (let i = max; i >= min; i--) {
-      const itemCount = count.reduce((acc, item) => {
-        if (item.value >= i) acc = acc + item.count;
-        return acc;
-      }, 0);
+      const hasCount = !isEmpty(count.filter(item => Number(item.value) === i));
+      const lastSelectableItem = count.reduce((acc, item) => item.value < acc.value || !acc.value && hasCount
+                                                              ? item : acc, {});
+      const itemCount = count.reduce((acc, item) => item.value >= i && hasCount ? acc + item.count : acc, 0);
       items.push(this.buildItem({
         lowerBound: i,
         max,
@@ -115,7 +116,7 @@ class StarRating extends Component {
         count: itemCount,
         translate,
         createURL,
-        isLowest: i === min,
+        isLastSelectableItem: i === Number(lastSelectableItem.value),
       }));
     }
     return (
