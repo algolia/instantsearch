@@ -17,6 +17,18 @@ class MultiRange extends Component {
     canRefine: PropTypes.bool.isRequired,
   };
 
+  static contextTypes = {
+    canRefine: PropTypes.func,
+  };
+
+  componentWillMount() {
+    if (this.context.canRefine) this.context.canRefine(this.props.canRefine);
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.context.canRefine) this.context.canRefine(props.canRefine);
+  }
+
   renderItem = item => {
     const {refine} = this.props;
 
@@ -26,6 +38,7 @@ class MultiRange extends Component {
           {...cx('itemRadio', item.isRefined && 'itemRadioSelected')}
           type="radio"
           checked={item.isRefined}
+          disabled={item.noRefinement}
           onChange={refine.bind(null, item.value)}
         />
         <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>

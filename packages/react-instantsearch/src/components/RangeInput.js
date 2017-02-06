@@ -51,19 +51,21 @@ class RangeInput extends Component {
     const {translate, canRefine} = this.props;
     return (
       <form {...cx('root', !canRefine && 'noRefinement')} onSubmit={this.onSubmit}>
-        <label {...cx('labelMin')}>
-          <input {...cx('inputMin')}
-                 type="number" value={this.state.from} onChange={e => this.setState({from: e.target.value})}
-          />
-        </label>
-        <span {...cx('separator')}>{translate('separator')}</span>
-        <label {...cx('labelMax')}>
-          <input {...cx('inputMax')}
-                 type="number" value={this.state.to} onChange={e => this.setState({to: e.target.value})}
-          />
-        </label>
-        <button {...cx('submit')} type="submit">{translate('submit')}
-        </button>
+        <fieldset disabled={!canRefine} {...cx('fieldset')}>
+          <label {...cx('labelMin')}>
+            <input {...cx('inputMin')}
+                   type="number" value={this.state.from} onChange={e => this.setState({from: e.target.value})}
+            />
+          </label>
+          <span {...cx('separator')}>{translate('separator')}</span>
+          <label {...cx('labelMax')}>
+            <input {...cx('inputMax')}
+                   type="number" value={this.state.to} onChange={e => this.setState({to: e.target.value})}
+            />
+          </label>
+          <button {...cx('submit')} type="submit">{translate('submit')}
+          </button>
+        </fieldset>
       </form>
     );
   }

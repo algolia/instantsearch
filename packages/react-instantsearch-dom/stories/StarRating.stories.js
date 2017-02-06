@@ -18,6 +18,13 @@ stories.add('default', () =>
         <StarRating attributeName="rating" max={6} min={1}/>
       </Panel>
   </WrapWithHits>
+).add('with some unavailable refinements', () =>
+  <WrapWithHits>
+      <Configure filters="rating>=4" />
+      <Panel title="Ratings">
+        <StarRating attributeName="rating" max={6} min={1}/>
+      </Panel>
+  </WrapWithHits>
 ).add('with panel but no refinement', () =>
   <WrapWithHits searchBox={false}>
       <Panel title="Ratings">
