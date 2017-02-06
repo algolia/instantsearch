@@ -12,12 +12,10 @@ stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="Stats">
     <div>
       <Stats />
-      <div style={{display: 'none'}}>
         <RefinementList
           attributeName="category"
           defaultRefinement={['Dining']}
         />
-      </div>
     </div>
   </WrapWithHits>
 );
