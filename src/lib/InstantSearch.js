@@ -24,6 +24,8 @@ function defaultCreateURL() { return '#'; }
  * @param  {function} [options.searchFunction] A hook that will be called each time a search needs to be done, with the
  * helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing
  * searches at page load for example.
+ * @param   {function} [options.clientInstanceFunction] A function called upon initialization with the `options.appId`
+ * and `options.apiKey` values, allowing you to return your own instance of the Algolia JS client to be used by instantsearch.js
  * @param  {Object} [options.searchParameters] Additional parameters to pass to
  * the Algolia API.
  * [Full documentation](https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters)
@@ -60,6 +62,7 @@ class InstantSearch extends EventEmitter {
     searchParameters = {},
     urlSync = null,
     searchFunction,
+    clientInstanceFunction = (app, key) => algoliasearch(app, key),
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
@@ -72,7 +75,7 @@ Usage: instantsearch({
       throw new Error(usage);
     }
 
-    const client = algoliasearch(appId, apiKey);
+    const client = clientInstanceFunction(appId, apiKey);
     client.addAlgoliaAgent(`instantsearch.js ${version}`);
 
     this.client = client;

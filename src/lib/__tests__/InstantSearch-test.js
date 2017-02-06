@@ -85,6 +85,42 @@ describe('InstantSearch lifecycle', () => {
     expect(algoliasearchHelper.notCalled).toBe(true, 'algoliasearchHelper not yet called');
   });
 
+  context('when providing a custom client instance', () => {
+    let customClientInstanceFunction;
+    let customAppID;
+    let customApiKey;
+
+    beforeEach(() => {
+      // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy 
+      algoliasearch.reset();
+
+      // Create a spy to act as a clientInstanceFunction that returns a custom client 
+      customClientInstanceFunction = sinon.stub().returns(client);
+      customAppID = 'customAppID';
+      customApiKey = 'customAPIKey';
+
+      // Create a new InstantSearch instance with custom client function
+      search = new InstantSearch({
+        appId: customAppID,
+        apiKey: customApiKey,
+        indexName,
+        searchParameters,
+        urlSync: {},
+        clientInstanceFunction: customClientInstanceFunction,
+      });
+    });
+
+    it('does not call algoliasearch directly', () => {
+      expect(algoliasearch.calledOnce).toBe(false, 'algoliasearch not called');
+    });
+
+    it('calls clientInstanceFunction(appId, apiKey)', () => {
+      expect(customClientInstanceFunction.calledOnce).toBe(true, 'clientInstanceFunction called once');
+      expect(customClientInstanceFunction.args[0])
+        .toEqual([customAppID, customApiKey]);
+    });
+  });
+
   context('when adding a widget without render and init', () => {
     let widget;
 
