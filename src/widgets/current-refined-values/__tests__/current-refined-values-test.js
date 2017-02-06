@@ -9,8 +9,8 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {prepareTemplateProps} from '../../../lib/utils';
 import currentRefinedValues from '../current-refined-values';
-import CurrentRefinedValues from '../../../components/CurrentRefinedValues/CurrentRefinedValues';
-import defaultTemplates from '../defaultTemplates';
+import CurrentRefinedValuesWithHOCs from '../../../components/CurrentRefinedValues/CurrentRefinedValues';
+import defaultTemplates from '../../../connectors/current-refined-values/defaultTemplates';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -346,12 +346,11 @@ describe('currentRefinedValues()', () => {
 
   context('render()', () => {
     let ReactDOM;
-    let autoHideContainerHOC;
-    let headerFooterHOC;
 
     let parameters;
     let client;
     let helper;
+    let initParameters;
     let renderParameters;
     let refinements;
     let expectedProps;
@@ -365,10 +364,6 @@ describe('currentRefinedValues()', () => {
     beforeEach(() => {
       ReactDOM = {render: sinon.spy()};
       currentRefinedValues.__Rewire__('ReactDOM', ReactDOM);
-      autoHideContainerHOC = sinon.stub().returns(CurrentRefinedValues);
-      currentRefinedValues.__Rewire__('autoHideContainerHOC', autoHideContainerHOC);
-      headerFooterHOC = sinon.stub().returns(CurrentRefinedValues);
-      currentRefinedValues.__Rewire__('headerFooterHOC', headerFooterHOC);
 
       parameters = {
         container: document.createElement('div'),
@@ -428,6 +423,12 @@ describe('currentRefinedValues()', () => {
         .addNumericRefinement('numericDisjunctiveFacet', '<=', 4)
         .toggleTag('tag1')
         .toggleTag('tag2');
+
+      initParameters = {
+        helper,
+        createURL: () => '',
+        templatesConfig: {randomAttributeNeverUsed: 'value'},
+      };
 
       renderParameters = {
         results: {
@@ -541,14 +542,14 @@ describe('currentRefinedValues()', () => {
 
     it('should render twice <CurrentRefinedValues ... />', () => {
       const widget = currentRefinedValues(parameters);
-      widget.init({helper});
+      widget.init(initParameters);
       widget.render(renderParameters);
       widget.render(renderParameters);
 
-      expect(ReactDOM.render.calledTwice).toBe(true);
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+      expect(ReactDOM.render.callCount).toBe(2);
+      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       expect(ReactDOM.render.firstCall.args[1]).toBe(parameters.container);
-      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+      expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       expect(ReactDOM.render.secondCall.args[1]).toBe(parameters.container);
     });
 
@@ -561,10 +562,10 @@ describe('currentRefinedValues()', () => {
         parameters.container = '#testid';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
       });
 
@@ -574,10 +575,10 @@ describe('currentRefinedValues()', () => {
         parameters.container = element;
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         expect(ReactDOM.render.firstCall.args[1]).toBe(element);
       });
     });
@@ -601,14 +602,14 @@ describe('currentRefinedValues()', () => {
             );
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
         it('should render all attributes with an empty array', () => {
@@ -623,14 +624,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -649,7 +650,7 @@ describe('currentRefinedValues()', () => {
           );
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -668,7 +669,7 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
       });
 
@@ -689,14 +690,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
         it('should render all attributes with an empty array', () => {
@@ -711,14 +712,14 @@ describe('currentRefinedValues()', () => {
           });
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
           expectedProps.attributes = {};
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
         it('should render and pass all attributes defined in each objects', () => {
@@ -748,7 +749,7 @@ describe('currentRefinedValues()', () => {
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -767,7 +768,7 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
       });
 
@@ -803,7 +804,7 @@ describe('currentRefinedValues()', () => {
           refinements = [].concat(firstRefinements).concat(otherRefinements);
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           setRefinementsInExpectedProps();
@@ -822,7 +823,7 @@ describe('currentRefinedValues()', () => {
           };
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
       });
     });
@@ -832,13 +833,13 @@ describe('currentRefinedValues()', () => {
         parameters.clearAll = 'before';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.clearAllPosition = 'before';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       });
     });
 
@@ -847,13 +848,13 @@ describe('currentRefinedValues()', () => {
         parameters.templates.item = 'MY CUSTOM TEMPLATE';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.templateProps.templates.item = 'MY CUSTOM TEMPLATE';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       });
     });
 
@@ -873,23 +874,25 @@ describe('currentRefinedValues()', () => {
           parameters.autoHideContainer = true;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
-        it('shouldAutoHideContainer should be true with autoHideContainer = false', () => {
+        it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
           parameters.autoHideContainer = false;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});        // eslint-disable-next-line max-len
+          widget.init(initParameters);        // eslint-disable-next-line max-len
 
           widget.render(renderParameters);
 
+          expectedProps.shouldAutoHideContainer = false;
+
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
       });
 
@@ -898,26 +901,26 @@ describe('currentRefinedValues()', () => {
           parameters.autoHideContainer = true;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           expectedProps.shouldAutoHideContainer = false;
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
 
         it('shouldAutoHideContainer should be false with autoHideContainer = false', () => {
           parameters.autoHideContainer = false;
 
           const widget = currentRefinedValues(parameters);
-          widget.init({helper});
+          widget.init(initParameters);
           widget.render(renderParameters);
 
           expectedProps.shouldAutoHideContainer = false;
 
           expect(ReactDOM.render.calledOnce).toBe(true);
-          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+          expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
         });
       });
     });
@@ -927,26 +930,26 @@ describe('currentRefinedValues()', () => {
         parameters.cssClasses.body = 'custom-passed-body';
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-passed-body';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       });
 
       it('should work with an array', () => {
         parameters.cssClasses.body = ['custom-body', 'custom-body-2'];
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         expectedProps.cssClasses.body = 'ais-current-refined-values--body custom-body custom-body-2';
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       });
     });
 
@@ -970,7 +973,7 @@ describe('currentRefinedValues()', () => {
         refinements = [].concat(firstRefinements).concat(secondRefinements).concat(otherRefinements);
 
         const widget = currentRefinedValues(parameters);
-        widget.init({helper});
+        widget.init(initParameters);
         widget.render(renderParameters);
 
         setRefinementsInExpectedProps();
@@ -980,14 +983,12 @@ describe('currentRefinedValues()', () => {
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true);
-        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValues {...expectedProps} />);
+        expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<CurrentRefinedValuesWithHOCs {...expectedProps} />);
       });
     });
 
     afterEach(() => {
       currentRefinedValues.__ResetDependency__('ReactDOM');
-      currentRefinedValues.__ResetDependency__('autoHideContainerHOC');
-      currentRefinedValues.__ResetDependency__('headerFooterHOC');
     });
   });
 });

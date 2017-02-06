@@ -8,7 +8,8 @@ import TestUtils from 'react-addons-test-utils';
 import forEach from 'lodash/forEach';
 import map from 'lodash/map';
 
-import CurrentRefinedValues from '../CurrentRefinedValues.js';
+import {RawCurrentRefinedValues as CurrentRefinedValues,
+        __RewireAPI__ as CurrentRefinedValuesRewireAPI} from '../CurrentRefinedValues.js'; // eslint-disable-line import/named
 import Template from '../../Template';
 
 import expectJSX from 'expect-jsx';
@@ -271,7 +272,7 @@ describe('CurrentRefinedValues', () => {
   context('options.clearAllClick', () => {
     beforeEach(() => {
       // Not perfect since we depend on an internal
-      CurrentRefinedValues.__Rewire__('handleClick', cb => cb);
+      CurrentRefinedValuesRewireAPI.__Rewire__('handleClick', cb => cb);
     });
 
     it('is used in the clearAll element before', () => {
@@ -297,7 +298,7 @@ describe('CurrentRefinedValues', () => {
     });
 
     afterEach(() => {
-      CurrentRefinedValues.__ResetDependency__('handleClick');
+      CurrentRefinedValuesRewireAPI.__ResetDependency__('handleClick');
     });
   });
 
@@ -345,7 +346,7 @@ describe('CurrentRefinedValues', () => {
   context('options.clearRefinementClicks', () => {
     beforeEach(() => {
       // Not perfect since we depend on an internal
-      CurrentRefinedValues.__Rewire__('handleClick', cb => cb);
+      CurrentRefinedValuesRewireAPI.__Rewire__('handleClick', cb => cb);
     });
 
     it('is used in an item element', () => {
@@ -360,7 +361,7 @@ describe('CurrentRefinedValues', () => {
     });
 
     afterEach(() => {
-      CurrentRefinedValues.__ResetDependency__('handleClick');
+      CurrentRefinedValuesRewireAPI.__ResetDependency__('handleClick');
     });
   });
 

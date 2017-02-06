@@ -10,7 +10,7 @@ expect.extend(expectJSX);
 
 import clearAll from '../clear-all';
 import ClearAll from '../../../components/ClearAll/ClearAll';
-import defaultTemplates from '../defaultTemplates.js';
+import defaultTemplates from '../../../connectors/clear-all/defaultTemplates.js';
 
 describe('clearAll()', () => {
   let ReactDOM;
@@ -19,19 +19,13 @@ describe('clearAll()', () => {
   let props;
   let results;
   let helper;
-  let autoHideContainerHOC;
-  let headerFooterHOC;
   let createURL;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
-    autoHideContainerHOC = sinon.stub().returns(ClearAll);
-    headerFooterHOC = sinon.stub().returns(ClearAll);
     createURL = sinon.stub().returns('#all-cleared');
 
     clearAll.__Rewire__('ReactDOM', ReactDOM);
-    clearAll.__Rewire__('autoHideContainerHOC', autoHideContainerHOC);
-    clearAll.__Rewire__('headerFooterHOC', headerFooterHOC);
 
     container = document.createElement('div');
     widget = clearAll({container, autoHideContainer: true, cssClasses: {root: ['root', 'cx']}});
@@ -65,17 +59,11 @@ describe('clearAll()', () => {
       },
       url: '#all-cleared',
     };
-    widget.init({helper});
+    widget.init({helper, createURL: () => {}});
   });
 
   it('configures nothing', () => {
     expect(widget.getConfiguration).toEqual(undefined);
-  });
-
-  it('calls the decorators', () => {
-    widget.render({results, helper, state: helper.state, createURL});
-    expect(headerFooterHOC.calledOnce).toBe(true);
-    expect(autoHideContainerHOC.calledOnce).toBe(true);
   });
 
   context('without refinements', () => {

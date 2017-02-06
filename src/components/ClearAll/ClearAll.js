@@ -2,7 +2,10 @@ import React from 'react';
 import Template from '../Template.js';
 import {isSpecialClick} from '../../lib/utils.js';
 
-class ClearAll extends React.Component {
+import autoHideContainer from '../../decorators/autoHideContainer.js';
+import headerFooter from '../../decorators/headerFooter.js';
+
+export class RawClearAll extends React.Component {
   componentWillMount() {
     this.handleClick = this.handleClick.bind(this);
   }
@@ -42,7 +45,7 @@ class ClearAll extends React.Component {
   }
 }
 
-ClearAll.propTypes = {
+RawClearAll.propTypes = {
   clearAll: React.PropTypes.func.isRequired,
   cssClasses: React.PropTypes.shape({
     link: React.PropTypes.string,
@@ -52,4 +55,4 @@ ClearAll.propTypes = {
   url: React.PropTypes.string.isRequired,
 };
 
-export default ClearAll;
+export default autoHideContainer(headerFooter(RawClearAll));

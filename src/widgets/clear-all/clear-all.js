@@ -1,20 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import ClearAllComponent from '../../components/ClearAll/ClearAll.js';
+import ClearAllWithHOCs from '../../components/ClearAll/ClearAll.js';
 
-const bem = bemHelper('ais-clear-all');
+import connectClearAll from '../../connectors/clear-all/connectClearAll.js';
 
 /**
  * Allows to clear all refinements at once
@@ -36,74 +24,30 @@ const bem = bemHelper('ais-clear-all');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-clearAll({
-  container,
-  [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={link: 'Clear all'} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ excludeAttributes=[] ]
-})`;
-function clearAll({
-    container,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    collapsible = false,
-    autoHideContainer = true,
-    excludeAttributes = [],
-  } = {}) {
-  if (!container) {
-    throw new Error(usage);
-  }
+export default connectClearAll(defaultRendering);
 
-  const containerNode = getContainerNode(container);
-  let ClearAll = headerFooterHOC(ClearAllComponent);
-  if (autoHideContainer === true) {
-    ClearAll = autoHideContainerHOC(ClearAll);
-  }
+function defaultRendering({
+  clearAll,
+  collapsible,
+  cssClasses,
+  hasRefinements,
+  shouldAutoHideContainer,
+  templateProps,
+  url,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link),
-  };
-
-  return {
-    init({helper, templatesConfig}) {
-      this.clearAll = this.clearAll.bind(this, helper);
-      this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
-    },
-
-    render({results, state, createURL}) {
-      this.clearAttributes = getRefinements(results, state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = this.clearAttributes.length !== 0;
-      const url = createURL(clearRefinementsFromState(state));
-
-      ReactDOM.render(
-        <ClearAll
-          clearAll={this.clearAll}
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          hasRefinements={hasRefinements}
-          shouldAutoHideContainer={!hasRefinements}
-          templateProps={this._templateProps}
-          url={url}
-        />,
-        containerNode
-      );
-    },
-
-    clearAll(helper) {
-      if (this.clearAttributes.length > 0) {
-        clearRefinementsAndSearch(helper, this.clearAttributes);
-      }
-    },
-  };
+  ReactDOM.render(
+    <ClearAllWithHOCs
+      clearAll={clearAll}
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      hasRefinements={hasRefinements}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+      url={url}
+    />,
+    containerNode
+  );
 }
-
-export default clearAll;

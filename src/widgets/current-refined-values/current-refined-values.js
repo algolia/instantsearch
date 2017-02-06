@@ -1,31 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  isDomElement,
-  getContainerNode,
-  prepareTemplateProps,
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import isUndefined from 'lodash/isUndefined';
-import isBoolean from 'lodash/isBoolean';
-import isString from 'lodash/isString';
-import isArray from 'lodash/isArray';
-import isPlainObject from 'lodash/isPlainObject';
-import isFunction from 'lodash/isFunction';
-import isEmpty from 'lodash/isEmpty';
-import map from 'lodash/map';
-import reduce from 'lodash/reduce';
-import filter from 'lodash/filter';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer';
-import defaultTemplates from './defaultTemplates';
-import CurrentRefinedValuesComponent from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
-
-const bem = bemHelper('ais-current-refined-values');
+import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
+import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them
@@ -59,205 +35,38 @@ const bem = bemHelper('ais-current-refined-values');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-currentRefinedValues({
-  container,
-  [ attributes: [{name[, label, template, transformData]}] ],
-  [ onlyListedAttributes = false ],
-  [ clearAll = 'before' ] // One of ['before', 'after', false]
-  [ templates.{header,item,clearAll,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer = true ],
-  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
-  [ collapsible=false ]
-})`;
-function currentRefinedValues({
-    container,
-    attributes = [],
-    onlyListedAttributes = false,
-    clearAll = 'before',
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-    cssClasses: userCssClasses = {},
-  }) {
-  const attributesOK = isArray(attributes) &&
-    reduce(
-      attributes,
-      (res, val) =>
-        res &&
-          isPlainObject(val) &&
-          isString(val.name) &&
-          (isUndefined(val.label) || isString(val.label)) &&
-          (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
-          (isUndefined(val.transformData) || isFunction(val.transformData)),
-      true);
+const currentRefinedValues = connectCurrentRefinedValues(({
+  attributes,
+  clearAllClick,
+  clearAllPosition,
+  clearAllURL,
+  clearRefinementClicks,
+  clearRefinementURLs,
+  collapsible,
+  cssClasses,
+  refinements,
+  shouldAutoHideContainer,
+  templateProps,
+  containerNode,
+}, isFirstRendering) => {
+  if (isFirstRendering) return;
 
-  const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
-  const templatesOK = isPlainObject(templates) &&
-    reduce(
-      templates,
-      (res, val, key) =>
-        res &&
-          templatesKeys.indexOf(key) !== -1 &&
-          (isString(val) || isFunction(val)),
-      true
-    );
-
-  const userCssClassesKeys = ['root', 'header', 'body', 'clearAll', 'list', 'item', 'link', 'count', 'footer'];
-  const userCssClassesOK = isPlainObject(userCssClasses) &&
-    reduce(
-      userCssClasses,
-      (res, val, key) =>
-        res &&
-         userCssClassesKeys.indexOf(key) !== -1 &&
-         isString(val) || isArray(val),
-      true);
-
-  const transformDataOK = isUndefined(transformData) ||
-    isFunction(transformData) ||
-    isPlainObject(transformData) && isFunction(transformData.item);
-
-  const showUsage = false ||
-    !(isString(container) || isDomElement(container)) ||
-    !isArray(attributes) ||
-    !attributesOK ||
-    !isBoolean(onlyListedAttributes) ||
-    [false, 'before', 'after'].indexOf(clearAll) === -1 ||
-    !isPlainObject(templates) ||
-    !templatesOK ||
-    !transformDataOK ||
-    !isBoolean(autoHideContainer) ||
-    !userCssClassesOK;
-
-  if (showUsage) {
-    throw new Error(usage);
-  }
-
-  const containerNode = getContainerNode(container);
-  let CurrentRefinedValues = headerFooterHOC(CurrentRefinedValuesComponent);
-  if (autoHideContainer === true) {
-    CurrentRefinedValues = autoHideContainerHOC(CurrentRefinedValues);
-  }
-
-  const attributeNames = map(attributes, attribute => attribute.name);
-  const restrictedTo = onlyListedAttributes ? attributeNames : [];
-
-  const attributesObj = reduce(attributes, (res, attribute) => {
-    res[attribute.name] = attribute;
-    return res;
-  }, {});
-
-  return {
-    init({helper}) {
-      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
-    },
-
-    render({results, helper, state, templatesConfig, createURL}) {
-      const cssClasses = {
-        root: cx(bem(null), userCssClasses.root),
-        header: cx(bem('header'), userCssClasses.header),
-        body: cx(bem('body'), userCssClasses.body),
-        clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
-        list: cx(bem('list'), userCssClasses.list),
-        item: cx(bem('item'), userCssClasses.item),
-        link: cx(bem('link'), userCssClasses.link),
-        count: cx(bem('count'), userCssClasses.count),
-        footer: cx(bem('footer'), userCssClasses.footer),
-      };
-
-      const templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
-
-      const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-      const clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
-      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
-
-      const shouldAutoHideContainer = refinements.length === 0;
-
-      ReactDOM.render(
-        <CurrentRefinedValues
-          attributes={attributesObj}
-          clearAllClick={this._clearRefinementsAndSearch}
-          clearAllPosition={clearAll}
-          clearAllURL={clearAllURL}
-          clearRefinementClicks={clearRefinementClicks}
-          clearRefinementURLs={clearRefinementURLs}
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          refinements={refinements}
-          shouldAutoHideContainer={shouldAutoHideContainer}
-          templateProps={templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
-}
-
-function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attributeName) {
-  const idx = attributeNames.indexOf(attributeName);
-  if (idx !== -1) {
-    return idx;
-  }
-  return attributeNames.length + otherAttributeNames.indexOf(attributeName);
-}
-
-function compareRefinements(attributeNames, otherAttributeNames, a, b) {
-  const idxa = getRestrictedIndexForSort(attributeNames, otherAttributeNames, a.attributeName);
-  const idxb = getRestrictedIndexForSort(attributeNames, otherAttributeNames, b.attributeName);
-  if (idxa === idxb) {
-    if (a.name === b.name) {
-      return 0;
-    }
-    return a.name < b.name ? -1 : 1;
-  }
-  return idxa < idxb ? -1 : 1;
-}
-
-function getFilteredRefinements(results, state, attributeNames, onlyListedAttributes) {
-  let refinements = getRefinements(results, state);
-  const otherAttributeNames = reduce(refinements, (res, refinement) => {
-    if (attributeNames.indexOf(refinement.attributeName) === -1 && res.indexOf(refinement.attributeName === -1)) {
-      res.push(refinement.attributeName);
-    }
-    return res;
-  }, []);
-  refinements = refinements.sort(compareRefinements.bind(null, attributeNames, otherAttributeNames));
-  if (onlyListedAttributes && !isEmpty(attributeNames)) {
-    refinements = filter(refinements, refinement => attributeNames.indexOf(refinement.attributeName) !== -1);
-  }
-  return refinements;
-}
-
-function clearRefinementFromState(state, refinement) {
-  switch (refinement.type) {
-  case 'facet':
-    return state.removeFacetRefinement(refinement.attributeName, refinement.name);
-  case 'disjunctive':
-    return state.removeDisjunctiveFacetRefinement(refinement.attributeName, refinement.name);
-  case 'hierarchical':
-    return state.clearRefinements(refinement.attributeName);
-  case 'exclude':
-    return state.removeExcludeRefinement(refinement.attributeName, refinement.name);
-  case 'numeric':
-    return state.removeNumericRefinement(refinement.attributeName, refinement.operator, refinement.numericValue);
-  case 'tag':
-    return state.removeTagRefinement(refinement.name);
-  default:
-    throw new Error(`clearRefinement: type ${refinement.type} is not handled`);
-  }
-}
-
-function clearRefinement(helper, refinement) {
-  helper.setState(clearRefinementFromState(helper.state, refinement)).search();
-}
+  ReactDOM.render(
+    <CurrentRefinedValuesWithHOCs
+      attributes={attributes}
+      clearAllClick={clearAllClick}
+      clearAllPosition={clearAllPosition}
+      clearAllURL={clearAllURL}
+      clearRefinementClicks={clearRefinementClicks}
+      clearRefinementURLs={clearRefinementURLs}
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      refinements={refinements}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+    />,
+    containerNode
+  );
+});
 
 export default currentRefinedValues;

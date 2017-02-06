@@ -4,7 +4,7 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import TestUtils from 'react-addons-test-utils';
-import ClearAll from '../ClearAll';
+import {RawClearAll as ClearAll} from '../ClearAll';
 import Template from '../../Template';
 
 import expectJSX from 'expect-jsx';

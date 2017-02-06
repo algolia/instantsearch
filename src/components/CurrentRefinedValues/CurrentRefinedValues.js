@@ -2,12 +2,15 @@ import React from 'react';
 
 import Template from '../Template.js';
 
+import headerFooterHOC from '../../decorators/headerFooter.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer';
+
 import {isSpecialClick} from '../../lib/utils.js';
 import map from 'lodash/map';
 import cloneDeep from 'lodash/cloneDeep';
 import isEqual from 'lodash/isEqual';
 
-class CurrentRefinedValues extends React.Component {
+export class RawCurrentRefinedValues extends React.Component {
   shouldComponentUpdate(nextProps) {
     return !isEqual(this.props.refinements, nextProps.refinements);
   }
@@ -109,7 +112,7 @@ function handleClick(cb) {
   };
 }
 
-CurrentRefinedValues.propTypes = {
+RawCurrentRefinedValues.propTypes = {
   attributes: React.PropTypes.object,
   clearAllClick: React.PropTypes.func,
   clearAllPosition: React.PropTypes.oneOfType([
@@ -134,4 +137,4 @@ CurrentRefinedValues.propTypes = {
   templateProps: React.PropTypes.object.isRequired,
 };
 
-export default CurrentRefinedValues;
+export default autoHideContainerHOC(headerFooterHOC(RawCurrentRefinedValues));
