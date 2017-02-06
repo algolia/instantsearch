@@ -62,7 +62,7 @@ class InstantSearch extends EventEmitter {
     searchParameters = {},
     urlSync = null,
     searchFunction,
-    clientFactory = (app, key) => algoliasearch(app, key),
+    clientFactory = algoliasearch,
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
