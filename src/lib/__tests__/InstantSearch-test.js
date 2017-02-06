@@ -117,7 +117,7 @@ describe('InstantSearch lifecycle', () => {
     it('calls clientFactory(appId, apiKey)', () => {
       expect(clientFactory.calledOnce).toBe(true, 'clientInstanceFunction called once');
       expect(clientFactory.args[0])
-        .toEqual([customAppID, customApiKey]);
+        .toEqual([algoliasearch, customAppID, customApiKey]);
     });
   });
 
