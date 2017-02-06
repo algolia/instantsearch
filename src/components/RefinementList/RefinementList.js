@@ -8,7 +8,10 @@ import isEqual from 'lodash/isEqual';
 
 import SearchBox from '../SearchBox';
 
-class RefinementList extends React.Component {
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+export class RawRefinementList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +36,7 @@ class RefinementList extends React.Component {
     let subItems;
     const hasChildren = facetValue.data && facetValue.data.length > 0;
     if (hasChildren) {
-      subItems = <RefinementList
+      subItems = <RawRefinementList
                   {...this.props}
                   depth={this.props.depth + 1}
                   facetValues={facetValue.data}
@@ -185,7 +188,7 @@ class RefinementList extends React.Component {
   }
 }
 
-RefinementList.propTypes = {
+RawRefinementList.propTypes = {
   Template: React.PropTypes.func,
   attributeNameKey: React.PropTypes.string,
   createURL: React.PropTypes.func,
@@ -207,10 +210,10 @@ RefinementList.propTypes = {
   isFromSearch: React.PropTypes.bool,
 };
 
-RefinementList.defaultProps = {
+RawRefinementList.defaultProps = {
   cssClasses: {},
   depth: 0,
   attributeNameKey: 'name',
 };
 
-export default RefinementList;
+export default autoHideContainerHOC(headerFooterHOC(RawRefinementList));

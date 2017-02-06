@@ -7,12 +7,11 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import hierarchicalMenu from '../hierarchical-menu';
 import RefinementList from '../../../components/RefinementList/RefinementList';
+import defaultTemplates from '../../../connectors/hierarchical-menu/defaultTemplates.js';
 
 describe('hierarchicalMenu()', () => {
-  let autoHideContainer;
   let container;
   let attributes;
-  let headerFooter;
   let options;
   let widget;
   let ReactDOM;
@@ -23,10 +22,6 @@ describe('hierarchicalMenu()', () => {
     options = {};
     ReactDOM = {render: sinon.spy()};
     hierarchicalMenu.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returnsArg(0);
-    hierarchicalMenu.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returnsArg(0);
-    hierarchicalMenu.__Rewire__('headerFooterHOC', headerFooter);
   });
 
   context('instantiated with wrong parameters', () => {
@@ -44,26 +39,6 @@ describe('hierarchicalMenu()', () => {
       options = {container: undefined, attributes};
       expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);
     });
-  });
-
-  context('autoHideContainer', () => {
-    beforeEach(() => { options = {container, attributes}; });
-
-    it('should be called if autoHideContainer set to true', () => {
-      hierarchicalMenu({...options, autoHideContainer: true});
-      expect(autoHideContainer.calledOnce).toBe(true);
-    });
-
-    it('should not be called if autoHideContainer set to false', () => {
-      hierarchicalMenu({container, attributes, autoHideContainer: false});
-      expect(autoHideContainer.called).toBe(false);
-    });
-  });
-
-  it('uses headerFooter', () => {
-    options = {container, attributes};
-    hierarchicalMenu(options);
-    expect(headerFooter.calledOnce).toBe(true);
   });
 
   context('getConfiguration', () => {
@@ -160,18 +135,12 @@ describe('hierarchicalMenu()', () => {
     let results;
     let data;
     let cssClasses;
-    const defaultTemplates = {
-      header: 'header',
-      item: 'item',
-      footer: 'footer',
-    };
     let templateProps;
     let helper;
     let state;
     let createURL;
 
     beforeEach(() => {
-      hierarchicalMenu.__Rewire__('defaultTemplates', defaultTemplates);
       templateProps = {
         transformData: undefined,
         templatesConfig: undefined,

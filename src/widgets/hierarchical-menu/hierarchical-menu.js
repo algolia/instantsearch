@@ -1,17 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
 
-const bem = bemHelper('ais-hierarchical-menu');
+import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+
 /**
  * Create a hierarchical menu using multiple attributes
  * @function hierarchicalMenu
@@ -45,124 +37,32 @@ const bem = bemHelper('ais-hierarchical-menu');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-hierarchicalMenu({
-  container,
-  attributes,
-  [ separator=' > ' ],
-  [ rootPath ],
-  [ showParentLevel=true ],
-  [ limit=10 ],
-  [ sortBy=['name:asc'] ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-function hierarchicalMenu({
-    container,
-    attributes,
-    separator = ' > ',
-    rootPath = null,
-    showParentLevel = true,
-    limit = 10,
-    sortBy = ['name:asc'],
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-  } = {}) {
-  if (!container || !attributes || !attributes.length) {
-    throw new Error(usage);
-  }
+export default connectHierarchicalMenu(defaultRendering);
 
-  const containerNode = getContainerNode(container);
+function defaultRendering({
+  attributeNameKey,
+  collapsible,
+  createURL,
+  cssClasses,
+  facetValues,
+  shouldAutoHideContainer,
+  templateProps,
+  toggleRefinement,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
 
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  // we need to provide a hierarchicalFacet name for the search state
-  // so that we can always map $hierarchicalFacetName => real attributes
-  // we use the first attribute name
-  const hierarchicalFacetName = attributes[0];
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    depth: bem('list', 'lvl'),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
-  };
-
-  return {
-    getConfiguration: currentConfiguration => ({
-      hierarchicalFacets: [{
-        name: hierarchicalFacetName,
-        attributes,
-        separator,
-        rootPath,
-        showParentLevel,
-      }],
-      maxValuesPerFacet: currentConfiguration.maxValuesPerFacet !== undefined ?
-        Math.max(currentConfiguration.maxValuesPerFacet, limit) :
-        limit,
-    }),
-    init({helper, templatesConfig}) {
-      this._toggleRefinement = facetValue => helper
-        .toggleRefinement(hierarchicalFacetName, facetValue)
-        .search();
-
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-    _prepareFacetValues(facetValues, state) {
-      return facetValues
-        .slice(0, limit)
-        .map(subValue => {
-          if (Array.isArray(subValue.data)) {
-            subValue.data = this._prepareFacetValues(subValue.data, state);
-          }
-
-          return subValue;
-        });
-    },
-    render({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
-      facetValues = this._prepareFacetValues(facetValues, state);
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          attributeNameKey="path"
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          shouldAutoHideContainer={facetValues.length === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-  };
+  ReactDOM.render(
+    <RefinementList
+      attributeNameKey="path"
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={facetValues.length === 0}
+      templateProps={templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
 }
-
-export default hierarchicalMenu;

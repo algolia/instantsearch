@@ -5,7 +5,7 @@ import {shallow} from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
 
-import RefinementList from '../RefinementList';
+import {RawRefinementList as RefinementList} from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
 import expectJSX from 'expect-jsx';
