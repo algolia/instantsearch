@@ -91,10 +91,10 @@ describe('InstantSearch lifecycle', () => {
     let customApiKey;
 
     beforeEach(() => {
-      // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy 
+      // InstantSearch is being called once at the top-level context, so reset the `algoliasearch` spy
       algoliasearch.reset();
 
-      // Create a spy to act as a clientInstanceFunction that returns a custom client 
+      // Create a spy to act as a clientInstanceFunction that returns a custom client
       customClientInstanceFunction = sinon.stub().returns(client);
       customAppID = 'customAppID';
       customApiKey = 'customAPIKey';
