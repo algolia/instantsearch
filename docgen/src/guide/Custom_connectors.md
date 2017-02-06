@@ -61,8 +61,8 @@ const CoolWidget = createConnector({
 
     // Connect the underlying component to the `queryAndPage` searchState entry.
     return {
-      query: searchState.queryAndPage[0],
-      page: searchState.queryAndPage[1],
+      query,
+      page,
     }
   },
 
