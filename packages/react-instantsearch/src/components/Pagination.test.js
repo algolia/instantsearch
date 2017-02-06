@@ -236,6 +236,22 @@ describe('Pagination', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('disabled all button if no results', () => {
+    const tree = renderer.create(
+      <Pagination
+        {...REQ_PROPS}
+        maxPages={Number.POSITIVE_INFINITY}
+        showLast
+        showFirst
+        showNext
+        showPrevious
+        nbPages={0}
+        currentRefinement={1}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('refines its value when clicking on a page link', () => {
     const refine = jest.fn();
     const wrapper = mount(

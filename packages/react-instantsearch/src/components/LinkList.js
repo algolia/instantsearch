@@ -53,6 +53,7 @@ export default class LinkList extends Component {
               item.disabled && 'itemDisabled',
               item.modifier
             )}
+            disabled={item.disabled}
           >
             {item.disabled ?
               <span {...cx('itemLink', 'itemLinkDisabled')}>

@@ -119,7 +119,6 @@ class Pagination extends Component {
       listComponent: ListComponent,
       ...otherProps
     } = this.props;
-
     const totalPages = Math.min(nbPages, maxPages);
     const lastPage = totalPages;
 
@@ -163,7 +162,7 @@ class Pagination extends Component {
       items.push({
         key: 'next',
         modifier: 'itemNext',
-        disabled: currentRefinement === lastPage,
+        disabled: currentRefinement === lastPage || lastPage <= 1,
         label: translate('next'),
         value: currentRefinement + 1,
         ariaLabel: translate('ariaNext'),
@@ -173,7 +172,7 @@ class Pagination extends Component {
       items.push({
         key: 'last',
         modifier: 'itemLast',
-        disabled: currentRefinement === lastPage,
+        disabled: currentRefinement === lastPage || lastPage <= 1,
         label: translate('last'),
         value: lastPage,
         ariaLabel: translate('ariaLast'),
