@@ -91,7 +91,7 @@ class Menu extends Component {
 
 export default translatable({
   showMore: extended => extended ? 'Show less' : 'Show more',
-  noResults: 'No Results',
+  noResults: 'No results',
   submit: null,
   reset: null,
   resetTitle: 'Clear the search query.',
