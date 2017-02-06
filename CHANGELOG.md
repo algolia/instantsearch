@@ -1,3 +1,13 @@
+<a name="1.10.5"></a>
+## [1.10.5](https://github.com/algolia/instantsearch.js/compare/v1.10.4...v1.10.5) (2017-02-06)
+
+
+### Bug Fixes
+
+* **urlSync:** update url only after threshold (#1917) ([b0f0cf1](https://github.com/algolia/instantsearch.js/commit/b0f0cf1)), closes [#1856](https://github.com/algolia/instantsearch.js/issues/1856)
+
+
+
 <a name="1.10.4"></a>
 ## [1.10.4](https://github.com/algolia/instantsearch.js/compare/v1.10.3...v1.10.4) (2017-01-25)
 
