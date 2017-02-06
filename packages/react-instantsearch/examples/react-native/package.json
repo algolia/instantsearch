@@ -1,16 +1,16 @@
 {
-	"name": "reactnative",
-	"version": "0.0.1",
-	"private": true,
-	"dependencies": {
-		"react": "^15.4.2",
-		"react-instantsearch": "latest",
-		"react-native": "^0.40.0"
-	},
-	"scripts": {
-		"start": "node node_modules/react-native/local-cli/cli.js start"
-	},
-	"devDependencies": {
-		"babel-preset-react-native": "^1.9.1"
-	}
+  "name": "reactnative",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-instantsearch": "latest",
+    "react-native": "^0.41.2"
+  },
+  "scripts": {
+    "start": "node node_modules/react-native/local-cli/cli.js start"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "^1.9.1"
+  }
 }
