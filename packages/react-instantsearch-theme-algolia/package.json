@@ -13,10 +13,10 @@
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.1",
+    "autoprefixer": "^6.7.2",
     "cssnano": "^3.10.0",
-    "node-sass": "^4.4.0",
-    "postcss": "^5.2.11",
+    "node-sass": "^4.5.0",
+    "postcss": "^5.2.12",
     "postcss-scss": "^0.4.0"
   },
   "author": {
