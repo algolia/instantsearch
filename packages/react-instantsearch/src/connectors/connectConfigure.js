@@ -29,7 +29,8 @@ export default createConnector({
     };
   },
   cleanUp(props, searchState) {
-    const configureState = Object.keys(searchState[namespace]).reduce((acc, item) => {
+    const configureKeys = searchState[namespace] ? Object.keys(searchState[namespace]) : [];
+    const configureState = configureKeys.reduce((acc, item) => {
       if (!props[item]) {
         acc[item] = searchState[namespace][item];
       }
