@@ -64,7 +64,7 @@ export default function createConnector(connectorDesc) {
 
       this.unsubscribe = store.subscribe(() => {
         this.setState({
-          props: this.getProvidedProps(props),
+          props: this.getProvidedProps(this.props),
         });
       });
 
