@@ -180,11 +180,13 @@ class SearchBox extends Component {
             <svg role="img">
               <use href="#sbx-icon-search-13"></use>
             </svg>
+            {translate('submit')}
           </button>
           <button type="reset" title={translate('resetTitle')} {...cx('reset')} onClick={this.onReset}>
             <svg role="img">
               <use href="#sbx-icon-clear-3"></use>
             </svg>
+            {translate('reset')}
           </button>
         </div>
       </form>
