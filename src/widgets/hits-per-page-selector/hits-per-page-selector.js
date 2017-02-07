@@ -1,15 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
-import some from 'lodash/some';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import SelectorComponent from '../../components/Selector.js';
 
-const bem = bemHelper('ais-hits-per-page-selector');
+import Selector from '../../components/Selector.js';
+
+import connectHitsPerPageSelector from '../../connectors/hits-per-page-selector/connectHitsPerPageSelector.js';
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -25,83 +19,25 @@ const bem = bemHelper('ais-hits-per-page-selector');
  * @return {Object}
  */
 
-const usage = `Usage:
-hitsPerPageSelector({
-  container,
+export default connectHitsPerPageSelector(defaultRendering);
+
+function defaultRendering({
+  cssClasses,
+  currentValue,
   options,
-  [ cssClasses.{root,item}={} ],
-  [ autoHideContainer=false ]
-})`;
-function hitsPerPageSelector({
-    container,
-    options: userOptions,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}) {
-  let options = userOptions;
-
-  if (!container || !options) {
-    throw new Error(usage);
-  }
-
-  const containerNode = getContainerNode(container);
-  let Selector = SelectorComponent;
-  if (autoHideContainer === true) {
-    Selector = autoHideContainerHOC(Selector);
-  }
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-  };
-
-  return {
-    init({helper, state}) {
-      const isCurrentInOptions = some(
-        options,
-        option => Number(state.hitsPerPage) === Number(option.value)
-      );
-
-      if (!isCurrentInOptions) {
-        if (state.hitsPerPage === undefined) {
-          if (window.console) {
-            window.console.log(
-`[Warning][hitsPerPageSelector] hitsPerPage not defined.
-You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
-using the searchParameters attribute of the instantsearch constructor.`
-            );
-          }
-        } else if (window.console) {
-          window.console.log(
-`[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
-          );
-        }
-
-        options = [{value: undefined, label: ''}].concat(options);
-      }
-
-      this.setHitsPerPage = value => helper
-        .setQueryParameter('hitsPerPage', Number(value))
-        .search();
-    },
-
-    render({state, results}) {
-      const currentValue = state.hitsPerPage;
-      const hasNoResults = results.nbHits === 0;
-
-      ReactDOM.render(
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={currentValue}
-          options={options}
-          setValue={this.setHitsPerPage}
-          shouldAutoHideContainer={hasNoResults}
-        />,
-        containerNode
-      );
-    },
-  };
+  setValue,
+  shouldAutoHideContainer,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Selector
+      cssClasses={cssClasses}
+      currentValue={currentValue}
+      options={options}
+      setValue={setValue}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+    />,
+    containerNode
+  );
 }
-
-export default hitsPerPageSelector;

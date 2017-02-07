@@ -1,6 +1,9 @@
 import React from 'react';
 
-class Selector extends React.Component {
+import autoHideContainer from '../decorators/autoHideContainer.js';
+import headerFooter from '../decorators/headerFooter.js';
+
+export class RawSelector extends React.Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
@@ -31,7 +34,7 @@ class Selector extends React.Component {
   }
 }
 
-Selector.propTypes = {
+RawSelector.propTypes = {
   cssClasses: React.PropTypes.shape({
     root: React.PropTypes.oneOfType([
       React.PropTypes.string,
@@ -58,4 +61,4 @@ Selector.propTypes = {
   setValue: React.PropTypes.func.isRequired,
 };
 
-export default Selector;
+export default autoHideContainer(headerFooter(RawSelector));

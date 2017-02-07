@@ -31,16 +31,13 @@ describe('hitsPerPageSelector()', () => {
   let props;
   let helper;
   let results;
-  let autoHideContainer;
   let consoleLog;
   let state;
 
   beforeEach(() => {
-    autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = {render: sinon.spy()};
 
     hitsPerPageSelector.__Rewire__('ReactDOM', ReactDOM);
-    hitsPerPageSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
     consoleLog = sinon.stub(window.console, 'log');
 
     container = document.createElement('div');
@@ -83,14 +80,13 @@ describe('hitsPerPageSelector()', () => {
         item: 'ais-hits-per-page-selector--item custom-item',
       },
       currentValue: 10,
-      shouldAutoHideContainer: true,
       options: [
         {value: 10, label: '10 results'},
         {value: 20, label: '20 results'},
       ],
       setValue: () => {},
     };
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+    expect(ReactDOM.render.callCount).toBe(2);
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
@@ -136,7 +132,6 @@ with \`value: hitsPerPage\` (hitsPerPage: -1)`
 
   afterEach(() => {
     hitsPerPageSelector.__ResetDependency__('ReactDOM');
-    hitsPerPageSelector.__ResetDependency__('autoHideContainerHOC');
     consoleLog.restore();
   });
 });

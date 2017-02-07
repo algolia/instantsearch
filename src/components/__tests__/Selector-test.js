@@ -3,7 +3,7 @@
 import React from 'react';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import Selector from '../Selector';
+import {RawSelector as Selector} from '../Selector';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
