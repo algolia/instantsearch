@@ -19,14 +19,11 @@ describe('numericSelector()', () => {
   let expectedProps;
   let helper;
   let results;
-  let autoHideContainer;
 
   beforeEach(() => {
-    autoHideContainer = sinon.stub().returns(Selector);
     ReactDOM = {render: sinon.spy()};
 
     numericSelector.__Rewire__('ReactDOM', ReactDOM);
-    numericSelector.__Rewire__('autoHideContainerHOC', autoHideContainer);
 
     container = document.createElement('div');
     options = [
@@ -44,7 +41,6 @@ describe('numericSelector()', () => {
         item: 'ais-numeric-selector--item custom-item',
       },
       currentValue: 1,
-      shouldAutoHideContainer: true,
       options: [
         {value: 1, label: 'first'},
         {value: 2, label: 'second'},
@@ -130,6 +126,5 @@ describe('numericSelector()', () => {
 
   afterEach(() => {
     numericSelector.__ResetDependency__('ReactDOM');
-    numericSelector.__ResetDependency__('autoHideContainerHOC');
   });
 });
