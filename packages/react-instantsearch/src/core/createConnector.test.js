@@ -214,6 +214,7 @@ describe('createConnector', () => {
       });
       const getSearchParameters = jest.fn(() => {
       });
+      const onSearchStateChange = jest.fn();
       const update = jest.fn();
       const Dummy = jest.fn(() => null);
       const Connected = createConnector({
@@ -233,13 +234,17 @@ describe('createConnector', () => {
               registerWidget: () => null,
               update,
             },
+            onSearchStateChange,
           },
         },
       });
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'there', another: ['one', 'two']});
+      expect(onSearchStateChange.mock.calls.length).toBe(1);
       expect(update.mock.calls.length).toBe(1);
       wrapper.setProps({hello: 'there', another: ['one', 'two']});
+      expect(onSearchStateChange.mock.calls.length).toBe(1);
       expect(update.mock.calls.length).toBe(1);
     });
   });
@@ -340,6 +345,7 @@ describe('createConnector', () => {
         getId,
       })(() => null);
       const update = jest.fn();
+      const onSearchStateChange = jest.fn();
       const props = {hello: 'there'};
       const wrapper = mount(<Connected {...props} />, {context: {
         ais: {
@@ -351,11 +357,14 @@ describe('createConnector', () => {
             registerWidget: () => null,
             update,
           },
+          onSearchStateChange,
         },
       }});
       expect(update.mock.calls.length).toBe(0);
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'you'});
       expect(update.mock.calls.length).toBe(1);
+      expect(onSearchStateChange.mock.calls.length).toBe(1);
     });
 
     it('dont update when props dont change', () => {
@@ -365,6 +374,7 @@ describe('createConnector', () => {
         getMetadata: () => null,
         getId,
       })(() => null);
+      const onSearchStateChange = jest.fn();
       const update = jest.fn();
       const props = {hello: 'there'};
       const wrapper = mount(<Connected {...props} />, {context: {
@@ -377,10 +387,13 @@ describe('createConnector', () => {
             registerWidget: () => null,
             update,
           },
+          onSearchStateChange,
         },
       }});
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'there'});
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
     });
 

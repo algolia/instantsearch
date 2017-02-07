@@ -80,6 +80,7 @@ class InstantSearch extends Component {
           onInternalStateUpdate: this.onWidgetsInternalStateUpdate.bind(this),
           createHrefForState: this.createHrefForState.bind(this),
           onSearchForFacetValues: this.onSearchForFacetValues.bind(this),
+          onSearchStateChange: this.onSearchStateChange.bind(this),
         },
       };
     }
@@ -99,15 +100,21 @@ class InstantSearch extends Component {
   }
 
   onWidgetsInternalStateUpdate(searchState) {
+    searchState = this.onSearchStateChange(searchState);
+
+    if (!this.isControlled) {
+      this.aisManager.onExternalStateUpdate(searchState);
+    }
+  }
+
+  onSearchStateChange(searchState) {
     searchState = this.aisManager.transitionState(searchState);
 
     if (this.props.onSearchStateChange) {
       this.props.onSearchStateChange(searchState);
     }
 
-    if (!this.isControlled) {
-      this.aisManager.onExternalStateUpdate(searchState);
-    }
+    return searchState;
   }
 
   onSearchForFacetValues(searchState) {
