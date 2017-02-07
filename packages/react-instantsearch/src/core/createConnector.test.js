@@ -133,6 +133,60 @@ describe('createConnector', () => {
       expect(wrapper.find(Dummy).props()).toEqual({...props, ...state.widgets});
     });
 
+    it('updates with latest props on state change', () => {
+      const getProvidedProps = jest.fn((props, state) => state);
+      const Dummy = () => null;
+      const Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps,
+        getId,
+      })(Dummy);
+      let state = {
+        ...createState(),
+        widgets: {
+          hoy: 'hey',
+        },
+      };
+      let props = {
+        hello: 'there',
+      };
+      let listener;
+      const wrapper = mount(<Connected {...props} />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => state,
+              subscribe: l => {
+                listener = l;
+              },
+            },
+          },
+        },
+      });
+      expect(wrapper.find(Dummy).props()).toEqual({...props, ...state.widgets});
+      state = {
+        ...createState(),
+        widgets: {
+          hey: 'hoy',
+        },
+      };
+
+      // also update props
+      props = {hello: 'you'};
+      wrapper.setProps(props);
+
+      listener();
+      expect(getProvidedProps.mock.calls.length).toBe(3);
+      const args = getProvidedProps.mock.calls[2];
+      expect(args[0]).toEqual(props);
+      expect(args[1]).toBe(state.widgets);
+      expect(args[2].results).toBe(state.results);
+      expect(args[2].error).toBe(state.error);
+      expect(args[2].searching).toBe(state.searching);
+      expect(args[3]).toBe(state.metadata);
+      expect(wrapper.find(Dummy).props()).toEqual({...props, ...state.widgets});
+    });
+
     it('unsubscribes from the store on unmount', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
