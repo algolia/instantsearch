@@ -161,7 +161,7 @@ const menu = menuRendering => ({
         facetValues,
         limitMax: widgetMaxValuesPerFacet,
         limitMin: limit,
-        shouldAutoHideContainer: facetValues.length === 0,
+        shouldAutoHideContainer: autoHideContainer && facetValues.length === 0,
         showMore: showMoreConfig !== null,
         templateProps: this._templateProps,
         toggleRefinement: this._toggleRefinement,

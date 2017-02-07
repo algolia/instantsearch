@@ -37,8 +37,6 @@ describe('numericRefinementList()', () => {
   let widget;
   let helper;
 
-  let autoHideContainer;
-  let headerFooter;
   let options;
   let results;
   let createURL;
@@ -47,10 +45,6 @@ describe('numericRefinementList()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     numericRefinementList.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(RefinementList);
-    numericRefinementList.__Rewire__('headerFooterHOC', headerFooter);
 
     options = [
       {name: 'All'},
@@ -134,9 +128,7 @@ describe('numericRefinementList()', () => {
       },
     };
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.callCount).toBe(2);
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -196,6 +188,9 @@ describe('numericRefinementList()', () => {
       attributeName: 'price',
       options: initialOptions,
     });
+
+    // The lifeccycle impose all the steps
+    testWidget.init({helper, createURL: () => ''});
 
     // When
     testWidget.render({state, results, createURL});

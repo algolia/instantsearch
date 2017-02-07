@@ -277,7 +277,7 @@ search.addWidget(
       active: 'facet-active',
     },
     templates: {
-      header: 'Price numeric list',
+      header: 'Numeric refinement list (price)',
     },
   })
 );

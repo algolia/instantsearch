@@ -1,19 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import find from 'lodash/find';
-import includes from 'lodash/includes';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 
-const bem = bemHelper('ais-refinement-list');
+import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -44,171 +33,29 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-numericRefinementList({
-  container,
-  attributeName,
-  options,
-  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ collapsible=false ]
-})`;
-function numericRefinementList({
-    container,
-    attributeName,
-    options,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  }) {
-  if (!container || !attributeName || !options) {
-    throw new Error(usage);
-  }
+export default connectNumericRefinementList(defaultRendering);
 
-  const containerNode = getContainerNode(container);
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    radio: cx(bem('radio'), userCssClasses.radio),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-  };
-
-  return {
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      this._toggleRefinement = facetValue => {
-        const refinedState = refine(helper.state, attributeName, options, facetValue);
-        helper.setState(refinedState).search();
-      };
-    },
-    render({results, state, createURL}) {
-      const facetValues = options.map(facetValue =>
-        ({
-          ...facetValue,
-          isRefined: isRefined(state, attributeName, facetValue),
-          attributeName,
-        })
-      );
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(refine(state, attributeName, options, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-  };
+function defaultRendering({
+  collapsible,
+  createURL,
+  cssClasses,
+  facetValues,
+  shouldAutoHideContainer,
+  templateProps,
+  toggleRefinement,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
 }
-
-function isRefined(state, attributeName, option) {
-  const currentRefinements = state.getNumericRefinements(attributeName);
-
-  if (option.start !== undefined && option.end !== undefined) {
-    if (option.start === option.end) {
-      return hasNumericRefinement(currentRefinements, '=', option.start);
-    }
-  }
-
-  if (option.start !== undefined) {
-    return hasNumericRefinement(currentRefinements, '>=', option.start);
-  }
-
-  if (option.end !== undefined) {
-    return hasNumericRefinement(currentRefinements, '<=', option.end);
-  }
-
-  if (option.start === undefined && option.end === undefined) {
-    return Object.keys(currentRefinements).length === 0;
-  }
-
-  return undefined;
-}
-
-function refine(state, attributeName, options, facetValue) {
-  let resolvedState = state;
-
-  const refinedOption = find(options, {name: facetValue});
-
-  const currentRefinements = resolvedState.getNumericRefinements(attributeName);
-
-  if (refinedOption.start === undefined && refinedOption.end === undefined) {
-    return resolvedState.clearRefinements(attributeName);
-  }
-
-  if (!isRefined(resolvedState, attributeName, refinedOption)) {
-    resolvedState = resolvedState.clearRefinements(attributeName);
-  }
-
-  if (refinedOption.start !== undefined && refinedOption.end !== undefined) {
-    if (refinedOption.start > refinedOption.end) {
-      throw new Error('option.start should be > to option.end');
-    }
-
-    if (refinedOption.start === refinedOption.end) {
-      if (hasNumericRefinement(currentRefinements, '=', refinedOption.start)) {
-        resolvedState = resolvedState.removeNumericRefinement(attributeName, '=', refinedOption.start);
-      } else {
-        resolvedState = resolvedState.addNumericRefinement(attributeName, '=', refinedOption.start);
-      }
-      return resolvedState;
-    }
-  }
-
-  if (refinedOption.start !== undefined) {
-    if (hasNumericRefinement(currentRefinements, '>=', refinedOption.start)) {
-      resolvedState = resolvedState.removeNumericRefinement(attributeName, '>=', refinedOption.start);
-    } else {
-      resolvedState = resolvedState.addNumericRefinement(attributeName, '>=', refinedOption.start);
-    }
-  }
-
-  if (refinedOption.end !== undefined) {
-    if (hasNumericRefinement(currentRefinements, '<=', refinedOption.end)) {
-      resolvedState = resolvedState.removeNumericRefinement(attributeName, '<=', refinedOption.end);
-    } else {
-      resolvedState = resolvedState.addNumericRefinement(attributeName, '<=', refinedOption.end);
-    }
-  }
-
-  return resolvedState;
-}
-
-function hasNumericRefinement(currentRefinements, operator, value) {
-  const hasOperatorRefinements = currentRefinements[operator] !== undefined;
-  const includesValue = includes(currentRefinements[operator], value);
-
-  return hasOperatorRefinements && includesValue;
-}
-
-export default numericRefinementList;
