@@ -340,7 +340,7 @@ search.addWidget(
       active: 'facet-active',
     },
     templates: {
-      header: 'Categories',
+      header: 'Categories (menu widget)',
     },
   })
 );

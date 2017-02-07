@@ -2,7 +2,7 @@
 
 import expect from 'expect';
 
-import defaultTemplates from '../defaultTemplates';
+import defaultTemplates from '../../../connectors/hits/defaultTemplates.js';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {

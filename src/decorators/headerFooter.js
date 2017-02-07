@@ -25,7 +25,7 @@ function headerFooter(ComposedComponent) {
       this._footerElement = this._getElement({type: 'footer'});
     }
     _getElement({type, handleClick = null}) {
-      const templates = this.props.templateProps.templates;
+      const templates = this.props.templateProps && this.props.templateProps.templates;
       if (!templates || !templates[type]) {
         return null;
       }

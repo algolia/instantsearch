@@ -1,15 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
 import Hits from '../../components/Hits.js';
-import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-hits');
+import connectHits from '../../connectors/hits/connectHits.js';
 
 /**
  * Display the list of results (hits) from the current search
@@ -30,59 +23,23 @@ const bem = bemHelper('ais-hits');
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
  * @return {Object}
  */
-const usage = `
-Usage:
-hits({
-  container,
-  [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} | templates.{empty, allItems} ],
-  [ transformData.{empty,item} | transformData.{empty, allItems} ],
-  [ hitsPerPage=20 ]
-})`;
-function hits({
-    container,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    transformData,
-    hitsPerPage = 20,
-  } = {}) {
-  if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
-  }
+export default connectHits(defaultRendering);
 
-  if (templates.item && templates.allItems) {
-    throw new Error(`Must contain only allItems OR item template.${usage}`);
-  }
-
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
-  };
-
-  return {
-    getConfiguration: () => ({hitsPerPage}),
-    init({templatesConfig}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-    render({results}) {
-      ReactDOM.render(
-        <Hits
-          cssClasses={cssClasses}
-          hits={results.hits}
-          results={results}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+function defaultRendering({
+  cssClasses,
+  hits,
+  results,
+  templateProps,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Hits
+      cssClasses={cssClasses}
+      hits={hits}
+      results={results}
+      templateProps={templateProps}
+    />,
+    containerNode
+  );
 }
-
-export default hits;
