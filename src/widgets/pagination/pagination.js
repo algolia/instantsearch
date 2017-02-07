@@ -1,21 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import defaults from 'lodash/defaults';
-import cx from 'classnames';
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import PaginationComponent from '../../components/Pagination/Pagination.js';
-
-const defaultLabels = {
-  previous: '‹',
-  next: '›',
-  first: '«',
-  last: '»',
-};
-const bem = bemHelper('ais-pagination');
+import Pagination from '../../components/Pagination/Pagination.js';
+import connectPagination from '../../connectors/pagination/connectPagination.js';
 
 /**
  * Add a pagination menu to navigate through the results
@@ -44,95 +30,35 @@ const bem = bemHelper('ais-pagination');
  * @param  {string|string[]} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
  * @return {Object}
  */
-const usage = `Usage:
-pagination({
-  container,
-  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
-  [ labels.{previous,next,first,last} ],
-  [ maxPages ],
-  [ padding=3 ],
-  [ showFirstLast=true ],
-  [ autoHideContainer=true ],
-  [ scrollTo='body' ]
-})`;
-function pagination({
-    container,
-    cssClasses: userCssClasses = {},
-    labels: userLabels = {},
-    maxPages,
-    padding = 3,
-    showFirstLast = true,
-    autoHideContainer = true,
-    scrollTo: userScrollTo = 'body',
-  } = {}) {
-  let scrollTo = userScrollTo;
+export default connectPagination(defaultRendering);
 
-  if (!container) {
-    throw new Error(usage);
-  }
-
-  if (scrollTo === true) {
-    scrollTo = 'body';
-  }
-
-  const containerNode = getContainerNode(container);
-  const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
-  let Pagination = PaginationComponent;
-  if (autoHideContainer === true) {
-    Pagination = autoHideContainerHOC(Pagination);
-  }
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    page: cx(bem('item', 'page'), userCssClasses.page),
-    previous: cx(bem('item', 'previous'), userCssClasses.previous),
-    next: cx(bem('item', 'next'), userCssClasses.next),
-    first: cx(bem('item', 'first'), userCssClasses.first),
-    last: cx(bem('item', 'last'), userCssClasses.last),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled),
-  };
-
-  const labels = defaults(userLabels, defaultLabels);
-
-  return {
-    init({helper}) {
-      this.setCurrentPage = page => {
-        helper.setCurrentPage(page);
-        if (scrollToNode !== false) {
-          scrollToNode.scrollIntoView();
-        }
-        helper.search();
-      };
-    },
-
-    getMaxPage(results) {
-      if (maxPages !== undefined) {
-        return Math.min(maxPages, results.nbPages);
-      }
-      return results.nbPages;
-    },
-
-    render({results, state, createURL}) {
-      ReactDOM.render(
-        <Pagination
-          createURL={page => createURL(state.setPage(page))}
-          cssClasses={cssClasses}
-          currentPage={results.page}
-          labels={labels}
-          nbHits={results.nbHits}
-          nbPages={this.getMaxPage(results)}
-          padding={padding}
-          setCurrentPage={this.setCurrentPage}
-          shouldAutoHideContainer={results.nbHits === 0}
-          showFirstLast={showFirstLast}
-        />,
-        containerNode
-      );
-    },
-  };
+function defaultRendering({
+  createURL,
+  cssClasses,
+  currentPage,
+  labels,
+  nbHits,
+  nbPages,
+  padding,
+  setCurrentPage,
+  shouldAutoHideContainer,
+  showFirstLast,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Pagination
+      createURL={createURL}
+      cssClasses={cssClasses}
+      currentPage={currentPage}
+      labels={labels}
+      nbHits={nbHits}
+      nbPages={nbPages}
+      padding={padding}
+      setCurrentPage={setCurrentPage}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      showFirstLast={showFirstLast}
+    />,
+    containerNode
+  );
 }
-
-export default pagination;

@@ -7,6 +7,7 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
+import connectPagination from '../../../connectors/pagination/connectPagination.js';
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {
@@ -24,7 +25,6 @@ describe('pagination()', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     cssClasses = {
@@ -44,6 +44,7 @@ describe('pagination()', () => {
     helper = {
       setCurrentPage: sinon.spy(),
       search: sinon.spy(),
+      getPage: () => 0,
     };
     widget.init({helper});
   });
@@ -77,7 +78,7 @@ describe('pagination()', () => {
       const getContainerNode = sinon.stub().returns({
         scrollIntoView,
       });
-      pagination.__Rewire__('getContainerNode', getContainerNode);
+      connectPagination.__Rewire__('getContainerNode', getContainerNode);
     });
 
     it('should not scroll', () => {
@@ -142,7 +143,6 @@ describe('pagination MaxPage', () => {
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     pagination.__Rewire__('ReactDOM', ReactDOM);
-    pagination.__Rewire__('autoHideContainerHOC', sinon.stub().returns(Pagination));
 
     container = document.createElement('div');
     cssClasses = {
