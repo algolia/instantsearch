@@ -28,9 +28,21 @@ describe('connectCurrentRefinements', () => {
   });
 
   it('refine applies the selected filters clear method on searchState', () => {
-    const searchState = refine(null, {wow: 'sweet'}, [{
+    let searchState = refine({}, {wow: 'sweet'}, [{
       value: nextState => ({...nextState, cool: 'neat'}),
     }]);
     expect(searchState).toEqual({wow: 'sweet', cool: 'neat'});
+
+    searchState = refine({clearsQuery: true}, {wow: 'sweet'}, [{
+      value: nextState => ({...nextState, cool: 'neat'}),
+    }]);
+    expect(searchState).toEqual({wow: 'sweet', cool: 'neat'});
+  });
+
+  it('the query should be removed from the search state if the props clearsQuery is passed', () => {
+    const searchState = refine({clearsQuery: true}, {wow: 'sweet', query: 'value'}, [{
+      value: nextState => ({...nextState, cool: 'neat'}),
+    }]);
+    expect(searchState).toEqual({wow: 'sweet', cool: 'neat', query: ''});
   });
 });
