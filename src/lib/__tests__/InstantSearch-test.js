@@ -85,8 +85,8 @@ describe('InstantSearch lifecycle', () => {
     expect(algoliasearchHelper.notCalled).toBe(true, 'algoliasearchHelper not yet called');
   });
 
-  context('when providing a custom client instance', () => {
-    let clientFactory;
+  context('when providing a custom client module', () => {
+    let createAlgoliaClient;
     let customAppID;
     let customApiKey;
 
@@ -95,7 +95,7 @@ describe('InstantSearch lifecycle', () => {
       algoliasearch.reset();
 
       // Create a spy to act as a clientInstanceFunction that returns a custom client
-      clientFactory = sinon.stub().returns(client);
+      createAlgoliaClient = sinon.stub().returns(client);
       customAppID = 'customAppID';
       customApiKey = 'customAPIKey';
 
@@ -106,7 +106,7 @@ describe('InstantSearch lifecycle', () => {
         indexName,
         searchParameters,
         urlSync: {},
-        clientFactory,
+        createAlgoliaClient,
       });
     });
 
@@ -114,9 +114,9 @@ describe('InstantSearch lifecycle', () => {
       expect(algoliasearch.calledOnce).toBe(false, 'algoliasearch not called');
     });
 
-    it('calls clientFactory(appId, apiKey)', () => {
-      expect(clientFactory.calledOnce).toBe(true, 'clientInstanceFunction called once');
-      expect(clientFactory.args[0])
+    it('calls createAlgoliaClient(appId, apiKey)', () => {
+      expect(createAlgoliaClient.calledOnce).toBe(true, 'clientInstanceFunction called once');
+      expect(createAlgoliaClient.args[0])
         .toEqual([algoliasearch, customAppID, customApiKey]);
     });
   });
