@@ -27,3 +27,16 @@ stories.add('nothing to clear', () =>
     <ClearAll />
   </WrapWithHits>
 );
+
+stories.add('clear all refinements and the query', () =>
+  <WrapWithHits linkedStoryGroup="ClearAll">
+      <ClearAll
+        clearsQuery
+        translations={{reset: 'Clear refinements and query'}}
+      />
+      <RefinementList
+        attributeName="category"
+        defaultRefinement={['Dining']}
+      />
+  </WrapWithHits>
+);
