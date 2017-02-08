@@ -13,7 +13,7 @@ import version from './version.js';
 import createHelpers from './createHelpers.js';
 
 function defaultCreateURL() { return '#'; }
-const defaultCreateAlgoliaClient = (algoliasearch, appId, apiKey) => algoliasearch(appId, apiKey);
+const defaultCreateAlgoliaClient = (defaultAlgoliasearch, appId, apiKey) => defaultAlgoliasearch(appId, apiKey);
 
 /**
  * @function instantsearch
