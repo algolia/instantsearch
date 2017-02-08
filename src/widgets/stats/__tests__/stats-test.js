@@ -20,16 +20,9 @@ describe('stats()', () => {
   let widget;
   let results;
 
-  let autoHideContainer;
-  let headerFooter;
-
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     stats.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(Stats);
-    stats.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(Stats);
-    stats.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = stats({container, cssClasses: {body: ['body', 'cx']}});
@@ -70,8 +63,6 @@ describe('stats()', () => {
       templateProps: ReactDOM.render.firstCall.args[0].props.templateProps,
     };
     expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Stats {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Stats {...props} />);

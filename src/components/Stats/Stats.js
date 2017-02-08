@@ -1,8 +1,10 @@
 import React from 'react';
 
 import Template from '../Template.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 
-class Stats extends React.Component {
+export class RawStats extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.nbHits !== nextProps.hits ||
       this.props.processingTimeMS !== nextProps.processingTimeMS;
@@ -28,7 +30,7 @@ class Stats extends React.Component {
   }
 }
 
-Stats.propTypes = {
+RawStats.propTypes = {
   cssClasses: React.PropTypes.shape({
     time: React.PropTypes.string,
   }),
@@ -41,4 +43,4 @@ Stats.propTypes = {
   templateProps: React.PropTypes.object.isRequired,
 };
 
-export default Stats;
+export default autoHideContainerHOC(headerFooterHOC(RawStats));

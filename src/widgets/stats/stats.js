@@ -1,17 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import StatsComponent from '../../components/Stats/Stats.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-stats');
+import Stats from '../../components/Stats/Stats.js';
+import connectStats from '../../connectors/stats/connectStats.js';
 
 /**
  * Display various stats about the current search state
@@ -32,69 +23,34 @@ const bem = bemHelper('ais-stats');
  * @param  {string|string[]} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
  * @return {Object}
  */
-const usage = `Usage:
-stats({
-  container,
-  [ templates.{header,body,footer} ],
-  [ transformData.{body} ],
-  [ autoHideContainer]
-})`;
-function stats({
-    container,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-  } = {}) {
-  if (!container) throw new Error(usage);
-  const containerNode = getContainerNode(container);
-
-  let Stats = headerFooterHOC(StatsComponent);
-  if (autoHideContainer === true) {
-    Stats = autoHideContainerHOC(Stats);
-  }
-
-  if (!containerNode) {
-    throw new Error(usage);
-  }
-
-  const cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time),
-  };
-
-  return {
-    init({templatesConfig}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-
-    render({results}) {
-      ReactDOM.render(
-        <Stats
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          hitsPerPage={results.hitsPerPage}
-          nbHits={results.nbHits}
-          nbPages={results.nbPages}
-          page={results.page}
-          processingTimeMS={results.processingTimeMS}
-          query={results.query}
-          shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+export default connectStats(defaultRendering);
+function defaultRendering({
+  collapsible,
+  cssClasses,
+  hitsPerPage,
+  nbHits,
+  nbPages,
+  page,
+  processingTimeMS,
+  query,
+  shouldAutoHideContainer,
+  templateProps,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Stats
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      hitsPerPage={hitsPerPage}
+      nbHits={nbHits}
+      nbPages={nbPages}
+      page={page}
+      processingTimeMS={processingTimeMS}
+      query={query}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+    />,
+    containerNode
+  );
 }
-
-export default stats;
