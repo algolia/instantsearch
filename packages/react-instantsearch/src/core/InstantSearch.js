@@ -100,7 +100,9 @@ class InstantSearch extends Component {
   }
 
   onWidgetsInternalStateUpdate(searchState) {
-    searchState = this.onSearchStateChange(searchState);
+    searchState = this.aisManager.transitionState(searchState);
+
+    this.onSearchStateChange(searchState);
 
     if (!this.isControlled) {
       this.aisManager.onExternalStateUpdate(searchState);
@@ -108,13 +110,9 @@ class InstantSearch extends Component {
   }
 
   onSearchStateChange(searchState) {
-    searchState = this.aisManager.transitionState(searchState);
-
     if (this.props.onSearchStateChange) {
       this.props.onSearchStateChange(searchState);
     }
-
-    return searchState;
   }
 
   onSearchForFacetValues(searchState) {

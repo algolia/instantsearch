@@ -106,7 +106,13 @@ export default function createConnector(connectorDesc) {
           // Since props might have changed, we need to re-run getSearchParameters
           // and getMetadata with the new props.
           this.context.ais.widgetsManager.update();
-          this.context.ais.onSearchStateChange(this.context.ais.store.getState().widgets);
+          if (connectorDesc.transitionState) {
+            this.context.ais.onSearchStateChange(connectorDesc.transitionState(
+              nextProps,
+              this.context.ais.store.getState().widgets,
+              this.context.ais.store.getState().widgets,
+            ));
+          }
         }
       }
     }
