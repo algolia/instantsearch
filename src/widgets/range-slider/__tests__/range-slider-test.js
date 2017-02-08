@@ -30,16 +30,9 @@ describe('rangeSlider()', () => {
   let results;
   let helper;
 
-  let autoHideContainer;
-  let headerFooter;
-
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     rangeSlider.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(Slider);
-    rangeSlider.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(Slider);
-    rangeSlider.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
 
@@ -111,8 +104,6 @@ describe('rangeSlider()', () => {
         const props = defaultProps;
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
       });
 
@@ -137,8 +128,6 @@ describe('rangeSlider()', () => {
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
       });
     });
@@ -206,8 +195,6 @@ describe('rangeSlider()', () => {
         };
 
         expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-        expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-        expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
       });
     });
@@ -248,8 +235,6 @@ describe('rangeSlider()', () => {
       };
 
       expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
-      expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-      expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
     });
   });
@@ -348,8 +333,6 @@ describe('rangeSlider()', () => {
       };
 
       expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-      expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-      expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Slider {...props} />);
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
       expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Slider {...props} />);
@@ -369,10 +352,10 @@ describe('rangeSlider()', () => {
       const targetValue = stats.min + 1;
 
       const state0 = helper.state;
-      widget._refine(helper, stats, [targetValue, stats.max]);
+      widget._refine(stats)([targetValue, stats.max]);
       const state1 = helper.state;
 
-      expect(helper.search.calledOnce).toBe(true, 'search called once');
+      expect(helper.search.callCount).toBe(1);
       expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '>=', targetValue));
     });
 
@@ -381,10 +364,10 @@ describe('rangeSlider()', () => {
       const targetValue = stats.max - 1;
 
       const state0 = helper.state;
-      widget._refine(helper, stats, [stats.min, targetValue]);
+      widget._refine(stats)([stats.min, targetValue]);
       const state1 = helper.state;
 
-      expect(helper.search.calledOnce).toBe(true, 'search called once');
+      expect(helper.search.callCount).toBe(1);
       expect(state1).toEqual(state0.addNumericRefinement('aNumAttr', '<=', targetValue));
     });
 
@@ -393,12 +376,12 @@ describe('rangeSlider()', () => {
       const targetValue = [stats.min + 1, stats.max - 1];
 
       const state0 = helper.state;
-      widget._refine(helper, stats, targetValue);
+      widget._refine(stats)(targetValue);
       const state1 = helper.state;
 
       const expectedState = state0.
-      addNumericRefinement('aNumAttr', '>=', targetValue[0]).
-      addNumericRefinement('aNumAttr', '<=', targetValue[1]);
+        addNumericRefinement('aNumAttr', '>=', targetValue[0]).
+        addNumericRefinement('aNumAttr', '<=', targetValue[1]);
 
       expect(state1).toEqual(expectedState);
       expect(helper.search.calledOnce).toBe(true, 'search called once');

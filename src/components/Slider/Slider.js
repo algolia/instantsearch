@@ -7,7 +7,10 @@ const cssPrefix = 'ais-range-slider--';
 
 import isEqual from 'lodash/isEqual';
 
-class Slider extends React.Component {
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+export class RawSlider extends React.Component {
   componentWillMount() {
     this.handleChange = this.handleChange.bind(this);
   }
@@ -60,7 +63,7 @@ class Slider extends React.Component {
   }
 }
 
-Slider.propTypes = {
+RawSlider.propTypes = {
   onChange: React.PropTypes.func,
   onSlide: React.PropTypes.func,
   pips: React.PropTypes.oneOfType([
@@ -79,4 +82,4 @@ Slider.propTypes = {
   ]),
 };
 
-export default Slider;
+export default autoHideContainerHOC(headerFooterHOC(RawSlider));

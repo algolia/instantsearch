@@ -6,7 +6,7 @@ import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
 
 import expectJSX from 'expect-jsx';
-import Slider from '../Slider';
+import {RawSlider as Slider} from '../Slider';
 import Nouislider from 'react-nouislider';
 expect.extend(expectJSX);
 

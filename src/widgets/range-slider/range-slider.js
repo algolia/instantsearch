@@ -1,21 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import find from 'lodash/find';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import cx from 'classnames';
-import SliderComponent from '../../components/Slider/Slider.js';
-
-const bem = bemHelper('ais-range-slider');
-const defaultTemplates = {
-  header: '',
-  footer: '',
-};
+import Slider from '../../components/Slider/Slider.js';
+import connectRangeSlider from '../../connectors/range-slider/connectRangeSlider.js';
 
 /**
  * Instantiate a slider based on a numeric attribute.
@@ -45,157 +31,37 @@ const defaultTemplates = {
  * @param  {number} [options.max] Maximal slider value, defaults to automatically computed from the result set
  * @return {Object}
  */
-const usage = `Usage:
-rangeSlider({
-  container,
-  attributeName,
-  [ tooltips=true ],
-  [ templates.{header, footer} ],
-  [ cssClasses.{root, header, body, footer} ],
-  [ step=1 ],
-  [ pips=true ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ min ],
-  [ max ]
-});
-`;
-function rangeSlider({
-    container,
-    attributeName,
-    tooltips = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    cssClasses: userCssClasses = {},
-    step = 1,
-    pips = true,
-    autoHideContainer = true,
-    min: userMin,
-    max: userMax,
-    precision = 2,
-  } = {}) {
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
 
-  const formatToNumber = v => Number(Number(v).toFixed(precision));
-
-  const sliderFormatter = {
-    from: v => v,
-    to: v => formatToNumber(v).toLocaleString(),
-  };
-
-  const containerNode = getContainerNode(container);
-  let Slider = headerFooterHOC(SliderComponent);
-  if (autoHideContainer === true) {
-    Slider = autoHideContainerHOC(Slider);
-  }
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
-
-  return {
-    getConfiguration: originalConf => {
-      const conf = {
-        disjunctiveFacets: [attributeName],
-      };
-
-      if (
-          (userMin !== undefined || userMax !== undefined)
-          &&
-          (!originalConf ||
-          originalConf.numericRefinements &&
-          originalConf.numericRefinements[attributeName] === undefined)
-        ) {
-        conf.numericRefinements = {[attributeName]: {}};
-
-        if (userMin !== undefined) {
-          conf.numericRefinements[attributeName]['>='] = [userMin];
-        }
-
-        if (userMax !== undefined) {
-          conf.numericRefinements[attributeName]['<='] = [userMax];
-        }
-      }
-
-      return conf;
-    },
-    _getCurrentRefinement(helper) {
-      let min = helper.state.getNumericRefinement(attributeName, '>=');
-      let max = helper.state.getNumericRefinement(attributeName, '<=');
-
-      if (min && min.length) {
-        min = min[0];
-      } else {
-        min = -Infinity;
-      }
-
-      if (max && max.length) {
-        max = max[0];
-      } else {
-        max = Infinity;
-      }
-
-      return {
-        min,
-        max,
-      };
-    },
-    _refine(helper, oldValues, newValues) {
-      helper.clearRefinements(attributeName);
-      if (newValues[0] > oldValues.min) {
-        helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
-      }
-      if (newValues[1] < oldValues.max) {
-        helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
-      }
-      helper.search();
-    },
-    init({templatesConfig}) {
-      this._templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-    render({results, helper}) {
-      const facet = find(results.disjunctiveFacets, {name: attributeName});
-      const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
-        min: null,
-        max: null,
-      };
-
-      if (userMin !== undefined) stats.min = userMin;
-      if (userMax !== undefined) stats.max = userMax;
-
-      const currentRefinement = this._getCurrentRefinement(helper);
-
-      if (tooltips.format !== undefined) {
-        tooltips = [{to: tooltips.format}, {to: tooltips.format}];
-      }
-
-      ReactDOM.render(
-        <Slider
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          onChange={this._refine.bind(this, helper, stats)}
-          pips={pips}
-          range={{min: Math.floor(stats.min), max: Math.ceil(stats.max)}}
-          shouldAutoHideContainer={stats.min === stats.max}
-          start={[currentRefinement.min, currentRefinement.max]}
-          step={step}
-          templateProps={this._templateProps}
-          tooltips={tooltips}
-          format={sliderFormatter}
-        />,
-        containerNode
-      );
-    },
-  };
+export default connectRangeSlider(defaultRendering);
+function defaultRendering({
+  collapsible,
+  cssClasses,
+  onChange,
+  pips,
+  range,
+  shouldAutoHideContainer,
+  start,
+  step,
+  templateProps,
+  tooltips,
+  format,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Slider
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      onChange={onChange}
+      pips={pips}
+      range={range}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      start={start}
+      step={step}
+      templateProps={templateProps}
+      tooltips={tooltips}
+      format={format}
+    />,
+    containerNode
+  );
 }
-
-export default rangeSlider;
