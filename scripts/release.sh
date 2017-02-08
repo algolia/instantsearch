@@ -86,7 +86,7 @@ printf "\n\nRelease: pushed to github, publish on npm"
 
 (
 cd packages/react-instantsearch
-npm run build-and-publish
+VERSION=$newVersion npm run build-and-publish
 )
 
 (
