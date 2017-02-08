@@ -1,20 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-  prefixKeys,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import filter from 'lodash/filter';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import defaultTemplates from './defaultTemplates.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 
-const bem = bemHelper('ais-refinement-list');
+import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
+
 /**
  * Instantiate a list of refinements based on a facet
  * @function refinementList
@@ -54,186 +43,42 @@ const bem = bemHelper('ais-refinement-list');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-refinementList({
-  container,
-  attributeName,
-  [ operator='or' ],
-  [ sortBy=['count:desc', 'name:asc'] ],
-  [ limit=10 ],
-  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ showMore.{templates: {active, inactive}, limit} ],
-  [ collapsible=false ],
-  [ searchForFacetValues.{placeholder, templates: {noResults}}],
-})`;
-function refinementList({
-    container,
-    attributeName,
-    operator = 'or',
-    sortBy = ['count:desc', 'name:asc'],
-    limit = 10,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-    showMore = false,
-    searchForFacetValues = false,
-  }) {
-  const showMoreConfig = getShowMoreConfig(showMore);
-  if (showMoreConfig && showMoreConfig.limit < limit) {
-    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
-  }
-  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
-
-  let RefinementList = RefinementListComponent;
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
-
-  RefinementList = headerFooterHOC(RefinementList);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  const containerNode = getContainerNode(container);
-
-  if (operator) {
-    operator = operator.toLowerCase();
-    if (operator !== 'and' && operator !== 'or') {
-      throw new Error(usage);
-    }
-  }
-
-  const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
-  const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
-  const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    label: cx(bem('label'), userCssClasses.label),
-    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count),
-  };
-
-  /* eslint-disable max-params */
-  const render = (facetValues, state, createURL,
-                  helperSpecializedSearchFacetValues, templateProps, toggleRefinement, isFromSearch) => {
-    // Bind createURL to this specific attribute
-    function _createURL(facetValue) {
-      return createURL(state.toggleRefinement(attributeName, facetValue));
-    }
-
-    // Pass count of currently selected items to the header template
-    const refinedFacetsCount = filter(facetValues, {isRefined: true}).length;
-    const headerFooterData = {
-      header: {refinedFacetsCount},
-    };
-
-    // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
-    // function
-    const searchFacetValues = helperSpecializedSearchFacetValues &&
-      helperSpecializedSearchFacetValues(
-        state,
-        createURL,
-        helperSpecializedSearchFacetValues,
-        templateProps,
-        toggleRefinement);
-
-    ReactDOM.render(
-      <RefinementList
-        collapsible={collapsible}
-        createURL={_createURL}
-        cssClasses={cssClasses}
-        facetValues={facetValues}
-        headerFooterData={headerFooterData}
-        limitMax={widgetMaxValuesPerFacet}
-        limitMin={limit}
-        shouldAutoHideContainer={!isFromSearch && facetValues.length === 0}
-        showMore={showMoreConfig !== null}
-        templateProps={templateProps}
-        toggleRefinement={toggleRefinement}
-        searchFacetValues={searchFacetValues}
-        searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
-        isFromSearch={isFromSearch}
-      />,
-      containerNode
-    );
-  };
-
-  let lastResultsFromMainSearch = null;
-
-  // Do not mistake searchForFacetValues and searchFacetValues which is the actual search
-  // function
-  const searchFacetValues = helper =>
-    (state, createURL, helperSpecializedSearchFacetValues, templateProps, toggleRefinement) =>
-    query => {
-      if (query === '' && lastResultsFromMainSearch) {
-        // render with previous data from the helper.
-        render(
-          lastResultsFromMainSearch, state, createURL,
-          helperSpecializedSearchFacetValues, templateProps, toggleRefinement, false);
-      } else {
-        helper.searchForFacetValues(attributeName, query).then(results => {
-          const facetValues = results.facetHits.map(h => {
-            h.name = h.value;
-            return h;
-          });
-          render(
-            facetValues, state, createURL,
-            helperSpecializedSearchFacetValues, templateProps, toggleRefinement, true);
-        });
-      }
-    };
-
-  return {
-    getConfiguration: configuration => {
-      const widgetConfiguration = {
-        [operator === 'and' ? 'facets' : 'disjunctiveFacets']: [attributeName],
-      };
-
-      const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
-      widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, widgetMaxValuesPerFacet);
-
-      return widgetConfiguration;
-    },
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates: allTemplates,
-      });
-
-      this.toggleRefinement = facetValue => helper
-        .toggleRefinement(attributeName, facetValue)
-        .search();
-
-      this.searchFacetValues = searchForFacetValues ? searchFacetValues(helper) : null;
-    },
-    render({results, state, createURL}) {
-      const facetValues = results
-        .getFacetValues(attributeName, {sortBy})
-        .map(h => {
-          h.highlighted = h.name;
-          return h;
-        });
-
-      lastResultsFromMainSearch = facetValues;
-
-      render(facetValues, state, createURL, this.searchFacetValues, this._templateProps, this.toggleRefinement, false);
-    },
-  };
+export default connectRefinementList(defaultRendering);
+function defaultRendering({
+  collapsible,
+  createURL,
+  cssClasses,
+  facetValues,
+  headerFooterData,
+  limitMax,
+  limitMin,
+  shouldAutoHideContainer,
+  showMore,
+  templateProps,
+  toggleRefinement,
+  searchFacetValues,
+  searchPlaceholder,
+  isFromSearch,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      headerFooterData={headerFooterData}
+      limitMax={limitMax}
+      limitMin={limitMin}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      showMore={showMore}
+      templateProps={templateProps}
+      toggleRefinement={toggleRefinement}
+      searchFacetValues={searchFacetValues}
+      searchPlaceholder={searchPlaceholder}
+      isFromSearch={isFromSearch}
+    />,
+    containerNode
+  );
 }
-
-export default refinementList;

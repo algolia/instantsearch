@@ -50,32 +50,6 @@ describe('refinementList()', () => {
     });
   });
 
-  context('autoHideContainer', () => {
-    beforeEach(() => {
-      options = {container, attributeName: 'attributeName'};
-    });
-    it('should be called if autoHideContainer set to true', () => {
-      // Given
-      options.autoHideContainer = true;
-
-      // When
-      refinementList(options);
-
-      // Then
-      expect(autoHideContainer.called).toBe(true);
-    });
-    it('should not be called if autoHideContainer set to false', () => {
-      // Given
-      options.autoHideContainer = false;
-
-      // When
-      refinementList(options);
-
-      // Then
-      expect(autoHideContainer.called).toBe(false);
-    });
-  });
-
   context('operator', () => {
     beforeEach(() => {
       options = {container, attributeName: 'attributeName'};
@@ -160,8 +134,8 @@ describe('refinementList()', () => {
   });
 
   context('render', () => {
+    const helper = {};
     let results;
-    let helper;
     let state;
     let templatesConfig;
     let createURL;
