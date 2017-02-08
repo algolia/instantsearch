@@ -115,6 +115,18 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.infiniteHits({
+    container: '#infinite-hits',
+    templates: {
+      empty,
+      item,
+    },
+    hitsPerPage: 3,
+    showMoreLabel: 'Show more',
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.pagination({
     container: '#pagination',
     cssClasses: {

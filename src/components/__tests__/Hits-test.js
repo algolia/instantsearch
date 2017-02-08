@@ -137,6 +137,11 @@ describe('Hits', () => {
             foo: 'baz',
           }],
         },
+        hits: [{
+          foo: 'bar',
+        }, {
+          foo: 'baz',
+        }],
         templateProps: {
           templates: {
             item: 'one item',
@@ -160,6 +165,9 @@ describe('Hits', () => {
             foo: 'bar',
           }],
         },
+        hits: [{
+          foo: 'bar',
+        }],
         templateProps: {
           templates: {
             item: 'one item',
@@ -215,6 +223,11 @@ describe('Hits', () => {
             foo: 'baz',
           }],
         },
+        hits: [{
+          foo: 'bar',
+        }, {
+          foo: 'baz',
+        }],
         templateProps: {
           templates: {
             item: 'one item',
@@ -240,6 +253,11 @@ describe('Hits', () => {
             foo: 'baz',
           }],
         },
+        hits: [{
+          foo: 'bar',
+        }, {
+          foo: 'baz',
+        }],
         templateProps: {
           templates: {
             item: 'one item',
@@ -267,6 +285,13 @@ describe('Hits', () => {
             foo: 'baz',
           }],
         },
+        hits: [{
+          objectID: 'BAR',
+          foo: 'bar',
+        }, {
+          objectID: 'BAZ',
+          foo: 'baz',
+        }],
         templateProps: {
           templates: {
             item: 'one item',

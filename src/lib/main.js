@@ -12,6 +12,7 @@ import currentRefinedValues from '../widgets/current-refined-values/current-refi
 import hierarchicalMenu from '../widgets/hierarchical-menu/hierarchical-menu.js';
 import hits from '../widgets/hits/hits.js';
 import hitsPerPageSelector from '../widgets/hits-per-page-selector/hits-per-page-selector.js';
+import infiniteHits from '../widgets/infinite-hits/infinite-hits.js';
 import menu from '../widgets/menu/menu.js';
 import refinementList from '../widgets/refinement-list/refinement-list.js';
 import numericRefinementList from '../widgets/numeric-refinement-list/numeric-refinement-list.js';
@@ -29,11 +30,13 @@ import version from './version.js';
 
 const instantsearch = toFactory(InstantSearch);
 instantsearch.widgets = {
+  analytics,
   clearAll,
   currentRefinedValues,
   hierarchicalMenu,
   hits,
   hitsPerPageSelector,
+  infiniteHits,
   menu,
   refinementList,
   numericRefinementList,
@@ -46,7 +49,6 @@ instantsearch.widgets = {
   starRating,
   stats,
   toggle,
-  analytics,
 };
 instantsearch.version = version;
 instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
