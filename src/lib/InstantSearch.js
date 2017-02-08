@@ -26,7 +26,7 @@ function defaultCreateURL() { return '#'; }
  * searches at page load for example.
  * @param   {function} [options.createAlgoliaClient] Allows you to provide your own algolia client instead of
  * the one instantiated internally by instantsearch.js. Useful in situations where you need
- * to setup complex option on the client or if you need to share it easily.
+ * to setup complex options on the client or if you need to share it easily.
  * Usage:
  * `createAlgoliaClient: function(algoliasearch, appId, apiKey) { return anyCustomClient; }`
  * We forward `algoliasearch` which is the original algoliasearch module imported inside instantsearch.js
