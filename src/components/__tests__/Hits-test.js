@@ -22,6 +22,7 @@ describe('Hits', () => {
         results: {
           hits: [],
         },
+        hits: [],
       };
 
       // When
@@ -129,19 +130,16 @@ describe('Hits', () => {
   describe('individual item templates', () => {
     it('should add an item template for each hit', () => {
       // Given
+      const hits = [{
+        foo: 'bar',
+      }, {
+        foo: 'baz',
+      }];
       const props = {
         results: {
-          hits: [{
-            foo: 'bar',
-          }, {
-            foo: 'baz',
-          }],
+          hits: hits,
         },
-        hits: [{
-          foo: 'bar',
-        }, {
-          foo: 'baz',
-        }],
+        hits: hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -159,15 +157,14 @@ describe('Hits', () => {
 
     it('should set the item class to each item', () => {
       // Given
+      const hits = [{
+        foo: 'bar',
+      }];
       const props = {
         results: {
-          hits: [{
-            foo: 'bar',
-          }],
+          hits: hits,
         },
-        hits: [{
-          foo: 'bar',
-        }],
+        hits: hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -215,19 +212,16 @@ describe('Hits', () => {
 
     it('should pass each result data to each item template', () => {
       // Given
+      const hits = [{
+        foo: 'bar',
+      }, {
+        foo: 'baz',
+      }];
       const props = {
         results: {
-          hits: [{
-            foo: 'bar',
-          }, {
-            foo: 'baz',
-          }],
+          hits: hits,
         },
-        hits: [{
-          foo: 'bar',
-        }, {
-          foo: 'baz',
-        }],
+        hits: hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -245,19 +239,16 @@ describe('Hits', () => {
 
     it('should add the __hitIndex in the list to each item', () => {
       // Given
+      const hits = [{
+        foo: 'bar',
+      }, {
+        foo: 'baz',
+      }];
       const props = {
         results: {
-          hits: [{
-            foo: 'bar',
-          }, {
-            foo: 'baz',
-          }],
+          hits: hits,
         },
-        hits: [{
-          foo: 'bar',
-        }, {
-          foo: 'baz',
-        }],
+        hits: hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -275,23 +266,18 @@ describe('Hits', () => {
 
     it('should use the objectID as the DOM key', () => {
       // Given
+      const hits = [{
+        objectID: 'BAR',
+        foo: 'bar',
+      }, {
+        objectID: 'BAZ',
+        foo: 'baz',
+      }];
       const props = {
         results: {
-          hits: [{
-            objectID: 'BAR',
-            foo: 'bar',
-          }, {
-            objectID: 'BAZ',
-            foo: 'baz',
-          }],
+          hits: hits,
         },
-        hits: [{
-          objectID: 'BAR',
-          foo: 'bar',
-        }, {
-          objectID: 'BAZ',
-          foo: 'baz',
-        }],
+        hits: hits,
         templateProps: {
           templates: {
             item: 'one item',
