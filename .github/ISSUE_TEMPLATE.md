@@ -15,6 +15,21 @@
 
 **Do you want to request a *feature* or report a *bug*?**
 
+<!--
+  ***************************
+  If the current behavior is a bug, please provide all the steps to reproduce and a minimal
+  [JSFiddle](https://jsfiddle.net/) example or a repository on GitHub that we can `npm install`
+  and `npm start`.
+  
+  We have simple online templates for you to use as a base to explain your bug or issue:
+    - react-instantsearch: https://jsfiddle.net/vvoyer/ar80rgpc/2/
+    - instantsearch.js: https://jsfiddle.net/vvoyer/0wm3donb/4/
+
+  If you are requesting a new feature, we need to understand WHY would you
+  need this feature (your use case) or how you are limited with the current API.
+  ***************************
+-->
+
 **Bug: What is the current behavior?**
 
 **Bug: What is the expected behavior?**
@@ -24,18 +39,6 @@
 **Feature: What is your use case for such a feature?**
 
 **Feature: What is your proposed API entry? The new option to add? What is the behavior?**
-
-<!--
-  ***************************
-  If the current behavior is a bug, please provide all the steps to reproduce and a minimal
-  [JSFiddle](https://jsfiddle.net/) example or a repository on GitHub that we can `npm install`
-  and `npm start`. If you are reporting an issue on instantsearch.js, you can fork and adapt this
-  [jsFiddle](https://jsfiddle.net/vvoyer/0wm3donb/4/).
-
-  If you are requesting a new feature, we need to understand WHY would you
-  need this feature, which means you should give the use case for such feature.
-  ***************************
--->
 
 **What project are you opening an issue for?**
 - react-instantsearch
