@@ -82,6 +82,7 @@
     "postcss": "^5.2.12",
     "postcss-loader": "^1.2.2",
     "postcss-scss": "^0.4.0",
+    "pretty-bytes-cli": "^2.0.0",
     "pug": "^2.0.0-beta11",
     "qs": "^6.3.0",
     "react": "^15.4.2",
@@ -97,6 +98,7 @@
     "stat-mode": "^0.2.2",
     "string": "^3.3.3",
     "style-loader": "^0.13.1",
+    "uglify-js": "^2.7.5",
     "webpack": "^1.14.0",
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.16.1"
