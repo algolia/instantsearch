@@ -66,7 +66,7 @@ class InstantSearch extends EventEmitter {
     searchParameters = {},
     urlSync = null,
     searchFunction,
-    createAlgoliaClient = (customOrInteralAlgoliasearch, appId, apiKey) => customOrInternalAlgoliasearch(appId, apiKey),
+    createAlgoliaClient = (customOrInternalAlgoliasearch, appId, apiKey) => customOrInternalAlgoliasearch(appId, apiKey),
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
