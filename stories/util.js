@@ -116,10 +116,10 @@ const CustomHits = connectHits(({hits}) =>
 
 WrapWithHits.propTypes = {
   children: React.PropTypes.node,
-  searchBox: React.PropTypes.boolean,
+  searchBox: React.PropTypes.bool,
   linkedStoryGroup: React.PropTypes.string,
-  hasPlayground: React.PropTypes.boolean,
-  pagination: React.PropTypes.boolean,
+  hasPlayground: React.PropTypes.bool,
+  pagination: React.PropTypes.bool,
   searchParameters: React.PropTypes.object,
 };
 
