@@ -76,7 +76,6 @@ describe('sortBySelector()', () => {
         item: 'ais-sort-by-selector--item custom-item',
       },
       currentValue: 'index-a',
-      shouldAutoHideContainer: true,
       options: [
         {value: 'index-a', label: 'Index A'},
         {value: 'index-b', label: 'Index B'},

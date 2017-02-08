@@ -1,16 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import findIndex from 'lodash/findIndex';
-import map from 'lodash/map';
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import SelectorComponent from '../../components/Selector.js';
 
-const bem = bemHelper('ais-sort-by-selector');
+import Selector from '../../components/Selector.js';
+import connectSortBySelector from '../../connectors/sort-by-selector/connectSortBySelector.js';
+
 /**
  * Instantiate a dropdown element to choose the current targeted index
  * @function sortBySelector
@@ -24,64 +17,25 @@ const bem = bemHelper('ais-sort-by-selector');
  * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each <option>
  * @return {Object}
  */
-const usage = `Usage:
-sortBySelector({
-  container,
-  indices,
-  [cssClasses.{root,item}={}],
-  [autoHideContainer=false]
-})`;
-function sortBySelector({
-    container,
-    indices,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
-  } = {}) {
-  if (!container || !indices) {
-    throw new Error(usage);
-  }
 
-  const containerNode = getContainerNode(container);
-  let Selector = SelectorComponent;
-  if (autoHideContainer === true) {
-    Selector = autoHideContainerHOC(Selector);
-  }
-
-  const selectorOptions = map(
-    indices,
-    index => ({label: index.label, value: index.name})
+export default connectSortBySelector(defaultRendering);
+function defaultRendering({
+  cssClasses,
+  currentValue,
+  options,
+  setValue,
+  shouldAutoHideContainer,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <Selector
+      cssClasses={cssClasses}
+      currentValue={currentValue}
+      options={options}
+      setValue={setValue}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+    />,
+    containerNode
   );
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-  };
-
-  return {
-    init({helper}) {
-      const currentIndex = helper.getIndex();
-      const isIndexInList = findIndex(indices, {name: currentIndex}) !== -1;
-      if (!isIndexInList) {
-        throw new Error(`[sortBySelector]: Index ${currentIndex} not present in \`indices\``);
-      }
-      this.setIndex = indexName => helper
-        .setIndex(indexName)
-        .search();
-    },
-
-    render({helper, results}) {
-      ReactDOM.render(
-        <Selector
-          cssClasses={cssClasses}
-          currentValue={helper.getIndex()}
-          options={selectorOptions}
-          setValue={this.setIndex}
-          shouldAutoHideContainer={results.nbHits === 0}
-        />,
-        containerNode
-      );
-    },
-  };
 }
-
-export default sortBySelector;
