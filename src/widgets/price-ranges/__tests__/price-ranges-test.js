@@ -6,9 +6,9 @@ import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import priceRanges from '../price-ranges.js';
-import generateRanges from '../generate-ranges.js';
+import generateRanges from '../../../connectors/price-ranges/generate-ranges.js';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
-import defaultTemplates from '../defaultTemplates.js';
+import defaultTemplates from '../../../connectors/price-ranges/defaultTemplates.js';
 
 describe('priceRanges call', () => {
   it('throws an exception when no container', () => {
@@ -29,18 +29,12 @@ describe('priceRanges()', () => {
   let results;
   let helper;
   let state;
-  let autoHideContainer;
-  let headerFooter;
   let createURL;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
-    autoHideContainer = sinon.stub().returns(PriceRanges);
-    headerFooter = sinon.stub().returns(PriceRanges);
 
     priceRanges.__Rewire__('ReactDOM', ReactDOM);
-    priceRanges.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    priceRanges.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = priceRanges({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
@@ -126,12 +120,6 @@ describe('priceRanges()', () => {
       expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
       expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<PriceRanges {...props} />);
       expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
-    });
-
-    it('calls the decorators', () => {
-      widget.render({results, helper, state, createURL});
-      expect(headerFooter.calledOnce).toBe(true);
-      expect(autoHideContainer.calledOnce).toBe(true);
     });
 
     it('calls getRefinements to check if there are some refinements', () => {

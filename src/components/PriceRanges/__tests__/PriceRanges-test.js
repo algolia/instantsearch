@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import Template from '../../Template';
-import PriceRanges from '../PriceRanges';
+import {RawPriceRanges as PriceRanges} from '../PriceRanges';
 import PriceRangesForm from '../PriceRangesForm';
 
 describe('PriceRanges', () => {

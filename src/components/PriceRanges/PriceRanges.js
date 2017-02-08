@@ -5,7 +5,10 @@ import PriceRangesForm from './PriceRangesForm.js';
 import cx from 'classnames';
 import isEqual from 'lodash/isEqual';
 
-class PriceRanges extends React.Component {
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
+
+export class RawPriceRanges extends React.Component {
   componentWillMount() {
     this.refine = this.refine.bind(this);
   }
@@ -81,7 +84,7 @@ class PriceRanges extends React.Component {
   }
 }
 
-PriceRanges.propTypes = {
+RawPriceRanges.propTypes = {
   cssClasses: React.PropTypes.shape({
     active: React.PropTypes.string,
     button: React.PropTypes.string,
@@ -103,8 +106,8 @@ PriceRanges.propTypes = {
   templateProps: React.PropTypes.object.isRequired,
 };
 
-PriceRanges.defaultProps = {
+RawPriceRanges.defaultProps = {
   cssClasses: {},
 };
 
-export default PriceRanges;
+export default autoHideContainerHOC(headerFooterHOC(RawPriceRanges));

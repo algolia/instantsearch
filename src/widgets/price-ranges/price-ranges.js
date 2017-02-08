@@ -1,18 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import generateRanges from './generate-ranges.js';
-import defaultTemplates from './defaultTemplates.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import cx from 'classnames';
-import PriceRangesComponent from '../../components/PriceRanges/PriceRanges.js';
-
-const bem = bemHelper('ais-price-ranges');
+import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
+import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges.js';
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -45,161 +34,31 @@ const bem = bemHelper('ais-price-ranges');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-priceRanges({
-  container,
-  attributeName,
-  [ currency=$ ],
-  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
-  [ templates.{header,item,footer} ],
-  [ labels.{currency,separator,button} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-function priceRanges({
-    container,
-    attributeName,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    labels: userLabels = {},
-    currency: userCurrency = '$',
-    autoHideContainer = true,
-  } = {}) {
-  let currency = userCurrency;
 
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
-
-  const containerNode = getContainerNode(container);
-  let PriceRanges = headerFooterHOC(PriceRangesComponent);
-  if (autoHideContainer === true) {
-    PriceRanges = autoHideContainerHOC(PriceRanges);
-  }
-
-  const labels = {
-    button: 'Go',
-    separator: 'to',
-    ...userLabels,
-  };
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    list: cx(bem('list'), userCssClasses.list),
-    link: cx(bem('link'), userCssClasses.link),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    form: cx(bem('form'), userCssClasses.form),
-    label: cx(bem('label'), userCssClasses.label),
-    input: cx(bem('input'), userCssClasses.input),
-    currency: cx(bem('currency'), userCssClasses.currency),
-    button: cx(bem('button'), userCssClasses.button),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
-
-  // before we had opts.currency, you had to pass labels.currency
-  if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
-
-  return {
-    getConfiguration: () => ({
-      facets: [attributeName],
-    }),
-
-    _generateRanges(results) {
-      const stats = results.getFacetStats(attributeName);
-      return generateRanges(stats);
-    },
-
-    _extractRefinedRange(helper) {
-      const refinements = helper.getRefinements(attributeName);
-      let from;
-      let to;
-
-      if (refinements.length === 0) {
-        return [];
-      }
-
-      refinements.forEach(v => {
-        if (v.operator.indexOf('>') !== -1) {
-          from = Math.floor(v.value[0]);
-        } else if (v.operator.indexOf('<') !== -1) {
-          to = Math.ceil(v.value[0]);
-        }
-      });
-      return [{from, to, isRefined: true}];
-    },
-
-    _refine(helper, from, to) {
-      const facetValues = this._extractRefinedRange(helper);
-
-      helper.clearRefinements(attributeName);
-      if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
-        if (typeof from !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
-        }
-        if (typeof to !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '<=', Math.ceil(to));
-        }
-      }
-
-      helper.search();
-    },
-
-    init({helper, templatesConfig}) {
-      this._refine = this._refine.bind(this, helper);
-      this._templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-    },
-
-    render({results, helper, state, createURL}) {
-      let facetValues;
-
-      if (results.hits.length > 0) {
-        facetValues = this._extractRefinedRange(helper);
-
-        if (facetValues.length === 0) {
-          facetValues = this._generateRanges(results);
-        }
-      } else {
-        facetValues = [];
-      }
-
-      facetValues.map(facetValue => {
-        let newState = state.clearRefinements(attributeName);
-        if (!facetValue.isRefined) {
-          if (facetValue.from !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
-          }
-          if (facetValue.to !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
-          }
-        }
-        facetValue.url = createURL(newState);
-        return facetValue;
-      });
-
-      ReactDOM.render(
-        <PriceRanges
-          collapsible={collapsible}
-          cssClasses={cssClasses}
-          currency={currency}
-          facetValues={facetValues}
-          labels={labels}
-          refine={this._refine}
-          shouldAutoHideContainer={facetValues.length === 0}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+export default connectPriceRanges(defaultRendering);
+function defaultRendering({
+  collapsible,
+  cssClasses,
+  currency,
+  facetValues,
+  labels,
+  refine,
+  shouldAutoHideContainer,
+  templateProps,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <PriceRanges
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      currency={currency}
+      facetValues={facetValues}
+      labels={labels}
+      refine={refine}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+    />,
+    containerNode
+  );
 }
-
-export default priceRanges;
