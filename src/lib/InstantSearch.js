@@ -13,6 +13,7 @@ import version from './version.js';
 import createHelpers from './createHelpers.js';
 
 function defaultCreateURL() { return '#'; }
+const defaultCreateAlgoliaClient = (algoliasearch, appId, apiKey) => algoliasearch(appId, apiKey);
 
 /**
  * @function instantsearch
@@ -66,7 +67,7 @@ class InstantSearch extends EventEmitter {
     searchParameters = {},
     urlSync = null,
     searchFunction,
-    createAlgoliaClient = (customOrInternalAlgoliasearch, appId, apiKey) => customOrInternalAlgoliasearch(appId, apiKey),
+    createAlgoliaClient = defaultCreateAlgoliaClient,
   }) {
     super();
     if (appId === null || apiKey === null || indexName === null) {
