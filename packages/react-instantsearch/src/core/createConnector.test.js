@@ -215,12 +215,14 @@ describe('createConnector', () => {
       const getSearchParameters = jest.fn(() => {
       });
       const onSearchStateChange = jest.fn();
+      const transitionState = jest.fn();
       const update = jest.fn();
       const Dummy = jest.fn(() => null);
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps,
         getSearchParameters,
+        transitionState,
         getId,
       })(Dummy);
       const wrapper = mount(<Connected />, {
@@ -240,11 +242,14 @@ describe('createConnector', () => {
       });
       expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
+      expect(transitionState.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'there', another: ['one', 'two']});
       expect(onSearchStateChange.mock.calls.length).toBe(1);
+      expect(transitionState.mock.calls.length).toBe(1);
       expect(update.mock.calls.length).toBe(1);
       wrapper.setProps({hello: 'there', another: ['one', 'two']});
       expect(onSearchStateChange.mock.calls.length).toBe(1);
+      expect(transitionState.mock.calls.length).toBe(1);
       expect(update.mock.calls.length).toBe(1);
     });
   });
@@ -338,11 +343,13 @@ describe('createConnector', () => {
     });
 
     it('calls update when props change', () => {
+      const transitionState = jest.fn();
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps: () => null,
         getMetadata: () => null,
         getId,
+        transitionState,
       })(() => null);
       const update = jest.fn();
       const onSearchStateChange = jest.fn();
@@ -360,19 +367,55 @@ describe('createConnector', () => {
           onSearchStateChange,
         },
       }});
+      expect(update.mock.calls.length).toBe(0);
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
+      expect(transitionState.mock.calls.length).toBe(0);
+      wrapper.setProps({hello: 'you'});
+      expect(update.mock.calls.length).toBe(1);
+      expect(onSearchStateChange.mock.calls.length).toBe(1);
+      expect(transitionState.mock.calls.length).toBe(1);
+    });
+
+    it('dont trigger onSearchStateChange when props change and the component has no transitionState function', () => {
+      const Connected = createConnector({
+        displayName: 'CoolConnector',
+        getProvidedProps: () => null,
+        getMetadata: () => null,
+        getId,
+      })(() => null);
+      const update = jest.fn();
+      const onSearchStateChange = jest.fn();
+      const props = {hello: 'there'};
+      const wrapper = mount(<Connected {...props} />, {
+        context: {
+          ais: {
+            store: {
+              getState: () => ({}),
+              subscribe: () => null,
+            },
+            widgetsManager: {
+              registerWidget: () => null,
+              update,
+            },
+            onSearchStateChange,
+          },
+        },
+      });
       expect(update.mock.calls.length).toBe(0);
       expect(onSearchStateChange.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'you'});
       expect(update.mock.calls.length).toBe(1);
-      expect(onSearchStateChange.mock.calls.length).toBe(1);
+      expect(onSearchStateChange.mock.calls.length).toBe(0);
     });
 
     it('dont update when props dont change', () => {
+      const transitionState = jest.fn();
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps: () => null,
         getMetadata: () => null,
         getId,
+        transitionState,
       })(() => null);
       const onSearchStateChange = jest.fn();
       const update = jest.fn();
@@ -392,9 +435,11 @@ describe('createConnector', () => {
       }});
       expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
+      expect(transitionState.mock.calls.length).toBe(0);
       wrapper.setProps({hello: 'there'});
       expect(onSearchStateChange.mock.calls.length).toBe(0);
       expect(update.mock.calls.length).toBe(0);
+      expect(transitionState.mock.calls.length).toBe(0);
     });
 
     it('unregisters itself on unmount', () => {
