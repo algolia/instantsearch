@@ -7,8 +7,8 @@ import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-import defaultTemplates from '../defaultTemplates.js';
-import defaultLabels from '../defaultLabels.js';
+import defaultTemplates from '../../../connectors/star-rating/defaultTemplates.js';
+import defaultLabels from '../../../connectors/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
@@ -20,17 +20,11 @@ describe('starRating()', () => {
   let state;
   let createURL;
 
-  let autoHideContainer;
-  let headerFooter;
   let results;
 
   beforeEach(() => {
     ReactDOM = {render: sinon.spy()};
     starRating.__Rewire__('ReactDOM', ReactDOM);
-    autoHideContainer = sinon.stub().returns(RefinementList);
-    starRating.__Rewire__('autoHideContainerHOC', autoHideContainer);
-    headerFooter = sinon.stub().returns(RefinementList);
-    starRating.__Rewire__('headerFooterHOC', headerFooter);
 
     container = document.createElement('div');
     widget = starRating({container, attributeName: 'anAttrName', cssClasses: {body: ['body', 'cx']}});
@@ -97,9 +91,7 @@ describe('starRating()', () => {
       },
     };
 
-    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
-    expect(autoHideContainer.calledOnce).toBe(true, 'autoHideContainer called once');
-    expect(headerFooter.calledOnce).toBe(true, 'headerFooter called once');
+    expect(ReactDOM.render.callCount).toBe(2);
     expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
     expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
     expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
@@ -110,7 +102,7 @@ describe('starRating()', () => {
     helper.getRefinements = sinon.stub().returns([{value: '1'}]);
     results.getFacetValues = sinon.stub().returns([{name: '1', count: 42}]);
     widget.render({state, helper, results, createURL});
-    expect(ReactDOM.render.calledOnce).toBe(true, 'ReactDOM.render called once');
+    expect(ReactDOM.render.callCount).toBe(1);
     expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([
       {
         count: 42,

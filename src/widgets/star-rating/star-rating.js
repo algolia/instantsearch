@@ -1,18 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
-
-const bem = bemHelper('ais-star-rating');
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
 
 /**
  * Instantiate a list of refinements based on a rating attribute
@@ -46,144 +35,28 @@ const bem = bemHelper('ais-star-rating');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-starRating({
-  container,
-  attributeName,
-  [ max=5 ],
-  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ labels.{andUp} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-function starRating({
-    container,
-    attributeName,
-    max = 5,
-    cssClasses: userCssClasses = {},
-    labels = defaultLabels,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
-  }) {
-  const containerNode = getContainerNode(container);
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
-    count: cx(bem('count'), userCssClasses.count),
-    star: cx(bem('star'), userCssClasses.star),
-    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-  };
-
-  return {
-    getConfiguration: () => ({disjunctiveFacets: [attributeName]}),
-
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-      this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-    },
-
-    render({helper, results, state, createURL}) {
-      const facetValues = [];
-      const allValues = {};
-      for (let v = max - 1; v >= 0; --v) {
-        allValues[v] = 0;
-      }
-      results.getFacetValues(attributeName).forEach(facet => {
-        const val = Math.round(facet.name);
-        if (!val || val > max - 1) {
-          return;
-        }
-        for (let v = val; v >= 1; --v) {
-          allValues[v] += facet.count;
-        }
-      });
-      const refinedStar = this._getRefinedStar(helper);
-      for (let star = max - 1; star >= 1; --star) {
-        const count = allValues[star];
-        if (refinedStar && star !== refinedStar && count === 0) {
-          // skip count==0 when at least 1 refinement is enabled
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        const stars = [];
-        for (let i = 1; i <= max; ++i) {
-          stars.push(i <= star);
-        }
-        facetValues.push({
-          stars,
-          name: String(star),
-          count,
-          isRefined: refinedStar === star,
-          labels,
-        });
-      }
-
-      // Bind createURL to this specific attribute
-      function _createURL(facetValue) {
-        return createURL(state.toggleRefinement(attributeName, facetValue));
-      }
-
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={facetValues}
-          shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this._toggleRefinement}
-        />,
-        containerNode
-      );
-    },
-
-    _toggleRefinement(helper, facetValue) {
-      const isRefined = this._getRefinedStar(helper) === Number(facetValue);
-      helper.clearRefinements(attributeName);
-      if (!isRefined) {
-        for (let val = Number(facetValue); val <= max; ++val) {
-          helper.addDisjunctiveFacetRefinement(attributeName, val);
-        }
-      }
-      helper.search();
-    },
-
-    _getRefinedStar(helper) {
-      let refinedStar = undefined;
-      const refinements = helper.getRefinements(attributeName);
-      refinements.forEach(r => {
-        if (!refinedStar || Number(r.value) < refinedStar) {
-          refinedStar = Number(r.value);
-        }
-      });
-      return refinedStar;
-    },
-  };
+export default connectStarRating(defaultRendering);
+function defaultRendering({
+  collapsible,
+  createURL,
+  cssClasses,
+  facetValues,
+  shouldAutoHideContainer,
+  templateProps,
+  toggleRefinement,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
 }
-
-export default starRating;
