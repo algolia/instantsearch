@@ -1,16 +1,12 @@
 import find from 'lodash/find';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import defaultTemplates from '../../../connectors/toggle/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 import {
   prepareTemplateProps,
   escapeRefinement,
   unescapeRefinement,
 } from '../../../lib/utils.js';
 
-// cannot use a function declaration because of
-// https://github.com/speedskater/babel-plugin-rewire/issues/109#issuecomment-227917555
-const currentToggle = ({
+const connectToggle = toggleRendering => ({
   attributeName,
   label,
   userValues,
@@ -19,8 +15,8 @@ const currentToggle = ({
   transformData,
   hasAnOffValue,
   containerNode,
-  RefinementList,
   cssClasses,
+  autoHideContainer,
 } = {}) => {
   const on = userValues ? escapeRefinement(userValues.on) : undefined;
   const off = userValues ? escapeRefinement(userValues.off) : undefined;
@@ -68,13 +64,23 @@ const currentToggle = ({
       if (!isRefined) {
         helper.addDisjunctiveFacetRefinement(attributeName, off);
       }
+
+      toggleRendering({
+        collapsible,
+        createURL: () => '',
+        cssClasses,
+        facetValues: [],
+        shouldAutoHideContainer: autoHideContainer,
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, false);
     },
     render({helper, results, state, createURL}) {
       const isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, on);
-      const onValue = on;
       const offValue = off === undefined ? false : off;
       const allFacetValues = results.getFacetValues(attributeName);
-      const onData = find(allFacetValues, {name: unescapeRefinement(onValue)});
+      const onData = find(allFacetValues, {name: unescapeRefinement(on)});
       const onFacetValue = {
         name: label,
         isRefined: onData !== undefined ? onData.isRefined : false,
@@ -104,25 +110,23 @@ const currentToggle = ({
       function _createURL() {
         return createURL(
           state
-            .removeDisjunctiveFacetRefinement(attributeName, isRefined ? onValue : off)
-            .addDisjunctiveFacetRefinement(attributeName, isRefined ? off : onValue)
+            .removeDisjunctiveFacetRefinement(attributeName, isRefined ? on : off)
+            .addDisjunctiveFacetRefinement(attributeName, isRefined ? off : on)
         );
       }
 
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={[facetValue]}
-          shouldAutoHideContainer={(facetValue.count === 0 || facetValue.count === null)}
-          templateProps={this._templateProps}
-          toggleRefinement={this.toggleRefinement}
-        />,
-        containerNode
-      );
+      toggleRendering({
+        collapsible,
+        createURL: _createURL,
+        cssClasses,
+        facetValues: [facetValue],
+        shouldAutoHideContainer: autoHideContainer && (facetValue.count === 0 || facetValue.count === null),
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, false);
     },
   };
 };
 
-export default currentToggle;
+export default connectToggle;

@@ -4,8 +4,8 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 
-import currentToggle from '../currentToggle.js';
-import defaultTemplates from '../../defaultTemplates.js';
+import currentToggle from '../../toggle.js';
+import defaultTemplates from '../../../../connectors/toggle/defaultTemplates.js';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);

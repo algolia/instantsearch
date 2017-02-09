@@ -1,12 +1,10 @@
 import find from 'lodash/find';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import defaultTemplates from '../../../connectors/toggle/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 import {
   prepareTemplateProps,
 } from '../../../lib/utils.js';
 
-export default function currentToggle({
+const connectToggle = toggleRendering => ({
   attributeName,
   label,
   userValues,
@@ -14,10 +12,10 @@ export default function currentToggle({
   collapsible,
   transformData,
   hasAnOffValue,
-  containerNode,
-  RefinementList,
+  autoHideContainer,
   cssClasses,
-} = {}) {
+  containerNode,
+} = {}) => { //eslint-disable-line
   return {
     getConfiguration() {
       return {
@@ -62,6 +60,17 @@ export default function currentToggle({
       if (!isRefined) {
         helper.addFacetRefinement(attributeName, userValues.off);
       }
+
+      toggleRendering({
+        collapsible,
+        createURL: () => '',
+        cssClasses,
+        facetValues: [],
+        shouldAutoHideContainer: autoHideContainer,
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, true);
     },
     render({helper, results, state, createURL}) {
       const isRefined = helper.state.isFacetRefined(attributeName, userValues.on);
@@ -85,18 +94,18 @@ export default function currentToggle({
         return createURL(state.toggleRefinement(attributeName, isRefined));
       }
 
-      ReactDOM.render(
-        <RefinementList
-          collapsible={collapsible}
-          createURL={_createURL}
-          cssClasses={cssClasses}
-          facetValues={[facetValue]}
-          shouldAutoHideContainer={results.nbHits === 0}
-          templateProps={this._templateProps}
-          toggleRefinement={this.toggleRefinement}
-        />,
-        containerNode
-      );
+      toggleRendering({
+        collapsible,
+        createURL: _createURL,
+        cssClasses,
+        facetValues: [facetValue],
+        shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, false);
     },
   };
-}
+};
+
+export default connectToggle;

@@ -1,22 +1,8 @@
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
-import cx from 'classnames';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
-import currentToggle from './implementations/currentToggle';
-import legacyToggle from './implementations/legacyToggle';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 
-const bem = bemHelper('ais-toggle');
-
-// we cannot use helper. because the facet is not yet declared in the helper
-const hasFacetsRefinementsFor = (attributeName, searchParameters) =>
-  searchParameters &&
-  searchParameters.facetsRefinements &&
-  searchParameters.facetsRefinements[attributeName] !== undefined;
+import connectToggle from '../../connectors/toggle/connectToggle.js';
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -55,86 +41,29 @@ const hasFacetsRefinementsFor = (attributeName, searchParameters) =>
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-toggle({
-  container,
-  attributeName,
-  label,
-  [ values={on: true, off: undefined} ],
-  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-function toggle({
-    container,
-    attributeName,
-    label,
-    values: userValues = {on: true, off: undefined},
-    templates = defaultTemplates,
-    collapsible = false,
-    cssClasses: userCssClasses = {},
-    transformData,
-    autoHideContainer = true,
-  } = {}) {
-  const containerNode = getContainerNode(container);
 
-  if (!container || !attributeName || !label) {
-    throw new Error(usage);
-  }
-
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
-
-  const hasAnOffValue = userValues.off !== undefined;
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    label: cx(bem('label'), userCssClasses.label),
-    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-    count: cx(bem('count'), userCssClasses.count),
-  };
-
-  // store the computed options for usage in the two toggle implementations
-  const implemOptions = {
-    attributeName,
-    label,
-    userValues,
-    templates,
-    collapsible,
-    transformData,
-    hasAnOffValue,
-    containerNode,
-    RefinementList,
-    cssClasses,
-  };
-
-  return {
-    getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-      const useLegacyToggle =
-        hasFacetsRefinementsFor(attributeName, currentSearchParameters) ||
-        hasFacetsRefinementsFor(attributeName, searchParametersFromUrl);
-
-      const toggleImplementation = useLegacyToggle ?
-        legacyToggle(implemOptions) :
-        currentToggle(implemOptions);
-
-      this.init = toggleImplementation.init.bind(toggleImplementation);
-      this.render = toggleImplementation.render.bind(toggleImplementation);
-      return toggleImplementation.getConfiguration(currentSearchParameters, searchParametersFromUrl);
-    },
-    init() {},
-    render() {},
-  };
+export default connectToggle(defaultRendering);
+function defaultRendering({
+  collapsible,
+  createURL,
+  cssClasses,
+  facetValues,
+  shouldAutoHideContainer,
+  templateProps,
+  toggleRefinement,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
 }
-
-export default toggle;

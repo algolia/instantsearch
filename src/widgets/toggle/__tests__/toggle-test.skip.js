@@ -29,8 +29,6 @@ describe('toggle()', () => {
   });
 
   context('good usage', () => {
-    let autoHideContainer;
-    let headerFooter;
     let container;
     let widget;
     let attributeName;
@@ -41,18 +39,13 @@ describe('toggle()', () => {
     let legacyToggle;
 
     beforeEach(() => {
-      autoHideContainer = sinon.stub();
-      headerFooter = sinon.stub();
-
       currentToggleImplem = {getConfiguration: sinon.spy(), init: sinon.spy(), render: sinon.spy()};
       legacyToggleImplem = {getConfiguration: sinon.spy(), init: sinon.spy(), render: sinon.spy()};
       currentToggle = sinon.stub().returns(currentToggleImplem);
       legacyToggle = sinon.stub().returns(legacyToggleImplem);
 
-      toggle.__Rewire__('autoHideContainerHOC', autoHideContainer);
       toggle.__Rewire__('currentToggle', currentToggle);
       toggle.__Rewire__('legacyToggle', legacyToggle);
-      toggle.__Rewire__('headerFooterHOC', headerFooter);
 
       container = document.createElement('div');
       label = 'Hello, ';
@@ -92,15 +85,7 @@ describe('toggle()', () => {
       expect(legacyToggleImplem.render.calledWithExactly(2)).toBe(true);
     });
 
-    it('uses autoHideContainer() and headerFooter()', () => {
-      expect(autoHideContainer.calledOnce).toBe(true);
-      expect(headerFooter.calledOnce).toBe(true);
-      expect(headerFooter.calledBefore(autoHideContainer)).toBe(true);
-    });
-
     afterEach(() => {
-      toggle.__ResetDependency__('autoHideContainerHOC');
-      toggle.__ResetDependency__('headerFooterHOC');
       toggle.__ResetDependency__('currentToggle');
       toggle.__ResetDependency__('legacyToggle');
     });
