@@ -12,6 +12,7 @@ export default {
     'examples/default-theme/index': join(__dirname, 'src/examples/default-theme/index.js'),
     'examples/tourism/index': join(__dirname, 'src/examples/tourism/index.js'),
     'examples/material-ui/index': join(__dirname, 'src/examples/material-ui/index.js'),
+    'examples/demo/index': join(__dirname, 'src/examples/demo/index.js'),
   },
   devtool: 'source-map',
   output: {
