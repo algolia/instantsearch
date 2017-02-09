@@ -136,10 +136,8 @@ describe('Hits', () => {
         foo: 'baz',
       }];
       const props = {
-        results: {
-          hits: hits,
-        },
-        hits: hits,
+        results: {hits},
+        hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -161,10 +159,8 @@ describe('Hits', () => {
         foo: 'bar',
       }];
       const props = {
-        results: {
-          hits: hits,
-        },
-        hits: hits,
+        results: {hits},
+        hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -218,10 +214,8 @@ describe('Hits', () => {
         foo: 'baz',
       }];
       const props = {
-        results: {
-          hits: hits,
-        },
-        hits: hits,
+        results: {hits},
+        hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -245,10 +239,8 @@ describe('Hits', () => {
         foo: 'baz',
       }];
       const props = {
-        results: {
-          hits: hits,
-        },
-        hits: hits,
+        results: {hits},
+        hits,
         templateProps: {
           templates: {
             item: 'one item',
@@ -274,10 +266,8 @@ describe('Hits', () => {
         foo: 'baz',
       }];
       const props = {
-        results: {
-          hits: hits,
-        },
-        hits: hits,
+        results: {hits},
+        hits,
         templateProps: {
           templates: {
             item: 'one item',

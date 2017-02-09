@@ -4,7 +4,7 @@ import Hits from './Hits.js';
 class InfiniteHits extends React.Component {
 
   render() {
-    const {cssClasses, hits, results, templateProps, showMore, showMoreLabel} = this.props;
+    const {cssClasses, hits, results, showMore, showMoreLabel, templateProps} = this.props;
     return (
       <div>
         <Hits
@@ -18,5 +18,20 @@ class InfiniteHits extends React.Component {
     );
   }
 }
+
+InfiniteHits.propTypes = {
+  cssClasses: React.PropTypes.shape({
+    root: React.PropTypes.string,
+    item: React.PropTypes.string,
+    allItems: React.PropTypes.string,
+    empty: React.PropTypes.string,
+    showmore: React.PropTypes.string,
+  }),
+  hits: React.PropTypes.object,
+  results: React.PropTypes.object,
+  showMore: React.PropTypes.function,
+  showMoreLabel: React.PropTypes.string,
+  templateProps: React.PropTypes.object.isRequired,
+};
 
 export default InfiniteHits;

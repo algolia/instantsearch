@@ -85,9 +85,9 @@ function infiniteHits({
           cssClasses={cssClasses}
           hits={hitsCache}
           results={results}
-          templateProps={this._templateProps}
           showMore={this.showMore}
           showMoreLabel={showMoreLabel}
+          templateProps={this._templateProps}
         />,
         containerNode
       );
