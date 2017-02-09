@@ -19,7 +19,6 @@ const bem = bemHelper('ais-infinitehits');
  * @param  {Object} [options.templates] Templates to use for the widget
  * @param  {string|Function} [options.templates.empty=''] Template to use when there are no results.
  * @param  {string|Function} [options.templates.item=''] Template to use for each result. This template will receive an object containing a single record.
- * @param  {string|Function} [options.templates.allItems=''] Template to use for the list of all results. (Can't be used with `item` template). This template will receive a complete SearchResults result object, this object contains the key hits that contains all the records retrieved.
  * @param  {Object} [options.transformData] Method to change the object passed to the templates
  * @param  {Function} [options.transformData.empty] Method used to change the object passed to the `empty` template
  * @param  {Function} [options.transformData.item] Method used to change the object passed to the `item` template
@@ -31,7 +30,7 @@ const bem = bemHelper('ais-infinitehits');
  */
 const usage = `
 Usage:
-hits({
+infiniteHits({
   container,
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty} ],
@@ -50,8 +49,8 @@ function infiniteHits({
     throw new Error(`Must provide a container.${usage}`);
   }
 
-  if (templates.item && templates.allItems) {
-    throw new Error(`Must contain only allItems OR item template.${usage}`);
+  if (!templates.item) {
+    throw new Error(`Must provide an item template.${usage}`);
   }
 
   const containerNode = getContainerNode(container);
