@@ -54,6 +54,7 @@ search.addWidget(
       // }]);
     },
     triggerOnUIInteraction: true,
+    pushInitialSearch: false,
   })
 );
 

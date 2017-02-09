@@ -14,5 +14,10 @@
   <span class="attr-infos">Default:<code class="attr-default">false</code>(<code>boolean</code>)</span>
 </p>
 <p class="attr-description">Trigger pushFunction after click on page or redirecting the page</p>
+<p class="attr-name">
+<span class='attr-optional'>`options.pushInitialSearch`<span class="show-description">…</span></span>
+  <span class="attr-infos">Default:<code class="attr-default">true</code>(<code>boolean</code>)</span>
+</p>
+<p class="attr-description">Trigger pushFunction after the initial search</p>
 
 <p class="attr-legend">* <span>Required</span></p>
