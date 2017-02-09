@@ -49,10 +49,6 @@ function infiniteHits({
     throw new Error(`Must provide a container.${usage}`);
   }
 
-  if (!templates.item) {
-    throw new Error(`Must provide an item template.${usage}`);
-  }
-
   const containerNode = getContainerNode(container);
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
