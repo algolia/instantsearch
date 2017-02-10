@@ -87,6 +87,7 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults) {
+    const attributeName = props.attributeName;
     const currentRefinement = getCurrentRefinement(props, searchState);
     const items = props.items.map(item => {
       const value = stringifyItem(item);
@@ -98,6 +99,18 @@ export default createConnector({
          itemHasRefinement(getId(props), searchResults.results, value) : false,
       };
     });
+
+    const stats = searchResults.results && searchResults.results.getFacetByName(attributeName) ?
+      searchResults.results.getFacetStats(attributeName) : null;
+    const refinedItem = find(items, item => item.isRefined === true);
+    if (!items.some(item => item.value === '')) {
+      items.push({
+        value: '',
+        isRefined: isEmpty(refinedItem),
+        noRefinement: !stats,
+        label: 'All',
+      });
+    }
 
     return {
       items: props.transformItems ? props.transformItems(items) : items,
