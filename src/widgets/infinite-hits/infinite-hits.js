@@ -9,7 +9,7 @@ import cx from 'classnames';
 import InfiniteHits from '../../components/InfiniteHits.js';
 import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-infinitehits');
+const bem = bemHelper('ais-infinite-hits');
 
 /**
  * Display the list of results (hits) from the current search
