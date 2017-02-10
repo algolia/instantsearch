@@ -1,6 +1,7 @@
 import React, {PropTypes, Component} from 'react';
 import List from './List';
 import classNames from './classNames.js';
+import translatable from '../core/translatable';
 
 const cx = classNames('MultiRange');
 
@@ -15,6 +16,7 @@ class MultiRange extends Component {
     refine: PropTypes.func.isRequired,
     transformItems: PropTypes.func,
     canRefine: PropTypes.bool.isRequired,
+    translate: PropTypes.func.isRequired,
   };
 
   static contextTypes = {
@@ -30,10 +32,10 @@ class MultiRange extends Component {
   }
 
   renderItem = item => {
-    const {refine} = this.props;
-
+    const {refine, translate} = this.props;
+    const label = item.value === '' ? translate('all') : item.label;
     return (
-      <label>
+      <label {...cx(item.value === '' && 'itemAll')}>
         <input
           {...cx('itemRadio', item.isRefined && 'itemRadioSelected')}
           type="radio"
@@ -43,7 +45,7 @@ class MultiRange extends Component {
         />
         <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
         <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
-          {item.label}
+          {label}
         </span>
       </label>
     );
@@ -64,4 +66,6 @@ class MultiRange extends Component {
   }
 }
 
-export default MultiRange;
+export default translatable({
+  all: 'All',
+})(MultiRange);
