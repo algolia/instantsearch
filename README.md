@@ -24,7 +24,10 @@ yarn add react-instantsearch
 
 Note: we use yarn to install dependencies but React InstantSearch is also installable via npm.
 
-Detailed info on how to use InstantSearch can be found in the [documentation website](react-doc)
+Detailed info on how to use InstantSearch can be found in the [documentation website][react-doc]
+## Contributing, dev, release
+
+Read the CONTRIBUTING guide ([link](CONTRIBUTING.md))
 
 ## Project status
 
