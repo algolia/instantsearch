@@ -83,7 +83,7 @@ export default function createConnector(connectorDesc) {
         ) :
         null;
       const transitionState = hasTransitionState ?
-        (prevWidgetsState, nextWidgetsState) => connectorDesc.transitionState(
+        (prevWidgetsState, nextWidgetsState) => connectorDesc.transitionState.call(this,
           this.props,
           prevWidgetsState,
           nextWidgetsState
@@ -107,7 +107,7 @@ export default function createConnector(connectorDesc) {
           // and getMetadata with the new props.
           this.context.ais.widgetsManager.update();
           if (connectorDesc.transitionState) {
-            this.context.ais.onSearchStateChange(connectorDesc.transitionState(
+            this.context.ais.onSearchStateChange(connectorDesc.transitionState.call(this,
               nextProps,
               this.context.ais.store.getState().widgets,
               this.context.ais.store.getState().widgets,
