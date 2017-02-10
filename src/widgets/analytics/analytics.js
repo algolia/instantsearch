@@ -4,18 +4,21 @@
  * @param  {Function} [options.pushFunction] Push function called when data are supposed to be pushed to analytic service
  * @param  {int} [options.delay=3000] Number of milliseconds between last search key stroke and calling pushFunction
  * @param  {boolean} [options.triggerOnUIInteraction=false] Trigger pushFunction after click on page or redirecting the page
+ * @param  {boolean} [options.pushInitialSearch=true] Trigger pushFunction after the initial search
  * @return {Object}
  */
 const usage = `Usage:
 analytics({
   pushFunction,
   [ delay=3000 ],
-  [ triggerOnUIInteraction=false ]
+  [ triggerOnUIInteraction=false ],
+  [ pushInitialSearch=true ]
 })`;
 function analytics({
   pushFunction,
   delay = 3000,
   triggerOnUIInteraction = false,
+  pushInitialSearch = true,
 } = {}) {
   if (!pushFunction) {
     throw new Error(usage);
@@ -106,6 +109,11 @@ function analytics({
 
   let pushTimeout;
 
+  let isInitialSearch = true;
+  if (pushInitialSearch === true) {
+    isInitialSearch = false;
+  }
+
   return {
     init() {
       if (triggerOnUIInteraction === true) {
@@ -119,6 +127,12 @@ function analytics({
       }
     },
     render({results, state}) {
+      if (isInitialSearch === true) {
+        isInitialSearch = false;
+
+        return;
+      }
+
       cachedState = {results, state};
 
       if (pushTimeout) {
