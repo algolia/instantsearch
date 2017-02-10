@@ -6,7 +6,7 @@ import cx from 'classnames';
 
 class Hits extends React.Component {
   renderWithResults() {
-    const renderedHits = map(this.props.results.hits, (hit, position) => {
+    const renderedHits = map(this.props.hits, (hit, position) => {
       const data = {
         ...hit,
         __hitIndex: position,
@@ -81,6 +81,7 @@ Hits.propTypes = {
     allItems: React.PropTypes.string,
     empty: React.PropTypes.string,
   }),
+  hits: React.PropTypes.object,
   results: React.PropTypes.object,
   templateProps: React.PropTypes.object.isRequired,
 };
