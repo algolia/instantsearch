@@ -17,6 +17,7 @@ describe('MultiRange', () => {
           {label: 'label2', value: '10:20', isRefined: false, noRefinement: false},
           {label: 'label3', value: '20:30', isRefined: false, noRefinement: false},
           {label: 'label4', value: '30:', isRefined: false, noRefinement: false},
+          {label: 'All', value: '', isRefined: true, noRefinement: false},
         ]}
         canRefine={true}
       />
@@ -34,6 +35,25 @@ describe('MultiRange', () => {
           {label: 'label2', value: '10:20', isRefined: true, noRefinement: false},
           {label: 'label3', value: '20:30', isRefined: false, noRefinement: false},
           {label: 'label4', value: '30:', isRefined: false, noRefinement: false},
+          {label: 'All', value: '', isRefined: false, noRefinement: false},
+        ]}
+        canRefine={true}
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('no refinements', () => {
+    const tree = renderer.create(
+      <MultiRange
+        createURL={() => '#'}
+        refine={() => null}
+        items={[
+          {label: 'label1', value: '10:', isRefined: false, noRefinement: true},
+          {label: 'label2', value: '10:20', isRefined: false, noRefinement: true},
+          {label: 'label3', value: '20:30', isRefined: false, noRefinement: true},
+          {label: 'label4', value: '30:', isRefined: false, noRefinement: true},
+          {label: 'All', value: '', isRefined: true, noRefinement: false},
         ]}
         canRefine={true}
       />
@@ -47,7 +67,7 @@ describe('MultiRange', () => {
         <MultiRange
           refine={refine}
           items={[
-            {label: 'label', value: '10:', isRefined: false, noRefinement: false},
+          {label: 'label', value: '10:', isRefined: false, noRefinement: false},
             {label: 'label', value: '10:20', isRefined: false, noRefinement: false},
             {label: 'label', value: '20:30', isRefined: false, noRefinement: false},
             {label: 'label', value: '30:', isRefined: false, noRefinement: false},

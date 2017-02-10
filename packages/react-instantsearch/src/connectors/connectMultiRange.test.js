@@ -17,16 +17,14 @@ let props;
 let params;
 
 describe('connectMultiRange', () => {
+  const results = {
+    getFacetStats: () => ({min: 0, max: 300}),
+    getFacetByName: () => true,
+  };
+
   it('provides the correct props to the component', () => {
-    let results = {
-      getFacetStats: () => ({min: 0, max: 300}),
-      getFacetByName: () => true,
-    };
-
     props = getProvidedProps({
-      items: [
-        {label: 'All'},
-      ],
+      items: [],
     }, {}, {results});
     expect(props).toEqual({
       items: [
@@ -37,15 +35,25 @@ describe('connectMultiRange', () => {
     });
 
     props = getProvidedProps({
+      items: [{label: 'ALL'}],
+    }, {}, {results});
+    expect(props).toEqual({
       items: [
-        {label: 'All'},
+        {label: 'ALL', value: '', isRefined: true, noRefinement: false},
+      ],
+      currentRefinement: '',
+      canRefine: true,
+    });
+
+    props = getProvidedProps({
+      items: [
         {label: 'Ok', start: 100},
       ],
     }, {}, {results});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: '', isRefined: true, noRefinement: false},
         {label: 'Ok', value: '100:', isRefined: false, noRefinement: false},
+        {label: 'All', value: '', isRefined: true, noRefinement: false},
       ],
       currentRefinement: '',
       canRefine: true,
@@ -53,14 +61,13 @@ describe('connectMultiRange', () => {
 
     props = getProvidedProps({
       items: [
-        {label: 'All'},
         {label: 'Not ok', end: 200},
       ],
     }, {}, {results});
     expect(props).toEqual({
       items: [
-        {label: 'All', value: '', isRefined: true, noRefinement: false},
         {label: 'Not ok', value: ':200', isRefined: false, noRefinement: false},
+        {label: 'All', value: '', isRefined: true, noRefinement: false},
       ],
       currentRefinement: '',
       canRefine: true,
@@ -68,78 +75,83 @@ describe('connectMultiRange', () => {
 
     props = getProvidedProps({
       items: [
-        {label: 'All'},
+        {label: 'Ok', start: 100},
+        {label: 'Not ok', end: 200},
+        {label: 'Maybe ok?', start: 100, end: 200},
+      ],
+    }, {}, {results});
+    expect(props).toEqual({
+      items: [
+        {label: 'Ok', value: '100:', isRefined: false, noRefinement: false},
+        {label: 'Not ok', value: ':200', isRefined: false, noRefinement: false},
+        {label: 'Maybe ok?', value: '100:200', isRefined: false, noRefinement: false},
+        {label: 'All', value: '', isRefined: true, noRefinement: false},
+      ],
+      currentRefinement: '',
+      canRefine: true,
+    });
+  });
+
+  it('no items define', () => {
+    props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}}, {results});
+    expect(props).toEqual({
+      items: [
+        {label: 'All', value: '', isRefined: true, noRefinement: false},
+      ],
+      currentRefinement: 'wat', canRefine: true});
+
+    props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}}, {});
+    expect(props).toEqual({
+      items: [
+        {label: 'All', value: '', isRefined: true, noRefinement: true},
+      ],
+      currentRefinement: 'wat', canRefine: false});
+
+    props = getProvidedProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {}, {});
+    expect(props).toEqual({
+      items: [
+        {label: 'All', value: '', isRefined: true, noRefinement: true},
+      ], currentRefinement: 'wat', canRefine: false});
+  });
+
+  it('use the transform items props if passed', () => {
+    const transformItems = jest.fn(() => ['items']);
+    props = getProvidedProps({
+      items: [
         {label: 'Ok', start: 100},
         {label: 'Not ok', end: 200},
         {label: 'Maybe ok?', start: 100, end: 200},
       ],
+      transformItems,
     }, {}, {results});
-    expect(props).toEqual({
+    expect(transformItems.mock.calls[0][0]).toEqual([
+        {label: 'Ok', value: '100:', isRefined: false, noRefinement: false},
+        {label: 'Not ok', value: ':200', isRefined: false, noRefinement: false},
+        {label: 'Maybe ok?', value: '100:200', isRefined: false, noRefinement: false},
+        {label: 'All', value: '', isRefined: true, noRefinement: false},
+    ]);
+    expect(props.items).toEqual(['items']);
+  });
+
+  it('compute the no refinement value for each item range when stats exists', () => {
+    props = getProvidedProps({
       items: [
-        {label: 'All', value: '', isRefined: true, noRefinement: false},
-        {label: 'Ok', value: '100:', isRefined: false, noRefinement: false},
-        {label: 'Not ok', value: ':200', isRefined: false, noRefinement: false},
-        {label: 'Maybe ok?', value: '100:200', isRefined: false, noRefinement: false},
-      ],
-      currentRefinement: '',
-      canRefine: true,
-    });
-
-    it('no items define', () => {
-      props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}}, {});
-      expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
-
-      props = getProvidedProps({attributeName: 'ok', items: []}, {multiRange: {ok: 'wat'}}, {});
-      expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
-
-      props = getProvidedProps({attributeName: 'ok', items: [], defaultRefinement: 'wat'}, {}, {});
-      expect(props).toEqual({items: [], currentRefinement: 'wat', canRefine: false});
-    });
-
-    it('use the transform items props if passed', () => {
-      const transformItems = jest.fn(() => ['items']);
-      props = getProvidedProps({
-        items: [
-        {label: 'All'},
-        {label: 'Ok', start: 100},
-        {label: 'Not ok', end: 200},
-        {label: 'Maybe ok?', start: 100, end: 200},
-        ],
-        transformItems,
-      }, {}, {results});
-      expect(transformItems.mock.calls[0][0]).toEqual([
-        {label: 'All', value: '', isRefined: true, noRefinement: false},
-        {label: 'Ok', value: '100:', isRefined: false, noRefinement: false},
-        {label: 'Not ok', value: ':200', isRefined: false, noRefinement: false},
-        {label: 'Maybe ok?', value: '100:200', isRefined: false, noRefinement: false},
-      ]);
-      expect(props.items).toEqual(['items']);
-    });
-
-    it('compute the no refinement value for each item range when stats exists', () => {
-      results = {
-        getFacetStats: () => ({min: 250, max: 300}),
-        getFacetByName: () => true,
-      };
-
-      props = getProvidedProps({
-        items: [
           {label: '1', start: 100},
           {label: '2', start: 400},
           {label: '3', end: 200},
           {label: '4', start: 100, end: 200},
-        ],
-      }, {}, {results});
-      expect(props).toEqual({
-        items: [
+      ],
+    }, {}, {results});
+    expect(props).toEqual({
+      items: [
           {label: '1', value: '100:', isRefined: false, noRefinement: false},
           {label: '2', value: '400:', isRefined: false, noRefinement: true},
-          {label: '3', value: ':200', isRefined: false, noRefinement: true},
-          {label: '4', value: '100:200', isRefined: false, noRefinement: true},
-        ],
-        currentRefinement: '',
-        canRefine: true,
-      });
+          {label: '3', value: ':200', isRefined: false, noRefinement: false},
+          {label: '4', value: '100:200', isRefined: false, noRefinement: false},
+          {label: 'All', value: '', isRefined: true, noRefinement: false},
+      ],
+      currentRefinement: '',
+      canRefine: true,
     });
   });
 
