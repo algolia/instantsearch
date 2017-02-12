@@ -1,3 +1,15 @@
+<a name="1.11.0"></a>
+# [1.11.0](https://github.com/algolia/instantsearch.js/compare/v1.10.5...v1.11.0) (2017-02-12)
+
+
+### Features
+
+* **analytics-widget:** add a new parameter pushInitialSearch (#1963) ([d777997](https://github.com/algolia/instantsearch.js/commit/d777997))
+* **custom client:** allows to provide a custom JS client instance (#1948) ([cce4f2e](https://github.com/algolia/instantsearch.js/commit/cce4f2e))
+* **InfiniteHits:** add new widget ([2d77e4b](https://github.com/algolia/instantsearch.js/commit/2d77e4b))
+
+
+
 <a name="1.10.5"></a>
 ## [1.10.5](https://github.com/algolia/instantsearch.js/compare/v1.10.4...v1.10.5) (2017-02-06)
 

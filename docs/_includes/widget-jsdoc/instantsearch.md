@@ -25,6 +25,11 @@
 </p>
 <p class="attr-description">A hook that will be called each time a search needs to be done, with the helper as a parameter. It's your responsibility to call helper.search(). This option allows you to avoid doing searches at page load for example.</p>
 <p class="attr-name">
+<span class='attr-optional'>`options.createAlgoliaClient`<span class="show-description">…</span></span>
+  <span class="attr-infos">(<code>function</code>)</span>
+</p>
+<p class="attr-description">Allows you to provide your own algolia client instead of the one instantiated internally by instantsearch.js. Useful in situations where you need to setup complex options on the client or if you need to share it easily. Usage: `createAlgoliaClient: function(algoliasearch, appId, apiKey) { return anyCustomClient; }` We forward `algoliasearch` which is the original algoliasearch module imported inside instantsearch.js</p>
+<p class="attr-name">
 <span class='attr-optional'>`options.searchParameters`<span class="show-description">…</span></span>
   <span class="attr-infos">(<code>Object</code>)</span>
 </p>
