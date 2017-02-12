@@ -52,7 +52,7 @@ exports[`RefinementList applies translations 1`] = `
             <svg
               role="img">
               <use
-                href="#sbx-icon-search-13" />
+                xlinkHref="#sbx-icon-search-13" />
             </svg>
           </button>
           <button
@@ -63,7 +63,7 @@ exports[`RefinementList applies translations 1`] = `
             <svg
               role="img">
               <use
-                href="#sbx-icon-clear-3" />
+                xlinkHref="#sbx-icon-clear-3" />
             </svg>
           </button>
         </div>
@@ -252,7 +252,7 @@ exports[`RefinementList refinement list with search inside items but no search r
             <svg
               role="img">
               <use
-                href="#sbx-icon-search-13" />
+                xlinkHref="#sbx-icon-search-13" />
             </svg>
           </button>
           <button
@@ -263,7 +263,7 @@ exports[`RefinementList refinement list with search inside items but no search r
             <svg
               role="img">
               <use
-                href="#sbx-icon-clear-3" />
+                xlinkHref="#sbx-icon-clear-3" />
             </svg>
           </button>
         </div>
@@ -393,7 +393,7 @@ exports[`RefinementList refinement list with search inside items with search res
             <svg
               role="img">
               <use
-                href="#sbx-icon-search-13" />
+                xlinkHref="#sbx-icon-search-13" />
             </svg>
           </button>
           <button
@@ -404,7 +404,7 @@ exports[`RefinementList refinement list with search inside items with search res
             <svg
               role="img">
               <use
-                href="#sbx-icon-clear-3" />
+                xlinkHref="#sbx-icon-clear-3" />
             </svg>
           </button>
         </div>

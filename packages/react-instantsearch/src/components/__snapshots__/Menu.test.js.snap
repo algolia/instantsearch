@@ -51,7 +51,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-search-13" />
+              xlinkHref="#sbx-icon-search-13" />
           </svg>
         </button>
         <button
@@ -62,7 +62,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-clear-3" />
+              xlinkHref="#sbx-icon-clear-3" />
           </svg>
         </button>
       </div>
@@ -178,7 +178,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-search-13" />
+              xlinkHref="#sbx-icon-search-13" />
           </svg>
         </button>
         <button
@@ -189,7 +189,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-clear-3" />
+              xlinkHref="#sbx-icon-clear-3" />
           </svg>
         </button>
       </div>
@@ -269,7 +269,7 @@ exports[`Menu applies translations 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-search-13" />
+              xlinkHref="#sbx-icon-search-13" />
           </svg>
         </button>
         <button
@@ -280,7 +280,7 @@ exports[`Menu applies translations 1`] = `
           <svg
             role="img">
             <use
-              href="#sbx-icon-clear-3" />
+              xlinkHref="#sbx-icon-clear-3" />
           </svg>
         </button>
       </div>

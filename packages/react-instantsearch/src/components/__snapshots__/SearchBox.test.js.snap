@@ -47,7 +47,7 @@ exports[`SearchBox applies its default props 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -58,7 +58,7 @@ exports[`SearchBox applies its default props 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
@@ -114,7 +114,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -125,7 +125,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
@@ -181,7 +181,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -192,7 +192,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
@@ -248,7 +248,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -259,7 +259,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
@@ -315,7 +315,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -326,7 +326,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
@@ -382,7 +382,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13" />
       </svg>
     </button>
     <button
@@ -393,7 +393,7 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       <svg
         role="img">
         <use
-          href="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3" />
       </svg>
     </button>
   </div>
