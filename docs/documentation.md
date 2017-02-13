@@ -423,6 +423,55 @@ and
 
 <div id="hits-container" class="widget-container"></div>
 
+#### Infinite hits
+
+<div class="codebox-combo">
+
+<img class="widget-icon pull-left" src="{% asset_path icon-widget-results.svg %}">
+The infinite hits widget is like the hits widget but instead of relying on an external pagination widget, it displays a button to load more results. <br/>
+It will display the results as one continuous long page. Its usage is particularly recommended in a mobile context. Even though it is not incompatible, it does not go well with the pagination widget. <br/>
+It accepts a [Mustache](https://mustache.github.io/) template string or a function returning a string. See the [templates](#templates) section.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet">
+{% highlight javascript %}
+{% raw %}
+search.addWidget(
+  instantsearch.widgets.infiniteHits({
+    container: '#infinite-hits-container',
+    templates: {
+      empty: 'No results',
+      item: '<strong>Hit {{objectID}}</strong>: {{{_highlightResult.name.value}}}'
+    },
+    hitsPerPage: 3
+  })
+);
+{% endraw %}
+{% endhighlight %}
+  </div>
+  <div class="jsdoc js-toggle-jsdoc">
+{% highlight javascript %}
+{% raw %}
+instantsearch.widgets.infiniteHits(options);
+{% endraw %}
+{% endhighlight %}
+
+{% include widget-jsdoc/infiniteHits.md %}
+
+  </div>
+  <div class="requirements js-toggle-requirements">
+For better control over what kind of data is returned, we suggest you configure the
+[attributeToRetrieve](https://www.algolia.com/doc/rest#param-attributesToRetrieve)
+and
+[attributeToHighlight](https://www.algolia.com/doc/rest#param-attributesToHighlight) of your index.
+  </div>
+</div>
+
+</div>
+
+<div id="infinite-hits-container" class="widget-container"></div>
+
 
 #### hitsPerPageSelector
 
