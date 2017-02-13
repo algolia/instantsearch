@@ -80,6 +80,8 @@ function infiniteHits({
 
       hitsCache = [...hitsCache, ...results.hits];
 
+      const isLastPage = results.nbPages <= results.page + 1;
+
       ReactDOM.render(
         <InfiniteHits
           cssClasses={cssClasses}
@@ -87,6 +89,7 @@ function infiniteHits({
           results={results}
           showMore={this.showMore}
           showMoreLabel={showMoreLabel}
+          isLastPage={isLastPage}
           templateProps={this._templateProps}
         />,
         containerNode

@@ -67,6 +67,27 @@ describe('infiniteHits()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
+  it('if it is the last page, then the props should contain isLastPage true', () => {
+    props = getProps();
+    const state = {page: 0};
+    widget.render({
+      results: {...results, page: 0, nbPages: 2},
+      state,
+    });
+    widget.render({
+      results: {...results, page: 1, nbPages: 2},
+      state,
+    });
+
+    expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
+    const propsWithIsLastPageFalse = {...(getProps({...results, page: 0, nbPages: 2})), isLastPage: false};
+    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<InfiniteHits {...propsWithIsLastPageFalse} />);
+    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
+    const propsWithIsLastPageTrue = {...(getProps({...results, page: 1, nbPages: 2})), isLastPage: true};
+    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<InfiniteHits {...propsWithIsLastPageTrue} />);
+    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+  });
+
   it('does not accept both item and allItems templates', () => {
     expect(infiniteHits.bind({container, templates: {item: '', allItems: ''}})).toThrow();
   });
@@ -85,10 +106,10 @@ describe('infiniteHits()', () => {
     infiniteHits.__ResetDependency__('defaultTemplates');
   });
 
-  function getProps() {
+  function getProps(otherResults) {
     return {
-      hits: results.hits,
-      results,
+      hits: (otherResults || results).hits,
+      results: otherResults || results,
       templateProps,
       cssClasses: {
         root: 'ais-infinite-hits root cx',
@@ -98,6 +119,7 @@ describe('infiniteHits()', () => {
       },
       showMore: () => {},
       showMoreLabel: 'Show more results',
+      isLastPage: false,
     };
   }
 });

@@ -5,6 +5,10 @@ class InfiniteHits extends React.Component {
 
   render() {
     const {cssClasses, hits, results, showMore, showMoreLabel, templateProps} = this.props;
+    const btn = this.props.isLastPage ?
+     <button disabled>{showMoreLabel}</button> :
+     <button onClick={showMore}>{showMoreLabel}</button>;
+
     return (
       <div>
         <Hits
@@ -13,7 +17,9 @@ class InfiniteHits extends React.Component {
           results={results}
           templateProps={templateProps}
         />
-        <div className={cssClasses.showmore}><button onClick={showMore}>{showMoreLabel}</button></div>
+        <div className={cssClasses.showmore}>
+          {btn}
+        </div>
       </div>
     );
   }
@@ -32,6 +38,7 @@ InfiniteHits.propTypes = {
   showMore: React.PropTypes.function,
   showMoreLabel: React.PropTypes.string,
   templateProps: React.PropTypes.object.isRequired,
+  isLastPage: React.PropTypes.bool.isRequired,
 };
 
 export default InfiniteHits;
