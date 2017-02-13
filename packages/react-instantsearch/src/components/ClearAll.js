@@ -10,13 +10,11 @@ class ClearAll extends Component {
     translate: PropTypes.func.isRequired,
     items: PropTypes.arrayOf(PropTypes.object).isRequired,
     refine: PropTypes.func.isRequired,
-    query: PropTypes.string,
   };
 
   render() {
-    const {translate, items, refine, query} = this.props;
-    const isDisabled = items.length === 0 && (!query || query === '');
-
+    const {translate, items, refine} = this.props;
+    const isDisabled = items.length === 0;
     if (isDisabled) {
       return (
         <button {...cx('root')} disabled>

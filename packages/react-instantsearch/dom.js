@@ -1,4 +1,5 @@
 import createInstantSearch from './src/core/createInstantSearch';
+import createMultiIndexContext from './src/core/createMultiIndexContext';
 import algoliasearch from 'algoliasearch';
 
 const InstantSearch = createInstantSearch(algoliasearch, {
@@ -6,6 +7,11 @@ const InstantSearch = createInstantSearch(algoliasearch, {
   props: {className: 'ais-InstantSearch__root'},
 });
 export {InstantSearch};
+const MultiIndexContext = createMultiIndexContext({
+  Root: 'div',
+  props: {className: 'ais-MultiIndex__root'},
+});
+export {MultiIndexContext};
 export {default as Configure} from './src/widgets/Configure.js';
 export {default as CurrentRefinements} from './src/widgets/CurrentRefinements.js';
 export {default as HierarchicalMenu} from './src/widgets/HierarchicalMenu.js';

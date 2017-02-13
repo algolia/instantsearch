@@ -144,17 +144,13 @@ class Pagination extends Component {
       });
     }
 
-    const samePage = {
-      valueOf: () => currentRefinement,
-      isSamePage: true,
-    };
-
     items = items.concat(
       getPages(currentRefinement, totalPages, pagesPadding).map(value => ({
         key: value,
         modifier: 'itemPage',
         label: translate('page', value),
-        value: value === currentRefinement ? samePage : value,
+        value,
+        selected: value === currentRefinement,
         ariaLabel: translate('ariaPage', value),
       }))
     );
@@ -184,7 +180,6 @@ class Pagination extends Component {
         {...otherProps}
         cx={cx}
         items={items}
-        selectedItem={currentRefinement}
         onSelect={refine}
         createURL={createURL}
       />

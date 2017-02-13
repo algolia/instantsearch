@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+import {getIndex} from '../core/indexUtils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -16,7 +17,8 @@ export default createConnector({
   displayName: 'AlgoliaHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    const hits = searchResults.results ? searchResults.results.hits : [];
+    const index = getIndex(this.context);
+    const hits = searchResults.results && searchResults.results[index] ? searchResults.results[index].hits : [];
 
     return {hits};
   },

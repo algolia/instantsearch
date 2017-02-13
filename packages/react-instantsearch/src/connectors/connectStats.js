@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+import {getIndex} from '../core/indexUtils';
 
 /**
  * connectStats connector provides the logic to build a widget that will
@@ -12,12 +13,13 @@ export default createConnector({
   displayName: 'AlgoliaStats',
 
   getProvidedProps(props, searchState, searchResults) {
-    if (!searchResults.results) {
+    const index = getIndex(this.context);
+    if (!searchResults.results || !searchResults.results[index]) {
       return null;
     }
     return {
-      nbHits: searchResults.results.nbHits,
-      processingTimeMS: searchResults.results.processingTimeMS,
+      nbHits: searchResults.results[index].nbHits,
+      processingTimeMS: searchResults.results[index].processingTimeMS,
     };
   },
 });
