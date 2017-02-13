@@ -35,7 +35,7 @@ const content = createConnector({
     },
  })(({noResults, query}) => {
     const content = noResults
-      ? <div>No results has been found for {query}</div>
+      ? <div>No results found for {query}</div>
       : <div>Some results</div>;
     return <div>{content}</div>;
  });
