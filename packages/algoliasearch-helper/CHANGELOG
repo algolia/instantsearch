@@ -1,5 +1,10 @@
 CHANGELOG
 
+2.18.1 - 2017-02-14
+ * fix(agent): sets the helper agent once
+ * doc(concepts): Fix typo
+ * fix(toggleRefinement): rename toggleRefinement to toggleFacetRefinement
+
 2.18.0 - 2017-01-10
  * feat(client): Add methods to set/get the client.
  * doc(sffv): Add the type of the results of searchForFacetValues
