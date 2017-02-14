@@ -64,7 +64,7 @@ const connectSearchBox = searchBoxRendering => ({
     poweredBy = {};
   }
 
-  const search = helper => {
+  const makeSearch = helper => {
     let previousQuery;
 
     const setQueryAndSearch = (q, doSearch = true) => {
@@ -81,17 +81,15 @@ const connectSearchBox = searchBoxRendering => ({
   };
 
   return {
-    init({state, helper, onHistoryChange}) {
-      this._search = search(helper);
+    init({helper, onHistoryChange}) {
+      this._search = makeSearch(helper);
       searchBoxRendering({
-        query: state.query,
+        query: helper.state.query,
         containerNode,
         onHistoryChange,
         poweredBy,
-        helper,
         wrapInput,
         autofocus,
-        queryHook,
         searchOnEnterKeyPressOnly,
         placeholder,
         cssClasses,

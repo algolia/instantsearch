@@ -48,10 +48,8 @@ function defaultRendering({
   containerNode,
   onHistoryChange,
   poweredBy,
-  helper,
   wrapInput,
   autofocus,
-  queryHook,
   searchOnEnterKeyPressOnly,
   placeholder,
   cssClasses,
@@ -90,7 +88,7 @@ function defaultRendering({
     // - use back button
     // - input query is empty (because <input> autocomplete = off)
     window.addEventListener('pageshow', () => {
-      input.value = helper.state.query;
+      input.value = query;
     });
 
     // Update value when query change outside of the input
@@ -98,9 +96,9 @@ function defaultRendering({
       input.value = fullState.query || '';
     });
 
-    if (autofocus === true || autofocus === 'auto' && helper.state.query === '') {
+    if (autofocus === true || autofocus === 'auto' && query === '') {
       input.focus();
-      input.setSelectionRange(helper.state.query.length, helper.state.query.length);
+      input.setSelectionRange(query.length, query.length);
     }
 
     // search on enter

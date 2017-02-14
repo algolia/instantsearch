@@ -29,6 +29,15 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.searchBox({
+    container: '#search-box-return',
+    placeholder: 'Search for products',
+    poweredBy: true,
+    searchOnEnterKeyPressOnly: true,
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.analytics({
     pushFunction(/* formattedParameters, state, results*/) {
       // Google Analytics
