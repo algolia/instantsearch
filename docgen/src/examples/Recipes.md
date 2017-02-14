@@ -20,6 +20,9 @@ examples: [{
   }, {
     id: 'react-router-v4',
     title: 'Usage with react-router v4.'
+  }, {
+    id: 'geo-search',
+    title: 'Geo search using dynamic search parameters'
   }]
 examplesEndpoint: https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples
 ---
