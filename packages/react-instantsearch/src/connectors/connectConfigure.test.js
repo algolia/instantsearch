@@ -18,31 +18,22 @@ describe('connectConfigure', () => {
     expect(searchParameters.getQueryParameter.bind(searchParameters, 'children')).toThrow();
   });
 
-  it('configure parameters that are in the search state should override the default one', () => {
-    const searchParameters = getSearchParameters(
-      new SearchParameters(),
-      {distinct: 1, whatever: 'please', children: 'whatever'},
-      {configure: {whatever: 'priority'}}
-    );
-    expect(searchParameters.getQueryParameter('distinct')).toEqual(1);
-    expect(searchParameters.getQueryParameter('whatever')).toEqual('priority');
-    expect(searchParameters.getQueryParameter.bind(searchParameters, 'children')).toThrow();
-  });
-
   it('calling transitionState should add configure parameters to the search state', () => {
-    let searchState = transitionState(
+    const providedThis = {};
+    let searchState = transitionState.call(providedThis,
       {distinct: 1, whatever: 'please', children: 'whatever'},
       {},
       {}
     );
     expect(searchState).toEqual({configure: {distinct: 1, whatever: 'please'}});
 
-    searchState = transitionState(
-      {distinct: 1, whatever: 'please', children: 'whatever'},
+    searchState = transitionState.call(providedThis,
+      {whatever: 'other', children: 'whatever'},
       {configure: {distinct: 1, whatever: 'please'}},
-      {configure: {distinct: 1, whatever: 'whatever'}},
+      {configure: {distinct: 1, whatever: 'please'}},
     );
-    expect(searchState).toEqual({configure: {distinct: 1, whatever: 'whatever'}});
+
+    expect(searchState).toEqual({configure: {whatever: 'other'}});
   });
 
   it('calling cleanUp should remove configure parameters from the search state', () => {

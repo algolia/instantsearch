@@ -1,31 +1,24 @@
 import createConnector from '../core/createConnector.js';
-import {omit, isEmpty} from 'lodash';
+import {omit, isEmpty, difference, keys} from 'lodash';
 
 const namespace = 'configure';
-
-function getCurrentRefinement(props, searchState) {
-  return Object.keys(props).reduce((acc, item) => {
-    acc[item] = searchState[namespace] && searchState[namespace][item]
-     ? searchState[namespace][item] : props[item];
-    return acc;
-  }, {});
-}
 
 export default createConnector({
   displayName: 'AlgoliaConfigure',
   getProvidedProps() {
     return {};
   },
-  getSearchParameters(searchParameters, props, searchState) {
+  getSearchParameters(searchParameters, props) {
     const items = omit(props, 'children');
-    const configuration = getCurrentRefinement(items, searchState);
-    return searchParameters.setQueryParameters(configuration);
+    return searchParameters.setQueryParameters(items);
   },
   transitionState(props, prevSearchState, nextSearchState) {
     const items = omit(props, 'children');
+    const nonPresentKeys = this._props ? difference(keys(this._props), keys(props)) : [];
+    this._props = props;
     return {
       ...nextSearchState,
-      [namespace]: {...items, ...nextSearchState[namespace]},
+      [namespace]: {...omit(nextSearchState[namespace], nonPresentKeys), ...items},
     };
   },
   cleanUp(props, searchState) {
