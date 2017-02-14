@@ -84,7 +84,7 @@ var version = require('./version');
  */
 function AlgoliaSearchHelper(client, index, options) {
   if (!client.addAlgoliaAgent) console.log('Please upgrade to the newest version of the JS Client.'); // eslint-disable-line
-  else client.addAlgoliaAgent('JS Helper ' + version);
+  else if (!doesClientAgentContainsHelper(client)) client.addAlgoliaAgent('JS Helper ' + version);
 
   this.setClient(client);
   var opts = options || {};
@@ -586,19 +586,38 @@ AlgoliaSearchHelper.prototype.toggleExclude = function() {
  * @throws Error will throw an error if the facet is not declared in the settings of the helper
  * @fires change
  * @chainable
+ * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
  */
 AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).toggleRefinement(facet, value);
+  return this.toggleFacetRefinement(facet, value);
+};
+
+/**
+ * Adds or removes a filter to a facetted attribute with the `value` provided. If
+ * the value is set then it removes it, otherwise it adds the filter.
+ *
+ * This method can be used for conjunctive, disjunctive and hierarchical filters.
+ *
+ * This method resets the current page to 0.
+ * @param  {string} facet the facet to refine
+ * @param  {string} value the associated value
+ * @return {AlgoliaSearchHelper}
+ * @throws Error will throw an error if the facet is not declared in the settings of the helper
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.toggleFacetRefinement = function(facet, value) {
+  this.state = this.state.setPage(0).toggleFacetRefinement(facet, value);
 
   this._change();
   return this;
 };
 
 /**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
  */
 AlgoliaSearchHelper.prototype.toggleRefine = function() {
-  return this.toggleRefinement.apply(this, arguments);
+  return this.toggleFacetRefinement.apply(this, arguments);
 };
 
 /**
@@ -872,7 +891,7 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
  * helper.hasRefinements('material'); // true
  *
  * helper.hasRefinements('categories'); // false
- * helper.toggleRefinement('categories', 'kitchen > knife');
+ * helper.toggleFacetRefinement('categories', 'kitchen > knife');
  * helper.hasRefinements('categories'); // true
  *
  */
@@ -1223,7 +1242,7 @@ AlgoliaSearchHelper.prototype.clearCache = function() {
 AlgoliaSearchHelper.prototype.setClient = function(newClient) {
   if (this.client === newClient) return this;
 
-  if (newClient.addAlgoliaAgent) newClient.addAlgoliaAgent('JS Helper ' + version);
+  if (newClient.addAlgoliaAgent && !doesClientAgentContainsHelper(newClient)) newClient.addAlgoliaAgent('JS Helper ' + version);
   this.client = newClient;
 
   return this;
@@ -1290,5 +1309,17 @@ AlgoliaSearchHelper.prototype.detachDerivedHelper = function(derivedHelper) {
  * @property {string} value the string use to filter the attribute
  * @property {string} type the type of filter: 'conjunctive', 'disjunctive', 'exclude'
  */
+
+
+/*
+ * This function tests if the _ua parameter of the client
+ * already contains the JS Helper UA
+ */
+function doesClientAgentContainsHelper(client) {
+  // this relies on JS Client internal variable, this might break if implementation changes
+  var currentAgent = client._ua;
+  return !currentAgent ? false :
+    currentAgent.indexOf('JS Helper') !== -1;
+}
 
 module.exports = AlgoliaSearchHelper;

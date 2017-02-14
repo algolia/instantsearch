@@ -11909,12 +11909,24 @@ SearchParameters.prototype = {
    * @param  {string} value the associated value
    * @return {SearchParameters}
    * @throws will throw an error if the facet is not declared in the settings of the helper
+   * @deprecated since version 2.19.0, see {@link SearchParameters#toggleFacetRefinement}
    */
   toggleRefinement: function toggleRefinement(facet, value) {
+    return this.toggleFacetRefinement(facet, value);
+  },
+  /**
+   * Generic toggle refinement method to use with facet, disjunctive facets
+   * and hierarchical facets
+   * @param  {string} facet the facet to refine
+   * @param  {string} value the associated value
+   * @return {SearchParameters}
+   * @throws will throw an error if the facet is not declared in the settings of the helper
+   */
+  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
     if (this.isHierarchicalFacet(facet)) {
       return this.toggleHierarchicalFacetRefinement(facet, value);
     } else if (this.isConjunctiveFacet(facet)) {
-      return this.toggleFacetRefinement(facet, value);
+      return this.toggleConjunctiveFacetRefinement(facet, value);
     } else if (this.isDisjunctiveFacet(facet)) {
       return this.toggleDisjunctiveFacetRefinement(facet, value);
     }
@@ -11929,7 +11941,7 @@ SearchParameters.prototype = {
    * @param {value} value value used for filtering
    * @return {SearchParameters}
    */
-  toggleFacetRefinement: function toggleFacetRefinement(facet, value) {
+  toggleConjunctiveFacetRefinement: function toggleConjunctiveFacetRefinement(facet, value) {
     if (!this.isConjunctiveFacet(facet)) {
       throw new Error(facet + ' is not defined in the facets attribute of the helper configuration');
     }
@@ -13995,19 +14007,38 @@ AlgoliaSearchHelper.prototype.toggleExclude = function() {
  * @throws Error will throw an error if the facet is not declared in the settings of the helper
  * @fires change
  * @chainable
+ * @deprecated since version 2.19.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
  */
 AlgoliaSearchHelper.prototype.toggleRefinement = function(facet, value) {
-  this.state = this.state.setPage(0).toggleRefinement(facet, value);
+  return this.toggleFacetRefinement(facet, value);
+};
+
+/**
+ * Adds or removes a filter to a facetted attribute with the `value` provided. If
+ * the value is set then it removes it, otherwise it adds the filter.
+ *
+ * This method can be used for conjunctive, disjunctive and hierarchical filters.
+ *
+ * This method resets the current page to 0.
+ * @param  {string} facet the facet to refine
+ * @param  {string} value the associated value
+ * @return {AlgoliaSearchHelper}
+ * @throws Error will throw an error if the facet is not declared in the settings of the helper
+ * @fires change
+ * @chainable
+ */
+AlgoliaSearchHelper.prototype.toggleFacetRefinement = function(facet, value) {
+  this.state = this.state.setPage(0).toggleFacetRefinement(facet, value);
 
   this._change();
   return this;
 };
 
 /**
- * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleRefinement}
+ * @deprecated since version 2.4.0, see {@link AlgoliaSearchHelper#toggleFacetRefinement}
  */
 AlgoliaSearchHelper.prototype.toggleRefine = function() {
-  return this.toggleRefinement.apply(this, arguments);
+  return this.toggleFacetRefinement.apply(this, arguments);
 };
 
 /**
@@ -14281,7 +14312,7 @@ AlgoliaSearchHelper.prototype.isRefined = function(facet, value) {
  * helper.hasRefinements('material'); // true
  *
  * helper.hasRefinements('categories'); // false
- * helper.toggleRefinement('categories', 'kitchen > knife');
+ * helper.toggleFacetRefinement('categories', 'kitchen > knife');
  * helper.hasRefinements('categories'); // true
  *
  */

@@ -42,7 +42,7 @@ test('helper.hasRefinements(attribute)', function(t) {
       setup({
         facets: ['color']
       });
-      helper.toggleRefinement('color', 'red');
+      helper.toggleFacetRefinement('color', 'red');
       ttt.equal(helper.hasRefinements('color'), true);
       ttt.end();
     });
@@ -61,7 +61,7 @@ test('helper.hasRefinements(attribute)', function(t) {
       setup({
         disjunctiveFacets: ['author']
       });
-      helper.toggleRefinement('author', 'John Spartan');
+      helper.toggleFacetRefinement('author', 'John Spartan');
       ttt.equal(helper.hasRefinements('author'), true);
       ttt.end();
     });
@@ -83,7 +83,7 @@ test('helper.hasRefinements(attribute)', function(t) {
           attributes: ['category.lvl0', 'category.lvl1']
         }]
       });
-      helper.toggleRefinement('category', 'Action Movies > Max');
+      helper.toggleFacetRefinement('category', 'Action Movies > Max');
       ttt.equal(helper.hasRefinements('category'), true);
       ttt.end();
     });
