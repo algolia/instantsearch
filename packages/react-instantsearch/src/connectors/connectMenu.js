@@ -34,12 +34,14 @@ const sortBy = ['count:desc', 'name:asc'];
  * connectMenu connector provides the logic to build a widget that will
  * give the user tha ability to choose a single value for a specific facet.
  * @name connectMenu
+ * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  * @kind connector
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
- * @propType {string} defaultRefinement - the value of the item selected by default
+ * @propType {string} [defaultRefinement] - the value of the item selected by default
  * @propType {boolean} [withSearchBox=false] - allow search inside values
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state

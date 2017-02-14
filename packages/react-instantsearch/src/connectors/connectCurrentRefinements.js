@@ -6,8 +6,8 @@ import {PropTypes} from 'react';
  * set.
  * @name connectCurrentRefinements
  * @kind connector
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
- * @propType {function} [clearsQuery=false] - If true will clear also the search query
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
+ * @propType {function} [clearsQuery=false] - Pass true to also clear the search query
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {array.<{label: string, attributeName: string, currentRefinement: string || object, items: array, value: function}>} items - all the filters, the `value` is to pass to the `refine` function for removing all currentrefinements, `label` is for the display. When existing several refinements for the same atribute name, then you get a nested `items` object that contains a `label` and a `value` function to use to remove a single filter. `attributeName` and `currentRefinement` are metadata containing row values.
  * @providedPropType {function} query - the search query

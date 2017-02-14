@@ -22,10 +22,12 @@ function getCurrentRefinement(props, searchState) {
  * connectSortBy connector provides the logic to build a widget that will
  *  displays a list of indexes allowing a user to change the hits are sorting.
  * @name connectSortBy
+ * @requirements Algolia handles sorting by creating replica indices. [Read more about sorting](https://www.algolia.com/doc/guides/relevance/sorting/) on
+ * the Algolia website.
  * @kind connector
  * @propType {string} defaultRefinement - The default selected index.
- * @propType {{value, label}[]} items - The list of indexes to search in.
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {{value: string, label: string}[]} items - The list of indexes to search in.
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to remove a single filter
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied

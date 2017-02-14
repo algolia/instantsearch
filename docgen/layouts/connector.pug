@@ -8,24 +8,30 @@ block navigation
 block content
   h2#description Description
     a.anchor(href=`${navPath}#description`)
-  p!=h.markdown(description)
+  div!=h.markdown(description)
   h2#proptypes Exposed props
     a.anchor(href=`${navPath}#proptypes`)
   if proptype
-    p These are the props exposed by the resulting Component.
+    p Props exposed on the connected component:
     table.api.proptypes
       tbody
         each type in proptype
           tr.api-entry-values
             td.api-entry-name
-              div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
+              div.api-entry(id=`default-props-entry-${name}-${type.name}`)
+                =`${type.name}${type.isRequired ? '*' : ''}`
                 a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
             td.api-entry-type
+              span type:
+              = ' '
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value:
+                span default:
+                = ' '
                 code=type.defaultValue
+              else
+                span &nbsp;
           tr.api-entry-description
             td(colspan=3)!=h.markdown(type.description)
   else
@@ -42,15 +48,24 @@ block content
               div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
                 a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
             td.api-entry-type
+              span type:
+              = ' '
               code=type.type
             td.api-entry-default-value
               if type.defaultValue
-                span default value:
+                span default:
+                = ' '
                 code=type.defaultValue
+              else
+                span &nbsp;
           tr.api-entry-description
             td(colspan=3)!=h.markdown(type.description)
   else
-    p This connector does not provided props to its wrapped Component.
+    p This connector does not provided props to its wrapped component.
+  if requirements
+    h2#requirements Requirements
+      a.anchor(href=`${navPath}#requirements`)
+    div!=h.markdown(requirements)
   if examples
     h2#example Example
       a.anchor(href=`${navPath}#example`)

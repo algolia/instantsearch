@@ -2,14 +2,10 @@ import connectInfiniteHits from '../connectors/connectInfiniteHits.js';
 import InfiniteHitsComponent from '../components/InfiniteHits.js';
 
 /**
- * Displays the list of hits for the current search parameters. This widget
- * will also render a **load more** button that will add one to the current
- * page and will trigger the search. The new results will be appended in the
- * list of results.
+ * Displays an infinite list of hits along with a **load more** button.
  *
- * To configure the number of hits being shown, use [HitsPerPage widget](widgets/HitsPerPage.html),
- * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
+ * To configure the number of hits being shown, use the [HitsPerPage widget](widgets/HitsPerPage.html),
+ * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or the [Configure widget](widgets/Configure.html).
  *
  * @name InfiniteHits
  * @kind widget
@@ -28,7 +24,6 @@ import InfiniteHitsComponent from '../components/InfiniteHits.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"

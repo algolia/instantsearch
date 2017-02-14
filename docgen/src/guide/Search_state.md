@@ -45,9 +45,9 @@ Here's the `searchState` shape for all the connectors or widgets that we provide
 
 <div class="guide-nav">
     <div class="guide-nav-left">
-        Previous: <a href="guide/Search_parameters.html">← Search Parameters</a>
+        Previous: <a href="guide/Search_parameters.html">← Search parameters</a>
     </div>
     <div class="guide-nav-right">
-        Next: <a href="guide/Multi_index.html">Multi index →</a>
+        Next: <a href="guide/Operations.html">Operations →</a>
     </div>
 </div>

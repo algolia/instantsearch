@@ -2,13 +2,16 @@ import connectRange from '../connectors/connectRange.js';
 import StarRatingComponent from '../components/StarRating.js';
 
 /**
- * StarRating lets the user refine search results by clicking on stars. The stars are based on the selected attributeName. The underlying rating attribute needs to have from min to max stars.
+ * StarRating lets the user refine search results by clicking on stars.
+ *
+ * The stars are based on the selected `attributeName`.
+ * @requirements The attribute passed to the `attributeName` prop must be holding numerical values.
  * @name StarRating
  * @kind widget
  * @propType {string} attributeName - the name of the attribute in the record
- * @propType {number} min - Minimum value for the rating. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
- * @propType {number} max - Maximum value for the rating. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
- * @propType {{min: number, max: number}} defaultRefinement - Default state of the widget containing the lower bound (end) and the max for the rating.
+ * @propType {number} [min] - Minimum value for the rating. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
+ * @propType {number} [max] - Maximum value for the rating. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
+ * @propType {{min: number, max: number}} [defaultRefinement] - Default state of the widget containing the lower bound (end) and the max for the rating.
  * @themeKey ais-StarRating__root - The root component of the widget
  * @themeKey ais-StarRating__ratingLink - The item link
  * @themeKey ais-StarRating__ratingLinkSelected - The selected link item
@@ -35,7 +38,6 @@ import StarRatingComponent from '../components/StarRating.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
