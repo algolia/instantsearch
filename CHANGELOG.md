@@ -1,3 +1,13 @@
+<a name="1.11.1"></a>
+## [1.11.1](https://github.com/algolia/instantsearch.js/compare/v1.11.0...v1.11.1) (2017-02-14)
+
+
+### Bug Fixes
+
+* **infinite-hits:** disable load more button when no more pages (#1973) ([745ed89](https://github.com/algolia/instantsearch.js/commit/745ed89)), closes [#1971](https://github.com/algolia/instantsearch.js/issues/1971)
+
+
+
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/algolia/instantsearch.js/compare/v1.10.5...v1.11.0) (2017-02-12)
 
