@@ -26,17 +26,14 @@ Here's an example configuring the [distinct parameter](https://www.algolia.com/d
 * You could also pass `hitsPerPage: 20` to configure the number of hits being shown when not using
 the [`<HitsPerPage>` widget](widgets/HitsPerPage.html).
 
-## Changing dynamically search parameters
+## Dynamic search parameters updates
 
 Every applied search parameters can be retrieved by listening to the `onSearchStateChange` 
 hook from the [`<InstantSearch>`](guide/<InstantSearch>.html) root component.
 
-To update the search parameters, you need to pass new props to the `<Configure/>` widget. 
+But to update the search parameters, you will need to pass updated props to the `<Configure/>` widget, directly modifying the search `state` prop and injecting it will have no effect.
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/geo-search) performing geo-search with `react-instantsearch` to see how you can update search parameters.
-
-**Notes:**
-* Modifying configure parameters through the search state will have no effect.
 
 <div class="guide-nav">
     <div class="guide-nav-left">
