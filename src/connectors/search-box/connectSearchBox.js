@@ -64,8 +64,25 @@ const connectSearchBox = searchBoxRendering => ({
     poweredBy = {};
   }
 
+  const search = helper => {
+    let previousQuery;
+
+    const setQueryAndSearch = (q, doSearch = true) => {
+      if (q !== helper.state.query) {
+        previousQuery = helper.state.query;
+        helper.setQuery(q);
+      }
+      if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
+    };
+
+    return queryHook ?
+      q => queryHook(q, setQueryAndSearch) :
+      setQueryAndSearch;
+  };
+
   return {
     init({state, helper, onHistoryChange}) {
+      this._search = search(helper);
       searchBoxRendering({
         query: state.query,
         containerNode,
@@ -79,6 +96,7 @@ const connectSearchBox = searchBoxRendering => ({
         placeholder,
         cssClasses,
         templates: defaultTemplates,
+        search: this._search,
       }, true);
     },
     render({helper}) {
@@ -95,6 +113,7 @@ const connectSearchBox = searchBoxRendering => ({
         placeholder,
         cssClasses,
         templates: defaultTemplates,
+        search: this._search,
       }, false);
     },
   };

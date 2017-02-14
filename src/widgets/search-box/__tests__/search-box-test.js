@@ -412,11 +412,11 @@ describe('searchBox()', () => {
       });
 
       it('updates the query', () => {
-        expect(helper.setQuery.calledOnce).toBe(true);
+        expect(helper.setQuery.callCount).toBe(1);
       });
 
       it('does not search', () => {
-        expect(helper.search.called).toBe(false);
+        expect(helper.search.callCount).toBe(0);
       });
     });
 
@@ -475,18 +475,40 @@ describe('searchBox()', () => {
     context('non-instant search', () => {
       beforeEach(() => {
         widget = searchBox({container, searchOnEnterKeyPressOnly: true});
+        helper.state.query = 'tes';
+        widget.init({state: helper.state, helper, onHistoryChange});
       });
 
       it('performs the search on keyup if <ENTER>', () => {
-        simulateInputEvent('test', 'tes', widget, helper, state, container);
-        simulateKeyUpEvent({keyCode: 13}, widget, helper, state, container);
-        expect(helper.search.calledOnce).toBe(true);
+        // simulateInputEvent('test', 'tes', widget, helper, state, container);
+        // simulateKeyUpEvent({keyCode: 13}, widget, helper, state, container);
+        container.value = 'test';
+        const e1 = new window.Event('input');
+        container.dispatchEvent(e1);
+
+        expect(helper.setQuery.callCount).toBe(1);
+        expect(helper.search.callCount).toBe(0);
+
+        // setQuery is mocked and does not apply the modification of the helper
+        // we have to set it ourselves
+        helper.state.query = container.value;
+
+        const e2 = new window.Event('keyup', {keyCode: 13});
+        Object.defineProperty(e2, 'keyCode', {get: () => 13});
+        container.dispatchEvent(e2);
+
+        expect(helper.setQuery.callCount).toBe(1);
+        expect(helper.search.callCount).toBe(1);
       });
 
       it('doesn\'t perform the search on keyup if not <ENTER>', () => {
-        simulateKeyUpEvent({}, widget, helper, state, container);
-        expect(helper.setQuery.called).toBe(false);
-        expect(helper.search.called).toBe(false);
+        container.value = 'test';
+        const event = new window.Event('keyup', {keyCode: 42});
+        Object.defineProperty(event, 'keyCode', {get: () => 42});
+        container.dispatchEvent(event);
+
+        expect(helper.setQuery.callCount).toBe(0);
+        expect(helper.search.callCount).toBe(0);
       });
     });
   });
@@ -637,7 +659,8 @@ function simulateInputEvent(query, stateQuery, widget, helper, state, container)
   }
 
   // When
-  widget.init({state, helper, onHistoryChange});
+  widget.init({state: helper.state, helper, onHistoryChange});
+
   // Then
   container.value = query;
   const event = new window.Event('input');

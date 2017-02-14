@@ -56,6 +56,7 @@ function defaultRendering({
   placeholder,
   cssClasses,
   templates,
+  search,
 }, isFirstRendering) {
   if (isFirstRendering) {
     const INPUT_EVENT = window.addEventListener ?
@@ -102,38 +103,21 @@ function defaultRendering({
       input.setSelectionRange(helper.state.query.length, helper.state.query.length);
     }
 
-    let previousQuery;
-    const search = q => {
-      if (previousQuery !== undefined && previousQuery !== q) helper.search();
-    };
-    const setQuery = q => {
-      if (q !== helper.state.query) {
-        previousQuery = helper.state.query;
-        helper.setQuery(q);
-      }
-    };
-    const setQueryAndSearch = q => {
-      setQuery(q);
-      search(q);
-    };
-    const maybeSearch = queryHook ? q => queryHook(q, setQueryAndSearch) : search;
-
-    // always set the query every keystrokes when there's no queryHook
-    if (!queryHook) {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(setQuery));
-    }
-
     // search on enter
     if (searchOnEnterKeyPressOnly) {
-      addListener(input, 'keyup', ifKey(KEY_ENTER, getInputValueAndCall(maybeSearch)));
+      addListener(input, INPUT_EVENT, e => {
+        search(getValue(e), false);
+      });
+      addListener(input, 'keyup', e => {
+        if (e.keyCode === KEY_ENTER) search(getValue(e));
+      });
     } else {
-      addListener(input, INPUT_EVENT, getInputValueAndCall(maybeSearch));
+      addListener(input, INPUT_EVENT, getInputValueAndCall(search));
 
       // handle IE8 weirdness where BACKSPACE key will not trigger an input change..
       // can be removed as soon as we remove support for it
       if (INPUT_EVENT === 'propertychange' || window.attachEvent) {
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(setQuery)));
-        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(maybeSearch)));
+        addListener(input, 'keyup', ifKey(KEY_SUPPRESS, getInputValueAndCall(search)));
       }
     }
   } else {
