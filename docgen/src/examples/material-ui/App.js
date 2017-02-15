@@ -13,6 +13,7 @@ import {
 import {
   InstantSearch,
   Highlight,
+  Configure,
 } from 'react-instantsearch/dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -33,7 +34,6 @@ import {
   IconMenu,
   Drawer,
   IconButton,
-  Configure,
 } from 'material-ui';
 import SortIcon from 'material-ui/svg-icons/content/sort';
 import {withUrlSync} from '../urlSync';
