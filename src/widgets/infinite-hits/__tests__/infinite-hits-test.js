@@ -11,6 +11,8 @@ import algoliasearchHelper from 'algoliasearch-helper';
 import infiniteHits from '../infinite-hits';
 import InfiniteHits from '../../../components/InfiniteHits';
 
+import defaultTemplates from '../../../connectors/infinite-hits/defaultTemplates.js';
+
 describe('infiniteHits call', () => {
   it('throws an exception when no container', () => {
     expect(infiniteHits).toThrow(/^Must provide a container/);
@@ -25,10 +27,6 @@ describe('infiniteHits()', () => {
   let results;
   let props;
   let helper;
-  const defaultTemplates = {
-    hit: 'hit',
-    empty: 'empty',
-  };
 
   beforeEach(() => {
     helper = algoliasearchHelper({addAlgoliaAgent: () => {}});
@@ -36,14 +34,13 @@ describe('infiniteHits()', () => {
 
     ReactDOM = {render: sinon.spy()};
     infiniteHits.__Rewire__('ReactDOM', ReactDOM);
-    infiniteHits.__Rewire__('defaultTemplates', defaultTemplates);
 
     container = document.createElement('div');
     templateProps = {
       transformData: undefined,
       templatesConfig: undefined,
       templates: defaultTemplates,
-      useCustomCompileOptions: {hit: false, empty: false},
+      useCustomCompileOptions: {item: false, empty: false},
     };
     widget = infiniteHits({container, cssClasses: {root: ['root', 'cx']}});
     widget.init({helper});

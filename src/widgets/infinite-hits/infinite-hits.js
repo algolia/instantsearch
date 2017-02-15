@@ -1,15 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
 import InfiniteHits from '../../components/InfiniteHits.js';
-import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-infinite-hits');
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
 
 /**
  * Display the list of results (hits) from the current search
@@ -29,75 +22,30 @@ const bem = bemHelper('ais-infinite-hits');
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
  * @return {Object}
  */
-const usage = `
-Usage:
-infiniteHits({
-  container,
-  [ cssClasses.{root,empty,item}={} ],
-  [ templates.{empty,item} | templates.{empty} ],
-  [ showMoreLabel="Show more results" ]
-  [ transformData.{empty,item} | transformData.{empty} ],
-  [ hitsPerPage=20 ]
-})`;
-function infiniteHits({
-    container,
-    cssClasses: userCssClasses = {},
-    showMoreLabel = 'Show more results',
-    templates = defaultTemplates,
-    transformData,
-    hitsPerPage = 20,
-  } = {}) {
-  if (!container) {
-    throw new Error(`Must provide a container.${usage}`);
-  }
+export default connectInfiniteHits(defaultRendering);
 
-  const containerNode = getContainerNode(container);
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    empty: cx(bem(null, 'empty'), userCssClasses.empty),
-    showmore: cx(bem('showmore'), userCssClasses.showmore),
-  };
+function defaultRendering({
+  cssClasses,
+  hits,
+  results,
+  showMore,
+  showMoreLabel,
+  templateProps,
+  isLastPage,
+  containerNode,
+}, isFirstRendering) {
+  if (isFirstRendering) return;
 
-  let hitsCache = [];
-
-  const getShowMore = helper => () => helper.nextPage().search();
-
-  return {
-    getConfiguration: () => ({hitsPerPage}),
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      this.showMore = getShowMore(helper);
-    },
-    render({results, state}) {
-      if (state.page === 0) {
-        hitsCache = [];
-      }
-
-      hitsCache = [...hitsCache, ...results.hits];
-
-      const isLastPage = results.nbPages <= results.page + 1;
-
-      ReactDOM.render(
-        <InfiniteHits
-          cssClasses={cssClasses}
-          hits={hitsCache}
-          results={results}
-          showMore={this.showMore}
-          showMoreLabel={showMoreLabel}
-          isLastPage={isLastPage}
-          templateProps={this._templateProps}
-        />,
-        containerNode
-      );
-    },
-  };
+  ReactDOM.render(
+    <InfiniteHits
+      cssClasses={cssClasses}
+      hits={hits}
+      results={results}
+      showMore={showMore}
+      showMoreLabel={showMoreLabel}
+      templateProps={templateProps}
+      isLastPage={isLastPage}
+    />,
+    containerNode
+  );
 }
-
-export default infiniteHits;
