@@ -18,7 +18,7 @@ stories.add('default', () =>
     <RangeInput attributeName="price"
                   min={number('max', 0)}
                   max={number('max', 300)}
-                  translations={object('translate', {submit: ' go', separator: 'to'})}
+                  translations={object('translations', {submit: ' go', separator: 'to'})}
     />
   </WrapWithHits>
 ).add('with panel', () =>

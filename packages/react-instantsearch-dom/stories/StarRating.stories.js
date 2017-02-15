@@ -44,7 +44,7 @@ stories.add('default', () =>
     <StarRating
       attributeName="rating"
       max={number('max', 6)}
-      translations={object('translate', {ratingLabel: ' & Up'})}
+      translations={object('translations', {ratingLabel: ' & Up'})}
     />
   </WrapWithHits>
 );
