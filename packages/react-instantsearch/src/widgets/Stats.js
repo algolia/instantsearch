@@ -2,7 +2,7 @@ import connectStats from '../connectors/connectStats.js';
 import StatsComponent from '../components/Stats.js';
 
 /**
- * The Stats component displays a string with the number of hits and the processing time.
+ * The Stats component displays the total number of matching hits and the time it took to get them (time spent in the Algolia server).
  * @name Stats
  * @kind widget
  * @themeKey ais-Stats__root - the root of the component
@@ -15,7 +15,6 @@ import StatsComponent from '../components/Stats.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"

@@ -60,8 +60,8 @@ const common = [
     return false;
   }),
   markdown,
-  headings('h2'),
   jsdoc(),
+  headings('h2'),
   nav(),
   // After markdown, so that paths point to the correct HTML file
   navigation({

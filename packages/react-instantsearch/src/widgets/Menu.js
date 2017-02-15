@@ -2,15 +2,17 @@ import connectMenu from '../connectors/connectMenu.js';
 import MenuComponent from '../components/Menu.js';
 
 /**
- * The Menu component displays a menu that lets the end user choose a single value for a specific facet.
+ * The Menu component displays a menu that lets the user choose a single value for a specific attribute.
  * @name Menu
  * @kind widget
+ * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  * @propType {string} attributeName - the name of the attribute in the record
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of diplayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
- * @propType {string} defaultRefinement - the value of the item selected by default
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {string} [defaultRefinement] - the value of the item selected by default
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @propType {boolean} [withSearchBox=false] - true if the component should display an input to search for facet values
  * @themeKey ais-Menu__root - the root of the component
  * @themeKey ais-Menu__items - the container of all items in the menu
@@ -34,7 +36,6 @@ import MenuComponent from '../components/Menu.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"

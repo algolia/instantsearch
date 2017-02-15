@@ -108,13 +108,13 @@ export default function() {
  * ]
  * the first square bracket is  matched in order to detect optional parameter
  */
-const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?(.+)/;
+const typeNameValueDescription = /\{(.+)\} (?:(\[?)(\S+?)(?:=(\S+?))?]? - )?([\s\S]*)/;
 function parseTypeNameValueDescription(v) {
   const parsed = typeNameValueDescription.exec(v);
   if (!parsed) return null;
   return {
     type: parsed[1],
-    isOptional: parsed[2] === '[',
+    isRequired: parsed[2] !== '[',
     name: parsed[3],
     defaultValue: parsed[4],
     description: parsed[5],
@@ -125,7 +125,7 @@ function parseTypeNameValueDescription(v) {
  * This regexp aims to parse simple key description tag values. Example
  *  showMore - container for the show more button
  */
-const keyDescription = /(?:(\S+) - )?(.+)/;
+const keyDescription = /(?:(\S+) - )?([\s\S]*)/;
 function parseKeyDescription(v) {
   const parsed = keyDescription.exec(v);
   if (!parsed) return null;
@@ -148,7 +148,14 @@ function parseCustomTags(customTagObjects) {
   const res = {};
   customTagObjects.forEach(({tag, value}) => {
     const tagValueParser = customTagParsers[tag];
-    if (!tagValueParser) return;
+
+    // when no custom tag parser found, just forward the value
+    // example: requirements
+    if (!tagValueParser) {
+      res[tag] = value;
+      return;
+    }
+
     res[tag] = res[tag] || [];
     res[tag].push(tagValueParser(value));
   });

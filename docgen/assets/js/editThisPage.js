@@ -1,13 +1,13 @@
 if (document.querySelector('body.documentation')) {
   const $edit = document.createElement('a');
-  $edit.classList.add('editOnGitHub');
-  $edit.textContent = 'Edit on GitHub';
+  $edit.classList.add('editThisPage');
+  $edit.textContent = 'Edit this page';
 
   let href = 'https://github.com/algolia/instantsearch.js/edit/v2/';
   const doc = 'docgen/src';
   const api = 'packages/react-instantsearch/src';
 
-  let pathname = document.location.pathname;
+  let pathname = document.location.pathname.replace('/instantsearch.js/react', '');
 
   if (/^\/(?:widgets|connectors)\/.+/.test(pathname)) {
     href += `${api}${pathname.replace('.html', '.js')}`;
@@ -20,7 +20,6 @@ if (document.querySelector('body.documentation')) {
   }
 
   pathname = pathname.replace('.html', '.md');
-
   $edit.href = href;
-  document.querySelector('.hero-container figure').appendChild($edit);
+  document.querySelector('.documentation-container').appendChild($edit);
 }

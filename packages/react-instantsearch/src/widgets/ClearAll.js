@@ -6,8 +6,8 @@ import ClearAllComponent from '../components/ClearAll.js';
  * to the search.
  * @name ClearAll
  * @kind widget
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
- * @propType {function} [clearsQuery=false] - If true will clear also the search query
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
+ * @propType {boolean} [clearsQuery=false] - Pass true to also clear the search query
  * @themeKey ais-ClearAll__root - the widget button
  * @translationKey reset - the clear all button value
  * @example
@@ -18,7 +18,6 @@ import ClearAllComponent from '../components/ClearAll.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
