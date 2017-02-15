@@ -23,9 +23,7 @@ branches:
 # http://docs.travis-ci.com/user/workers/container-based-infrastructure/#Routing-your-build-to-container-based-infrastructure
 sudo: false
 cache:
-  directories:
-    - ~/.yarn
-    - ~/.nvm
+  yarn: true
 env:
   global:
     - CXX=g++-4.8
