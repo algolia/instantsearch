@@ -2613,7 +2613,7 @@ nav.sidebar {
   max-width: 240px;
   border-right: 1px solid #d8d8d8;
   overflow: hidden;
-  padding-top: 120px;
+  padding-top: 60px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -2642,7 +2642,7 @@ nav.sidebar {
     nav.sidebar .sidebar-container .sidebar-elements .sidebar-element {
       width: 100%;
       line-height: 32px;
-      margin-bottom: 1em; }
+      margin-bottom: .5em; }
       nav.sidebar .sidebar-container .sidebar-elements .sidebar-element.level-h3 {
         line-height: 24px;
         font-size: 12px;
@@ -2838,7 +2838,23 @@ nav.sidebar {
   min-height: 1000px;
   padding-left: 30px;
   padding-bottom: 200px;
-  padding-top: 120px; }
+  padding-top: 60px; }
+  .documentation-section .documentation-container .editThisPage,
+  .examples-section .documentation-container .editThisPage {
+    position: absolute;
+    font-size: 12px;
+    right: 12px;
+    top: 12px;
+    padding: 3px 6px;
+    border: 1px solid #21A4D7;
+    border-radius: 3px;
+    text-transform: uppercase;
+    opacity: .7; }
+    .documentation-section .documentation-container .editThisPage:hover,
+    .examples-section .documentation-container .editThisPage:hover {
+      background: #21A4D7;
+      color: #ebf1f5;
+      opacity: 1; }
   .documentation-section .documentation-container p,
   .documentation-section .documentation-container ul,
   .documentation-section .documentation-container ol,
@@ -2882,22 +2898,34 @@ nav.sidebar {
           float: left;
           margin-right: 6px;
           color: #a4a4a4; }
-  .documentation-section .documentation-container .content h2:first-of-type,
-  .examples-section .documentation-container .content h2:first-of-type {
+  .documentation-section .documentation-container .content h2:first-child,
+  .examples-section .documentation-container .content h2:first-child {
     margin-top: -16px; }
   .documentation-section .documentation-container .content p:first-child,
   .examples-section .documentation-container .content p:first-child {
     margin-top: 0; }
-  .documentation-section .documentation-container h2:before, .documentation-section .documentation-container h3:before, .documentation-section .documentation-container .api-entry:before, .documentation-section .documentation-container .css-class:before,
-  .examples-section .documentation-container h2:before,
-  .examples-section .documentation-container h3:before,
-  .examples-section .documentation-container .api-entry:before,
-  .examples-section .documentation-container .css-class:before {
-    content: "";
-    display: block;
-    height: 80px;
-    margin-top: -80px;
-    box-sizing: content-box; }
+  .documentation-section .documentation-container h2, .documentation-section .documentation-container h3, .documentation-section .documentation-container .api-entry, .documentation-section .documentation-container .css-class,
+  .examples-section .documentation-container h2,
+  .examples-section .documentation-container h3,
+  .examples-section .documentation-container .api-entry,
+  .examples-section .documentation-container .css-class {
+    overflow: hidden; }
+    .documentation-section .documentation-container h2:before, .documentation-section .documentation-container h3:before, .documentation-section .documentation-container .api-entry:before, .documentation-section .documentation-container .css-class:before,
+    .examples-section .documentation-container h2:before,
+    .examples-section .documentation-container h3:before,
+    .examples-section .documentation-container .api-entry:before,
+    .examples-section .documentation-container .css-class:before {
+      content: "";
+      display: block;
+      height: 80px;
+      margin-top: -80px;
+      box-sizing: content-box; }
+    .documentation-section .documentation-container h2:target, .documentation-section .documentation-container h3:target, .documentation-section .documentation-container .api-entry:target, .documentation-section .documentation-container .css-class:target,
+    .examples-section .documentation-container h2:target,
+    .examples-section .documentation-container h3:target,
+    .examples-section .documentation-container .api-entry:target,
+    .examples-section .documentation-container .css-class:target {
+      overflow: visible; }
   .documentation-section .documentation-container table.api,
   .examples-section .documentation-container table.api {
     padding: 0;
@@ -2947,7 +2975,7 @@ nav.sidebar {
       .examples-section .documentation-container table.api tr td {
         text-align: left;
         margin: 0;
-        padding: 13px 13px;
+        padding: .5em;
         -webkit-box-flex: 1;
             -ms-flex: 1;
                 flex: 1;
@@ -3600,12 +3628,6 @@ body.example .btn {
       .hero-section .article-title figure img {
         max-width: 500px;
         margin: 0.5em 0; }
-      .hero-section .article-title figure .editOnGitHub {
-        position: absolute;
-        bottom: 3px;
-        font-size: 12px;
-        left: 0;
-        line-height: 1; }
     .hero-section .article-title h2 {
       font-weight: 300; }
     .hero-section .article-title.doc-only {
