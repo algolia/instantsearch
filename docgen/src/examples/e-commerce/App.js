@@ -14,6 +14,7 @@ import {
   RangeInput,
   Highlight,
   Panel,
+  Configure,
 } from 'react-instantsearch/dom';
 import {
   connectSearchBox,
@@ -31,8 +32,8 @@ const App = props =>
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 16}}
   >
+    <Configure hitsPerPage={16} />
     <Header />
     <div className="content-wrapper">
       <Facets />

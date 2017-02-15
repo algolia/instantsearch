@@ -5,6 +5,7 @@ import {
   SearchBox,
   Pagination,
   Highlight,
+  Configure,
 } from '../packages/react-instantsearch/dom';
 import {connectHits} from '../packages/react-instantsearch/connectors';
 import {linkTo} from '@kadira/storybook';
@@ -61,8 +62,8 @@ const WrapWithHits = ({
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
-    searchParameters={{...searchParameters}}
   >
+    <Configure {...searchParameters} />
     <div>
       <div className="container widget-container">
         {children}

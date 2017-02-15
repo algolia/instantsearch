@@ -33,6 +33,7 @@ import {
   IconMenu,
   Drawer,
   IconButton,
+  Configure,
 } from 'material-ui';
 import SortIcon from 'material-ui/svg-icons/content/sort';
 import {withUrlSync} from '../urlSync';
@@ -53,8 +54,8 @@ const MaterialUiExample = props =>
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 20}}
   >
+    <Configure hitsPerPage={20} />
     <Content/>
   </InstantSearch>;
 

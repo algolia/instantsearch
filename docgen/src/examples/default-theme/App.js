@@ -14,6 +14,7 @@ import {
   StarRating,
   RangeInput,
   Highlight,
+  Configure,
 } from 'react-instantsearch/dom';
 import {withUrlSync} from '../urlSync';
 import 'react-instantsearch-theme-algolia/style.scss';
@@ -26,8 +27,8 @@ const App = props =>
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 16}}
   >
+    <Configure hitsPerPage={16} />
     <Header />
     <div className="content-wrapper">
       <Facets />

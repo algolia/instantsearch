@@ -13,6 +13,7 @@ import {
   RangeInput,
   Highlight,
   Panel,
+  Configure,
 } from 'react-instantsearch/dom';
 import {
   connectSearchBox,
@@ -27,8 +28,8 @@ export default function App() {
       appId="latency"
       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
       indexName="ikea"
-      searchParameters={{hitsPerPage: 16}}
     >
+      <Configure hitsPerPage={16} />
       <Header />
       <div className="content-wrapper">
         <Facets />
