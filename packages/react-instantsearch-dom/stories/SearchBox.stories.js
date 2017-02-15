@@ -23,7 +23,7 @@ stories.add('default', () =>
       focusShortcuts={['s']}
       searchAsYouType={true}
       autoFocus={true}
-      translations={object('translate', {
+      translations={object('translations', {
         submit: null,
         reset: null,
         submitTitle: 'Submit your search query.',
