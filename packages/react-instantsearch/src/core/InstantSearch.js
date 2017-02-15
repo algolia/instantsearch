@@ -20,13 +20,14 @@ function validateNextProps(props, nextProps) {
  * It provides all the connected components (aka widgets) a means to interact
  * with the searchState.
  * @kind widget
- * @propType {string} appId - The Algolia application id.
- * @propType {string} apiKey - Your Algolia Search-Only API key.
- * @propType {string} indexName - The index in which to search.
- * @propType {object} [searchParameters] - This method of providing parameters to Algolia is now deprecated. Please use [`<configure/>`](widgets/Configure.html). Object containing query parameters to be sent to Algolia. It will be overriden by the search parameters resolved via the widgets. Typical use case: setting the distinct setting is done by providing an object like: `{distinct: 1}`. For more information about the kind of object that can be provided on the [official API documentation](https://www.algolia.com/doc/rest-api/search#full-text-search-parameters). Read the [search parameters guide](guide/Search_parameters.html).
- * @propType {func} onSearchStateChange - See [URL Routing](guide/Routing.html).
- * @propType {object} searchState - See [URL Routing](guide/Routing.html).
- * @propType {func} createURL - See [URL Routing](guide/Routing.html).
+ * @requirements You will need to have an Algolia account to be able to use this widget.
+ * [Create one now](https://www.algolia.com/users/sign_up).
+ * @propType {string} appId - Your Algolia application id.
+ * @propType {string} apiKey - Your Algolia search-only API key.
+ * @propType {string} indexName - Main index in which to search.
+ * @propType {func} [onSearchStateChange] - Function to be called everytime a new search is done. Useful for [URL Routing](guide/Routing.html).
+ * @propType {object} [searchState] - Object to inject some search state. Switches the InstantSearch component in controlled mode. Useful for [URL Routing](guide/Routing.html).
+ * @propType {func} [createURL] - Function to call when creating links, useful for [URL Routing](guide/Routing.html).
  * @example
  * import {InstantSearch, SearchBox, Hits} from 'react-instantsearch/dom';
  *

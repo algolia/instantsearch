@@ -2,7 +2,9 @@ import connectHighlight from '../connectors/connectHighlight.js';
 import HighlightComponent from '../components/Highlight.js';
 
 /**
- * Renders an highlighted attribute.
+ * Renders any attribute from an hit into its highlighted form when relevant.
+ *
+ * Read more about it in the [Highlighting results](guide/Highlighting_results.html) guide.
  * @name Highlight
  * @kind widget
  * @propType {string} attributeName - the location of the highlighted attribute in the hit
@@ -13,7 +15,7 @@ import HighlightComponent from '../components/Highlight.js';
  * import {InstantSearch, connectHits, Highlight} from 'InstantSearch';
  *
  * const CustomHits = connectHits(hits => {
- *  return hits.map((hit) => <p><Highlight attributeName='description' hit={hit}/></p>);
+ *  return hits.map((hit) => <p><Highlight attributeName="description" hit={hit}/></p>);
  * });
  *
  * export default function App() {

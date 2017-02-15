@@ -2,7 +2,9 @@ import connectHighlight from '../connectors/connectHighlight.js';
 import SnippetComponent from '../components/Snippet.js';
 
 /**
- * Renders an highlighted snippet attribute.
+ * Renders any attribute from an hit into its highlighted snippet form when relevant.
+ *
+ * Read more about it in the [Highlighting results](guide/Highlighting_results.html) guide.
  * @name Snippet
  * @kind widget
  * @propType {string} attributeName - the location of the highlighted snippet attribute in the hit
@@ -13,7 +15,7 @@ import SnippetComponent from '../components/Snippet.js';
  * import {InstantSearch, connectHits, Snippet} from 'InstantSearch';
  *
  * const CustomHits = connectHits(hits => {
- *  return hits.map((hit) => <p><Snippet attributeName='description' hit={hit}/></p>);
+ *  return hits.map((hit) => <p><Snippet attributeName="description" hit={hit}/></p>);
  * });
  *
  * export default function App() {

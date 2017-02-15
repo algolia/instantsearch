@@ -2,17 +2,14 @@ import connectHitsPerPage from '../connectors/connectHitsPerPage.js';
 import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
 
 /**
- * The HitsPerPage widget displays a dropdown menu of the chosen number of items to be displayed.
- * With it a user can choose to display more or fewer results from Algolia.
+ * The HitsPerPage widget displays a dropdown menu to let the user change the number
+ * of displayed hits.
  *
- * List of hits per page options.
- * Passing a list of numbers `[n]` is a shorthand for `[{value: n, label: n}]`.
- * Beware: the `label` of `HitsPerPage` items must be either a string or a number.
  * @name HitsPerPage
  * @kind widget
+ * @propType {{value: number, label: string}[]} items - List of available options.
  * @propType {number} defaultRefinement - The number of items selected by default
- * @propType {{value, label}[]|number[]} items - List of hits per page options. Passing a list of numbers [n] is a shorthand for [{value: n, label: n}].
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @themeKey ais-HitsPerPage__root - the root of the component.
  * @example
  * import React from 'react';
@@ -25,7 +22,6 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"

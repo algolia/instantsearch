@@ -44,14 +44,16 @@ function getValue(name, props, searchState) {
  * give the user tha ability to choose multiple values for a specific facet.
  * @name connectRefinementList
  * @kind connector
- * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
+ * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
  * @propType {string} attributeName - the name of the attribute in the record
+ * @propType {boolean} [withSearchBox=false] - allow search inside values
+ * @propType {string} [operator=or] - How to apply the refinements. Possible values: 'or' or 'and'.
  * @propType {boolean} [showMore=false] - true if the component should display a button that will expand the number of items
  * @propType {number} [limitMin=10] - the minimum number of displayed items
  * @propType {number} [limitMax=20] - the maximun number of displayed items. Only used when showMore is set to `true`
  * @propType {string[]} defaultRefinement - the values of the items selected by default. The searchState of this widget takes the form of a list of `string`s, which correspond to the values of all selected refinements. However, when there are no refinements selected, the value of the searchState is an empty string.
- * @propType {boolean} [withSearchBox=false] - allow search inside values
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string[]} currentRefinement - the refinement currently applied

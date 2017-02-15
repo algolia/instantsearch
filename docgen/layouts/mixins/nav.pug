@@ -1,5 +1,5 @@
-mixin nav(currentPath, navItems, title, headings)
-  div.sidebar-container
+mixin nav(currentPath, navItems, title, headings, navScroll=false)
+  div(class={"sidebar-container": true, "sidebar-navScroll": navScroll})
     h2.sidebar-header=title
     ul.sidebar-elements
       if navItems

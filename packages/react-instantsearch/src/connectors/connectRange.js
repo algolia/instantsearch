@@ -9,10 +9,11 @@ import createConnector from '../core/createConnector';
  * a numeric range.
  * @name connectRange
  * @kind connector
+ * @requirements The attribute passed to the `attributeName` prop must be holding numerical values.
  * @propType {string} attributeName - Name of the attribute for faceting
- * @propType {{min: number, max: number}} defaultRefinement - Default searchState of the widget containing the start and the end of the range.
- * @propType {number} min - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
- * @propType {number} max - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
+ * @propType {{min: number, max: number}} [defaultRefinement] - Default searchState of the widget containing the start and the end of the range.
+ * @propType {number} [min] - Minimum value. When this isn't set, the minimum value will be automatically computed by Algolia using the data in the index.
+ * @propType {number} [max] - Maximum value. When this isn't set, the maximum value will be automatically computed by Algolia using the data in the index.
  * @providedPropType {function} refine - a function to select a range.
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied

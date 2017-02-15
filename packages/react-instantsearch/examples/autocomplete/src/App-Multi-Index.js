@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {InstantSearch, Highlight} from 'react-instantsearch/dom';
+import {InstantSearch, Highlight, Configure} from 'react-instantsearch/dom';
 import {createConnector} from 'react-instantsearch';
 import {connectSearchBox} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
@@ -103,9 +103,9 @@ class FirstResults extends React.Component {
       indexName="bestbuy"
       searchState={this.props.searchState}
       onSearchStateChange={this.props.onSearchStateChange}
-      searchParameters={{hitsPerPage: 3}}
     >
       <div>
+        <Configure hitsPerPage={3} />
         <VirtualSearchBox/>
         <VirtualAutoSuggest indexName="bestbuy" onProps={this.props.onProps}/>
       </div>
@@ -131,9 +131,9 @@ class SecondResults extends React.Component {
       indexName="ikea"
       searchState={this.props.searchState}
       onSearchStateChange={this.props.onSearchStateChange}
-      searchParameters={{hitsPerPage: 3}}
     >
       <div>
+        <Configure hitsPerPage={3} />
         <VirtualSearchBox/>
         <VirtualAutoSuggest onProps={this.props.onProps} indexName="ikea"/>
       </div>

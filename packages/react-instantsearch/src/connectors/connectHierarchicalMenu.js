@@ -75,16 +75,40 @@ const sortBy = ['name:asc'];
  * This is commonly used for multi-level categorization of products on e-commerce
  * websites. From a UX point of view, we suggest not displaying more than two levels deep.
  * @name connectHierarchicalMenu
+ * @requirements To use this widget, your attributes must be formatted in a specific way.
+ * If you want for example to have a hiearchical menu of categories, objects in your index
+ * should be formatted this way:
+ *
+ * ```json
+ * {
+ *   "categories.lvl0": "products",
+ *   "categories.lvl1": "products > fruits",
+ *   "categories.lvl2": "products > fruits > citrus"
+ * }
+ * ```
+ *
+ * It's also possible to provide more than one path for each level:
+ *
+ * ```json
+ * {
+ *   "categories.lvl0": ["products", "goods"],
+ *   "categories.lvl1": ["products > fruits", "goods > to eat"]
+ * }
+ * ```
+ *
+ * All attributes passed to the `attributes` prop must be present in "attributes for faceting"
+ * on the Algolia dashboard or configured as `attributesForFaceting` via a set settings call to the Algolia API.
+ *
  * @kind connector
  * @propType {string} attributes - List of attributes to use to generate the hierarchy of the menu. See the example for the convention to follow.
- * @propType {string} defaultRefinement - the item value selected by default
+ * @propType {string} [defaultRefinement] - the item value selected by default
  * @propType {boolean} [showMore=false] - Flag to activate the show more button, for toggling the number of items between limitMin and limitMax.
  * @propType {number} [limitMin=10] -  The maximum number of items displayed.
  * @propType {number} [limitMax=20] -  The maximum number of items displayed when the user triggers the show more. Not considered if `showMore` is false.
  * @propType {string} [separator='>'] -  Specifies the level separator used in the data.
  * @propType {string[]} [rootPath=null] - The already selected and hidden path.
  * @propType {boolean} [showParentLevel=true] - Flag to set if the parent level should be displayed.
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state
  * @providedPropType {string} currentRefinement - the refinement currently applied

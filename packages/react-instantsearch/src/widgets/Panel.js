@@ -1,7 +1,11 @@
 import Panel from '../components/Panel.js';
 
 /**
- * The Panel widget wraps other widgets with a consistent panel design. It also reacts, indicates and set CSS classes when widgets are no more relevant for refining (like when a RefinementList becomes empty because of the current search).
+ * The Panel widget wraps other widgets in a consistent panel design.
+ *
+ * It also reacts, indicates and set CSS classes when widgets are no more
+ * relevant for refining. E.g. when a RefinementList becomes empty because of
+ * the current search results.
  * @name Panel
  * @kind widget
  * @propType {string} title - The panel title
@@ -16,7 +20,6 @@ import Panel from '../components/Panel.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"

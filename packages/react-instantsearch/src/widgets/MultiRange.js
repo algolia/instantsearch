@@ -5,10 +5,11 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * MultiRange is a widget used for selecting the range value of a numeric attribute.
  * @name MultiRange
  * @kind widget
+ * @requirements The attribute passed to the `attributeName` prop must be holding numerical values.
  * @propType {string} attributeName - the name of the attribute in the records
  * @propType {{label: string, start: number, end: number}[]} items - List of options. With a text label, and upper and lower bounds.
- * @propType {string} defaultRefinement - the value of the item selected by default, follow the format "min:max".
- * @propType {function} [transformItems] - If provided, this function can be used to modify the `items` provided prop of the wrapped component (ex: for filtering or sorting items). this function takes the `items` prop as a parameter and expects it back in return.
+ * @propType {string} [defaultRefinement] - the value of the item selected by default, follow the format "min:max".
+ * @propType {function} [transformItems] - Function to modify the items being displayed, e.g. for filtering or sorting them. Takes an items as parameter and expects it back in return.
  * @themeKey ais-MultiRange__root - The root component of the widget
  * @themeKey ais-MultiRange__items - The container of the items
  * @themeKey ais-MultiRange__item - A single item
@@ -29,7 +30,6 @@ import MultiRangeComponent from '../components/MultiRange.js';
  * export default function App() {
  *   return (
  *     <InstantSearch
- *       className="container-fluid"
  *       appId="latency"
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
