@@ -1268,7 +1268,7 @@ AlgoliaSearchHelper.prototype.getClient = function() {
  * is `SearchParameters -> SearchParameters`.
  *
  * This method returns a new DerivedHelper which is an EventEmitter
- * that fires the same `search`, `results` and `error` events. Those
+ * that fires the same `search`, `result` and `error` events. Those
  * events, however, will receive data specific to this DerivedHelper
  * and the SearchParameters that is returned by the call of the
  * parameter function.
