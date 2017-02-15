@@ -13,6 +13,15 @@ The format for those class names is `ais-NameOfWidget__elementModifier`.
 The different class names used by every widgets are described on their respective documentation page. You
 can also inspect the underlying DOM and style accordingly.
 
+You can also style the icons in for example the `SearchBox`, but since those are svg elements, you'll use css like this:
+
+```css
+.ais-SearchBox__reset svg, 
+.ais-SearchBox__button svg { 
+  fill: red
+}
+```
+
 ## Loading the theme
 
 We do not load any CSS into your page automatically but we provide an Algolia theme that you can load
