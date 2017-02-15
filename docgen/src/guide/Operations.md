@@ -1,9 +1,9 @@
 ---
-title: Search state
+title: Operations
 mainTitle: Guide
 layout: main.pug
 category: guide
-navWeight: 55
+navWeight: 52
 ---
 
 [Algolia pricing](https://www.algolia.com/pricing) structure is based on operations and records.
