@@ -5,7 +5,9 @@ export default function sidebar(options) {
   list.classList.add('no-mobile');
 
   sidebarContainer.appendChild(list);
-  sidebarFollowScroll(sidebarContainer.firstChild);
+  if (sidebarContainer.firstChild.classList.contains('sidebar-navScroll')) {
+    sidebarFollowScroll(sidebarContainer.firstChild);
+  }
   activeLinks(sidebarContainer);
   scrollSpy(sidebarContainer, headersContainer);
 }

@@ -6,6 +6,7 @@ import React from 'react';
  * using the [connectRange connector](/connectors/connectRange.html).
  *
  * @name RangeSlider
+ * @requirements To connect any slider to Algolia, the underlying attribute used must be holding numerical values.
  * @kind widget
  * @example
  *

@@ -6,7 +6,7 @@ nav.sidebar {
   max-width: $sidebar-width;
   border-right: 1px solid #d8d8d8;
   overflow: hidden;
-  padding-top: 120px;
+  padding-top: 60px;
   user-select: none;
 
   .sidebar-container {
@@ -39,7 +39,7 @@ nav.sidebar {
       .sidebar-element {
         width: 100%;
         line-height: 32px;
-        margin-bottom: 1em;
+        margin-bottom: .5em;
 
         &.level-h2 {}
         &.level-h3 {

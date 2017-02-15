@@ -14,6 +14,7 @@ import {
   RangeInput,
   Highlight,
   Panel,
+  Configure,
 } from 'react-instantsearch/dom';
 import {
   connectSearchBox,
@@ -25,15 +26,14 @@ import 'react-instantsearch-theme-algolia/style.scss';
 
 const App = props =>
   <InstantSearch
-    className="container-fluid"
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
     indexName="ikea"
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 16}}
   >
+    <Configure hitsPerPage={16} />
     <Header />
     <div className="content-wrapper">
       <Facets />

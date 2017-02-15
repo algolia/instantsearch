@@ -1,7 +1,5 @@
-import markdown from 'markdown-it';
 import highlight from '../syntaxHighlighting.js';
-
-const md = markdown();
+import md from '../mdRenderer.js';
 
 // this plugin provides ATM one helper to easily compute the publicPath of assets
 export default function helpers(filenames, metalsmith, cb) {

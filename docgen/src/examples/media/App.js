@@ -11,6 +11,7 @@ import {
   Pagination,
   StarRating,
   Highlight,
+  Configure,
 } from 'react-instantsearch/dom';
 
 import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
@@ -24,8 +25,8 @@ const App = props =>
     searchState={props.searchState}
     createURL={props.createURL.bind(this)}
     onSearchStateChange={props.onSearchStateChange.bind(this)}
-    searchParameters={{hitsPerPage: 10}}
   >
+    <Configure hitsPerPage={10} />
     <Header/>
     <section>
       <Facets/>

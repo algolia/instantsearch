@@ -3,6 +3,7 @@ title: Getting started tutorial
 layout: main.pug
 category: gettingstarted
 withHeadings: true
+navScroll: true
 ---
 
 ## Welcome to React InstantSearch
@@ -20,20 +21,18 @@ In this tutorial, you'll learn how to:
 
 ## Before we start
 
-As mentionned earlier, React InstantSearch is meant to be used with `Algolia`.
+React InstantSearch is meant to be used with Algolia.
 
-Therefore, you'll need the credentials to an Algolia index. Here are
-the credentials to an already configured index:
+Therefore, you'll need the credentials to an Algolia index. To ease
+this getting started, here are the credentials to an already configured index:
  - `appId`: `latency`
  - `searchKey`: `3d9875e51fbd20c7754e65422f7ce5e1`
  - `indexName`: `bestbuy`
 
 It contains sample data for an e-commerce website.
 
-This guide also expects you to have a working [React](https://facebook.github.io/react/) project. To follow this
-guide in the best conditions, we suggest you use
-[create-react-app](https://github.com/facebookincubator/create-react-app#getting-started) which
-is the official React-CLI from Facebook.
+This guide also expects you to have a working [React](https://facebook.github.io/react/) project. If you need to setup a React project, we suggest you use
+[facebookincubator/create-react-app](https://github.com/facebookincubator/create-react-app#getting-started) which is the official React-CLI from Facebook.
 
 ## Install `react-instantsearch`
 
@@ -43,14 +42,16 @@ React InstantSearch is available in the [npm](https://www.npmjs.com) registry. I
 yarn add react-instantsearch
 ```
 
-Note: we use `yarn` to install dependencies but React InstantSearch is also installable via `npm`.
+Note: we use `yarn add` to install dependencies but React InstantSearch is also installable via `npm install`.
 
 ## Add the `<InstantSearch>` component
 
-The [<InstantSearch>](widgets/InstantSearch.html) component that will connect to Algolia
-and that will synchronise all the widgets together. It maintains the state
+[`<InstantSearch>`](widgets/InstantSearch.html) is the component that will connect to Algolia
+and will synchronise all the widgets together.
+
+It maintains the state
 of the search, does the queries, and provides the results to the widgets so
-that they can update themselves if needed.
+that they can update themselves when needed.
 
 ```jsx
 import React from 'react';
@@ -76,24 +77,24 @@ ReactDOM.render(<App />, document.querySelector('#app'));
 credentials of your application in Algolia. They can be found in your [Algolia
 dashboard](https://www.algolia.com/api-keys).
 
-Congratulations 🎉 Your application is now connected to Algolia! This wrapper
-will provide a context so that the instantsearch widgets you add inside
-can interact with the search.
+Congrats 🎉! Your application is now connected to Algolia.
 
 In this section we've seen:
- - how to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
- - configure your credentials
+ - How to connect a part of a [React](https://facebook.github.io/react/) application to Algolia
+ - How to configure your Algolia credentials
 
  > To get more *under the hood* information about the `<InstantSearch>` wrapper
  > component, [read our guide](guide/<InstantSearch>.html).
 
-## Load the theme
+## Load the Algolia theme
 
 We do not inject any CSS in your application by default, only CSS class names are declared
-on our widgets. It's your responsibility to then load a theme. We provide an Algolia theme
-that should be a good start.
+on our widgets. It's your responsibility to then load a theme or style the CSS classes accordingly.
 
-Just include it in your webpage:
+We provide an Algolia theme that should be a good start.
+
+Include it in your webpage with this CDN link or copy paste the raw content:
+
 ```html
 <link rel="stylesheet" href="https://unpkg.com/react-instantsearch-theme-algolia@3.0.0/style.min.css">
 ```
@@ -274,7 +275,7 @@ We now miss two elements in our search interface:
  - the ability to browse beyond the first page of results
  - the ability to reset the search state
 
-Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), the [ClearAll](widgets/ClearAll.html)
+Those two features are implemented respectively with the [Pagination](widgets/Pagination.html), [ClearAll](widgets/ClearAll.html)
 and [CurrentRefinements](widgets/CurrentRefinements.html) widgets. Both have nice defaults which means that
 we can use them directly without further configuration.
 

@@ -25,9 +25,8 @@ function getCurrentRefinement(props, searchState) {
  * @name connectToggle
  * @kind connector
  * @propType {string} attributeName - Name of the attribute on which to apply the `value` refinement. Required when `value` is present.
- * @propType {string} label - Label for this toggle.
- * @propType {string} function - Custom filter. Takes in a `SearchParameters` and returns a new `SearchParameters` with the filter applied.
- * @propType {string} value - Value of the refinement to apply on `attributeName`. Required when `attributeName` is present.
+ * @propType {string} label - Label for the toggle.
+ * @propType {string} value - Value of the refinement to apply on `attributeName`.
  * @propType {boolean} [defaultChecked=false] - Default searchState of the widget. Should the toggle be checked by default?
  * @providedPropType {function} refine - a function to toggle a refinement
  * @providedPropType {function} createURL - a function to generate a URL for the corresponding search state

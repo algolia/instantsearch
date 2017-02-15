@@ -108,9 +108,25 @@
     min-height: 1000px;
     padding-left: 30px;
     padding-bottom: 200px;
-    padding-top: 120px;
+    padding-top: 60px;
 
+    .editThisPage {
+      position: absolute;
+      font-size: 12px;
+      right: 12px;
+      top: 12px;
+      padding: 3px 6px;
+      border: 1px solid #21A4D7;
+      border-radius: 3px;
+      text-transform: uppercase;
+      opacity: .7;
 
+      &:hover {
+        background: #21A4D7;
+        color: #ebf1f5;
+        opacity: 1;
+      }
+    }
 
     p,
     ul,
@@ -143,7 +159,7 @@
     }
 
     .content {
-      h2:first-of-type {
+      h2:first-child {
         margin-top: -16px;
       }
       & p:first-child {
@@ -152,12 +168,16 @@
     }
 
     h2, h3, .api-entry, .css-class {
+      overflow: hidden;
       &:before {
         content: "";
         display: block;
         height: $offset-height;
         margin-top: -$offset-height;
         box-sizing: content-box;
+      }
+      &:target {
+        overflow: visible;
       }
     }
 
@@ -211,7 +231,7 @@
         td {
           text-align: left;
           margin: 0;
-          padding: 13px 13px;
+          padding: .5em;
           flex: 1;
           white-space: normal;
 
@@ -312,7 +332,6 @@
   .algolia-places {
     color: #000000;
   }
-
 
   h2, h3, .api-entry {
     .anchor {
