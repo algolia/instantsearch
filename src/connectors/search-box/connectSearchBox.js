@@ -83,6 +83,7 @@ const connectSearchBox = searchBoxRendering => ({
   return {
     init({helper, onHistoryChange}) {
       this._search = makeSearch(helper);
+      this._onHistoryChange = onHistoryChange;
       searchBoxRendering({
         query: helper.state.query,
         containerNode,
@@ -101,7 +102,7 @@ const connectSearchBox = searchBoxRendering => ({
       searchBoxRendering({
         query: helper.state.query,
         containerNode,
-        onHistoryChange: () => {},
+        onHistoryChange: this.onHistoryChange,
         poweredBy,
         helper,
         wrapInput,
