@@ -1,19 +1,16 @@
+import find from 'lodash/find';
+
 import {
+  prepareTemplateProps,
   bemHelper,
   getContainerNode,
+  escapeRefinement,
+  unescapeRefinement,
 } from '../../lib/utils.js';
 import defaultTemplates from './defaultTemplates.js';
 import cx from 'classnames';
-import connectCurrent from './implementations/current.js';
-import connectLegacy from './implementations/legacy.js';
 
 const bem = bemHelper('ais-toggle');
-
-// we cannot use helper. because the facet is not yet declared in the helper
-const hasFacetsRefinementsFor = (attributeName, searchParameters) =>
-  searchParameters &&
-  searchParameters.facetsRefinements &&
-  searchParameters.facetsRefinements[attributeName] !== undefined;
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -64,74 +61,160 @@ toggle({
   [ autoHideContainer=true ],
   [ collapsible=false ]
 })`;
-function connectToggle(toggleRendering) {
-  const legacyToggle = connectLegacy(toggleRendering);
-  const currentToggle = connectCurrent(toggleRendering);
+const connectToggle = toggleRendering => ({
+  container,
+  attributeName,
+  label,
+  values: userValues = {on: true, off: undefined},
+  templates = defaultTemplates,
+  collapsible = false,
+  cssClasses: userCssClasses = {},
+  transformData,
+  autoHideContainer = true,
+} = {}) => {
+  const containerNode = getContainerNode(container);
 
-  return ({
-    container,
-    attributeName,
-    label,
-    values: userValues = {on: true, off: undefined},
-    templates = defaultTemplates,
-    collapsible = false,
-    cssClasses: userCssClasses = {},
-    transformData,
-    autoHideContainer = true,
-  } = {}) => {
-    const containerNode = getContainerNode(container);
+  if (!container || !attributeName || !label) {
+    throw new Error(usage);
+  }
 
-    if (!container || !attributeName || !label) {
-      throw new Error(usage);
-    }
+  const hasAnOffValue = userValues.off !== undefined;
+  const on = userValues ? escapeRefinement(userValues.on) : undefined;
+  const off = userValues ? escapeRefinement(userValues.off) : undefined;
 
-    const hasAnOffValue = userValues.off !== undefined;
-
-    const cssClasses = {
-      root: cx(bem(null), userCssClasses.root),
-      header: cx(bem('header'), userCssClasses.header),
-      body: cx(bem('body'), userCssClasses.body),
-      footer: cx(bem('footer'), userCssClasses.footer),
-      list: cx(bem('list'), userCssClasses.list),
-      item: cx(bem('item'), userCssClasses.item),
-      active: cx(bem('item', 'active'), userCssClasses.active),
-      label: cx(bem('label'), userCssClasses.label),
-      checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
-      count: cx(bem('count'), userCssClasses.count),
-    };
-
-    // store the computed options for usage in the two toggle implementations
-    const implemOptions = {
-      attributeName,
-      label,
-      userValues,
-      templates,
-      collapsible,
-      transformData,
-      hasAnOffValue,
-      containerNode,
-      cssClasses,
-      autoHideContainer,
-    };
-
-    return {
-      getConfiguration(currentSearchParameters, searchParametersFromUrl) {
-        const useLegacyToggle =
-          hasFacetsRefinementsFor(attributeName, currentSearchParameters) ||
-          hasFacetsRefinementsFor(attributeName, searchParametersFromUrl);
-
-        const toggleImplementation = useLegacyToggle ?
-          legacyToggle(implemOptions) :
-          currentToggle(implemOptions);
-
-        this.init = toggleImplementation.init.bind(toggleImplementation);
-        this.render = toggleImplementation.render.bind(toggleImplementation);
-        return toggleImplementation.getConfiguration(currentSearchParameters, searchParametersFromUrl);
-      },
-      init() {},
-      render() {},
-    };
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    label: cx(bem('label'), userCssClasses.label),
+    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+    count: cx(bem('count'), userCssClasses.count),
   };
-}
+
+  return {
+    getConfiguration() {
+      return {
+        disjunctiveFacets: [attributeName],
+      };
+    },
+    init({state, helper, templatesConfig, createURL}) {
+      this._templateProps = prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig,
+        templates,
+      });
+
+      this.toggleRefinement = this.toggleRefinement.bind(this, helper);
+
+      // Bind createURL to this specific attribute
+      this._createURL = (currentState, isCurrentlyRefined) => () =>
+        createURL(currentState.removeDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? on : off)
+                              .addDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? off : on));
+
+      const isRefined = state.isDisjunctiveFacetRefined(attributeName, on);
+      // no need to refine anything at init if no custom off values
+      if (hasAnOffValue) {
+        // Add filtering on the 'off' value if set
+        if (!isRefined) {
+          helper.addDisjunctiveFacetRefinement(attributeName, off);
+        }
+      }
+
+      const onFacetValue = {
+        name: label,
+        isRefined,
+        count: 0,
+      };
+
+      const offFacetValue = {
+        name: label,
+        isRefined: hasAnOffValue && !isRefined,
+        count: 0,
+      };
+
+      const facetValue = {
+        name: label,
+        isRefined,
+        count: null,
+        onFacetValue,
+        offFacetValue,
+      };
+
+      toggleRendering({
+        collapsible,
+        createURL: this._createURL(state, isRefined),
+        cssClasses,
+        facetValues: [facetValue],
+        shouldAutoHideContainer: autoHideContainer,
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, true);
+    },
+    render({helper, results, state}) {
+      const isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, on);
+      const offValue = off === undefined ? false : off;
+      const allFacetValues = results.getFacetValues(attributeName);
+      const onData = find(allFacetValues, {name: unescapeRefinement(on)});
+      const onFacetValue = {
+        name: label,
+        isRefined: onData !== undefined ? onData.isRefined : false,
+        count: onData === undefined ? null : onData.count,
+      };
+      const offData = hasAnOffValue ? find(allFacetValues, {name: unescapeRefinement(offValue)}) : undefined;
+      const offFacetValue = {
+        name: label,
+        isRefined: offData !== undefined ? offData.isRefined : false,
+        count: offData === undefined ? results.nbHits : offData.count,
+      };
+
+      // what will we show by default,
+      // if checkbox is not checked, show: [ ] free shipping (countWhenChecked)
+      // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
+      const nextRefinement = isRefined ? offFacetValue : onFacetValue;
+
+      const facetValue = {
+        name: label,
+        isRefined,
+        count: nextRefinement === undefined ? null : nextRefinement.count,
+        onFacetValue,
+        offFacetValue,
+      };
+
+      toggleRendering({
+        collapsible,
+        createURL: this._createURL(state, isRefined),
+        cssClasses,
+        facetValues: [facetValue],
+        shouldAutoHideContainer: autoHideContainer && (facetValue.count === 0 || facetValue.count === null),
+        templateProps: this._templateProps,
+        toggleRefinement: this.toggleRefinement,
+        containerNode,
+      }, false);
+    },
+    toggleRefinement(helper, facetValue, isRefined) {
+      // Checking
+      if (!isRefined) {
+        if (hasAnOffValue) {
+          helper.removeDisjunctiveFacetRefinement(attributeName, off);
+        }
+        helper.addDisjunctiveFacetRefinement(attributeName, on);
+      } else {
+        // Unchecking
+        helper.removeDisjunctiveFacetRefinement(attributeName, on);
+        if (hasAnOffValue) {
+          helper.addDisjunctiveFacetRefinement(attributeName, off);
+        }
+      }
+
+      helper.search();
+    },
+  };
+};
 
 export default connectToggle;

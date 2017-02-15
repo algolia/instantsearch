@@ -54,6 +54,7 @@ function defaultRendering({
   containerNode,
 }, isFirstRendering) {
   if (isFirstRendering) return;
+
   ReactDOM.render(
     <RefinementList
       collapsible={collapsible}
