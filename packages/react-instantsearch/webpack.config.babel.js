@@ -6,6 +6,7 @@ export default {
   entry: {
     Core: './index.js',
     Dom: './dom.js',
+    Connectors: './connectors.js',
   },
   devtool: 'source-map',
   output: {
