@@ -24,9 +24,9 @@ agentkeepalive@^2.1.1:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-2.2.0.tgz#c5d1bd4b129008f1163f236f86e5faea2026e2ef"
 
-algoliasearch-helper@^2.18.0:
-  version "2.18.0"
-  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.18.0.tgz#854e68418a455239620870aaf30ad785811bba18"
+algoliasearch-helper@^2.18.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/algoliasearch-helper/-/algoliasearch-helper-2.18.1.tgz#ebac9f70b4aacf684d04932095c6ee5c5eb77c55"
   dependencies:
     events "^1.1.0"
     lodash "^4.13.1"
@@ -34,12 +34,12 @@ algoliasearch-helper@^2.18.0:
     qs "^6.2.1"
     util "^0.10.3"
 
-algoliasearch@^3.20.3:
-  version "3.20.4"
-  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.20.4.tgz#56608cbbc4b3f0b49d128cc058a04086eb9f7d2c"
+algoliasearch@^3.21.1:
+  version "3.21.1"
+  resolved "https://registry.yarnpkg.com/algoliasearch/-/algoliasearch-3.21.1.tgz#fdc3a47495a6eeeef061c201caba1a363a703c92"
   dependencies:
     agentkeepalive "^2.1.1"
-    debug "^2.3.2"
+    debug "2.3.3"
     envify "^4.0.0"
     es6-promise "^4.0.5"
     events "^1.1.0"
@@ -672,14 +672,14 @@ babel-register@^6.18.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtime@^6.9.0, babel-runtime@^6.9.1:
+babel-runtime@^6.0.0, babel-runtime@^6.20.0:
   version "6.20.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.20.0.tgz#87300bdcf4cd770f09bf0048c64204e17806d16f"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.22.0:
+babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.9.0, babel-runtime@^6.9.1:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
   dependencies:
@@ -1098,7 +1098,7 @@ debug@2.3.3:
   dependencies:
     ms "0.7.2"
 
-debug@^2.1.1, debug@^2.2.0, debug@^2.3.2:
+debug@^2.1.1, debug@^2.2.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.0.tgz#bc596bcabe7617f11d9fa15361eded5608b8499b"
   dependencies:
