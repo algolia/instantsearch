@@ -15,7 +15,7 @@ NODE_ENV=production webpack
 
 license="/*! ReactInstantSearch ${VERSION:-UNRELEASED} | © Algolia, inc. | https://community.algolia.com/instantsearch.js/react/ */"
 umd_dist="dist/umd"
-entries=( 'Core' 'Dom' )
+entries=( 'Core' 'Dom' 'Connectors')
 for entry in "${entries[@]}"
 do
   dist_file="$umd_dist/${entry}.js"
