@@ -2,7 +2,6 @@ import {
   bemHelper,
   getContainerNode,
   prepareTemplateProps,
-  getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch,
 } from '../../lib/utils.js';
@@ -21,6 +20,11 @@ clearAll({
   [ excludeAttributes=[] ]
 })`;
 
+/**
+ * Connects a rendering with the clearAll business logic.
+ * @param {function} renderClearAll function that renders the clear all widget
+ * @return {function} a widget factory for a clear all widget
+ */
 const connectClearAll = renderClearAll => ({
     container,
     templates = defaultTemplates,
@@ -47,9 +51,10 @@ const connectClearAll = renderClearAll => ({
     init({helper, templatesConfig, createURL}) {
       this.clearAll = this.clearAll.bind(this, helper);
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
+      this.clearAttributes = [];
 
       renderClearAll({
-        clearAll: this.clearAll,
+        clearAll: () => {},
         collapsible,
         cssClasses,
         hasRefinements: false,
@@ -61,7 +66,7 @@ const connectClearAll = renderClearAll => ({
     },
 
     render({results, state, createURL}) {
-      this.clearAttributes = getRefinements(results, state)
+      this.clearAttributes = results.getRefinements()
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
       const hasRefinements = this.clearAttributes.length !== 0;
