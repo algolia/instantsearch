@@ -10,6 +10,9 @@ class SearchBox extends Component {
     refine: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
 
+    resetComponent: PropTypes.element,
+    submitComponent: PropTypes.element,
+
     focusShortcuts: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
@@ -177,14 +180,24 @@ class SearchBox extends Component {
             {...cx('input')}
           />
           <button type="submit" title={translate('submitTitle')} {...cx('submit')}>
-            <svg role="img">
-              <use xlinkHref="#sbx-icon-search-13"></use>
-            </svg>
+            {
+              this.props.submitComponent ?
+                this.props.submitComponent
+                :
+                <svg role="img">
+                  <use xlinkHref="#sbx-icon-search-13"></use>
+                </svg>
+            }
           </button>
           <button type="reset" title={translate('resetTitle')} {...cx('reset')} onClick={this.onReset}>
-            <svg role="img">
-              <use xlinkHref="#sbx-icon-clear-3"></use>
-            </svg>
+            {
+              this.props.resetComponent ?
+                this.props.resetComponent
+                :
+                <svg role="img">
+                  <use xlinkHref="#sbx-icon-clear-3"></use>
+                </svg>
+            }
           </button>
         </div>
       </form>
@@ -194,8 +207,6 @@ class SearchBox extends Component {
 }
 
 export default translatable({
-  submit: null,
-  reset: null,
   resetTitle: 'Clear the search query.',
   submitTitle: 'Submit your search query.',
   placeholder: 'Search here…',
