@@ -142,4 +142,24 @@ describe('SearchBox', () => {
     document.dispatchEvent(event3);
     expect(input.focus.mock.calls.length).toBe(2);
   });
+
+  it('pass inputProps property as input component properties', () => {
+    const onKeyDown = () => {};
+    const onFocus = () => {};
+    const onBlur = () => {};
+    const wrapper = mount(
+      <SearchBox
+        refine={() => null}
+        inputProps={{
+          onKeyDown,
+          onFocus,
+          onBlur,
+        }}
+      />
+    );
+    const props = wrapper.find('input').props();
+    expect(props.onKeyDown).toBe(onKeyDown);
+    expect(props.onFocus).toBe(onFocus);
+    expect(props.onBlur).toBe(onBlur);
+  });
 });
