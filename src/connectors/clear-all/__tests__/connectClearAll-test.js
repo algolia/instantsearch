@@ -8,7 +8,7 @@ const SearchResults = jsHelper.SearchResults;
 
 import connectClearAll from '../connectClearAll.js';
 
-describe.only('connectClearAll', () => {
+describe('connectClearAll', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({});
     helper.search = sinon.stub();
@@ -86,9 +86,6 @@ describe.only('connectClearAll', () => {
     const initClearMethod = rendering.lastCall.args[0].clearAll;
     initClearMethod();
 
-    // The clearing function only works when results are received
-    // At this point of the lifecycle we don't have results yet
-    // that's why the search state still contains refinements
     expect(helper.hasRefinements('myFacet')).toBe(true);
 
     helper.toggleRefinement('myFacet', 'someOtherValue');
@@ -100,10 +97,10 @@ describe.only('connectClearAll', () => {
       createURL: () => '#',
     });
 
-    // expect(helper.hasRefinements('myFacet')).toBe(true);
-    // const renderClearMethod = rendering.lastCall.args[0].clearAll;
-    // renderClearMethod();
-    // expect(helper.hasRefinements('myFacet')).toBe(false);
+    expect(helper.hasRefinements('myFacet')).toBe(true);
+    const renderClearMethod = rendering.lastCall.args[0].clearAll;
+    renderClearMethod();
+    expect(helper.hasRefinements('myFacet')).toBe(false);
   });
 
   it('some refinements from results <=> hasRefinements = true', () => {
@@ -127,7 +124,7 @@ describe.only('connectClearAll', () => {
       onHistoryChange: () => {},
     });
 
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
+    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -170,38 +167,5 @@ describe.only('connectClearAll', () => {
     });
 
     expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
-  });
-
-  it('some refinements from results <=> hasRefinements = true', () => {
-    // test if the values sent to the rendering function
-    // are consistent with the search state
-    const helper = jsHelper({}, undefined, {facets: ['aFacet']});
-    helper.toggleRefinement('aFacet', 'some value');
-    helper.search = sinon.stub();
-
-    const container = document.createElement('div');
-    const rendering = sinon.stub();
-    const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget({
-      container,
-    });
-
-    widget.init({
-      helper,
-      state: helper.state,
-      createURL: () => '#',
-      onHistoryChange: () => {},
-    });
-
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(false);
-
-    widget.render({
-      results: new SearchResults(helper.state, [{}]),
-      state: helper.state,
-      helper,
-      createURL: () => '#',
-    });
-
-    expect(rendering.lastCall.args[0].hasRefinements).toBe(true);
   });
 });

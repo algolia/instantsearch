@@ -128,7 +128,7 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
         collapsible,
         createURL: _createURL,
         cssClasses,
-        facetValues: undefined,
+        facetValues: [],
         shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         toggleRefinement: this._toggleRefinement,

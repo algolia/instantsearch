@@ -166,17 +166,22 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
 
       const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
 
+      const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
+      const clearRefinementURLs =
+        refinements.map(refinement => createURL(clearRefinementFromState(helper.state, refinement)));
+      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
+
       renderCurrentRefinedValues({
         attributes: attributesObj,
         clearAllClick: this._clearRefinementsAndSearch,
         clearAllPosition: clearAll,
         clearAllURL,
-        clearRefinementClicks: [],
-        clearRefinementURLs: [],
+        clearRefinementClicks,
+        clearRefinementURLs,
         collapsible,
         cssClasses,
-        refinements: [],
-        autoHideContainer,
+        refinements,
+        shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         containerNode,
       }, true);

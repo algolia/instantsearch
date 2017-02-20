@@ -1,6 +1,7 @@
 import {
   bemHelper,
   getContainerNode,
+  getRefinements,
   prepareTemplateProps,
   clearRefinementsFromState,
   clearRefinementsAndSearch,
@@ -51,13 +52,16 @@ const connectClearAll = renderClearAll => ({
     init({helper, templatesConfig, createURL}) {
       this.clearAll = this.clearAll.bind(this, helper);
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
-      this.clearAttributes = [];
+      this.clearAttributes = getRefinements({}, helper.state)
+        .map(one => one.attributeName)
+        .filter(one => excludeAttributes.indexOf(one) === -1);
+      const hasRefinements = this.clearAttributes.length !== 0;
 
       renderClearAll({
         clearAll: () => {},
         collapsible,
         cssClasses,
-        hasRefinements: false,
+        hasRefinements,
         shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         url: createURL(clearRefinementsFromState(helper.state)),
@@ -66,7 +70,7 @@ const connectClearAll = renderClearAll => ({
     },
 
     render({results, state, createURL}) {
-      this.clearAttributes = results.getRefinements()
+      this.clearAttributes = getRefinements(results, state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
       const hasRefinements = this.clearAttributes.length !== 0;
