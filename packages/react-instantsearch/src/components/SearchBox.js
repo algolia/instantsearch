@@ -147,6 +147,18 @@ class SearchBox extends Component {
     } = this.props;
     const query = this.getQuery();
 
+    const submitComponent = this.props.submitComponent
+      ? this.props.submitComponent
+      : <svg role="img">
+          <use xlinkHref="#sbx-icon-search-13" />
+        </svg>;
+
+    const resetComponent = this.props.resetComponent
+      ? this.props.resetComponent
+      : <svg role="img">
+          <use xlinkHref="#sbx-icon-clear-3" />
+        </svg>;
+
     /* eslint-disable max-len */
     return (
       <form
@@ -180,24 +192,10 @@ class SearchBox extends Component {
             {...cx('input')}
           />
           <button type="submit" title={translate('submitTitle')} {...cx('submit')}>
-            {
-              this.props.submitComponent ?
-                this.props.submitComponent
-                :
-                <svg role="img">
-                  <use xlinkHref="#sbx-icon-search-13"></use>
-                </svg>
-            }
+            {submitComponent}
           </button>
           <button type="reset" title={translate('resetTitle')} {...cx('reset')} onClick={this.onReset}>
-            {
-              this.props.resetComponent ?
-                this.props.resetComponent
-                :
-                <svg role="img">
-                  <use xlinkHref="#sbx-icon-clear-3"></use>
-                </svg>
-            }
+            {resetComponent}
           </button>
         </div>
       </form>
