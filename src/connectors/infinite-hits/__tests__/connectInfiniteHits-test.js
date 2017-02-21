@@ -22,7 +22,7 @@ describe('connectInfiniteHits', () => {
       hitsPerPage: 10,
     });
 
-    const config = widget.getConfiguration();
+    const config = widget.getConfiguration({});
     expect(config).toEqual({hitsPerPage: 10});
 
     // test if widget is not rendered yet at this point
