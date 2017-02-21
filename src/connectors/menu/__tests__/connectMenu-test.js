@@ -85,7 +85,7 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -128,7 +128,7 @@ describe('connectMenu', () => {
       attributeName: 'category',
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');

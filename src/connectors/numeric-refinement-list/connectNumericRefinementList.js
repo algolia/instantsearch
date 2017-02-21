@@ -94,11 +94,19 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
 
       this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
 
+      const facetValues = options.map(facetValue =>
+        ({
+          ...facetValue,
+          isRefined: isRefined(helper.state, attributeName, facetValue),
+          attributeName,
+        })
+      );
+
       numericRefinementListRendering({
         collapsible,
         createURL: this._createURL(helper.state),
         cssClasses,
-        facetValues: [],
+        facetValues,
         shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         toggleRefinement: this._toggleRefinement,
