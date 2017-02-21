@@ -212,7 +212,7 @@ import {InstantSearch, Hits, SearchBox, Highlight} from 'react-instantsearch/dom
 
 function Product({hit}) {
   return (
-    <div style={{marginTop: '10px'}>
+    <div style={{marginTop: '10px'}}>
       <span className="hit-name">
         <Highlight attributeName="name" hit={hit} />
       </span>
