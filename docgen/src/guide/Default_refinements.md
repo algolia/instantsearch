@@ -70,6 +70,6 @@ const App = () =>
         Previous: <a href="guide/Connectors.html">← Connectors</a>
     </div>
     <div class="guide-nav-right">
-        Next: <a href="guide/Search_for_facet_values.html">Search for facet values →</a>
+        Next: <a href="guide/Searching_in_Lists.html">Searching in *Lists →</a>
     </div>
 </div>
