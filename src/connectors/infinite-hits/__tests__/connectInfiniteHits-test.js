@@ -1,0 +1,148 @@
+/* eslint-env mocha */
+
+import expect from 'expect';
+import sinon from 'sinon';
+
+import jsHelper from 'algoliasearch-helper';
+const SearchResults = jsHelper.SearchResults;
+
+import connectInfiniteHits from '../connectInfiniteHits.js';
+
+const fakeClient = {addAlgoliaAgent: () => {}};
+
+describe('connectInfiniteHits', () => {
+  it('Renders during init and render', () => {
+    const container = document.createElement('div');
+    // test that the dummyRendering is called with the isFirstRendering
+    // flag set accordingly
+    const rendering = sinon.stub();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({
+      container,
+      hitsPerPage: 10,
+    });
+
+    const config = widget.getConfiguration();
+    expect(config).toEqual({hitsPerPage: 10});
+
+    // test if widget is not rendered yet at this point
+    expect(rendering.callCount).toBe(0);
+
+    const helper = jsHelper(fakeClient, '', config);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    // test that rendering has been called during init with isFirstRendering = true
+    expect(rendering.callCount).toBe(1);
+    // test if isFirstRendering is true during init
+    expect(rendering.lastCall.args[1]).toBe(true);
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.containerNode).toBe(container);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // test that rendering has been called during init with isFirstRendering = false
+    expect(rendering.callCount).toBe(2);
+    expect(rendering.lastCall.args[1]).toBe(false);
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    expect(secondRenderingOptions.containerNode).toBe(container);
+  });
+
+  it('Provides the hits and the whole results', () => {
+    const container = document.createElement('div');
+    const rendering = sinon.stub();
+    const makeWidget = connectInfiniteHits(rendering);
+    const widget = makeWidget({
+      container,
+    });
+
+    const helper = jsHelper(fakeClient, '', {});
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const firstRenderingOptions = rendering.lastCall.args[0];
+    expect(firstRenderingOptions.hits).toEqual([]);
+    expect(firstRenderingOptions.results).toBe(undefined);
+
+    const hits = [
+      {fake: 'data'},
+      {sample: 'infos'},
+    ];
+    const results = new SearchResults(helper.state, [{hits}]);
+    widget.render({
+      results,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const secondRenderingOptions = rendering.lastCall.args[0];
+    const {showMore} = secondRenderingOptions;
+    expect(secondRenderingOptions.hits).toEqual(hits);
+    expect(secondRenderingOptions.results).toEqual(results);
+    showMore();
+    expect(helper.search.callCount).toBe(1);
+
+    // the results should accumulate if there is an increment in page
+    const otherHits = [
+      {fake: 'data 2'},
+      {sample: 'infos 2'},
+    ];
+    const otherResults = new SearchResults(helper.state, [{
+      hits: otherHits,
+    }]);
+    widget.render({
+      results: otherResults,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const thirdRenderingOptions = rendering.lastCall.args[0];
+    expect(thirdRenderingOptions.hits).toEqual([...hits, ...otherHits]);
+    expect(thirdRenderingOptions.results).toEqual(otherResults);
+
+    helper.setPage(0);
+
+    // If the page goes back to 0, the hits cache should be flushed
+
+    const thirdHits = [
+      {fake: 'data 3'},
+      {sample: 'infos 3'},
+    ];
+    const thirdResults = new SearchResults(helper.state, [{
+      hits: thirdHits,
+    }]);
+    widget.render({
+      results: thirdResults,
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    const fourthRenderingOptions = rendering.lastCall.args[0];
+    expect(fourthRenderingOptions.hits).toEqual(thirdHits);
+    expect(fourthRenderingOptions.results).toEqual(thirdResults);
+  });
+});

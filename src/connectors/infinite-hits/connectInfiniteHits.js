@@ -73,7 +73,7 @@ const connectInfiniteHits = infiniteHitsRendering => ({
       infiniteHitsRendering({
         cssClasses,
         hits: hitsCache,
-        results: [],
+        results: undefined,
         showMore: this.showMore,
         showMoreLabel,
         templateProps: this._templateProps,
