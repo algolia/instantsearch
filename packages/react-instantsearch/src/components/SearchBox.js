@@ -152,6 +152,7 @@ class SearchBox extends Component {
         onSubmit={this.props.onSubmit ? this.props.onSubmit : this.onSubmit}
         onReset={this.onReset}
         {...cx('root')}
+        action=""
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
           <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-search-13" viewBox="0 0 40 40">
