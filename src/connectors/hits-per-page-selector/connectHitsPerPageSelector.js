@@ -9,7 +9,7 @@ const bem = bemHelper('ais-hits-per-page-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
- * @function hitsPerPageSelector
+ * @function connectHitsPerPageSelector
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {Array} options.options Array of objects defining the different values and labels
  * @param  {number} options.options[0].value number of hits to display per page
@@ -77,7 +77,7 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
       const currentValue = state.hitsPerPage;
 
       this.setHitsPerPage = value => helper
-        .setQueryParameter('hitsPerPage', Number(value))
+        .setQueryParameter('hitsPerPage', value)
         .search();
 
       renderHitsPerPageSelector({

@@ -34,6 +34,7 @@ describe('connectClearAll', () => {
 
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering.callCount).toBe(1);
+    // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
 
     const firstRenderingOptions = rendering.lastCall.args[0];
