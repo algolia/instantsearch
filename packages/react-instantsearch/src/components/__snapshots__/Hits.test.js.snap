@@ -1,11 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Hits accepts a hitComponent prop 1`] = `
 <div
-  className="ais-Hits__root">
+  className="ais-Hits__root"
+>
   <div
-    id={0} />
+    id={0}
+  />
   <div
-    id={1} />
+    id={1}
+  />
   <div
-    id={2} />
+    id={2}
+  />
 </div>
 `;

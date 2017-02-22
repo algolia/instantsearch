@@ -1,33 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`RangeInput applies translations 1`] = `
 <form
   className="ais-RangeInput__root"
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <fieldset
     className="ais-RangeInput__fieldset"
-    disabled={false}>
+    disabled={false}
+  >
     <label
-      className="ais-RangeInput__labelMin">
+      className="ais-RangeInput__labelMin"
+    >
       <input
         className="ais-RangeInput__inputMin"
         onChange={[Function]}
         type="number"
-        value={0} />
+        value={0}
+      />
     </label>
     <span
-      className="ais-RangeInput__separator">
+      className="ais-RangeInput__separator"
+    >
       SEPARATOR
     </span>
     <label
-      className="ais-RangeInput__labelMax">
+      className="ais-RangeInput__labelMax"
+    >
       <input
         className="ais-RangeInput__inputMax"
         onChange={[Function]}
         type="number"
-        value={100} />
+        value={100}
+      />
     </label>
     <button
       className="ais-RangeInput__submit"
-      type="submit">
+      type="submit"
+    >
       SUBMIT
     </button>
   </fieldset>
@@ -37,33 +47,41 @@ exports[`RangeInput applies translations 1`] = `
 exports[`RangeInput supports passing max/min values 1`] = `
 <form
   className="ais-RangeInput__root"
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <fieldset
     className="ais-RangeInput__fieldset"
-    disabled={false}>
+    disabled={false}
+  >
     <label
-      className="ais-RangeInput__labelMin">
+      className="ais-RangeInput__labelMin"
+    >
       <input
         className="ais-RangeInput__inputMin"
         onChange={[Function]}
         type="number"
-        value={0} />
+        value={0}
+      />
     </label>
     <span
-      className="ais-RangeInput__separator">
+      className="ais-RangeInput__separator"
+    >
       to
     </span>
     <label
-      className="ais-RangeInput__labelMax">
+      className="ais-RangeInput__labelMax"
+    >
       <input
         className="ais-RangeInput__inputMax"
         onChange={[Function]}
         type="number"
-        value={100} />
+        value={100}
+      />
     </label>
     <button
       className="ais-RangeInput__submit"
-      type="submit">
+      type="submit"
+    >
       ok
     </button>
   </fieldset>

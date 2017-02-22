@@ -1,7 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ClearAll has a disabled mode 1`] = `
 <button
   className="ais-ClearAll__root"
-  disabled={true}>
+  disabled={true}
+>
   Clear all filters
 </button>
 `;
@@ -9,7 +12,8 @@ exports[`ClearAll has a disabled mode 1`] = `
 exports[`ClearAll renders a clickable button 1`] = `
 <button
   className="ais-ClearAll__root"
-  onClick={[Function]}>
+  onClick={[Function]}
+>
   Clear all filters
 </button>
 `;
