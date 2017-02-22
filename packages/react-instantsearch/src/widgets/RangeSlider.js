@@ -19,10 +19,11 @@ import React from 'react';
  *
  * const Range = React.createClass({
   propTypes: {
-    min: React.PropTypes.number.isRequired,
-    max: React.PropTypes.number.isRequired,
-    currentRefinement: React.PropTypes.object.isRequired,
+    min: React.PropTypes.number,
+    max: React.PropTypes.number,
+    currentRefinement: React.PropTypes.object,
     refine: React.PropTypes.func.isRequired,
+    canRefine: React.PropTypes.bool.isRequired,
   },
 
   getInitialState() {
@@ -49,7 +50,7 @@ import React from 'react';
   render() {
     const {min, max, currentRefinement} = this.props;
     const {currentValues} = this.state;
-    return (
+    return min !== max ?
       <div>
         <Rheostat
           min={min}
@@ -62,12 +63,11 @@ import React from 'react';
           <div>{currentValues.min}</div>
           <div>{currentValues.max}</div>
         </div>
-      </div>
-    );
+      </div> : null;
   },
 });
 
- const ConnectedRange = connectRange(Range);
+const ConnectedRange = connectRange(Range);
 
  */
 export default connectRange(() =>
