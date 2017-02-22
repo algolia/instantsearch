@@ -2,24 +2,29 @@
 
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
+import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 
 const {
-  optimize: {OccurenceOrderPlugin, UglifyJsPlugin},
+  optimize: {UglifyJsPlugin},
 } = webpack;
 
 export default {
   ...webpackConfig,
+  devtool: 'source-map',
   output: {
     ...webpackConfig.output,
     filename: '[name].[hash]-build.js', // hash names in production
   },
   plugins: [
-    new OccurenceOrderPlugin(), // spelling mistake fixed in webpack 2.0
     new UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
+      sourceMap: true,
     }),
     ...webpackConfig.plugins,
+    new BundleAnalyzerPlugin({
+      analyzerMode: 'static',
+      openAnalyzer: false,
+      generateStatsFile: true,
+      logLevel: 'error',
+    }),
   ],
 };
