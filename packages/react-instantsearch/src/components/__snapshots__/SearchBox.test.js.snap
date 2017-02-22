@@ -1,36 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`SearchBox applies its default props 1`] = `
 <form
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={false}
@@ -39,26 +48,33 @@ exports[`SearchBox applies its default props 1`] = `
       placeholder="Search here…"
       required={true}
       type="search"
-      value="" />
+      value=""
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="Clear the search query."
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
@@ -70,34 +86,41 @@ exports[`SearchBox lets you customize its theme 1`] = `
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={false}
@@ -106,26 +129,33 @@ exports[`SearchBox lets you customize its theme 1`] = `
       placeholder="Search here…"
       required={true}
       type="search"
-      value="" />
+      value=""
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="Clear the search query."
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
@@ -137,34 +167,41 @@ exports[`SearchBox lets you customize its translations 1`] = `
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={false}
@@ -173,26 +210,33 @@ exports[`SearchBox lets you customize its translations 1`] = `
       placeholder="PLACEHOLDER"
       required={true}
       type="search"
-      value="" />
+      value=""
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="RESET_TITLE"
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
@@ -204,34 +248,41 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={true}
@@ -240,26 +291,33 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
       placeholder="Search here…"
       required={true}
       type="search"
-      value="" />
+      value=""
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="Clear the search query."
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
@@ -271,34 +329,41 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={false}
@@ -307,26 +372,33 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
       placeholder="Search here…"
       required={true}
       type="search"
-      value="QUERY1" />
+      value="QUERY1"
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="Clear the search query."
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
@@ -338,34 +410,41 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
-  onSubmit={[Function]}>
+  onSubmit={[Function]}
+>
   <svg
     style={
       Object {
         "display": "none",
       }
     }
-    xmlns="http://www.w3.org/2000/svg">
+    xmlns="http://www.w3.org/2000/svg"
+  >
     <symbol
       id="sbx-icon-search-13"
       viewBox="0 0 40 40"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M26.804 29.01c-2.832 2.34-6.465 3.746-10.426 3.746C7.333 32.756 0 25.424 0 16.378 0 7.333 7.333 0 16.378 0c9.046 0 16.378 7.333 16.378 16.378 0 3.96-1.406 7.594-3.746 10.426l10.534 10.534c.607.607.61 1.59-.004 2.202-.61.61-1.597.61-2.202.004L26.804 29.01zm-10.426.627c7.323 0 13.26-5.936 13.26-13.26 0-7.32-5.937-13.257-13.26-13.257C9.056 3.12 3.12 9.056 3.12 16.378c0 7.323 5.936 13.26 13.258 13.26z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
     <symbol
       id="sbx-icon-clear-3"
       viewBox="0 0 20 20"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         d="M8.114 10L.944 2.83 0 1.885 1.886 0l.943.943L10 8.113l7.17-7.17.944-.943L20 1.886l-.943.943-7.17 7.17 7.17 7.17.943.944L18.114 20l-.943-.943-7.17-7.17-7.17 7.17-.944.943L0 18.114l.943-.943L8.113 10z"
-        fillRule="evenodd" />
+        fillRule="evenodd"
+      />
     </symbol>
   </svg>
   <div
     className="ais-SearchBox__wrapper"
-    role="search">
+    role="search"
+  >
     <input
       autoComplete="off"
       autoFocus={false}
@@ -374,26 +453,33 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
       placeholder="Search here…"
       required={true}
       type="search"
-      value="QUERY2" />
+      value="QUERY2"
+    />
     <button
       className="ais-SearchBox__submit"
       title="Submit your search query."
-      type="submit">
+      type="submit"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-search-13" />
+          xlinkHref="#sbx-icon-search-13"
+        />
       </svg>
     </button>
     <button
       className="ais-SearchBox__reset"
       onClick={[Function]}
       title="Clear the search query."
-      type="reset">
+      type="reset"
+    >
       <svg
-        role="img">
+        role="img"
+      >
         <use
-          xlinkHref="#sbx-icon-clear-3" />
+          xlinkHref="#sbx-icon-clear-3"
+        />
       </svg>
     </button>
   </div>
