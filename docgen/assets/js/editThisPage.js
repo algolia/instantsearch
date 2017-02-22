@@ -1,4 +1,4 @@
-if (document.querySelector('body.documentation')) {
+if (document.querySelector('.documentation-container')) {
   const $edit = document.createElement('a');
   $edit.classList.add('editThisPage');
   $edit.textContent = 'Edit this page';
@@ -7,7 +7,10 @@ if (document.querySelector('body.documentation')) {
   const doc = 'docgen/src';
   const api = 'packages/react-instantsearch/src';
 
-  let pathname = document.location.pathname.replace('/instantsearch.js/react', '');
+  let pathname = document.location.pathname.replace(
+    '/instantsearch.js/react',
+    '',
+  );
 
   if (/^\/(?:widgets|connectors)\/.+/.test(pathname)) {
     href += `${api}${pathname.replace('.html', '.js')}`;
