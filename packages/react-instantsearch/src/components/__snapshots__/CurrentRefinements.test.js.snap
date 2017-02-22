@@ -1,23 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`CurrentRefinements allows clearing unique items of a refinement 1`] = `
 <div
-  className="ais-CurrentRefinements__root">
+  className="ais-CurrentRefinements__root"
+>
   <div
-    className="ais-CurrentRefinements__items">
+    className="ais-CurrentRefinements__items"
+  >
     <div
-      className="ais-CurrentRefinements__item ais-CurrentRefinements__itemParent">
+      className="ais-CurrentRefinements__item ais-CurrentRefinements__itemParent"
+    >
       <span
-        className="ais-CurrentRefinements__itemLabel">
+        className="ais-CurrentRefinements__itemLabel"
+      >
         Genre
       </span>
       <div
-        className="ais-CurrentRefinements__item">
+        className="ais-CurrentRefinements__item"
+      >
         <span
-          className="ais-CurrentRefinements__itemLabel">
+          className="ais-CurrentRefinements__itemLabel"
+        >
           Sci-fi
         </span>
         <button
           className="ais-CurrentRefinements__itemClear"
-          onClick={[Function]}>
+          onClick={[Function]}
+        >
           ✕
         </button>
       </div>
@@ -28,18 +37,23 @@ exports[`CurrentRefinements allows clearing unique items of a refinement 1`] = `
 
 exports[`CurrentRefinements renders a list of current refinements 1`] = `
 <div
-  className="ais-CurrentRefinements__root">
+  className="ais-CurrentRefinements__root"
+>
   <div
-    className="ais-CurrentRefinements__items">
+    className="ais-CurrentRefinements__items"
+  >
     <div
-      className="ais-CurrentRefinements__item">
+      className="ais-CurrentRefinements__item"
+    >
       <span
-        className="ais-CurrentRefinements__itemLabel">
+        className="ais-CurrentRefinements__itemLabel"
+      >
         Genre
       </span>
       <button
         className="ais-CurrentRefinements__itemClear"
-        onClick={[Function]}>
+        onClick={[Function]}
+      >
         ✕
       </button>
     </div>

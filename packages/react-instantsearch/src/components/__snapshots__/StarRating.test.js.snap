@@ -1,30 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`StarRating applies translations 1`] = `
 <div
-  className="ais-StarRating__root">
+  className="ais-StarRating__root"
+>
   <a
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       5
     </span>
   </a>
@@ -32,26 +43,34 @@ exports[`StarRating applies translations 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       9
     </span>
   </a>
@@ -59,26 +78,34 @@ exports[`StarRating applies translations 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       12
     </span>
   </a>
@@ -86,51 +113,67 @@ exports[`StarRating applies translations 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       14
     </span>
   </a>
   <div
     className="ais-StarRating__ratingLink ais-StarRating__ratingLinkSelected"
-    disabled={false}>
+    disabled={false}
+  >
     <span
-      className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected" />
+      className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelSelected">
+      className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelSelected"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected">
+      className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected"
+    >
       15
     </span>
   </div>
@@ -139,31 +182,40 @@ exports[`StarRating applies translations 1`] = `
 
 exports[`StarRating supports passing max/min values 1`] = `
 <div
-  className="ais-StarRating__root">
+  className="ais-StarRating__root"
+>
   <a
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       5
     </span>
   </a>
@@ -171,26 +223,34 @@ exports[`StarRating supports passing max/min values 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       9
     </span>
   </a>
@@ -198,26 +258,34 @@ exports[`StarRating supports passing max/min values 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       12
     </span>
   </a>
@@ -225,51 +293,67 @@ exports[`StarRating supports passing max/min values 1`] = `
     className="ais-StarRating__ratingLink"
     disabled={false}
     href="#"
-    onClick={[Function]}>
+    onClick={[Function]}
+  >
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIcon" />
+      className="ais-StarRating__ratingIcon"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty" />
+      className="ais-StarRating__ratingIconEmpty"
+    />
     <span
-      className="ais-StarRating__ratingLabel">
+      className="ais-StarRating__ratingLabel"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount">
+      className="ais-StarRating__ratingCount"
+    >
       14
     </span>
   </a>
   <div
     className="ais-StarRating__ratingLink ais-StarRating__ratingLinkSelected"
-    disabled={false}>
+    disabled={false}
+  >
     <span
-      className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected" />
+      className="ais-StarRating__ratingIcon ais-StarRating__ratingIconSelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected" />
+      className="ais-StarRating__ratingIconEmpty ais-StarRating__ratingIconEmptySelected"
+    />
     <span
-      className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelSelected">
+      className="ais-StarRating__ratingLabel ais-StarRating__ratingLabelSelected"
+    >
        & Up
     </span>
     <span>
        
     </span>
     <span
-      className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected">
+      className="ais-StarRating__ratingCount ais-StarRating__ratingCountSelected"
+    >
       15
     </span>
   </div>
