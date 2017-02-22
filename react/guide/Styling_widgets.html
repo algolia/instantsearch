@@ -2,6 +2,18 @@
 <p>The format for those class names is <code>ais-NameOfWidget__elementModifier</code>.</p>
 <p>The different class names used by every widgets are described on their respective documentation page. You
 can also inspect the underlying DOM and style accordingly.</p>
+<h2 id="styling-icons">Styling icons <a class="anchor" href="guide/Styling_widgets.html#styling-icons" aria-hidden="true"></a></h2>
+<p>You can style icons colors too, for example the <code>SearchBox</code> ones:</p>
+<pre class="code-sample language-css">
+  <div class="heading">Code</div>
+  <div class="code-wrap">
+    <code><span class="cs-qualifier">.ais-SearchBox__reset</span> <span class="cs-tag">svg</span>, 
+<span class="cs-qualifier">.ais-SearchBox__button</span> <span class="cs-tag">svg</span> { 
+  <span class="cs-property">fill</span>: <span class="cs-keyword">red</span>
+}
+</code>
+  </div>
+</pre>
 <h2 id="loading-the-theme">Loading the theme <a class="anchor" href="guide/Styling_widgets.html#loading-the-theme" aria-hidden="true"></a></h2>
 <p>We do not load any CSS into your page automatically but we provide an Algolia theme that you can load
 manually.</p>
@@ -137,4 +149,4 @@ var c = document.getElementsByTagName('script')[0]; c.parentNode.insertBefore(s,
 }
 if(window.attachEvent) { window.attachEvent('onload', async_load); }
 else { window.addEventListener('load', async_load, false); }
-})();</script><script src="/instantsearch.js/react/js/main.7ec42022213ded917d65-build.js"></script></body>
+})();</script><script src="/instantsearch.js/react/js/common.117cd1f8b43a232809ac-build.js"></script><script src="/instantsearch.js/react/js/main.117cd1f8b43a232809ac-build.js"></script></body>
