@@ -2,17 +2,15 @@
 
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
-import WatchMissingNodeModulesPlugin from 'react-dev-utils/WatchMissingNodeModulesPlugin';
 
 const {
-  optimize: {OccurenceOrderPlugin},
   HotModuleReplacementPlugin,
-  NoErrorsPlugin,
+  NoEmitOnErrorsPlugin,
 } = webpack;
 
 export default {
   ...webpackConfig,
-  devtool: 'source-map', // a lot faster than 'source-map', not ok for production though
+  devtool: 'cheap-module-eval-source-map',
   entry: {
     ...(
       Object
@@ -30,10 +28,8 @@ export default {
     ),
   },
   plugins: [
-    new WatchMissingNodeModulesPlugin(),
-    new OccurenceOrderPlugin(), // spelling mistake fixed in webpack 2.0
     new HotModuleReplacementPlugin(),
-    new NoErrorsPlugin(),
+    new NoEmitOnErrorsPlugin(),
     ...webpackConfig.plugins,
   ],
 };

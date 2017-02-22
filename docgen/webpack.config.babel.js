@@ -1,7 +1,7 @@
 import webpack from 'webpack';
 import {join} from 'path';
-import autoprefixer from 'autoprefixer';
 import config from './config.js';
+import HappyPack from 'happypack';
 
 export default {
   entry: {
@@ -13,41 +13,45 @@ export default {
     'examples/tourism/index': join(__dirname, 'src/examples/tourism/index.js'),
     'examples/material-ui/index': join(__dirname, 'src/examples/material-ui/index.js'),
   },
-  devtool: 'source-map',
   output: {
     path: config.docsDist,
     publicPath: config.publicPath,
     filename: '[name].js',
   },
   module: {
-    loaders: [
+    rules: [
       {
-        test: /\.json$/, exclude: /node_modules/, loader: 'json',
-      },
-      {
-        test: /\.js$/, exclude: /node_modules/, loader: 'babel',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'happypack/loader?id=babel',
       },
       {
         test: /\.scss$/,
-        loaders: ['style?insertAt=top', 'css', 'postcss', 'sass'],
+        exclude: /node_modules/,
+        loader: 'happypack/loader?id=style',
       },
     ],
   },
-  postcss: [autoprefixer()],
-  resolve: {
-    alias: {
-      'react-instantsearch': join(__dirname, '../packages/react-instantsearch/'),
-      'react-instantsearch-theme-algolia': join(__dirname, '../packages/react-instantsearch-theme-algolia/'),
-    },
-  },
-  // replace usage of process.env.NODE_ENV with the actual NODE_ENV from command line
-  // when building. Some modules might be using it, this way we will reduce the code output when
-  // NODE_ENV === 'production' and NODE_ENV=production was used to build
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'js/common',
+      minChunks: module =>
+        (/\/react-instantsearch/).test(module.context) ||
+        (/\/react\//).test(module.context) ||
+        (/\/react-dom\//).test(module.context) ||
+        (/\/lodash\//).test(module.context) ||
+        (/\/fbjs\//).test(module.context),
+    }),
+    new HappyPack({
+      loaders: ['babel-loader?cacheDirectory=true'],
+      id: 'babel',
+    }),
+    new HappyPack({
+      loaders: ['style-loader?insertAt=top', 'css-loader', 'postcss-loader', 'sass-loader'],
+      id: 'style',
     }),
   ],
 };
