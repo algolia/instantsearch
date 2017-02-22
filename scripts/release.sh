@@ -94,5 +94,4 @@ cd packages/react-instantsearch-theme-algolia
 npm run build-and-publish
 )
 
-printf "Release:
-Package was published to npm."
+printf "\n\nRelease: Package was published to npm."
