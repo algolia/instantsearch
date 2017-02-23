@@ -8,6 +8,7 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
     className="ais-Menu__SearchBox"
   >
     <form
+      action=""
       className="ais-SearchBox__root"
       noValidate={true}
       onReset={[Function]}
@@ -47,12 +48,15 @@ exports[`Menu Menu with search inside items but no search results 1`] = `
         role="search"
       >
         <input
+          autoCapitalize="off"
           autoComplete="off"
+          autoCorrect="off"
           autoFocus={false}
           className="ais-SearchBox__input"
           onChange={[Function]}
           placeholder="Search here…"
           required={true}
+          spellCheck="false"
           type="search"
           value=""
         />
@@ -164,6 +168,7 @@ exports[`Menu Menu with search inside items with search results 1`] = `
     className="ais-Menu__SearchBox"
   >
     <form
+      action=""
       className="ais-SearchBox__root"
       noValidate={true}
       onReset={[Function]}
@@ -203,12 +208,15 @@ exports[`Menu Menu with search inside items with search results 1`] = `
         role="search"
       >
         <input
+          autoCapitalize="off"
           autoComplete="off"
+          autoCorrect="off"
           autoFocus={false}
           className="ais-SearchBox__input"
           onChange={[Function]}
           placeholder="Search here…"
           required={true}
+          spellCheck="false"
           type="search"
           value=""
         />
@@ -276,6 +284,7 @@ exports[`Menu applies translations 1`] = `
     className="ais-Menu__SearchBox"
   >
     <form
+      action=""
       className="ais-SearchBox__root"
       noValidate={true}
       onReset={[Function]}
@@ -315,12 +324,15 @@ exports[`Menu applies translations 1`] = `
         role="search"
       >
         <input
+          autoCapitalize="off"
           autoComplete="off"
+          autoCorrect="off"
           autoFocus={false}
           className="ais-SearchBox__input"
           onChange={[Function]}
           placeholder="placeholder"
           required={true}
+          spellCheck="false"
           type="search"
           value=""
         />
