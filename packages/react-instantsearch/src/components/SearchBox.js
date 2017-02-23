@@ -120,6 +120,7 @@ class SearchBox extends Component {
   onSubmit = e => {
     e.preventDefault();
     e.stopPropagation();
+    this.input.blur();
 
     const {refine, searchAsYouType} = this.props;
     if (!searchAsYouType) {
@@ -151,6 +152,7 @@ class SearchBox extends Component {
         onSubmit={this.props.onSubmit ? this.props.onSubmit : this.onSubmit}
         onReset={this.onReset}
         {...cx('root')}
+        action=""
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
           <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-search-13" viewBox="0 0 40 40">
@@ -171,6 +173,9 @@ class SearchBox extends Component {
             placeholder={translate('placeholder')}
             autoFocus={autoFocus}
             autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
             required
             value={query}
             onChange={this.onChange}
