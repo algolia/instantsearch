@@ -9,6 +9,7 @@ exports[`RefinementList applies translations 1`] = `
       className="ais-RefinementList__SearchBox"
     >
       <form
+        action=""
         className="ais-SearchBox__root"
         noValidate={true}
         onReset={[Function]}
@@ -48,12 +49,15 @@ exports[`RefinementList applies translations 1`] = `
           role="search"
         >
           <input
+            autoCapitalize="off"
             autoComplete="off"
+            autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
             onChange={[Function]}
             placeholder="placeholder"
             required={true}
+            spellCheck="false"
             type="search"
             value=""
           />
@@ -254,6 +258,7 @@ exports[`RefinementList refinement list with search inside items but no search r
       className="ais-RefinementList__SearchBox"
     >
       <form
+        action=""
         className="ais-SearchBox__root"
         noValidate={true}
         onReset={[Function]}
@@ -293,12 +298,15 @@ exports[`RefinementList refinement list with search inside items but no search r
           role="search"
         >
           <input
+            autoCapitalize="off"
             autoComplete="off"
+            autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
             onChange={[Function]}
             placeholder="Search here…"
             required={true}
+            spellCheck="false"
             type="search"
             value=""
           />
@@ -427,6 +435,7 @@ exports[`RefinementList refinement list with search inside items with search res
       className="ais-RefinementList__SearchBox"
     >
       <form
+        action=""
         className="ais-SearchBox__root"
         noValidate={true}
         onReset={[Function]}
@@ -466,12 +475,15 @@ exports[`RefinementList refinement list with search inside items with search res
           role="search"
         >
           <input
+            autoCapitalize="off"
             autoComplete="off"
+            autoCorrect="off"
             autoFocus={false}
             className="ais-SearchBox__input"
             onChange={[Function]}
             placeholder="Search here…"
             required={true}
+            spellCheck="false"
             type="search"
             value=""
           />
