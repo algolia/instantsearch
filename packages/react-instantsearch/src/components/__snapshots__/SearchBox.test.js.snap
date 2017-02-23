@@ -2,6 +2,7 @@
 
 exports[`SearchBox applies its default props 1`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -41,12 +42,15 @@ exports[`SearchBox applies its default props 1`] = `
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="Search here…"
       required={true}
+      spellCheck="false"
       type="search"
       value=""
     />
@@ -83,6 +87,7 @@ exports[`SearchBox applies its default props 1`] = `
 
 exports[`SearchBox lets you customize its theme 1`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -122,12 +127,15 @@ exports[`SearchBox lets you customize its theme 1`] = `
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="Search here…"
       required={true}
+      spellCheck="false"
       type="search"
       value=""
     />
@@ -164,6 +172,7 @@ exports[`SearchBox lets you customize its theme 1`] = `
 
 exports[`SearchBox lets you customize its translations 1`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -203,12 +212,15 @@ exports[`SearchBox lets you customize its translations 1`] = `
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="PLACEHOLDER"
       required={true}
+      spellCheck="false"
       type="search"
       value=""
     />
@@ -245,6 +257,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
 
 exports[`SearchBox transfers the autoFocus prop to the underlying input element 1`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -284,12 +297,15 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={true}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="Search here…"
       required={true}
+      spellCheck="false"
       type="search"
       value=""
     />
@@ -326,6 +342,7 @@ exports[`SearchBox transfers the autoFocus prop to the underlying input element 
 
 exports[`SearchBox treats its query prop as its input value 1`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -365,12 +382,15 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="Search here…"
       required={true}
+      spellCheck="false"
       type="search"
       value="QUERY1"
     />
@@ -407,6 +427,7 @@ exports[`SearchBox treats its query prop as its input value 1`] = `
 
 exports[`SearchBox treats its query prop as its input value 2`] = `
 <form
+  action=""
   className="ais-SearchBox__root"
   noValidate={true}
   onReset={[Function]}
@@ -446,12 +467,15 @@ exports[`SearchBox treats its query prop as its input value 2`] = `
     role="search"
   >
     <input
+      autoCapitalize="off"
       autoComplete="off"
+      autoCorrect="off"
       autoFocus={false}
       className="ais-SearchBox__input"
       onChange={[Function]}
       placeholder="Search here…"
       required={true}
+      spellCheck="false"
       type="search"
       value="QUERY2"
     />
