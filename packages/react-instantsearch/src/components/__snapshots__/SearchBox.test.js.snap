@@ -236,6 +236,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
           xlinkHref="#sbx-icon-search-13"
         />
       </svg>
+      SUBMIT
     </button>
     <button
       className="ais-SearchBox__reset"
@@ -250,6 +251,7 @@ exports[`SearchBox lets you customize its translations 1`] = `
           xlinkHref="#sbx-icon-clear-3"
         />
       </svg>
+      RESET
     </button>
   </div>
 </form>
