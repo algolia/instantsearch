@@ -8,18 +8,18 @@ please expose us your use case and come ask us questions on <a href="https://dis
 or <a href="https://github.com/algolia/instantsearch.js/issues">GitHub</a> first. We will be glad
 that you do so.</p>
 <p>If you are confident <code>createConnector</code> is what you need, here’s its API:</p>
-<h2 id=""><code>const connector = createConnector(implementation)</code> <a class="anchor" href="guide/Custom_connectors.html#" aria-hidden="true"></a></h2>
+<h2 id="const-connector-createconnectorimplementation"><code>const connector = createConnector(implementation)</code> <a class="anchor" href="guide/Custom_connectors.html#const-connector-createconnectorimplementation" aria-hidden="true"></a></h2>
 <p><code>implementation</code> is an object whose shape and properties matches the following conventions:</p>
-<h2 id="-2"><code>{displayName, propTypes, defaultProps}</code> <a class="anchor" href="guide/Custom_connectors.html#-2" aria-hidden="true"></a></h2>
+<h2 id="displayname-proptypes-defaultprops"><code>{displayName, propTypes, defaultProps}</code> <a class="anchor" href="guide/Custom_connectors.html#displayname-proptypes-defaultprops" aria-hidden="true"></a></h2>
 <p>Those properties are directly applied to the higher-order component. Providing a <code>displayName</code> is mandatory.</p>
-<h2 id="-3"><code>getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults)</code> <a class="anchor" href="guide/Custom_connectors.html#-3" aria-hidden="true"></a></h2>
+<h2 id="getprovidedpropsprops-searchstate-searchresults-meta-searchforfacetvaluesresults"><code>getProvidedProps(props, searchState, searchResults, meta, searchForFacetValuesResults)</code> <a class="anchor" href="guide/Custom_connectors.html#getprovidedpropsprops-searchstate-searchresults-meta-searchforfacetvaluesresults" aria-hidden="true"></a></h2>
 <p>This method should return the props to forward to the composed component.</p>
 <p><code>props</code> are the props that were provided to the higher-order component.</p>
 <p><code>searchState</code> holds the search state of all widgets. You can find the shape of all widgets search state in <a href="guide/Search_state.html">the corresponding guide</a>.</p>
 <p><code>searchResults</code> holds the search results, search errors and search loading state, with the shape <code>{results: ?SearchResults, error: ?Error, loading: bool}</code>. The <code>SearchResults</code> type is described in the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults">Helper’s documentation</a>.</p>
 <p><code>meta</code> is the list of metadata from all widgets whose connector defines a <code>getMetadata</code> method.</p>
 <p><code>searchForFacetValuesResults</code> holds the search for facet values results.</p>
-<h2 id="-4"><code>refine(props, searchState, ...args)</code> <a class="anchor" href="guide/Custom_connectors.html#-4" aria-hidden="true"></a></h2>
+<h2 id="refineprops-searchstate-args"><code>refine(props, searchState, ...args)</code> <a class="anchor" href="guide/Custom_connectors.html#refineprops-searchstate-args" aria-hidden="true"></a></h2>
 <p>This method defines exactly how the <code>refine</code> prop of widgets affects the search state.</p>
 <p>It takes in the current props of the higher-order component, the <a href="guide/Search_state.html">search state</a> of all widgets, as well as all arguments passed to the <code>refine</code> and <code>createURL</code> props of stateful widgets, and returns a new state.</p>
 <pre class="code-sample language-jsx">
@@ -80,7 +80,7 @@ that you do so.</p>
   </div>
 </pre>
 <p>In the example above, we create a widget that reads and manipulates the <code>queryAndPage</code> state entry. However, we haven’t described how those entries should affect the search parameters passed to the Algolia client just yet.</p>
-<h2 id="-5"><code>getSearchParameters(searchParameters, props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#-5" aria-hidden="true"></a></h2>
+<h2 id="getsearchparameterssearchparameters-props-searchstate"><code>getSearchParameters(searchParameters, props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#getsearchparameterssearchparameters-props-searchstate" aria-hidden="true"></a></h2>
 <p>This method applies the current props and state to the provided <code>SearchParameters</code>, and returns a new <code>SearchParameters</code>. The <code>SearchParameters</code> type is described in the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">Helper’s documentation</a>.</p>
 <p>Every time the props or state of a widget change, all the <code>getSearchParameters</code> methods of all the registered widgets are called in a chain to produce a new <code>SearchParameters</code>. Then, if the output <code>SearchParameters</code> differs from the previous one, a new search is triggered.</p>
 <p>As such, the <code>getSearchParameters</code> method allows you to describe how the state and props of a widget should affect the search parameters.</p>
@@ -107,7 +107,7 @@ that you do so.</p>
 </code>
   </div>
 </pre>
-<h2 id="-6"><code>getMetadata(props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#-6" aria-hidden="true"></a></h2>
+<h2 id="getmetadataprops-searchstate"><code>getMetadata(props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#getmetadataprops-searchstate" aria-hidden="true"></a></h2>
 <p>This method allows the widget to register a custom <code>metadata</code> object for any props and state combination.</p>
 <p>If your widget is stateful, the corresponding URL key should be declared on the metadata object as the <code>id</code> property, so that the <code>InstantSearch</code> component can determine which URL keys it controls and which are foreign and should be left intact.</p>
 <p>The metadata object also allows you to declare any data that you would like to pass down to all other widgets. The list of metadata objects of all components is available as the fourth argument to the <code>getProvidedProps</code> method.</p>
@@ -171,7 +171,7 @@ that you do so.</p>
 </code>
   </div>
 </pre>
-<h2 id="-7"><code>searchForFacetValues(props, searchState, nextRefinement)</code> <a class="anchor" href="guide/Custom_connectors.html#-7" aria-hidden="true"></a></h2>
+<h2 id="searchforfacetvaluesprops-searchstate-nextrefinement"><code>searchForFacetValues(props, searchState, nextRefinement)</code> <a class="anchor" href="guide/Custom_connectors.html#searchforfacetvaluesprops-searchstate-nextrefinement" aria-hidden="true"></a></h2>
 <p>This method needs to be implemented if you want to have the ability to perform a search for facet values inside your widget.</p>
 <p>It takes in the current props of the higher-order component, the <a href="guide/Search_state.html">search state</a> of all widgets, as well as all arguments passed to the <code>searchForFacetValues</code> props of stateful widgets, and returns an
 object of the shape: <code>{facetName: string, query: string}</code></p>
@@ -190,7 +190,7 @@ object of the shape: <code>{facetName: string, query: string}</code></p>
 </code>
   </div>
 </pre>
-<h2 id="-8"><code>cleanUp(props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#-8" aria-hidden="true"></a></h2>
+<h2 id="cleanupprops-searchstate"><code>cleanUp(props, searchState)</code> <a class="anchor" href="guide/Custom_connectors.html#cleanupprops-searchstate" aria-hidden="true"></a></h2>
 <p>This method is called when a widget is about to unmount in order to clean the searchState.</p>
 <p>It takes in the current props of the higher-order component and the searchState of all widgets and expect a new searchState in return.</p>
 <p><code>props</code> are the props that were provided to the higher-order component.</p>
@@ -219,7 +219,7 @@ object of the shape: <code>{facetName: string, query: string}</code></p>
         Next: <a href="guide/Conditional_display.html">Conditional Display →</a>
     </div>
 </div>
-</div></div></div></section><footer class="ac-footer"><div class="ac-footer-container"><p class="ac-footer-links">Code licensed under<a class="ac-footer-link-item" href="https://raw.githubusercontent.com/algolia/instantsearch.js/develop/LICENSE">MIT</a><br><a class="ac-footer-link-item" href="https://github.com/algolia/instantsearch.js/tree/v2">GitHub</a><a class="ac-footer-link-item" href="https://github.com/algolia/instantsearch.js/issues">issues</a><a class="ac-footer-link-item" href="https://www.algolia.com/policies/privacy">Privacy policy</a></p></div><div class="ac-footer-container ac-footer-brand"><p>This project is part of</p><img class="ac-footer-brand-icon" src="images/community-badge.svg"><figure><img class="ac-footer-brand-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/v1484219849/algolia-community-logo-words-darkbg.svg"><figcaption>Algolia Community</figcaption></figure><a class="ac-footer-btn ac-footer-btn-cta" href="https://community.algolia.com/">See More</a><span class="ac-icon ac-icon-love-dark"></span></div><p class="ac-footer-version">Latest version: 3.2.0</p><div class="ac-footer-actions"><div class="footer-container"><p>Build unique search experiences with Algolia</p><a class="ac-footer-btn ac-footer-btn-ghost-grey" href="https://www.algolia.com/why?utm_medium=social-owned&amp;utm_source=instantsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=why">See Why<span class="ac-icon-triangle"></span></a><a class="ac-footer-btn ac-footer-btn-ghost-blue" href="https://www.algolia.com/users/sign_up?utm_medium=social-owned&amp;utm_source=instantsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=get_started">Get Started For Free</a></div></div></footer><script src="https://cdn.jsdelivr.net/g/jquery@3(jquery.slim.min.js),docsearch.js@2,underscorejs@1"></script><script>docsearch({
+</div></div></div></section><footer class="ac-footer"><div class="ac-footer-container"><p class="ac-footer-links">Code licensed under<a class="ac-footer-link-item" href="https://raw.githubusercontent.com/algolia/instantsearch.js/develop/LICENSE">MIT</a><br><a class="ac-footer-link-item" href="https://github.com/algolia/instantsearch.js/tree/v2">GitHub</a><a class="ac-footer-link-item" href="https://github.com/algolia/instantsearch.js/issues">issues</a><a class="ac-footer-link-item" href="https://www.algolia.com/policies/privacy">Privacy policy</a></p></div><div class="ac-footer-container ac-footer-brand"><p>This project is part of</p><img class="ac-footer-brand-icon" src="images/community-badge.svg"><figure><img class="ac-footer-brand-logo" src="https://res.cloudinary.com/hilnmyskv/image/upload/v1484219849/algolia-community-logo-words-darkbg.svg"><figcaption>Algolia Community</figcaption></figure><a class="ac-footer-btn ac-footer-btn-cta" href="https://community.algolia.com/">See More</a><span class="ac-icon ac-icon-love-dark"></span></div><p class="ac-footer-version">Latest version: 3.2.1</p><div class="ac-footer-actions"><div class="footer-container"><p>Build unique search experiences with Algolia</p><a class="ac-footer-btn ac-footer-btn-ghost-grey" href="https://www.algolia.com/why?utm_medium=social-owned&amp;utm_source=instantsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=why">See Why<span class="ac-icon-triangle"></span></a><a class="ac-footer-btn ac-footer-btn-ghost-blue" href="https://www.algolia.com/users/sign_up?utm_medium=social-owned&amp;utm_source=instantsearchjs%20website&amp;utm_campaign=homepage&amp;utm_term=get_started">Get Started For Free</a></div></div></footer><script src="https://cdn.jsdelivr.net/g/jquery@3(jquery.slim.min.js),docsearch.js@2,underscorejs@1"></script><script>docsearch({
   apiKey: '5cb6763f264e31381e18639a1147634c',
   indexName: 'react-instantsearch',
   inputSelector: '#searchbox',
@@ -287,4 +287,4 @@ var c = document.getElementsByTagName('script')[0]; c.parentNode.insertBefore(s,
 }
 if(window.attachEvent) { window.attachEvent('onload', async_load); }
 else { window.addEventListener('load', async_load, false); }
-})();</script><script src="/instantsearch.js/react/js/common.117cd1f8b43a232809ac-build.js"></script><script src="/instantsearch.js/react/js/main.117cd1f8b43a232809ac-build.js"></script></body>
+})();</script><script src="/instantsearch.js/react/js/common.80f7260031ad05e00137-build.js"></script><script src="/instantsearch.js/react/js/main.80f7260031ad05e00137-build.js"></script></body>
