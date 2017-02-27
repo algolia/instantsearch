@@ -22,7 +22,7 @@
   and `npm start`.
   
   We have simple online templates for you to use as a base to explain your bug or issue:
-    - react-instantsearch: https://jsfiddle.net/vvoyer/ar80rgpc/2/
+    - react-instantsearch: https://jsfiddle.net/ar80rgpc/6/
     - instantsearch.js: https://jsfiddle.net/vvoyer/0wm3donb/4/
 
   If you are requesting a new feature, we need to understand WHY would you
