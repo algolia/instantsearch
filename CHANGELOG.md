@@ -1,3 +1,13 @@
+<a name="1.11.2"></a>
+## [1.11.2](https://github.com/algolia/instantsearch.js/compare/v1.11.1...v1.11.2) (2017-02-28)
+
+
+### Bug Fixes
+
+* **searchBox:** avoid unwanted cursor jumps on hashchange (#2013) ([d0103db](https://github.com/algolia/instantsearch.js/commit/d0103db)), closes [#2012](https://github.com/algolia/instantsearch.js/issues/2012)
+
+
+
 <a name="1.11.1"></a>
 ## [1.11.1](https://github.com/algolia/instantsearch.js/compare/v1.11.0...v1.11.1) (2017-02-14)
 
