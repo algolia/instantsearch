@@ -31,11 +31,24 @@ function timerMaker(t0) {
  * @type {UrlUtil}
  */
 const hashUrlUtils = {
+  ignoreNextPopState: false,
   character: '#',
   onpopstate(cb) {
-    window.addEventListener('hashchange', cb);
+    window.addEventListener('hashchange', hash => {
+      if (this.ignoreNextPopState) {
+        this.ignoreNextPopState = false;
+        return;
+      }
+
+      cb(hash);
+    });
   },
   pushState(qs) {
+    // hash change or location assign does trigger an hashchange event
+    // so everytime we change it manually, we inform the code
+    // to ignore the next hashchange event
+    // see https://github.com/algolia/instantsearch.js/issues/2012
+    this.ignoreNextPopState = true;
     window.location.assign(getFullURL(this.createURL(qs)));
   },
   createURL(qs) {
