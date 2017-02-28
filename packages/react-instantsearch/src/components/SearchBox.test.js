@@ -48,13 +48,26 @@ describe('SearchBox', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('lets you give custom components for reset and submit', () => {
+    const tree = renderer.create(
+      <SearchBox
+        refine={() => null}
+        submitComponent={<span>🔍</span>}
+        resetComponent={
+          <svg viewBox="200 198 108 122">
+            <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
+          </svg>
+        }
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('lets you customize its translations', () => {
     const tree = renderer.create(
       <SearchBox
         refine={() => null}
         translations={{
-          submit: 'SUBMIT',
-          reset: 'RESET',
           resetTitle: 'RESET_TITLE',
           placeholder: 'PLACEHOLDER',
         }}
