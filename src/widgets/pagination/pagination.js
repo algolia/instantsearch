@@ -40,7 +40,7 @@ function defaultRendering({
   nbHits,
   nbPages,
   padding,
-  setCurrentPage,
+  setPage,
   shouldAutoHideContainer,
   showFirstLast,
   containerNode,
@@ -55,7 +55,7 @@ function defaultRendering({
       nbHits={nbHits}
       nbPages={nbPages}
       padding={padding}
-      setCurrentPage={setCurrentPage}
+      setCurrentPage={setPage}
       shouldAutoHideContainer={shouldAutoHideContainer}
       showFirstLast={showFirstLast}
     />,

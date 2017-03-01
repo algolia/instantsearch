@@ -91,8 +91,8 @@ const connectPagination = paginationRendering => ({
 
   return {
     init({helper, createURL}) {
-      this.setCurrentPage = page => {
-        helper.setCurrentPage(page);
+      this.setPage = page => {
+        helper.setPage(page);
         if (scrollToNode !== false) {
           scrollToNode.scrollIntoView();
         }
@@ -104,12 +104,12 @@ const connectPagination = paginationRendering => ({
       paginationRendering({
         createURL: this.createURL(helper.state),
         cssClasses,
-        currentPage: helper.getPage(),
+        currentPage: helper.getPage() || 0,
         labels,
         nbHits: 0,
         nbPages: 0,
         padding,
-        setCurrentPage: this.setCurrentPage,
+        setPage: this.setPage,
         shouldAutoHideContainer: autoHideContainer,
         showFirstLast,
         containerNode,
@@ -127,12 +127,12 @@ const connectPagination = paginationRendering => ({
       paginationRendering({
         createURL: this.createURL(state),
         cssClasses,
-        currentPage: results.page,
+        currentPage: state.page,
         labels,
         nbHits: results.nbHits,
         nbPages: this.getMaxPage(results),
         padding,
-        setCurrentPage: this.setCurrentPage,
+        setPage: this.setPage,
         shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
         showFirstLast,
         containerNode,
