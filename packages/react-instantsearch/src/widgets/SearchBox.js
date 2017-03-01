@@ -13,8 +13,6 @@ import SearchBoxComponent from '../components/SearchBox.js';
  * @themeKey ais-SearchBox__input - the search box input
  * @themeKey ais-SearchBox__submit - the submit button
  * @themeKey ais-SearchBox__reset - the reset button
- * @translationkey submit - The submit button label
- * @translationkey reset - The reset button label
  * @translationkey submitTitle - The submit button title
  * @translationkey resetTitle - The reset button title
  * @translationkey placeholder - The label of the input placeholder
