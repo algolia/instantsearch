@@ -164,7 +164,7 @@ const connectPriceRanges = priceRangesRendering => ({
     render({results, helper, state, createURL}) {
       let facetValues;
 
-      if (results.hits.length > 0) {
+      if (results && results.hits && results.hits.length > 0) {
         facetValues = this._extractRefinedRange(helper);
 
         if (facetValues.length === 0) {
