@@ -74,7 +74,7 @@ const connectStats = statsRendering => ({
         nbPages: 0,
         page: helper.state.page,
         processingTimeMS: -1,
-        query: '',
+        query: helper.state.query,
         shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         containerNode,
