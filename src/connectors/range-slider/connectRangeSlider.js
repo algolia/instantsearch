@@ -95,22 +95,15 @@ const connectRangeSlider = rangeSliderRendering => ({
         disjunctiveFacets: [attributeName],
       };
 
-      if (
-          (userMin !== undefined || userMax !== undefined)
-          &&
-          (!originalConf ||
-          originalConf.numericRefinements &&
-          originalConf.numericRefinements[attributeName] === undefined)
-        ) {
+      const hasUserBounds = userMin !== undefined || userMax !== undefined;
+      const boundsNotAlreadyDefined = !originalConf ||
+        originalConf.numericRefinements &&
+        originalConf.numericRefinements[attributeName] === undefined;
+
+      if (hasUserBounds && boundsNotAlreadyDefined) {
         conf.numericRefinements = {[attributeName]: {}};
-
-        if (userMin !== undefined) {
-          conf.numericRefinements[attributeName]['>='] = [userMin];
-        }
-
-        if (userMax !== undefined) {
-          conf.numericRefinements[attributeName]['<='] = [userMax];
-        }
+        if (userMin !== undefined) conf.numericRefinements[attributeName]['>='] = [userMin];
+        if (userMax !== undefined) conf.numericRefinements[attributeName]['<='] = [userMax];
       }
 
       return conf;
@@ -142,12 +135,12 @@ const connectRangeSlider = rangeSliderRendering => ({
         templatesConfig,
         templates,
       });
-      this._refine = oldValues => newValues => {
+      this._refine = bounds => newValues => {
         helper.clearRefinements(attributeName);
-        if (newValues[0] > oldValues.min) {
+        if (!bounds.min || newValues[0] > bounds.min) {
           helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
         }
-        if (newValues[1] < oldValues.max) {
+        if (!bounds.max || newValues[1] < bounds.max) {
           helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
         }
         helper.search();
@@ -162,7 +155,7 @@ const connectRangeSlider = rangeSliderRendering => ({
       rangeSliderRendering({
         collapsible,
         cssClasses,
-        onChange: this._refine(stats),
+        refine: this._refine(stats),
         pips,
         range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
         shouldAutoHideContainer: autoHideContainer && stats.min === stats.max,
@@ -193,7 +186,7 @@ const connectRangeSlider = rangeSliderRendering => ({
       rangeSliderRendering({
         collapsible,
         cssClasses,
-        onChange: this._refine(stats),
+        refine: this._refine(stats),
         pips,
         range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
         shouldAutoHideContainer: autoHideContainer && stats.min === stats.max,

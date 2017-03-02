@@ -36,7 +36,7 @@ export default connectRangeSlider(defaultRendering);
 function defaultRendering({
   collapsible,
   cssClasses,
-  onChange,
+  refine,
   pips,
   range,
   shouldAutoHideContainer,
@@ -52,7 +52,7 @@ function defaultRendering({
     <Slider
       collapsible={collapsible}
       cssClasses={cssClasses}
-      onChange={onChange}
+      onChange={refine}
       pips={pips}
       range={range}
       shouldAutoHideContainer={shouldAutoHideContainer}
