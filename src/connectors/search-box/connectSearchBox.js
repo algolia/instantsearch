@@ -87,7 +87,7 @@ const connectSearchBox = searchBoxRendering => ({
       searchBoxRendering({
         query: helper.state.query,
         containerNode,
-        onHistoryChange,
+        onHistoryChange: this._onHistoryChange,
         poweredBy,
         wrapInput,
         autofocus,
