@@ -10,7 +10,7 @@ import connectSortBySelector from '../connectSortBySelector.js';
 
 const fakeClient = {addAlgoliaAgent: () => {}};
 
-describe.only('connectSortBySelector', () => {
+describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {
     const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
