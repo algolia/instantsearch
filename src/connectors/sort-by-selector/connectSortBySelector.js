@@ -39,6 +39,7 @@ const connectSortBySelector = sortBySelectorRendering => ({
 
   const containerNode = getContainerNode(container);
 
+  // in order to fit the component parameters, name has to be mapped to value
   const selectorOptions = map(
     indices,
     index => ({label: index.label, value: index.name})
