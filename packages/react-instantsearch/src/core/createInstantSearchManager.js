@@ -89,7 +89,6 @@ export default function createInstantSearchManager({
 
     mainParameters = {...mainParameters, ...derivatedParameters.find(param => param.index === indexName)};
     remove(derivatedParameters, param => param.index === indexName);
-
     return {mainParameters, derivatedParameters};
   }
 
