@@ -137,7 +137,7 @@ const connectToggle = toggleRendering => ({
         count: 0,
       };
 
-      const facetValue = {
+      const value = {
         name: label,
         isRefined,
         count: null,
@@ -149,7 +149,7 @@ const connectToggle = toggleRendering => ({
         collapsible,
         createURL: this._createURL(state, isRefined),
         cssClasses,
-        facetValues: [facetValue],
+        value,
         shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         toggleRefinement: this.toggleRefinement,
@@ -178,7 +178,7 @@ const connectToggle = toggleRendering => ({
       // if checkbox is checked, show: [x] free shipping (countWhenNotChecked)
       const nextRefinement = isRefined ? offFacetValue : onFacetValue;
 
-      const facetValue = {
+      const value = {
         name: label,
         isRefined,
         count: nextRefinement === undefined ? null : nextRefinement.count,
@@ -190,8 +190,8 @@ const connectToggle = toggleRendering => ({
         collapsible,
         createURL: this._createURL(state, isRefined),
         cssClasses,
-        facetValues: [facetValue],
-        shouldAutoHideContainer: autoHideContainer && (facetValue.count === 0 || facetValue.count === null),
+        value,
+        shouldAutoHideContainer: autoHideContainer && (value.count === 0 || value.count === null),
         templateProps: this._templateProps,
         toggleRefinement: this.toggleRefinement,
         containerNode,

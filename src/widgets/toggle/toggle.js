@@ -47,7 +47,7 @@ function defaultRendering({
   collapsible,
   createURL,
   cssClasses,
-  facetValues,
+  value,
   shouldAutoHideContainer,
   templateProps,
   toggleRefinement,
@@ -60,7 +60,7 @@ function defaultRendering({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues}
+      facetValues={[value]}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={templateProps}
       toggleRefinement={toggleRefinement}

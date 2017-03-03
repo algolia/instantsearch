@@ -11,7 +11,7 @@ import connectStats from '../connectStats.js';
 const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectStats', () => {
-  it.only('Renders during init and render', () => {
+  it('Renders during init and render', () => {
     const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly

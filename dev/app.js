@@ -317,7 +317,7 @@ search.addWidget(
   instantsearch.widgets.toggle({
     container: '#free-shipping',
     attributeName: 'free_shipping',
-    label: 'Free Shipping',
+    label: 'Free Shipping (toggle single value)',
     cssClasses: {
       header: 'facet-title',
       item: 'facet-value checkbox',
@@ -326,6 +326,27 @@ search.addWidget(
     },
     templates: {
       header: 'Shipping',
+    },
+  })
+);
+
+search.addWidget(
+  instantsearch.widgets.toggle({
+    container: '#google-amazon',
+    attributeName: 'brand',
+    label: 'Canon (not checked) or sony (checked)',
+    cssClasses: {
+      header: 'facet-title',
+      item: 'facet-value checkbox',
+      count: 'facet-count pull-right',
+      active: 'facet-active',
+    },
+    values: {
+      on: 'Sony',
+      off: 'Canon',
+    },
+    templates: {
+      header: 'Google or amazon (toggle two values)',
     },
   })
 );
