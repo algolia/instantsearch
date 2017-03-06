@@ -196,6 +196,7 @@ Usage: instantsearch({
           templatesConfig: this.templatesConfig,
           createURL: this._createAbsoluteURL,
           onHistoryChange: this._onHistoryChange,
+          instantSearchInstance: this,
         });
       }
     });
