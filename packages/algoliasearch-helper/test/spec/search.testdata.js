@@ -199,6 +199,7 @@ function getData() {
   });
 
   var responseHelper = {
+    '_rawResults': response.results.slice(0),
     '_state': searchParams,
     'query': '',
     'hits': [

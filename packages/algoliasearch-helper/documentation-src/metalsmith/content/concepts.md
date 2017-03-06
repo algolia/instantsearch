@@ -14,7 +14,7 @@ also all the filters available should be too.
 
 ![The search flow](images/concepts/The search cycle.svg)
 
-### The UI source of truth
+### The source of truth of the UI
 
 The Helper stores and keeps track of the successive filters applied in
 your search UI. It is the source of truth for your search parameters. This

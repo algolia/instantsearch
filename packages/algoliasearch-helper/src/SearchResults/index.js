@@ -224,6 +224,8 @@ function findMatchingHierarchicalFacetFromAttributeName(hierarchicalFacets, hier
 function SearchResults(state, results) {
   var mainSubResponse = results[0];
 
+  this._rawResults = results;
+
   /**
    * query used to generate the results
    * @member {string}
