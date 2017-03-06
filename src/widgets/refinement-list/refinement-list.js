@@ -1,8 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import cx from 'classnames';
+import {filter} from 'lodash';
 
-import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
+import connectRefinementList from '../../connectors/connectRefinementList/connectRefinementList.js';
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+  prefixKeys,
+} from '../../lib/utils.js';
+import defaultTemplates from './defaultTemplates.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+
+const bem = bemHelper('ais-refinement-list');
+const usage = `Usage:
+refinementList({
+  container,
+  attributeName,
+  [ operator='or' ],
+  [ sortBy=['count:desc', 'name:asc'] ],
+  [ limit=10 ],
+  [ cssClasses.{root, header, body, footer, list, item, active, label, checkbox, count}],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ],
+  [ showMore.{templates: {active, inactive}, limit} ],
+  [ collapsible=false ],
+  [ searchForFacetValues.{placeholder, templates: {noResults}}],
+})`;
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -41,44 +69,104 @@ import connectRefinementList from '../../connectors/refinement-list/connectRefin
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
+ * @return {Object} Widget instance
  */
-export default connectRefinementList(defaultRendering);
-function defaultRendering({
-  collapsible,
-  createURL,
-  cssClasses,
-  facetValues,
-  headerFooterData,
-  limitMax,
-  limitMin,
-  shouldAutoHideContainer,
-  showMore,
-  templateProps,
-  toggleRefinement,
-  searchFacetValues,
-  searchPlaceholder,
-  isFromSearch,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      headerFooterData={headerFooterData}
-      limitMax={limitMax}
-      limitMin={limitMin}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showMore={showMore}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-      searchFacetValues={searchFacetValues}
-      searchPlaceholder={searchPlaceholder}
-      isFromSearch={isFromSearch}
-    />,
-    containerNode
-  );
+export default function refinementList({
+  container,
+  attributeName,
+  operator = 'or',
+  sortBy = ['count:desc', 'name:asc'],
+  limit = 10,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+  showMore = false,
+  searchForFacetValues = false,
+}) {
+  if (!container || !attributeName) {
+    throw new Error(usage);
+  }
+
+  const showMoreConfig = getShowMoreConfig(showMore);
+  if (showMoreConfig && showMoreConfig.limit < limit) {
+    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+  }
+
+  operator = operator.toLowerCase();
+  if (operator !== 'and' && operator !== 'or') {
+    throw new Error(usage);
+  }
+
+  const limitMax = showMoreConfig && showMoreConfig.limit || limit;
+  const containerNode = getContainerNode(container);
+  const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
+  const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
+  const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    label: cx(bem('label'), userCssClasses.label),
+    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+    count: cx(bem('count'), userCssClasses.count),
+  };
+
+  let templateProps;
+
+  return connectRefinementList(({
+    refine,
+    items,
+    createURL,
+    searchFacetValues,
+    isFromSearch,
+    instantSearchInstance,
+  }, isFirstRendering) => {
+    if (isFirstRendering) {
+      templateProps = prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: allTemplates,
+      });
+
+      return;
+    }
+
+    // Pass count of currently selected items to the header template
+    const headerFooterData = {
+      header: {refinedFacetsCount: filter(items, {isRefined: true}).length},
+    };
+    const shouldAutoHideContainer = autoHideContainer && !isFromSearch && items.length === 0;
+
+    ReactDOM.render(
+      <RefinementList
+        collapsible={collapsible}
+        createURL={createURL}
+        cssClasses={cssClasses}
+        facetValues={items}
+        headerFooterData={headerFooterData}
+        limitMax={limitMax}
+        limitMin={limit}
+        shouldAutoHideContainer={shouldAutoHideContainer}
+        showMore={showMoreConfig !== null}
+        templateProps={templateProps}
+        toggleRefinement={refine}
+        searchFacetValues={searchFacetValues}
+        searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+        isFromSearch={isFromSearch}
+      />,
+      containerNode
+    );
+  })({
+    attributeName,
+    operator,
+    limit: limitMax,
+    sortBy,
+  });
 }
