@@ -22,11 +22,11 @@ function refine(props, searchState, nextRefinement, context) {
   const id = getId();
   const nextValue = {[id]: nextRefinement};
   const resetPage = true;
-  return refineValue(props, searchState, nextValue, context, resetPage);
+  return refineValue(searchState, nextValue, context, resetPage);
 }
 
 function cleanUp(props, searchState, context) {
-  return cleanUpValue(props, searchState, context, getId());
+  return cleanUpValue(searchState, context, getId());
 }
 
 /**

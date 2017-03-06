@@ -77,6 +77,6 @@ export default createConnector({
     const nextPage = getCurrentRefinement(props, searchState, this.context) + 1;
     const nextValue = {[id]: nextPage};
     const resetPage = false;
-    return refineValue(props, searchState, nextValue, this.context, resetPage);
+    return refineValue(searchState, nextValue, this.context, resetPage);
   },
 });

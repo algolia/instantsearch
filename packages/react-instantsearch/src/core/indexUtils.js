@@ -11,20 +11,20 @@ export function hasMultipleIndex(context) {
 }
 
 // eslint-disable-next-line max-params
-export function refineValue(props, searchState, nextRefinement, context, resetPage, namespace) {
+export function refineValue(searchState, nextRefinement, context, resetPage, namespace) {
   if (hasMultipleIndex(context)) {
     return namespace
-      ? refineMultiIndexWithNamespace(props, searchState, nextRefinement, context, namespace)
-      : refineMultiIndex(props, searchState, nextRefinement, context, resetPage);
+      ? refineMultiIndexWithNamespace(searchState, nextRefinement, context, resetPage, namespace)
+      : refineMultiIndex(searchState, nextRefinement, context, resetPage);
   } else {
     return namespace
-      ? refineSingleIndexWithNamespace(props, searchState, nextRefinement, namespace)
-      : refineSingleIndex(props, searchState, nextRefinement, resetPage);
+      ? refineSingleIndexWithNamespace(searchState, nextRefinement, resetPage, namespace)
+      : refineSingleIndex(searchState, nextRefinement, resetPage);
   }
 }
 
-function refineMultiIndex(props, searchState, nextRefinement, context, resetPage) {
-  const page = resetPage ? {page: 1} : {};
+function refineMultiIndex(searchState, nextRefinement, context, resetPage) {
+  const page = resetPage ? {page: 1} : undefined;
   const index = getIndex(context);
   const state = has(searchState, `indices.${index}`)
     ? {...searchState.indices, [index]: {...searchState.indices[index], ...nextRefinement, ...page}}
@@ -32,24 +32,27 @@ function refineMultiIndex(props, searchState, nextRefinement, context, resetPage
   return {...searchState, indices: state};
 }
 
-function refineSingleIndex(props, searchState, nextRefinement, resetPage) {
-  const page = resetPage ? {page: 1} : {};
+function refineSingleIndex(searchState, nextRefinement, resetPage) {
+  const page = resetPage ? {page: 1} : undefined;
   return {...searchState, ...nextRefinement, ...page};
 }
 
-function refineMultiIndexWithNamespace(props, searchState, nextRefinement, context, namespace) {
+// eslint-disable-next-line max-params
+function refineMultiIndexWithNamespace(searchState, nextRefinement, context, resetPage, namespace) {
   const index = getIndex(context);
+  const page = resetPage ? {page: 1} : undefined;
   const state = has(searchState, `indices.${index}`)
     ? {...searchState.indices, [index]: {
       ...searchState.indices[index],
       ...{[namespace]: {...searchState.indices[index][namespace], ...nextRefinement},
         page: 1}}}
-    : {...searchState.indices, ...{[index]: {[namespace]: nextRefinement, page: 1}}};
+    : {...searchState.indices, ...{[index]: {[namespace]: nextRefinement, ...page}}};
   return {...searchState, indices: state};
 }
 
-function refineSingleIndexWithNamespace(props, searchState, nextRefinement, namespace) {
-  return {...searchState, [namespace]: {...searchState[namespace], ...nextRefinement}, page: 1};
+function refineSingleIndexWithNamespace(searchState, nextRefinement, resetPage, namespace) {
+  const page = resetPage ? {page: 1} : undefined;
+  return {...searchState, [namespace]: {...searchState[namespace], ...nextRefinement}, ...page};
 }
 
 // eslint-disable-next-line max-params
@@ -67,7 +70,7 @@ export function getCurrentRefinementValue(props, searchState, context, id, defau
   return defaultValue;
 }
 
-export function cleanUpValue(props, searchState, context, id) {
+export function cleanUpValue(searchState, context, id) {
   const index = getIndex(context);
   return hasMultipleIndex(context)
     ? omit(searchState, `indices.${index}.${id}`)

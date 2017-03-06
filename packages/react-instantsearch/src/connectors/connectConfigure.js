@@ -21,7 +21,7 @@ export default createConnector({
     const nonPresentKeys = this._props ? difference(keys(this._props), keys(props)) : [];
     this._props = props;
     const nextValue = {[id]: {...omit(nextSearchState[id], nonPresentKeys), ...items}};
-    return refineValue(props, nextSearchState, nextValue, this.context);
+    return refineValue(nextSearchState, nextValue, this.context);
   },
   cleanUp(props, searchState) {
     const id = getId();
@@ -35,6 +35,6 @@ export default createConnector({
       return acc;
     }, {});
     const nextValue = {[id]: configureState};
-    return refineValue(props, searchState, nextValue, this.context);
+    return refineValue(searchState, nextValue, this.context);
   },
 });

@@ -61,11 +61,11 @@ function itemHasRefinement(attributeName, results, value) {
 function refine(props, searchState, nextRefinement, context) {
   const nextValue = {[getId(props, searchState)]: nextRefinement};
   const resetPage = true;
-  return refineValue(props, searchState, nextValue, context, resetPage, namespace);
+  return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
 
 function cleanUp(props, searchState, context) {
-  return cleanUpValue(props, searchState, context, `${namespace}.${getId(props)}`);
+  return cleanUpValue(searchState, context, `${namespace}.${getId(props)}`);
 }
 
 /**

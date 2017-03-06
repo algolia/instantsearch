@@ -60,11 +60,11 @@ export default createConnector({
     const id = getId();
     const nextValue = {[id]: nextRefinement};
     const resetPage = true;
-    return refineValue(props, searchState, nextValue, this.context, resetPage);
+    return refineValue(searchState, nextValue, this.context, resetPage);
   },
 
   cleanUp(props, searchState) {
-    return cleanUpValue(props, searchState, this.context, getId());
+    return cleanUpValue(searchState, this.context, getId());
   },
 
   getSearchParameters(searchParameters, props, searchState) {

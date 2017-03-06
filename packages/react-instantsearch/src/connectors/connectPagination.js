@@ -23,7 +23,7 @@ function refine(props, searchState, nextPage, context) {
   const id = getId();
   const nextValue = {[id]: nextPage};
   const resetPage = false;
-  return refineValue(props, searchState, nextValue, context, resetPage);
+  return refineValue(searchState, nextValue, context, resetPage);
 }
 
 /**
@@ -64,7 +64,7 @@ export default createConnector({
   },
 
   cleanUp(props, searchState) {
-    return cleanUpValue(props, searchState, this.context, getId());
+    return cleanUpValue(searchState, this.context, getId());
   },
 
   getSearchParameters(searchParameters, props, searchState) {

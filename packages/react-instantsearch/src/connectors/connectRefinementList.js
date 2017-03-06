@@ -46,11 +46,11 @@ function refine(props, searchState, nextRefinement, context) {
       // {foo: []} => ""
   const nextValue = {[id]: nextRefinement.length > 0 ? nextRefinement : ''};
   const resetPage = true;
-  return refineValue(props, searchState, nextValue, context, resetPage, namespace);
+  return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
 
 function cleanUp(props, searchState, context) {
-  return cleanUpValue(props, searchState, context, `${namespace}.${getId(props)}`);
+  return cleanUpValue(searchState, context, `${namespace}.${getId(props)}`);
 }
 /**
  * connectRefinementList connector provides the logic to build a widget that will
