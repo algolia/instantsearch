@@ -94,7 +94,7 @@
   },
   "dependencies": {
     "algoliasearch": "^3.21.1",
-    "algoliasearch-helper": "^2.18.1",
+    "algoliasearch-helper": "^2.19.0",
     "classnames": "^2.2.5",
     "clean-css-cli": "^4.0.8",
     "events": "^1.1.0",
