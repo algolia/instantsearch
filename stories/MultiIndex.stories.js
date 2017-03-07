@@ -4,7 +4,7 @@ import {Configure, InstantSearch, MultiIndexContext, Highlight, SearchBox} from 
 import {connectHits, connectAutoComplete} from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 
-const stories = storiesOf('MultiIndex', module);
+const stories = storiesOf('MultiIndexContext', module);
 
 stories.add('MultiHits', () =>
   <InstantSearch

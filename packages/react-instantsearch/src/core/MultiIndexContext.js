@@ -1,5 +1,33 @@
 import React, {PropTypes, Component, Children} from 'react';
 
+/* eslint valid-jsdoc: 0 */
+/**
+ * @description
+ * `<MultiIndexContext>` is the component that allows you to apply widgets to a dedicated index. It's
+ * useful if you want to build an interface that targets multiple indices.
+ * @kind widget
+ * @propType {string} indexName - index in which to search.
+ * @example
+ * import {InstantSearch, MultiIndexContext, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
+ *
+ * export default function Search() {
+ *   return (
+ * <InstantSearch
+          appId=""
+          apiKey=""
+          indexName="index1">
+      <SearchBox/>
+      <Configure hitsPerPage={1} />
+      <MultiIndexContext indexName="index1">
+        <Hits />
+      </MultiIndexContext>
+      <MultiIndexContext indexName="index2">
+        <Hits />
+      </MultiIndexContext>
+  </InstantSearch>
+ *   );
+ * }
+ */
 class MultiIndexContext extends Component {
   getChildContext() {
     return {
