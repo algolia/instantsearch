@@ -8,9 +8,12 @@ import 'react-instantsearch-theme-algolia/style.css';
 import qs from 'qs';
 
 const updateAfter = 700;
+
+const createURL = state => `?${qs.stringify(state)}`;
+
 const searchStateToUrl =
   (props, searchState) =>
-    searchState ? `${props.location.pathname}?${qs.stringify(searchState)}` : '';
+    searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
 
 class App extends Component {
   constructor(props) {
@@ -29,8 +32,6 @@ class App extends Component {
     this.setState({searchState});
   };
 
-  createURL = state => `?${qs.stringify(state)}`;
-
   render() {
     return (
       <InstantSearch
@@ -39,7 +40,7 @@ class App extends Component {
         indexName="ikea"
         searchState={this.state.searchState}
         onSearchStateChange={this.onSearchStateChange.bind(this)}
-        createURL={this.createURL}
+        createURL={createURL}
       >
 
         <div>
