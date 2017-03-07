@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {
   InstantSearch, HierarchicalMenu,
   Hits, Menu, Pagination, PoweredBy, StarRating,
@@ -92,8 +92,10 @@ class App extends Component {
 }
 
 App.propTypes = {
-  history: React.PropTypes.object.isRequired,
-  location: React.PropTypes.object.isRequired,
+  history: PropTypes.shape({{
+    push: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.object.isRequired
 };
 
 export default App;
