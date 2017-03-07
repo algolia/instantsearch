@@ -95,7 +95,7 @@ App.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
 };
 
 export default App;
