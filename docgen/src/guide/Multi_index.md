@@ -6,22 +6,19 @@ category: guide
 navWeight: 50
 ---
 
-You can use multiple [`<InstantSearch>`](guide/<InstantSearch>.html) instances for cases like:
+Whenever you want to:
 
-* displaying hits from different indices
-* sharing a single SearchBox
-* any use case involving synchronizing widgets between different [`<InstantSearch>`](guide/<InstantSearch>.html) instances
+* display hits from different indices
+* share a single SearchBox
+* synchronize widgets between different indices
 
-Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject searchState or be notified of searchState changes:
+You can use multiple [`<MultiIndexContext>`](widgets/<MultiIndexContext>.html) instances.
 
-* onSearchStateChange(onSearchStateChange): a function being called every time the [`<InstantSearch>`](guide/<InstantSearch>.html) searchState is updated.
-* [searchState](guide/Search_state.html): a search state
+The `<MultiIndexContext>` component takes one props, the targetted index name. 
 
-The idea is to have a main component that will receive every new search state of the first instance
-and then pass it back to each [`<InstantSearch>`](guide/<InstantSearch>.html) instances.
+When using a `<MultiIndexContext>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
 
-Refinements and parameters of an [`<InstantSearch>`](guide/<InstantSearch>.html) searchState needs to have their corresponding widgets or
-[virtual widget](guide/Virtual_widgets.html) added to be effectively applied.
+Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component. 
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
 
