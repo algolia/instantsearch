@@ -21,7 +21,7 @@ class App extends Component {
   onSearchStateChange = searchState => {
     clearTimeout(this.debouncedSetState);
     this.debouncedSetState = setTimeout(() => {
-      this.props.push(
+      this.props.history.push(
       searchStateToUrl(this.props, searchState),
       searchState
       );
@@ -91,7 +91,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  push: React.PropTypes.func.isRequired,
+  history: React.PropTypes.object.isRequired,
   location: React.PropTypes.object.isRequired,
 };
 
