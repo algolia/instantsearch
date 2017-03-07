@@ -1,6 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {without} from 'lodash';
-
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -172,9 +170,16 @@ class SearchBox extends Component {
           <use xlinkHref="#sbx-icon-clear-3" />
         </svg>;
 
-    const searchInputEvents = without(Object.keys(this.props), ['onReset', 'onSubmit', 'onChange'])
-      .filter(prop => prop.indexOf('on') === 0)
-      .reduce((props, prop) => ({...props, [prop]: this.props[prop]}), {});
+    const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
+      if (
+          ['onsubmit', 'onreset', 'onchange'].indexOf(prop.toLowerCase()) === -1 &&
+          prop.indexOf('on') === 0
+        ) {
+        return {...props, [prop]: this.props[prop]};
+      }
+
+      return props;
+    }, {});
 
     /* eslint-disable max-len */
     return (
