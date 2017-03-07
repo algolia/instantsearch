@@ -92,7 +92,7 @@ class App extends Component {
 }
 
 App.propTypes = {
-  history: PropTypes.shape({{
+  history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
   location: PropTypes.object.isRequired
