@@ -3,6 +3,8 @@
   "version": "2.19.0",
   "description": "Helper for implementing advanced search features with algolia",
   "main": "index.js",
+  "module": "dist/algoliasearch.helper.esm.js",
+  "jsnext:main": "dist/algoliasearch.helper.esm.js",
   "homepage": "https://community.algolia.com/algoliasearch-helper-js/",
   "scripts": {
     "watch": "watchify index.js -v -s algoliasearchHelper -o dist/algoliasearch.helper.js",
@@ -93,6 +95,9 @@
     "pretty-bytes-cli": "^2.0.0",
     "replace-ext": "1.0.0",
     "rimraf": "^2.5.2",
+    "rollup": "^0.41.4",
+    "rollup-plugin-commonjs": "^7.1.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
     "semver": "^5.1.0",
     "sinon": "^1.17.4",
     "st": "^1.1.0",

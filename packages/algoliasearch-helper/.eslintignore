@@ -1,3 +1,4 @@
 dist/
 documentation-src/
 documentation/
+scripts/rollup.esm.config.js

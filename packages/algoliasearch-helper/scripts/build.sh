@@ -21,3 +21,5 @@ uglifyjs dist/algoliasearch.helper.js --mangle --compress=warnings=false > dist/
 echo '..Gzipped file size'
 
 echo "${bundle}.min.js gzipped will weight" $(cat dist/"${bundle}".min.js | gzip -9 | wc -c | pretty-bytes)
+
+rollup -c scripts/rollup.esm.config.js
