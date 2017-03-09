@@ -23,11 +23,16 @@ class Slider extends React.Component {
   }
 
   render() {
-    if (this.props.range.min === this.props.range.max) {
-      // There's no need to try to render the Slider, it will not be usable
-      // and will throw
-      return null;
-    }
+    // display a `disabled` state of the `NoUiSlider` when range.min === range.max
+    const {range: {min, max}} = this.props;
+    const isDisabled = min === max;
+
+    // when range.min === range.max, we only want to add a little more to the max
+    // to display the same value in the UI, but the `NoUiSlider` wont
+    // throw an error since they are not the same value.
+    const range = isDisabled
+      ? {min, max: min + 0.0001}
+      : {min, max};
 
     // setup pips
     let pips;
@@ -48,12 +53,14 @@ class Slider extends React.Component {
       <Nouislider
         // NoUiSlider also accepts a cssClasses prop, but we don't want to
         // provide one.
-        {...omit(this.props, ['cssClasses'])}
+        {...omit(this.props, ['cssClasses', 'range'])}
         animate={false}
         behaviour={'snap'}
         connect
         cssPrefix={cssPrefix}
         onChange={this.handleChange}
+        range={range}
+        disabled={isDisabled}
         pips={pips}
       />
     );
