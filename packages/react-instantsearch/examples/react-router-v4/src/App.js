@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {
   InstantSearch, HierarchicalMenu,
   Hits, Menu, Pagination, PoweredBy, StarRating,
@@ -8,9 +8,12 @@ import 'react-instantsearch-theme-algolia/style.css';
 import qs from 'qs';
 
 const updateAfter = 700;
+
+const createURL = state => `?${qs.stringify(state)}`;
+
 const searchStateToUrl =
   (props, searchState) =>
-    searchState ? `${props.location.pathname}?${qs.stringify(searchState)}` : '';
+    searchState ? `${props.location.pathname}${createURL(searchState)}` : '';
 
 class App extends Component {
   constructor(props) {
@@ -21,15 +24,13 @@ class App extends Component {
   onSearchStateChange = searchState => {
     clearTimeout(this.debouncedSetState);
     this.debouncedSetState = setTimeout(() => {
-      this.props.push(
+      this.props.history.push(
       searchStateToUrl(this.props, searchState),
       searchState
       );
     }, updateAfter);
     this.setState({searchState});
   };
-
-  createURL = state => `?${qs.stringify(state)}`;
 
   render() {
     return (
@@ -39,7 +40,7 @@ class App extends Component {
         indexName="ikea"
         searchState={this.state.searchState}
         onSearchStateChange={this.onSearchStateChange.bind(this)}
-        createURL={this.createURL}
+        createURL={createURL}
       >
 
         <div>
@@ -91,8 +92,10 @@ class App extends Component {
 }
 
 App.propTypes = {
-  push: React.PropTypes.func.isRequired,
-  location: React.PropTypes.object.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
+  location: PropTypes.object.isRequired,
 };
 
 export default App;
