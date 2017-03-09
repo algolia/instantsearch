@@ -1,5 +1,9 @@
 {
-  "presets": ["latest", "react", "stage-2"],
+  "presets": [
+    ["env", { "targets": { "browsers": ["last 2 versions", "ie >= 9"] } }],
+    "react",
+    "stage-2"
+  ],
   "plugins": ["lodash", "inline-json-import"],
   "env": {
     "development": {
