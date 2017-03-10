@@ -12,6 +12,7 @@ function getId() {
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state
  * @providedPropType {boolean} hasMore - indicates if there are more pages to load
+ * @providedPropType {function} refine - call to load more results
  */
 export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
