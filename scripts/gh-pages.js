@@ -17,6 +17,7 @@ const end = err => {
 
 const defaultOptions = {
   logger,
+  silent: true,
   src: 'react/**/*', // everything in react/
   only: 'react/', // only remove what's in react/, keep other untouched (leave V1 doc)
 };
