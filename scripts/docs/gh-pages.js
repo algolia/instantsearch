@@ -6,6 +6,7 @@ let basePath = join(__dirname, '../../docs/_site');
 ghpages.clean();
 
 let config = {
+  silent: true,
   logger: msg => console.log(msg),
   only: ['**/*', '!react/**/*', '!react']
 };
