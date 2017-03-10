@@ -211,13 +211,14 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
  * @param {string} query the string query for the search
  * @param {string} facet the name of the facetted attribute
+ * @param {number} maxFacetHits the maximum number values returned. Should be > 0 and <= 100
  * @return {promise<FacetSearchResult>} the results of the search
  */
-AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query) {
+AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits) {
   var state = this.state;
   var index = this.client.initIndex(this.state.index);
   var isDisjunctive = state.isDisjunctiveFacet(facet);
-  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, this.state);
+  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, this.state);
   return index.searchForFacetValues(algoliaQuery).then(function addIsRefined(content) {
     content.facetHits = forEach(content.facetHits, function(f) {
       f.isRefined = isDisjunctive ?
