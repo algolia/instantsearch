@@ -1,5 +1,10 @@
 CHANGELOG
 
+2.20.0 - 2017-03-10
+ * feat(pending-search): let the dev know the state of the search requests queue
+ * feat(maxFacetHits): implement maxFacetHits for SFFV
+ * chore(build): Provide an ES module build
+
 2.19.0 - 2017-03-06
  *  feat(search-response): Exposed raw results
  *  doc(concepts): fix formulation

@@ -13517,6 +13517,18 @@ var version = require('./version');
  */
 
 /**
+ * Event triggered when the queue of queries have been depleted (with any result or outdated queries)
+ * @event AlgoliaSearchHelper#event:searchQueueEmpty
+ * @example
+ * helper.on('searchQueueEmpty', function() {
+ *   console.log('No more search pending');
+ *   // This is received before the result event if we're not expecting new results
+ * });
+ *
+ * helper.search();
+ */
+
+/**
  * Initialize a new AlgoliaSearchHelper
  * @class
  * @classdesc The AlgoliaSearchHelper is a class that ease the management of the
@@ -13547,6 +13559,7 @@ function AlgoliaSearchHelper(client, index, options) {
   this._queryId = 0;
   this._lastQueryIdReceived = -1;
   this.derivedHelpers = [];
+  this._currentNbQueries = 0;
 }
 
 util.inherits(AlgoliaSearchHelper, events.EventEmitter);
@@ -13616,10 +13629,16 @@ AlgoliaSearchHelper.prototype.getQuery = function() {
 AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   var tempState = !options ? this.state : this.state.setQueryParameters(options);
   var queries = requestBuilder._getQueries(tempState.index, tempState);
+  var self = this;
+
+  this._currentNbQueries++;
+
   if (cb) {
     return this.client.search(
       queries,
       function(err, content) {
+        self._currentNbQueries--;
+        if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
         if (err) cb(err, null, tempState);
         else cb(err, new SearchResults(tempState, content.results), tempState);
       }
@@ -13627,11 +13646,17 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
   }
 
   return this.client.search(queries).then(function(content) {
+    self._currentNbQueries--;
+    if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
     return {
       content: new SearchResults(tempState, content.results),
       state: tempState,
       _originalResponse: content
     };
+  }, function(e) {
+    self._currentNbQueries--;
+    if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+    throw e;
   });
 };
 
@@ -13662,16 +13687,23 @@ AlgoliaSearchHelper.prototype.searchOnce = function(options, cb) {
  * the parameters from the state so that the search is narrowed to only the possible values.
  *
  * See the description of [FacetSearchResult](reference.html#FacetSearchResult)
- * @param {string} query the string query for the search
  * @param {string} facet the name of the facetted attribute
+ * @param {string} query the string query for the search
+ * @param {number} maxFacetHits the maximum number values returned. Should be > 0 and <= 100
  * @return {promise<FacetSearchResult>} the results of the search
  */
-AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query) {
+AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query, maxFacetHits) {
   var state = this.state;
   var index = this.client.initIndex(this.state.index);
   var isDisjunctive = state.isDisjunctiveFacet(facet);
-  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, this.state);
+  var algoliaQuery = requestBuilder.getSearchForFacetQuery(facet, query, maxFacetHits, this.state);
+
+  this._currentNbQueries++;
+  var self = this;
+
   return index.searchForFacetValues(algoliaQuery).then(function addIsRefined(content) {
+    self._currentNbQueries--;
+    if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
     content.facetHits = forEach(content.facetHits, function(f) {
       f.isRefined = isDisjunctive ?
         state.isDisjunctiveFacetRefined(facet, f.value) :
@@ -13679,6 +13711,10 @@ AlgoliaSearchHelper.prototype.searchForFacetValues = function(facet, query) {
     });
 
     return content;
+  }, function(e) {
+    self._currentNbQueries--;
+    if (self._currentNbQueries === 0) self.emit('searchQueueEmpty');
+    throw e;
   });
 };
 
@@ -14614,6 +14650,8 @@ AlgoliaSearchHelper.prototype._search = function() {
   var queries = mainQueries.concat(flatten(derivedQueries));
   var queryId = this._queryId++;
 
+  this._currentNbQueries++;
+
   this.client.search(queries, this._dispatchAlgoliaResponse.bind(this, states, queryId));
 };
 
@@ -14630,10 +14668,15 @@ AlgoliaSearchHelper.prototype._search = function() {
  * @return {undefined}
  */
 AlgoliaSearchHelper.prototype._dispatchAlgoliaResponse = function(states, queryId, err, content) {
+  // FIXME remove the number of outdated queries discarded instead of just one
+
   if (queryId < this._lastQueryIdReceived) {
     // Outdated answer
     return;
   }
+
+  this._currentNbQueries -= (queryId - this._lastQueryIdReceived);
+  if (this._currentNbQueries === 0) this.emit('searchQueueEmpty');
 
   this._lastQueryIdReceived = queryId;
 
@@ -14745,6 +14788,14 @@ AlgoliaSearchHelper.prototype.detachDerivedHelper = function(derivedHelper) {
   var pos = this.derivedHelpers.indexOf(derivedHelper);
   if (pos === -1) throw new Error('Derived helper already detached');
   this.derivedHelpers.splice(pos, 1);
+};
+
+/**
+ * This method returns if there is currently at least one on-going search.
+ * @return {boolean} true if there is a search pending
+ */
+AlgoliaSearchHelper.prototype.hasPendingRequests = function() {
+  return this._currentNbQueries > 0;
 };
 
 /**
@@ -15120,14 +15171,18 @@ var requestBuilder = {
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
   },
 
-  getSearchForFacetQuery: function(facetName, query, state) {
+  getSearchForFacetQuery: function(facetName, query, maxFacetHits, state) {
     var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName) ?
       state.clearRefinements(facetName) :
       state;
-    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), {
+    var searchForFacetSearchParameters = {
       facetQuery: query,
       facetName: facetName
-    });
+    };
+    if (typeof maxFacetHits === 'number') {
+      searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
+    }
+    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), searchForFacetSearchParameters);
     return queries;
   }
 };
@@ -15309,7 +15364,7 @@ exports.getQueryStringFromState = function(state, options) {
 },{"./SearchParameters":291,"./SearchParameters/shortener":292,"lodash/bind":215,"lodash/forEach":224,"lodash/invert":232,"lodash/isArray":234,"lodash/isPlainObject":246,"lodash/isString":247,"lodash/map":254,"lodash/mapKeys":255,"lodash/mapValues":256,"lodash/pick":264,"qs":282,"qs/lib/utils":285}],300:[function(require,module,exports){
 'use strict';
 
-module.exports = '2.19.0';
+module.exports = '2.20.0';
 
 },{}]},{},[1])(1)
 });
