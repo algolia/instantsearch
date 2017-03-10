@@ -130,7 +130,7 @@ test(
   });
 
 
-test.only(
+test(
   '[INT][SEARCHFORCETVALUES] Should be able to limit the number of returned items',
   function(t) {
     setup(indexName, dataset, config).

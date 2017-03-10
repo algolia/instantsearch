@@ -150,5 +150,8 @@ gulp.task('doc:server', function(done) {
   ).listen(8083, done);
 });
 
-gulp.task('doc:watch', ['doc:content', 'doc:js', 'doc:style', 'doc:server', 'doc:all:watch']);
+gulp.task('doc:watch', ['doc:content', 'doc:js', 'doc:style', 'doc:server', 'doc:all:watch'], function() {
+
+  console.log(" >>>> Go to http://localhost:8083 🚀");
+});
 gulp.task('doc', ['doc:content', 'doc:style', 'doc:js']);
