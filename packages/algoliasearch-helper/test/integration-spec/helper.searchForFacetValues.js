@@ -129,3 +129,27 @@ test(
     }).then(null, bind(t.error, t));
   });
 
+
+test(
+  '[INT][SEARCHFORCETVALUES] Should be able to limit the number of returned items',
+  function(t) {
+    setup(indexName, dataset, config).
+    then(function(client) {
+      var helper = algoliasearchHelper(client, indexName, {
+        facets: ['f', 'f2']
+      });
+
+      helper.searchForFacetValues('f', 'b', 1).then(function(content) {
+        t.ok(content.facetHits.length, 'should get one value');
+
+        t.deepEqual(content.facetHits, [
+          {value: 'ba', highlighted: '<em>b</em>a', count: 3, isRefined: false}
+        ]);
+
+        t.end();
+      }).catch(function(err) {
+        setTimeout(function() {throw err;}, 1);
+      });
+    }).then(null, bind(t.error, t));
+  });
+

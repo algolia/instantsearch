@@ -12,6 +12,7 @@ during the search cycle with events:
  - `search`: when the search is sent to Algolia
  - `result`: when the results are retrieved from Algolia
  - `error`: when Algolia sends back an error
+ - `searchQueueEmpty`: when there is no more on going searches
 
 You can also read the current parameters of the search using the AlgoliaSearchHelper
 but it might not be the one you expect according to the last results received.
@@ -45,9 +46,13 @@ based method, that's why it is prefered.
 You can also search into the values of the facets using `searchForFacetValues`. This
 method can be called in the same way that `searchOnce`.
 
+Finally, you can retrieve if there is an on-going search with `hasPendingRequests` or by
+listening to the `searchQueueEmpty` event.
+
 {{> jsdoc jsdoc/helper/search}}
 {{> jsdoc jsdoc/helper/searchOnce}}
 {{> jsdoc jsdoc/helper/searchForFacetValues}}
+{{> jsdoc jsdoc/helper/hasPendingRequests}}
 {{> jsdoc jsdoc/helper/clearCache}}
 
 ### Derive / multi-queries

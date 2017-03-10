@@ -290,14 +290,18 @@ var requestBuilder = {
     return hierarchicalFacet.attributes.slice(0, parentLevel + 1);
   },
 
-  getSearchForFacetQuery: function(facetName, query, state) {
+  getSearchForFacetQuery: function(facetName, query, maxFacetHits, state) {
     var stateForSearchForFacetValues = state.isDisjunctiveFacet(facetName) ?
       state.clearRefinements(facetName) :
       state;
-    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), {
+    var searchForFacetSearchParameters = {
       facetQuery: query,
       facetName: facetName
-    });
+    };
+    if (typeof maxFacetHits === 'number') {
+      searchForFacetSearchParameters.maxFacetHits = maxFacetHits;
+    }
+    var queries = merge(requestBuilder._getHitsSearchParams(stateForSearchForFacetValues), searchForFacetSearchParameters);
     return queries;
   }
 };
