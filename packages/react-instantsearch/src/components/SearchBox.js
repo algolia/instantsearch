@@ -24,6 +24,8 @@ class SearchBox extends Component {
 
     // For testing purposes
     __inputRef: PropTypes.func,
+
+    inputProps: PropTypes.object,
   };
 
   static defaultProps = {
@@ -145,6 +147,7 @@ class SearchBox extends Component {
     const {
       translate,
       autoFocus,
+      inputProps,
     } = this.props;
     const query = this.getQuery();
 
@@ -195,6 +198,7 @@ class SearchBox extends Component {
             value={query}
             onChange={this.onChange}
             {...cx('input')}
+            {...inputProps}
           />
           <button type="submit" title={translate('submitTitle')} {...cx('submit')}>
             {submitComponent}
