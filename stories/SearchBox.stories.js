@@ -94,6 +94,12 @@ class SearchBoxContainer extends Component {
                 { eventName }
               </label>
           ) }
+
+          <div style={ {marginBottom: 5, marginTop: 5, fontSize: 12} }>
+            <em>
+              (Click on the "action logger" tab of the right sidebar to see events logs)
+            </em>
+          </div>
         </div>
 
         <SearchBox
