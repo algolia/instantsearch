@@ -1,5 +1,5 @@
-import React from 'react';
-import {storiesOf} from '@kadira/storybook';
+import React, {Component} from 'react';
+import {storiesOf, action} from '@kadira/storybook';
 import {SearchBox} from '../packages/react-instantsearch/dom';
 import {withKnobs, object} from '@kadira/storybook-addon-knobs';
 import {WrapWithHits} from './util';
@@ -43,3 +43,79 @@ stories.add('default', () =>
     />
   </WrapWithHits>
 );
+
+// with event listeners
+// --------------------
+class SearchBoxContainer extends Component {
+
+  state = {selectedEvents: {onChange: true}}
+
+  get supportedEvents() {
+    return [
+      'onChange', 'onFocus', 'onBlur',
+      'onSelect', 'onKeyDown', 'onKeyPress',
+      'onSubmit', 'onReset',
+    ];
+  }
+
+  handleSelectedEvent = eventName => ({target: {checked}}) => {
+    const {selectedEvents} = this.state;
+    this.setState({selectedEvents: {...selectedEvents, [eventName]: checked}});
+  }
+
+  handleSubmit = event => {
+    // we dont want the page to reload after the submit event
+    event.preventDefault();
+    event.stopPropagation();
+
+    this.logAction('onSubmit')(event);
+  }
+
+  logAction = eventName => event => {
+    // we dont want to log unselected event
+    if (this.state.selectedEvents[eventName]) {
+      action(eventName)(event);
+    }
+  }
+
+  render() {
+    return (
+      <WrapWithHits searchBox={ false } hasPlayground={ true } linkedStoryGroup="searchBox">
+        <div style={ {color: '#999', borderBottom: '1px solid #E4E4E4', marginBottom: 10} }>
+          {/* events checkboxes */}
+          { this.supportedEvents.map(eventName =>
+              <label key={ eventName } style={ {marginRight: 10} }>
+                <input
+                  name={ `selectEvent-${eventName}` }
+                  type="checkbox"
+                  checked={ this.state.selectedEvents[eventName] }
+                  onChange={ this.handleSelectedEvent(eventName) }
+                />
+                { eventName }
+              </label>
+          ) }
+
+          <div style={ {marginBottom: 5, marginTop: 5, fontSize: 12} }>
+            <em>
+              (Click on the "action logger" tab of the right sidebar to see events logs)
+            </em>
+          </div>
+        </div>
+
+        <SearchBox
+          onSubmit={ this.handleSubmit }
+          onReset={ this.logAction('onReset') }
+          onChange={ this.logAction('onChange') }
+          onFocus={ this.logAction('onFocus') }
+          onBlur={ this.logAction('onBlur') }
+          onSelect={ this.logAction('onSelect') }
+          onKeyDown={ this.logAction('onKeyDown') }
+          onKeyPress={ this.logAction('onKeyPress') }
+        />
+      </WrapWithHits>
+    );
+  }
+
+}
+
+stories.add('with event listeners', () => <SearchBoxContainer />);
