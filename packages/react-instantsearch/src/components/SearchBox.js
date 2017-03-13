@@ -21,6 +21,8 @@ class SearchBox extends Component {
 
     searchAsYouType: PropTypes.bool,
     onSubmit: PropTypes.func,
+    onReset: PropTypes.func,
+    onChange: PropTypes.func,
 
     // For testing purposes
     __inputRef: PropTypes.func,
@@ -134,11 +136,19 @@ class SearchBox extends Component {
 
   onChange = e => {
     this.setQuery(e.target.value);
+
+    if (this.props.onChange) {
+      this.props.onChange(e);
+    }
   };
 
   onReset = () => {
     this.setQuery('');
     this.input.focus();
+
+    if (this.props.onReset) {
+      this.props.onReset();
+    }
   };
 
   render() {
@@ -159,6 +169,17 @@ class SearchBox extends Component {
       : <svg role="img">
           <use xlinkHref="#sbx-icon-clear-3" />
         </svg>;
+
+    const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
+      if (
+          ['onsubmit', 'onreset', 'onchange'].indexOf(prop.toLowerCase()) === -1 &&
+          prop.indexOf('on') === 0
+        ) {
+        return {...props, [prop]: this.props[prop]};
+      }
+
+      return props;
+    }, {});
 
     /* eslint-disable max-len */
     return (
@@ -194,6 +215,7 @@ class SearchBox extends Component {
             required
             value={query}
             onChange={this.onChange}
+            {...searchInputEvents}
             {...cx('input')}
           />
           <button type="submit" title={translate('submitTitle')} {...cx('submit')}>
