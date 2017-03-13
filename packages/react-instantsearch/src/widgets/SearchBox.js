@@ -10,6 +10,7 @@ import SearchBoxComponent from '../components/SearchBox.js';
  * @propType {boolean} [searchAsYouType=true] - Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.
  * @propType {function} [onSubmit] - Intercept submit event sent from the SearchBox form container.
  * @propType {function} [onReset] - Listen to `reset` event sent from the SearchBox form container.
+ * @propType {function} [on*] - Listen to any events sent form the search input itself.
  * @propType {React.Element} [submitComponent] - Change the apparence of the default submit button (magnifying glass).
  * @propType {React.Element} [resetComponent] - Change the apparence of the default reset button (cross).
  * @propType {string} [defaultRefinement] - Provide default refinement value when component is mounted.
