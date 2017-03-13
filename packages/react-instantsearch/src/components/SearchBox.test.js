@@ -155,4 +155,34 @@ describe('SearchBox', () => {
     document.dispatchEvent(event3);
     expect(input.focus.mock.calls.length).toBe(2);
   });
+
+  it('should accept `onXXX` events', () => {
+    const onSubmit = jest.fn();
+    const onReset = jest.fn();
+
+    const inputEventsList = ['onChange', 'onFocus', 'onBlur', 'onSelect', 'onKeyDown', 'onKeyPress'];
+    const inputProps = inputEventsList.reduce((props, prop) => ({...props, [prop]: jest.fn()}), {});
+
+    const wrapper = mount(
+      <SearchBox
+        refine={ () => null }
+        onSubmit={ onSubmit }
+        onReset={ onReset }
+        { ...inputProps }
+      />
+    );
+
+    // simulate form events `onReset` && `onSubmit`
+    wrapper.find('form').simulate('submit');
+    expect(onSubmit).toBeCalled();
+
+    wrapper.find('form').simulate('reset');
+    expect(onReset).toBeCalled();
+
+    // simulate input search events
+    inputEventsList.forEach(eventName => {
+      wrapper.find('input').simulate(eventName.replace(/^on/, '').toLowerCase());
+      expect(inputProps[eventName]).toBeCalled();
+    });
+  });
 });
