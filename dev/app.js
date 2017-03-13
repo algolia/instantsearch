@@ -199,6 +199,19 @@ search.addWidget(
 );
 
 search.addWidget(
+  instantsearch.widgets.refinementSelect({
+    container: '#refinement-select',
+    attributeName: 'categories',
+    templates: {
+      header: 'Categories through select',
+    },
+    cssClasses: {
+      header: 'facet-title',
+    },
+  })
+);
+
+search.addWidget(
   instantsearch.widgets.refinementList({
     collapsible: {
       collapsed: true,
