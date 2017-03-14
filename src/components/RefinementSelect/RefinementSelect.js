@@ -11,6 +11,7 @@ class RefinementSelect extends Component {
     toggleRefinement: PropTypes.func.isRequired,
     clearRefinements: PropTypes.func.isRequired,
     attributeNameKey: PropTypes.string,
+    limit: PropTypes.number.isRequired,
   }
 
   static defaultProps = {
@@ -19,15 +20,18 @@ class RefinementSelect extends Component {
   }
 
   get selectValue(): {name: string} {
-    const {facetValues} = this.props;
-    const selectValue = facetValues.find(({isRefined}) => isRefined);
-
+    const selectValue = this.facetValues.find(({isRefined}) => isRefined);
     return selectValue || {name: 'all'};
   }
 
   get totalCount(): number {
     const {facetValues} = this.props;
     return facetValues.reduce((total, {count}) => total + count, 0);
+  }
+
+  get facetValues(): number {
+    const {facetValues, limit} = this.props;
+    return facetValues.slice(0, limit);
   }
 
   handleSelectChange = ({target: {value}}) => {
@@ -37,14 +41,14 @@ class RefinementSelect extends Component {
       return;
     }
 
-    const {facetValues, toggleRefinement, attributeNameKey} = this.props;
-    const {[attributeNameKey]: facetValueToRefine, isRefined} = facetValues.find(({name}) => name === value);
+    const {toggleRefinement, attributeNameKey} = this.props;
+    const {[attributeNameKey]: facetValueToRefine, isRefined} = this.facetValues.find(({name}) => name === value);
 
     toggleRefinement(facetValueToRefine, isRefined);
   }
 
   render() {
-    const {facetValues, cssClasses} = this.props;
+    const {cssClasses} = this.props;
 
     return (
       <select
@@ -52,7 +56,6 @@ class RefinementSelect extends Component {
         value={ this.selectValue.name }
         onChange={ this.handleSelectChange }
       >
-        {/* TODO: use templating for "see all" option, ask @vvo */}
         <option
           value="all"
           className={ cssClasses.option }
@@ -60,7 +63,7 @@ class RefinementSelect extends Component {
           See all ({ this.totalCount })
         </option>
 
-        { facetValues.map(({name, path, count}) =>
+        { this.facetValues.map(({name, path, count}) =>
           <option
             key={ name }
             value={ path }

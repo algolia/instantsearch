@@ -21,12 +21,14 @@ refinementSelect({
   attributeName,
   [ autoHideContainer=true ],
   [ sortBy=['count:desc', 'name:asc'] ],
+  [ limit=10 ],
   [ cssClasses.{root,header,body,footer,select,option}={} ],
 })`;
 
 function refinementSelect({
   container,
   attributeName,
+  limit = 10,
   autoHideContainer = true,
   sortBy = ['count:desc', 'name:asc'],
   cssClasses: userCssClasses = {},
@@ -77,6 +79,7 @@ function refinementSelect({
           templateProps={ this._templateProps }
           toggleRefinement={ this._toggleRefinement }
           clearRefinements={ this._clearRefinements }
+          limit={ limit }
         />,
         containerNode
       );
