@@ -43,11 +43,11 @@
             </div>
           </search-facet>
 
-          <stars-facet attribute="rating">
+          <rating-facet attribute="rating">
             <div slot="header">
               <h3>Rating</h3>
             </div>
-          </stars-facet>
+          </rating-facet>
         </div>
         <div class="col-md-10 col-sm-9">
           <div class="search-controls">
@@ -72,7 +72,7 @@
                 <div class="hit__info">
                   <h2 class="hit__name" v-html="hit._highlightResult.name.value"></h2>
                   <div class="hit__type" v-html="hit._highlightResult.type.value"></div>
-                  <div class="hit__stars">
+                  <div class="hit__rating">
                     <template v-for="n in 5">
                       <span v-if="n <= hit.rating" class="hit__star"></span>
                       <span v-else class="hit__star--empty"></span>
@@ -193,7 +193,7 @@
     font-size: 12px;
   }
 
-  .hit__stars {
+  .hit__rating {
     margin-top: 10px;
   }
 
@@ -278,8 +278,8 @@
 
   }
 
-  /* Stars Facet */
-  .alg-stars-facet {
+  /* Rating Facet */
+  .alg-rating-facet {
 
     input {
       display: none;
@@ -299,7 +299,7 @@
       padding-left: 0;
     }
 
-    .alg-stars-facet__item--active label {
+    .alg-rating-facet__item--active label {
       font-weight: bold;
 
       &:hover {
@@ -309,7 +309,7 @@
 
     }
 
-    .alg-stars-facet__clear {
+    .alg-rating-facet__clear {
       border: none;
       background: none;
       padding-left: 0;

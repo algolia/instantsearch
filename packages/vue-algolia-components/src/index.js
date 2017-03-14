@@ -7,7 +7,7 @@ import ResultsPerPageSelector from 'vue-algolia-results-per-page-selector'
 import NavigationTreeFacet from 'vue-algolia-navigation-tree-facet'
 import SortBySelector from 'vue-algolia-sort-by-selector'
 import ClearSearch from 'vue-algolia-clear-search'
-import StarsFacet from 'vue-algolia-stars-facet'
+import RatingFacet from 'vue-algolia-rating-facet'
 import EmptyResults from 'vue-algolia-empty-results'
 import SearchFacet from 'vue-algolia-search-facet'
 import PriceRangeFacet from 'vue-algolia-price-range-facet'
@@ -22,7 +22,7 @@ const Algolia = {
   NavigationTreeFacet,
   SortBySelector,
   ClearSearch,
-  StarsFacet,
+  RatingFacet,
   EmptyResults,
   SearchFacet,
   PriceRangeFacet,
@@ -37,7 +37,7 @@ const Algolia = {
     Vue.component('navigation-tree-facet', NavigationTreeFacet)
     Vue.component('sort-by-selector', SortBySelector)
     Vue.component('clear-search', ClearSearch)
-    Vue.component('stars-facet', StarsFacet)
+    Vue.component('rating-facet', RatingFacet)
     Vue.component('empty-results', EmptyResults)
     Vue.component('search-facet', SearchFacet)
     Vue.component('price-range-facet', PriceRangeFacet)
@@ -61,7 +61,7 @@ export {ResultsPerPageSelector}
 export {NavigationTreeFacet}
 export {SortBySelector}
 export {ClearSearch}
-export {StarsFacet}
+export {RatingFacet}
 export {EmptyResults}
 export {SearchFacet}
 export {PriceRangeFacet}

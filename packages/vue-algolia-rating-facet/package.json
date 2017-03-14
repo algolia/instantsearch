@@ -1,13 +1,13 @@
 {
-  "name": "vue-algolia-stars-facet",
+  "name": "vue-algolia-rating-facet",
   "version": "0.0.0",
   "files": [
     "dist"
   ],
-  "main": "dist/vue-algolia-stars-facet.common.js",
-  "module": "dist/vue-algolia-stars-facet.esm.js",
-  "jsnext:main": "dist/vue-algolia-stars-facet.esm.js",
-  "unpkg": "dist/vue-algolia-stars-facet.js",
+  "main": "dist/vue-algolia-rating-facet.common.js",
+  "module": "dist/vue-algolia-rating-facet.esm.js",
+  "jsnext:main": "dist/vue-algolia-rating-facet.esm.js",
+  "unpkg": "dist/vue-algolia-rating-facet.js",
   "scripts": {
     "build": "yarn build-umd && yarn build-es && yarn build-cjs",
     "build-umd": "rollup -c ../../build/rollup.umd.config.js",
