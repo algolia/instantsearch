@@ -12,20 +12,14 @@ yarn global add lerna
 # Install dependencies common to the packages
 yarn install
 
-# Download all dependencies
+# Download all dependencies and build all packages
+yarn boot
+
+# Or with native lerna: 
 lerna bootstrap --npmClient=yarn
 
-# Build all the packages
+# if you want to run the building later again
 lerna run build
 ```
 
-## Lerna caveats (probably because of Yarn)
-
-Sometimes your builds will fail because of incorrect dependencies resolution. If that happens, the easiest fix is
-to delete all `node_modules` folders and to bootstrap again.
-
-```sh
-rm -rf ./packages/*/node_modules
-lerna bootstrap
-```
-
+Note: `yarn boot` will delete all node modules and make sure all npm dependencies are properly rebuilt.
