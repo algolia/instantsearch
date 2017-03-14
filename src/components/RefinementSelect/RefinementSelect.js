@@ -3,7 +3,10 @@ import React, {Component, PropTypes} from 'react';
 class RefinementSelect extends Component {
 
   static propTypes = {
-    cssClasses: PropTypes.shape({select: PropTypes.string}),
+    cssClasses: PropTypes.shape({
+      select: PropTypes.string,
+      option: PropTypes.string,
+    }),
     facetValues: PropTypes.array.isRequired,
     toggleRefinement: PropTypes.func.isRequired,
     clearRefinements: PropTypes.func.isRequired,
@@ -41,18 +44,28 @@ class RefinementSelect extends Component {
   }
 
   render() {
-    const {facetValues} = this.props;
+    const {facetValues, cssClasses} = this.props;
 
     return (
       <select
+        className={ cssClasses.select }
         value={ this.selectValue.name }
         onChange={ this.handleSelectChange }
       >
         {/* TODO: use templating for "see all" option, ask @vvo */}
-        <option value="all">See all ({ this.totalCount })</option>
+        <option
+          value="all"
+          className={ cssClasses.option }
+        >
+          See all ({ this.totalCount })
+        </option>
 
         { facetValues.map(({name, path, count}) =>
-          <option key={ name } value={ path }>
+          <option
+            key={ name }
+            value={ path }
+            className={ cssClasses.option }
+          >
             { name } ({ count })
           </option>
         ) }
