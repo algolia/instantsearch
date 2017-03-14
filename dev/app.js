@@ -204,9 +204,11 @@ search.addWidget(
     attributeName: 'categories',
     templates: {
       header: 'Categories through select',
+      seeAllOption: 'See all',
     },
     cssClasses: {
       header: 'facet-title',
+      select: 'form-control',
     },
   })
 );
