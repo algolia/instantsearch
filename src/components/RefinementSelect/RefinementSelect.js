@@ -5,36 +5,58 @@ class RefinementSelect extends Component {
   static propTypes = {
     cssClasses: PropTypes.shape({select: PropTypes.string}),
     facetValues: PropTypes.array.isRequired,
-    createURL: PropTypes.func.isRequired,
+    toggleRefinement: PropTypes.func.isRequired,
+    clearRefinements: PropTypes.func.isRequired,
+    attributeNameKey: PropTypes.string,
   }
 
-  get selectValue() {
+  static defaultProps = {
+    cssClasses: {},
+    attributeNameKey: 'name',
+  }
+
+  get selectValue(): {name: string} {
     const {facetValues} = this.props;
-    return facetValues.find(({isRefined}) => isRefined);
+    const selectValue = facetValues.find(({isRefined}) => isRefined);
+
+    return selectValue || {name: 'all'};
+  }
+
+  get totalCount(): number {
+    const {facetValues} = this.props;
+    return facetValues.reduce((total, {count}) => total + count, 0);
   }
 
   handleSelectChange = ({target: {value}}) => {
-    console.log(value);
+    // we want clear all refinements when the user select `See all` option
+    if (value === 'all') {
+      this.props.clearRefinements();
+      return;
+    }
+
+    const {facetValues, toggleRefinement, attributeNameKey} = this.props;
+    const {[attributeNameKey]: facetValueToRefine, isRefined} = facetValues.find(({name}) => name === value);
+
+    toggleRefinement(facetValueToRefine, isRefined);
   }
 
   render() {
     const {facetValues} = this.props;
 
     return (
-      <div>
-        <select
-          value={ this.selectValue }
-          onChange={ this.handleSelectChange }
-        >
-          { facetValues.map(({name, path, count}) =>
-            <option key={ name } value={ path }>
-              { name } ({ count })
-            </option>
-          ) }
-        </select>
+      <select
+        value={ this.selectValue.name }
+        onChange={ this.handleSelectChange }
+      >
+        {/* TODO: use templating for "see all" option, ask @vvo */}
+        <option value="all">See all ({ this.totalCount })</option>
 
-        <pre>{ JSON.stringify(this.props, null, 4) }</pre>
-      </div>
+        { facetValues.map(({name, path, count}) =>
+          <option key={ name } value={ path }>
+            { name } ({ count })
+          </option>
+        ) }
+      </select>
     );
   }
 
