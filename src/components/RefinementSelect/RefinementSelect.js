@@ -62,14 +62,14 @@ class RefinementSelect extends Component {
           {templates && templates.seeAllOption || 'See all'}
         </option>
 
-        { this.facetValues.map(({name, count}) =>
+        { this.facetValues.map(({name, count, isRefined}) =>
           <option
             key={ name }
             value={ name }
             className={ cssClasses.option }
           >
             { templates && templates.selectOption
-                ? templates.selectOption({name, count})
+                ? templates.selectOption({name, count, isRefined})
                 : `${name} (${count})`
             }
           </option>
