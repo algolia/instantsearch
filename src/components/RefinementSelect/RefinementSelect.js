@@ -24,11 +24,6 @@ class RefinementSelect extends Component {
     return selectValue || {name: 'all'};
   }
 
-  get totalCount(): number {
-    const {facetValues} = this.props;
-    return facetValues.reduce((total, {count}) => total + count, 0);
-  }
-
   get facetValues(): number {
     const {facetValues, limit} = this.props;
     return facetValues.slice(0, limit);
@@ -56,11 +51,8 @@ class RefinementSelect extends Component {
         value={ this.selectValue.name }
         onChange={ this.handleSelectChange }
       >
-        <option
-          value="all"
-          className={ cssClasses.option }
-        >
-          See all ({ this.totalCount })
+        <option value="all" className={ cssClasses.option }>
+          See all
         </option>
 
         { this.facetValues.map(({name, path, count}) =>
