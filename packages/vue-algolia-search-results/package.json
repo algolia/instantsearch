@@ -1,0 +1,27 @@
+{
+  "name": "vue-algolia-search-results",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/vue-algolia-search-results.common.js",
+  "module": "dist/vue-algolia-search-results.esm.js",
+  "jsnext:main": "dist/vue-algolia-search-results.esm.js",
+  "unpkg": "dist/vue-algolia-search-results.js",
+  "scripts": {
+    "build": "yarn build-umd && yarn build-es && yarn build-cjs",
+    "build-umd": "rollup -c ../../build/rollup.umd.config.js",
+    "build-es": "rollup -c ../../build/rollup.es.config.js",
+    "build-cjs": "rollup -c ../../build/rollup.cjs.config.js"
+  },
+  "dependencies": {
+    "vue-algolia-component": "*"
+  },
+  "peerDependencies": {
+    "vue": "^2.2.2"
+  }
+}
+
+
+
+
