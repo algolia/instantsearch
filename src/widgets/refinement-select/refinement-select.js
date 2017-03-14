@@ -53,12 +53,8 @@ function refinementSelect({
   };
 
   return {
-    init({helper, templatesConfig, createURL}) {
+    init({helper, templatesConfig}) {
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
-
-      // TODO: find out what it does, just copy/paste
-      this._createURL = (state, facetValue) =>
-        createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
 
       this._toggleRefinement = facetValue => helper
         .toggleRefinement(hierarchicalFacetName, facetValue)
@@ -69,17 +65,8 @@ function refinementSelect({
         .search();
     },
 
-    // TODO: find out what it does, just copy/paste
-    _prepareFacetValues(facetValues, state) {
-      return facetValues.map(facetValue => ({...facetValue, url: this._createURL(state, facetValue)}));
-    },
-
-    render({results, state}) {
-      // TODO: find out what it does, just copy/paste
-      const facetValues = this._prepareFacetValues(
-        results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [],
-        state
-      );
+    render({results}) {
+      const facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
 
       ReactDOM.render(
         <RefinementSelect
