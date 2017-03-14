@@ -44,10 +44,14 @@
           </search-facet>
 
           <rating-facet attribute="rating">
-            <div slot="header">
-              <h3>Rating</h3>
-            </div>
+            <template scope="{value, min, max, count}">
+              {{value}}/{{max}} et plus ({{count}})
+            </template>
           </rating-facet>
+
+
+
+
         </div>
         <div class="col-md-10 col-sm-9">
           <div class="search-controls">
