@@ -13,7 +13,7 @@ yarn global add lerna
 yarn install
 
 # Download all dependencies
-lerna bootstrap
+lerna bootstrap --npmClient=yarn
 
 # Build all the packages
 lerna run build
