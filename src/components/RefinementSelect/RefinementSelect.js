@@ -12,6 +12,11 @@ class RefinementSelect extends Component {
     clearRefinements: PropTypes.func.isRequired,
     attributeNameKey: PropTypes.string,
     limit: PropTypes.number.isRequired,
+    templateProps: PropTypes.shape({
+      templates: PropTypes.shape({
+        seeAllOption: PropTypes.string,
+      }),
+    }),
   }
 
   static defaultProps = {
@@ -43,7 +48,7 @@ class RefinementSelect extends Component {
   }
 
   render() {
-    const {cssClasses} = this.props;
+    const {cssClasses, templateProps: {templates: {seeAllOption}}} = this.props;
 
     return (
       <select
@@ -52,7 +57,7 @@ class RefinementSelect extends Component {
         onChange={ this.handleSelectChange }
       >
         <option value="all" className={ cssClasses.option }>
-          See all
+          {seeAllOption || 'See all'}
         </option>
 
         { this.facetValues.map(({name, path, count}) =>
