@@ -1,7 +1,7 @@
 Algolia components for Vue.js
 -----------------------------
 
-This project uses [Lerna](https://github.com/lerna/lerna) to orchestrate the all the packages.
+This project uses [Lerna](https://github.com/lerna/lerna) to orchestrate all the packages.
 
 To get started you should:
 
