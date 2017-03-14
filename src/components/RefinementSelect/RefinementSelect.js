@@ -22,6 +22,7 @@ class RefinementSelect extends Component {
   static defaultProps = {
     cssClasses: {},
     attributeNameKey: 'name',
+    templateProps: {},
   }
 
   get selectValue(): {name: string} {
@@ -48,7 +49,7 @@ class RefinementSelect extends Component {
   }
 
   render() {
-    const {cssClasses, templateProps: {templates: {seeAllOption}}} = this.props;
+    const {cssClasses, templateProps: {templates}} = this.props;
 
     return (
       <select
@@ -57,13 +58,13 @@ class RefinementSelect extends Component {
         onChange={ this.handleSelectChange }
       >
         <option value="all" className={ cssClasses.option }>
-          {seeAllOption || 'See all'}
+          {templates && templates.seeAllOption || 'See all'}
         </option>
 
-        { this.facetValues.map(({name, path, count}) =>
+        { this.facetValues.map(({name, count}) =>
           <option
             key={ name }
-            value={ path }
+            value={ name }
             className={ cssClasses.option }
           >
             { name } ({ count })
