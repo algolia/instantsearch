@@ -45,12 +45,13 @@
 
           <rating-facet attribute="rating">
             <template scope="{value, min, max, count}">
-              {{value}}/{{max}} et plus ({{count}})
+              <template v-for="n in max">
+                <span v-if="n <= value">&#9733</span>
+                <span v-else>&#9734</span>
+              </template>
+              &amp; up ({{count}})
             </template>
           </rating-facet>
-
-
-
 
         </div>
         <div class="col-md-10 col-sm-9">
