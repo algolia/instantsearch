@@ -36,9 +36,15 @@ function refinementSelect({
   templates = defaultTemplates,
 } = {}) {
   // check for templates options validity
-  const hasStringAsSeeAllOption = templates && templates.seeAllOption && typeof templates.seeAllOption === 'string';
-  const hasFnAsSelectOption = templates && templates.selectOption && typeof templates.selectOption === 'function';
-  if (!container || !attributeName || !hasStringAsSeeAllOption || !hasFnAsSelectOption) {
+  const seeAllOptionTemplateIsValid = templates.seeAllOption
+    ? typeof templates.seeAllOption === 'string'
+    : true;
+
+  const selectOptionTemplateIsValid = templates.selectOption
+    ? typeof templates.selectOption === 'function'
+    : true;
+
+  if (!container || !attributeName || !seeAllOptionTemplateIsValid || !selectOptionTemplateIsValid) {
     throw new Error(usage);
   }
 
