@@ -57,9 +57,15 @@ function refinementSelect({
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
 
       // TODO: find out what it does, just copy/paste
-      this._createURL = (state, facetValue) => createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+      this._createURL = (state, facetValue) =>
+        createURL(state.toggleRefinement(hierarchicalFacetName, facetValue));
+
       this._toggleRefinement = facetValue => helper
         .toggleRefinement(hierarchicalFacetName, facetValue)
+        .search();
+
+      this._clearRefinements = () => helper
+        .clearRefinements(hierarchicalFacetName)
         .search();
     },
 
@@ -81,6 +87,8 @@ function refinementSelect({
           cssClasses={ cssClasses }
           facetValues={ facetValues }
           templateProps={ this._templateProps }
+          toggleRefinement={ this._toggleRefinement }
+          clearRefinements={ this._clearRefinements }
         />,
         containerNode
       );
