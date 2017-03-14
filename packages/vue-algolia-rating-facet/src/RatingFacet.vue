@@ -22,11 +22,18 @@
                  @change="toggleRefinement(facet)"
                  :name="name"
           >
-          <template v-for="n in max">
-            <span v-if="n <= facet.name" class="alg-rating-facet__star">&#9733</span>
-            <span v-else class="alg-rating-facet__star alg-rating-facet__star--empty">&#9734</span>
-          </template>
-          &nbsp;&amp; up <span class="alg-rating-facet__count">({{facet.count}})</span>
+          <slot :value="facet.value"
+                :min="min"
+                :max="max"
+                :count="facet.count"
+          >
+            <template v-for="n in max">
+              <span v-if="n <= facet.value" class="alg-rating-facet__star">&#9733</span>
+              <span v-else class="alg-rating-facet__star alg-rating-facet__star--empty">&#9734</span>
+            </template>
+            &nbsp;&amp; up
+            <span class="alg-rating-facet__count">({{facet.count}})</span>
+          </slot>
         </label>
       </li>
     </ul>
