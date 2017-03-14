@@ -14,9 +14,9 @@ yarn install
 
 # Download all dependencies and build all packages
 yarn boot
+
+# if you want to run the building later again
+lerna run build
 ```
 
-Note: `yarn boot` will delete all node modules and make sure every npm dependencies are properly rebuilt.
-
-
-
+Note: `yarn boot` will delete all node modules and make sure all npm dependencies are properly rebuilt.
