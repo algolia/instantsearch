@@ -23,6 +23,7 @@ refinementSelect({
   [ sortBy=['count:desc', 'name:asc'] ],
   [ limit=10 ],
   [ cssClasses.{root,header,body,footer,select,option}={} ],
+  [ templates.{header,seeAllOption:string,selectOption:function,footer} ],
 })`;
 
 function refinementSelect({
@@ -34,7 +35,10 @@ function refinementSelect({
   cssClasses: userCssClasses = {},
   templates = defaultTemplates,
 } = {}) {
-  if (!container || !attributeName) {
+  // check for templates options validity
+  const hasStringAsSeeAllOption = templates && templates.seeAllOption && typeof templates.seeAllOption === 'string';
+  const hasFnAsSelectOption = templates && templates.selectOption && typeof templates.selectOption === 'function';
+  if (!container || !attributeName || !hasStringAsSeeAllOption || !hasFnAsSelectOption) {
     throw new Error(usage);
   }
 

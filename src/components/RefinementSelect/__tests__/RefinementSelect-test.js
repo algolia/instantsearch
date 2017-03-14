@@ -125,4 +125,27 @@ describe('RefinementSelect', () => {
     // Then
     expect(actual.find('option').length).toEqual(2 + 1);
   });
+
+  it('should apply correct template to <select> option', () => {
+    // Given
+    const props = {
+      facetValues: [
+        {name: 'foo', count: 10, isRefined: false},
+        {name: 'bar', count: 20, isRefined: false},
+      ],
+      templateProps: {
+        templates: {selectOption: ({name, count}) => `${name} - ${count}`},
+      },
+    };
+
+    // When
+    const actual = shallowRender(props);
+
+    // Then
+    expect(actual.find('option').at(1).text())
+      .toEqual(`${props.facetValues[0].name} - ${props.facetValues[0].count}`);
+
+    expect(actual.find('option').at(2).text())
+      .toEqual(`${props.facetValues[1].name} - ${props.facetValues[1].count}`);
+  });
 });

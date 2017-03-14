@@ -15,6 +15,7 @@ class RefinementSelect extends Component {
     templateProps: PropTypes.shape({
       templates: PropTypes.shape({
         seeAllOption: PropTypes.string,
+        selectOption: PropTypes.func,
       }),
     }),
   }
@@ -67,7 +68,10 @@ class RefinementSelect extends Component {
             value={ name }
             className={ cssClasses.option }
           >
-            { name } ({ count })
+            { templates && templates.selectOption
+                ? templates.selectOption({name, count})
+                : `${name} (${count})`
+            }
           </option>
         ) }
       </select>
