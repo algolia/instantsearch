@@ -21,7 +21,7 @@ refinementSelect({
   attributeName,
   [ autoHideContainer=true ],
   [ sortBy=['count:desc', 'name:asc'] ],
-  [ cssClasses.{root,header,body,footer,select}={} ],
+  [ cssClasses.{root,header,body,footer,select,option}={} ],
 })`;
 
 function refinementSelect({
@@ -50,6 +50,7 @@ function refinementSelect({
     body: cx(bem('body'), userCssClasses.body),
     footer: cx(bem('footer'), userCssClasses.footer),
     select: cx(bem('select'), userCssClasses.select),
+    option: cx(bem('option'), userCssClasses.option),
   };
 
   return {
