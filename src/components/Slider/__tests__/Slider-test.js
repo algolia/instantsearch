@@ -47,10 +47,27 @@ describe('Slider', () => {
     );
   });
 
-  it('should not render anything when ranges are equal', () => {
+  it('should render <NouisLider disabled="true" /> when ranges are equal', () => {
     props.range.min = props.range.max = 8;
     const out = render();
-    expect(out).toEqual(null);
+    expect(out).toEqualJSX(
+      <Nouislider
+        animate={ false }
+        behaviour="snap"
+        connect
+        cssPrefix="ais-range-slider--"
+        format={ {to: () => {}, from: () => {}} }
+        onChange={ () => {} }
+        pips={ {
+          density: 3,
+          mode: 'positions',
+          stepped: true,
+          values: [0, 50, 100],
+        } }
+        range={ {min: props.range.min, max: props.range.min + 0.0001} }
+        disabled
+      />
+    );
   });
 
   function render() {
