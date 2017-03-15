@@ -5,19 +5,19 @@ import {shallow} from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
 
-import RefinementSelect from '../RefinementSelect.js';
+import MenuSelect from '../MenuSelect.js';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
-describe('RefinementSelect', () => {
+describe('MenuSelect', () => {
   function shallowRender(extraProps = {}) {
     const props = {
       facetValues: [],
       attributeNameKey: 'name',
       ...extraProps,
     };
-    return shallow(React.createElement(RefinementSelect, props));
+    return shallow(React.createElement(MenuSelect, props));
   }
 
   it('should apply correctly provided classes', () => {

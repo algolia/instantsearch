@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 
-class RefinementSelect extends Component {
+class MenuSelect extends Component {
 
   static propTypes = {
     cssClasses: PropTypes.shape({
@@ -80,4 +80,4 @@ class RefinementSelect extends Component {
 
 }
 
-export default RefinementSelect;
+export default MenuSelect;

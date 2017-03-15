@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import headerFooterHOC from '../../decorators/headerFooter.js';
 import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import RefinementSelectComponent from '../../components/RefinementSelect/RefinementSelect.js';
+import MenuSelectComponent from '../../components/MenuSelect/MenuSelect.js';
 import defaultTemplates from './defaultTemplates.js';
 
 import {
@@ -13,11 +13,11 @@ import {
   bemHelper,
 } from '../../lib/utils.js';
 
-const bem = bemHelper('ais-refinement-select');
+const bem = bemHelper('ais-menu-select');
 
 /**
  * Create a <select> menu out of a facet
- * @function refinementSelect
+ * @function MenuSelect
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
@@ -38,7 +38,7 @@ const bem = bemHelper('ais-refinement-select');
  * @return {Object}
 **/
 const usage = `Usage:
-refinementSelect({
+MenuSelect({
   container,
   attributeName,
   [ autoHideContainer=true ],
@@ -48,7 +48,7 @@ refinementSelect({
   [ templates.{header,seeAllOption:string,selectOption:function,footer} ],
 })`;
 
-function refinementSelect({
+function menuSelect({
   container,
   attributeName,
   limit = 10,
@@ -72,9 +72,9 @@ function refinementSelect({
 
   const containerNode = getContainerNode(container);
 
-  const RefinementSelect = autoHideContainer === true
-    ? autoHideContainerHOC(headerFooterHOC(RefinementSelectComponent))
-    : headerFooterHOC(RefinementSelectComponent);
+  const MenuSelect = autoHideContainer === true
+    ? autoHideContainerHOC(headerFooterHOC(MenuSelectComponent))
+    : headerFooterHOC(MenuSelectComponent);
 
   const hierarchicalFacetName = attributeName;
 
@@ -104,7 +104,7 @@ function refinementSelect({
       const facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
 
       ReactDOM.render(
-        <RefinementSelect
+        <MenuSelect
           shouldAutoHideContainer={ false }
           cssClasses={ cssClasses }
           facetValues={ facetValues }
@@ -119,4 +119,4 @@ function refinementSelect({
   };
 }
 
-export default refinementSelect;
+export default menuSelect;

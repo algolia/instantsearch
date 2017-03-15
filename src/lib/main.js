@@ -26,7 +26,7 @@ import starRating from '../widgets/star-rating/star-rating.js';
 import stats from '../widgets/stats/stats.js';
 import toggle from '../widgets/toggle/toggle.js';
 import analytics from '../widgets/analytics/analytics.js';
-import refinementSelect from '../widgets/refinement-select/refinement-select.js';
+import menuSelect from '../widgets/menu-select/menu-select.js';
 import version from './version.js';
 
 const instantsearch = toFactory(InstantSearch);
@@ -50,7 +50,7 @@ instantsearch.widgets = {
   starRating,
   stats,
   toggle,
-  refinementSelect,
+  menuSelect,
 };
 instantsearch.version = version;
 instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;

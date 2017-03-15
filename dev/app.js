@@ -199,8 +199,8 @@ search.addWidget(
 );
 
 search.addWidget(
-  instantsearch.widgets.refinementSelect({
-    container: '#refinement-select',
+  instantsearch.widgets.menuSelect({
+    container: '#menu-select',
     attributeName: 'categories',
     templates: {
       header: 'Categories through select',
