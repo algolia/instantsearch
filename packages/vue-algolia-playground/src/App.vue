@@ -90,7 +90,9 @@
             </template>
           </search-results>
 
-          <empty-results/>
+          <empty-results>
+            <template scope="{query}">This is my custom stuff <u>{{query}}</u></template>
+          </empty-results>
 
           <div class="clearfix"></div>
 
