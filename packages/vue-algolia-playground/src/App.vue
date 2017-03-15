@@ -95,7 +95,13 @@
           <div class="clearfix"></div>
 
           <div class="pagination-container">
-            <ranged-pagination class="pagination"></ranged-pagination>
+            <ranged-pagination class="pagination">
+              <template slot="first">&lt; First page</template>
+              <template slot="previous">&lt; Previous page</template>
+              <template scope="{value, active}">{{value + 1}}</template>
+              <template slot="next">&gt; Next page</template>
+              <template slot="last">&gt; Last page</template>
+            </ranged-pagination>
           </div>
         </div>
       </div>
@@ -389,6 +395,15 @@
       }
 
     }
+
+    button {
+      border: none;
+      background: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .alg-ranged-pagination__item--active label {
       font-weight: bold;
     }

@@ -1,23 +1,49 @@
 <template>
   <ul class="alg-ranged-pagination">
+    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--first"
+        :class="{'alg-ranged-pagination__item--disabled': page === 0}"
+    >
+      <button type="button" @click="goToFirstPage" :disabled="page === 0">
+        <slot name="first">&lt;&lt;</slot>
+      </button>
+    </li>
+    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--previous"
+        :class="{'alg-ranged-pagination__item--disabled': page === 0}"
+    >
+      <button type="button" @click="goToPreviousPage" :disabled="page === 0">
+        <slot name="previous">&lt;</slot>
+      </button>
+    </li>
     <li
-        v-for="item in items"
+        v-for="item in pages"
         class="alg-ranged-pagination__item"
-        :class="{
-              'alg-ranged-pagination__item--disabled': item.disabled,
-              'alg-ranged-pagination__item--active': !item.disabled && item.value === page
-            }"
+        :class="{ 'alg-ranged-pagination__item--active': item === page }"
     >
       <label>
         <input type="radio"
                :name="name"
-               :value="item.value"
-               :disabled="item.disabled"
+               :value="item"
                v-model="page"
-               @change="goToPage(item.value)"
+               @change="goToPage(item)"
         >
-        {{ item.label }}
+        <slot :value="item" :active="item === page">
+          {{ item + 1 }}
+        </slot>
       </label>
+    </li>
+    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--next"
+        :class="{'alg-ranged-pagination__item--disabled': page >= nbPages - 1 }"
+    >
+      <button type="button" @click="goToNextPage" :disabled="page >= nbPages - 1">
+        <slot name="next">&gt;</slot>
+      </button>
+    </li>
+    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--last"
+        :class="{'alg-ranged-pagination__item--disabled': page >= nbPages - 1 }"
+    >
+      <button type="button" @click="goToLastPage" :disabled="page >= nbPages - 1">
+        <slot name="last">&gt;&gt;</slot>
+      </button>
     </li>
   </ul>
 </template>
@@ -46,50 +72,6 @@
       },
       nbPages () {
         return this.searchStore.nbPages
-      },
-      items () {
-        const items = []
-        const pages = this.pages
-
-        // First page.
-        items.push({
-          disabled: this.page === 0,
-          value: 0,
-          label: '<<',
-        })
-
-        // Previous page.
-        items.push({
-          disabled: this.page === 0,
-          value: Math.max(0, this.page - 1),
-          label: '<',
-        })
-
-        // All pages in range.
-        for (let key in pages) {
-          const page = pages[key]
-          items.push({
-            disabled: false,
-            value: page,
-            label: page + 1,
-          })
-        }
-
-        // Next page.
-        items.push({
-          disabled: this.page >= this.nbPages - 1,
-          value: this.page + 1,
-          label: '>',
-        })
-
-        // Last page.
-        items.push({
-          disabled: this.page >= this.nbPages - 1,
-          value: this.nbPages,
-          label: '>>',
-        })
-
-        return items
       },
       pages () {
         let maxPages = this.padding * 2
@@ -125,6 +107,18 @@
       goToPage (page) {
         page = Math.min(this.nbPages - 1, page)
         this.searchStore.page = page
+      },
+      goToFirstPage () {
+        this.goToPage(0)
+      },
+      goToPreviousPage () {
+        this.goToPage(this.page - 1)
+      },
+      goToNextPage () {
+        this.goToPage(this.page + 1)
+      },
+      goToLastPage () {
+        this.goToPage(this.nbPages - 1)
       }
     }
   }
