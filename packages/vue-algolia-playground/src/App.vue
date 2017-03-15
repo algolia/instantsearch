@@ -23,6 +23,9 @@
             <div slot="header">
               <h3>Browse by</h3>
             </div>
+            <template scope="{count, active, value}">
+              &gt; {{ value }}
+            </template>
           </navigation-tree-facet>
 
           <price-range-facet attribute="price">
