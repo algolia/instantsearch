@@ -14,6 +14,7 @@ exports[`RefinementList applies translations 1`] = `
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
+        role="search"
       >
         <svg
           style={
@@ -263,6 +264,7 @@ exports[`RefinementList refinement list with search inside items but no search r
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
+        role="search"
       >
         <svg
           style={
@@ -440,6 +442,7 @@ exports[`RefinementList refinement list with search inside items with search res
         noValidate={true}
         onReset={[Function]}
         onSubmit={[Function]}
+        role="search"
       >
         <svg
           style={
