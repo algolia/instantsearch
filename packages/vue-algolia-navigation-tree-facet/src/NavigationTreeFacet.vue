@@ -14,8 +14,10 @@
                  :value="facet.name"
                  :name="name + '[]'"
           >
-          <span class="alg-navigation-tree-facet__value">{{facet.name}}</span>
-          <span class="alg-navigation-tree-facet__count">({{facet.count}})</span>
+          <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
+            <span class="alg-navigation-tree-facet__value">{{facet.name}}</span>
+            <span class="alg-navigation-tree-facet__count">({{facet.count}})</span>
+          </slot>
         </label>
 
         <template v-if="facet.isRefined && facet.data.length > 0">
@@ -31,8 +33,10 @@
                        :value="subfacet.name"
                        :name="name + '[]'"
                 >
-                <span class="alg-navigation-tree-facet__value">{{subfacet.name}}</span>
-                <span class="alg-navigation-tree-facet__count">({{subfacet.count}})</span>
+                <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
+                  <span class="alg-navigation-tree-facet__value">{{subfacet.name}}</span>
+                  <span class="alg-navigation-tree-facet__count">({{subfacet.count}})</span>
+                </slot>
               </label>
             </li>
           </ul>
