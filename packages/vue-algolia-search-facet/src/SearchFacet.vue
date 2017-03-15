@@ -14,8 +14,11 @@
                  @change="toggleRefinement(facet)"
                  :value="facet.name"
           >
-          <span class="alg-search-facet__value">{{facet.name}}</span>
-          <span class="alg-search-facet__count">({{facet.count}})</span>
+
+          <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
+            <span class="alg-search-facet__value">{{facet.name}}</span>
+            <span class="alg-search-facet__count">({{facet.count}})</span>
+          </slot>
         </label>
       </li>
     </ul>

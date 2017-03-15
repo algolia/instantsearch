@@ -44,6 +44,9 @@
             <div slot="header">
               <h3>Color</h3>
             </div>
+            <template scope="{count, active, value}">
+              <span>{{value}} - {{count}}</span>
+            </template>
           </search-facet>
 
           <rating-facet attribute="rating">
@@ -281,6 +284,10 @@
           text-decoration: underline;
         }
 
+      }
+
+      input {
+        margin-right: 5px;
       }
     }
     ul {
