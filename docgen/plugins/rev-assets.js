@@ -65,5 +65,5 @@ export default function revAssets(): Promise<*> {
       .then(renameFiles)
       .then(result => renameReferences(`${DIST_PATH}/**/*.{html,css}`, result));
 
-  return Promise.all([computeCSSFiles, computeImagesFiles]);
+  return computeCSSFiles().then(computeImagesFiles);
 }
