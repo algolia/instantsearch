@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 
 import defaultTemplates from '../../../connectors/hits/defaultTemplates.js';
 

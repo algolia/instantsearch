@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
@@ -70,7 +68,7 @@ describe('pagination()', () => {
     expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
   });
 
-  context('mocking getContainerNode', () => {
+  describe('mocking getContainerNode', () => {
     let scrollIntoView;
 
     beforeEach(() => {

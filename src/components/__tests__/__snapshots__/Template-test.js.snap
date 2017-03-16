@@ -1,0 +1,112 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Template forward rootProps to the first node 1`] = `
+<div
+  className="hey"
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "",
+    }
+  }
+  onClick={[Function]}
+/>
+`;
+
+exports[`Template shouldComponentUpdate calls render when templateKey changes 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it supports ",
+    }
+  }
+/>
+`;
+
+exports[`Template transform data usage defaults data to an empty {} object 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it supports ",
+    }
+  }
+/>
+`;
+
+exports[`Template transform data usage supports passing a transformData map function 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it supports transformData",
+    }
+  }
+/>
+`;
+
+exports[`Template transform data usage transformData with a function is using a deep cloned version of the data 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "",
+    }
+  }
+/>
+`;
+
+exports[`Template transform data usage transformData with an object is using a deep cloned version of the data 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "",
+    }
+  }
+/>
+`;
+
+exports[`Template using helpers call the relevant function 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it supports <em>helpers</em>",
+    }
+  }
+/>
+`;
+
+exports[`Template without helpers can configure compilation options 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it configures compilation delimiters",
+    }
+  }
+/>
+`;
+
+exports[`Template without helpers supports templates as functions returning a React element 1`] = `
+<div>
+  <p>
+    it also works with 
+    functions
+  </p>
+</div>
+`;
+
+exports[`Template without helpers supports templates as functions returning a string 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it also works with functions",
+    }
+  }
+/>
+`;
+
+exports[`Template without helpers supports templates as strings 1`] = `
+<div
+  dangerouslySetInnerHTML={
+    Object {
+      "__html": "it works with strings",
+    }
+  }
+/>
+`;

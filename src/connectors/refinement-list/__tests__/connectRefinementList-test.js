@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 import sinon from 'sinon';
 
 import algoliasearchHelper from 'algoliasearch-helper';
@@ -47,7 +46,7 @@ describe('connectRefinementList', () => {
     ).toThrow();
   });
 
-  context('options configuring the helper', () => {
+  describe('options configuring the helper', () => {
     it('`attributeName`', () => {
       const widget = makeWidget({
         attributeName: 'myFacet',

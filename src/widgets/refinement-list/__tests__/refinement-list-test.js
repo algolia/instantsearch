@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 import sinon from 'sinon';
 
 import expectJSX from 'expect-jsx';
@@ -28,7 +27,7 @@ describe('refinementList()', () => {
     refinementList.__Rewire__('headerFooterHOC', headerFooter);
   });
 
-  context('instantiated with wrong parameters', () => {
+  describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
       // Given
       options = {container: undefined, attributeName: 'foo'};
@@ -41,7 +40,7 @@ describe('refinementList()', () => {
     });
   });
 
-  context('render', () => {
+  describe('render', () => {
     const helper = {};
     let results;
     let state;
@@ -60,7 +59,7 @@ describe('refinementList()', () => {
       createURL = () => '#';
     });
 
-    context('cssClasses', () => {
+    describe('cssClasses', () => {
       it('should call the component with the correct classes', () => {
         // Given
         const cssClasses = {
@@ -94,7 +93,7 @@ describe('refinementList()', () => {
       });
     });
 
-    context('autoHideContainer', () => {
+    describe('autoHideContainer', () => {
       it('should set shouldAutoHideContainer to false if there are facetValues', () => {
         // Given
         results.getFacetValues = sinon.stub().returns([{name: 'foo'}, {name: 'bar'}]);
@@ -176,7 +175,7 @@ describe('refinementList()', () => {
     });
   });
 
-  context('show more', () => {
+  describe('show more', () => {
     it('should return a configuration with the highest limit value (default value)', () => {
       const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {}};
       const wdgt = refinementList(opts);

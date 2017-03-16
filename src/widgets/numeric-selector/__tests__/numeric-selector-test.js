@@ -1,12 +1,8 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import numericSelector from '../numeric-selector';
 import Selector from '../../../components/Selector';
 
@@ -36,6 +32,7 @@ describe('numericSelector()', () => {
     };
     widget = numericSelector({container, options, attributeName: 'aNumAttr', cssClasses});
     expectedProps = {
+      shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-numeric-selector custom-root cx',
         item: 'ais-numeric-selector--item custom-item',

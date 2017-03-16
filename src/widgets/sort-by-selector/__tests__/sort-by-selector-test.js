@@ -1,12 +1,8 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import sortBySelector from '../sort-by-selector';
 import Selector from '../../../components/Selector';
 
@@ -71,6 +67,7 @@ describe('sortBySelector()', () => {
     widget.render({helper, results});
     widget.render({helper, results});
     props = {
+      shouldAutoHideContainer: false,
       cssClasses: {
         root: 'ais-sort-by-selector custom-root cx',
         item: 'ais-sort-by-selector--item custom-item',

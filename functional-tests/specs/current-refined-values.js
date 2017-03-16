@@ -7,7 +7,7 @@ describe('currentRefinedValues', () => {
 
   it('is empty', () => expect(getCurrentRefinements().length).toBe(0));
 
-  context('when we have some refinements', () => {
+  describe('when we have some refinements', () => {
     beforeEach(() => {
       browser.click(firstRefinement);
       browser.pause(1000);

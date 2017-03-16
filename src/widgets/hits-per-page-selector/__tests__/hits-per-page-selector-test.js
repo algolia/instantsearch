@@ -1,14 +1,8 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
 import hitsPerPageSelector from '../hits-per-page-selector';
 import Selector from '../../../components/Selector';
+import renderer from 'react-test-renderer';
 
 describe('hitsPerPageSelector call', () => {
   it('throws an exception when no options', () => {
@@ -28,7 +22,6 @@ describe('hitsPerPageSelector()', () => {
   let options;
   let cssClasses;
   let widget;
-  let props;
   let helper;
   let results;
   let consoleLog;
@@ -74,23 +67,8 @@ describe('hitsPerPageSelector()', () => {
     widget.init({helper, state: helper.state});
     widget.render({results, state});
     widget.render({results, state});
-    props = {
-      cssClasses: {
-        root: 'ais-hits-per-page-selector custom-root cx',
-        item: 'ais-hits-per-page-selector--item custom-item',
-      },
-      currentValue: 10,
-      options: [
-        {value: 10, label: '10 results'},
-        {value: 20, label: '20 results'},
-      ],
-      setValue: () => {},
-    };
     expect(ReactDOM.render.callCount).toBe(2);
-    expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<Selector {...props} />);
-    expect(ReactDOM.render.firstCall.args[1]).toEqual(container);
-    expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<Selector {...props} />);
-    expect(ReactDOM.render.secondCall.args[1]).toEqual(container);
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
   });
 
   it('sets the underlying hitsPerPage', () => {
@@ -127,7 +105,7 @@ with \`value: hitsPerPage\` (hitsPerPage: -1)`
     delete helper.state.hitsPerPage;
     expect(() => {
       widget.init({state: helper.state, helper});
-    }).toNotThrow(/No option in `options`/);
+    }).not.toThrow(/No option in `options`/);
   });
 
   afterEach(() => {

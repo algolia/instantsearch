@@ -1,12 +1,8 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import defaultTemplates from '../../../connectors/star-rating/defaultTemplates.js';
 import defaultLabels from '../../../connectors/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';

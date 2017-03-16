@@ -33,7 +33,7 @@ InfiniteHits.propTypes = {
     empty: React.PropTypes.string,
     showmore: React.PropTypes.string,
   }),
-  hits: React.PropTypes.object,
+  hits: React.PropTypes.array,
   results: React.PropTypes.object,
   showMore: React.PropTypes.function,
   showMoreLabel: React.PropTypes.string,

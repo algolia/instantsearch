@@ -27,7 +27,7 @@ describe('priceRanges', () => {
     expect(refinements[1].name).toBe('Price ≥ 80');
   });
 
-  context('the form', () => {
+  describe('the form', () => {
     beforeEach(() => {
       const element = browser.element(widget);
 

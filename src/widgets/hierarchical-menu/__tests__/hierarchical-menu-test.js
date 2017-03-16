@@ -1,13 +1,5 @@
-/* eslint-env mocha */
-
-import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 import hierarchicalMenu from '../hierarchical-menu';
-import RefinementList from '../../../components/RefinementList/RefinementList';
-import defaultTemplates from '../../../connectors/hierarchical-menu/defaultTemplates.js';
 
 describe('hierarchicalMenu()', () => {
   let container;
@@ -24,7 +16,7 @@ describe('hierarchicalMenu()', () => {
     hierarchicalMenu.__Rewire__('ReactDOM', ReactDOM);
   });
 
-  context('instantiated with wrong parameters', () => {
+  describe('instantiated with wrong parameters', () => {
     it('should fail if no attributes', () => {
       options = {container, attributes: undefined};
       expect(() => hierarchicalMenu(options)).toThrow(/^Usage:/);
@@ -41,7 +33,7 @@ describe('hierarchicalMenu()', () => {
     });
   });
 
-  context('getConfiguration', () => {
+  describe('getConfiguration', () => {
     beforeEach(() => { options = {container, attributes}; });
 
     it('has defaults', () => {
@@ -104,7 +96,7 @@ describe('hierarchicalMenu()', () => {
       });
     });
 
-    context('limit option', () => {
+    describe('limit option', () => {
       it('configures maxValuesPerFacet', () =>
         expect(
           hierarchicalMenu({limit: 20, ...options})
@@ -131,34 +123,14 @@ describe('hierarchicalMenu()', () => {
     });
   });
 
-  context('render', () => {
+  describe('render', () => {
     let results;
     let data;
-    let cssClasses;
-    let templateProps;
     let helper;
     let state;
     let createURL;
 
     beforeEach(() => {
-      templateProps = {
-        transformData: undefined,
-        templatesConfig: undefined,
-        templates: defaultTemplates,
-        useCustomCompileOptions: {header: false, item: false, footer: false},
-      };
-      cssClasses = {
-        active: 'ais-hierarchical-menu--item__active',
-        body: 'ais-hierarchical-menu--body',
-        count: 'ais-hierarchical-menu--count',
-        depth: 'ais-hierarchical-menu--list__lvl',
-        footer: 'ais-hierarchical-menu--footer',
-        header: 'ais-hierarchical-menu--header',
-        item: 'ais-hierarchical-menu--item',
-        link: 'ais-hierarchical-menu--link',
-        list: 'ais-hierarchical-menu--list',
-        root: 'ais-hierarchical-menu',
-      };
       data = {data: [{name: 'foo'}, {name: 'bar'}]};
       results = {getFacetValues: sinon.spy(() => data)};
       helper = {
@@ -188,19 +160,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu({...options, cssClasses: userCssClasses});
       widget.init({helper, createURL});
       widget.render({results, state});
-      const actual = ReactDOM.render.firstCall.args[0].props.cssClasses;
-      expect(actual).toEqual({
-        root: 'ais-hierarchical-menu root cx',
-        header: 'ais-hierarchical-menu--header header',
-        body: 'ais-hierarchical-menu--body body',
-        footer: 'ais-hierarchical-menu--footer footer',
-        list: 'ais-hierarchical-menu--list list',
-        depth: 'ais-hierarchical-menu--list__lvl',
-        item: 'ais-hierarchical-menu--item item',
-        active: 'ais-hierarchical-menu--item__active active',
-        link: 'ais-hierarchical-menu--link link',
-        count: 'ais-hierarchical-menu--count count',
-      });
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('calls ReactDOM.render', () => {
@@ -208,18 +168,7 @@ describe('hierarchicalMenu()', () => {
       widget.init({helper, createURL});
       widget.render({results, state});
       expect(ReactDOM.render.calledOnce).toBe(true);
-      expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(
-        <RefinementList
-          attributeNameKey="path"
-          collapsible={false}
-          createURL={() => {}}
-          cssClasses={cssClasses}
-          facetValues={[{name: 'foo'}, {name: 'bar'}]}
-          shouldAutoHideContainer={false}
-          templateProps={templateProps}
-          toggleRefinement={() => {}}
-        />
-      );
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('asks for results.getFacetValues', () => {
@@ -258,12 +207,7 @@ describe('hierarchicalMenu()', () => {
       }});
       widget.init({helper, createURL});
       widget.render({results, state});
-      expect(ReactDOM.render.firstCall.args[0].props.templateProps.templates)
-        .toEqual({
-          header: 'header2',
-          item: 'item2',
-          footer: 'footer2',
-        });
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('sets shouldAutoHideContainer to true when no results', () => {
@@ -271,7 +215,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({helper, createURL});
       widget.render({results, state});
-      expect(ReactDOM.render.firstCall.args[0].props.shouldAutoHideContainer).toBe(true);
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('sets facetValues to empty array when no results', () => {
@@ -279,7 +223,7 @@ describe('hierarchicalMenu()', () => {
       widget = hierarchicalMenu(options);
       widget.init({helper, createURL});
       widget.render({results, state});
-      expect(ReactDOM.render.firstCall.args[0].props.facetValues).toEqual([]);
+      expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('has a toggleRefinement method', () => {

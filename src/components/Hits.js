@@ -81,7 +81,7 @@ Hits.propTypes = {
     allItems: React.PropTypes.string,
     empty: React.PropTypes.string,
   }),
-  hits: React.PropTypes.object,
+  hits: React.PropTypes.array,
   results: React.PropTypes.object,
   templateProps: React.PropTypes.object.isRequired,
 };

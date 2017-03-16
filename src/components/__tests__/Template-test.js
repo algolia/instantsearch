@@ -1,35 +1,20 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import expect from 'expect';
-import TestUtils from 'react-addons-test-utils';
 import TemplateWithTransformData, {PureTemplate} from '../Template';
 import sinon from 'sinon';
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
-const {createRenderer} = TestUtils;
+import renderer from 'react-test-renderer';
 
 describe('Template', () => {
-  let renderer;
-
-  beforeEach(() => {
-    renderer = createRenderer();
-  });
-
   describe('without helpers', () => {
     it('supports templates as strings', () => {
       const props = getProps({
         templates: {test: 'it works with {{type}}'},
         data: {type: 'strings'},
       });
-
-      renderer.render(<PureTemplate {...props} />);
-      const out = renderer.getRenderOutput();
-
-      const content = 'it works with strings';
-      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('supports templates as functions returning a string', () => {
@@ -37,12 +22,10 @@ describe('Template', () => {
         templates: {test: templateData => `it also works with ${templateData.type}`},
         data: {type: 'functions'},
       });
-
-      renderer.render(<PureTemplate {...props} />);
-      const out = renderer.getRenderOutput();
-
-      const content = 'it also works with functions';
-      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('supports templates as functions returning a React element', () => {
@@ -50,12 +33,10 @@ describe('Template', () => {
         templates: {test: templateData => <p>it also works with {templateData.type}</p>},
         data: {type: 'functions'},
       });
-
-      renderer.render(<PureTemplate {...props} />);
-      const out = renderer.getRenderOutput();
-
-      const content = 'it also works with functions';
-      expect(out).toEqualJSX(<div><p>{content}</p></div>);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('can configure compilation options', () => {
@@ -65,12 +46,10 @@ describe('Template', () => {
         useCustomCompileOptions: {test: true},
         templatesConfig: {compileOptions: {delimiters: '<% %>'}},
       });
-
-      renderer.render(<PureTemplate {...props} />);
-      const out = renderer.getRenderOutput();
-
-      const content = 'it configures compilation delimiters';
-      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
   });
 
@@ -81,12 +60,10 @@ describe('Template', () => {
         data: {feature: 'helpers'},
         templatesConfig: {helpers: {emphasis: (text, render) => `<em>${render(text)}</em>`}},
       });
-
-      renderer.render(<PureTemplate {...props} />);
-      const out = renderer.getRenderOutput();
-
-      const content = 'it supports <em>helpers</em>';
-      expect(out).toEqualJSX(<div dangerouslySetInnerHTML={{__html: content}}></div>);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('sets the function context (`this`) to the template `data`', done => {
@@ -105,7 +82,10 @@ describe('Template', () => {
         },
       });
 
-      renderer.render(<PureTemplate {...props} />);
+      const tree = renderer.create(
+        <PureTemplate {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
   });
 
@@ -119,13 +99,10 @@ describe('Template', () => {
           return originalData;
         },
       });
-
-      renderer.render(<TemplateWithTransformData {...props} />);
-
-      const out = renderer.getRenderOutput();
-      const expectedJSX = <PureTemplate {...props} data={{feature: 'transformData'}} />;
-
-      expect(out).toEqualJSX(expectedJSX);
+      const tree = renderer.create(
+        <TemplateWithTransformData {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('defaults data to an empty {} object', () => {
@@ -136,13 +113,10 @@ describe('Template', () => {
           return originalData;
         },
       });
-
-      renderer.render(<TemplateWithTransformData {...props} />);
-
-      const out = renderer.getRenderOutput();
-      const expectedJSX = <PureTemplate {...props} data={{test: 'transformData'}} />;
-
-      expect(out).toEqualJSX(expectedJSX);
+      const tree = renderer.create(
+        <TemplateWithTransformData {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
     });
 
     it('transformData with a function is using a deep cloned version of the data', () => {
@@ -153,14 +127,17 @@ describe('Template', () => {
         data,
         transformData: clonedData => {
           called = true;
-          expect(clonedData).toNotBe(data);
-          expect(clonedData.a).toNotBe(data.a);
+          expect(clonedData).not.toBe(data);
+          expect(clonedData.a).not.toBe(data.a);
           expect(clonedData).toEqual(data);
           return clonedData;
         },
       });
 
-      renderer.render(<TemplateWithTransformData {...props} />);
+      const tree = renderer.create(
+        <TemplateWithTransformData {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
       expect(called).toBe(true);
     });
 
@@ -173,15 +150,18 @@ describe('Template', () => {
         transformData: {
           test: clonedData => {
             called = true;
-            expect(clonedData).toNotBe(data);
-            expect(clonedData.a).toNotBe(data.a);
+            expect(clonedData).not.toBe(data);
+            expect(clonedData.a).not.toBe(data.a);
             expect(clonedData).toEqual(data);
             return clonedData;
           },
         },
       });
 
-      renderer.render(<TemplateWithTransformData {...props} />);
+      const tree = renderer.create(
+        <TemplateWithTransformData {...props} />
+      ).toJSON();
+      expect(tree).toMatchSnapshot();
       expect(called).toBe(true);
     });
 
@@ -193,7 +173,9 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<TemplateWithTransformData {...props} />);
+        renderer.create(
+          <TemplateWithTransformData {...props} />
+        );
       }).toThrow('`transformData` must return a `object`, got `undefined`.');
     });
 
@@ -207,8 +189,10 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<TemplateWithTransformData {...props} />);
-      }).toNotThrow();
+        renderer.create(
+          <TemplateWithTransformData {...props} />
+        );
+      }).not.toThrow();
     });
 
     it('throws an error if the transformData returns an unexpected type', () => {
@@ -219,7 +203,9 @@ describe('Template', () => {
       });
 
       expect(() => {
-        renderer.render(<TemplateWithTransformData {...props} />);
+        renderer.create(
+          <TemplateWithTransformData {...props} />
+        );
       }).toThrow('`transformData` must return a `object`, got `boolean`.');
     });
   });
@@ -228,18 +214,13 @@ describe('Template', () => {
     function fn() {}
 
     const props = getProps({});
-    renderer.render(<PureTemplate rootProps={{className: 'hey', onClick: fn}} {...props}/>);
-
-    const out = renderer.getRenderOutput();
-    const expectedProps = {
-      className: 'hey',
-      dangerouslySetInnerHTML: {__html: ''},
-      onClick: fn,
-    };
-    expect(out).toEqualJSX(<div {...expectedProps}></div>);
+    const tree = renderer.create(
+      <PureTemplate rootProps={{className: 'hey', onClick: fn}} {...props}/>
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
-  context('shouldComponentUpdate', () => {
+  describe('shouldComponentUpdate', () => {
     let props;
     let component;
     let container;

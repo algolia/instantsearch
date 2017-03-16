@@ -1,15 +1,9 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import {shallow} from 'enzyme';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import {RawRefinementList as RefinementList} from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
-
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
 
 describe('RefinementList', () => {
   let createURL;

@@ -1,46 +1,28 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-import TestUtils from 'react-addons-test-utils';
 import {RawClearAll as ClearAll} from '../ClearAll';
-import Template from '../../Template';
-
-import expectJSX from 'expect-jsx';
-expect.extend(expectJSX);
-
-const {createRenderer} = TestUtils;
+import renderer from 'react-test-renderer';
 
 describe('ClearAll', () => {
-  let renderer;
   const defaultProps = {
     clearAll: () => {},
     cssClasses: {
       link: 'custom-link',
     },
     hasRefinements: false,
-    templateProps: {},
+    templateProps: {
+      templates: {
+        link: '',
+      },
+    },
     url: '#all-cleared!',
   };
 
-  beforeEach(() => {
-    renderer = createRenderer();
-  });
-
   it('should render <ClearAll />', () => {
-    const out = render();
-    expect(out).toEqualJSX(
-      <a
-        className="custom-link"
-        href="#all-cleared!"
-        onClick={() => {}}
-      >
-        <Template
-          data={{hasRefinements: false}}
-          templateKey="link"
-        />
-      </a>);
+    const tree = renderer.create(
+      <ClearAll {...defaultProps} />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   it('should handle clicks (and special clicks)', () => {
@@ -60,13 +42,4 @@ describe('ClearAll', () => {
     expect(props.clearAll.calledOnce).toBe(true, 'clearAll called once');
     expect(preventDefault.calledOnce).toBe(true, 'preventDefault called once');
   });
-
-  function render(extraProps = {}) {
-    const props = {
-      ...defaultProps,
-      ...extraProps,
-    };
-    renderer.render(<ClearAll {...props} />);
-    return renderer.getRenderOutput();
-  }
 });

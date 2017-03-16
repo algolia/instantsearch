@@ -1,10 +1,6 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
-
 import TestUtils from 'react-addons-test-utils';
-
 import expectJSX from 'expect-jsx';
 import {RawSlider as Slider} from '../Slider';
 import Nouislider from 'react-nouislider';

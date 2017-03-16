@@ -1,19 +1,14 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import currentToggle from '../toggle.js';
 import defaultTemplates from '../../../connectors/toggle/defaultTemplates.js';
-
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 describe('currentToggle()', () => {
-  context('good usage', () => {
+  describe('good usage', () => {
     let ReactDOM;
     let containerNode;
     let widget;
@@ -52,7 +47,7 @@ describe('currentToggle()', () => {
       expect(widget.getConfiguration()).toEqual({disjunctiveFacets: ['world!']});
     });
 
-    context('render', () => {
+    describe('render', () => {
       let templateProps;
       let results;
       let helper;
@@ -333,7 +328,7 @@ describe('currentToggle()', () => {
       });
     });
 
-    context('toggleRefinement', () => {
+    describe('toggleRefinement', () => {
       let helper;
 
       function toggleOn() {
@@ -351,7 +346,7 @@ describe('currentToggle()', () => {
         };
       });
 
-      context('default values', () => {
+      describe('default values', () => {
         it('toggle on should add filter to true', () => {
           // Given
           widget = currentToggle({container: containerNode, attributeName, label, userValues});
@@ -377,7 +372,7 @@ describe('currentToggle()', () => {
           expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
         });
       });
-      context('specific values', () => {
+      describe('specific values', () => {
         it('toggle on should change the refined value', () => {
           // Given
           userValues = {on: 'on', off: 'off'};
@@ -407,7 +402,7 @@ describe('currentToggle()', () => {
       });
     });
 
-    context('custom off value', () => {
+    describe('custom off value', () => {
       const createURL = () => '#';
       it('should add a refinement for custom off value on init', () => {
         // Given

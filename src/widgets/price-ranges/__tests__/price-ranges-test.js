@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
@@ -54,7 +52,7 @@ describe('priceRanges()', () => {
     expect(widget.getConfiguration()).toEqual({facets: ['aNumAttr']});
   });
 
-  context('without refinements', () => {
+  describe('without refinements', () => {
     let props;
 
     beforeEach(() => {
