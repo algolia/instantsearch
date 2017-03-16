@@ -30,7 +30,7 @@ export default function createInstantSearchManager({
   helper.on('error', handleSearchError);
 
   let derivedHelpers = {};
-  let indexMapping; // keep track of the original index where the parameters applied when sortBy is used.
+  let indexMapping = {}; // keep track of the original index where the parameters applied when sortBy is used.
 
   let initialSearchParameters = helper.state;
 
@@ -59,16 +59,16 @@ export default function createInstantSearchManager({
     indexMapping = {};
     const mainParameters = widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => !widget.Index ||
-                        widget.Index && widget.Index.targetedIndex === indexName)
+      .filter(widget => !widget.multiIndexContext ||
+                        widget.multiIndexContext && widget.multiIndexContext.targetedIndex === indexName)
       .reduce((res, widget) => widget.getSearchParameters(res), initialSearchParameters);
     indexMapping[mainParameters.index] = indexName;
 
     const derivatedWidgets = widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => widget.Index && widget.Index.targetedIndex !== indexName)
+      .filter(widget => widget.multiIndexContext && widget.multiIndexContext.targetedIndex !== indexName)
       .reduce((indices, widget) => {
-        const targetedIndex = widget.Index.targetedIndex;
+        const targetedIndex = widget.multiIndexContext.targetedIndex;
         const index = indices.find(i => i.targetedIndex === targetedIndex);
         if (index) {
           index.widgets.push(widget);

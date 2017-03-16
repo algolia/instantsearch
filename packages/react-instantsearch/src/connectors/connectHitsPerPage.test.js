@@ -79,7 +79,7 @@ describe('connectHitsPerPage', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, multiIndexContext: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -126,7 +126,7 @@ describe('connectHitsPerPage', () => {
         },
       });
 
-      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, multiIndexContext: {targetedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine(

@@ -1,13 +1,13 @@
 import {has, omit, get} from 'lodash';
 
 export function getIndex(context) {
-  return context && context.Index
-  ? context.Index.targetedIndex
+  return context && context.multiIndexContext
+  ? context.multiIndexContext.targetedIndex
   : context.ais.mainTargetedIndex;
 }
 
 export function hasMultipleIndex(context) {
-  return context && context.Index;
+  return context && context.multiIndexContext;
 }
 
 // eslint-disable-next-line max-params

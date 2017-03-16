@@ -17,7 +17,7 @@ describe('connectStats', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'first'}, multiIndexContext: {targetedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the correct props to the component', () => {
       props = getProvidedProps(null, null, {});

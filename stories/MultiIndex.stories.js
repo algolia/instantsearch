@@ -40,7 +40,7 @@ stories.add('MultiHits', () =>
 
 const VirtualAutoComplete = connectAutoComplete(() => null);
 
-const AutoComplete = connectAutoComplete(({hits, query, refine}) => <Autosuggest
+const AutoComplete = connectAutoComplete(({hits, currentRefinement, refine}) => <Autosuggest
   suggestions={hits}
   multiSection={true}
   onSuggestionsFetchRequested={({value}) => refine(value)}
@@ -53,7 +53,7 @@ const AutoComplete = connectAutoComplete(({hits, query, refine}) => <Autosuggest
   }
   inputProps={{
     placeholder: 'Type a product',
-    value: query,
+    value: currentRefinement,
     onChange: () => {
     },
   }}

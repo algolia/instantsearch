@@ -60,7 +60,7 @@ describe('connectSortBy', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'first'}, multiIndexContext: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);

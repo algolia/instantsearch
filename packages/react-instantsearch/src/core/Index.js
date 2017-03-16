@@ -31,7 +31,7 @@ import React, {PropTypes, Component, Children} from 'react';
 class Index extends Component {
   getChildContext() {
     return {
-      Index: {
+      multiIndexContext: {
         targetedIndex: this.props.indexName,
       },
     };
@@ -62,7 +62,7 @@ Index.propTypes = {
 
 Index.childContextTypes = {
   // @TODO: more precise widgets manager propType
-  Index: PropTypes.object.isRequired,
+  multiIndexContext: PropTypes.object.isRequired,
 };
 
 export default Index;

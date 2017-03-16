@@ -52,13 +52,13 @@ export default function createConnector(connectorDesc) {
     static contextTypes = {
       // @TODO: more precise state manager propType
       ais: PropTypes.object.isRequired,
-      Index: PropTypes.object,
+      multiIndexContext: PropTypes.object,
     };
 
     constructor(props, context) {
       super(props, context);
 
-      const {ais: {store, widgetsManager}, Index} = context;
+      const {ais: {store, widgetsManager}, multiIndexContext} = context;
       this.state = {
         props: this.getProvidedProps(props),
       };
@@ -92,7 +92,7 @@ export default function createConnector(connectorDesc) {
         null;
       if (isWidget) {
         this.unregisterWidget = widgetsManager.registerWidget({
-          getSearchParameters, getMetadata, transitionState, Index,
+          getSearchParameters, getMetadata, transitionState, multiIndexContext,
         });
       }
     }
