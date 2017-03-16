@@ -1,17 +1,23 @@
 import React, {PropTypes, Component} from 'react';
+
 import classNames from './classNames.js';
+import translatable from '../core/translatable';
 
 const cx = classNames('InfiniteHits');
 
 class InfiniteHits extends Component {
   render() {
-    const {hitComponent: ItemComponent, hits, hasMore, refine} = this.props;
+    const {hitComponent: ItemComponent, hits, hasMore, refine, translate} = this.props;
     const renderedHits = hits.map(hit =>
       <ItemComponent key={hit.objectID} hit={hit} />
     );
     const loadMoreButton = hasMore ?
-      <button {...cx('loadMore')} onClick={() => refine()}>Load more</button> :
-      <button {...cx('loadMore')} disabled>Load more</button>;
+      <button {...cx('loadMore')} onClick={() => refine()}>
+        {translate('loadMore')}
+      </button> :
+      <button {...cx('loadMore')} disabled>
+        {translate('loadMore')}
+      </button>;
 
     return (
       <div {...cx('root')}>
@@ -30,6 +36,7 @@ InfiniteHits.propTypes = {
   ]).isRequired,
   hasMore: PropTypes.bool.isRequired,
   refine: PropTypes.func.isRequired,
+  translate: PropTypes.func.isRequired,
 };
 
 InfiniteHits.defaultProps = {
@@ -43,4 +50,6 @@ InfiniteHits.defaultProps = {
     >{JSON.stringify(hit).slice(0, 100)}...</div>,
 };
 
-export default InfiniteHits;
+export default translatable({
+  loadMore: 'Load more',
+})(InfiniteHits);
