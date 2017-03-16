@@ -46,24 +46,37 @@ function renameReferences(inFiles: string|string[], files: { oldPath: string, ne
   return replace({from, to, files: inFiles});
 }
 
+// 1. compute MD5 for images -> replace in CSS/JS/HTML
+// 2. compute MD5 for "assets" -> replace in CSS/JS/HTML
+// 3. compute MD5 for CSS -> replace in JS, HTML
+// 4. compute MD5 for JS -> replace in HTML
 export default function revAssets(): Promise<*> {
-  // COMPUTE CSS
-  // -----------
+  const IMAGES_PATH = path.join(DIST_PATH, 'images');
+  const IMAGES_FILES = glob.sync(`${IMAGES_PATH}/**/*.{svg,png,jpeg,jpg,gif}`);
+  const computeImages = () => computeHashForFiles(IMAGES_FILES)
+    .then(renameFiles)
+    .then(result => renameReferences(`${DIST_PATH}/**/*.{js,html,css}`, result));
+
+  const ASSETS_PATH = path.join(DIST_PATH, 'assets');
+  const ASSETS_FILES = glob.sync(`${ASSETS_PATH}/**/*.{json,svg,png,jpeg,jpg,gif}`);
+  const computeAssets = () => computeHashForFiles(ASSETS_FILES)
+    .then(renameFiles)
+    .then(result => renameReferences(`${DIST_PATH}/**/*.{js,html,css}`, result));
+
   const CSS_PATH = path.join(DIST_PATH, 'stylesheets');
   const CSS_FILES = glob.sync(`${CSS_PATH}/**/*.css`);
-
-  const computeCSSFiles = () => computeHashForFiles(CSS_FILES)
+  const computeCSS = () => computeHashForFiles(CSS_FILES)
       .then(renameFiles)
       .then(result => renameReferences(`${DIST_PATH}/**/*.html`, result));
 
-  // COMPUTE IMAGES
-  // --------------
-  const IMAGES_PATH = path.join(DIST_PATH, 'images');
-  const IMAGES_FILES = glob.sync(`${IMAGES_PATH}/**/*.{svg,png,jpeg,jpg,gif}`);
+  const JS_PATH = path.join(DIST_PATH, 'js');
+  const JS_FILES = glob.sync(`${JS_PATH}/**/*.js`);
+  const computeJS = () => computeHashForFiles(JS_FILES)
+    .then(renameFiles)
+    .then(result => renameReferences(`${DIST_PATH}/**/*.html`, result));
 
-  const computeImagesFiles = () => computeHashForFiles(IMAGES_FILES)
-      .then(renameFiles)
-      .then(result => renameReferences(`${DIST_PATH}/**/*.{html,css}`, result));
-
-  return computeCSSFiles().then(computeImagesFiles);
+  return computeImages()
+    .then(computeAssets)
+    .then(computeCSS)
+    .then(computeJS);
 }
