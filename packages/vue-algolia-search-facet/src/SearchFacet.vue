@@ -43,27 +43,27 @@
           return this.attribute
         }
       },
-      useAnd: {
-        type: Boolean,
-        default: false
+      operator: {
+        type: String,
+        default: 'or',
+        validator (value) {
+          value = value.toLowerCase()
+
+          return value === 'or' || value === 'and';
+        }
       },
       limit: {
         type: Number,
         default: 10
       },
       sortBy: {
-        default: function () {
+        default () {
           return ['isRefined:desc', 'count:desc', 'name:asc']
         }
-      },
-      multi: {
-        type: Boolean,
-        default: true
       }
     },
     mounted () {
-      const facetType = this.useAnd ? 'conjunctive' : 'disjunctive'
-      this.searchStore.addFacet(this.attribute, facetType)
+      this.searchStore.addFacet(this.attribute, this.operator)
     },
     destroyed () {
       this.searchStore.removeFacet(this.attribute)
@@ -75,20 +75,12 @@
     },
     methods: {
       toggleRefinement: function (value) {
-        if (value.isRefined || this.multi) {
-          return this.searchStore.toggleFacetRefinement(this.attribute, value.name)
-        }
-
-        this.searchStore.stop()
-        this.searchStore.clearRefinements(this.attribute)
-        this.searchStore.toggleFacetRefinement(this.attribute, value.name)
-        this.searchStore.start()
+        return this.searchStore.toggleFacetRefinement(this.attribute, value.name)
       }
     },
     watch: {
       operator (value) {
-        const facetType = this.useAnd ? 'conjunctive' : 'disjunctive'
-        this.searchStore.addFacet(this.attribute, facetType)
+        this.searchStore.addFacet(this.attribute, this.operator)
       }
     }
   }

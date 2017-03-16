@@ -64,7 +64,7 @@
       attribute: {
         type: String,
         required: false,
-        default: 'hierarchical_list'
+        default: 'tree'
       },
       attributes: {
         type: Array,
@@ -90,7 +90,7 @@
         name: this.attribute,
         attributes: this.attributes,
         separator: this.separator
-      }, 'hierarchical')
+      }, 'tree')
     },
     destroyed () {
       this.searchStore.removeFacet(this.attribute)

@@ -1,14 +1,15 @@
 import algolia from 'algoliasearch'
 import algoliaHelper from 'algoliasearch-helper'
 
-export const FACET_CONJUNCTIVE = 'conjunctive'
-export const FACET_DISJUNCTIVE = 'disjunctive'
-export const FACET_HIERARCHICAL = 'hierarchical'
+export const FACET_AND = 'and'
+export const FACET_OR = 'or'
+export const FACET_TREE = 'tree'
 
 const assertValidFacetType = function (type) {
-  if (type === FACET_CONJUNCTIVE) return
-  if (type === FACET_DISJUNCTIVE) return
-  if (type === FACET_HIERARCHICAL) return
+  type = type.toLowerCase()
+  if (type === FACET_AND) return
+  if (type === FACET_OR) return
+  if (type === FACET_TREE) return
 
   throw new Error(`Invalid facet type ${type}.`)
 }
@@ -170,18 +171,19 @@ export class Store {
     this.page = this.nbPages - 1
   }
 
-  addFacet(attribute, type = FACET_CONJUNCTIVE) {
+  addFacet(attribute, type = FACET_AND) {
     assertValidFacetType(type)
+    type = type.toLowerCase()
 
     this.stop()
     this.removeFacet(attribute)
 
     let state = null
-    if (type === FACET_CONJUNCTIVE) {
+    if (type === FACET_AND) {
       state = this._helper.state.addFacet(attribute)
-    } else if (type === FACET_DISJUNCTIVE) {
+    } else if (type === FACET_OR) {
       state = this._helper.state.addDisjunctiveFacet(attribute)
-    } else if (type === FACET_HIERARCHICAL) {
+    } else if (type === FACET_TREE) {
       state = this._helper.state.addHierarchicalFacet(attribute)
     }
 
@@ -215,18 +217,6 @@ export class Store {
 
   clearRefinements(attribute) {
     this._helper.clearRefinements(attribute)
-  }
-
-  isConjunctiveFacet(attribute) {
-    return this._helper.state.isConjunctiveFacet(attribute)
-  }
-
-  isDisjunctiveFacet(attribute) {
-    return this._helper.state.isDisjunctiveFacet(attribute)
-  }
-
-  isHierarchicalFacet(attribute) {
-    return this._helper.state.isHierarchicalFacet(attribute)
   }
 
   getFacetValues(attribute, sortBy, limit = -1) {

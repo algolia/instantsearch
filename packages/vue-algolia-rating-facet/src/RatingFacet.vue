@@ -66,7 +66,7 @@
       }
     },
     mounted: function () {
-      this.searchStore.addFacet(this.attribute, 'disjunctive')
+      this.searchStore.addFacet(this.attribute, 'or')
     },
     destroyed: function () {
       this.searchStore.removeFacet(this.attribute)
