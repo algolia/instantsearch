@@ -415,6 +415,12 @@
       }
     }
 
+    .alg-ranged-pagination__item--disabled {
+      button:hover {
+        text-decoration: none;
+      }
+    }
+
     .alg-ranged-pagination__item--active label {
       font-weight: bold;
     }
