@@ -54,20 +54,14 @@ function computeFiles([filesGlob, replaceFilesGlob]: Array<string, string>): Pro
 }
 
 export default function revAssets(): Promise<*> {
-  // 1. compute MD5 for images -> replace in CSS/JS/HTML
-  // 2. compute MD5 for "assets" -> replace in CSS/JS/HTML
-  // 3. compute MD5 for CSS -> replace in JS, HTML
-  // 4. compute MD5 for JS -> replace in HTML
-  // 5. compute MD5 for CSS/JS examples -> replace in examples HTML
-  const images = ['images/**/*.{svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
-  const assets = ['assets/**/*.{json,svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
-  const css = ['stylesheets/**/*.css', '**/*.html'];
+  // 1. compute MD5 for images / json -> replace in CSS, JS, HTML
+  // 2. compute MD5 for CSS -> replace in JS, HTML
+  // 3. compute MD5 for JS -> replace in HTML
+  const imagesJson = ['**/*.{json,svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
+  const css = ['**/*.css', '**/*.{js,html}'];
   const js = ['**/*.js', '**/*.html'];
-  const examples = ['examples/**/*.{css,js}', 'examples/**/*.html'];
 
-  return computeFiles(images)
-    .then(() => computeFiles(assets))
+  return computeFiles(imagesJson)
     .then(() => computeFiles(css))
-    .then(() => computeFiles(js))
-    .then(() => computeFiles(examples));
+    .then(() => computeFiles(js));
 }
