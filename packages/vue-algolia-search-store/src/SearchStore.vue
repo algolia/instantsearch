@@ -42,12 +42,20 @@
 
           return
         }
+      },
+      query: {
+        type: String,
+        default: ""
       }
     },
     provide () {
       this._localSearchStore = createFromAlgoliaCredentials(this.appId, this.apiKey)
       if (this.index) {
         this._localSearchStore.index = this.index
+      }
+
+      if(this.query) {
+        this._localSearchStore.query = this.query
       }
       // Todo: add user agent
 
@@ -61,6 +69,9 @@
     watch: {
       index () {
         this._localSearchStore.index = this.index
+      },
+      query () {
+        this._localSearchStore.query = this.query
       }
     }
   }
