@@ -46,37 +46,25 @@ function renameReferences(inFiles: string|string[], files: { oldPath: string, ne
   return replace({from, to, files: inFiles});
 }
 
-// 1. compute MD5 for images -> replace in CSS/JS/HTML
-// 2. compute MD5 for "assets" -> replace in CSS/JS/HTML
-// 3. compute MD5 for CSS -> replace in JS, HTML
-// 4. compute MD5 for JS -> replace in HTML
+function computeFiles(filesGlob: string, replaceFilesGlob: string): Promise<*> {
+  const files = glob.sync(`${DIST_PATH}/${filesGlob}`);
+  return computeHashForFiles(files)
+    .then(renameFiles)
+    .then(result => renameReferences(`${DIST_PATH}/${replaceFilesGlob}`, result));
+}
+
 export default function revAssets(): Promise<*> {
-  const IMAGES_PATH = path.join(DIST_PATH, 'images');
-  const IMAGES_FILES = glob.sync(`${IMAGES_PATH}/**/*.{svg,png,jpeg,jpg,gif}`);
-  const computeImages = () => computeHashForFiles(IMAGES_FILES)
-    .then(renameFiles)
-    .then(result => renameReferences(`${DIST_PATH}/**/*.{js,html,css}`, result));
+  // 1. compute MD5 for images -> replace in CSS/JS/HTML
+  // 2. compute MD5 for "assets" -> replace in CSS/JS/HTML
+  // 3. compute MD5 for CSS -> replace in JS, HTML
+  // 4. compute MD5 for JS -> replace in HTML
+  const images = ['images/**/*.{svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
+  const assets = ['assets/**/*.{json,svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
+  const css = ['stylesheets/**/*.css', '**/*.html'];
+  const js = ['**/*.js', '**/*.html'];
 
-  const ASSETS_PATH = path.join(DIST_PATH, 'assets');
-  const ASSETS_FILES = glob.sync(`${ASSETS_PATH}/**/*.{json,svg,png,jpeg,jpg,gif}`);
-  const computeAssets = () => computeHashForFiles(ASSETS_FILES)
-    .then(renameFiles)
-    .then(result => renameReferences(`${DIST_PATH}/**/*.{js,html,css}`, result));
-
-  const CSS_PATH = path.join(DIST_PATH, 'stylesheets');
-  const CSS_FILES = glob.sync(`${CSS_PATH}/**/*.css`);
-  const computeCSS = () => computeHashForFiles(CSS_FILES)
-      .then(renameFiles)
-      .then(result => renameReferences(`${DIST_PATH}/**/*.html`, result));
-
-  const JS_PATH = path.join(DIST_PATH, 'js');
-  const JS_FILES = glob.sync(`${JS_PATH}/**/*.js`);
-  const computeJS = () => computeHashForFiles(JS_FILES)
-    .then(renameFiles)
-    .then(result => renameReferences(`${DIST_PATH}/**/*.html`, result));
-
-  return computeImages()
-    .then(computeAssets)
-    .then(computeCSS)
-    .then(computeJS);
+  return computeFiles(...images)
+    .then(() => computeFiles(...assets))
+    .then(() => computeFiles(...css))
+    .then(() => computeFiles(...js));
 }
