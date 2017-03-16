@@ -30,7 +30,7 @@ export default function createInstantSearchManager({
   helper.on('error', handleSearchError);
 
   let derivedHelpers = {};
-  let indexMapping = {}; // keep track of the original index where the parameters applied
+  let indexMapping; // keep track of the original index where the parameters applied when sortBy is used.
 
   let initialSearchParameters = helper.state;
 
