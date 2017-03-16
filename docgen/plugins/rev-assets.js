@@ -58,13 +58,16 @@ export default function revAssets(): Promise<*> {
   // 2. compute MD5 for "assets" -> replace in CSS/JS/HTML
   // 3. compute MD5 for CSS -> replace in JS, HTML
   // 4. compute MD5 for JS -> replace in HTML
+  // 5. compute MD5 for CSS/JS examples -> replace in examples HTML
   const images = ['images/**/*.{svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
   const assets = ['assets/**/*.{json,svg,png,jpeg,jpg,gif}', '**/*.{js,html,css}'];
   const css = ['stylesheets/**/*.css', '**/*.html'];
   const js = ['**/*.js', '**/*.html'];
+  const examples = ['examples/**/*.{css,js}', 'examples/**/*.html'];
 
   return computeFiles(...images)
     .then(() => computeFiles(...assets))
     .then(() => computeFiles(...css))
-    .then(() => computeFiles(...js));
+    .then(() => computeFiles(...js))
+    .then(() => computeFiles(...examples));
 }
