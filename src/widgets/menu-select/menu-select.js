@@ -17,7 +17,7 @@ const bem = bemHelper('ais-menu-select');
 
 /**
  * Create a <select> menu out of a facet
- * @function MenuSelect
+ * @function menuSelect
  * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
  * @param  {string[]|Function} [options.sortBy=['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]

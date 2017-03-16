@@ -599,6 +599,49 @@ The attribute defined in `attributeName` must be defined as an
 
 <div id="categories" class="widget-container"></div>
 
+#### menuSelect
+
+<div class="codebox-combo">
+
+The menu select widget provides a way to navigate through results based on a single attribute.
+Only one value can be selected at a time. This can be used for navigating through the categories
+of an e-commerce website.
+{:.description}
+
+<div class="code-box">
+  <div class="code-sample-snippet js-toggle-snippet">
+{% highlight javascript %}
+search.addWidget(
+  instantsearch.widgets.menuSelect({
+    container: '#menuselect-categories',
+    attributeName: 'categories',
+    limit: 10,
+    templates: {
+      header: 'Categories',
+      seeAllOption: 'See all'
+    }
+  })
+);
+{% endhighlight %}
+  </div>
+
+  <div class="jsdoc js-toggle-jsdoc">
+{% highlight javascript %}
+instantsearch.widgets.menuSelect(options);
+{% endhighlight %}
+
+{% include widget-jsdoc/menuSelect.md %}
+  </div>
+  <div class="requirements js-toggle-requirements">
+The attribute defined in `attributeName` must be defined as an
+[attributesForFaceting](https://www.algolia.com/doc/rest#param-attributesForFaceting) in your index configuration.
+  </div>
+</div>
+
+</div>
+
+<div id="menuselect-categories" class="widget-container"></div>
+
 #### hierarchicalMenu
 
 <div class="codebox-combo">
