@@ -15,11 +15,9 @@ yarn install
 # Download all dependencies and build all packages
 yarn boot
 
-# Or with native lerna: 
-lerna bootstrap --npmClient=yarn
+# Build the dependencies of all packages
+yarn build
 
-# if you want to run the building later again
-lerna run build
+# Clean all the dependencies and build again
+yarn reboot
 ```
-
-Note: `yarn boot` will delete all node modules and make sure all npm dependencies are properly rebuilt.
