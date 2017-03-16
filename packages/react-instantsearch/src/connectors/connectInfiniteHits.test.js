@@ -5,7 +5,7 @@ jest.mock('../core/createConnector');
 
 describe('connectInfiniteHits', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const refine = connect.refine.bind(context);
     it('provides the current hits to the component', () => {
@@ -109,7 +109,7 @@ describe('connectInfiniteHits', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the current hits to the component', () => {
       const hits = [{}];

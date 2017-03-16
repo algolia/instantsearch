@@ -2,8 +2,8 @@ import {has, omit, get} from 'lodash';
 
 export function getIndex(context) {
   return context && context.Index
-  ? context.Index.targettedIndex
-  : context.ais.mainTargettedIndex;
+  ? context.Index.targetedIndex
+  : context.ais.mainTargetedIndex;
 }
 
 export function hasMultipleIndex(context) {

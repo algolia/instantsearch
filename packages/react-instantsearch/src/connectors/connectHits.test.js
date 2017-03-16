@@ -7,7 +7,7 @@ const {getSearchParameters} = connect;
 
 describe('connectHits', () => {
   describe('single index', () => {
-    const context = {context: {Index: {targettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the current hits to the component', () => {
       const hits = [{}];
@@ -26,7 +26,7 @@ describe('connectHits', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the current hits to the component', () => {
       const hits = [{}];

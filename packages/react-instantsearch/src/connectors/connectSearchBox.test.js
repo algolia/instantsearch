@@ -10,7 +10,7 @@ let params;
 
 describe('connectSearchBox', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const refine = connect.refine.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
@@ -51,7 +51,7 @@ describe('connectSearchBox', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
@@ -72,7 +72,7 @@ describe('connectSearchBox', () => {
         indices: {first: {query: 'yep', page: 1}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine({}, {indices: {first: {query: 'yep'}}, otherKey: 'val'}, 'yop');

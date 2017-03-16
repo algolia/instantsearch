@@ -32,7 +32,7 @@ class Index extends Component {
   getChildContext() {
     return {
       Index: {
-        targettedIndex: this.props.indexName,
+        targetedIndex: this.props.indexName,
       },
     };
   }

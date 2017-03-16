@@ -5,7 +5,7 @@ jest.mock('../core/createConnector');
 
 const {refine} = connect;
 
-const context = {context: {Index: {targettedIndex: 'index'}}};
+const context = {context: {multiIndexContext: {targetedIndex: 'index'}}};
 const getProvidedProps = connect.getProvidedProps.bind(context);
 
 describe('connectCurrentRefinements', () => {

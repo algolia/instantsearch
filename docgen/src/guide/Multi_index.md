@@ -10,11 +10,11 @@ Whenever you want to:
 
 * display hits from different indices
 * share a single SearchBox
-* synchronize widgets between different indices
+* build an autocomplete menu targeting different indices. Either manually or using an external autocomplete component (see [`connectAutoComplete`](connectors/connectAutoComplete.html)
 
 You can use multiple [`<Index>`](widgets/<Index>.html) instances.
 
-The `<Index>` component takes one props, the targetted index name. 
+The `<Index>` component takes one prop, the targeted index name. 
 
 When using a `<Index>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
 

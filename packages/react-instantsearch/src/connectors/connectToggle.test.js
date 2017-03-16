@@ -10,7 +10,7 @@ let params;
 
 describe('connectToggle', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const refine = connect.refine.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
@@ -101,7 +101,7 @@ describe('connectToggle', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -128,7 +128,7 @@ describe('connectToggle', () => {
         indices: {first: {page: 1, toggle: {t: true, otherKey: false}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       searchState = refine({attributeName: 't'}, {indices: {first: {toggle: {t: true, otherKey: false}}}}, false);

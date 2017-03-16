@@ -17,7 +17,7 @@ describe('connectAutoComplete', () => {
       {first: {hits: firstHits}, second: {hits: secondHits}}});
     expect(props).toEqual({
       hits: [{hits: firstHits, index: 'first'}, {hits: secondHits, index: 'second'}],
-      query: ''});
+      currentRefinement: ''});
 
     props = getProvidedProps({}, {query: 'query'}, {
       results:
@@ -25,7 +25,7 @@ describe('connectAutoComplete', () => {
     });
     expect(props).toEqual({
       hits: [{hits: firstHits, index: 'first'}, {hits: secondHits, index: 'second'}],
-      query: 'query',
+      currentRefinement: 'query',
     });
 
     props = getProvidedProps({defaultRefinement: 'query'}, {}, {
@@ -34,7 +34,7 @@ describe('connectAutoComplete', () => {
     });
     expect(props).toEqual({
       hits: [{hits: firstHits, index: 'first'}, {hits: secondHits, index: 'second'}],
-      query: 'query',
+      currentRefinement: 'query',
     });
   });
 

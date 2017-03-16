@@ -8,7 +8,7 @@ import {getIndex} from '../core/indexUtils';
  *
  * To configure the number of hits retrieved, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
+ * prop to a [Configure](guide/Search_parameters.html) widget.
  * @name connectHits
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state

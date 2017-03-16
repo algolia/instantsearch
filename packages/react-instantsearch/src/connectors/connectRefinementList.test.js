@@ -11,7 +11,7 @@ let params;
 
 describe('connectRefinementList', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
 
     const {searchForFacetValues} = connect;
     const getProvidedProps = connect.getProvidedProps.bind(context);
@@ -321,7 +321,7 @@ describe('connectRefinementList', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -372,7 +372,7 @@ describe('connectRefinementList', () => {
         indices: {first: {page: 1, refinementList: {ok: ['yep'], otherKey: ['val']}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine({attributeName: 'ok'},

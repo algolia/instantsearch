@@ -4,7 +4,7 @@ import {refineValue, getCurrentRefinementValue, cleanUpValue} from './indexUtils
 
 describe('utility method for manipulating the search state', () => {
   describe('when there is a single index', () => {
-    const context = {ais: {mainTargettedIndex: 'index'}};
+    const context = {ais: {mainTargetedIndex: 'index'}};
     it('refine with no namespace', () => {
       let searchState = {};
       let nextRefinement = {refinement: 'refinement'};
@@ -99,7 +99,7 @@ describe('utility method for manipulating the search state', () => {
     });
   });
   describe('when there are multiple index', () => {
-    const context = {Index: {targettedIndex: 'first'}};
+    const context = {multiIndexContext: {targetedIndex: 'first'}};
     it('refine with no namespace', () => {
       let searchState = {};
       let nextRefinement = {refinement: 'refinement'};

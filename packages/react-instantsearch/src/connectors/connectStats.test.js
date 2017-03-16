@@ -6,7 +6,7 @@ jest.mock('../core/createConnector');
 let props;
 describe('connectStats', () => {
   describe('single index', () => {
-    const context = {context: {Index: {targettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the correct props to the component', () => {
       props = getProvidedProps(null, null, {});
@@ -17,7 +17,7 @@ describe('connectStats', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the correct props to the component', () => {
       props = getProvidedProps(null, null, {});

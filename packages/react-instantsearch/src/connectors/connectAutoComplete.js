@@ -21,10 +21,12 @@ function getCurrentRefinement(props, searchState) {
  *
  * To configure the number of hits retrieved, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
+ * prop to a [Configure](guide/Search_parameters.html) widget.
  * @name connectAutoComplete
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state
+ * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {string} currentRefinement - the query to search for.
  */
 export default createConnector({
   displayName: 'AlgoliaAutoComplete',
@@ -36,14 +38,14 @@ export default createConnector({
         hits.push({index, hits: searchResults.results[index].hits});
       });
     }
-    return {hits, query: getCurrentRefinement(props, searchState)};
+    return {hits, currentRefinement: getCurrentRefinement(props, searchState)};
   },
 
-  refine(props, searchState, nextQuery) {
+  refine(props, searchState, nextCurrentRefinement) {
     const id = getId();
     return {
       ...searchState,
-      [id]: nextQuery,
+      [id]: nextCurrentRefinement,
     };
   },
 

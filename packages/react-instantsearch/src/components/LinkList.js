@@ -41,9 +41,6 @@ export default class LinkList extends Component {
             key={has(item, 'key') ? item.key : item.value}
             {...cx(
               'item',
-              // on purpose == following, see
-              // https://github.com/algolia/instantsearch.js/commit/bfed1f3512e40fb1e9989453582b4a2c2d90e3f2
-              // eslint-disable-next-line
               item.selected && !item.disabled && 'itemSelected',
               item.disabled && 'itemDisabled',
               item.modifier

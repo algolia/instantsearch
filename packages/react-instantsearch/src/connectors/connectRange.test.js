@@ -10,7 +10,7 @@ let params;
 
 describe('connectRange', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const refine = connect.refine.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
@@ -189,7 +189,7 @@ describe('connectRange', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -238,7 +238,7 @@ describe('connectRange', () => {
         indices: {first: {page: 1, range: {ok: {min: 3, max: 5}, otherKey: {min: 1, max: 2}}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine({attributeName: 'ok'},

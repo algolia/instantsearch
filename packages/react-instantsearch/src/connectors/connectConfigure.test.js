@@ -6,12 +6,12 @@ jest.mock('../core/createConnector');
 
 describe('connectConfigure', () => {
   describe('single index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'index'}}};
+    const context = {context: {ais: {mainTargetedIndex: 'index'}}};
     const getSearchParameters = connect.getSearchParameters.bind(context);
     const transitionState = connect.transitionState.bind(context);
     const cleanUp = connect.cleanUp.bind(context);
 
-    it('it propagates the props to the SearchParameters without children', () => {
+    it('propagates the props to the SearchParameters without children', () => {
       const searchParameters = getSearchParameters(
         new SearchParameters(),
         {distinct: 1, whatever: 'please', children: 'whatever'},
@@ -55,7 +55,7 @@ describe('connectConfigure', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
+    let context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'second'}}};
     let cleanUp = connect.cleanUp.bind(context);
     const getSearchParameters = connect.getSearchParameters.bind(context);
 
@@ -87,7 +87,7 @@ describe('connectConfigure', () => {
 
       expect(searchState).toEqual({indices: {second: {configure: {whatever: 'other'}}}});
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
       transitionState = connect.transitionState.bind(context);
 
       searchState = transitionState(
@@ -124,7 +124,7 @@ describe('connectConfigure', () => {
         first: {configure: {distinct: 1, whatever: 'please'}}, second: {configure: {}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
+      context = {context: {ais: {mainTargetedIndex: 'first'}, Index: {targetedIndex: 'first'}}};
       cleanUp = connect.cleanUp.bind(context);
 
       searchState = cleanUp(
