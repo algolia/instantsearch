@@ -13,7 +13,7 @@ export default {
   devtool: 'source-map',
   output: {
     ...webpackConfig.output,
-    filename: '[name].[hash]-build.js', // hash names in production
+    filename: '[name]-build.js', // hash is made with `plugins/rev-assets.js`
   },
   plugins: [
     new UglifyJsPlugin({
