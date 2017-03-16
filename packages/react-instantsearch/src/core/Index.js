@@ -6,6 +6,7 @@ import React, {PropTypes, Component, Children} from 'react';
  * `<Index>` is the component that allows you to apply widgets to a dedicated index. It's
  * useful if you want to build an interface that targets multiple indices.
  * @kind widget
+ * @name <Index>
  * @propType {string} indexName - index in which to search.
  * @example
  * import {InstantSearch, Index, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
