@@ -46,7 +46,7 @@ function renameReferences(inFiles: string|string[], files: { oldPath: string, ne
   return replace({from, to, files: inFiles});
 }
 
-function computeFiles(filesGlob: string, replaceFilesGlob: string): Promise<*> {
+function computeFiles([filesGlob, replaceFilesGlob]: Array<string, string>): Promise<*> {
   const files = glob.sync(`${DIST_PATH}/${filesGlob}`);
   return computeHashForFiles(files)
     .then(renameFiles)
@@ -65,9 +65,9 @@ export default function revAssets(): Promise<*> {
   const js = ['**/*.js', '**/*.html'];
   const examples = ['examples/**/*.{css,js}', 'examples/**/*.html'];
 
-  return computeFiles(...images)
-    .then(() => computeFiles(...assets))
-    .then(() => computeFiles(...css))
-    .then(() => computeFiles(...js))
-    .then(() => computeFiles(...examples));
+  return computeFiles(images)
+    .then(() => computeFiles(assets))
+    .then(() => computeFiles(css))
+    .then(() => computeFiles(js))
+    .then(() => computeFiles(examples));
 }
