@@ -114,8 +114,10 @@
   }
 </script>
 
-<style>
-  .alg-price-range__input {
-    width: 50px
+<style lang="scss" rel="stylesheet/scss">
+  .alg-price-range {
+    .alg-price-range__input {
+      width: 50px;
+    }
   }
 </style>
