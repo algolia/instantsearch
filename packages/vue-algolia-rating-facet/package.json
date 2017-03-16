@@ -15,6 +15,7 @@
     "build-cjs": "rollup -c ../../build/rollup.cjs.config.js"
   },
   "dependencies": {
+    "algolia-search-store": "*",
     "vue-algolia-component": "*"
   },
   "peerDependencies": {

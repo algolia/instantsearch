@@ -50,6 +50,7 @@
 </template>
 
 <script>
+  import {FACET_TREE} from 'algolia-search-store'
   import algoliaComponent from 'vue-algolia-component'
 
   export default {
@@ -90,7 +91,7 @@
         name: this.attribute,
         attributes: this.attributes,
         separator: this.separator
-      }, 'tree')
+      }, FACET_TREE)
     },
     destroyed () {
       this.searchStore.removeFacet(this.attribute)

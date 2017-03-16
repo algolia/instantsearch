@@ -28,6 +28,7 @@
 </template>
 
 <script>
+  import {FACET_OR, FACET_AND} from 'algolia-search-store'
   import algoliaComponent from 'vue-algolia-component'
 
   export default {
@@ -45,11 +46,11 @@
       },
       operator: {
         type: String,
-        default: 'or',
+        default: FACET_OR,
         validator (value) {
           value = value.toLowerCase()
 
-          return value === 'or' || value === 'and';
+          return value === FACET_OR || value === FACET_AND;
         }
       },
       limit: {

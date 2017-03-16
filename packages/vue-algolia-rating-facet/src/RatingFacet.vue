@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import {FACET_OR} from 'algolia-search-store'
   import algoliaComponent from 'vue-algolia-component'
 
   export default {
@@ -66,7 +67,7 @@
       }
     },
     mounted: function () {
-      this.searchStore.addFacet(this.attribute, 'or')
+      this.searchStore.addFacet(this.attribute, FACET_OR)
     },
     destroyed: function () {
       this.searchStore.removeFacet(this.attribute)
