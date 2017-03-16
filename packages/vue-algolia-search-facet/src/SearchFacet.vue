@@ -61,15 +61,15 @@
         default: true
       }
     },
-    mounted: function () {
+    mounted () {
       const facetType = this.useAnd ? 'conjunctive' : 'disjunctive'
       this.searchStore.addFacet(this.attribute, facetType)
     },
-    destroyed: function () {
+    destroyed () {
       this.searchStore.removeFacet(this.attribute)
     },
     computed: {
-      facetValues: function () {
+      facetValues () {
         return this.searchStore.getFacetValues(this.attribute, this.sortBy, this.limit)
       }
     },
@@ -86,7 +86,7 @@
       }
     },
     watch: {
-      operator: function (value) {
+      operator (value) {
         const facetType = this.useAnd ? 'conjunctive' : 'disjunctive'
         this.searchStore.addFacet(this.attribute, facetType)
       }

@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="container-fluid">
-
     <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76">
       <div class="row">
         <div class="col-md-2 col-sm-3">
