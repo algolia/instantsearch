@@ -76,20 +76,20 @@
           </div>
 
           <search-results>
-            <template scope="{ hit }">
+            <template scope="{ result }">
               <div class="search-result">
-                <img class="hit__image img-responsive" :src="hit.image">
+                <img class="result__image img-responsive" :src="result.image">
 
-                <div class="hit__info">
-                  <h2 class="hit__name" v-html="hit._highlightResult.name.value"></h2>
-                  <div class="hit__type" v-html="hit._highlightResult.type.value"></div>
-                  <div class="hit__rating">
+                <div class="result__info">
+                  <h2 class="result__name" v-html="result._highlightResult.name.value"></h2>
+                  <div class="result__type" v-html="result._highlightResult.type.value"></div>
+                  <div class="result__rating">
                     <template v-for="n in 5">
-                      <span v-if="n <= hit.rating" class="hit__star"></span>
-                      <span v-else class="hit__star--empty"></span>
+                      <span v-if="n <= result.rating" class="result__star"></span>
+                      <span v-else class="result__star--empty"></span>
                     </template>
                   </div>
-                  <div class="hit__price">${{hit.price}}</div>
+                  <div class="result__price">${{result.price}}</div>
                 </div>
                 <div class="clearfix"></div>
               </div>
@@ -170,7 +170,7 @@
     transition: all .5s;
   }
 
-  .hit__info {
+  .result__info {
     position: absolute;
     width: 100%;
     padding: 0px 20px 20px;
@@ -178,28 +178,28 @@
     left: 0;
   }
 
-  .hit__image {
+  .result__image {
     margin-bottom: 100px;
   }
 
-  .hit__name {
+  .result__name {
     font-size: 14px;
     font-weight: bold;
   }
 
-  .hit__name em, .hit__type em {
+  .result__name em, .result__type em {
     font-style: normal;
     background: rgba(143, 187, 237, .1);
     box-shadow: inset 0 -1px 0 0 rgba(69, 142, 225, .8);
   }
 
-  .hit__type em {
+  .result__type em {
     background: rgba(143, 187, 237, .1);
     border-radius: 0;
     box-shadow: inset 0 -1px 0 0 rgba(69, 142, 225, .8);
   }
 
-  .hit__price {
+  .result__price {
     font-size: 25px;
     font-weight: bold;
     position: absolute;
@@ -207,26 +207,26 @@
     bottom: 16px;
   }
 
-  .hit__type {
+  .result__type {
     color: #a2a2a2;
     font-size: 12px;
   }
 
-  .hit__rating {
+  .result__rating {
     margin-top: 10px;
   }
 
-  .hit__star {
+  .result__star {
     width: 1em;
     height: 1em;
   }
 
-  .hit__star:before {
+  .result__star:before {
     content: '\2605';
     color: #FBAE00;
   }
 
-  .hit__star--empty:before {
+  .result__star--empty:before {
     content: '\2606';
     color: #FBAE00;
   }

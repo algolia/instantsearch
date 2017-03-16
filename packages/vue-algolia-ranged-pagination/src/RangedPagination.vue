@@ -32,16 +32,16 @@
       </label>
     </li>
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--next"
-        :class="{'alg-ranged-pagination__item--disabled': page >= nbPages - 1 }"
+        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages - 1 }"
     >
-      <button type="button" @click="goToNextPage" :disabled="page >= nbPages - 1">
+      <button type="button" @click="goToNextPage" :disabled="page >= totalPages - 1">
         <slot name="next">&gt;</slot>
       </button>
     </li>
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--last"
-        :class="{'alg-ranged-pagination__item--disabled': page >= nbPages - 1 }"
+        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages - 1 }"
     >
-      <button type="button" @click="goToLastPage" :disabled="page >= nbPages - 1">
+      <button type="button" @click="goToLastPage" :disabled="page >= totalPages - 1">
         <slot name="last">&gt;&gt;</slot>
       </button>
     </li>
@@ -70,13 +70,13 @@
       page () {
         return this.searchStore.page
       },
-      nbPages () {
-        return this.searchStore.nbPages
+      totalPages () {
+        return this.searchStore.totalPages
       },
       pages () {
         let maxPages = this.padding * 2
-        if (this.nbPages - 1 < maxPages) {
-          maxPages = this.nbPages - 1
+        if (this.totalPages - 1 < maxPages) {
+          maxPages = this.totalPages - 1
         }
 
         let pages = [this.page]
@@ -92,7 +92,7 @@
             firstPage--
             pages.unshift(firstPage)
           } else {
-            if (lastPage >= this.nbPages - 1) {
+            if (lastPage >= this.totalPages - 1) {
               continue
             }
             lastPage++
@@ -105,7 +105,7 @@
     },
     methods: {
       goToPage (page) {
-        page = Math.min(this.nbPages - 1, page)
+        page = Math.min(this.totalPages - 1, page)
         this.searchStore.page = page
       },
       goToFirstPage () {
@@ -118,7 +118,7 @@
         this.goToPage(this.page + 1)
       },
       goToLastPage () {
-        this.goToPage(this.nbPages - 1)
+        this.goToPage(this.totalPages - 1)
       }
     }
   }

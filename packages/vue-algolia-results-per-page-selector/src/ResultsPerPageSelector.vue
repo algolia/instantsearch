@@ -1,7 +1,7 @@
 <template>
   <select class="alg-hpp-selector"
           @change="onChange"
-          v-model="hitsPerPage"
+          v-model="resultsPerPage"
           :name="name"
   >
     <slot v-for="option in options" :option="option">
@@ -18,7 +18,7 @@
     props: {
       name: {
         type: String,
-        default: 'hits_per_page'
+        default: 'results_per_page'
       },
       options: {
         type: Array,
@@ -28,18 +28,18 @@
       },
     },
     computed: {
-      hitsPerPage: function () {
-        return this.searchStore.hitsPerPage
+      resultsPerPage: function () {
+        return this.searchStore.resultsPerPage
       }
     },
     mounted: function () {
-      if (this.options.indexOf(this.searchStore.hitsPerPage) === -1) {
-        this.searchStore.hitsPerPage = this.options[0]
+      if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
+        this.searchStore.resultsPerPage = this.options[0]
       }
     },
     methods: {
       onChange: function (event) {
-        this.searchStore.hitsPerPage = Number(event.target.value)
+        this.searchStore.resultsPerPage = Number(event.target.value)
       }
     }
   }

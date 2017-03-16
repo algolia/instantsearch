@@ -57,8 +57,10 @@ export class Store {
 
   set algoliaClient(algoliaClient) {
     this._helper.setClient(algoliaClient)
-    // Todo: this does not trigger a "change" event for now.
-    // Todo: maybe refresh after this?
+
+    // Manually trigger the change given the helper doesn't emit a change event
+    // when a new client is set.
+    onHelperChange()
   }
 
   get algoliaClient() {
@@ -73,6 +75,7 @@ export class Store {
     return this.algoliaClient.applicationID
   }
 
+  // Todo: maybe freeze / unfreeze, pause / resume are better names
   start() {
     if (this._stoppedCounter < 1) {
       this._stoppedCounter = 0
@@ -97,21 +100,21 @@ export class Store {
     return this._helper.getIndex()
   }
 
-  set hitsPerPage(hitsPerPage) {
-    this._helper.setQueryParameter('hitsPerPage', hitsPerPage)
+  set resultsPerPage(count) {
+    this._helper.setQueryParameter('hitsPerPage', count)
   }
 
-  get hitsPerPage() {
-    let hitsPerPage = this._helper.getQueryParameter('hitsPerPage')
+  get resultsPerPage() {
+    let resultsPerPage = this._helper.getQueryParameter('hitsPerPage')
 
-    if(hitsPerPage) {
-      return hitsPerPage
+    if(resultsPerPage) {
+      return resultsPerPage
     }
 
     return this._helper.lastResults ? this._helper.lastResults.hitsPerPage : 0
   }
 
-  get hits() {
+  get results() {
     if (!this._helper.lastResults) {
       return []
     }
@@ -127,7 +130,7 @@ export class Store {
     this._helper.setPage(page)
   }
 
-  get nbPages() {
+  get totalPages() {
     if (!this._helper.lastResults) {
       return 0
     }
@@ -135,7 +138,7 @@ export class Store {
     return this._helper.lastResults.nbPages
   }
 
-  get nbHits() {
+  get totalResults() {
     if (!this._helper.lastResults) {
       return 0
     }
@@ -151,19 +154,19 @@ export class Store {
     return this._helper.lastResults.processingTimeMS
   }
 
-  firstPage() {
+  goTofirstPage() {
     this.page = 0
   }
 
-  previousPage() {
+  goToPreviousPage() {
     this._helper.previousPage()
   }
 
-  nextPage() {
+  goToNextPage() {
     this._helper.nextPage()
   }
 
-  lastPage() {
+  goToLastPage() {
     this.page = this.nbPages - 1
   }
 
@@ -269,6 +272,7 @@ export class Store {
     return this._helper.state.query
   }
 
+  // Todo: find a better name for this function.
   refresh() {
     this._helper.search()
   }

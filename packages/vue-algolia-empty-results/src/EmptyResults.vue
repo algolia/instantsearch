@@ -1,5 +1,5 @@
 <template>
-  <div class="empty-search-results" v-if="nbHits <= 0">
+  <div class="empty-search-results" v-if="totalResults <= 0">
     <slot :query="query">
       No results matched your query <strong class="alg-empty-results__query">{{query}}</strong>
     </slot>
@@ -12,8 +12,8 @@
   export default {
     mixins: [algoliaComponent],
     computed: {
-      nbHits: function () {
-        return this.searchStore.nbHits
+      totalResults: function () {
+        return this.searchStore.totalResults
       },
       query: function () {
         return this.searchStore.query

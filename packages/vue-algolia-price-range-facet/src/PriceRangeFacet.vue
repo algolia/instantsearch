@@ -54,7 +54,7 @@
     },
     computed: {
       shouldDisplay () {
-        return this.from || this.to || this.searchStore.nbHits > 0
+        return this.from || this.to || this.searchStore.totalResults > 0
       },
       from () {
         for (let refinement in this.searchStore.activeRefinements) {

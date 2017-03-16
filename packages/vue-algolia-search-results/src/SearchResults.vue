@@ -1,7 +1,7 @@
 <template>
   <div class="alg-search-results">
-    <slot v-for="hit in hits" :hit="hit">
-      Result 'objectID': {{ hit.objectID }}
+    <slot v-for="result in results" :result="result">
+      Result 'objectID': {{ result.objectID }}
     </slot>
   </div>
 </template>
@@ -16,51 +16,51 @@
         type: Boolean,
         default: false
       },
-      hitsPerPage: {
+      resultsPerPage: {
         type: Number
       }
     },
     mounted () {
-      this.pushHitsPerPage()
+      this.updateResultsPerPage()
     },
     watch: {
-      hitsPerPage () {
-        this.pushHitsPerPage()
+      resultsPerPage () {
+        this.updateResultsPerPage()
       }
     },
     methods: {
-      pushHitsPerPage () {
-        if (typeof this.hitsPerPage === 'number' && this.hitsPerPage > 0) {
-          this.searchStore.hitsPerPage = this.hitsPerPage
+      updateResultsPerPage () {
+        if (typeof this.resultsPerPage === 'number' && this.resultsPerPage > 0) {
+          this.searchStore.resultsPerPage = this.resultsPerPage
         }
       }
     },
     computed: {
-      hits () {
+      results () {
         if (this.stack === false) {
-          return this.searchStore.hits
+          return this.searchStore.results
         }
 
-        if (typeof this.stackedHits === 'undefined') {
-          this.stackedHits = []
+        if (typeof this.stackedResults === 'undefined') {
+          this.stackedResults = []
         }
 
         if (this.searchStore.page === 0) {
-          this.stackedHits = []
+          this.stackedResults = []
         }
 
-        if (this.stackedHits.length === 0 || this.searchStore.hits.length === 0) {
-          this.stackedHits.push(...this.searchStore.hits)
+        if (this.stackedResults.length === 0 || this.searchStore.results.length === 0) {
+          this.stackedResults.push(...this.searchStore.results)
         } else {
-          const lastStacked = this.stackedHits[this.stackedHits.length - 1]
-          const lastHit = this.searchStore.hits[this.searchStore.hits.length - 1]
+          const lastStacked = this.stackedResults[this.stackedResults.length - 1]
+          const lastResult = this.searchStore.results[this.searchStore.results.length - 1]
 
-          if (lastStacked['objectID'] !== lastHit['objectID']) {
-            this.stackedHits.push(...this.searchStore.hits)
+          if (lastStacked['objectID'] !== lastResult['objectID']) {
+            this.stackedResults.push(...this.searchStore.results)
           }
         }
 
-        return this.stackedHits
+        return this.stackedResults
       }
     }
   }

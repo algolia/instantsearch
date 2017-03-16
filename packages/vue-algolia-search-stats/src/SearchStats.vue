@@ -1,6 +1,6 @@
 <template>
-  <div class="alg-search-stats" v-if="nbHits > 0">
-    <slot>{{nbHits}} results found in {{processingTimeMS}}ms</slot>
+  <div class="alg-search-stats" v-if="totalResults > 0">
+    <slot>{{totalResults}} results found in {{processingTimeMS}}ms</slot>
   </div>
 </template>
 
@@ -10,8 +10,8 @@
   export default {
     mixins: [algoliaComponent],
     computed: {
-      nbHits () {
-        return this.searchStore.nbHits
+      totalResults () {
+        return this.searchStore.totalResults
       },
       processingTimeMS () {
         return this.searchStore.processingTimeMS
