@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-rating-facet" v-if="isVisible">
+  <div class="alg-rating-facet" v-if="show">
     <slot name="header"></slot>
 
     <button class="alg-rating-facet__clear"
@@ -66,14 +66,14 @@
         default: 5
       }
     },
-    mounted: function () {
+    mounted () {
       this.searchStore.addFacet(this.attribute, FACET_OR)
     },
-    destroyed: function () {
+    destroyed () {
       this.searchStore.removeFacet(this.attribute)
     },
     computed: {
-      isVisible: function () {
+      show () {
         for (let value in this.facetValues) {
           if (this.facetValues[value].count > 0) {
             return true
@@ -81,7 +81,7 @@
         }
         return false
       },
-      facetValues: function () {
+      facetValues () {
         const values = this.searchStore.getFacetValues(this.attribute, ['name:asc'], this.max + 1)
 
         let stars = []

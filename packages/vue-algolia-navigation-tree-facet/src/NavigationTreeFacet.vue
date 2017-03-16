@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-navigation-tree-facet" v-if="facetValues.length > 0">
+  <div class="alg-navigation-tree-facet" v-if="show">
     <slot name="header"></slot>
 
     <ul v-if="facetValues.length > 0">
@@ -101,6 +101,9 @@
         let values = this.searchStore.getFacetValues(this.attribute, this.sortBy)
 
         return values.data || []
+      },
+      show () {
+        return this.facetValues.length > 0
       }
     },
     methods: {
