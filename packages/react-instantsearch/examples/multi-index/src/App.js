@@ -1,5 +1,5 @@
 import React from 'react';
-import {InstantSearch, Hits, SearchBox, MultiIndexContext} from 'react-instantsearch/dom';
+import {InstantSearch, Hits, SearchBox, Index} from 'react-instantsearch/dom';
 import 'react-instantsearch-theme-algolia/style.css';
 
 const App = () =>
@@ -11,10 +11,10 @@ const App = () =>
     <SearchBox/>
     <p>Results in first dataset</p>
     <Hits />
-    <MultiIndexContext indexName="ikea">
+    <Index indexName="ikea">
       <p>Results in second dataset</p>
       <Hits />
-    </MultiIndexContext>
+    </Index>
   </InstantSearch>;
 
 export default App;

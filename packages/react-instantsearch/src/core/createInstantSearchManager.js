@@ -59,16 +59,16 @@ export default function createInstantSearchManager({
     indexMapping = {};
     const mainParameters = widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => !widget.multiIndexContext ||
-                        widget.multiIndexContext && widget.multiIndexContext.targettedIndex === indexName)
+      .filter(widget => !widget.Index ||
+                        widget.Index && widget.Index.targettedIndex === indexName)
       .reduce((res, widget) => widget.getSearchParameters(res), initialSearchParameters);
     indexMapping[mainParameters.index] = indexName;
 
     const derivatedWidgets = widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .filter(widget => widget.multiIndexContext && widget.multiIndexContext.targettedIndex !== indexName)
+      .filter(widget => widget.Index && widget.Index.targettedIndex !== indexName)
       .reduce((indices, widget) => {
-        const targettedIndex = widget.multiIndexContext.targettedIndex;
+        const targettedIndex = widget.Index.targettedIndex;
         const index = indices.find(i => i.targettedIndex === targettedIndex);
         if (index) {
           index.widgets.push(widget);

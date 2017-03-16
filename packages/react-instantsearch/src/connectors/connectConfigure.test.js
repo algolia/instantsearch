@@ -55,7 +55,7 @@ describe('connectConfigure', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'second'}}};
+    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
     let cleanUp = connect.cleanUp.bind(context);
     const getSearchParameters = connect.getSearchParameters.bind(context);
 
@@ -87,7 +87,7 @@ describe('connectConfigure', () => {
 
       expect(searchState).toEqual({indices: {second: {configure: {whatever: 'other'}}}});
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'first'}}};
+      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
       transitionState = connect.transitionState.bind(context);
 
       searchState = transitionState(
@@ -124,7 +124,7 @@ describe('connectConfigure', () => {
         first: {configure: {distinct: 1, whatever: 'please'}}, second: {configure: {}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'first'}}};
+      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
       cleanUp = connect.cleanUp.bind(context);
 
       searchState = cleanUp(

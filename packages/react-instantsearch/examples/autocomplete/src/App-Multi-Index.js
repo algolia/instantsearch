@@ -1,5 +1,5 @@
 import React from 'react';
-import {InstantSearch, Configure, MultiIndexContext} from 'react-instantsearch/dom';
+import {InstantSearch, Configure, Index} from 'react-instantsearch/dom';
 import {connectAutoComplete} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 import 'react-instantsearch-theme-algolia/style.css';
@@ -11,12 +11,12 @@ const App = () =>
     indexName="ikea">
     <AutoComplete />
     <Configure hitsPerPage={1} />
-    <MultiIndexContext indexName="bestbuy">
+    <Index indexName="bestbuy">
       <VirtualAutoComplete />
-    </MultiIndexContext>
-    <MultiIndexContext indexName="airbnb">
+    </Index>
+    <Index indexName="airbnb">
       <VirtualAutoComplete />
-    </MultiIndexContext>
+    </Index>
   </InstantSearch >;
 
 const VirtualAutoComplete = connectAutoComplete(() => null);

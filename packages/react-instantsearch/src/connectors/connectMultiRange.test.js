@@ -251,7 +251,7 @@ describe('connectMultiRange', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -297,7 +297,7 @@ describe('connectMultiRange', () => {
         {first: {otherKey: 'val', page: 1, multiRange: {ok: 'yep', otherKey: 'val'}}},
       });
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine(

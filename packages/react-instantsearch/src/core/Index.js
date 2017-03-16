@@ -3,12 +3,12 @@ import React, {PropTypes, Component, Children} from 'react';
 /* eslint valid-jsdoc: 0 */
 /**
  * @description
- * `<MultiIndexContext>` is the component that allows you to apply widgets to a dedicated index. It's
+ * `<Index>` is the component that allows you to apply widgets to a dedicated index. It's
  * useful if you want to build an interface that targets multiple indices.
  * @kind widget
  * @propType {string} indexName - index in which to search.
  * @example
- * import {InstantSearch, MultiIndexContext, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
+ * import {InstantSearch, Index, SearchBox, Hits, Configure} from 'react-instantsearch/dom';
  *
  * export default function Search() {
  *   return (
@@ -18,20 +18,20 @@ import React, {PropTypes, Component, Children} from 'react';
           indexName="index1">
       <SearchBox/>
       <Configure hitsPerPage={1} />
-      <MultiIndexContext indexName="index1">
+      <Index indexName="index1">
         <Hits />
-      </MultiIndexContext>
-      <MultiIndexContext indexName="index2">
+      </Index>
+      <Index indexName="index2">
         <Hits />
-      </MultiIndexContext>
+      </Index>
   </InstantSearch>
  *   );
  * }
  */
-class MultiIndexContext extends Component {
+class Index extends Component {
   getChildContext() {
     return {
-      multiIndexContext: {
+      Index: {
         targettedIndex: this.props.indexName,
       },
     };
@@ -47,7 +47,7 @@ class MultiIndexContext extends Component {
   }
 }
 
-MultiIndexContext.propTypes = {
+Index.propTypes = {
   // @TODO: These props are currently constant.
   indexName: PropTypes.string.isRequired,
   children: PropTypes.node,
@@ -60,9 +60,9 @@ MultiIndexContext.propTypes = {
   }).isRequired,
 };
 
-MultiIndexContext.childContextTypes = {
+Index.childContextTypes = {
   // @TODO: more precise widgets manager propType
-  multiIndexContext: PropTypes.object.isRequired,
+  Index: PropTypes.object.isRequired,
 };
 
-export default MultiIndexContext;
+export default Index;

@@ -52,7 +52,7 @@ describe('createInstantSearchManager', () => {
 
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 1'),
-          multiIndexContext: {targettedIndex: 'second'},
+          Index: {targettedIndex: 'second'},
         });
 
         expect(ism.store.getState().results).toBe(null);
@@ -95,7 +95,7 @@ describe('createInstantSearchManager', () => {
         });
         ism.widgetsManager.registerWidget({
           getSearchParameters: params => params.setQuery('second query 1'),
-          multiIndexContext: {targettedIndex: 'second'},
+          Index: {targettedIndex: 'second'},
         });
 
         ism.onExternalStateUpdate({});

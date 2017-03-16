@@ -109,7 +109,7 @@ describe('connectInfiniteHits', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the current hits to the component', () => {
       const hits = [{}];

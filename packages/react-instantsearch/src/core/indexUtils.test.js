@@ -99,7 +99,7 @@ describe('utility method for manipulating the search state', () => {
     });
   });
   describe('when there are multiple index', () => {
-    const context = {multiIndexContext: {targettedIndex: 'first'}};
+    const context = {Index: {targettedIndex: 'first'}};
     it('refine with no namespace', () => {
       let searchState = {};
       let nextRefinement = {refinement: 'refinement'};

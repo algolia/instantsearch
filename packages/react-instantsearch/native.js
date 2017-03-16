@@ -1,13 +1,13 @@
 import algoliasearch from 'algoliasearch/reactnative';
 import createInstantSearch from './src/core/createInstantSearch';
-import createMultiIndexContext from './src/core/createMultiIndexContext';
+import createIndex from './src/core/createIndex';
 import {View} from 'react-native';
 const InstantSearch = createInstantSearch(algoliasearch, {
   Root: View,
 });
 export {InstantSearch};
-const MultiIndexContext = createMultiIndexContext({
+const Index = createIndex({
   Root: View,
 });
-export {MultiIndexContext};
+export {Index};
 export {default as Configure} from './src/widgets/Configure.js';

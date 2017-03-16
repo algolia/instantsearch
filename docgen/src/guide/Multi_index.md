@@ -12,11 +12,11 @@ Whenever you want to:
 * share a single SearchBox
 * synchronize widgets between different indices
 
-You can use multiple [`<MultiIndexContext>`](widgets/<MultiIndexContext>.html) instances.
+You can use multiple [`<Index>`](widgets/<Index>.html) instances.
 
-The `<MultiIndexContext>` component takes one props, the targetted index name. 
+The `<Index>` component takes one props, the targetted index name. 
 
-When using a `<MultiIndexContext>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
+When using a `<Index>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
 
 Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component. 
 

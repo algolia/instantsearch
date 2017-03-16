@@ -1,10 +1,10 @@
 import React from 'react';
 import {storiesOf} from '@kadira/storybook';
-import {Configure, InstantSearch, MultiIndexContext, Highlight, SearchBox} from '../packages/react-instantsearch/dom';
+import {Configure, InstantSearch, Index, Highlight, SearchBox} from '../packages/react-instantsearch/dom';
 import {connectHits, connectAutoComplete} from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 
-const stories = storiesOf('MultiIndexContext', module);
+const stories = storiesOf('Index', module);
 
 stories.add('MultiHits', () =>
   <InstantSearch
@@ -13,15 +13,15 @@ stories.add('MultiHits', () =>
     indexName="ikea">
     <SearchBox/>
     <Configure hitsPerPage={1} />
-    <MultiIndexContext indexName="ikea">
+    <Index indexName="ikea">
       <CustomHits />
-    </MultiIndexContext>
-    <MultiIndexContext indexName="bestbuy">
+    </Index>
+    <Index indexName="bestbuy">
       <CustomHits />
-    </MultiIndexContext>
-    <MultiIndexContext indexName="airbnb">
+    </Index>
+    <Index indexName="airbnb">
       <CustomHits />
-    </MultiIndexContext>
+    </Index>
   </InstantSearch>
 ).add('AutoComplete', () =>
   <InstantSearch
@@ -30,12 +30,12 @@ stories.add('MultiHits', () =>
     indexName="ikea">
     <AutoComplete />
     <Configure hitsPerPage={1} />
-    <MultiIndexContext indexName="bestbuy">
+    <Index indexName="bestbuy">
       <VirtualAutoComplete />
-    </MultiIndexContext>
-    <MultiIndexContext indexName="airbnb">
+    </Index>
+    <Index indexName="airbnb">
       <VirtualAutoComplete />
-    </MultiIndexContext>
+    </Index>
   </InstantSearch >);
 
 const VirtualAutoComplete = connectAutoComplete(() => null);

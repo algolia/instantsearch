@@ -17,7 +17,7 @@ describe('connectScrollTo', () => {
     });
   });
   describe('multi index', () => {
-    const context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'second'}}};
+    const context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     it('provides the correct props to the component', () => {
       props = getProvidedProps({scrollOn: 'p'}, {indices: {second: {p: 1}}});

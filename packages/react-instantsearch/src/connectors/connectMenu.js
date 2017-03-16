@@ -99,7 +99,7 @@ export default createConnector({
       console.warn('react-instantsearch: `searchForFacetValues` has been renamed to' +
         '`withSearchBox`, this will break in the next major version.');
     }
-    if (props.withSearchBox && this.context.multiIndexContext) {
+    if (props.withSearchBox && this.context.Index) {
       // eslint-disable-next-line no-console
       console.error('react-instantsearch: searching in *List is not available when used inside a' +
         ' multi index context');

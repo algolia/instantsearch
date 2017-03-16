@@ -341,7 +341,7 @@ describe('connectMenu', () => {
     });
   });
   describe('multi index', () => {
-    let context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'first'}}};
+    let context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'first'}}};
     const getProvidedProps = connect.getProvidedProps.bind(context);
     const getSP = connect.getSearchParameters.bind(context);
     const getMetadata = connect.getMetadata.bind(context);
@@ -528,7 +528,7 @@ describe('connectMenu', () => {
       );
       expect(nextState).toEqual({indices: {first: {page: 1, otherKey: 'val', menu: {ok: 'yep', otherKey: 'val'}}}});
 
-      context = {context: {ais: {mainTargettedIndex: 'first'}, multiIndexContext: {targettedIndex: 'second'}}};
+      context = {context: {ais: {mainTargettedIndex: 'first'}, Index: {targettedIndex: 'second'}}};
       refine = connect.refine.bind(context);
 
       nextState = refine(

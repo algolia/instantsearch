@@ -2,6 +2,46 @@ body {
     font-family: Helvetica, sans-serif;
 }
 
+.highlighted{
+    background: yellow;
+}
+
+.autocomplete{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid red;
+}
+
+.content{
+    display: flex;
+    justify-content: space-between;
+}
+
+.block{
+    padding: 5px 10px;
+}
+
+.title{
+    border: 1px solid red;
+    display: flex;
+    justify-content: space-around;
+    padding: 5px 10px;
+}
+
+.disabled {
+    display: none;
+}
+
+.ais-MultiIndex__root{
+    width: 100%;
+}
+
+.title div{
+    width: 100%;
+    padding: 5px 10px;
+>>>>>>> 2c04318... refactor(Index): MultiIndexContext => Index
+}
+
 .react-autosuggest__container {
     position: relative;
 }
