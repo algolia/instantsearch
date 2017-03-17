@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-search-facet" v-if="facetValues.length > 0">
+  <div class="alg-search-facet" v-if="show">
     <slot name="header"></slot>
 
     <ul>
@@ -72,6 +72,9 @@
     computed: {
       facetValues () {
         return this.searchStore.getFacetValues(this.attribute, this.sortBy, this.limit)
+      },
+      show () {
+        return this.facetValues.length > 0
       }
     },
     methods: {

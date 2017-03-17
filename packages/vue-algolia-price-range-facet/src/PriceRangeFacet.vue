@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-price-range" v-show="shouldDisplay">
+  <div class="alg-price-range" v-show="show">
 
     <slot name="header"></slot>
 
@@ -53,7 +53,7 @@
       }
     },
     computed: {
-      shouldDisplay () {
+      show () {
         return this.from || this.to || this.searchStore.totalResults > 0
       },
       from () {
