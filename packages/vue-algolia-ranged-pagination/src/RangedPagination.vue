@@ -156,23 +156,26 @@
       }
     }
 
-    .alg-ranged-pagination__item--disabled {
-      button:hover {
-        text-decoration: none;
-      }
+  }
+
+  .alg-ranged-pagination__item--disabled {
+
+    button:hover {
+      text-decoration: none;
     }
 
-    .alg-ranged-pagination__item--active label {
-      font-weight: bold;
+  }
+
+  .alg-ranged-pagination__item--active label {
+    font-weight: bold;
+  }
+
+  .alg-ranged-pagination__item--disabled, .alg-ranged-pagination__item--active {
+
+    label:hover {
+      text-decoration: none;
+      cursor: default;
     }
 
-    .alg-ranged-pagination__item--disabled, .alg-ranged-pagination__item--active {
-
-      label:hover {
-        text-decoration: none;
-        cursor: default;
-      }
-
-    }
   }
 </style>
