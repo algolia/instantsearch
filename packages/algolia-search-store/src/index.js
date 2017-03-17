@@ -5,8 +5,7 @@ export const FACET_AND = 'and'
 export const FACET_OR = 'or'
 export const FACET_TREE = 'tree'
 
-const assertValidFacetType = function (type) {
-  type = type.toLowerCase()
+export const assertValidFacetType = function (type) {
   if (type === FACET_AND) return
   if (type === FACET_OR) return
   if (type === FACET_TREE) return
@@ -54,6 +53,10 @@ export class Store {
 
     // Todo: fetch the version somehow.
     this._helper.getClient().addAlgoliaAgent('Store (x.x.x)')
+  }
+
+  get algoliaHelper() {
+    return this._helper;
   }
 
   set algoliaClient(algoliaClient) {
@@ -173,7 +176,6 @@ export class Store {
 
   addFacet(attribute, type = FACET_AND) {
     assertValidFacetType(type)
-    type = type.toLowerCase()
 
     this.stop()
     this.removeFacet(attribute)
