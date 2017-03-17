@@ -34,6 +34,9 @@ In this case you will need to use the [`connectAutoComplete`](connectors/connect
 
 [Read the example](https://github.com/algolia/instantsearch.js/blob/v2/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices. 
 
+When using the `<Index>` component the shape of the search state will be modified. See 
+[our Search State guide](guide/Search_state.html). 
+
 <div class="guide-nav">
     <div class="guide-nav-left">
         Previous: <a href="guide/Search_parameters.html">← Search Parameters</a>

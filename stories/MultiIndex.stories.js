@@ -3,7 +3,7 @@ import {storiesOf} from '@kadira/storybook';
 import {Configure, InstantSearch, Index, Highlight, SearchBox} from '../packages/react-instantsearch/dom';
 import {connectHits, connectAutoComplete} from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
-const stories = storiesOf('Index', module);
+const stories = storiesOf('<Index>', module);
 
 stories.add('MultiHits', () =>
   <InstantSearch
