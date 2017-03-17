@@ -12,10 +12,10 @@
   export default {
     mixins: [algoliaComponent],
     computed: {
-      totalResults: function () {
+      totalResults () {
         return this.searchStore.totalResults
       },
-      query: function () {
+      query () {
         return this.searchStore.query
       }
     }
