@@ -126,6 +126,7 @@
 
       }
     }
+    
     ul {
       list-style: none;
       padding-left: 0;
@@ -135,9 +136,10 @@
       }
 
     }
-    .alg-navigation-tree-facet__item--active > label {
-      font-weight: bold;
-    }
 
+  }
+
+  .alg-navigation-tree-facet__item--active > label {
+    font-weight: bold;
   }
 </style>
