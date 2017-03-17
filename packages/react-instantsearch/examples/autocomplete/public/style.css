@@ -39,7 +39,6 @@ body {
 .title div{
     width: 100%;
     padding: 5px 10px;
->>>>>>> 2c04318... refactor(Index): MultiIndexContext => Index
 }
 
 .react-autosuggest__container {
