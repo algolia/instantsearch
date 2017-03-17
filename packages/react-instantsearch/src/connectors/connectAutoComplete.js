@@ -24,8 +24,8 @@ function getCurrentRefinement(props, searchState) {
  * prop to a [Configure](guide/Search_parameters.html) widget.
  * @name connectAutoComplete
  * @kind connector
- * @providedPropType {array.<object>} hits - the records that matched the search state
- * @providedPropType {function} refine - a function to remove a single filter
+ * @providedPropType {array.<object>} hits - the records that matched the search state.
+ * @providedPropType {function} refine - a function to change the query.
  * @providedPropType {string} currentRefinement - the query to search for.
  */
 export default createConnector({
@@ -53,7 +53,7 @@ export default createConnector({
     return omit(searchState, getId());
   },
 
-  /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.
+  /* connectAutoComplete needs to be considered as a widget to trigger a search if no others widgets are used.
    * To be considered as a widget you need either getSearchParameters, getMetadata or getTransitionState
    * See createConnector.js
     * */

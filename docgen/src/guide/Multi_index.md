@@ -10,7 +10,7 @@ Whenever you want to:
 
 * display hits from different indices
 * share a single SearchBox
-* build an autocomplete menu targeting different indices. Either manually or using an external autocomplete component (see [`connectAutoComplete`](connectors/connectAutoComplete.html)
+* build an autocomplete menu targeting different indices
 
 You can use multiple [`<Index>`](widgets/<Index>.html) instances.
 
@@ -21,6 +21,18 @@ When using a `<Index>` component under an `<InstantSearch>` root component you c
 Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component. 
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
+
+You might also want to:
+
+* Use an external autocomplete component
+
+In this case you will need to use the [`connectAutoComplete`](connectors/connectAutoComplete.html) connectors that will give you access to: 
+
+* All the indices hits
+* The current query
+* The refine function to update the query
+
+[Read the example](https://github.com/algolia/instantsearch.js/blob/v2/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices. 
 
 <div class="guide-nav">
     <div class="guide-nav-left">

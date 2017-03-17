@@ -6,7 +6,7 @@ import Autosuggest from 'react-autosuggest';
 import {forOwn} from 'lodash';
 import 'react-instantsearch-theme-algolia/style.css';
 
-class App extends Component {
+class App2 extends Component {
   render() {
     return (
       <InstantSearch
@@ -107,4 +107,4 @@ AutoComplete.propTypes = {
 
 const ConnectedAutoComplete = connectAutoComplete(AutoComplete);
 
-export default App;
+export default App2;

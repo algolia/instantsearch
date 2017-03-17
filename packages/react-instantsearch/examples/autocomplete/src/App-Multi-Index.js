@@ -1,6 +1,6 @@
 import React from 'react';
 import {InstantSearch, Configure, Index} from 'react-instantsearch/dom';
-import {connectAutoComplete} from 'react-instantsearch/connectors';
+import {connectAutoComplete, connectHits} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
 import 'react-instantsearch-theme-algolia/style.css';
 
@@ -12,14 +12,14 @@ const App = () =>
     <AutoComplete />
     <Configure hitsPerPage={1} />
     <Index indexName="bestbuy">
-      <VirtualAutoComplete />
+      <VirtualHits />
     </Index>
     <Index indexName="airbnb">
-      <VirtualAutoComplete />
+      <VirtualHits />
     </Index>
   </InstantSearch >;
 
-const VirtualAutoComplete = connectAutoComplete(() => null);
+const VirtualHits = connectHits(() => null);
 
 const AutoComplete = connectAutoComplete(({hits, currentRefinement, refine}) => <Autosuggest
   suggestions={hits}
