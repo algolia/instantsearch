@@ -88,6 +88,20 @@ function menuSelect({
   };
 
   return {
+    getConfiguration(configuration) {
+      const widgetConfiguration = {
+        hierarchicalFacets: [{
+          name: hierarchicalFacetName,
+          attributes: [attributeName],
+        }],
+      };
+
+      const currentMaxValuesPerFacet = configuration.maxValuesPerFacet || 0;
+      widgetConfiguration.maxValuesPerFacet = Math.max(currentMaxValuesPerFacet, limit);
+
+      return widgetConfiguration;
+    },
+
     init({helper, templatesConfig}) {
       this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
 
