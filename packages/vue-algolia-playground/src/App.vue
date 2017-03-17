@@ -259,7 +259,13 @@
     }
   }
 
+  /* Ranged Pagination */
   .alg-ranged-pagination li label{
     padding: 10px;
+  }
+
+  /* Search Facet */
+  .alg-search-facet label input {
+    margin-right: 5px;
   }
 </style>

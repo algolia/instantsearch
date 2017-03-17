@@ -102,9 +102,6 @@
 
       }
 
-      input {
-        margin-right: 5px;
-      }
     }
 
     ul {
