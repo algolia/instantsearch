@@ -48,6 +48,16 @@ npm run release
 
 This cannot yet be moved to `yarn release` so please use `npm run release`.
 
+To publish a beta version, you have to use:
+
+```sh
+npm run release -- -b # or --beta
+```
+
+Then for the version you bump if needed, and append `-beta0` (or 1 etc for next versions).
+
+The beta website will be updated automatically.
+
 ## Update docs
 
 ```sh
