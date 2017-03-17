@@ -15,7 +15,7 @@ export default {
   entry: 'src/index.js',
   moduleName: moduleName,
   plugins: [
-    vue({compileTemplate: true, css: false}),
+    vue({compileTemplate: true, css: true}),
     resolve({
       browser: true,
       preferBuiltins: false

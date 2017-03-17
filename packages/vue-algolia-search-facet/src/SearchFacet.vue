@@ -87,3 +87,28 @@
   }
 </script>
 
+<style lang="scss" rel="stylesheet/scss">
+  .alg-search-facet {
+
+    label {
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover .alg-search-facet__value {
+        text-decoration: underline;
+      }
+
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    &__item--active label {
+      font-weight: bold;
+    }
+
+  }
+</style>
+

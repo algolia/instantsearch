@@ -110,3 +110,31 @@
     }
   }
 </script>
+
+<style lang="scss" rel="stylesheet/scss">
+  .alg-navigation-tree-facet {
+
+    label {
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover .alg-navigation-tree-facet__value {
+        text-decoration: underline;
+      }
+
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    & > ul {
+      padding-left: 0;
+    }
+
+    &__item--active > label {
+      font-weight: bold;
+    }
+
+  }
+</style>

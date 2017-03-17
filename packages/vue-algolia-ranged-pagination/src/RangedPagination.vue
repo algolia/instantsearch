@@ -123,3 +123,55 @@
     }
   }
 </script>
+
+<style lang="scss" rel="stylesheet/scss">
+  /* Ranged Pagination */
+  .alg-ranged-pagination {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+      display: inline-block;
+    }
+
+    input {
+      display: none;
+    }
+
+    label {
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+    }
+
+    button {
+      border: none;
+      background: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__item--disabled button:hover {
+      text-decoration: none;
+    }
+
+    &__item--active label {
+      font-weight: bold;
+    }
+
+    &__item--disabled, &__item--active {
+
+      label:hover {
+        text-decoration: none;
+        cursor: default;
+      }
+
+    }
+
+  }
+</style>

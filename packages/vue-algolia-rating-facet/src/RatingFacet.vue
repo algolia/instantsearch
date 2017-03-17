@@ -157,6 +157,55 @@
   }
 </script>
 
+<style lang="scss" rel="stylesheet/scss">
+  .alg-rating-facet {
 
+    input {
+      display: none;
+    }
+
+    label {
+      font-weight: normal;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    &__item--active label {
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: none;
+        cursor: default;
+      }
+
+    }
+
+    &__clear {
+      border: none;
+      background: none;
+      padding-left: 0;
+
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      &:before {
+        content: '< ';
+      }
+
+    }
+
+  }
+</style>
 
 

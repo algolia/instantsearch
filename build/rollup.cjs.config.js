@@ -9,7 +9,7 @@ export default {
   entry: 'src/index.js',
   external: dependencies,
   plugins: [
-    vue({compileTemplate: true, css: false}),
+    vue({compileTemplate: true, css: true}),
     buble(),
     filesize()
   ],
