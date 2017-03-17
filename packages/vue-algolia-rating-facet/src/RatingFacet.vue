@@ -173,36 +173,36 @@
       }
 
     }
-    
+
     ul {
       list-style: none;
       padding-left: 0;
     }
 
-  }
+    &__item--active label {
+      font-weight: bold;
 
-  .alg-rating-facet__item--active label {
-    font-weight: bold;
+      &:hover {
+        text-decoration: none;
+        cursor: default;
+      }
 
-    &:hover {
-      text-decoration: none;
-      cursor: default;
     }
 
-  }
+    &__clear {
+      border: none;
+      background: none;
+      padding-left: 0;
 
-  .alg-rating-facet__clear {
-    border: none;
-    background: none;
-    padding-left: 0;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
-    &:hover {
-      cursor: pointer;
-      text-decoration: underline;
-    }
+      &:before {
+        content: '< ';
+      }
 
-    &:before {
-      content: '< ';
     }
 
   }

@@ -156,25 +156,21 @@
       }
     }
 
-  }
-
-  .alg-ranged-pagination__item--disabled {
-
-    button:hover {
+    &__item--disabled button:hover {
       text-decoration: none;
     }
 
-  }
+    &__item--active label {
+      font-weight: bold;
+    }
 
-  .alg-ranged-pagination__item--active label {
-    font-weight: bold;
-  }
+    &__item--disabled, &__item--active {
 
-  .alg-ranged-pagination__item--disabled, .alg-ranged-pagination__item--active {
+      label:hover {
+        text-decoration: none;
+        cursor: default;
+      }
 
-    label:hover {
-      text-decoration: none;
-      cursor: default;
     }
 
   }

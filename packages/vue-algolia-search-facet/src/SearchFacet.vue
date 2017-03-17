@@ -94,12 +94,8 @@
       font-weight: normal;
       cursor: pointer;
 
-      &:hover {
-
-        .alg-search-facet__value {
-          text-decoration: underline;
-        }
-
+      &:hover .alg-search-facet__value {
+        text-decoration: underline;
       }
 
     }
@@ -109,10 +105,10 @@
       padding-left: 0;
     }
 
-  }
+    &__item--active label {
+      font-weight: bold;
+    }
 
-  .alg-search-facet__item--active label {
-    font-weight: bold;
   }
 </style>
 

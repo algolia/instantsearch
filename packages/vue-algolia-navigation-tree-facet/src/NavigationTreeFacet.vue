@@ -118,13 +118,10 @@
       font-weight: normal;
       cursor: pointer;
 
-      &:hover {
-
-        .alg-navigation-tree-facet__value {
-          text-decoration: underline;
-        }
-
+      &:hover .alg-navigation-tree-facet__value {
+        text-decoration: underline;
       }
+
     }
 
     ul {
@@ -137,9 +134,9 @@
 
     }
 
-  }
+    &__item--active > label {
+      font-weight: bold;
+    }
 
-  .alg-navigation-tree-facet__item--active > label {
-    font-weight: bold;
   }
 </style>
