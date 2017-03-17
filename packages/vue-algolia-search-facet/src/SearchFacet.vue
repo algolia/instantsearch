@@ -106,15 +106,16 @@
         margin-right: 5px;
       }
     }
+
     ul {
       list-style: none;
       padding-left: 0;
     }
 
-    .alg-search-facet__item--active label {
-      font-weight: bold;
-    }
+  }
 
+  .alg-search-facet__item--active label {
+    font-weight: bold;
   }
 </style>
 
