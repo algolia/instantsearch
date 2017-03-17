@@ -126,12 +126,10 @@
 
     ul {
       list-style: none;
+    }
+
+    & > ul {
       padding-left: 0;
-
-      ul {
-        padding-left: 20px;
-      }
-
     }
 
     &__item--active > label {
