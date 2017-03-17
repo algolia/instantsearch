@@ -118,7 +118,7 @@
       font-weight: normal;
       cursor: pointer;
 
-      &:hover &__value {
+      &:hover .alg-navigation-tree-facet__value {
         text-decoration: underline;
       }
 
