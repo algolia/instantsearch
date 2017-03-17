@@ -3,7 +3,6 @@ import {storiesOf} from '@kadira/storybook';
 import {Configure, InstantSearch, Index, Highlight, SearchBox} from '../packages/react-instantsearch/dom';
 import {connectHits, connectAutoComplete} from '../packages/react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
-
 const stories = storiesOf('Index', module);
 
 stories.add('MultiHits', () =>
@@ -31,14 +30,14 @@ stories.add('MultiHits', () =>
     <AutoComplete />
     <Configure hitsPerPage={1} />
     <Index indexName="bestbuy">
-      <VirtualAutoComplete />
+      <VirtualHits />
     </Index>
     <Index indexName="airbnb">
-      <VirtualAutoComplete />
+      <VirtualHits />
     </Index>
   </InstantSearch >);
 
-const VirtualAutoComplete = connectAutoComplete(() => null);
+const VirtualHits = connectHits(() => null);
 
 const AutoComplete = connectAutoComplete(({hits, currentRefinement, refine}) => <Autosuggest
   suggestions={hits}
