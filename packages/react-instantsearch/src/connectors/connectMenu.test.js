@@ -239,13 +239,14 @@ describe('connectMenu', () => {
 
     it('registers its id in metadata', () => {
       const metadata = getMetadata({attributeName: 'ok'}, {});
-      expect(metadata).toEqual({id: 'ok', items: []});
+      expect(metadata).toEqual({id: 'ok', index: 'index', items: []});
     });
 
     it('registers its filter in metadata', () => {
       const metadata = getMetadata({attributeName: 'wot'}, {menu: {wot: 'wat'}});
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'index',
         items: [{
           label: 'wot: wat',
           attributeName: 'wot',
@@ -560,6 +561,7 @@ describe('connectMenu', () => {
       const metadata = getMetadata({attributeName: 'wot'}, {indices: {first: {menu: {wot: 'wat'}}}});
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'first',
         items: [{
           label: 'wot: wat',
           attributeName: 'wot',

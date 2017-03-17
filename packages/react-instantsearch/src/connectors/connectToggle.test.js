@@ -64,6 +64,7 @@ describe('connectToggle', () => {
       expect(metadata).toEqual({
         items: [],
         id: 't',
+        index: 'index',
       });
 
       metadata = getMetadata({attributeName: 't', label: 'yep'}, {toggle: {t: true}});
@@ -78,6 +79,7 @@ describe('connectToggle', () => {
           },
         ],
         id: 't',
+        index: 'index',
       });
     });
 
@@ -166,6 +168,7 @@ describe('connectToggle', () => {
           },
         ],
         id: 't',
+        index: 'first',
       });
     });
 

@@ -187,6 +187,7 @@ export default createConnector({
     const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     return {
       id,
+      index: getIndex(this.context),
       items: currentRefinement === null ? [] : [{
         label: `${props.attributeName}: ${currentRefinement}`,
         attributeName: props.attributeName,

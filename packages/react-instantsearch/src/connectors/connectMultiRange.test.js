@@ -194,7 +194,7 @@ describe('connectMultiRange', () => {
 
     it('registers its id in metadata', () => {
       const metadata = getMetadata({attributeName: 'ok'}, {});
-      expect(metadata).toEqual({id: 'ok', items: []});
+      expect(metadata).toEqual({id: 'ok', index: 'index', items: []});
     });
 
     it('registers its filter in metadata', () => {
@@ -211,6 +211,7 @@ describe('connectMultiRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'index',
         items: [{
           label: 'wot: YAY',
           // Ignore clear, we test it later
@@ -334,6 +335,7 @@ describe('connectMultiRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'first',
         items: [{
           label: 'wot: YAY',
           // Ignore clear, we test it later

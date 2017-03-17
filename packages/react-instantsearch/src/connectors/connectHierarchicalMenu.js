@@ -235,6 +235,7 @@ export default createConnector({
 
     return {
       id,
+      index: getIndex(this.context),
       items: !currentRefinement ? [] : [{
         label: `${rootAttribute}: ${currentRefinement}`,
         attributeName: rootAttribute,

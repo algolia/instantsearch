@@ -1,6 +1,6 @@
 import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
-import {cleanUpValue, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
 
 function getId(props) {
   return props.attributeName;
@@ -91,6 +91,7 @@ export default createConnector({
     const id = getId(props);
     const checked = getCurrentRefinement(props, searchState, this.context);
     const items = [];
+    const index = getIndex(this.context);
     if (checked) {
       items.push({
         label: props.label,
@@ -99,6 +100,6 @@ export default createConnector({
         value: nextState => refine(props, nextState, false, this.context),
       });
     }
-    return {id, items};
+    return {id, index, items};
   },
 });

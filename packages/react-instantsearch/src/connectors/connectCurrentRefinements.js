@@ -22,7 +22,6 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults, metadata) {
-    const index = getIndex(this.context);
     const items = metadata.reduce((res, meta) => {
       if (typeof meta.items !== 'undefined') {
         if (!props.clearsQuery && meta.id === 'query') {
@@ -37,14 +36,9 @@ export default createConnector({
       return res;
     }, []);
 
-    // legacy
-    const query = props.clearsQuery && searchResults.results && searchResults.results[index]
-      ? searchResults.results[index].query : undefined;
-
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       canRefine: items.length > 0,
-      query,
     };
   },
 

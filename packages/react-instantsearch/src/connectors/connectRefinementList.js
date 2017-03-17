@@ -203,6 +203,7 @@ export default createConnector({
     const context = this.context;
     return {
       id,
+      index: getIndex(this.context),
       items: getCurrentRefinement(props, searchState, context).length > 0 ? [{
         attributeName: props.attributeName,
         label: `${props.attributeName}: `,

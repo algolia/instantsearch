@@ -215,13 +215,14 @@ describe('connectHierarchicalMenu', () => {
 
     it('registers its id in metadata', () => {
       const metadata = getMetadata({attributes: ['ok']}, {});
-      expect(metadata).toEqual({items: [], id: 'ok'});
+      expect(metadata).toEqual({items: [], index: 'index', id: 'ok'});
     });
 
     it('registers its filter in metadata', () => {
       const metadata = getMetadata({attributes: ['ok']}, {hierarchicalMenu: {ok: 'wat'}});
       expect(metadata).toEqual({
         id: 'ok',
+        index: 'index',
         items: [{
           label: 'ok: wat',
           attributeName: 'ok',
@@ -449,6 +450,7 @@ describe('connectHierarchicalMenu', () => {
       const metadata = getMetadata({attributes: ['ok']}, {indices: {first: {hierarchicalMenu: {ok: 'wat'}}}});
       expect(metadata).toEqual({
         id: 'ok',
+        index: 'first',
         items: [{
           label: 'ok: wat',
           attributeName: 'ok',

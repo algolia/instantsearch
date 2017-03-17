@@ -42,7 +42,6 @@ describe('connectCurrentRefinements', () => {
     ]);
 
     expect(props.items).toEqual([{currentRefinement: 'query'}]);
-    expect(props.query).toEqual('query');
   });
 
   it('dont provide the query if clearsQuery props is true but the current refinement is an empty string', () => {
@@ -57,7 +56,6 @@ describe('connectCurrentRefinements', () => {
     ]);
 
     expect(props.items).toEqual([]);
-    expect(props.query).toEqual('');
   });
 
   it('refine applies the selected filters clear method on searchState', () => {

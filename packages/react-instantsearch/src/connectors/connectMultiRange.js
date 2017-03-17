@@ -166,6 +166,7 @@ export default createConnector({
     const id = getId(props);
     const value = getCurrentRefinement(props, searchState, this.context);
     const items = [];
+    const index = getIndex(this.context);
     if (value !== '') {
       const {label} = find(props.items, item => stringifyItem(item) === value);
       items.push({
@@ -175,6 +176,6 @@ export default createConnector({
         value: nextState => refine(props, nextState, '', this.context),
       });
     }
-    return {id, items};
+    return {id, index, items};
   },
 });

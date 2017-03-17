@@ -128,6 +128,7 @@ describe('connectRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'index',
         items: [{
           label: '5 <= wot',
           attributeName: 'wot',
@@ -146,6 +147,7 @@ describe('connectRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'index',
         items: [{
           label: 'wot <= 10',
           attributeName: 'wot',
@@ -160,6 +162,7 @@ describe('connectRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'index',
         items: [{
           label: '5 <= wot <= 10',
           attributeName: 'wot',
@@ -271,6 +274,7 @@ describe('connectRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'first',
         items: [{
           label: '5 <= wot',
           attributeName: 'wot',
@@ -289,6 +293,7 @@ describe('connectRange', () => {
       );
       expect(metadata).toEqual({
         id: 'wot',
+        index: 'first',
         items: [{
           label: 'wot <= 10',
           attributeName: 'wot',

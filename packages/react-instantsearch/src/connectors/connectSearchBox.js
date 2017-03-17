@@ -1,6 +1,6 @@
 import createConnector from '../core/createConnector';
 import {PropTypes} from 'react';
-import {cleanUpValue, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import {cleanUpValue, refineValue, getCurrentRefinementValue, getIndex} from '../core/indexUtils';
 
 function getId() {
   return 'query';
@@ -68,6 +68,7 @@ export default createConnector({
     const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     return {
       id,
+      index: getIndex(this.context),
       items: currentRefinement === null ? [] : [{
         label: `${id}: ${currentRefinement}`,
         value: nextState => refine(props, nextState, '', this.context),

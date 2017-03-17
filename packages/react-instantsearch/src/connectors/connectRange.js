@@ -169,6 +169,7 @@ export default createConnector({
 
     return {
       id,
+      index: getIndex(this.context),
       items: item ? [item] : [],
     };
   },
