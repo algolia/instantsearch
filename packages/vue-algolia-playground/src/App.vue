@@ -257,6 +257,9 @@
     &.alg-clear-search--disabled {
       display: none;
     }
+  }
 
+  .alg-ranged-pagination li label{
+    padding: 10px;
   }
 </style>

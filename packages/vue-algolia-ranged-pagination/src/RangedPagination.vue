@@ -132,11 +132,6 @@
 
     li {
       display: inline-block;
-
-      label {
-        padding: 10px;
-      }
-
     }
 
     input {
