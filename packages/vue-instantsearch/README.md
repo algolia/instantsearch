@@ -6,9 +6,6 @@ This project uses [Lerna](https://github.com/lerna/lerna) to orchestrate all the
 To get started you should:
 
 ```sh
-# Install Lerna globally
-yarn global add lerna
-
 # Install dependencies common to the packages
 yarn install
 
@@ -20,4 +17,7 @@ yarn build
 
 # Clean all the dependencies and build again
 yarn reboot
+
+# Launch tests with Jest
+yarn test
 ```
