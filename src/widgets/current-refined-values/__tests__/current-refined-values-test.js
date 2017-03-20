@@ -5,7 +5,7 @@ import algoliasearch from 'algoliasearch';
 import algoliasearchHelper from 'algoliasearch-helper';
 import {prepareTemplateProps} from '../../../lib/utils';
 import currentRefinedValues from '../current-refined-values';
-import defaultTemplates from '../../../connectors/current-refined-values/defaultTemplates';
+import defaultTemplates from '../defaultTemplates';
 
 describe('currentRefinedValues()', () => {
   describe('types checking', () => {
@@ -420,7 +420,9 @@ describe('currentRefinedValues()', () => {
       initParameters = {
         helper,
         createURL: () => '',
-        templatesConfig: {randomAttributeNeverUsed: 'value'},
+        instantSearchInstance: {
+          templatesConfig: {randomAttributeNeverUsed: 'value'},
+        },
       };
 
       renderParameters = {

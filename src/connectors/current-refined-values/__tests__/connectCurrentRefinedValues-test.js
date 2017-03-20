@@ -33,10 +33,7 @@ describe('connectCurrentRefinedValues', () => {
     expect(rendering.lastCall.args[1]).toBe(true);
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.containerNode).toBe(container);
     expect(firstRenderingOptions.refinements).toEqual([]);
-    expect(firstRenderingOptions.collapsible).toBe(false);
-    expect(firstRenderingOptions.shouldAutoHideContainer).toBe(true);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -50,10 +47,7 @@ describe('connectCurrentRefinedValues', () => {
     expect(rendering.lastCall.args[1]).toBe(false);
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.containerNode).toBe(container);
     expect(secondRenderingOptions.refinements).toEqual([]);
-    expect(secondRenderingOptions.collapsible).toBe(false);
-    expect(secondRenderingOptions.shouldAutoHideContainer).toBe(true);
   });
 
   it('Provide a function to clear the refinements at each step', () => {

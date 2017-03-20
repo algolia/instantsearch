@@ -1,7 +1,74 @@
+import {
+  isDomElement,
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+} from '../../lib/utils.js';
+import cx from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
 import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
+import defaultTemplates from './defaultTemplates';
+
+import isUndefined from 'lodash/isUndefined';
+import isBoolean from 'lodash/isBoolean';
+import isString from 'lodash/isString';
+import isArray from 'lodash/isArray';
+import isPlainObject from 'lodash/isPlainObject';
+import isFunction from 'lodash/isFunction';
+
+import reduce from 'lodash/reduce';
+
+const bem = bemHelper('ais-current-refined-values');
+
+const renderer = ({
+  autoHideContainer,
+  collapsible,
+  containerNode,
+  cssClasses,
+  renderState,
+  transformData,
+  templates,
+}) => ({
+  attributes,
+  clearAllClick,
+  clearAllPosition,
+  clearAllURL,
+  clearRefinementClicks,
+  clearRefinementURLs,
+  refinements,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && refinements && refinements.length === 0;
+
+  ReactDOM.render(
+    <CurrentRefinedValuesWithHOCs
+      attributes={attributes}
+      clearAllClick={clearAllClick}
+      clearAllPosition={clearAllPosition}
+      clearAllURL={clearAllURL}
+      clearRefinementClicks={clearRefinementClicks}
+      clearRefinementURLs={clearRefinementURLs}
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      refinements={refinements}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them
@@ -35,38 +102,102 @@ import connectCurrentRefinedValues from '../../connectors/current-refined-values
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const currentRefinedValues = connectCurrentRefinedValues(({
-  attributes,
-  clearAllClick,
-  clearAllPosition,
-  clearAllURL,
-  clearRefinementClicks,
-  clearRefinementURLs,
-  collapsible,
-  cssClasses,
-  refinements,
-  shouldAutoHideContainer,
-  templateProps,
-  containerNode,
-}, isFirstRendering) => {
-  if (isFirstRendering) return;
 
-  ReactDOM.render(
-    <CurrentRefinedValuesWithHOCs
-      attributes={attributes}
-      clearAllClick={clearAllClick}
-      clearAllPosition={clearAllPosition}
-      clearAllURL={clearAllURL}
-      clearRefinementClicks={clearRefinementClicks}
-      clearRefinementURLs={clearRefinementURLs}
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      refinements={refinements}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-    />,
-    containerNode
-  );
-});
+const usage = `Usage:
+currentRefinedValues({
+  container,
+  [ attributes: [{name[, label, template, transformData]}] ],
+  [ onlyListedAttributes = false ],
+  [ clearAll = 'before' ] // One of ['before', 'after', false]
+  [ templates.{header,item,clearAll,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer = true ],
+  [ cssClasses.{root, header, body, clearAll, list, item, link, count, footer} = {} ],
+  [ collapsible=false ]
+})`;
 
-export default currentRefinedValues;
+export default function currentRefinedValues({
+  attributes = [],
+  onlyListedAttributes = false,
+  clearAll = 'before',
+  templates = defaultTemplates,
+  container,
+  transformData,
+  autoHideContainer = true,
+  cssClasses: userCssClasses = {},
+  collapsible = false,
+}) {
+  const transformDataOK = isUndefined(transformData) ||
+    isFunction(transformData) ||
+    isPlainObject(transformData) && isFunction(transformData.item);
+
+  const templatesKeys = ['header', 'item', 'clearAll', 'footer'];
+  const templatesOK = isPlainObject(templates) &&
+    reduce(
+      templates,
+      (res, val, key) =>
+        res &&
+          templatesKeys.indexOf(key) !== -1 &&
+          (isString(val) || isFunction(val)),
+      true
+    );
+
+  const userCssClassesKeys = ['root', 'header', 'body', 'clearAll', 'list', 'item', 'link', 'count', 'footer'];
+  const userCssClassesOK = isPlainObject(userCssClasses) &&
+    reduce(
+      userCssClasses,
+      (res, val, key) =>
+        res &&
+         userCssClassesKeys.indexOf(key) !== -1 &&
+         isString(val) || isArray(val),
+      true);
+
+  const showUsage = false ||
+    !(isString(container) || isDomElement(container)) ||
+    !isArray(attributes) ||
+    !isBoolean(onlyListedAttributes) ||
+    [false, 'before', 'after'].indexOf(clearAll) === -1 ||
+    !isPlainObject(templates) ||
+    !templatesOK ||
+    !transformDataOK ||
+    !isBoolean(autoHideContainer) ||
+    !userCssClassesOK;
+
+  if (showUsage) {
+    throw new Error(usage);
+  }
+
+  const containerNode = getContainerNode(container);
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    clearAll: cx(bem('clear-all'), userCssClasses.clearAll),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count),
+    footer: cx(bem('footer'), userCssClasses.footer),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    collapsible,
+    cssClasses,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+  });
+
+  try {
+    const makeCurrentRefinedValues = connectCurrentRefinedValues(specializedRenderer);
+    return makeCurrentRefinedValues({
+      attributes,
+      onlyListedAttributes,
+      clearAll,
+    });
+  } catch (e) {
+    throw new Error(usage);
+  }
+}
