@@ -2,6 +2,19 @@
 
 set -e # exit when error
 
+beta=false
+while test $# -gt 0; do
+  case "$1" in
+    -b|--beta)
+      printf "Publishing as a beta version\n"
+      beta=true
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
 # npm owner add and npm whoami cannot be moved to yarn yet
 if [[ -n $(cd packages/react-instantsearch && npm owner add "$(npm whoami)") ]]; then
   printf "Release: Not an owner of the npm repo, ask for it\n"
@@ -84,13 +97,19 @@ git push origin --tags
 
 printf "\n\nRelease: pushed to github, publish on npm"
 
+npmFlags=''
+yarnFlags=''
+if [[ beta ]]; then
+  npmFlags="--tag beta"
+fi
+
 (
-cd packages/react-instantsearch
-VERSION=$newVersion npm run build-and-publish
+cd packages/react-instantsearch 
+VERSION=$newVersion npm run build-and-publish -- -n "$npmFlags" -y "$yarnFlags"
 )
 
 (
-cd packages/react-instantsearch-theme-algolia
+cd packages/react-instantsearch-theme-algolia -- -n "$npmFlags" -y "$yarnFlags"
 npm run build-and-publish
 )
 

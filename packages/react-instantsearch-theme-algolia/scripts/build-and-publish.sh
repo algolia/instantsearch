@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
 
-yarn build &&
-npm publish
+npmFlags=''
+yarnFlags=''
+while getopts 'n:y:' flag; do
+  case "${flag}" in
+    n) npmFlags="${OPTARG}" ;;
+    y) yarnFlags="${OPTARG}" ;;
+    *) error "Unexpected option ${flag}" ;;
+  esac
+done
+
+yarn build $yarnFlags &&
+npm publish $npmFlags
