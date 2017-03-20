@@ -1,21 +1,77 @@
-
-
 import sinon from 'sinon';
 
-import jsHelper from 'algoliasearch-helper';
-const SearchResults = jsHelper.SearchResults;
+import algoliasearchHelper from 'algoliasearch-helper';
+const SearchResults = algoliasearchHelper.SearchResults;
 
 import connectMenu from '../connectMenu.js';
 
 const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectMenu', () => {
+  let rendering;
+  let makeWidget;
+  beforeEach(() => {
+    rendering = sinon.stub();
+    makeWidget = connectMenu(rendering);
+  });
+
+  it('throws on bad usage', () => {
+    expect(
+      connectMenu
+    ).toThrow();
+
+    expect(
+      () => connectMenu({})
+    ).toThrow();
+
+    expect(
+      () => connectMenu(() => {})()
+    ).toThrow();
+
+    expect(
+      () => connectMenu({limit: 10})
+    ).toThrow();
+
+    expect(
+      () => connectMenu(() => {})({limit: 10})
+    ).toThrow();
+  });
+
+  describe('options configuring the helper', () => {
+    it('`attributeName`', () => {
+      const widget = makeWidget({
+        attributeName: 'myFacet',
+      });
+
+      expect(widget.getConfiguration({})).toEqual({
+        hierarchicalFacets: [{
+          name: 'myFacet',
+          attributes: ['myFacet'],
+        }],
+        maxValuesPerFacet: 10,
+      });
+    });
+
+    it('`limit`', () => {
+      const widget = makeWidget({
+        attributeName: 'myFacet',
+        limit: 20,
+      });
+
+      expect(widget.getConfiguration({})).toEqual({
+        hierarchicalFacets: [{
+          name: 'myFacet',
+          attributes: ['myFacet'],
+        }],
+        maxValuesPerFacet: 20,
+      });
+    });
+  });
+
   it('Renders during init and render', () => {
     const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
-    const rendering = sinon.stub();
-    const makeWidget = connectMenu(rendering);
     const widget = makeWidget({
       container,
       attributeName: 'myFacet',
@@ -34,7 +90,7 @@ describe('connectMenu', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper(fakeClient, '', config);
+    const helper = algoliasearchHelper(fakeClient, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -47,14 +103,10 @@ describe('connectMenu', () => {
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.lastCall.args[0].isFirstRendering).toBe(true);
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.shouldAutoHideContainer).toBe(true);
-    expect(firstRenderingOptions.limitMax).toBe(9);
-    expect(firstRenderingOptions.limitMin).toBe(9);
-    expect(firstRenderingOptions.collapsible).toBe(false);
-    expect(firstRenderingOptions.containerNode).toBe(container);
+    expect(firstRenderingOptions.canRefine).toBe(false);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -65,26 +117,18 @@ describe('connectMenu', () => {
 
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.lastCall.args[0].isFirstRendering).toBe(false);
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.shouldAutoHideContainer).toBe(true);
-    expect(secondRenderingOptions.limitMax).toBe(9);
-    expect(secondRenderingOptions.limitMin).toBe(9);
-    expect(secondRenderingOptions.collapsible).toBe(false);
-    expect(secondRenderingOptions.containerNode).toBe(container);
+    expect(secondRenderingOptions.canRefine).toBe(false);
   });
 
   it('Provide a function to clear the refinements at each step', () => {
-    const container = document.createElement('div');
-    const rendering = sinon.stub();
-    const makeWidget = connectMenu(rendering);
     const widget = makeWidget({
-      container,
       attributeName: 'category',
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -97,10 +141,10 @@ describe('connectMenu', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement} = firstRenderingOptions;
-    toggleRefinement('value');
+    const {refine} = firstRenderingOptions;
+    refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    toggleRefinement('value');
+    refine('value');
     expect(helper.hasRefinements('category')).toBe(true);
 
     widget.render({
@@ -111,23 +155,19 @@ describe('connectMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement: renderToggleRefinement} = secondRenderingOptions;
-    renderToggleRefinement('value');
+    const {refine: renderRefine} = secondRenderingOptions;
+    renderRefine('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    renderToggleRefinement('value');
+    renderRefine('value');
     expect(helper.hasRefinements('category')).toBe(true);
   });
 
   it('provides the correct facet values', () => {
-    const container = document.createElement('div');
-    const rendering = sinon.stub();
-    const makeWidget = connectMenu(rendering);
     const widget = makeWidget({
-      container,
       attributeName: 'category',
     });
 
-    const helper = jsHelper(fakeClient, '', widget.getConfiguration({}));
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');
@@ -143,7 +183,7 @@ describe('connectMenu', () => {
     // During the first rendering there are no facet values
     // The function get an empty array so that it doesn't break
     // over null-ish values.
-    expect(firstRenderingOptions.facetValues).toEqual([]);
+    expect(firstRenderingOptions.items).toEqual([]);
 
     widget.render({
       results: new SearchResults(helper.state, [{
@@ -167,14 +207,13 @@ describe('connectMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.facetValues).toEqual([
+    expect(secondRenderingOptions.items).toEqual([
       {
         name: 'Decoration',
         path: 'Decoration',
         count: 880,
         isRefined: true,
         data: null,
-        url: '#',
       },
       {
         name: 'Outdoor',
@@ -182,7 +221,6 @@ describe('connectMenu', () => {
         count: 47,
         isRefined: false,
         data: null,
-        url: '#',
       },
     ]);
   });

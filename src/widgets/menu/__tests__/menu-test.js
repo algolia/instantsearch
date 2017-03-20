@@ -13,7 +13,7 @@ describe('menu', () => {
     expect(menu.bind(null, {attributeName})).toThrow(/^Usage/);
   });
 
-  it('snapshot', () => {
+  it.only('snapshot', () => {
     const data = {data: [{name: 'foo'}, {name: 'bar'}]};
     const results = {getFacetValues: sinon.spy(() => data)};
     const helper = {
@@ -27,9 +27,10 @@ describe('menu', () => {
     const ReactDOM = {render: sinon.spy()};
     menu.__Rewire__('ReactDOM', ReactDOM);
     const widget = menu({container: document.createElement('div'), attributeName: 'test'});
-    widget.init({helper, createURL});
-    widget.render({results, state});
-    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
+    const instantSearchInstance = {templatesConfig: undefined};
+    widget.init({helper, createURL, instantSearchInstance});
+    widget.render({results, createURL, state});
+    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
     menu.__ResetDependency__('ReactDOM');
   });
 });
