@@ -1,14 +1,10 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import expectJSX from 'expect-jsx';
 import rangeSlider from '../range-slider.js';
 import Slider from '../../../components/Slider/Slider.js';
 import AlgoliasearchHelper from 'algoliasearch-helper';
-
 expect.extend(expectJSX);
 
 describe('rangeSlider call', () => {
@@ -46,7 +42,7 @@ describe('rangeSlider()', () => {
     sinon.spy(helper, 'search');
   });
 
-  context('min option', () => {
+  describe('min option', () => {
     it('refines when no previous configuration', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
       expect(widget.getConfiguration()).toEqual({
@@ -70,7 +66,7 @@ describe('rangeSlider()', () => {
       });
     });
 
-    context('render', () => {
+    describe('render', () => {
       const defaultProps = {
         cssClasses: {
           root: 'ais-range-slider',
@@ -133,7 +129,7 @@ describe('rangeSlider()', () => {
     });
   });
 
-  context('max option', () => {
+  describe('max option', () => {
     it('refines when no previous configuration', () => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
       expect(widget.getConfiguration()).toEqual({
@@ -149,7 +145,7 @@ describe('rangeSlider()', () => {
       });
     });
 
-    context('render', () => {
+    describe('render', () => {
       const defaultProps = {
         cssClasses: {
           root: 'ais-range-slider',
@@ -200,7 +196,7 @@ describe('rangeSlider()', () => {
     });
   });
 
-  context('without result', () => {
+  describe('without result', () => {
     beforeEach(() => {
       results = {};
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
@@ -239,7 +235,7 @@ describe('rangeSlider()', () => {
     });
   });
 
-  context('when rangestats min === stats max', () => {
+  describe('when rangestats min === stats max', () => {
     beforeEach(() => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
       widget.init({helper});
@@ -285,7 +281,7 @@ describe('rangeSlider()', () => {
     });
   });
 
-  context('with results', () => {
+  describe('with results', () => {
     beforeEach(() => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
       widget.init({helper});

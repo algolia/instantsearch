@@ -1,2 +1,4 @@
 # waiting for https://github.com/imathis/guard-jekyll-plus/issues/49
 baseurl: "/instantsearch.js"
+instantsearch_css: "https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css"
+instantsearch_js: "https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"

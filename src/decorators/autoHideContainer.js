@@ -33,6 +33,7 @@ function autoHideContainer(ComposedComponent) {
 
   AutoHide.propTypes = {
     shouldAutoHideContainer: React.PropTypes.bool.isRequired,
+    ...ComposedComponent.propTypes,
   };
 
   // precise displayName for ease of debugging (react dev tool, react warnings)

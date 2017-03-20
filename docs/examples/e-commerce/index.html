@@ -15,7 +15,7 @@
       document.write('<link rel="stylesheet" href="//' + window.location.hostname +':8080/instantsearch.css">');
     </script>
   {% else %}
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.css" />
+  <link rel="stylesheet" href="{{ site.instantsearch_css }}" />
   {% endif %}
   <link rel="stylesheet" type="text/css" href="main.css" />
   <!--[if lte IE 9]>
@@ -74,7 +74,7 @@
       document.write('\x3Cscript src="//' + window.location.hostname +':8080/instantsearch.js">\x3C/script>');
     </script>
   {% else %}
-  <script src="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.min.js"></script>
+    <script src="{{ site.instantsearch_js }}"></script>
   {% endif %}
 
   <script src="https://cdn.jsdelivr.net/jquery/1.11.3/jquery.min.js"></script>

@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 
 import generateRanges from '../generate-ranges';
 

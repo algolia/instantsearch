@@ -1,16 +1,11 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
 import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
-
 import connectCurrentRefinedValues from '../connectCurrentRefinedValues.js';
 
 describe('connectCurrentRefinedValues', () => {
   it('Renders during init and render', () => {
-    const helper = jsHelper({});
+    const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
     const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
@@ -64,7 +59,7 @@ describe('connectCurrentRefinedValues', () => {
   it('Provide a function to clear the refinements at each step', () => {
     // For each refinements we get a function that we can call
     // for removing a single refinement
-    const helper = jsHelper({}, '', {
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();

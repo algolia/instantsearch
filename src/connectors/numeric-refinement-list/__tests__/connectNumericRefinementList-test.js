@@ -1,13 +1,7 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
 import sinon from 'sinon';
-
 import jsHelper from 'algoliasearch-helper';
 const SearchResults = jsHelper.SearchResults;
-
 import connectNumericRefinementList from '../connectNumericRefinementList.js';
-
 const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectNumericRefinementList', () => {

@@ -1,16 +1,11 @@
-/* eslint-env mocha */
-
 import React from 'react';
-import expect from 'expect';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import algoliasearchHelper from 'algoliasearch-helper';
 import infiniteHits from '../infinite-hits';
 import InfiniteHits from '../../../components/InfiniteHits';
-
 import defaultTemplates from '../../../connectors/infinite-hits/defaultTemplates.js';
 
 describe('infiniteHits call', () => {

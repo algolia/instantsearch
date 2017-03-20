@@ -1,15 +1,18 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import {shallow} from 'enzyme';
 import TestUtils from 'react-addons-test-utils';
-import TestComponent from './TestComponent';
 import headerFooter from '../headerFooter';
 import Template from '../../components/Template';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
+
+class TestComponent extends React.Component {
+  render() {
+    return <div {...this.props} />;
+  }
+}
 
 describe('headerFooter', () => {
   let renderer;

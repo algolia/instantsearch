@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -37,7 +36,7 @@ describe('connectHierarchicalMenu', () => {
     // test if widget is not rendered yet at this point
     expect(rendering.callCount).toBe(0);
 
-    const helper = jsHelper({}, '', config);
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', config);
     helper.search = sinon.stub();
 
     widget.init({
@@ -83,7 +82,7 @@ describe('connectHierarchicalMenu', () => {
       attributes: ['category', 'sub_category'],
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'value');
@@ -126,7 +125,7 @@ describe('connectHierarchicalMenu', () => {
       attributes: ['category', 'subCategory'],
     });
 
-    const helper = jsHelper({}, '', widget.getConfiguration({}));
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', widget.getConfiguration({}));
     helper.search = sinon.stub();
 
     helper.toggleRefinement('category', 'Decoration');

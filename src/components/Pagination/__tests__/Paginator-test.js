@@ -1,11 +1,7 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
-
 import Paginator from '../Paginator';
 
 describe('paginator: simple cases', () => {
-  context('on the first page', () => {
+  describe('on the first page', () => {
     const pager = new Paginator({
       currentPage: 0,
       total: 10,
@@ -27,7 +23,7 @@ describe('paginator: simple cases', () => {
     });
   });
 
-  context('on 3rd page', () => {
+  describe('on 3rd page', () => {
     const pager = new Paginator({
       currentPage: 2,
       total: 10,
@@ -49,7 +45,7 @@ describe('paginator: simple cases', () => {
     });
   });
 
-  context('on 5th page', () => {
+  describe('on 5th page', () => {
     const pager = new Paginator({
       currentPage: 5,
       total: 10,
@@ -71,7 +67,7 @@ describe('paginator: simple cases', () => {
     });
   });
 
-  context('on the page before the last', () => {
+  describe('on the page before the last', () => {
     const pager = new Paginator({
       currentPage: 8,
       total: 10,
@@ -93,7 +89,7 @@ describe('paginator: simple cases', () => {
     });
   });
 
-  context('on last page', () => {
+  describe('on last page', () => {
     const pager = new Paginator({
       currentPage: 9,
       total: 10,

@@ -1,11 +1,7 @@
-/* eslint-env mocha */
-
-import expect from 'expect';
 import sinon from 'sinon';
-
+import expect from 'expect';
 import searchBox from '../search-box';
 import EventEmitter from 'events';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
@@ -37,7 +33,7 @@ describe('searchBox()', () => {
     };
   });
 
-  context('bad usage', () => {
+  describe('bad usage', () => {
     it('throws an error if container is not defined', () => {
       expect(() => {
         searchBox({container: null});
@@ -45,7 +41,7 @@ describe('searchBox()', () => {
     });
   });
 
-  context('targeting a div', () => {
+  describe('targeting a div', () => {
     let opts;
 
     beforeEach(() => {
@@ -92,7 +88,7 @@ describe('searchBox()', () => {
     });
   });
 
-  context('targeting an input', () => {
+  describe('targeting an input', () => {
     it('reuse the existing input', () => {
       container = document.body.appendChild(document.createElement('input'));
       widget = searchBox({container});
@@ -132,7 +128,7 @@ describe('searchBox()', () => {
     });
   });
 
-  context('wraps the input in a div', () => {
+  describe('wraps the input in a div', () => {
     it('when targeting a div', () => {
       // Given
       container = document.createElement('div');
@@ -178,7 +174,7 @@ describe('searchBox()', () => {
     });
   });
 
-  context('poweredBy', () => {
+  describe('poweredBy', () => {
     let defaultInitOptions;
     let defaultWidgetOptions;
     let $;
@@ -378,12 +374,12 @@ describe('searchBox()', () => {
     });
   });
 
-  context('input event listener', () => {
+  describe('input event listener', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
     });
 
-    context('instant search', () => {
+    describe('instant search', () => {
       beforeEach(() => {
         widget = searchBox({container});
       });
@@ -405,7 +401,7 @@ describe('searchBox()', () => {
       });
     });
 
-    context('non-instant search and input event', () => {
+    describe('non-instant search and input event', () => {
       beforeEach(() => {
         widget = searchBox({container, searchOnEnterKeyPressOnly: true});
         simulateInputEvent('test', 'tes', widget, helper, state, container);
@@ -420,7 +416,7 @@ describe('searchBox()', () => {
       });
     });
 
-    context('using a queryHook', () => {
+    describe('using a queryHook', () => {
       it('calls the queryHook', () => {
         const queryHook = sinon.spy();
         widget = searchBox({container, queryHook});
@@ -456,12 +452,12 @@ describe('searchBox()', () => {
     });
   });
 
-  context('keyup', () => {
+  describe('keyup', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
     });
 
-    context('instant search', () => {
+    describe('instant search', () => {
       beforeEach(() => {
         widget = searchBox({container});
       });
@@ -472,7 +468,7 @@ describe('searchBox()', () => {
       });
     });
 
-    context('non-instant search', () => {
+    describe('non-instant search', () => {
       beforeEach(() => {
         widget = searchBox({container, searchOnEnterKeyPressOnly: true});
         helper.state.query = 'tes';
@@ -544,14 +540,14 @@ describe('searchBox()', () => {
     expect(container.value).toBe('initial');
   });
 
-  context('autofocus', () => {
+  describe('autofocus', () => {
     beforeEach(() => {
       container = document.body.appendChild(document.createElement('input'));
       container.focus = sinon.spy();
       container.setSelectionRange = sinon.spy();
     });
 
-    context('when auto', () => {
+    describe('when auto', () => {
       beforeEach(() => {
         widget = searchBox({container, autofocus: 'auto'});
       });
@@ -575,7 +571,7 @@ describe('searchBox()', () => {
       });
     });
 
-    context('when true', () => {
+    describe('when true', () => {
       beforeEach(() => {
         widget = searchBox({container, autofocus: true});
       });
@@ -608,7 +604,7 @@ describe('searchBox()', () => {
       });
     });
 
-    context('when false', () => {
+    describe('when false', () => {
       beforeEach(() => {
         widget = searchBox({container, autofocus: false});
       });

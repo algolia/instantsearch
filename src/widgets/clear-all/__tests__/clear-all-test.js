@@ -1,13 +1,8 @@
-/* eslint-env mocha */
-
 import React from 'react';
-
 import expect from 'expect';
 import sinon from 'sinon';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import clearAll from '../clear-all';
 import ClearAll from '../../../components/ClearAll/ClearAll';
 import defaultTemplates from '../defaultTemplates.js';
@@ -66,7 +61,7 @@ describe('clearAll()', () => {
     expect(widget.getConfiguration).toEqual(undefined);
   });
 
-  context('without refinements', () => {
+  describe('without refinements', () => {
     beforeEach(() => {
       helper.state.facetsRefinements = {};
       props.hasRefinements = false;
@@ -85,7 +80,7 @@ describe('clearAll()', () => {
     });
   });
 
-  context('with refinements', () => {
+  describe('with refinements', () => {
     beforeEach(() => {
       helper.state.facetsRefinements = ['something'];
       props.hasRefinements = true;

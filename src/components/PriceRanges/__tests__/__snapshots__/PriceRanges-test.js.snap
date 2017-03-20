@@ -1,0 +1,337 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PriceRanges individual methods getForm should call the PriceRangesForm 1`] = `
+<form
+  className={undefined}
+  onSubmit={[Function]}
+>
+  <label
+    className={undefined}
+  >
+    <span
+      className={undefined}
+    >
+      $
+       
+    </span>
+    <input
+      className={undefined}
+      onChange={[Function]}
+      type="number"
+      value=""
+    />
+  </label>
+  <span
+    className={undefined}
+  >
+     
+     
+  </span>
+  <label
+    className={undefined}
+  >
+    <span
+      className={undefined}
+    >
+      $
+       
+    </span>
+    <input
+      className={undefined}
+      onChange={[Function]}
+      type="number"
+      value=""
+    />
+  </label>
+  <button
+    className={undefined}
+    type="submit"
+  >
+    hello
+  </button>
+</form>
+`;
+
+exports[`PriceRanges individual methods getItemFromFacetValue should display one active range item correctly 1`] = `
+<div
+  className="item active"
+>
+  <a
+    className="link"
+    href="url"
+    onClick={[Function]}
+  >
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "  $",
+        }
+      }
+    />
+  </a>
+</div>
+`;
+
+exports[`PriceRanges individual methods getItemFromFacetValue should display one range item correctly 1`] = `
+<div
+  className="item"
+>
+  <a
+    className="link"
+    href="url"
+    onClick={[Function]}
+  >
+    <div
+      dangerouslySetInnerHTML={
+        Object {
+          "__html": "  $",
+        }
+      }
+    />
+  </a>
+</div>
+`;
+
+exports[`PriceRanges render should have the right number of items 1`] = `
+<div>
+  <div
+    className={undefined}
+  >
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+  </div>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <label
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+         
+      </span>
+      <input
+        className={undefined}
+        onChange={[Function]}
+        type="number"
+        value=""
+      />
+    </label>
+    <span
+      className={undefined}
+    >
+       
+       
+    </span>
+    <label
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+         
+      </span>
+      <input
+        className={undefined}
+        onChange={[Function]}
+        type="number"
+        value=""
+      />
+    </label>
+    <button
+      className={undefined}
+      type="submit"
+    />
+  </form>
+</div>
+`;
+
+exports[`PriceRanges render should wrap the output in a list CSS class 1`] = `
+<div>
+  <div
+    className="list"
+  >
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+    <div
+      className=""
+    >
+      <a
+        className={undefined}
+        href={undefined}
+        onClick={[Function]}
+      >
+        <div
+          dangerouslySetInnerHTML={
+            Object {
+              "__html": "  ",
+            }
+          }
+        />
+      </a>
+    </div>
+  </div>
+  <form
+    className={undefined}
+    onSubmit={[Function]}
+  >
+    <label
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+         
+      </span>
+      <input
+        className={undefined}
+        onChange={[Function]}
+        type="number"
+        value=""
+      />
+    </label>
+    <span
+      className={undefined}
+    >
+       
+       
+    </span>
+    <label
+      className={undefined}
+    >
+      <span
+        className={undefined}
+      >
+         
+      </span>
+      <input
+        className={undefined}
+        onChange={[Function]}
+        type="number"
+        value=""
+      />
+    </label>
+    <button
+      className={undefined}
+      type="submit"
+    />
+  </form>
+</div>
+`;

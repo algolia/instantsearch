@@ -1,7 +1,4 @@
-/* eslint-env mocha */
-
 import expect from 'expect';
-
 import algoliasearchHelper from 'algoliasearch-helper';
 import * as utils from '../utils';
 import isEmpty from 'lodash/isEmpty';
@@ -54,7 +51,7 @@ describe('utils.bemHelper', () => {
     expect(utils.bemHelper('block')).toBeA('function');
   });
 
-  context('returned function', () => {
+  describe('returned function', () => {
     const returnedFunction = utils.bemHelper('block');
 
     it('should create a block class when invoked without parameters', () => {
@@ -490,7 +487,7 @@ describe('utils.clearRefinementsFromState', () => {
     state = helper.state;
   });
 
-  context('without arguments', () => {
+  describe('without arguments', () => {
     it('should clear everything', () => {
       const newState = utils.clearRefinementsFromState(state);
       expect(isEmpty(newState.facetsRefinements)).toBe(true, 'state shouldn\'t have facetsRefinements');

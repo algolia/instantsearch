@@ -3,35 +3,28 @@ node_js: stable
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
+    - ubuntu-toolchain-r-test
     packages:
-      - g++-4.8
+    - g++-4.8
 before_install:
-  - git config --global user.email "algobot@users.noreply.github.com"
-  - git config --global user.name "algobot"
-  - rvm install 2.3.1
-  - rvm use 2.3.1
-  - rm -rf /home/travis/.yarn
-script: ./scripts/test-ci.sh
+- git config --global user.email "algobot@users.noreply.github.com"
+- git config --global user.name "algobot"
+- rvm install 2.3.1
+- rvm use 2.3.1
+- rm -rf /home/travis/.yarn
+script: "./scripts/test-ci.sh"
 branches:
   only:
-    - master
-    - develop
-    - /^greenkeeper-.*$/
-# force container based infra
-#
-# http://docs.travis-ci.com/user/workers/container-based-infrastructure/#Routing-your-build-to-container-based-infrastructure
+  - master
+  - develop
+  - "/^greenkeeper-.*$/"
 sudo: false
 cache:
-  directories:
-    - ~/.yarn
-    - ~/.nvm
+  yarn: true
 env:
   global:
-    - CXX=g++-4.8
-    - SAUCE_USERNAME=instantsearchjs
-    # we make this public so that we can still run tests on PRS coming from forks
-    - SAUCE_ACCESS_KEY=a3b366ec-c8d3-46af-8710-4d66992514ac
-    - secure: gP965MQhMUCCHSPZkiifzUdi9ZLnqIxr7yFyseeAXMSSrZyRT9RXbhF3A/7+du3EPQ+HF8S087+DF3XGYsNdvpOaKvvBh6C5KE15BSD7nw2tB+Q4kEd4LnxQB9I7Q9HYcvAErl/xlQ1nBJnkRTka1Zej97iYqBrEjO2Riwfu+cRQlxXMYOf9ZrRrlmYySlQVvBrliU499UaL/cYqZ8Y6/VIr8P8ju0Y7KVuSLoVHOQgK6c8PL4Y6JB4pelDXAljgrSrnNPEB3YAuyEvrP5apw4PZQ9D8Mopdt0FLKuuW1wpXB3G5TL4dieHnQWqth/FqVFDsvssdWjKP9mzgp0l4A7GslcJwyNx3Jea1EYqhFcCMacw6K+tCF9bA6jPavfjWw0IwThqnW6ZrJCzyDcaLxX+DJ5xrY4V0YgamfAxFCCTLG3F8xLVHbiHrI8RhqDItPcOj0k6884MWbanOzCZfRKXyrRpDWuUmnLc627vxvF2w645CDh43DwZJMQdBMIEkucfLNemQnw1kWpcz1au2zMdca2XM8Em9kpt/xQTFhEd1aSi8eAgTMebvJudkVCijkDce5p8uArsGLjIB6q5wG0+f91k0OOTgsopOr5sgAQTFB3l4kZWZYOiv9vFQ+K3uKmvgjOxw76XIPc4dnlWMA10llFNz9qKUn7u7sHbLuns=
-    - secure: B4TDAPszGM93UU5GYuAUCJcunLAaerDMGjQLMTkPKA7jjWICX14fuowbN7BAtxnfCCYwSuyEpnBSf2C9ppA0eKa9ber+91n+Au/aVUp0QOcfQJyONGWIJSziiFH4IO7vlv+jM1C6kYAfRPoOkYTJGwG2W99HF7Ph+rmt2OGvX3kII5tlyXyTuraA+/0CEznL1fW3W3RZmyTNhpO1wxTmwpc8j2ed3bRMJv2LIeTAPTJq7h2obvK27Mlet9dYNaulsZEch2MHm+TFQBv4+n10rlvkpoBcb7PBBJHVUD6/xSoo80SasQdmAYJVNN8Lql6FUmuYx9m2/OgC2MaRcx/FDhF/KTY0lswK3+qnKS2wPjjXqLpqXjjN+hPEm8jTW/qQ1FKSfPfOUNhLW6nu8/InWqtLY/2sLWH8BQizAADpV1bRBI+CvKZ4cUbMZjmwKigqPQXLqo/gPuWsagiwRHr720v6Re7Z3gwdjDqn1s4v4acuUsunW/Akjz46+YfLa6XEHY73JmPQSXr48pQAgMd682grclo+CSMYRy2MoKpSPLnoNSbCZagLUpSbzBN47bMmuymVYA/GCSToPrXevsMKJsonQeL9BwVMYmT7pUcXSr05/ehDTpLN5MaR7X220k5gQPR7d+n3ir4GR4vLrix3B5GAOorTb79pTmEQhkUdBpI=
-    - secure: Kl58s2KaFUdi1E4tvmJDMiZh+yrqupuAVL2gR/avkmcp46zRsTqsgSmWIS/mdEtnj4Ujcuejxfpab59CSa6csCo7ToePj8Ywso3Zjxhq+fmYJ4yZ5MA79L0+Vnz/Pw72N1TjsowKE8rTm/vHOsNQZFwoZ9Gl08VmM4ozhZviO7GqXD3araia260vRf5ohql4uUDqn3Q3spcSXDfBg0EvDPWFgiXHMwxWGA2OLGlAXHoql8dYIADKQ3PYWFHV8MO8vq1h3JD0zUm3GwF4qNYsma7FKhzYAQkNGf3igs6/MJ/d90VPw+eAYTT8s/Wwatmac0/dBxEn0roDLuMExbD1/MXgfPMph9GIWBzSGy54TQnNEWv0HM3mf3JcZU30nY91OvaK7HJuq7p7m/Av1+MqAtPPKOYD8TyXcOhDA95N1ezkQcUC59DoNIn/e5uvFW5PcY8nKObPxLd+r73KIFWkAqLPtxaZzjHY9JiMCQ7W8RGrR6OfvF1V2rK9accOMHQyu6gdWH55L4K2VQR5Th61b/NnrsuARt7i8YBBEd7v/Amp2sNIwnipmgjGOWbulZfyMy+eepaDfTTTNo2rR9ENnbGt434u/djDGhSdwUbM+geTYkDSaDW8V6WAcc/pRM8ph/FF9wTz01unU48LAyWPK/Xf4r6nDvNd5pPDX2LkWVM=
+  - CXX=g++-4.8
+  - SAUCE_USERNAME=instantsearchjs
+  - SAUCE_ACCESS_KEY=a3b366ec-c8d3-46af-8710-4d66992514ac
+  - secure: DMNHPyjuZcxIly2N/mcqDEzeJ7gw5i6hOX+2dN8DW8CF6CFh2HIhA5Iznaerjst+gcHHRACWHT8BYstDExhaUAbegys1B/S3oDapLLT3H48a0VlpncAiyTvismv93tB7+WdoMAs+6zBMUo1z98At1ck6yUHsvASy7SNGVOI0UBRg5cu40eIrZTCKjhE6JXh2D2+HbFa7ODYy7aMl99A0Pk1SrFzehCVKd6+UhdY5Q+OKZNbPF3oDBifbAJeV54uYBPfgJJkj2CvWIIyGM33FRwrxZ/njwNgeCR1YMXNL0DEYQbyS3bBSkc/nSjE49vk8fY9m9n+CXjXsUsVWbGBBgsQTgOEQFjruNCiojXNuxTU3KLWjfDsdvT7KTnNj4lc1kfH10ESpVhhhfYLwmi9VaGyUlP825LYsdHidAWYVyLOcYufvUwXF+icpr2mEq9lG01pVZcX//GxsmQIcQ3/h3XEYfCBub7ZoiRYjoqL+AQWN+16OOW5DyC55DEI4FZClXtYP28u2z4VSpmPvE7X8kHO7fRtL5ZJyHcz9D3uVE8KlgBwtN4tOZ1tVJ8ssnaDeFJLtXpIAB/LwFdMbHNla+6gJ8aFvDiN2T97Y/Hk2/g4jO8pW1TAppnuON5pxsHy2bT46df1ad1OyINFsjtBYIQymlmVBAWalN242eDMyC+o=
+  - secure: IReZG9KWjW8v+u/YmzGF8b+7zO0BC+cuvQGehxOXePnx01Ja+xrKeBv/RfO2E13vm3IoHByisPkeTWlnJA8h4/AwmvdOk33KkRBUVBABIsbvlN+uZ+jjz96K2VcD1ZjItSo7SrPEs+InRtsUfDBcr7burWUxL6tuhKcZT7wN+CT/QXBRN4Ai1z4DMFi5nK2vgOQ9u02IWjdzSXafDw4lhO+SEqNfMTDVXVqiSQ11Cyh7qsciiPkwxPhZWB3vg6YD0vU3GiYlgrC/Cr6hiCwiPi+9e+73MBwxsX8BYC0/2uM8vSMOocaePg1X9TOAP9sDCHW/MR8p+zfapV+7e7QBW2XaDy0j6m1rer1KwAhLSqCg4Gtp8Uc6qOS+W8NLnXzcUikLhkhp6/6TixsO2laKlr8sSwJ3o/qMyE7ViTyWQ/0qKZtYYFBxihT7bDzQI6C5nv+x8PZ5mFuhjaEb8PxYmgyXWznCnouqhYMHDn5geEzM3E3xjOhaIyqfNsqTX+nAkJGQR//GtZdyscKHsMD+7XVJ0AN+xRNtaEMCqVd5Tos3RT9ZSpD6eznltqL5RmASXcrKqLbuqh8ZkfpC549qvRDBFV4kOrZiiIb00H4ZcEH6WJjvRJ73EDb590HGIcsPqKlslXpRY1AhjK5AdiDnLZVrvayg+tGLFEL+8iC8q+A=

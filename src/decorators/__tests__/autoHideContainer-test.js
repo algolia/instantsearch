@@ -1,16 +1,21 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import expect from 'expect';
 import TestUtils from 'react-addons-test-utils';
-import TestComponent from './TestComponent';
 import autoHideContainer from '../autoHideContainer';
-
-import sinon from 'sinon';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
+import sinon from 'sinon';
+
+class TestComponent extends React.Component {
+  render() {
+    return <div>{this.props.hello}</div>;
+  }
+}
+
+TestComponent.propTypes = {
+  hello: React.PropTypes.string,
+};
 
 describe('autoHideContainer', () => {
   let props = {};
@@ -20,12 +25,12 @@ describe('autoHideContainer', () => {
     const renderer = createRenderer();
     props.hello = 'son';
     const AutoHide = autoHideContainer(TestComponent);
-    renderer.render(<AutoHide {...props} />);
+    renderer.render(<AutoHide shouldAutoHideContainer {...props} />);
     const out = renderer.getRenderOutput();
-    expect(out).toEqualJSX(<TestComponent hello="son" />);
+    expect(out).toEqualJSX(<TestComponent shouldAutoHideContainer hello="son" />);
   });
 
-  context('props.shouldAutoHideContainer', () => {
+  describe('props.shouldAutoHideContainer', () => {
     let AutoHide;
     let component;
     let container;
@@ -33,17 +38,19 @@ describe('autoHideContainer', () => {
     beforeEach(() => {
       AutoHide = autoHideContainer(TestComponent);
       container = document.createElement('div');
-      props = {hello: 'mom'};
+      props = {hello: 'mom', shouldAutoHideContainer: false};
       component = ReactDOM.render(<AutoHide {...props} />, container);
     });
 
-    it('creates a component', () => expect(component).toExist());
+    it('creates a component', () => {
+      expect(component).toExist();
+    });
 
     it('shows the container at first', () => {
       expect(container.style.display).toNotEqual('none');
     });
 
-    context('when set to true', () => {
+    describe('when set to true', () => {
       beforeEach(() => {
         sinon.spy(component, 'render');
         props.shouldAutoHideContainer = true;
@@ -58,7 +65,7 @@ describe('autoHideContainer', () => {
         expect(component.render.called).toBe(false);
       });
 
-      context('when set back to false', () => {
+      describe('when set back to false', () => {
         beforeEach(() => {
           props.shouldAutoHideContainer = false;
           ReactDOM.render(<AutoHide {...props} />, container);

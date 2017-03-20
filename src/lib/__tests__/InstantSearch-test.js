@@ -1,7 +1,7 @@
-/* eslint-env mocha */
+
 import EventEmitter from 'events';
 
-import expect from 'expect';
+
 import range from 'lodash/range';
 import sinon from 'sinon';
 
@@ -85,7 +85,7 @@ describe('InstantSearch lifecycle', () => {
     expect(algoliasearchHelper.notCalled).toBe(true, 'algoliasearchHelper not yet called');
   });
 
-  context('when providing a custom client module', () => {
+  describe('when providing a custom client module', () => {
     let createAlgoliaClient;
     let customAppID;
     let customApiKey;
@@ -121,7 +121,7 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
-  context('when adding a widget without render and init', () => {
+  describe('when adding a widget without render and init', () => {
     let widget;
 
     beforeEach(() => {
@@ -168,7 +168,7 @@ describe('InstantSearch lifecycle', () => {
     expect(search.searchParameters.facetsRefinements).toEqual({fruits: ['apple']});
   });
 
-  context('when adding a widget', () => {
+  describe('when adding a widget', () => {
     let widget;
 
     beforeEach(() => {
@@ -186,7 +186,7 @@ describe('InstantSearch lifecycle', () => {
       expect(widget.getConfiguration.notCalled).toBe(true);
     });
 
-    context('when we call search.start', () => {
+    describe('when we call search.start', () => {
       beforeEach(() => {
         search.start();
       });
@@ -235,7 +235,7 @@ describe('InstantSearch lifecycle', () => {
         expect(widget.render.notCalled).toBe(true);
       });
 
-      context('when we have results', () => {
+      describe('when we have results', () => {
         let results;
 
         beforeEach(() => {
@@ -258,7 +258,7 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
-  context('when we have 5 widgets', () => {
+  describe('when we have 5 widgets', () => {
     let widgets;
 
     beforeEach(() => {
@@ -293,7 +293,7 @@ describe('InstantSearch lifecycle', () => {
     });
   });
 
-  context('when render happens', () => {
+  describe('when render happens', () => {
     const render = sinon.spy();
     beforeEach(() => {
       render.reset();

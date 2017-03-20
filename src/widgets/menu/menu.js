@@ -1,7 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import cx from 'classnames';
+
+import defaultTemplates from './defaultTemplates.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
+import headerFooterHOC from '../../decorators/headerFooter.js';
 import connectMenu from '../../connectors/menu/connectMenu.js';
+import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+  prefixKeys,
+} from '../../lib/utils.js';
+
+const bem = bemHelper('ais-menu');
+
+const usage = `Usage:
+menu({
+  container,
+  attributeName,
+  [ sortBy=['count:desc', 'name:asc'] ],
+  [ limit=10 ],
+  [ cssClasses.{root,list,item} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer ],
+  [ showMore.{templates: {active, inactive}, limit} ],
+  [ collapsible=false ]
+})`;
 
 /**
  * Create a menu out of a facet
@@ -34,37 +63,91 @@ import connectMenu from '../../connectors/menu/connectMenu.js';
  * @param  {string|string[]} [options.cssClasses.count] CSS class to add to each count element (when using the default template)
  * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
+ * @return {Object} Widget instance
  */
-export default connectMenu(defaultRendering);
+export default function menu({
+  container,
+  attributeName,
+  sortBy = ['count:desc', 'name:asc'],
+  limit = 10,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+  showMore = false,
+} = {}) {
+  if (!container || !attributeName) {
+    throw new Error(usage);
+  }
 
-function defaultRendering({
-  collapsible,
-  createURL,
-  cssClasses,
-  facetValues,
-  limitMax,
-  limitMin,
-  shouldAutoHideContainer,
-  showMore,
-  templateProps,
-  toggleRefinement,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      limitMax={limitMax}
-      limitMin={limitMin}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      showMore={showMore}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-    />,
-    containerNode
-  );
+  const showMoreConfig = getShowMoreConfig(showMore);
+  if (showMoreConfig && showMoreConfig.limit < limit) {
+    throw new Error('showMore.limit configuration should be > than the limit in the main configuration'); // eslint-disable-line
+  }
+
+  const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
+
+  const containerNode = getContainerNode(container);
+  let RefinementList = headerFooterHOC(RefinementListComponent);
+  if (autoHideContainer === true) {
+    RefinementList = autoHideContainerHOC(RefinementList);
+  }
+
+  const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
+  const allTemplates = showMoreTemplates ? {...templates, ...showMoreTemplates} : templates;
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count),
+  };
+
+  let templateProps;
+
+  return connectMenu(({
+    refine,
+    items,
+    createURL,
+    canRefine,
+    instantSearchInstance,
+    isFirstRendering,
+  }) => {
+    if (isFirstRendering) {
+      templateProps = prepareTemplateProps({
+        transformData,
+        defaultTemplates,
+        templatesConfig: instantSearchInstance.templatesConfig,
+        templates: allTemplates,
+      });
+    }
+
+    const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue)}));
+
+    ReactDOM.render(
+      <RefinementList
+        collapsible={ collapsible }
+        createURL={ createURL }
+        cssClasses={ cssClasses }
+        facetValues={ facetValues }
+        limitMax={ widgetMaxValuesPerFacet }
+        limitMin={ limit }
+        shouldAutoHideContainer={ !canRefine }
+        showMore={ showMoreConfig !== null }
+        templateProps={ templateProps }
+        toggleRefinement={ refine }
+      />,
+      containerNode
+    );
+  })({
+    attributeName,
+    limit,
+    sortBy,
+  });
 }

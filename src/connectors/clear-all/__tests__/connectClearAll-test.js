@@ -1,6 +1,5 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -10,7 +9,7 @@ import connectClearAll from '../connectClearAll.js';
 
 describe('connectClearAll', () => {
   it('Renders during init and render', () => {
-    const helper = jsHelper({});
+    const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
     const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
@@ -65,7 +64,7 @@ describe('connectClearAll', () => {
     // test the function received by the rendering function
     // to clear the refinements
 
-    const helper = jsHelper({}, '', {facets: ['myFacet']});
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', {facets: ['myFacet']});
     helper.search = sinon.stub();
     helper.toggleRefinement('myFacet', 'myValue');
 
@@ -107,7 +106,7 @@ describe('connectClearAll', () => {
   it('some refinements from results <=> hasRefinements = true', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
-    const helper = jsHelper({}, undefined, {facets: ['aFacet']});
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, undefined, {facets: ['aFacet']});
     helper.toggleRefinement('aFacet', 'some value');
     helper.search = sinon.stub();
 
@@ -141,7 +140,7 @@ describe('connectClearAll', () => {
     // test if the values sent to the rendering function
     // are consistent with the search state
 
-    const helper = jsHelper({});
+    const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
 
     const container = document.createElement('div');

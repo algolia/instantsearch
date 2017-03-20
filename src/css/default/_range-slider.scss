@@ -16,6 +16,15 @@ $range-slider-handle-bg: $white;
     height: $range-slider-target-height;
     margin-top: 2em;
     margin-bottom: 2em;
+
+    &[disabled="true"] {
+      cursor: not-allowed;
+
+      .ais-range-slider--handle {
+        border-color: $range-slider-marker-bg;
+        cursor: not-allowed;
+      }
+    }
   }
 
   @include element(base) {

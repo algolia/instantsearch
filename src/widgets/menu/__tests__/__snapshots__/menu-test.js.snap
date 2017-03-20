@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`menu snapshot 1`] = `
+<HeaderFooter-AutoHide
+  collapsible={false}
+  createURL={[Function]}
+  cssClasses={
+    Object {
+      "active": "ais-menu--item__active",
+      "body": "ais-menu--body",
+      "count": "ais-menu--count",
+      "footer": "ais-menu--footer",
+      "header": "ais-menu--header",
+      "item": "ais-menu--item",
+      "link": "ais-menu--link",
+      "list": "ais-menu--list",
+      "root": "ais-menu",
+    }
+  }
+  facetValues={
+    Array [
+      Object {
+        "name": "foo",
+        "url": "#",
+      },
+      Object {
+        "name": "bar",
+        "url": "#",
+      },
+    ]
+  }
+  limitMax={10}
+  limitMin={10}
+  shouldAutoHideContainer={false}
+  showMore={false}
+  templateProps={
+    Object {
+      "templates": Object {
+        "footer": "",
+        "header": "",
+        "item": "<a class=\\"{{cssClasses.link}}\\" href=\\"{{url}}\\">{{name}} <span class=\\"{{cssClasses.count}}\\">{{#helpers.formatNumber}}{{count}}{{/helpers.formatNumber}}</span></a>",
+      },
+      "templatesConfig": undefined,
+      "transformData": undefined,
+      "useCustomCompileOptions": Object {
+        "footer": false,
+        "header": false,
+        "item": false,
+      },
+    }
+  }
+  toggleRefinement={[Function]}
+/>
+`;

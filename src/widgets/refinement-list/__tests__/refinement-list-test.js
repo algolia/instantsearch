@@ -1,12 +1,12 @@
-/* eslint-env mocha */
 
-import expect from 'expect';
+
 import sinon from 'sinon';
 
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
 import refinementList from '../refinement-list.js';
+const instantSearchInstance = {templatesConfig: {}};
 
 describe('refinementList()', () => {
   let autoHideContainer;
@@ -27,17 +27,7 @@ describe('refinementList()', () => {
     refinementList.__Rewire__('headerFooterHOC', headerFooter);
   });
 
-  context('instantiated with wrong parameters', () => {
-    it('should fail if no attributeName', () => {
-      // Given
-      options = {container, attributeName: undefined};
-
-      // Then
-      expect(() => {
-        // When
-        refinementList(options);
-      }).toThrow(/^Usage:/);
-    });
+  describe('instantiated with wrong parameters', () => {
     it('should fail if no container', () => {
       // Given
       options = {container: undefined, attributeName: 'foo'};
@@ -50,100 +40,16 @@ describe('refinementList()', () => {
     });
   });
 
-  context('operator', () => {
-    beforeEach(() => {
-      options = {container, attributeName: 'attributeName'};
-    });
-    it('should accept [and, or, AND, OR]', () => {
-      expect(() => {
-        refinementList({...options, operator: 'or'});
-      }).toNotThrow();
-
-      expect(() => {
-        refinementList({...options, operator: 'OR'});
-      }).toNotThrow();
-
-      expect(() => {
-        refinementList({...options, operator: 'and'});
-      }).toNotThrow();
-
-      expect(() => {
-        refinementList({...options, operator: 'AND'});
-      }).toNotThrow();
-    });
-    it('should throw an error on any other value', () => {
-      expect(() => {
-        refinementList({...options, operator: 'foo'});
-      }).toThrow(/^Usage:/);
-    });
-  });
-
-  context('getConfiguration', () => {
-    let configuration;
-    beforeEach(() => {
-      options = {container, attributeName: 'attributeName'};
-    });
-    it('should add a facet for AND operator', () => {
-      // Given
-      options.operator = 'AND';
-      widget = refinementList(options);
-      configuration = {};
-
-      // When
-      const actual = widget.getConfiguration(configuration);
-
-      // Then
-      expect(actual.facets).toInclude('attributeName');
-    });
-    it('should add disjunctiveFacet for OR operator', () => {
-      // Given
-      options.operator = 'OR';
-      widget = refinementList(options);
-      configuration = {};
-
-      // When
-      const actual = widget.getConfiguration(configuration);
-
-      // Then
-      expect(actual.disjunctiveFacets).toInclude('attributeName');
-    });
-    it('should set the maxValuePerFacet to the specified limit if higher', () => {
-      // Given
-      options.limit = 1000;
-      widget = refinementList(options);
-      configuration = {maxValuesPerFacet: 100};
-
-      // When
-      const actual = widget.getConfiguration(configuration);
-
-      // Then
-      expect(actual.maxValuesPerFacet).toBe(1000);
-    });
-    it('should keep the maxValuePerFacet if higher than the one specified', () => {
-      // Given
-      options.limit = 100;
-      widget = refinementList(options);
-      configuration = {maxValuesPerFacet: 1000};
-
-      // When
-      const actual = widget.getConfiguration(configuration);
-
-      // Then
-      expect(actual.maxValuesPerFacet).toBe(1000);
-    });
-  });
-
-  context('render', () => {
+  describe('render', () => {
     const helper = {};
     let results;
     let state;
-    let templatesConfig;
     let createURL;
 
     function renderWidget(userOptions) {
       widget = refinementList({...options, ...userOptions});
-      widget.init({helper, createURL});
-      return widget.render({results, helper, templatesConfig, state});
+      widget.init({helper, createURL, instantSearchInstance});
+      return widget.render({results, helper, state});
     }
 
     beforeEach(() => {
@@ -153,7 +59,7 @@ describe('refinementList()', () => {
       createURL = () => '#';
     });
 
-    context('cssClasses', () => {
+    describe('cssClasses', () => {
       it('should call the component with the correct classes', () => {
         // Given
         const cssClasses = {
@@ -187,7 +93,7 @@ describe('refinementList()', () => {
       });
     });
 
-    context('autoHideContainer', () => {
+    describe('autoHideContainer', () => {
       it('should set shouldAutoHideContainer to false if there are facetValues', () => {
         // Given
         results.getFacetValues = sinon.stub().returns([{name: 'foo'}, {name: 'bar'}]);
@@ -238,7 +144,7 @@ describe('refinementList()', () => {
       it('should dynamically update the header template on subsequent renders', () => {
         // Given
         const widgetOptions = {container, attributeName: 'type'};
-        const initOptions = {helper, createURL};
+        const initOptions = {helper, createURL, instantSearchInstance};
         const facetValues = [{
           name: 'foo',
           isRefined: true,
@@ -247,7 +153,7 @@ describe('refinementList()', () => {
           isRefined: false,
         }];
         results.getFacetValues = sinon.stub().returns(facetValues);
-        const renderOptions = {results, helper, templatesConfig, state};
+        const renderOptions = {results, helper, state};
 
         // When
         widget = refinementList(widgetOptions);
@@ -269,41 +175,7 @@ describe('refinementList()', () => {
     });
   });
 
-  context('toggleRefinement', () => {
-    let helper;
-    beforeEach(() => {
-      options = {container, attributeName: 'attributeName'};
-      helper = {
-        toggleRefinement: sinon.stub().returnsThis(),
-        search: sinon.spy(),
-      };
-    });
-
-    it('should do a refinement on the selected facet', () => {
-      // Given
-      widget = refinementList(options);
-      widget.init({helper});
-
-      // When
-      widget.toggleRefinement(helper, 'attributeName', 'facetValue');
-
-      // Then
-      expect(helper.toggleRefinement.calledWith('attributeName', 'facetValue'));
-    });
-    it('should start a search on refinement', () => {
-      // Given
-      widget = refinementList(options);
-      widget.init({helper});
-
-      // When
-      widget.toggleRefinement(helper, 'attributeName', 'facetValue');
-
-      // Then
-      expect(helper.search.called);
-    });
-  });
-
-  context('show more', () => {
+  describe('show more', () => {
     it('should return a configuration with the highest limit value (default value)', () => {
       const opts = {container, attributeName: 'attributeName', limit: 1, showMore: {}};
       const wdgt = refinementList(opts);

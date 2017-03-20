@@ -1,11 +1,7 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import cloneDeep from 'lodash/cloneDeep';
-
 import expectJSX from 'expect-jsx';
 import numericRefinementList from '../numeric-refinement-list.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';

@@ -19,6 +19,7 @@ export {
   prefixKeys,
   escapeRefinement,
   unescapeRefinement,
+  checkRendering,
 };
 
 /**
@@ -256,4 +257,10 @@ function escapeRefinement(value) {
 
 function unescapeRefinement(value) {
   return String(value).replace(/^\\-/, '-');
+}
+
+function checkRendering(rendering, usage) {
+  if (rendering === undefined || typeof rendering !== 'function') {
+    throw new Error(usage);
+  }
 }

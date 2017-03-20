@@ -1,5 +1,3 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';

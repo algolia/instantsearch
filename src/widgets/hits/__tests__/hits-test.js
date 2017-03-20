@@ -1,15 +1,10 @@
-/* eslint-env mocha */
-
 import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
-
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-
 import hits from '../hits';
 import Hits from '../../../components/Hits';
-
 import defaultTemplates from '../../../connectors/hits/defaultTemplates.js';
 
 describe('hits call', () => {
