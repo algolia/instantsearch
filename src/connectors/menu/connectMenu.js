@@ -38,38 +38,7 @@ export default function connectMenu(renderFn) {
     limit = 10,
     sortBy = ['count:desc', 'name:asc'],
   }) => {
-    checkUsage({attributeName, usage});
-
-    const render = ({
-      items,
-      state,
-      createURL,
-      refine,
-      helper,
-      isFromSearch,
-      isFirstSearch,
-      instantSearchInstance,
-      isFirstRendering,
-    }) => {
-      const _createURL = facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
-
-      renderFn({
-        createURL: _createURL,
-        items,
-        refine,
-        instantSearchInstance,
-        canRefine: items.length > 0,
-        isFirstSearch,
-        helper,
-        isFromSearch,
-        limit,
-        isFirstRendering,
-      });
-    };
-
-    let _refine;
-    let _helper;
-    let _instantSearchInstance;
+    checkUsage({attributeName, usageMessage: usage});
 
     return {
       getConfiguration(configuration) {
@@ -87,38 +56,41 @@ export default function connectMenu(renderFn) {
       },
 
       init({helper, createURL, instantSearchInstance}) {
-        _refine = facetValue => helper
+        this._createURL = facetValue =>
+          createURL(helper.state.toggleRefinement(attributeName, facetValue));
+
+        this._refine = facetValue => helper
           .toggleRefinement(attributeName, facetValue)
           .search();
 
-        _instantSearchInstance = instantSearchInstance;
-        _helper = helper;
+        this._instantSearchInstance = instantSearchInstance;
+        this._helper = helper;
 
-        render({
+        renderFn({
           items: [],
           state: helper.state,
-          createURL,
-          refine: _refine,
-          helper: _helper,
+          createURL: this._createURL,
+          refine: this._refine,
+          helper: this._helper,
           isFirstSearch: true,
-          isFirstRendering: true,
           instantSearchInstance,
-        });
+          canRefine: false,
+        }, true);
       },
 
-      render({results, state, createURL}) {
+      render({results, state}) {
         const items = results.getFacetValues(attributeName, {sortBy}).data || [];
 
-        render({
+        renderFn({
           items,
           state,
-          createURL,
-          refine: _refine,
-          helper: _helper,
+          createURL: this._createURL,
+          refine: this._refine,
+          helper: this._helper,
           isFirstSearch: false,
-          isFirstRendering: false,
-          instantSearchInstance: _instantSearchInstance,
-        });
+          instantSearchInstance: this._instantSearchInstance,
+          canRefine: items.length > 0,
+        }, false);
       },
     };
   };

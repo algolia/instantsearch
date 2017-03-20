@@ -13,15 +13,14 @@ describe('menu', () => {
     expect(menu.bind(null, {attributeName})).toThrow(/^Usage/);
   });
 
-  it.only('snapshot', () => {
+  it('snapshot', () => {
     const data = {data: [{name: 'foo'}, {name: 'bar'}]};
     const results = {getFacetValues: sinon.spy(() => data)};
+    const state = {toggleRefinement: sinon.spy()};
     const helper = {
       toggleRefinement: sinon.stub().returnsThis(),
       search: sinon.spy(),
-    };
-    const state = {
-      toggleRefinement: sinon.spy(),
+      state,
     };
     const createURL = () => '#';
     const ReactDOM = {render: sinon.spy()};
@@ -30,7 +29,7 @@ describe('menu', () => {
     const instantSearchInstance = {templatesConfig: undefined};
     widget.init({helper, createURL, instantSearchInstance});
     widget.render({results, createURL, state});
-    expect(ReactDOM.render.secondCall.args[0]).toMatchSnapshot();
+    expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     menu.__ResetDependency__('ReactDOM');
   });
 });

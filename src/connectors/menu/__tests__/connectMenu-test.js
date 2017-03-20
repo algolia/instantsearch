@@ -103,7 +103,7 @@ describe('connectMenu', () => {
     // test that rendering has been called during init with isFirstRendering = true
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
-    expect(rendering.lastCall.args[0].isFirstRendering).toBe(true);
+    expect(rendering.lastCall.args[1]).toBe(true);
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.canRefine).toBe(false);
@@ -117,7 +117,7 @@ describe('connectMenu', () => {
 
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
-    expect(rendering.lastCall.args[0].isFirstRendering).toBe(false);
+    expect(rendering.lastCall.args[1]).toBe(false);
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.canRefine).toBe(false);

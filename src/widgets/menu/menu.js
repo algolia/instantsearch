@@ -4,10 +4,8 @@ import cx from 'classnames';
 
 import defaultTemplates from './defaultTemplates.js';
 import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
-import autoHideContainerHOC from '../../decorators/autoHideContainer.js';
-import headerFooterHOC from '../../decorators/headerFooter.js';
 import connectMenu from '../../connectors/menu/connectMenu.js';
-import RefinementListComponent from '../../components/RefinementList/RefinementList.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 
 import {
   bemHelper,
@@ -17,6 +15,54 @@ import {
 } from '../../lib/utils.js';
 
 const bem = bemHelper('ais-menu');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+  transformData,
+  widgetMaxValuesPerFacet,
+  limit,
+  showMoreConfig,
+}) => ({
+  refine,
+  items,
+  createURL,
+  canRefine,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue)}));
+  const shouldAutoHideContainer = autoHideContainer && !canRefine;
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={ collapsible }
+      createURL={ createURL }
+      cssClasses={ cssClasses }
+      facetValues={ facetValues }
+      limitMax={ widgetMaxValuesPerFacet }
+      limitMin={ limit }
+      shouldAutoHideContainer={ shouldAutoHideContainer }
+      showMore={ showMoreConfig !== null }
+      templateProps={ renderState.templateProps }
+      toggleRefinement={ refine }
+    />,
+    containerNode
+  );
+};
 
 const usage = `Usage:
 menu({
@@ -76,8 +122,8 @@ export default function menu({
   transformData,
   autoHideContainer = true,
   showMore = false,
-} = {}) {
-  if (!container || !attributeName) {
+}) {
+  if (!container) {
     throw new Error(usage);
   }
 
@@ -89,10 +135,6 @@ export default function menu({
   const widgetMaxValuesPerFacet = showMoreConfig && showMoreConfig.limit || limit;
 
   const containerNode = getContainerNode(container);
-  let RefinementList = headerFooterHOC(RefinementListComponent);
-  if (autoHideContainer === true) {
-    RefinementList = autoHideContainerHOC(RefinementList);
-  }
 
   const showMoreTemplates = showMoreConfig && prefixKeys('show-more-', showMoreConfig.templates);
   const allTemplates = showMoreTemplates ? {...templates, ...showMoreTemplates} : templates;
@@ -109,45 +151,23 @@ export default function menu({
     count: cx(bem('count'), userCssClasses.count),
   };
 
-  let templateProps;
-
-  return connectMenu(({
-    refine,
-    items,
-    createURL,
-    canRefine,
-    instantSearchInstance,
-    isFirstRendering,
-  }) => {
-    if (isFirstRendering) {
-      templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates: allTemplates,
-      });
-    }
-
-    const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue)}));
-
-    ReactDOM.render(
-      <RefinementList
-        collapsible={ collapsible }
-        createURL={ createURL }
-        cssClasses={ cssClasses }
-        facetValues={ facetValues }
-        limitMax={ widgetMaxValuesPerFacet }
-        limitMin={ limit }
-        shouldAutoHideContainer={ !canRefine }
-        showMore={ showMoreConfig !== null }
-        templateProps={ templateProps }
-        toggleRefinement={ refine }
-      />,
-      containerNode
-    );
-  })({
-    attributeName,
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates: allTemplates,
+    transformData,
+    widgetMaxValuesPerFacet,
     limit,
-    sortBy,
+    showMoreConfig,
   });
+
+  try {
+    const makeWidget = connectMenu(specializedRenderer);
+    return makeWidget({attributeName, limit, sortBy});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
