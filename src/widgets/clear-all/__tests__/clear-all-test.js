@@ -48,13 +48,19 @@ describe('clearAll()', () => {
       shouldAutoHideContainer: true,
       templateProps: {
         templates: defaultTemplates,
-        templatesConfig: undefined,
+        templatesConfig: {},
         transformData: undefined,
         useCustomCompileOptions: {header: false, footer: false, link: false},
       },
       url: '#all-cleared',
     };
-    widget.init({helper, createURL: () => {}});
+    widget.init({
+      helper,
+      createURL: () => {},
+      instantSearchInstance: {
+        templatesConfig: {},
+      },
+    });
   });
 
   it('configures nothing', () => {
@@ -69,8 +75,8 @@ describe('clearAll()', () => {
     });
 
     it('calls twice ReactDOM.render(<ClearAll props />, container)', () => {
-      widget.render({results, helper, state: helper.state, createURL});
-      widget.render({results, helper, state: helper.state, createURL});
+      widget.render({results, helper, state: helper.state, createURL, instantSearchInstance: {}});
+      widget.render({results, helper, state: helper.state, createURL, instantSearchInstance: {}});
 
       expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
       expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<ClearAll {...getProps()} />);

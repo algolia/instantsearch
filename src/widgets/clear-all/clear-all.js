@@ -104,11 +104,10 @@ export default function ClearAll({
     cssClasses,
     collapsible,
     autoHideContainer,
-    state: {},
+    renderState: {},
     templates,
   });
 
   const makeWidget = connectClearAll(specializedRenderer);
   return makeWidget({excludeAttributes});
 }
-
