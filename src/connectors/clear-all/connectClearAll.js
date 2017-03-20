@@ -1,25 +1,14 @@
 import {
-  bemHelper,
-  getContainerNode,
   getRefinements,
-  prepareTemplateProps,
   clearRefinementsFromState,
   clearRefinementsAndSearch,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
 
-const bem = bemHelper('ais-clear-all');
-
-const usage = `Usage:
-clearAll({
-  container,
-  [ cssClasses.{root,header,body,footer,link}={} ],
-  [ templates.{header,link,footer}={link: 'Clear all'} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ excludeAttributes=[] ]
-})`;
+const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
+  if (hasRefinements) {
+    clearRefinementsAndSearch(helper, clearAttributes);
+  }
+};
 
 /**
  * Connects a rendering with the clearAll business logic.
@@ -27,73 +16,36 @@ clearAll({
  * @return {function} a widget factory for a clear all widget
  */
 const connectClearAll = renderClearAll => ({
-    container,
-    templates = defaultTemplates,
-    cssClasses: userCssClasses = {},
-    collapsible = false,
-    autoHideContainer = true,
     excludeAttributes = [],
-  } = {}) => {
-  if (!container) {
-    throw new Error(usage);
-  }
-
-  const containerNode = getContainerNode(container);
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    link: cx(bem('link'), userCssClasses.link),
-  };
-
-  return {
-    init({helper, templatesConfig, createURL}) {
-      this.clearAll = this.clearAll.bind(this, helper);
-      this._templateProps = prepareTemplateProps({defaultTemplates, templatesConfig, templates});
-      this.clearAttributes = getRefinements({}, helper.state)
+  } = {}) => ({
+    init({helper, instantSearchInstance, createURL}) {
+      const clearAttributes = getRefinements({}, helper.state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = this.clearAttributes.length !== 0;
+      const hasRefinements = clearAttributes.length !== 0;
 
       renderClearAll({
         clearAll: () => {},
-        collapsible,
-        cssClasses,
         hasRefinements,
-        shouldAutoHideContainer: autoHideContainer,
-        templateProps: this._templateProps,
         url: createURL(clearRefinementsFromState(helper.state)),
-        containerNode,
+        instantSearchInstance,
       }, true);
     },
 
-    render({results, state, createURL}) {
-      this.clearAttributes = getRefinements(results, state)
+    render({results, state, createURL, helper, instantSearchInstance}) {
+      const clearAttributes = getRefinements(results, state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = this.clearAttributes.length !== 0;
-      const url = createURL(clearRefinementsFromState(state));
+      const hasRefinements = clearAttributes.length !== 0;
+      const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
 
       renderClearAll({
-        clearAll: this.clearAll,
-        collapsible,
-        cssClasses,
+        clearAll: clearAll({helper, clearAttributes, hasRefinements}),
         hasRefinements,
-        shouldAutoHideContainer: autoHideContainer && !hasRefinements,
-        templateProps: this._templateProps,
-        url,
-        containerNode,
+        createURL: preparedCreateURL,
+        instantSearchInstance,
       }, false);
     },
-
-    clearAll(helper) {
-      if (this.clearAttributes.length > 0) {
-        clearRefinementsAndSearch(helper, this.clearAttributes);
-      }
-    },
-  };
-};
+  });
 
 export default connectClearAll;

@@ -10,7 +10,7 @@ expect.extend(expectJSX);
 
 import clearAll from '../clear-all';
 import ClearAll from '../../../components/ClearAll/ClearAll';
-import defaultTemplates from '../../../connectors/clear-all/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('clearAll()', () => {
   let ReactDOM;
