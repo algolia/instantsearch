@@ -1,11 +1,4 @@
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
 import some from 'lodash/some';
-import cx from 'classnames';
-
-const bem = bemHelper('ais-hits-per-page-selector');
 
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
@@ -25,28 +18,16 @@ const usage = `Usage:
 hitsPerPageSelector({
   container,
   options,
-  [ cssClasses.{root,item}={} ],
-  [ autoHideContainer=false ]
 })`;
 
 const connectHitsPerPageSelector = renderHitsPerPageSelector => ({
-    container,
     options: userOptions,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = false,
   } = {}) => {
   let options = userOptions;
 
-  if (!container || !options) {
+  if (!options) {
     throw new Error(usage);
   }
-
-  const containerNode = getContainerNode(container);
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-  };
 
   return {
     init({helper, state}) {
@@ -81,12 +62,10 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
         .search();
 
       renderHitsPerPageSelector({
-        cssClasses,
         currentValue,
         options,
         setValue: this.setHitsPerPage,
-        shouldAutoHideContainer: autoHideContainer,
-        containerNode,
+        hasNoResults: true,
       }, true);
     },
 
@@ -95,12 +74,10 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
       const hasNoResults = results.nbHits === 0;
 
       renderHitsPerPageSelector({
-        cssClasses,
         currentValue,
         options,
         setValue: this.setHitsPerPage,
-        shouldAutoHideContainer: autoHideContainer && hasNoResults,
-        containerNode,
+        hasNoResults,
       }, false);
     },
   };
