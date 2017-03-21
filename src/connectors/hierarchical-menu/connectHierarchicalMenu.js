@@ -1,12 +1,3 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
-
-const bem = bemHelper('ais-hierarchical-menu');
 /**
  * Create a hierarchical menu using multiple attributes
  * @function hierarchicalMenu
@@ -41,57 +32,30 @@ const bem = bemHelper('ais-hierarchical-menu');
  * @return {Object}
  */
 const usage = `Usage:
-hierarchicalMenu({
-  container,
+connectHierarchicalMenu({
   attributes,
   [ separator=' > ' ],
   [ rootPath ],
   [ showParentLevel=true ],
   [ limit=10 ],
   [ sortBy=['name:asc'] ],
-  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
-  [ templates.{header, item, footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
 })`;
 const connectHierarchicalMenu = renderHierarchicalMenu => ({
-    container,
     attributes,
     separator = ' > ',
     rootPath = null,
     showParentLevel = true,
     limit = 10,
     sortBy = ['name:asc'],
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
   } = {}) => {
-  if (!container || !attributes || !attributes.length) {
+  if (!attributes || !attributes.length) {
     throw new Error(usage);
   }
-
-  const containerNode = getContainerNode(container);
 
   // we need to provide a hierarchicalFacet name for the search state
   // so that we can always map $hierarchicalFacetName => real attributes
   // we use the first attribute name
   const hierarchicalFacetName = attributes[0];
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    depth: bem('list', 'lvl'),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    link: cx(bem('link'), userCssClasses.link),
-    count: cx(bem('count'), userCssClasses.count),
-  };
 
   return {
     getConfiguration: currentConfiguration => ({
@@ -106,17 +70,10 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
         Math.max(currentConfiguration.maxValuesPerFacet, limit) :
         limit,
     }),
-    init({helper, templatesConfig, createURL}) {
+    init({helper, createURL, instantSearchInstance}) {
       this._toggleRefinement = facetValue => helper
         .toggleRefinement(hierarchicalFacetName, facetValue)
         .search();
-
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
 
       // Bind createURL to this specific attribute
       function _createURL(facetValue) {
@@ -125,14 +82,11 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
 
       renderHierarchicalMenu({
         attributeNameKey: 'path',
-        collapsible,
         createURL: _createURL,
-        cssClasses,
         facetValues: [],
-        shouldAutoHideContainer: autoHideContainer,
         templateProps: this._templateProps,
         toggleRefinement: this._toggleRefinement,
-        containerNode,
+        instantSearchInstance,
       }, true);
     },
     _prepareFacetValues(facetValues, state) {
@@ -157,14 +111,9 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
 
       renderHierarchicalMenu({
         attributeNameKey: 'path',
-        collapsible,
         createURL: _createURL,
-        cssClasses,
         facetValues,
-        shouldAutoHideContainer: autoHideContainer && facetValues.length === 0,
-        templateProps: this._templateProps,
         toggleRefinement: this._toggleRefinement,
-        containerNode,
       }, false);
     },
   };

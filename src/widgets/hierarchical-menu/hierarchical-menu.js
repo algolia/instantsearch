@@ -1,8 +1,60 @@
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import connectHierarchicalMenu from '../../connectors/hierarchical-menu/connectHierarchicalMenu';
 import RefinementList from '../../components/RefinementList/RefinementList.js';
+
+import cx from 'classnames';
+import defaultTemplates from './defaultTemplates.js';
+
+const bem = bemHelper('ais-hierarchical-menu');
+
+const renderer = ({
+  autoHideContainer,
+  collapsible,
+  cssClasses,
+  containerNode,
+  transformData,
+  templates,
+  renderState,
+}) => ({
+  attributeNameKey,
+  createURL,
+  facetValues,
+  toggleRefinement,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && facetValues.length === 0;
+
+  ReactDOM.render(
+    <RefinementList
+      attributeNameKey="path"
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
+};
 
 /**
  * Create a hierarchical menu using multiple attributes
@@ -37,32 +89,76 @@ import RefinementList from '../../components/RefinementList/RefinementList.js';
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-export default connectHierarchicalMenu(defaultRendering);
 
-function defaultRendering({
-  attributeNameKey,
-  collapsible,
-  createURL,
-  cssClasses,
-  facetValues,
-  shouldAutoHideContainer,
-  templateProps,
-  toggleRefinement,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
+const usage = `Usage:
+hierarchicalMenu({
+  container,
+  attributes,
+  [ separator=' > ' ],
+  [ rootPath ],
+  [ showParentLevel=true ],
+  [ limit=10 ],
+  [ sortBy=['name:asc'] ],
+  [ cssClasses.{root , header, body, footer, list, depth, item, active, link}={} ],
+  [ templates.{header, item, footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
+})`;
 
-  ReactDOM.render(
-    <RefinementList
-      attributeNameKey="path"
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      shouldAutoHideContainer={facetValues.length === 0}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-    />,
-    containerNode
-  );
+export default function hierarchicalMenu({
+  container,
+  attributes,
+  separator = ' > ',
+  rootPath = null,
+  showParentLevel = true,
+  limit = 10,
+  sortBy = ['name:asc'],
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+} = {}) {
+  if (!container || !attributes || !attributes.length) {
+    throw new Error(usage);
+  }
+
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    depth: bem('list', 'lvl'),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    link: cx(bem('link'), userCssClasses.link),
+    count: cx(bem('count'), userCssClasses.count),
+  };
+
+  const specializedRenderer = renderer({
+    autoHideContainer,
+    collapsible,
+    cssClasses,
+    containerNode,
+    transformData,
+    templates,
+    renderState: {},
+  });
+  try {
+    const makeHierarchicalMenu = connectHierarchicalMenu(specializedRenderer);
+    return makeHierarchicalMenu({
+      attributes,
+      separator,
+      rootPath,
+      showParentLevel,
+      limit,
+      sortBy,
+    });
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

@@ -158,14 +158,14 @@ describe('hierarchicalMenu()', () => {
       };
 
       widget = hierarchicalMenu({...options, cssClasses: userCssClasses});
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('calls ReactDOM.render', () => {
       widget = hierarchicalMenu(options);
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(ReactDOM.render.calledOnce).toBe(true);
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
@@ -173,7 +173,7 @@ describe('hierarchicalMenu()', () => {
 
     it('asks for results.getFacetValues', () => {
       widget = hierarchicalMenu(options);
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(results.getFacetValues.calledOnce).toBe(true);
       expect(results.getFacetValues.getCall(0).args).toEqual([
@@ -187,7 +187,7 @@ describe('hierarchicalMenu()', () => {
 
     it('has a sortBy option', () => {
       widget = hierarchicalMenu({...options, sortBy: ['count:asc']});
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(results.getFacetValues.calledOnce).toBe(true);
       expect(results.getFacetValues.getCall(0).args).toEqual([
@@ -205,7 +205,7 @@ describe('hierarchicalMenu()', () => {
         item: 'item2',
         footer: 'footer2',
       }});
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
@@ -213,7 +213,7 @@ describe('hierarchicalMenu()', () => {
     it('sets shouldAutoHideContainer to true when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
@@ -221,14 +221,14 @@ describe('hierarchicalMenu()', () => {
     it('sets facetValues to empty array when no results', () => {
       data = {};
       widget = hierarchicalMenu(options);
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       expect(ReactDOM.render.firstCall.args[0]).toMatchSnapshot();
     });
 
     it('has a toggleRefinement method', () => {
       widget = hierarchicalMenu(options);
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       const elementToggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
       elementToggleRefinement('mom');
@@ -266,7 +266,7 @@ describe('hierarchicalMenu()', () => {
         {name: 'three'},
       ];
       widget = hierarchicalMenu({...options, limit: 3});
-      widget.init({helper, createURL});
+      widget.init({helper, createURL, instantSearchInstance: {}});
       widget.render({results, state});
       const actualFacetValues = ReactDOM.render.firstCall.args[0].props.facetValues;
       expect(actualFacetValues)
