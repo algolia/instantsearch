@@ -31,5 +31,5 @@ Overriding the default content:
 
 | ClassName                       | Description        |
 |---------------------------------|--------------------|
-| alg-empty-search-results        | Container class.   |
+| alg-empty-results        | Container class.   |
 | alg-empty-search-results__query | The current query. |
