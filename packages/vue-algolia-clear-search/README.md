@@ -33,6 +33,13 @@ Only clear the facet refinements:
 <clear-search :clearQuery="false"></clear-search>
 ```
 
+## Props
+
+| Name        | Type    | Default | Description                                                                     |
+|-------------|---------|---------|---------------------------------------------------------------------------------|
+| clearQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
+| clearFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
+
 ## Slots
 
 | Name    | Props | Default                                              | Description                                 |
