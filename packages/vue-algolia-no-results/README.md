@@ -29,7 +29,7 @@ Overriding the default content:
 
 ## CSS Classes
 
-| ClassName             | Description        |
-|-----------------------|--------------------|
-| alg-no-results        | Container class.   |
-| alg-no-results__query | The current query. |
+| ClassName             | Description       |
+|-----------------------|-------------------|
+| alg-no-results        | Container class   |
+| alg-no-results__query | The current query |
