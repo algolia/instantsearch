@@ -1,4 +1,4 @@
-Vue Algolia Empty Results
+Vue Algolia No Results
 ---
 
 A convenience component that will only be showed when no results are to be yielded.
@@ -8,28 +8,28 @@ A convenience component that will only be showed when no results are to be yield
 Basic usage:
 
 ```html
-<empty-results></empty-results>
+<no-results></no-results>
 ```
 
 Overriding the default content:
 
  ```html
-<empty-results>
+<no-results>
 	<template scope="props">
-		No products matcher <i>{{ props.query }}</i>.
+		No products found for <i>{{ props.query }}</i>.
 	</template>
-</empty-results>
+</no-results>
  ```
 
 ## Slots
 
-| Name    | Props | Default                                                                                     | Description                                              |
-|---------|-------|---------------------------------------------------------------------------------------------|----------------------------------------------------------|
-| default | query | `No results matched your query <strong class="alg-empty-results__query">{{query}}</strong>` | The content to be displayed when no results are yielded. |
+| Name    | Props | Default                                                                                  | Description                                              |
+|---------|-------|------------------------------------------------------------------------------------------|----------------------------------------------------------|
+| default | query | `No results matched your query <strong class="alg-no-results__query">{{query}}</strong>` | The content to be displayed when no results are yielded. |
 
 ## CSS Classes
 
-| ClassName                       | Description        |
-|---------------------------------|--------------------|
-| alg-empty-results        | Container class.   |
-| alg-empty-search-results__query | The current query. |
+| ClassName             | Description        |
+|-----------------------|--------------------|
+| alg-no-results        | Container class.   |
+| alg-no-results__query | The current query. |
