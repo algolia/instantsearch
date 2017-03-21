@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -46,9 +44,7 @@ describe('connectToggle', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {containerNode, collapsible, value, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
-      expect(collapsible).toBe(false);
+      const {value} = rendering.lastCall.args[0];
       expect(value).toEqual({
         name: label,
         count: null,
@@ -64,7 +60,6 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      expect(shouldAutoHideContainer).toBe(true);
     }
 
     widget.render({
@@ -88,9 +83,7 @@ describe('connectToggle', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {containerNode, collapsible, value, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
-      expect(collapsible).toBe(false);
+      const {value} = rendering.lastCall.args[0];
       expect(value).toEqual({
         name: label,
         count: 45,
@@ -106,7 +99,6 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      expect(shouldAutoHideContainer).toBe(false);
     }
   });
 
@@ -136,7 +128,7 @@ describe('connectToggle', () => {
     { // first rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
       expect(value).toEqual({
         name: label,
         count: null,
@@ -152,9 +144,9 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      toggleRefinement(value, !value.isRefined);
+      refine(value, !value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
     }
 
@@ -176,7 +168,7 @@ describe('connectToggle', () => {
     { // Second rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 45,
@@ -192,7 +184,7 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
     }
 
@@ -221,7 +213,7 @@ describe('connectToggle', () => {
     { // Third rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 85,
@@ -237,7 +229,7 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
     }
   });
@@ -272,7 +264,8 @@ describe('connectToggle', () => {
     { // first rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
+
       expect(value).toEqual({
         name: label,
         count: null,
@@ -288,9 +281,9 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      toggleRefinement(value, !value.isRefined);
+      refine(value, !value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
     }
 
@@ -319,7 +312,7 @@ describe('connectToggle', () => {
     { // Second rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
       expect(value).toEqual({
         name: label,
         // the value is the one that is not selected
@@ -336,7 +329,7 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
     }
 
@@ -365,7 +358,7 @@ describe('connectToggle', () => {
     { // Third rendering
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, value} = renderOptions;
+      const {refine, value} = renderOptions;
       expect(value).toEqual({
         name: label,
         count: 40,
@@ -381,7 +374,7 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      toggleRefinement(value, value.isRefined);
+      refine(value, value.isRefined);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
     }
   });

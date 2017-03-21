@@ -2,7 +2,7 @@ import React from 'react';
 import expect from 'expect';
 import sinon from 'sinon';
 import currentToggle from '../toggle.js';
-import defaultTemplates from '../../../connectors/toggle/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
@@ -17,6 +17,7 @@ describe('currentToggle()', () => {
     let userValues;
     let collapsible;
     let cssClasses;
+    let instantSearchInstance;
 
     beforeEach(() => {
       ReactDOM = {render: sinon.spy()};
@@ -41,6 +42,7 @@ describe('currentToggle()', () => {
       collapsible = false;
       userValues = {on: true, off: undefined};
       widget = currentToggle({container: containerNode, attributeName, label});
+      instantSearchInstance = {templatesConfig: undefined};
     });
 
     it('configures disjunctiveFacets', () => {
@@ -83,7 +85,7 @@ describe('currentToggle()', () => {
           toggleRefinement() {},
         };
         createURL = () => '#';
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
       });
 
       it('calls twice ReactDOM.render', () => {
@@ -94,7 +96,7 @@ describe('currentToggle()', () => {
         };
         widget = currentToggle({container: containerNode, attributeName, label, userValues});
         widget.getConfiguration();
-        widget.init({helper, state, createURL});
+        widget.init({helper, state, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         widget.render({results, helper, state});
         expect(ReactDOM.render.calledTwice).toBe(true, 'ReactDOM.render called twice');
@@ -134,7 +136,7 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
@@ -157,7 +159,7 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         widget.render({results, helper, state});
 
@@ -198,7 +200,7 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         widget.render({results, helper, state});
 
@@ -238,7 +240,7 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         widget.render({results, helper, state});
 
@@ -281,7 +283,7 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
         widget.render({results, helper, state});
 
@@ -301,7 +303,7 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
       });
 
-      it('using props.toggleRefinement', () => {
+      it('using props.refine', () => {
         results = {
           hits: [{Hello: ', world!'}],
           nbHits: 1,
@@ -317,9 +319,9 @@ describe('currentToggle()', () => {
           collapsible,
         });
         widget.getConfiguration();
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
         widget.render({results, helper, state});
-        const toggleRefinement = ReactDOM.render.firstCall.args[0].props.toggleRefinement;
+        const {toggleRefinement} = ReactDOM.render.firstCall.args[0].props;
         expect(toggleRefinement).toBeA('function');
         toggleRefinement();
         expect(helper.addDisjunctiveFacetRefinement.calledOnce).toBe(true);
@@ -328,7 +330,7 @@ describe('currentToggle()', () => {
       });
     });
 
-    describe('toggleRefinement', () => {
+    describe('refine', () => {
       let helper;
 
       function toggleOn() {
@@ -386,6 +388,7 @@ describe('currentToggle()', () => {
           expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
           expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'on')).toBe(true);
         });
+
         it('toggle off should change the refined value', () => {
           // Given
           userValues = {on: 'on', off: 'off'};
@@ -417,11 +420,12 @@ describe('currentToggle()', () => {
         };
 
         // When
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
 
         // Then
         expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, 'off')).toBe(true);
       });
+
       it('should not add a refinement for custom off value on init if already checked', () => {
         // Given
         userValues = {on: 'on', off: 'off'};
@@ -435,11 +439,12 @@ describe('currentToggle()', () => {
         };
 
         // When
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
 
         // Then
         expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);
       });
+
       it('should not add a refinement for no custom off value on init', () => {
         // Given
         widget = currentToggle({container: containerNode, attributeName, label, values: userValues});
@@ -452,7 +457,7 @@ describe('currentToggle()', () => {
         };
 
         // When
-        widget.init({state, helper, createURL});
+        widget.init({state, helper, createURL, instantSearchInstance});
 
         // Then
         expect(helper.addDisjunctiveFacetRefinement.called).toBe(false);

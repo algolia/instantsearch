@@ -1,8 +1,71 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import RefinementList from '../../components/RefinementList/RefinementList.js';
+import cx from 'classnames';
 
+import defaultTemplates from './defaultTemplates.js';
+import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectToggle from '../../connectors/toggle/connectToggle.js';
+
+import {
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+} from '../../lib/utils.js';
+
+const bem = bemHelper('ais-toggle');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+  transformData,
+}) => ({
+  refine,
+  value,
+  createURL,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && (value.count === 0 || value.count === null);
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={[value]}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
+toggle({
+  container,
+  attributeName,
+  label,
+  [ values={on: true, off: undefined} ],
+  [ cssClasses.{root,header,body,footer,list,item,active,label,checkbox,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
+})`;
 
 /**
  * Instantiate the toggling of a boolean facet filter on and off.
@@ -42,29 +105,50 @@ import connectToggle from '../../connectors/toggle/connectToggle.js';
  * @return {Object}
  */
 
-export default connectToggle(defaultRendering);
-function defaultRendering({
-  collapsible,
-  createURL,
-  cssClasses,
-  value,
-  shouldAutoHideContainer,
-  templateProps,
-  toggleRefinement,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
+export default function toggle({
+  container,
+  attributeName,
+  label,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  autoHideContainer = true,
+  collapsible = false,
+  values: userValues = {on: true, off: undefined},
+} = {}) {
+  if (!container) {
+    throw new Error(usage);
+  }
 
-  ReactDOM.render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={[value]}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-    />,
-    containerNode
-  );
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    label: cx(bem('label'), userCssClasses.label),
+    checkbox: cx(bem('checkbox'), userCssClasses.checkbox),
+    count: cx(bem('count'), userCssClasses.count),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+  });
+
+  try {
+    const makeWidget = connectToggle(specializedRenderer);
+    return makeWidget({attributeName, label, values: userValues});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
