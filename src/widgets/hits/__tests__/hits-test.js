@@ -3,13 +3,13 @@ import expect from 'expect';
 import sinon from 'sinon';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-import hits from '../hits';
-import Hits from '../../../components/Hits';
-import defaultTemplates from '../../../connectors/hits/defaultTemplates.js';
+import hits from '../hits.js';
+import Hits from '../../../components/Hits.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('hits call', () => {
   it('throws an exception when no container', () => {
-    expect(hits).toThrow(/^Must provide a container/);
+    expect(hits).toThrow();
   });
 });
 
@@ -33,7 +33,7 @@ describe('hits()', () => {
       useCustomCompileOptions: {item: false, empty: false},
     };
     widget = hits({container, cssClasses: {root: ['root', 'cx']}});
-    widget.init({});
+    widget.init({instantSearchInstance: {templateProps}});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 
