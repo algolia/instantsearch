@@ -1,16 +1,24 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import find from 'lodash/find';
-import cx from 'classnames';
+import {checkRendering} from '../../lib/utils.js';
 
-const bem = bemHelper('ais-range-slider');
-const defaultTemplates = {
-  header: '',
-  footer: '',
-};
+const usage = `Usage:
+var customRangeSlider = connectRangeSlider(function render(params, isFirstRendering) {
+  // params = {
+  //   refine,
+  //   range,
+  //   start,
+  //   instantSearchInstance,
+  // }
+});
+search.addWidget(
+  customRangeSlider({
+    attributeName,
+    min,
+    max,
+    precision
+  });
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRangeSlider.html
+`;
 
 /**
  * Instantiate a slider based on a numeric attribute.
@@ -40,165 +48,118 @@ const defaultTemplates = {
  * @param  {number} [options.max] Maximal slider value, defaults to automatically computed from the result set
  * @return {Object}
  */
-const usage = `Usage:
-rangeSlider({
-  container,
-  attributeName,
-  [ tooltips=true ],
-  [ templates.{header, footer} ],
-  [ cssClasses.{root, header, body, footer} ],
-  [ step=1 ],
-  [ pips=true ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ],
-  [ min ],
-  [ max ]
-});
-`;
-const connectRangeSlider = rangeSliderRendering => ({
-    container,
+
+export default function connectRangeSlider(renderFn) {
+  checkRendering(renderFn, usage);
+
+  return ({
     attributeName,
-    tooltips = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    cssClasses: userCssClasses = {},
-    step = 1,
-    pips = true,
-    autoHideContainer = true,
     min: userMin,
     max: userMax,
     precision = 2,
-  } = {}) => {
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
+  }) => {
+    if (!attributeName) {
+      throw new Error(usage);
+    }
 
-  const formatToNumber = v => Number(Number(v).toFixed(precision));
+    const formatToNumber = v => Number(Number(v).toFixed(precision));
 
-  const sliderFormatter = {
-    from: v => v,
-    to: v => formatToNumber(v).toLocaleString(),
-  };
+    const sliderFormatter = {
+      from: v => v,
+      to: v => formatToNumber(v).toLocaleString(),
+    };
 
-  const containerNode = getContainerNode(container);
+    return {
+      getConfiguration: originalConf => {
+        const conf = {
+          disjunctiveFacets: [attributeName],
+        };
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
+        const hasUserBounds = userMin !== undefined || userMax !== undefined;
+        const boundsNotAlreadyDefined = !originalConf ||
+          originalConf.numericRefinements &&
+          originalConf.numericRefinements[attributeName] === undefined;
 
-  return {
-    getConfiguration: originalConf => {
-      const conf = {
-        disjunctiveFacets: [attributeName],
-      };
-
-      const hasUserBounds = userMin !== undefined || userMax !== undefined;
-      const boundsNotAlreadyDefined = !originalConf ||
-        originalConf.numericRefinements &&
-        originalConf.numericRefinements[attributeName] === undefined;
-
-      if (hasUserBounds && boundsNotAlreadyDefined) {
-        conf.numericRefinements = {[attributeName]: {}};
-        if (userMin !== undefined) conf.numericRefinements[attributeName]['>='] = [userMin];
-        if (userMax !== undefined) conf.numericRefinements[attributeName]['<='] = [userMax];
-      }
-
-      return conf;
-    },
-    _getCurrentRefinement(helper) {
-      let min = helper.state.getNumericRefinement(attributeName, '>=');
-      let max = helper.state.getNumericRefinement(attributeName, '<=');
-
-      if (min && min.length) {
-        min = min[0];
-      } else {
-        min = -Infinity;
-      }
-
-      if (max && max.length) {
-        max = max[0];
-      } else {
-        max = Infinity;
-      }
-
-      return {
-        min,
-        max,
-      };
-    },
-    init({helper, templatesConfig}) {
-      this._templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-      this._refine = bounds => newValues => {
-        helper.clearRefinements(attributeName);
-        if (!bounds.min || newValues[0] > bounds.min) {
-          helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
+        if (hasUserBounds && boundsNotAlreadyDefined) {
+          conf.numericRefinements = {[attributeName]: {}};
+          if (userMin !== undefined) conf.numericRefinements[attributeName]['>='] = [userMin];
+          if (userMax !== undefined) conf.numericRefinements[attributeName]['<='] = [userMax];
         }
-        if (!bounds.max || newValues[1] < bounds.max) {
-          helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
+
+        return conf;
+      },
+
+      _getCurrentRefinement(helper) {
+        let min = helper.state.getNumericRefinement(attributeName, '>=');
+        let max = helper.state.getNumericRefinement(attributeName, '<=');
+
+        if (min && min.length) {
+          min = min[0];
+        } else {
+          min = -Infinity;
         }
-        helper.search();
-      };
 
-      const stats = {
-        min: userMin || null,
-        max: userMax || null,
-      };
-      const currentRefinement = this._getCurrentRefinement(helper);
+        if (max && max.length) {
+          max = max[0];
+        } else {
+          max = Infinity;
+        }
 
-      rangeSliderRendering({
-        collapsible,
-        cssClasses,
-        refine: this._refine(stats),
-        pips,
-        range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
-        shouldAutoHideContainer: autoHideContainer && stats.min === stats.max,
-        start: [currentRefinement.min, currentRefinement.max],
-        step,
-        templateProps: this._templateProps,
-        tooltips,
-        format: sliderFormatter,
-        containerNode,
-      }, true);
-    },
-    render({results, helper}) {
-      const facet = find(results.disjunctiveFacets, {name: attributeName});
-      const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
-        min: null,
-        max: null,
-      };
+        return {
+          min,
+          max,
+        };
+      },
 
-      if (userMin !== undefined) stats.min = userMin;
-      if (userMax !== undefined) stats.max = userMax;
+      init({helper, instantSearchInstance}) {
+        this._instantSearchInstance = instantSearchInstance;
 
-      const currentRefinement = this._getCurrentRefinement(helper);
+        this._refine = bounds => newValues => {
+          helper.clearRefinements(attributeName);
+          if (!bounds.min || newValues[0] > bounds.min) {
+            helper.addNumericRefinement(attributeName, '>=', formatToNumber(newValues[0]));
+          }
+          if (!bounds.max || newValues[1] < bounds.max) {
+            helper.addNumericRefinement(attributeName, '<=', formatToNumber(newValues[1]));
+          }
+          helper.search();
+        };
 
-      if (tooltips.format !== undefined) {
-        tooltips = [{to: tooltips.format}, {to: tooltips.format}];
-      }
+        const stats = {
+          min: userMin || null,
+          max: userMax || null,
+        };
+        const currentRefinement = this._getCurrentRefinement(helper);
 
-      rangeSliderRendering({
-        collapsible,
-        cssClasses,
-        refine: this._refine(stats),
-        pips,
-        range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
-        shouldAutoHideContainer: autoHideContainer && stats.min === stats.max,
-        start: [currentRefinement.min, currentRefinement.max],
-        step,
-        templateProps: this._templateProps,
-        tooltips,
-        format: sliderFormatter,
-        containerNode,
-      }, false);
-    },
+        renderFn({
+          refine: this._refine(stats),
+          range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
+          start: [currentRefinement.min, currentRefinement.max],
+          format: sliderFormatter,
+          instantSearchInstance: this._instantSearchInstance,
+        }, true);
+      },
+
+      render({results, helper}) {
+        const facet = (results.disjunctiveFacets || []).find(({name}) => name === attributeName);
+        const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
+          min: null,
+          max: null,
+        };
+
+        if (userMin !== undefined) stats.min = userMin;
+        if (userMax !== undefined) stats.max = userMax;
+
+        const currentRefinement = this._getCurrentRefinement(helper);
+
+        renderFn({
+          refine: this._refine(stats),
+          range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
+          start: [currentRefinement.min, currentRefinement.max],
+          format: sliderFormatter,
+          instantSearchInstance: this._instantSearchInstance,
+        }, false);
+      },
+    };
   };
-};
-
-export default connectRangeSlider;
+}

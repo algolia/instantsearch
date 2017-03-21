@@ -1,7 +1,88 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
 import Slider from '../../components/Slider/Slider.js';
 import connectRangeSlider from '../../connectors/range-slider/connectRangeSlider.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+
+const defaultTemplates = {
+  header: '',
+  footer: '',
+};
+
+const bem = bemHelper('ais-range-slider');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  tooltips,
+  renderState,
+  autoHideContainer,
+  pips,
+  step,
+  collapsible,
+  templates,
+}) => ({
+  refine,
+  range,
+  start,
+  instantSearchInstance,
+  format,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && range.min === range.max;
+
+  if (tooltips.format !== undefined) {
+    tooltips = [{to: tooltips.format}, {to: tooltips.format}];
+  }
+
+  ReactDOM.render(
+    <Slider
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      onChange={refine}
+      pips={pips}
+      range={range}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      start={start}
+      step={step}
+      templateProps={renderState.templateProps}
+      tooltips={tooltips}
+      format={format}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
+rangeSlider({
+  container,
+  attributeName,
+  [ tooltips=true ],
+  [ templates.{header, footer} ],
+  [ cssClasses.{root, header, body, footer} ],
+  [ step=1 ],
+  [ pips=true ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ],
+  [ min ],
+  [ max ]
+});
+`;
 
 /**
  * Instantiate a slider based on a numeric attribute.
@@ -29,39 +110,51 @@ import connectRangeSlider from '../../connectors/range-slider/connectRangeSlider
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @param  {number} [options.min] Minimal slider value, default to automatically computed from the result set
  * @param  {number} [options.max] Maximal slider value, defaults to automatically computed from the result set
- * @return {Object}
+ * @return {Object} widget
  */
+export default function rangeSlider({
+  container,
+  attributeName,
+  tooltips = true,
+  templates = defaultTemplates,
+  collapsible = false,
+  cssClasses: userCssClasses = {},
+  step = 1,
+  pips = true,
+  autoHideContainer = true,
+  min,
+  max,
+  precision = 2,
+} = {}) {
+  if (!container) {
+    throw new Error(usage);
+  }
 
-export default connectRangeSlider(defaultRendering);
-function defaultRendering({
-  collapsible,
-  cssClasses,
-  refine,
-  pips,
-  range,
-  shouldAutoHideContainer,
-  start,
-  step,
-  templateProps,
-  tooltips,
-  format,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <Slider
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      onChange={refine}
-      pips={pips}
-      range={range}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      start={start}
-      step={step}
-      templateProps={templateProps}
-      tooltips={tooltips}
-      format={format}
-    />,
-    containerNode
-  );
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    tooltips,
+    templates,
+    renderState: {},
+    collapsible,
+    step,
+    pips,
+    autoHideContainer,
+  });
+
+  try {
+    const makeWidget = connectRangeSlider(specializedRenderer);
+    return makeWidget({attributeName, min, max, precision});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

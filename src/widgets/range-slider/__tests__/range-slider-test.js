@@ -7,6 +7,8 @@ import Slider from '../../../components/Slider/Slider.js';
 import AlgoliasearchHelper from 'algoliasearch-helper';
 expect.extend(expectJSX);
 
+const instantSearchInstance = {templatesConfig: undefined};
+
 describe('rangeSlider call', () => {
   it('throws an exception when no container', () => {
     const attributeName = '';
@@ -95,7 +97,7 @@ describe('rangeSlider()', () => {
         results = {};
         widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100, max: 200});
         helper.setState(widget.getConfiguration());
-        widget.init({helper});
+        widget.init({helper, instantSearchInstance});
         widget.render({results, helper});
         const props = defaultProps;
 
@@ -115,7 +117,7 @@ describe('rangeSlider()', () => {
         };
         widget = rangeSlider({container, attributeName: 'aNumAttr', min: 100});
         helper.setState(widget.getConfiguration());
-        widget.init({helper});
+        widget.init({helper, instantSearchInstance});
         widget.render({results, helper});
         const props = {
           ...defaultProps,
@@ -182,7 +184,7 @@ describe('rangeSlider()', () => {
         };
         widget = rangeSlider({container, attributeName: 'aNumAttr', max: 100});
         helper.setState(widget.getConfiguration());
-        widget.init({helper});
+        widget.init({helper, instantSearchInstance});
         widget.render({results, helper});
         const props = {
           ...defaultProps,
@@ -200,7 +202,7 @@ describe('rangeSlider()', () => {
     beforeEach(() => {
       results = {};
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
-      widget.init({helper});
+      widget.init({helper, instantSearchInstance});
     });
 
     it('calls ReactDOM.render(<Slider props />, container)', () => {
@@ -238,7 +240,7 @@ describe('rangeSlider()', () => {
   describe('when rangestats min === stats max', () => {
     beforeEach(() => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
-      widget.init({helper});
+      widget.init({helper, instantSearchInstance});
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
@@ -284,7 +286,7 @@ describe('rangeSlider()', () => {
   describe('with results', () => {
     beforeEach(() => {
       widget = rangeSlider({container, attributeName: 'aNumAttr', cssClasses: {root: ['root', 'cx']}});
-      widget.init({helper});
+      widget.init({helper, instantSearchInstance});
       results = {
         disjunctiveFacets: [{
           name: 'aNumAttr',
