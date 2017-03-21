@@ -5,9 +5,8 @@ import {
 } from '../../lib/utils.js';
 
 const usage = `Usage:
-var customToggle = connectToggle(function render(params) {
+var customToggle = connectToggle(function render(params, isFirstRendering) {
   // params = {
-  //   isFirstRender,
   //   isFromSearch,
   //   createURL,
   //   items,

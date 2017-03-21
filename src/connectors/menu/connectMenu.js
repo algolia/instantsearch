@@ -1,9 +1,8 @@
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customMenu = connectMenu(function render(params) {
+var customMenu = connectMenu(function render(params, isFirstRendering) {
   // params = {
-  //   isFirstRender,
   //   isFromSearch,
   //   createURL,
   //   items,
