@@ -6,11 +6,11 @@ expect.extend(expectJSX);
 import algoliasearchHelper from 'algoliasearch-helper';
 import infiniteHits from '../infinite-hits';
 import InfiniteHits from '../../../components/InfiniteHits';
-import defaultTemplates from '../../../connectors/infinite-hits/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('infiniteHits call', () => {
   it('throws an exception when no container', () => {
-    expect(infiniteHits).toThrow(/^Must provide a container/);
+    expect(infiniteHits).toThrow();
   });
 });
 
@@ -38,7 +38,7 @@ describe('infiniteHits()', () => {
       useCustomCompileOptions: {item: false, empty: false},
     };
     widget = infiniteHits({container, cssClasses: {root: ['root', 'cx']}});
-    widget.init({helper});
+    widget.init({helper, instantSearchInstance: {}});
     results = {hits: [{first: 'hit', second: 'hit'}]};
   });
 

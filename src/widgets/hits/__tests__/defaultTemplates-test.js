@@ -1,7 +1,4 @@
-
-
-
-import defaultTemplates from '../../../connectors/hits/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
 
 describe('hits defaultTemplates', () => {
   it('has a `empty` default template', () => {
