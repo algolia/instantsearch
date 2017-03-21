@@ -1,8 +1,72 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
 
 import Stats from '../../components/Stats/Stats.js';
 import connectStats from '../../connectors/stats/connectStats.js';
+import defaultTemplates from './defaultTemplates.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+
+const bem = bemHelper('ais-stats');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  collapsible,
+  autoHideContainer,
+  renderState,
+  templates,
+  transformData,
+}) => ({
+  hitsPerPage,
+  nbHits,
+  nbPages,
+  page,
+  processingTimeMS,
+  query,
+  instantSearchInstance: {templatesConfig},
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+
+  ReactDOM.render(
+    <Stats
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      hitsPerPage={hitsPerPage}
+      nbHits={nbHits}
+      nbPages={nbPages}
+      page={page}
+      processingTimeMS={processingTimeMS}
+      query={query}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
+stats({
+  container,
+  [ templates.{header,body,footer} ],
+  [ transformData.{body} ],
+  [ autoHideContainer]
+})`;
 
 /**
  * Display various stats about the current search state
@@ -21,36 +85,44 @@ import connectStats from '../../connectors/stats/connectStats.js';
  * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {string|string[]} [options.cssClasses.time] CSS class to add to the element wrapping the time processingTimeMs
- * @return {Object}
+ * @return {Object} widget
  */
-export default connectStats(defaultRendering);
-function defaultRendering({
-  collapsible,
-  cssClasses,
-  hitsPerPage,
-  nbHits,
-  nbPages,
-  page,
-  processingTimeMS,
-  query,
-  shouldAutoHideContainer,
-  templateProps,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <Stats
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      hitsPerPage={hitsPerPage}
-      nbHits={nbHits}
-      nbPages={nbPages}
-      page={page}
-      processingTimeMS={processingTimeMS}
-      query={query}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-    />,
-    containerNode
-  );
+export default function stats({
+  container,
+  cssClasses: userCssClasses = {},
+  autoHideContainer = true,
+  collapsible = false,
+  transformData,
+  templates = defaultTemplates,
+} = {}) {
+  if (!container) {
+    throw new Error(usage);
+  }
+
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    header: cx(bem('header'), userCssClasses.header),
+    root: cx(bem(null), userCssClasses.root),
+    time: cx(bem('time'), userCssClasses.time),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+  });
+
+  try {
+    const makeWidget = connectStats(specializedRenderer);
+    return makeWidget();
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

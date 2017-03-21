@@ -1,5 +1,4 @@
 
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -39,17 +38,13 @@ describe('connectStats', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {containerNode, hitsPerPage, nbHits, nbPages, page,
-        processingTimeMS, query, collapsible, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query} = rendering.lastCall.args[0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(-1);
       expect(query).toBe(helper.state.query);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(true);
     }
 
     widget.render({
@@ -73,17 +68,13 @@ describe('connectStats', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {containerNode, hitsPerPage, nbHits, nbPages, page,
-        processingTimeMS, query, collapsible, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query} = rendering.lastCall.args[0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(1);
       expect(nbPages).toBe(1);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(12);
       expect(query).toBe(helper.state.query);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(false);
     }
   });
 });

@@ -1,12 +1,4 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
-
-const bem = bemHelper('ais-stats');
+import {checkRendering} from '../../lib/utils.js';
 
 /**
  * Display various stats about the current search state
@@ -28,75 +20,47 @@ const bem = bemHelper('ais-stats');
  * @return {Object}
  */
 const usage = `Usage:
-stats({
-  container,
-  [ templates.{header,body,footer} ],
-  [ transformData.{body} ],
-  [ autoHideContainer]
-})`;
-const connectStats = statsRendering => ({
-    container,
-    cssClasses: userCssClasses = {},
-    autoHideContainer = true,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-  } = {}) => {
-  if (!container) throw new Error(usage);
-  const containerNode = getContainerNode(container);
+var customStats = connectState(function render(params, isFirstRendering) {
+  // params = {
+  //   hitsPerPage,
+  //   nbHits,
+  //   nbPages,
+  //   page,
+  //   processingTimeMS,
+  //   query,
+  // }
+});
+search.addWidget(customStats());
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStats.html`;
 
-  if (!containerNode) {
-    throw new Error(usage);
-  }
+export default function connectStats(renderFn) {
+  checkRendering(renderFn, usage);
 
-  const cssClasses = {
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    header: cx(bem('header'), userCssClasses.header),
-    root: cx(bem(null), userCssClasses.root),
-    time: cx(bem('time'), userCssClasses.time),
-  };
+  return () => ({
+    init({helper, instantSearchInstance}) {
+      this._instantSearchInstance = instantSearchInstance;
 
-  return {
-    init({templatesConfig, helper}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      statsRendering({
-        collapsible,
-        cssClasses,
+      renderFn({
+        instantSearchInstance,
         hitsPerPage: helper.state.hitsPerPage,
         nbHits: 0,
         nbPages: 0,
         page: helper.state.page,
         processingTimeMS: -1,
         query: helper.state.query,
-        shouldAutoHideContainer: autoHideContainer,
-        templateProps: this._templateProps,
-        containerNode,
       }, true);
     },
 
     render({results}) {
-      statsRendering({
-        collapsible,
-        cssClasses,
+      renderFn({
+        instantSearchInstance: this._instantSearchInstance,
         hitsPerPage: results.hitsPerPage,
         nbHits: results.nbHits,
         nbPages: results.nbPages,
         page: results.page,
         processingTimeMS: results.processingTimeMS,
         query: results.query,
-        shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
-        templateProps: this._templateProps,
-        containerNode,
       }, false);
     },
-  };
-};
-
-export default connectStats;
+  });
+}

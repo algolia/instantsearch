@@ -33,6 +33,11 @@ describe('stats()', () => {
       processingTimeMS: 42,
       query: 'a query',
     };
+
+    widget.init({
+      helper: {state: {}},
+      instantSearchInstance: {templatesConfig: undefined},
+    });
   });
 
   it('configures nothing', () => {
