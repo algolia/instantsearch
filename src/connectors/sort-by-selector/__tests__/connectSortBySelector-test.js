@@ -1,5 +1,4 @@
 
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -44,14 +43,12 @@ describe('connectSortBySelector', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {containerNode, currentValue, options, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {currentValue, options} = rendering.lastCall.args[0];
       expect(currentValue).toBe(helper.state.index);
       expect(options).toEqual([
         {label: 'Sort products by relevance', value: 'relevance'},
         {label: 'Sort products by price', value: 'priceASC'},
       ]);
-      expect(shouldAutoHideContainer).toBe(false);
     }
 
     widget.render({
@@ -67,14 +64,12 @@ describe('connectSortBySelector', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {containerNode, currentValue, options, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {currentValue, options} = rendering.lastCall.args[0];
       expect(currentValue).toBe(helper.state.index);
       expect(options).toEqual([
         {label: 'Sort products by relevance', value: 'relevance'},
         {label: 'Sort products by price', value: 'priceASC'},
       ]);
-      expect(shouldAutoHideContainer).toBe(false);
     }
   });
 
