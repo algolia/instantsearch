@@ -182,6 +182,7 @@ Usage: instantsearch({
         state,
         helper,
         createURL: this._createAbsoluteURL,
+        instantSearchInstance: this,
       });
     });
     this.emit('render');

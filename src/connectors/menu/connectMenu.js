@@ -62,7 +62,6 @@ export default function connectMenu(renderFn) {
           .toggleRefinement(attributeName, facetValue)
           .search();
 
-        this._instantSearchInstance = instantSearchInstance;
         this._helper = helper;
 
         renderFn({
@@ -71,13 +70,12 @@ export default function connectMenu(renderFn) {
           createURL: this._createURL,
           refine: this._refine,
           helper: this._helper,
-          isFirstSearch: true,
           instantSearchInstance,
           canRefine: false,
         }, true);
       },
 
-      render({results, state}) {
+      render({results, state, instantSearchInstance}) {
         const items = results.getFacetValues(attributeName, {sortBy}).data || [];
 
         renderFn({
@@ -86,8 +84,7 @@ export default function connectMenu(renderFn) {
           createURL: this._createURL,
           refine: this._refine,
           helper: this._helper,
-          isFirstSearch: false,
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
           canRefine: items.length > 0,
         }, false);
       },

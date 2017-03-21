@@ -1,6 +1,4 @@
-
 import EventEmitter from 'events';
-
 
 import range from 'lodash/range';
 import sinon from 'sinon';
@@ -243,7 +241,7 @@ describe('InstantSearch lifecycle', () => {
           helper.emit('result', results, helper.state);
         });
 
-        it('calls widget.render({results, state, helper, templatesConfig})', () => {
+        it('calls widget.render({results, state, helper, templatesConfig, instantSearchInstance})', () => {
           expect(widget.render.calledOnce).toBe(true, 'widget.render called once');
           expect(widget.render.args[0])
             .toEqual([{
@@ -252,6 +250,7 @@ describe('InstantSearch lifecycle', () => {
               state: helper.state,
               helper,
               templatesConfig: search.templatesConfig,
+              instantSearchInstance: search,
             }]);
         });
       });
