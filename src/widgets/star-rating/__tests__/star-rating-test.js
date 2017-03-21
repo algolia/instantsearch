@@ -3,8 +3,8 @@ import sinon from 'sinon';
 import expect from 'expect';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
-import defaultTemplates from '../../../connectors/star-rating/defaultTemplates.js';
-import defaultLabels from '../../../connectors/star-rating/defaultLabels.js';
+import defaultTemplates from '../../../widgets/star-rating/defaultTemplates.js';
+import defaultLabels from '../../../widgets/star-rating/defaultLabels.js';
 import starRating from '../star-rating.js';
 import RefinementList from '../../../components/RefinementList/RefinementList.js';
 
@@ -39,7 +39,7 @@ describe('starRating()', () => {
       hits: [],
     };
     createURL = () => '#';
-    widget.init({helper});
+    widget.init({helper, instantSearchInstance: {templatesConfig: undefined}});
   });
 
   it('configures the underlying disjunctive facet', () => {
