@@ -1,13 +1,4 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
-import defaultLabels from './defaultLabels.js';
-
-const bem = bemHelper('ais-star-rating');
+import {checkRendering} from '../../lib/utils.js';
 
 /**
  * Instantiate a list of refinements based on a rating attribute
@@ -42,144 +33,117 @@ const bem = bemHelper('ais-star-rating');
  * @return {Object}
  */
 const usage = `Usage:
-starRating({
-  container,
-  attributeName,
-  [ max=5 ],
-  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ labels.{andUp} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-const connectStarRating = starRatingRendering => ({
-    container,
+var customStarRating = connectStarRating(function render(params, isFirstRendering) {
+  // params = {
+  //   facetValues,
+  //   createURL,
+  //   instantSearchInstance,
+  //   results,
+  // }
+});
+search.addWidget(
+  customStarRatingI({
+    attributeName,
+    [ max=5 ],
+  });
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStarRating.html
+`;
+export default function connectStarRating(renderFn) {
+  checkRendering(renderFn, usage);
+
+  return ({
     attributeName,
     max = 5,
-    cssClasses: userCssClasses = {},
-    labels = defaultLabels,
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
   }) => {
-  const containerNode = getContainerNode(container);
+    if (!attributeName) {
+      throw new Error(usage);
+    }
 
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
+    return {
+      getConfiguration() {
+        return {disjunctiveFacets: [attributeName]};
+      },
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
-    count: cx(bem('count'), userCssClasses.count),
-    star: cx(bem('star'), userCssClasses.star),
-    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-  };
+      init({helper, createURL, instantSearchInstance}) {
+        this._instantSearchInstance = instantSearchInstance;
+        this._toggleRefinement = this._toggleRefinement.bind(this, helper);
+        this._createURL = state => facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
 
-  return {
-    getConfiguration: () => ({disjunctiveFacets: [attributeName]}),
+        renderFn({
+          instantSearchInstance: this._instantSearchInstance,
+          facetValues: [],
+          nbHits: 0,
+          refine: this._toggleRefinement,
+          createURL: this._createURL(helper.state),
+        }, true);
+      },
 
-    init({templatesConfig, helper, createURL}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-      this._toggleRefinement = this._toggleRefinement.bind(this, helper);
-      this._createURL = state => facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
-
-      starRatingRendering({
-        collapsible,
-        createURL: this._createURL(helper.state),
-        cssClasses,
-        facetValues: [],
-        shouldAutoHideContainer: autoHideContainer,
-        templateProps: this._templateProps,
-        toggleRefinement: this._toggleRefinement,
-        containerNode,
-      }, true);
-    },
-
-    render({helper, results, state}) {
-      const facetValues = [];
-      const allValues = {};
-      for (let v = max; v >= 0; --v) {
-        allValues[v] = 0;
-      }
-      results.getFacetValues(attributeName).forEach(facet => {
-        const val = Math.round(facet.name);
-        if (!val || val > max) {
-          return;
+      render({helper, results, state}) {
+        const facetValues = [];
+        const allValues = {};
+        for (let v = max; v >= 0; --v) {
+          allValues[v] = 0;
         }
-        for (let v = val; v >= 1; --v) {
-          allValues[v] += facet.count;
-        }
-      });
-      const refinedStar = this._getRefinedStar(helper);
-      for (let star = max - 1; star >= 1; --star) {
-        const count = allValues[star];
-        if (refinedStar && star !== refinedStar && count === 0) {
-          // skip count==0 when at least 1 refinement is enabled
-          // eslint-disable-next-line no-continue
-          continue;
-        }
-        const stars = [];
-        for (let i = 1; i <= max; ++i) {
-          stars.push(i <= star);
-        }
-        facetValues.push({
-          stars,
-          name: String(star),
-          count,
-          isRefined: refinedStar === star,
-          labels,
+        results.getFacetValues(attributeName).forEach(facet => {
+          const val = Math.round(facet.name);
+          if (!val || val > max) {
+            return;
+          }
+          for (let v = val; v >= 1; --v) {
+            allValues[v] += facet.count;
+          }
         });
-      }
-
-      starRatingRendering({
-        collapsible,
-        createURL: this._createURL(state),
-        cssClasses,
-        facetValues,
-        shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
-        templateProps: this._templateProps,
-        toggleRefinement: this._toggleRefinement,
-        containerNode,
-      }, false);
-    },
-
-    _toggleRefinement(helper, facetValue) {
-      const isRefined = this._getRefinedStar(helper) === Number(facetValue);
-      helper.clearRefinements(attributeName);
-      if (!isRefined) {
-        for (let val = Number(facetValue); val <= max; ++val) {
-          helper.addDisjunctiveFacetRefinement(attributeName, val);
+        const refinedStar = this._getRefinedStar(helper);
+        for (let star = max - 1; star >= 1; --star) {
+          const count = allValues[star];
+          if (refinedStar && star !== refinedStar && count === 0) {
+            // skip count==0 when at least 1 refinement is enabled
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+          const stars = [];
+          for (let i = 1; i <= max; ++i) {
+            stars.push(i <= star);
+          }
+          facetValues.push({
+            stars,
+            name: String(star),
+            count,
+            isRefined: refinedStar === star,
+          });
         }
-      }
-      helper.search();
-    },
 
-    _getRefinedStar(helper) {
-      let refinedStar = undefined;
-      const refinements = helper.getRefinements(attributeName);
-      refinements.forEach(r => {
-        if (!refinedStar || Number(r.value) < refinedStar) {
-          refinedStar = Number(r.value);
+        renderFn({
+          instantSearchInstance: this._instantSearchInstance,
+          facetValues,
+          nbHits: results.nbHits,
+          refine: this._toggleRefinement,
+          createURL: this._createURL(state),
+        }, false);
+      },
+
+      _toggleRefinement(helper, facetValue) {
+        const isRefined = this._getRefinedStar(helper) === Number(facetValue);
+        helper.clearRefinements(attributeName);
+        if (!isRefined) {
+          for (let val = Number(facetValue); val <= max; ++val) {
+            helper.addDisjunctiveFacetRefinement(attributeName, val);
+          }
         }
-      });
-      return refinedStar;
-    },
+        helper.search();
+      },
+
+      _getRefinedStar(helper) {
+        let refinedStar = undefined;
+        const refinements = helper.getRefinements(attributeName);
+        refinements.forEach(r => {
+          if (!refinedStar || Number(r.value) < refinedStar) {
+            refinedStar = Number(r.value);
+          }
+        });
+        return refinedStar;
+      },
+    };
   };
-};
-
-export default connectStarRating;
+}

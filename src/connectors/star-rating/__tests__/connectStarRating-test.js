@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -44,11 +42,8 @@ describe('connectStarRating', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {containerNode, facetValues, collapsible, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {facetValues} = rendering.lastCall.args[0];
       expect(facetValues).toEqual([]);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(true);
     }
 
     widget.render({
@@ -68,32 +63,25 @@ describe('connectStarRating', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {containerNode, facetValues, collapsible, shouldAutoHideContainer} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {facetValues} = rendering.lastCall.args[0];
       expect(facetValues).toEqual([
         {
-          count: 1000, isRefined: false,
-          labels: {andUp: '& Up'}, name: '4',
+          count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: false,
-          labels: {andUp: '& Up'}, name: '3',
+          count: 1050, isRefined: false, name: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false,
-          labels: {andUp: '& Up'}, name: '2',
+          count: 1070, isRefined: false, name: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false,
-          labels: {andUp: '& Up'}, name: '1',
+          count: 1080, isRefined: false, name: '1',
           stars: [true, false, false, false, false],
         },
       ]);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(false);
     }
   });
 
@@ -122,10 +110,10 @@ describe('connectStarRating', () => {
 
     { // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, facetValues} = renderOptions;
+      const {refine, facetValues} = renderOptions;
       expect(facetValues).toEqual([]);
       expect(helper.getRefinements(attributeName)).toEqual([]);
-      toggleRefinement('3');
+      refine('3');
       expect(helper.getRefinements(attributeName)).toEqual([
         {type: 'disjunctive', value: '3'},
         {type: 'disjunctive', value: '4'},
@@ -151,26 +139,22 @@ describe('connectStarRating', () => {
 
     { // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {toggleRefinement, facetValues} = renderOptions;
+      const {refine, facetValues} = renderOptions;
       expect(facetValues).toEqual([
         {
-          count: 1000, isRefined: false,
-          labels: {andUp: '& Up'}, name: '4',
+          count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],
         },
         {
-          count: 1050, isRefined: true,
-          labels: {andUp: '& Up'}, name: '3',
+          count: 1050, isRefined: true, name: '3',
           stars: [true, true, true, false, false],
         },
         {
-          count: 1070, isRefined: false,
-          labels: {andUp: '& Up'}, name: '2',
+          count: 1070, isRefined: false, name: '2',
           stars: [true, true, false, false, false],
         },
         {
-          count: 1080, isRefined: false,
-          labels: {andUp: '& Up'}, name: '1',
+          count: 1080, isRefined: false, name: '1',
           stars: [true, false, false, false, false],
         },
       ]);
@@ -179,7 +163,7 @@ describe('connectStarRating', () => {
         {type: 'disjunctive', value: '4'},
         {type: 'disjunctive', value: '5'},
       ]);
-      toggleRefinement('4');
+      refine('4');
       expect(helper.getRefinements(attributeName)).toEqual([
         {type: 'disjunctive', value: '4'},
         {type: 'disjunctive', value: '5'},

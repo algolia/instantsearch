@@ -1,7 +1,74 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectStarRating from '../../connectors/star-rating/connectStarRating.js';
+import defaultTemplates from './defaultTemplates.js';
+import defaultLabels from './defaultLabels.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+
+const bem = bemHelper('ais-star-rating');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  templates,
+  collapsible,
+  transformData,
+  autoHideContainer,
+  renderState,
+  labels,
+}) => ({
+  refine,
+  facetValues,
+  createURL,
+  instantSearchInstance: {templatesConfig},
+  nbHits,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues.map(facetValue => ({...facetValue, labels}))}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
+starRating({
+  container,
+  attributeName,
+  [ max=5 ],
+  [ cssClasses.{root,header,body,footer,list,item,active,link,disabledLink,star,emptyStar,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ labels.{andUp} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
+})`;
 
 /**
  * Instantiate a list of refinements based on a rating attribute
@@ -33,30 +100,55 @@ import connectStarRating from '../../connectors/star-rating/connectStarRating.js
  * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
  * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
+ * @return {Object} widget
  */
-export default connectStarRating(defaultRendering);
-function defaultRendering({
-  collapsible,
-  createURL,
-  cssClasses,
-  facetValues,
-  shouldAutoHideContainer,
-  templateProps,
-  toggleRefinement,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-    />,
-    containerNode
-  );
+export default function starRating({
+  container,
+  attributeName,
+  max = 5,
+  cssClasses: userCssClasses = {},
+  labels = defaultLabels,
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+}) {
+  if (!container) {
+    throw new Error(usage);
+  }
+
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    link: cx(bem('link'), userCssClasses.link),
+    disabledLink: cx(bem('link', 'disabled'), userCssClasses.disabledLink),
+    count: cx(bem('count'), userCssClasses.count),
+    star: cx(bem('star'), userCssClasses.star),
+    emptyStar: cx(bem('star', 'empty'), userCssClasses.emptyStar),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    collapsible,
+    autoHideContainer,
+    renderState: {},
+    templates,
+    transformData,
+    labels,
+  });
+
+  try {
+    const makeWidget = connectStarRating(specializedRenderer);
+    return makeWidget({attributeName, max});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
