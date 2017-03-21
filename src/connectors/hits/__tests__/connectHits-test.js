@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -42,9 +40,6 @@ describe('connectHits', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.containerNode).toBe(container);
-
     widget.render({
       results: new SearchResults(helper.state, [{}]),
       state: helper.state,
@@ -55,9 +50,6 @@ describe('connectHits', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
-
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.containerNode).toBe(container);
   });
 
   it('Provides the hits and the whole results', () => {

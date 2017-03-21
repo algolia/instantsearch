@@ -4,6 +4,49 @@ import Hits from '../../components/Hits.js';
 
 import connectHits from '../../connectors/hits/connectHits.js';
 
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+import cx from 'classnames';
+import defaultTemplates from './defaultTemplates.js';
+
+const bem = bemHelper('ais-hits');
+
+const renderer = ({
+  renderState,
+  cssClasses,
+  containerNode,
+  transformData,
+  templates,
+}) => ({
+  hits, // eslint-disable-line
+  results,
+  templateProps,
+  instantSearchInstance,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  ReactDOM.render(
+    <Hits
+      cssClasses={cssClasses}
+      hits={hits}
+      results={results}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
 /**
  * Display the list of results (hits) from the current search
  * @function hits
@@ -23,23 +66,52 @@ import connectHits from '../../connectors/hits/connectHits.js';
  * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each result
  * @return {Object}
  */
-export default connectHits(defaultRendering);
+const usage = `
+Usage:
+hits({
+  container,
+  [ cssClasses.{root,empty,item}={} ],
+  [ templates.{empty,item} | templates.{empty, allItems} ],
+  [ transformData.{empty,item} | transformData.{empty, allItems} ],
+  [ hitsPerPage=20 ]
+})`;
 
-function defaultRendering({
-  cssClasses,
-  hits,
-  results,
-  templateProps,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <Hits
-      cssClasses={cssClasses}
-      hits={hits}
-      results={results}
-      templateProps={templateProps}
-    />,
-    containerNode
-  );
+export default function hits({
+  container,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  transformData,
+  hitsPerPage = 20,
+}) {
+  if (!container) {
+    throw new Error(`Must provide a container.${usage}`);
+  }
+
+  if (templates.item && templates.allItems) {
+    throw new Error(`Must contain only allItems OR item template.${usage}`);
+  }
+
+  const containerNode = getContainerNode(container);
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    item: cx(bem('item'), userCssClasses.item),
+    empty: cx(bem(null, 'empty'), userCssClasses.empty),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    renderState: {},
+    transformData,
+    templates,
+  });
+
+  try {
+    const makeHits = connectHits(specializedRenderer);
+    return makeHits({
+      hitsPerPage,
+    });
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
