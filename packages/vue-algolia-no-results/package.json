@@ -1,13 +1,13 @@
 {
-  "name": "vue-algolia-empty-results",
+  "name": "vue-algolia-no-results",
   "version": "0.0.0",
   "files": [
     "dist"
   ],
-  "main": "dist/vue-algolia-empty-results.common.js",
-  "module": "dist/vue-algolia-empty-results.esm.js",
-  "jsnext:main": "dist/vue-algolia-empty-results.esm.js",
-  "unpkg": "dist/vue-algolia-empty-results.js",
+  "main": "dist/vue-algolia-no-results.common.js",
+  "module": "dist/vue-algolia-no-results.esm.js",
+  "jsnext:main": "dist/vue-algolia-no-results.esm.js",
+  "unpkg": "dist/vue-algolia-no-results.js",
   "scripts": {
     "build": "yarn build-umd && yarn build-es && yarn build-cjs",
     "build-umd": "rollup -c ../../build/rollup.umd.config.js",

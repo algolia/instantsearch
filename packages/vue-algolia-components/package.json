@@ -25,7 +25,7 @@
     "vue-algolia-sort-by-selector": "*",
     "vue-algolia-clear-search": "*",
     "vue-algolia-rating-facet": "*",
-    "vue-algolia-empty-results": "*",
+    "vue-algolia-no-results": "*",
     "vue-algolia-search-facet": "*",
     "vue-algolia-price-range-facet": "*"
   },
