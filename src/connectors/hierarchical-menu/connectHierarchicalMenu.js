@@ -71,7 +71,7 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
         limit,
     }),
     init({helper, createURL, instantSearchInstance}) {
-      this._toggleRefinement = facetValue => helper
+      this._refine = facetValue => helper
         .toggleRefinement(hierarchicalFacetName, facetValue)
         .search();
 
@@ -83,9 +83,9 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
       renderHierarchicalMenu({
         attributeNameKey: 'path',
         createURL: _createURL,
-        facetValues: [],
+        items: [],
         templateProps: this._templateProps,
-        toggleRefinement: this._toggleRefinement,
+        refine: this._refine,
         instantSearchInstance,
       }, true);
     },
@@ -100,9 +100,11 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
           return subValue;
         });
     },
-    render({results, state, createURL}) {
-      let facetValues = results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [];
-      facetValues = this._prepareFacetValues(facetValues, state);
+    render({results, state, createURL, instantSearchInstance}) {
+      const items = this._prepareFacetValues(
+        results.getFacetValues(hierarchicalFacetName, {sortBy}).data || [],
+        state
+      );
 
       // Bind createURL to this specific attribute
       function _createURL(facetValue) {
@@ -112,8 +114,9 @@ const connectHierarchicalMenu = renderHierarchicalMenu => ({
       renderHierarchicalMenu({
         attributeNameKey: 'path',
         createURL: _createURL,
-        facetValues,
-        toggleRefinement: this._toggleRefinement,
+        items,
+        refine: this._refine,
+        instantSearchInstance,
       }, false);
     },
   };

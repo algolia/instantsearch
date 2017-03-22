@@ -25,7 +25,7 @@ const renderer = ({
   autoHideContainer,
 }) => ({
   refine,
-  facetValues,
+  items,
   instantSearchInstance,
 }, isFirstRendering) => {
   if (isFirstRendering) {
@@ -37,14 +37,14 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && facetValues.length === 0;
+  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
   ReactDOM.render(
     <PriceRanges
       collapsible={collapsible}
       cssClasses={cssClasses}
       currency={currency}
-      facetValues={facetValues}
+      facetValues={items}
       labels={labels}
       refine={refine}
       shouldAutoHideContainer={shouldAutoHideContainer}

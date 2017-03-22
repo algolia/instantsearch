@@ -25,8 +25,8 @@ const renderer = ({
 }) => ({
   attributeNameKey,
   createURL,
-  facetValues,
-  toggleRefinement,
+  items,
+  refine,
   instantSearchInstance,
 }, isFirstRendering) => {
   if (isFirstRendering) {
@@ -39,7 +39,7 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && facetValues.length === 0;
+  const shouldAutoHideContainer = autoHideContainer && items.length === 0;
 
   ReactDOM.render(
     <RefinementList
@@ -47,10 +47,10 @@ const renderer = ({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues}
+      facetValues={items}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
-      toggleRefinement={toggleRefinement}
+      toggleRefinement={refine}
     />,
     containerNode
   );

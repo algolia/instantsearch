@@ -71,7 +71,7 @@ export default function connectStarRating(renderFn) {
 
         renderFn({
           instantSearchInstance,
-          facetValues: [],
+          items: [],
           nbHits: 0,
           refine: this._toggleRefinement,
           createURL: this._createURL(helper.state),
@@ -115,7 +115,7 @@ export default function connectStarRating(renderFn) {
 
         renderFn({
           instantSearchInstance,
-          facetValues,
+          items: facetValues,
           nbHits: results.nbHits,
           refine: this._toggleRefinement,
           createURL: this._createURL(state),

@@ -107,7 +107,7 @@ export default function connectPriceRanges(renderFn) {
 
         renderFn({
           instantSearchInstance,
-          facetValues: [],
+          items: [],
           refine: this._refine,
         }, true);
       },
@@ -140,7 +140,7 @@ export default function connectPriceRanges(renderFn) {
         });
 
         renderFn({
-          facetValues,
+          items: facetValues,
           refine: this._refine,
           instantSearchInstance,
         }, false);

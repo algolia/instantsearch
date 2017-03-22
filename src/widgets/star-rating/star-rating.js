@@ -26,7 +26,7 @@ const renderer = ({
   labels,
 }) => ({
   refine,
-  facetValues,
+  items,
   createURL,
   instantSearchInstance,
   nbHits,
@@ -48,7 +48,7 @@ const renderer = ({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues.map(facetValue => ({...facetValue, labels}))}
+      facetValues={items.map(item => ({...item, labels}))}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}

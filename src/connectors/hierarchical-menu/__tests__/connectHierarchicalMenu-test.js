@@ -83,10 +83,10 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement} = firstRenderingOptions;
-    toggleRefinement('value');
+    const {refine} = firstRenderingOptions;
+    refine('value');
     expect(helper.hasRefinements('category')).toBe(false);
-    toggleRefinement('value');
+    refine('value');
     expect(helper.hasRefinements('category')).toBe(true);
 
     widget.render({
@@ -97,7 +97,7 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement: renderToggleRefinement} = secondRenderingOptions;
+    const {refine: renderToggleRefinement} = secondRenderingOptions;
     renderToggleRefinement('value');
     expect(helper.hasRefinements('category')).toBe(false);
     renderToggleRefinement('value');
@@ -129,7 +129,7 @@ describe('connectHierarchicalMenu', () => {
     // During the first rendering there are no facet values
     // The function get an empty array so that it doesn't break
     // over null-ish values.
-    expect(firstRenderingOptions.facetValues).toEqual([]);
+    expect(firstRenderingOptions.items).toEqual([]);
 
     widget.render({
       results: new SearchResults(helper.state, [{
@@ -157,7 +157,7 @@ describe('connectHierarchicalMenu', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.facetValues).toEqual([
+    expect(secondRenderingOptions.items).toEqual([
       {
         name: 'Decoration',
         path: 'Decoration',
