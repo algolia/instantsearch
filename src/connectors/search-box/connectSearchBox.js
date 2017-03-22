@@ -1,7 +1,20 @@
-import {
-  getContainerNode,
-} from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
+import {checkRendering} from '../../lib/utils.js';
+
+const usage = `Usage:
+var customSearchBox = connectMenu(function render(params, isFirstRendering) {
+  // params = {
+  //   query,
+  //   onHistoryChange,
+  //   search,
+  // }
+});
+search.addWidget(
+  customSearchBox({
+    [ onQueryHook ]
+  });
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html
+`;
 
 /**
  * Instantiate a searchbox
@@ -27,95 +40,42 @@ import defaultTemplates from './defaultTemplates.js';
  * @return {Object}
  */
 
-const usage = `Usage:
-searchBox({
-  container,
-  [ placeholder ],
-  [ cssClasses.{input,poweredBy} ],
-  [ poweredBy=false || poweredBy.{template, cssClasses.{root,link}} ],
-  [ wrapInput ],
-  [ autofocus ],
-  [ searchOnEnterKeyPressOnly ],
-  [ queryHook ]
-})`;
-const connectSearchBox = searchBoxRendering => ({
-  container,
-  placeholder = '',
-  cssClasses = {},
-  poweredBy = false,
-  wrapInput = true,
-  autofocus = 'auto',
-  searchOnEnterKeyPressOnly = false,
-  queryHook,
-}) => {
-  if (!container) {
-    throw new Error(usage);
-  }
+export default function connectSearchBox(renderFn) {
+  checkRendering(renderFn, usage);
 
-  const containerNode = getContainerNode(container);
-
-  // Only possible values are 'auto', true and false
-  if (typeof autofocus !== 'boolean') {
-    autofocus = 'auto';
-  }
-
-  // Convert to object if only set to true
-  if (poweredBy === true) {
-    poweredBy = {};
-  }
-
-  const makeSearch = helper => {
-    let previousQuery;
-
-    const setQueryAndSearch = (q, doSearch = true) => {
-      if (q !== helper.state.query) {
-        previousQuery = helper.state.query;
-        helper.setQuery(q);
-      }
-      if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
-    };
-
-    return queryHook ?
-      q => queryHook(q, setQueryAndSearch) :
-      setQueryAndSearch;
-  };
-
-  return {
+  return ({queryHook}) => ({
     init({helper, onHistoryChange}) {
-      this._search = makeSearch(helper);
+      this._search = (() => {
+        let previousQuery;
+
+        const setQueryAndSearch = (q, doSearch = true) => {
+          if (q !== helper.state.query) {
+            previousQuery = helper.state.query;
+            helper.setQuery(q);
+          }
+          if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
+        };
+
+        return queryHook ?
+          q => queryHook(q, setQueryAndSearch) :
+          setQueryAndSearch;
+      })();
+
       this._onHistoryChange = onHistoryChange;
-      searchBoxRendering({
+
+      renderFn({
         query: helper.state.query,
-        containerNode,
         onHistoryChange: this._onHistoryChange,
-        poweredBy,
-        wrapInput,
-        autofocus,
-        searchOnEnterKeyPressOnly,
-        placeholder,
-        cssClasses,
-        templates: defaultTemplates,
         search: this._search,
       }, true);
     },
+
     render({helper}) {
-      searchBoxRendering({
+      renderFn({
         query: helper.state.query,
-        containerNode,
-        onHistoryChange: this.onHistoryChange,
-        poweredBy,
-        helper,
-        wrapInput,
-        autofocus,
-        queryHook,
-        searchOnEnterKeyPressOnly,
-        placeholder,
-        cssClasses,
-        templates: defaultTemplates,
+        onHistoryChange: this._onHistoryChange,
         search: this._search,
       }, false);
     },
-  };
-};
-
-export default connectSearchBox;
+  });
+}
