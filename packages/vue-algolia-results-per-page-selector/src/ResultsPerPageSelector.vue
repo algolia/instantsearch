@@ -1,6 +1,5 @@
 <template>
   <select class="alg-hpp-selector"
-          @change="onChange"
           v-model="resultsPerPage"
           :name="name"
   >
@@ -28,18 +27,18 @@
       },
     },
     computed: {
-      resultsPerPage: function () {
-        return this.searchStore.resultsPerPage
+      resultsPerPage:{
+        get () {
+          return this.searchStore.resultsPerPage
+        },
+        set (value) {
+          this.searchStore.resultsPerPage = Number(value)
+        }
       }
     },
     mounted: function () {
       if (this.options.indexOf(this.searchStore.resultsPerPage) === -1) {
         this.searchStore.resultsPerPage = this.options[0]
-      }
-    },
-    methods: {
-      onChange: function (event) {
-        this.searchStore.resultsPerPage = Number(event.target.value)
       }
     }
   }
