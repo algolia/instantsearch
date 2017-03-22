@@ -16,7 +16,7 @@ import defaultTemplates from './defaultTemplates.js';
 const bem = bemHelper('ais-clear-all');
 
 const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, renderState, templates}) => ({
-  clearAll,
+  clearAll, // eslint-disable-line
   hasRefinements,
   createURL,
   instantSearchInstance,
@@ -46,27 +46,6 @@ const renderer = ({containerNode, cssClasses, collapsible, autoHideContainer, re
   );
 };
 
-/**
- * Allows to clear all refinements at once
- * @function clearAll
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string[]} [options.excludeAttributes] List of attributes names to exclude from clear actions
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.link] Link template
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when there's no refinement to clear
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to the link element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
-
 const usage = `Usage:
 clearAll({
   container,
@@ -77,7 +56,28 @@ clearAll({
   [ excludeAttributes=[] ]
 })`;
 
-export default function ClearAll({
+/**
+ * Allows to clear all refinements at once
+ *
+ * @function clearAll
+ * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param  {string[]} [$0.excludeAttributes] List of attributes names to exclude from clear actions
+ * @param  {Object} [$0.templates] Templates to use for the widget
+ * @param  {string|Function} [$0.templates.header] Header template
+ * @param  {string|Function} [$0.templates.link] Link template
+ * @param  {string|Function} [$0.templates.footer] Footer template
+ * @param  {boolean} [$0.autoHideContainer=true] Hide the container when there's no refinement to clear
+ * @param  {Object} [$0.cssClasses] CSS classes to be added
+ * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to the link element
+ * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @return {Widget} a clearAll widget instance
+ */
+export default function clearAll({
   container,
   templates = defaultTemplates,
   cssClasses: userCssClasses = {},
