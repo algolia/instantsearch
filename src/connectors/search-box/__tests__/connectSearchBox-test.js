@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -39,14 +37,8 @@ describe('connectSearchBox', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {query, containerNode, poweredBy,
-        autofocus, searchOnEnterKeyPressOnly, placeholder} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {query} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(poweredBy).toBe(false);
-      expect(autofocus).toBe('auto');
-      expect(searchOnEnterKeyPressOnly).toBe(false);
-      expect(placeholder).toBe('');
     }
 
     widget.render({
@@ -62,14 +54,8 @@ describe('connectSearchBox', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {query, containerNode, poweredBy,
-        autofocus, searchOnEnterKeyPressOnly, placeholder} = rendering.lastCall.args[0];
-      expect(containerNode).toBe(container);
+      const {query} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(poweredBy).toBe(false);
-      expect(autofocus).toBe('auto');
-      expect(searchOnEnterKeyPressOnly).toBe(false);
-      expect(placeholder).toBe('');
     }
   });
 
