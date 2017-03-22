@@ -6,6 +6,7 @@ var customRangeSlider = connectRangeSlider(function render(params, isFirstRender
   //   refine,
   //   range,
   //   start,
+  //   format,
   //   instantSearchInstance,
   // }
 });
@@ -21,34 +22,27 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * Instantiate a slider based on a numeric attribute.
- * This is a wrapper around [noUiSlider](http://refreshless.com/nouislider/)
- * @function rangeSlider
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for faceting
- * @param  {boolean|Object} [options.tooltips=true] Should we show tooltips or not.
- * The default tooltip will show the raw value.
- * You can also provide
- * `tooltips: {format: function(rawValue) {return '$' + Math.round(rawValue).toLocaleString()}}`
- * So that you can format the tooltip display value as you want
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header=''] Header template
- * @param  {string|Function} [options.templates.footer=''] Footer template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no refinements available
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {boolean|object} [options.pips=true] Show slider pips.
- * @param  {boolean|object} [options.step=1] Every handle move will jump that number of steps.
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @param  {number} [options.min] Minimal slider value, default to automatically computed from the result set
- * @param  {number} [options.max] Maximal slider value, defaults to automatically computed from the result set
- * @return {Object}
+ * @typedef {Object} CustomRangeSliderWidgetOptions
+ * @param {string} attributeName Name of the attribute for faceting.
+ * @param {number} [min] Minimal slider value, default to automatically computed from the result set
+ * @param {number} [max] Maximal slider value, defaults to automatically computed from the result set
+ * @param {number} [precision = 2]
  */
 
+/**
+ * @typedef {Object} RangeSliderRenderingOptions
+ * @property {function} refine
+ * @property {{min: number, max: number}} range
+ * @property {[number, number]} start
+ * @property {function} format
+ * @property {InstantSearch} instantSearchInstance
+ */
+
+ /**
+  * Connects a rendering function with the range slider business logic.
+  * @param {function(RangeSliderRenderingOptions)} renderFn function that renders the range slider widget
+  * @return {function(CustomRangeSliderWidgetOptions)} a widget factory for range slider widget
+  */
 export default function connectRangeSlider(renderFn) {
   checkRendering(renderFn, usage);
 

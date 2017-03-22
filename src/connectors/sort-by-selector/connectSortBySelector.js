@@ -1,20 +1,12 @@
 import {checkRendering} from '../../lib/utils.js';
 
-/**
- * Instantiate a dropdown element to choose the current targeted index
- * @function connectSortBySelector
- * @param  {Array} options.indices Array of objects defining the different indices to choose from.
- * @param  {string} options.indices[0].name Name of the index to target
- * @param  {string} options.indices[0].label Label displayed in the dropdown
- * @return {Object}
- */
 const usage = `Usage:
 var customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {
   // params = {
   //   currentValue,
   //   options,
   //   setValue,
-  //   nbHits,
+  //   hasNoResults,
   // }
 });
 search.addWidget(
@@ -22,6 +14,27 @@ search.addWidget(
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSortBySelector.html
 `;
+
+/**
+ * @typedef {Object} CustomSortBySelectorWidgetOptions
+ * @param {Object[]} indices Array of objects defining the different indices to choose from.
+ * @param {string} indices[].name Name of the index to target
+ * @param {string} indices[].label Label displayed in the dropdown
+ */
+
+/**
+ * @typedef {Object} SortBySelectorRenderingOptions
+ * @property {string} currentValue
+ * @property {Object[]} options
+ * @property {function} setValue
+ * @property {boolean} hasNoResults
+ */
+
+ /**
+  * Connects a rendering function with the sort by selector business logic.
+  * @param {function(SortBySelectorRenderingOptions)} renderFn function that renders the sort by selector widget
+  * @return {function(CustomSortBySelectorWidgetOptions)} a widget factory for sort by selector widget
+  */
 export default function connectSortBySelector(renderFn) {
   checkRendering(renderFn, usage);
 

@@ -17,29 +17,24 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 `;
 
 /**
- * Instantiate a searchbox
- * @function searchBox
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} [options.placeholder] Input's placeholder [*]
- * @param  {boolean|Object} [options.poweredBy=false] Define if a "powered by Algolia" link should be added near the input
- * @param  {function|string} [options.poweredBy.template] Template used for displaying the link. Can accept a function or a Hogan string.
- * @param  {number} [options.poweredBy.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.poweredBy.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.poweredBy.cssClasses.link] CSS class to add to the link element
- * @param  {boolean} [options.wrapInput=true] Wrap the input in a `div.ais-search-box`
- * @param  {boolean|string} [autofocus='auto'] autofocus on the input
- * @param  {boolean} [options.searchOnEnterKeyPressOnly=false] If set, trigger the search
- * once `<Enter>` is pressed only
- * @param  {Object} [options.cssClasses] CSS classes to add
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the
- * wrapping div (if `wrapInput` set to `true`)
- * @param  {string|string[]} [options.cssClasses.input] CSS class to add to the input
- * @param  {function} [options.queryHook] A function that will be called every time a new search would be done. You
+ * @typedef {Object} CustomSearchBoxWidgetOptions
+ * @param {function} queryHook A function that will be called every time a new search would be done. You
  * will get the query as first parameter and a search(query) function to call as the second parameter.
  * This queryHook can be used to debounce the number of searches done from the searchBox.
- * @return {Object}
  */
 
+/**
+ * @typedef {Object} SearchBoxRenderingOptions
+ * @property {string} query
+ * @property {function} onHistoryChange
+ * @property {function} search
+ */
+
+ /**
+  * Connects a rendering function with the search box business logic.
+  * @param {function(SearchBoxRenderingOptions)} renderFn function that renders the search box widget
+  * @return {function(CustomSearchBoxWidgetOptions)} a widget factory for search box widget
+  */
 export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 
