@@ -5,7 +5,7 @@
     "url": "https://www.algolia.com"
   },
   "description": "⚡ Lightning-fast search for React and React Native apps",
-  "version": "3.2.2-beta0",
+  "version": "3.3.0",
   "scripts": {
     "build": "./scripts/build.sh",
     "build-and-publish": "./scripts/build-and-publish.sh"
