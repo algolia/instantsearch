@@ -6,7 +6,7 @@
           @click.prevent="clear"
   >
     <slot>
-      <span class="alg-clear-search__label">{{ label }}</span>
+      <span class="alg-clear-search__label">Clear</span>
     </slot>
   </button>
 </template>
@@ -26,10 +26,6 @@
         type: Boolean,
         required: false,
         default: true
-      },
-      label: {
-        type: String,
-        default: "Clear"
       }
     },
     computed: {
