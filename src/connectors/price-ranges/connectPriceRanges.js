@@ -1,13 +1,21 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
+import {checkRendering} from '../../lib/utils.js';
 import generateRanges from './generate-ranges.js';
-import defaultTemplates from './defaultTemplates.js';
-import cx from 'classnames';
 
-const bem = bemHelper('ais-price-ranges');
+const usage = `Usage:
+var customPriceRanges = connectToggle(function render(params, isFirstRendering) {
+  // params = {
+  //   facetValues,
+  //   refine,
+  //   instantSearchInstance,
+  // }
+});
+search.addWidget(
+  customPriceRanges({
+    attributeName,
+  });
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPriceRanges.html
+`;
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -40,167 +48,103 @@ const bem = bemHelper('ais-price-ranges');
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-const usage = `Usage:
-priceRanges({
-  container,
-  attributeName,
-  [ currency=$ ],
-  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
-  [ templates.{header,item,footer} ],
-  [ labels.{currency,separator,button} ],
-  [ autoHideContainer=true ],
-  [ collapsible=false ]
-})`;
-const connectPriceRanges = priceRangesRendering => ({
-    container,
-    attributeName,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    labels: userLabels = {},
-    currency: userCurrency = '$',
-    autoHideContainer = true,
-  } = {}) => {
-  let currency = userCurrency;
 
-  if (!container || !attributeName) {
-    throw new Error(usage);
-  }
+export default function connectPriceRanges(renderFn) {
+  checkRendering(renderFn, usage);
 
-  const containerNode = getContainerNode(container);
+  return ({attributeName}) => {
+    if (!attributeName) {
+      throw new Error(usage);
+    }
 
-  const labels = {
-    button: 'Go',
-    separator: 'to',
-    ...userLabels,
-  };
+    return {
+      getConfiguration() {
+        return {facets: [attributeName]};
+      },
 
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    list: cx(bem('list'), userCssClasses.list),
-    link: cx(bem('link'), userCssClasses.link),
-    item: cx(bem('item'), userCssClasses.item),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    form: cx(bem('form'), userCssClasses.form),
-    label: cx(bem('label'), userCssClasses.label),
-    input: cx(bem('input'), userCssClasses.input),
-    currency: cx(bem('currency'), userCssClasses.currency),
-    button: cx(bem('button'), userCssClasses.button),
-    separator: cx(bem('separator'), userCssClasses.separator),
-    footer: cx(bem('footer'), userCssClasses.footer),
-  };
+      _generateRanges(results) {
+        const stats = results.getFacetStats(attributeName);
+        return generateRanges(stats);
+      },
 
-  // before we had opts.currency, you had to pass labels.currency
-  if (userLabels.currency !== undefined && userLabels.currency !== currency) currency = userLabels.currency;
+      _extractRefinedRange(helper) {
+        const refinements = helper.getRefinements(attributeName);
+        let from;
+        let to;
 
-  return {
-    getConfiguration: () => ({
-      facets: [attributeName],
-    }),
-
-    _generateRanges(results) {
-      const stats = results.getFacetStats(attributeName);
-      return generateRanges(stats);
-    },
-
-    _extractRefinedRange(helper) {
-      const refinements = helper.getRefinements(attributeName);
-      let from;
-      let to;
-
-      if (refinements.length === 0) {
-        return [];
-      }
-
-      refinements.forEach(v => {
-        if (v.operator.indexOf('>') !== -1) {
-          from = Math.floor(v.value[0]);
-        } else if (v.operator.indexOf('<') !== -1) {
-          to = Math.ceil(v.value[0]);
+        if (refinements.length === 0) {
+          return [];
         }
-      });
-      return [{from, to, isRefined: true}];
-    },
 
-    _refine(helper, from, to) {
-      const facetValues = this._extractRefinedRange(helper);
-
-      helper.clearRefinements(attributeName);
-      if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
-        if (typeof from !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
-        }
-        if (typeof to !== 'undefined') {
-          helper.addNumericRefinement(attributeName, '<=', Math.ceil(to));
-        }
-      }
-
-      helper.search();
-    },
-
-    init({helper, templatesConfig}) {
-      this._refine = this._refine.bind(this, helper);
-      this._templateProps = prepareTemplateProps({
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
-      priceRangesRendering({
-        collapsible,
-        cssClasses,
-        currency,
-        facetValues: [],
-        labels,
-        refine: this._refine,
-        shouldAutoHideContainer: autoHideContainer,
-        templateProps: this._templateProps,
-        containerNode,
-      }, true);
-    },
-
-    render({results, helper, state, createURL}) {
-      let facetValues;
-
-      if (results && results.hits && results.hits.length > 0) {
-        facetValues = this._extractRefinedRange(helper);
-
-        if (facetValues.length === 0) {
-          facetValues = this._generateRanges(results);
-        }
-      } else {
-        facetValues = [];
-      }
-
-      facetValues.map(facetValue => {
-        let newState = state.clearRefinements(attributeName);
-        if (!facetValue.isRefined) {
-          if (facetValue.from !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
+        refinements.forEach(v => {
+          if (v.operator.indexOf('>') !== -1) {
+            from = Math.floor(v.value[0]);
+          } else if (v.operator.indexOf('<') !== -1) {
+            to = Math.ceil(v.value[0]);
           }
-          if (facetValue.to !== undefined) {
-            newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
+        });
+        return [{from, to, isRefined: true}];
+      },
+
+      _refine(helper, from, to) {
+        const facetValues = this._extractRefinedRange(helper);
+
+        helper.clearRefinements(attributeName);
+        if (facetValues.length === 0 || facetValues[0].from !== from || facetValues[0].to !== to) {
+          if (typeof from !== 'undefined') {
+            helper.addNumericRefinement(attributeName, '>=', Math.floor(from));
+          }
+          if (typeof to !== 'undefined') {
+            helper.addNumericRefinement(attributeName, '<=', Math.ceil(to));
           }
         }
-        facetValue.url = createURL(newState);
-        return facetValue;
-      });
 
-      priceRangesRendering({
-        collapsible,
-        cssClasses,
-        currency,
-        facetValues,
-        labels,
-        refine: this._refine,
-        shouldAutoHideContainer: autoHideContainer && facetValues.length === 0,
-        templateProps: this._templateProps,
-        containerNode,
-      }, false);
-    },
+        helper.search();
+      },
+
+      init({helper, instantSearchInstance}) {
+        this._refine = this._refine.bind(this, helper);
+
+        renderFn({
+          instantSearchInstance,
+          items: [],
+          refine: this._refine,
+        }, true);
+      },
+
+      render({results, helper, state, createURL, instantSearchInstance}) {
+        let facetValues;
+
+        if (results && results.hits && results.hits.length > 0) {
+          facetValues = this._extractRefinedRange(helper);
+
+          if (facetValues.length === 0) {
+            facetValues = this._generateRanges(results);
+          }
+        } else {
+          facetValues = [];
+        }
+
+        facetValues.map(facetValue => {
+          let newState = state.clearRefinements(attributeName);
+          if (!facetValue.isRefined) {
+            if (facetValue.from !== undefined) {
+              newState = newState.addNumericRefinement(attributeName, '>=', Math.floor(facetValue.from));
+            }
+            if (facetValue.to !== undefined) {
+              newState = newState.addNumericRefinement(attributeName, '<=', Math.ceil(facetValue.to));
+            }
+          }
+          facetValue.url = createURL(newState);
+          return facetValue;
+        });
+
+        renderFn({
+          items: facetValues,
+          refine: this._refine,
+          instantSearchInstance,
+        }, false);
+      },
+    };
   };
-};
-
-export default connectPriceRanges;
+}

@@ -42,8 +42,8 @@ describe('connectStarRating', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {facetValues} = rendering.lastCall.args[0];
-      expect(facetValues).toEqual([]);
+      const {items} = rendering.lastCall.args[0];
+      expect(items).toEqual([]);
     }
 
     widget.render({
@@ -63,8 +63,8 @@ describe('connectStarRating', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {facetValues} = rendering.lastCall.args[0];
-      expect(facetValues).toEqual([
+      const {items} = rendering.lastCall.args[0];
+      expect(items).toEqual([
         {
           count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],
@@ -110,8 +110,8 @@ describe('connectStarRating', () => {
 
     { // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, facetValues} = renderOptions;
-      expect(facetValues).toEqual([]);
+      const {refine, items} = renderOptions;
+      expect(items).toEqual([]);
       expect(helper.getRefinements(attributeName)).toEqual([]);
       refine('3');
       expect(helper.getRefinements(attributeName)).toEqual([
@@ -139,8 +139,8 @@ describe('connectStarRating', () => {
 
     { // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, facetValues} = renderOptions;
-      expect(facetValues).toEqual([
+      const {refine, items} = renderOptions;
+      expect(items).toEqual([
         {
           count: 1000, isRefined: false, name: '4',
           stars: [true, true, true, true, false],

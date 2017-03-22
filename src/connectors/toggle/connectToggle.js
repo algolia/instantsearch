@@ -73,9 +73,6 @@ export default function connectToggle(renderFn) {
       },
 
       init({state, helper, createURL, instantSearchInstance}) {
-        this._instantSearchInstance = instantSearchInstance;
-        this._helper = helper;
-
         this._createURL = isCurrentlyRefined => () => createURL(
           state
             .removeDisjunctiveFacetRefinement(attributeName, isCurrentlyRefined ? on : off)
@@ -125,7 +122,7 @@ export default function connectToggle(renderFn) {
         }, true);
       },
 
-      render({helper, results, state}) {
+      render({helper, results, state, instantSearchInstance}) {
         const isRefined = helper.state.isDisjunctiveFacetRefined(attributeName, on);
         const offValue = off === undefined ? false : off;
         const allFacetValues = results.getFacetValues(attributeName);
@@ -164,9 +161,9 @@ export default function connectToggle(renderFn) {
           state,
           createURL: this._createURL,
           refine: this.toggleRefinement,
-          helper: this._helper,
+          helper,
           isFirstSearch: false,
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
         }, false);
       },
     };

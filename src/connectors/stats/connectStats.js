@@ -38,8 +38,6 @@ export default function connectStats(renderFn) {
 
   return () => ({
     init({helper, instantSearchInstance}) {
-      this._instantSearchInstance = instantSearchInstance;
-
       renderFn({
         instantSearchInstance,
         hitsPerPage: helper.state.hitsPerPage,
@@ -51,9 +49,9 @@ export default function connectStats(renderFn) {
       }, true);
     },
 
-    render({results}) {
+    render({results, instantSearchInstance}) {
       renderFn({
-        instantSearchInstance: this._instantSearchInstance,
+        instantSearchInstance,
         hitsPerPage: results.hitsPerPage,
         nbHits: results.nbHits,
         nbPages: results.nbPages,

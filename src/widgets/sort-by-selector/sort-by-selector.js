@@ -16,11 +16,11 @@ const renderer = ({
   currentValue,
   options,
   setValue,
-  nbHits,
+  hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
   ReactDOM.render(
     <Selector

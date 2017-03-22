@@ -6,6 +6,8 @@ import Stats from '../../../components/Stats/Stats';
 import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 
+const instantSearchInstance = {templatesConfig: undefined};
+
 describe('stats call', () => {
   it('should throw when called without container', () => {
     expect(() => stats()).toThrow(/^Usage:/);
@@ -36,7 +38,7 @@ describe('stats()', () => {
 
     widget.init({
       helper: {state: {}},
-      instantSearchInstance: {templatesConfig: undefined},
+      instantSearchInstance,
     });
   });
 
@@ -45,8 +47,8 @@ describe('stats()', () => {
   });
 
   it('calls twice ReactDOM.render(<Stats props />, container)', () => {
-    widget.render({results});
-    widget.render({results});
+    widget.render({results, instantSearchInstance});
+    widget.render({results, instantSearchInstance});
     const props = {
       cssClasses: {
         body: 'ais-stats--body body cx',

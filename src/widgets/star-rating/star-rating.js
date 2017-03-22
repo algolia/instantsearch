@@ -26,29 +26,29 @@ const renderer = ({
   labels,
 }) => ({
   refine,
-  facetValues,
+  items,
   createURL,
-  instantSearchInstance: {templatesConfig},
-  nbHits,
+  instantSearchInstance,
+  hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
       defaultTemplates,
-      templatesConfig,
+      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
   ReactDOM.render(
     <RefinementList
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues.map(facetValue => ({...facetValue, labels}))}
+      facetValues={items.map(item => ({...item, labels}))}
       shouldAutoHideContainer={shouldAutoHideContainer}
       templateProps={renderState.templateProps}
       toggleRefinement={refine}

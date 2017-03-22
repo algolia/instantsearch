@@ -112,8 +112,6 @@ export default function connectRangeSlider(renderFn) {
       },
 
       init({helper, instantSearchInstance}) {
-        this._instantSearchInstance = instantSearchInstance;
-
         this._refine = bounds => newValues => {
           helper.clearRefinements(attributeName);
           if (!bounds.min || newValues[0] > bounds.min) {
@@ -136,11 +134,11 @@ export default function connectRangeSlider(renderFn) {
           range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
           start: [currentRefinement.min, currentRefinement.max],
           format: sliderFormatter,
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
         }, true);
       },
 
-      render({results, helper}) {
+      render({results, helper, instantSearchInstance}) {
         const facet = (results.disjunctiveFacets || []).find(({name}) => name === attributeName);
         const stats = facet !== undefined && facet.stats !== undefined ? facet.stats : {
           min: null,
@@ -157,7 +155,7 @@ export default function connectRangeSlider(renderFn) {
           range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
           start: [currentRefinement.min, currentRefinement.max],
           format: sliderFormatter,
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
         }, false);
       },
     };
