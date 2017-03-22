@@ -1,3 +1,13 @@
+<a name="1.11.3"></a>
+## [1.11.3](https://github.com/algolia/instantsearch.js/compare/v1.11.2...v1.11.3) (2017-03-22)
+
+
+### Bug Fixes
+
+* **Slider:** display disabled slider when `min === max` (#2041) ([511fdfd](https://github.com/algolia/instantsearch.js/commit/511fdfd)), closes [#2037](https://github.com/algolia/instantsearch.js/issues/2037)
+
+
+
 <a name="1.11.2"></a>
 ## [1.11.2](https://github.com/algolia/instantsearch.js/compare/v1.11.1...v1.11.2) (2017-02-28)
 
