@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -56,8 +54,6 @@ describe('connectNumericSelector', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.currentValue).toBe(listOptions[0].value);
-    expect(firstRenderingOptions.shouldAutoHideContainer).toBe(false);
-    expect(firstRenderingOptions.containerNode).toBe(container);
 
     widget.render({
       results: new SearchResults(helper.state, [{nbHits: 0}]),
@@ -71,9 +67,7 @@ describe('connectNumericSelector', () => {
     expect(rendering.lastCall.args[1]).toBe(false);
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.shouldAutoHideContainer).toBe(false);
     expect(secondRenderingOptions.currentValue).toBe(listOptions[0].value);
-    expect(secondRenderingOptions.containerNode).toBe(container);
   });
 
   it('Reads the default value from the URL if possible', () => {
