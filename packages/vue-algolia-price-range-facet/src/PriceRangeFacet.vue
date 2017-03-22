@@ -1,19 +1,45 @@
 <template>
-  <div class="alg-price-range" v-show="show">
+  <div class="alg-price-range-facet" v-show="show">
 
     <slot name="header"></slot>
 
-    <span class="alg-price-range__currency alg-price-range__currency--left" v-if="currencyPlacement === 'left'">{{currency}}</span>
-    <input class="alg-price-range__input alg-price-range__input--from" type="number" v-model="from" @change="updateFrom"
-           placeholder="min" size="5" :name="fromName">
-    <span class="alg-price-range__currency alg-price-range__currency--right" v-if="currencyPlacement === 'right'">{{currency}}</span>
+    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--left"
+          v-if="currencyPlacement === 'left'"
+    >
+      {{ currency }}
+    </span>
+    <input class="alg-price-range-facet__input alg-price-range-facet__input--from"
+           type="number"
+           v-model="from"
+           @change="updateFrom"
+           :placeholder="fromPlaceholder"
+           :name="fromName"
+    >
+    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--right"
+          v-if="currencyPlacement === 'right'"
+    >
+      {{ currency }}
+    </span>
 
     <slot><span>to&nbsp;</span></slot>
 
-    <span class="alg-price-range__currency alg-price-range__currency--left" v-if="currencyPlacement === 'left'">{{currency}}</span>
-    <input class="alg-price-range__input alg-price-range__input--to" type="number" v-model="to" @change="updateTo"
-           placeholder="max" size="5" :name="toName">
-    <span class="alg-price-range__currency alg-price-range__currency--right" v-if="currencyPlacement === 'right'">{{currency}}</span>
+    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--left"
+          v-if="currencyPlacement === 'left'"
+    >
+      {{ currency }}
+    </span>
+    <input class="alg-price-range-facet__input alg-price-range-facet__input--to"
+           type="number"
+           v-model="to"
+           @change="updateTo"
+           :placeholder="toPlaceholder"
+           :name="toName"
+    >
+    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--right"
+          v-if="currencyPlacement === 'right'"
+    >
+      {{ currency }}
+    </span>
 
     <slot name="footer"></slot>
 
@@ -30,9 +56,17 @@
         type: String,
         default: "price_from"
       },
+      fromPlaceholder: {
+        type: String,
+        default: "min"
+      },
       toName: {
         type: String,
         default: "price_to"
+      },
+      toPlaceholder: {
+        type: String,
+        default: "max"
       },
       attribute: {
         type: String,
@@ -115,7 +149,7 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  .alg-price-range__input {
+  .alg-price-range-facet__input {
     width: 50px;
   }
 </style>
