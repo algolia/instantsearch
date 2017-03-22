@@ -65,10 +65,9 @@ export default function connectRefinementList(renderFn) {
     }) => {
     checkUsage({attributeName, operator, usage});
 
-    /* eslint-disable max-params */
-    const render = (items, state, createURL,
+    const render = ({items, state, createURL,
                     helperSpecializedSearchFacetValues,
-                    refine, isFromSearch, isFirstSearch, instantSearchInstance) => {
+                    refine, isFromSearch, isFirstSearch, instantSearchInstance}) => {
       // Compute a specific createURL method able to link to any facet value state change
       const _createURL = facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
 
@@ -79,7 +78,9 @@ export default function connectRefinementList(renderFn) {
           state,
           createURL,
           helperSpecializedSearchFacetValues,
-          refine);
+          refine,
+          instantSearchInstance,
+        );
 
       renderFn({
         createURL: _createURL,
@@ -97,22 +98,36 @@ export default function connectRefinementList(renderFn) {
     let refine;
 
     const createSearchForFacetValues = helper =>
-      (state, createURL, helperSpecializedSearchFacetValues, toggleRefinement) =>
+      (state, createURL, helperSpecializedSearchFacetValues, toggleRefinement, instantSearchInstance) =>
       query => {
         if (query === '' && lastResultsFromMainSearch) {
           // render with previous data from the helper.
-          render(
-            lastResultsFromMainSearch, state, createURL,
-            helperSpecializedSearchFacetValues, toggleRefinement, false);
+          render({
+            items: lastResultsFromMainSearch,
+            state,
+            createURL,
+            helperSpecializedSearchFacetValues,
+            refine: toggleRefinement,
+            isFromSearch: false,
+            isFirstSearch: false,
+            instantSearchInstance,
+          });
         } else {
           helper.searchForFacetValues(attributeName, query).then(results => {
             const facetValues = results.facetHits.map(h => {
               h.name = h.value;
               return h;
             });
-            render(
-              facetValues, state, createURL,
-              helperSpecializedSearchFacetValues, toggleRefinement, true, false);
+            render({
+              items: facetValues,
+              state,
+              createURL,
+              helperSpecializedSearchFacetValues,
+              refine: toggleRefinement,
+              isFromSearch: true,
+              isFirstSearch: false,
+              instantSearchInstance,
+            });
           });
         }
       };
@@ -137,9 +152,18 @@ export default function connectRefinementList(renderFn) {
 
         searchForFacetValues = createSearchForFacetValues(helper);
 
-        render([], helper.state, createURL, searchForFacetValues, refine, false, true, instantSearchInstance);
+        render({
+          items: [],
+          state: helper.state,
+          createURL,
+          helperSpecializedSearchFacetValues: searchForFacetValues,
+          refine,
+          isFromSearch: false,
+          isFirstSearch: true,
+          instantSearchInstance,
+        });
       },
-      render({results, state, createURL}) {
+      render({results, state, createURL, instantSearchInstance}) {
         const facetValues = results
           .getFacetValues(attributeName, {sortBy})
           .map(h => {
@@ -149,7 +173,16 @@ export default function connectRefinementList(renderFn) {
 
         lastResultsFromMainSearch = facetValues;
 
-        render(facetValues, state, createURL, searchForFacetValues, refine, false, false);
+        render({
+          items: facetValues,
+          state,
+          createURL,
+          helperSpecializedSearchFacetValues: searchForFacetValues,
+          refine,
+          isFromSearch: false,
+          isFirstSearch: false,
+          instantSearchInstance,
+        });
       },
     };
   };
