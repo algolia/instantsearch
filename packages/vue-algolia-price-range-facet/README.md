@@ -1,54 +1,44 @@
-Vue Algolia Clear Search
+Vue Algolia Price Range Facet
 ---
 
-A button that allows the user to clear the `query`, the `facet refinements`, or both.
+A component that lets users filter results based on a given minimum and maximum price.
 
 ## Usage
 
 Basic usage:
 
 ```html
-<clear-search></clear-search>
-```
-
-Overriding the default content:
-
-```html
-<clear-search>
-	<template>
-		Clear search query
-	</template>
-</clear-search>
-```
-
-Only clear the search query:
-
-```html
-<clear-search :clearFacets="false"></clear-search>
-```
-
-Only clear the facet refinements:
-
-```html
-<clear-search :clearQuery="false"></clear-search>
+<price-range-facet></price-range-facet>
 ```
 
 ## Props
 
-| Name        | Type    | Default | Description                                                                     |
-|-------------|---------|---------|---------------------------------------------------------------------------------|
-| clearQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
-| clearFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
+| Name              | Required | Type   | Default        | Description                                                           |
+|-------------------|----------|--------|----------------|-----------------------------------------------------------------------|
+| fromName          | false    | string | `'price_from'` | The input name for the minimum value to return results for.           |
+| fromPlaceholder   | false    | string | `'min'`        | The input placeholder for the minimum value to return results for.    |
+| toName            | false    | string | `'price_from'` | The input name for the maximum value to return results for.           |
+| toPlaceholder     | false    | string | `'max'`        | The input placeholder for the maximum value to return results for.    |
+| attribute         | true     | string |                | The attribute to filter on.                                           |
+| currency          | false    | string | `'$'`          | The currency.                                                         |
+| currencyPlacement | false    | string | `'left'`       | Whether to display the currency 'left' or 'right' side of the inputs. |
 
 ## Slots
 
-| Name    | Props | Default                                              | Description                                 |
-|---------|-------|------------------------------------------------------|---------------------------------------------|
-| default | query | `<span class="alg-clear-search__label">Clear</span>` | The text displayed inside the clear button. |
+| Name    | Props | Default | Description                                                                                      |
+|---------|-------|---------|--------------------------------------------------------------------------------------------------|
+| header  |       |         | Allows to add content at the top of the component which will be hidden when the component is.    |
+| footer  |       |         | Allows to add content at the bottom of the component which will be hidden when the component is. |
+| default |       | `'to '` | Text displayed between the 'min' and 'max' inputs.                                               |
 
 ## CSS Classes
 
-| ClassName               | Description       |
-|-------------------------|-------------------|
-| alg-clear-search        | Button class      |
-| alg-clear-search__label | Button text class |
+| ClassName                              | Description                                      |
+|----------------------------------------|--------------------------------------------------|
+| alg-price-range-facet                  | Container class.                                 |
+| alg-price-range-facet__currency        | Wraps the currency symbol.                       |
+| alg-price-range-facet__currency--left  | When the currency is displayed before the input. |
+| alg-price-range-facet__currency--right | When the currency is displayed after the input.  |
+| alg-price-range-facet__input           | Min and max input element's class.               |
+| alg-price-range-facet__input--from     | Min input element's class.                       |
+| alg-price-range-facet__input--to       | Max input element's class.                       |
