@@ -54,7 +54,7 @@ To publish a beta version, you have to use:
 npm run release -- -b # or --beta
 ```
 
-Then for the version you bump if needed, and append `-beta0` (or 1 etc for next versions).
+Then for the version you bump if needed, and append `-beta.0` (or 1 etc for next versions).
 
 The beta website will be updated automatically.
 
