@@ -4,6 +4,56 @@ import RefinementList from '../../components/RefinementList/RefinementList.js';
 
 import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
 
+import defaultTemplates from './defaultTemplates.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+import cx from 'classnames';
+
+const bem = bemHelper('ais-refinement-list');
+
+const renderer = ({
+  containerNode,
+  collapsible,
+  autoHideContainer,
+  cssClasses,
+  renderState,
+  transformData,
+  templates,
+}) => ({
+  createURL,
+  instantSearchInstance,
+  toggleRefinement,
+  facetValues,
+  noResults,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={facetValues}
+      shouldAutoHideContainer={autoHideContainer && noResults}
+      templateProps={renderState.templateProps}
+      toggleRefinement={toggleRefinement}
+    />,
+    containerNode
+  );
+};
+
 /**
  * Instantiate a list of refinements based on a facet
  * @function numericRefinementList
@@ -33,29 +83,62 @@ import connectNumericRefinementList from '../../connectors/numeric-refinement-li
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object}
  */
-export default connectNumericRefinementList(defaultRendering);
+const usage = `Usage:
+numericRefinementList({
+  container,
+  attributeName,
+  options,
+  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
+  [ templates.{header,item,footer} ],
+  [ transformData.{item} ],
+  [ autoHideContainer ],
+  [ collapsible=false ]
+})`;
 
-function defaultRendering({
-  collapsible,
-  createURL,
-  cssClasses,
-  facetValues,
-  shouldAutoHideContainer,
-  templateProps,
-  toggleRefinement,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <RefinementList
-      collapsible={collapsible}
-      createURL={createURL}
-      cssClasses={cssClasses}
-      facetValues={facetValues}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-      toggleRefinement={toggleRefinement}
-    />,
-    containerNode
-  );
+export default function numericRefinementList({
+  container,
+  attributeName,
+  options,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  transformData,
+  autoHideContainer = true,
+}) {
+  if (!container || !attributeName || !options) {
+    throw new Error(usage);
+  }
+
+  const containerNode = getContainerNode(container);
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    footer: cx(bem('footer'), userCssClasses.footer),
+    list: cx(bem('list'), userCssClasses.list),
+    item: cx(bem('item'), userCssClasses.item),
+    label: cx(bem('label'), userCssClasses.label),
+    radio: cx(bem('radio'), userCssClasses.radio),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+  };
+
+  const specializedRenderer = renderer({
+    containerNode,
+    collapsible,
+    autoHideContainer,
+    cssClasses,
+    renderState: {},
+    transformData,
+    templates,
+  });
+  try {
+    const makeNumericRefinementList = connectNumericRefinementList(specializedRenderer);
+    return makeNumericRefinementList({
+      attributeName,
+      options,
+    });
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

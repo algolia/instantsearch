@@ -77,7 +77,7 @@ describe('numericRefinementList()', () => {
     helper.state.clearRefinements = sinon.stub().returns(helper.state);
     helper.state.addNumericRefinement = sinon.stub().returns(helper.state);
     createURL = () => '#';
-    widget.init({helper});
+    widget.init({helper, instantSearchInstance: {}});
   });
 
   it('calls twice ReactDOM.render(<RefinementList props />, container)', () => {
@@ -186,7 +186,7 @@ describe('numericRefinementList()', () => {
     });
 
     // The lifeccycle impose all the steps
-    testWidget.init({helper, createURL: () => ''});
+    testWidget.init({helper, createURL: () => '', instantSearchInstance: {}});
 
     // When
     testWidget.render({state, results, createURL});

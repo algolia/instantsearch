@@ -41,11 +41,6 @@ describe('connectNumericRefinementList', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
 
-    const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.shouldAutoHideContainer).toBe(true);
-    expect(firstRenderingOptions.collapsible).toBe(false);
-    expect(firstRenderingOptions.containerNode).toBe(container);
-
     widget.render({
       results: new SearchResults(helper.state, [{nbHits: 0}]),
       state: helper.state,
@@ -56,11 +51,6 @@ describe('connectNumericRefinementList', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
-
-    const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.shouldAutoHideContainer).toBe(true);
-    expect(secondRenderingOptions.collapsible).toBe(false);
-    expect(secondRenderingOptions.containerNode).toBe(container);
   });
 
   it('Provide a function to update the refinements at each step', () => {
@@ -221,5 +211,68 @@ describe('connectNumericRefinementList', () => {
 
       toggleRefinement = renderingParameters.toggleRefinement;
     });
+  });
+
+  it('when the state is cleared, the "no value" value should be refined', () => {
+    const container = document.createElement('div');
+    const rendering = sinon.stub();
+    const makeWidget = connectNumericRefinementList(rendering);
+    const listOptions = [
+      {name: 'below 10', end: 10},
+      {name: '10 - 20', start: 10, end: 20},
+      {name: 'more than 20', start: 20},
+      {name: '42', start: 42, end: 42},
+      {name: 'void'},
+    ];
+    const widget = makeWidget({
+      container,
+      attributeName: 'numerics',
+      options: listOptions,
+    });
+
+    const helper = jsHelper(fakeClient);
+    helper.search = sinon.stub();
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    const toggleRefinement = rendering.lastCall.args[0].toggleRefinement;
+    // a user selects a value in the refinement list
+    toggleRefinement(listOptions[0].name);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // No option should be selected
+    const expectedResults0 = [...listOptions].map(o => ({...o, isRefined: false, attributeName: 'numerics'}));
+    expectedResults0[0].isRefined = true;
+
+    const renderingParameters0 = rendering.lastCall.args[0];
+    expect(renderingParameters0.facetValues).toEqual(expectedResults0);
+
+    // All the refinements are cleared by a third party
+    helper.removeNumericRefinement('numerics');
+
+    widget.render({
+      results: new SearchResults(helper.state, [{}]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    // No option should be selected
+    const expectedResults1 = [...listOptions].map(o => ({...o, isRefined: false, attributeName: 'numerics'}));
+    expectedResults1[4].isRefined = true;
+
+    const renderingParameters1 = rendering.lastCall.args[0];
+    expect(renderingParameters1.facetValues).toEqual(expectedResults1);
   });
 });

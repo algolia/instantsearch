@@ -288,6 +288,7 @@ search.addWidget(
     templates: {
       header: 'Numeric refinement list (price)',
     },
+    //autoHideContainer: false,
   })
 );
 

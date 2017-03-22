@@ -1,14 +1,5 @@
-import {
-  bemHelper,
-  prepareTemplateProps,
-  getContainerNode,
-} from '../../lib/utils.js';
-import cx from 'classnames';
 import find from 'lodash/find';
 import includes from 'lodash/includes';
-import defaultTemplates from './defaultTemplates.js';
-
-const bem = bemHelper('ais-refinement-list');
 
 /**
  * Instantiate a list of refinements based on a facet
@@ -40,53 +31,20 @@ const bem = bemHelper('ais-refinement-list');
  * @return {Object}
  */
 const usage = `Usage:
-numericRefinementList({
-  container,
+connectNumericRefinementList(renderer)({
   attributeName,
-  options,
-  [ cssClasses.{root,header,body,footer,list,item,active,label,radio,count} ],
-  [ templates.{header,item,footer} ],
-  [ transformData.{item} ],
-  [ autoHideContainer ],
-  [ collapsible=false ]
+  options
 })`;
 const connectNumericRefinementList = numericRefinementListRendering => ({
-    container,
     attributeName,
     options,
-    cssClasses: userCssClasses = {},
-    templates = defaultTemplates,
-    collapsible = false,
-    transformData,
-    autoHideContainer = true,
   }) => {
-  if (!container || !attributeName || !options) {
+  if (!attributeName || !options) {
     throw new Error(usage);
   }
 
-  const containerNode = getContainerNode(container);
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    header: cx(bem('header'), userCssClasses.header),
-    body: cx(bem('body'), userCssClasses.body),
-    footer: cx(bem('footer'), userCssClasses.footer),
-    list: cx(bem('list'), userCssClasses.list),
-    item: cx(bem('item'), userCssClasses.item),
-    label: cx(bem('label'), userCssClasses.label),
-    radio: cx(bem('radio'), userCssClasses.radio),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-  };
-
   return {
-    init({templatesConfig, helper, createURL}) {
-      this._templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig,
-        templates,
-      });
-
+    init({helper, createURL, instantSearchInstance}) {
       this._toggleRefinement = facetValue => {
         const refinedState = refine(helper.state, attributeName, options, facetValue);
         helper.setState(refinedState).search();
@@ -103,17 +61,14 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
       );
 
       numericRefinementListRendering({
-        collapsible,
         createURL: this._createURL(helper.state),
-        cssClasses,
         facetValues,
-        shouldAutoHideContainer: autoHideContainer,
-        templateProps: this._templateProps,
+        noResults: true,
         toggleRefinement: this._toggleRefinement,
-        containerNode,
+        instantSearchInstance,
       }, true);
     },
-    render({results, state}) {
+    render({results, state, instantSearchInstance}) {
       const facetValues = options.map(facetValue =>
         ({
           ...facetValue,
@@ -122,15 +77,14 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
         })
       );
 
+      const noResults = results.nbHits === 0;
+
       numericRefinementListRendering({
-        collapsible,
         createURL: this._createURL(state),
-        cssClasses,
         facetValues,
-        shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
-        templateProps: this._templateProps,
+        noResults,
         toggleRefinement: this._toggleRefinement,
-        containerNode,
+        instantSearchInstance,
       }, false);
     },
   };
