@@ -11,7 +11,6 @@
     <input class="alg-price-range-facet__input alg-price-range-facet__input--from"
            type="number"
            v-model="from"
-           @change="updateFrom"
            :placeholder="fromPlaceholder"
            :name="fromName"
     >
@@ -31,7 +30,6 @@
     <input class="alg-price-range-facet__input alg-price-range-facet__input--to"
            type="number"
            v-model="to"
-           @change="updateTo"
            :placeholder="toPlaceholder"
            :name="toName"
     >
@@ -90,59 +88,61 @@
       show () {
         return this.from || this.to || this.searchStore.totalResults > 0
       },
-      from () {
-        for (let refinement in this.searchStore.activeRefinements) {
-          if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
-            && this.searchStore.activeRefinements[refinement].type === 'numeric'
-            && this.searchStore.activeRefinements[refinement].operator === '>') {
+      from: {
+        get () {
+          for (let refinement in this.searchStore.activeRefinements) {
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+              && this.searchStore.activeRefinements[refinement].type === 'numeric'
+              && this.searchStore.activeRefinements[refinement].operator === '>') {
 
-            return this.searchStore.activeRefinements[refinement].numericValue
+              return this.searchStore.activeRefinements[refinement].numericValue
+            }
           }
-        }
-        return
-      },
-      to () {
-        for (let refinement in this.searchStore.activeRefinements) {
-          if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
-            && this.searchStore.activeRefinements[refinement].type === 'numeric'
-            && this.searchStore.activeRefinements[refinement].operator === '<') {
-            return this.searchStore.activeRefinements[refinement].numericValue
-          }
-        }
-        return
-      }
-    },
-    methods: {
-      updateFrom: function (event) {
-        const value = Number(event.target.value)
-
-        this.searchStore.stop()
-        this.searchStore.removeNumericRefinement(this.attribute, '>')
-        if (value > 0) {
-          this.searchStore.addNumericRefinement(this.attribute, '>', value)
-        }
-
-        // Remove the max value if lower than the min value.
-        if (value > Number(this.to)) {
-          this.searchStore.removeNumericRefinement(this.attribute, '<')
-        }
-
-        this.searchStore.start()
-      },
-      updateTo: function (event) {
-        const value = Number(event.target.value)
-
-        // Only update when `to` has reached the `from` value.
-        if (value < Number(this.from)) {
           return
-        }
+        },
+        set (value) {
+          value = Number(value)
 
-        this.searchStore.stop()
-        this.searchStore.removeNumericRefinement(this.attribute, '<')
-        if (value > 0) {
-          this.searchStore.addNumericRefinement(this.attribute, '<', value)
+          this.searchStore.stop()
+          this.searchStore.removeNumericRefinement(this.attribute, '>')
+          if (value > 0) {
+            this.searchStore.addNumericRefinement(this.attribute, '>', value)
+          }
+
+          // Remove the max value if lower than the min value.
+          if (value > Number(this.to)) {
+            this.searchStore.removeNumericRefinement(this.attribute, '<')
+          }
+
+          this.searchStore.start()
         }
-        this.searchStore.start()
+      },
+      to: {
+        get () {
+          for (let refinement in this.searchStore.activeRefinements) {
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+              && this.searchStore.activeRefinements[refinement].type === 'numeric'
+              && this.searchStore.activeRefinements[refinement].operator === '<') {
+              return this.searchStore.activeRefinements[refinement].numericValue
+            }
+          }
+          return
+        },
+        set (value) {
+          value = Number(value)
+
+          // Only update when `to` has reached the `from` value.
+          if (value < Number(this.from)) {
+            return
+          }
+
+          this.searchStore.stop()
+          this.searchStore.removeNumericRefinement(this.attribute, '<')
+          if (value > 0) {
+            this.searchStore.addNumericRefinement(this.attribute, '<', value)
+          }
+          this.searchStore.start()
+        }
       }
     }
   }
