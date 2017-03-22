@@ -18,7 +18,7 @@ const renderer = ({
 }) => ({
   currentValue,
   setValue,
-  noResults,
+  hasNoResults,
   options,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
@@ -29,7 +29,7 @@ const renderer = ({
       currentValue={currentValue}
       options={options}
       setValue={setValue}
-      shouldAutoHideContainer={autoHideContainer && noResults}
+      shouldAutoHideContainer={autoHideContainer && hasNoResults}
     />,
     containerNode
   );

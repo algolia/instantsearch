@@ -28,7 +28,7 @@ const renderer = ({
   instantSearchInstance,
   toggleRefinement,
   facetValues,
-  noResults,
+  hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -46,7 +46,7 @@ const renderer = ({
       createURL={createURL}
       cssClasses={cssClasses}
       facetValues={facetValues}
-      shouldAutoHideContainer={autoHideContainer && noResults}
+      shouldAutoHideContainer={autoHideContainer && hasNoResults}
       templateProps={renderState.templateProps}
       toggleRefinement={toggleRefinement}
     />,

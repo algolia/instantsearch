@@ -25,18 +25,17 @@ const connectNumericSelector = numericSelectorRendering => ({
         currentValue: this._getRefinedValue(helper.state),
         options,
         setValue: this._refine,
-        noResults: true,
+        hasNoResults: true,
         instantSearchInstance,
       }, true);
     },
 
     render({helper, results, instantSearchInstance}) {
-      const noResults = results.nbHits === 0;
       numericSelectorRendering({
         currentValue: this._getRefinedValue(helper.state),
         options,
         setValue: this._refine,
-        noResults,
+        hasNoResults: results.nbHits === 0,
         instantSearchInstance,
       }, false);
     },

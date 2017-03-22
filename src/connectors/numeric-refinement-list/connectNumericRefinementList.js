@@ -63,7 +63,7 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
       numericRefinementListRendering({
         createURL: this._createURL(helper.state),
         facetValues,
-        noResults: true,
+        hasNoResults: true,
         toggleRefinement: this._toggleRefinement,
         instantSearchInstance,
       }, true);
@@ -77,12 +77,10 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
         })
       );
 
-      const noResults = results.nbHits === 0;
-
       numericRefinementListRendering({
         createURL: this._createURL(state),
         facetValues,
-        noResults,
+        hasNoResults: results.nbHits === 0,
         toggleRefinement: this._toggleRefinement,
         instantSearchInstance,
       }, false);

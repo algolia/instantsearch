@@ -29,7 +29,7 @@ const renderer = ({
   items,
   createURL,
   instantSearchInstance,
-  nbHits,
+  hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
@@ -41,7 +41,7 @@ const renderer = ({
     return;
   }
 
-  const shouldAutoHideContainer = autoHideContainer && nbHits === 0;
+  const shouldAutoHideContainer = autoHideContainer && hasNoResults;
 
   ReactDOM.render(
     <RefinementList

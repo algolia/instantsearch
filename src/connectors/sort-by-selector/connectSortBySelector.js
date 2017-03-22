@@ -49,7 +49,7 @@ export default function connectSortBySelector(renderFn) {
           currentValue: currentIndex,
           options: selectorOptions,
           setValue: this.setIndex,
-          nbHits: 0,
+          hasNoResults: true,
         }, true);
       },
 
@@ -58,7 +58,7 @@ export default function connectSortBySelector(renderFn) {
           currentValue: helper.getIndex(),
           options: selectorOptions,
           setValue: this.setIndex,
-          nbHits: results.nbHits,
+          hasNoResults: results.nbHits === 0,
         }, false);
       },
     };
