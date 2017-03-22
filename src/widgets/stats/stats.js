@@ -29,13 +29,13 @@ const renderer = ({
   page,
   processingTimeMS,
   query,
-  instantSearchInstance: {templatesConfig},
+  instantSearchInstance,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
       defaultTemplates,
-      templatesConfig,
+      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
     return;

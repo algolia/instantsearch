@@ -26,12 +26,12 @@ const renderer = ({
 }) => ({
   refine,
   facetValues,
-  instantSearchInstance: {templatesConfig},
+  instantSearchInstance,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
-      templatesConfig,
+      templatesConfig: instantSearchInstance.templateProps,
       templates,
     });
     return;

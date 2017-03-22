@@ -28,14 +28,14 @@ const renderer = ({
   refine,
   facetValues,
   createURL,
-  instantSearchInstance: {templatesConfig},
+  instantSearchInstance,
   nbHits,
 }, isFirstRendering) => {
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       transformData,
       defaultTemplates,
-      templatesConfig,
+      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
     return;

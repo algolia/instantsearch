@@ -66,12 +66,11 @@ export default function connectStarRating(renderFn) {
       },
 
       init({helper, createURL, instantSearchInstance}) {
-        this._instantSearchInstance = instantSearchInstance;
         this._toggleRefinement = this._toggleRefinement.bind(this, helper);
         this._createURL = state => facetValue => createURL(state.toggleRefinement(attributeName, facetValue));
 
         renderFn({
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
           facetValues: [],
           nbHits: 0,
           refine: this._toggleRefinement,
@@ -79,7 +78,7 @@ export default function connectStarRating(renderFn) {
         }, true);
       },
 
-      render({helper, results, state}) {
+      render({helper, results, state, instantSearchInstance}) {
         const facetValues = [];
         const allValues = {};
         for (let v = max; v >= 0; --v) {
@@ -115,7 +114,7 @@ export default function connectStarRating(renderFn) {
         }
 
         renderFn({
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
           facetValues,
           nbHits: results.nbHits,
           refine: this._toggleRefinement,

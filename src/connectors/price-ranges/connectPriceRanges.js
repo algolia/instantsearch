@@ -103,7 +103,6 @@ export default function connectPriceRanges(renderFn) {
       },
 
       init({helper, instantSearchInstance}) {
-        this._instantSearchInstance = instantSearchInstance;
         this._refine = this._refine.bind(this, helper);
 
         renderFn({
@@ -113,7 +112,7 @@ export default function connectPriceRanges(renderFn) {
         }, true);
       },
 
-      render({results, helper, state, createURL}) {
+      render({results, helper, state, createURL, instantSearchInstance}) {
         let facetValues;
 
         if (results && results.hits && results.hits.length > 0) {
@@ -143,7 +142,7 @@ export default function connectPriceRanges(renderFn) {
         renderFn({
           facetValues,
           refine: this._refine,
-          instantSearchInstance: this._instantSearchInstance,
+          instantSearchInstance,
         }, false);
       },
     };
