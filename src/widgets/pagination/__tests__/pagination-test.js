@@ -76,7 +76,7 @@ describe('pagination()', () => {
       const getContainerNode = sinon.stub().returns({
         scrollIntoView,
       });
-      connectPagination.__Rewire__('getContainerNode', getContainerNode);
+      pagination.__Rewire__('getContainerNode', getContainerNode);
     });
 
     it('should not scroll', () => {
@@ -89,7 +89,9 @@ describe('pagination()', () => {
     it('should scroll to body', () => {
       widget = pagination({container});
       widget.init({helper});
-      widget.setPage(helper, 2);
+      widget.render({results, helper, state: {page: 0}});
+      const {props: {setCurrentPage}} = ReactDOM.render.firstCall.args[0];
+      setCurrentPage(2);
       expect(scrollIntoView.calledOnce).toBe(true, 'scrollIntoView called once');
     });
 
