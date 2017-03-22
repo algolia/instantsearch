@@ -1,0 +1,24 @@
+em {
+  color: rgb(0, 188, 212);;
+}
+
+html,body{
+  -webkit-overflow-scrolling : touch !important;
+  overflow: auto !important;
+  height: 100% !important;
+}
+
+.cm-navigation {
+  top: 0px
+}
+
+.Header__appBar {
+  box-shadow: none !important;
+  position: fixed !important;
+  top: 60px;
+}
+
+span[type='button']{
+  background: white!important;
+  -webkit-appearance: inherit!important;
+}
