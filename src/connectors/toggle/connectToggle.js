@@ -7,10 +7,12 @@ import {
 const usage = `Usage:
 var customToggle = connectToggle(function render(params, isFirstRendering) {
   // params = {
-  //   isFromSearch,
+  //   value,
+  //   state,
   //   createURL,
-  //   items,
   //   refine,
+  //   helper,
+  //   isFirstSearch,
   //   instantSearchInstance,
   // }
 });
@@ -24,15 +26,29 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectToggle.html
 `;
 
-export const checkUsage = ({attributeName, label, usageMessage}) => {
-  const noAttributeName = attributeName === undefined;
-  const noLabel = label === undefined;
+/**
+ * @typedef {Object} CustomToggleWidgetOptions
+ * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @param {string} label Human-readable name of the filter (eg. "Free Shipping")
+ * @param {Object} [values] Lets you define the values to filter on when toggling
+ */
 
-  if (noAttributeName || noLabel) {
-    throw new Error(usageMessage);
-  }
-};
+/**
+ * @typedef {Object} ToggleRenderingOptions
+ * @property {Object} value
+ * @property {Object} state
+ * @property {function} createURL
+ * @property {function} refine
+ * @property {Object} helper
+ * @property {boolean} isFirstSearch
+ * @property {InstantSearch} instantSearchInstance
+ */
 
+/**
+ * Connects a rendering function with the toggle business logic.
+ * @param {function(ToggleRenderingOptions)} renderFn function that renders the toggle widget
+ * @return {function(CustomToggleWidgetOptions)} a widget factory for toggle widget
+ */
 export default function connectToggle(renderFn) {
   checkRendering(renderFn, usage);
 
@@ -41,7 +57,9 @@ export default function connectToggle(renderFn) {
     label,
     values: userValues = {on: true, off: undefined},
   }) => {
-    checkUsage({attributeName, label, usageMessage: usage});
+    if (!attributeName || !label) {
+      throw new Error(usage);
+    }
 
     const hasAnOffValue = userValues.off !== undefined;
     const on = userValues ? escapeRefinement(userValues.on) : undefined;
