@@ -6,7 +6,9 @@ expect.extend(expectJSX);
 import priceRanges from '../price-ranges.js';
 import generateRanges from '../../../connectors/price-ranges/generate-ranges.js';
 import PriceRanges from '../../../components/PriceRanges/PriceRanges.js';
-import defaultTemplates from '../../../connectors/price-ranges/defaultTemplates.js';
+import defaultTemplates from '../defaultTemplates.js';
+
+const instantSearchInstance = {templatesConfig: undefined};
 
 describe('priceRanges call', () => {
   it('throws an exception when no container', () => {
@@ -106,7 +108,7 @@ describe('priceRanges()', () => {
           useCustomCompileOptions: {header: false, footer: false, item: false},
         },
       };
-      widget.init({helper});
+      widget.init({helper, instantSearchInstance});
     });
 
     it('calls twice ReactDOM.render(<PriceRanges props />, container)', () => {

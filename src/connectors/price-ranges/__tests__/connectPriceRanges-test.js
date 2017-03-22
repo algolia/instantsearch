@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -43,24 +41,15 @@ describe('connectPriceRanges', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {facetValues, currency, collapsible, labels,
-        shouldAutoHideContainer, containerNode} = rendering.lastCall.args[0];
+      const {facetValues} = rendering.lastCall.args[0];
       expect(facetValues).toEqual([]);
-      expect(currency).toBe('$');
-      expect(collapsible).toBe(false);
-      expect(labels).toEqual({
-        button: 'Go',
-        separator: 'to',
-      });
-      expect(shouldAutoHideContainer).toBe(true);
-      expect(containerNode).toBe(container);
     }
 
     widget.render({
       results: new SearchResults(helper.state, [{
         hits: [{test: 'oneTime'}],
         facets: {price: {10: 1, 20: 1, 30: 1}},
-        facets_stats: { // eslint-disable-line 
+        facets_stats: { // eslint-disable-line
           price: {
             avg: 20,
             max: 30,
@@ -83,21 +72,12 @@ describe('connectPriceRanges', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const {facetValues, currency, collapsible, labels,
-        shouldAutoHideContainer, containerNode} = rendering.lastCall.args[0];
+      const {facetValues} = rendering.lastCall.args[0];
       expect(facetValues).toEqual([
         {to: 10, url: '#'}, {from: 10, to: 13, url: '#'}, {from: 13, to: 16, url: '#'},
         {from: 16, to: 19, url: '#'}, {from: 19, to: 22, url: '#'}, {from: 22, to: 25, url: '#'},
         {from: 25, to: 28, url: '#'}, {from: 28, url: '#'},
       ]);
-      expect(currency).toBe('$');
-      expect(collapsible).toBe(false);
-      expect(labels).toEqual({
-        button: 'Go',
-        separator: 'to',
-      });
-      expect(shouldAutoHideContainer).toBe(false);
-      expect(containerNode).toBe(container);
     }
   });
 
@@ -138,7 +118,7 @@ describe('connectPriceRanges', () => {
       results: new SearchResults(helper.state, [{
         hits: [{test: 'oneTime'}],
         facets: {price: {10: 1, 20: 1, 30: 1}},
-        facets_stats: { // eslint-disable-line 
+        facets_stats: { // eslint-disable-line
           price: {
             avg: 20,
             max: 30,

@@ -1,7 +1,70 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
 import PriceRanges from '../../components/PriceRanges/PriceRanges.js';
 import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges.js';
+import defaultTemplates from './defaultTemplates.js';
+
+import {
+  bemHelper,
+  prepareTemplateProps,
+  getContainerNode,
+} from '../../lib/utils.js';
+
+const bem = bemHelper('ais-price-ranges');
+
+const renderer = ({
+  containerNode,
+  templates,
+  renderState,
+  collapsible,
+  cssClasses,
+  labels,
+  currency,
+  autoHideContainer,
+}) => ({
+  refine,
+  facetValues,
+  instantSearchInstance: {templatesConfig},
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      defaultTemplates,
+      templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  const shouldAutoHideContainer = autoHideContainer && facetValues.length === 0;
+
+  ReactDOM.render(
+    <PriceRanges
+      collapsible={collapsible}
+      cssClasses={cssClasses}
+      currency={currency}
+      facetValues={facetValues}
+      labels={labels}
+      refine={refine}
+      shouldAutoHideContainer={shouldAutoHideContainer}
+      templateProps={renderState.templateProps}
+    />,
+    containerNode
+  );
+};
+
+const usage = `Usage:
+priceRanges({
+  container,
+  attributeName,
+  [ currency=$ ],
+  [ cssClasses.{root,header,body,list,item,active,link,form,label,input,currency,separator,button,footer} ],
+  [ templates.{header,item,footer} ],
+  [ labels.{currency,separator,button} ],
+  [ autoHideContainer=true ],
+  [ collapsible=false ]
+})`;
 
 /**
  * Instantiate a price ranges on a numerical facet
@@ -32,33 +95,67 @@ import connectPriceRanges from '../../connectors/price-ranges/connectPriceRanges
  * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
  * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
  * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
+ * @return {Object} widget
  */
+export default function priceRanges({
+  container,
+  attributeName,
+  cssClasses: userCssClasses = {},
+  templates = defaultTemplates,
+  collapsible = false,
+  labels: userLabels = {},
+  currency: userCurrency = '$',
+  autoHideContainer = true,
+} = {}) {
+  if (!container) {
+    throw new Error(usage);
+  }
 
-export default connectPriceRanges(defaultRendering);
-function defaultRendering({
-  collapsible,
-  cssClasses,
-  currency,
-  facetValues,
-  labels,
-  refine,
-  shouldAutoHideContainer,
-  templateProps,
-  containerNode,
-}, isFirstRendering) {
-  if (isFirstRendering) return;
-  ReactDOM.render(
-    <PriceRanges
-      collapsible={collapsible}
-      cssClasses={cssClasses}
-      currency={currency}
-      facetValues={facetValues}
-      labels={labels}
-      refine={refine}
-      shouldAutoHideContainer={shouldAutoHideContainer}
-      templateProps={templateProps}
-    />,
-    containerNode
-  );
+  const containerNode = getContainerNode(container);
+
+  const labels = {
+    button: 'Go',
+    separator: 'to',
+    ...userLabels,
+  };
+
+  const cssClasses = {
+    root: cx(bem(null), userCssClasses.root),
+    header: cx(bem('header'), userCssClasses.header),
+    body: cx(bem('body'), userCssClasses.body),
+    list: cx(bem('list'), userCssClasses.list),
+    link: cx(bem('link'), userCssClasses.link),
+    item: cx(bem('item'), userCssClasses.item),
+    active: cx(bem('item', 'active'), userCssClasses.active),
+    form: cx(bem('form'), userCssClasses.form),
+    label: cx(bem('label'), userCssClasses.label),
+    input: cx(bem('input'), userCssClasses.input),
+    currency: cx(bem('currency'), userCssClasses.currency),
+    button: cx(bem('button'), userCssClasses.button),
+    separator: cx(bem('separator'), userCssClasses.separator),
+    footer: cx(bem('footer'), userCssClasses.footer),
+  };
+
+  // before we had opts.currency, you had to pass labels.currency
+  const currency = userLabels.currency !== undefined
+    ? userLabels.currency
+    : userCurrency;
+
+  const specializedRenderer = renderer({
+    containerNode,
+    templates,
+    renderState: {},
+    collapsible,
+    cssClasses,
+    labels,
+    currency,
+    autoHideContainer,
+  });
+
+  try {
+    const makeWidget = connectPriceRanges(specializedRenderer);
+    return makeWidget({attributeName});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
