@@ -1,6 +1,5 @@
 <template>
   <select class="alg-sort-by-selector"
-          @change="changeIndex"
           v-model="indexName"
           :name="name"
   >
@@ -28,8 +27,13 @@
       }
     },
     computed: {
-      indexName: function () {
-        return this.searchStore.index
+      indexName: {
+        get () {
+          return this.searchStore.index
+        },
+        set (value) {
+          this.searchStore.index = value
+        }
       }
     },
     mounted: function () {
@@ -41,12 +45,7 @@
       }
 
       if (!match) {
-        this.searchStore.index = this.indices[0].name
-      }
-    },
-    methods: {
-      changeIndex: function (event) {
-        this.searchStore.index = event.target.value
+        this.indexName = this.indices[0].name
       }
     }
   }
