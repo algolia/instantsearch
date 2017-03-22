@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -36,6 +34,7 @@ describe('connectRangeSlider', () => {
       state: helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
+      instantSearchInstance: {templatesConfig: undefined},
     });
 
     { // should call the rendering once with isFirstRendering to true
@@ -44,20 +43,16 @@ describe('connectRangeSlider', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {range, collapsible, start,
-        shouldAutoHideContainer, containerNode} = rendering.lastCall.args[0];
+      const {range, start} = rendering.lastCall.args[0];
       expect(range).toEqual({min: 0, max: 0});
       expect(start).toEqual([-Infinity, Infinity]);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(true);
-      expect(containerNode).toBe(container);
     }
 
     widget.render({
       results: new SearchResults(helper.state, [{
         hits: [{test: 'oneTime'}],
         facets: {price: {10: 1, 20: 1, 30: 1}},
-        facets_stats: { // eslint-disable-line 
+        facets_stats: { // eslint-disable-line
           price: {
             avg: 20,
             max: 30,
@@ -80,13 +75,9 @@ describe('connectRangeSlider', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const {range, collapsible, start,
-        shouldAutoHideContainer, containerNode} = rendering.lastCall.args[0];
+      const {range, start} = rendering.lastCall.args[0];
       expect(range).toEqual({min: 10, max: 30});
       expect(start).toEqual([-Infinity, Infinity]);
-      expect(collapsible).toBe(false);
-      expect(shouldAutoHideContainer).toBe(false);
-      expect(containerNode).toBe(container);
     }
   });
 
@@ -158,7 +149,7 @@ describe('connectRangeSlider', () => {
       results: new SearchResults(helper.state, [{
         hits: [{test: 'oneTime'}],
         facets: {price: {10: 1, 20: 1, 30: 1}},
-        facets_stats: { // eslint-disable-line 
+        facets_stats: { // eslint-disable-line
           price: {
             avg: 20,
             max: 30,

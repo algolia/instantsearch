@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -43,8 +41,6 @@ describe('connectPagination', () => {
       expect(firstRenderingOptions.currentPage).toBe(0);
       expect(firstRenderingOptions.nbHits).toBe(0);
       expect(firstRenderingOptions.nbPages).toBe(0);
-      expect(firstRenderingOptions.shouldAutoHideContainer).toBe(true);
-      expect(firstRenderingOptions.showFirstLast).toBe(true);
     }
 
     widget.render({
@@ -69,22 +65,17 @@ describe('connectPagination', () => {
       expect(secondRenderingOptions.currentPage).toBe(0);
       expect(secondRenderingOptions.nbHits).toBe(1);
       expect(secondRenderingOptions.nbPages).toBe(1);
-      expect(secondRenderingOptions.shouldAutoHideContainer).toBe(false);
-      expect(secondRenderingOptions.showFirstLast).toBe(true);
     }
   });
 
   it('Provides a function to update the refinements at each step', () => {
     const container = document.createElement('div');
-    const scrollTo = document.createElement('div');
-    scrollTo.scrollIntoView = sinon.stub();
 
     const rendering = sinon.stub();
     const makeWidget = connectPagination(rendering);
 
     const widget = makeWidget({
       container,
-      scrollTo,
     });
 
     const helper = jsHelper(fakeClient);
@@ -103,7 +94,6 @@ describe('connectPagination', () => {
       setPage(2);
       expect(helper.getPage()).toBe(2);
       expect(helper.search.callCount).toBe(1);
-      expect(scrollTo.scrollIntoView.callCount).toBe(1);
     }
 
     widget.render({
@@ -119,7 +109,6 @@ describe('connectPagination', () => {
       setPage(7);
       expect(helper.getPage()).toBe(7);
       expect(helper.search.callCount).toBe(2);
-      expect(scrollTo.scrollIntoView.callCount).toBe(2);
     }
   });
 });

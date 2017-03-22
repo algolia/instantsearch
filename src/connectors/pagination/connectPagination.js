@@ -1,17 +1,22 @@
-import defaults from 'lodash/defaults';
-import cx from 'classnames';
-import {
-  bemHelper,
-  getContainerNode,
-} from '../../lib/utils.js';
+import {checkRendering} from '../../lib/utils.js';
 
-const defaultLabels = {
-  previous: '‹',
-  next: '›',
-  first: '«',
-  last: '»',
-};
-const bem = bemHelper('ais-pagination');
+const usage = `Usage:
+var customPagination = connectPagination(function render(params, isFirstRendering) {
+  // params = {
+  //   createURL,
+  //   currentPage,
+  //   nbHits,
+  //   nbPages,
+  //   setPage,
+  // }
+});
+search.addWidget(
+  customPagination({
+    [maxPages]
+  })
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPagination.html
+`;
 
 /**
  * Add a pagination menu to navigate through the results
@@ -38,107 +43,44 @@ const bem = bemHelper('ais-pagination');
  * @param  {string|string[]} [options.cssClasses.last] CSS classes added to the last `<li>`
  * @param  {string|string[]} [options.cssClasses.active] CSS classes added to the active `<li>`
  * @param  {string|string[]} [options.cssClasses.disabled] CSS classes added to the disabled `<li>`
- * @return {Object}
+ * @return {Object} widget
  */
-const usage = `Usage:
-pagination({
-  container,
-  [ cssClasses.{root,item,page,previous,next,first,last,active,disabled}={} ],
-  [ labels.{previous,next,first,last} ],
-  [ maxPages ],
-  [ padding=3 ],
-  [ showFirstLast=true ],
-  [ autoHideContainer=true ],
-  [ scrollTo='body' ]
-})`;
-const connectPagination = paginationRendering => ({
-    container,
-    cssClasses: userCssClasses = {},
-    labels: userLabels = {},
-    maxPages,
-    padding = 3,
-    showFirstLast = true,
-    autoHideContainer = true,
-    scrollTo: userScrollTo = 'body',
-  } = {}) => {
-  let scrollTo = userScrollTo;
 
-  if (!container) {
-    throw new Error(usage);
-  }
+export default function connectPagination(renderFn) {
+  checkRendering(renderFn, usage);
 
-  if (scrollTo === true) {
-    scrollTo = 'body';
-  }
-
-  const containerNode = getContainerNode(container);
-  const scrollToNode = scrollTo !== false ? getContainerNode(scrollTo) : false;
-
-  const cssClasses = {
-    root: cx(bem(null), userCssClasses.root),
-    item: cx(bem('item'), userCssClasses.item),
-    link: cx(bem('link'), userCssClasses.link),
-    page: cx(bem('item', 'page'), userCssClasses.page),
-    previous: cx(bem('item', 'previous'), userCssClasses.previous),
-    next: cx(bem('item', 'next'), userCssClasses.next),
-    first: cx(bem('item', 'first'), userCssClasses.first),
-    last: cx(bem('item', 'last'), userCssClasses.last),
-    active: cx(bem('item', 'active'), userCssClasses.active),
-    disabled: cx(bem('item', 'disabled'), userCssClasses.disabled),
-  };
-
-  const labels = defaults(userLabels, defaultLabels);
-
-  return {
+  return ({maxPages}) => ({
     init({helper, createURL}) {
       this.setPage = page => {
         helper.setPage(page);
-        if (scrollToNode !== false) {
-          scrollToNode.scrollIntoView();
-        }
         helper.search();
       };
 
       this.createURL = state => page => createURL(state.setPage(page));
 
-      paginationRendering({
+      renderFn({
         createURL: this.createURL(helper.state),
-        cssClasses,
         currentPage: helper.getPage() || 0,
-        labels,
         nbHits: 0,
         nbPages: 0,
-        padding,
         setPage: this.setPage,
-        shouldAutoHideContainer: autoHideContainer,
-        showFirstLast,
-        containerNode,
       }, true);
     },
 
-    getMaxPage(results) {
-      if (maxPages !== undefined) {
-        return Math.min(maxPages, results.nbPages);
-      }
-      return results.nbPages;
+    getMaxPage({nbPages}) {
+      return maxPages !== undefined
+        ? Math.min(maxPages, nbPages)
+        : nbPages;
     },
 
     render({results, state}) {
-      paginationRendering({
+      renderFn({
         createURL: this.createURL(state),
-        cssClasses,
         currentPage: state.page,
-        labels,
+        setPage: this.setPage,
         nbHits: results.nbHits,
         nbPages: this.getMaxPage(results),
-        padding,
-        setPage: this.setPage,
-        shouldAutoHideContainer: autoHideContainer && results.nbHits === 0,
-        showFirstLast,
-        containerNode,
       }, false);
     },
-  };
-};
-
-export default connectPagination;
+  });
+}
