@@ -37,11 +37,12 @@ const connectClearAll = renderClearAll => ({
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
       const hasRefinements = clearAttributes.length !== 0;
+      const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
 
       renderClearAll({
         clearAll: () => {},
         hasRefinements,
-        url: createURL(clearRefinementsFromState(helper.state)),
+        createURL: preparedCreateURL,
         instantSearchInstance,
       }, true);
     },
