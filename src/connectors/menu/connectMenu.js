@@ -3,10 +3,11 @@ import {checkRendering} from '../../lib/utils.js';
 const usage = `Usage:
 var customMenu = connectMenu(function render(params, isFirstRendering) {
   // params = {
-  //   isFromSearch,
-  //   createURL,
   //   items,
+  //   state,
+  //   createURL,
   //   refine,
+  //   helper,
   //   instantSearchInstance,
   //   canRefine,
   // }
@@ -21,14 +22,30 @@ search.addWidget(
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectMenu.html
 `;
 
-export const checkUsage = ({attributeName, usageMessage}) => {
-  const noAttributeName = attributeName === undefined;
+/**
+ * @typedef {Object} CustomMenuWidgetOptions
+ * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
+ * @param {number} [limit = 10] How many facets values to retrieve [*]
+ * @param {string[]|function} [sortBy = ['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
+ */
 
-  if (noAttributeName) {
-    throw new Error(usageMessage);
-  }
-};
+/**
+ * @typedef {Object} MenuRenderingOptions
+ * @property {Object[]} items
+ * @property {Object} state
+ * @property {function} createURL
+ * @property {function} refine
+ * @property {AlgoliaSearchHelper} helper
+ * @property {InstantSearch} instantSearchInstance
+ * @property {boolean} canRefine
+ */
 
+ /**
+  * Connects a rendering function with the menu business logic.
+  * @param {function(MenuRenderingOptions)} renderFn function that renders the menu widget
+  * @return {function(CustomMenuWidgetOptions)} a widget factory for menu widget
+  */
 export default function connectMenu(renderFn) {
   checkRendering(renderFn, usage);
 
@@ -37,7 +54,9 @@ export default function connectMenu(renderFn) {
     limit = 10,
     sortBy = ['count:desc', 'name:asc'],
   }) => {
-    checkUsage({attributeName, usageMessage: usage});
+    if (!attributeName) {
+      throw new Error(usage);
+    }
 
     return {
       getConfiguration(configuration) {
