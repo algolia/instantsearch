@@ -75,31 +75,31 @@ starRating({
  * The ratings must be integer values. You can still keep the precise float value in another attribute
  * to be used in the custom ranking configuration. So that the actual hits ranking is precise.
  * @function starRating
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for filtering
- * @param  {number} [options.max] The maximum rating value
- * @param  {Object} [options.labels] Labels used by the default template
- * @param  {string} [options.labels.andUp] The label suffixed after each line
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.link] CSS class to add to each link element
- * @param  {string|string[]} [options.cssClasses.disabledLink] CSS class to add to each disabled link (when using the default template)
- * @param  {string|string[]} [options.cssClasses.star] CSS class to add to each star element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.emptyStar] CSS class to add to each empty star element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} $0.attributeName Name of the attribute for filtering
+ * @param  {number} [$0.max] The maximum rating value
+ * @param  {Object} [$0.labels] Labels used by the default template
+ * @param  {string} [$0.labels.andUp] The label suffixed after each line
+ * @param  {Object} [$0.templates] Templates to use for the widget
+ * @param  {string|Function} [$0.templates.header] Header template
+ * @param  {string|Function} [$0.templates.item] Item template, provided with `name`, `count`, `isRefined`, `url` data properties
+ * @param  {string|Function} [$0.templates.footer] Footer template
+ * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
+ * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no results match
+ * @param  {Object} [$0.cssClasses] CSS classes to add to the wrapping elements
+ * @param  {string|string[]} [$0.cssClasses.root] CSS class to add to the root element
+ * @param  {string|string[]} [$0.cssClasses.header] CSS class to add to the header element
+ * @param  {string|string[]} [$0.cssClasses.body] CSS class to add to the body element
+ * @param  {string|string[]} [$0.cssClasses.footer] CSS class to add to the footer element
+ * @param  {string|string[]} [$0.cssClasses.list] CSS class to add to the list element
+ * @param  {string|string[]} [$0.cssClasses.item] CSS class to add to each item element
+ * @param  {string|string[]} [$0.cssClasses.link] CSS class to add to each link element
+ * @param  {string|string[]} [$0.cssClasses.disabledLink] CSS class to add to each disabled link (when using the default template)
+ * @param  {string|string[]} [$0.cssClasses.star] CSS class to add to each star element (when using the default template)
+ * @param  {string|string[]} [$0.cssClasses.emptyStar] CSS class to add to each empty star element (when using the default template)
+ * @param  {string|string[]} [$0.cssClasses.active] CSS class to add to each active element
+ * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @return {Object} widget
  */
 export default function starRating({

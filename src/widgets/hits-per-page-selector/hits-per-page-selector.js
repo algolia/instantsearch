@@ -37,20 +37,6 @@ const renderer = ({
   );
 };
 
-/**
- * Instantiate a dropdown element to choose the number of hits to display per page
- * @function hitsPerPageSelector
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.options Array of objects defining the different values and labels
- * @param  {number} options.options[0].value number of hits to display per page
- * @param  {string} options.options[0].label Label to display in the option
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
- * @return {Object}
- */
-
 const usage = `Usage:
 hitsPerPageSelector({
   container,
@@ -59,6 +45,19 @@ hitsPerPageSelector({
   [ autoHideContainer=false ]
 })`;
 
+/**
+ * Instantiate a dropdown element to choose the number of hits to display per page
+ * @function hitsPerPageSelector
+ * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param  {Array} $0.options Array of objects defining the different values and labels
+ * @param  {number} $0.options[0].value number of hits to display per page
+ * @param  {string} $0.options[0].label Label to display in the option
+ * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
+ * @param  {Object} [$0.cssClasses] CSS classes to be added
+ * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each `<option>`
+ * @return {Object} widget
+ */
 export default function hitsPerPageSelector({
   container,
   options,
@@ -84,9 +83,7 @@ export default function hitsPerPageSelector({
 
   try {
     const makeHitsPerPageSelector = connectHitsPerPageSelector(specializedRenderer);
-    return makeHitsPerPageSelector({
-      options,
-    });
+    return makeHitsPerPageSelector({options});
   } catch (e) {
     throw new Error(usage);
   }

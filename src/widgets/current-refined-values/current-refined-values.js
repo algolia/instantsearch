@@ -1,15 +1,6 @@
-import {
-  isDomElement,
-  bemHelper,
-  getContainerNode,
-  prepareTemplateProps,
-} from '../../lib/utils.js';
-import cx from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
-import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
-import defaultTemplates from './defaultTemplates';
+import cx from 'classnames';
 
 import isUndefined from 'lodash/isUndefined';
 import isBoolean from 'lodash/isBoolean';
@@ -17,8 +8,18 @@ import isString from 'lodash/isString';
 import isArray from 'lodash/isArray';
 import isPlainObject from 'lodash/isPlainObject';
 import isFunction from 'lodash/isFunction';
-
 import reduce from 'lodash/reduce';
+
+import CurrentRefinedValuesWithHOCs from '../../components/CurrentRefinedValues/CurrentRefinedValues.js';
+import connectCurrentRefinedValues from '../../connectors/current-refined-values/connectCurrentRefinedValues.js';
+import defaultTemplates from './defaultTemplates';
+
+import {
+  isDomElement,
+  bemHelper,
+  getContainerNode,
+  prepareTemplateProps,
+} from '../../lib/utils.js';
 
 const bem = bemHelper('ais-current-refined-values');
 
@@ -85,36 +86,35 @@ currentRefinedValues({
 
 /**
  * Instantiate a list of current refinements with the possibility to clear them.
- *
  * @function currentRefinedValues
- * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} [$0.attributes] Attributes configuration
- * @param  {string} [$0.attributes[].name] Required attribute name
- * @param  {string} [$0.attributes[].label] Attribute label (passed to the item template)
- * @param  {string|Function} [$0.attributes[].template] Attribute specific template
- * @param  {Function} [$0.attributes[].transformData] Attribute specific transformData
- * @param  {boolean} [$0.onlyListedAttributes=false] Only use declared attributes
- * @param  {boolean|string} [$0.clearAll='before'] Clear all position (one of ('before', 'after', false))
- * @param  {Object} [$0.templates] Templates to use for the widget
- * @param  {string|Function} [$0.templates.header] Header template
- * @param  {string|Function} [$0.templates.item] Item template
- * @param  {string|Function} [$0.templates.clearAll] Clear all template
- * @param  {string|Function} [$0.templates.footer] Footer template
- * @param  {Function} [$0.transformData] Object containing the transformData functions
- * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no current refinements
- * @param  {Object} [$0.cssClasses] CSS classes to be added
- * @param  {string} [$0.cssClasses.root] CSS classes added to the root element
- * @param  {string} [$0.cssClasses.header] CSS classes added to the header element
- * @param  {string} [$0.cssClasses.body] CSS classes added to the body element
- * @param  {string} [$0.cssClasses.clearAll] CSS classes added to the clearAll element
- * @param  {string} [$0.cssClasses.list] CSS classes added to the list element
- * @param  {string} [$0.cssClasses.item] CSS classes added to the item element
- * @param  {string} [$0.cssClasses.link] CSS classes added to the link element
- * @param  {string} [$0.cssClasses.count] CSS classes added to the count element
- * @param  {string} [$0.cssClasses.footer] CSS classes added to the footer element
- * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @param {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param {Array} [$0.attributes = []] Attributes configuration
+ * @param {string} $0.attributes[].name Required attribute name
+ * @param {string} $0.attributes[].label Attribute label (passed to the item template)
+ * @param {string|Function} $0.attributes[].template Attribute specific template
+ * @param {Function} $0.attributes[].transformData Attribute specific transformData
+ * @param {boolean} $0.onlyListedAttributes=false] Only use declared attributes
+ * @param {boolean|string} [$0.clearAll='before'] Clear all position (one of ('before', 'after', false))
+ * @param {Object} [$0.templates] Templates to use for the widget
+ * @param {string|Function} [$0.templates.header] Header template
+ * @param {string|Function} [$0.templates.item] Item template
+ * @param {string|Function} [$0.templates.clearAll] Clear all template
+ * @param {string|Function} [$0.templates.footer] Footer template
+ * @param {Function} [$0.transformData] Object containing the transformData functions
+ * @param {Function} [$0.transformData.item] Function to change the object passed to the `item` template
+ * @param {boolean} [$0.autoHideContainer=true] Hide the container when no current refinements
+ * @param {Object} [$0.cssClasses] CSS classes to be added
+ * @param {string} [$0.cssClasses.root] CSS classes added to the root element
+ * @param {string} [$0.cssClasses.header] CSS classes added to the header element
+ * @param {string} [$0.cssClasses.body] CSS classes added to the body element
+ * @param {string} [$0.cssClasses.clearAll] CSS classes added to the clearAll element
+ * @param {string} [$0.cssClasses.list] CSS classes added to the list element
+ * @param {string} [$0.cssClasses.item] CSS classes added to the item element
+ * @param {string} [$0.cssClasses.link] CSS classes added to the link element
+ * @param {string} [$0.cssClasses.count] CSS classes added to the count element
+ * @param {string} [$0.cssClasses.footer] CSS classes added to the footer element
+ * @param {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
  * @returns {Object} A currentRefinedValues widget instance
  */
 export default function currentRefinedValues({
@@ -193,11 +193,7 @@ export default function currentRefinedValues({
 
   try {
     const makeCurrentRefinedValues = connectCurrentRefinedValues(specializedRenderer);
-    return makeCurrentRefinedValues({
-      attributes,
-      onlyListedAttributes,
-      clearAll,
-    });
+    return makeCurrentRefinedValues({attributes, onlyListedAttributes, clearAll});
   } catch (e) {
     throw new Error(usage);
   }

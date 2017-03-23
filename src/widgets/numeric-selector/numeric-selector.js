@@ -46,16 +46,16 @@ const usage = `Usage: numericSelector({
 /**
  * Instantiate a dropdown element to choose the number of hits to display per page
  * @function numericSelector
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the numeric attribute to use
- * @param  {Array} options.options Array of objects defining the different values and labels
- * @param  {number} options.options[i].value The numerical value to refine with
- * @param  {string} options.options[i].label Label to display in the option
- * @param  {string} [options.operator='='] The operator to use to refine
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
+ * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param  {string} $0.attributeName Name of the numeric attribute to use
+ * @param  {Array} $0.options Array of objects defining the different values and labels
+ * @param  {number} $0.options[i].value The numerical value to refine with
+ * @param  {string} $0.options[i].label Label to display in the option
+ * @param  {string} [$0.operator='='] The operator to use to refine
+ * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
+ * @param  {Object} [$0.cssClasses] CSS classes to be added
+ * @param  {string|string[]} [$0.cssClasses.root] CSS classes added to the parent `<select>`
+ * @param  {string|string[]} [$0.cssClasses.item] CSS classes added to each `<option>`
  * @return {Object} a numeric selector widget instance
  */
 export default function numericSelector({
@@ -77,11 +77,11 @@ export default function numericSelector({
   };
 
   const specializedRenderer = renderer({autoHideContainer, containerNode, cssClasses});
-  const makeNumericSelector = connectNumericSelector(specializedRenderer);
 
-  return makeNumericSelector({
-    operator,
-    attributeName,
-    options,
-  });
+  try {
+    const makeNumericSelector = connectNumericSelector(specializedRenderer);
+    return makeNumericSelector({operator, attributeName, options});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

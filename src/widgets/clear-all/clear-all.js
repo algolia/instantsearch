@@ -108,6 +108,10 @@ export default function clearAll({
     templates,
   });
 
-  const makeWidget = connectClearAll(specializedRenderer);
-  return makeWidget({excludeAttributes});
+  try {
+    const makeWidget = connectClearAll(specializedRenderer);
+    return makeWidget({excludeAttributes});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }
