@@ -1,8 +1,26 @@
 import {
+  checkRendering,
   getRefinements,
   clearRefinementsFromState,
   clearRefinementsAndSearch,
 } from '../../lib/utils.js';
+
+const usage = `Usage:
+var customClearAll = connectClearAll(function render(params, isFirstRendering) {
+  // params = {
+  //   clearAll,
+  //   hasRefinements,
+  //   createURL,
+  //   instantSearchInstance,
+  // }
+});
+search.addWidget(
+  customClearAll({
+    [excludeAttributes = []]
+  });
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
+`;
 
 const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
   if (hasRefinements) {
@@ -26,12 +44,13 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 /**
  * Connects a rendering with the clearAll business logic.
  * @function connectClearAll
- * @param {function(ClearAllRenderingOptions)} renderClearAll - function that renders the clear all widget
+ * @param {function(ClearAllRenderingOptions)} renderFn function that renders the clear all widget
  * @return {function(CustomClearAllWidgetOptions)} - a widget factory for a clear all widget
  */
-const connectClearAll = renderClearAll => ({
-    excludeAttributes = [],
-  } = {}) => ({
+export default function connectClearAll(renderFn) {
+  checkRendering(renderFn, usage);
+
+  return ({excludeAttributes = []}) => ({
     init({helper, instantSearchInstance, createURL}) {
       const clearAttributes = getRefinements({}, helper.state)
         .map(one => one.attributeName)
@@ -39,7 +58,7 @@ const connectClearAll = renderClearAll => ({
       const hasRefinements = clearAttributes.length !== 0;
       const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
 
-      renderClearAll({
+      renderFn({
         clearAll: () => {},
         hasRefinements,
         createURL: preparedCreateURL,
@@ -54,7 +73,7 @@ const connectClearAll = renderClearAll => ({
       const hasRefinements = clearAttributes.length !== 0;
       const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
 
-      renderClearAll({
+      renderFn({
         clearAll: clearAll({helper, clearAttributes, hasRefinements}),
         hasRefinements,
         createURL: preparedCreateURL,
@@ -62,5 +81,4 @@ const connectClearAll = renderClearAll => ({
       }, false);
     },
   });
-
-export default connectClearAll;
+}
