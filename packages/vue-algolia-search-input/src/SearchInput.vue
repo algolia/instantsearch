@@ -5,11 +5,7 @@
          autocomplete="off"
          spellcheck="false"
          class="alg-search-input"
-
-         @input="onInput"
-         @change="onInput"
-
-         :value="query"
+         v-model="query"
          :name="name"
   >
 </template>
@@ -26,22 +22,21 @@
       }
     },
     computed: {
-      query () {
-        return this.searchStore.query
-      }
-    },
-    methods: {
-      onInput (e) {
-        this.searchStore.stop()
-        this.searchStore.query = e.target.value
-        this.$emit('query', e.target.value)
+      query: {
+        get () {
+          return this.searchStore.query
+        },
+        set (value) {
+          this.searchStore.stop()
+          this.searchStore.query = value
+          this.$emit('query', value)
 
-        // We here ensure we give the time to listeners to alter the store's state
-        // without triggering in between ghost queries.
-        this.$nextTick(function () {
-          this.searchStore.start()
-        })
-
+          // We here ensure we give the time to listeners to alter the store's state
+          // without triggering in between ghost queries.
+          this.$nextTick(function () {
+            this.searchStore.start()
+          })
+        }
       }
     }
   }
