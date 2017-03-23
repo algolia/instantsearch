@@ -20,11 +20,11 @@ const renderer = ({
   renderState,
   templates,
   transformData,
+  showMoreLabel,
 }) => ({
   hits,
   results,
   showMore,
-  showMoreLabel,
   isLastPage,
   instantSearchInstance,
 }, isFirstRendering) => {
@@ -74,6 +74,7 @@ const usage = `
 Usage:
 infiniteHits({
   container,
+  [ showMoreLabel ],
   [ cssClasses.{root,empty,item}={} ],
   [ templates.{empty,item} | templates.{empty} ],
   [ transformData.{empty,item} | transformData.{empty} ],
@@ -105,12 +106,14 @@ export default function infiniteHits({
     cssClasses,
     transformData,
     templates,
+    showMoreLabel,
     renderState: {},
   });
 
-  const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
-  return makeInfiniteHits({
-    showMoreLabel,
-    hitsPerPage,
-  });
+  try {
+    const makeInfiniteHits = connectInfiniteHits(specializedRenderer);
+    return makeInfiniteHits({hitsPerPage});
+  } catch (e) {
+    throw new Error(usage);
+  }
 }

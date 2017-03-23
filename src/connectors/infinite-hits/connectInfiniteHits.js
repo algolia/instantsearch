@@ -6,15 +6,13 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
   //   hits,
   //   results,
   //   showMore,
-  //   showMoreLabel,
   //   isLastPage,
   //   instantSearchInstance,
   // }
 });
 search.addWidget(
   customInfiniteHits({
-    [showMoreLabel = 'Show more results'],
-    [hitsPerPage = 20],
+    [hitsPerPage = 20]
   });
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectInfiniteHits.html
@@ -22,7 +20,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
- * @param {string} showMoreLabel Label used on the show more button
  * @param {number} hitsPerPage The number of hits to display per page
  */
 
@@ -31,7 +28,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Array} hits
  * @property {Object} results
  * @property {function} showMore
- * @property {string} showMoreLabel
  * @property {boolean} isLastPage
  * @property {InstantSearch} instantSearchInstance
  */
@@ -45,7 +41,6 @@ export default function connectInfiniteHits(renderFn) {
   checkRendering(renderFn, usage);
 
   return ({
-    showMoreLabel = 'Show more results',
     hitsPerPage = 20,
   }) => {
     let hitsCache = [];
@@ -63,7 +58,6 @@ export default function connectInfiniteHits(renderFn) {
           hits: hitsCache,
           results: undefined,
           showMore: this.showMore,
-          showMoreLabel,
           isLastPage: true,
           instantSearchInstance,
         }, true);
@@ -82,7 +76,6 @@ export default function connectInfiniteHits(renderFn) {
           hits: hitsCache,
           results,
           showMore: this.showMore,
-          showMoreLabel,
           isLastPage,
           instantSearchInstance,
         }, false);
