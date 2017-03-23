@@ -1,9 +1,9 @@
 {
-  "name": "vue-algolia-playground",
+  "private": true,
+  "name": "example-store",
   "version": "1.0.0",
   "description": "Algolia + Vue.js playground",
   "author": "Raymond Rutjes <raymond.rutjes@gmail.com>",
-  "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js"

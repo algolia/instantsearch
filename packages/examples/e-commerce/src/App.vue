@@ -8,7 +8,7 @@
           </h1>
         </div>
         <div class="col-md-10 col-sm-9">
-          <search-input placeholder="Search product by name or reference..."></search-input>
+          <search-input placeholder="Search product by name or reference..." />
 
           <clear-search>
             <i class="fa fa-times-circle" aria-hidden="true"></i>
@@ -19,43 +19,23 @@
       <div class="row">
         <div class="col-md-2 col-sm-3">
           <navigation-tree-facet :attributes="['category', 'sub_category']">
-            <div slot="header">
-              <h3>Browse by</h3>
-            </div>
-            <!--template scope="{count, active, value}">
-              &gt; {{ value }}
-            </template-->
+            <h3 slot="header">Browse by</h3>
           </navigation-tree-facet>
 
           <price-range-facet attribute="price">
-            <div slot="header">
-              <h3>Price</h3>
-            </div>
+            <h3 slot="header">Price</h3>
           </price-range-facet>
 
           <search-facet attribute="materials">
-            <div slot="header">
-              <h3>Material</h3>
-            </div>
+            <h3 slot="header">Material</h3>
           </search-facet>
 
           <search-facet attribute="colors">
-            <div slot="header">
-              <h3>Color</h3>
-            </div>
-            <template scope="{count, active, value}">
-              <span>{{value}} - {{count}}</span>
-            </template>
+            <h3 slot="header">Color</h3>
           </search-facet>
 
           <rating-facet attribute="rating">
-            <template scope="{value, min, max, count}">
-              <template v-for="n in max">
-                <span v-if="n <= value">&#9733</span>
-                <span v-else>&#9734</span>
-              </template>
-              &amp; up ({{count}})
-            </template>
+            <h3 slot="header">Rating</h3>
           </rating-facet>
 
         </div>
@@ -90,26 +70,14 @@
                   </div>
                   <div class="result__price">${{result.price}}</div>
                 </div>
-                <div class="clearfix"></div>
               </div>
             </template>
           </search-results>
 
-          <no-results>
-            <template scope="{query}">This is my custom stuff <u>{{query}}</u></template>
-          </no-results>
+          <no-results/>
 
-          <div class="clearfix"></div>
+          <ranged-pagination class="pagination"/>
 
-          <div class="pagination-container">
-            <ranged-pagination class="pagination">
-              <template slot="first">&lt; First page</template>
-              <template slot="previous">&lt; Previous page</template>
-              <template scope="{value, active}">{{value + 1}}</template>
-              <template slot="next">&gt; Next page</template>
-              <template slot="last">&gt; Last page</template>
-            </ranged-pagination>
-          </div>
         </div>
       </div>
     </search-store>
