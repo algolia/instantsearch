@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import expectJSX from 'expect-jsx';

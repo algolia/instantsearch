@@ -70,39 +70,6 @@ const renderer = ({
   );
 };
 
-/**
- * Instantiate a list of current refinements with the possibility to clear them
- * @function currentRefinedValues
- * @param  {string|DOMElement}  options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array}             [option.attributes] Attributes configuration
- * @param  {string}            [option.attributes[].name] Required attribute name
- * @param  {string}            [option.attributes[].label] Attribute label (passed to the item template)
- * @param  {string|Function}   [option.attributes[].template] Attribute specific template
- * @param  {Function}          [option.attributes[].transformData] Attribute specific transformData
- * @param  {boolean|string}    [option.clearAll='before'] Clear all position (one of ('before', 'after', false))
- * @param  {boolean}           [options.onlyListedAttributes=false] Only use declared attributes
- * @param  {Object}            [options.templates] Templates to use for the widget
- * @param  {string|Function}   [options.templates.header] Header template
- * @param  {string|Function}   [options.templates.item] Item template
- * @param  {string|Function}   [options.templates.clearAll] Clear all template
- * @param  {string|Function}   [options.templates.footer] Footer template
- * @param  {Function}          [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean}           [options.autoHideContainer=true] Hide the container when no current refinements
- * @param  {Object}            [options.cssClasses] CSS classes to be added
- * @param  {string}            [options.cssClasses.root] CSS classes added to the root element
- * @param  {string}            [options.cssClasses.header] CSS classes added to the header element
- * @param  {string}            [options.cssClasses.body] CSS classes added to the body element
- * @param  {string}            [options.cssClasses.clearAll] CSS classes added to the clearAll element
- * @param  {string}            [options.cssClasses.list] CSS classes added to the list element
- * @param  {string}            [options.cssClasses.item] CSS classes added to the item element
- * @param  {string}            [options.cssClasses.link] CSS classes added to the link element
- * @param  {string}            [options.cssClasses.count] CSS classes added to the count element
- * @param  {string}            [options.cssClasses.footer] CSS classes added to the footer element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
-
 const usage = `Usage:
 currentRefinedValues({
   container,
@@ -116,12 +83,46 @@ currentRefinedValues({
   [ collapsible=false ]
 })`;
 
+/**
+ * Instantiate a list of current refinements with the possibility to clear them.
+ *
+ * @function currentRefinedValues
+ * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
+ * @param  {Array} [$0.attributes] Attributes configuration
+ * @param  {string} [$0.attributes[].name] Required attribute name
+ * @param  {string} [$0.attributes[].label] Attribute label (passed to the item template)
+ * @param  {string|Function} [$0.attributes[].template] Attribute specific template
+ * @param  {Function} [$0.attributes[].transformData] Attribute specific transformData
+ * @param  {boolean} [$0.onlyListedAttributes=false] Only use declared attributes
+ * @param  {boolean|string} [$0.clearAll='before'] Clear all position (one of ('before', 'after', false))
+ * @param  {Object} [$0.templates] Templates to use for the widget
+ * @param  {string|Function} [$0.templates.header] Header template
+ * @param  {string|Function} [$0.templates.item] Item template
+ * @param  {string|Function} [$0.templates.clearAll] Clear all template
+ * @param  {string|Function} [$0.templates.footer] Footer template
+ * @param  {Function} [$0.transformData] Object containing the transformData functions
+ * @param  {Function} [$0.transformData.item] Function to change the object passed to the `item` template
+ * @param  {boolean} [$0.autoHideContainer=true] Hide the container when no current refinements
+ * @param  {Object} [$0.cssClasses] CSS classes to be added
+ * @param  {string} [$0.cssClasses.root] CSS classes added to the root element
+ * @param  {string} [$0.cssClasses.header] CSS classes added to the header element
+ * @param  {string} [$0.cssClasses.body] CSS classes added to the body element
+ * @param  {string} [$0.cssClasses.clearAll] CSS classes added to the clearAll element
+ * @param  {string} [$0.cssClasses.list] CSS classes added to the list element
+ * @param  {string} [$0.cssClasses.item] CSS classes added to the item element
+ * @param  {string} [$0.cssClasses.link] CSS classes added to the link element
+ * @param  {string} [$0.cssClasses.count] CSS classes added to the count element
+ * @param  {string} [$0.cssClasses.footer] CSS classes added to the footer element
+ * @param  {object|boolean} [$0.collapsible=false] Hide the widget body and footer when clicking on header
+ * @param  {boolean} [$0.collapsible.collapsed] Initial collapsed state of a collapsible widget
+ * @returns {Object} A currentRefinedValues widget instance
+ */
 export default function currentRefinedValues({
+  container,
   attributes = [],
   onlyListedAttributes = false,
   clearAll = 'before',
   templates = defaultTemplates,
-  container,
   transformData,
   autoHideContainer = true,
   cssClasses: userCssClasses = {},

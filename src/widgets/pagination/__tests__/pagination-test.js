@@ -5,7 +5,6 @@ import expectJSX from 'expect-jsx';
 expect.extend(expectJSX);
 import pagination from '../pagination';
 import Pagination from '../../../components/Pagination/Pagination';
-import connectPagination from '../../../connectors/pagination/connectPagination.js';
 
 describe('pagination call', () => {
   it('throws an exception when no container', () => {

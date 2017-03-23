@@ -13,7 +13,6 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 /**
  * @typedef {Object} CustomClearAllWidgetOptions
  * @param {string[]} excludeAttributes - all the attributes that should not be displayed
- * @return {widget}
  */
 
 /**
@@ -26,6 +25,7 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 
 /**
  * Connects a rendering with the clearAll business logic.
+ * @function connectClearAll
  * @param {function(ClearAllRenderingOptions)} renderClearAll - function that renders the clear all widget
  * @return {function(CustomClearAllWidgetOptions)} - a widget factory for a clear all widget
  */

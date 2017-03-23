@@ -1,8 +1,5 @@
-import React from 'react';
 import sinon from 'sinon';
 import hitsPerPageSelector from '../hits-per-page-selector';
-import Selector from '../../../components/Selector';
-import renderer from 'react-test-renderer';
 
 describe('hitsPerPageSelector call', () => {
   it('throws an exception when no options', () => {

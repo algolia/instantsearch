@@ -1,6 +1,3 @@
-
-
-
 import generateRanges from '../generate-ranges';
 
 describe('generateRanges()', () => {

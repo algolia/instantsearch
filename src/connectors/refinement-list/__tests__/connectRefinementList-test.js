@@ -1,5 +1,3 @@
-
-
 import sinon from 'sinon';
 
 import algoliasearchHelper from 'algoliasearch-helper';

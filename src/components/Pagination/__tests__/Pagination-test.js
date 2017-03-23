@@ -1,7 +1,6 @@
 import React from 'react';
 import sinon from 'sinon';
 import Pagination from '../Pagination';
-import PaginationLink from '../PaginationLink';
 import renderer from 'react-test-renderer';
 
 describe('Pagination', () => {
