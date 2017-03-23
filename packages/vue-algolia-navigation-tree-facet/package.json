@@ -10,9 +10,9 @@
   "unpkg": "dist/vue-algolia-navigation-tree-facet.js",
   "scripts": {
     "build": "yarn build-umd && yarn build-es && yarn build-cjs",
-    "build-umd": "rollup -c ../../build/rollup.umd.config.js",
-    "build-es": "rollup -c ../../build/rollup.es.config.js",
-    "build-cjs": "rollup -c ../../build/rollup.cjs.config.js"
+    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
+    "build:es": "rollup -c ../../build/rollup.es.config.js",
+    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
   },
   "dependencies": {
     "algolia-search-store": "*",
