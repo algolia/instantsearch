@@ -1,8 +1,10 @@
 <template>
-  <div class="alg-search-results">
+  <div class="alg-search-results" v-if="show">
+    <slot name="header"></slot>
     <slot v-for="result in results" :result="result">
       Result 'objectID': {{ result.objectID }}
     </slot>
+    <slot name="footer"></slot>
   </div>
 </template>
 
@@ -61,6 +63,9 @@
         }
 
         return this.stackedResults
+      },
+      show () {
+        return this.results.length > 0
       }
     }
   }
