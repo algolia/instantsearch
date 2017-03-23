@@ -1,6 +1,6 @@
-# vue-algolia-playground
+# e-commerce example
 
-> Algolia + Vue.js playground
+> Algolia + Vue.js in an e-commerce site
 
 ## Build Setup
 
