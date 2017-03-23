@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "example-store",
+  "name": "example-e-commerce",
   "version": "1.0.0",
   "description": "Algolia + Vue.js playground",
   "author": "Raymond Rutjes <raymond.rutjes@gmail.com>",

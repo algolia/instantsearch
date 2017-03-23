@@ -1,5 +1,5 @@
 {
-  "name": "multi-index",
+  "name": "example-multi-index",
   "description": "Example of multi-index queries - Vue.js + Algolia",
   "version": "1.0.0",
   "author": "Raymond Rutjes <raymond.rutjes@gmail.com>",
