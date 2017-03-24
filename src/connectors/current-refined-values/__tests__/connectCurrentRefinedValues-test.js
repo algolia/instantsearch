@@ -14,6 +14,7 @@ describe('connectCurrentRefinedValues', () => {
     const makeWidget = connectCurrentRefinedValues(rendering);
     const widget = makeWidget({
       container,
+      foo: 'bar', // dummy param to test `widgetParams`
     });
 
     expect(widget.getConfiguration).toBe(undefined);
@@ -34,6 +35,10 @@ describe('connectCurrentRefinedValues', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.refinements).toEqual([]);
+    expect(firstRenderingOptions.widgetParams).toEqual({
+      container,
+      foo: 'bar',
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -48,6 +53,10 @@ describe('connectCurrentRefinedValues', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.refinements).toEqual([]);
+    expect(secondRenderingOptions.widgetParams).toEqual({
+      container,
+      foo: 'bar',
+    });
   });
 
   it('Provide a function to clear the refinements at each step', () => {

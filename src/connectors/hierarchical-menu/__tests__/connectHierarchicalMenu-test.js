@@ -48,6 +48,10 @@ describe('connectHierarchicalMenu', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      attributes: ['category', 'sub_category'],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -59,6 +63,10 @@ describe('connectHierarchicalMenu', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      attributes: ['category', 'sub_category'],
+    });
   });
 
   it('Provide a function to clear the refinements at each step', () => {

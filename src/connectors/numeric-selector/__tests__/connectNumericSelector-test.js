@@ -54,6 +54,11 @@ describe('connectNumericSelector', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.currentValue).toBe(listOptions[0].value);
+    expect(firstRenderingOptions.widgetParams).toEqual({
+      container,
+      attributeName: 'numerics',
+      options: listOptions,
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{nbHits: 0}]),
@@ -68,6 +73,11 @@ describe('connectNumericSelector', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.currentValue).toBe(listOptions[0].value);
+    expect(secondRenderingOptions.widgetParams).toEqual({
+      container,
+      attributeName: 'numerics',
+      options: listOptions,
+    });
   });
 
   it('Reads the default value from the URL if possible', () => {

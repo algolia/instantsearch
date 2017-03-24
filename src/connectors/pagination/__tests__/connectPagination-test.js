@@ -16,6 +16,7 @@ describe('connectPagination', () => {
     const makeWidget = connectPagination(rendering);
     const widget = makeWidget({
       container,
+      foo: 'bar', // dummy param for `widgetParams` test
     });
 
     // does not have a getConfiguration method
@@ -41,6 +42,10 @@ describe('connectPagination', () => {
       expect(firstRenderingOptions.currentPage).toBe(0);
       expect(firstRenderingOptions.nbHits).toBe(0);
       expect(firstRenderingOptions.nbPages).toBe(0);
+      expect(firstRenderingOptions.widgetParams).toEqual({
+        container,
+        foo: 'bar',
+      });
     }
 
     widget.render({

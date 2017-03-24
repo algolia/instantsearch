@@ -39,6 +39,10 @@ describe('connectHits', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      hitsPerPage: 10,
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -50,6 +54,10 @@ describe('connectHits', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      hitsPerPage: 10,
+    });
   });
 
   it('Provides the hits and the whole results', () => {

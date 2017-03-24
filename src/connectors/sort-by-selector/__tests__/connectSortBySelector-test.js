@@ -10,7 +10,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectSortBySelector', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -20,10 +19,7 @@ describe('connectSortBySelector', () => {
       {label: 'Sort products by relevance', name: 'relevance'},
       {label: 'Sort products by price', name: 'priceASC'},
     ];
-    const widget = makeWidget({
-      container,
-      indices,
-    });
+    const widget = makeWidget({indices});
 
     expect(widget.getConfiguration).toBe(undefined);
 
@@ -43,8 +39,9 @@ describe('connectSortBySelector', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {currentValue, options} = rendering.lastCall.args[0];
+      const {currentValue, options, widgetParams} = rendering.lastCall.args[0];
       expect(currentValue).toBe(helper.state.index);
+      expect(widgetParams).toEqual({indices});
       expect(options).toEqual([
         {label: 'Sort products by relevance', value: 'relevance'},
         {label: 'Sort products by price', value: 'priceASC'},

@@ -16,6 +16,7 @@ describe('connectClearAll', () => {
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
       container,
+      foo: 'bar', // dummy param to test `widgetParams`
     });
 
     expect(widget.getConfiguration).toBe(undefined);
@@ -36,6 +37,10 @@ describe('connectClearAll', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.hasRefinements).toBe(false);
+    expect(firstRenderingOptions.widgetParams).toEqual({
+      container,
+      foo: 'bar', // dummy param to test `widgetParams`
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),

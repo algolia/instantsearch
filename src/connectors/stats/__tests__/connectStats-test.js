@@ -38,13 +38,14 @@ describe('connectStats', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query} = rendering.lastCall.args[0];
+      const {hitsPerPage, nbHits, nbPages, page, processingTimeMS, query, widgetParams} = rendering.lastCall.args[0];
       expect(hitsPerPage).toBe(helper.state.hitsPerPage);
       expect(nbHits).toBe(0);
       expect(nbPages).toBe(0);
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(-1);
       expect(query).toBe(helper.state.query);
+      expect(widgetParams).toEqual({container});
     }
 
     widget.render({

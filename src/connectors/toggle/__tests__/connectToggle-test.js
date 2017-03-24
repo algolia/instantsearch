@@ -9,7 +9,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectToggle', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -18,7 +17,6 @@ describe('connectToggle', () => {
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      container,
       attributeName,
       label,
     });
@@ -44,7 +42,7 @@ describe('connectToggle', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {value} = rendering.lastCall.args[0];
+      const {value, widgetParams} = rendering.lastCall.args[0];
       expect(value).toEqual({
         name: label,
         count: null,
@@ -59,6 +57,11 @@ describe('connectToggle', () => {
           isRefined: false,
           count: 0,
         },
+      });
+
+      expect(widgetParams).toEqual({
+        attributeName,
+        label,
       });
     }
 

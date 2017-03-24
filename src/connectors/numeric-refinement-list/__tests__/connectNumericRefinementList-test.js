@@ -40,6 +40,15 @@ describe('connectNumericRefinementList', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      attributeName: 'numerics',
+      options: [
+        {name: 'below 10', end: 10},
+        {name: '10 - 20', start: 10, end: 20},
+        {name: 'more than 20', start: 20},
+      ],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{nbHits: 0}]),
@@ -51,6 +60,15 @@ describe('connectNumericRefinementList', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      attributeName: 'numerics',
+      options: [
+        {name: 'below 10', end: 10},
+        {name: '10 - 20', start: 10, end: 20},
+        {name: 'more than 20', start: 20},
+      ],
+    });
   });
 
   it('Provide a function to update the refinements at each step', () => {

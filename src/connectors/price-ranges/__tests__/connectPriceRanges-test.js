@@ -72,12 +72,16 @@ describe('connectPriceRanges', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values for the first rendering
-      const {items} = rendering.lastCall.args[0];
+      const {items, widgetParams} = rendering.lastCall.args[0];
       expect(items).toEqual([
         {to: 10, url: '#'}, {from: 10, to: 13, url: '#'}, {from: 13, to: 16, url: '#'},
         {from: 16, to: 19, url: '#'}, {from: 19, to: 22, url: '#'}, {from: 22, to: 25, url: '#'},
         {from: 25, to: 28, url: '#'}, {from: 28, url: '#'},
       ]);
+      expect(widgetParams).toEqual({
+        container,
+        attributeName,
+      });
     }
   });
 

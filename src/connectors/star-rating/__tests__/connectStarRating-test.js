@@ -9,7 +9,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectStarRating', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -17,7 +16,6 @@ describe('connectStarRating', () => {
 
     const attributeName = 'grade';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 
@@ -42,8 +40,9 @@ describe('connectStarRating', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {items} = rendering.lastCall.args[0];
+      const {items, widgetParams} = rendering.lastCall.args[0];
       expect(items).toEqual([]);
+      expect(widgetParams).toEqual({attributeName});
     }
 
     widget.render({

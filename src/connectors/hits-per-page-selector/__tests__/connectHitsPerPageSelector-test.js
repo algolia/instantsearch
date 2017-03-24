@@ -42,6 +42,13 @@ describe('connectHitsPerPageSelector', () => {
     expect(rendering.callCount).toBe(1);
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      options: [
+        {value: 3, label: '3 items per page'},
+        {value: 10, label: '10 items per page'},
+      ],
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -53,6 +60,13 @@ describe('connectHitsPerPageSelector', () => {
     // test that rendering has been called during init with isFirstRendering = false
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
+    expect(rendering.lastCall.args[0].widgetParams).toEqual({
+      container,
+      options: [
+        {value: 3, label: '3 items per page'},
+        {value: 10, label: '10 items per page'},
+      ],
+    });
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {

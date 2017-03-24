@@ -17,6 +17,7 @@ describe('connectSearchBox', () => {
 
     const widget = makeWidget({
       container,
+      foo: 'bar', // dummy param passed to `renderFn`
     });
 
     expect(widget.getConfiguration).toBe(undefined);
@@ -37,8 +38,9 @@ describe('connectSearchBox', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {query} = rendering.lastCall.args[0];
+      const {query, widgetParams} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
+      expect(widgetParams).toEqual({container, foo: 'bar'});
     }
 
     widget.render({
@@ -54,8 +56,9 @@ describe('connectSearchBox', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {query} = rendering.lastCall.args[0];
+      const {query, widgetParams} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
+      expect(widgetParams).toEqual({container, foo: 'bar'});
     }
   });
 

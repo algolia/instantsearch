@@ -130,6 +130,10 @@ describe('connectRefinementList', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.canRefine).toBe(false);
+    expect(firstRenderingOptions.widgetParams).toEqual({
+      attributeName: 'myFacet',
+      limit: 9,
+    });
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -144,6 +148,10 @@ describe('connectRefinementList', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.canRefine).toBe(false);
+    expect(secondRenderingOptions.widgetParams).toEqual({
+      attributeName: 'myFacet',
+      limit: 9,
+    });
   });
 
   it('Provide a function to clear the refinements at each step', () => {
