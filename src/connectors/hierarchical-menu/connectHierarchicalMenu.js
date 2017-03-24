@@ -36,18 +36,18 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} HierarchicalMenuRenderingOptions
- * @property {string} attributeNameKey
- * @property {function} createURL
- * @property {Object[]} items
- * @property {function} refine
- * @property {InstantSearch} instantSearchInstance
+ * @property {string} attributeNameKey the key to be used on the items
+ * @property {function} createURL function that create a url for the next state
+ * @property {Object[]} items the values to be rendered
+ * @property {function} refine set the path of the hierarchical filter and triggers a new search
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
   * Connects a rendering function with the toggle business logic.
   * @param {function(HierarchicalMenuRenderingOptions)} renderFn function that renders the toggle widget
-  * @return {function(CustomHierarchicalMenuWidgetOptions)} a widget factory for toggle widget
+  * @return {function(CustomHierarchicalMenuWidgetOptions)} a custom toggle widget factory
   */
 export default function connectHierarchicalMenu(renderFn) {
   checkRendering(renderFn, usage);
