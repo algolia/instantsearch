@@ -7,13 +7,11 @@ import connectHierarchicalMenu from '../connectHierarchicalMenu.js';
 
 describe('connectHierarchicalMenu', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
-      container,
       attributes: ['category', 'sub_category'],
     });
 
@@ -49,7 +47,6 @@ describe('connectHierarchicalMenu', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       attributes: ['category', 'sub_category'],
     });
 
@@ -64,17 +61,14 @@ describe('connectHierarchicalMenu', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       attributes: ['category', 'sub_category'],
     });
   });
 
   it('Provide a function to clear the refinements at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
-      container,
       attributes: ['category', 'sub_category'],
     });
 
@@ -113,11 +107,9 @@ describe('connectHierarchicalMenu', () => {
   });
 
   it('provides the correct facet values', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHierarchicalMenu(rendering);
     const widget = makeWidget({
-      container,
       attributes: ['category', 'subCategory'],
     });
 

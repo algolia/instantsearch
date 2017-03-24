@@ -9,14 +9,12 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectSearchBox', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectSearchBox(rendering);
 
     const widget = makeWidget({
-      container,
       foo: 'bar', // dummy param passed to `renderFn`
     });
 
@@ -40,7 +38,7 @@ describe('connectSearchBox', () => {
       // should provide good values for the first rendering
       const {query, widgetParams} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({container, foo: 'bar'});
+      expect(widgetParams).toEqual({foo: 'bar'});
     }
 
     widget.render({
@@ -58,18 +56,15 @@ describe('connectSearchBox', () => {
       // should provide good values after the first search
       const {query, widgetParams} = rendering.lastCall.args[0];
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({container, foo: 'bar'});
+      expect(widgetParams).toEqual({foo: 'bar'});
     }
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectSearchBox(rendering);
 
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     const helper = jsHelper(fakeClient);
     helper.search = sinon.stub();
@@ -109,7 +104,6 @@ describe('connectSearchBox', () => {
   });
 
   it('queryHook parameter let the dev control the behavior of the search', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectSearchBox(rendering);
 
@@ -118,7 +112,6 @@ describe('connectSearchBox', () => {
     const queryHook = sinon.spy((q, search) => { if (letSearchThrough) search(q); });
 
     const widget = makeWidget({
-      container,
       queryHook,
     });
 

@@ -9,13 +9,11 @@ describe('connectClearAll', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
     const widget = makeWidget({
-      container,
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
@@ -38,7 +36,6 @@ describe('connectClearAll', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.hasRefinements).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      container,
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
@@ -65,12 +62,9 @@ describe('connectClearAll', () => {
     helper.search = sinon.stub();
     helper.toggleRefinement('myFacet', 'myValue');
 
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     widget.init({
       helper,
@@ -107,12 +101,9 @@ describe('connectClearAll', () => {
     helper.toggleRefinement('aFacet', 'some value');
     helper.search = sinon.stub();
 
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     widget.init({
       helper,
@@ -140,12 +131,9 @@ describe('connectClearAll', () => {
     const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
 
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectClearAll(rendering);
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     widget.init({
       helper,

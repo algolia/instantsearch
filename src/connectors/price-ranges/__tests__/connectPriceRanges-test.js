@@ -9,7 +9,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectPriceRanges', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -17,7 +16,6 @@ describe('connectPriceRanges', () => {
 
     const attributeName = 'price';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 
@@ -79,21 +77,17 @@ describe('connectPriceRanges', () => {
         {from: 25, to: 28, url: '#'}, {from: 28, url: '#'},
       ]);
       expect(widgetParams).toEqual({
-        container,
         attributeName,
       });
     }
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
-
     const rendering = sinon.stub();
     const makeWidget = connectPriceRanges(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 

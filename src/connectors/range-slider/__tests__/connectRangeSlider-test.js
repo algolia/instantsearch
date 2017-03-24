@@ -9,7 +9,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectRangeSlider', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -17,7 +16,6 @@ describe('connectRangeSlider', () => {
 
     const attributeName = 'price';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 
@@ -47,7 +45,6 @@ describe('connectRangeSlider', () => {
       expect(range).toEqual({min: 0, max: 0});
       expect(start).toEqual([-Infinity, Infinity]);
       expect(widgetParams).toEqual({
-        container,
         attributeName,
       });
     }
@@ -86,26 +83,25 @@ describe('connectRangeSlider', () => {
   });
 
   it('Accepts some user bounds', () => {
-    const container = document.createElement('div');
     const makeWidget = connectRangeSlider(() => {});
 
     const attributeName = 'price';
 
-    expect(makeWidget({container, attributeName, min: 0}).getConfiguration()).toEqual({
+    expect(makeWidget({attributeName, min: 0}).getConfiguration()).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
         [attributeName]: {'>=': [0]},
       },
     });
 
-    expect(makeWidget({container, attributeName, max: 100}).getConfiguration()).toEqual({
+    expect(makeWidget({attributeName, max: 100}).getConfiguration()).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
         [attributeName]: {'<=': [100]},
       },
     });
 
-    expect(makeWidget({container, attributeName, min: 0, max: 100}).getConfiguration()).toEqual({
+    expect(makeWidget({attributeName, min: 0, max: 100}).getConfiguration()).toEqual({
       disjunctiveFacets: [attributeName],
       numericRefinements: {
         [attributeName]: {
@@ -117,14 +113,11 @@ describe('connectRangeSlider', () => {
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
-
     const rendering = sinon.stub();
     const makeWidget = connectRangeSlider(rendering);
 
     const attributeName = 'price';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 

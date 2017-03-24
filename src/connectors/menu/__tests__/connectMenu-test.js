@@ -69,11 +69,9 @@ describe('connectMenu', () => {
   });
 
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const widget = makeWidget({
-      container,
       attributeName: 'myFacet',
       limit: 9,
     });
@@ -108,7 +106,6 @@ describe('connectMenu', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.canRefine).toBe(false);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      container,
       attributeName: 'myFacet',
       limit: 9,
     });
@@ -127,7 +124,6 @@ describe('connectMenu', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.canRefine).toBe(false);
     expect(secondRenderingOptions.widgetParams).toEqual({
-      container,
       attributeName: 'myFacet',
       limit: 9,
     });

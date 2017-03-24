@@ -9,7 +9,6 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectNumericSelector', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -20,7 +19,6 @@ describe('connectNumericSelector', () => {
       {name: '30', value: 30},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
@@ -55,7 +53,6 @@ describe('connectNumericSelector', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.currentValue).toBe(listOptions[0].value);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
@@ -74,14 +71,12 @@ describe('connectNumericSelector', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.currentValue).toBe(listOptions[0].value);
     expect(secondRenderingOptions.widgetParams).toEqual({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
   });
 
   it('Reads the default value from the URL if possible', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
@@ -92,7 +87,6 @@ describe('connectNumericSelector', () => {
       {name: '30', value: 30},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
@@ -121,7 +115,6 @@ describe('connectNumericSelector', () => {
   });
 
   it('Provide a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
@@ -130,7 +123,6 @@ describe('connectNumericSelector', () => {
       {name: '30', value: 30},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
@@ -175,7 +167,6 @@ describe('connectNumericSelector', () => {
   });
 
   it('provides isRefined for the currently selected value', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericSelector(rendering);
     const listOptions = [
@@ -184,7 +175,6 @@ describe('connectNumericSelector', () => {
       {name: '30', value: 30},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });

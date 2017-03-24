@@ -88,14 +88,6 @@ describe('connectRefinementList', () => {
     });
   });
 
-  it('calls render method at init time', () => {
-
-  });
-
-  it('calls render method when we have new results', () => {
-
-  });
-
   it('Renders during init and render', () => {
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
