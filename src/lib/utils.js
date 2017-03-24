@@ -20,6 +20,7 @@ export {
   escapeRefinement,
   unescapeRefinement,
   checkRendering,
+  isReactElement,
 };
 
 /**
@@ -263,4 +264,10 @@ function checkRendering(rendering, usage) {
   if (rendering === undefined || typeof rendering !== 'function') {
     throw new Error(usage);
   }
+}
+
+const REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+function isReactElement(object) {
+  return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
 }

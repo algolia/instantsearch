@@ -1,12 +1,12 @@
 import React from 'react';
+import hogan from 'hogan.js';
 
 import curry from 'lodash/curry';
 import cloneDeep from 'lodash/cloneDeep';
 import mapValues from 'lodash/mapValues';
-
-import hogan from 'hogan.js';
-
 import isEqual from 'lodash/isEqual';
+
+import {isReactElement} from '../lib/utils.js';
 
 export class PureTemplate extends React.Component {
   shouldComponentUpdate(nextProps) {
@@ -31,8 +31,8 @@ export class PureTemplate extends React.Component {
       return null;
     }
 
-    if (React.isValidElement(content)) {
-      return <div {...this.props.rootProps}>{content}</div>;
+    if (isReactElement(content)) {
+      throw new Error('Support for templates as React elements has been removed, please use react-instantsearch');
     }
 
     return <div {...this.props.rootProps} dangerouslySetInnerHTML={{__html: content}} />;
