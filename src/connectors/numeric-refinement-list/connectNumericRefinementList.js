@@ -1,96 +1,104 @@
 import find from 'lodash/find';
 import includes from 'lodash/includes';
 
-/**
- * Instantiate a list of refinements based on a facet
- * @function numericRefinementList
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {string} options.attributeName Name of the attribute for filtering
- * @param  {Object[]} options.options List of all the options
- * @param  {string} options.options[].name Name of the option
- * @param  {number} [options.options[].start] Low bound of the option (>=)
- * @param  {number} [options.options[].end] High bound of the option (<=)
- * @param  {Object} [options.templates] Templates to use for the widget
- * @param  {string|Function} [options.templates.header] Header template
- * @param  {string|Function} [options.templates.item] Item template, provided with `name`, `isRefined`, `url` data properties
- * @param  {string|Function} [options.templates.footer] Footer template
- * @param  {Function} [options.transformData.item] Function to change the object passed to the `item` template
- * @param  {boolean} [options.autoHideContainer=true] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to add to the wrapping elements
- * @param  {string|string[]} [options.cssClasses.root] CSS class to add to the root element
- * @param  {string|string[]} [options.cssClasses.header] CSS class to add to the header element
- * @param  {string|string[]} [options.cssClasses.body] CSS class to add to the body element
- * @param  {string|string[]} [options.cssClasses.footer] CSS class to add to the footer element
- * @param  {string|string[]} [options.cssClasses.list] CSS class to add to the list element
- * @param  {string|string[]} [options.cssClasses.label] CSS class to add to each link element
- * @param  {string|string[]} [options.cssClasses.item] CSS class to add to each item element
- * @param  {string|string[]} [options.cssClasses.radio] CSS class to add to each radio element (when using the default template)
- * @param  {string|string[]} [options.cssClasses.active] CSS class to add to each active element
- * @param  {object|boolean} [options.collapsible=false] Hide the widget body and footer when clicking on header
- * @param  {boolean} [options.collapsible.collapsed] Initial collapsed state of a collapsible widget
- * @return {Object}
- */
+import {checkRendering} from '../../lib/utils.js';
+
 const usage = `Usage:
 connectNumericRefinementList(renderer)({
   attributeName,
   options
 })`;
-const connectNumericRefinementList = numericRefinementListRendering => widgetParams => {
-  const {
+/**
+ * @typedef {Object} NumericRefinementListWidgetOptions
+ * @property {string} attributeName Name of the attribute for filtering
+ * @property {Object[]} options List of all the options
+ * @property {string} options[].name Name of the option
+ * @property {number} [options[].start] Low bound of the option (>=)
+ * @property {number} [options[].end] High bound of the option (<=)
+ */
+
+/**
+ * @typedef {Object} NumericRefinementListRenderingOptions
+ * @property {function(string)} createURL create URL's for the next state, the string is the name of the selected option
+ * @property {FacetValue[]} facetValues the list of available choices
+ * @property {string} facetValues[].name Name of the option
+ * @property {number} [facetValues[].start] Low bound of the option (>=)
+ * @property {number} [facetValues[].end] High bound of the option (<=)
+ * @property {number} [facetValues[].isRefined] true if the value is selected
+ * @property {number} [facetValues[].attributeName] the name of the attribute in the records
+ * @property {boolean} hasNoResults true if there were no results retrieved in the previous search
+ * @property {function(string)} toggleRefinement set the selected value and trigger a new search
+ * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ */
+
+/**
+ * Instantiate a list of refinements based on a facet
+ *
+ * @function connectNumericRefinementList
+ * @param {function(NumericRefinementListRenderingOptions, boolean)} renderFn function that render the numeric refinement list
+ * @return {function(NumericRefinementListWidgetOptions)} a custom numeric refinement list widget factory
+ */
+export default function connectNumericRefinementList(renderFn) {
+  checkRendering(renderFn, usage);
+
+  return widgetParams => {
+    const {
       attributeName,
       options,
     } = widgetParams;
 
-  if (!attributeName || !options) {
-    throw new Error(usage);
-  }
+    if (!attributeName || !options) {
+      throw new Error(usage);
+    }
 
-  return {
-    init({helper, createURL, instantSearchInstance}) {
-      this._toggleRefinement = facetValue => {
-        const refinedState = refine(helper.state, attributeName, options, facetValue);
-        helper.setState(refinedState).search();
-      };
+    return {
+      init({helper, createURL, instantSearchInstance}) {
+        this._toggleRefinement = facetValue => {
+          const refinedState = refine(helper.state, attributeName, options, facetValue);
+          helper.setState(refinedState).search();
+        };
 
-      this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
+        this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
 
-      const facetValues = options.map(facetValue =>
-        ({
-          ...facetValue,
-          isRefined: isRefined(helper.state, attributeName, facetValue),
-          attributeName,
-        })
-      );
+        const facetValues = options.map(facetValue =>
+          ({
+            ...facetValue,
+            isRefined: isRefined(helper.state, attributeName, facetValue),
+            attributeName,
+          })
+        );
 
-      numericRefinementListRendering({
-        createURL: this._createURL(helper.state),
-        facetValues,
-        hasNoResults: true,
-        toggleRefinement: this._toggleRefinement,
-        instantSearchInstance,
-        widgetParams,
-      }, true);
-    },
-    render({results, state, instantSearchInstance}) {
-      const facetValues = options.map(facetValue =>
-        ({
-          ...facetValue,
-          isRefined: isRefined(state, attributeName, facetValue),
-          attributeName,
-        })
-      );
+        renderFn({
+          createURL: this._createURL(helper.state),
+          facetValues,
+          hasNoResults: true,
+          toggleRefinement: this._toggleRefinement,
+          instantSearchInstance,
+          widgetParams,
+        }, true);
+      },
+      render({results, state, instantSearchInstance}) {
+        const facetValues = options.map(facetValue =>
+          ({
+            ...facetValue,
+            isRefined: isRefined(state, attributeName, facetValue),
+            attributeName,
+          })
+        );
 
-      numericRefinementListRendering({
-        createURL: this._createURL(state),
-        facetValues,
-        hasNoResults: results.nbHits === 0,
-        toggleRefinement: this._toggleRefinement,
-        instantSearchInstance,
-        widgetParams,
-      }, false);
-    },
+        renderFn({
+          createURL: this._createURL(state),
+          facetValues,
+          hasNoResults: results.nbHits === 0,
+          toggleRefinement: this._toggleRefinement,
+          instantSearchInstance,
+          widgetParams,
+        }, false);
+      },
+    };
   };
-};
+}
 
 function isRefined(state, attributeName, option) {
   const currentRefinements = state.getNumericRefinements(attributeName);
@@ -171,5 +179,3 @@ function hasNumericRefinement(currentRefinements, operator, value) {
 
   return hasOperatorRefinements && includesValue;
 }
-
-export default connectNumericRefinementList;
