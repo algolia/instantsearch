@@ -1,4 +1,3 @@
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -71,7 +70,6 @@ describe('connectSortBySelector', () => {
   });
 
   it('Provides a function to update the index at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectSortBySelector(rendering);
 
@@ -80,7 +78,6 @@ describe('connectSortBySelector', () => {
       {label: 'Sort products by price', name: 'priceASC'},
     ];
     const widget = makeWidget({
-      container,
       indices,
     });
 

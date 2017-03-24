@@ -7,13 +7,11 @@ describe('connectCurrentRefinedValues', () => {
   it('Renders during init and render', () => {
     const helper = jsHelper({addAlgoliaAgent: () => {}});
     helper.search = sinon.stub();
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectCurrentRefinedValues(rendering);
     const widget = makeWidget({
-      container,
       foo: 'bar', // dummy param to test `widgetParams`
     });
 
@@ -36,7 +34,6 @@ describe('connectCurrentRefinedValues', () => {
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.refinements).toEqual([]);
     expect(firstRenderingOptions.widgetParams).toEqual({
-      container,
       foo: 'bar',
     });
 
@@ -54,7 +51,6 @@ describe('connectCurrentRefinedValues', () => {
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.refinements).toEqual([]);
     expect(secondRenderingOptions.widgetParams).toEqual({
-      container,
       foo: 'bar',
     });
   });
@@ -66,12 +62,9 @@ describe('connectCurrentRefinedValues', () => {
       facets: ['myFacet'],
     });
     helper.search = sinon.stub();
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectCurrentRefinedValues(rendering);
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     helper.addFacetRefinement('myFacet', 'value');
 

@@ -9,13 +9,11 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectPagination', () => {
   it('connectPagination - Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectPagination(rendering);
     const widget = makeWidget({
-      container,
       foo: 'bar', // dummy param for `widgetParams` test
     });
 
@@ -43,7 +41,6 @@ describe('connectPagination', () => {
       expect(firstRenderingOptions.nbHits).toBe(0);
       expect(firstRenderingOptions.nbPages).toBe(0);
       expect(firstRenderingOptions.widgetParams).toEqual({
-        container,
         foo: 'bar',
       });
     }
@@ -74,14 +71,10 @@ describe('connectPagination', () => {
   });
 
   it('Provides a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
-
     const rendering = sinon.stub();
     const makeWidget = connectPagination(rendering);
 
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     const helper = jsHelper(fakeClient);
     helper.search = sinon.stub();

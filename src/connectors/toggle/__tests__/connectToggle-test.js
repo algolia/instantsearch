@@ -106,14 +106,12 @@ describe('connectToggle', () => {
   });
 
   it('Provides a function to add/remove a facet value', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectToggle(rendering);
 
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      container,
       attributeName,
       label,
     });
@@ -238,14 +236,12 @@ describe('connectToggle', () => {
   });
 
   it('Provides a function to toggle between two values', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectToggle(rendering);
 
     const attributeName = 'isShippingFree';
     const label = 'Free shipping?';
     const widget = makeWidget({
-      container,
       attributeName,
       label,
       values: {

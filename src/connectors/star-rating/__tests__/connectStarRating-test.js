@@ -85,13 +85,11 @@ describe('connectStarRating', () => {
   });
 
   it('Provides a function to update the index at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectStarRating(rendering);
 
     const attributeName = 'grade';
     const widget = makeWidget({
-      container,
       attributeName,
     });
 

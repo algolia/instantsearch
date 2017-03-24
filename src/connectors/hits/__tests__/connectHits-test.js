@@ -9,13 +9,11 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectHits', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
     const widget = makeWidget({
-      container,
       hitsPerPage: 10,
     });
 
@@ -40,7 +38,6 @@ describe('connectHits', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       hitsPerPage: 10,
     });
 
@@ -55,18 +52,14 @@ describe('connectHits', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       hitsPerPage: 10,
     });
   });
 
   it('Provides the hits and the whole results', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHits(rendering);
-    const widget = makeWidget({
-      container,
-    });
+    const widget = makeWidget();
 
     const helper = jsHelper(fakeClient, '', {});
     helper.search = sinon.stub();

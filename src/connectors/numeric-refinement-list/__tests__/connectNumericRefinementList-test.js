@@ -6,13 +6,11 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectNumericRefinementList', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: [
         {name: 'below 10', end: 10},
@@ -41,7 +39,6 @@ describe('connectNumericRefinementList', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       attributeName: 'numerics',
       options: [
         {name: 'below 10', end: 10},
@@ -61,7 +58,6 @@ describe('connectNumericRefinementList', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       attributeName: 'numerics',
       options: [
         {name: 'below 10', end: 10},
@@ -72,11 +68,9 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('Provide a function to update the refinements at each step', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: [
         {name: 'below 10', end: 10},
@@ -134,11 +128,9 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('provides the correct facet values', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: [
         {name: 'below 10', end: 10},
@@ -180,7 +172,6 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('provides isRefined for the currently selected value', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);
     const listOptions = [
@@ -191,7 +182,6 @@ describe('connectNumericRefinementList', () => {
       {name: 'void'},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });
@@ -232,7 +222,6 @@ describe('connectNumericRefinementList', () => {
   });
 
   it('when the state is cleared, the "no value" value should be refined', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectNumericRefinementList(rendering);
     const listOptions = [
@@ -243,7 +232,6 @@ describe('connectNumericRefinementList', () => {
       {name: 'void'},
     ];
     const widget = makeWidget({
-      container,
       attributeName: 'numerics',
       options: listOptions,
     });

@@ -1,4 +1,3 @@
-
 import sinon from 'sinon';
 
 import jsHelper from 'algoliasearch-helper';
@@ -10,14 +9,13 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectStats', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectStats(rendering);
 
     const widget = makeWidget({
-      container,
+      foo: 'bar', // dummy param to test `widgetParams`
     });
 
     expect(widget.getConfiguration).toEqual(undefined);
@@ -45,7 +43,7 @@ describe('connectStats', () => {
       expect(page).toBe(helper.state.page);
       expect(processingTimeMS).toBe(-1);
       expect(query).toBe(helper.state.query);
-      expect(widgetParams).toEqual({container});
+      expect(widgetParams).toEqual({foo: 'bar'});
     }
 
     widget.render({

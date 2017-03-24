@@ -8,13 +8,11 @@ const fakeClient = {addAlgoliaAgent: () => {}};
 
 describe('connectHitsPerPageSelector', () => {
   it('Renders during init and render', () => {
-    const container = document.createElement('div');
     // test that the dummyRendering is called with the isFirstRendering
     // flag set accordingly
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
@@ -43,7 +41,6 @@ describe('connectHitsPerPageSelector', () => {
     // test if isFirstRendering is true during init
     expect(rendering.lastCall.args[1]).toBe(true);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
@@ -61,7 +58,6 @@ describe('connectHitsPerPageSelector', () => {
     expect(rendering.callCount).toBe(2);
     expect(rendering.lastCall.args[1]).toBe(false);
     expect(rendering.lastCall.args[0].widgetParams).toEqual({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
@@ -70,11 +66,9 @@ describe('connectHitsPerPageSelector', () => {
   });
 
   it('Provide a function to change the current hits per page, and provide the current value', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
@@ -117,11 +111,9 @@ describe('connectHitsPerPageSelector', () => {
   });
 
   it('provides the current hitsPerPage value', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
@@ -157,11 +149,9 @@ describe('connectHitsPerPageSelector', () => {
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
-    const container = document.createElement('div');
     const rendering = sinon.stub();
     const makeWidget = connectHitsPerPageSelector(rendering);
     const widget = makeWidget({
-      container,
       options: [
         {value: 3, label: '3 items per page'},
         {value: 10, label: '10 items per page'},
