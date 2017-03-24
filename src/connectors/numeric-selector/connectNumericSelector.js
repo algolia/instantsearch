@@ -31,17 +31,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} NumericSelectorRenderingOptions
- * @property {string} currentValue
- * @property {{ value: string, label: string }[]} options
- * @property {function} setValue
- * @property {boolean} hasNoResults
- * @property {InstantSearch} instantSearchInstance
+ * @property {string} currentValue the currently selected value
+ * @property {{ value: string, label: string }[]} the different values and labels of the selector
+ * @property {function} setValue updates the change with the selected value
+ * @property {boolean} hasNoResults indicates if the last search returned any value
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
   * Connects a rendering function with the numeric selector business logic.
-  * @param {function(NumericSelectorRenderingOptions)} renderFn function that renders the numeric selector widget
+  * @param {function(NumericSelectorRenderingOptions, boolean)} renderFn function that renders the numeric selector widget
   * @return {function(CustomNumericSelectorWidgetOptions)} a widget factory for numeric selector widget
   */
 export default function connectNumericSelector(renderFn) {
