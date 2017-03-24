@@ -6,6 +6,7 @@ var customSearchBox = connectMenu(function render(params, isFirstRendering) {
   //   query,
   //   onHistoryChange,
   //   search,
+  //   instantSearchInstance
   // }
 });
 search.addWidget(
@@ -25,9 +26,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} SearchBoxRenderingOptions
- * @property {string} query
- * @property {function} onHistoryChange
- * @property {function} search
+ * @property {string} query the query from the last search
+ * @property {function} onHistoryChange set a callback when the browser history changes
+ * @property {function} search triggers the search with a `query` as parameter
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
  /**
@@ -39,7 +41,7 @@ export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 
   return ({queryHook}) => ({
-    init({helper, onHistoryChange}) {
+    init({helper, onHistoryChange, instantSearchInstance}) {
       this._search = (() => {
         let previousQuery;
 
@@ -62,14 +64,16 @@ export default function connectSearchBox(renderFn) {
         query: helper.state.query,
         onHistoryChange: this._onHistoryChange,
         search: this._search,
+        instantSearchInstance,
       }, true);
     },
 
-    render({helper}) {
+    render({helper, instantSearchInstance}) {
       renderFn({
         query: helper.state.query,
         onHistoryChange: this._onHistoryChange,
         search: this._search,
+        instantSearchInstance,
       }, false);
     },
   });
