@@ -5,56 +5,19 @@ import '../shams/Object.freeze.js';
 import '../shims/Object.getPrototypeOf.js';
 
 import toFactory from 'to-factory';
-import InstantSearch from './InstantSearch.js';
 import algoliasearchHelper from 'algoliasearch-helper';
-import clearAll from '../widgets/clear-all/clear-all.js';
-import currentRefinedValues from '../widgets/current-refined-values/current-refined-values.js';
-import hierarchicalMenu from '../widgets/hierarchical-menu/hierarchical-menu.js';
-import hits from '../widgets/hits/hits.js';
-import hitsPerPageSelector from '../widgets/hits-per-page-selector/hits-per-page-selector.js';
-import infiniteHits from '../widgets/infinite-hits/infinite-hits.js';
-import menu from '../widgets/menu/menu.js';
-import refinementList from '../widgets/refinement-list/refinement-list.js';
-import numericRefinementList from '../widgets/numeric-refinement-list/numeric-refinement-list.js';
-import numericSelector from '../widgets/numeric-selector/numeric-selector.js';
-import pagination from '../widgets/pagination/pagination.js';
-import priceRanges from '../widgets/price-ranges/price-ranges.js';
-import searchBox from '../widgets/search-box/search-box.js';
-import rangeSlider from '../widgets/range-slider/range-slider.js';
-import sortBySelector from '../widgets/sort-by-selector/sort-by-selector.js';
-import starRating from '../widgets/star-rating/star-rating.js';
-import stats from '../widgets/stats/stats.js';
-import toggle from '../widgets/toggle/toggle.js';
-import analytics from '../widgets/analytics/analytics.js';
+
+import InstantSearch from './InstantSearch.js';
 import version from './version.js';
 
 import * as connectors from '../connectors/index.js';
+import * as widgets from '../widgets/index.js';
 
 const instantsearch = Object.assign(toFactory(InstantSearch), {
-  connectors,
-  version,
-  widgets: {
-    analytics,
-    clearAll,
-    currentRefinedValues,
-    hierarchicalMenu,
-    hits,
-    hitsPerPageSelector,
-    infiniteHits,
-    menu,
-    refinementList,
-    numericRefinementList,
-    numericSelector,
-    pagination,
-    priceRanges,
-    searchBox,
-    rangeSlider,
-    sortBySelector,
-    starRating,
-    stats,
-    toggle,
-  },
   createQueryString: algoliasearchHelper.url.getQueryStringFromState,
+  connectors,
+  widgets,
+  version,
 });
 
 export default instantsearch;
