@@ -15,7 +15,7 @@ const renderer = ({
 }) => ({
   currentValue,
   options,
-  setValue,
+  refine,
   hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
@@ -27,7 +27,7 @@ const renderer = ({
       cssClasses={cssClasses}
       currentValue={currentValue}
       options={options}
-      setValue={setValue}
+      setValue={refine}
       shouldAutoHideContainer={shouldAutoHideContainer}
     />,
     containerNode

@@ -100,9 +100,9 @@ describe('connectSortBySelector', () => {
     { // first rendering
       expect(helper.state.index).toBe(indices[0].name);
       const renderOptions = rendering.lastCall.args[0];
-      const {setValue, currentValue} = renderOptions;
+      const {refine, currentValue} = renderOptions;
       expect(currentValue).toBe(helper.state.index);
-      setValue('bip');
+      refine('bip');
       expect(helper.state.index).toBe('bip');
       expect(helper.search.callCount).toBe(1);
     }
@@ -117,9 +117,9 @@ describe('connectSortBySelector', () => {
     { // Second rendering
       expect(helper.state.index).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {setValue, currentValue} = renderOptions;
+      const {refine, currentValue} = renderOptions;
       expect(currentValue).toBe('bip');
-      setValue('bop');
+      refine('bop');
       expect(helper.state.index).toBe('bop');
       expect(helper.search.callCount).toBe(2);
     }

@@ -5,8 +5,9 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
   // params = {
   //   currentValue,
   //   options,
-  //   setValue,
+  //   refine,
   //   hasNoResults,
+  //   instantSearchInstance
   // }
 });
 search.addWidget(
@@ -24,10 +25,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} SortBySelectorRenderingOptions
- * @property {string} currentValue
- * @property {Object[]} options
- * @property {function} setValue
- * @property {boolean} hasNoResults
+ * @property {string} currentValue the currently selected index
+ * @property {Object[]} options all the available indices
+ * @property {function} refine switch indices and do a new search
+ * @property {boolean} hasNoResults a boolean that indicates if there were no results during that last search
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
  /**
@@ -46,7 +48,7 @@ export default function connectSortBySelector(renderFn) {
     const selectorOptions = indices.map(({label, name}) => ({label, value: name}));
 
     return {
-      init({helper}) {
+      init({helper, instantSearchInstance}) {
         const currentIndex = helper.getIndex();
         const isIndexInList = indices.find(({name}) => name === currentIndex);
 
@@ -61,17 +63,19 @@ export default function connectSortBySelector(renderFn) {
         renderFn({
           currentValue: currentIndex,
           options: selectorOptions,
-          setValue: this.setIndex,
+          refine: this.setIndex,
           hasNoResults: true,
+          instantSearchInstance,
         }, true);
       },
 
-      render({helper, results}) {
+      render({helper, results, instantSearchInstance}) {
         renderFn({
           currentValue: helper.getIndex(),
           options: selectorOptions,
-          setValue: this.setIndex,
+          refine: this.setIndex,
           hasNoResults: results.nbHits === 0,
+          instantSearchInstance,
         }, false);
       },
     };
