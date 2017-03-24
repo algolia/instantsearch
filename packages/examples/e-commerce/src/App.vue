@@ -42,6 +42,7 @@
         <div class="col-md-10 col-sm-9">
           <div class="search-controls">
 
+
             <sort-by-selector :indices="[
                 {name: 'ikea', label: 'Relevance'},
                 {name: 'ikea_price_asc', label: 'Lowest price'},
@@ -51,7 +52,10 @@
 
             <results-per-page-selector :options="[12, 24, 48]"/>
 
+            <algolia-powered-by />
+
             <search-stats/>
+
           </div>
 
           <search-results>
@@ -113,6 +117,14 @@
     border-radius: 2px;
     margin: 20px 0;
     margin-right: 5%;
+  }
+
+  .alg-powered-by {
+    float: right;
+    margin-right: 10px;
+    svg {
+      vertical-align: bottom;
+    }
   }
 
   .search-controls {
