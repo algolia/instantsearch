@@ -24,15 +24,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} PriceRangesRenderingOptions
- * @property {Object[]} items
- * @property {function} refine
+ * @property {Object[]} items the prices ranges to display
+ * @property {function} refine select or unselect a price range and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance
  */
 
  /**
   * Connects a rendering function with the price ranges business logic.
-  * @param {function(PriceRangesRenderingOptions)} renderFn function that renders the price ranges widget
+  * @param {function(PriceRangesRenderingOptions, boolean)} renderFn function that renders the price ranges widget
   * @return {function(CustomPriceRangesWidgetOptions)} a widget factory for price ranges widget
   */
 export default function connectPriceRanges(renderFn) {
