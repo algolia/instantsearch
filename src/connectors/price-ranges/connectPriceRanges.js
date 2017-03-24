@@ -27,7 +27,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object[]} items the prices ranges to display
  * @property {function} refine select or unselect a price range and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
- * @property {InstantSearch} instantSearchInstance
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
  /**

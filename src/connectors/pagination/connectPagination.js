@@ -31,6 +31,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} nbPages the number of pages for the result set
  * @property {function} setPage set the current page and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
  /**
@@ -45,7 +46,7 @@ export default function connectPagination(renderFn) {
     const {maxPages} = widgetParams;
 
     return {
-      init({helper, createURL}) {
+      init({helper, createURL, instantSearchInstance}) {
         this.setPage = page => {
           helper.setPage(page);
           helper.search();
@@ -60,6 +61,7 @@ export default function connectPagination(renderFn) {
           nbPages: 0,
           setPage: this.setPage,
           widgetParams,
+          instantSearchInstance,
         }, true);
       },
 
@@ -69,7 +71,7 @@ export default function connectPagination(renderFn) {
           : nbPages;
       },
 
-      render({results, state}) {
+      render({results, state, instantSearchInstance}) {
         renderFn({
           createURL: this.createURL(state),
           currentPage: state.page,
@@ -77,6 +79,7 @@ export default function connectPagination(renderFn) {
           nbHits: results.nbHits,
           nbPages: this.getMaxPage(results),
           widgetParams,
+          instantSearchInstance,
         }, false);
       },
     };
