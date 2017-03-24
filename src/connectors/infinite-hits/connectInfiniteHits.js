@@ -41,7 +41,7 @@ export default function connectInfiniteHits(renderFn) {
   checkRendering(renderFn, usage);
 
   return widgetParams => {
-    const {hitsPerPage = 20} = widgetParams;
+    const {hitsPerPage = 20} = widgetParams || {};
     let hitsCache = [];
     const getShowMore = helper => () => helper.nextPage().search();
 
