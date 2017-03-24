@@ -36,7 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the star rating business logic.
- * @param {function(StarRatingRenderingOptions)} renderFn function that renders the star rating widget
+ * @param {function(StarRatingRenderingOptions, boolean)} renderFn function that renders the star rating widget
  * @return {function(CustomStarRatingWidgetOptions)} a widget factory for star rating widget
  */
 export default function connectStarRating(renderFn) {

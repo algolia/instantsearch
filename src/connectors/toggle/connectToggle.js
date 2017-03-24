@@ -40,7 +40,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the toggle business logic.
- * @param {function(ToggleRenderingOptions)} renderFn function that renders the toggle widget
+ * @param {function(ToggleRenderingOptions, boolean)} renderFn function that renders the toggle widget
  * @return {function(CustomToggleWidgetOptions)} a widget factory for toggle widget
  */
 export default function connectToggle(renderFn) {

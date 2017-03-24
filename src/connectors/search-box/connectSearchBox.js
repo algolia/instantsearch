@@ -34,7 +34,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the search box business logic.
-  * @param {function(SearchBoxRenderingOptions)} renderFn function that renders the search box widget
+  * @param {function(SearchBoxRenderingOptions, boolean)} renderFn function that renders the search box widget
   * @return {function(CustomSearchBoxWidgetOptions)} a widget factory for search box widget
   */
 export default function connectSearchBox(renderFn) {

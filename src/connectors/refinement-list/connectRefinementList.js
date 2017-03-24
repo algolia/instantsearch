@@ -34,25 +34,30 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 };
 
 /**
- * refinementList connector, allows you to create your own refinement list and completely tune
- * the rendering of it.
- * @name connectRefinementList
- * @TODO: I do not know how to document the dual ()() call in an efficient way with jsDoc that will also be easy
- * to crawl with the doc crawler (maybe re-use exposed props and provided props but rename it for non react people?)
- * @param {function} renderFn The rendering function.
- * @providedProp isFirstRender
- * @providedProp isFromSearch
- * @providedProp createURL
- * @providedProp items
- * @providedProp refine
- * @providedProp searchForItems
- * @providedProp instantSearchInstance
- * @providedProp canRefine
- * @exposedProp attributeName
- * @exposedProp operator
- * @exposedProp limit
- * @exposedProp sortBy
- * @return {[type]}                         [description]
+ * @typedef {Object} RefinementListRenderingOptions
+ * @property {string} attributeName the attribute in the records that are used by the widget
+ * @property {string} operator how the filters are combined together
+ * @property {number} limit the max number of items displayed
+ * @property {string[]} sortBy how the values are ordered
+ */
+
+/**
+ * @typedef {Object} RefinementListRenderingOptions
+ * @property {Object[]} items the list of filtering values returned from Algolia
+ * @property {function} createURL create the next state url
+ * @property {function} refine set the next state url
+ * @property {function} searchForItems search for values inside the list
+ * @property {boolean} isFromSearch indicates if the values are from an index search
+ * @property {boolean} canRefine indicates if a refinement can be applied
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ */
+
+/**
+ * Creates a custom widget for a refinement list.
+ *
+ * @function connectRefinementList
+ * @param {function(RefinementListRenderingOptions, boolean)} renderFn function that renders the refinement list widget
+ * @returns {function(RefinementListWidgetOptions)} a custom refinement list widget factory
  */
 export default function connectRefinementList(renderFn) {
   checkRendering(renderFn, usage);

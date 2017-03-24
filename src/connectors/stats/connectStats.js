@@ -28,7 +28,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * Connects a rendering function with the stats business logic.
- * @param {function(StatsRenderingOptions)} renderFn function that renders the stats widget
+ * @param {function(StatsRenderingOptions, boolean)} renderFn function that renders the stats widget
  * @return {function} a widget factory for stats widget
  */
 export default function connectStats(renderFn) {
