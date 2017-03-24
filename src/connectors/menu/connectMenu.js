@@ -32,14 +32,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} MenuRenderingOptions
- * @property {Object[]} items
- * @property {Object} state
- * @property {function} createURL
- * @property {function} refine
- * @property {AlgoliaSearchHelper} helper
- * @property {InstantSearch} instantSearchInstance
- * @property {boolean} canRefine
+ * @property {Object[]} items the elements that can be refined for the current search results
+ * @property {function} createURL creates the URL for a single item name in the list
+ * @property {function} refine filter the search to item.name value
+ * @property {boolean} canRefine true if refinement can be applied
  * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
  /**
@@ -88,25 +86,21 @@ export default function connectMenu(renderFn) {
 
         renderFn({
           items: [],
-          state: helper.state,
           createURL: this._createURL,
           refine: this._refine,
-          helper: this._helper,
           instantSearchInstance,
           canRefine: false,
           widgetParams,
         }, true);
       },
 
-      render({results, state, instantSearchInstance}) {
+      render({results, instantSearchInstance}) {
         const items = results.getFacetValues(attributeName, {sortBy}).data || [];
 
         renderFn({
           items,
-          state,
           createURL: this._createURL,
           refine: this._refine,
-          helper: this._helper,
           instantSearchInstance,
           canRefine: items.length > 0,
           widgetParams,
