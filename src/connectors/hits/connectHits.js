@@ -37,8 +37,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return (widgetOptions = {}) => {
-    const {hitsPerPage = 20} = widgetOptions;
+  return (widgetParams = {}) => {
+    const {hitsPerPage = 20} = widgetParams;
 
     return {
       getConfiguration() {
@@ -50,7 +50,7 @@ export default function connectHits(renderFn) {
           hits: [],
           results: undefined,
           instantSearchInstance,
-          widgetOptions,
+          widgetParams,
         }, true);
       },
 
@@ -59,7 +59,7 @@ export default function connectHits(renderFn) {
           hits: results.hits,
           results,
           instantSearchInstance,
-          widgetOptions,
+          widgetParams,
         }, false);
       },
     };
