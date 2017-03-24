@@ -7,7 +7,6 @@ npm test
 # we need to build to run functional tests
 NODE_ENV=production npm run build
 INDEX_PAGE=index npm run test:functional
-INDEX_PAGE=index-preact npm run test:functional
 ./scripts/validate-commit-msgs.sh
 npm run docs:jsdoc # check we are able to generate docs
 
