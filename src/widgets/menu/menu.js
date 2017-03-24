@@ -44,7 +44,7 @@ const renderer = ({
     return;
   }
 
-  const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue)}));
+  const facetValues = items.map(facetValue => ({...facetValue, url: createURL(facetValue.name)}));
   const shouldAutoHideContainer = autoHideContainer && !canRefine;
 
   ReactDOM.render(
