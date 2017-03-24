@@ -82,15 +82,6 @@ exports[`Template without helpers can configure compilation options 1`] = `
 />
 `;
 
-exports[`Template without helpers supports templates as functions returning a React element 1`] = `
-<div>
-  <p>
-    it also works with 
-    functions
-  </p>
-</div>
-`;
-
 exports[`Template without helpers supports templates as functions returning a string 1`] = `
 <div
   dangerouslySetInnerHTML={

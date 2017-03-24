@@ -28,15 +28,14 @@ describe('Template', () => {
       expect(tree).toMatchSnapshot();
     });
 
-    it('supports templates as functions returning a React element', () => {
+    it('throws an error when templates as functions returning a React element', () => {
       const props = getProps({
-        templates: {test: templateData => <p>it also works with {templateData.type}</p>},
+        templates: {test: templateData => <p>it doesnt works with {templateData.type}</p>},
         data: {type: 'functions'},
       });
-      const tree = renderer.create(
+      expect(() => renderer.create(
         <PureTemplate {...props} />
-      ).toJSON();
-      expect(tree).toMatchSnapshot();
+      )).toThrow();
     });
 
     it('can configure compilation options', () => {
