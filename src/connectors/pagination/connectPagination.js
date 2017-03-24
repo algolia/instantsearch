@@ -25,17 +25,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef PaginationRenderingOptions
- * @property {function} createURL
- * @property {number} currentPage
- * @property {number} nbHits
- * @property {number} nbPages
- * @property {function} setPage
+ * @property {function(number)} createURL create URL's for the next state, the number is the page to generate the URL for
+ * @property {number} currentPage the number of the page currently displayed
+ * @property {number} nbHits the number of hits computed for the last query (can be approximated)
+ * @property {number} nbPages the number of pages for the result set
+ * @property {function} setPage set the current page and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
   * Connects a rendering function with the pagination business logic.
-  * @param {function(PaginationRenderingOptions)} renderFn function that renders the pagination widget
+  * @param {function(PaginationRenderingOptions, boolean)} renderFn function that renders the pagination widget
   * @return {function(CustomPaginationWidgetOptions)} a widget factory for pagination widget
   */
 export default function connectPagination(renderFn) {
