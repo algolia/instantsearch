@@ -35,7 +35,7 @@ InfiniteHits.propTypes = {
   }),
   hits: React.PropTypes.array,
   results: React.PropTypes.object,
-  showMore: React.PropTypes.function,
+  showMore: React.PropTypes.func,
   showMoreLabel: React.PropTypes.string,
   templateProps: React.PropTypes.object.isRequired,
   isLastPage: React.PropTypes.bool.isRequired,
