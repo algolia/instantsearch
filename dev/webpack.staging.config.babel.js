@@ -17,16 +17,16 @@ export default {
       test: /\.js$/, exclude: /node_modules/, loader: 'babel',
     }, {
       test: /\.html$/, exclude: /node_modules/, loader: 'raw',
-    }, {
-      test: require.resolve('react'), loader: 'expose?React',
-    }, {
-      test: require.resolve('react-dom'), loader: 'expose?ReactDOM',
     }],
   },
   // when module not found, find locally first
   // helps fixing the npm link not working with webpack
   // http://stackoverflow.com/a/33722844/147079
   resolve: {
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat',
+    },
     fallback: [join(__dirname, '..', 'node_modules')],
   },
   // same issue, for loaders like babel
