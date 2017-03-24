@@ -30,6 +30,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} nbHits
  * @property {number} nbPages
  * @property {function} setPage
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -40,38 +41,44 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectPagination(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({maxPages}) => ({
-    init({helper, createURL}) {
-      this.setPage = page => {
-        helper.setPage(page);
-        helper.search();
-      };
+  return widgetParams => {
+    const {maxPages} = widgetParams;
 
-      this.createURL = state => page => createURL(state.setPage(page));
+    return {
+      init({helper, createURL}) {
+        this.setPage = page => {
+          helper.setPage(page);
+          helper.search();
+        };
 
-      renderFn({
-        createURL: this.createURL(helper.state),
-        currentPage: helper.getPage() || 0,
-        nbHits: 0,
-        nbPages: 0,
-        setPage: this.setPage,
-      }, true);
-    },
+        this.createURL = state => page => createURL(state.setPage(page));
 
-    getMaxPage({nbPages}) {
-      return maxPages !== undefined
-        ? Math.min(maxPages, nbPages)
-        : nbPages;
-    },
+        renderFn({
+          createURL: this.createURL(helper.state),
+          currentPage: helper.getPage() || 0,
+          nbHits: 0,
+          nbPages: 0,
+          setPage: this.setPage,
+          widgetParams,
+        }, true);
+      },
 
-    render({results, state}) {
-      renderFn({
-        createURL: this.createURL(state),
-        currentPage: state.page,
-        setPage: this.setPage,
-        nbHits: results.nbHits,
-        nbPages: this.getMaxPage(results),
-      }, false);
-    },
-  });
+      getMaxPage({nbPages}) {
+        return maxPages !== undefined
+          ? Math.min(maxPages, nbPages)
+          : nbPages;
+      },
+
+      render({results, state}) {
+        renderFn({
+          createURL: this.createURL(state),
+          currentPage: state.page,
+          setPage: this.setPage,
+          nbHits: results.nbHits,
+          nbPages: this.getMaxPage(results),
+          widgetParams,
+        }, false);
+      },
+    };
+  };
 }

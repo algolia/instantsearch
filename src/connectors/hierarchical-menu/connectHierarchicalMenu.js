@@ -41,6 +41,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object[]} items
  * @property {function} refine
  * @property {InstantSearch} instantSearchInstance
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -51,14 +52,16 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectHierarchicalMenu(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
-    attributes,
-    separator = ' > ',
-    rootPath = null,
-    showParentLevel = true,
-    limit = 10,
-    sortBy = ['name:asc'],
-  } = {}) => {
+  return (widgetParams = {}) => {
+    const {
+      attributes,
+      separator = ' > ',
+      rootPath = null,
+      showParentLevel = true,
+      limit = 10,
+      sortBy = ['name:asc'],
+    } = widgetParams;
+
     if (!attributes || !attributes.length) {
       throw new Error(usage);
     }
@@ -98,6 +101,7 @@ export default function connectHierarchicalMenu(renderFn) {
           items: [],
           refine: this._refine,
           instantSearchInstance,
+          widgetParams,
         }, true);
       },
 
@@ -130,6 +134,7 @@ export default function connectHierarchicalMenu(renderFn) {
           items,
           refine: this._refine,
           instantSearchInstance,
+          widgetParams,
         }, false);
       },
     };

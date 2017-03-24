@@ -49,6 +49,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {function} searchForItems search for values inside the list
  * @property {boolean} isFromSearch indicates if the values are from an index search
  * @property {boolean} canRefine indicates if a refinement can be applied
+ * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
@@ -62,12 +63,14 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 export default function connectRefinementList(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
+  return widgetParams => {
+    const {
       attributeName,
       operator = 'or',
       limit,
       sortBy = ['count:desc', 'name:asc'],
-    }) => {
+    } = widgetParams;
+
     checkUsage({attributeName, operator, usage});
 
     const render = ({items, state, createURL,
@@ -95,6 +98,7 @@ export default function connectRefinementList(renderFn) {
         instantSearchInstance,
         isFromSearch,
         canRefine: isFromSearch || items.length > 0,
+        widgetParams,
       }, isFirstSearch);
     };
 

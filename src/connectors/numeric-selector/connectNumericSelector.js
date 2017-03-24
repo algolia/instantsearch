@@ -36,6 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} setValue
  * @property {boolean} hasNoResults
  * @property {InstantSearch} instantSearchInstance
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -46,11 +47,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectNumericSelector(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
-    attributeName,
-    options,
-    operator = '=',
-  }) => {
+  return widgetParams => {
+    const {
+      attributeName,
+      options,
+      operator = '=',
+    } = widgetParams;
+
     if (!attributeName || !options) {
       throw new Error(usage);
     }
@@ -81,6 +84,7 @@ export default function connectNumericSelector(renderFn) {
           setValue: this._refine,
           hasNoResults: true,
           instantSearchInstance,
+          widgetParams,
         }, true);
       },
 
@@ -91,6 +95,7 @@ export default function connectNumericSelector(renderFn) {
           setValue: this._refine,
           hasNoResults: results.nbHits === 0,
           instantSearchInstance,
+          widgetParams,
         }, false);
       },
 

@@ -35,10 +35,12 @@ connectNumericRefinementList(renderer)({
   attributeName,
   options
 })`;
-const connectNumericRefinementList = numericRefinementListRendering => ({
-    attributeName,
-    options,
-  }) => {
+const connectNumericRefinementList = numericRefinementListRendering => widgetParams => {
+  const {
+      attributeName,
+      options,
+    } = widgetParams;
+
   if (!attributeName || !options) {
     throw new Error(usage);
   }
@@ -66,6 +68,7 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
         hasNoResults: true,
         toggleRefinement: this._toggleRefinement,
         instantSearchInstance,
+        widgetParams,
       }, true);
     },
     render({results, state, instantSearchInstance}) {
@@ -83,6 +86,7 @@ const connectNumericRefinementList = numericRefinementListRendering => ({
         hasNoResults: results.nbHits === 0,
         toggleRefinement: this._toggleRefinement,
         instantSearchInstance,
+        widgetParams,
       }, false);
     },
   };

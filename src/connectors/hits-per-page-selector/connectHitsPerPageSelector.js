@@ -20,9 +20,8 @@ hitsPerPageSelector({
   options,
 })`;
 
-const connectHitsPerPageSelector = renderHitsPerPageSelector => ({
-    options: userOptions,
-  } = {}) => {
+const connectHitsPerPageSelector = renderHitsPerPageSelector => (widgetParams = {}) => {
+  const {options: userOptions} = widgetParams;
   let options = userOptions;
 
   if (!options) {
@@ -66,6 +65,7 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
         options,
         setValue: this.setHitsPerPage,
         hasNoResults: true,
+        widgetParams,
       }, true);
     },
 
@@ -78,6 +78,7 @@ with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
         options,
         setValue: this.setHitsPerPage,
         hasNoResults,
+        widgetParams,
       }, false);
     },
   };

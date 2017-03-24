@@ -39,6 +39,7 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
  * @property {boolean} hasRefinements
  * @property {function} createURL
  * @property {InstantSearch} instantSearchInstance
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
 /**
@@ -50,35 +51,41 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 export default function connectClearAll(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({excludeAttributes = []}) => ({
-    init({helper, instantSearchInstance, createURL}) {
-      const clearAttributes = getRefinements({}, helper.state)
+  return (widgetParams = {}) => {
+    const {excludeAttributes = []} = widgetParams;
+
+    return {
+      init({helper, instantSearchInstance, createURL}) {
+        const clearAttributes = getRefinements({}, helper.state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = clearAttributes.length !== 0;
-      const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
+        const hasRefinements = clearAttributes.length !== 0;
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
 
-      renderFn({
-        clearAll: () => {},
-        hasRefinements,
-        createURL: preparedCreateURL,
-        instantSearchInstance,
-      }, true);
-    },
+        renderFn({
+          clearAll: () => {},
+          hasRefinements,
+          createURL: preparedCreateURL,
+          instantSearchInstance,
+          widgetParams,
+        }, true);
+      },
 
-    render({results, state, createURL, helper, instantSearchInstance}) {
-      const clearAttributes = getRefinements(results, state)
+      render({results, state, createURL, helper, instantSearchInstance}) {
+        const clearAttributes = getRefinements(results, state)
         .map(one => one.attributeName)
         .filter(one => excludeAttributes.indexOf(one) === -1);
-      const hasRefinements = clearAttributes.length !== 0;
-      const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
+        const hasRefinements = clearAttributes.length !== 0;
+        const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
 
-      renderFn({
-        clearAll: clearAll({helper, clearAttributes, hasRefinements}),
-        hasRefinements,
-        createURL: preparedCreateURL,
-        instantSearchInstance,
-      }, false);
-    },
-  });
+        renderFn({
+          clearAll: clearAll({helper, clearAttributes, hasRefinements}),
+          hasRefinements,
+          createURL: preparedCreateURL,
+          instantSearchInstance,
+          widgetParams,
+        }, false);
+      },
+    };
+  };
 }
