@@ -28,29 +28,33 @@ import toggle from '../widgets/toggle/toggle.js';
 import analytics from '../widgets/analytics/analytics.js';
 import version from './version.js';
 
-const instantsearch = toFactory(InstantSearch);
-instantsearch.widgets = {
-  analytics,
-  clearAll,
-  currentRefinedValues,
-  hierarchicalMenu,
-  hits,
-  hitsPerPageSelector,
-  infiniteHits,
-  menu,
-  refinementList,
-  numericRefinementList,
-  numericSelector,
-  pagination,
-  priceRanges,
-  searchBox,
-  rangeSlider,
-  sortBySelector,
-  starRating,
-  stats,
-  toggle,
-};
-instantsearch.version = version;
-instantsearch.createQueryString = algoliasearchHelper.url.getQueryStringFromState;
+import * as connectors from '../connectors/index.js';
+
+const instantsearch = Object.assign(toFactory(InstantSearch), {
+  connectors,
+  version,
+  widgets: {
+    analytics,
+    clearAll,
+    currentRefinedValues,
+    hierarchicalMenu,
+    hits,
+    hitsPerPageSelector,
+    infiniteHits,
+    menu,
+    refinementList,
+    numericRefinementList,
+    numericSelector,
+    pagination,
+    priceRanges,
+    searchBox,
+    rangeSlider,
+    sortBySelector,
+    starRating,
+    stats,
+    toggle,
+  },
+  createQueryString: algoliasearchHelper.url.getQueryStringFromState,
+});
 
 export default instantsearch;
