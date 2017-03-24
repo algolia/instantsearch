@@ -1,87 +1,117 @@
 import some from 'lodash/some';
 
-/**
- * Instantiate a dropdown element to choose the number of hits to display per page
- * @function connectHitsPerPageSelector
- * @param  {string|DOMElement} options.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} options.options Array of objects defining the different values and labels
- * @param  {number} options.options[0].value number of hits to display per page
- * @param  {string} options.options[0].label Label to display in the option
- * @param  {boolean} [options.autoHideContainer=false] Hide the container when no results match
- * @param  {Object} [options.cssClasses] CSS classes to be added
- * @param  {string|string[]} [options.cssClasses.root] CSS classes added to the parent `<select>`
- * @param  {string|string[]} [options.cssClasses.item] CSS classes added to each `<option>`
- * @return {Object}
- */
+import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-hitsPerPageSelector({
-  container,
-  options,
-})`;
+var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFirstRendering) {
+  // params = {
+  //   options,
+  //   currentValue,
+  //   setValue,
+  //   hasNoResults,
+  //   instantSearchInstance,
+  //   widgetParams,
+  // }
+});
+search.addWidget(
+  options: [
+    {value: 10, label: '10 results per page'},
+    {value: 42, label: '42 results per page'},
+  ],
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPageSelector.html
+`;
 
-const connectHitsPerPageSelector = renderHitsPerPageSelector => (widgetParams = {}) => {
-  const {options: userOptions} = widgetParams;
-  let options = userOptions;
+/**
+ * @typedef HitsPerPageRenderingOptions
+ * @property {Object[]} options Array of objects defining the different values and labels
+ * @property {number} options[0].value number of hits to display per page
+ * @property {string} options[0].label Label to display in the option
+ * @property {number} currentValue the currently selected value of hitsPerPage
+ * @property {function(number)} setValue sets the number of hits per page and trigger a search
+ * @property {boolean} hasNoResults true if there were no results in the last search
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} widgetParams all original options forwarded to rendering
+ */
 
-  if (!options) {
-    throw new Error(usage);
-  }
+/**
+ * @typedef HitsPerPageWidgetOptions
+ * @property {Object[]} options Array of objects defining the different values and labels
+ * @property {number} options[0].value number of hits to display per page
+ * @property {string} options[0].label Label to display in the option
+ */
 
-  return {
-    init({helper, state}) {
-      const isCurrentInOptions = some(
-        options,
-        option => Number(state.hitsPerPage) === Number(option.value)
-      );
+/**
+ * Creates a custom HitsPerPage widget factory.
+ * @param {function(HitsPerPageRenderingOptions, boolean)} renderFn function that renders the hits widget
+ * @return {function(HitsPerPageWidgetOptions)} a custom HitsPerPage widget factory
+ */
+export default function connectHitsPerPageSelector(renderFn) {
+  checkRendering(renderFn, usage);
 
-      if (!isCurrentInOptions) {
-        if (state.hitsPerPage === undefined) {
-          if (window.console) {
+  return (widgetParams = {}) => {
+    const {options: userOptions} = widgetParams;
+    let options = userOptions;
+
+    if (!options) {
+      throw new Error(usage);
+    }
+
+    return {
+      init({helper, state, instantSearchInstance}) {
+        const isCurrentInOptions = some(
+          options,
+          option => Number(state.hitsPerPage) === Number(option.value)
+        );
+
+        if (!isCurrentInOptions) {
+          if (state.hitsPerPage === undefined) {
+            if (window.console) {
+              window.console.log(
+  `[Warning][hitsPerPageSelector] hitsPerPage not defined.
+  You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
+  using the searchParameters attribute of the instantsearch constructor.`
+              );
+            }
+          } else if (window.console) {
             window.console.log(
-`[Warning][hitsPerPageSelector] hitsPerPage not defined.
-You should probably use a \`hits\` widget or set the value \`hitsPerPage\`
-using the searchParameters attribute of the instantsearch constructor.`
+  `[Warning][hitsPerPageSelector] No option in \`options\`
+  with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
             );
           }
-        } else if (window.console) {
-          window.console.log(
-`[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: ${state.hitsPerPage})`
-          );
+
+          options = [{value: undefined, label: ''}].concat(options);
         }
 
-        options = [{value: undefined, label: ''}].concat(options);
-      }
+        const currentValue = state.hitsPerPage;
 
-      const currentValue = state.hitsPerPage;
+        this.setHitsPerPage = value => helper
+          .setQueryParameter('hitsPerPage', value)
+          .search();
 
-      this.setHitsPerPage = value => helper
-        .setQueryParameter('hitsPerPage', value)
-        .search();
+        renderFn({
+          currentValue,
+          options,
+          setValue: this.setHitsPerPage,
+          hasNoResults: true,
+          widgetParams,
+          instantSearchInstance,
+        }, true);
+      },
 
-      renderHitsPerPageSelector({
-        currentValue,
-        options,
-        setValue: this.setHitsPerPage,
-        hasNoResults: true,
-        widgetParams,
-      }, true);
-    },
+      render({state, results, instantSearchInstance}) {
+        const currentValue = state.hitsPerPage;
+        const hasNoResults = results.nbHits === 0;
 
-    render({state, results}) {
-      const currentValue = state.hitsPerPage;
-      const hasNoResults = results.nbHits === 0;
-
-      renderHitsPerPageSelector({
-        currentValue,
-        options,
-        setValue: this.setHitsPerPage,
-        hasNoResults,
-        widgetParams,
-      }, false);
-    },
+        renderFn({
+          currentValue,
+          options,
+          setValue: this.setHitsPerPage,
+          hasNoResults,
+          widgetParams,
+          instantSearchInstance,
+        }, false);
+      },
+    };
   };
-};
-
-export default connectHitsPerPageSelector;
+}

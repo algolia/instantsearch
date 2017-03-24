@@ -49,7 +49,7 @@ hitsPerPageSelector({
  * Instantiate a dropdown element to choose the number of hits to display per page
  * @function hitsPerPageSelector
  * @param  {string|DOMElement} $0.container CSS Selector or DOMElement to insert the widget
- * @param  {Array} $0.options Array of objects defining the different values and labels
+ * @param  {Object[]} $0.options Array of objects defining the different values and labels
  * @param  {number} $0.options[0].value number of hits to display per page
  * @param  {string} $0.options[0].label Label to display in the option
  * @param  {boolean} [$0.autoHideContainer=false] Hide the container when no results match
