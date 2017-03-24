@@ -59,7 +59,6 @@ connectCurrentRefinedValues({
 const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
     attributes = [],
     onlyListedAttributes = false,
-    clearAll = 'before',
   }) => {
   const attributesOK = isArray(attributes) &&
     reduce(
@@ -76,8 +75,7 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
   const showUsage = false ||
     !isArray(attributes) ||
     !attributesOK ||
-    !isBoolean(onlyListedAttributes) ||
-    [false, 'before', 'after'].indexOf(clearAll) === -1;
+    !isBoolean(onlyListedAttributes);
 
   if (showUsage) {
     throw new Error(usage);
@@ -105,7 +103,6 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
       renderCurrentRefinedValues({
         attributes: attributesObj,
         clearAllClick: this._clearRefinementsAndSearch,
-        clearAllPosition: clearAll,
         clearAllURL,
         clearRefinementClicks,
         clearRefinementURLs,
@@ -123,7 +120,6 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
       renderCurrentRefinedValues({
         attributes: attributesObj,
         clearAllClick: this._clearRefinementsAndSearch,
-        clearAllPosition: clearAll,
         clearAllURL,
         clearRefinementClicks,
         clearRefinementURLs,

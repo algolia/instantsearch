@@ -25,6 +25,7 @@ const bem = bemHelper('ais-current-refined-values');
 
 const renderer = ({
   autoHideContainer,
+  clearAllPosition,
   collapsible,
   containerNode,
   cssClasses,
@@ -34,7 +35,6 @@ const renderer = ({
 }) => ({
   attributes,
   clearAllClick,
-  clearAllPosition,
   clearAllURL,
   clearRefinementClicks,
   clearRefinementURLs,
@@ -183,6 +183,7 @@ export default function currentRefinedValues({
 
   const specializedRenderer = renderer({
     containerNode,
+    clearAllPosition: clearAll,
     collapsible,
     cssClasses,
     autoHideContainer,
