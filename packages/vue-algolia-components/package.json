@@ -27,7 +27,8 @@
     "vue-algolia-rating-facet": "*",
     "vue-algolia-no-results": "*",
     "vue-algolia-search-facet": "*",
-    "vue-algolia-price-range-facet": "*"
+    "vue-algolia-price-range-facet": "*",
+    "vue-algolia-powered-by": "*"
   },
   "peerDependencies": {
     "vue": "^2.2.2"
