@@ -41,8 +41,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectInfiniteHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
-    const {hitsPerPage = 20} = widgetParams || {};
+  return (widgetParams = {}) => {
+    const {hitsPerPage = 20} = widgetParams;
     let hitsCache = [];
     const getShowMore = helper => () => helper.nextPage().search();
 

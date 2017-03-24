@@ -5,12 +5,18 @@ import sinon from 'sinon';
 import {RawRefinementList as RefinementList} from '../RefinementList';
 import RefinementListItem from '../RefinementListItem';
 
+const defaultProps = {
+  templateProps: {},
+  toggleRefinement: () => {},
+};
+
 describe('RefinementList', () => {
   let createURL;
 
   function shallowRender(extraProps = {}) {
     createURL = sinon.spy();
     const props = {
+      ...defaultProps,
       createURL,
       facetValues: [],
       ...extraProps,
@@ -22,6 +28,7 @@ describe('RefinementList', () => {
     it('should add the `list` class to the root element', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           list: 'list',
         },
@@ -37,6 +44,7 @@ describe('RefinementList', () => {
     it('should set item classes to the refinements', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           item: 'item',
         },
@@ -55,6 +63,7 @@ describe('RefinementList', () => {
     it('should set active classes to the active refinements', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           active: 'active',
         },
@@ -78,6 +87,7 @@ describe('RefinementList', () => {
     it('should have the correct names', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
           {name: 'foo', isRefined: false},
           {name: 'bar', isRefined: false},
@@ -97,7 +107,8 @@ describe('RefinementList', () => {
     it('understands attributeNameKey', () => {
       // Given
       const props = {
-        facetValues: [{name: 'no', youpiName: 'hello'}],
+        ...defaultProps,
+        facetValues: [{name: 'no', youpiName: 'hello', isRefined: false}],
         attributeNameKey: 'youpiName',
       };
 
@@ -114,6 +125,7 @@ describe('RefinementList', () => {
     it('should correctly set if refined or not', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
           {name: 'foo', isRefined: false},
           {name: 'bar', isRefined: true},
@@ -135,9 +147,10 @@ describe('RefinementList', () => {
     it('should pass the count to the templateData', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo', count: 42},
-          {name: 'bar', count: 16},
+          {name: 'foo', count: 42, isRefined: false},
+          {name: 'bar', count: 16, isRefined: false},
         ],
       };
 
@@ -156,10 +169,11 @@ describe('RefinementList', () => {
     it('displays a number of items equal to the limit when showMore: false', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: false,
         limitMin: 2,
@@ -175,10 +189,11 @@ describe('RefinementList', () => {
     it('displays a number of items equal to the limit when showMore: true but not enabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
         limitMin: 2,
@@ -195,10 +210,11 @@ describe('RefinementList', () => {
     it('displays a number of items equal to the showMore limit when showMore: true and enabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         limitMin: 2,
         limitMax: 3,
@@ -217,10 +233,11 @@ describe('RefinementList', () => {
     it('adds a showMore link when the feature is enabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
         limitMin: 2,
@@ -238,10 +255,11 @@ describe('RefinementList', () => {
     it('does not add a showMore link when the feature is disabled', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: false,
         limitMin: 2,
@@ -259,10 +277,11 @@ describe('RefinementList', () => {
     it('no showMore when: state = open -> values change -> values <= limitMin ', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
         limitMin: 2,
@@ -281,10 +300,11 @@ describe('RefinementList', () => {
     it('does not add a showMore link when the facet values length is equal to the minLimit', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         showMore: true,
         limitMin: 3,
@@ -302,10 +322,11 @@ describe('RefinementList', () => {
     it('changing the state will toggle the number of items displayed', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
-          {name: 'foo'},
-          {name: 'bar'},
-          {name: 'baz'},
+          {name: 'foo', isRefined: false},
+          {name: 'bar', isRefined: false},
+          {name: 'baz', isRefined: false},
         ],
         limitMin: 2,
         limitMax: 3,
@@ -332,13 +353,15 @@ describe('RefinementList', () => {
     it('should create a subList with the sub values', () => {
       // Given
       const props = {
+        ...defaultProps,
         facetValues: [
           {
             name: 'foo',
             data: [
-              {name: 'bar'},
-              {name: 'baz'},
+              {name: 'bar', isRefined: false},
+              {name: 'baz', isRefined: false},
             ],
+            isRefined: false,
           },
         ],
       };
@@ -358,6 +381,7 @@ describe('RefinementList', () => {
     it('should add depth class for each depth', () => {
       // Given
       const props = {
+        ...defaultProps,
         cssClasses: {
           depth: 'depth-',
         },
@@ -365,9 +389,10 @@ describe('RefinementList', () => {
           {
             name: 'foo',
             data: [
-              {name: 'bar'},
-              {name: 'baz'},
+              {name: 'bar', isRefined: false},
+              {name: 'baz', isRefined: false},
             ],
+            isRefined: false,
           },
         ],
       };

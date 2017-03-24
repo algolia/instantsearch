@@ -19,6 +19,7 @@ describe('Slider', () => {
     props = {
       range: {min: 0, max: 5000},
       format: {to: () => {}, from: () => {}},
+      start: [0, 0],
     };
   });
 
@@ -39,6 +40,7 @@ describe('Slider', () => {
           values: [0, 50, 100],
         }}
         range={props.range}
+        start={ props.start }
       />
     );
   });
@@ -61,6 +63,7 @@ describe('Slider', () => {
           values: [0, 50, 100],
         } }
         range={ {min: props.range.min, max: props.range.min + 0.0001} }
+        start={ props.start }
         disabled
       />
     );
