@@ -6,6 +6,8 @@
     <p>In this example, we have one single search input that will fetch results from 2 different indices when the query is changed.</p>
 
     <input v-model="query" class="alg-search-input" placeholder="Search for a product...">
+    <algolia-powered-by />
+
     <div class="grid">
       <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" index="bestbuy" :query="query">
         <search-results>
@@ -106,6 +108,10 @@
     border: 2px solid lightgrey;
     border-radius: 2px;
     margin: 20px 0;
+  }
+
+  .alg-powered-by {
+    text-align: right;
   }
 
   .alg-search-stats {
