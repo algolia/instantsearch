@@ -35,6 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {{min: number, max: number}} range
  * @property {[number, number]} start
  * @property {function} format
+ * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance
  */
 
@@ -46,12 +47,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectRangeSlider(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
-    attributeName,
-    min: userMin,
-    max: userMax,
-    precision = 2,
-  }) => {
+  return widgetParams => {
+    const {
+      attributeName,
+      min: userMin,
+      max: userMax,
+      precision = 2,
+    } = widgetParams;
+
     if (!attributeName) {
       throw new Error(usage);
     }
@@ -128,6 +131,7 @@ export default function connectRangeSlider(renderFn) {
           range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
           start: [currentRefinement.min, currentRefinement.max],
           format: sliderFormatter,
+          widgetParams,
           instantSearchInstance,
         }, true);
       },
@@ -149,6 +153,7 @@ export default function connectRangeSlider(renderFn) {
           range: {min: Math.floor(stats.min), max: Math.ceil(stats.max)},
           start: [currentRefinement.min, currentRefinement.max],
           format: sliderFormatter,
+          widgetParams,
           instantSearchInstance,
         }, false);
       },

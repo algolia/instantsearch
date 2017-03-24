@@ -30,6 +30,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} refine switch indices and do a new search
  * @property {boolean} hasNoResults a boolean that indicates if there were no results during that last search
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -40,7 +41,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectSortBySelector(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({indices}) => {
+  return widgetParams => {
+    const {indices} = widgetParams;
+
     if (!indices) {
       throw new Error(usage);
     }
@@ -65,6 +68,7 @@ export default function connectSortBySelector(renderFn) {
           options: selectorOptions,
           refine: this.setIndex,
           hasNoResults: true,
+          widgetParams,
           instantSearchInstance,
         }, true);
       },
@@ -75,6 +79,7 @@ export default function connectSortBySelector(renderFn) {
           options: selectorOptions,
           refine: this.setIndex,
           hasNoResults: results.nbHits === 0,
+          widgetParams,
           instantSearchInstance,
         }, false);
       },

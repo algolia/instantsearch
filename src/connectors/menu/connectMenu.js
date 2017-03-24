@@ -39,6 +39,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {AlgoliaSearchHelper} helper
  * @property {InstantSearch} instantSearchInstance
  * @property {boolean} canRefine
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -49,11 +50,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectMenu(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
-    attributeName,
-    limit = 10,
-    sortBy = ['count:desc', 'name:asc'],
-  }) => {
+  return widgetParams => {
+    const {
+      attributeName,
+      limit = 10,
+      sortBy = ['count:desc', 'name:asc'],
+    } = widgetParams;
+
     if (!attributeName) {
       throw new Error(usage);
     }
@@ -91,6 +94,7 @@ export default function connectMenu(renderFn) {
           helper: this._helper,
           instantSearchInstance,
           canRefine: false,
+          widgetParams,
         }, true);
       },
 
@@ -105,6 +109,7 @@ export default function connectMenu(renderFn) {
           helper: this._helper,
           instantSearchInstance,
           canRefine: items.length > 0,
+          widgetParams,
         }, false);
       },
     };

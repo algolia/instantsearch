@@ -26,6 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object[]} hits
  * @property {Object} results
  * @property {InstantSearch} instantSearchInstance
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
@@ -36,25 +37,31 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectHits(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({hitsPerPage = 20}) => ({
-    getConfiguration() {
-      return {hitsPerPage};
-    },
+  return (widgetOptions = {}) => {
+    const {hitsPerPage = 20} = widgetOptions;
 
-    init({instantSearchInstance}) {
-      renderFn({
-        hits: [],
-        results: undefined,
-        instantSearchInstance,
-      }, true);
-    },
+    return {
+      getConfiguration() {
+        return {hitsPerPage};
+      },
 
-    render({results, instantSearchInstance}) {
-      renderFn({
-        hits: results.hits,
-        results,
-        instantSearchInstance,
-      }, false);
-    },
-  });
+      init({instantSearchInstance}) {
+        renderFn({
+          hits: [],
+          results: undefined,
+          instantSearchInstance,
+          widgetOptions,
+        }, true);
+      },
+
+      render({results, instantSearchInstance}) {
+        renderFn({
+          hits: results.hits,
+          results,
+          instantSearchInstance,
+          widgetOptions,
+        }, false);
+      },
+    };
+  };
 }

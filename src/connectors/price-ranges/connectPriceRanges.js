@@ -26,6 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} PriceRangesRenderingOptions
  * @property {Object[]} items
  * @property {function} refine
+ * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance
  */
 
@@ -37,7 +38,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectPriceRanges(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({attributeName}) => {
+  return widgetParams => {
+    const {attributeName} = widgetParams;
+
     if (!attributeName) {
       throw new Error(usage);
     }
@@ -94,6 +97,7 @@ export default function connectPriceRanges(renderFn) {
           instantSearchInstance,
           items: [],
           refine: this._refine,
+          widgetParams,
         }, true);
       },
 
@@ -127,6 +131,7 @@ export default function connectPriceRanges(renderFn) {
         renderFn({
           items: facetValues,
           refine: this._refine,
+          widgetParams,
           instantSearchInstance,
         }, false);
       },

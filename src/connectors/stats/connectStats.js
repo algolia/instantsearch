@@ -24,6 +24,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {number} page the current page
  * @property {number} processingTimeMS the time taken in the Algolia engine to compute the results
  * @property {string} query the last query used
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
 /**
@@ -34,7 +35,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectStats(renderFn) {
   checkRendering(renderFn, usage);
 
-  return () => ({
+  return widgetParams => ({
     init({helper, instantSearchInstance}) {
       renderFn({
         instantSearchInstance,
@@ -44,6 +45,7 @@ export default function connectStats(renderFn) {
         page: helper.state.page,
         processingTimeMS: -1,
         query: helper.state.query,
+        widgetParams,
       }, true);
     },
 
@@ -56,6 +58,7 @@ export default function connectStats(renderFn) {
         page: results.page,
         processingTimeMS: results.processingTimeMS,
         query: results.query,
+        widgetParams,
       }, false);
     },
   });

@@ -32,6 +32,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} refine a function that switch to the next state and do a search (takes the filter value as parameter)
  * @property {boolean} hasNoResults a boolean that indicates that the last search contains no results
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
 /**
@@ -42,10 +43,12 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectStarRating(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({
-    attributeName,
-    max = 5,
-  }) => {
+  return widgetParams => {
+    const {
+      attributeName,
+      max = 5,
+    } = widgetParams;
+
     if (!attributeName) {
       throw new Error(usage);
     }
@@ -65,6 +68,7 @@ export default function connectStarRating(renderFn) {
           hasNoResults: true,
           refine: this._toggleRefinement,
           createURL: this._createURL(helper.state),
+          widgetParams,
         }, true);
       },
 
@@ -109,6 +113,7 @@ export default function connectStarRating(renderFn) {
           hasNoResults: results.nbHits === 0,
           refine: this._toggleRefinement,
           createURL: this._createURL(state),
+          widgetParams,
         }, false);
       },
 

@@ -33,6 +33,7 @@ connectCurrentRefinedValues({
  * @property {string[]} clearRefinementURLs,individual url where a single refinement is cleared
  * @property {Refinements[]} refinements,all the current refinements
  * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
 /**
@@ -56,10 +57,8 @@ connectCurrentRefinedValues({
  * @param {function(CurrentRefinedValuesRenderingOptions)} renderCurrentRefinedValues the custom rendering function
  * @return {function(CurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
  */
-const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
-    attributes = [],
-    onlyListedAttributes = false,
-  }) => {
+const connectCurrentRefinedValues = renderCurrentRefinedValues => (widgetParams = {}) => {
+  const {attributes = [], onlyListedAttributes = false} = widgetParams;
   const attributesOK = isArray(attributes) &&
     reduce(
       attributes,
@@ -108,6 +107,7 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
         clearRefinementURLs,
         refinements,
         instantSearchInstance,
+        widgetParams,
       }, true);
     },
     render({results, helper, state, createURL, instantSearchInstance}) {
@@ -125,6 +125,7 @@ const connectCurrentRefinedValues = renderCurrentRefinedValues => ({
         clearRefinementURLs,
         refinements,
         instantSearchInstance,
+        widgetParams,
       }, false);
     },
   };

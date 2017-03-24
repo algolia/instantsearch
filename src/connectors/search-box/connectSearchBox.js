@@ -29,6 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {string} query the query from the last search
  * @property {function} onHistoryChange set a callback when the browser history changes
  * @property {function} search triggers the search with a `query` as parameter
+ * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
@@ -40,41 +41,47 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectSearchBox(renderFn) {
   checkRendering(renderFn, usage);
 
-  return ({queryHook}) => ({
-    init({helper, onHistoryChange, instantSearchInstance}) {
-      this._search = (() => {
-        let previousQuery;
+  return widgetParams => {
+    const {queryHook} = widgetParams;
 
-        const setQueryAndSearch = (q, doSearch = true) => {
-          if (q !== helper.state.query) {
-            previousQuery = helper.state.query;
-            helper.setQuery(q);
-          }
-          if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
-        };
+    return {
+      init({helper, onHistoryChange, instantSearchInstance}) {
+        this._search = (() => {
+          let previousQuery;
 
-        return queryHook ?
-          q => queryHook(q, setQueryAndSearch) :
-          setQueryAndSearch;
-      })();
+          const setQueryAndSearch = (q, doSearch = true) => {
+            if (q !== helper.state.query) {
+              previousQuery = helper.state.query;
+              helper.setQuery(q);
+            }
+            if (doSearch && previousQuery !== undefined && previousQuery !== q) helper.search();
+          };
 
-      this._onHistoryChange = onHistoryChange;
+          return queryHook ?
+            q => queryHook(q, setQueryAndSearch) :
+            setQueryAndSearch;
+        })();
 
-      renderFn({
-        query: helper.state.query,
-        onHistoryChange: this._onHistoryChange,
-        search: this._search,
-        instantSearchInstance,
-      }, true);
-    },
+        this._onHistoryChange = onHistoryChange;
 
-    render({helper, instantSearchInstance}) {
-      renderFn({
-        query: helper.state.query,
-        onHistoryChange: this._onHistoryChange,
-        search: this._search,
-        instantSearchInstance,
-      }, false);
-    },
-  });
+        renderFn({
+          query: helper.state.query,
+          onHistoryChange: this._onHistoryChange,
+          search: this._search,
+          widgetParams,
+          instantSearchInstance,
+        }, true);
+      },
+
+      render({helper, instantSearchInstance}) {
+        renderFn({
+          query: helper.state.query,
+          onHistoryChange: this._onHistoryChange,
+          search: this._search,
+          widgetParams,
+          instantSearchInstance,
+        }, false);
+      },
+    };
+  };
 }
