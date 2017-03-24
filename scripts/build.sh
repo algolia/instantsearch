@@ -12,11 +12,10 @@ ROOT=`dirname "$0"`/..
 
 license="/*! instantsearch.js ${VERSION:-UNRELEASED} | © Algolia Inc. and other contributors; Licensed MIT | github.com/algolia/instantsearch.js */"
 
-bundles=( 'instantsearch' 'instantsearch-preact' )
+bundles=( 'instantsearch' )
 
-# build for jsdelivr, with everything inlined while exposing React + ReactDOM (for plugins)
+# build for jsdelivr, with everything inlined while using `preact` instead of `react`
 webpack --config scripts/webpack.config.jsdelivr.babel.js
-webpack --config scripts/webpack.config.preact.jsdelivr.babel.js
 
 # only transpile to ES5 for package.json main entry
 babel -q index.js -o dist-es5-module/index.js

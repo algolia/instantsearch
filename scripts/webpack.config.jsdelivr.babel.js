@@ -13,13 +13,13 @@ export default {
   module: {
     loaders: [{
       test: /\.js$/, exclude: /node_modules/, loader: 'babel',
-    }, {
-      test: require.resolve('react'), loader: 'expose?React',
-    }, {
-      test: require.resolve('react-dom'), loader: 'expose?ReactDOM',
     }],
   },
   resolve: {
+    alias: {
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat',
+    },
     fallback: [join(__dirname, '..', 'node_modules')],
   },
   // same issue, for loaders like babel

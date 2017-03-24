@@ -2943,10 +2943,6 @@ expect@^1.20.2:
     object-keys "^1.0.9"
     tmatch "^2.0.1"
 
-expose-loader@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-0.7.3.tgz#35fbd3659789e4faa81f59de8b7e9fc39e466d51"
-
 express@^4.13.3, express@^4.15.2:
   version "4.15.2"
   resolved "https://registry.yarnpkg.com/express/-/express-4.15.2.tgz#af107fc148504457f2dca9a6f2571d7129b97b35"
