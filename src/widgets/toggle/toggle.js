@@ -23,9 +23,9 @@ const renderer = ({
   templates,
   transformData,
 }) => ({
-  refine,
   value,
   createURL,
+  refine,
   instantSearchInstance,
 }, isFirstRendering) => {
   if (isFirstRendering) {

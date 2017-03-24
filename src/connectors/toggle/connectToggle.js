@@ -8,11 +8,8 @@ const usage = `Usage:
 var customToggle = connectToggle(function render(params, isFirstRendering) {
   // params = {
   //   value,
-  //   state,
   //   createURL,
   //   refine,
-  //   helper,
-  //   isFirstSearch,
   //   instantSearchInstance,
   // }
 });
@@ -35,13 +32,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} ToggleRenderingOptions
- * @property {Object} value
- * @property {Object} state
- * @property {function} createURL
- * @property {function} refine
- * @property {Object} helper
- * @property {boolean} isFirstSearch
- * @property {InstantSearch} instantSearchInstance
+ * @property {Object} value the value of the toggle with `name`, `isRefined`, `count`, `onFacetValue` and `offFacetValue`
+ * @property {function} createURL the function to create a url for the next state
+ * @property {function} refine updates to the next state
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
 /**
@@ -131,11 +125,8 @@ export default function connectToggle(renderFn) {
 
         renderFn({
           value,
-          state: helper.state,
           createURL: this._createURL,
           refine: this.toggleRefinement,
-          helper,
-          isFirstSearch: true,
           instantSearchInstance,
         }, true);
       },
@@ -180,7 +171,6 @@ export default function connectToggle(renderFn) {
           createURL: this._createURL,
           refine: this.toggleRefinement,
           helper,
-          isFirstSearch: false,
           instantSearchInstance,
         }, false);
       },
