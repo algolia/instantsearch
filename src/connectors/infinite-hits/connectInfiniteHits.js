@@ -25,16 +25,17 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} InfiniteHitsRenderingOptions
- * @property {Array} hits
- * @property {Object} results
- * @property {function} showMore
- * @property {boolean} isLastPage
- * @property {InstantSearch} instantSearchInstance
+ * @property {Array} hits the aggregated hits of all the pages
+ * @property {Object} results the last results
+ * @property {function} showMore adds a new page and search
+ * @property {boolean} isLastPage true if the last page has been reached
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
   * Connects a rendering function with the infinite hits business logic.
-  * @param {function(InfiniteHitsRenderingOptions)} renderFn function that renders the infinite hits widget
+  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn function that renders the infinite hits widget
   * @return {function(CustomInfiniteHitsWidgetOptions)} a widget factory for infinite hits widget
   */
 export default function connectInfiniteHits(renderFn) {

@@ -42,7 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the menu business logic.
-  * @param {function(MenuRenderingOptions)} renderFn function that renders the menu widget
+  * @param {function(MenuRenderingOptions, boolean)} renderFn function that renders the menu widget
   * @return {function(CustomMenuWidgetOptions)} a widget factory for menu widget
   */
 export default function connectMenu(renderFn) {

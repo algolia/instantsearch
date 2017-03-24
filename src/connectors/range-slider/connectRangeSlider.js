@@ -41,7 +41,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
  /**
   * Connects a rendering function with the range slider business logic.
-  * @param {function(RangeSliderRenderingOptions)} renderFn function that renders the range slider widget
+  * @param {function(RangeSliderRenderingOptions, boolean)} renderFn function that renders the range slider widget
   * @return {function(CustomRangeSliderWidgetOptions)} a widget factory for range slider widget
   */
 export default function connectRangeSlider(renderFn) {

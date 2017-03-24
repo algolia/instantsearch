@@ -23,15 +23,15 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef HitsRenderingOptions
- * @property {Object[]} hits
- * @property {Object} results
- * @property {InstantSearch} instantSearchInstance
+ * @property {Object[]} hits the hits contained in the last results from Algolia
+ * @property {Object} results the complete results from Algolia
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
  /**
   * Connects a rendering function with the hits business logic.
-  * @param {function(HitsRenderingOptions)} renderFn function that renders the hits widget
+  * @param {function(HitsRenderingOptions, boolean)} renderFn function that renders the hits widget
   * @return {function(CustomHitsWidgetOptions)} a widget factory for hits widget
   */
 export default function connectHits(renderFn) {
