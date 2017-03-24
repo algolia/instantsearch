@@ -27,11 +27,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} StarRatingRenderingOptions
- * @property {Object[]} items
- * @property {function} createURL
- * @property {function} refine
- * @property {boolean} hasNoResults
- * @property {InstantSearch} instantSearchInstance
+ * @property {Object[]} items all the elements to render
+ * @property {function} createURL a function that creates a url for the next state (takes the filter value as parameter)
+ * @property {function} refine a function that switch to the next state and do a search (takes the filter value as parameter)
+ * @property {boolean} hasNoResults a boolean that indicates that the last search contains no results
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
 
 /**

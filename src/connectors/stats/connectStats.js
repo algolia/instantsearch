@@ -17,13 +17,13 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} StatsRenderingOptions
- * @property {InstantSearch} instantSearchInstance
- * @property {number} hitsPerPage
- * @property {number} nbHits
- * @property {number} nbPages
- * @property {number} page
- * @property {number} processingTimeMS
- * @property {string} query
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {number} hitsPerPage the number of hits per page
+ * @property {number} nbHits the number of hits returned by the last search results
+ * @property {number} nbPages the numbers of pages of results
+ * @property {number} page the current page
+ * @property {number} processingTimeMS the time taken in the Algolia engine to compute the results
+ * @property {string} query the last query used
  */
 
 /**
