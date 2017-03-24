@@ -23,4 +23,10 @@ describe('instantsearch()', () => {
       expect(typeof widget).toEqual('function', 'A widget must be a function');
     });
   });
+
+  it('includes the connectors functions', () => {
+    forEach(instantsearch.connectors, connector => {
+      expect(typeof connector).toEqual('function', 'A connector must be a function');
+    });
+  });
 });
