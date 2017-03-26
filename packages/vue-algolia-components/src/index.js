@@ -11,6 +11,7 @@ import RatingFacet from 'vue-algolia-rating-facet'
 import NoResults from 'vue-algolia-no-results'
 import SearchFacet from 'vue-algolia-search-facet'
 import PriceRangeFacet from 'vue-algolia-price-range-facet'
+import AlgoliaPoweredBy from 'vue-algolia-powered-by'
 
 const Algolia = {
   SearchStore,
@@ -26,6 +27,7 @@ const Algolia = {
   NoResults,
   SearchFacet,
   PriceRangeFacet,
+  AlgoliaPoweredBy,
 
   install (Vue) {
     Vue.component('search-store', SearchStore)
@@ -41,6 +43,7 @@ const Algolia = {
     Vue.component('no-results', NoResults)
     Vue.component('search-facet', SearchFacet)
     Vue.component('price-range-facet', PriceRangeFacet)
+    Vue.component('algolia-powered-by', AlgoliaPoweredBy)
   }
 
 }
@@ -65,3 +68,4 @@ export {RatingFacet}
 export {NoResults}
 export {SearchFacet}
 export {PriceRangeFacet}
+export {AlgoliaPoweredBy}
