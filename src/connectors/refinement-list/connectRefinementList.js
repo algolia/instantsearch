@@ -18,7 +18,7 @@ search.addWidget(
     attributeName,
     [ operator = 'or' ],
     [ limit ],
-    [ sortBy = ['count:desc', 'name:asc'] ]
+    [ sortBy = ['isRefined', 'count:desc'] ]
   });
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
@@ -38,7 +38,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {string} attributeName the attribute in the records that are used by the widget
  * @property {string} operator how the filters are combined together
  * @property {number} limit the max number of items displayed
- * @property {string[]} sortBy how the values are ordered
+ * @param {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  */
 
 /**
@@ -68,7 +68,7 @@ export default function connectRefinementList(renderFn) {
       attributeName,
       operator = 'or',
       limit,
-      sortBy = ['count:desc', 'name:asc'],
+      sortBy = ['isRefined', 'count:desc'],
     } = widgetParams;
 
     checkUsage({attributeName, operator, usage});

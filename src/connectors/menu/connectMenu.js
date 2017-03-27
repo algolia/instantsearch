@@ -16,7 +16,7 @@ search.addWidget(
   customMenu({
     attributeName,
     [ limit ],
-    [ sortBy = ['count:desc', 'name:asc'] ]
+    [ sortBy = ['isRefined', 'count:desc'] ]
   });
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectMenu.html
@@ -26,7 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @typedef {Object} CustomMenuWidgetOptions
  * @param {string} attributeName Name of the attribute for faceting (eg. "free_shipping")
  * @param {number} [limit = 10] How many facets values to retrieve [*]
- * @param {string[]|function} [sortBy = ['count:desc', 'name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @param {string[]|function} [sortBy = ['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax). [*]
  */
 
@@ -52,7 +52,7 @@ export default function connectMenu(renderFn) {
     const {
       attributeName,
       limit = 10,
-      sortBy = ['count:desc', 'name:asc'],
+      sortBy = ['isRefined', 'count:desc'],
     } = widgetParams;
 
     if (!attributeName) {

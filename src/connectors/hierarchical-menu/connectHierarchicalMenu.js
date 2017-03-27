@@ -16,7 +16,7 @@ search.addWidget(
     [ rootPath = null ],
     [ showParentLevel = true ],
     [ limit = 10 ],
-    [ sortBy = ['name:asc'] ],
+    [ sortBy = ['isRefined', 'count:desc'] ],
   });
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHierarchicalMenu.html
@@ -29,7 +29,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param  {string} [rootPath] Prefix path to use if the first level is not the root level.
  * @param  {string} [showParentLevel=false] Show the parent level of the current refined value
  * @param  {number} [limit=10] How much facet values to get [*]
- * @param  {string[]|Function} [sortBy=['name:asc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
+ * @param  {string[]|Function} [sortBy=['isRefined', 'count:desc']] How to sort refinements. Possible values: `count|isRefined|name:asc|name:desc`.
  *   You can also use a sort function that behaves like the standard Javascript [compareFunction](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#Syntax).
  */
 
@@ -57,7 +57,7 @@ export default function connectHierarchicalMenu(renderFn) {
       rootPath = null,
       showParentLevel = true,
       limit = 10,
-      sortBy = ['name:asc'],
+      sortBy = ['isRefined', 'count:desc'],
     } = widgetParams;
 
     if (!attributes || !attributes.length) {
