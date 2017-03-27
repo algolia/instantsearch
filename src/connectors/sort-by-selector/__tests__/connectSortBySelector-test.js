@@ -38,8 +38,8 @@ describe('connectSortBySelector', () => {
       expect(isFirstRendering).toBe(true);
 
       // should provide good values for the first rendering
-      const {currentValue, options, widgetParams} = rendering.lastCall.args[0];
-      expect(currentValue).toBe(helper.state.index);
+      const {currentRefinement, options, widgetParams} = rendering.lastCall.args[0];
+      expect(currentRefinement).toBe(helper.state.index);
       expect(widgetParams).toEqual({indices});
       expect(options).toEqual([
         {label: 'Sort products by relevance', value: 'relevance'},
@@ -60,8 +60,8 @@ describe('connectSortBySelector', () => {
       expect(isFirstRendering).toBe(false);
 
       // should provide good values after the first search
-      const {currentValue, options} = rendering.lastCall.args[0];
-      expect(currentValue).toBe(helper.state.index);
+      const {currentRefinement, options} = rendering.lastCall.args[0];
+      expect(currentRefinement).toBe(helper.state.index);
       expect(options).toEqual([
         {label: 'Sort products by relevance', value: 'relevance'},
         {label: 'Sort products by price', value: 'priceASC'},
@@ -94,8 +94,8 @@ describe('connectSortBySelector', () => {
     { // first rendering
       expect(helper.state.index).toBe(indices[0].name);
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, currentValue} = renderOptions;
-      expect(currentValue).toBe(helper.state.index);
+      const {refine, currentRefinement} = renderOptions;
+      expect(currentRefinement).toBe(helper.state.index);
       refine('bip');
       expect(helper.state.index).toBe('bip');
       expect(helper.search.callCount).toBe(1);
@@ -111,8 +111,8 @@ describe('connectSortBySelector', () => {
     { // Second rendering
       expect(helper.state.index).toBe('bip');
       const renderOptions = rendering.lastCall.args[0];
-      const {refine, currentValue} = renderOptions;
-      expect(currentValue).toBe('bip');
+      const {refine, currentRefinement} = renderOptions;
+      expect(currentRefinement).toBe('bip');
       refine('bop');
       expect(helper.state.index).toBe('bop');
       expect(helper.search.callCount).toBe(2);

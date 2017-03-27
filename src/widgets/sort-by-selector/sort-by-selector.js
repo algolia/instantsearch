@@ -13,7 +13,7 @@ const renderer = ({
   cssClasses,
   autoHideContainer,
 }) => ({
-  currentValue,
+  currentRefinement,
   options,
   refine,
   hasNoResults,
@@ -25,7 +25,7 @@ const renderer = ({
   ReactDOM.render(
     <Selector
       cssClasses={cssClasses}
-      currentValue={currentValue}
+      currentValue={currentRefinement}
       options={options}
       setValue={refine}
       shouldAutoHideContainer={shouldAutoHideContainer}

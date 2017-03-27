@@ -3,7 +3,7 @@ import {checkRendering} from '../../lib/utils.js';
 const usage = `Usage:
 var customSortBySelector = connectSortBySelector(function render(params, isFirstRendering) {
   // params = {
-  //   currentValue,
+  //   currentRefinement,
   //   options,
   //   refine,
   //   hasNoResults,
@@ -26,7 +26,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} SortBySelectorRenderingOptions
- * @property {string} currentValue the currently selected index
+ * @property {string} currentRefinement the currently selected index
  * @property {Object[]} options all the available indices
  * @property {function} refine switch indices and do a new search
  * @property {boolean} hasNoResults a boolean that indicates if there were no results during that last search
@@ -65,7 +65,7 @@ export default function connectSortBySelector(renderFn) {
           .search();
 
         renderFn({
-          currentValue: currentIndex,
+          currentRefinement: currentIndex,
           options: selectorOptions,
           refine: this.setIndex,
           hasNoResults: true,
@@ -76,7 +76,7 @@ export default function connectSortBySelector(renderFn) {
 
       render({helper, results, instantSearchInstance}) {
         renderFn({
-          currentValue: helper.getIndex(),
+          currentRefinement: helper.getIndex(),
           options: selectorOptions,
           refine: this.setIndex,
           hasNoResults: results.nbHits === 0,
