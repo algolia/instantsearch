@@ -8,11 +8,12 @@ var customPagination = connectPagination(function render(params, isFirstRenderin
   //   nbHits,
   //   nbPages,
   //   setPage,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customPagination({
-    [maxPages]
+    [ maxPages ]
   })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPagination.html
@@ -20,7 +21,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef CustomPaginationWidgetOptions
- * @param {number} maxPages The max number of pages to browse
+ * @param {number} [maxPages] The max number of pages to browse
  */
 
 /**

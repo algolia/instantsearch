@@ -7,12 +7,13 @@ var customPriceRanges = connectToggle(function render(params, isFirstRendering) 
   //   items,
   //   refine,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customPriceRanges({
     attributeName,
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectPriceRanges.html
 `;

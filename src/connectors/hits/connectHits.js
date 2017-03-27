@@ -6,12 +6,13 @@ var customHits = connectHits(function render(params, isFirstRendering) {
   //   hits,
   //   results,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customHits({
     [ hitsPerPage = 20 ]
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHits.html
 `;

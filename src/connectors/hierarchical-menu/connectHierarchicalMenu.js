@@ -1,12 +1,13 @@
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customToggle = connectHierarchicalMenu(function render(params, isFirstRendering) {
+var customToggle = connectHierarchicalMenu(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,
   //   items,
   //   refine,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
@@ -17,7 +18,7 @@ search.addWidget(
     [ showParentLevel = true ],
     [ limit = 10 ],
     [ sortBy = ['isRefined', 'count:desc'] ],
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHierarchicalMenu.html
 `;

@@ -6,13 +6,14 @@ var customSearchBox = connectMenu(function render(params, isFirstRendering) {
   //   query,
   //   onHistoryChange,
   //   search,
-  //   instantSearchInstance
+  //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customSearchBox({
-    [ onQueryHook ]
-  });
+    [ onQueryHook ],
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectSearchBox.html
 `;

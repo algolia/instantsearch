@@ -4,10 +4,25 @@ import includes from 'lodash/includes';
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-connectNumericRefinementList(renderer)({
-  attributeName,
-  options
-})`;
+var customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {
+  // params = {
+  //   createURL,
+  //   facetValues,
+  //   hasNoResults,
+  //   toggleRefinement,
+  //   instantSearchInstance,
+  //   widgetParams,
+  //  }
+});
+search.addWidget(
+  customNumericRefinementList({
+    attributeName,
+    options,
+  })
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericRefinementList.html
+`;
+
 /**
  * @typedef {Object} NumericRefinementListWidgetOptions
  * @property {string} attributeName Name of the attribute for filtering

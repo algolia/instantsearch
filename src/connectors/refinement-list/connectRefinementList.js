@@ -11,6 +11,7 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   searchForItems,
   //   instantSearchInstance,
   //   canRefine,
+  //   widgetParams,
   // }
 });
 search.addWidget(
@@ -18,8 +19,8 @@ search.addWidget(
     attributeName,
     [ operator = 'or' ],
     [ limit ],
-    [ sortBy = ['isRefined', 'count:desc'] ]
-  });
+    [ sortBy = ['isRefined', 'count:desc'] ],
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRefinementList.html
 `;

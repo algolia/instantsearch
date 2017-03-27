@@ -8,15 +8,16 @@ var customRangeSlider = connectRangeSlider(function render(params, isFirstRender
   //   start,
   //   format,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customRangeSlider({
     attributeName,
-    min,
-    max,
-    precision
-  });
+    [ min ],
+    [ max ],
+    [ precision = 2 ],
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectRangeSlider.html
 `;
@@ -26,7 +27,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @param {string} attributeName Name of the attribute for faceting.
  * @param {number} [min] Minimal slider value, default to automatically computed from the result set
  * @param {number} [max] Maximal slider value, defaults to automatically computed from the result set
- * @param {number} [precision = 2]
+ * @param {number} [precision = 2] Number of digits after decimal point to display.
  */
 
 /**

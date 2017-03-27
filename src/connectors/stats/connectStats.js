@@ -10,6 +10,7 @@ var customStats = connectState(function render(params, isFirstRendering) {
   //   page,
   //   processingTimeMS,
   //   query,
+  //   widgetParams,
   // }
 });
 search.addWidget(customStats());

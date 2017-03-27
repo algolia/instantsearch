@@ -14,10 +14,12 @@ var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFir
   // }
 });
 search.addWidget(
-  options: [
-    {value: 10, label: '10 results per page'},
-    {value: 42, label: '42 results per page'},
-  ],
+  customHitsPerPage({
+    options: [
+      {value: 10, label: '10 results per page'},
+      {value: 42, label: '42 results per page'},
+    ],
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectHitsPerPageSelector.html
 `;

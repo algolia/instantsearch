@@ -8,19 +8,20 @@ var customInfiniteHits = connectInfiniteHits(function render(params, isFirstRend
   //   showMore,
   //   isLastPage,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customInfiniteHits({
-    [hitsPerPage = 20]
-  });
+    [ hitsPerPage = 20 ]
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectInfiniteHits.html
 `;
 
 /**
  * @typedef {Object} CustomInfiniteHitsWidgetOptions
- * @param {number} hitsPerPage The number of hits to display per page
+ * @param {number} [hitsPerPage = 20] The number of hits to display per page
  */
 
 /**

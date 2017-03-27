@@ -8,13 +8,14 @@ var customStarRating = connectStarRating(function render(params, isFirstRenderin
   //   refine,
   //   instantSearchInstance,
   //   hasNoResults,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customStarRatingI({
     attributeName,
     [ max=5 ],
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectStarRating.html
 `;

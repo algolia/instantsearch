@@ -7,7 +7,8 @@ var customSortBySelector = connectSortBySelector(function render(params, isFirst
   //   options,
   //   refine,
   //   hasNoResults,
-  //   instantSearchInstance
+  //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(

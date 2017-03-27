@@ -12,12 +12,13 @@ var customClearAll = connectClearAll(function render(params, isFirstRendering) {
   //   hasRefinements,
   //   createURL,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
   customClearAll({
-    [excludeAttributes = []]
-  });
+    [ excludeAttributes = [] ]
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectClearAll.html
 `;
@@ -35,10 +36,10 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 
 /**
  * @typedef {Object} ClearAllRenderingOptions
- * @property {function} clearAll
- * @property {boolean} hasRefinements
- * @property {function} createURL
- * @property {InstantSearch} instantSearchInstance
+ * @property {function} clearAll function to trigger the clear of all the currently refined values
+ * @property {boolean} hasRefinements boolean to indicate if search state is refined
+ * @property {function} createURL function that create a url for the next state
+ * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 

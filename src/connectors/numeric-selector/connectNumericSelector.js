@@ -8,6 +8,7 @@ var customNumericSelector = connectNumericSelector(function renderFn(params, isF
   //   setValue,
   //   hasNoResults,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
@@ -15,7 +16,7 @@ search.addWidget(
     attributeName,
     options,
     [ operator = '=' ]
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectNumericSelector.html
 `;

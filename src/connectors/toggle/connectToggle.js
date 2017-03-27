@@ -11,6 +11,7 @@ var customToggle = connectToggle(function render(params, isFirstRendering) {
   //   createURL,
   //   refine,
   //   instantSearchInstance,
+  //   widgetParams,
   // }
 });
 search.addWidget(
@@ -18,7 +19,7 @@ search.addWidget(
     attributeName,
     label,
     [ values = {on: true, off: undefined} ]
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectToggle.html
 `;

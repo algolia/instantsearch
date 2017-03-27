@@ -17,11 +17,27 @@ import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
 
 const usage = `Usage:
-connectCurrentRefinedValues({
-  [ attributes: [{name[, label, template, transformData]}] ],
-  [ onlyListedAttributes = false ],
-  [ clearAll = 'before' ] // One of ['before', 'after', false]
-})`;
+var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {
+  // params = {
+  //   attributes,
+  //   clearAllClick,
+  //   clearAllPosition,
+  //   clearAllURL,
+  //   clearRefinementClicks,
+  //   clearRefinementURLs,
+  //   refinements,
+  //   instantSearchInstance,
+  //   widgetParams,
+  // }
+});
+search.addWidget(
+  customCurrentRefinedValues({
+    [ attributes = [] ],
+    [ onlyListedAttributes = false ],
+  })
+);
+Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectCurrentRefinedValues.html
+`;
 
 /**
  * @typedef {Object} CurrentRefinedValuesRenderingOptions
@@ -29,9 +45,9 @@ connectCurrentRefinedValues({
  * @property {function} clearAllClick function to trigger the clear of all the currently refined values
  * @property {string} clearAllPosition position of the 'clear all' button
  * @property {function} clearAllURL url which leads to a state where all the refinements have been cleared
- * @property {function[]} clearRefinementClicks,individual clearing function per refinement
- * @property {string[]} clearRefinementURLs,individual url where a single refinement is cleared
- * @property {Refinements[]} refinements,all the current refinements
+ * @property {function[]} clearRefinementClicks individual clearing function per refinement
+ * @property {string[]} clearRefinementURLs individual url where a single refinement is cleared
+ * @property {Refinements[]} refinements all the current refinements
  * @property {InstantsSearch} instantSearchInstance the instance of instantsearch.js
  * @property {Object} widgetParams all original options forwarded to rendering
  */
@@ -40,7 +56,7 @@ connectCurrentRefinedValues({
  * @typedef {Object} CurrentRefinedValuesAttributes
  * @property {string} name mandatory field which is the name of the attribute
  * @property {string} label the label to apply on a refinement per attribute
- * @property {(string|function)} template the template to apply
+ * @property {string|function} template the template to apply
  * @property {function} transformData function to transform the content of the refinement before rendering the template
  */
 
@@ -48,7 +64,6 @@ connectCurrentRefinedValues({
  * @typedef {Object} CurrentRefinedValuesWidgetOptions
  * @property {CurrentRefinedValuesAttributes[]} attributes specification for the display of refinements per attribute
  * @property {boolean} onlyListedAttributes limit the displayed refinement to the list specified
- * @property {boolean|string} clearAll position of the clear all button
  */
 
 /**

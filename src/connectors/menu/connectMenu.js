@@ -10,6 +10,7 @@ var customMenu = connectMenu(function render(params, isFirstRendering) {
   //   helper,
   //   instantSearchInstance,
   //   canRefine,
+  //   widgetParams,
   // }
 });
 search.addWidget(
@@ -17,7 +18,7 @@ search.addWidget(
     attributeName,
     [ limit ],
     [ sortBy = ['isRefined', 'count:desc'] ]
-  });
+  })
 );
 Full documentation available at https://community.algolia.com/instantsearch.js/connectors/connectMenu.html
 `;
