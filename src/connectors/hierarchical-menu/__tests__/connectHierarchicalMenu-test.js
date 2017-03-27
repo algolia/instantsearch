@@ -189,4 +189,75 @@ describe('connectHierarchicalMenu', () => {
       },
     ]);
   });
+
+  it('provides the correct `currentRefinement` value', () => {
+    const rendering = jest.fn();
+    const makeWidget = connectHierarchicalMenu(rendering);
+    const widget = makeWidget({
+      attributes: ['category', 'subCategory'],
+    });
+
+    const helper = jsHelper({addAlgoliaAgent: () => {}}, '', widget.getConfiguration({}));
+    helper.search = sinon.stub();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering).toBeCalled();
+    expect(rendering.mock.calls[0][0].currentRefinement).toBe(null);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            Decoration: 880,
+          },
+          subCategory: {
+            'Decoration > Candle holders & candles': 193,
+            'Decoration > Frames & pictures': 173,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            Decoration: 880,
+            Outdoor: 47,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.mock.calls[1][0].currentRefinement).toEqual({
+      name: 'Decoration',
+      path: 'Decoration',
+      count: 880,
+      isRefined: true,
+      data: [
+        {
+          name: 'Candle holders & candles',
+          path: 'Decoration > Candle holders & candles',
+          count: 193,
+          isRefined: false,
+          data: null,
+        },
+        {
+          name: 'Frames & pictures',
+          path: 'Decoration > Frames & pictures',
+          count: 173,
+          isRefined: false,
+          data: null,
+        },
+      ],
+    });
+  });
 });

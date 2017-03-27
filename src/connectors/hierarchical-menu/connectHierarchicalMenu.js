@@ -8,6 +8,7 @@ var customToggle = connectHierarchicalMenu(function renderFn(params, isFirstRend
   //   refine,
   //   instantSearchInstance,
   //   widgetParams,
+  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -41,6 +42,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function} refine set the path of the hierarchical filter and triggers a new search
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
+ * @property {Object} currentRefinement the refinement currently applied
  */
 
  /**
@@ -100,6 +102,7 @@ export default function connectHierarchicalMenu(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
+          currentRefinement: null,
         }, true);
       },
 
@@ -113,6 +116,10 @@ export default function connectHierarchicalMenu(renderFn) {
 
             return subValue;
           });
+      },
+
+      _findCurrentRefinement(items) {
+        return items.find(({isRefined}) => isRefined);
       },
 
       render({results, state, createURL, instantSearchInstance}) {
@@ -132,6 +139,7 @@ export default function connectHierarchicalMenu(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
+          currentRefinement: this._findCurrentRefinement(items),
         }, false);
       },
     };
