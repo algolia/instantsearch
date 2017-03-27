@@ -1,9 +1,3 @@
-import {
-  getRefinements,
-  clearRefinementsFromState,
-  clearRefinementsAndSearch,
-} from '../../lib/utils.js';
-
 import isUndefined from 'lodash/isUndefined';
 import isBoolean from 'lodash/isBoolean';
 import isString from 'lodash/isString';
@@ -15,6 +9,13 @@ import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 import reduce from 'lodash/reduce';
 import filter from 'lodash/filter';
+
+import {
+  getRefinements,
+  clearRefinementsFromState,
+  clearRefinementsAndSearch,
+  checkRendering,
+} from '../../lib/utils.js';
 
 const usage = `Usage:
 var customCurrentRefinedValues = connectCurrentRefinedValues(function renderFn(params, isFirstRendering) {
@@ -69,82 +70,92 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * Creactes a currentRefinedValues widget with a custom rendering.
  * @function connectCurrentRefinedValues
- * @param {function(CurrentRefinedValuesRenderingOptions)} renderCurrentRefinedValues the custom rendering function
+ * @param {function(CurrentRefinedValuesRenderingOptions)} renderFn the custom rendering function
  * @return {function(CurrentRefinedValuesWidgetOptions): CurrentRefinedValuesWidget} a function that creates CurrentRefinedValues widget
  */
-const connectCurrentRefinedValues = renderCurrentRefinedValues => (widgetParams = {}) => {
-  const {attributes = [], onlyListedAttributes = false} = widgetParams;
-  const attributesOK = isArray(attributes) &&
-    reduce(
-      attributes,
-      (res, val) =>
-        res &&
-          isPlainObject(val) &&
-          isString(val.name) &&
-          (isUndefined(val.label) || isString(val.label)) &&
-          (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
-          (isUndefined(val.transformData) || isFunction(val.transformData)),
-      true);
+export default function connectCurrentRefinedValues(renderFn) {
+  checkRendering(renderFn, usage);
 
-  const showUsage = false ||
-    !isArray(attributes) ||
-    !attributesOK ||
-    !isBoolean(onlyListedAttributes);
+  return (widgetParams = {}) => {
+    const {
+      attributes = [],
+      onlyListedAttributes = false,
+    } = widgetParams;
 
-  if (showUsage) {
-    throw new Error(usage);
-  }
+    const attributesOK = isArray(attributes) &&
+      reduce(
+        attributes,
+        (res, val) =>
+          res &&
+            isPlainObject(val) &&
+            isString(val.name) &&
+            (isUndefined(val.label) || isString(val.label)) &&
+            (isUndefined(val.template) || isString(val.template) || isFunction(val.template)) &&
+            (isUndefined(val.transformData) || isFunction(val.transformData)),
+        true);
 
-  const attributeNames = map(attributes, attribute => attribute.name);
-  const restrictedTo = onlyListedAttributes ? attributeNames : [];
+    const showUsage = false ||
+      !isArray(attributes) ||
+      !attributesOK ||
+      !isBoolean(onlyListedAttributes);
 
-  const attributesObj = reduce(attributes, (res, attribute) => {
-    res[attribute.name] = attribute;
-    return res;
-  }, {});
+    if (showUsage) {
+      throw new Error(usage);
+    }
 
-  return {
-    init({helper, createURL, instantSearchInstance}) {
-      this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
+    const attributeNames = map(attributes, attribute => attribute.name);
+    const restrictedTo = onlyListedAttributes ? attributeNames : [];
 
-      const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
+    const attributesObj = reduce(attributes, (res, attribute) => {
+      res[attribute.name] = attribute;
+      return res;
+    }, {});
 
-      const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
-      const clearRefinementURLs =
-        refinements.map(refinement => createURL(clearRefinementFromState(helper.state, refinement)));
-      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
+    return {
+      init({helper, createURL, instantSearchInstance}) {
+        this._clearRefinementsAndSearch = clearRefinementsAndSearch.bind(null, helper, restrictedTo);
 
-      renderCurrentRefinedValues({
-        attributes: attributesObj,
-        clearAllClick: this._clearRefinementsAndSearch,
-        clearAllURL,
-        clearRefinementClicks,
-        clearRefinementURLs,
-        refinements,
-        instantSearchInstance,
-        widgetParams,
-      }, true);
-    },
-    render({results, helper, state, createURL, instantSearchInstance}) {
-      const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
+        const clearAllURL = createURL(clearRefinementsFromState(helper.state, restrictedTo));
 
-      const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
-      const clearRefinementURLs = refinements.map(refinement => createURL(clearRefinementFromState(state, refinement)));
-      const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
+        const refinements = getFilteredRefinements({}, helper.state, attributeNames, onlyListedAttributes);
+        const clearRefinementURLs =
+          refinements.map(refinement => createURL(clearRefinementFromState(helper.state, refinement)));
+        const clearRefinementClicks = refinements.map(refinement => clearRefinement.bind(null, helper, refinement));
 
-      renderCurrentRefinedValues({
-        attributes: attributesObj,
-        clearAllClick: this._clearRefinementsAndSearch,
-        clearAllURL,
-        clearRefinementClicks,
-        clearRefinementURLs,
-        refinements,
-        instantSearchInstance,
-        widgetParams,
-      }, false);
-    },
+        renderFn({
+          attributes: attributesObj,
+          clearAllClick: this._clearRefinementsAndSearch,
+          clearAllURL,
+          clearRefinementClicks,
+          clearRefinementURLs,
+          refinements,
+          instantSearchInstance,
+          widgetParams,
+        }, true);
+      },
+      render({results, helper, state, createURL, instantSearchInstance}) {
+        const clearAllURL = createURL(clearRefinementsFromState(state, restrictedTo));
+
+        const refinements = getFilteredRefinements(results, state, attributeNames, onlyListedAttributes);
+        const clearRefinementURLs = refinements
+          .map(refinement => createURL(clearRefinementFromState(state, refinement)));
+        const clearRefinementClicks = refinements
+          .map(refinement => clearRefinement.bind(null, helper, refinement));
+
+        renderFn({
+          attributes: attributesObj,
+          clearAllClick: this._clearRefinementsAndSearch,
+          clearAllURL,
+          clearRefinementClicks,
+          clearRefinementURLs,
+          refinements,
+          instantSearchInstance,
+          widgetParams,
+        }, false);
+      },
+    };
   };
-};
+}
 
 function getRestrictedIndexForSort(attributeNames, otherAttributeNames, attributeName) {
   const idx = attributeNames.indexOf(attributeName);
@@ -203,5 +214,3 @@ function clearRefinementFromState(state, refinement) {
 function clearRefinement(helper, refinement) {
   helper.setState(clearRefinementFromState(helper.state, refinement)).search();
 }
-
-export default connectCurrentRefinedValues;
