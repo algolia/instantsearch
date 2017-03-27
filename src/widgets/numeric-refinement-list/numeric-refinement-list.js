@@ -25,8 +25,8 @@ const renderer = ({
 }) => ({
   createURL,
   instantSearchInstance,
-  toggleRefinement,
-  facetValues,
+  refine,
+  items,
   hasNoResults,
 }, isFirstRendering) => {
   if (isFirstRendering) {
@@ -44,10 +44,10 @@ const renderer = ({
       collapsible={collapsible}
       createURL={createURL}
       cssClasses={cssClasses}
-      facetValues={facetValues}
+      facetValues={items}
       shouldAutoHideContainer={autoHideContainer && hasNoResults}
       templateProps={renderState.templateProps}
-      toggleRefinement={toggleRefinement}
+      toggleRefinement={refine}
     />,
     containerNode
   );

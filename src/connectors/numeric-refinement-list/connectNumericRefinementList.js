@@ -7,9 +7,9 @@ const usage = `Usage:
 var customNumericRefinementList = connectNumericRefinementList(function renderFn(params, isFirstRendering) {
   // params = {
   //   createURL,
-  //   facetValues,
+  //   items,
   //   hasNoResults,
-  //   toggleRefinement,
+  //   refine,
   //   instantSearchInstance,
   //   widgetParams,
   //  }
@@ -35,14 +35,14 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} NumericRefinementListRenderingOptions
  * @property {function(string)} createURL create URL's for the next state, the string is the name of the selected option
- * @property {FacetValue[]} facetValues the list of available choices
- * @property {string} facetValues[].name Name of the option
- * @property {number} [facetValues[].start] Low bound of the option (>=)
- * @property {number} [facetValues[].end] High bound of the option (<=)
- * @property {number} [facetValues[].isRefined] true if the value is selected
- * @property {number} [facetValues[].attributeName] the name of the attribute in the records
+ * @property {FacetValue[]} items the list of available choices
+ * @property {string} items[].name Name of the option
+ * @property {number} [items[].start] Low bound of the option (>=)
+ * @property {number} [items[].end] High bound of the option (<=)
+ * @property {number} [items[].isRefined] true if the value is selected
+ * @property {number} [items[].attributeName] the name of the attribute in the records
  * @property {boolean} hasNoResults true if there were no results retrieved in the previous search
- * @property {function(string)} toggleRefinement set the selected value and trigger a new search
+ * @property {function(string)} refine set the selected value and trigger a new search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
@@ -69,14 +69,14 @@ export default function connectNumericRefinementList(renderFn) {
 
     return {
       init({helper, createURL, instantSearchInstance}) {
-        this._toggleRefinement = facetValue => {
+        this._refine = facetValue => {
           const refinedState = refine(helper.state, attributeName, options, facetValue);
           helper.setState(refinedState).search();
         };
 
         this._createURL = state => facetValue => createURL(refine(state, attributeName, options, facetValue));
 
-        const facetValues = options.map(facetValue =>
+        const items = options.map(facetValue =>
           ({
             ...facetValue,
             isRefined: isRefined(helper.state, attributeName, facetValue),
@@ -86,15 +86,15 @@ export default function connectNumericRefinementList(renderFn) {
 
         renderFn({
           createURL: this._createURL(helper.state),
-          facetValues,
+          items,
           hasNoResults: true,
-          toggleRefinement: this._toggleRefinement,
+          refine: this._refine,
           instantSearchInstance,
           widgetParams,
         }, true);
       },
       render({results, state, instantSearchInstance}) {
-        const facetValues = options.map(facetValue =>
+        const items = options.map(facetValue =>
           ({
             ...facetValue,
             isRefined: isRefined(state, attributeName, facetValue),
@@ -104,9 +104,9 @@ export default function connectNumericRefinementList(renderFn) {
 
         renderFn({
           createURL: this._createURL(state),
-          facetValues,
+          items,
           hasNoResults: results.nbHits === 0,
-          toggleRefinement: this._toggleRefinement,
+          refine: this._refine,
           instantSearchInstance,
           widgetParams,
         }, false);
