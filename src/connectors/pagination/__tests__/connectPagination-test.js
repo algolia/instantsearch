@@ -37,7 +37,7 @@ describe('connectPagination', () => {
 
       // should provide good values for the first rendering
       const firstRenderingOptions = rendering.lastCall.args[0];
-      expect(firstRenderingOptions.currentPage).toBe(0);
+      expect(firstRenderingOptions.currentRefinement).toBe(0);
       expect(firstRenderingOptions.nbHits).toBe(0);
       expect(firstRenderingOptions.nbPages).toBe(0);
       expect(firstRenderingOptions.widgetParams).toEqual({
@@ -64,7 +64,7 @@ describe('connectPagination', () => {
 
       // should call the rendering with values from the results
       const secondRenderingOptions = rendering.lastCall.args[0];
-      expect(secondRenderingOptions.currentPage).toBe(0);
+      expect(secondRenderingOptions.currentRefinement).toBe(0);
       expect(secondRenderingOptions.nbHits).toBe(1);
       expect(secondRenderingOptions.nbPages).toBe(1);
     }
@@ -88,8 +88,8 @@ describe('connectPagination', () => {
 
     { // first rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {setPage} = renderOptions;
-      setPage(2);
+      const {refine} = renderOptions;
+      refine(2);
       expect(helper.getPage()).toBe(2);
       expect(helper.search.callCount).toBe(1);
     }
@@ -103,8 +103,8 @@ describe('connectPagination', () => {
 
     { // Second rendering
       const renderOptions = rendering.lastCall.args[0];
-      const {setPage} = renderOptions;
-      setPage(7);
+      const {refine} = renderOptions;
+      refine(7);
       expect(helper.getPage()).toBe(7);
       expect(helper.search.callCount).toBe(2);
     }

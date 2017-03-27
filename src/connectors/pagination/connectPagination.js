@@ -4,10 +4,10 @@ const usage = `Usage:
 var customPagination = connectPagination(function render(params, isFirstRendering) {
   // params = {
   //   createURL,
-  //   currentPage,
+  //   currentRefinement,
   //   nbHits,
   //   nbPages,
-  //   setPage,
+  //   refine,
   //   widgetParams,
   // }
 });
@@ -27,10 +27,10 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef PaginationRenderingOptions
  * @property {function(number)} createURL create URL's for the next state, the number is the page to generate the URL for
- * @property {number} currentPage the number of the page currently displayed
+ * @property {number} currentRefinement the number of the page currently displayed
  * @property {number} nbHits the number of hits computed for the last query (can be approximated)
  * @property {number} nbPages the number of pages for the result set
- * @property {function} setPage set the current page and trigger a search
+ * @property {function} refine set the current page and trigger a search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
@@ -48,19 +48,19 @@ export default function connectPagination(renderFn) {
 
     return {
       init({helper, createURL, instantSearchInstance}) {
-        this.setPage = page => {
+        this.refine = page => {
           helper.setPage(page);
           helper.search();
         };
 
-        this.createURL = state => page => createURL(state.setPage(page));
+        this.createURL = state => page => createURL(state.refine(page));
 
         renderFn({
           createURL: this.createURL(helper.state),
-          currentPage: helper.getPage() || 0,
+          currentRefinement: helper.getPage() || 0,
           nbHits: 0,
           nbPages: 0,
-          setPage: this.setPage,
+          refine: this.refine,
           widgetParams,
           instantSearchInstance,
         }, true);
@@ -75,8 +75,8 @@ export default function connectPagination(renderFn) {
       render({results, state, instantSearchInstance}) {
         renderFn({
           createURL: this.createURL(state),
-          currentPage: state.page,
-          setPage: this.setPage,
+          currentRefinement: state.page,
+          refine: this.refine,
           nbHits: results.nbHits,
           nbPages: this.getMaxPage(results),
           widgetParams,

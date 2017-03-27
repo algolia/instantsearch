@@ -28,15 +28,15 @@ const renderer = ({
   scrollToNode,
 }) => ({
   createURL,
-  currentPage,
+  currentRefinement,
   nbHits,
   nbPages,
-  setPage,
+  refine,
 }, isFirstRendering) => {
   if (isFirstRendering) return;
 
-  const setCurrentPage = () => {
-    setPage();
+  const setCurrrentPage = () => {
+    refine();
 
     if (scrollToNode !== false) {
       scrollToNode.scrollIntoView();
@@ -49,12 +49,12 @@ const renderer = ({
     <Pagination
       createURL={createURL}
       cssClasses={cssClasses}
-      currentPage={currentPage}
+      currentPage={currentRefinement}
       labels={labels}
       nbHits={nbHits}
       nbPages={nbPages}
       padding={padding}
-      setCurrentPage={setCurrentPage}
+      setCurrentPage={setCurrrentPage}
       shouldAutoHideContainer={shouldAutoHideContainer}
       showFirstLast={showFirstLast}
     />,

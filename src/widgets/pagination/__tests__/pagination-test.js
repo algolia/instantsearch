@@ -51,7 +51,7 @@ describe('pagination()', () => {
   });
 
   it('sets the page', () => {
-    widget.setPage(helper, 42);
+    widget.refine(helper, 42);
     expect(helper.setPage.calledOnce).toBe(true);
     expect(helper.search.calledOnce).toBe(true);
   });
@@ -81,7 +81,7 @@ describe('pagination()', () => {
     it('should not scroll', () => {
       widget = pagination({container, scrollTo: false});
       widget.init({helper});
-      widget.setPage(helper, 2);
+      widget.refine(helper, 2);
       expect(scrollIntoView.calledOnce).toBe(false, 'scrollIntoView never called');
     });
 
