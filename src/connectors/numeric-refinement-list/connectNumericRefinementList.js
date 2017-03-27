@@ -57,7 +57,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectNumericRefinementList(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
+  return (widgetParams = {}) => {
     const {
       attributeName,
       options,

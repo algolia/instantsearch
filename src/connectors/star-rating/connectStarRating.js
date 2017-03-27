@@ -44,7 +44,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectStarRating(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
+  return (widgetParams = {}) => {
     const {
       attributeName,
       max = 5,

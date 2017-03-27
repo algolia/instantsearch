@@ -36,7 +36,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectStats(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => ({
+  return (widgetParams = {}) => ({
     init({helper, instantSearchInstance}) {
       renderFn({
         instantSearchInstance,

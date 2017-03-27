@@ -49,7 +49,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectMenu(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
+  return (widgetParams = {}) => {
     const {
       attributeName,
       limit = 10,

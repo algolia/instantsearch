@@ -48,7 +48,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 export default function connectToggle(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
+  return (widgetParams = {}) => {
     const {
       attributeName,
       label,

@@ -64,7 +64,7 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
 export default function connectRefinementList(renderFn) {
   checkRendering(renderFn, usage);
 
-  return widgetParams => {
+  return (widgetParams = {}) => {
     const {
       attributeName,
       operator = 'or',
