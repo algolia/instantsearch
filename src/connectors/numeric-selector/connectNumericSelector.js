@@ -3,9 +3,9 @@ import {checkRendering} from '../../lib/utils.js';
 const usage = `Usage:
 var customNumericSelector = connectNumericSelector(function renderFn(params, isFirstRendering) {
   // params = {
-  //   currentValue,
+  //   currentRefinement,
   //   options,
-  //   setValue,
+  //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
   //   widgetParams,
@@ -32,9 +32,9 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} NumericSelectorRenderingOptions
- * @property {string} currentValue the currently selected value
+ * @property {string} currentRefinement the currently selected value
  * @property {{ value: string, label: string }[]} the different values and labels of the selector
- * @property {function} setValue updates the change with the selected value
+ * @property {function} refine updates the change with the selected value
  * @property {boolean} hasNoResults indicates if the last search returned any value
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
@@ -80,9 +80,9 @@ export default function connectNumericSelector(renderFn) {
         };
 
         renderFn({
-          currentValue: this._getRefinedValue(helper.state),
+          currentRefinement: this._getRefinedValue(helper.state),
           options,
-          setValue: this._refine,
+          refine: this._refine,
           hasNoResults: true,
           instantSearchInstance,
           widgetParams,
@@ -91,9 +91,9 @@ export default function connectNumericSelector(renderFn) {
 
       render({helper, results, instantSearchInstance}) {
         renderFn({
-          currentValue: this._getRefinedValue(helper.state),
+          currentRefinement: this._getRefinedValue(helper.state),
           options,
-          setValue: this._refine,
+          refine: this._refine,
           hasNoResults: results.nbHits === 0,
           instantSearchInstance,
           widgetParams,

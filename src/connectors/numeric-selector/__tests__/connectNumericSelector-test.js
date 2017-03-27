@@ -51,7 +51,7 @@ describe('connectNumericSelector', () => {
     expect(rendering.lastCall.args[1]).toBe(true);
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.currentValue).toBe(listOptions[0].value);
+    expect(firstRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(firstRenderingOptions.widgetParams).toEqual({
       attributeName: 'numerics',
       options: listOptions,
@@ -69,7 +69,7 @@ describe('connectNumericSelector', () => {
     expect(rendering.lastCall.args[1]).toBe(false);
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.currentValue).toBe(listOptions[0].value);
+    expect(secondRenderingOptions.currentRefinement).toBe(listOptions[0].value);
     expect(secondRenderingOptions.widgetParams).toEqual({
       attributeName: 'numerics',
       options: listOptions,
@@ -139,13 +139,13 @@ describe('connectNumericSelector', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {setValue} = firstRenderingOptions;
+    const {refine} = firstRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
-    setValue(listOptions[1].name);
+    refine(listOptions[1].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [20]});
-    setValue(listOptions[2].name);
+    refine(listOptions[2].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [30]});
-    setValue(listOptions[0].name);
+    refine(listOptions[0].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
 
     widget.render({
@@ -156,7 +156,7 @@ describe('connectNumericSelector', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {setValue: renderSetValue} = secondRenderingOptions;
+    const {refine: renderSetValue} = secondRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [10]});
     renderSetValue(listOptions[1].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [20]});
@@ -190,12 +190,12 @@ describe('connectNumericSelector', () => {
       onHistoryChange: () => {},
     });
 
-    let setValue = rendering.lastCall.args[0].setValue;
+    let refine = rendering.lastCall.args[0].refine;
 
     listOptions.forEach((_, i) => {
       // we loop with 1 increment because the first value is selected by default
       const currentOption = listOptions[(i + 1) % listOptions.length];
-      setValue(currentOption.name);
+      refine(currentOption.name);
 
       widget.render({
         results: new SearchResults(helper.state, [{}]),
@@ -209,9 +209,9 @@ describe('connectNumericSelector', () => {
       const expectedResult = currentOption.value;
 
       const renderingParameters = rendering.lastCall.args[0];
-      expect(renderingParameters.currentValue).toEqual(expectedResult);
+      expect(renderingParameters.currentRefinement).toEqual(expectedResult);
 
-      setValue = renderingParameters.setValue;
+      refine = renderingParameters.refine;
     });
   });
 });
