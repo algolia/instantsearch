@@ -6,8 +6,8 @@ const usage = `Usage:
 var customHitsPerPage = connectHitsPerPageSelector(function render(params, isFirstRendering) {
   // params = {
   //   options,
-  //   currentValue,
-  //   setValue,
+  //   currentRefinement,
+  //   refine,
   //   hasNoResults,
   //   instantSearchInstance,
   //   widgetParams,
@@ -29,8 +29,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object[]} options Array of objects defining the different values and labels
  * @property {number} options[0].value number of hits to display per page
  * @property {string} options[0].label Label to display in the option
- * @property {number} currentValue the currently selected value of hitsPerPage
- * @property {function(number)} setValue sets the number of hits per page and trigger a search
+ * @property {number} currentRefinement the currently selected value of hitsPerPage
+ * @property {function(number)} refine sets the number of hits per page and trigger a search
  * @property {boolean} hasNoResults true if there were no results in the last search
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  * @property {Object} widgetParams all original options forwarded to rendering
@@ -85,16 +85,16 @@ export default function connectHitsPerPageSelector(renderFn) {
           options = [{value: undefined, label: ''}].concat(options);
         }
 
-        const currentValue = state.hitsPerPage;
+        const currentRefinement = state.hitsPerPage;
 
         this.setHitsPerPage = value => helper
           .setQueryParameter('hitsPerPage', value)
           .search();
 
         renderFn({
-          currentValue,
+          currentRefinement,
           options,
-          setValue: this.setHitsPerPage,
+          refine: this.setHitsPerPage,
           hasNoResults: true,
           widgetParams,
           instantSearchInstance,
@@ -102,13 +102,13 @@ export default function connectHitsPerPageSelector(renderFn) {
       },
 
       render({state, results, instantSearchInstance}) {
-        const currentValue = state.hitsPerPage;
+        const currentRefinement = state.hitsPerPage;
         const hasNoResults = results.nbHits === 0;
 
         renderFn({
-          currentValue,
+          currentRefinement,
           options,
-          setValue: this.setHitsPerPage,
+          refine: this.setHitsPerPage,
           hasNoResults,
           widgetParams,
           instantSearchInstance,

@@ -89,9 +89,9 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {setValue} = firstRenderingOptions;
+    const {refine} = firstRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(11);
-    setValue(3);
+    refine(3);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
 
     widget.render({
@@ -102,7 +102,7 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {setValue: renderSetValue} = secondRenderingOptions;
+    const {refine: renderSetValue} = secondRenderingOptions;
     expect(helper.getQueryParameter('hitsPerPage')).toBe(3);
     renderSetValue(10);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(10);
@@ -134,8 +134,8 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.currentValue).toBe(7);
-    firstRenderingOptions.setValue(3);
+    expect(firstRenderingOptions.currentRefinement).toBe(7);
+    firstRenderingOptions.refine(3);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -145,7 +145,7 @@ describe('connectHitsPerPageSelector', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.currentValue).toBe(3);
+    expect(secondRenderingOptions.currentRefinement).toBe(3);
   });
 
   it('adds an option for the unselecting values, when the current hitsPerPage is defined elsewhere', () => {
@@ -172,7 +172,7 @@ describe('connectHitsPerPageSelector', () => {
 
     const firstRenderingOptions = rendering.lastCall.args[0];
     expect(firstRenderingOptions.options.length).toBe(3);
-    firstRenderingOptions.setValue(firstRenderingOptions.options[0].value);
+    firstRenderingOptions.refine(firstRenderingOptions.options[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
 
     // Reset the hitsPerPage to an actual value
@@ -187,7 +187,7 @@ describe('connectHitsPerPageSelector', () => {
 
     const secondRenderingOptions = rendering.lastCall.args[0];
     expect(secondRenderingOptions.options.length).toBe(3);
-    secondRenderingOptions.setValue(secondRenderingOptions.options[0].value);
+    secondRenderingOptions.refine(secondRenderingOptions.options[0].value);
     expect(helper.getQueryParameter('hitsPerPage')).toBe(undefined);
   });
 });
