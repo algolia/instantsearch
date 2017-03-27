@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
 import RefinementList from '../../components/RefinementList/RefinementList.js';
-
 import connectNumericRefinementList from '../../connectors/numeric-refinement-list/connectNumericRefinementList.js';
-
 import defaultTemplates from './defaultTemplates.js';
 
 import {
@@ -11,7 +11,6 @@ import {
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
 
 const bem = bemHelper('ais-refinement-list');
 

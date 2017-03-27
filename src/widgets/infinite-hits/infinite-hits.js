@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
 import InfiniteHits from '../../components/InfiniteHits.js';
+import defaultTemplates from './defaultTemplates.js';
+import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
 
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
-import defaultTemplates from './defaultTemplates.js';
-
-import connectInfiniteHits from '../../connectors/infinite-hits/connectInfiniteHits.js';
 
 const bem = bemHelper('ais-infinite-hits');
 

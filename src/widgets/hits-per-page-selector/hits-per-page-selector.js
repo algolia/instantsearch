@@ -1,17 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
+
+import Selector from '../../components/Selector.js';
+import connectHitsPerPageSelector from '../../connectors/hits-per-page-selector/connectHitsPerPageSelector.js';
 
 import {
   bemHelper,
   getContainerNode,
 } from '../../lib/utils.js';
-import cx from 'classnames';
 
 const bem = bemHelper('ais-hits-per-page-selector');
-
-import Selector from '../../components/Selector.js';
-
-import connectHitsPerPageSelector from '../../connectors/hits-per-page-selector/connectHitsPerPageSelector.js';
 
 const renderer = ({
   containerNode,
