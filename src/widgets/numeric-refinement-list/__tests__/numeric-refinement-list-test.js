@@ -139,7 +139,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "4"', () => {
-    widget._toggleRefinement('4');
+    widget._refine('4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '=', 4]);
@@ -147,7 +147,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls the refinement functions if refined with "between 5 and 10"', () => {
-    widget._toggleRefinement('between 5 and 10');
+    widget._refine('between 5 and 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledTwice).toBe(true, 'addNumericRefinement called twice');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 5]);
@@ -156,7 +156,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "less than 4"', () => {
-    widget._toggleRefinement('less than 4');
+    widget._refine('less than 4');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '<=', 4]);
@@ -164,7 +164,7 @@ describe('numericRefinementList()', () => {
   });
 
   it('calls two times the refinement functions if refined with "more than 10"', () => {
-    widget._toggleRefinement('more than 10');
+    widget._refine('more than 10');
     expect(helper.state.clearRefinements.calledOnce).toBe(true, 'clearRefinements called once');
     expect(helper.state.addNumericRefinement.calledOnce).toBe(true, 'addNumericRefinement called once');
     expect(helper.state.addNumericRefinement.getCall(0).args).toEqual(['price', '>=', 10]);

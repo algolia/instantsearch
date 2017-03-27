@@ -92,17 +92,17 @@ describe('connectNumericRefinementList', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement, facetValues} = firstRenderingOptions;
+    const {refine, items} = firstRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
-    toggleRefinement(facetValues[0].name);
+    refine(items[0].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'<=': [10]});
-    toggleRefinement(facetValues[1].name);
+    refine(items[1].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'>=': [10], '<=': [20]});
-    toggleRefinement(facetValues[2].name);
+    refine(items[2].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'>=': [20]});
-    toggleRefinement(facetValues[3].name);
+    refine(items[3].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'=': [42]});
-    toggleRefinement(facetValues[4].name);
+    refine(items[4].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
 
     widget.render({
@@ -113,7 +113,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    const {toggleRefinement: renderToggleRefinement, facetValues: renderFacetValues} = secondRenderingOptions;
+    const {refine: renderToggleRefinement, items: renderFacetValues} = secondRenderingOptions;
     expect(helper.state.getNumericRefinements('numerics')).toEqual({});
     renderToggleRefinement(renderFacetValues[0].name);
     expect(helper.state.getNumericRefinements('numerics')).toEqual({'<=': [10]});
@@ -150,7 +150,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const firstRenderingOptions = rendering.lastCall.args[0];
-    expect(firstRenderingOptions.facetValues).toEqual([
+    expect(firstRenderingOptions.items).toEqual([
       {name: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
       {name: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
       {name: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
@@ -164,7 +164,7 @@ describe('connectNumericRefinementList', () => {
     });
 
     const secondRenderingOptions = rendering.lastCall.args[0];
-    expect(secondRenderingOptions.facetValues).toEqual([
+    expect(secondRenderingOptions.items).toEqual([
       {name: 'below 10', end: 10, isRefined: false, attributeName: 'numerics'},
       {name: '10 - 20', start: 10, end: 20, isRefined: false, attributeName: 'numerics'},
       {name: 'more than 20', start: 20, isRefined: false, attributeName: 'numerics'},
@@ -196,10 +196,10 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    let toggleRefinement = rendering.lastCall.args[0].toggleRefinement;
+    let refine = rendering.lastCall.args[0].refine;
 
     listOptions.forEach((currentOption, i) => {
-      toggleRefinement(currentOption.name);
+      refine(currentOption.name);
 
       widget.render({
         results: new SearchResults(helper.state, [{}]),
@@ -215,9 +215,9 @@ describe('connectNumericRefinementList', () => {
       expectedResults[i].isRefined = true;
 
       const renderingParameters = rendering.lastCall.args[0];
-      expect(renderingParameters.facetValues).toEqual(expectedResults);
+      expect(renderingParameters.items).toEqual(expectedResults);
 
-      toggleRefinement = renderingParameters.toggleRefinement;
+      refine = renderingParameters.refine;
     });
   });
 
@@ -246,9 +246,9 @@ describe('connectNumericRefinementList', () => {
       onHistoryChange: () => {},
     });
 
-    const toggleRefinement = rendering.lastCall.args[0].toggleRefinement;
+    const refine = rendering.lastCall.args[0].refine;
     // a user selects a value in the refinement list
-    toggleRefinement(listOptions[0].name);
+    refine(listOptions[0].name);
 
     widget.render({
       results: new SearchResults(helper.state, [{}]),
@@ -262,7 +262,7 @@ describe('connectNumericRefinementList', () => {
     expectedResults0[0].isRefined = true;
 
     const renderingParameters0 = rendering.lastCall.args[0];
-    expect(renderingParameters0.facetValues).toEqual(expectedResults0);
+    expect(renderingParameters0.items).toEqual(expectedResults0);
 
     // All the refinements are cleared by a third party
     helper.removeNumericRefinement('numerics');
@@ -279,6 +279,6 @@ describe('connectNumericRefinementList', () => {
     expectedResults1[4].isRefined = true;
 
     const renderingParameters1 = rendering.lastCall.args[0];
-    expect(renderingParameters1.facetValues).toEqual(expectedResults1);
+    expect(renderingParameters1.items).toEqual(expectedResults1);
   });
 });
