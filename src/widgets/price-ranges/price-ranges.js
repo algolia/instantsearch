@@ -31,7 +31,7 @@ const renderer = ({
   if (isFirstRendering) {
     renderState.templateProps = prepareTemplateProps({
       defaultTemplates,
-      templatesConfig: instantSearchInstance.templateProps,
+      templatesConfig: instantSearchInstance.templatesConfig,
       templates,
     });
     return;
