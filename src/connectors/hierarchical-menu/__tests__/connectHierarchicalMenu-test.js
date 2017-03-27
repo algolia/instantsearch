@@ -209,8 +209,10 @@ describe('connectHierarchicalMenu', () => {
       onHistoryChange: () => {},
     });
 
+    const [[firstRenderingOptions]] = rendering.mock.calls;
+
     expect(rendering).toBeCalled();
-    expect(rendering.mock.calls[0][0].currentRefinement).toBe(null);
+    expect(firstRenderingOptions.currentRefinement).toBe(null);
 
     widget.render({
       results: new SearchResults(helper.state, [{
@@ -237,7 +239,9 @@ describe('connectHierarchicalMenu', () => {
       createURL: () => '#',
     });
 
-    expect(rendering.mock.calls[1][0].currentRefinement).toEqual({
+    const [, [secondRenderingOptions]] = rendering.mock.calls;
+
+    expect(secondRenderingOptions.currentRefinement).toEqual({
       name: 'Decoration',
       path: 'Decoration',
       count: 880,
