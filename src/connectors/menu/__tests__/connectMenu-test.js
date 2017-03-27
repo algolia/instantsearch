@@ -230,4 +230,51 @@ describe('connectMenu', () => {
       },
     ]);
   });
+
+  it('provides the correct `currentRefinement` value', () => {
+    const widget = makeWidget({attributeName: 'category'});
+
+    const helper = algoliasearchHelper(fakeClient, '', widget.getConfiguration({}));
+    helper.search = jest.fn();
+
+    helper.toggleRefinement('category', 'Decoration');
+
+    widget.init({
+      helper,
+      state: helper.state,
+      createURL: () => '#',
+      onHistoryChange: () => {},
+    });
+
+    expect(rendering.lastCall.args[0].currentRefinement).toBe(null);
+
+    widget.render({
+      results: new SearchResults(helper.state, [{
+        hits: [],
+        facets: {
+          category: {
+            Decoration: 880,
+          },
+        },
+      }, {
+        facets: {
+          category: {
+            Decoration: 880,
+            Outdoor: 47,
+          },
+        },
+      }]),
+      state: helper.state,
+      helper,
+      createURL: () => '#',
+    });
+
+    expect(rendering.lastCall.args[0].currentRefinement).toEqual({
+      name: 'Decoration',
+      path: 'Decoration',
+      count: 880,
+      isRefined: true,
+      data: null,
+    });
+  });
 });

@@ -11,6 +11,7 @@ var customMenu = connectMenu(function render(params, isFirstRendering) {
   //   instantSearchInstance,
   //   canRefine,
   //   widgetParams,
+  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -39,6 +40,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {boolean} canRefine true if refinement can be applied
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} currentRefinement the refinement currently applied
  */
 
  /**
@@ -92,6 +94,7 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
           canRefine: false,
           widgetParams,
+          currentRefinement: null,
         }, true);
       },
 
@@ -105,6 +108,7 @@ export default function connectMenu(renderFn) {
           instantSearchInstance,
           canRefine: items.length > 0,
           widgetParams,
+          currentRefinement: items.find(({isRefined}) => isRefined),
         }, false);
       },
     };
