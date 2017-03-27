@@ -83,7 +83,7 @@ describe('hitsPerPageSelector()', () => {
     expect(consoleLog.firstCall.args[0]).
       toEqual(
 `[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: 20)`
+  with \`value: hitsPerPage\` (hitsPerPage: 20)`
       );
   });
 
@@ -94,7 +94,7 @@ with \`value: hitsPerPage\` (hitsPerPage: 20)`
     expect(consoleLog.firstCall.args[0]).
       toEqual(
 `[Warning][hitsPerPageSelector] No option in \`options\`
-with \`value: hitsPerPage\` (hitsPerPage: -1)`
+  with \`value: hitsPerPage\` (hitsPerPage: -1)`
       );
   });
 
