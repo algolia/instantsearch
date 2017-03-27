@@ -1,20 +1,79 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
-import {filter} from 'lodash';
+import filter from 'lodash/filter';
 
 import RefinementList from '../../components/RefinementList/RefinementList.js';
 import connectRefinementList from '../../connectors/refinement-list/connectRefinementList.js';
+import defaultTemplates from './defaultTemplates.js';
+import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
+
 import {
   bemHelper,
   prepareTemplateProps,
   getContainerNode,
   prefixKeys,
 } from '../../lib/utils.js';
-import defaultTemplates from './defaultTemplates.js';
-import getShowMoreConfig from '../../lib/show-more/getShowMoreConfig.js';
 
 const bem = bemHelper('ais-refinement-list');
+
+const renderer = ({
+  containerNode,
+  cssClasses,
+  transformData,
+  templates,
+  renderState,
+  collapsible,
+  limitMax,
+  limit,
+  autoHideContainer,
+  showMoreConfig,
+  searchForFacetValues,
+}) => ({
+  refine,
+  items,
+  createURL,
+  searchForItems,
+  isFromSearch,
+  instantSearchInstance,
+  canRefine,
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    renderState.templateProps = prepareTemplateProps({
+      transformData,
+      defaultTemplates,
+      templatesConfig: instantSearchInstance.templatesConfig,
+      templates,
+    });
+    return;
+  }
+
+  // Pass count of currently selected items to the header template
+  const headerFooterData = {
+    header: {refinedFacetsCount: filter(items, {isRefined: true}).length},
+  };
+
+  ReactDOM.render(
+    <RefinementList
+      collapsible={collapsible}
+      createURL={createURL}
+      cssClasses={cssClasses}
+      facetValues={items}
+      headerFooterData={headerFooterData}
+      limitMax={limitMax}
+      limitMin={limit}
+      shouldAutoHideContainer={autoHideContainer && canRefine === false}
+      showMore={showMoreConfig !== null}
+      templateProps={renderState.templateProps}
+      toggleRefinement={refine}
+      searchFacetValues={searchForFacetValues && searchForItems}
+      searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
+      isFromSearch={isFromSearch}
+    />,
+    containerNode
+  );
+};
+
 const usage = `Usage:
 refinementList({
   container,
@@ -99,6 +158,7 @@ export default function refinementList({
   const showMoreTemplates = showMoreConfig ? prefixKeys('show-more-', showMoreConfig.templates) : {};
   const searchForValuesTemplates = searchForFacetValues ? searchForFacetValues.templates : {};
   const allTemplates = {...templates, ...showMoreTemplates, ...searchForValuesTemplates};
+
   const cssClasses = {
     root: cx(bem(null), userCssClasses.root),
     header: cx(bem('header'), userCssClasses.header),
@@ -112,56 +172,29 @@ export default function refinementList({
     count: cx(bem('count'), userCssClasses.count),
   };
 
-  let templateProps;
-
-  return connectRefinementList(({
-    refine,
-    items,
-    createURL,
-    searchForItems,
-    isFromSearch,
-    instantSearchInstance,
-    canRefine,
-  }, isFirstRendering) => {
-    if (isFirstRendering) {
-      templateProps = prepareTemplateProps({
-        transformData,
-        defaultTemplates,
-        templatesConfig: instantSearchInstance.templatesConfig,
-        templates: allTemplates,
-      });
-
-      return;
-    }
-
-    // Pass count of currently selected items to the header template
-    const headerFooterData = {
-      header: {refinedFacetsCount: filter(items, {isRefined: true}).length},
-    };
-
-    ReactDOM.render(
-      <RefinementList
-        collapsible={collapsible}
-        createURL={createURL}
-        cssClasses={cssClasses}
-        facetValues={items}
-        headerFooterData={headerFooterData}
-        limitMax={limitMax}
-        limitMin={limit}
-        shouldAutoHideContainer={autoHideContainer && canRefine === false}
-        showMore={showMoreConfig !== null}
-        templateProps={templateProps}
-        toggleRefinement={refine}
-        searchFacetValues={searchForFacetValues && searchForItems}
-        searchPlaceholder={searchForFacetValues.placeholder || 'Search for other...'}
-        isFromSearch={isFromSearch}
-      />,
-      containerNode
-    );
-  })({
-    attributeName,
-    operator,
-    limit: limitMax,
-    sortBy,
+  const specializedRenderer = renderer({
+    containerNode,
+    cssClasses,
+    transformData,
+    templates: allTemplates,
+    renderState: {},
+    collapsible,
+    limitMax,
+    limit,
+    autoHideContainer,
+    showMoreConfig,
+    searchForFacetValues,
   });
+
+  try {
+    const makeWidget = connectRefinementList(specializedRenderer);
+    return makeWidget({
+      attributeName,
+      operator,
+      limit: limitMax,
+      sortBy,
+    });
+  } catch (e) {
+    throw new Error(e);
+  }
 }
