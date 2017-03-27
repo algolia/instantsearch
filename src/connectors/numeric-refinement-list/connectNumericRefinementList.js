@@ -12,6 +12,7 @@ var customNumericRefinementList = connectNumericRefinementList(function renderFn
   //   refine,
   //   instantSearchInstance,
   //   widgetParams,
+  //   currentRefinement,
   //  }
 });
 search.addWidget(
@@ -45,6 +46,7 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {function(string)} refine set the selected value and trigger a new search
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
+ * @property {Object} currentRefinement the refinement currently applied
  */
 
 /**
@@ -91,8 +93,10 @@ export default function connectNumericRefinementList(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
+          currentRefinement: this._findCurrentRefinement(items),
         }, true);
       },
+
       render({results, state, instantSearchInstance}) {
         const items = options.map(facetValue =>
           ({
@@ -109,7 +113,12 @@ export default function connectNumericRefinementList(renderFn) {
           refine: this._refine,
           instantSearchInstance,
           widgetParams,
+          currentRefinement: this._findCurrentRefinement(items),
         }, false);
+      },
+
+      _findCurrentRefinement(items) {
+        return items.find(({isRefined: itemIsRefined}) => itemIsRefined);
       },
     };
   };
