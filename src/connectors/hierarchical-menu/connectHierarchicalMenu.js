@@ -3,7 +3,6 @@ import {checkRendering} from '../../lib/utils.js';
 const usage = `Usage:
 var customToggle = connectHierarchicalMenu(function render(params, isFirstRendering) {
   // params = {
-  //   attributeNameKey,
   //   createURL,
   //   items,
   //   refine,
@@ -36,7 +35,6 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 
 /**
  * @typedef {Object} HierarchicalMenuRenderingOptions
- * @property {string} attributeNameKey the key to be used on the items
  * @property {function} createURL function that create a url for the next state
  * @property {Object[]} items the values to be rendered
  * @property {function} refine set the path of the hierarchical filter and triggers a new search
@@ -96,7 +94,6 @@ export default function connectHierarchicalMenu(renderFn) {
         }
 
         renderFn({
-          attributeNameKey: 'path',
           createURL: _createURL,
           items: [],
           refine: this._refine,
@@ -129,7 +126,6 @@ export default function connectHierarchicalMenu(renderFn) {
         }
 
         renderFn({
-          attributeNameKey: 'path',
           createURL: _createURL,
           items,
           refine: this._refine,

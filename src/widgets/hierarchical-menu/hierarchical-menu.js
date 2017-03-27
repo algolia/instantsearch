@@ -23,7 +23,6 @@ const renderer = ({
   templates,
   renderState,
 }) => ({
-  attributeNameKey,
   createURL,
   items,
   refine,
