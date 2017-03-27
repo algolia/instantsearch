@@ -1,6 +1,5 @@
 import createConnector from '../core/createConnector';
 import {PropTypes} from 'react';
-import {getIndex} from '../core/indexUtils';
 
 /**
  * connectCurrentRefinements connector provides the logic to build a widget that will
