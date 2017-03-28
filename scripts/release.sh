@@ -3,17 +3,17 @@
 set -e # exit when error
 
 beta=false
-while test $# -gt 0; do
+if [ $# -gt 0 ]; then
   case "$1" in
-    -b|--beta)
-      printf "Publishing as a beta version\n"
+    --beta)
       beta=true
       ;;
     *)
-      break
+      printf "Usage: npm run release -- --beta\n";
+      exit 1;
       ;;
   esac
-done
+fi
 
 # npm owner add and npm whoami cannot be moved to yarn yet
 if [[ -n $(cd packages/react-instantsearch && npm owner add "$(npm whoami)") ]]; then
@@ -58,8 +58,13 @@ read -p "=> Release: press [ENTER] to view changes since latest version.."
 
 conventional-changelog --preset angular --output-unreleased | less
 
+additionalInfo=''
+if [[ $beta ]]; then
+  additionalInfo=' (You are releasing a BETA version, add -beta.x, x being a number)'
+fi
+
 # choose and bump new version
-printf "\n=> Release: please type the new chosen version > "
+printf "\n=> Release: please type the new chosen version $additionalInfo >"
 read -e newVersion
 
 (
@@ -98,18 +103,17 @@ git push origin --tags
 printf "\n\nRelease: pushed to github, publish on npm"
 
 npmFlags=''
-yarnFlags=''
-if [[ beta ]]; then
+if [[ $beta ]]; then
   npmFlags="--tag beta"
 fi
 
 (
-cd packages/react-instantsearch 
-VERSION=$newVersion npm run build-and-publish -- -n "$npmFlags" -y "$yarnFlags"
+cd packages/react-instantsearch
+VERSION=$newVersion npm run build-and-publish -- -n "$npmFlags"
 )
 
 (
-cd packages/react-instantsearch-theme-algolia -- -n "$npmFlags" -y "$yarnFlags"
+cd packages/react-instantsearch-theme-algolia -- -n "$npmFlags"
 npm run build-and-publish
 )
 
