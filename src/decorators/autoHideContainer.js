@@ -1,44 +1,17 @@
-/* eslint-disable react/no-find-dom-node */
+import React, {Component, PropTypes} from 'react';
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-function autoHideContainer(ComposedComponent) {
-  class AutoHide extends React.Component {
-    componentDidMount() {
-      this._hideOrShowContainer(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-      if (this.props.shouldAutoHideContainer === nextProps.shouldAutoHideContainer) {
-        return;
-      }
-
-      this._hideOrShowContainer(nextProps);
-    }
-
-    shouldComponentUpdate(nextProps) {
-      return nextProps.shouldAutoHideContainer === false;
-    }
-
-    _hideOrShowContainer(props) {
-      const container = ReactDOM.findDOMNode(this).parentNode;
-      container.style.display = props.shouldAutoHideContainer === true ? 'none' : '';
-    }
+export default function(ComposedComponent) {
+  return class AutoHide extends Component {
+    static displayName = `${ComposedComponent.name}-AutoHide`
+    static propTypes = {shouldAutoHideContainer: PropTypes.bool.isRequired}
 
     render() {
-      return <ComposedComponent {...this.props} />;
+      const {shouldAutoHideContainer} = this.props;
+      return (
+        <div style={{display: shouldAutoHideContainer ? 'none' : ''}}>
+          <ComposedComponent {...this.props} />
+        </div>
+      );
     }
-  }
-
-  AutoHide.propTypes = {
-    shouldAutoHideContainer: React.PropTypes.bool.isRequired,
   };
-
-  // precise displayName for ease of debugging (react dev tool, react warnings)
-  AutoHide.displayName = `${ComposedComponent.name}-AutoHide`;
-
-  return AutoHide;
 }
-
-export default autoHideContainer;
