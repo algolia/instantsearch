@@ -32,7 +32,6 @@ describe('connectRangeSlider', () => {
       state: helper.state,
       createURL: () => '#',
       onHistoryChange: () => {},
-      instantSearchInstance: {templatesConfig: undefined},
     });
 
     { // should call the rendering once with isFirstRendering to true
