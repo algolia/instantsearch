@@ -1,3 +1,21 @@
+<a name="4.0.0-beta.0"></a>
+# [4.0.0-beta.0](https://github.com/algolia/instantsearch.js/compare/v3.3.0...v4.0.0-beta.0) (2017-03-28)
+
+
+### Features
+
+* **multi-index:** ease multi index and auto complete ([09a4e1d](https://github.com/algolia/instantsearch.js/commit/09a4e1d))
+
+
+### BREAKING CHANGES
+
+* multi-index: * Reseting the pagination should be done at each connector level inside the "refine" function when returning the search state.
+* The current page now appears inside the search state when a widget is used
+* Query values are part of the items prop of the connectCurrentRefinements connector. Behaviour is unchanged, query will be filtered if clearsQuery prop is false.
+* Add the index name to all the current refinements items. (not used by our widgets yet, but available if needed).
+
+
+
 <a name="3.3.0"></a>
 # [3.3.0](https://github.com/algolia/instantsearch.js/compare/v3.2.2-beta0...v3.3.0) (2017-03-22)
 
