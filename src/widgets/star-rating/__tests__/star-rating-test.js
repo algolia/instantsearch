@@ -159,7 +159,7 @@ describe('starRating()', () => {
     expect(helper.search.calledOnce).toBe(true, 'search called once');
   });
 
-  it.only('should return the right facet counts and results', () => {
+  it('should return the right facet counts and results', () => {
     const attributeName = 'anAttrName';
 
     const _widget = starRating({container, attributeName, cssClasses: {body: ['body', 'cx']}});
