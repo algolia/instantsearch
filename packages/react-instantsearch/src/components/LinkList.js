@@ -28,17 +28,12 @@ export default class LinkList extends Component {
         disabled: PropTypes.bool,
       })
     ),
-    selectedItem: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-      PropTypes.object,
-    ]),
     onSelect: PropTypes.func.isRequired,
     canRefine: PropTypes.bool.isRequired,
   };
 
   render() {
-    const {cx, createURL, items, selectedItem, onSelect, canRefine} = this.props;
+    const {cx, createURL, items, onSelect, canRefine} = this.props;
     return (
       <ul {...cx('root', !canRefine && 'noRefinement')}>
         {items.map(item =>
@@ -46,10 +41,7 @@ export default class LinkList extends Component {
             key={has(item, 'key') ? item.key : item.value}
             {...cx(
               'item',
-              // on purpose == following, see
-              // https://github.com/algolia/instantsearch.js/commit/bfed1f3512e40fb1e9989453582b4a2c2d90e3f2
-              // eslint-disable-next-line
-              item.value == selectedItem && !item.disabled && 'itemSelected',
+              item.selected && !item.disabled && 'itemSelected',
               item.disabled && 'itemDisabled',
               item.modifier
             )}
@@ -60,7 +52,7 @@ export default class LinkList extends Component {
                 {has(item, 'label') ? item.label : item.value}
               </span> :
               <Link
-                {...cx('itemLink', item.value === selectedItem && 'itemLinkSelected')}
+                {...cx('itemLink', item.selected && 'itemLinkSelected')}
                 aria-label={item.ariaLabel}
                 href={createURL(item.value)}
                 onClick={onSelect.bind(null, item.value)}

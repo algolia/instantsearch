@@ -1,7 +1,21 @@
 import createConnector from '../core/createConnector';
+import {getIndex, getCurrentRefinementValue, refineValue} from '../core/indexUtils';
 
 function getId() {
   return 'page';
+}
+
+function getCurrentRefinement(props, searchState, context) {
+  const id = getId();
+  const page = 1;
+  return getCurrentRefinementValue(props, searchState, context, id, page,
+    currentRefinement => {
+      if (typeof currentRefinement === 'string') {
+        currentRefinement = parseInt(currentRefinement, 10);
+      }
+      return currentRefinement;
+    }
+  );
 }
 
 /**
@@ -18,7 +32,8 @@ export default createConnector({
   displayName: 'AlgoliaInfiniteHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    if (!searchResults.results) {
+    const index = getIndex(this.context);
+    if (!searchResults.results || !searchResults.results[index]) {
       this._allResults = [];
       return {
         hits: this._allResults,
@@ -26,7 +41,7 @@ export default createConnector({
       };
     }
 
-    const {hits, page, nbPages, hitsPerPage} = searchResults.results;
+    const {hits, page, nbPages, hitsPerPage} = searchResults.results[index];
 
     if (page === 0) {
       this._allResults = hits;
@@ -53,35 +68,16 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const id = getId();
-    const currentPage = searchState[id] ?
-      searchState[id] :
-      0;
-
     return searchParameters.setQueryParameters({
-      page: currentPage,
+      page: getCurrentRefinement(props, searchState, this.context) - 1,
     });
   },
 
   refine(props, searchState) {
     const id = getId();
-    const nextPage = searchState[id] ?
-      Number(searchState[id]) + 1 :
-      1;
-    return {
-      ...searchState,
-      [id]: nextPage,
-    };
-  },
-
-  transitionState(props, prevSearchState, nextSearchState) {
-    const id = getId();
-    if (prevSearchState[id] === nextSearchState[id]) {
-      return {
-        ...nextSearchState,
-        [id]: 0,
-      };
-    }
-    return nextSearchState;
+    const nextPage = getCurrentRefinement(props, searchState, this.context) + 1;
+    const nextValue = {[id]: nextPage};
+    const resetPage = false;
+    return refineValue(searchState, nextValue, this.context, resetPage);
   },
 });

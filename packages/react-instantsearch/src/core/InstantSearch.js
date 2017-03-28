@@ -91,6 +91,7 @@ class InstantSearch extends Component {
         ...this._aisContextCache.ais,
         store: this.aisManager.store,
         widgetsManager: this.aisManager.widgetsManager,
+        mainTargetedIndex: this.props.indexName,
       },
     };
   }

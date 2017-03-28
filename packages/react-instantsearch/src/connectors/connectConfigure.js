@@ -1,7 +1,10 @@
 import createConnector from '../core/createConnector.js';
-import {omit, isEmpty, difference, keys} from 'lodash';
+import {omit, difference, keys} from 'lodash';
+import {hasMultipleIndex, getIndex, refineValue} from '../core/indexUtils';
 
-const namespace = 'configure';
+function getId() {
+  return 'configure';
+}
 
 export default createConnector({
   displayName: 'AlgoliaConfigure',
@@ -13,22 +16,25 @@ export default createConnector({
     return searchParameters.setQueryParameters(items);
   },
   transitionState(props, prevSearchState, nextSearchState) {
+    const id = getId();
     const items = omit(props, 'children');
     const nonPresentKeys = this._props ? difference(keys(this._props), keys(props)) : [];
     this._props = props;
-    return {
-      ...nextSearchState,
-      [namespace]: {...omit(nextSearchState[namespace], nonPresentKeys), ...items},
-    };
+    const nextValue = {[id]: {...omit(nextSearchState[id], nonPresentKeys), ...items}};
+    return refineValue(nextSearchState, nextValue, this.context);
   },
   cleanUp(props, searchState) {
-    const configureKeys = searchState[namespace] ? Object.keys(searchState[namespace]) : [];
+    const id = getId();
+    const index = getIndex(this.context);
+    const subState = hasMultipleIndex(this.context) && searchState.indices ? searchState.indices[index] : searchState;
+    const configureKeys = subState[id] ? Object.keys(subState[id]) : [];
     const configureState = configureKeys.reduce((acc, item) => {
       if (!props[item]) {
-        acc[item] = searchState[namespace][item];
+        acc[item] = subState[id][item];
       }
       return acc;
     }, {});
-    return isEmpty(configureState) ? omit(searchState, namespace) : {...searchState, [namespace]: configureState};
+    const nextValue = {[id]: configureState};
+    return refineValue(searchState, nextValue, this.context);
   },
 });

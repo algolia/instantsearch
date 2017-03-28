@@ -1,20 +1,32 @@
 import createConnector from '../core/createConnector';
-import {omit} from 'lodash';
 import {PropTypes} from 'react';
+import {cleanUpValue, refineValue, getCurrentRefinementValue, getIndex} from '../core/indexUtils';
 
 function getId() {
   return 'query';
 }
 
-function getCurrentRefinement(props, searchState) {
+function getCurrentRefinement(props, searchState, context) {
+  const id = getId(props);
+  return getCurrentRefinementValue(props, searchState, context, id, '',
+    currentRefinement => {
+      if (currentRefinement) {
+        return currentRefinement;
+      }
+      return '';
+    }
+  );
+}
+
+function refine(props, searchState, nextRefinement, context) {
   const id = getId();
-  if (typeof searchState[id] !== 'undefined') {
-    return searchState[id];
-  }
-  if (typeof props.defaultRefinement !== 'undefined') {
-    return props.defaultRefinement;
-  }
-  return '';
+  const nextValue = {[id]: nextRefinement};
+  const resetPage = true;
+  return refineValue(searchState, nextValue, context, resetPage);
+}
+
+function cleanUp(props, searchState, context) {
+  return cleanUpValue(searchState, context, getId());
 }
 
 /**
@@ -35,23 +47,33 @@ export default createConnector({
 
   getProvidedProps(props, searchState) {
     return {
-      currentRefinement: getCurrentRefinement(props, searchState),
+      currentRefinement: getCurrentRefinement(props, searchState, this.context),
     };
   },
 
-  refine(props, searchState, nextQuery) {
-    const id = getId();
-    return {
-      ...searchState,
-      [id]: nextQuery,
-    };
+  refine(props, searchState, nextRefinement) {
+    return refine(props, searchState, nextRefinement, this.context);
   },
 
   cleanUp(props, searchState) {
-    return omit(searchState, getId());
+    return cleanUp(props, searchState, this.context);
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setQuery(getCurrentRefinement(props, searchState));
+    return searchParameters.setQuery(getCurrentRefinement(props, searchState, this.context));
+  },
+
+  getMetadata(props, searchState) {
+    const id = getId(props);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    return {
+      id,
+      index: getIndex(this.context),
+      items: currentRefinement === null ? [] : [{
+        label: `${id}: ${currentRefinement}`,
+        value: nextState => refine(props, nextState, '', this.context),
+        currentRefinement,
+      }],
+    };
   },
 });

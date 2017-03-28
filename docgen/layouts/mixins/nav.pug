@@ -17,6 +17,8 @@ mixin navRec(currentPath, navItems, title, depth, headings)
       li(class=className)
         if navItem.title === 'InstantSearch'
           a(href=navItem.path class=activeClass)='<InstantSearch>'
+        else if navItem.title === 'Index'
+          a(href=navItem.path class=activeClass)='<Index>'
         else
           a(href=navItem.path class=activeClass)=navItem.title
         ul
