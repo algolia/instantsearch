@@ -1,0 +1,241 @@
+// Mixins
+@mixin placeholder {
+  $placeholders: ":-webkit-input" ":-moz" "-moz" "-ms-input";
+  @each $placeholder in $placeholders {
+    &:#{$placeholder}-placeholder {
+      @content;
+    }
+  }
+}
+@mixin better-fonts() {
+  h1,h2,h3,h4,h5,h6,span,div,p,pre,code,a,strong,em,i {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@mixin arrowSeparatorLeft($color) {
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: 10;
+    height: 100%;
+    width: 40px;
+    top: 0;
+    left: -6px;
+    background: url("data:image/svg+xml;utf8,<svg width=\'31\' height=\'62\' viewBox=\'0 0 31 62\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\'><title>Rectangle</title><defs><path id=\'b\' d=\'M6 1l23 30L6 61H0V1z\'/><filter x=\'-50%\' y=\'-50%\' width=\'200%\' height=\'200%\' filterUnits=\'objectBoundingBox\' id=\'a\'><feOffset dx=\'1\' in=\'SourceAlpha\' result=\'shadowOffsetOuter1\'/><feGaussianBlur stdDeviation=\'.5\' in=\'shadowOffsetOuter1\' result=\'shadowBlurOuter1\'/><feColorMatrix values=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0\' in=\'shadowBlurOuter1\'/></filter></defs><g fill=\'#{str-replace(#{$color}, '#','%23')}\' fill-rule=\'evenodd\'><use filter=\'url(%23a)\' xlink:href=\'%23b\'/><use xlink:href=\'%23b\'/></g></svg>")no-repeat;
+  }
+}
+
+
+@mixin footer-text{
+  color: #496f92;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  margin: 0;
+  font-family: 'Raleway', helvetica, sans-serif;
+  font-weight: 800;
+  float: none;
+}
+
+@mixin hide() {
+  display: none !important;
+  visibility: hidden;
+}
+
+@mixin unhide($type) {
+  display: $type !important;
+  visibility: visible;
+}
+@mixin appearance ($value) {
+  -webkit-appearance: $value;
+     -moz-appearance: $value;
+          appearance: $value;
+}
+
+// Responsive Breakpoints
+@mixin big-min-mq {
+  @media (min-width: $bp-big){
+    @content
+  }
+}
+@mixin huge-min-mq {
+  @media (min-width: $bp-huge){
+    @content
+  }
+}
+
+@mixin big-mq {
+  @media (max-width: $bp-big){
+    @content
+  }
+}
+@mixin medium-mq {
+  @media (max-width: $bp-medium){
+    @content
+  }
+}
+@mixin small-mq {
+  @media  (max-width: $bp-medium){
+    @content
+  }
+}
+@mixin mobile-mq {
+  @media  (max-width: $bp-small){
+    @content
+  }
+}
+@mixin tablet-mq-portrait {
+ @media only screen
+  and (min-device-width : 768px)
+  and (max-device-width : 1024px)
+  and (orientation : portrait) {
+    @content
+  }
+}
+@mixin tablet-mq-landscape {
+ @media only screen
+  and (min-device-width : 768px)
+  and (max-device-width : 1024px)
+  and (orientation : landscape) {
+    @content
+  }
+}
+
+@mixin component($component, $element: false, $modifier: false) {
+  @if $element !=false and $modifier==false {
+    .cm-#{$component}__#{$element} {
+      @content
+    }
+  }
+  @if $element !=false and $modifier !=false {
+    .cm-#{$component}__#{$element}--#{$modifier} {
+      @content
+    }
+  }
+  @if $element==false and $modifier !=false {
+    .cm-#{$component}--#{$modifier} {
+      @content
+    }
+  }
+  @else if $element==false and $modifier==false {
+    .cm-#{$component} {
+      @content
+    }
+  }
+}
+
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+  @return $string;
+}
+
+@mixin isRetina {
+  @media(-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+    @content
+  }
+  @media(-webkit-min-device-pixel-ratio: 1.3),
+  (min-resolution: 124.8dpi) {
+    @content
+  }
+  @media(-webkit-min-device-pixel-ratio: 1.5),
+  (min-resolution: 144dpi) {
+    @content
+  }
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {
+    @content
+  }
+  &:-moz-placeholder {
+    @content
+  }
+  &::-moz-placeholder {
+    @content
+  }
+  &:-ms-input-placeholder {
+    @content
+  }
+}
+
+@mixin arrowSeparator($color) {
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: 10;
+    height: 100%;
+    width: 40px;
+    top: 0;
+    right: -34px;
+    background: url("data:image/svg+xml;utf8,<svg width=\'31\' height=\'62\' viewBox=\'0 0 31 62\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\'><title>Rectangle</title><defs><path id=\'b\' d=\'M6 1l23 30L6 61H0V1z\'/><filter x=\'-50%\' y=\'-50%\' width=\'200%\' height=\'200%\' filterUnits=\'objectBoundingBox\' id=\'a\'><feOffset dx=\'1\' in=\'SourceAlpha\' result=\'shadowOffsetOuter1\'/><feGaussianBlur stdDeviation=\'.5\' in=\'shadowOffsetOuter1\' result=\'shadowBlurOuter1\'/><feColorMatrix values=\'0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0\' in=\'shadowBlurOuter1\'/></filter></defs><g fill=\'#{str-replace(#{$color}, '#','%23')}\' fill-rule=\'evenodd\'><use filter=\'url(%23a)\' xlink:href=\'%23b\'/><use xlink:href=\'%23b\'/></g></svg>")no-repeat;
+  }
+}
+
+
+//---------------------------
+// DIAGONAL HELPER
+// Generate a diagonal edge on a before pseudo element
+// $rotation: diagonal degree
+// $background : background color, image, gradient
+// $height: height of the edge ( px, %, cm, pc, etc)
+// @content [Write the style you want to apply to the diagonal edge, and it will be added within the @content directive]
+//---------------------------
+@mixin diagonal($rotation, $background, $height, $imp: false, $pos: after) {
+  &:#{$pos} {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: $height;
+    background: #{$background};
+    @if $imp == 'true' {
+      transform: skewY($rotation) !important;
+    }
+    @else {
+      transform: skewY($rotation);
+    }
+    @content;
+  }
+}
+
+// USE THIS ONE CAREFULLY
+
+
+// Placeholders
+
+
+%fadeInDown {
+  animation-name: fadeInDown;
+}
+
+%animated {
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+%active-links {
+  color: $accent-color;
+  box-shadow: inset -2px 0 0 0 $accent-color;
+  font-weight: bold;
+
+  @supports (-webkit-background-clip: text) and (-webkit-text-fill-color: transparent) {
+    background: -webkit-linear-gradient(120deg, $accent-color, $accent-color-darkish);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  @include small-mq {
+    font-weight: bold;
+    box-shadow: none;
+    color: #fff;
+  }
+}

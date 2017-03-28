@@ -1,0 +1,114 @@
+$color-map: (
+  ('primary', #2897c6),
+  ('blue', #00aeff),
+  ('grey', #686C7C),
+  ('black', #33383e),
+  ('pink', #fb366e),
+  ('green', #94be46),
+  ('greenish', #3ecf8e),
+  ('wine', #6e205f),
+  ('white', #fff)
+);
+
+$btn-primary-background-color: #00aeff;
+$btn-primary-text-color: #FFF;
+$btn-base-font-size: 12px;
+
+.btn {
+  display: inline-block;
+  position: relative;
+  padding: 1.083em 2.000em;
+  border-radius: 3px;
+  letter-spacing: 0.9px;
+
+  font: {
+    family: 'Open Sans', Segoe UI, sans-serif;
+    weight: 500;
+    size: $btn-base-font-size;
+  };
+
+  text-align: center;
+  text-decoration: none;
+  line-height: 1;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  transition: background 0.1s ease, transform 0.1s ease, font-size 0.05s ease;
+  will-change: background, transform, font-size ;
+  cursor: pointer;
+  background: $btn-primary-background-color;
+  color: #fff;
+
+  &:hover {
+    transform: scale(1.05)
+  }
+
+  &:active {
+    top: 2px;
+  }
+
+  &[class*="-cta"] {
+    padding: 1.167em 4.000em;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.22);
+  }
+
+  &[class*="-fat"] {
+    padding: 1.329em 1.999em;
+    font-size: 16px;
+    box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &[class*="-uc"] {
+    text-transform: uppercase;
+  }
+
+  &[class*="-rd"] {
+    border-radius: 50px
+  }
+
+   // Colors
+  @each $name, $color in $color-map {
+    &[class*="-#{$name}"] {
+      background: $color;
+
+      @if $color == white {
+        color: #33383e,
+      } @else {
+        color: #fff;
+      }
+
+      &:hover {
+        background: lighten($color, 5%);
+      }
+    }
+  }
+
+  &[class*="-ghost"] {
+    max-width: inherit;
+    padding: 0.783em 2em 0.683em;
+    background: transparent;
+    border: 1px solid;
+    box-shadow: none;
+    font-weight: 800;
+
+    &:hover {
+      font-size: 12px;
+    }
+
+    @each $name, $color in $color-map {
+      &[class*="-#{$name}"] {
+        color: $color;
+        border-color: currentColor;
+
+        &:hover {
+          background: lighten($color, 5%);
+          border-color: $color;
+
+          @if $color == white {
+            color: #33383e,
+          } @else {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}

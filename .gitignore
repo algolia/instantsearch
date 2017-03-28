@@ -1,5 +1,8 @@
+/docs/
+/docs-production/
 node_modules/
 dist/
 dist-es5-module/
 npm-debug.log
 .DS_Store
+.happypack/

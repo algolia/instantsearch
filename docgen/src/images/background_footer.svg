@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="630px" viewBox="0 0 1440 630" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 40.3 (33839) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="-1.70530257e-13" y="0.171266503" width="1440" height="629"></rect>
+        <radialGradient cx="50.4345703%" cy="40.0212479%" fx="50.4345703%" fy="40.0212479%" r="40.3386084%" id="radialGradient-3">
+            <stop stop-color="#131B26" offset="0%"></stop>
+            <stop stop-color="#263748" offset="100%"></stop>
+        </radialGradient>
+        <linearGradient x1="34.8378812%" y1="89.4014157%" x2="86.3269258%" y2="-74.0979515%" id="linearGradient-4">
+            <stop stop-color="#1D2F40" offset="0%"></stop>
+            <stop stop-color="#2F404F" offset="100%"></stop>
+        </linearGradient>
+        <polyline id="path-5" points="717.527936 12.31109 989.411583 284.194737 717.527936 556.078384 445.644289 284.194737 717.527936 12.31109"></polyline>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="8" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="9" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <mask id="mask-7" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="543.767294" height="543.767294" fill="white">
+            <use xlink:href="#path-5"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <g id="Rectangle-24"></g>
+            <rect id="Rectangle-90" fill="url(#radialGradient-3)" mask="url(#mask-2)" x="-7.68682695" y="-1.01518803" width="1450.65957" height="633.65616"></rect>
+            <polyline id="Rectangle-89-Copy-13" fill="#263748" mask="url(#mask-2)" points="1035.03225 36.2587038 1188.21494 189.441392 1035.03225 342.624081 881.849564 189.441392 1035.03225 36.2587038"></polyline>
+            <polyline id="Rectangle-89-Copy-7" fill="#263748" mask="url(#mask-2)" points="415.364704 48.405045 554.889947 187.930289 415.364704 327.455532 275.83946 187.930289 415.364704 48.405045"></polyline>
+            <polyline id="Rectangle-89-Copy-17" fill="#263748" mask="url(#mask-2)" points="270.859959 -94.7036188 410.385203 44.8216248 270.859959 184.346868 131.334715 44.8216248 270.859959 -94.7036188"></polyline>
+            <polyline id="Rectangle-89-Copy-7" fill="#263748" mask="url(#mask-2)" points="347.674398 268.213125 410.385203 330.923929 347.674398 393.634734 284.963594 330.923929 347.674398 268.213125"></polyline>
+            <polyline id="Rectangle-89-Copy-7" fill="#263748" mask="url(#mask-2)" points="121.134765 41.9253427 343.392938 264.183515 121.134765 486.441687 -101.123407 264.183515 121.134765 41.9253427"></polyline>
+            <polyline id="Rectangle-89-Copy-7" fill="#263748" mask="url(#mask-2)" points="280.682133 335.457241 343.392938 398.168045 280.682133 460.878849 217.971329 398.168045 280.682133 335.457241"></polyline>
+            <polyline id="Rectangle-89-Copy-9" fill="#263748" mask="url(#mask-2)" points="718.707873 -520 1150.94105 -87.7668243 718.707873 344.466351 286.474697 -87.7668243 718.707873 -520"></polyline>
+            <polyline id="Rectangle-89-Copy" fill="#263748" mask="url(#mask-2)" points="992.548814 307.249971 1256.54578 571.246933 984.662128 843.13058 720.665167 579.133618 992.548814 307.249971"></polyline>
+            <polyline id="Rectangle-89-Copy-6" fill="#263748" mask="url(#mask-2)" points="442.737105 307.249971 595.919793 460.43266 442.737105 613.615348 289.554416 460.43266 442.737105 307.249971"></polyline>
+            <polyline id="Rectangle-89-Copy-14" fill="#263748" mask="url(#mask-2)" points="1191.12213 -118.881278 1342.76495 32.7615508 1191.12213 184.40438 1039.4793 32.7615508 1191.12213 -118.881278"></polyline>
+            <polyline id="Rectangle-89-Copy-11" fill="#263748" mask="url(#mask-2)" points="599.215656 465.412161 752.787023 618.983528 599.215656 772.554894 445.644289 618.983528 599.215656 465.412161"></polyline>
+            <polyline id="Rectangle-89-Copy-8" fill="#263748" mask="url(#mask-2)" points="130.21229 311.279581 402.095937 583.163228 130.21229 855.046875 -141.671357 583.163228 130.21229 311.279581"></polyline>
+            <polyline id="Rectangle-89-Copy-2" fill="#263748" mask="url(#mask-2)" points="1310.888 74.4919175 1582.77164 346.375564 1310.888 618.259211 1039.00435 346.375564 1310.888 74.4919175"></polyline>
+            <g id="Rectangle-89" mask="url(#mask-2)">
+                <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                <use stroke-opacity="0.158571105" stroke="#46AEDA" mask="url(#mask-7)" stroke-width="2" fill="url(#linearGradient-4)" fill-rule="evenodd" xlink:href="#path-5"></use>
+            </g>
+        </g>
+    </g>
+</svg>

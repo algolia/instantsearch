@@ -1,0 +1,105 @@
+.press__tweets {
+    position: relative;
+    width: 100%;
+    display: block;
+    overflow: visible;
+    white-space: nowrap;
+    padding: 0;
+    -webkit-transition: opacity 0.3s linear, -webkit-transform 0.5s ease;
+    transition: opacity 0.3s linear, -webkit-transform 0.5s ease;
+    transition: opacity 0.3s linear, transform 0.5s ease;
+    transition: opacity 0.3s linear, transform 0.5s ease, -webkit-transform 0.5s ease;
+}
+.press__tweets::-webkit-scrollbar {
+    width: 0px !important
+}
+.press__tweets--loading {
+    opacity: 0
+}
+
+body.safari ul.press__tweets{
+  display: flex;
+}
+
+.press__tweet {
+    border-radius: 4px;
+    display: inline-block;
+    opacity: .5;
+    vertical-align: middle;
+    -webkit-transform: scale(0.7);
+    transform: scale(0.7);
+    -webkit-transition: -webkit-transform 0.5s ease;
+    transition: -webkit-transform 0.5s ease;
+    transition: transform 0.5s ease;
+    transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+
+    body.safari &{
+      min-width: 420px;
+    }
+}
+.press__tweet:last-child {
+    margin-right: 0
+}
+.press__tweet--current {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    position: relative
+}
+.press__tweet__arrow {
+    position: absolute;
+    top: calc(50% - 14px);
+    cursor: pointer;
+    display: block;
+    height: 28px;
+    width: 48px;
+    display: none;
+    text-align: center;
+
+}
+.press__tweet--current .press__tweet__arrow {
+    display: block
+}
+.press__tweet__arrow svg:hover {
+    cursor: pointer
+}
+.press__tweet__arrow svg:hover path {
+    stroke: #575757
+}
+.press__tweet__arrow svg path {
+    -webkit-transition: stroke 0.12s ease-in;
+    transition: stroke 0.12s ease-in
+}
+.press__tweet__arrow--prev {
+    left: -47px;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1)
+}
+.press__tweet:first-child .press__tweet__arrow--prev {
+    display: none
+}
+.press__tweet__arrow--next {
+    right: -47px
+}
+.press__tweet:last-child .press__tweet__arrow--next {
+    display: none
+}
+
+@media (max-width: $bp-small) {
+    .press__tweet--current {
+        max-width: 100%;
+    }
+    .press__tweet--current .press__tweet__arrow--prev,
+    .press__tweet--current .press__tweet__arrow--next {
+        width: 20% !important;
+        left: -25% !important;
+    }
+    .press__tweet--current .press__tweet__arrow--next {
+        left: 52% !important;
+    }
+    .twitter-tweet {
+        min-width: inherit !important;
+        width: 60% !important;
+        transform: translateX(-10%) rotate(0) !important;
+    }
+}
