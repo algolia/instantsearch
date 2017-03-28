@@ -22,13 +22,18 @@ describe('autoHideContainer', () => {
     const AutoHide = autoHideContainer(TestComponent);
     renderer.render(<AutoHide {...props} />);
     const out = renderer.getRenderOutput();
-    expect(out).toEqualJSX(<TestComponent hello="son" />);
+    expect(out).toEqualJSX(
+      <div style={{display: ''}}>
+        <TestComponent hello="son" />
+      </div>
+    );
   });
 
   context('props.shouldAutoHideContainer', () => {
     let AutoHide;
     let component;
     let container;
+    let innerContainer;
 
     beforeEach(() => {
       AutoHide = autoHideContainer(TestComponent);
@@ -48,14 +53,15 @@ describe('autoHideContainer', () => {
         sinon.spy(component, 'render');
         props.shouldAutoHideContainer = true;
         ReactDOM.render(<AutoHide {...props} />, container);
+        innerContainer = container.firstElementChild;
       });
 
       it('hides the container', () => {
-        expect(container.style.display).toEqual('none');
+        expect(innerContainer.style.display).toEqual('none');
       });
 
-      it('does not call component.render()', () => {
-        expect(component.render.called).toBe(false);
+      it('call component.render()', () => {
+        expect(component.render.called).toBe(true);
       });
 
       context('when set back to false', () => {
@@ -65,11 +71,11 @@ describe('autoHideContainer', () => {
         });
 
         it('shows the container', () => {
-          expect(container.style.display).toNotEqual('none');
+          expect(innerContainer.style.display).toNotEqual('none');
         });
 
         it('calls component.render()', () => {
-          expect(component.render.calledOnce).toBe(true);
+          expect(component.render.calledTwice).toBe(true);
         });
       });
     });
