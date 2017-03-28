@@ -10,6 +10,9 @@ class SearchBox extends Component {
     refine: PropTypes.func.isRequired,
     translate: PropTypes.func.isRequired,
 
+    resetComponent: PropTypes.element,
+    submitComponent: PropTypes.element,
+
     focusShortcuts: PropTypes.arrayOf(
       PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     ),
@@ -18,6 +21,8 @@ class SearchBox extends Component {
 
     searchAsYouType: PropTypes.bool,
     onSubmit: PropTypes.func,
+    onReset: PropTypes.func,
+    onChange: PropTypes.func,
 
     // For testing purposes
     __inputRef: PropTypes.func,
@@ -131,11 +136,19 @@ class SearchBox extends Component {
 
   onChange = e => {
     this.setQuery(e.target.value);
+
+    if (this.props.onChange) {
+      this.props.onChange(e);
+    }
   };
 
   onReset = () => {
     this.setQuery('');
     this.input.focus();
+
+    if (this.props.onReset) {
+      this.props.onReset();
+    }
   };
 
   render() {
@@ -145,6 +158,29 @@ class SearchBox extends Component {
     } = this.props;
     const query = this.getQuery();
 
+    const submitComponent = this.props.submitComponent
+      ? this.props.submitComponent
+      : <svg role="img">
+          <use xlinkHref="#sbx-icon-search-13" />
+        </svg>;
+
+    const resetComponent = this.props.resetComponent
+      ? this.props.resetComponent
+      : <svg role="img">
+          <use xlinkHref="#sbx-icon-clear-3" />
+        </svg>;
+
+    const searchInputEvents = Object.keys(this.props).reduce((props, prop) => {
+      if (
+          ['onsubmit', 'onreset', 'onchange'].indexOf(prop.toLowerCase()) === -1 &&
+          prop.indexOf('on') === 0
+        ) {
+        return {...props, [prop]: this.props[prop]};
+      }
+
+      return props;
+    }, {});
+
     /* eslint-disable max-len */
     return (
       <form
@@ -153,6 +189,7 @@ class SearchBox extends Component {
         onReset={this.onReset}
         {...cx('root')}
         action=""
+        role="search"
       >
         <svg xmlns="http://www.w3.org/2000/svg" style={{display: 'none'}}>
           <symbol xmlns="http://www.w3.org/2000/svg" id="sbx-icon-search-13" viewBox="0 0 40 40">
@@ -179,17 +216,14 @@ class SearchBox extends Component {
             required
             value={query}
             onChange={this.onChange}
+            {...searchInputEvents}
             {...cx('input')}
           />
           <button type="submit" title={translate('submitTitle')} {...cx('submit')}>
-            <svg role="img">
-              <use xlinkHref="#sbx-icon-search-13"></use>
-            </svg>
+            {submitComponent}
           </button>
           <button type="reset" title={translate('resetTitle')} {...cx('reset')} onClick={this.onReset}>
-            <svg role="img">
-              <use xlinkHref="#sbx-icon-clear-3"></use>
-            </svg>
+            {resetComponent}
           </button>
         </div>
       </form>
@@ -199,8 +233,6 @@ class SearchBox extends Component {
 }
 
 export default translatable({
-  submit: null,
-  reset: null,
   resetTitle: 'Clear the search query.',
   submitTitle: 'Submit your search query.',
   placeholder: 'Search here…',

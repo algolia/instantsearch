@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * Since a lot of sliders already exist, we did not include one by default.
  * However you can easily connect React InstantSearch to an existing one
- * using the [connectRange connector](/connectors/connectRange.html).
+ * using the [connectRange connector](connectors/connectRange.html).
  *
  * @name RangeSlider
  * @requirements To connect any slider to Algolia, the underlying attribute used must be holding numerical values.

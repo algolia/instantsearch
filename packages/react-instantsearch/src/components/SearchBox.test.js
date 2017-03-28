@@ -48,13 +48,26 @@ describe('SearchBox', () => {
     expect(tree).toMatchSnapshot();
   });
 
+  it('lets you give custom components for reset and submit', () => {
+    const tree = renderer.create(
+      <SearchBox
+        refine={() => null}
+        submitComponent={<span>🔍</span>}
+        resetComponent={
+          <svg viewBox="200 198 108 122">
+            <path d="M200.8 220l45 46.7-20 47.4 31.7-34 50.4 39.3-34.3-52.6 30.2-68.3-49.7 51.7" />
+          </svg>
+        }
+      />
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
   it('lets you customize its translations', () => {
     const tree = renderer.create(
       <SearchBox
         refine={() => null}
         translations={{
-          submit: 'SUBMIT',
-          reset: 'RESET',
           resetTitle: 'RESET_TITLE',
           placeholder: 'PLACEHOLDER',
         }}
@@ -141,5 +154,35 @@ describe('SearchBox', () => {
     const event3 = new KeyboardEvent('keydown', {keyCode: 84});
     document.dispatchEvent(event3);
     expect(input.focus.mock.calls.length).toBe(2);
+  });
+
+  it('should accept `onXXX` events', () => {
+    const onSubmit = jest.fn();
+    const onReset = jest.fn();
+
+    const inputEventsList = ['onChange', 'onFocus', 'onBlur', 'onSelect', 'onKeyDown', 'onKeyPress'];
+    const inputProps = inputEventsList.reduce((props, prop) => ({...props, [prop]: jest.fn()}), {});
+
+    const wrapper = mount(
+      <SearchBox
+        refine={ () => null }
+        onSubmit={ onSubmit }
+        onReset={ onReset }
+        { ...inputProps }
+      />
+    );
+
+    // simulate form events `onReset` && `onSubmit`
+    wrapper.find('form').simulate('submit');
+    expect(onSubmit).toBeCalled();
+
+    wrapper.find('form').simulate('reset');
+    expect(onReset).toBeCalled();
+
+    // simulate input search events
+    inputEventsList.forEach(eventName => {
+      wrapper.find('input').simulate(eventName.replace(/^on/, '').toLowerCase());
+      expect(inputProps[eventName]).toBeCalled();
+    });
   });
 });

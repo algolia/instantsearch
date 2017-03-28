@@ -12,7 +12,7 @@ import {isEqual} from 'lodash';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {searchState: {...qs.parse(this.props.router.location.query)}};
+    this.state = {searchState: {...qs.parse(props.router.location.query)}};
   }
 
   componentWillReceiveProps() {

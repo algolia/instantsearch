@@ -8,13 +8,17 @@ import SearchBoxComponent from '../components/SearchBox.js';
  * @propType {string[]} [focusShortcuts=['s','/']] - List of keyboard shortcuts that focus the search box. Accepts key names and key codes.
  * @propType {boolean} [autoFocus=false] - Should the search box be focused on render?
  * @propType {boolean} [searchAsYouType=true] - Should we search on every change to the query? If you disable this option, new searches will only be triggered by clicking the search button or by pressing the enter key while the search box is focused.
+ * @propType {function} [onSubmit] - Intercept submit event sent from the SearchBox form container.
+ * @propType {function} [onReset] - Listen to `reset` event sent from the SearchBox form container.
+ * @propType {function} [on*] - Listen to any events sent form the search input itself.
+ * @propType {React.Element} [submitComponent] - Change the apparence of the default submit button (magnifying glass).
+ * @propType {React.Element} [resetComponent] - Change the apparence of the default reset button (cross).
+ * @propType {string} [defaultRefinement] - Provide default refinement value when component is mounted.
  * @themeKey ais-SearchBox__root - the root of the component
  * @themeKey ais-SearchBox__wrapper - the search box wrapper
  * @themeKey ais-SearchBox__input - the search box input
  * @themeKey ais-SearchBox__submit - the submit button
  * @themeKey ais-SearchBox__reset - the reset button
- * @translationkey submit - The submit button label
- * @translationkey reset - The reset button label
  * @translationkey submitTitle - The submit button title
  * @translationkey resetTitle - The reset button title
  * @translationkey placeholder - The label of the input placeholder

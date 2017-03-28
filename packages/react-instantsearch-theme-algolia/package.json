@@ -1,7 +1,7 @@
 {
   "name": "react-instantsearch-theme-algolia",
   "description": "Algolia theme for React InstantSearch",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "homepage": "https://community.algolia.com/instantsearch.js/react/",
   "repository": {
     "type": "git",
@@ -13,10 +13,10 @@
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.4",
+    "autoprefixer": "^6.7.5",
     "cssnano": "^3.10.0",
     "node-sass": "^4.5.0",
-    "postcss": "^5.2.14",
+    "postcss": "^5.2.15",
     "postcss-scss": "^0.4.1"
   },
   "author": {

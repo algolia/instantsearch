@@ -1,6 +1,6 @@
 import createInstantSearch from './src/core/createInstantSearch';
 import createIndex from './src/core/createIndex';
-import algoliasearch from 'algoliasearch';
+import algoliasearch from 'algoliasearch/lite';
 
 const InstantSearch = createInstantSearch(algoliasearch, {
   Root: 'div',
