@@ -1,3 +1,5 @@
+import {isEmpty} from 'lodash';
+
 // From https://github.com/reactjs/react-redux/blob/master/src/utils/shallowEqual.js
 export function shallowEqual(objA, objB) {
   if (objA === objB) {
@@ -61,3 +63,11 @@ export function getDisplayName(Component) {
 
 const resolved = Promise.resolve();
 export const defer = f => { resolved.then(f); };
+
+export function removeEmptyKey(obj) {
+  Object.keys(obj).forEach(key =>
+    obj[key] && typeof obj[key] === 'object' && !isEmpty(obj[key]) && removeEmptyKey(obj[key]) ||
+    obj[key] === undefined || isEmpty(obj[key]) && delete obj[key]
+  );
+  return obj;
+}

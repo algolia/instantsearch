@@ -29,6 +29,9 @@ export default function createInstantSearchManager({
   helper.on('result', handleSearchSuccess);
   helper.on('error', handleSearchError);
 
+  let derivedHelpers = {};
+  let indexMapping = {}; // keep track of the original index where the parameters applied when sortBy is used.
+
   let initialSearchParameters = helper.state;
 
   const widgetsManager = createWidgetsManager(onWidgetsUpdate);
@@ -53,25 +56,64 @@ export default function createInstantSearchManager({
   }
 
   function getSearchParameters() {
-    return widgetsManager.getWidgets()
+    indexMapping = {};
+    const mainParameters = widgetsManager.getWidgets()
       .filter(widget => Boolean(widget.getSearchParameters))
-      .reduce(
-        (res, widget) => widget.getSearchParameters(res),
-        initialSearchParameters
-      );
+      .filter(widget => !widget.multiIndexContext ||
+                        widget.multiIndexContext && widget.multiIndexContext.targetedIndex === indexName)
+      .reduce((res, widget) => widget.getSearchParameters(res), initialSearchParameters);
+    indexMapping[mainParameters.index] = indexName;
+
+    const derivatedWidgets = widgetsManager.getWidgets()
+      .filter(widget => Boolean(widget.getSearchParameters))
+      .filter(widget => widget.multiIndexContext && widget.multiIndexContext.targetedIndex !== indexName)
+      .reduce((indices, widget) => {
+        const targetedIndex = widget.multiIndexContext.targetedIndex;
+        const index = indices.find(i => i.targetedIndex === targetedIndex);
+        if (index) {
+          index.widgets.push(widget);
+        } else {
+          indices.push({targetedIndex, widgets: [widget]});
+        }
+        return indices;
+      }, []);
+
+    return {mainParameters, derivatedWidgets};
   }
 
   function search() {
-    const widgetSearchParameters = getSearchParameters(helper.state);
+    const {mainParameters, derivatedWidgets} = getSearchParameters(helper.state);
 
-    helper.setState(widgetSearchParameters)
-          .search();
+    Object.values(derivedHelpers).forEach(d => d.detach());
+    derivedHelpers = {};
+
+    helper.setState(mainParameters);
+
+    derivatedWidgets.forEach(derivatedSearchParameters => {
+      const index = derivatedSearchParameters.targetedIndex;
+      const derivedHelper = helper.derive(sp => {
+        const parameters = derivatedSearchParameters.widgets.reduce((res, widget) =>
+          widget.getSearchParameters(res), sp.setIndex(index)
+        );
+        indexMapping[parameters.index] = index;
+        return parameters;
+      });
+      derivedHelper.on('result', handleSearchSuccess);
+      derivedHelper.on('error', handleSearchError);
+      derivedHelpers[index] = derivedHelper;
+    });
+
+    helper.search();
   }
 
   function handleSearchSuccess(content) {
+    const state = store.getState();
+    const results = state.results ? state.results : [];
+    results[indexMapping[content.index]] = content;
+
     const nextState = omit({
       ...store.getState(),
-      results: content,
+      results,
       searching: false,
     }, 'resultsFacetValues');
     store.setState(nextState);

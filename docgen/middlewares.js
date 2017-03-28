@@ -37,6 +37,7 @@ const common = [
     reactPackage('src/widgets/*.js'),
     reactPackage('src/connectors/*.js'),
     reactPackage('src/core/InstantSearch.js'),
+    reactPackage('src/core/Index.js'),
   ], {
     ignore: '**/*.test.js',
     computeFilename: filename => `${filename}.jsdoc`, // denotes jsdoc file but also avoid js ignore

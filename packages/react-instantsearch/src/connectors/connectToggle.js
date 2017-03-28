@@ -1,6 +1,6 @@
 import {PropTypes} from 'react';
-import {omit, isEmpty} from 'lodash';
 import createConnector from '../core/createConnector';
+import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
 
 function getId(props) {
   return props.attributeName;
@@ -8,15 +8,26 @@ function getId(props) {
 
 const namespace = 'toggle';
 
-function getCurrentRefinement(props, searchState) {
+function getCurrentRefinement(props, searchState, context) {
+  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, false,
+    currentRefinement => {
+      if (currentRefinement) {
+        return currentRefinement;
+      }
+      return null;
+    }
+  );
+}
+
+function refine(props, searchState, nextRefinement, context) {
   const id = getId(props);
-  if (searchState[namespace] && searchState[namespace][id]) {
-    return searchState[namespace][id];
-  }
-  if (props.defaultRefinement) {
-    return props.defaultRefinement;
-  }
-  return false;
+  const nextValue = {[id]: nextRefinement ? nextRefinement : false};
+  const resetPage = true;
+  return refineValue(searchState, nextValue, context, resetPage, namespace);
+}
+
+function cleanUp(props, searchState, context) {
+  return cleanUpValue(searchState, context, `${namespace}.${getId(props)}`);
 }
 
 /**
@@ -43,28 +54,21 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(props, searchState);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     return {currentRefinement};
   },
 
-  refine(props, searchState, nextChecked) {
-    return {
-      ...searchState,
-      [namespace]: {...searchState[namespace], [getId(props, searchState)]: nextChecked},
-    };
+  refine(props, searchState, nextRefinement) {
+    return refine(props, searchState, nextRefinement, this.context);
   },
 
   cleanUp(props, searchState) {
-    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
-    if (isEmpty(cleanState[namespace])) {
-      return omit(cleanState, namespace);
-    }
-    return cleanState;
+    return cleanUp(props, searchState, this.context);
   },
 
   getSearchParameters(searchParameters, props, searchState) {
     const {attributeName, value, filter} = props;
-    const checked = getCurrentRefinement(props, searchState);
+    const checked = getCurrentRefinement(props, searchState, this.context);
 
     if (checked) {
       if (attributeName) {
@@ -85,19 +89,17 @@ export default createConnector({
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const checked = getCurrentRefinement(props, searchState);
+    const checked = getCurrentRefinement(props, searchState, this.context);
     const items = [];
+    const index = getIndex(this.context);
     if (checked) {
       items.push({
         label: props.label,
         currentRefinement: props.label,
         attributeName: props.attributeName,
-        value: nextState => ({
-          ...nextState,
-          [namespace]: {...nextState[namespace], [id]: false},
-        }),
+        value: nextState => refine(props, nextState, false, this.context),
       });
     }
-    return {id, items};
+    return {id, index, items};
   },
 });

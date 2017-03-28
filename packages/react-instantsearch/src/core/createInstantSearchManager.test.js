@@ -146,7 +146,6 @@ describe('createInstantSearchManager', () => {
 
       ism.widgetsManager.registerWidget({
         getMetadata: () => {},
-        getSearchParameters: () => {},
         transitionState: () => {},
       });
 

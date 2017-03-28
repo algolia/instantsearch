@@ -12,6 +12,7 @@ stories.addDecorator(withKnobs);
 stories.add('default', () =>
   <WrapWithHits linkedStoryGroup="RefinementList" hasPlayground={true}>
     <RefinementList attributeName="category"/>
+
   </WrapWithHits>
 ).add('with selected item', () =>
   <WrapWithHits >

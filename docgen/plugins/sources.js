@@ -26,7 +26,6 @@ export default function sourcesPlugin(sources, {ignore, computeFilename}) {
                     pluginDone(statErr);
                     return;
                   }
-
                   statDone(null, {...statMemo, [computeFilename(filename)]: {stats}});
                 });
               },

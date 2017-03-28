@@ -83,7 +83,7 @@ export default function() {
             withHeadings: false,
             layout: `${data.kind}.pug`,
             category: data.kind,
-            navWeight: data.name === 'InstantSearch' ? 1000 : 0,
+            navWeight: data.name === 'InstantSearch' || data.name === 'Index' ? 1000 : 0,
           };
         });
       });

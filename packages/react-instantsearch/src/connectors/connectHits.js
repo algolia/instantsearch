@@ -1,4 +1,5 @@
 import createConnector from '../core/createConnector';
+import {getIndex} from '../core/indexUtils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -7,7 +8,7 @@ import createConnector from '../core/createConnector';
  *
  * To configure the number of hits retrieved, use [HitsPerPage widget](widgets/HitsPerPage.html),
  * [connectHitsPerPage connector](connectors/connectHitsPerPage.html) or pass the hitsPerPage
- * parameter to the [searchParameters](guide/Search_parameters.html) prop on `<InstantSearch/>`.
+ * prop to a [Configure](guide/Search_parameters.html) widget.
  * @name connectHits
  * @kind connector
  * @providedPropType {array.<object>} hits - the records that matched the search state
@@ -16,7 +17,8 @@ export default createConnector({
   displayName: 'AlgoliaHits',
 
   getProvidedProps(props, searchState, searchResults) {
-    const hits = searchResults.results ? searchResults.results.hits : [];
+    const index = getIndex(this.context);
+    const hits = searchResults.results && searchResults.results[index] ? searchResults.results[index].hits : [];
 
     return {hits};
   },

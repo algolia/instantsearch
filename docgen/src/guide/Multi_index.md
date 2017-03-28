@@ -6,24 +6,36 @@ category: guide
 navWeight: 50
 ---
 
-You can use multiple [`<InstantSearch>`](guide/<InstantSearch>.html) instances for cases like:
+Whenever you want to:
 
-* displaying hits from different indices
-* sharing a single SearchBox
-* any use case involving synchronizing widgets between different [`<InstantSearch>`](guide/<InstantSearch>.html) instances
+* display hits from different indices
+* share a single SearchBox
+* build an autocomplete menu targeting different indices
 
-Two props on the [InstantSearch component](widgets/InstantSearch.html) can be used to inject searchState or be notified of searchState changes:
+You can use multiple [`<Index>`](widgets/<Index>.html) instances.
 
-* onSearchStateChange(onSearchStateChange): a function being called every time the [`<InstantSearch>`](guide/<InstantSearch>.html) searchState is updated.
-* [searchState](guide/Search_state.html): a search state
+The `<Index>` component takes one prop, the targeted index name. 
 
-The idea is to have a main component that will receive every new search state of the first instance
-and then pass it back to each [`<InstantSearch>`](guide/<InstantSearch>.html) instances.
+When using a `<Index>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
 
-Refinements and parameters of an [`<InstantSearch>`](guide/<InstantSearch>.html) searchState needs to have their corresponding widgets or
-[virtual widget](guide/Virtual_widgets.html) added to be effectively applied.
+Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component. 
 
 [Read the example](https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
+
+You might also want to:
+
+* Use an external autocomplete component
+
+In this case you will need to use the [`connectAutoComplete`](connectors/connectAutoComplete.html) connectors that will give you access to: 
+
+* All the indices hits
+* The current query
+* The refine function to update the query
+
+[Read the example](https://github.com/algolia/instantsearch.js/blob/v2/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices. 
+
+When using the `<Index>` component the shape of the search state will be modified. See 
+[our Search State guide](guide/Search_state.html). 
 
 <div class="guide-nav">
     <div class="guide-nav-left">

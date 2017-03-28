@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createIndex wraps Index 1`] = `
+Object {
+  "children": undefined,
+  "indexName": "name",
+  "root": Object {
+    "Root": "div",
+  },
+}
+`;

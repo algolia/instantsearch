@@ -6,7 +6,7 @@ import {WrapWithHits} from './util';
 const stories = storiesOf('Configure', module);
 
 stories.add('default', () =>
-    <ConfigureExample/>
+  <ConfigureExample />
 );
 
 class ConfigureExample extends React.Component {
@@ -20,7 +20,7 @@ class ConfigureExample extends React.Component {
   }
   render() {
     return <WrapWithHits>
-     <Configure hitsPerPage={this.state.hitsPerPage}/>
+      <Configure hitsPerPage={this.state.hitsPerPage} />
       <button onClick={this.onClick.bind(this)}>Toggle HitsPerPage</button>
     </WrapWithHits>;
   }
