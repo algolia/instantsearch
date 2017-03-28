@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {omit, isEmpty} from 'lodash';
+import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
 
@@ -25,23 +25,35 @@ function getId(props) {
 
 const namespace = 'range';
 
-function getCurrentRefinement(props, searchState) {
-  const id = getId(props);
-  if (searchState[namespace] && typeof searchState[namespace][id] !== 'undefined') {
-    let {min, max} = searchState[namespace][id];
-    if (typeof min === 'string') {
-      min = parseInt(min, 10);
+function getCurrentRefinement(props, searchState, context) {
+  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, {},
+    currentRefinement => {
+      let {min, max} = currentRefinement;
+      if (typeof min === 'string') {
+        min = parseInt(min, 10);
+      }
+      if (typeof max === 'string') {
+        max = parseInt(max, 10);
+      }
+      return {min, max};
     }
-    if (typeof max === 'string') {
-      max = parseInt(max, 10);
-    }
-    return {min, max};
-  }
-  if (typeof props.defaultRefinement !== 'undefined') {
-    return props.defaultRefinement;
-  }
-  return {};
+  );
 }
+
+function refine(props, searchState, nextRefinement, context) {
+  if (!isFinite(nextRefinement.min) || !isFinite(nextRefinement.max)) {
+    throw new Error('You can\'t provide non finite values to the range connector');
+  }
+  const id = getId(props);
+  const nextValue = {[id]: nextRefinement};
+  const resetPage = true;
+  return refineValue(searchState, nextValue, context, resetPage, namespace);
+}
+
+function cleanUp(props, searchState, context) {
+  return cleanUpValue(searchState, context, `${namespace}.${getId(props)}`);
+}
+
 export default createConnector({
   displayName: 'AlgoliaRange',
 
@@ -63,15 +75,17 @@ export default createConnector({
     const hasMin = typeof min !== 'undefined';
     const hasMax = typeof max !== 'undefined';
 
+    const index = getIndex(this.context);
+
     if (!hasMin || !hasMax) {
-      if (!searchResults.results) {
+      if (!searchResults.results || !searchResults.results[index]) {
         return {
           canRefine: false,
         };
       }
 
-      const stats = searchResults.results.getFacetByName(attributeName) ?
-        searchResults.results.getFacetStats(attributeName) : null;
+      const stats = searchResults.results[index].getFacetByName(attributeName) ?
+        searchResults.results[index].getFacetStats(attributeName) : null;
       if (!stats) {
         return {
           canRefine: false,
@@ -86,7 +100,7 @@ export default createConnector({
       }
     }
 
-    const count = searchResults.results ? searchResults.results
+    const count = searchResults.results && searchResults.results[index] ? searchResults.results[index]
       .getFacetValues(attributeName)
       .map(v => ({
         value: v.name,
@@ -96,7 +110,7 @@ export default createConnector({
     const {
       min: valueMin = min,
       max: valueMax = max,
-    } = getCurrentRefinement(props, searchState);
+    } = getCurrentRefinement(props, searchState, this.context);
     return {
       min,
       max,
@@ -107,26 +121,16 @@ export default createConnector({
   },
 
   refine(props, searchState, nextRefinement) {
-    if (!isFinite(nextRefinement.min) || !isFinite(nextRefinement.max)) {
-      throw new Error('You can\'t provide non finite values to the range connector');
-    }
-    return {
-      ...searchState,
-      [namespace]: {...searchState[namespace], [getId(props)]: nextRefinement},
-    };
+    return refine(props, searchState, nextRefinement, this.context);
   },
 
   cleanUp(props, searchState) {
-    const cleanState = omit(searchState, `${namespace}.${getId(props)}`);
-    if (isEmpty(cleanState[namespace])) {
-      return omit(cleanState, namespace);
-    }
-    return cleanState;
+    return cleanUp(props, searchState, this.context);
   },
 
   getSearchParameters(params, props, searchState) {
     const {attributeName} = props;
-    const currentRefinement = getCurrentRefinement(props, searchState);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     params = params.addDisjunctiveFacet(attributeName);
 
     const {min, max} = currentRefinement;
@@ -142,7 +146,7 @@ export default createConnector({
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, searchState);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     let item;
     const hasMin = typeof currentRefinement.min !== 'undefined';
     const hasMax = typeof currentRefinement.max !== 'undefined';
@@ -159,15 +163,13 @@ export default createConnector({
         label: itemLabel,
         currentRefinement,
         attributeName: props.attributeName,
-        value: nextState => ({
-          ...nextState,
-          [namespace]: {...nextState[namespace], [id]: {}},
-        }),
+        value: nextState => cleanUp(props, nextState, this.context),
       };
     }
 
     return {
       id,
+      index: getIndex(this.context),
       items: item ? [item] : [],
     };
   },

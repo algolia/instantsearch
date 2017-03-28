@@ -52,23 +52,4 @@ describe('ClearAll', () => {
     btn.simulate('click');
     expect(refine.mock.calls.length).toBe(1);
   });
-
-  it('the clearAll button should not be disabled if there is a query, items, or both', () => {
-    const refine = jest.fn();
-    const wrapper = mount(
-      <ClearAll refine={refine} items={[]} query="value" />
-    );
-    const btn = wrapper.find('button');
-    expect(refine.mock.calls.length).toBe(0);
-
-    btn.simulate('click');
-
-    expect(refine.mock.calls.length).toBe(1);
-
-    wrapper.setProps({items: [{value: 'test', label: 'test: test'}]});
-
-    btn.simulate('click');
-
-    expect(refine.mock.calls.length).toBe(2);
-  });
 });

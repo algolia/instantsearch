@@ -1,5 +1,6 @@
 import createConnector from '../core/createConnector';
 import {PropTypes} from 'react';
+
 /**
  * connectCurrentRefinements connector provides the logic to build a widget that will
  * give the user the ability to remove all or some of the filters that were
@@ -20,22 +21,29 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults, metadata) {
-    const items = metadata.reduce((res, meta) =>
-        typeof meta.items !== 'undefined' ? res.concat(meta.items) : res
-      , []);
-    const query = props.clearsQuery && searchResults.results ? searchResults.results.query : undefined;
+    const items = metadata.reduce((res, meta) => {
+      if (typeof meta.items !== 'undefined') {
+        if (!props.clearsQuery && meta.id === 'query') {
+          return res;
+        } else {
+          if (props.clearsQuery && meta.id === 'query' && meta.items[0].currentRefinement === '') {
+            return res;
+          }
+          return res.concat(meta.items);
+        }
+      }
+      return res;
+    }, []);
 
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       canRefine: items.length > 0,
-      query,
     };
   },
 
   refine(props, searchState, items) {
     // `value` corresponds to our internal clear function computed in each connector metadata.
     const refinementsToClear = items instanceof Array ? items.map(item => item.value) : [items];
-    searchState = props.clearsQuery && searchState.query ? {...searchState, query: ''} : searchState;
     return refinementsToClear.reduce((res, clear) => clear(res), searchState);
   },
 });

@@ -442,40 +442,64 @@ describe('createConnector', () => {
       expect(transitionState.mock.calls.length).toBe(0);
     });
 
-    it('unregisters itself on unmount', () => {
+    describe('unmounting', () => {
       const Connected = createConnector({
         displayName: 'CoolConnector',
         getProvidedProps: () => null,
         getMetadata: () => null,
-        cleanUp: () => ({another: {state: 'state'}}),
+        cleanUp: () => ({another: {state: 'state', key: {}}, key: {}}),
       })(() => null);
       const unregister = jest.fn();
       const setState = jest.fn();
       const onInternalStateUpdate = jest.fn();
-      const wrapper = mount(<Connected />, {context: {
-        ais: {
-          store: {
-            getState: () => ({widgets: {another: {state: 'state'}}}),
-            setState,
-            subscribe: () => () => null,
+      it('unregisters itself on unmount', () => {
+        const wrapper = mount(<Connected />, {
+          context: {
+            ais: {
+              store: {
+                getState: () => ({widgets: {another: {state: 'state'}}}),
+                setState,
+                subscribe: () => () => null,
+              },
+              widgetsManager: {
+                registerWidget: () => unregister,
+              },
+              onInternalStateUpdate,
+            },
           },
-          widgetsManager: {
-            registerWidget: () => unregister,
+        });
+        expect(unregister.mock.calls.length).toBe(0);
+        expect(setState.mock.calls.length).toBe(0);
+        expect(onInternalStateUpdate.mock.calls.length).toBe(0);
+
+        wrapper.unmount();
+
+        expect(unregister.mock.calls.length).toBe(1);
+        expect(setState.mock.calls.length).toBe(1);
+        expect(onInternalStateUpdate.mock.calls.length).toBe(1);
+        expect(setState.mock.calls[0][0]).toEqual({widgets: {another: {state: 'state'}}});
+        expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({another: {state: 'state'}});
+      });
+      it('empty key from the search state should be removed', () => {
+        const wrapper = mount(<Connected />, {
+          context: {
+            ais: {
+              store: {
+                getState: () => ({widgets: {another: {state: 'state'}}}),
+                setState,
+                subscribe: () => () => null,
+              },
+              widgetsManager: {
+                registerWidget: () => unregister,
+              },
+              onInternalStateUpdate,
+            },
           },
-          onInternalStateUpdate,
-        },
-      }});
-      expect(unregister.mock.calls.length).toBe(0);
-      expect(setState.mock.calls.length).toBe(0);
-      expect(onInternalStateUpdate.mock.calls.length).toBe(0);
+        });
+        wrapper.unmount();
 
-      wrapper.unmount();
-
-      expect(unregister.mock.calls.length).toBe(1);
-      expect(setState.mock.calls.length).toBe(1);
-      expect(onInternalStateUpdate.mock.calls.length).toBe(1);
-      expect(setState.mock.calls[0][0]).toEqual({widgets: {another: {state: 'state'}}});
-      expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({another: {state: 'state'}});
+        expect(onInternalStateUpdate.mock.calls[0][0]).toEqual({another: {state: 'state'}});
+      });
     });
   });
 

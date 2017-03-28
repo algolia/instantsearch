@@ -1,20 +1,21 @@
 import {PropTypes} from 'react';
 import createConnector from '../core/createConnector';
-import {omit} from 'lodash';
+import {cleanUpValue, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
 
 function getId() {
   return 'hitsPerPage';
 }
 
-function getCurrentRefinement(props, searchState) {
+function getCurrentRefinement(props, searchState, context) {
   const id = getId();
-  if (typeof searchState[id] !== 'undefined') {
-    if (typeof searchState[id] === 'string') {
-      return parseInt(searchState[id], 10);
+  return getCurrentRefinementValue(props, searchState, context, id, null,
+    currentRefinement => {
+      if (typeof currentRefinement === 'string') {
+        return parseInt(currentRefinement, 10);
+      }
+      return currentRefinement;
     }
-    return searchState[id];
-  }
-  return props.defaultRefinement;
+  );
 }
 
 /**
@@ -43,7 +44,7 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(props, searchState);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     const items = props.items.map(item => item.value === currentRefinement
       ? {...item, isRefined: true} : {...item, isRefined: false});
     return {
@@ -52,20 +53,19 @@ export default createConnector({
     };
   },
 
-  refine(props, searchState, nextHitsPerPage) {
+  refine(props, searchState, nextRefinement) {
     const id = getId();
-    return {
-      ...searchState,
-      [id]: nextHitsPerPage,
-    };
+    const nextValue = {[id]: nextRefinement};
+    const resetPage = true;
+    return refineValue(searchState, nextValue, this.context, resetPage);
   },
 
   cleanUp(props, searchState) {
-    return omit(searchState, getId());
+    return cleanUpValue(searchState, this.context, getId());
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setHitsPerPage(getCurrentRefinement(props, searchState));
+    return searchParameters.setHitsPerPage(getCurrentRefinement(props, searchState, this.context));
   },
 
   getMetadata() {

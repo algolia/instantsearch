@@ -1,5 +1,5 @@
 import {PropTypes} from 'react';
-import {omit} from 'lodash';
+import {cleanUpValue, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
 
@@ -7,15 +7,16 @@ function getId() {
   return 'sortBy';
 }
 
-function getCurrentRefinement(props, searchState) {
-  const id = getId();
-  if (searchState[id]) {
-    return searchState[id];
-  }
-  if (props.defaultRefinement) {
-    return props.defaultRefinement;
-  }
-  return null;
+function getCurrentRefinement(props, searchState, context) {
+  const id = getId(props);
+  return getCurrentRefinementValue(props, searchState, context, id, null,
+    currentRefinement => {
+      if (currentRefinement) {
+        return currentRefinement;
+      }
+      return null;
+    }
+  );
 }
 
 /**
@@ -46,7 +47,7 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(props, searchState);
+    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
     const items = props.items.map(item => item.value === currentRefinement
       ? {...item, isRefined: true} : {...item, isRefined: false});
     return {
@@ -57,18 +58,17 @@ export default createConnector({
 
   refine(props, searchState, nextRefinement) {
     const id = getId();
-    return {
-      ...searchState,
-      [id]: nextRefinement,
-    };
+    const nextValue = {[id]: nextRefinement};
+    const resetPage = true;
+    return refineValue(searchState, nextValue, this.context, resetPage);
   },
 
   cleanUp(props, searchState) {
-    return omit(searchState, getId());
+    return cleanUpValue(searchState, this.context, getId());
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const selectedIndex = getCurrentRefinement(props, searchState);
+    const selectedIndex = getCurrentRefinement(props, searchState, this.context);
     return searchParameters.setIndex(selectedIndex);
   },
 

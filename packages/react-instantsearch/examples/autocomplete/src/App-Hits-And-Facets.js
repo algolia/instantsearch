@@ -6,7 +6,7 @@ import Autosuggest from 'react-autosuggest';
 import {forOwn} from 'lodash';
 import 'react-instantsearch-theme-algolia/style.css';
 
-class App extends Component {
+class App2 extends Component {
   render() {
     return (
       <InstantSearch
@@ -41,10 +41,10 @@ const connectAutoComplete = createConnector({
    facets you want the value of.
    */
   getProvidedProps(props, state, search) {
-    const hits = search.results ? search.results.hits : [];
+    const hits = search.results && search.results.bestbuy ? search.results.bestbuy.hits : [];
     const facets = props.attributes.reduce((acc, attributeName) => {
-      if (search.results) {
-        acc[attributeName] = search.results
+      if (search.results && search.results.bestbuy) {
+        acc[attributeName] = search.results.bestbuy
           .getFacetValues(attributeName)
           .slice(0, 3)
           .map(v => ({
@@ -107,4 +107,4 @@ AutoComplete.propTypes = {
 
 const ConnectedAutoComplete = connectAutoComplete(AutoComplete);
 
-export default App;
+export default App2;

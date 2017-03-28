@@ -2,15 +2,16 @@
 
 import createInstantSearchManager from './createInstantSearchManager';
 
-import algoliaClient from 'algoliasearch/lite';
+import algoliaClient from 'algoliasearch';
 
 jest.useFakeTimers();
 
 jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
-  let count = 0;
   const Helper = require.requireActual('algoliasearch-helper/src/algoliasearch.helper.js');
   Helper.prototype._dispatchAlgoliaResponse = function(state) {
-    this.emit('result', {count: count++, index: 'index'}, state);
+    state.forEach(s => {
+      this.emit('result', {query: s.state.query, index: s.state.index}, s);
+    });
   };
   Helper.prototype.searchForFacetValues = () => Promise.resolve({facetHits: 'results'});
   return Helper;
@@ -39,18 +40,19 @@ describe('createInstantSearchManager', () => {
     describe('on widget lifecycle', () => {
       it('updates the store and searches', () => {
         const ism = createInstantSearchManager({
-          indexName: 'index',
+          indexName: 'first',
           initialState: {},
           searchParameters: {},
           algoliaClient: client,
         });
 
         ism.widgetsManager.registerWidget({
-          getSearchParameters: params => {
-            params.setQuery('search');
-            params.setIndex('index');
-            return params;
-          },
+          getSearchParameters: params => params.setQuery('first query 1'),
+        });
+
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('second query 1'),
+          multiIndexContext: {targetedIndex: 'second'},
         });
 
         expect(ism.store.getState().results).toBe(null);
@@ -59,8 +61,12 @@ describe('createInstantSearchManager', () => {
           jest.runAllTimers();
 
           const store = ism.store.getState();
-          expect(store.results.index).toEqual({count: 0, index: 'index'});
+          expect(store.results.first).toEqual({query: 'first query 1', index: 'first'});
+          expect(store.results.second).toEqual({query: 'second query 1', index: 'second'});
           expect(store.error).toBe(null);
+
+          ism.widgetsManager.getWidgets()[0].getSearchParameters = params => params.setQuery('first query 2');
+          ism.widgetsManager.getWidgets()[1].getSearchParameters = params => params.setQuery('second query 2');
 
           ism.widgetsManager.update();
 
@@ -68,7 +74,8 @@ describe('createInstantSearchManager', () => {
             jest.runAllTimers();
 
             const store1 = ism.store.getState();
-            expect(store.results.index).toEqual({count: 1, index: 'index'});
+            expect(store.results.first).toEqual({query: 'first query 2', index: 'first'});
+            expect(store.results.second).toEqual({query: 'second query 2', index: 'second'});
             expect(store1.error).toBe(null);
           });
         });
@@ -77,10 +84,18 @@ describe('createInstantSearchManager', () => {
     describe('on external updates', () => {
       it('updates the store and searches', () => {
         const ism = createInstantSearchManager({
-          indexName: 'index',
+          indexName: 'first',
           initialState: {},
-          searchParameters: {index: 'index'},
+          searchParameters: {},
           algoliaClient: client,
+        });
+
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('first query 1'),
+        });
+        ism.widgetsManager.registerWidget({
+          getSearchParameters: params => params.setQuery('second query 1'),
+          multiIndexContext: {targetedIndex: 'second'},
         });
 
         ism.onExternalStateUpdate({});
@@ -90,30 +105,9 @@ describe('createInstantSearchManager', () => {
         jest.runAllTimers();
 
         const store = ism.store.getState();
-        expect(store.results.index).toEqual({count: 2, index: 'index'});
+        expect(store.results.first).toEqual({query: 'first query 1', index: 'first'});
+        expect(store.results.second).toEqual({query: 'second query 1', index: 'second'});
         expect(store.error).toBe(null);
-      });
-    });
-    describe('on search for facet values', () => {
-      it('updates the store and searches', () => {
-        const ism = createInstantSearchManager({
-          indexName: 'index',
-          initialState: {},
-          searchParameters: {index: 'index'},
-          algoliaClient: client,
-        });
-
-        ism.onSearchForFacetValues({facetName: 'facetName', query: 'query'});
-
-        expect(ism.store.getState().results).toBe(null);
-
-        jest.runAllTimers();
-
-        return Promise.resolve().then(() => {
-          const store = ism.store.getState();
-          expect(store.resultsFacetValues).toEqual({facetName: 'results', query: 'query'});
-          expect(store.searchingForFacetValues).toBe(false);
-        });
       });
     });
   });
