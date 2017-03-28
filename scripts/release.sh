@@ -60,7 +60,7 @@ conventional-changelog --preset angular --output-unreleased | less
 
 additionalInfo=''
 if [[ $beta ]]; then
-  additionalInfo=' (You are releasing a BETA version, add -beta.x, x being a number)'
+  additionalInfo='. You are releasing a BETA version. New version should look like x.x.x-beta.x.'
 fi
 
 # choose and bump new version
