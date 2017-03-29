@@ -1,0 +1,58 @@
+extends archetypes/content-with-menu.pug
+
+include mixins/nav.pug
+
+block navigation
+  +nav(navPath, navigation, mainTitle || title, withHeadings && headings || [])
+
+block content
+  h2#description Description
+    a.anchor(href=`${navPath}#description`)
+  p!=h.markdown(description)
+  h2#proptypes Exposed props
+    a.anchor(href=`${navPath}#proptypes`)
+  if proptype
+    p These are the props exposed by the resulting Component.
+    table.api.proptypes
+      tbody
+        each type in proptype
+          tr.api-entry-values
+            td.api-entry-name
+              div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
+                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
+            td.api-entry-type
+              code=type.type
+            td.api-entry-default-value
+              if type.defaultValue
+                span default value:
+                code=type.defaultValue
+          tr.api-entry-description
+            td(colspan=3)!=h.markdown(type.description)
+  else
+    p This connector does not expose external props.
+  h2#provided-props Provided props
+    a.anchor(href=`${navPath}#provided-props`)
+  if providedproptype
+    p These are the props that the wrapped Component will receive.
+    table.api.proptypes
+      tbody
+        each type in providedproptype
+          tr.api-entry-values
+            td.api-entry-name
+              div.api-entry(id=`default-props-entry-${name}-${type.name}`)=type.name
+                a.anchor(href=`${navPath}#default-props-entry-${name}-${type.name}`)
+            td.api-entry-type
+              code=type.type
+            td.api-entry-default-value
+              if type.defaultValue
+                span default value:
+                code=type.defaultValue
+          tr.api-entry-description
+            td(colspan=3)!=h.markdown(type.description)
+  else
+    p This connector does not provided props to its wrapped Component.
+  if examples
+    h2#example Example
+      a.anchor(href=`${navPath}#example`)
+    each example in examples
+      p!=h.highlight(example, {lang: 'jsx'})

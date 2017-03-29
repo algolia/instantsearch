@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="522px" height="330px" viewBox="0 0 522 330" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>facets-illus</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="330" height="324" rx="4"></rect>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-3">
+            <feMorphology radius="1" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="1" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-1" y="-1" width="332" height="326">
+            <rect x="-1" y="-1" width="332" height="326" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-5">
+            <stop stop-color="#2B91FC" offset="0%"></stop>
+            <stop stop-color="#2D91FC" offset="100%"></stop>
+        </linearGradient>
+        <path d="M0,3.00335124 C0,1.34464615 1.34237885,0 3.00335124,0 L10.9966488,0 C12.6553538,0 14,1.34237885 14,3.00335124 L14,10.9966488 C14,12.6553538 12.6576211,14 10.9966488,14 L3.00335124,14 C1.34464615,14 0,12.6576211 0,10.9966488 L0,3.00335124 Z" id="path-6"></path>
+        <mask id="mask-7" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
+            <use xlink:href="#path-6"></use>
+        </mask>
+        <polyline id="path-8" points="3.90002441 7.90864964 6.00159836 10.2941486 10.232513 3.75967852"></polyline>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-9">
+            <feMorphology radius="0.75" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feGaussianBlur stdDeviation="0.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196841033 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-10">
+            <stop stop-color="#AEAEAE" offset="0%"></stop>
+            <stop stop-color="#C0C0C0" offset="100%"></stop>
+        </linearGradient>
+        <rect id="path-11" x="0" y="0" width="14" height="14" rx="3"></rect>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-12">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196246603 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <mask id="mask-13" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
+            <use xlink:href="#path-11"></use>
+        </mask>
+        <rect id="path-14" x="0" y="0" width="14" height="14" rx="3"></rect>
+        <filter x="-50%" y="-50%" width="200%" height="200%" filterUnits="objectBoundingBox" id="filter-15">
+            <feGaussianBlur stdDeviation="0.5" in="SourceAlpha" result="shadowBlurInner1"></feGaussianBlur>
+            <feOffset dx="0" dy="1" in="shadowBlurInner1" result="shadowOffsetInner1"></feOffset>
+            <feComposite in="shadowOffsetInner1" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="shadowInnerInner1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.196246603 0" type="matrix" in="shadowInnerInner1"></feColorMatrix>
+        </filter>
+        <mask id="mask-16" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="14" height="14" fill="white">
+            <use xlink:href="#path-14"></use>
+        </mask>
+    </defs>
+    <g id="Website" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Offline" transform="translate(-203.000000, -1249.000000)">
+            <g id="feature-focus" transform="translate(0.000000, 1130.000000)">
+                <g id="facets-illus" transform="translate(203.000000, 120.000000)">
+                    <g id="Group-14-Copy-2" transform="translate(189.000000, 0.000000)">
+                        <g id="Group-13-Copy">
+                            <mask id="mask-2" fill="white">
+                                <use xlink:href="#path-1"></use>
+                            </mask>
+                            <g id="Rectangle-3">
+                                <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                <use stroke="#F7F7FF" mask="url(#mask-4)" stroke-width="2" xlink:href="#path-1"></use>
+                            </g>
+                            <text id="Deep-linking-&amp;-searc" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#3369E7">
+                                <tspan x="12" y="27">Deep linking &amp; search in iOS 9 will change ev..</tspan>
+                            </text>
+                            <text id="The-holy-grail-for-a" mask="url(#mask-2)" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#9D9DBD">
+                                <tspan x="12" y="48">The holy grail for any investor is to discover the next G...</tspan>
+                            </text>
+                            <text id="Next-level-searching" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#3369E7">
+                                <tspan x="12" y="92">Next-level searching in Slack</tspan>
+                            </text>
+                            <text id="Day-to-day-productiv" mask="url(#mask-2)" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#9D9DBD">
+                                <tspan x="12" y="113">Day to day productivity is one thing. Having a long-ter...</tspan>
+                            </text>
+                            <text id="How-Google-Is-Taking" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#3369E7">
+                                <tspan x="12" y="157">How Google Is Taking Search Outside the Box</tspan>
+                            </text>
+                            <text id="The-I/O-conference-h" mask="url(#mask-2)" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#9D9DBD">
+                                <tspan x="12" y="178">The I/O conference had virtual reality, photos and elec...</tspan>
+                            </text>
+                            <text id="A-painstakingly-craf" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#3369E7">
+                                <tspan x="12" y="222">A painstakingly crafted search for Hearthsto..</tspan>
+                            </text>
+                            <text id="Hearthstone’s-popula" mask="url(#mask-2)" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#9D9DBD">
+                                <tspan x="12" y="243">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
+                            </text>
+                            <text id="A-painstakingly-craf-Copy" mask="url(#mask-2)" font-family="OpenSans-Semibold, Open Sans" font-size="14" font-weight="500" fill="#3369E7">
+                                <tspan x="12" y="287">A painstakingly crafted search for Hearthsto..</tspan>
+                            </text>
+                            <text id="Hearthstone’s-popula-Copy" mask="url(#mask-2)" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#9D9DBD">
+                                <tspan x="12" y="308">Hearthstone’s popularity is stunning. Is it the worthy...</tspan>
+                            </text>
+                            <rect id="Rectangle-4" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="64" width="330" height="1"></rect>
+                            <rect id="Rectangle-4-Copy" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="129" width="330" height="1"></rect>
+                            <rect id="Rectangle-4-Copy-2" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="194" width="330" height="1"></rect>
+                            <rect id="Rectangle-4-Copy-3" fill="#D8D8D8" opacity="0.5" mask="url(#mask-2)" x="5.68434189e-14" y="259" width="330" height="1"></rect>
+                        </g>
+                    </g>
+                    <g id="Group-42" transform="translate(0.000000, 16.000000)">
+                        <g id="Group-44">
+                            <text id="TYPE" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#182359">
+                                <tspan x="0" y="13">TYPE</tspan>
+                            </text>
+                            <text id="Article" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                <tspan x="20" y="43">Article</tspan>
+                            </text>
+                            <g id="Check-Box-On" transform="translate(0.000000, 32.000000)">
+                                <use id="Rectangle-3-Copy" stroke="url(#linearGradient-5)" mask="url(#mask-7)" fill="#3B99FC" xlink:href="#path-6"></use>
+                                <g id="Path-68">
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-9)" xlink:href="#path-8"></use>
+                                    <use stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xlink:href="#path-8"></use>
+                                </g>
+                            </g>
+                            <g id="checkbox_off-copy" transform="translate(0.000000, 58.000000)">
+                                <g id="Rectangle-3-Copy-2">
+                                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-11"></use>
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-12)" xlink:href="#path-11"></use>
+                                    <use stroke="url(#linearGradient-10)" mask="url(#mask-13)" stroke-width="1" xlink:href="#path-11"></use>
+                                </g>
+                            </g>
+                            <g id="checkbox_off-copy-2" transform="translate(0.000000, 84.000000)">
+                                <g id="Rectangle-3-Copy-2">
+                                    <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-14"></use>
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-15)" xlink:href="#path-14"></use>
+                                    <use stroke="url(#linearGradient-10)" mask="url(#mask-16)" stroke-width="1" xlink:href="#path-14"></use>
+                                </g>
+                            </g>
+                            <text id="Video" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                <tspan x="20" y="69">Video</tspan>
+                            </text>
+                            <text id="Categorie" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                <tspan x="20" y="95">Categorie</tspan>
+                            </text>
+                            <text id="236" font-family="OpenSans, Open Sans" font-size="11" font-weight="normal" fill-opacity="0.5" fill="#000000">
+                                <tspan x="130.131348" y="43">236</tspan>
+                            </text>
+                            <text id="48" font-family="OpenSans, Open Sans" font-size="11" font-weight="normal" fill-opacity="0.5" fill="#000000">
+                                <tspan x="136.420898" y="69">48</tspan>
+                            </text>
+                            <text id="12" font-family="OpenSans, Open Sans" font-size="11" font-weight="normal" fill-opacity="0.5" fill="#000000">
+                                <tspan x="136.420898" y="95">12</tspan>
+                            </text>
+                        </g>
+                        <g id="Group-46" transform="translate(0.000000, 129.000000)">
+                            <text id="TAGS" font-family="OpenSans, Open Sans" font-size="12" font-weight="normal" fill="#182359">
+                                <tspan x="0" y="13">TAGS</tspan>
+                            </text>
+                            <g id="Group-40" transform="translate(0.000000, 29.000000)">
+                                <rect id="Rectangle-10" fill="#FFFFFF" x="0" y="0" width="68" height="34" rx="3"></rect>
+                                <text id="Startup" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                    <tspan x="12" y="22">Startup</tspan>
+                                </text>
+                            </g>
+                            <g id="Group-39" transform="translate(0.000000, 71.000000)">
+                                <rect id="Rectangle-10-Copy-2" fill="#FFFFFF" x="0" y="0" width="131" height="34" rx="3"></rect>
+                                <text id="Entrepreneurship" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                    <tspan x="12" y="22">Entrepreneurship</tspan>
+                                </text>
+                            </g>
+                            <g id="Group-39-Copy" transform="translate(0.000000, 113.000000)">
+                                <rect id="Rectangle-10-Copy-2" fill="#FFFFFF" x="0" y="0" width="66" height="34" rx="3"></rect>
+                                <text id="Search" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                    <tspan x="12" y="22">Search</tspan>
+                                </text>
+                            </g>
+                            <g id="Group-39-Copy-2" transform="translate(73.000000, 113.000000)">
+                                <rect id="Rectangle-10-Copy-2" fill="#FFFFFF" x="0" y="0" width="66" height="34" rx="3"></rect>
+                                <text id="Design" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                    <tspan x="12" y="22">Design</tspan>
+                                </text>
+                            </g>
+                            <g id="Group-41" transform="translate(75.000000, 29.000000)">
+                                <rect id="Rectangle-10-Copy" fill="#FFFFFF" x="0" y="0" width="85" height="34" rx="3"></rect>
+                                <text id="Marketing" font-family="OpenSans, Open Sans" font-size="13" font-weight="normal" fill="#262626">
+                                    <tspan x="12" y="22">Marketing</tspan>
+                                </text>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

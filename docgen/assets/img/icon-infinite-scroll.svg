@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="80px" height="84px" viewBox="0 0 80 84" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 42 (36781) - http://www.bohemiancoding.com/sketch -->
+    <title>infinite-scroll</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="42.966%" y1="14.059%" x2="85.153%" y2="110.153%" id="linearGradient-1">
+            <stop stop-color="#1CC7D0" offset="0%"></stop>
+            <stop stop-color="#136B90" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="10.934%" y1="-27.347%" x2="73.434%" y2="79.684%" id="linearGradient-2">
+            <stop stop-color="#2EDE98" offset="0%"></stop>
+            <stop stop-color="#1CC7D0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="infinite-scroll" fill-rule="nonzero">
+            <g id="icon-isInfinite" transform="translate(8.000000, 7.000000)">
+                <g id="Group">
+                    <g id="Rectangle-path">
+                        <rect fill="url(#linearGradient-1)" x="0" y="5" width="64" height="64" rx="4"></rect>
+                        <rect fill="url(#linearGradient-2)" x="0" y="0" width="64" height="64" rx="4"></rect>
+                    </g>
+                    <path d="M38.324,26.69 L26.534,26.69 L26.534,33.857 C26.534,34.203 26.394,34.517 26.167,34.745 C25.937,34.971 25.619,35.112 25.264,35.112 L13.49,35.112 C12.788,35.112 12.22,34.552 12.22,33.849 C12.22,33.149 12.78,32.584 13.49,32.584 L24.01,32.584 L24.01,25.42 C24.01,24.727 24.57,24.165 25.272,24.165 L39.587,24.165 C40.285,24.165 40.851,24.735 40.851,25.42 L40.851,37.64 L51.837,37.64 C52.532,37.64 53.097,38.2 53.097,38.902 C53.097,39.599 52.535,40.165 51.837,40.165 L39.587,40.165 C39.239,40.165 38.925,40.025 38.695,39.793 C38.467,39.565 38.325,39.253 38.325,38.91 L38.325,26.69 L38.324,26.69 Z" id="Shape" fill="#FFFFFF"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

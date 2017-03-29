@@ -1,0 +1,41 @@
+{
+  "name": "instantsearch-android-docgen",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-node start.js",
+    "build": "babel-node build.js",
+    "build-preview": "DOCS_DIST=../docs-preview/instantsearch-android; mkdir -p $DOCS_DIST && NODE_ENV=production yarn build && mv $DOCS_DIST/_redirects $DOCS_DIST/../; unset DOCS_DIST",
+    "deploy-preview": "rm -f preview.zip && ls .. && zip -r -9 preview.zip ../docs-preview/ && netlify deploy && rm preview.zip",
+    "preview": "yarn build-preview && yarn deploy-preview"
+  },
+  "dependencies": {
+    "algolia-frontend-components": "^0.0.24",
+    "autoprefixer": "^6.6.0",
+    "babel-cli": "^6.18.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-env": "^1.2.1",
+    "babel-preset-latest": "^6.22.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "browser-sync": "^2.18.5",
+    "codemirror": "^5.22.0",
+    "compression": "^1.6.2",
+    "json-loader": "^0.5.4",
+    "markdown-it": "^8.2.2",
+    "markdown-it-anchor": "^2.6.0",
+    "metalsmith": "^2.3.0",
+    "metalsmith-headings": "^0.1.0",
+    "metalsmith-layouts": "^1.7.0",
+    "metalsmith-navigation": "^0.2.9",
+    "metalsmith-sass": "^1.3.0",
+    "ms-webpack": "^1.0.2",
+    "netlify-cli": "^1.1.0",
+    "node-sass": "^4.1.1",
+    "postcss-scss": "^0.4.0",
+    "pug": "^2.0.0-beta6",
+    "webpack": "^1.14.0",
+    "webpack-dev-middleware": "^1.9.0",
+    "webpack-hot-middleware": "^2.14.0"
+  }
+}

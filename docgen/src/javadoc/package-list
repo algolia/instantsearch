@@ -1,0 +1,8 @@
+com.algolia.instantsearch.events
+com.algolia.instantsearch.helpers
+com.algolia.instantsearch.model
+com.algolia.instantsearch.ui
+com.algolia.instantsearch.ui.databinding
+com.algolia.instantsearch.ui.utils
+com.algolia.instantsearch.ui.views
+com.algolia.instantsearch.utils

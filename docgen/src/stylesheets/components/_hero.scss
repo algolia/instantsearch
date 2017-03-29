@@ -1,0 +1,245 @@
+.tagline a {
+  color: $algolia-blue;
+}
+
+// Start the hero
+$css: ".st0{ fill:none; stroke:%23FFF; stroke-miterlimit:10;}";
+
+.hero-section {
+  background-image:  url('../images/header-background.svg'), linear-gradient(to bottom right, $bunting 0%, $bunting 100%);
+  //background: $bunting;
+  background-repeat: no-repeat, repeat;
+  background-position: center center, top left;
+  background-size:  cover, 100%;
+  padding-top: $nav-height*1.5;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+  height: 780px;
+  color: #fff;
+
+  .tagline {
+    img {
+      vertical-align: bottom;
+
+      &.android-logo {
+        position: relative;
+        top: -8px;
+      }
+    }
+  }
+
+  .container,
+  .hero-container {
+    position: relative;
+    z-index: 5;
+  }
+
+  .tagline {
+    margin-bottom: 0.8em;
+  }
+
+  h3 {
+    margin-bottom: 2em;
+    opacity: 0.75;
+    font-size: 22px;
+    line-height: 1.27;
+    color: #fff
+  }
+
+  .hero-content {
+    margin-top: 3em;
+    margin-bottom: -2.5em;
+  }
+  .hero-illustration {
+    position: relative;
+    text-align: left;
+    width: 414px;
+    margin: 4em auto;
+
+
+    img {
+      position: absolute;
+      top: 16px;
+    }
+  }
+
+
+  .article-title  {
+    width: 70%;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+
+    a {
+      text-shadow: 1px 1px 3px rgba(255,255,255,0.2)
+    }
+
+    .algolia-website-logo-link {
+      width: 20px;
+      display: inline-block;
+      position: relative;
+      z-index: 9;
+    }
+
+    figure {
+      margin-top: 1em;
+
+      img {
+        max-width: 500px;
+        margin: 0.5em 0;
+      }
+    }
+
+
+    &.doc-only {
+      width: 100%;
+    }
+  }
+
+  h1.project-title {
+    position: relative;
+    top: -10px;
+    font-size: 14px !important;
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: 42px;
+    font-weight: 300;
+  }
+
+  .illustration {
+    padding: 1em;
+
+    img {
+      max-width: 140px;
+    }
+  }
+
+  @include mobile-mq {
+    text-align: center;
+    padding-top: 16px;
+    position: relative;
+    max-width: 100%;
+    background-position: center top, center center;
+    background-size: 500px, 100%;
+    min-height: 460px !important;
+    height: 460px !important;
+
+    h3 {
+      margin-top: 1em;
+    }
+
+
+    .hero-container {
+      top: 70px;
+    }
+
+    .fl-left {
+      width: 100%;
+      margin-top: $nav-height * 1.5;
+      padding-left: 2em;
+      max-width: 500px;
+      float: none;
+
+
+       body.documentation &{
+        margin-top: 0;
+      }
+    }
+
+
+
+    h1.project-title {
+      font-size: 28px;
+    }
+
+    .btn {
+      max-width: 100%;
+    }
+
+    #json-response-text {
+      text-align: left;
+    }
+  }
+
+  body.documentation &{
+    min-height: 200px;
+    height: 200px;
+    line-height: calc(200px + 60px);
+    padding: 0;
+    background-size: 100%;
+    background-position: center right 10vw, center center;
+    text-align: left;
+
+    .doc-only {
+      display: block;
+
+      figure {
+        line-height: 150px;
+
+        img {
+          max-width: 46px;
+          margin-right: 16px;
+          vertical-align: middle;
+        }
+
+        figcaption {
+          position: relative;
+          vertical-align: middle;
+          text-indent: inherit;
+          top: inherit;
+          color: #fff;
+          display: inline-block;
+
+          @include small-mq {
+            width: calc(100% - 90px);
+
+            h1 {
+              font-size: 28px;
+              line-height: 1.2;
+            }
+          }
+        }
+      }
+    }
+
+
+
+    .article-title h1.project-title {
+      padding-top: 0.25em;
+    }
+
+
+    @include small-mq {
+      min-height: 240px !important;
+      height: 240px !important;
+      .hero-container {
+        text-align: center !important;
+      }
+    }
+  }
+}
+
+@keyframes fill {
+  0% {
+    fill-opacity: 0;
+  }
+
+  100% {
+    fill-opacity: 1;
+  }
+}
+
+
+
+@keyframes swan-dash {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.documentation .hero-container {
+  top: 0;
+}
+

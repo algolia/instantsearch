@@ -1,0 +1,457 @@
+@mixin spacer
+  width: 100%
+  font-size: 0
+  margin: 0
+  padding: 0
+  border: 0
+  display: block
+
+// Spacer
+.spacer5
+  +spacer
+  height: 5px
+.spacer10
+  +spacer
+  height: 10px
+.spacer15
+  +spacer
+  height: 15px
+.spacer20
+  +spacer
+  height: 20px
+.spacer25
+  +spacer
+  height: 25px
+.spacer30
+  +spacer
+  height: 30px
+.spacer35
+  +spacer
+  height: 35px
+.spacer40
+  +spacer
+  height: 40px
+.spacer45
+  +spacer
+  height: 45px
+.spacer50
+  +spacer
+  height: 50px
+.spacer60
+  +spacer
+  height: 60px
+.spacer80
+  +spacer
+  height: 80px
+.spacer100
+  +spacer
+  height: 100px
+.spacer120
+  +spacer
+  height: 120px
+.spacer200
+  +spacer
+  height: 200px
+
+// Widths
+.w100
+  width: 100px
+.w150
+  width: 150px
+.w200
+  width: 200px
+.m100
+  max-width: 100px
+.m200
+  max-width: 200px
+.m300
+  max-width: 300px
+.m400
+  max-width: 400px
+.m500
+  max-width: 500px
+.m600
+  max-width: 600px
+.m700
+  max-width: 700px
+.m800
+  max-width: 800px
+.m900
+  max-width: 900px
+.m1000
+  max-width: 1000px
+.m1200
+  max-width: 1200px
+.m100p
+  max-width: 100%
+
+// Heights
+.h100
+  height: 100px
+.h200
+  height: 200px
+.h300
+  height: 300px
+.h500
+  height: 500px
+.h600
+  height: 600px
+.hfull
+  height: 100%
+
+// Positions
+.pos-rel
+  position: relative
+.pos-stc
+  position: static
+.pos-abt
+  position: absolute
+
+
+
+// Text size
+.text-xxl
+  font-size: 50px
+.text-xl
+  font-size: 32px
+.text-lg
+  font-size: 20px
+.text-sm
+  font-size: 12px
+.text-xs
+  font-size: 10px
+
+// Pulls
+.pull-in
+  margin-left: -15px
+  margin-right: -15px
+.pull-out
+  margin: -15px
+
+// Border
+.b-t
+  border-top: 1px solid $secondary-color
+.b-r
+  border-right: 1px solid $secondary-color
+.b-b
+  border-bottom: 1px solid $secondary-color
+.b-l
+  border-left: 1px solid $secondary-color
+
+// Paddings
+.padder
+  padding: 0 15px
+.p-small
+  padding: 10px
+.no-p-l
+  padding-left: 0
+.no-p-r
+  padding-right: 0
+.p-large
+  padding: 20px
+.p-xlarge
+  padding: 30px
+.p-l-small
+  padding-left: 10px
+.p-l-large
+  padding-left: 20px
+.p-l-xlarge
+  padding-left: 30px
+.p-r-large
+  padding-right: 20px
+.p-r-xlarge
+  padding-right: 30px
+.p-l-xxlarge
+  padding-left: 60px
+.p-r-xxlarge
+  padding-right: 60px
+
+.no-padding
+  padding: 0 !important
+
+// Margins
+.m-l-r-auto
+  margin-left: auto
+  margin-right: auto
+.m-l
+  margin-left: 15px
+.m-l-none
+  margin-left: 0
+.m-l-mini
+  margin-left: 5px
+.m-l-small
+  margin-left: 10px
+.m-l-large
+  margin-left: 20px
+.m-l-n
+  margin-left: -15px
+.m-l-n-mini
+  margin-left: -5px
+.m-l-n-small
+  margin-left: -10px
+.m-l-n-large
+  margin-left: -20px
+.m-t
+  margin-top: 15px
+.m-t-none
+  margin-top: 0
+.m-t-mini
+  margin-top: 5px
+.m-t-small
+  margin-top: 10px
+.m-t-large
+  margin-top: 20px
+.m-t-n
+  margin-top: -15px
+.m-t-n-xmini
+  margin-top: -1px
+.m-t-n-mini
+  margin-top: -5px
+.m-t-n-small
+  margin-top: -10px
+.m-t-n-large
+  margin-top: -20px
+.m-r
+  margin-right: 15px
+.m-r-none
+  margin-right: 0
+.m-r-mini
+  margin-right: 5px
+.m-r-small
+  margin-right: 10px
+.m-r-large
+  margin-right: 20px
+.m-r-n
+  margin-right: -15px
+.m-r-n-mini
+  margin-right: -5px
+.m-r-n-small
+  margin-right: -10px
+.m-r-n-large
+  margin-right: -20px
+.m-b
+  margin-bottom: 15px
+.m-b-none
+  margin-bottom: 0
+.m-b-mini
+  margin-bottom: 5px
+.m-b-small
+  margin-bottom: 10px
+.m-b-large
+  margin-bottom: 20px
+.m-b-n
+  margin-bottom: -15px
+.m-b-n-mini
+  margin-bottom: -5px
+.m-b-n-small
+  margin-bottom: -10px
+.m-b-n-large
+  margin-bottom: -20px
+
+
+// Text centering
+.text-center
+  text-align: center
+.text-justify
+  text-align: justify
+.text-left
+  text-align: left
+.text-right
+  text-align: right
+.vertical-align-middle
+  display: inline-block !important
+  vertical-align: middle !important
+.text-ellipsis
+  white-space: nowrap
+  overflow: hidden
+  max-width: 100%
+  text-overflow: ellipsis
+.text-break-word
+  word-wrap: break-word
+.nowrap
+  word-wrap: nowrap
+  white-space: nowrap
+.lower-case
+  text-transform: lowercase
+.upper-case
+  text-transform: uppercase
+.hidden-text
+  text-indent: -9999px
+  color: transparent
+
+
+// Lines
+.line
+  width: 100%
+  height: 1px
+  margin: 10px 0
+  font-size: 0
+  overflow: hidden
+  border-width: 0
+  background-color: $secondary-color
+.line-dashed
+  border-style: dashed
+  background: transparent
+.headline
+  border-bottom: 5px solid $black
+  margin-top: 0
+  line-height: 45px
+
+.no-line
+  border-width: 0
+.no-border
+  border-color: transparent !important
+.no-radius
+  border-radius: 0
+.block
+  display: block
+.inline
+  display: inline-block
+.pull-none
+  float: none
+.fl-left
+  float: left
+
+.line-v
+  border-left: 1px solid #dddddd
+  padding-left: 20px
+.line-v-right
+  border-right: 1px solid #dddddd
+  padding-right: 20px
+
+
+.hero-title
+  line-height: 1.28em !important
+
+.clickable
+  cursor: pointer
+
+.rotate-45
+  transform: rotate(45deg)
+
+.content-box
+  box-sizing: content-box
+
+.faded
+  opacity: .3
+
+.line-through
+  text-decoration: line-through
+
+.v-center
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+
+// Sub / sup
+sub, sup
+  font-size: 50%
+  line-height: 0
+  position: relative
+  vertical-align: baseline
+
+sup
+  top: -0.7em
+
+sub
+  bottom: -0.25em
+
+[ng\:cloak], [ng-cloak], .ng-cloak
+  display: none !important
+
+// Clearfix
+.cf:after
+  clear: both
+
+.cf
+  *zoom: 1
+
+// Flex classes
+.flex-container
+  display: flex
+  flex-flow: row wrap
+
+.flex-end
+  align-items: flex-end
+
+.flex-start
+  align-items: flex-start
+
+.flex-col
+  flex-direction: column
+
+.flex-space
+  justify-content: space-around
+
+.flex-item-20
+  flex: 20%
+
+.flex-item-30
+  flex: 30%
+
+.flex-item-40
+  flex: 40%
+
+.flex-item-50
+  flex: 50%
+
+.flex-item-60
+  flex: 60%
+
+.flex-item-100
+  flex: 100%
+
+// Responsive
+
+.visible-xs-block,
+.visible-xs-inline,
+.visible-xs-inline-block,
+.visible-sm-block,
+.visible-sm-inline,
+.visible-sm-inline-block,
+.visible-md-block,
+.visible-md-inline,
+.visible-md-inline-block,
+.visible-lg-block,
+.visible-lg-inline,
+.visible-lg-inline-block
+  display: none !important
+
+.mobile-only
+  display: none !important
+
+  @media (max-width: $screen-sm)
+    display: block !important
+
+    &.btn
+      display: inline-block !important
+
+.hide-mobile
+  display: block !important
+
+  &.btn
+    display: inline-block !important
+
+  @media (max-width: $screen-sm)
+    display: none !important
+
+@media (max-width:768px)
+  .hidden-md-down
+    display:none!important
+
+.visible-sm-inline
+  @media (min-width: $screen-sm-max)
+    display: inline !important
+
+
+.cb,
+.img-object[align="left"] ~ p.cb
+  clear: both !important
+  display: block
+
+
+// Debug
+.debug
+  outline: 1px solid
+  *
+    outline: 1px solid

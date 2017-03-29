@@ -1,0 +1,35 @@
+@charset 'utf-8';
+
+@import 'node_modules/algolia-frontend-components/dist/_communityHeader';
+
+@import 'vendors/normalize',
+'vendors/variables',
+'vendors/functions',
+'vendors/mixins',
+'vendors/base',
+'vendors/helpers',
+'vendors/family',
+'vendors/animations',
+'vendors/docsearch';
+
+@import 'components/syntax-theme',
+'components/syntax-theme2',
+'components/icons',
+'components/containers',
+'components/code-snippet',
+'components/buttons',
+'components/inputs',
+'components/fonts',
+'components/header',
+'components/footer',
+'components/large-tiles',
+'components/sidebar',
+'components/documentation',
+'components/examples-intro',
+'components/examples',
+'components/hero',
+'components/dropdown',
+'components/tweets',
+'components/free-trial',
+'components/colors';
+
