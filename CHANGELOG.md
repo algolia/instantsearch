@@ -1,3 +1,14 @@
+<a name="1.11.4"></a>
+## [1.11.4](https://github.com/algolia/instantsearch.js/compare/v1.11.3...v1.11.4) (2017-03-29)
+
+
+### Bug Fixes
+
+* **autoHideContainer:** dont prevent render with `shouldComponentUpdate` (#2076) ([b520400](https://github.com/algolia/instantsearch.js/commit/b520400))
+* **star-rating:** make max value inclusive ([f5fc41c](https://github.com/algolia/instantsearch.js/commit/f5fc41c)), closes [#2002](https://github.com/algolia/instantsearch.js/issues/2002)
+
+
+
 <a name="1.11.3"></a>
 ## [1.11.3](https://github.com/algolia/instantsearch.js/compare/v1.11.2...v1.11.3) (2017-03-22)
 
