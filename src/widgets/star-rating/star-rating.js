@@ -110,12 +110,12 @@ function starRating({
     render({helper, results, state, createURL}) {
       const facetValues = [];
       const allValues = {};
-      for (let v = max - 1; v >= 0; --v) {
+      for (let v = max; v >= 0; --v) {
         allValues[v] = 0;
       }
       results.getFacetValues(attributeName).forEach(facet => {
         const val = Math.round(facet.name);
-        if (!val || val > max - 1) {
+        if (!val || val > max) {
           return;
         }
         for (let v = val; v >= 1; --v) {
