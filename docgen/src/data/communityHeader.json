@@ -13,29 +13,46 @@
     "name": "<span class='visible-sm-inline'>Getting Started</span>",
     "url": "getting-started.html",
     "dropdownItems": null
-  },{
-    "name": "Documentation",
+  },
+  {
+    "name": "Guides",
     "url": "",
     "image": "",
     "dropdownItems": [
       {
         "name": "Concepts",
-        "url": "concepts.html"
+        "url": "guides/concepts.html"
+      },
+      {
+        "name": "Advanced customization",
+        "url": "guides/deep-customization.html"
+      },
+      {
+        "name": "Creating widgets",
+        "url": "guides/new-widgets.html"
+      }
+    ]
+  },
+  {
+    "name": "API",
+    "url": "",
+    "image": "",
+    "dropdownItems": [
+      {
+        "name": "instantsearch()",
+        "url": "widgets.html"
       },
       {
         "name": "Widgets",
         "url": "widgets.html"
       },
       {
-        "name": "API Reference",
-        "url": "javadoc/"
-      },
-      {
-        "name": "Troubleshooting",
-        "url": "troubleshooting.html"
+        "name": "Connectors",
+        "url": "concepts.html"
       }
     ]
-  },{
+  },
+  {
     "name": "<span class='visible-sm-inline'>Examples</span>",
     "url": "examples.html"
   },{

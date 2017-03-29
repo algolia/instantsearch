@@ -2,7 +2,7 @@
 title: Examples
 layout: examples.pug
 name: examples
-category: main
+category: examples
 withHeadings: true
 navWeight: 0
 ---

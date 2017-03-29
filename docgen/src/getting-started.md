@@ -2,7 +2,7 @@
 title: Getting started
 layout: main.pug
 name: getting-started
-category: main
+category: getting-started
 withHeadings: true
 navWeight: 100
 ---
