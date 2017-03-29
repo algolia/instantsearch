@@ -28,7 +28,7 @@ Detailed info on how to use InstantSearch can be found in the [documentation web
 ## Contributing, dev, release
 
 We welcome all contributors, from beginner to advanced. You are only
-one command away to start the developer environement, [read our CONTRIBUTING guide](CONTRIBUTING.md).
+one command away to start the developer environment, [read our CONTRIBUTING guide](CONTRIBUTING.md).
 
 ## Project status
 
