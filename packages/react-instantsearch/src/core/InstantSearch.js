@@ -56,7 +56,8 @@ class InstantSearch extends Component {
       indexName: props.indexName,
       searchParameters: props.searchParameters,
       algoliaClient: props.algoliaClient,
-      initialState,
+      resultsState: props.resultsState,
+      initialState
     });
   }
 
@@ -146,6 +147,7 @@ InstantSearch.propTypes = {
   createURL: PropTypes.func,
 
   searchState: PropTypes.object,
+  resultsState: PropTypes.object,
   onSearchStateChange: PropTypes.func,
 
   children: PropTypes.node,

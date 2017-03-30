@@ -23,6 +23,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
       searchParameters: PropTypes.object,
       createURL: PropTypes.func,
       searchState: PropTypes.object,
+      resultsState: PropTypes.object,
       onSearchStateChange: PropTypes.func,
     };
 
@@ -51,6 +52,7 @@ export default function createInstantSearch(defaultAlgoliaClient, root) {
           searchState={this.props.searchState}
           onSearchStateChange={this.props.onSearchStateChange}
           root={root}
+          resultsState={this.props.resultsState}
           algoliaClient={this.client}
           children={this.props.children}
         />
