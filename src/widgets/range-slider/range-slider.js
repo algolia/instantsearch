@@ -82,7 +82,9 @@ function rangeSlider({
 
   const sliderFormatter = {
     from: v => v,
-    to: v => formatToNumber(v).toLocaleString(),
+    to: v => {
+      return formatToNumber(v).toLocaleString()
+    }
   };
 
   const containerNode = getContainerNode(container);
@@ -183,7 +185,7 @@ function rangeSlider({
           collapsible={collapsible}
           cssClasses={cssClasses}
           onChange={this._refine.bind(this, helper, stats)}
-          pips={pips}
+          // pips={false}
           range={{min: Math.floor(stats.min), max: Math.ceil(stats.max)}}
           shouldAutoHideContainer={stats.min === stats.max}
           start={[currentRefinement.min, currentRefinement.max]}
