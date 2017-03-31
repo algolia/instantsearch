@@ -22,7 +22,7 @@ Therefore, you'll need the credentials to an Algolia index. To ease this getting
 
 It contains sample data for an e-commerce website.
 
-This guide also expects you to have a working website. You can also use our bootstrapped project by clicking this link.
+This guide also expects you to have a working website. You can also use our bootstrapped project by clicking [this link](./boilerplate.zip).
 
 
 # Install `instantsearch.js`
