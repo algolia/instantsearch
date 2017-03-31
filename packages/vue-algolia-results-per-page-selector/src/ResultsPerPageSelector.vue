@@ -1,11 +1,11 @@
 <template>
-  <select class="alg-hpp-selector"
+  <select class="alg-results-per-page-selector"
           v-model="resultsPerPage"
           :name="name"
   >
-    <slot v-for="option in options" :option="option">
-      <option>{{ option }}</option>
-    </slot>
+    <template v-for="option in options">
+      <option :value="option"><slot :option="option">{{ option }}</slot></option>
+    </template>
   </select>
 </template>
 
