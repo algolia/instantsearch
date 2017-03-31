@@ -214,7 +214,7 @@
     float: right;
   }
 
-  .alg-hpp-selector {
+  .alg-results-per-page-selector {
     float: right;
     margin-right: 10px;
   }
