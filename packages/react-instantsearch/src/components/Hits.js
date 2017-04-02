@@ -5,11 +5,11 @@ const cx = classNames('Hits');
 
 class Hits extends Component {
   render() {
-    const {hitComponent: ItemComponent, hits} = this.props;
+    const {hitComponent: ItemComponent, hits, userObj} = this.props;
     return (
       <div {...cx('root')}>
         {hits.map(hit =>
-          <ItemComponent key={hit.objectID} hit={hit} />
+          <ItemComponent key={hit.objectID} hit={hit} userObj={userObj}/>
         )}
       </div>
     );
