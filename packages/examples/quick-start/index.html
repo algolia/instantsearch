@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Welcome to Vue</title>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="./node_modules/vue-instantsearch/dist/vue-instantsearch.js"></script>
+  <link href="styles.css" media="all" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+  <div id="app">
+    <ais-store app-id="latency" api-key="6be0576ff61c053d5f9a3225e2a90f76" index-name="ikea">
+      <ais-input placeholder="Search for a product..."></ais-input>
+      <ais-results>
+        <template scope="{ result }">
+          <div class="search-result">
+            <img class="result__image img-responsive" :src="result.image">
+
+            <div class="result__info">
+              <h2 class="result__name" v-html="result._highlightResult.name.value"></h2>
+              <div class="result__type" v-html="result._highlightResult.type.value"></div>
+              <div class="result__rating">
+                <template v-for="n in 5">
+                  <span v-if="n <= result.rating" class="result__star"></span>
+                  <span v-else class="result__star--empty"></span>
+                </template>
+              </div>
+              <div class="result__price">${{result.price}}</div>
+            </div>
+          </div>
+        </template>
+      </ais-results>
+    </ais-store>
+  </div>
+
+  <script>
+    new Vue({
+      el: '#app',
+      data: {}
+    })
+  </script>
+</body>
+</html>

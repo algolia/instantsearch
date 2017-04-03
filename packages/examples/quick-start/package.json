@@ -1,0 +1,10 @@
+{
+  "name": "example-simple",
+  "description": "Simple example of using Algolia instantsearch with Vue.js in the browser.",
+  "version": "0.0.0",
+  "author": "Raymond Rutjes <raymond.rutjes@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "vue-instantsearch": "*"
+  }
+}
