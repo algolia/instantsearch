@@ -41,15 +41,15 @@ class Menu extends Component {
     if (this.context.canRefine) this.context.canRefine(props.canRefine);
   }
 
-  renderItem = item => {
-    const {refine, createURL} = this.props;
+  renderItem = (item, resetQuery) => {
+    const {createURL} = this.props;
     const label = this.props.isFromSearch
       ? <Highlight attributeName="label" hit={item}/>
       : item.label;
     return (
       <Link
         {...cx('itemLink', item.isRefined && 'itemLinkSelected')}
-        onClick={() => refine(item.value)}
+        onClick={() => this.selectItem(item, resetQuery)}
         href={createURL(item.value)}
       >
         <span {...cx('itemLabel', item.isRefined && 'itemLabelSelected')}>
@@ -63,7 +63,8 @@ class Menu extends Component {
     );
   };
 
-  selectItem = item => {
+  selectItem = (item, resetQuery) => {
+    resetQuery();
     this.props.refine(item.value);
   };
 
