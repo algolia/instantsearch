@@ -47,7 +47,7 @@
           this.stackedResults = []
         }
 
-        if (this.searchStore.page === 0) {
+        if (this.searchStore.page === 1) {
           this.stackedResults = []
         }
 
