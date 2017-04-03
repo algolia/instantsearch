@@ -54,4 +54,24 @@ describe('Store', () => {
     expect(store.algoliaHelper).toBe(helper);
   })
 
+  test('can retrieve the current page', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    helper.setPage(1);
+    const store = new Store(helper);
+
+    expect(store.page).toEqual(2);
+  })
+
+  test('can change the current page', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+
+    store.page = 2;
+
+    expect(helper.getPage()).toEqual(1);
+    expect(store.page).toEqual(2);
+  })
+
 });
