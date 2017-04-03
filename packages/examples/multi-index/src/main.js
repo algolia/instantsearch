@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Plugin from 'vue-algolia-components'
+import Plugin from 'vue-instantsearch'
 
 Vue.use(Plugin)
 
