@@ -96,11 +96,11 @@ export class Store {
     this._stoppedCounter++
   }
 
-  set index(index) {
+  set indexName(index) {
     this._helper.setIndex(index)
   }
 
-  get index() {
+  get indexName() {
     return this._helper.getIndex()
   }
 
