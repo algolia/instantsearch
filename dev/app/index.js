@@ -2,7 +2,7 @@
 import instantsearch from '../../index.js';
 
 import initBuiltInWidgets from './init-builtin-widgets.js';
-// import initVanillaWidgets from './init-vanilla-widgets.js';
+import initVanillaWidgets from './init-vanilla-widgets.js';
 import initJqueryWidgets from './init-jquery-widgets.js';
 
 const search = instantsearch({
@@ -22,9 +22,9 @@ const search = instantsearch({
 const q = window.location.search;
 
 switch (true) {
-// case q.includes('widgets=vanilla'):
-//   initVanillaWidgets(search);
-//   break;
+case q.includes('widgets=vanilla'):
+  initVanillaWidgets(search);
+  break;
 case q.includes('widgets=jquery'):
   initJqueryWidgets(search);
   break;
