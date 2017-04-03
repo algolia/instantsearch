@@ -51,7 +51,11 @@ class List extends Component {
     return extended ? limitMax : limitMin;
   };
 
-  renderItem = item => {
+  resetQuery = () => {
+    this.setState({query: ''});
+  }
+
+  renderItem = (item, resetQuery) => {
     const items = item.items &&
       <div {...this.props.cx('itemItems')}>
         {item.items.slice(0, this.getLimit()).map(child =>
@@ -70,7 +74,7 @@ class List extends Component {
           items && item.isRefined && 'itemSelectedParent'
         )}
       >
-        {this.props.renderItem(item)}
+        {this.props.renderItem(item, resetQuery)}
         {items}
       </div>
     );
@@ -96,11 +100,12 @@ class List extends Component {
 
   renderSearchBox() {
     const {cx, searchForItems, isFromSearch, translate, items, selectItem} = this.props;
+
     const noResults = items.length === 0 &&
       this.state.query !== '' ? <div {...cx('noResults')}>{translate('noResults')}</div> : null;
     return <div {...cx('SearchBox')}>
         <SearchBox
-          currentRefinement={isFromSearch ? this.state.query : ''}
+        currentRefinement={this.state.query}
           refine={value => {
             this.setState({query: value});
             searchForItems(value);
@@ -111,7 +116,7 @@ class List extends Component {
             e.preventDefault();
             e.stopPropagation();
             if (isFromSearch) {
-              selectItem(items[0]);
+              selectItem(items[0], this.resetQuery);
             }
           }}
         />
@@ -136,7 +141,7 @@ class List extends Component {
       <div {...cx('root', !this.props.canRefine && 'noRefinement')}>
         {searchBox}
         <div {...cx('items')}>
-          {items.slice(0, limit).map(item => this.renderItem(item))}
+          {items.slice(0, limit).map(item => this.renderItem(item, this.resetQuery))}
         </div>
         {this.renderShowMore()}
       </div>

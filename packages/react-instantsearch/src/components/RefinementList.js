@@ -44,11 +44,12 @@ class RefinementList extends Component {
     if (this.context.canRefine) this.context.canRefine(props.canRefine);
   }
 
-  selectItem = item => {
+  selectItem = (item, resetQuery) => {
+    resetQuery();
     this.props.refine(item.value);
   };
 
-  renderItem = item => {
+  renderItem = (item, resetQuery) => {
     const label = this.props.isFromSearch
       ? <Highlight attributeName="label" hit={item}/>
       : item.label;
@@ -59,7 +60,7 @@ class RefinementList extends Component {
           {...cx('itemCheckbox', item.isRefined && 'itemCheckboxSelected')}
           type="checkbox"
           checked={item.isRefined}
-          onChange={() => this.selectItem(item)}
+          onChange={() => this.selectItem(item, resetQuery)}
         />
         <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
         <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
@@ -90,6 +91,7 @@ class RefinementList extends Component {
             'withSearchBox',
             'canRefine',
           ])}
+          query={this.state.query}
         />
       </div>
     );
