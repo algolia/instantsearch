@@ -25,11 +25,11 @@ Overriding the default content:
 
 | Name    | Props | Default                                                                                  | Description                                              |
 |---------|-------|------------------------------------------------------------------------------------------|----------------------------------------------------------|
-| default | query | `No results matched your query <strong class="alg-no-results__query">{{query}}</strong>` | The content to be displayed when no results are yielded. |
+| default | query | `No results matched your query <strong class="ais-no-results__query">{{query}}</strong>` | The content to be displayed when no results are yielded. |
 
 ## CSS Classes
 
 | ClassName             | Description       |
 |-----------------------|-------------------|
-| alg-no-results        | Container class   |
-| alg-no-results__query | The current query |
+| ais-no-results        | Container class   |
+| ais-no-results__query | The current query |

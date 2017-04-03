@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-search-results" v-if="show">
+  <div class="ais-results" v-if="show">
     <slot name="header"></slot>
     <slot v-for="result in results" :result="result">
       Result 'objectID': {{ result.objectID }}

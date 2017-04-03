@@ -1,11 +1,11 @@
 <template>
-  <div class="alg-navigation-tree-facet" v-if="show">
+  <div class="ais-navigation-tree" v-if="show">
     <slot name="header"></slot>
 
     <ul v-if="facetValues.length > 0">
       <li v-for="facet in facetValues"
-          class="alg-navigation-tree-facet__item"
-          :class="{'alg-navigation-tree-facet__item--active': facet.isRefined}"
+          class="ais-navigation-tree__item"
+          :class="{'ais-navigation-tree__item--active': facet.isRefined}"
       >
         <label>
           <input type="checkbox"
@@ -15,16 +15,16 @@
                  :name="name + '[]'"
           >
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
-            <span class="alg-navigation-tree-facet__value">{{facet.name}}</span>
-            <span class="alg-navigation-tree-facet__count">({{facet.count}})</span>
+            <span class="ais-navigation-tree__value">{{facet.name}}</span>
+            <span class="ais-navigation-tree__count">({{facet.count}})</span>
           </slot>
         </label>
 
         <template v-if="facet.isRefined && facet.data.length > 0">
           <ul>
             <li v-for="subfacet in facet.data"
-                class="alg-navigation-tree-facet__item"
-                :class="{'alg-navigation-tree-facet__item--active': subfacet.isRefined}"
+                class="ais-navigation-tree__item"
+                :class="{'ais-navigation-tree__item--active': subfacet.isRefined}"
             >
               <label>
                 <input type="checkbox"
@@ -34,8 +34,8 @@
                        :name="name + '[]'"
                 >
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
-                  <span class="alg-navigation-tree-facet__value">{{subfacet.name}}</span>
-                  <span class="alg-navigation-tree-facet__count">({{subfacet.count}})</span>
+                  <span class="ais-navigation-tree__value">{{subfacet.name}}</span>
+                  <span class="ais-navigation-tree__count">({{subfacet.count}})</span>
                 </slot>
               </label>
             </li>
@@ -115,13 +115,13 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  .alg-navigation-tree-facet {
+  .ais-navigation-tree {
 
     label {
       font-weight: normal;
       cursor: pointer;
 
-      &:hover .alg-navigation-tree-facet__value {
+      &:hover .ais-navigation-tree__value {
         text-decoration: underline;
       }
 

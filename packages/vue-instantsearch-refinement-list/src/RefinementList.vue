@@ -1,11 +1,11 @@
 <template>
-  <div class="alg-search-facet" v-if="show">
+  <div class="ais-refinement-list" v-if="show">
     <slot name="header"></slot>
 
     <ul>
       <li v-for="facet in facetValues"
-          class="alg-search-facet__item"
-          :class="{'alg-search-facet__item--active': facet.isRefined}"
+          class="ais-refinement-list__item"
+          :class="{'ais-refinement-list__item--active': facet.isRefined}"
       >
         <label>
           <input type="checkbox"
@@ -16,8 +16,8 @@
           >
 
           <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
-            <span class="alg-search-facet__value">{{facet.name}}</span>
-            <span class="alg-search-facet__count">({{facet.count}})</span>
+            <span class="ais-refinement-list__value">{{facet.name}}</span>
+            <span class="ais-refinement-list__count">({{facet.count}})</span>
           </slot>
         </label>
       </li>
@@ -91,13 +91,13 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  .alg-search-facet {
+  .ais-refinement-list {
 
     label {
       font-weight: normal;
       cursor: pointer;
 
-      &:hover .alg-search-facet__value {
+      &:hover .ais-refinement-list__value {
         text-decoration: underline;
       }
 

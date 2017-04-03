@@ -1,7 +1,7 @@
 <template>
-  <div class="alg-no-results" v-if="totalResults <= 0">
+  <div class="ais-no-results" v-if="totalResults <= 0">
     <slot :query="query">
-      No results matched your query <strong class="alg-no-results__query">{{query}}</strong>
+      No results matched your query <strong class="ais-no-results__query">{{query}}</strong>
     </slot>
   </div>
 </template>

@@ -5,7 +5,7 @@
 
     <p>In this example, we have one single search input that will fetch results from 2 different indices when the query is changed.</p>
 
-    <input v-model="query" class="alg-search-input" placeholder="Search for a product...">
+    <input v-model="query" class="ais-input" placeholder="Search for a product...">
     <ais-powered-by />
 
     <div class="grid">
@@ -99,7 +99,7 @@
     margin-bottom: 5px;
   }
 
-  .alg-search-input {
+  .ais-input {
     width: 100%;
     outline: none;
     font-size: 15px;
@@ -110,18 +110,18 @@
     margin: 20px 0;
   }
 
-  .alg-powered-by {
+  .ais-powered-by {
     text-align: right;
   }
 
-  .alg-search-stats {
+  .ais-stats {
     margin-bottom: 10px;
   }
 
   .grid {
     display: flex;
 
-    .alg-search-store {
+    .ais-store {
       flex: 0 0 50%;
     }
   }

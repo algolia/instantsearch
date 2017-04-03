@@ -1,8 +1,8 @@
 <template>
-  <div class="alg-rating-facet" v-if="show">
+  <div class="ais-rating" v-if="show">
     <slot name="header"></slot>
 
-    <button class="alg-rating-facet__clear"
+    <button class="ais-rating__clear"
             type="button"
             @click="clear"
             v-if="currentValue"
@@ -12,8 +12,8 @@
 
     <ul>
       <li v-for="facet in facetValues"
-          class="alg-rating-facet__item"
-          :class="{'alg-rating-facet__item--active': facet.isRefined}"
+          class="ais-rating__item"
+          :class="{'ais-rating__item--active': facet.isRefined}"
       >
         <label>
           <input type="radio"
@@ -28,11 +28,11 @@
                 :count="facet.count"
           >
             <template v-for="n in max">
-              <span v-if="n <= facet.value" class="alg-rating-facet__star">&#9733</span>
-              <span v-else class="alg-rating-facet__star alg-rating-facet__star--empty">&#9734</span>
+              <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
+              <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
             </template>
             &nbsp;&amp; up
-            <span class="alg-rating-facet__count">({{facet.count}})</span>
+            <span class="ais-rating__count">({{facet.count}})</span>
           </slot>
         </label>
       </li>
@@ -158,7 +158,7 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  .alg-rating-facet {
+  .ais-rating {
 
     input {
       display: none;

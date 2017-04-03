@@ -1,20 +1,20 @@
 <template>
-  <div class="alg-price-range-facet" v-show="show">
+  <div class="ais-price-range" v-show="show">
 
     <slot name="header"></slot>
 
-    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--left"
+    <span class="ais-price-range__currency ais-price-range__currency--left"
           v-if="currencyPlacement === 'left'"
     >
       {{ currency }}
     </span>
-    <input class="alg-price-range-facet__input alg-price-range-facet__input--from"
+    <input class="ais-price-range__input ais-price-range__input--from"
            type="number"
            v-model="from"
            :placeholder="fromPlaceholder"
            :name="fromName"
     >
-    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--right"
+    <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
     >
       {{ currency }}
@@ -22,18 +22,18 @@
 
     <slot><span>to&nbsp;</span></slot>
 
-    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--left"
+    <span class="ais-price-range__currency ais-price-range__currency--left"
           v-if="currencyPlacement === 'left'"
     >
       {{ currency }}
     </span>
-    <input class="alg-price-range-facet__input alg-price-range-facet__input--to"
+    <input class="ais-price-range__input ais-price-range__input--to"
            type="number"
            v-model="to"
            :placeholder="toPlaceholder"
            :name="toName"
     >
-    <span class="alg-price-range-facet__currency alg-price-range-facet__currency--right"
+    <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
     >
       {{ currency }}
@@ -149,7 +149,7 @@
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-  .alg-price-range-facet__input {
+  .ais-price-range__input {
     width: 50px;
   }
 </style>

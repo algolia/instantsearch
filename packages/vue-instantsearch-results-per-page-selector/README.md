@@ -29,5 +29,5 @@ Basic usage:
 
 | ClassName                     | Description             |
 |-------------------------------|-------------------------|
-| alg-results-per-page-selector | The select input class. |
+| ais-results-per-page-selector | The select input class. |
 

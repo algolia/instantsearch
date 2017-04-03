@@ -1,14 +1,14 @@
 <template>
-  <ul class="alg-ranged-pagination">
-    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--first"
-        :class="{'alg-ranged-pagination__item--disabled': page === 1}"
+  <ul class="ais-pagination">
+    <li class="ais-pagination__item ais-pagination__item--first"
+        :class="{'ais-pagination__item--disabled': page === 1}"
     >
       <button type="button" @click="goToFirstPage" :disabled="page === 1">
         <slot name="first">&lt;&lt;</slot>
       </button>
     </li>
-    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--previous"
-        :class="{'alg-ranged-pagination__item--disabled': page === 1}"
+    <li class="ais-pagination__item ais-pagination__item--previous"
+        :class="{'ais-pagination__item--disabled': page === 1}"
     >
       <button type="button" @click="goToPreviousPage" :disabled="page === 1">
         <slot name="previous">&lt;</slot>
@@ -16,8 +16,8 @@
     </li>
     <li
         v-for="item in pages"
-        class="alg-ranged-pagination__item"
-        :class="{ 'alg-ranged-pagination__item--active': item === page }"
+        class="ais-pagination__item"
+        :class="{ 'ais-pagination__item--active': item === page }"
     >
       <label>
         <input type="radio"
@@ -31,15 +31,15 @@
         </slot>
       </label>
     </li>
-    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--next"
-        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages }"
+    <li class="ais-pagination__item ais-pagination__item--next"
+        :class="{'ais-pagination__item--disabled': page >= totalPages }"
     >
       <button type="button" @click="goToNextPage" :disabled="page >= totalPages">
         <slot name="next">&gt;</slot>
       </button>
     </li>
-    <li class="alg-ranged-pagination__item alg-ranged-pagination__item--last"
-        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages }"
+    <li class="ais-pagination__item ais-pagination__item--last"
+        :class="{'ais-pagination__item--disabled': page >= totalPages }"
     >
       <button type="button" @click="goToLastPage" :disabled="page >= totalPages">
         <slot name="last">&gt;&gt;</slot>
@@ -126,7 +126,7 @@
 
 <style lang="scss" rel="stylesheet/scss">
   /* Ranged Pagination */
-  .alg-ranged-pagination {
+  .ais-pagination {
     list-style: none;
     padding-left: 0;
 
