@@ -9,7 +9,7 @@
     <algolia-powered-by />
 
     <div class="grid">
-      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" index="bestbuy" :query="query">
+      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="bestbuy" :query="query">
         <search-results>
           <div slot="header">
             <h2>Products from first index</h2>
@@ -38,7 +38,7 @@
         </search-results>
       </search-store>
 
-      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" index="ikea" :query="query">
+      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="ikea" :query="query">
         <search-results>
 
           <div slot="header">

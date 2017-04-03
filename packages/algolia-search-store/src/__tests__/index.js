@@ -54,6 +54,24 @@ describe('Store', () => {
     expect(store.algoliaHelper).toBe(helper);
   })
 
+  test('can retrieve index name', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client, 'my_index');
+    const store = new Store(helper);
+
+    expect(store.indexName).toEqual('my_index');
+  })
+
+  test('can set index name', () => {
+    const client = algoliaClient('app_id', 'api_key');
+    const helper = algoliaHelper(client);
+    const store = new Store(helper);
+
+    store.indexName = 'custom_index_name';
+
+    expect(store.indexName).toEqual('custom_index_name');
+  })
+
   test('can retrieve the current page', () => {
     const client = algoliaClient('app_id', 'api_key');
     const helper = algoliaHelper(client);

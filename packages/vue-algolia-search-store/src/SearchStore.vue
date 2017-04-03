@@ -32,12 +32,12 @@
           return
         }
       },
-      index: {
+      indexName: {
         type: String,
         default () {
           // Todo: add validator callback in case no search store is injected
           if (this._searchStore) {
-            return this._searchStore.index
+            return this._searchStore.indexName
           }
 
           return
@@ -50,8 +50,8 @@
     },
     provide () {
       this._localSearchStore = createFromAlgoliaCredentials(this.appId, this.apiKey)
-      if (this.index) {
-        this._localSearchStore.index = this.index
+      if (this.indexName) {
+        this._localSearchStore.indexName = this.indexName
       }
 
       if(this.query) {
@@ -67,8 +67,8 @@
       this._localSearchStore.start()
     },
     watch: {
-      index () {
-        this._localSearchStore.index = this.index
+      indexName () {
+        this._localSearchStore.index = this.indexName
       },
       query () {
         this._localSearchStore.query = this.query

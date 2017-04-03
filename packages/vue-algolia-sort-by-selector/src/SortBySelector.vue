@@ -3,7 +3,7 @@
           v-model="indexName"
           :name="name"
   >
-    <slot v-for="index in indices" :index="index">
+    <slot v-for="index in indices" :indexName="indexName">
       <option :value="index.name">
         {{ index.label }}
       </option>
@@ -19,7 +19,7 @@
     props: {
       name: {
         type: String,
-        default: "index"
+        default: "index_name"
       },
       indices: {
         type: Array,
@@ -29,10 +29,10 @@
     computed: {
       indexName: {
         get () {
-          return this.searchStore.index
+          return this.searchStore.indexName
         },
         set (value) {
-          this.searchStore.index = value
+          this.searchStore.indexName = value
         }
       }
     },
