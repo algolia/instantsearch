@@ -25,6 +25,7 @@ function validateNextProps(props, nextProps) {
  * @propType {string} appId - Your Algolia application id.
  * @propType {string} apiKey - Your Algolia search-only API key.
  * @propType {string} indexName - Main index in which to search.
+ * @propType {object} [algoliaClient] - Provide a custom Algolia client instead of the internal one.
  * @propType {func} [onSearchStateChange] - Function to be called everytime a new search is done. Useful for [URL Routing](guide/Routing.html).
  * @propType {object} [searchState] - Object to inject some search state. Switches the InstantSearch component in controlled mode. Useful for [URL Routing](guide/Routing.html).
  * @propType {func} [createURL] - Function to call when creating links, useful for [URL Routing](guide/Routing.html).
