@@ -6,14 +6,14 @@
     <p>In this example, we have one single search input that will fetch results from 2 different indices when the query is changed.</p>
 
     <input v-model="query" class="alg-search-input" placeholder="Search for a product...">
-    <algolia-powered-by />
+    <ais-powered-by />
 
     <div class="grid">
-      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="bestbuy" :query="query">
-        <search-results>
+      <ais-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="bestbuy" :query="query">
+        <ais-results>
           <div slot="header">
             <h2>Products from first index</h2>
-            <search-stats></search-stats>
+            <ais-stats></ais-stats>
           </div>
 
           <template scope="{ result }">
@@ -35,15 +35,15 @@
               </div>
             </div>
           </template>
-        </search-results>
-      </search-store>
+        </ais-results>
+      </ais-store>
 
-      <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="ikea" :query="query">
-        <search-results>
+      <ais-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76" indexName="ikea" :query="query">
+        <ais-results>
 
           <div slot="header">
             <h2>Products from second index</h2>
-            <search-stats></search-stats>
+            <ais-stats></ais-stats>
           </div>
 
           <template scope="{ result }">
@@ -65,8 +65,8 @@
             </div>
           </template>
 
-        </search-results>
-      </search-store>
+        </ais-results>
+      </ais-store>
     </div>
 
     <p style="text-align: center;">Data courtesy of ikea.com &amp; bestbuy.com</p>

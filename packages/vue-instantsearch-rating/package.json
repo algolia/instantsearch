@@ -1,0 +1,28 @@
+{
+  "name": "vue-instantsearch-rating",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/vue-instantsearch-rating.common.js",
+  "module": "dist/vue-instantsearch-rating.esm.js",
+  "jsnext:main": "dist/vue-instantsearch-rating.esm.js",
+  "unpkg": "dist/vue-instantsearch-rating.js",
+  "scripts": {
+    "build": "yarn build:umd && yarn build:es && yarn build:cjs",
+    "build:umd": "rollup -c ../../build/rollup.umd.config.js",
+    "build:es": "rollup -c ../../build/rollup.es.config.js",
+    "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
+  },
+  "dependencies": {
+    "instantsearch-store": "*",
+    "vue-instantsearch-component": "*"
+  },
+  "peerDependencies": {
+    "vue": "^2.2.2"
+  }
+}
+
+
+
+

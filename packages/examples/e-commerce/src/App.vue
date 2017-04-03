@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="container-fluid">
-    <search-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76">
+    <ais-store appId="latency" apiKey="6be0576ff61c053d5f9a3225e2a90f76">
       <div class="row">
         <div class="col-md-2 col-sm-3">
           <h1 class="head-title">
@@ -8,57 +8,57 @@
           </h1>
         </div>
         <div class="col-md-10 col-sm-9">
-          <search-input placeholder="Search product by name or reference..." />
+          <ais-input placeholder="Search product by name or reference..." />
 
-          <clear-search>
+          <ais-clear>
             <i class="fa fa-times-circle" aria-hidden="true"></i>
-          </clear-search>
+          </ais-clear>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-2 col-sm-3">
-          <navigation-tree-facet :attributes="['category', 'sub_category']">
+          <ais-navigation-tree :attributes="['category', 'sub_category']">
             <h3 slot="header">Browse by</h3>
-          </navigation-tree-facet>
+          </ais-navigation-tree>
 
-          <price-range-facet attribute="price">
+          <ais-price-range attribute="price">
             <h3 slot="header">Price</h3>
-          </price-range-facet>
+          </ais-price-range>
 
-          <search-facet attribute="materials">
+          <ais-refinement-list attribute="materials">
             <h3 slot="header">Material</h3>
-          </search-facet>
+          </ais-refinement-list>
 
-          <search-facet attribute="colors">
+          <ais-refinement-list attribute="colors">
             <h3 slot="header">Color</h3>
-          </search-facet>
+          </ais-refinement-list>
 
-          <rating-facet attribute="rating">
+          <ais-rating attribute="rating">
             <h3 slot="header">Rating</h3>
-          </rating-facet>
+          </ais-rating>
 
         </div>
         <div class="col-md-10 col-sm-9">
           <div class="search-controls">
 
 
-            <sort-by-selector :indices="[
+            <ais-sort-by-selector :indices="[
                 {name: 'ikea', label: 'Relevance'},
                 {name: 'ikea_price_asc', label: 'Lowest price'},
                 {name: 'ikea_price_desc', label: 'Highest price'}
                 ]"
             />
 
-            <results-per-page-selector :options="[12, 24, 48]"/>
+            <ais-results-per-page-selector :options="[12, 24, 48]"/>
 
-            <algolia-powered-by />
+            <ais-powered-by />
 
-            <search-stats/>
+            <ais-stats/>
 
           </div>
 
-          <search-results>
+          <ais-results>
             <template scope="{ result }">
               <div class="search-result">
                 <img class="result__image img-responsive" :src="result.image">
@@ -76,15 +76,15 @@
                 </div>
               </div>
             </template>
-          </search-results>
+          </ais-results>
 
-          <no-results/>
+          <ais-no-results/>
 
-          <ranged-pagination class="pagination"/>
+          <ais-pagination class="pagination"/>
 
         </div>
       </div>
-    </search-store>
+    </ais-store>
 
   </div>
 </template>

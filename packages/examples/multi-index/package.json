@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^2.2.1",
-    "vue-algolia-components": "*"
+    "vue-instantsearch": "*"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",

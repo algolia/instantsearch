@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "vue": "^2.2.2",
-    "vue-algolia-components": "*"
+    "vue-instantsearch": "*"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
