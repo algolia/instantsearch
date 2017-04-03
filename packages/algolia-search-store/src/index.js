@@ -127,11 +127,11 @@ export class Store {
   }
 
   get page() {
-    return this._helper.getPage()
+    return this._helper.getPage() + 1
   }
 
   set page(page) {
-    this._helper.setPage(page)
+    this._helper.setPage(page - 1)
   }
 
   get totalPages() {
