@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-search-stats" v-if="totalResults > 0">
+  <div class="ais-stats" v-if="totalResults > 0">
     <slot>{{totalResults}} results found in {{processingTimeMS}}ms</slot>
   </div>
 </template>

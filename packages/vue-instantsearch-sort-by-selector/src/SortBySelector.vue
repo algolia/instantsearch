@@ -1,5 +1,5 @@
 <template>
-  <select class="alg-sort-by-selector"
+  <select class="ais-sort-by-selector"
           v-model="indexName"
           :name="name"
   >

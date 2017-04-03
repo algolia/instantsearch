@@ -107,7 +107,7 @@
     margin: auto;
   }
 
-  .alg-search-input {
+  .ais-input {
     width: 100%;
     outline: none;
     font-size: 15px;
@@ -119,7 +119,7 @@
     margin-right: 5%;
   }
 
-  .alg-powered-by {
+  .ais-powered-by {
     float: right;
     margin-right: 10px;
     svg {
@@ -210,17 +210,17 @@
   }
 
   /* Sort by selector */
-  .alg-sort-by-selector {
+  .ais-sort-by-selector {
     float: right;
   }
 
-  .alg-results-per-page-selector {
+  .ais-results-per-page-selector {
     float: right;
     margin-right: 10px;
   }
 
   /* Clear Search */
-  .alg-clear-search {
+  .ais-clear {
     background: none;
     border: none;
     position: absolute;
@@ -234,18 +234,18 @@
       vertical-align: middle;
     }
 
-    &.alg-clear-search--disabled {
+    &.ais-clear--disabled {
       display: none;
     }
   }
 
   /* Ranged Pagination */
-  .alg-ranged-pagination li label{
+  .ais-pagination li label{
     padding: 10px;
   }
 
   /* Search Facet */
-  .alg-search-facet label input {
+  .ais-refinement-list label input {
     margin-right: 5px;
   }
 </style>

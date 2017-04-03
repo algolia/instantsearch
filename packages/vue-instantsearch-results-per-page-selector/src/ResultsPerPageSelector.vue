@@ -1,5 +1,5 @@
 <template>
-  <select class="alg-results-per-page-selector"
+  <select class="ais-results-per-page-selector"
           v-model="resultsPerPage"
           :name="name"
   >

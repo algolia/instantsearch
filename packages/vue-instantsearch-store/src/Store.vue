@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-search-store">
+  <div class="ais-store">
     <slot></slot>
   </div>
 </template>

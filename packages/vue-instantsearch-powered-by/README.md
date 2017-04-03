@@ -15,5 +15,5 @@ Basic usage:
 
 | ClassName            | Description                                      |
 |----------------------|--------------------------------------------------|
-| alg-powered-by       | Container class                                  |
+| ais-powered-by       | Container class                                  |
 

@@ -44,11 +44,11 @@ Only clear the facet refinements:
 
 | Name    | Props | Default                                              | Description                                 |
 |---------|-------|------------------------------------------------------|---------------------------------------------|
-| default | query | `<span class="alg-clear-search__label">Clear</span>` | The text displayed inside the clear button. |
+| default | query | `<span class="ais-clear__label">Clear</span>` | The text displayed inside the clear button. |
 
 ## CSS Classes
 
 | ClassName               | Description       |
 |-------------------------|-------------------|
-| alg-clear-search        | Button class      |
-| alg-clear-search__label | Button text class |
+| ais-clear        | Button class      |
+| ais-clear__label | Button text class |

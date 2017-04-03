@@ -1,5 +1,5 @@
 <template>
-  <div class="alg-powered-by">
+  <div class="ais-powered-by">
     <a href="https://algolia.com">
       <svg width="130" viewBox="0 0 130 18" xmlns="http://www.w3.org/2000/svg">
         <title>search by Algolia</title>

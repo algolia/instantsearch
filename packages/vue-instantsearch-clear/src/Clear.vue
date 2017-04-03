@@ -1,12 +1,12 @@
 <template>
   <button type="reset"
-          class="alg-clear-search"
-          :class="{'alg-clear-search--disabled': disabled}"
+          class="ais-clear"
+          :class="{'ais-clear--disabled': disabled}"
           :disabled="disabled"
           @click.prevent="clear"
   >
     <slot>
-      <span class="alg-clear-search__label">Clear</span>
+      <span class="ais-clear__label">Clear</span>
     </slot>
   </button>
 </template>

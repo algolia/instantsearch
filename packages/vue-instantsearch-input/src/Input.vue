@@ -4,7 +4,7 @@
          autocapitalize="off"
          autocomplete="off"
          spellcheck="false"
-         class="alg-search-input"
+         class="ais-input"
          v-model="query"
          :name="name"
   >
