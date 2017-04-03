@@ -1,16 +1,16 @@
 <template>
   <ul class="alg-ranged-pagination">
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--first"
-        :class="{'alg-ranged-pagination__item--disabled': page === 0}"
+        :class="{'alg-ranged-pagination__item--disabled': page === 1}"
     >
-      <button type="button" @click="goToFirstPage" :disabled="page === 0">
+      <button type="button" @click="goToFirstPage" :disabled="page === 1">
         <slot name="first">&lt;&lt;</slot>
       </button>
     </li>
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--previous"
-        :class="{'alg-ranged-pagination__item--disabled': page === 0}"
+        :class="{'alg-ranged-pagination__item--disabled': page === 1}"
     >
-      <button type="button" @click="goToPreviousPage" :disabled="page === 0">
+      <button type="button" @click="goToPreviousPage" :disabled="page === 1">
         <slot name="previous">&lt;</slot>
       </button>
     </li>
@@ -27,21 +27,21 @@
                @change="goToPage(item)"
         >
         <slot :value="item" :active="item === page">
-          {{ item + 1 }}
+          {{ item }}
         </slot>
       </label>
     </li>
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--next"
-        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages - 1 }"
+        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages }"
     >
-      <button type="button" @click="goToNextPage" :disabled="page >= totalPages - 1">
+      <button type="button" @click="goToNextPage" :disabled="page >= totalPages">
         <slot name="next">&gt;</slot>
       </button>
     </li>
     <li class="alg-ranged-pagination__item alg-ranged-pagination__item--last"
-        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages - 1 }"
+        :class="{'alg-ranged-pagination__item--disabled': page >= totalPages }"
     >
-      <button type="button" @click="goToLastPage" :disabled="page >= totalPages - 1">
+      <button type="button" @click="goToLastPage" :disabled="page >= totalPages">
         <slot name="last">&gt;&gt;</slot>
       </button>
     </li>
@@ -86,13 +86,13 @@
         while (pages.length <= maxPages) {
           even = !even
           if (even) {
-            if (firstPage <= 0) {
+            if (firstPage <= 1) {
               continue
             }
             firstPage--
             pages.unshift(firstPage)
           } else {
-            if (lastPage >= this.totalPages - 1) {
+            if (lastPage >= this.totalPages) {
               continue
             }
             lastPage++
@@ -105,11 +105,11 @@
     },
     methods: {
       goToPage (page) {
-        page = Math.min(this.totalPages - 1, page)
+        page = Math.min(this.totalPages, page)
         this.searchStore.page = page
       },
       goToFirstPage () {
-        this.goToPage(0)
+        this.goToPage(1)
       },
       goToPreviousPage () {
         this.goToPage(this.page - 1)
@@ -118,7 +118,7 @@
         this.goToPage(this.page + 1)
       },
       goToLastPage () {
-        this.goToPage(this.totalPages - 1)
+        this.goToPage(this.totalPages)
       }
     }
   }
