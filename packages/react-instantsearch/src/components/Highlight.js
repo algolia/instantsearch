@@ -9,5 +9,6 @@ Highlight.propTypes = {
   hit: React.PropTypes.object.isRequired,
   attributeName: React.PropTypes.string.isRequired,
   highlight: React.PropTypes.func.isRequired,
+  TagName: React.PropTypes.string,
 };
 
