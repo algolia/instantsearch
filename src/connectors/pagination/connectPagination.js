@@ -53,7 +53,7 @@ export default function connectPagination(renderFn) {
           helper.search();
         };
 
-        this.createURL = state => page => createURL(state.refine(page));
+        this.createURL = state => page => createURL(state.setPage(page));
 
         renderFn({
           createURL: this.createURL(helper.state),
