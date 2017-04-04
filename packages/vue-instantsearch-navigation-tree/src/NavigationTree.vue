@@ -7,17 +7,12 @@
           class="ais-navigation-tree__item"
           :class="{'ais-navigation-tree__item--active': facet.isRefined}"
       >
-        <label>
-          <input type="checkbox"
-                 v-model="facet.isRefined"
-                 @change="toggleRefinement(facet)"
-                 :value="facet.name"
-          >
+        <a href="#" @click.prevent="toggleRefinement(facet)">
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
             <span class="ais-navigation-tree__value">{{facet.name}}</span>
             <span class="ais-navigation-tree__count">({{facet.count}})</span>
           </slot>
-        </label>
+        </a>
 
         <template v-if="facet.isRefined && facet.data.length > 0">
           <ul>
@@ -25,17 +20,12 @@
                 class="ais-navigation-tree__item"
                 :class="{'ais-navigation-tree__item--active': subfacet.isRefined}"
             >
-              <label>
-                <input type="checkbox"
-                       v-model="subfacet.isRefined"
-                       @change="toggleRefinement(subfacet)"
-                       :value="subfacet.name"
-                >
+              <a href="#" @click.prevent="toggleRefinement(subfacet)">
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
                   <span class="ais-navigation-tree__value">{{subfacet.name}}</span>
                   <span class="ais-navigation-tree__count">({{subfacet.count}})</span>
                 </slot>
-              </label>
+              </a>
             </li>
           </ul>
         </template>
