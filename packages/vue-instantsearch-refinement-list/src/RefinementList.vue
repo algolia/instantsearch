@@ -83,28 +83,3 @@
   }
 </script>
 
-<style lang="scss" rel="stylesheet/scss">
-  .ais-refinement-list {
-
-    label {
-      font-weight: normal;
-      cursor: pointer;
-
-      &:hover .ais-refinement-list__value {
-        text-decoration: underline;
-      }
-
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    &__item--active label {
-      font-weight: bold;
-    }
-
-  }
-</style>
-

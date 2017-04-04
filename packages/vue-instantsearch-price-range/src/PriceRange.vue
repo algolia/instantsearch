@@ -137,9 +137,3 @@
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  .ais-price-range__input {
-    width: 50px;
-  }
-</style>

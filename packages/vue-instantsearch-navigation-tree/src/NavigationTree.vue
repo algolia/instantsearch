@@ -105,31 +105,3 @@
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  .ais-navigation-tree {
-
-    label {
-      font-weight: normal;
-      cursor: pointer;
-
-      &:hover .ais-navigation-tree__value {
-        text-decoration: underline;
-      }
-
-    }
-
-    ul {
-      list-style: none;
-    }
-
-    & > ul {
-      padding-left: 0;
-    }
-
-    &__item--active > label {
-      font-weight: bold;
-    }
-
-  }
-</style>
