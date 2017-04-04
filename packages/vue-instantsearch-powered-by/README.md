@@ -1,4 +1,4 @@
-Vue Algolia Powered By
+Vue InstantSearch Powered By
 ---
 
 A component that helps you quickly add the "powered by Algolia" mention that is required on the free plan.
@@ -8,7 +8,7 @@ A component that helps you quickly add the "powered by Algolia" mention that is 
 Basic usage:
 
 ```html
-<algolia-powered-by></algolia-powered-by>
+<ais-powered-by></ais-powered-by>
 ```
 
 ## CSS Classes

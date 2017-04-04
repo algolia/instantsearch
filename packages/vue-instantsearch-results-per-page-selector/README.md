@@ -1,4 +1,4 @@
-Vue Algolia Results Per Page Selector
+Vue InstantSearch Results Per Page Selector
 ---
 
 A component that lets the user change the number of results to be displayed per page.
@@ -8,7 +8,7 @@ A component that lets the user change the number of results to be displayed per 
 Basic usage:
 
 ```html
-<results-per-page-selector :options="[20, 50, 100]"></results-per-page-selector>
+<ais-results-per-page-selector :options="[20, 50, 100]"></ais-results-per-page-selector>
 ```
 
 ## Props
