@@ -17,6 +17,7 @@
   "dependencies": {
     "vue-instantsearch-store": "*",
     "vue-instantsearch-highlight": "*",
+    "vue-instantsearch-snippet": "*",
     "vue-instantsearch-input": "*",
     "vue-instantsearch-results": "*",
     "vue-instantsearch-stats": "*",

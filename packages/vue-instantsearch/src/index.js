@@ -1,5 +1,6 @@
 import AisStore from 'vue-instantsearch-store'
 import AisHighlight from 'vue-instantsearch-highlight'
+import AisSnippet from 'vue-instantsearch-snippet'
 import AisInput from 'vue-instantsearch-input'
 import AisResults from 'vue-instantsearch-results'
 import AisStats from 'vue-instantsearch-stats'
@@ -17,6 +18,7 @@ import AisPoweredBy from 'vue-instantsearch-powered-by'
 const InstantSearch = {
   AisStore,
   AisHighlight,
+  AisSnippet,
   AisInput,
   AisResults,
   AisStats,
@@ -34,6 +36,7 @@ const InstantSearch = {
   install (Vue) {
     Vue.component('ais-store', AisStore)
     Vue.component('ais-highlight', AisHighlight)
+    Vue.component('ais-snippet', AisSnippet)
     Vue.component('ais-input', AisInput)
     Vue.component('ais-results', AisResults)
     Vue.component('ais-stats', AisStats)
@@ -61,6 +64,7 @@ export default InstantSearch
 export {
   AisStore,
   AisHighlight,
+  AisSnippet,
   AisInput,
   AisResults,
   AisStats,
