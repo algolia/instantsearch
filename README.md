@@ -28,5 +28,5 @@ one command away to start the developer environment, [read our CONTRIBUTING guid
 [readme-logo]: ./docgen/readme-logo.png
 [react-doc]: https://community.algolia.com/instantsearch.js/react/
 [algolia-website]: https://www.algolia.com/
-[instantsearch.js-github]: https://github.com/algolia/instantsearch.js/tree/develop
-[instantsearch-android-github]: https://github.com/algolia/instantsearch.js/tree/develop
+[instantsearch.js-github]: https://github.com/algolia/instantsearch.js
+[instantsearch-android-github]: https://github.com/algolia/instantsearch-android
