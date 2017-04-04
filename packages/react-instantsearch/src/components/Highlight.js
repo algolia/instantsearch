@@ -2,7 +2,7 @@ import React from 'react';
 import Highlighter from './Highlighter';
 
 export default function Highlight(props) {
-  return <Highlighter highlightProperty="_highlightResult" {...props}/>;
+  return <Highlighter highlightProperty="_highlightResult" {...props} />;
 }
 
 Highlight.propTypes = {
@@ -10,4 +10,3 @@ Highlight.propTypes = {
   attributeName: React.PropTypes.string.isRequired,
   highlight: React.PropTypes.func.isRequired,
 };
-

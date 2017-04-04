@@ -4,10 +4,10 @@
 // Otherwise, if it's an asset or a file with no layout then we compare
 // the file's last modification time to the process start time
 
-import {join} from 'path';
+import { join } from 'path';
 
-import {parallel} from 'async';
-import {watch} from 'chokidar';
+import { parallel } from 'async';
+import { watch } from 'chokidar';
 
 let lastRunTime = false;
 let layoutChange = true;
@@ -16,19 +16,29 @@ const layoutFiles = join(__dirname, '../layouts/**/*');
 const cssFiles = join(__dirname, '../src/stylesheets/**/*');
 const CSSEntryPoints = ['stylesheets/index.css', 'stylesheets/header.css'];
 
-export const hasChanged = file => file.stats && file.stats.ctime && file.stats.mtime ?
-  Date.parse(file.stats.ctime) > lastRunTime || Date.parse(file.stats.mtime) > lastRunTime :
-  true;
+export const hasChanged = file =>
+  file.stats && file.stats.ctime && file.stats.mtime
+    ? Date.parse(file.stats.ctime) > lastRunTime ||
+        Date.parse(file.stats.mtime) > lastRunTime
+    : true;
 
 export default function onlyChanged(files, metalsmith, cb) {
   if (lastRunTime === false) {
-    watch(layoutFiles, {ignoreInitial: true})
-      .on('all', () => { layoutChange = true; })
-      .on('error', err => { throw err; });
+    watch(layoutFiles, { ignoreInitial: true })
+      .on('all', () => {
+        layoutChange = true;
+      })
+      .on('error', err => {
+        throw err;
+      });
 
-    watch(cssFiles, {ignoreInitial: true})
-      .on('all', () => { cssChange = true; })
-      .on('error', err => { throw err; });
+    watch(cssFiles, { ignoreInitial: true })
+      .on('all', () => {
+        cssChange = true;
+      })
+      .on('error', err => {
+        throw err;
+      });
 
     lastRunTime = Date.now();
     layoutChange = false;
@@ -38,16 +48,16 @@ export default function onlyChanged(files, metalsmith, cb) {
   }
 
   parallel(
-    Object
-      .entries(files)
-      .map(([name, file]) => done => {
+    Object.entries(files).map(([name, file]) =>
+      done => {
         if (!file.stats) {
           done(null); // keep file, we do not know
           return;
         }
 
         if (!file.layout) {
-          const cssEntryPointNeedsUpdate = CSSEntryPoints.indexOf(name) !== -1 && cssChange === true;
+          const cssEntryPointNeedsUpdate = CSSEntryPoints.indexOf(name) !==
+            -1 && cssChange === true;
 
           if (!hasChanged(file) && !cssEntryPointNeedsUpdate) {
             // file has no layout and was not updated, remove file
@@ -70,14 +80,14 @@ export default function onlyChanged(files, metalsmith, cb) {
 
         done(null);
       }),
-      err => {
-        if (!err) {
-          lastRunTime = Date.now();
-          layoutChange = false;
-          cssChange = false;
-          console.log(`[metalsmith]: onlyChanged | ${Object.keys(files)}`); // eslint-disable-line no-console
-        }
-        cb(err);
+    err => {
+      if (!err) {
+        lastRunTime = Date.now();
+        layoutChange = false;
+        cssChange = false;
+        console.log(`[metalsmith]: onlyChanged | ${Object.keys(files)}`); // eslint-disable-line no-console
       }
+      cb(err);
+    }
   );
 }

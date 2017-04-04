@@ -1,18 +1,17 @@
 import React from 'react';
-import {has} from 'lodash';
+import { has } from 'lodash';
 
-import {getDisplayName} from './utils';
-import {withKeysPropType} from './propTypes';
+import { getDisplayName } from './utils';
+import { withKeysPropType } from './propTypes';
 
 export default function translatable(defaultTranslations) {
   return Composed => {
     function Translatable(props) {
-      const {translations, ...otherProps} = props;
+      const { translations, ...otherProps } = props;
       const translate = (key, ...params) => {
-        const translation =
-          translations && has(translations, key) ?
-            translations[key] :
-            defaultTranslations[key];
+        const translation = translations && has(translations, key)
+          ? translations[key]
+          : defaultTranslations[key];
         if (typeof translation === 'function') {
           return translation(...params);
         }

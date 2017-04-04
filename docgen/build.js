@@ -1,13 +1,16 @@
 import builder from './builder.js';
 import revAssets from './plugins/rev-assets.js';
-import {build as middlewares} from './middlewares';
+import { build as middlewares } from './middlewares';
 
-builder({
-  middlewares,
-}, err => {
-  if (err) {
-    throw err;
+builder(
+  {
+    middlewares,
+  },
+  err => {
+    if (err) {
+      throw err;
+    }
+
+    revAssets();
   }
-
-  revAssets();
-});
+);

@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import List from './List';
 import classNames from './classNames.js';
 import translatable from '../core/translatable';
@@ -7,12 +7,14 @@ const cx = classNames('MultiRange');
 
 class MultiRange extends Component {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.node.isRequired,
-      value: PropTypes.string.isRequired,
-      isRefined: PropTypes.bool.isRequired,
-      noRefinement: PropTypes.bool.isRequired,
-    })).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.node.isRequired,
+        value: PropTypes.string.isRequired,
+        isRefined: PropTypes.bool.isRequired,
+        noRefinement: PropTypes.bool.isRequired,
+      })
+    ).isRequired,
     refine: PropTypes.func.isRequired,
     transformItems: PropTypes.func,
     canRefine: PropTypes.bool.isRequired,
@@ -32,7 +34,7 @@ class MultiRange extends Component {
   }
 
   renderItem = item => {
-    const {refine, translate} = this.props;
+    const { refine, translate } = this.props;
     const label = item.value === '' ? translate('all') : item.label;
     return (
       <label {...cx(item.value === '' && 'itemAll')}>
@@ -43,8 +45,16 @@ class MultiRange extends Component {
           disabled={item.noRefinement}
           onChange={refine.bind(null, item.value)}
         />
-        <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
-        <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+        <span
+          {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}
+        />
+        <span
+          {...cx(
+            'itemLabel',
+            'itemLabel',
+            item.isRefined && 'itemLabelSelected'
+          )}
+        >
           {label}
         </span>
       </label>
@@ -52,7 +62,7 @@ class MultiRange extends Component {
   };
 
   render() {
-    const {items, canRefine} = this.props;
+    const { items, canRefine } = this.props;
 
     return (
       <List
@@ -60,7 +70,7 @@ class MultiRange extends Component {
         showMore={false}
         canRefine={canRefine}
         cx={cx}
-        items={items.map(item => ({...item, key: item.value}))}
+        items={items.map(item => ({ ...item, key: item.value }))}
       />
     );
   }

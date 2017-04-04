@@ -13,8 +13,11 @@ import {
   TextInput,
   Image,
 } from 'react-native';
-import {InstantSearch} from 'react-instantsearch/native';
-import {connectSearchBox, connectInfiniteHits} from 'react-instantsearch/connectors';
+import { InstantSearch } from 'react-instantsearch/native';
+import {
+  connectSearchBox,
+  connectInfiniteHits,
+} from 'react-instantsearch/connectors';
 
 const styles = StyleSheet.create({
   maincontainer: {
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
 });
 
 export default React.createClass({
+  displayName: 'React Native example',
   render() {
     return (
       <View style={styles.maincontainer}>
@@ -37,8 +41,8 @@ export default React.createClass({
           apiKey="6be0576ff61c053d5f9a3225e2a90f76"
           indexName="ikea"
         >
-          <ConnectedSearchBox/>
-          <ConnectedHits/>
+          <ConnectedSearchBox />
+          <ConnectedHits />
         </InstantSearch>
       </View>
     );
@@ -47,11 +51,13 @@ export default React.createClass({
 
 class SearchBox extends React.Component {
   render() {
-    return <TextInput
-      style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-      onChangeText={text => this.props.refine(text)}
-      value={this.props.currentRefinement}
-    />;
+    return (
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        onChangeText={text => this.props.refine(text)}
+        value={this.props.currentRefinement}
+      />
+    );
   }
 }
 
@@ -70,27 +76,29 @@ class Hits extends React.Component {
   }
 
   render() {
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    const hits = this.props.hits.length > 0 ?
-      <View >
-        <ListView
-          dataSource={ds.cloneWithRows(this.props.hits)}
-          renderRow={this._renderRow}
-          onEndReached={this.onEndReached.bind(this)}/>
-      </View> : null;
+    const ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
+    const hits = this.props.hits.length > 0
+      ? <View>
+          <ListView
+            dataSource={ds.cloneWithRows(this.props.hits)}
+            renderRow={this._renderRow}
+            onEndReached={this.onEndReached.bind(this)}
+          />
+        </View>
+      : null;
     return hits;
   }
 
-  _renderRow = hit =>
+  _renderRow = hit => (
     <View style={styles.item}>
-      <Image
-        style={{height: 100, width: 100}}
-        source={{uri: hit.image}}
-      />
+      <Image style={{ height: 100, width: 100 }} source={{ uri: hit.image }} />
       <Text>
         {hit.name}
       </Text>
-    </View>;
+    </View>
+  );
 }
 
 Hits.propTypes = {

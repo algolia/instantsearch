@@ -1,20 +1,20 @@
 export default function initHeader() {
-  const cmSearch = function () {
+  const cmSearch = function() {
     const searchIcon = document.querySelector('#search');
     const cancelIcon = document.querySelector('#cancel');
     const searchContainer = document.querySelector('.cm-search__input');
     const searchInput = document.querySelector('#searchbox');
 
-    function openSearchInput () {
+    function openSearchInput() {
       searchContainer.classList.add('open');
       searchInput.focus();
     }
 
-    function closeSearchInput () {
+    function closeSearchInput() {
       searchContainer.classList.remove('open');
     }
 
-    function emptySearchInput () {
+    function emptySearchInput() {
       if (searchInput.value !== '') {
         searchInput.value = '';
       } else {
@@ -25,7 +25,7 @@ export default function initHeader() {
     searchIcon.addEventListener('click', openSearchInput);
     cancelIcon.addEventListener('click', emptySearchInput);
 
-    window.onresize = function () {
+    window.onresize = function() {
       emptySearchInput();
       closeSearchInput();
     };
@@ -88,13 +88,19 @@ export default function initHeader() {
 
       container.appendChild(wrapper);
       setTimeout(() => {
-        document.querySelector('#menu-wrapper .cm-menu__list:first-of-type').style.display = 'none';
+        document.querySelector(
+          '#menu-wrapper .cm-menu__list:first-of-type'
+        ).style.display = 'none';
         const links = document.querySelectorAll('#menu-wrapper a');
         const linksArray = [];
         let linksTpl = '';
         const inm = document.querySelector('.mobile-navigation-wrapper input');
-        const searchButton = document.querySelector('.mobile-navigation-wrapper button#search');
-        const cancelButton = document.querySelector('.mobile-navigation-wrapper button#cancel');
+        const searchButton = document.querySelector(
+          '.mobile-navigation-wrapper button#search'
+        );
+        const cancelButton = document.querySelector(
+          '.mobile-navigation-wrapper button#cancel'
+        );
         inm.id = 'mobile-searchbox';
         searchButton.id = 'search-mobile';
         cancelButton.id = 'cancel-mobile';
@@ -142,7 +148,9 @@ export default function initHeader() {
     document.addEventListener('keyup', maybeOpenSearchBox);
 
     function maybeOpenSearchBox(e) {
-      if (e.target.tagName !== 'INPUT' && e.keyCode === 83 || e.keyCode === 191) {
+      if (
+        (e.target.tagName !== 'INPUT' && e.keyCode === 83) || e.keyCode === 191
+      ) {
         document.querySelector('.cm-search__input').classList.add('open');
         document.querySelector('#searchbox').focus();
       } else if (e.keyCode === 27) {

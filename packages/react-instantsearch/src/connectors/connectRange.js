@@ -1,5 +1,10 @@
-import {PropTypes} from 'react';
-import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import { PropTypes } from 'react';
+import {
+  cleanUpValue,
+  getIndex,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
 
@@ -26,26 +31,33 @@ function getId(props) {
 const namespace = 'range';
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, {},
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    `${namespace}.${getId(props)}`,
+    {},
     currentRefinement => {
-      let {min, max} = currentRefinement;
+      let { min, max } = currentRefinement;
       if (typeof min === 'string') {
         min = parseInt(min, 10);
       }
       if (typeof max === 'string') {
         max = parseInt(max, 10);
       }
-      return {min, max};
+      return { min, max };
     }
   );
 }
 
 function refine(props, searchState, nextRefinement, context) {
   if (!isFinite(nextRefinement.min) || !isFinite(nextRefinement.max)) {
-    throw new Error('You can\'t provide non finite values to the range connector');
+    throw new Error(
+      "You can't provide non finite values to the range connector"
+    );
   }
   const id = getId(props);
-  const nextValue = {[id]: nextRefinement};
+  const nextValue = { [id]: nextRefinement };
   const resetPage = true;
   return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
@@ -69,8 +81,8 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults) {
-    const {attributeName} = props;
-    let {min, max} = props;
+    const { attributeName } = props;
+    let { min, max } = props;
 
     const hasMin = typeof min !== 'undefined';
     const hasMax = typeof max !== 'undefined';
@@ -84,8 +96,9 @@ export default createConnector({
         };
       }
 
-      const stats = searchResults.results[index].getFacetByName(attributeName) ?
-        searchResults.results[index].getFacetStats(attributeName) : null;
+      const stats = searchResults.results[index].getFacetByName(attributeName)
+        ? searchResults.results[index].getFacetStats(attributeName)
+        : null;
       if (!stats) {
         return {
           canRefine: false,
@@ -100,12 +113,12 @@ export default createConnector({
       }
     }
 
-    const count = searchResults.results && searchResults.results[index] ? searchResults.results[index]
-      .getFacetValues(attributeName)
-      .map(v => ({
-        value: v.name,
-        count: v.count,
-      })) : [];
+    const count = searchResults.results && searchResults.results[index]
+      ? searchResults.results[index].getFacetValues(attributeName).map(v => ({
+          value: v.name,
+          count: v.count,
+        }))
+      : [];
 
     const {
       min: valueMin = min,
@@ -114,7 +127,7 @@ export default createConnector({
     return {
       min,
       max,
-      currentRefinement: {min: valueMin, max: valueMax},
+      currentRefinement: { min: valueMin, max: valueMax },
       count,
       canRefine: count.length > 0,
     };
@@ -129,11 +142,15 @@ export default createConnector({
   },
 
   getSearchParameters(params, props, searchState) {
-    const {attributeName} = props;
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const { attributeName } = props;
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     params = params.addDisjunctiveFacet(attributeName);
 
-    const {min, max} = currentRefinement;
+    const { min, max } = currentRefinement;
     if (typeof min !== 'undefined') {
       params = params.addNumericRefinement(attributeName, '>=', min);
     }
@@ -146,7 +163,11 @@ export default createConnector({
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     let item;
     const hasMin = typeof currentRefinement.min !== 'undefined';
     const hasMax = typeof currentRefinement.max !== 'undefined';

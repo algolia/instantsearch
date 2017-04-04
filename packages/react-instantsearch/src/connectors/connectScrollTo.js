@@ -1,7 +1,7 @@
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 
 import createConnector from '../core/createConnector';
-import {getCurrentRefinementValue} from '../core/indexUtils';
+import { getCurrentRefinementValue } from '../core/indexUtils';
 
 /**
  * connectScrollTo connector provides the logic to build a widget that will
@@ -24,8 +24,14 @@ export default createConnector({
 
   getProvidedProps(props, searchState) {
     const id = props.scrollOn;
-    const value = getCurrentRefinementValue(props, searchState, this.context, id, null,
-     currentRefinement => currentRefinement);
-    return {value};
+    const value = getCurrentRefinementValue(
+      props,
+      searchState,
+      this.context,
+      id,
+      null,
+      currentRefinement => currentRefinement
+    );
+    return { value };
   },
 });

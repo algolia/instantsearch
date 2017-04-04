@@ -1,7 +1,7 @@
 /* eslint-env jest, jasmine */
 
 import React from 'react';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 
 import SortBy from './SortBy';
 
@@ -11,21 +11,24 @@ describe('SortBy behavior', () => {
     const wrapper = mount(
       <SortBy
         createURL={() => '#'}
-        items={[{value: 'index1', label: 'index name 1'},
-          {value: 'index2', label: 'index name 2'},
-          {value: 'index3', label: 'index name 3'},
-          {value: 'index4', label: 'index name 4'}]}
+        items={[
+          { value: 'index1', label: 'index name 1' },
+          { value: 'index2', label: 'index name 2' },
+          { value: 'index3', label: 'index name 3' },
+          { value: 'index4', label: 'index name 4' },
+        ]}
         currentRefinement={'index1'}
         refine={refine}
       />
     );
 
-    const selectedValue = wrapper
-      .find('.ais-SortBy__root');
+    const selectedValue = wrapper.find('.ais-SortBy__root');
     expect(selectedValue.find('option').length).toBe(4);
     expect(selectedValue.find('option').first().text()).toBe('index name 1');
 
-    selectedValue.find('select').simulate('change', {target: {value: 'index3'}});
+    selectedValue
+      .find('select')
+      .simulate('change', { target: { value: 'index3' } });
 
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual('index3');
@@ -36,17 +39,18 @@ describe('SortBy behavior', () => {
     const wrapper = mount(
       <SortBy
         createURL={() => '#'}
-        items={[{value: 'index1'},
-          {value: 'index2'},
-          {value: 'index3'},
-          {value: 'index4'}]}
+        items={[
+          { value: 'index1' },
+          { value: 'index2' },
+          { value: 'index3' },
+          { value: 'index4' },
+        ]}
         refine={refine}
         currentRefinement={'index1'}
       />
     );
 
-    const selectedValue = wrapper
-      .find('.ais-SortBy__root');
+    const selectedValue = wrapper.find('.ais-SortBy__root');
     expect(selectedValue.find('option').length).toBe(4);
     expect(selectedValue.find('option').first().text()).toBe('index1');
   });

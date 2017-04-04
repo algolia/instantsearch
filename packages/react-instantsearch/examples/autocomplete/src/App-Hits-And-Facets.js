@@ -1,9 +1,12 @@
-import React, {Component} from 'react';
-import {InstantSearch, Configure} from 'react-instantsearch/dom';
-import {createConnector} from 'react-instantsearch';
-import {connectSearchBox, connectRefinementList} from 'react-instantsearch/connectors';
+import React, { Component } from 'react';
+import { InstantSearch, Configure } from 'react-instantsearch/dom';
+import { createConnector } from 'react-instantsearch';
+import {
+  connectSearchBox,
+  connectRefinementList,
+} from 'react-instantsearch/connectors';
 import Autosuggest from 'react-autosuggest';
-import {forOwn} from 'lodash';
+import { forOwn } from 'lodash';
 import 'react-instantsearch-theme-algolia/style.css';
 
 class App2 extends Component {
@@ -16,10 +19,10 @@ class App2 extends Component {
       >
         <div>
           <Configure hitsPerPage={3} />
-          <VirtualSearchBox/>
-          <VirtualRefinementList attributeName="manufacturer"/>
-          <VirtualRefinementList attributeName="category"/>
-          <ConnectedAutoComplete attributes={['manufacturer', 'category']}/>
+          <VirtualSearchBox />
+          <VirtualRefinementList attributeName="manufacturer" />
+          <VirtualRefinementList attributeName="category" />
+          <ConnectedAutoComplete attributes={['manufacturer', 'category']} />
         </div>
       </InstantSearch>
     );
@@ -41,20 +44,27 @@ const connectAutoComplete = createConnector({
    facets you want the value of.
    */
   getProvidedProps(props, state, search) {
-    const hits = search.results && search.results.bestbuy ? search.results.bestbuy.hits : [];
-    const facets = props.attributes.reduce((acc, attributeName) => {
-      if (search.results && search.results.bestbuy) {
-        acc[attributeName] = search.results.bestbuy
-          .getFacetValues(attributeName)
-          .slice(0, 3)
-          .map(v => ({
-            name: v.name,
-          }));
-      }
-      return acc;
-    }, {});
+    const hits = search.results && search.results.bestbuy
+      ? search.results.bestbuy.hits
+      : [];
+    const facets = props.attributes.reduce(
+      (acc, attributeName) => {
+        if (search.results && search.results.bestbuy) {
+          acc[attributeName] = search.results.bestbuy
+            .getFacetValues(attributeName)
+            .slice(0, 3)
+            .map(v => ({
+              name: v.name,
+            }));
+        }
+        return acc;
+      },
+      {}
+    );
     return {
-      hits, query: state.query !== undefined ? state.query : '', facets,
+      hits,
+      query: state.query !== undefined ? state.query : '',
+      facets,
     };
   },
 
@@ -70,33 +80,34 @@ const connectAutoComplete = createConnector({
 class AutoComplete extends React.Component {
   formatHitsForAutoSuggest(props) {
     const hits = [];
-    forOwn({...props.facets, hits: props.hits}, (value, key) => {
-      hits.push({title: key, hits: value});
+    forOwn({ ...props.facets, hits: props.hits }, (value, key) => {
+      hits.push({ title: key, hits: value });
     });
     return hits;
   }
 
   render() {
-    return <Autosuggest
-      suggestions={this.formatHitsForAutoSuggest(this.props)}
-      multiSection={true}
-      onSuggestionsFetchRequested={({value}) => this.props.refine(value)}
-      onSuggestionsClearRequested={() => this.props.refine('')}
-      getSuggestionValue={hit => hit.name}
-      renderSuggestion={hit =>
-        <div>
-          <div>{hit.name}</div>
-        </div>
-      }
-      inputProps={{
-        placeholder: 'Type a product',
-        value: this.props.query,
-        onChange: () => {
-        },
-      }}
-      renderSectionTitle={section => section.title}
-      getSectionSuggestions={section => section.hits}
-    />;
+    return (
+      <Autosuggest
+        suggestions={this.formatHitsForAutoSuggest(this.props)}
+        multiSection={true}
+        onSuggestionsFetchRequested={({ value }) => this.props.refine(value)}
+        onSuggestionsClearRequested={() => this.props.refine('')}
+        getSuggestionValue={hit => hit.name}
+        renderSuggestion={hit => (
+          <div>
+            <div>{hit.name}</div>
+          </div>
+        )}
+        inputProps={{
+          placeholder: 'Type a product',
+          value: this.props.query,
+          onChange: () => {},
+        }}
+        renderSectionTitle={section => section.title}
+        getSectionSuggestions={section => section.hits}
+      />
+    );
   }
 }
 

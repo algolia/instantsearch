@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
@@ -13,7 +13,7 @@ class ClearAll extends Component {
   };
 
   render() {
-    const {translate, items, refine} = this.props;
+    const { translate, items, refine } = this.props;
     const isDisabled = items.length === 0;
     if (isDisabled) {
       return (
@@ -24,10 +24,7 @@ class ClearAll extends Component {
     }
 
     return (
-      <button
-        {...cx('root')}
-        onClick={refine.bind(null, items)}
-      >
+      <button {...cx('root')} onClick={refine.bind(null, items)}>
         {translate('reset')}
       </button>
     );

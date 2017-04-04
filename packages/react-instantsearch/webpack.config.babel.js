@@ -1,4 +1,4 @@
-import {join} from 'path';
+import { join } from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import webpack from 'webpack'; // this is available because of root package.json
 
@@ -18,17 +18,20 @@ export default {
   module: {
     rules: [
       {
-        test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader',
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
       },
     ],
   },
   externals: {
-    'react': {
+    react: {
       root: 'React',
       commonjs2: 'react',
       commonjs: 'react',
       amd: 'react',
-    }, 'react-dom': {
+    },
+    'react-dom': {
       root: 'ReactDOM',
       commonjs2: 'react-dom',
       commonjs: 'react-dom',
