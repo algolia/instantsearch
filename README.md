@@ -1,4 +1,4 @@
-[![InstantSearch.js logo][readme-logo]][website]
+[![InstantSearch.js logo][logo]][website]
 
 InstantSearch projects: **InstantSearch.js** [React InstantSearch][react-instantsearch-github], [InstantSearch Android](instantsearch-android-github).
 
