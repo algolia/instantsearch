@@ -54,3 +54,6 @@ Append `-beta.x` where x is a number to the version for beta, so 4.0.0-beta.2 fo
 ## Update docs
 
 Documentation website is automatically updated by Travis when master is merged.
+
+[logo]: ./docs/readme-logo.png
+[website]: https://community.algolia.com/instantsearch.js
