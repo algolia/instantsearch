@@ -2,6 +2,9 @@ language: node_js
 node_js: stable
 before_script:
   - yarn boot
+branches:		
+  only:		
+    - master
 cache:
   yarn: true
   directories:
