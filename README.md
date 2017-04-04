@@ -1,4 +1,4 @@
-[![React InstantSearch logo][readme-logo]][react-doc]
+[![React InstantSearch logo][logo]][website]
 
 InstantSearch projects: **React InstantSearch** [InstantSearch.js][instantsearch.js-github], [InstantSearch Android](instantsearch-android-github).
 
@@ -10,7 +10,7 @@ Built by [Algolia][algolia-website].
 
 This repository holds the code and documentation for the React InstantSearch project.
 
-Go to the [React InstantSearch documentation website][react-doc] to learn how to use it.
+Go to the [React InstantSearch documentation website][website] to learn how to use it.
 
 ## Installation
 
@@ -25,8 +25,8 @@ yarn add react-instantsearch
 We welcome all contributors, from casual to regular. You are only
 one command away to start the developer environment, [read our CONTRIBUTING guide](CONTRIBUTING.md).
 
-[readme-logo]: ./docgen/readme-logo.png
-[react-doc]: https://community.algolia.com/instantsearch.js/react/
+[logo]: ./docgen/readme-logo.png
+[website]: https://community.algolia.com/react-instantsearch
 [algolia-website]: https://www.algolia.com/
 [instantsearch.js-github]: https://github.com/algolia/instantsearch.js
 [instantsearch-android-github]: https://github.com/algolia/instantsearch-android
