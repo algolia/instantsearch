@@ -34,6 +34,15 @@ Disable html escaping (**not recommended**):
 <ais-snippet :result="result" attribute-name="description" :escape-html="false"></ais-snippet>
 ```
 
+## Props
+
+| Name           | Required | Type    | Default | Description                                           |
+|----------------|----------|---------|---------|-------------------------------------------------------|
+| result         | true     | Object  |         | A single Algolia result as it is returned by the API. |
+| attribute-name | true     | String  |         | The attribute name to be snippeted.                   |
+| tag-name       | false    | String  | `'em'`  | The tag name used for highlighting.                   |
+| escape-html    | false    | Boolean | `true`  | Whether to escape the HTML or not.                    |
+
 ## CSS Classes
 
 | ClassName             | Description       |
