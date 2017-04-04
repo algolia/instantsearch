@@ -41,7 +41,7 @@ export default function App() {
 
 const Header = () =>
   <header className="content-wrapper">
-    <a href="https://community.algolia.com/instantsearch.js/react" className="is-logo"><img
+    <a href="https://community.algolia.com/react-instantsearch/" className="is-logo"><img
       src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
       width={40}/></a>
     <a href="./" className="logo">aeki</a>

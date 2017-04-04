@@ -4,7 +4,7 @@ import {setOptions} from '@kadira/storybook-addon-options';
 
 setOptions({
   name: 'react-instantsearch',
-  url: 'https://community.algolia.com/instantsearch.js/react/',
+  url: 'https://community.algolia.com/react-instantsearch/',
   goFullScreen: false,
   showLeftPanel: true,
   showDownPanel: true,

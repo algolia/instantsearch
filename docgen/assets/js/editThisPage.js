@@ -3,12 +3,12 @@ if (document.querySelector('.documentation-container')) {
   $edit.classList.add('editThisPage');
   $edit.textContent = 'Edit this page';
 
-  let href = 'https://github.com/algolia/instantsearch.js/edit/v2/';
+  let href = 'https://github.com/algolia/react-instantsearch/edit/master/';
   const doc = 'docgen/src';
   const api = 'packages/react-instantsearch/src';
 
   let pathname = document.location.pathname.replace(
-    '/instantsearch.js/react',
+    '/react-instantsearch',
     '',
   );
 

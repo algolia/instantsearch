@@ -5,9 +5,6 @@ before_script:
 branches:
   only:
     - master
-    - develop
-    - v2
-    - /^greenkeeper-.*$/
 cache:
   yarn: true
   directories:

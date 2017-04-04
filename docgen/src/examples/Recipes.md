@@ -24,7 +24,7 @@ examples: [{
     id: 'geo-search',
     title: 'Geo search using dynamic search parameters'
   }]
-examplesEndpoint: https://github.com/algolia/instantsearch.js/tree/v2/packages/react-instantsearch/examples
+examplesEndpoint: https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples
 ---
 
 ## Recipes

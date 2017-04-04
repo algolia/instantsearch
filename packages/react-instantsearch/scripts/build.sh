@@ -13,7 +13,7 @@ babel -q native.js -o dist/native.js &&
 babel -q --ignore test.js,__mocks__ --out-dir dist/src src &&
 NODE_ENV=production webpack
 
-license="/*! ReactInstantSearch ${VERSION:-UNRELEASED} | © Algolia, inc. | https://community.algolia.com/instantsearch.js/react/ */"
+license="/*! ReactInstantSearch ${VERSION:-UNRELEASED} | © Algolia, inc. | https://community.algolia.com/react-instantsearch/ */"
 umd_dist="dist/umd"
 entries=( 'Core' 'Dom' 'Connectors')
 for entry in "${entries[@]}"
