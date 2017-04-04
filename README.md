@@ -4,7 +4,7 @@ InstantSearch projects: **InstantSearch.js** | [React InstantSearch][react-insta
 
 ## InstantSearch.js
 
-> ⚡ Lightning-fast search for websites
+> ⚡ Lightning-fast search for your apps
 
 Built by [Algolia][algolia-website].
 
