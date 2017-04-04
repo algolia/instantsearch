@@ -75,3 +75,6 @@ yarn upgrade-deps
 ```sh
 yarn changelog
 ```
+
+[readme-logo]: ./docgen/readme-logo.png
+[react-doc]: https://community.algolia.com/instantsearch.js/react/
