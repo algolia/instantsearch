@@ -1,7 +1,7 @@
 Vue InstantSearch Highlight
 ---
 
-A functional component that helps you safely display highlighted attributes of your search results.
+A component that helps you safely display highlighted attributes of your search results.
 
 This component leverages the [highlighting feature of Algolia](https://www.algolia.com/doc/faq/searching/what-is-the-highlighting/#faq-section)
 but adds some sugar on top of it to prevent XSS attacks.

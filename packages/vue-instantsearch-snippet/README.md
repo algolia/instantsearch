@@ -1,7 +1,7 @@
 Vue InstantSearch Snippet
 ---
 
-A functional component that helps you safely display snippeted attributes of your search results.
+A component that helps you safely display snippeted attributes of your search results.
 
 This component leverages the [snippeting feature of Algolia](https://www.algolia.com/doc/faq/searching/what-is-attributes-to-snippet-how-does-it-work/#faq-section)
 but adds some sugar on top of it to prevent XSS attacks.
