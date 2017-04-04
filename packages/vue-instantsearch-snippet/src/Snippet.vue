@@ -16,6 +16,10 @@
       tagName: {
         type: String,
         default: 'em'
+      },
+      escapeHtml: {
+        type: Boolean,
+        default: true
       }
     },
     render (h, ctx) {
@@ -27,12 +31,17 @@
         throw new Error(`Attribute ${attributeName} has no snippet.`)
       }
 
+      let attributeValue = result._snippetResult[attributeName].value
+      if (ctx.props.escapeHtml === true) {
+        attributeValue = escapeHtml(attributeValue)
+      }
+
       return h('span', {
           'class': {
             'ais-snippet': true
           },
           domProps: {
-            innerHTML: escapeHtml(result._snippetResult[attributeName].value)
+            innerHTML: attributeValue
             .replace(HIGHLIGHT_PRE_TAG, `<${tagName}>`)
             .replace(HIGHLIGHT_POST_TAG, `</${tagName}>`)
           }
