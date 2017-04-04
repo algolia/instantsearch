@@ -1,8 +1,8 @@
-[![React InstantSearch logo][readme-logo]][react-doc]
+[![React InstantSearch logo][logo]][website]
 
 ## Development
 
-We use the [documentation website][react-doc] as the main way to develop
+We use the [documentation website][website] as the main way to develop
 React InstantSearch.
 
 ```sh
@@ -35,6 +35,8 @@ yarn dev # unit tests watch mode, no lint
 ```sh
 yarn lint
 ```
+
+Files are automatically formatted with prettier.
 
 ## Release
 
@@ -76,5 +78,5 @@ yarn upgrade-deps
 yarn changelog
 ```
 
-[readme-logo]: ./docgen/readme-logo.png
-[react-doc]: https://community.algolia.com/instantsearch.js/react/
+[logo]: ./docgen/readme-logo.png
+[website]: https://community.algolia.com/react-instantsearch/
