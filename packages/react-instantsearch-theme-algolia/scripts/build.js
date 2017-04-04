@@ -1,9 +1,9 @@
-import {join} from 'path';
-import {render} from 'node-sass';
+import { join } from 'path';
+import { render } from 'node-sass';
 import postcss from 'postcss';
 import syntax from 'postcss-scss';
 import autoprefixer from 'autoprefixer';
-import {writeFile} from 'fs';
+import { writeFile } from 'fs';
 import cssnano from 'cssnano';
 
 const handleError = err => {
@@ -15,16 +15,16 @@ const handleError = err => {
   console.error(err);
 };
 
-const write = (destination, content) => new Promise((resolve, reject) =>
-  writeFile(destination, content, writeErr => {
-    if (writeErr) {
-      reject(writeErr);
-      return;
-    }
+const write = (destination, content) =>
+  new Promise((resolve, reject) =>
+    writeFile(destination, content, writeErr => {
+      if (writeErr) {
+        reject(writeErr);
+        return;
+      }
 
-    resolve();
-  })
-);
+      resolve();
+    }));
 
 const generateStylesheet = () => {
   const root = join(__dirname, '..');
@@ -34,28 +34,32 @@ const generateStylesheet = () => {
 
   const autoprefix = postcss([autoprefixer]);
   const minify = postcss([cssnano]);
-  render({
-    file: sourceStylesheet,
-  }, (sassErr, result) => {
-    if (sassErr) {
-      handleError(sassErr);
-      return;
-    }
+  render(
+    {
+      file: sourceStylesheet,
+    },
+    (sassErr, result) => {
+      if (sassErr) {
+        handleError(sassErr);
+        return;
+      }
 
-    autoprefix.process(result.css, {syntax})
-      .then(({css: prefixedCss}) =>
-        minify
-          .process(prefixedCss)
-          .then(({css: minifiedCss}) => ({prefixedCss, minifiedCss}))
-      )
-      .then(({prefixedCss, minifiedCss}) =>
-        Promise.all([
-          write(builtStylesheet, prefixedCss),
-          write(minifiedStylesheet, minifiedCss),
-        ])
-      )
-      .catch(postProcessingErr => { handleError(postProcessingErr); });
-  });
+      autoprefix
+        .process(result.css, { syntax })
+        .then(({ css: prefixedCss }) =>
+          minify
+            .process(prefixedCss)
+            .then(({ css: minifiedCss }) => ({ prefixedCss, minifiedCss })))
+        .then(({ prefixedCss, minifiedCss }) =>
+          Promise.all([
+            write(builtStylesheet, prefixedCss),
+            write(minifiedStylesheet, minifiedCss),
+          ]))
+        .catch(postProcessingErr => {
+          handleError(postProcessingErr);
+        });
+    }
+  );
 };
 
 generateStylesheet();

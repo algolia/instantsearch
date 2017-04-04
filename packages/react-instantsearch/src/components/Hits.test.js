@@ -1,23 +1,18 @@
 /* eslint-env jest, jasmine */
 
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 import renderer from 'react-test-renderer';
 
 import Hits from './Hits';
 
 describe('Hits', () => {
   it('accepts a hitComponent prop', () => {
-    const hits = [{objectID: 0}, {objectID: 1}, {objectID: 2}];
-    const Hit = ({hit}) => <div id={hit.objectID}/>;
+    const hits = [{ objectID: 0 }, { objectID: 1 }, { objectID: 2 }];
+    const Hit = ({ hit }) => <div id={hit.objectID} />;
     Hit.propTypes = {
       hit: PropTypes.object,
     };
-    const tree = renderer.create(
-      <Hits
-        hitComponent={Hit}
-        hits={hits}
-      />
-    );
+    const tree = renderer.create(<Hits hitComponent={Hit} hits={hits} />);
     expect(tree.toJSON()).toMatchSnapshot();
   });
 });

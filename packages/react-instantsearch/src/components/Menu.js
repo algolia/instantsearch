@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import {pick} from 'lodash';
+import React, { PropTypes, Component } from 'react';
+import { pick } from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import Link from './Link';
@@ -15,12 +15,14 @@ class Menu extends Component {
     searchForItems: PropTypes.func.isRequired,
     withSearchBox: PropTypes.bool,
     createURL: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
-      count: PropTypes.number.isRequired,
-      isRefined: PropTypes.bool.isRequired,
-    })),
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+        count: PropTypes.number.isRequired,
+        isRefined: PropTypes.bool.isRequired,
+      })
+    ),
     isFromSearch: PropTypes.bool.isRequired,
     canRefine: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
@@ -42,9 +44,9 @@ class Menu extends Component {
   }
 
   renderItem = (item, resetQuery) => {
-    const {createURL} = this.props;
+    const { createURL } = this.props;
     const label = this.props.isFromSearch
-      ? <Highlight attributeName="label" hit={item}/>
+      ? <Highlight attributeName="label" hit={item} />
       : item.label;
     return (
       <Link

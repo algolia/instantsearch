@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import {isNaN} from 'lodash';
+import React, { PropTypes, Component } from 'react';
+import { isNaN } from 'lodash';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -24,8 +24,9 @@ class RangeInput extends Component {
 
   constructor(props) {
     super(props);
-    this.state = this.props.canRefine ?
-      {from: props.currentRefinement.min, to: props.currentRefinement.max} : {from: '', to: ''};
+    this.state = this.props.canRefine
+      ? { from: props.currentRefinement.min, to: props.currentRefinement.max }
+      : { from: '', to: '' };
   }
 
   componentWillMount() {
@@ -34,7 +35,10 @@ class RangeInput extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.canRefine) {
-      this.setState({from: nextProps.currentRefinement.min, to: nextProps.currentRefinement.max});
+      this.setState({
+        from: nextProps.currentRefinement.min,
+        to: nextProps.currentRefinement.max,
+      });
     }
     if (this.context.canRefine) this.context.canRefine(nextProps.canRefine);
   }
@@ -42,28 +46,41 @@ class RangeInput extends Component {
   onSubmit = e => {
     e.preventDefault();
     e.stopPropagation();
-    if (!isNaN(parseFloat(this.state.from, 10)) && !isNaN(parseFloat(this.state.to, 10))) {
-      this.props.refine({min: this.state.from, max: this.state.to});
+    if (
+      !isNaN(parseFloat(this.state.from, 10)) &&
+      !isNaN(parseFloat(this.state.to, 10))
+    ) {
+      this.props.refine({ min: this.state.from, max: this.state.to });
     }
   };
 
   render() {
-    const {translate, canRefine} = this.props;
+    const { translate, canRefine } = this.props;
     return (
-      <form {...cx('root', !canRefine && 'noRefinement')} onSubmit={this.onSubmit}>
+      <form
+        {...cx('root', !canRefine && 'noRefinement')}
+        onSubmit={this.onSubmit}
+      >
         <fieldset disabled={!canRefine} {...cx('fieldset')}>
           <label {...cx('labelMin')}>
-            <input {...cx('inputMin')}
-                   type="number" value={this.state.from} onChange={e => this.setState({from: e.target.value})}
+            <input
+              {...cx('inputMin')}
+              type="number"
+              value={this.state.from}
+              onChange={e => this.setState({ from: e.target.value })}
             />
           </label>
           <span {...cx('separator')}>{translate('separator')}</span>
           <label {...cx('labelMax')}>
-            <input {...cx('inputMax')}
-                   type="number" value={this.state.to} onChange={e => this.setState({to: e.target.value})}
+            <input
+              {...cx('inputMax')}
+              type="number"
+              value={this.state.to}
+              onChange={e => this.setState({ to: e.target.value })}
             />
           </label>
-          <button {...cx('submit')} type="submit">{translate('submit')}
+          <button {...cx('submit')} type="submit">
+            {translate('submit')}
           </button>
         </fieldset>
       </form>

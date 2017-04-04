@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 
 /**
  * connectCurrentRefinements connector provides the logic to build a widget that will
@@ -21,19 +21,26 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults, metadata) {
-    const items = metadata.reduce((res, meta) => {
-      if (typeof meta.items !== 'undefined') {
-        if (!props.clearsQuery && meta.id === 'query') {
-          return res;
-        } else {
-          if (props.clearsQuery && meta.id === 'query' && meta.items[0].currentRefinement === '') {
+    const items = metadata.reduce(
+      (res, meta) => {
+        if (typeof meta.items !== 'undefined') {
+          if (!props.clearsQuery && meta.id === 'query') {
             return res;
+          } else {
+            if (
+              props.clearsQuery &&
+              meta.id === 'query' &&
+              meta.items[0].currentRefinement === ''
+            ) {
+              return res;
+            }
+            return res.concat(meta.items);
           }
-          return res.concat(meta.items);
         }
-      }
-      return res;
-    }, []);
+        return res;
+      },
+      []
+    );
 
     return {
       items: props.transformItems ? props.transformItems(items) : items,
@@ -43,7 +50,9 @@ export default createConnector({
 
   refine(props, searchState, items) {
     // `value` corresponds to our internal clear function computed in each connector metadata.
-    const refinementsToClear = items instanceof Array ? items.map(item => item.value) : [items];
+    const refinementsToClear = items instanceof Array
+      ? items.map(item => item.value)
+      : [items];
     return refinementsToClear.reduce((res, clear) => clear(res), searchState);
   },
 });

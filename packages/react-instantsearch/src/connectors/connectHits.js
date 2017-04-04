@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import {getIndex} from '../core/indexUtils';
+import { getIndex } from '../core/indexUtils';
 
 /**
  * connectHits connector provides the logic to create connected
@@ -18,9 +18,11 @@ export default createConnector({
 
   getProvidedProps(props, searchState, searchResults) {
     const index = getIndex(this.context);
-    const hits = searchResults.results && searchResults.results[index] ? searchResults.results[index].hits : [];
+    const hits = searchResults.results && searchResults.results[index]
+      ? searchResults.results[index].hits
+      : [];
 
-    return {hits};
+    return { hits };
   },
 
   /* Hits needs to be considered as a widget to trigger a search if no others widgets are used.

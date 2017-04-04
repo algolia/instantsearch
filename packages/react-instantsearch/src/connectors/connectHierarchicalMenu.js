@@ -1,14 +1,24 @@
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 import createConnector from '../core/createConnector';
-import {SearchParameters} from 'algoliasearch-helper';
-import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import { SearchParameters } from 'algoliasearch-helper';
+import {
+  cleanUpValue,
+  getIndex,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 export const getId = props => props.attributes[0];
 
 const namespace = 'hierarchicalMenu';
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, null,
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    `${namespace}.${getId(props)}`,
+    null,
     currentRefinement => {
       if (currentRefinement === '') {
         return null;
@@ -34,13 +44,15 @@ function getValue(path, props, searchState, context) {
     nextRefinement = path;
   } else {
     const tmpSearchParameters = new SearchParameters({
-      hierarchicalFacets: [{
-        name: id,
-        attributes,
-        separator,
-        rootPath,
-        showParentLevel,
-      }],
+      hierarchicalFacets: [
+        {
+          name: id,
+          attributes,
+          separator,
+          rootPath,
+          showParentLevel,
+        },
+      ],
     });
 
     nextRefinement = tmpSearchParameters
@@ -64,7 +76,7 @@ function transformValue(value, limit, props, searchState, context) {
 
 function refine(props, searchState, nextRefinement, context) {
   const id = getId(props);
-  const nextValue = {[id]: nextRefinement || ''};
+  const nextValue = { [id]: nextRefinement || '' };
   const resetPage = true;
   return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
@@ -126,8 +138,14 @@ export default createConnector({
   propTypes: {
     attributes: (props, propName, componentName) => {
       const isNotString = val => typeof val !== 'string';
-      if (!Array.isArray(props[propName]) || props[propName].some(isNotString) || props[propName].length < 1) {
-        return new Error(`Invalid prop ${propName} supplied to ${componentName}. Expected an Array of Strings`);
+      if (
+        !Array.isArray(props[propName]) ||
+        props[propName].some(isNotString) ||
+        props[propName].length < 1
+      ) {
+        return new Error(
+          `Invalid prop ${propName} supplied to ${componentName}. Expected an Array of Strings`
+        );
       }
       return undefined;
     },
@@ -151,27 +169,32 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState, searchResults) {
-    const {showMore, limitMin, limitMax} = props;
+    const { showMore, limitMin, limitMax } = props;
     const id = getId(props);
-    const {results} = searchResults;
+    const { results } = searchResults;
     const index = getIndex(this.context);
 
-    const isFacetPresent =
-      Boolean(results) &&
+    const isFacetPresent = Boolean(results) &&
       Boolean(results[index]) &&
       Boolean(results[index].getFacetByName(id));
 
     if (!isFacetPresent) {
       return {
         items: [],
-        currentRefinement: getCurrentRefinement(props, searchState, this.context),
+        currentRefinement: getCurrentRefinement(
+          props,
+          searchState,
+          this.context
+        ),
         canRefine: false,
       };
     }
 
     const limit = showMore ? limitMax : limitMin;
-    const value = results[index].getFacetValues(id, {sortBy});
-    const items = value.data ? transformValue(value.data, limit, props, searchState, this.context) : [];
+    const value = results[index].getFacetValues(id, { sortBy });
+    const items = value.data
+      ? transformValue(value.data, limit, props, searchState, this.context)
+      : [];
 
     return {
       items: props.transformItems ? props.transformItems(items) : items,
@@ -217,7 +240,11 @@ export default createConnector({
         ),
       });
 
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     if (currentRefinement !== null) {
       searchParameters = searchParameters.toggleHierarchicalFacetRefinement(
         id,
@@ -231,17 +258,25 @@ export default createConnector({
   getMetadata(props, searchState) {
     const rootAttribute = props.attributes[0];
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
 
     return {
       id,
       index: getIndex(this.context),
-      items: !currentRefinement ? [] : [{
-        label: `${rootAttribute}: ${currentRefinement}`,
-        attributeName: rootAttribute,
-        value: nextState => refine(props, nextState, '', this.context),
-        currentRefinement,
-      }],
+      items: !currentRefinement
+        ? []
+        : [
+            {
+              label: `${rootAttribute}: ${currentRefinement}`,
+              attributeName: rootAttribute,
+              value: nextState => refine(props, nextState, '', this.context),
+              currentRefinement,
+            },
+          ],
     };
   },
 });

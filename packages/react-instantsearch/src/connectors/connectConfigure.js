@@ -1,6 +1,6 @@
 import createConnector from '../core/createConnector.js';
-import {omit, difference, keys} from 'lodash';
-import {hasMultipleIndex, getIndex, refineValue} from '../core/indexUtils';
+import { omit, difference, keys } from 'lodash';
+import { hasMultipleIndex, getIndex, refineValue } from '../core/indexUtils';
 
 function getId() {
   return 'configure';
@@ -18,23 +18,32 @@ export default createConnector({
   transitionState(props, prevSearchState, nextSearchState) {
     const id = getId();
     const items = omit(props, 'children');
-    const nonPresentKeys = this._props ? difference(keys(this._props), keys(props)) : [];
+    const nonPresentKeys = this._props
+      ? difference(keys(this._props), keys(props))
+      : [];
     this._props = props;
-    const nextValue = {[id]: {...omit(nextSearchState[id], nonPresentKeys), ...items}};
+    const nextValue = {
+      [id]: { ...omit(nextSearchState[id], nonPresentKeys), ...items },
+    };
     return refineValue(nextSearchState, nextValue, this.context);
   },
   cleanUp(props, searchState) {
     const id = getId();
     const index = getIndex(this.context);
-    const subState = hasMultipleIndex(this.context) && searchState.indices ? searchState.indices[index] : searchState;
+    const subState = hasMultipleIndex(this.context) && searchState.indices
+      ? searchState.indices[index]
+      : searchState;
     const configureKeys = subState[id] ? Object.keys(subState[id]) : [];
-    const configureState = configureKeys.reduce((acc, item) => {
-      if (!props[item]) {
-        acc[item] = subState[id][item];
-      }
-      return acc;
-    }, {});
-    const nextValue = {[id]: configureState};
+    const configureState = configureKeys.reduce(
+      (acc, item) => {
+        if (!props[item]) {
+          acc[item] = subState[id][item];
+        }
+        return acc;
+      },
+      {}
+    );
+    const nextValue = { [id]: configureState };
     return refineValue(searchState, nextValue, this.context);
   },
 });

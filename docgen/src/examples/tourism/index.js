@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AppContainer} from 'react-hot-loader';
+import { AppContainer } from 'react-hot-loader';
 
 import App from './App.js';
 
-ReactDOM.render(<AppContainer><App/></AppContainer>, document.querySelector('#app'));
+ReactDOM.render(
+  <AppContainer><App /></AppContainer>,
+  document.querySelector('#app')
+);
 
 // Hot Module Replacement API
 // this and AppContainer are react-hot-loader 3 API needs
@@ -14,9 +17,8 @@ if (module.hot) {
     const NextApp = require('./App.js').default;
     ReactDOM.render(
       <AppContainer>
-        <NextApp/>
-      </AppContainer>
-      ,
+        <NextApp />
+      </AppContainer>,
       document.querySelector('#app')
     );
   });

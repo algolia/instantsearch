@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import {omit} from 'lodash';
+import { omit } from 'lodash';
 
 const getId = () => 'query';
 
@@ -35,10 +35,13 @@ export default createConnector({
     const hits = [];
     if (searchResults.results) {
       Object.keys(searchResults.results).forEach(index => {
-        hits.push({index, hits: searchResults.results[index].hits});
+        hits.push({ index, hits: searchResults.results[index].hits });
       });
     }
-    return {hits, currentRefinement: getCurrentRefinement(props, searchState)};
+    return {
+      hits,
+      currentRefinement: getCurrentRefinement(props, searchState),
+    };
   },
 
   refine(props, searchState, nextCurrentRefinement) {

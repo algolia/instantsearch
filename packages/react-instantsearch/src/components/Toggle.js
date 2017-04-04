@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import classNames from './classNames.js';
 
 const cx = classNames('Toggle');
@@ -15,7 +15,7 @@ class Toggle extends Component {
   };
 
   render() {
-    const {currentRefinement, label} = this.props;
+    const { currentRefinement, label } = this.props;
 
     return (
       <label {...cx('root')}>

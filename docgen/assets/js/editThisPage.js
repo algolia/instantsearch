@@ -7,10 +7,7 @@ if (document.querySelector('.documentation-container')) {
   const doc = 'docgen/src';
   const api = 'packages/react-instantsearch/src';
 
-  let pathname = document.location.pathname.replace(
-    '/react-instantsearch',
-    '',
-  );
+  let pathname = document.location.pathname.replace('/react-instantsearch', '');
 
   if (/^\/(?:widgets|connectors)\/.+/.test(pathname)) {
     href += `${api}${pathname.replace('.html', '.js')}`;

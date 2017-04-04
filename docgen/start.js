@@ -1,12 +1,12 @@
-import {watch} from 'chokidar';
+import { watch } from 'chokidar';
 
 import devServer from './devServer.js';
 import builder from './builder.js';
-import {start as middlewares} from './middlewares';
-import {rootPath} from './path.js';
+import { start as middlewares } from './middlewares';
+import { rootPath } from './path.js';
 
 // we build once at start
-builder({middlewares}, err => {
+builder({ middlewares }, err => {
   if (err) {
     throw err;
   }
@@ -16,20 +16,24 @@ builder({middlewares}, err => {
 });
 
 // then we watch and rebuild
-watch([
-  rootPath('packages/react-instantsearch/src/**/*.js'),
-  rootPath('docgen/assets/'),
-  rootPath('docgen/src/**/*'),
-  rootPath('docgen/layouts/**/*.pug'),
-], {
-  ignoreInitial: true,
-  ignored: /assets\/js\/(.*)?\.js$/,
-})
-  .on('all', () => builder({clean: false, middlewares}, err => {
-    if (err) {
-      throw err;
-    }
-  }))
+watch(
+  [
+    rootPath('packages/react-instantsearch/src/**/*.js'),
+    rootPath('docgen/assets/'),
+    rootPath('docgen/src/**/*'),
+    rootPath('docgen/layouts/**/*.pug'),
+  ],
+  {
+    ignoreInitial: true,
+    ignored: /assets\/js\/(.*)?\.js$/,
+  }
+)
+  .on('all', () =>
+    builder({ clean: false, middlewares }, err => {
+      if (err) {
+        throw err;
+      }
+    }))
   .on('error', err => {
     throw err;
   });

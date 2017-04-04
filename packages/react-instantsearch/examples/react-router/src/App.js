@@ -1,22 +1,29 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
-  InstantSearch, HierarchicalMenu,
-  Hits, Menu, Pagination, PoweredBy, StarRating,
-  RefinementList, SearchBox, ClearAll,
+  InstantSearch,
+  HierarchicalMenu,
+  Hits,
+  Menu,
+  Pagination,
+  PoweredBy,
+  StarRating,
+  RefinementList,
+  SearchBox,
+  ClearAll,
 } from 'react-instantsearch/dom';
-import {withRouter} from 'react-router';
+import { withRouter } from 'react-router';
 import 'react-instantsearch-theme-algolia/style.css';
 import qs from 'qs';
-import {isEqual} from 'lodash';
+import { isEqual } from 'lodash';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {searchState: {...qs.parse(props.router.location.query)}};
+    this.state = { searchState: { ...qs.parse(props.router.location.query) } };
   }
 
   componentWillReceiveProps() {
-    this.setState({searchState: qs.parse(this.props.router.location.query)});
+    this.setState({ searchState: qs.parse(this.props.router.location.query) });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -26,11 +33,15 @@ class App extends Component {
   onSearchStateChange(nextSearchState) {
     const THRESHOLD = 700;
     const newPush = Date.now();
-    this.setState({lastPush: newPush, searchState: nextSearchState});
+    this.setState({ lastPush: newPush, searchState: nextSearchState });
     if (this.state.lastPush && newPush - this.state.lastPush <= THRESHOLD) {
-      this.props.router.replace(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
+      this.props.router.replace(
+        nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
+      );
     } else {
-      this.props.router.push(nextSearchState ? `?${qs.stringify(nextSearchState)}` : '');
+      this.props.router.push(
+        nextSearchState ? `?${qs.stringify(nextSearchState)}` : ''
+      );
     }
   }
 
@@ -48,44 +59,42 @@ class App extends Component {
       >
 
         <div>
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: 10,
-          }}>
-            <SearchBox/>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: 10,
+            }}
+          >
+            <SearchBox />
             <PoweredBy />
           </div>
-          <div style={{display: 'flex'}}>
-            <div style={{padding: '0px 20px'}}>
+          <div style={{ display: 'flex' }}>
+            <div style={{ padding: '0px 20px' }}>
               <p>Hierarchical Menu</p>
               <HierarchicalMenu
                 id="categories"
-                attributes={[
-                  'category',
-                  'sub_category',
-                  'sub_sub_category',
-                ]}
+                attributes={['category', 'sub_category', 'sub_sub_category']}
               />
               <p>Menu</p>
-              <Menu attributeName="type"/>
+              <Menu attributeName="type" />
               <p>Refinement List</p>
-              <RefinementList attributeName="colors"/>
+              <RefinementList attributeName="colors" />
               <p>Range Ratings</p>
-              <StarRating attributeName="rating" max={6}/>
+              <StarRating attributeName="rating" max={6} />
 
             </div>
-            <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
-              <div style={{display: 'flex', justifyContent: 'space-around'}}>
-                <ClearAll/>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <ClearAll />
               </div>
               <div>
                 <Hits />
               </div>
-              <div style={{alignSelf: 'center'}}>
-                <Pagination showLast={true}/>
+              <div style={{ alignSelf: 'center' }}>
+                <Pagination showLast={true} />
               </div>
             </div>
           </div>

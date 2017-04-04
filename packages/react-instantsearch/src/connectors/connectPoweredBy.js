@@ -18,6 +18,6 @@ export default createConnector({
       'utm_medium=website&' +
       `utm_content=${location.hostname}&` +
       'utm_campaign=poweredby';
-    return {url};
+    return { url };
   },
 });

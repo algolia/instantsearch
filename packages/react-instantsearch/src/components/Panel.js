@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import classNames from './classNames.js';
 
 const cx = classNames('Panel');
@@ -14,21 +14,23 @@ class Panel extends Component {
   };
 
   getChildContext() {
-    return {canRefine: this.canRefine};
+    return { canRefine: this.canRefine };
   }
 
   constructor(props) {
     super(props);
-    this.state = {canRefine: true};
+    this.state = { canRefine: true };
     this.canRefine = canRefine => {
-      this.setState({canRefine});
+      this.setState({ canRefine });
     };
   }
   render() {
-    return <div {...cx('root', !this.state.canRefine && 'noRefinement')}>
-      <h5 {...cx('title')}>{this.props.title}</h5>
-      {this.props.children}
-    </div>;
+    return (
+      <div {...cx('root', !this.state.canRefine && 'noRefinement')}>
+        <h5 {...cx('title')}>{this.props.title}</h5>
+        {this.props.children}
+      </div>
+    );
   }
 }
 

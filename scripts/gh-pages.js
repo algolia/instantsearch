@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import ghpages from 'gh-pages';
-import {join} from 'path';
+import { join } from 'path';
 
 ghpages.clean();
 
@@ -17,7 +17,7 @@ const end = err => {
 
 const defaultOptions = {
   logger,
-  silent: true
+  silent: true,
 };
 
 ghpages.publish(site, defaultOptions, end);

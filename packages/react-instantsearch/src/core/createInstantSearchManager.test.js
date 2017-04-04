@@ -92,19 +92,19 @@ describe('createInstantSearchManager', () => {
       ism.widgetsManager.registerWidget({
         transitionState: (nxt, current) => {
           expect(nxt).toEqual(nextSearchState);
-          return {...current, a: 1};
+          return { ...current, a: 1 };
         },
       });
 
       ism.widgetsManager.registerWidget({
         transitionState: (nxt, current) => {
           expect(nxt).toEqual(nextSearchState);
-          return {...current, b: 2};
+          return { ...current, b: 2 };
         },
       });
 
       const state = ism.transitionState();
-      expect(state).toEqual({a: 1, b: 2});
+      expect(state).toEqual({ a: 1, b: 2 });
     });
   });
 
@@ -120,11 +120,11 @@ describe('createInstantSearchManager', () => {
       const widgetIDsT0 = ism.getWidgetsIds().sort();
       expect(widgetIDsT0).toEqual([]);
 
-      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'a'})});
-      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'b'})});
-      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'c'})});
+      ism.widgetsManager.registerWidget({ getMetadata: () => ({ id: 'a' }) });
+      ism.widgetsManager.registerWidget({ getMetadata: () => ({ id: 'b' }) });
+      ism.widgetsManager.registerWidget({ getMetadata: () => ({ id: 'c' }) });
 
-      ism.widgetsManager.registerWidget({getMetadata: () => ({id: 'd'})});
+      ism.widgetsManager.registerWidget({ getMetadata: () => ({ id: 'd' }) });
 
       return Promise.resolve().then(() => {
         const widgetIDsT1 = ism.getWidgetsIds().sort();
@@ -179,14 +179,20 @@ describe('createInstantSearchManager', () => {
 });
 
 function makeClient(response) {
-  const clientInstance = algoliaClient('latency', '249078a3d4337a8231f1665ec5a44966');
+  const clientInstance = algoliaClient(
+    'latency',
+    '249078a3d4337a8231f1665ec5a44966'
+  );
   const clonedResponse = JSON.parse(JSON.stringify(response));
   clientInstance.addAlgoliaAgent = () => {};
   clientInstance.search = jest.fn((queries, cb) => {
     if (cb) {
-      setTimeout(() => {
-        cb(null, clonedResponse);
-      }, 1);
+      setTimeout(
+        () => {
+          cb(null, clonedResponse);
+        },
+        1
+      );
       return undefined;
     }
 

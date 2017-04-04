@@ -1,6 +1,11 @@
 import createConnector from '../core/createConnector';
-import {PropTypes} from 'react';
-import {cleanUpValue, refineValue, getCurrentRefinementValue, getIndex} from '../core/indexUtils';
+import { PropTypes } from 'react';
+import {
+  cleanUpValue,
+  refineValue,
+  getCurrentRefinementValue,
+  getIndex,
+} from '../core/indexUtils';
 
 function getId() {
   return 'query';
@@ -8,7 +13,12 @@ function getId() {
 
 function getCurrentRefinement(props, searchState, context) {
   const id = getId(props);
-  return getCurrentRefinementValue(props, searchState, context, id, '',
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    id,
+    '',
     currentRefinement => {
       if (currentRefinement) {
         return currentRefinement;
@@ -20,7 +30,7 @@ function getCurrentRefinement(props, searchState, context) {
 
 function refine(props, searchState, nextRefinement, context) {
   const id = getId();
-  const nextValue = {[id]: nextRefinement};
+  const nextValue = { [id]: nextRefinement };
   const resetPage = true;
   return refineValue(searchState, nextValue, context, resetPage);
 }
@@ -60,20 +70,30 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setQuery(getCurrentRefinement(props, searchState, this.context));
+    return searchParameters.setQuery(
+      getCurrentRefinement(props, searchState, this.context)
+    );
   },
 
   getMetadata(props, searchState) {
     const id = getId(props);
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     return {
       id,
       index: getIndex(this.context),
-      items: currentRefinement === null ? [] : [{
-        label: `${id}: ${currentRefinement}`,
-        value: nextState => refine(props, nextState, '', this.context),
-        currentRefinement,
-      }],
+      items: currentRefinement === null
+        ? []
+        : [
+            {
+              label: `${id}: ${currentRefinement}`,
+              value: nextState => refine(props, nextState, '', this.context),
+              currentRefinement,
+            },
+          ],
     };
   },
 });
