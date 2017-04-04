@@ -8,11 +8,14 @@ jest.useFakeTimers();
 
 jest.mock('algoliasearch-helper/src/algoliasearch.helper.js', () => {
   let count = 0;
-  const Helper = require.requireActual('algoliasearch-helper/src/algoliasearch.helper.js');
+  const Helper = require.requireActual(
+    'algoliasearch-helper/src/algoliasearch.helper.js'
+  );
   Helper.prototype._dispatchAlgoliaResponse = function(state) {
-    this.emit('result', {count: count++, index: 'index'}, state);
+    this.emit('result', { count: count++, index: 'index' }, state);
   };
-  Helper.prototype.searchForFacetValues = () => Promise.resolve({facetHits: 'results'});
+  Helper.prototype.searchForFacetValues = () =>
+    Promise.resolve({ facetHits: 'results' });
   return Helper;
 });
 
@@ -59,7 +62,7 @@ describe('createInstantSearchManager', () => {
           jest.runAllTimers();
 
           const store = ism.store.getState();
-          expect(store.results.index).toEqual({count: 0, index: 'index'});
+          expect(store.results.index).toEqual({ count: 0, index: 'index' });
           expect(store.error).toBe(null);
 
           ism.widgetsManager.update();
@@ -68,7 +71,7 @@ describe('createInstantSearchManager', () => {
             jest.runAllTimers();
 
             const store1 = ism.store.getState();
-            expect(store.results.index).toEqual({count: 1, index: 'index'});
+            expect(store.results.index).toEqual({ count: 1, index: 'index' });
             expect(store1.error).toBe(null);
           });
         });
@@ -79,7 +82,7 @@ describe('createInstantSearchManager', () => {
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
-          searchParameters: {index: 'index'},
+          searchParameters: { index: 'index' },
           algoliaClient: client,
         });
 
@@ -90,7 +93,7 @@ describe('createInstantSearchManager', () => {
         jest.runAllTimers();
 
         const store = ism.store.getState();
-        expect(store.results.index).toEqual({count: 2, index: 'index'});
+        expect(store.results.index).toEqual({ count: 2, index: 'index' });
         expect(store.error).toBe(null);
       });
     });
@@ -99,11 +102,11 @@ describe('createInstantSearchManager', () => {
         const ism = createInstantSearchManager({
           indexName: 'index',
           initialState: {},
-          searchParameters: {index: 'index'},
+          searchParameters: { index: 'index' },
           algoliaClient: client,
         });
 
-        ism.onSearchForFacetValues({facetName: 'facetName', query: 'query'});
+        ism.onSearchForFacetValues({ facetName: 'facetName', query: 'query' });
 
         expect(ism.store.getState().results).toBe(null);
 
@@ -111,7 +114,10 @@ describe('createInstantSearchManager', () => {
 
         return Promise.resolve().then(() => {
           const store = ism.store.getState();
-          expect(store.resultsFacetValues).toEqual({facetName: 'results', query: 'query'});
+          expect(store.resultsFacetValues).toEqual({
+            facetName: 'results',
+            query: 'query',
+          });
           expect(store.searchingForFacetValues).toBe(false);
         });
       });

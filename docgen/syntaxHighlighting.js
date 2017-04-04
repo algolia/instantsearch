@@ -1,4 +1,4 @@
-import {runMode} from 'codemirror/addon/runmode/runmode.node';
+import { runMode } from 'codemirror/addon/runmode/runmode.node';
 import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -26,11 +26,10 @@ export default function highlight(source, lang) {
     tokenizedSource += `<span class="cs-${style.replace(/ +/g, ' cs-')}">${text}</span>`;
   });
 
-  return (
-`<pre class="code-sample language-${lang}">
+  return `<pre class="code-sample language-${lang}">
   <div class="heading">${heading}</div>
   <div class="code-wrap">
     <code>${tokenizedSource}</code>
   </div>
-</pre>`);
+</pre>`;
 }

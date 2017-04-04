@@ -1,6 +1,11 @@
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 import createConnector from '../core/createConnector';
-import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import {
+  cleanUpValue,
+  getIndex,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 function getId(props) {
   return props.attributeName;
@@ -9,7 +14,12 @@ function getId(props) {
 const namespace = 'toggle';
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, false,
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    `${namespace}.${getId(props)}`,
+    false,
     currentRefinement => {
       if (currentRefinement) {
         return currentRefinement;
@@ -21,7 +31,7 @@ function getCurrentRefinement(props, searchState, context) {
 
 function refine(props, searchState, nextRefinement, context) {
   const id = getId(props);
-  const nextValue = {[id]: nextRefinement ? nextRefinement : false};
+  const nextValue = { [id]: nextRefinement ? nextRefinement : false };
   const resetPage = true;
   return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
@@ -54,8 +64,12 @@ export default createConnector({
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
-    return {currentRefinement};
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
+    return { currentRefinement };
   },
 
   refine(props, searchState, nextRefinement) {
@@ -67,17 +81,14 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const {attributeName, value, filter} = props;
+    const { attributeName, value, filter } = props;
     const checked = getCurrentRefinement(props, searchState, this.context);
 
     if (checked) {
       if (attributeName) {
         searchParameters = searchParameters
           .addFacet(attributeName)
-          .addFacetRefinement(
-            attributeName,
-            value
-          );
+          .addFacetRefinement(attributeName, value);
       }
       if (filter) {
         searchParameters = filter(searchParameters);
@@ -100,6 +111,6 @@ export default createConnector({
         value: nextState => refine(props, nextState, false, this.context),
       });
     }
-    return {id, index, items};
+    return { id, index, items };
   },
 });

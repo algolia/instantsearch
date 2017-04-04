@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import translatable from '../core/translatable';
 import classNames from './classNames.js';
 
@@ -12,7 +12,7 @@ class Stats extends Component {
   };
 
   render() {
-    const {translate, nbHits, processingTimeMS} = this.props;
+    const { translate, nbHits, processingTimeMS } = this.props;
     return (
       <span {...cx('root')}>
         {translate('stats', nbHits, processingTimeMS)}

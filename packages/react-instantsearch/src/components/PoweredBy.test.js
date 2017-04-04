@@ -7,25 +7,24 @@ import PoweredBy from './PoweredBy';
 
 describe('PoweredBy', () => {
   it('default', () => {
-    const tree = renderer.create(
-      <PoweredBy
-        createURL={() => '#'}
-        url="url"
-      />
-    ).toJSON();
+    const tree = renderer
+      .create(<PoweredBy createURL={() => '#'} url="url" />)
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('applies translations', () => {
-    const tree = renderer.create(
-      <PoweredBy
-        createURL={() => '#'}
-        url="url"
-        translations={{
-          searchBy: ' Search By',
-        }}
-      />
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <PoweredBy
+          createURL={() => '#'}
+          url="url"
+          translations={{
+            searchBy: ' Search By',
+          }}
+        />
+      )
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

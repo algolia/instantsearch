@@ -1,4 +1,4 @@
-import {get} from 'lodash';
+import { get } from 'lodash';
 
 /**
  * Find an highlighted attribute given an `attributeName` and an `highlightProperty`, parses it,
@@ -16,19 +16,21 @@ import {get} from 'lodash';
  * @param {object} hit - the actual hit returned by Algolia.
  * @return {object[]} - An array of {value: string, isDefined: boolean}.
  */
-export default function parseAlgoliaHit({
-  preTag = '<em>',
-  postTag = '</em>',
-  highlightProperty,
-  attributeName,
-  hit,
-}) {
+export default function parseAlgoliaHit(
+  {
+    preTag = '<em>',
+    postTag = '</em>',
+    highlightProperty,
+    attributeName,
+    hit,
+  }
+) {
   if (!hit) throw new Error('`hit`, the matching record, must be provided');
 
   const highlightObject = get(hit[highlightProperty], attributeName);
   const highlightedValue = !highlightObject ? '' : highlightObject.value;
 
-  return parseHighlightedAttribute({preTag, postTag, highlightedValue});
+  return parseHighlightedAttribute({ preTag, postTag, highlightedValue });
 }
 
 /**
@@ -40,19 +42,23 @@ export default function parseAlgoliaHit({
  * @param {string} highlightedValue - highlighted attribute as returned by Algolia highlight feature
  * @return {object[]} - An array of {value: string, isDefined: boolean}.
  */
-function parseHighlightedAttribute({
-  preTag,
-  postTag,
-  highlightedValue,
-}) {
+function parseHighlightedAttribute(
+  {
+    preTag,
+    postTag,
+    highlightedValue,
+  }
+) {
   const splitByPreTag = highlightedValue.split(preTag);
   const firstValue = splitByPreTag.shift();
-  const elements = firstValue === '' ? [] : [{value: firstValue, isHighlighted: false}];
+  const elements = firstValue === ''
+    ? []
+    : [{ value: firstValue, isHighlighted: false }];
 
   if (postTag === preTag) {
     let isHighlighted = true;
     splitByPreTag.forEach(split => {
-      elements.push({value: split, isHighlighted});
+      elements.push({ value: split, isHighlighted });
       isHighlighted = !isHighlighted;
     });
   } else {

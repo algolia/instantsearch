@@ -2,10 +2,10 @@
 
 import webpack from 'webpack';
 import webpackConfig from './webpack.config.babel.js';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 
 const {
-  optimize: {UglifyJsPlugin},
+  optimize: { UglifyJsPlugin },
 } = webpack;
 
 export default {

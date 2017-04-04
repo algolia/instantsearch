@@ -3,13 +3,14 @@ import parseAlgoliaHit from '../core/highlight';
 
 import highlightTags from '../core/highlightTags.js';
 
-const highlight = ({attributeName, hit, highlightProperty}) => parseAlgoliaHit({
-  attributeName,
-  hit,
-  preTag: highlightTags.highlightPreTag,
-  postTag: highlightTags.highlightPostTag,
-  highlightProperty,
-});
+const highlight = ({ attributeName, hit, highlightProperty }) =>
+  parseAlgoliaHit({
+    attributeName,
+    hit,
+    preTag: highlightTags.highlightPreTag,
+    postTag: highlightTags.highlightPostTag,
+    highlightProperty,
+  });
 
 /**
  * connectHighlight connector provides the logic to create an highlighter
@@ -34,6 +35,6 @@ export default createConnector({
   propTypes: {},
 
   getProvidedProps() {
-    return {highlight};
+    return { highlight };
   },
 });

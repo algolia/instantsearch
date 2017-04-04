@@ -10,7 +10,7 @@ describe('Highlighter', () => {
   it('parses an highlighted attribute of hit object', () => {
     const hitFromAPI = {
       objectID: 0,
-      deep: {attribute: {value: 'awesome highlighted hit!'}},
+      deep: { attribute: { value: 'awesome highlighted hit!' } },
       _highlightProperty: {
         deep: {
           attribute: {
@@ -25,19 +25,22 @@ describe('Highlighter', () => {
       },
     };
 
-    const highlight = ({hit, attributeName, highlightProperty}) => parseAlgoliaHit({
-      preTag: '<ais-highlight>',
-      postTag: '</ais-highlight>',
-      attributeName,
-      hit,
-      highlightProperty,
-    });
+    const highlight = ({ hit, attributeName, highlightProperty }) =>
+      parseAlgoliaHit({
+        preTag: '<ais-highlight>',
+        postTag: '</ais-highlight>',
+        attributeName,
+        hit,
+        highlightProperty,
+      });
 
     const tree = renderer.create(
-      <Highlighter attributeName="deep.attribute.value"
-                   hit={hitFromAPI}
-                   highlight={highlight}
-                   highlightProperty="_highlightProperty"/>
+      <Highlighter
+        attributeName="deep.attribute.value"
+        hit={hitFromAPI}
+        highlight={highlight}
+        highlightProperty="_highlightProperty"
+      />
     );
     expect(tree.toJSON()).toMatchSnapshot();
   });

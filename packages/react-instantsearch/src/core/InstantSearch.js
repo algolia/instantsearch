@@ -1,14 +1,14 @@
-import React, {PropTypes, Component, Children} from 'react';
+import React, { PropTypes, Component, Children } from 'react';
 import createInstantSearchManager from './createInstantSearchManager';
 
 function validateNextProps(props, nextProps) {
   if (!props.searchState && nextProps.searchState) {
     throw new Error(
-      'You can\'t switch <InstantSearch> from being uncontrolled to controlled'
+      "You can't switch <InstantSearch> from being uncontrolled to controlled"
     );
   } else if (props.searchState && !nextProps.searchState) {
     throw new Error(
-      'You can\'t switch <InstantSearch> from being controlled to uncontrolled'
+      "You can't switch <InstantSearch> from being controlled to uncontrolled"
     );
   }
 }
@@ -99,7 +99,9 @@ class InstantSearch extends Component {
 
   createHrefForState(searchState) {
     searchState = this.aisManager.transitionState(searchState);
-    return this.isControlled && this.props.createURL ? this.props.createURL(searchState, this.getKnownKeys()) : '#';
+    return this.isControlled && this.props.createURL
+      ? this.props.createURL(searchState, this.getKnownKeys())
+      : '#';
   }
 
   onWidgetsInternalStateUpdate(searchState) {
@@ -128,11 +130,9 @@ class InstantSearch extends Component {
 
   render() {
     const childrenCount = Children.count(this.props.children);
-    const {Root, props} = this.props.root;
-    if (childrenCount === 0)
-      return null;
-    else
-      return <Root {...props}>{this.props.children}</Root>;
+    const { Root, props } = this.props.root;
+    if (childrenCount === 0) return null;
+    else return <Root {...props}>{this.props.children}</Root>;
   }
 }
 

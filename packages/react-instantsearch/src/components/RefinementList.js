@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import {pick} from 'lodash';
+import React, { PropTypes, Component } from 'react';
+import { pick } from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import classNames from './classNames.js';
@@ -9,7 +9,7 @@ const cx = classNames('RefinementList');
 class RefinementList extends Component {
   constructor(props) {
     super(props);
-    this.state = {query: ''};
+    this.state = { query: '' };
   }
 
   static propTypes = {
@@ -18,12 +18,14 @@ class RefinementList extends Component {
     searchForItems: PropTypes.func.isRequired,
     withSearchBox: PropTypes.bool,
     createURL: PropTypes.func.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.arrayOf(PropTypes.string).isRequired,
-      count: PropTypes.number.isRequired,
-      isRefined: PropTypes.bool.isRequired,
-    })),
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string.isRequired,
+        value: PropTypes.arrayOf(PropTypes.string).isRequired,
+        count: PropTypes.number.isRequired,
+        isRefined: PropTypes.bool.isRequired,
+      })
+    ),
     isFromSearch: PropTypes.bool.isRequired,
     canRefine: PropTypes.bool.isRequired,
     showMore: PropTypes.bool,
@@ -51,7 +53,7 @@ class RefinementList extends Component {
 
   renderItem = (item, resetQuery) => {
     const label = this.props.isFromSearch
-      ? <Highlight attributeName="label" hit={item}/>
+      ? <Highlight attributeName="label" hit={item} />
       : item.label;
 
     return (
@@ -62,15 +64,24 @@ class RefinementList extends Component {
           checked={item.isRefined}
           onChange={() => this.selectItem(item, resetQuery)}
         />
-        <span {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}></span>
-        <span {...cx('itemLabel', 'itemLabel', item.isRefined && 'itemLabelSelected')}>
+        <span
+          {...cx('itemBox', 'itemBox', item.isRefined && 'itemBoxSelected')}
+        />
+        <span
+          {...cx(
+            'itemLabel',
+            'itemLabel',
+            item.isRefined && 'itemLabelSelected'
+          )}
+        >
           {label}
         </span>
         {' '}
         <span {...cx('itemCount', item.isRefined && 'itemCountSelected')}>
           {item.count}
         </span>
-      </label>);
+      </label>
+    );
   };
 
   render() {

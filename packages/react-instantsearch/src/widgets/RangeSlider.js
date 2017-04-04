@@ -70,10 +70,14 @@ import React from 'react';
 const ConnectedRange = connectRange(Range);
 
  */
-export default connectRange(() =>
-  <div>We do not provide any Slider, see the documentation to learn how to connect one easily:
-    <a target="_blank" href="https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html">
+export default connectRange(() => (
+  <div>
+    We do not provide any Slider, see the documentation to learn how to connect one easily:
+    <a
+      target="_blank"
+      href="https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html"
+    >
       https://community.algolia.com/react-instantsearch/widgets/RangeSlider.html
     </a>
   </div>
-);
+));

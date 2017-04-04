@@ -1,5 +1,5 @@
 import pkg from '../packages/react-instantsearch/package.json';
-import {rootPath} from './path';
+import { rootPath } from './path';
 
 const configs = {
   production: {
@@ -14,4 +14,4 @@ const configs = {
   },
 };
 
-export default {...configs[process.env.NODE_ENV], pkg};
+export default { ...configs[process.env.NODE_ENV], pkg };

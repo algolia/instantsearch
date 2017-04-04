@@ -1,6 +1,6 @@
-import React, {PropTypes, Component} from 'react';
-import {range} from 'lodash';
-import {capitalize} from '../core/utils';
+import React, { PropTypes, Component } from 'react';
+import { range } from 'lodash';
+import { capitalize } from '../core/utils';
 import translatable from '../core/translatable';
 import LinkList from './LinkList';
 import classNames from './classNames.js';
@@ -95,8 +95,7 @@ class Pagination extends Component {
     return {
       key: `${modifier}.${value}`,
       modifier,
-      disabled: value < 1 ||
-      value >= Math.min(maxPages, nbPages),
+      disabled: value < 1 || value >= Math.min(maxPages, nbPages),
       label: translate(translationKey, value),
       value,
       ariaLabel: translate(`aria${capitalize(translationKey)}`, value),

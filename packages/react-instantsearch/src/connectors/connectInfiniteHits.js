@@ -1,5 +1,9 @@
 import createConnector from '../core/createConnector';
-import {getIndex, getCurrentRefinementValue, refineValue} from '../core/indexUtils';
+import {
+  getIndex,
+  getCurrentRefinementValue,
+  refineValue,
+} from '../core/indexUtils';
 
 function getId() {
   return 'page';
@@ -8,7 +12,12 @@ function getId() {
 function getCurrentRefinement(props, searchState, context) {
   const id = getId();
   const page = 1;
-  return getCurrentRefinementValue(props, searchState, context, id, page,
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    id,
+    page,
     currentRefinement => {
       if (typeof currentRefinement === 'string') {
         currentRefinement = parseInt(currentRefinement, 10);
@@ -41,7 +50,7 @@ export default createConnector({
       };
     }
 
-    const {hits, page, nbPages, hitsPerPage} = searchResults.results[index];
+    const { hits, page, nbPages, hitsPerPage } = searchResults.results[index];
 
     if (page === 0) {
       this._allResults = hits;
@@ -49,10 +58,7 @@ export default createConnector({
       const previousPage = this._allResults.length / hitsPerPage - 1;
 
       if (page > previousPage) {
-        this._allResults = [
-          ...this._allResults,
-          ...hits,
-        ];
+        this._allResults = [...this._allResults, ...hits];
       } else if (page < previousPage) {
         this._allResults = hits;
       }
@@ -76,7 +82,7 @@ export default createConnector({
   refine(props, searchState) {
     const id = getId();
     const nextPage = getCurrentRefinement(props, searchState, this.context) + 1;
-    const nextValue = {[id]: nextPage};
+    const nextValue = { [id]: nextPage };
     const resetPage = false;
     return refineValue(searchState, nextValue, this.context, resetPage);
   },

@@ -1,5 +1,5 @@
 import createConnector from '../core/createConnector';
-import {getIndex} from '../core/indexUtils';
+import { getIndex } from '../core/indexUtils';
 
 /**
  * connectStats connector provides the logic to build a widget that will

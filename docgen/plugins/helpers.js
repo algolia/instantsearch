@@ -13,9 +13,9 @@ export default function helpers(filenames, metalsmith, cb) {
     },
     maybeActive(navPath, singlePathOrArrayOfPaths) {
       const pathsToTest = [].concat(singlePathOrArrayOfPaths);
-      return pathsToTest.some(pathToTest => navPath.indexOf(pathToTest) === 0) ?
-        'active' :
-        '';
+      return pathsToTest.some(pathToTest => navPath.indexOf(pathToTest) === 0)
+        ? 'active'
+        : '';
     },
   };
 

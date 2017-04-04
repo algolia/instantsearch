@@ -1,4 +1,4 @@
-import React, {PropTypes, Component, Children} from 'react';
+import React, { PropTypes, Component, Children } from 'react';
 
 /* eslint valid-jsdoc: 0 */
 /**
@@ -40,11 +40,9 @@ class Index extends Component {
 
   render() {
     const childrenCount = Children.count(this.props.children);
-    const {Root, props} = this.props.root;
-    if (childrenCount === 0)
-      return null;
-    else
-      return <Root {...props}>{this.props.children}</Root>;
+    const { Root, props } = this.props.root;
+    if (childrenCount === 0) return null;
+    else return <Root {...props}>{this.props.children}</Root>;
   }
 }
 

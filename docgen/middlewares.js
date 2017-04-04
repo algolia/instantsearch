@@ -21,7 +21,7 @@ import sources from './plugins/sources.js';
 import webpackStartConfig from './webpack.config.start.babel.js';
 import webpackBuildConfig from './webpack.config.build.babel';
 
-import {reactPackage} from './path.js';
+import { reactPackage } from './path.js';
 
 const common = [
   helpers,
@@ -33,15 +33,18 @@ const common = [
     source: './rootFiles',
     destination: './',
   }),
-  sources([
-    reactPackage('src/widgets/*.js'),
-    reactPackage('src/connectors/*.js'),
-    reactPackage('src/core/InstantSearch.js'),
-    reactPackage('src/core/Index.js'),
-  ], {
-    ignore: '**/*.test.js',
-    computeFilename: filename => `${filename}.jsdoc`, // denotes jsdoc file but also avoid js ignore
-  }),
+  sources(
+    [
+      reactPackage('src/widgets/*.js'),
+      reactPackage('src/connectors/*.js'),
+      reactPackage('src/core/InstantSearch.js'),
+      reactPackage('src/core/Index.js'),
+    ],
+    {
+      ignore: '**/*.test.js',
+      computeFilename: filename => `${filename}.jsdoc`, // denotes jsdoc file but also avoid js ignore
+    }
+  ),
   ignore(fileName => {
     // This is a fix for VIM swp files inside src/,
     // We could also configure VIM to store swp files somewhere else
@@ -65,30 +68,33 @@ const common = [
   headings('h2'),
   nav(),
   // After markdown, so that paths point to the correct HTML file
-  navigation({
-    core: {
-      sortBy: 'nav_sort',
-      filterProperty: 'nav_groups',
+  navigation(
+    {
+      core: {
+        sortBy: 'nav_sort',
+        filterProperty: 'nav_groups',
+      },
+      widget: {
+        sortBy: 'nav_sort',
+        filterProperty: 'nav_groups',
+      },
+      connector: {
+        sortBy: 'nav_sort',
+        filterProperty: 'nav_groups',
+      },
+      examples: {
+        sortBy: 'nav_sort',
+        filterProperty: 'nav_groups',
+      },
+      gettingstarted: {
+        sortBy: 'nav_sort',
+        filterProperty: 'nav_groups',
+      },
     },
-    widget: {
-      sortBy: 'nav_sort',
-      filterProperty: 'nav_groups',
-    },
-    connector: {
-      sortBy: 'nav_sort',
-      filterProperty: 'nav_groups',
-    },
-    examples: {
-      sortBy: 'nav_sort',
-      filterProperty: 'nav_groups',
-    },
-    gettingstarted: {
-      sortBy: 'nav_sort',
-      filterProperty: 'nav_groups',
-    },
-  }, {
-    navListProperty: 'navs',
-  }),
+    {
+      navListProperty: 'navs',
+    }
+  ),
   // perfStart(),
   sass({
     sourceMap: true,

@@ -10,11 +10,7 @@ import {
   connectInfiniteHits,
   connectCurrentRefinements,
 } from 'react-instantsearch/connectors';
-import {
-  InstantSearch,
-  Highlight,
-  Configure,
-} from 'react-instantsearch/dom';
+import { InstantSearch, Highlight, Configure } from 'react-instantsearch/dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
@@ -28,7 +24,8 @@ import {
   MenuItem,
   Card,
   Divider,
-  CardHeader, CardTitle,
+  CardHeader,
+  CardTitle,
   AppBar,
   FontIcon,
   IconMenu,
@@ -36,17 +33,18 @@ import {
   IconButton,
 } from 'material-ui';
 import SortIcon from 'material-ui/svg-icons/content/sort';
-import {withUrlSync} from '../urlSync';
+import { withUrlSync } from '../urlSync';
 
 injectTapEventPlugin();
 
-const App = props =>
+const App = props => (
   <MuiThemeProvider>
     <MaterialUiExample {...props} />
-  </MuiThemeProvider>;
+  </MuiThemeProvider>
+);
 
 const isMobile = window.innerWidth < 450;
-const MaterialUiExample = props =>
+const MaterialUiExample = props => (
   <InstantSearch
     appId="latency"
     apiKey="6be0576ff61c053d5f9a3225e2a90f76"
@@ -56,15 +54,16 @@ const MaterialUiExample = props =>
     onSearchStateChange={props.onSearchStateChange.bind(this)}
   >
     <Configure hitsPerPage={20} />
-    <Content/>
-  </InstantSearch>;
+    <Content />
+  </InstantSearch>
+);
 
 const Content = React.createClass({
   getInitialState() {
-    return {drawer: !isMobile};
+    return { drawer: !isMobile };
   },
-  drawerAction () {
-    this.setState({drawer: !this.state.drawer});
+  drawerAction() {
+    this.setState({ drawer: !this.state.drawer });
   },
   render() {
     const baseDrawerStyle = {
@@ -82,7 +81,9 @@ const Content = React.createClass({
     };
     const defaultMarginLeft = isMobile ? window.innerWidth : 300;
     const marginLeft = this.state.drawer ? defaultMarginLeft : 0;
-    const displayDrawer = this.state.drawer ? openDrawerStyle : closedDrawerStyle;
+    const displayDrawer = this.state.drawer
+      ? openDrawerStyle
+      : closedDrawerStyle;
     return (
       <div>
         <AppBar
@@ -90,39 +91,56 @@ const Content = React.createClass({
           onLeftIconButtonTouchTap={this.drawerAction}
           className="Header__appBar"
         >
-          <div style={{display: 'flex', alignItems: 'center', flexGrow: 1}}>
-            <ConnectedSearchBox/>
+          <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <ConnectedSearchBox />
             <ConnectedSortBy
-              items={[{value: 'ikea', label: 'Featured'},
-                {value: 'ikea_price_desc', label: 'Price (desc)'},
-                {value: 'ikea_price_asc', label: 'Price (asc)'}]}
-              defaultRefinement="ikea"/>
+              items={[
+                { value: 'ikea', label: 'Featured' },
+                { value: 'ikea_price_desc', label: 'Price (desc)' },
+                { value: 'ikea_price_asc', label: 'Price (asc)' },
+              ]}
+              defaultRefinement="ikea"
+            />
           </div>
         </AppBar>
         <div className="main">
           <div className="Sidebar">
-            <Drawer open={this.state.drawer} width={marginLeft} containerStyle={displayDrawer}
-                    containerClassName="Drawer">
-              <ConnectedCurrentRefinements/>
+            <Drawer
+              open={this.state.drawer}
+              width={marginLeft}
+              containerStyle={displayDrawer}
+              containerClassName="Drawer"
+            >
+              <ConnectedCurrentRefinements />
               <Divider />
               <ConnectedNestedList
                 id="Categories"
-                attributes={[
-                  'category',
-                  'sub_category',
-                  'sub_sub_category',
-                ]}
+                attributes={['category', 'sub_category', 'sub_sub_category']}
               />
               <Divider />
-              <ConnectedCheckBoxRefinementList attributeName="materials" operator="or"/>
-              <ConnectedCheckBoxRefinementList attributeName="colors" operator="or"/>
+              <ConnectedCheckBoxRefinementList
+                attributeName="materials"
+                operator="or"
+              />
+              <ConnectedCheckBoxRefinementList
+                attributeName="colors"
+                operator="or"
+              />
               <Divider />
-              <div style={{marginBottom: 120}}>
-                <ConnectedCurrentRefinements/>
+              <div style={{ marginBottom: 120 }}>
+                <ConnectedCurrentRefinements />
               </div>
             </Drawer>
           </div>
-          <div className="Content__hits" style={{marginLeft, display: 'flex', flexDirection: 'column', marginTop: 140}}>
+          <div
+            className="Content__hits"
+            style={{
+              marginLeft,
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: 140,
+            }}
+          >
             <ConnectedHits />
           </div>
         </div>
@@ -131,7 +149,7 @@ const Content = React.createClass({
   },
 });
 
-const MaterialUiSearchBox = ({currentRefinement, refine}) => {
+const MaterialUiSearchBox = ({ currentRefinement, refine }) => {
   const style = {
     backgroundColor: 'white',
     display: 'flex',
@@ -141,93 +159,116 @@ const MaterialUiSearchBox = ({currentRefinement, refine}) => {
     flexGrow: 1,
   };
 
-  const clear = currentRefinement ?
-    <FontIcon style={{color: 'lightgrey'}}
-              className="material-icons"
-              onTouchTap={() => refine('')}>clear</FontIcon>
+  const clear = currentRefinement
+    ? <FontIcon
+        style={{ color: 'lightgrey' }}
+        className="material-icons"
+        onTouchTap={() => refine('')}
+      >
+        clear
+      </FontIcon>
     : null;
 
   return (
     <div style={style}>
-      <FontIcon style={{color: 'lightgrey'}} className="material-icons">search</FontIcon>
-      <TextField value={currentRefinement}
-                 onChange={e => refine(e.target.value)}
-                 id="SearchBox"
-                 hintText="Search for a product..."
-                 fullWidth={true}
-                 underlineShow={false}
+      <FontIcon style={{ color: 'lightgrey' }} className="material-icons">
+        search
+      </FontIcon>
+      <TextField
+        value={currentRefinement}
+        onChange={e => refine(e.target.value)}
+        id="SearchBox"
+        hintText="Search for a product..."
+        fullWidth={true}
+        underlineShow={false}
       />
       {clear}
-    </div>);
+    </div>
+  );
 };
 
-const CheckBoxItem = ({item, refine}) =>
-    <ListItem
-      primaryText={item.label}
-      leftCheckbox={
-        <Checkbox checked={item.isRefined}
-                  onCheck={e => {
-                    e.preventDefault();
-                    refine(item.value);
-                  }}
-        />}
-    />
-  ;
-
-const MaterialUiCheckBoxRefinementList = ({items, attributeName, refine, createURL}) =>
-    <List>
-      <Subheader style={{fontSize: 18}}>{attributeName.toUpperCase()}</Subheader>
-      {items.map(item =>
-        <CheckBoxItem
-          key={item.label}
-          item={item}
-          refine={refine}
-          createURL={createURL}
-        />
-      )}
-    </List>
-  ;
-
-const MaterialUiNestedList = function ({id, items, refine}) {
-  return <List>
-    <Subheader style={{fontSize: 18}}>{id.toUpperCase()}</Subheader>
-    {items.map((item, idx) => {
-      const nestedElements = item.items ? item.items.map((child, childIdx) =>
-            <ListItem
-              primaryText={child.label}
-              key={childIdx}
-              onClick={e => {
-                e.preventDefault();
-                refine(child.value);
-              }}
-              style={child.isRefined ? {fontWeight: 700} : {}}
-            />
-          ) : [];
-      return <ListItem
-          primaryText={item.label}
-          key={idx}
-          primaryTogglesNestedList={true}
-          nestedItems={nestedElements}
-          onClick={e => {
-            e.preventDefault();
-            refine(item.value);
-          }}
-          style={item.isRefined ? {fontWeight: 700} : {}}
-        />;
+const CheckBoxItem = ({ item, refine }) => (
+  <ListItem
+    primaryText={item.label}
+    leftCheckbox={
+      <Checkbox
+        checked={item.isRefined}
+        onCheck={e => {
+          e.preventDefault();
+          refine(item.value);
+        }}
+      />
     }
-    )}
-  </List>;
+  />
+);
+
+const MaterialUiCheckBoxRefinementList = (
+  { items, attributeName, refine, createURL }
+) => (
+  <List>
+    <Subheader style={{ fontSize: 18 }}>
+      {attributeName.toUpperCase()}
+    </Subheader>
+    {items.map(item => (
+      <CheckBoxItem
+        key={item.label}
+        item={item}
+        refine={refine}
+        createURL={createURL}
+      />
+    ))}
+  </List>
+);
+
+const MaterialUiNestedList = function({ id, items, refine }) {
+  return (
+    <List>
+      <Subheader style={{ fontSize: 18 }}>{id.toUpperCase()}</Subheader>
+      {items.map((item, idx) => {
+        const nestedElements = item.items
+          ? item.items.map((child, childIdx) => (
+              <ListItem
+                primaryText={child.label}
+                key={childIdx}
+                onClick={e => {
+                  e.preventDefault();
+                  refine(child.value);
+                }}
+                style={child.isRefined ? { fontWeight: 700 } : {}}
+              />
+            ))
+          : [];
+        return (
+          <ListItem
+            primaryText={item.label}
+            key={idx}
+            primaryTogglesNestedList={true}
+            nestedItems={nestedElements}
+            onClick={e => {
+              e.preventDefault();
+              refine(item.value);
+            }}
+            style={item.isRefined ? { fontWeight: 700 } : {}}
+          />
+        );
+      })}
+    </List>
+  );
 };
 
 const MaterialUiSortBy = React.createClass({
   render() {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><SortIcon color="white" style={{marginTop: 13}}/></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <SortIcon color="white" style={{ marginTop: 13 }} />
+          </IconButton>
+        }
         onChange={this.handleChange}
         value={this.props.currentRefinement}
       >
-        {this.props.items.map(item =>
+        {this.props.items.map(item => (
           <MenuItem
             key={item.value}
             value={item.value}
@@ -235,28 +276,29 @@ const MaterialUiSortBy = React.createClass({
             onTouchTap={e => {
               e.preventDefault();
               this.props.refine(item.value);
-            }}/>
-        )}
+            }}
+          />
+        ))}
       </IconMenu>
     );
   },
-
 });
 
-function CustomHits({hits, marginLeft, hasMore, refine}) {
+function CustomHits({ hits, marginLeft, hasMore, refine }) {
   const cardStyle = isMobile
     ? {
-      width: '100%',
-      height: 250,
-      marginBottom: 10,
-      position: 'relative',
-    } : {
-      width: 270,
-      height: 250,
-      marginBottom: 10,
-      marginLeft: 10,
-      position: 'relative',
-    };
+        width: '100%',
+        height: 250,
+        marginBottom: 10,
+        position: 'relative',
+      }
+    : {
+        width: 270,
+        height: 250,
+        marginBottom: 10,
+        marginLeft: 10,
+        position: 'relative',
+      };
 
   const containerCardStyle = {
     marginLeft,
@@ -270,24 +312,34 @@ function CustomHits({hits, marginLeft, hasMore, refine}) {
   return (
     <div>
       <main id="hits" style={containerCardStyle}>
-        {hits.map((hit, idx) =>
+        {hits.map((hit, idx) => (
           <Card key={idx} style={cardStyle}>
             <CardHeader
-              subtitle={<Highlight attributeName="name" hit={hit}/>}
+              subtitle={<Highlight attributeName="name" hit={hit} />}
             />
             <div style={imageHolderStyle}>
-              <img src={hit.image} style={{maxWidth: 120, maxHeight: 120}}/>
+              <img src={hit.image} style={{ maxWidth: 120, maxHeight: 120 }} />
             </div>
             <CardTitle
-              title={<span><Highlight attributeName="name" hit={hit}/> - ${hit.price}</span>}
-              subtitle={<Highlight attributeName="type" hit={hit}/>}
-              style={{position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(255, 255, 255, 0.6)'}}
-              titleStyle={{fontSize: 16}}
+              title={
+                <span>
+                  <Highlight attributeName="name" hit={hit} /> - ${hit.price}
+                </span>
+              }
+              subtitle={<Highlight attributeName="type" hit={hit} />}
+              style={{
+                position: 'absolute',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                background: 'rgba(255, 255, 255, 0.6)',
+              }}
+              titleStyle={{ fontSize: 16 }}
             />
           </Card>
-        )}
+        ))}
       </main>
-      <div style={{display: 'flex', justifyContent: 'center'}}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <RaisedButton
           onTouchTap={() => {
             if (hasMore) {
@@ -297,20 +349,20 @@ function CustomHits({hits, marginLeft, hasMore, refine}) {
           primary
           disabled={!hasMore}
           label="Load More"
-          style={{alignSelf: 'center', marginLeft, marginBottom: 10}}
+          style={{ alignSelf: 'center', marginLeft, marginBottom: 10 }}
         />
       </div>
     </div>
   );
 }
 
-function MaterialUiClearAllFilters({items, refine}) {
+function MaterialUiClearAllFilters({ items, refine }) {
   return (
     <FlatButton
       onTouchTap={() => refine(items)}
       label="Clear All"
       primary
-      style={{height: 48, width: '100%'}}
+      style={{ height: 48, width: '100%' }}
       className="ClearAll"
     />
   );
@@ -318,7 +370,9 @@ function MaterialUiClearAllFilters({items, refine}) {
 
 const ConnectedSearchBox = connectSearchBox(MaterialUiSearchBox);
 
-const ConnectedCheckBoxRefinementList = connectRefinementList(MaterialUiCheckBoxRefinementList);
+const ConnectedCheckBoxRefinementList = connectRefinementList(
+  MaterialUiCheckBoxRefinementList
+);
 
 const ConnectedNestedList = connectHierarchicalMenu(MaterialUiNestedList);
 
@@ -326,6 +380,8 @@ const ConnectedSortBy = connectSortBy(MaterialUiSortBy);
 
 const ConnectedHits = connectInfiniteHits(CustomHits);
 
-const ConnectedCurrentRefinements = connectCurrentRefinements(MaterialUiClearAllFilters);
+const ConnectedCurrentRefinements = connectCurrentRefinements(
+  MaterialUiClearAllFilters
+);
 
 export default withUrlSync(App);

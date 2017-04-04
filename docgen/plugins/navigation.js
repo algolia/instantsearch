@@ -1,4 +1,4 @@
-import {forEach} from 'lodash';
+import { forEach } from 'lodash';
 
 export default function() {
   return function(files, metalsmith, done) {
@@ -27,8 +27,7 @@ export default function() {
       // than one without.
       // Then navigation is sorted by title.
       data.navigation = categories[category].sort((a, b) => {
-        if (a.title && b.title &&
-            a.navWeight === b.navWeight) {
+        if (a.title && b.title && a.navWeight === b.navWeight) {
           return a.title.localeCompare(b.title);
         } else {
           return b.navWeight - a.navWeight;

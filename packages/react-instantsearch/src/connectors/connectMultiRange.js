@@ -1,6 +1,11 @@
-import {PropTypes} from 'react';
-import {find, isEmpty, has} from 'lodash';
-import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import { PropTypes } from 'react';
+import { find, isEmpty, has } from 'lodash';
+import {
+  cleanUpValue,
+  getIndex,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
 
@@ -13,7 +18,7 @@ function stringifyItem(item) {
 
 function parseItem(value) {
   if (value.length === 0) {
-    return {start: null, end: null};
+    return { start: null, end: null };
   }
   const [startStr, endStr] = value.split(':');
   return {
@@ -29,7 +34,12 @@ function getId(props) {
 }
 
 function getCurrentRefinement(props, searchState, context) {
-  return getCurrentRefinementValue(props, searchState, context, `${namespace}.${getId(props)}`, '',
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    `${namespace}.${getId(props)}`,
+    '',
     currentRefinement => {
       if (currentRefinement === '') {
         return '';
@@ -40,26 +50,33 @@ function getCurrentRefinement(props, searchState, context) {
 }
 
 function isRefinementsRangeIncludesInsideItemRange(stats, start, end) {
-  return stats.min > start && stats.min < end || stats.max > start && stats.max < end;
+  return (stats.min > start && stats.min < end) ||
+    (stats.max > start && stats.max < end);
 }
 
 function isItemRangeIncludedInsideRefinementsRange(stats, start, end) {
-  return start > stats.min && start < stats.max || end > stats.min && end < stats.max;
+  return (start > stats.min && start < stats.max) ||
+    (end > stats.min && end < stats.max);
 }
 
 function itemHasRefinement(attributeName, results, value) {
-  const stats = results.getFacetByName(attributeName) ?
-        results.getFacetStats(attributeName) : null;
+  const stats = results.getFacetByName(attributeName)
+    ? results.getFacetStats(attributeName)
+    : null;
   const range = value.split(':');
-  const start = Number(range[0]) === 0 || value === '' ? Number.NEGATIVE_INFINITY : Number(range[0]);
-  const end = Number(range[1]) === 0 || value === '' ? Number.POSITIVE_INFINITY : Number(range[1]);
+  const start = Number(range[0]) === 0 || value === ''
+    ? Number.NEGATIVE_INFINITY
+    : Number(range[0]);
+  const end = Number(range[1]) === 0 || value === ''
+    ? Number.POSITIVE_INFINITY
+    : Number(range[1]);
   return !(Boolean(stats) &&
-        (isRefinementsRangeIncludesInsideItemRange(stats, start, end)
-       || isItemRangeIncludedInsideRefinementsRange(stats, start, end)));
+    (isRefinementsRangeIncludesInsideItemRange(stats, start, end) ||
+      isItemRangeIncludedInsideRefinementsRange(stats, start, end)));
 }
 
 function refine(props, searchState, nextRefinement, context) {
-  const nextValue = {[getId(props, searchState)]: nextRefinement};
+  const nextValue = { [getId(props, searchState)]: nextRefinement };
   const resetPage = true;
   return refineValue(searchState, nextValue, context, resetPage, namespace);
 }
@@ -90,17 +107,23 @@ export default createConnector({
   propTypes: {
     id: PropTypes.string,
     attributeName: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.node,
-      start: PropTypes.number,
-      end: PropTypes.number,
-    })).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.node,
+        start: PropTypes.number,
+        end: PropTypes.number,
+      })
+    ).isRequired,
     transformItems: PropTypes.func,
   },
 
   getProvidedProps(props, searchState, searchResults) {
     const attributeName = props.attributeName;
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
     const index = getIndex(this.context);
     const items = props.items.map(item => {
       const value = stringifyItem(item);
@@ -108,13 +131,16 @@ export default createConnector({
         label: item.label,
         value,
         isRefined: value === currentRefinement,
-        noRefinement: searchResults.results && searchResults.results[index] ?
-         itemHasRefinement(getId(props), searchResults.results[index], value) : false,
+        noRefinement: searchResults.results && searchResults.results[index]
+          ? itemHasRefinement(getId(props), searchResults.results[index], value)
+          : false,
       };
     });
 
-    const stats = has(searchResults, `results.${index}`) && searchResults.results[index].getFacetByName(attributeName) ?
-      searchResults.results[index].getFacetStats(attributeName) : null;
+    const stats = has(searchResults, `results.${index}`) &&
+      searchResults.results[index].getFacetByName(attributeName)
+      ? searchResults.results[index].getFacetStats(attributeName)
+      : null;
     const refinedItem = find(items, item => item.isRefined === true);
     if (!items.some(item => item.value === '')) {
       items.push({
@@ -128,7 +154,8 @@ export default createConnector({
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
-      canRefine: items.length > 0 && items.some(item => item.noRefinement === false),
+      canRefine: items.length > 0 &&
+        items.some(item => item.noRefinement === false),
     };
   },
 
@@ -141,8 +168,10 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    const {attributeName} = props;
-    const {start, end} = parseItem(getCurrentRefinement(props, searchState, this.context));
+    const { attributeName } = props;
+    const { start, end } = parseItem(
+      getCurrentRefinement(props, searchState, this.context)
+    );
     searchParameters = searchParameters.addDisjunctiveFacet(attributeName);
 
     if (start) {
@@ -168,7 +197,10 @@ export default createConnector({
     const items = [];
     const index = getIndex(this.context);
     if (value !== '') {
-      const {label} = find(props.items, item => stringifyItem(item) === value);
+      const { label } = find(
+        props.items,
+        item => stringifyItem(item) === value
+      );
       items.push({
         label: `${props.attributeName}: ${label}`,
         attributeName: props.attributeName,
@@ -176,6 +208,6 @@ export default createConnector({
         value: nextState => refine(props, nextState, '', this.context),
       });
     }
-    return {id, index, items};
+    return { id, index, items };
   },
 });
