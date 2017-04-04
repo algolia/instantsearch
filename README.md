@@ -8,9 +8,11 @@ InstantSearch projects: **React InstantSearch** [InstantSearch.js][instantsearch
 
 Built by [Algolia][algolia-website].
 
-This repository holds the code and documentation for the React InstantSearch project.
+This repository holds the code for the React InstantSearch project.
 
-Go to the [React InstantSearch documentation website][website] to learn how to use it.
+## Documentation
+
+There's a dedicated documentation available at <https://community.algolia.com/react-instantsearch/>.
 
 ## Installation
 
