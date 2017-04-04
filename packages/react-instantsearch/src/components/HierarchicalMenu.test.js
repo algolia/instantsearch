@@ -2,48 +2,66 @@
 
 import React from 'react';
 import renderer from 'react-test-renderer';
-import {mount} from 'enzyme';
+import { mount } from 'enzyme';
 
 import HierarchicalMenu from './HierarchicalMenu';
 
 describe('HierarchicalMenu', () => {
   it('default hierarchical menu', () => {
-    const tree = renderer.create(
-      <HierarchicalMenu
-        refine={() => null}
-        createURL={() => '#'}
-        items={[
-          {value: 'white', count: 10, label: 'white',
-            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
-          {value: 'black', count: 20, label: 'black'},
-          {value: 'blue', count: 30, label: 'blue'},
-        ]}
-        limitMin={2}
-        limitMax={4}
-        showMore={true}
-        canRefine={true}
-      />
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <HierarchicalMenu
+          refine={() => null}
+          createURL={() => '#'}
+          items={[
+            {
+              value: 'white',
+              count: 10,
+              label: 'white',
+              items: [
+                { value: 'white1', label: 'white1', count: 3 },
+                { value: 'white2', label: 'white2', count: 4 },
+              ],
+            },
+            { value: 'black', count: 20, label: 'black' },
+            { value: 'blue', count: 30, label: 'blue' },
+          ]}
+          limitMin={2}
+          limitMax={4}
+          showMore={true}
+          canRefine={true}
+        />
+      )
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('applies translations', () => {
-    const tree = renderer.create(
-      <HierarchicalMenu
-        refine={() => null}
-        createURL={() => '#'}
-        items={[
-          {value: 'white', count: 10, label: 'white',
-            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
-          {value: 'black', count: 20, label: 'black'},
-          {value: 'blue', count: 30, label: 'blue'},
-        ]}
-        translations={{
-          showMore: ' display more',
-        }}
-        canRefine={true}
-      />
-    ).toJSON();
+    const tree = renderer
+      .create(
+        <HierarchicalMenu
+          refine={() => null}
+          createURL={() => '#'}
+          items={[
+            {
+              value: 'white',
+              count: 10,
+              label: 'white',
+              items: [
+                { value: 'white1', label: 'white1', count: 3 },
+                { value: 'white2', label: 'white2', count: 4 },
+              ],
+            },
+            { value: 'black', count: 20, label: 'black' },
+            { value: 'blue', count: 30, label: 'blue' },
+          ]}
+          translations={{
+            showMore: ' display more',
+          }}
+          canRefine={true}
+        />
+      )
+      .toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -54,20 +72,32 @@ describe('HierarchicalMenu', () => {
         refine={refine}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10, label: 'white',
-            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
-          {value: 'black', count: 20, label: 'black'},
-          {value: 'blue', count: 30, label: 'blue'},
+          {
+            value: 'white',
+            count: 10,
+            label: 'white',
+            items: [
+              { value: 'white1', label: 'white1', count: 3 },
+              { value: 'white2', label: 'white2', count: 4 },
+            ],
+          },
+          { value: 'black', count: 20, label: 'black' },
+          { value: 'blue', count: 30, label: 'blue' },
         ]}
         canRefine={true}
       />
     );
 
-    const itemParent = wrapper.find('.ais-HierarchicalMenu__item .ais-HierarchicalMenu__itemParent');
+    const itemParent = wrapper.find(
+      '.ais-HierarchicalMenu__item .ais-HierarchicalMenu__itemParent'
+    );
 
     expect(itemParent.length).toBe(1);
 
-    itemParent.find('.ais-HierarchicalMenu__itemLink').first().simulate('click');
+    itemParent
+      .find('.ais-HierarchicalMenu__itemLink')
+      .first()
+      .simulate('click');
     expect(refine.mock.calls.length).toBe(1);
     expect(refine.mock.calls[0][0]).toEqual('white');
 
@@ -81,11 +111,11 @@ describe('HierarchicalMenu', () => {
         refine={refine}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10, label: 'white'},
-          {value: 'black', count: 20, label: 'black'},
-          {value: 'blue', count: 30, label: 'blue'},
-          {value: 'green', count: 30, label: 'green'},
-          {value: 'cyan', count: 30, label: 'cyan'},
+          { value: 'white', count: 10, label: 'white' },
+          { value: 'black', count: 20, label: 'black' },
+          { value: 'blue', count: 30, label: 'blue' },
+          { value: 'green', count: 30, label: 'green' },
+          { value: 'cyan', count: 30, label: 'cyan' },
         ]}
         limitMin={2}
         limitMax={4}
@@ -112,8 +142,8 @@ describe('HierarchicalMenu', () => {
         refine={refine}
         createURL={() => '#'}
         items={[
-          {value: 'white', count: 10, label: 'white'},
-          {value: 'black', count: 20, label: 'black'},
+          { value: 'white', count: 10, label: 'white' },
+          { value: 'black', count: 20, label: 'black' },
         ]}
         limitMin={2}
         limitMax={4}
@@ -126,7 +156,9 @@ describe('HierarchicalMenu', () => {
 
     expect(items.length).toBe(2);
 
-    expect(wrapper.find('.ais-HierarchicalMenu__showMoreDisabled')).toBeDefined();
+    expect(
+      wrapper.find('.ais-HierarchicalMenu__showMoreDisabled')
+    ).toBeDefined();
 
     wrapper.unmount();
   });
@@ -136,31 +168,42 @@ describe('HierarchicalMenu', () => {
       const canRefine = jest.fn();
       const wrapper = mount(
         <HierarchicalMenu
-        refine={() => null}
-        createURL={() => '#'}
-        items={[
-          {value: 'white', count: 10, label: 'white',
-            items: [{value: 'white1', label: 'white1', count: 3}, {value: 'white2', label: 'white2', count: 4}]},
-          {value: 'black', count: 20, label: 'black'},
-          {value: 'blue', count: 30, label: 'blue'},
-        ]}
-        canRefine={true}
-      />,
+          refine={() => null}
+          createURL={() => '#'}
+          items={[
+            {
+              value: 'white',
+              count: 10,
+              label: 'white',
+              items: [
+                { value: 'white1', label: 'white1', count: 3 },
+                { value: 'white2', label: 'white2', count: 4 },
+              ],
+            },
+            { value: 'black', count: 20, label: 'black' },
+            { value: 'blue', count: 30, label: 'blue' },
+          ]}
+          canRefine={true}
+        />,
         {
-          context: {canRefine},
-          childContextTypes: {canRefine: React.PropTypes.func},
-        },
+          context: { canRefine },
+          childContextTypes: { canRefine: React.PropTypes.func },
+        }
       );
 
       expect(canRefine.mock.calls.length).toBe(1);
       expect(canRefine.mock.calls[0][0]).toEqual(true);
-      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(0);
+      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(
+        0
+      );
 
-      wrapper.setProps({canRefine: false});
+      wrapper.setProps({ canRefine: false });
 
       expect(canRefine.mock.calls.length).toBe(2);
       expect(canRefine.mock.calls[1][0]).toEqual(false);
-      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(1);
+      expect(wrapper.find('.ais-HierarchicalMenu__noRefinement').length).toBe(
+        1
+      );
     });
   });
 });

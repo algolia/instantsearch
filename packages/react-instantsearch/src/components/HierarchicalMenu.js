@@ -1,5 +1,5 @@
-import React, {PropTypes, Component} from 'react';
-import {pick} from 'lodash';
+import React, { PropTypes, Component } from 'react';
+import { pick } from 'lodash';
 import translatable from '../core/translatable';
 import List from './List';
 import Link from './Link';
@@ -7,12 +7,14 @@ import classNames from './classNames.js';
 
 const cx = classNames('HierarchicalMenu');
 
-const itemsPropType = PropTypes.arrayOf(PropTypes.shape({
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string,
-  count: PropTypes.number.isRequired,
-  items: (...args) => itemsPropType(...args),
-}));
+const itemsPropType = PropTypes.arrayOf(
+  PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    count: PropTypes.number.isRequired,
+    items: (...args) => itemsPropType(...args),
+  })
+);
 
 class HierarchicalMenu extends Component {
   static propTypes = {
@@ -40,7 +42,7 @@ class HierarchicalMenu extends Component {
   }
 
   renderItem = item => {
-    const {createURL, refine} = this.props;
+    const { createURL, refine } = this.props;
 
     return (
       <Link

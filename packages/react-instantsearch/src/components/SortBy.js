@@ -1,4 +1,4 @@
-import React, {PropTypes, Component} from 'react';
+import React, { PropTypes, Component } from 'react';
 import Select from './Select';
 import classNames from './classNames.js';
 
@@ -8,10 +8,12 @@ class SortBy extends Component {
   static propTypes = {
     refine: PropTypes.func.isRequired,
 
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.string.isRequired,
-    })).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.string.isRequired,
+      })
+    ).isRequired,
 
     currentRefinement: PropTypes.string.isRequired,
     transformItems: PropTypes.func,
@@ -19,10 +21,10 @@ class SortBy extends Component {
 
   onChange = e => {
     this.props.refine(e.target.value);
-  }
+  };
 
   render() {
-    const {refine, items, currentRefinement} = this.props;
+    const { refine, items, currentRefinement } = this.props;
     return (
       <Select
         cx={cx}

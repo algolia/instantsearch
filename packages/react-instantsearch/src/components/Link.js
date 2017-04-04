@@ -1,7 +1,7 @@
-import React, {PropTypes, Component} from 'react';
-import {omit} from 'lodash';
+import React, { PropTypes, Component } from 'react';
+import { omit } from 'lodash';
 
-import {isSpecialClick} from '../core/utils';
+import { isSpecialClick } from '../core/utils';
 
 export default class Link extends Component {
   static propTypes = {
@@ -17,11 +17,6 @@ export default class Link extends Component {
   };
 
   render() {
-    return (
-      <a
-        {...omit(this.props, 'onClick')}
-        onClick={this.onClick}
-      />
-    );
+    return <a {...omit(this.props, 'onClick')} onClick={this.onClick} />;
   }
 }

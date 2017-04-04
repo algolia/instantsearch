@@ -1,6 +1,10 @@
-import {PropTypes} from 'react';
+import { PropTypes } from 'react';
 import createConnector from '../core/createConnector';
-import {cleanUpValue, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import {
+  cleanUpValue,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 function getId() {
   return 'hitsPerPage';
@@ -8,7 +12,12 @@ function getId() {
 
 function getCurrentRefinement(props, searchState, context) {
   const id = getId();
-  return getCurrentRefinementValue(props, searchState, context, id, null,
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    id,
+    null,
     currentRefinement => {
       if (typeof currentRefinement === 'string') {
         return parseInt(currentRefinement, 10);
@@ -36,17 +45,27 @@ export default createConnector({
 
   propTypes: {
     defaultRefinement: PropTypes.number.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.number.isRequired,
-    })).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.number.isRequired,
+      })
+    ).isRequired,
     transformItems: PropTypes.func,
   },
 
   getProvidedProps(props, searchState) {
-    const currentRefinement = getCurrentRefinement(props, searchState, this.context);
-    const items = props.items.map(item => item.value === currentRefinement
-      ? {...item, isRefined: true} : {...item, isRefined: false});
+    const currentRefinement = getCurrentRefinement(
+      props,
+      searchState,
+      this.context
+    );
+    const items = props.items.map(
+      item =>
+        item.value === currentRefinement
+          ? { ...item, isRefined: true }
+          : { ...item, isRefined: false }
+    );
     return {
       items: props.transformItems ? props.transformItems(items) : items,
       currentRefinement,
@@ -55,7 +74,7 @@ export default createConnector({
 
   refine(props, searchState, nextRefinement) {
     const id = getId();
-    const nextValue = {[id]: nextRefinement};
+    const nextValue = { [id]: nextRefinement };
     const resetPage = true;
     return refineValue(searchState, nextValue, this.context, resetPage);
   },
@@ -65,10 +84,12 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setHitsPerPage(getCurrentRefinement(props, searchState, this.context));
+    return searchParameters.setHitsPerPage(
+      getCurrentRefinement(props, searchState, this.context)
+    );
   },
 
   getMetadata() {
-    return {id: getId()};
+    return { id: getId() };
   },
 });

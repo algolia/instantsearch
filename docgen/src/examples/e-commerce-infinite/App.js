@@ -1,7 +1,7 @@
 /* eslint react/prop-types: 0 */
 
 import React from 'react';
-import {createConnector} from 'react-instantsearch';
+import { createConnector } from 'react-instantsearch';
 import {
   InstantSearch,
   HierarchicalMenu,
@@ -39,71 +39,90 @@ export default function App() {
   );
 }
 
-const Header = () =>
+const Header = () => (
   <header className="content-wrapper">
-    <a href="https://community.algolia.com/react-instantsearch/" className="is-logo"><img
-      src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
-      width={40}/></a>
-    <a href="./" className="logo">aeki</a>
-    <ConnectedSearchBox/>
-  </header>;
-
-const Facets = () =>
-    <aside>
-
-      <ClearAll
-        translations={{
-          reset: 'Clear all filters',
-        }}
+    <a
+      href="https://community.algolia.com/react-instantsearch/"
+      className="is-logo"
+    >
+      <img
+        src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
+        width={40}
       />
+    </a>
+    <a href="./" className="logo">aeki</a>
+    <ConnectedSearchBox />
+  </header>
+);
 
-      <section className="facet-wrapper">
-        <div className="facet-category-title facet">Show results for</div>
-          <HierarchicalMenu
-            key="categories"
-            attributes={[
-              'category',
-              'sub_category',
-              'sub_sub_category',
-            ]}
-          />
-      </section>
+const Facets = () => (
+  <aside>
 
-      <section className="facet-wrapper">
-        <div className="facet-category-title facet">RefineBy</div>
-          <Panel title="Type">
-            <RefinementList attributeName="type" operator="or" limitMin={5} withSearchBox/>
-          </Panel>
-          <Panel
-            title="Materials">
-            <RefinementList attributeName="materials" operator="or" limitMin={5} withSearchBox/>
-          </Panel>
-            <ConnectedColorRefinementList attributeName="colors" operator="or"/>
-          <Panel title="Rating">
-          <StarRating attributeName="rating" max={5}/>
-          </Panel>
-          <Panel title="Price">
-            <RangeInput key="price_input" attributeName="price" />
-          </Panel>
-      </section>
-      <div className="thank-you">Data courtesy of <a href="http://www.ikea.com/">ikea.com</a></div>
-    </aside>;
+    <ClearAll
+      translations={{
+        reset: 'Clear all filters',
+      }}
+    />
 
-const CustomSearchBox = ({currentRefinement, refine}) =>
-    <div className="input-group">
-      <input type="text"
-             value={currentRefinement}
-             onChange={e => refine(e.target.value)}
-             autoComplete="off"
-             className="form-control"
-             id="q"/>
-      <span className="input-group-btn">
-      <button className="btn btn-default"><i className="fa fa-search"></i></button>
-    </span>
+    <section className="facet-wrapper">
+      <div className="facet-category-title facet">Show results for</div>
+      <HierarchicalMenu
+        key="categories"
+        attributes={['category', 'sub_category', 'sub_sub_category']}
+      />
+    </section>
+
+    <section className="facet-wrapper">
+      <div className="facet-category-title facet">RefineBy</div>
+      <Panel title="Type">
+        <RefinementList
+          attributeName="type"
+          operator="or"
+          limitMin={5}
+          withSearchBox
+        />
+      </Panel>
+      <Panel title="Materials">
+        <RefinementList
+          attributeName="materials"
+          operator="or"
+          limitMin={5}
+          withSearchBox
+        />
+      </Panel>
+      <ConnectedColorRefinementList attributeName="colors" operator="or" />
+      <Panel title="Rating">
+        <StarRating attributeName="rating" max={5} />
+      </Panel>
+      <Panel title="Price">
+        <RangeInput key="price_input" attributeName="price" />
+      </Panel>
+    </section>
+    <div className="thank-you">
+      Data courtesy of <a href="http://www.ikea.com/">ikea.com</a>
     </div>
-  ;
+  </aside>
+);
 
-const ColorItem = ({item, createURL, refine}) => {
+const CustomSearchBox = ({ currentRefinement, refine }) => (
+  <div className="input-group">
+    <input
+      type="text"
+      value={currentRefinement}
+      onChange={e => refine(e.target.value)}
+      autoComplete="off"
+      className="form-control"
+      id="q"
+    />
+    <span className="input-group-btn">
+      <button className="btn btn-default">
+        <i className="fa fa-search" />
+      </button>
+    </span>
+  </div>
+);
+
+const ColorItem = ({ item, createURL, refine }) => {
   const active = item.isRefined ? 'checked' : '';
   return (
     <a
@@ -114,68 +133,78 @@ const ColorItem = ({item, createURL, refine}) => {
         refine(item.value);
       }}
       data-facet-value={item.label}
-    >
-    </a>
+    />
   );
 };
 
-const CustomColorRefinementList = ({items, refine, createURL}) =>
-    items.length > 0 ? <div>
-      <h5 className={'ais-Panel__Title'}>Colors</h5>
-      {items.map(item =>
-        <ColorItem
-          key={item.label}
-          item={item}
-          refine={refine}
-          createURL={createURL}
-        />
-      )}
-    </div> : null;
+const CustomColorRefinementList = ({ items, refine, createURL }) =>
+  items.length > 0
+    ? <div>
+        <h5 className={'ais-Panel__Title'}>Colors</h5>
+        {items.map(item => (
+          <ColorItem
+            key={item.label}
+            item={item}
+            refine={refine}
+            createURL={createURL}
+          />
+        ))}
+      </div>
+    : null;
 
-function CustomHits({hits, refine, hasMore}) {
-  const loadMoreButton = hasMore ?
-    <button onClick={refine} className="btn btn-primary btn-block">Load more</button> :
-    <button disabled className="btn btn-primary btn-block">Load more</button>;
+function CustomHits({ hits, refine, hasMore }) {
+  const loadMoreButton = hasMore
+    ? <button onClick={refine} className="btn btn-primary btn-block">
+        Load more
+      </button>
+    : <button disabled className="btn btn-primary btn-block">Load more</button>;
   return (
     <main id="hits">
-      {hits.map((hit, idx) =>
-        <Hit item={hit} key={idx}/>
-      )}
+      {hits.map((hit, idx) => <Hit item={hit} key={idx} />)}
       {loadMoreButton}
     </main>
   );
 }
 
-const Hit = ({item}) => {
+const Hit = ({ item }) => {
   const icons = [];
   for (let i = 0; i < 5; i++) {
     const suffix = i >= item.rating ? '_empty' : '';
-    icons.push(<label key={i} label className={`ais-StarRating__ratingIcon${suffix}`}></label>);
+    icons.push(
+      <label key={i} label className={`ais-StarRating__ratingIcon${suffix}`} />
+    );
   }
   return (
     <article className="hit">
       <div className="product-picture-wrapper">
-        <div className="product-picture"><img src={`${item.image}`}/></div>
+        <div className="product-picture"><img src={`${item.image}`} /></div>
       </div>
       <div className="product-desc-wrapper">
-        <div className="product-name"><Highlight attributeName="name" hit={item} /></div>
-        <div className="product-type"><Highlight attributeName="type" hit={item} /></div>
+        <div className="product-name">
+          <Highlight attributeName="name" hit={item} />
+        </div>
+        <div className="product-type">
+          <Highlight attributeName="type" hit={item} />
+        </div>
         <div className="ais-StarRating__ratingLink">
           {icons}
           <div className="product-price">${item.price}</div>
         </div>
       </div>
-    </article>);
+    </article>
+  );
 };
 
 const CustomResults = createConnector({
   displayName: 'CustomResults',
 
   getProvidedProps(props, searchState, searchResults) {
-    const noResults = searchResults.results ? searchResults.results.nbHits === 0 : false;
-    return {query: searchState.query, noResults};
+    const noResults = searchResults.results
+      ? searchResults.results.nbHits === 0
+      : false;
+    return { query: searchState.query, noResults };
   },
-})(({noResults, query}) => {
+})(({ noResults, query }) => {
   if (noResults) {
     return (
       <div className="results-wrapper">
@@ -192,21 +221,23 @@ const CustomResults = createConnector({
             <label>Sort by</label>
             <SortBy
               items={[
-                {value: 'ikea', label: 'Featured'},
-                {value: 'ikea_price_asc', label: 'Price asc.'},
-                {value: 'ikea_price_desc', label: 'Price desc.'},
+                { value: 'ikea', label: 'Featured' },
+                { value: 'ikea_price_asc', label: 'Price asc.' },
+                { value: 'ikea_price_desc', label: 'Price desc.' },
               ]}
               defaultRefinement="ikea"
             />
           </div>
           <Stats />
         </section>
-        <ConnectedHits/>
+        <ConnectedHits />
       </div>
     );
   }
 });
 
 const ConnectedSearchBox = connectSearchBox(CustomSearchBox);
-const ConnectedColorRefinementList = connectRefinementList(CustomColorRefinementList);
+const ConnectedColorRefinementList = connectRefinementList(
+  CustomColorRefinementList
+);
 const ConnectedHits = connectInfiniteHits(CustomHits);

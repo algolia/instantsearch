@@ -1,4 +1,9 @@
-import {cleanUpValue, getIndex, refineValue, getCurrentRefinementValue} from '../core/indexUtils';
+import {
+  cleanUpValue,
+  getIndex,
+  refineValue,
+  getCurrentRefinementValue,
+} from '../core/indexUtils';
 
 import createConnector from '../core/createConnector';
 
@@ -9,7 +14,12 @@ function getId() {
 function getCurrentRefinement(props, searchState, context) {
   const id = getId();
   const page = 1;
-  return getCurrentRefinementValue(props, searchState, context, id, page,
+  return getCurrentRefinementValue(
+    props,
+    searchState,
+    context,
+    id,
+    page,
     currentRefinement => {
       if (typeof currentRefinement === 'string') {
         return parseInt(currentRefinement, 10);
@@ -21,7 +31,7 @@ function getCurrentRefinement(props, searchState, context) {
 
 function refine(props, searchState, nextPage, context) {
   const id = getId();
-  const nextValue = {[id]: nextPage};
+  const nextValue = { [id]: nextPage };
   const resetPage = false;
   return refineValue(searchState, nextValue, context, resetPage);
 }
@@ -68,10 +78,12 @@ export default createConnector({
   },
 
   getSearchParameters(searchParameters, props, searchState) {
-    return searchParameters.setPage(getCurrentRefinement(props, searchState, this.context) - 1);
+    return searchParameters.setPage(
+      getCurrentRefinement(props, searchState, this.context) - 1
+    );
   },
 
   getMetadata() {
-    return {id: getId()};
+    return { id: getId() };
   },
 });

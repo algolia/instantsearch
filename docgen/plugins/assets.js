@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import readdir from 'recursive-readdir';
 import mode from 'stat-mode';
-import {each} from 'async';
+import { each } from 'async';
 
 /**
  * Expose `assets`.

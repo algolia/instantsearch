@@ -1,5 +1,5 @@
-import {PropTypes, Component, Children} from 'react';
-import {findDOMNode} from 'react-dom';
+import { PropTypes, Component, Children } from 'react';
+import { findDOMNode } from 'react-dom';
 
 class ScrollTo extends Component {
   static propTypes = {
@@ -8,7 +8,7 @@ class ScrollTo extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    const {value} = this.props;
+    const { value } = this.props;
     if (value !== prevProps.value) {
       const el = findDOMNode(this);
       el.scrollIntoView();

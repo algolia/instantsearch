@@ -7,6 +7,6 @@ export default function classNames(block) {
       elements
         .filter(element => element !== undefined && element !== false)
         .map(element => `${prefix}-${block}__${element}`)
-      ),
+    ),
   });
 }

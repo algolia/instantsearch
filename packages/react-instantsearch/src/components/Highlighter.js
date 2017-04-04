@@ -1,11 +1,21 @@
 import React from 'react';
 
-export default function Highlighter({hit, attributeName, highlight, highlightProperty}) {
-  const parsedHighlightedValue = highlight({hit, attributeName, highlightProperty});
+export default function Highlighter(
+  { hit, attributeName, highlight, highlightProperty }
+) {
+  const parsedHighlightedValue = highlight({
+    hit,
+    attributeName,
+    highlightProperty,
+  });
   const reactHighlighted = parsedHighlightedValue.map((v, i) => {
     const key = `split-${i}-${v.value}`;
     if (!v.isHighlighted) {
-      return <span key={key} className="ais-Highlight__nonHighlighted">{v.value}</span>;
+      return (
+        <span key={key} className="ais-Highlight__nonHighlighted">
+          {v.value}
+        </span>
+      );
     }
     return <em key={key} className="ais-Highlight__highlighted">{v.value}</em>;
   });
