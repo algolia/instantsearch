@@ -16,7 +16,6 @@ Basic usage:
 | Name    | Required | Type   | Default              | Description                       |
 |---------|----------|--------|----------------------|-----------------------------------|
 | options | false    | array  | `[6, 12, 24]`        | The different selectable options. |
-| name    | false    | string | `'results_per_page'` | The select form input name.            |
 
 
 ## Slots

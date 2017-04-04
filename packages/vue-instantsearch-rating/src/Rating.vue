@@ -20,7 +20,6 @@
                  :value="facet.value"
                  v-model="currentValue"
                  @change="toggleRefinement(facet)"
-                 :name="name"
           >
           <slot :value="facet.value"
                 :min="min"
@@ -49,10 +48,6 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default: "rating"
-      },
       attribute: {
         type: String,
         required: true

@@ -12,7 +12,6 @@
                  v-model="facet.isRefined"
                  @change="toggleRefinement(facet)"
                  :value="facet.name"
-                 :name="name + '[]'"
           >
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
             <span class="ais-navigation-tree__value">{{facet.name}}</span>
@@ -31,7 +30,6 @@
                        v-model="subfacet.isRefined"
                        @change="toggleRefinement(subfacet)"
                        :value="subfacet.name"
-                       :name="name + '[]'"
                 >
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
                   <span class="ais-navigation-tree__value">{{subfacet.name}}</span>
@@ -56,12 +54,6 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default () {
-          return this.attribute
-        }
-      },
       attribute: {
         type: String,
         required: false,

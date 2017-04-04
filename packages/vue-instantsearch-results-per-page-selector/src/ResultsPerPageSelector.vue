@@ -1,8 +1,5 @@
 <template>
-  <select class="ais-results-per-page-selector"
-          v-model="resultsPerPage"
-          :name="name"
-  >
+  <select class="ais-results-per-page-selector" v-model="resultsPerPage">
     <template v-for="option in options">
       <option :value="option"><slot :option="option">{{ option }}</slot></option>
     </template>
@@ -15,10 +12,6 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default: 'results_per_page'
-      },
       options: {
         type: Array,
         default: function () {

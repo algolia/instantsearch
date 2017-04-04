@@ -15,9 +15,7 @@ Basic usage:
 
 | Name              | Required | Type   | Default        | Description                                                           |
 |-------------------|----------|--------|----------------|-----------------------------------------------------------------------|
-| fromName          | false    | string | `'price_from'` | The input name for the minimum value to return results for.           |
 | fromPlaceholder   | false    | string | `'min'`        | The input placeholder for the minimum value to return results for.    |
-| toName            | false    | string | `'price_from'` | The input name for the maximum value to return results for.           |
 | toPlaceholder     | false    | string | `'max'`        | The input placeholder for the maximum value to return results for.    |
 | attribute         | true     | string |                | The attribute to filter on.                                           |
 | currency          | false    | string | `'$'`          | The currency.                                                         |

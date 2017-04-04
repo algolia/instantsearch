@@ -9,7 +9,6 @@
       >
         <label>
           <input type="checkbox"
-                 :name="name"
                  v-model="facet.isRefined"
                  @change="toggleRefinement(facet)"
                  :value="facet.name"
@@ -37,12 +36,6 @@
       attribute: {
         type: String,
         required: true
-      },
-      name: {
-        type: String,
-        default () {
-          return this.attribute
-        }
       },
       operator: {
         type: String,

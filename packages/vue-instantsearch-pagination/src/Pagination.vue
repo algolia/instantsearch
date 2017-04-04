@@ -21,7 +21,6 @@
     >
       <label>
         <input type="radio"
-               :name="name"
                :value="item"
                v-model="page"
                @change="goToPage(item)"
@@ -54,10 +53,6 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default: 'page'
-      },
       padding: {
         type: Number,
         default: 3,

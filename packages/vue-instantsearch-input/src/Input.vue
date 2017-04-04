@@ -6,7 +6,6 @@
          spellcheck="false"
          class="ais-input"
          v-model="query"
-         :name="name"
   >
 </template>
 
@@ -15,12 +14,6 @@
 
   export default {
     mixins: [algoliaComponent],
-    props: {
-      name: {
-        type: String,
-        default: "query"
-      }
-    },
     computed: {
       query: {
         get () {

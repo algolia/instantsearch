@@ -12,7 +12,6 @@
            type="number"
            v-model="from"
            :placeholder="fromPlaceholder"
-           :name="fromName"
     >
     <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
@@ -31,7 +30,6 @@
            type="number"
            v-model="to"
            :placeholder="toPlaceholder"
-           :name="toName"
     >
     <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
@@ -50,17 +48,9 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      fromName: {
-        type: String,
-        default: "price_from"
-      },
       fromPlaceholder: {
         type: String,
         default: "min"
-      },
-      toName: {
-        type: String,
-        default: "price_to"
       },
       toPlaceholder: {
         type: String,
