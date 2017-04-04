@@ -5,6 +5,9 @@ export const FACET_AND = 'and'
 export const FACET_OR = 'or'
 export const FACET_TREE = 'tree'
 
+export const HIGHLIGHT_PRE_TAG = '__ais-highlight__'
+export const HIGHLIGHT_POST_TAG = '__/ais-highlight__'
+
 export const assertValidFacetType = function (type) {
   if (type === FACET_AND) return
   if (type === FACET_OR) return
@@ -49,10 +52,27 @@ export class Store {
     }
 
     this._helper = algoliaHelper
+
+    // Here we enforce custom highlight tags for handling XSS protection.
+    // We also make sure that we keep the current page as this operation resets it.
+    const page = this._helper.getPage()
+    this._helper.setQueryParameter('highlightPreTag', HIGHLIGHT_PRE_TAG)
+    this._helper.setQueryParameter('highlightPostTag', HIGHLIGHT_POST_TAG)
+    this._helper.setPage(page)
+
+
     this._helper.on('change', onHelperChange.bind(this))
 
     // Todo: fetch the version somehow.
     this._helper.getClient().addAlgoliaAgent('Store (x.x.x)')
+  }
+
+  get highlightPreTag() {
+    return this._helper.getQueryParameter('highlightPreTag')
+  }
+
+  get highlightPostTag() {
+    return this._helper.getQueryParameter('highlightPostTag')
   }
 
   get algoliaHelper() {
