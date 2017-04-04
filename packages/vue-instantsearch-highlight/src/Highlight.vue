@@ -16,6 +16,10 @@
       tagName: {
         type: String,
         default: 'em'
+      },
+      escapeHtml: {
+        type: Boolean,
+        default: true
       }
     },
     render (h, ctx) {
@@ -27,12 +31,17 @@
         throw new Error(`Attribute ${attributeName} is not highlighted.`)
       }
 
+      let attributeValue = result._highlightResult[attributeName].value
+      if (ctx.props.escapeHtml === true) {
+        attributeValue = escapeHtml(attributeValue)
+      }
+
       return h('span', {
           'class': {
             'ais-highlight': true
           },
           domProps: {
-            innerHTML: escapeHtml(result._highlightResult[attributeName].value)
+            innerHTML: attributeValue
             .replace(HIGHLIGHT_PRE_TAG, `<${tagName}>`)
             .replace(HIGHLIGHT_POST_TAG, `</${tagName}>`)
           }

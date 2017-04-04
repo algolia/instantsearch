@@ -28,6 +28,12 @@ Changing the highlighting tag:
 
 **Note that the tag name has to be passed without carets.**
 
+Disable html escaping (**not recommended**):
+
+```html
+<ais-highlight :result="result" attribute-name="description" :escape-html="false"></ais-highlight>
+```
+
 ## CSS Classes
 
 | ClassName             | Description       |
