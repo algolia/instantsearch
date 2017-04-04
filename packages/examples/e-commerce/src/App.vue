@@ -64,8 +64,12 @@
                 <img class="result__image img-responsive" :src="result.image">
 
                 <div class="result__info">
-                  <h2 class="result__name" v-html="result._highlightResult.name.value"></h2>
-                  <div class="result__type" v-html="result._highlightResult.type.value"></div>
+                  <h2 class="result__name">
+                    <ais-highlight :result="result" attribute-name="name"/>
+                  </h2>
+                  <div class="result__type">
+                    <ais-highlight :result="result" attribute-name="type"/>
+                  </div>
                   <div class="result__rating">
                     <template v-for="n in 5">
                       <span v-if="n <= result.rating" class="result__star"></span>
