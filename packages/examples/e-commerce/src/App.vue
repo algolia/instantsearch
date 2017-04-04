@@ -18,9 +18,9 @@
 
       <div class="row">
         <div class="col-md-2 col-sm-3">
-          <ais-navigation-tree :attributes="['category', 'sub_category']">
+          <ais-tree-menu :attributes="['category', 'sub_category']">
             <h3 slot="header">Browse by</h3>
-          </ais-navigation-tree>
+          </ais-tree-menu>
 
           <ais-price-range attribute-name="price">
             <h3 slot="header">Price</h3>

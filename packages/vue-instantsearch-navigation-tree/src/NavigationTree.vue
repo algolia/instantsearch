@@ -1,29 +1,29 @@
 <template>
-  <div class="ais-navigation-tree" v-if="show">
+  <div class="ais-tree-menu" v-if="show">
     <slot name="header"></slot>
 
     <ul v-if="facetValues.length > 0">
       <li v-for="facet in facetValues"
-          class="ais-navigation-tree__item"
-          :class="{'ais-navigation-tree__item--active': facet.isRefined}"
+          class="ais-tree-menu__item"
+          :class="{'ais-tree-menu__item--active': facet.isRefined}"
       >
         <a href="#" @click.prevent="toggleRefinement(facet)">
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
-            <span class="ais-navigation-tree__value">{{facet.name}}</span>
-            <span class="ais-navigation-tree__count">({{facet.count}})</span>
+            <span class="ais-tree-menu__value">{{facet.name}}</span>
+            <span class="ais-tree-menu__count">({{facet.count}})</span>
           </slot>
         </a>
 
         <template v-if="facet.isRefined && facet.data.length > 0">
           <ul>
             <li v-for="subfacet in facet.data"
-                class="ais-navigation-tree__item"
-                :class="{'ais-navigation-tree__item--active': subfacet.isRefined}"
+                class="ais-tree-menu__item"
+                :class="{'ais-tree-menu__item--active': subfacet.isRefined}"
             >
               <a href="#" @click.prevent="toggleRefinement(subfacet)">
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
-                  <span class="ais-navigation-tree__value">{{subfacet.name}}</span>
-                  <span class="ais-navigation-tree__count">({{subfacet.count}})</span>
+                  <span class="ais-tree-menu__value">{{subfacet.name}}</span>
+                  <span class="ais-tree-menu__count">({{subfacet.count}})</span>
                 </slot>
               </a>
             </li>
