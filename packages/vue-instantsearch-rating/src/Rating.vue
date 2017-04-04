@@ -48,7 +48,7 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      attribute: {
+      attributeName: {
         type: String,
         required: true
       },
@@ -62,10 +62,10 @@
       }
     },
     mounted () {
-      this.searchStore.addFacet(this.attribute, FACET_OR)
+      this.searchStore.addFacet(this.attributeName, FACET_OR)
     },
     destroyed () {
-      this.searchStore.removeFacet(this.attribute)
+      this.searchStore.removeFacet(this.attributeName)
     },
     computed: {
       show () {
@@ -77,7 +77,7 @@
         return false
       },
       facetValues () {
-        const values = this.searchStore.getFacetValues(this.attribute, ['name:asc'], this.max + 1)
+        const values = this.searchStore.getFacetValues(this.attributeName, ['name:asc'], this.max + 1)
 
         let stars = []
         let isRefined = false
@@ -131,7 +131,7 @@
     methods: {
       toggleRefinement (facet) {
         if (facet.isRefined) {
-          return this.searchStore.clearRefinements(this.attribute)
+          return this.searchStore.clearRefinements(this.attributeName)
         }
 
         if (facet.count === 0) {
@@ -139,14 +139,14 @@
         }
 
         this.searchStore.stop()
-        this.searchStore.clearRefinements(this.attribute)
+        this.searchStore.clearRefinements(this.attributeName)
         for (let val = Number(facet.name); val <= this.max; ++val) {
-          this.searchStore.addFacetRefinement(this.attribute, val);
+          this.searchStore.addFacetRefinement(this.attributeName, val);
         }
         this.searchStore.start()
       },
       clear () {
-        this.searchStore.clearRefinements(this.attribute)
+        this.searchStore.clearRefinements(this.attributeName)
       }
     }
   }

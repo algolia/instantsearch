@@ -56,7 +56,7 @@
         type: String,
         default: "max"
       },
-      attribute: {
+      attributeName: {
         type: String,
         required: true
       },
@@ -81,7 +81,7 @@
       from: {
         get () {
           for (let refinement in this.searchStore.activeRefinements) {
-            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attributeName
               && this.searchStore.activeRefinements[refinement].type === 'numeric'
               && this.searchStore.activeRefinements[refinement].operator === '>') {
 
@@ -94,14 +94,14 @@
           value = Number(value)
 
           this.searchStore.stop()
-          this.searchStore.removeNumericRefinement(this.attribute, '>')
+          this.searchStore.removeNumericRefinement(this.attributeName, '>')
           if (value > 0) {
-            this.searchStore.addNumericRefinement(this.attribute, '>', value)
+            this.searchStore.addNumericRefinement(this.attributeName, '>', value)
           }
 
           // Remove the max value if lower than the min value.
           if (value > Number(this.to)) {
-            this.searchStore.removeNumericRefinement(this.attribute, '<')
+            this.searchStore.removeNumericRefinement(this.attributeName, '<')
           }
 
           this.searchStore.start()
@@ -110,7 +110,7 @@
       to: {
         get () {
           for (let refinement in this.searchStore.activeRefinements) {
-            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attributeName
               && this.searchStore.activeRefinements[refinement].type === 'numeric'
               && this.searchStore.activeRefinements[refinement].operator === '<') {
               return this.searchStore.activeRefinements[refinement].numericValue
@@ -127,9 +127,9 @@
           }
 
           this.searchStore.stop()
-          this.searchStore.removeNumericRefinement(this.attribute, '<')
+          this.searchStore.removeNumericRefinement(this.attributeName, '<')
           if (value > 0) {
-            this.searchStore.addNumericRefinement(this.attribute, '<', value)
+            this.searchStore.addNumericRefinement(this.attributeName, '<', value)
           }
           this.searchStore.start()
         }

@@ -33,7 +33,7 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      attribute: {
+      attributeName: {
         type: String,
         required: true
       },
@@ -57,14 +57,14 @@
       }
     },
     mounted () {
-      this.searchStore.addFacet(this.attribute, this.operator)
+      this.searchStore.addFacet(this.attributeName, this.operator)
     },
     destroyed () {
-      this.searchStore.removeFacet(this.attribute)
+      this.searchStore.removeFacet(this.attributeName)
     },
     computed: {
       facetValues () {
-        return this.searchStore.getFacetValues(this.attribute, this.sortBy, this.limit)
+        return this.searchStore.getFacetValues(this.attributeName, this.sortBy, this.limit)
       },
       show () {
         return this.facetValues.length > 0
@@ -72,12 +72,12 @@
     },
     methods: {
       toggleRefinement: function (value) {
-        return this.searchStore.toggleFacetRefinement(this.attribute, value.name)
+        return this.searchStore.toggleFacetRefinement(this.attributeName, value.name)
       }
     },
     watch: {
       operator (value) {
-        this.searchStore.addFacet(this.attribute, this.operator)
+        this.searchStore.addFacet(this.attributeName, this.operator)
       }
     }
   }
