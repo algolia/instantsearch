@@ -3,10 +3,6 @@
   Please provide enough information so that others can review your pull request.
 -->
 
-**What project are you opening a pull request for?**
-- react-instantsearch (use v2 base)
-- instantsearch.js (use develop base)
-
 **Summary**
 
 <!--

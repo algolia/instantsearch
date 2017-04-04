@@ -3,12 +3,12 @@ import {rootPath} from './path';
 
 const configs = {
   production: {
-    docsDist: rootPath('docs-production/react'),
+    docsDist: rootPath('docs-production/react-instantsearch'),
     storyBookPublicPath: 'storybook/',
-    publicPath: '/instantsearch.js/react/',
+    publicPath: '/react-instantsearch/',
   },
   development: {
-    docsDist: rootPath('docs/react'),
+    docsDist: rootPath('docs/react-instantsearch'),
     storyBookPublicPath: 'http://localhost:6006/',
     publicPath: '/',
   },

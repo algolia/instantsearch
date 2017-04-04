@@ -18,7 +18,7 @@
     "test:build": "./scripts/test:build.sh",
     "dev": "jest --watch --bail",
     "docs:storybook-start": "NODE_ENV=development start-storybook -p 6006 -c ./storybook -s ./storybook/public",
-    "docs:storybook-build-production": "NODE_ENV=production build-storybook -s ./storybook/public -o docs-production/react/storybook -c ./storybook"
+    "docs:storybook-build-production": "NODE_ENV=production build-storybook -s ./storybook/public -o docs-production/react-instantsearch/storybook -c ./storybook"
   },
   "dependencies": {
     "@kadira/react-storybook-addon-info": "^3.3.0",

@@ -10,10 +10,10 @@
     "build": "./scripts/build.sh",
     "build-and-publish": "./scripts/build-and-publish.sh"
   },
-  "homepage": "https://community.algolia.com/instantsearch.js/react/",
+  "homepage": "https://community.algolia.com/react-instantsearch/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js/"
+    "url": "https://github.com/algolia/react-instantsearch/"
   },
   "dependencies": {
     "algoliasearch": "^3.21.1",

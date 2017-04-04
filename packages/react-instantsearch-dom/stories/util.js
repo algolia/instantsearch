@@ -32,7 +32,7 @@ const WrapWithHits = ({
   linkedStoryGroup,
   pagination = true,
 }) => {
-  const sourceCodeUrl = `https://github.com/algolia/instantsearch.js/tree/v2/stories/${linkedStoryGroup}.stories.js`;
+  const sourceCodeUrl = `https://github.com/algolia/react-instantsearch/tree/master/stories/${linkedStoryGroup}.stories.js`;
   const playgroundLink = hasPlayground
     ? <button onClick={linkTo(linkedStoryGroup, 'playground')}
          className="playground-url"

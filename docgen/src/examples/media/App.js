@@ -36,7 +36,7 @@ const App = props =>
 
 const Header = () =>
   <header className="row">
-    <a href="https://community.algolia.com/instantsearch.js/" className="is-logo">
+    <a href="https://community.algolia.com/react-instantsearch/" className="is-logo">
       <img
         src="https://res.cloudinary.com/hilnmyskv/image/upload/w_100,h_100,dpr_2.0//v1461180087/logo-instantsearchjs-avatar.png"
         width="40"/></a>

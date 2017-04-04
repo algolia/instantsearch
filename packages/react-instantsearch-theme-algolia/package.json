@@ -2,10 +2,10 @@
   "name": "react-instantsearch-theme-algolia",
   "description": "Algolia theme for React InstantSearch",
   "version": "4.0.0-beta.1",
-  "homepage": "https://community.algolia.com/instantsearch.js/react/",
+  "homepage": "https://community.algolia.com/react-instantsearch/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/algolia/instantsearch.js/"
+    "url": "https://github.com/algolia/react-instantsearch/"
   },
   "license": "MIT",
   "scripts": {

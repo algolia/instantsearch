@@ -14,7 +14,7 @@ export default createConnector({
 
   getProvidedProps() {
     const url = 'https://www.algolia.com/?' +
-      'utm_source=instantsearch.js&' +
+      'utm_source=react-instantsearch&' +
       'utm_medium=website&' +
       `utm_content=${location.hostname}&` +
       'utm_campaign=poweredby';

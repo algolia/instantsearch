@@ -15,7 +15,7 @@ in some cases the current API may not be able to fulfill this promise of simplic
 
 If that's not the case or in doubt, **before diving into custom conectors**
 please expose us your use case and come ask us questions on [discourse](https://discourse.algolia.com/c/instantsearch)
-or [GitHub](https://github.com/algolia/instantsearch.js/issues) first. We will be glad
+or [GitHub](https://github.com/algolia/react-instantsearch/issues) first. We will be glad
 that you do so.
 
 If you are confident `createConnector` is what you need, here's its API:
