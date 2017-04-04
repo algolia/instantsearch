@@ -131,7 +131,7 @@ To use it, require this file:
 
 ### React InstantSearch
 
-We also have a dedicated React library if you are already using React: [React InstantSearch](https://community.algolia.com/instantsearch.js/react/).
+We also have a dedicated React library if you are already using React: [React InstantSearch](https://community.algolia.com/react-instantsearch/).
 
 ### Initialization
 
