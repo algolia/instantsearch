@@ -1,6 +1,5 @@
 language: node_js
-node_js:
-  - "6"
+node_js: stable
 before_script:
   - yarn boot
   - yarn build:cjs
