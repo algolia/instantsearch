@@ -1,1 +1,1 @@
-export {default} from './NavigationTree.vue'
+export {default} from './TreeMenu.vue'
