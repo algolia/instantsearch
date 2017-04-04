@@ -3,46 +3,41 @@
     <li class="ais-pagination__item ais-pagination__item--first"
         :class="{'ais-pagination__item--disabled': page === 1}"
     >
-      <button type="button" @click="goToFirstPage" :disabled="page === 1">
+      <a href="#" @click.prevent="goToFirstPage">
         <slot name="first">&lt;&lt;</slot>
-      </button>
+      </a>
     </li>
     <li class="ais-pagination__item ais-pagination__item--previous"
         :class="{'ais-pagination__item--disabled': page === 1}"
     >
-      <button type="button" @click="goToPreviousPage" :disabled="page === 1">
+      <a href="#" @click.prevent="goToPreviousPage">
         <slot name="previous">&lt;</slot>
-      </button>
+      </a>
     </li>
     <li
         v-for="item in pages"
         class="ais-pagination__item"
         :class="{ 'ais-pagination__item--active': item === page }"
     >
-      <label>
-        <input type="radio"
-               :value="item"
-               v-model="page"
-               @change="goToPage(item)"
-        >
+      <a href="#" @click.prevent="goToPage(item)">
         <slot :value="item" :active="item === page">
           {{ item }}
         </slot>
-      </label>
+      </a>
     </li>
     <li class="ais-pagination__item ais-pagination__item--next"
         :class="{'ais-pagination__item--disabled': page >= totalPages }"
     >
-      <button type="button" @click="goToNextPage" :disabled="page >= totalPages">
+      <a href="#" @click.prevent="goToNextPage">
         <slot name="next">&gt;</slot>
-      </button>
+      </a>
     </li>
     <li class="ais-pagination__item ais-pagination__item--last"
         :class="{'ais-pagination__item--disabled': page >= totalPages }"
     >
-      <button type="button" @click="goToLastPage" :disabled="page >= totalPages">
+      <a href="#" @click.prevent="goToLastPage">
         <slot name="last">&gt;&gt;</slot>
-      </button>
+      </a>
     </li>
   </ul>
 </template>
