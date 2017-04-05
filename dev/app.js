@@ -9,6 +9,7 @@ import item from './templates/item.html';
 
 import customMenuWidget from './customWidgets/menu.js';
 import customClearAll from './customWidgets/clearAll.js';
+import customCurrentRefinedValues from './customWidgets/currentRefinedValues.js';
 
 const search = instantsearch({
   appId: 'latency',
@@ -388,6 +389,10 @@ search.addWidget(customMenuWidget({
 
 search.addWidget(customClearAll({
   containerNode: $('#custom-clear-all'),
+}));
+
+search.addWidget(customCurrentRefinedValues({
+  containerNode: $('#custom-current-refined-values'),
 }));
 
 search.addWidget(
