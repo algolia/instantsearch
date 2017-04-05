@@ -64,7 +64,7 @@ function cleanUp(props, searchState, context) {
 }
 /**
  * connectRefinementList connector provides the logic to build a widget that will
- * give the user tha ability to choose multiple values for a specific facet.
+ * give the user the ability to choose multiple values for a specific facet.
  * @name connectRefinementList
  * @kind connector
  * @requirements The attribute passed to the `attributeName` prop must be present in "attributes for faceting"
