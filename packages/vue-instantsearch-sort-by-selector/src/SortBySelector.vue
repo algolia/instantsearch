@@ -1,8 +1,5 @@
 <template>
-  <select class="ais-sort-by-selector"
-          v-model="indexName"
-          :name="name"
-  >
+  <select class="ais-sort-by-selector" v-model="indexName">
     <slot v-for="index in indices" :indexName="indexName">
       <option :value="index.name">
         {{ index.label }}
@@ -17,10 +14,6 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default: "index_name"
-      },
       indices: {
         type: Array,
         required: true

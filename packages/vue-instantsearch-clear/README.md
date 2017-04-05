@@ -1,4 +1,4 @@
-Vue Algolia Clear Search
+Vue InstantSearch Clear
 ---
 
 A button that allows the user to clear the `query`, the `facet refinements`, or both.
@@ -8,29 +8,29 @@ A button that allows the user to clear the `query`, the `facet refinements`, or 
 Basic usage:
 
 ```html
-<clear-search></clear-search>
+<ais-clear></ais-clear>
 ```
 
 Overriding the default content:
 
 ```html
-<clear-search>
+<ais-clear>
 	<template>
 		Clear search query
 	</template>
-</clear-search>
+</ais-clear>
 ```
 
 Only clear the search query:
 
 ```html
-<clear-search :clearFacets="false"></clear-search>
+<ais-clear:clearFacets="false"></ais-clear>
 ```
 
 Only clear the facet refinements:
 
 ```html
-<clear-search :clearQuery="false"></clear-search>
+<ais-clear:clearQuery="false"></ais-clear>
 ```
 
 ## Props

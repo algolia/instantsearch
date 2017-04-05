@@ -1,4 +1,4 @@
-Vue Algolia No Results
+Vue InstantSearch No Results
 ---
 
 A convenience component that will only be showed when no results are to be yielded.
@@ -14,11 +14,11 @@ Basic usage:
 Overriding the default content:
 
  ```html
-<no-results>
+<ais-no-results>
 	<template scope="props">
 		No products found for <i>{{ props.query }}</i>.
 	</template>
-</no-results>
+</ais-no-results>
  ```
 
 ## Slots

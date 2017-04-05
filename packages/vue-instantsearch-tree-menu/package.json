@@ -1,15 +1,15 @@
 {
-  "name": "vue-instantsearch-navigation-tree",
+  "name": "vue-instantsearch-tree-menu",
   "version": "0.0.0",
   "files": [
     "dist"
   ],
-  "main": "dist/vue-instantsearch-navigation-tree.common.js",
-  "module": "dist/vue-instantsearch-navigation-tree.esm.js",
-  "jsnext:main": "dist/vue-instantsearch-navigation-tree.esm.js",
-  "unpkg": "dist/vue-instantsearch-navigation-tree.js",
+  "main": "dist/vue-instantsearch-tree-menu.common.js",
+  "module": "dist/vue-instantsearch-tree-menu.esm.js",
+  "jsnext:main": "dist/vue-instantsearch-tree-menu.esm.js",
+  "unpkg": "dist/vue-instantsearch-tree-menu.js",
   "scripts": {
-    "build": "yarn build:umd && yarn build:es && yarn build:cjs",
+    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
     "build:umd": "rollup -c ../../build/rollup.umd.config.js",
     "build:es": "rollup -c ../../build/rollup.es.config.js",
     "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"

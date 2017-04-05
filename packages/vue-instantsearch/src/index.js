@@ -6,7 +6,7 @@ import AisResults from 'vue-instantsearch-results'
 import AisStats from 'vue-instantsearch-stats'
 import AisPagination from 'vue-instantsearch-pagination'
 import AisResultsPerPageSelector from 'vue-instantsearch-results-per-page-selector'
-import AisNavigationTree from 'vue-instantsearch-navigation-tree'
+import AisTreeMenu from 'vue-instantsearch-tree-menu'
 import AisSortBySelector from 'vue-instantsearch-sort-by-selector'
 import AisClear from 'vue-instantsearch-clear'
 import AisRating from 'vue-instantsearch-rating'
@@ -24,7 +24,7 @@ const InstantSearch = {
   AisStats,
   AisPagination,
   AisResultsPerPageSelector,
-  AisNavigationTree,
+  AisTreeMenu,
   AisSortBySelector,
   AisClear,
   AisRating,
@@ -42,7 +42,7 @@ const InstantSearch = {
     Vue.component('ais-stats', AisStats)
     Vue.component('ais-pagination', AisPagination)
     Vue.component('ais-results-per-page-selector', AisResultsPerPageSelector)
-    Vue.component('ais-navigation-tree', AisNavigationTree)
+    Vue.component('ais-tree-menu', AisTreeMenu)
     Vue.component('ais-sort-by-selector', AisSortBySelector)
     Vue.component('ais-clear', AisClear)
     Vue.component('ais-rating', AisRating)
@@ -70,7 +70,7 @@ export {
   AisStats,
   AisPagination,
   AisResultsPerPageSelector,
-  AisNavigationTree,
+  AisTreeMenu,
   AisSortBySelector,
   AisClear,
   AisRating,

@@ -18,23 +18,23 @@
 
       <div class="row">
         <div class="col-md-2 col-sm-3">
-          <ais-navigation-tree :attributes="['category', 'sub_category']">
+          <ais-tree-menu :attributes="['category', 'sub_category']">
             <h3 slot="header">Browse by</h3>
-          </ais-navigation-tree>
+          </ais-tree-menu>
 
-          <ais-price-range attribute="price">
+          <ais-price-range attribute-name="price">
             <h3 slot="header">Price</h3>
           </ais-price-range>
 
-          <ais-refinement-list attribute="materials">
+          <ais-refinement-list attribute-name="materials">
             <h3 slot="header">Material</h3>
           </ais-refinement-list>
 
-          <ais-refinement-list attribute="colors">
+          <ais-refinement-list attribute-name="colors">
             <h3 slot="header">Color</h3>
           </ais-refinement-list>
 
-          <ais-rating attribute="rating">
+          <ais-rating attribute-name="rating">
             <h3 slot="header">Rating</h3>
           </ais-rating>
 

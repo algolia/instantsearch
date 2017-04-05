@@ -2,41 +2,29 @@
   <div class="ais-rating" v-if="show">
     <slot name="header"></slot>
 
-    <button class="ais-rating__clear"
-            type="button"
-            @click="clear"
-            v-if="currentValue"
-    >
+    <a href="#" @click.default="clear" class="ais-rating__clear" v-if="currentValue">
       <slot name="clear">Clear</slot>
-    </button>
+    </a>
 
-    <ul>
-      <li v-for="facet in facetValues"
-          class="ais-rating__item"
-          :class="{'ais-rating__item--active': facet.isRefined}"
-      >
-        <label>
-          <input type="radio"
-                 :value="facet.value"
-                 v-model="currentValue"
-                 @change="toggleRefinement(facet)"
-                 :name="name"
-          >
-          <slot :value="facet.value"
-                :min="min"
-                :max="max"
-                :count="facet.count"
-          >
-            <template v-for="n in max">
-              <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
-              <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
-            </template>
-            &nbsp;&amp; up
-            <span class="ais-rating__count">({{facet.count}})</span>
-          </slot>
-        </label>
-      </li>
-    </ul>
+    <div v-for="facet in facetValues"
+        class="ais-rating__item"
+        :class="{'ais-rating__item--active': facet.isRefined}"
+    >
+      <a href="#" @click.prevent="toggleRefinement(facet)">
+        <slot :value="facet.value"
+              :min="min"
+              :max="max"
+              :count="facet.count"
+        >
+          <template v-for="n in max">
+            <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
+            <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
+          </template>
+          &nbsp;&amp; up
+          <span class="ais-rating__count">{{facet.count}}</span>
+        </slot>
+      </a>
+    </div>
 
     <slot name="footer"></slot>
   </div>
@@ -49,11 +37,7 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      name: {
-        type: String,
-        default: "rating"
-      },
-      attribute: {
+      attributeName: {
         type: String,
         required: true
       },
@@ -67,10 +51,10 @@
       }
     },
     mounted () {
-      this.searchStore.addFacet(this.attribute, FACET_OR)
+      this.searchStore.addFacet(this.attributeName, FACET_OR)
     },
     destroyed () {
-      this.searchStore.removeFacet(this.attribute)
+      this.searchStore.removeFacet(this.attributeName)
     },
     computed: {
       show () {
@@ -82,7 +66,7 @@
         return false
       },
       facetValues () {
-        const values = this.searchStore.getFacetValues(this.attribute, ['name:asc'], this.max + 1)
+        const values = this.searchStore.getFacetValues(this.attributeName, ['name:asc'], this.max + 1)
 
         let stars = []
         let isRefined = false
@@ -136,7 +120,7 @@
     methods: {
       toggleRefinement (facet) {
         if (facet.isRefined) {
-          return this.searchStore.clearRefinements(this.attribute)
+          return this.searchStore.clearRefinements(this.attributeName)
         }
 
         if (facet.count === 0) {
@@ -144,68 +128,17 @@
         }
 
         this.searchStore.stop()
-        this.searchStore.clearRefinements(this.attribute)
+        this.searchStore.clearRefinements(this.attributeName)
         for (let val = Number(facet.name); val <= this.max; ++val) {
-          this.searchStore.addFacetRefinement(this.attribute, val);
+          this.searchStore.addFacetRefinement(this.attributeName, val);
         }
         this.searchStore.start()
       },
       clear () {
-        this.searchStore.clearRefinements(this.attribute)
+        this.searchStore.clearRefinements(this.attributeName)
       }
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  .ais-rating {
-
-    input {
-      display: none;
-    }
-
-    label {
-      font-weight: normal;
-      cursor: pointer;
-
-      &:hover {
-        text-decoration: underline;
-      }
-
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    &__item--active label {
-      font-weight: bold;
-
-      &:hover {
-        text-decoration: none;
-        cursor: default;
-      }
-
-    }
-
-    &__clear {
-      border: none;
-      background: none;
-      padding-left: 0;
-
-      &:hover {
-        cursor: pointer;
-        text-decoration: underline;
-      }
-
-      &:before {
-        content: '< ';
-      }
-
-    }
-
-  }
-</style>
 
 

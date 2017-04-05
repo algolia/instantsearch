@@ -12,7 +12,6 @@
            type="number"
            v-model="from"
            :placeholder="fromPlaceholder"
-           :name="fromName"
     >
     <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
@@ -31,7 +30,6 @@
            type="number"
            v-model="to"
            :placeholder="toPlaceholder"
-           :name="toName"
     >
     <span class="ais-price-range__currency ais-price-range__currency--right"
           v-if="currencyPlacement === 'right'"
@@ -50,23 +48,15 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      fromName: {
-        type: String,
-        default: "price_from"
-      },
       fromPlaceholder: {
         type: String,
         default: "min"
-      },
-      toName: {
-        type: String,
-        default: "price_to"
       },
       toPlaceholder: {
         type: String,
         default: "max"
       },
-      attribute: {
+      attributeName: {
         type: String,
         required: true
       },
@@ -91,7 +81,7 @@
       from: {
         get () {
           for (let refinement in this.searchStore.activeRefinements) {
-            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attributeName
               && this.searchStore.activeRefinements[refinement].type === 'numeric'
               && this.searchStore.activeRefinements[refinement].operator === '>') {
 
@@ -104,14 +94,14 @@
           value = Number(value)
 
           this.searchStore.stop()
-          this.searchStore.removeNumericRefinement(this.attribute, '>')
+          this.searchStore.removeNumericRefinement(this.attributeName, '>')
           if (value > 0) {
-            this.searchStore.addNumericRefinement(this.attribute, '>', value)
+            this.searchStore.addNumericRefinement(this.attributeName, '>', value)
           }
 
           // Remove the max value if lower than the min value.
           if (value > Number(this.to)) {
-            this.searchStore.removeNumericRefinement(this.attribute, '<')
+            this.searchStore.removeNumericRefinement(this.attributeName, '<')
           }
 
           this.searchStore.start()
@@ -120,7 +110,7 @@
       to: {
         get () {
           for (let refinement in this.searchStore.activeRefinements) {
-            if (this.searchStore.activeRefinements[refinement].attributeName === this.attribute
+            if (this.searchStore.activeRefinements[refinement].attributeName === this.attributeName
               && this.searchStore.activeRefinements[refinement].type === 'numeric'
               && this.searchStore.activeRefinements[refinement].operator === '<') {
               return this.searchStore.activeRefinements[refinement].numericValue
@@ -137,9 +127,9 @@
           }
 
           this.searchStore.stop()
-          this.searchStore.removeNumericRefinement(this.attribute, '<')
+          this.searchStore.removeNumericRefinement(this.attributeName, '<')
           if (value > 0) {
-            this.searchStore.addNumericRefinement(this.attribute, '<', value)
+            this.searchStore.addNumericRefinement(this.attributeName, '<', value)
           }
           this.searchStore.start()
         }
@@ -147,9 +137,3 @@
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  .ais-price-range__input {
-    width: 50px;
-  }
-</style>

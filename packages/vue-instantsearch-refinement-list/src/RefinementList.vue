@@ -2,26 +2,25 @@
   <div class="ais-refinement-list" v-if="show">
     <slot name="header"></slot>
 
-    <ul>
-      <li v-for="facet in facetValues"
-          class="ais-refinement-list__item"
-          :class="{'ais-refinement-list__item--active': facet.isRefined}"
-      >
-        <label>
-          <input type="checkbox"
-                 :name="name"
-                 v-model="facet.isRefined"
-                 @change="toggleRefinement(facet)"
-                 :value="facet.name"
-          >
 
-          <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
-            <span class="ais-refinement-list__value">{{facet.name}}</span>
-            <span class="ais-refinement-list__count">({{facet.count}})</span>
-          </slot>
-        </label>
-      </li>
-    </ul>
+    <div v-for="facet in facetValues"
+        class="ais-refinement-list__item"
+        :class="{'ais-refinement-list__item--active': facet.isRefined}"
+    >
+      <label>
+        <input type="checkbox"
+               v-model="facet.isRefined"
+               @change="toggleRefinement(facet)"
+               :value="facet.name"
+        >
+
+        <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
+          <span class="ais-refinement-list__value">{{facet.name}}</span>
+          <span class="ais-refinement-list__count">{{facet.count}}</span>
+        </slot>
+      </label>
+    </div>
+
 
     <slot name="footer"></slot>
   </div>
@@ -34,15 +33,9 @@
   export default {
     mixins: [algoliaComponent],
     props: {
-      attribute: {
+      attributeName: {
         type: String,
         required: true
-      },
-      name: {
-        type: String,
-        default () {
-          return this.attribute
-        }
       },
       operator: {
         type: String,
@@ -64,14 +57,14 @@
       }
     },
     mounted () {
-      this.searchStore.addFacet(this.attribute, this.operator)
+      this.searchStore.addFacet(this.attributeName, this.operator)
     },
     destroyed () {
-      this.searchStore.removeFacet(this.attribute)
+      this.searchStore.removeFacet(this.attributeName)
     },
     computed: {
       facetValues () {
-        return this.searchStore.getFacetValues(this.attribute, this.sortBy, this.limit)
+        return this.searchStore.getFacetValues(this.attributeName, this.sortBy, this.limit)
       },
       show () {
         return this.facetValues.length > 0
@@ -79,39 +72,14 @@
     },
     methods: {
       toggleRefinement: function (value) {
-        return this.searchStore.toggleFacetRefinement(this.attribute, value.name)
+        return this.searchStore.toggleFacetRefinement(this.attributeName, value.name)
       }
     },
     watch: {
       operator (value) {
-        this.searchStore.addFacet(this.attribute, this.operator)
+        this.searchStore.addFacet(this.attributeName, this.operator)
       }
     }
   }
 </script>
-
-<style lang="scss" rel="stylesheet/scss">
-  .ais-refinement-list {
-
-    label {
-      font-weight: normal;
-      cursor: pointer;
-
-      &:hover .ais-refinement-list__value {
-        text-decoration: underline;
-      }
-
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 0;
-    }
-
-    &__item--active label {
-      font-weight: bold;
-    }
-
-  }
-</style>
 

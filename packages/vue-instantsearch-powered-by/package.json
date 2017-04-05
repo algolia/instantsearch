@@ -9,7 +9,7 @@
   "jsnext:main": "dist/vue-instantsearch-powered-by.esm.js",
   "unpkg": "dist/vue-instantsearch-powered-by.js",
   "scripts": {
-    "build": "yarn build:umd && yarn build:es && yarn build:cjs",
+    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
     "build:umd": "rollup -c ../../build/rollup.umd.config.js",
     "build:es": "rollup -c ../../build/rollup.es.config.js",
     "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"

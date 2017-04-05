@@ -1,4 +1,4 @@
-Vue Algolia Price Range Facet
+Vue InstantSearch Price Range
 ---
 
 A component that lets users filter results based on a given minimum and maximum price.
@@ -8,18 +8,16 @@ A component that lets users filter results based on a given minimum and maximum 
 Basic usage:
 
 ```html
-<price-range-facet></price-range-facet>
+<ais-price-range></ais-price-range>
 ```
 
 ## Props
 
 | Name              | Required | Type   | Default        | Description                                                           |
 |-------------------|----------|--------|----------------|-----------------------------------------------------------------------|
-| fromName          | false    | string | `'price_from'` | The input name for the minimum value to return results for.           |
 | fromPlaceholder   | false    | string | `'min'`        | The input placeholder for the minimum value to return results for.    |
-| toName            | false    | string | `'price_from'` | The input name for the maximum value to return results for.           |
 | toPlaceholder     | false    | string | `'max'`        | The input placeholder for the maximum value to return results for.    |
-| attribute         | true     | string |                | The attribute to filter on.                                           |
+| attributeName     | true     | string |                | The attribute to filter on.                                           |
 | currency          | false    | string | `'$'`          | The currency.                                                         |
 | currencyPlacement | false    | string | `'left'`       | Whether to display the currency 'left' or 'right' side of the inputs. |
 

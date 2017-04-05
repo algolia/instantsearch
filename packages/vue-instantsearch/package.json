@@ -9,7 +9,7 @@
   "jsnext:main": "dist/vue-instantsearch.esm.js",
   "unpkg": "dist/vue-instantsearch.js",
   "scripts": {
-    "build": "yarn build:umd && yarn build:es && yarn build:cjs",
+    "build": "npm run build:umd && npm run build:es && npm run build:cjs",
     "build:umd": "rollup -c ../../build/rollup.umd.config.js",
     "build:es": "rollup -c ../../build/rollup.es.config.js",
     "build:cjs": "rollup -c ../../build/rollup.cjs.config.js"
@@ -23,7 +23,7 @@
     "vue-instantsearch-stats": "*",
     "vue-instantsearch-pagination": "*",
     "vue-instantsearch-results-per-page-selector": "*",
-    "vue-instantsearch-navigation-tree": "*",
+    "vue-instantsearch-tree-menu": "*",
     "vue-instantsearch-sort-by-selector": "*",
     "vue-instantsearch-clear": "*",
     "vue-instantsearch-rating": "*",
