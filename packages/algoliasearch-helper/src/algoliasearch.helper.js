@@ -1338,7 +1338,7 @@ AlgoliaSearchHelper.prototype.detachDerivedHelper = function(derivedHelper) {
 };
 
 /**
- * This method returns if there is currently at least one on-going search.
+ * This method returns true if there is currently at least one on-going search.
  * @return {boolean} true if there is a search pending
  */
 AlgoliaSearchHelper.prototype.hasPendingRequests = function() {
