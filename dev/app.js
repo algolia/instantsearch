@@ -10,6 +10,7 @@ import item from './templates/item.html';
 import customMenuWidget from './customWidgets/menu.js';
 import customClearAll from './customWidgets/clearAll.js';
 import customCurrentRefinedValues from './customWidgets/currentRefinedValues.js';
+import customHierarchicalMenu from './customWidgets/hierarchicalMenu.js';
 
 const search = instantsearch({
   appId: 'latency',
@@ -395,6 +396,15 @@ search.addWidget(customCurrentRefinedValues({
   containerNode: $('#custom-current-refined-values'),
 }));
 
+search.addWidget(customHierarchicalMenu({
+  containerNode: $('#custom-hierarchical-menu'),
+  attributes: [
+    'hierarchicalCategories.lvl0',
+    'hierarchicalCategories.lvl1',
+    'hierarchicalCategories.lvl2',
+  ],
+}));
+
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
@@ -415,22 +425,22 @@ search.addWidget(
   })
 );
 
-// search.addWidget(
-//   instantsearch.widgets.hierarchicalMenu({
-//     container: '#hierarchical-categories',
-//     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
-//     cssClasses: {
-//       header: 'facet-title',
-//       list: 'hierarchical-categories-list',
-//       link: 'facet-value',
-//       count: 'facet-count pull-right',
-//     },
-//     rootPath: 'Cameras & Camcorders',
-//     templates: {
-//       header: 'Hierarchical categories',
-//     },
-//   })
-// );
+search.addWidget(
+  instantsearch.widgets.hierarchicalMenu({
+    container: '#hierarchical-categories',
+    attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+    cssClasses: {
+      header: 'facet-title',
+      list: 'hierarchical-categories-list',
+      link: 'facet-value',
+      count: 'facet-count pull-right',
+    },
+    rootPath: 'Cameras & Camcorders',
+    templates: {
+      header: 'Hierarchical categories',
+    },
+  })
+);
 
 search.addWidget(
   instantsearch.widgets.priceRanges({

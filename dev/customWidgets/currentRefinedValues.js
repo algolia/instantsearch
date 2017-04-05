@@ -13,11 +13,9 @@ const renderFn = ({
   // ----------------------------------------
   if (isFirstRendering) {
     const markup = window.$(`
-      <div class="facet" id="custom-current-refined-values">
-        <div class="facet-title">Custom current refinements</div>
-        <div id="custom-crv-clear-all-container"></div>
-        <ul style="list-style-type: none; margin: 0; padding: 0;"></ul>
-      </div>
+      <div class="facet-title">Custom current refinements</div>
+      <div id="custom-crv-clear-all-container"></div>
+      <ul style="list-style-type: none; margin: 0; padding: 0;"></ul>
     `);
     containerNode.append(markup);
   }
