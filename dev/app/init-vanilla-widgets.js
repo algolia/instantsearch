@@ -7,4 +7,10 @@ export default search => {
       containerNode: document.getElementById('clear-all'),
     })
   );
+
+  search.addWidget(
+    vanillaWidgets.hits({
+      containerNode: document.getElementById('hits'),
+    })
+  );
 };
