@@ -10,17 +10,17 @@ To get started you should:
 
 ```sh
 # Install dependencies common to the packages
-yarn install
+npm install
 
 # Download all dependencies and build all packages
-yarn boot
+npm run boot
 
 # Build the dependencies of all packages
-yarn build
+npm run build
 
 # Clean all the dependencies and build again
-yarn reboot
+npm run reboot
 
 # Launch tests with Jest
-yarn test
+npm test
 ```
