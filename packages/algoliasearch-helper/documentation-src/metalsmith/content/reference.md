@@ -115,7 +115,7 @@ var helper = AlgoliasearchHelper(client, indexName, {
 ```
 
 The values that can be used for filtering are retrieved with
-the answer from Algolia. They are accesisble using the
+the answer from Algolia. They are accessible using the
 [getFacetValues](#SearchResults#getFacetValues) methods on the
 [SearchResults](#SearchResults) object.
 
@@ -160,7 +160,7 @@ var helper = AlgoliasearchHelper(client, indexName, {
 ```
 
 The values that can be used for filtering are retrieved with
-the answer from Algolia. They are accesisble using the
+the answer from Algolia. They are accessible using the
 [getFacetValues](#SearchResults#getFacetValues) methods on the
 [SearchResults](#SearchResults) object.
 
