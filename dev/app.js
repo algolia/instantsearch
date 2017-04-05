@@ -11,6 +11,7 @@ import customMenuWidget from './customWidgets/menu.js';
 import customClearAll from './customWidgets/clearAll.js';
 import customCurrentRefinedValues from './customWidgets/currentRefinedValues.js';
 import customHierarchicalMenu from './customWidgets/hierarchicalMenu.js';
+import customPagination from './customWidgets/pagination.js';
 
 const search = instantsearch({
   appId: 'latency',
@@ -148,6 +149,13 @@ search.addWidget(
       root: 'pagination', // This uses Bootstrap classes
       active: 'active',
     },
+    maxPages: 20,
+  })
+);
+
+search.addWidget(
+  customPagination({
+    containerNode: $('#custom-pagination'),
     maxPages: 20,
   })
 );
