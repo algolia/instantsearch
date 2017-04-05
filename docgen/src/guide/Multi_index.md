@@ -6,6 +6,8 @@ category: guide
 navWeight: 50
 ---
 
+**This is a beta feature available via `yarn install react-instantsearch@beta`**.
+
 Whenever you want to:
 
 * display hits from different indices
@@ -14,11 +16,11 @@ Whenever you want to:
 
 You can use multiple [`<Index>`](widgets/<Index>.html) instances.
 
-The `<Index>` component takes one prop, the targeted index name. 
+The `<Index>` component takes one prop, the targeted index name.
 
-When using a `<Index>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index. 
+When using a `<Index>` component under an `<InstantSearch>` root component you can declare widgets that will target a precise index.
 
-Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component. 
+Widgets that targets all the indices, like the SearchBox, should remain under the `<InstantSearch>` root component.
 
 [Read the example](https://github.com/algolia/react-instantsearch/tree/master/packages/react-instantsearch/examples/multi-index) displaying hits from two different indices.
 
@@ -26,16 +28,16 @@ You might also want to:
 
 * Use an external autocomplete component
 
-In this case you will need to use the [`connectAutoComplete`](connectors/connectAutoComplete.html) connectors that will give you access to: 
+In this case you will need to use the [`connectAutoComplete`](connectors/connectAutoComplete.html) connectors that will give you access to:
 
 * All the indices hits
 * The current query
 * The refine function to update the query
 
-[Read the example](https://github.com/algolia/react-instantsearch/blob/master/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices. 
+[Read the example](https://github.com/algolia/react-instantsearch/blob/master/packages/react-instantsearch/examples/autocomplete/src/App-Multi-Index.js) using AutoSuggest to display hits from different indices.
 
-When using the `<Index>` component the shape of the search state will be modified. See 
-[our Search State guide](guide/Search_state.html). 
+When using the `<Index>` component the shape of the search state will be modified. See
+[our Search State guide](guide/Search_state.html).
 
 <div class="guide-nav">
     <div class="guide-nav-left">
