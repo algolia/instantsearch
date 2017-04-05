@@ -13,7 +13,6 @@ Basic usage:
 
 ## CSS Classes
 
-| ClassName            | Description                                      |
-|----------------------|--------------------------------------------------|
-| ais-powered-by       | Container class                                  |
-
+| ClassName      | Description     |
+|:---------------|:----------------|
+| ais-powered-by | Container class |

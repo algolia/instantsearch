@@ -35,20 +35,20 @@ Only clear the facet refinements:
 
 ## Props
 
-| Name        | Type    | Default | Description                                                                     |
-|-------------|---------|---------|---------------------------------------------------------------------------------|
+| Name        | Type    | Default | Description                                                                       |
+|:------------|:--------|:--------|:----------------------------------------------------------------------------------|
 | clearQuery  | boolean | `true`  | If `true`, when the button is clicked, the `query` will be emptied.               |
 | clearFacets | boolean | `true`  | If `true`, when the button is clicked, all the facet refinements will be removed. |
 
 ## Slots
 
-| Name    | Props | Default                                              | Description                                 |
-|---------|-------|------------------------------------------------------|---------------------------------------------|
+| Name    | Props | Default                                       | Description                                 |
+|:--------|:------|:----------------------------------------------|:--------------------------------------------|
 | default | query | `<span class="ais-clear__label">Clear</span>` | The text displayed inside the clear button. |
 
 ## CSS Classes
 
-| ClassName               | Description       |
-|-------------------------|-------------------|
+| ClassName        | Description       |
+|:-----------------|:------------------|
 | ais-clear        | Button class      |
 | ais-clear__label | Button text class |

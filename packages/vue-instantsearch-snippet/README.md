@@ -37,7 +37,7 @@ Disable html escaping (**not recommended**):
 ## Props
 
 | Name           | Required | Type    | Default | Description                                           |
-|----------------|----------|---------|---------|-------------------------------------------------------|
+|:---------------|:---------|:--------|:--------|:------------------------------------------------------|
 | result         | true     | Object  |         | A single Algolia result as it is returned by the API. |
 | attribute-name | true     | String  |         | The attribute name to be snippeted.                   |
 | tag-name       | false    | String  | `'em'`  | The tag name used for highlighting.                   |
@@ -45,6 +45,6 @@ Disable html escaping (**not recommended**):
 
 ## CSS Classes
 
-| ClassName             | Description       |
-|-----------------------|-------------------|
-| ais-snippet           | Container class   |
+| ClassName   | Description     |
+|:------------|:----------------|
+| ais-snippet | Container class |
