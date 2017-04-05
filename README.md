@@ -1,6 +1,6 @@
 [![React InstantSearch logo][logo]][website]
 
-InstantSearch projects: **React InstantSearch** | [InstantSearch.js][instantsearch.js-github] | [InstantSearch Android](instantsearch-android-github).
+InstantSearch projects: **React InstantSearch** | [InstantSearch.js][instantsearch.js-github] | [InstantSearch Android][instantsearch-android-github].
 
 ## React InstantSearch
 
