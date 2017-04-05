@@ -2,25 +2,25 @@
   <div class="ais-refinement-list" v-if="show">
     <slot name="header"></slot>
 
-    <ul>
-      <li v-for="facet in facetValues"
-          class="ais-refinement-list__item"
-          :class="{'ais-refinement-list__item--active': facet.isRefined}"
-      >
-        <label>
-          <input type="checkbox"
-                 v-model="facet.isRefined"
-                 @change="toggleRefinement(facet)"
-                 :value="facet.name"
-          >
 
-          <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
-            <span class="ais-refinement-list__value">{{facet.name}}</span>
-            <span class="ais-refinement-list__count">({{facet.count}})</span>
-          </slot>
-        </label>
-      </li>
-    </ul>
+    <div v-for="facet in facetValues"
+        class="ais-refinement-list__item"
+        :class="{'ais-refinement-list__item--active': facet.isRefined}"
+    >
+      <label>
+        <input type="checkbox"
+               v-model="facet.isRefined"
+               @change="toggleRefinement(facet)"
+               :value="facet.name"
+        >
+
+        <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
+          <span class="ais-refinement-list__value">{{facet.name}}</span>
+          <span class="ais-refinement-list__count">{{facet.count}}</span>
+        </slot>
+      </label>
+    </div>
+
 
     <slot name="footer"></slot>
   </div>
