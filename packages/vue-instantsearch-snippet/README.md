@@ -23,7 +23,7 @@ Basic usage:
 Changing the highlighting tag:
 
  ```html
-<ais-snippet :result="result" attribute-name="description" tag-name="mark"></ais-snippet>
+<ais-snippet :result="result" attribute-name="description" tag-name="em"></ais-snippet>
  ```
 
 **Note that the tag name has to be passed without carets.**
@@ -36,12 +36,12 @@ Disable html escaping (**not recommended**):
 
 ## Props
 
-| Name           | Required | Type    | Default | Description                                           |
-|:---------------|:---------|:--------|:--------|:------------------------------------------------------|
-| result         | true     | Object  |         | A single Algolia result as it is returned by the API. |
-| attribute-name | true     | String  |         | The attribute name to be snippeted.                   |
-| tag-name       | false    | String  | `'em'`  | The tag name used for highlighting.                   |
-| escape-html    | false    | Boolean | `true`  | Whether to escape the HTML or not.                    |
+| Name           | Required | Type    | Default  | Description                                           |
+|:---------------|:---------|:--------|:---------|:------------------------------------------------------|
+| result         | true     | Object  |          | A single Algolia result as it is returned by the API. |
+| attribute-name | true     | String  |          | The attribute name to be snippeted.                   |
+| tag-name       | false    | String  | `'mark'` | The tag name used for highlighting.                   |
+| escape-html    | false    | Boolean | `true`   | Whether to escape the HTML or not.                    |
 
 ## CSS Classes
 

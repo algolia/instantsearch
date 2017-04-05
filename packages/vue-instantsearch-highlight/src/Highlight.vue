@@ -15,7 +15,7 @@
       },
       tagName: {
         type: String,
-        default: 'em'
+        default: 'mark'
       },
       escapeHtml: {
         type: Boolean,
