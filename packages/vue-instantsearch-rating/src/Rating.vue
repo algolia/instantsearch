@@ -2,40 +2,29 @@
   <div class="ais-rating" v-if="show">
     <slot name="header"></slot>
 
-    <button class="ais-rating__clear"
-            type="button"
-            @click="clear"
-            v-if="currentValue"
-    >
+    <a href="#" @click.default="clear" class="ais-rating__clear" v-if="currentValue">
       <slot name="clear">Clear</slot>
-    </button>
+    </a>
 
-    <ul>
-      <li v-for="facet in facetValues"
-          class="ais-rating__item"
-          :class="{'ais-rating__item--active': facet.isRefined}"
-      >
-        <label>
-          <input type="radio"
-                 :value="facet.value"
-                 v-model="currentValue"
-                 @change="toggleRefinement(facet)"
-          >
-          <slot :value="facet.value"
-                :min="min"
-                :max="max"
-                :count="facet.count"
-          >
-            <template v-for="n in max">
-              <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
-              <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
-            </template>
-            &nbsp;&amp; up
-            <span class="ais-rating__count">({{facet.count}})</span>
-          </slot>
-        </label>
-      </li>
-    </ul>
+    <div v-for="facet in facetValues"
+        class="ais-rating__item"
+        :class="{'ais-rating__item--active': facet.isRefined}"
+    >
+      <a href="#" @click.prevent="toggleRefinement(facet)">
+        <slot :value="facet.value"
+              :min="min"
+              :max="max"
+              :count="facet.count"
+        >
+          <template v-for="n in max">
+            <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
+            <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
+          </template>
+          &nbsp;&amp; up
+          <span class="ais-rating__count">({{facet.count}})</span>
+        </slot>
+      </a>
+    </div>
 
     <slot name="footer"></slot>
   </div>
