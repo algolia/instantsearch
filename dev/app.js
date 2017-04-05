@@ -8,6 +8,7 @@ import empty from './templates/no-results.html';
 import item from './templates/item.html';
 
 import customMenuWidget from './customWidgets/menu.js';
+import customClearAll from './customWidgets/clearAll.js';
 
 const search = instantsearch({
   appId: 'latency',
@@ -383,6 +384,10 @@ search.addWidget(customMenuWidget({
   containerNode: $('#custom-menu'),
   attributeName: 'categories',
   limit: 3,
+}));
+
+search.addWidget(customClearAll({
+  containerNode: $('#custom-clear-all'),
 }));
 
 search.addWidget(
