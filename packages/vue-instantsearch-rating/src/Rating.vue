@@ -21,7 +21,7 @@
             <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
           </template>
           &nbsp;&amp; up
-          <span class="ais-rating__count">({{facet.count}})</span>
+          <span class="ais-rating__count">{{facet.count}}</span>
         </slot>
       </a>
     </div>

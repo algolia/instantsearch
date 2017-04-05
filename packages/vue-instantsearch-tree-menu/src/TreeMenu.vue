@@ -10,7 +10,7 @@
         <a href="#" @click.prevent="toggleRefinement(facet)">
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
             <span class="ais-tree-menu__value">{{facet.name}}</span>
-            <span class="ais-tree-menu__count">({{facet.count}})</span>
+            <span class="ais-tree-menu__count">{{facet.count}}</span>
           </slot>
         </a>
 
@@ -23,7 +23,7 @@
               <a href="#" @click.prevent="toggleRefinement(subfacet)">
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
                   <span class="ais-tree-menu__value">{{subfacet.name}}</span>
-                  <span class="ais-tree-menu__count">({{subfacet.count}})</span>
+                  <span class="ais-tree-menu__count">{{subfacet.count}}</span>
                 </slot>
               </a>
             </li>
