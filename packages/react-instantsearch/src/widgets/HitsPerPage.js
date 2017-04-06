@@ -5,6 +5,9 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  * The HitsPerPage widget displays a dropdown menu to let the user change the number
  * of displayed hits.
  *
+ * If you only want to configure the number of hits per page without
+ * displaying a widget, you should use the `<Configure hitsPerPage={20} />` widget. See [`<Configure /> documentation`](widgets/Configure.html)
+ *
  * @name HitsPerPage
  * @kind widget
  * @propType {{value: number, label: string}[]} items - List of available options.
@@ -26,7 +29,10 @@ import HitsPerPageSelectComponent from '../components/HitsPerPage.js';
  *       apiKey="6be0576ff61c053d5f9a3225e2a90f76"
  *       indexName="ikea"
  *     >
- *       <HitsPerPage defaultRefinement={20}/>
+ *       <HitsPerPage
+ *         defaultRefinement={20}
+ *         items={[{value: '30', label: 'Show 20 hits'}, {value: '50', label: 'Show 50 hits'}]}
+ *       />
  *     </InstantSearch>
  *   );
  * }
