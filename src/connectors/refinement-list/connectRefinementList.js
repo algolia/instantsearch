@@ -3,7 +3,6 @@ import {checkRendering} from '../../lib/utils.js';
 const usage = `Usage:
 var customRefinementList = connectRefinementList(function render(params) {
   // params = {
-  //   isFirstRender,
   //   isFromSearch,
   //   createURL,
   //   items,

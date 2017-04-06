@@ -45,4 +45,14 @@ export default search => {
       containerNode: window.$('#hits')
     })
   )
+
+  search.addWidget(
+    jqueryWidgets.refinementList({
+      containerNode: window.$('#brands'),
+      attributeName: 'brand',
+      operator: 'or',
+      limit: 10,
+      title: 'Brands'
+    })
+  )
 };
