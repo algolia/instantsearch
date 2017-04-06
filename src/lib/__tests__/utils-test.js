@@ -573,7 +573,7 @@ describe('utils.clearRefinementsFromState', () => {
     expect(isEmpty(newState.tagRefinements)).toBe(false, 'state should have tagRefinements');
   });
 
-  it('should clear one numeric facet', () => {
+  it('should clear one numeric disjunctive facet', () => {
     const newState = utils.clearRefinementsFromState(state, ['numericDisjunctiveFacet1']);
     expect(isEmpty(newState.facetsRefinements)).toBe(false, 'state should have facetsRefinements');
     expect(isEmpty(newState.facetsExcludes)).toBe(false, 'state should have facetsExcludes');

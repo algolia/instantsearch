@@ -3,7 +3,7 @@ import webpack from 'webpack';
 
 export default {
   entry: {
-    bundle: './dev/app.js',
+    bundle: './dev/app/index.js',
   },
   devtool: 'source-map',
   output: {

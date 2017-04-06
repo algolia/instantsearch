@@ -1,6 +1,6 @@
 /* eslint-disable import/default */
 /* global $ */
-import instantsearch from '../../index.js';
+import instantsearch from '../../../../index.js';
 
 export default instantsearch.connectors.connectMenu(customMenuRendering);
 function customMenuRendering(opts, isFirstRendering) {
@@ -39,4 +39,3 @@ function customMenuRendering(opts, isFirstRendering) {
     });
   }
 }
-
