@@ -1,6 +1,5 @@
 /* eslint-disable import/default */
-
-import instantsearch from '../../';
+import instantsearch from '../../../../index.js';
 
 export default instantsearch.connectors.connectClearAll(render);
 
