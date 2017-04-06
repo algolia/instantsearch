@@ -39,4 +39,10 @@ export default search => {
       ],
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.hits({
+      containerNode: window.$('#hits')
+    })
+  )
 };
