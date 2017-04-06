@@ -7,6 +7,12 @@ import allItems from './templates/all-items.html';
 import empty from './templates/no-results.html';
 import item from './templates/item.html';
 
+import customMenuWidget from './customWidgets/menu.js';
+import customClearAll from './customWidgets/clearAll.js';
+import customCurrentRefinedValues from './customWidgets/currentRefinedValues.js';
+import customHierarchicalMenu from './customWidgets/hierarchicalMenu.js';
+import customPagination from './customWidgets/pagination.js';
+
 const search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
@@ -143,6 +149,13 @@ search.addWidget(
       root: 'pagination', // This uses Bootstrap classes
       active: 'active',
     },
+    maxPages: 20,
+  })
+);
+
+search.addWidget(
+  customPagination({
+    containerNode: $('#custom-pagination'),
     maxPages: 20,
   })
 );
@@ -384,6 +397,23 @@ search.addWidget(customMenuWidget({
   limit: 3,
 }));
 
+search.addWidget(customClearAll({
+  containerNode: $('#custom-clear-all'),
+}));
+
+search.addWidget(customCurrentRefinedValues({
+  containerNode: $('#custom-current-refined-values'),
+}));
+
+search.addWidget(customHierarchicalMenu({
+  containerNode: $('#custom-hierarchical-menu'),
+  attributes: [
+    'hierarchicalCategories.lvl0',
+    'hierarchicalCategories.lvl1',
+    'hierarchicalCategories.lvl2',
+  ],
+}));
+
 search.addWidget(
   instantsearch.widgets.rangeSlider({
     container: '#price',
@@ -404,22 +434,22 @@ search.addWidget(
   })
 );
 
-// search.addWidget(
-//   instantsearch.widgets.hierarchicalMenu({
-//     container: '#hierarchical-categories',
-//     attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
-//     cssClasses: {
-//       header: 'facet-title',
-//       list: 'hierarchical-categories-list',
-//       link: 'facet-value',
-//       count: 'facet-count pull-right',
-//     },
-//     rootPath: 'Cameras & Camcorders',
-//     templates: {
-//       header: 'Hierarchical categories',
-//     },
-//   })
-// );
+search.addWidget(
+  instantsearch.widgets.hierarchicalMenu({
+    container: '#hierarchical-categories',
+    attributes: ['hierarchicalCategories.lvl0', 'hierarchicalCategories.lvl1', 'hierarchicalCategories.lvl2'],
+    cssClasses: {
+      header: 'facet-title',
+      list: 'hierarchical-categories-list',
+      link: 'facet-value',
+      count: 'facet-count pull-right',
+    },
+    rootPath: 'Cameras & Camcorders',
+    templates: {
+      header: 'Hierarchical categories',
+    },
+  })
+);
 
 search.addWidget(
   instantsearch.widgets.priceRanges({

@@ -34,11 +34,11 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
  * @property {Object} widgetParams all original options forwarded to rendering
  */
 
- /**
-  * Connects a rendering function with the infinite hits business logic.
-  * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn function that renders the infinite hits widget
-  * @return {function(CustomInfiniteHitsWidgetOptions)} a widget factory for infinite hits widget
-  */
+/**
+ * Connects a rendering function with the infinite hits business logic.
+ * @param {function(InfiniteHitsRenderingOptions, boolean)} renderFn function that renders the infinite hits widget
+ * @return {function(CustomInfiniteHitsWidgetOptions)} a widget factory for infinite hits widget
+ */
 export default function connectInfiniteHits(renderFn) {
   checkRendering(renderFn, usage);
 
