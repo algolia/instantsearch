@@ -31,7 +31,7 @@ export default search => {
 
   search.addWidget(
     jqueryWidgets.hierarchicalMenu({
-      containerNode: window.$('#hierarchical-menu'),
+      containerNode: window.$('#hierarchical-categories'),
       attributes: [
         'hierarchicalCategories.lvl0',
         'hierarchicalCategories.lvl1',
@@ -53,6 +53,17 @@ export default search => {
       operator: 'or',
       limit: 10,
       title: 'Brands',
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.hitsPerPageSelector({
+      containerNode: window.$('#hits-per-page-selector'),
+      options: [
+        {value: 6, label: '6 per page'},
+        {value: 12, label: '12 per page'},
+        {value: 24, label: '24 per page'},
+      ],
     })
   );
 };
