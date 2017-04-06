@@ -6,7 +6,7 @@ category: guide
 navWeight: 50
 ---
 
-**This is a beta feature available via `yarn install react-instantsearch@beta`**.
+**This is a beta feature available via `yarn add react-instantsearch@beta`**.
 
 Whenever you want to:
 
