@@ -13,20 +13,19 @@ Basic usage:
 
 ## Props
 
-| Name    | Required | Type   | Default              | Description                       |
-|---------|----------|--------|----------------------|-----------------------------------|
-| options | false    | array  | `[6, 12, 24]`        | The different selectable options. |
+| Name    | Required | Type  | Default       | Description                       |
+|:--------|:---------|:------|:--------------|:----------------------------------|
+| options | false    | array | `[6, 12, 24]` | The different selectable options. |
 
 
 ## Slots
 
 | Name    | Props  | Default        | Description   |
-|---------|--------|----------------|---------------|
+|:--------|:-------|:---------------|:--------------|
 | default | option | `{{ option }}` | Option label. |
 
 ## CSS Classes
 
 | ClassName                     | Description             |
-|-------------------------------|-------------------------|
+|:------------------------------|:------------------------|
 | ais-results-per-page-selector | The select input class. |
-
