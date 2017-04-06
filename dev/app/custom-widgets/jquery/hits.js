@@ -1,7 +1,7 @@
 /* eslint-disable import/default */
 import instantsearch from '../../../../index.js';
 
-const renderFn = ({hits, results, widgetParams: {containerNode}}, isFirstRendering) => {
+const renderFn = ({hits, widgetParams: {containerNode}}) => {
   containerNode.html(
     hits.map(hit => `
       <div class="hit">
@@ -30,7 +30,7 @@ const renderFn = ({hits, results, widgetParams: {containerNode}}, isFirstRenderi
         </div>
       </div>
     `)
-  )
+  );
 };
 
 export default instantsearch.connectors.connectHits(renderFn);

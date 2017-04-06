@@ -42,9 +42,9 @@ export default search => {
 
   search.addWidget(
     jqueryWidgets.hits({
-      containerNode: window.$('#hits')
+      containerNode: window.$('#hits'),
     })
-  )
+  );
 
   search.addWidget(
     jqueryWidgets.refinementList({
@@ -52,7 +52,7 @@ export default search => {
       attributeName: 'brand',
       operator: 'or',
       limit: 10,
-      title: 'Brands'
+      title: 'Brands',
     })
-  )
+  );
 };
