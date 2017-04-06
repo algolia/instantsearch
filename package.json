@@ -45,6 +45,7 @@
     "babel-register": "^6.24.0",
     "babel-template": "^6.23.0",
     "babel-types": "^6.23.0",
+    "bel": "^4.6.0",
     "cheerio": "^0.22.0",
     "collect-json": "^1.0.8",
     "compression": "^1.6.2",
