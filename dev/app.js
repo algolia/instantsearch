@@ -7,8 +7,6 @@ import allItems from './templates/all-items.html';
 import empty from './templates/no-results.html';
 import item from './templates/item.html';
 
-import customMenuWidget from './customWidgets/menu.js';
-
 const search = instantsearch({
   appId: 'latency',
   apiKey: '6be0576ff61c053d5f9a3225e2a90f76',
@@ -379,6 +377,7 @@ search.addWidget(
   })
 );
 
+import customMenuWidget from './customWidgets/menu.js';
 search.addWidget(customMenuWidget({
   containerNode: $('#custom-menu'),
   attributeName: 'categories',

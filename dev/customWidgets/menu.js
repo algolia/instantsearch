@@ -21,7 +21,7 @@ function customMenuRendering(opts, isFirstRendering) {
 
   input.refine = opts.refine;
 
-  const facetValues = opts.items;
+  const facetValues = opts.items.slice(0, opts.widgetParams.limit || 10);
   const facetOptions = facetValues.map(f => f.isRefined ?
       $(`<option value='${f.path}' selected>${f.name}</option>`) :
       $(`<option value='${f.path}'>${f.name}</option>`)
