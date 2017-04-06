@@ -15,11 +15,11 @@ const renderFn = ({
       <ul style="list-style-type: none; margin: 0; padding: 0;"></ul>
     `;
 
-    containerNode.append(markup)
+    containerNode.append(markup);
   }
 
   // remove event listeners if any before attachign new ones
-  window.$('li[data-refine-value]').each(function() { window.$(this).off() });
+  window.$('li[data-refine-value]').each(function() { window.$(this).off(); });
 
   if (canRefine) {
     const list = items.map(item => `
@@ -48,11 +48,11 @@ const renderFn = ({
           </span>
         </label>
       </li>
-    `)
+    `);
 
     containerNode
       .find('ul')
-      .html(list.join(''))
+      .html(list.join(''));
 
     containerNode
       .find('li[data-refine-value]')
@@ -61,10 +61,10 @@ const renderFn = ({
           e.preventDefault();
           e.stopPropagation();
 
-          refine(window.$(this).data('refine-value'))
-        })
-      })
+          refine(window.$(this).data('refine-value'));
+        });
+      });
   }
-}
+};
 
 export default instantsearch.connectors.connectRefinementList(renderFn);
