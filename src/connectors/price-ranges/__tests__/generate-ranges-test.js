@@ -52,10 +52,8 @@ describe('generateRanges()', () => {
   it('should not generate ranges', () => {
     const stats = {min: 20, max: 20, avg: 20, sum: 20};
     expect(generateRanges(stats)).toEqual([]);
-  });
 
-  it('should not generate ranges', () => {
-    const stats = {min: 6765, max: 6765, avg: 6765, sum: 6765};
-    expect(generateRanges(stats)).toEqual([]);
+    const longerStats = {min: 6765, max: 6765, avg: 6765, sum: 6765};
+    expect(generateRanges(longerStats)).toEqual([]);
   });
 });
