@@ -66,4 +66,18 @@ export default search => {
       ],
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.numericSelector({
+      containerNode: window.$('#popularity-selector'),
+      operator: '>=',
+      attributeName: 'popularity',
+      options: [
+        {label: 'Default', value: 0},
+        {label: 'Top 10', value: 9991},
+        {label: 'Top 100', value: 9901},
+        {label: 'Top 500', value: 9501},
+      ],
+    })
+  );
 };
