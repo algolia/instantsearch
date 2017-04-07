@@ -35,6 +35,8 @@
 
 **Bug: What browsers are impacted? Which versions?**
 
+**Bug: What is the proposed solution?**
+
 **Feature: What is your use case for such a feature?**
 
 **Feature: What is your proposed API entry? The new option to add? What is the behavior?**
