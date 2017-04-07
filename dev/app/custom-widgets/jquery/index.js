@@ -14,3 +14,4 @@ export {default as sortBySelector} from './sortBySelector';
 export {default as starRating} from './starRating';
 export {default as stats} from './stats';
 export {default as toggle} from './toggle';
+export {default as infiniteHits} from './infiniteHits';

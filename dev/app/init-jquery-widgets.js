@@ -54,6 +54,7 @@ export default search => {
   search.addWidget(
     jqueryWidgets.hits({
       containerNode: window.$('#hits'),
+      hitsPerPage: 3,
     })
   );
 
@@ -151,6 +152,13 @@ export default search => {
       attributeName: 'free_shipping',
       label: 'Free Shipping (toggle single value)',
       title: 'Free Shipping',
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.infiniteHits({
+      containerNode: window.$('#infinite-hits'),
+      hitsPerPage: 3,
     })
   );
 };
