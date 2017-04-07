@@ -130,4 +130,12 @@ export default search => {
       ],
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.starRating({
+      containerNode: window.$('#rating'),
+      attributeName: 'rating',
+      max: 5,
+    })
+  );
 };
