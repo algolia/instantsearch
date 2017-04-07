@@ -8,8 +8,8 @@
 
         <a href="#" @click.prevent="toggleRefinement(facet)">
           <slot :value="facet.name" :count="facet.count" :active="facet.isRefined">
-            <span :class="bem('item', 'value')">{{ facet.name }}</span>
-            <span :class="bem('item', 'count')">{{ facet.count }}</span>
+            <span :class="bem('value')">{{ facet.name }}</span>
+            <span :class="bem('count')">{{ facet.count }}</span>
           </slot>
         </a>
 
@@ -18,8 +18,8 @@
             <li v-for="subfacet in facet.data" :class="[bem('item'), subfacet.isRefined ? bem('item', 'active') : '']">
               <a href="#" @click.prevent="toggleRefinement(subfacet)">
                 <slot :value="subfacet.name" :count="subfacet.count" :active="subfacet.isRefined">
-                  <span :class="bem('item', 'value')">{{ subfacet.name }}</span>
-                  <span :class="bem('item', 'count')">{{ subfacet.count }}</span>
+                  <span :class="bem('value')">{{ subfacet.name }}</span>
+                  <span :class="bem('count')">{{ subfacet.count }}</span>
                 </slot>
               </a>
             </li>
