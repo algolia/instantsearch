@@ -27,4 +27,14 @@ export default search => {
       containerNode: document.getElementById('hits'),
     })
   );
+
+  search.addWidget(
+    vanillaWidgets.refinementList({
+      containerNode: document.getElementById('brands'),
+      attributeName: 'brand',
+      operator: 'or',
+      limit: 10,
+      title: 'Brands',
+    })
+  );
 };
