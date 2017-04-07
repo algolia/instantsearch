@@ -378,7 +378,7 @@ React on your side.</p>
 
 <div class="codebox-combo">
 
-  <p>To build your search results page, you need to combine several widgets. Start by adding a <code>searchBox</code> widget, a <code>hits</code> widget and a <code>pagination</code> widget to build a basic results page.</p>
+  <p>To build your search results page, you need to combine several widgets. Start by adding a <code>searchBox</code> widget, a <code>hits</code> widget, and a <code>pagination</code> widget to build a basic results page.</p>
 
   <div class="code-box">
     <div class="code-sample-snippet js-toggle-snippet ignore">
@@ -3337,7 +3337,7 @@ actually start typing, you can use the <code>searchFunction</code> hook.</p>
 to actually start the search.  <code>helper.state</code> also contains information about
 the current state of your search.</p>
 
-  <p>You can for example check for <code>helper.state.query</code> to see if the query is empty
+  <p>You can, for example, check for <code>helper.state.query</code> to see if the query is empty
 or not, and act accordingly. You might also have to handle the case when users
 start typing, then delete their query and hide the results when that happens.</p>
 
@@ -3431,7 +3431,7 @@ but any other method to show/hide the results would work.</p>
 
 <p>All helpers are accessible in the Mustache templating through <code>{{#helpers.nameOfTheHelper}}{{valueToFormat}}{{/helpers.nameOfTheHelper}}</code>. To use them in the function templates, you’ll have to call <code>search.templatesConfig.helpers.nameOfTheHelper</code> where <code>search</code> is your current <strong>instantsearch.js</strong> instance.</p>
 
-<p>Currently we have one helper:</p>
+<p>Currently, we have one helper:</p>
 
 <p><code>formatNumber</code>: Will accept a number as input and return the formatted version of the number in the locale defined with the <code>numberLocale</code> config option (defaults to <code>en-EN</code>). eg. <code>100000</code> will be formatted as <code>100 000</code> with <code>en-EN</code></p>
 
@@ -3513,7 +3513,7 @@ but any other method to show/hide the results would work.</p>
             <li>results: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchresults">results</a> of the query</li>
             <li>state: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#searchparameters">search state</a>.</li>
             <li>helper: the <a href="https://community.algolia.com/algoliasearch-helper-js/reference.html#algoliasearchhelper">helper</a> used to create a new search query</li>
-            <li>createURL: function provided to create urls</li>
+            <li>createURL: function provided to create URLs</li>
           </ul>
         </li>
       </ul>
@@ -3558,7 +3558,7 @@ but any other method to show/hide the results would work.</p>
 
 <p>All widgets have been designed to be heavily stylable with CSS rules. <strong>instantsearch.js</strong> ships with a default CSS theme that only includes the necessary CSS classes.</p>
 
-<p>You can see all the existing customizable CSS classes in the <a href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css">non minified CSS</a>.</p>
+<p>You can see all the existing customizable CSS classes in the <a href="https://cdn.jsdelivr.net/instantsearch.js/1/instantsearch.css">non-minified CSS</a>.</p>
 
 <p>We use <a href="http://sass-lang.com/">Sass</a> to build the CSS.</p>
 
