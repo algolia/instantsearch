@@ -144,4 +144,13 @@ export default search => {
       containerNode: window.$('#stats'),
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.toggle({
+      containerNode: window.$('#free-shipping'),
+      attributeName: 'free_shipping',
+      label: 'Free Shipping (toggle single value)',
+      title: 'Free Shipping',
+    })
+  );
 };
