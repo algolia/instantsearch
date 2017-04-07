@@ -30,6 +30,17 @@ export default search => {
   );
 
   search.addWidget(
+    jqueryWidgets.hitsPerPageSelector({
+      containerNode: window.$('#hits-per-page-selector'),
+      options: [
+        {value: 6, label: '6 per page'},
+        {value: 12, label: '12 per page'},
+        {value: 24, label: '24 per page'},
+      ],
+    })
+  );
+
+  search.addWidget(
     jqueryWidgets.hierarchicalMenu({
       containerNode: window.$('#hierarchical-menu'),
       attributes: [
@@ -37,6 +48,12 @@ export default search => {
         'hierarchicalCategories.lvl1',
         'hierarchicalCategories.lvl2',
       ],
+    })
+  );
+
+  search.addWidget(
+    jqueryWidgets.hits({
+      containerNode: window.$('#hits')
     })
   );
 };
