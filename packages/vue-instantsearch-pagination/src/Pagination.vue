@@ -42,12 +42,6 @@
         validator (value) {
           return value > 0
         }
-      },
-      classNames: {
-        type: Object,
-        default () {
-          return {}
-        }
       }
     },
     computed: {
@@ -88,23 +82,6 @@
       }
     },
     methods: {
-      bem (element, modifier) {
-        const blockClassName = 'ais-pagination'
-        if(!element) {
-          return this.customClassName(blockClassName)
-        }
-        const elementClassName = blockClassName + '__' + element
-        if (!modifier) {
-          return this.customClassName(elementClassName)
-        }
-
-        const modifierClassName = elementClassName + '--' + modifier
-
-        return this.customClassName(elementClassName) + ' ' + this.customClassName(modifierClassName)
-      },
-      customClassName (className) {
-        return !this.classNames[className] ? className : this.classNames[className]
-      },
       goToPage (page) {
         page = Math.min(this.totalPages, page)
         this.searchStore.page = page
