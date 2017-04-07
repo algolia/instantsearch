@@ -10,3 +10,4 @@ export {default as numericSelector} from './numericSelector';
 export {default as numericRefinementList} from './numericRefinementList';
 export {default as priceRanges} from './priceRanges';
 export {default as searchBox} from './searchBox';
+export {default as sortBySelector} from './sortBySelector';

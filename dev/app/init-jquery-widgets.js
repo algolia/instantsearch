@@ -119,4 +119,15 @@ export default search => {
       inputNode: window.$('#search-box'),
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.sortBySelector({
+      containerNode: window.$('#sort-by-selector'),
+      indices: [
+        {name: 'instant_search', label: 'Most relevant'},
+        {name: 'instant_search_price_asc', label: 'Lowest price'},
+        {name: 'instant_search_price_desc', label: 'Highest price'},
+      ],
+    })
+  );
 };
