@@ -44,6 +44,11 @@
         }
       }
     },
+    data () {
+      return {
+        blockClassName: 'ais-pagination'
+      }
+    },
     computed: {
       page () {
         return this.searchStore.page

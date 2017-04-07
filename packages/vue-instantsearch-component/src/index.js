@@ -23,7 +23,11 @@ export default {
   },
   methods: {
     bem (element, modifier) {
-      const blockClassName = 'ais-pagination'
+      if(!this.blockClassName) {
+        throw new Error('You need to provide \'blockClassName\' in your data.')
+      }
+      
+      const blockClassName = this.blockClassName
       if(!element) {
         return this.customClassName(blockClassName)
       }
