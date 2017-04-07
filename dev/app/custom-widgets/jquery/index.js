@@ -8,3 +8,4 @@ export {default as hits} from './hits';
 export {default as refinementList} from './refinementList';
 export {default as numericSelector} from './numericSelector';
 export {default as numericRefinementList} from './numericRefinementList';
+export {default as priceRanges} from './priceRanges';

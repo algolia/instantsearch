@@ -106,4 +106,11 @@ export default search => {
       ],
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.priceRanges({
+      containerNode: window.$('#price-ranges'),
+      attributeName: 'price',
+    })
+  );
 };
