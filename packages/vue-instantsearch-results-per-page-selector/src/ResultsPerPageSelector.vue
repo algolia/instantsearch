@@ -1,5 +1,5 @@
 <template>
-  <select class="ais-results-per-page-selector" v-model="resultsPerPage">
+  <select :class="bem()" v-model="resultsPerPage">
     <template v-for="option in options">
       <option :value="option"><slot :option="option">{{ option }}</slot></option>
     </template>
@@ -18,6 +18,11 @@
           return [6, 12, 24]
         }
       },
+    },
+    data () {
+      return {
+        blockClassName: 'ais-results-per-page-selector'
+      }
     },
     computed: {
       resultsPerPage:{

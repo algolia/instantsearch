@@ -1,39 +1,23 @@
 <template>
-  <div class="ais-price-range" v-show="show">
+  <div :class="bem()" v-show="show">
 
     <slot name="header"></slot>
 
-    <span class="ais-price-range__currency ais-price-range__currency--left"
-          v-if="currencyPlacement === 'left'"
-    >
+    <span :class="bem('currency', 'left')" v-if="currencyPlacement === 'left'">
       {{ currency }}
     </span>
-    <input class="ais-price-range__input ais-price-range__input--from"
-           type="number"
-           v-model="from"
-           :placeholder="fromPlaceholder"
-    >
-    <span class="ais-price-range__currency ais-price-range__currency--right"
-          v-if="currencyPlacement === 'right'"
-    >
+    <input :class="bem('input', 'from')" type="number" v-model="from" :placeholder="fromPlaceholder" >
+    <span :class="bem('currency', 'right')" v-if="currencyPlacement === 'right'">
       {{ currency }}
     </span>
 
     <slot><span>to&nbsp;</span></slot>
 
-    <span class="ais-price-range__currency ais-price-range__currency--left"
-          v-if="currencyPlacement === 'left'"
-    >
+    <span :class="bem('currency', 'left')" v-if="currencyPlacement === 'left'">
       {{ currency }}
     </span>
-    <input class="ais-price-range__input ais-price-range__input--to"
-           type="number"
-           v-model="to"
-           :placeholder="toPlaceholder"
-    >
-    <span class="ais-price-range__currency ais-price-range__currency--right"
-          v-if="currencyPlacement === 'right'"
-    >
+    <input :class="bem('input', 'to')" type="number" v-model="to" :placeholder="toPlaceholder" >
+    <span :class="bem('currency', 'right')" v-if="currencyPlacement === 'right'">
       {{ currency }}
     </span>
 
@@ -72,6 +56,11 @@
         validator: function (value) {
           return value === 'left' || value === 'right'
         }
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-price-range'
       }
     },
     computed: {

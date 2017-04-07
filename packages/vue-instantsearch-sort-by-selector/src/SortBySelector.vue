@@ -1,5 +1,5 @@
 <template>
-  <select class="ais-sort-by-selector" v-model="indexName">
+  <select :class="bem()" v-model="indexName">
     <slot v-for="index in indices" :indexName="indexName">
       <option :value="index.name">
         {{ index.label }}
@@ -17,6 +17,11 @@
       indices: {
         type: Array,
         required: true
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-sort-by-selector'
       }
     },
     computed: {
@@ -43,4 +48,3 @@
     }
   }
 </script>
-

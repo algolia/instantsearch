@@ -1,15 +1,12 @@
 <template>
-  <div class="ais-rating" v-if="show">
+  <div :class="bem()" v-if="show">
     <slot name="header"></slot>
 
-    <a href="#" @click.default="clear" class="ais-rating__clear" v-if="currentValue">
+    <a href="#" @click.default="clear" :class="bem('clear')" v-if="currentValue">
       <slot name="clear">Clear</slot>
     </a>
 
-    <div v-for="facet in facetValues"
-        class="ais-rating__item"
-        :class="{'ais-rating__item--active': facet.isRefined}"
-    >
+    <div v-for="facet in facetValues" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
       <a href="#" @click.prevent="toggleRefinement(facet)">
         <slot :value="facet.value"
               :min="min"
@@ -17,11 +14,11 @@
               :count="facet.count"
         >
           <template v-for="n in max">
-            <span v-if="n <= facet.value" class="ais-rating__star">&#9733</span>
-            <span v-else class="ais-rating__star ais-rating__star--empty">&#9734</span>
+            <span v-if="n <= facet.value" :class="bem('star')">&#9733</span>
+            <span v-else :class="bem('star', 'empty')">&#9734</span>
           </template>
           &nbsp;&amp; up
-          <span class="ais-rating__count">{{facet.count}}</span>
+          <span :class="bem('count')">{{facet.count}}</span>
         </slot>
       </a>
     </div>
@@ -48,6 +45,11 @@
       max: {
         type: Number,
         default: 5
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-rating'
       }
     },
     mounted () {
@@ -140,5 +142,3 @@
     }
   }
 </script>
-
-

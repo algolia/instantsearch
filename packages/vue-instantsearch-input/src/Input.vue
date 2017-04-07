@@ -4,7 +4,7 @@
          autocapitalize="off"
          autocomplete="off"
          spellcheck="false"
-         class="ais-input"
+         :class="bem()"
          v-model="query"
   >
 </template>
@@ -14,6 +14,11 @@
 
   export default {
     mixins: [algoliaComponent],
+    data () {
+      return {
+        blockClassName: 'ais-input'
+      }
+    },
     computed: {
       query: {
         get () {

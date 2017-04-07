@@ -1,12 +1,9 @@
 <template>
-  <div class="ais-refinement-list" v-if="show">
+  <div :class="bem()" v-if="show">
+
     <slot name="header"></slot>
 
-
-    <div v-for="facet in facetValues"
-        class="ais-refinement-list__item"
-        :class="{'ais-refinement-list__item--active': facet.isRefined}"
-    >
+    <div v-for="facet in facetValues" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']">
       <label>
         <input type="checkbox"
                v-model="facet.isRefined"
@@ -15,14 +12,14 @@
         >
 
         <slot :count="facet.count" :active="facet.isRefined" :value="facet.name">
-          <span class="ais-refinement-list__value">{{facet.name}}</span>
-          <span class="ais-refinement-list__count">{{facet.count}}</span>
+          <span :class="bem('value')">{{facet.name}}</span>
+          <span :class="bem('count')">{{facet.count}}</span>
         </slot>
       </label>
     </div>
 
-
     <slot name="footer"></slot>
+
   </div>
 </template>
 
@@ -56,6 +53,11 @@
         }
       }
     },
+    data () {
+      return {
+        blockClassName: 'ais-refinement-list'
+      }
+    },
     mounted () {
       this.searchStore.addFacet(this.attributeName, this.operator)
     },
@@ -82,4 +84,3 @@
     }
   }
 </script>
-

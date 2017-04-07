@@ -1,5 +1,5 @@
 <template>
-  <div class="ais-powered-by">
+  <div :class="bem()">
     <a href="https://algolia.com">
       <svg width="130" viewBox="0 0 130 18" xmlns="http://www.w3.org/2000/svg">
         <title>search by Algolia</title>
@@ -21,5 +21,13 @@
 </template>
 
 <script>
-  export default {}
+  import algoliaComponent from 'vue-instantsearch-component'
+  export default {
+    mixins: [algoliaComponent],
+    data () {
+      return {
+        blockClassName: 'ais-powered-by'
+      }
+    }
+  }
 </script>
