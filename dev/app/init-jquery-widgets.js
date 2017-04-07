@@ -113,4 +113,10 @@ export default search => {
       attributeName: 'price',
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.searchBox({
+      inputNode: window.$('#search-box'),
+    })
+  );
 };
