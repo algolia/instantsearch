@@ -46,7 +46,7 @@ const clearAll = ({helper, clearAttributes, hasRefinements}) => () => {
 /**
  * Connects a rendering with the clearAll business logic.
  * @function connectClearAll
- * @param {function(ClearAllRenderingOptions)} renderFn function that renders the clear all widget
+ * @param {function(ClearAllRenderingOptions, boolean)} renderFn function that renders the clear all widget
  * @return {function(CustomClearAllWidgetOptions)} - a widget factory for a clear all widget
  */
 export default function connectClearAll(renderFn) {

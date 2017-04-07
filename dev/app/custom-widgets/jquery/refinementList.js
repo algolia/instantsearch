@@ -1,0 +1,70 @@
+/* eslint-disable import/default */
+import instantsearch from '../../../../index.js';
+
+const renderFn = ({
+  items,
+  refine,
+  canRefine,
+  createURL,
+  currentRefinement,
+  widgetParams: {containerNode, title},
+}, isFirstRendering) => {
+  if (isFirstRendering) {
+    const markup = `
+      <div class="facet-title">${title}</div>
+      <ul style="list-style-type: none; margin: 0; padding: 0;"></ul>
+    `;
+
+    containerNode.append(markup);
+  }
+
+  // remove event listeners if any before attachign new ones
+  window.$('li[data-refine-value]').each(function() { window.$(this).off(); });
+
+  if (canRefine) {
+    const list = items.map(item => `
+      <li
+        data-refine-value="${item.name}"
+        class="facet-value checkbox clearfix"
+      >
+        <label style="display: block;">
+          <input
+            type="checkbox"
+            value="${item.name}"
+            ${item.isRefined ? 'checked' : ''}
+          />
+
+          <a
+            href="${createURL(item)}"
+            style="text-decoration: none; color: #000;"
+          >
+            ${item.isRefined
+              ? `<strong>${item.name}</strong>`
+              : item.name}
+          </a>
+
+          <span class="facet-count pull-right">
+            ${item.count}
+          </span>
+        </label>
+      </li>
+    `);
+
+    containerNode
+      .find('ul')
+      .html(list.join(''));
+
+    containerNode
+      .find('li[data-refine-value]')
+      .each(function() {
+        window.$(this).on('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          refine(window.$(this).data('refine-value'));
+        });
+      });
+  }
+};
+
+export default instantsearch.connectors.connectRefinementList(renderFn);

@@ -1,7 +1,7 @@
 import {checkRendering} from '../../lib/utils.js';
 
 const usage = `Usage:
-var customSearchBox = connectMenu(function render(params, isFirstRendering) {
+var customSearchBox = connectSearchBox(function render(params, isFirstRendering) {
   // params = {
   //   query,
   //   onHistoryChange,

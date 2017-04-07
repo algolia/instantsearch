@@ -4,4 +4,7 @@ export {default as hierarchicalMenu} from './hierarchicalMenu';
 export {default as menu} from './menu';
 export {default as pagination} from './pagination';
 export {default as hitsPerPageSelector} from './hits-per-page.js';
-export {default as hits} from './hits.js';
+export {default as hits} from './hits';
+export {default as refinementList} from './refinementList';
+export {default as numericSelector} from './numericSelector';
+export {default as numericRefinementList} from './numericRefinementList';
