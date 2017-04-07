@@ -138,4 +138,10 @@ export default search => {
       max: 5,
     })
   );
+
+  search.addWidget(
+    jqueryWidgets.stats({
+      containerNode: window.$('#stats'),
+    })
+  );
 };

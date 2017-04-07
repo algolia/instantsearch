@@ -12,3 +12,4 @@ export {default as priceRanges} from './priceRanges';
 export {default as searchBox} from './searchBox';
 export {default as sortBySelector} from './sortBySelector';
 export {default as starRating} from './starRating';
+export {default as stats} from './stats';
