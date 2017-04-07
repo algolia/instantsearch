@@ -14,8 +14,8 @@
               :count="facet.count"
         >
           <template v-for="n in max">
-            <span v-if="n <= facet.value" :class="bem('star')">&#9733</span>
-            <span v-else :class="bem('star', 'empty')">&#9734</span>
+            <span v-if="n <= facet.value" :class="bem('star')">&#9733;</span>
+            <span v-else :class="bem('star', 'empty')">&#9734;</span>
           </template>
           &nbsp;&amp; up
           <span :class="bem('count')">{{facet.count}}</span>
