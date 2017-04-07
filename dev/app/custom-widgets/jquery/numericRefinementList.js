@@ -5,7 +5,6 @@ const renderFn = ({
   createURL,
   items,
   refine,
-  currentRefinement,
   widgetParams: {
     containerNode,
     attributeName,
