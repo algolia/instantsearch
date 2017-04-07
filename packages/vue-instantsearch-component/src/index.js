@@ -26,19 +26,26 @@ export default {
       if(!this.blockClassName) {
         throw new Error('You need to provide \'blockClassName\' in your data.')
       }
-      
+
       const blockClassName = this.blockClassName
-      if(!element) {
+      if(!element && !modifier) {
         return this.customClassName(blockClassName)
       }
+
+      if(!element) {
+        const blockModifierClassName = blockClassName + '--' + modifier
+
+        return this.customClassName(blockModifierClassName)
+      }
+
       const elementClassName = blockClassName + '__' + element
       if (!modifier) {
         return this.customClassName(elementClassName)
       }
 
-      const modifierClassName = elementClassName + '--' + modifier
+      const elementModifierClassName = elementClassName + '--' + modifier
 
-      return this.customClassName(elementClassName) + ' ' + this.customClassName(modifierClassName)
+      return this.customClassName(elementClassName) + ' ' + this.customClassName(elementModifierClassName)
     },
     customClassName (className) {
       return !this.classNames[className] ? className : this.classNames[className]
