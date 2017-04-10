@@ -34,7 +34,7 @@ const renderList = ({containerNode, items, refine}) => {
         e.stopPropagation();
 
         const {from, to} = items[index];
-        refine(from, to);
+        refine({from, to});
       });
     });
 };
@@ -81,7 +81,7 @@ const handleFormSubmit = ({refine, containerNode}) => e => {
   const from = !isNaN(parseFloat(fromInputValue)) ? parseFloat(fromInputValue) : undefined;
   const to = !isNaN(parseFloat(toInputValue)) ? parseFloat(toInputValue) : undefined;
 
-  if (from || to) refine(from, to);
+  if (from || to) refine({from, to});
 };
 
 const renderFn = ({

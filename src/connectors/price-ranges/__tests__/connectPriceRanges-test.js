@@ -106,7 +106,7 @@ describe('connectPriceRanges', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual(undefined);
       const renderOptions = rendering.lastCall.args[0];
       const {refine} = renderOptions;
-      refine(10, 30);
+      refine({from: 10, to: 30});
       expect(helper.getNumericRefinement('price', '>=')).toEqual([10]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       expect(helper.search.callCount).toBe(1);
@@ -138,7 +138,7 @@ describe('connectPriceRanges', () => {
       expect(helper.getNumericRefinement('price', '<=')).toEqual([30]);
       const renderOptions = rendering.lastCall.args[0];
       const {refine} = renderOptions;
-      refine(40, 50);
+      refine({from: 40, to: 50});
       expect(helper.getNumericRefinement('price', '>=')).toEqual([40]);
       expect(helper.getNumericRefinement('price', '<=')).toEqual([50]);
       expect(helper.search.callCount).toBe(2);
@@ -167,7 +167,7 @@ describe('connectPriceRanges', () => {
     expect(rendering).toBeCalled();
     expect(firstRenderingOptions.currentRefinement).toBe(null);
 
-    firstRenderingOptions.refine(10, 30);
+    firstRenderingOptions.refine({from: 10, to: 30});
 
     widget.render({
       results: new SearchResults(helper.state, [{
