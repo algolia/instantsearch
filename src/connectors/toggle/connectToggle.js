@@ -34,8 +34,8 @@ Full documentation available at https://community.algolia.com/instantsearch.js/c
 /**
  * @typedef {Object} ToggleRenderingOptions
  * @property {Object} value the value of the toggle with `name`, `isRefined`, `count`, `onFacetValue` and `offFacetValue`
- * @property {function} createURL the function to create a url for the next state
- * @property {function} refine updates to the next state
+ * @property {function(facetValue)} createURL the function to create a url for the next state
+ * @property {function(facetValue)} refine updates to the next state
  * @property {Object} widgetParams all `CustomToggleWidgetOptions` forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
  */
@@ -70,7 +70,7 @@ export default function connectToggle(renderFn) {
         };
       },
 
-      toggleRefinement(helper, facetValue, isRefined) {
+      toggleRefinement(helper, {isRefined} = {}) {
         // Checking
         if (!isRefined) {
           if (hasAnOffValue) {

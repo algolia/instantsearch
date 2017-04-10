@@ -220,7 +220,7 @@ describe('currentToggle()', () => {
         expect(ReactDOM.render.firstCall.args[0]).toEqualJSX(<RefinementList {...props} />);
         expect(ReactDOM.render.secondCall.args[0]).toEqualJSX(<RefinementList {...props} />);
 
-        widget.toggleRefinement(helper, 'facetValueToRefine', true);
+        widget.toggleRefinement({isRefined: true});
         expect(helper.removeDisjunctiveFacetRefinement.calledWith(attributeName, 5)).toBe(true);
         expect(helper.addDisjunctiveFacetRefinement.calledWith(attributeName, '\\-2')).toBe(true);
       });
@@ -334,10 +334,10 @@ describe('currentToggle()', () => {
       let helper;
 
       function toggleOn() {
-        widget.toggleRefinement(helper, 'facetValueToRefine', false);
+        widget.toggleRefinement(helper, {isRefined: false});
       }
       function toggleOff() {
-        widget.toggleRefinement(helper, 'facetValueToRefine', true);
+        widget.toggleRefinement(helper, {isRefined: true});
       }
 
       beforeEach(() => {

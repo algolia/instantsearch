@@ -145,9 +145,9 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      refine(value, value.isRefined);
+      refine({isRefined: value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      refine(value, !value.isRefined);
+      refine({isRefined: !value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
     }
 
@@ -185,7 +185,7 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      refine(value, value.isRefined);
+      refine({isRefined: value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
     }
 
@@ -230,7 +230,7 @@ describe('connectToggle', () => {
           count: 85,
         },
       });
-      refine(value, value.isRefined);
+      refine(value);
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(undefined);
     }
   });
@@ -280,9 +280,9 @@ describe('connectToggle', () => {
           count: 0,
         },
       });
-      refine(value, value.isRefined);
+      refine({isRefined: value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
-      refine(value, !value.isRefined);
+      refine({isRefined: !value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
     }
 
@@ -328,7 +328,7 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      refine(value, value.isRefined);
+      refine({isRefined: value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['true']);
     }
 
@@ -373,7 +373,7 @@ describe('connectToggle', () => {
           count: 40,
         },
       });
-      refine(value, value.isRefined);
+      refine({isRefined: value.isRefined});
       expect(helper.state.disjunctiveFacetsRefinements[attributeName]).toEqual(['false']);
     }
   });

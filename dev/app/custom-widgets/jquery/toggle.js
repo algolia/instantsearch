@@ -50,7 +50,7 @@ const renderFn = ({
     e.preventDefault();
     e.stopPropagation();
 
-    refine(value, value.isRefined);
+    refine(value);
   });
 };
 
