@@ -17,3 +17,5 @@ exports[`renders proper HTML 1`] = `
 <span class="ais-highlight">con
   <mark>ten</mark>t</span>
 `;
+
+exports[`should render an empty string if attribute is not highlighted 1`] = `<span class="ais-highlight"></span>`;

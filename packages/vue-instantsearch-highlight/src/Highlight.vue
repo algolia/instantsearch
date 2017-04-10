@@ -27,11 +27,11 @@
       const attributeName = ctx.props.attributeName
       const tagName = ctx.props.tagName
 
-      if (!result._highlightResult || !result._highlightResult[attributeName]) {
-        throw new Error(`Attribute ${attributeName} is not highlighted.`)
-      }
+      let attributeValue = ''
+      if (result._highlightResult && result._highlightResult[attributeName]) {
+        attributeValue = result._highlightResult[attributeName].value
+      } 
 
-      let attributeValue = result._highlightResult[attributeName].value
       if (ctx.props.escapeHtml === true) {
         attributeValue = escapeHtml(attributeValue)
       }
