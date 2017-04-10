@@ -1,6 +1,6 @@
 <template>
-  <div class="ais-stats" v-if="totalResults > 0">
-    <slot>{{totalResults}} results found in {{processingTimeMS}}ms</slot>
+  <div :class="bem()" v-if="totalResults > 0">
+    <slot>{{ totalResults }} results found in {{ processingTimeMS }}ms</slot>
   </div>
 </template>
 
@@ -9,6 +9,11 @@
 
   export default {
     mixins: [algoliaComponent],
+    data () {
+      return {
+        blockClassName: 'ais-stats'
+      }
+    },
     computed: {
       totalResults () {
         return this.searchStore.totalResults

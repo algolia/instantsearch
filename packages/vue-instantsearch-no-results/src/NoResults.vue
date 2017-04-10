@@ -1,7 +1,7 @@
 <template>
-  <div class="ais-no-results" v-if="totalResults <= 0">
+  <div :class="bem()" v-if="totalResults <= 0">
     <slot :query="query">
-      No results matched your query <strong class="ais-no-results__query">{{query}}</strong>
+      No results matched your query <strong :class="bem('query')">{{query}}</strong>
     </slot>
   </div>
 </template>
@@ -11,6 +11,11 @@
 
   export default {
     mixins: [algoliaComponent],
+    data () {
+      return {
+        blockClassName: 'ais-no-results'
+      }
+    },
     computed: {
       totalResults () {
         return this.searchStore.totalResults

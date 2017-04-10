@@ -1,40 +1,28 @@
 <template>
-  <ul class="ais-pagination">
-    <li class="ais-pagination__item ais-pagination__item--first"
-        :class="{'ais-pagination__item--disabled': page === 1}"
-    >
+  <ul :class="bem()">
+    <li :class="[bem('item', 'first'), page === 1 ? bem('item', 'disabled') : '']">
       <a href="#" @click.prevent="goToFirstPage">
         <slot name="first">&lt;&lt;</slot>
       </a>
     </li>
-    <li class="ais-pagination__item ais-pagination__item--previous"
-        :class="{'ais-pagination__item--disabled': page === 1}"
-    >
+    <li :class="[bem('item', 'previous'), page === 1 ? bem('item', 'disabled') : '']">
       <a href="#" @click.prevent="goToPreviousPage">
         <slot name="previous">&lt;</slot>
       </a>
     </li>
-    <li
-        v-for="item in pages"
-        class="ais-pagination__item"
-        :class="{ 'ais-pagination__item--active': item === page }"
-    >
+    <li v-for="item in pages" :class="[bem('item'), page === item ? bem('item', 'active') : '']" >
       <a href="#" @click.prevent="goToPage(item)">
         <slot :value="item" :active="item === page">
           {{ item }}
         </slot>
       </a>
     </li>
-    <li class="ais-pagination__item ais-pagination__item--next"
-        :class="{'ais-pagination__item--disabled': page >= totalPages }"
-    >
+    <li :class="[bem('item', 'next'), page >= totalPages ? bem('item', 'disabled') : '']">
       <a href="#" @click.prevent="goToNextPage">
         <slot name="next">&gt;</slot>
       </a>
     </li>
-    <li class="ais-pagination__item ais-pagination__item--last"
-        :class="{'ais-pagination__item--disabled': page >= totalPages }"
-    >
+    <li :class="[bem('item', 'last'), page >= totalPages ? bem('item', 'disabled') : '']">
       <a href="#" @click.prevent="goToLastPage">
         <slot name="last">&gt;&gt;</slot>
       </a>
@@ -54,6 +42,11 @@
         validator (value) {
           return value > 0
         }
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-pagination'
       }
     },
     computed: {

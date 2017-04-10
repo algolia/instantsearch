@@ -1,12 +1,11 @@
 <template>
   <button type="reset"
-          class="ais-clear"
-          :class="{'ais-clear--disabled': disabled}"
+          :class="[bem(), disabled ? bem(null, 'disabled') : '']"
           :disabled="disabled"
           @click.prevent="clear"
   >
     <slot>
-      <span class="ais-clear__label">Clear</span>
+      <span :class="bem('label')">Clear</span>
     </slot>
   </button>
 </template>
@@ -26,6 +25,11 @@
         type: Boolean,
         required: false,
         default: true
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-clear'
       }
     },
     computed: {
@@ -56,4 +60,3 @@
     }
   }
 </script>
-

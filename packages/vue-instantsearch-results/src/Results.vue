@@ -1,10 +1,14 @@
 <template>
-  <div class="ais-results" v-if="show">
+  <div :class="bem()" v-if="show">
+
     <slot name="header"></slot>
+    
     <slot v-for="result in results" :result="result">
       Result 'objectID': {{ result.objectID }}
     </slot>
+
     <slot name="footer"></slot>
+
   </div>
 </template>
 
@@ -20,6 +24,11 @@
       },
       resultsPerPage: {
         type: Number
+      }
+    },
+    data () {
+      return {
+        blockClassName: 'ais-results'
       }
     },
     mounted () {
