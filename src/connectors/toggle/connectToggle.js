@@ -129,7 +129,7 @@ export default function connectToggle(renderFn) {
 
         renderFn({
           value,
-          createURL: this._createURL,
+          createURL: this._createURL(value.isRefined),
           refine: this.toggleRefinement,
           instantSearchInstance,
           widgetParams,
@@ -173,7 +173,7 @@ export default function connectToggle(renderFn) {
         renderFn({
           value,
           state,
-          createURL: this._createURL,
+          createURL: this._createURL(value.isRefined),
           refine: this.toggleRefinement,
           helper,
           instantSearchInstance,

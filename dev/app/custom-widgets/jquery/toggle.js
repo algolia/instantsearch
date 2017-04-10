@@ -24,7 +24,7 @@ const renderFn = ({
   $facetValue.off('click');
   $facetValue.html(`
     <a
-      href="${createURL(value)()}"
+      href="${createURL()}"
       style="text-decoration: none; color: #000"
     >
       <label
