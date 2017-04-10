@@ -11,7 +11,6 @@ var customRefinementList = connectRefinementList(function render(params) {
   //   instantSearchInstance,
   //   canRefine,
   //   widgetParams,
-  //   currentRefinement,
   // }
 });
 search.addWidget(
@@ -52,7 +51,6 @@ export const checkUsage = ({attributeName, operator, usageMessage}) => {
  * @property {boolean} canRefine indicates if a refinement can be applied
  * @property {Object} widgetParams all original options forwarded to rendering
  * @property {InstantSearch} instantSearchInstance the instance of instantsearch on which the widget is attached
- * @property {Object} currentRefinement the refinement currently applied
  */
 
 /**
@@ -101,7 +99,6 @@ export default function connectRefinementList(renderFn) {
         isFromSearch,
         canRefine: isFromSearch || items.length > 0,
         widgetParams,
-        currentRefinement: items.filter(({isRefined}) => isRefined) || null,
       }, isFirstSearch);
     };
 
