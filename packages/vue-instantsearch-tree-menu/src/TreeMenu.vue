@@ -3,7 +3,7 @@
 
     <slot name="header"></slot>
 
-    <ul v-if="facetValues.length > 0">
+    <ul :class="bem('list')" v-if="facetValues.length > 0">
       <li v-for="facet in facetValues" :class="[bem('item'), facet.isRefined ? bem('item', 'active') : '']" >
 
         <a href="#" @click.prevent="toggleRefinement(facet)">
