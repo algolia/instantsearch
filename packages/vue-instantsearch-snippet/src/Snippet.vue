@@ -27,11 +27,11 @@
       const attributeName = ctx.props.attributeName
       const tagName = ctx.props.tagName
 
-      if (!result._snippetResult || !result._snippetResult[attributeName]) {
-        throw new Error(`Attribute ${attributeName} has no snippet.`)
+      let attributeValue = ''
+      if (result._snippetResult && result._snippetResult[attributeName]) {
+        attributeValue = result._snippetResult[attributeName].value
       }
 
-      let attributeValue = result._snippetResult[attributeName].value
       if (ctx.props.escapeHtml === true) {
         attributeValue = escapeHtml(attributeValue)
       }
