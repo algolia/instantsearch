@@ -69,6 +69,8 @@ export default function connectClearAll(renderFn) {
         const hasRefinements = clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
 
+        this._clearAll = clearAll({helper, clearAttributes, hasRefinements});
+
         renderFn({
           clearAll: this._cachedClearAll,
           hasRefinements,
