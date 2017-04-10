@@ -119,7 +119,7 @@ describe('currentToggle()', () => {
             count: 2,
             isRefined: false,
             name: label,
-            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
+            offFacetValue: {count: 3, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
@@ -169,7 +169,7 @@ describe('currentToggle()', () => {
             isRefined:
             false,
             name: label,
-            offFacetValue: {count: 1, name: 'Hello, ', isRefined: false},
+            offFacetValue: {count: 3, name: 'Hello, ', isRefined: false},
             onFacetValue: {count: 2, name: 'Hello, ', isRefined: false},
           }],
           shouldAutoHideContainer: false,
@@ -289,11 +289,11 @@ describe('currentToggle()', () => {
 
         props = {
           facetValues: [{
-            count: 1,
+            count: 3,
             isRefined: true,
             name: label,
             onFacetValue: {name: label, isRefined: true, count: 2},
-            offFacetValue: {name: label, isRefined: false, count: 1},
+            offFacetValue: {name: label, isRefined: false, count: 3},
           }],
           shouldAutoHideContainer: false,
           ...props,

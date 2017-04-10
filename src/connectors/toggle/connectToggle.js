@@ -154,7 +154,9 @@ export default function connectToggle(renderFn) {
         const offFacetValue = {
           name: label,
           isRefined: offData !== undefined ? offData.isRefined : false,
-          count: offData === undefined ? results.nbHits : offData.count,
+          count: offData === undefined
+            ? allFacetValues.reduce((total, {count}) => total + count, 0)
+            : offData.count,
         };
 
         // what will we show by default,

@@ -38,9 +38,7 @@ const renderFn = ({
         />
         ${value.name}
         <span class="facet-count pull-right">
-          ${value.isRefined
-            ? value.onFacetValue.count
-            : value.offFacetValue.count}
+          ${value.count}
         </span>
       </label>
     </a>
