@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`accepts custom highlighting tag 1`] = `
+<span class="ais-highlight">con
+  <em>ten</em>t</span>
+`;
+
+exports[`allows unsafe output 1`] = `
+<span class="ais-highlight">
+  <strong>un-escaped output</strong>
+</span>
+`;
+
+exports[`protects against XSS 1`] = `<span class="ais-highlight">&lt;script&gt;alert('test');&lt;/script&gt;</span>`;
+
+exports[`renders proper HTML 1`] = `
+<span class="ais-highlight">con
+  <mark>ten</mark>t</span>
+`;
