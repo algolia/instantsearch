@@ -56,15 +56,21 @@ export default function connectClearAll(renderFn) {
     const {excludeAttributes = []} = widgetParams;
 
     return {
+      _clearAll() {},
+      _cachedClearAll() { this._clearAll(); },
+
       init({helper, instantSearchInstance, createURL}) {
+        this._cachedClearAll = this._cachedClearAll.bind(this);
+
         const clearAttributes = getRefinements({}, helper.state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
+          .map(one => one.attributeName)
+          .filter(one => excludeAttributes.indexOf(one) === -1);
+
         const hasRefinements = clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(helper.state));
 
         renderFn({
-          clearAll: () => {},
+          clearAll: this._cachedClearAll,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,
@@ -74,13 +80,16 @@ export default function connectClearAll(renderFn) {
 
       render({results, state, createURL, helper, instantSearchInstance}) {
         const clearAttributes = getRefinements(results, state)
-        .map(one => one.attributeName)
-        .filter(one => excludeAttributes.indexOf(one) === -1);
+          .map(one => one.attributeName)
+          .filter(one => excludeAttributes.indexOf(one) === -1);
+
         const hasRefinements = clearAttributes.length !== 0;
         const preparedCreateURL = () => createURL(clearRefinementsFromState(state));
 
+        this._clearAll = clearAll({helper, clearAttributes, hasRefinements});
+
         renderFn({
-          clearAll: clearAll({helper, clearAttributes, hasRefinements}),
+          clearAll: this._cachedClearAll,
           hasRefinements,
           createURL: preparedCreateURL,
           instantSearchInstance,
